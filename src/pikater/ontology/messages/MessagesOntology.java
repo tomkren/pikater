@@ -336,6 +336,10 @@ public class MessagesOntology extends Ontology {
 	public static final String RECOMMEND_DATA = "data";
 	public static final String RECOMMEND_RECOMMENDER = "recommender";
 	
+	public static final String SEND_EMAIL = "SEND_EMAIL";
+	public static final String SEND_EMAIL_TO_ADDRESS = "to_address";
+	public static final String SEND_EMAIL_TYPE = "email_type";
+	
 	// public static final String SEND_OPTIONS = "SEND-OPTIONS";
 	// public static final String SEND_OPTIONS_OPTIONS = "options";
 
@@ -420,6 +424,7 @@ public class MessagesOntology extends Ontology {
 			add(new AgentActionSchema(SHUTDOWN_DATABASE),
 					ShutdownDatabase.class);
 			add(new AgentActionSchema(RECOMMEND), Recommend.class);
+			add(new AgentActionSchema(SEND_EMAIL), SendEmail.class);
 
 			ConceptSchema cs = (ConceptSchema) getSchema(ID);
 			cs.add(ID_IDENTIFICATOR,
@@ -1015,6 +1020,12 @@ public class MessagesOntology extends Ontology {
 			as = (AgentActionSchema) getSchema(RECOMMEND);
 			as.add(RECOMMEND_DATA, (ConceptSchema) getSchema(DATA));
 			as.add(RECOMMEND_RECOMMENDER, (ConceptSchema) getSchema(AGENT));
+			
+			as = (AgentActionSchema) getSchema(SEND_EMAIL);
+            as.add(SEND_EMAIL_TO_ADDRESS, (PrimitiveSchema) getSchema(BasicOntology.STRING),
+                    ObjectSchema.MANDATORY);
+            as.add(SEND_EMAIL_TYPE, (PrimitiveSchema) getSchema(BasicOntology.STRING),
+                    ObjectSchema.MANDATORY);
 			
 		} catch (OntologyException oe) {
 			oe.printStackTrace();
