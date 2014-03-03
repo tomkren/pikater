@@ -95,5 +95,6 @@
 	<classpathentry kind="lib" path="libraries/junit/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="libraries/junit/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="libraries/javax.mail.jar"/>
+	<classpathentry kind="lib" path="libraries/postgresql-9.3-1101.jdbc41.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,10 +1,8 @@
-CREATE TABLE `datasets_atrributes_mapping` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datasetId` int(11) NOT NULL,
-  `attributeMetadataId` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `datasetFK_idx` (`datasetId`),
-  KEY `attributeMetadataFK_idx` (`attributeMetadataId`),
-  CONSTRAINT `datasetFK` FOREIGN KEY (`datasetId`) REFERENCES `datasets` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `attributeMetadataFK` FOREIGN KEY (`attributeMetadataId`) REFERENCES `attribute_metadata` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE datasets_atrributes_mapping (
+  id SERIAL PRIMARY KEY,
+  datasetId INTEGER NOT NULL REFERENCES datasets (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  attributeMetadataId INTEGER NOT NULL REFERENCES attribute_metadata (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+CREATE INDEX datasetFK_idx ON datasets_atrributes_mapping (datasetId);
+CREATE INDEX attributeMetadataFK_idx ON datasets_atrributes_mapping (attributeMetadataId);

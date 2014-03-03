@@ -131,6 +131,8 @@ public abstract class PikaterAgent extends Agent {
              loggerBean= getArgumentValue(LOGGER_BEAN_ARG);
         }
         logger=(Logger)context.getBean(loggerBean);
+        if (logger == null)
+            throw new RuntimeException("Failed to initialize logger bean");
         if (containsArgument(VERBOSITY_ARG))
         {
             String verbosityValue= getArgumentValue(VERBOSITY_ARG);

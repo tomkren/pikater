@@ -30,6 +30,8 @@ public class ManagerAgent extends PikaterAgent {
 
 	@Override
 	protected void setup() {	
+        initDefault();
+
 		File data = new File("saved");
         if (!data.exists()) {
             log("Creating directory saved");
@@ -40,7 +42,6 @@ public class ManagerAgent extends PikaterAgent {
             }
         }
         
-        initDefault();
         registerWithDF();
         
 		getAgentTypesFromFile();
