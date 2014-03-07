@@ -1,0 +1,5 @@
+<agent_description>
+  <name>SimulatedAnnealing-Searcher</name>
+  <picture>picture2.jpg</picture>
+  <description>Searcher is using to find values of parameters for computing agents. For search the solution is used method simulated annaling.</description>
+</agent_description>
