@@ -1,0 +1,5 @@
+This tutorial I was using during programing.
+You require xstream-[version].jar, xpp3-[version].jar and xmlpull-[version].jar in the classpath.
+
+http://xstream.codehaus.org/tutorial.html
+
