@@ -12,7 +12,7 @@ public class VisualizationOnly {
 
 
     //sets only the visualization of iris.arff
-    public static void createDescription() {
+    public static ComputationDescription createDescription() {
 
         ComputationDescription cd = new ComputationDescription();
 
@@ -25,6 +25,7 @@ public class VisualizationOnly {
 
         cd.setRootElement(fv);
 
+        return cd;
     }
 
 

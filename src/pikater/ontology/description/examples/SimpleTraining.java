@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class SimpleTraining {
 
     //trains the MLP on iris and shows differences between correct and trained classification
-    public static void createDescription() {
+    public static ComputationDescription createDescription() {
 
         FileDataProvider fdp = new FileDataProvider();
         fdp.setFileURI("iris.arff");
@@ -38,6 +38,7 @@ public class SimpleTraining {
         ComputationDescription cd = new ComputationDescription();
         cd.setRootElement(diff);
 
+        return cd;
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class SearchOnly {
 
-    public static void createDescription() {
+    public static ComputationDescription createDescription() {
 
         FileDataProvider fdp = new FileDataProvider();
         fdp.setFileURI("iris.arff");
@@ -53,7 +53,7 @@ public class SearchOnly {
         ComputationDescription cd = new ComputationDescription();
         cd.setRootElement(ca);
 
-
+        return cd;
     }
 
 }
