@@ -2,10 +2,10 @@ package pikater.utility.pikaterDatabase;
 
 import java.io.File;
 
-# Nejake metody (funkcni pozadavky knihovny) co budu brzy potrebovat - je to jen nastrel
-
 public class Database {
 
+// Nejake metody (funkcni pozadavky knihovny) co budu brzy potrebovat - je to jen nastrel
+	
   public void saveExperimentXML(int userID, File xmlExperimet) {
         //:TODO
   }
