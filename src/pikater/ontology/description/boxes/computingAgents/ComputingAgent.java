@@ -1,11 +1,17 @@
-package pikater.ontology.description;
+package pikater.ontology.description.boxes.computingAgents;
 
 import java.util.ArrayList;
+
+import pikater.ontology.description.Box;
+import pikater.ontology.description.boxes.providers.IDataProvider;
+import pikater.ontology.description.boxes.providers.IErrorProvider;
+import pikater.ontology.description.boxesWrappers.DataSourceDescription;
+import pikater.ontology.description.elements.Parameter;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorProvider {
+public class ComputingAgent extends Box implements IDataProvider, IComputingAgent, IErrorProvider {
 
     String modelClass;
     ArrayList<Parameter> parameters;

@@ -1,13 +1,14 @@
-package pikater.ontology.description;
-
-import jade.content.Concept;
+package pikater.ontology.description.boxes.recomenders;
 
 import java.util.ArrayList;
+
+import pikater.ontology.description.Box;
+import pikater.ontology.description.elements.Parameter;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Recommender implements Concept {
+public class Recommender extends Box {
 
     String recommenderClass;
     ArrayList<Parameter> parameters;

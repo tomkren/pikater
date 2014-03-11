@@ -1,13 +1,14 @@
-package pikater.ontology.description;
-
-import jade.content.Concept;
+package pikater.ontology.description.boxes.searchers;
 
 import java.util.ArrayList;
+
+import pikater.ontology.description.Box;
+import pikater.ontology.description.elements.Parameter;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Search implements Concept{
+public class Search extends Box {
 
     String searchClass;
     ArrayList<Parameter> searchParameters;

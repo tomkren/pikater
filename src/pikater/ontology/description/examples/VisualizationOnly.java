@@ -1,9 +1,9 @@
 package pikater.ontology.description.examples;
 
-import pikater.ontology.description.ComputationDescription;
-import pikater.ontology.description.DataSourceDescription;
-import pikater.ontology.description.FileDataProvider;
-import pikater.ontology.description.FileVisualizer;
+import pikater.ontology.description.boxes.providers.FileDataProvider;
+import pikater.ontology.description.boxes.visualizers.FileVisualizer;
+import pikater.ontology.description.boxesWrappers.ComputationDescription;
+import pikater.ontology.description.boxesWrappers.DataSourceDescription;
 
 /**
  * Created by Martin Pilat on 28.12.13.

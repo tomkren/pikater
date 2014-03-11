@@ -1,9 +1,12 @@
-package pikater.ontology.description;
+package pikater.ontology.description.boxes.visualizers;
+
+import pikater.ontology.description.Box;
+import pikater.ontology.description.boxesWrappers.DataSourceDescription;
 
 /**
  * Created by marti_000 on 28.12.13.
  */
-public class FileVisualizer implements IVisualizer {
+public class FileVisualizer extends Box implements IVisualizer {
 
     DataSourceDescription dataSource;
 
@@ -14,4 +17,5 @@ public class FileVisualizer implements IVisualizer {
     public void setDataSource(DataSourceDescription dataSource) {
         this.dataSource = dataSource;
     }
+    
 }

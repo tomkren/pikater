@@ -1,4 +1,4 @@
-package pikater.ontology.description;
+package pikater.ontology.description.boxesWrappers;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -6,7 +6,7 @@ import jade.content.onto.Ontology;
 /**
  * Created by Martin Pilat on 27.12.13.
  */
-public class DescriptionOntology extends BeanOntology{
+public class DescriptionOntology extends BeanOntology {
 
     private DescriptionOntology() {
         super("DescriptionOntology");

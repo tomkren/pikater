@@ -1,11 +1,12 @@
-package pikater.ontology.description;
+package pikater.ontology.description.elements;
 
-import jade.content.Concept;
+import pikater.ontology.description.Element;
+import pikater.ontology.description.IElement;
 
 /**
  * Created by Martin Pilat on 27.12.13.
  */
-public abstract class Parameter implements Concept {
+public abstract class Parameter extends Element {
     String name;
     boolean searchable;
 

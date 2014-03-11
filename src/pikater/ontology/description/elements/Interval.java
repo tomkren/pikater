@@ -1,11 +1,13 @@
-package pikater.ontology.description;
+package pikater.ontology.description.elements;
 
+import pikater.ontology.description.Element;
+import pikater.ontology.description.IElement;
 import jade.content.Concept;
 
 /**
  * Created by Martin Pilat on 27.12.13.
  */
-public class Interval implements Concept {
+public class Interval extends Element {
 
     double min;
     double max;

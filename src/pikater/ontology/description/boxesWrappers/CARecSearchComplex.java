@@ -1,11 +1,19 @@
-package pikater.ontology.description;
+package pikater.ontology.description.boxesWrappers;
 
 import java.util.ArrayList;
+
+import pikater.ontology.description.Box;
+import pikater.ontology.description.BoxWraper;
+import pikater.ontology.description.boxes.computingAgents.IComputingAgent;
+import pikater.ontology.description.boxes.providers.IDataProvider;
+import pikater.ontology.description.boxes.recomenders.Recommender;
+import pikater.ontology.description.boxes.searchers.Search;
+import pikater.ontology.description.elements.Parameter;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class CARecSearchComplex implements IComputingAgent, IDataProvider {
+public class CARecSearchComplex extends BoxWraper implements IComputingAgent, IDataProvider {
 
     ArrayList<ErrorDescription> errors;
     Search search;

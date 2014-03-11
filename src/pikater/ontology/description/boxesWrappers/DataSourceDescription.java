@@ -1,11 +1,14 @@
-package pikater.ontology.description;
+package pikater.ontology.description.boxesWrappers;
 
+import pikater.ontology.description.Box;
+import pikater.ontology.description.BoxWraper;
+import pikater.ontology.description.boxes.providers.IDataProvider;
 import jade.content.Concept;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class DataSourceDescription implements Concept {
+public class DataSourceDescription extends BoxWraper {
 
     private IDataProvider dataProvider;
     private String dataType;

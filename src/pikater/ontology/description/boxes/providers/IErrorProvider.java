@@ -1,4 +1,4 @@
-package pikater.ontology.description;
+package pikater.ontology.description.boxes.providers;
 
 import jade.content.Concept;
 

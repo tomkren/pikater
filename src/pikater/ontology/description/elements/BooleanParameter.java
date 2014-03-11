@@ -1,4 +1,5 @@
-package pikater.ontology.description;
+package pikater.ontology.description.elements;
+
 
 /**
  * Created by marti_000 on 27.12.13.

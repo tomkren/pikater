@@ -1,11 +1,12 @@
-package pikater.ontology.description;
+package pikater.ontology.description.boxesWrappers;
 
-import jade.content.Concept;
+import pikater.ontology.description.BoxWraper;
+import pikater.ontology.description.boxes.providers.IErrorProvider;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class ErrorDescription implements Concept {
+public class ErrorDescription extends BoxWraper {
 
     IErrorProvider provider;
     String type;

@@ -1,6 +1,14 @@
 package pikater.ontology.description.examples;
 
 import pikater.ontology.description.*;
+import pikater.ontology.description.boxes.computingAgents.ComputingAgent;
+import pikater.ontology.description.boxes.providers.FileDataProvider;
+import pikater.ontology.description.boxes.visualizers.DifferenceVisualizer;
+import pikater.ontology.description.boxesWrappers.ComputationDescription;
+import pikater.ontology.description.boxesWrappers.DataSourceDescription;
+import pikater.ontology.description.elements.DoubleParameter;
+import pikater.ontology.description.elements.IntegerParameter;
+import pikater.ontology.description.elements.Parameter;
 
 import java.util.ArrayList;
 

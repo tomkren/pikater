@@ -1,4 +1,4 @@
-package pikater.ontology.description;
+package pikater.ontology.description.elements;
 
 import java.util.ArrayList;
 
