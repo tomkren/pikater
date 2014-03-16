@@ -6,6 +6,8 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>pikater.data.jpa.JPAExperiment</class>
     <class>pikater.data.jpa.JPAResult</class>
+    <class>pikater.data.jpa.JPAGeneralFile</class>
+    <class>pikater.data.jpa.JPADataSetLO</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/pikater" />
