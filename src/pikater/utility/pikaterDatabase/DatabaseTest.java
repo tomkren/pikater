@@ -37,7 +37,29 @@ public class DatabaseTest {
 		db.saveGeneralFile(1, "Just a testfile", f);
 		db.saveGeneralFile(2, "Second test file for user no. 2", f2);
 		
+		//db.deleteDataSetLOById(29);
 		
+		List<JPADataSetLO> list= db.getAllDataSetLargeObjects();
+		System.out.println("All DataSets: ");
+		for(JPADataSetLO dslo:list){
+			System.out.println(dslo.getID()+" "+dslo.getDataSetFileName()+" "+dslo.getOID());
+		}
+		System.out.println(list.size()+" items found.");
+		System.out.println();
+		
+		//db.deleteGeneralFilesById(10);
+		
+		List<JPAGeneralFile> list2= db.getAllGeneralFiles();
+		System.out.println("All GeneralFiles: ");
+		for(JPAGeneralFile gf:list2){
+			System.out.println(gf.getID()+" "+gf.getFileName()+" "+gf.getOID());
+		}
+		System.out.println(list2.size()+" items found.");
+		System.out.println();
+		
+		
+		
+		/**
 		List<JPADataSetLO> list= db.getDataSetLargeObjectsByUser(1);
 		System.out.println("DataSets for user no. 1: ");
 		for(JPADataSetLO dslo:list){
@@ -72,6 +94,12 @@ public class DatabaseTest {
 		System.out.println(list2.size()+" items found.");
 		System.out.println();
 		
+		long del_count=db.deleteAllDataSetLargeObjectsByUser(1);
+		System.out.println("Number of deleted DataSets for User no. 1: "+del_count);
+		
+		del_count=db.deleteAllDataSetLargeObjectsByUser(2);
+		System.out.println("Number of deleted DataSets for User no. 2: "+del_count);
+		**/
 	}
 
 	
