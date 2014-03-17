@@ -68,7 +68,6 @@ public class Agent_DataManager extends PikaterAgent {
     protected void setup() {
         try {
     		initDefault();
-    		initEntityManager();
     		registerWithDF();
 
             if (containsArgument(CONNECTION_ARG_NAME))
@@ -405,89 +404,96 @@ public class Agent_DataManager extends PikaterAgent {
         SaveResults sr = (SaveResults) a.getAction();
         Task res = sr.getTask();
         
-        entityManager.getTransaction().begin();
-        JPAResult jparesult = new JPAResult();
-
-        jparesult.setAgentName(res.getAgent().getName());
-        // nesedi na novy model kde jsou ciselne ID agentu - stary model pouziva Stringy... 
-        //jparesult.setAgentTypeId(res.getAgent().getType());
-        jparesult.setOptions(res.getAgent().optionsToString());
-        // cim se ma naplnit serializedFilename?
-        // co tyhle hodnoty co v novem model nejsou?
-        //query += "\'" + res.getData().removePath(res.getData().getTrain_file_name()) + "\',";
-        //query += "\'" + res.getData().removePath(res.getData().getTest_file_name()) + "\',";
-
-        float Error_rate = Float.MAX_VALUE;
-        float Kappa_statistic = Float.MAX_VALUE;
-        float Mean_absolute_error = Float.MAX_VALUE;
-        float Root_mean_squared_error = Float.MAX_VALUE;
-        float Relative_absolute_error = Float.MAX_VALUE; // percent
-        float Root_relative_squared_error = Float.MAX_VALUE; // percent
-        int duration = Integer.MAX_VALUE; // miliseconds
-        float durationLR = Float.MAX_VALUE;
-
-        Iterator itr = res.getResult().getEvaluations().iterator();
-        while (itr.hasNext()) {
-            Eval next_eval = (Eval) itr.next();
-            if (next_eval.getName().equals("error_rate")){
-                Error_rate = next_eval.getValue();
+        EntityManager entityManager = emf.createEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            JPAResult jparesult = new JPAResult();
+    
+            jparesult.setAgentName(res.getAgent().getName());
+            // nesedi na novy model kde jsou ciselne ID agentu - stary model pouziva Stringy... 
+            //jparesult.setAgentTypeId(res.getAgent().getType());
+            jparesult.setOptions(res.getAgent().optionsToString());
+            // cim se ma naplnit serializedFilename?
+            // co tyhle hodnoty co v novem model nejsou?
+            //query += "\'" + res.getData().removePath(res.getData().getTrain_file_name()) + "\',";
+            //query += "\'" + res.getData().removePath(res.getData().getTest_file_name()) + "\',";
+    
+            float Error_rate = Float.MAX_VALUE;
+            float Kappa_statistic = Float.MAX_VALUE;
+            float Mean_absolute_error = Float.MAX_VALUE;
+            float Root_mean_squared_error = Float.MAX_VALUE;
+            float Relative_absolute_error = Float.MAX_VALUE; // percent
+            float Root_relative_squared_error = Float.MAX_VALUE; // percent
+            int duration = Integer.MAX_VALUE; // miliseconds
+            float durationLR = Float.MAX_VALUE;
+    
+            Iterator itr = res.getResult().getEvaluations().iterator();
+            while (itr.hasNext()) {
+                Eval next_eval = (Eval) itr.next();
+                if (next_eval.getName().equals("error_rate")){
+                    Error_rate = next_eval.getValue();
+                }
+    
+                if (next_eval.getName().equals("kappa_statistic")){
+                    Kappa_statistic = next_eval.getValue();
+                }
+    
+                if (next_eval.getName().equals("mean_absolute_error")){
+                    Mean_absolute_error = next_eval.getValue();
+                }
+    
+                if (next_eval.getName().equals("root_mean_squared_error")){
+                    Root_mean_squared_error = next_eval.getValue();
+                }
+    
+                if (next_eval.getName().equals("relative_absolute_error")){
+                    Relative_absolute_error = next_eval.getValue();
+                }
+    
+                if (next_eval.getName().equals("root_relative_squared_error")){
+                    Root_relative_squared_error = next_eval.getValue();
+                }
+    
+                if (next_eval.getName().equals("duration")){
+                    duration = (int)next_eval.getValue();
+                }
+                if (next_eval.getName().equals("durationLR")){
+                    durationLR = (float)next_eval.getValue();
+                }
             }
-
-            if (next_eval.getName().equals("kappa_statistic")){
-                Kappa_statistic = next_eval.getValue();
-            }
-
-            if (next_eval.getName().equals("mean_absolute_error")){
-                Mean_absolute_error = next_eval.getValue();
-            }
-
-            if (next_eval.getName().equals("root_mean_squared_error")){
-                Root_mean_squared_error = next_eval.getValue();
-            }
-
-            if (next_eval.getName().equals("relative_absolute_error")){
-                Relative_absolute_error = next_eval.getValue();
-            }
-
-            if (next_eval.getName().equals("root_relative_squared_error")){
-                Root_relative_squared_error = next_eval.getValue();
-            }
-
-            if (next_eval.getName().equals("duration")){
-                duration = (int)next_eval.getValue();
-            }
-            if (next_eval.getName().equals("durationLR")){
-                durationLR = (float)next_eval.getValue();
-            }
+            
+            jparesult.setErrorRate(Error_rate);
+            jparesult.setKappaStatistic(Kappa_statistic);
+            jparesult.setMeanAbsoluteError(Mean_absolute_error);
+            jparesult.setRootMeanSquaredError(Root_mean_squared_error);
+            jparesult.setRelativeAbsoluteError(Relative_absolute_error);
+            jparesult.setRootRelativeSquaredError(Root_relative_squared_error);
+            jparesult.setStart(new Date(Timestamp.valueOf(res.getStart()).getTime()));
+            //query += "\'" + Timestamp.valueOf(res.getStart()) + "\',";
+            jparesult.setFinish(new Date(Timestamp.valueOf(res.getFinish()).getTime()));
+            //query += "\'" + Timestamp.valueOf(res.getFinish()) + "\',";
+            
+            // v novem modelu tohle neni        
+            //query += "\'" + duration + "\',";
+            //query += "\'" + durationLR + "\',";
+    
+            // je to ono?
+            jparesult.setSerializedFileName(res.getResult().getObject_filename());
+            //query += "\'" + res.getResult().getObject_filename() + "\', ";
+            
+            //jparesult.setExperiment(TODO);
+            //query += "\'" + res.getId().getIdentificator() + "\',";  // TODO - pozor - neni jednoznacne, pouze pro jednoho managera
+            //query += "\'" + res.getProblem_name() + "\',";
+            jparesult.setNote(res.getNote());
+    
+            entityManager.persist(jparesult);
+            entityManager.getTransaction().commit();
+            log("persisted a JPAResult");
+        } finally {
+            if (entityManager.getTransaction().isActive())
+                entityManager.getTransaction().rollback();
+            entityManager.close();
         }
-        
-        jparesult.setErrorRate(Error_rate);
-        jparesult.setKappaStatistic(Kappa_statistic);
-        jparesult.setMeanAbsoluteError(Mean_absolute_error);
-        jparesult.setRootMeanSquaredError(Root_mean_squared_error);
-        jparesult.setRelativeAbsoluteError(Relative_absolute_error);
-        jparesult.setRootRelativeSquaredError(Root_relative_squared_error);
-        jparesult.setStart(new Date(Timestamp.valueOf(res.getStart()).getTime()));
-        //query += "\'" + Timestamp.valueOf(res.getStart()) + "\',";
-        jparesult.setFinish(new Date(Timestamp.valueOf(res.getFinish()).getTime()));
-        //query += "\'" + Timestamp.valueOf(res.getFinish()) + "\',";
-        
-        // v novem modelu tohle neni        
-        //query += "\'" + duration + "\',";
-        //query += "\'" + durationLR + "\',";
-
-        // je to ono?
-        jparesult.setSerializedFileName(res.getResult().getObject_filename());
-        //query += "\'" + res.getResult().getObject_filename() + "\', ";
-        
-        //jparesult.setExperiment(TODO);
-        //query += "\'" + res.getId().getIdentificator() + "\',";  // TODO - pozor - neni jednoznacne, pouze pro jednoho managera
-        //query += "\'" + res.getProblem_name() + "\',";
-        jparesult.setNote(res.getNote());
-
-        entityManager.persist(jparesult);
-        entityManager.getTransaction().commit();
-        log("persisted a JPAResult");
 
         ACLMessage reply = request.createReply();
         reply.setPerformative(ACLMessage.INFORM);

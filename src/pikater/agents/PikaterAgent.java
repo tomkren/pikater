@@ -44,7 +44,7 @@ public abstract class PikaterAgent extends Agent {
     protected Verbosity verbosity=Verbosity.NORMAL;
     private Logger logger;
     protected Arguments arguments;
-    protected EntityManager entityManager;
+    protected EntityManagerFactory emf;
 
     public Codec getCodec() {
         return codec;
@@ -167,17 +167,11 @@ public abstract class PikaterAgent extends Agent {
     {
         parseArguments(args);
         initLogging();
+        // this bean provides JPA database access to the agent, which can create EntityManagers as needed (and should close them when done)
+        emf = (EntityManagerFactory)context.getBean(DATAMODEL_BEAN);
         log("is alive...", 1);
         getContentManager().registerLanguage(codec);
         getContentManager().registerOntology(ontology);
-    }
-    
-    /** Po zavolani bude mit dany agent pristup k JPA entityManageru a muze skrz nej pracovat s JPA objekty v DB*/
-    public void initEntityManager() {
-        if (entityManager != null)
-            return;
-        EntityManagerFactory emf = (EntityManagerFactory)context.getBean(DATAMODEL_BEAN);
-        entityManager = emf.createEntityManager();
     }
 
     private void parseArguments(Object[] args)
