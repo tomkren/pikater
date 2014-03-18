@@ -1,0 +1,2 @@
+Puvodni verze JPA trid, cast uz je prekopana do trid v pikater.data.jpa a odsud smazana.
+Az budou predelane vsechny, tahle package se muze smazat.

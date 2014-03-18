@@ -8,8 +8,10 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import pikater.configuration.Argument;
 import pikater.configuration.Arguments;
 import pikater.logging.Logger;
@@ -22,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 /**
  * User: Kuba
  * Date: 25.8.13
@@ -31,6 +36,7 @@ public abstract class PikaterAgent extends Agent {
     private final String DEFAULT_LOGGER_BEAN="logger";
     private final String LOGGER_BEAN_ARG="logger";
     private final String VERBOSITY_ARG="verbosity";
+    protected final String DATAMODEL_BEAN = "dataModel";
     protected Codec codec = new SLCodec();
     protected Ontology ontology = MessagesOntology.getInstance();
     protected String initBeansName = "Beans.xml";
@@ -38,6 +44,7 @@ public abstract class PikaterAgent extends Agent {
     protected Verbosity verbosity=Verbosity.NORMAL;
     private Logger logger;
     protected Arguments arguments;
+    protected EntityManagerFactory emf;
 
     public Codec getCodec() {
         return codec;
@@ -160,6 +167,8 @@ public abstract class PikaterAgent extends Agent {
     {
         parseArguments(args);
         initLogging();
+        // this bean provides JPA database access to the agent, which can create EntityManagers as needed (and should close them when done)
+        emf = (EntityManagerFactory)context.getBean(DATAMODEL_BEAN);
         log("is alive...", 1);
         getContentManager().registerLanguage(codec);
         getContentManager().registerOntology(ontology);
