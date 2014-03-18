@@ -1,17 +1,6 @@
 package pikater.ontology.description.examples;
 
 import pikater.ontology.description.*;
-import pikater.ontology.description.boxes.computingAgents.ComputingAgent;
-import pikater.ontology.description.boxes.providers.FileDataProvider;
-import pikater.ontology.description.boxes.searchers.Search;
-import pikater.ontology.description.boxesWrappers.CARecSearchComplex;
-import pikater.ontology.description.boxesWrappers.ComputationDescription;
-import pikater.ontology.description.boxesWrappers.DataSourceDescription;
-import pikater.ontology.description.boxesWrappers.ErrorDescription;
-import pikater.ontology.description.elements.DoubleParameter;
-import pikater.ontology.description.elements.IntegerParameter;
-import pikater.ontology.description.elements.Interval;
-import pikater.ontology.description.elements.Parameter;
 
 import java.util.ArrayList;
 
@@ -20,7 +9,7 @@ import java.util.ArrayList;
  */
 public class SearchOnly {
 
-    public static ComputationDescription createDescription() {
+    public static void createDescription() {
 
         FileDataProvider fdp = new FileDataProvider();
         fdp.setFileURI("iris.arff");
@@ -64,7 +53,7 @@ public class SearchOnly {
         ComputationDescription cd = new ComputationDescription();
         cd.setRootElement(ca);
 
-        return cd;
+
     }
 
 }

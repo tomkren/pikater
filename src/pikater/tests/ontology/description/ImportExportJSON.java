@@ -5,19 +5,17 @@ import java.util.ArrayList;
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 
-import pikater.ontology.description.boxes.visualizers.FileVisualizer;
-import pikater.ontology.description.boxesWrappers.ComputationDescription;
-import pikater.ontology.description.elements.BooleanParameter;
-import pikater.ontology.description.elements.Parameter;
+import pikater.ontology.description.BooleanParameter;
+import pikater.ontology.description.ComputationDescription;
+import pikater.ontology.description.FileVisualizer;
 import pikater.ontology.description.examples.SearchOnly;
-import pikater.ontology.description.graph.GraphJSON;
 
 public class ImportExportJSON {
 
 	public void run() {
         
 		FileVisualizer fileVis = new FileVisualizer();
-
+/*
 		BooleanParameter bParameter = new BooleanParameter("parameter1", true);
 		ArrayList<Parameter> globalParameters = new ArrayList<Parameter>();
 		globalParameters.add(bParameter);
@@ -28,6 +26,6 @@ public class ImportExportJSON {
 
         GraphJSON graph = compDesc.exportJSON();
         graph.printGraph();
-		
+*/		
 	}
 }

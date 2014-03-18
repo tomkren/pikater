@@ -1,14 +1,6 @@
 package pikater.ontology.description.examples;
 
 import pikater.ontology.description.*;
-import pikater.ontology.description.boxes.computingAgents.ComputingAgent;
-import pikater.ontology.description.boxes.providers.FileDataProvider;
-import pikater.ontology.description.boxes.visualizers.DifferenceVisualizer;
-import pikater.ontology.description.boxesWrappers.ComputationDescription;
-import pikater.ontology.description.boxesWrappers.DataSourceDescription;
-import pikater.ontology.description.elements.DoubleParameter;
-import pikater.ontology.description.elements.IntegerParameter;
-import pikater.ontology.description.elements.Parameter;
 
 import java.util.ArrayList;
 
@@ -18,7 +10,7 @@ import java.util.ArrayList;
 public class SimpleTraining {
 
     //trains the MLP on iris and shows differences between correct and trained classification
-    public static ComputationDescription createDescription() {
+    public static void createDescription() {
 
         FileDataProvider fdp = new FileDataProvider();
         fdp.setFileURI("iris.arff");
@@ -46,7 +38,6 @@ public class SimpleTraining {
         ComputationDescription cd = new ComputationDescription();
         cd.setRootElement(diff);
 
-        return cd;
     }
 
 }

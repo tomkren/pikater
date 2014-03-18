@@ -1,12 +1,8 @@
 package pikater.tests.ontology.description;
 
-import pikater.ontology.description.boxesWrappers.ComputationDescription;
-import pikater.ontology.description.examples.SearchOnly;
-import pikater.ontology.description.examples.SimpleTraining;
-import pikater.ontology.description.examples.VisualizationOnly;
 
 public class ImportExportXML {
-
+/*
 	public void run() {
 
         ComputationDescription searchOnlyDescription = 
@@ -38,5 +34,5 @@ public class ImportExportXML {
 			System.out.println("BUG - ImportExportXML");
 		}
 	}
-
+*/
 }
