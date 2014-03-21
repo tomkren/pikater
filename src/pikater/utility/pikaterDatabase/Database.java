@@ -17,11 +17,12 @@ import org.postgresql.largeobject.LargeObjectManager;
 
 import pikater.data.jpa.JPADataSetLO;
 import pikater.data.jpa.JPAGeneralFile;
+import pikater.data.jpa.JPAUser;
 
 public class Database {
 	
 	PGConnection connection;
-	
+	public enum PasswordChangeResult{Success,Error};
 	private EntityManagerFactory factory;
 	EntityManager em = null;
 	
@@ -35,8 +36,144 @@ public class Database {
 	public void insertExperiment(int userID, String xmlExperimetId, Long dataSetId, int priority) {
         //:TODO
     }
+
+	/**
+	 * !!!IMPORTANT!!!!
+	 * For now it just creates some test data (example users, saves test files)
+	 * 
+	 * Initializes the database for storing the Java Persistence API objects. 
+	 * @param loadTestData If the parameter is set to true the function also loads some test data
+	 * @throws IOException 
+	 * @throws SQLException 
+	 */
+	public void init(boolean loadTestData) throws SQLException, IOException{
+		//createDataBase();
+		if(loadTestData){
+			loadTestData();
+		}
+	}
+	
+	/**
+	 * Creates the database 'pikater' if not existing
+	 */
+	private void createDataBase(){
+		
+	}
+	
+	/**
+	 * Loads test data to the DataBase
+	 * @throws IOException 
+	 * @throws SQLException 
+	 */
+	private void loadTestData() throws SQLException, IOException{
+		this.addUser("johndoe", "123", "nassoftwerak@gmail.com", 6);
+		this.addUser("vomacka", "12345", "nassoftwerak@gmail.com", 4);
+		this.addUser("alfa", "12", "nassoftwerak@gmail.com", 3);
+		this.addUser("beta", "123", "nassoftwerak@gmail.com", 2);
+		
+		JPAUser john=this.getUserByLogin("johndoe");
+		this.saveGeneralFile(john.getId(), "First Data File",new File( "./data/files/25d7d5d689042a3816aa1598d5fd56ef"));
+		this.saveGeneralFile(john.getId(), "Second Data File",new File( "./data/files/772c551b8486b932aed784a582b9c1b1"));
+		this.saveGeneralFile(john.getId(), "Third Data File",new File( "./data/files/dc7ce6dea5a75110486760cfac1051a5"));
+	}
+	
+	/**
+	 * Adds an existing user object to the database
+	 * @param user The user's object.
+	 */
+	public void addUser(JPAUser user){
+		persist(user);
+	}
+	
+	/**
+	 * Based on the given parameters creates a new user object and stores it to the database.
+	 * @param login The new user's login name
+	 * @param password The new user's password
+	 * @param email The new user's e-mail
+	 */
+	public void addUser(String login,String password,String email){
+		JPAUser newUser=new JPAUser();
+		newUser.setLogin(login);
+		newUser.setPassword(password);
+		newUser.setEmail(email);
+		this.addUser(newUser);
+	}
+	
+	/**
+	 * Based on the given parameters creates a new user object and stores it to the database.
+	 * @param login The new user's login name
+	 * @param password The new user's password
+	 * @param email The new user's e-mail
+	 * @param maxPriority The new user's maximal priority
+	 */
+	public void addUser(String login,String password,String email,long maxPriority){
+		JPAUser newUser=new JPAUser();
+		newUser.setLogin(login);
+		newUser.setPassword(password);
+		newUser.setEmail(email);
+		newUser.setPriorityMax(maxPriority);
+		this.addUser(newUser);
+	}
+	
+	/**
+	 * Returns the list of all users stored in the database.
+	 * @return The List of users.
+	 */
+	public List<JPAUser> getUsers(){
+		em = factory.createEntityManager();
+		Query q = em.createQuery("select u from JPAUser u");
+		List<JPAUser> userList = q.getResultList();
+		em.close();
+		return userList;
+	}
   
 	/**
+	 * Returns an user identified by the given ID
+	 * @param id The user id
+	 * @return The JPA object of user found in the database
+	 */
+	public JPAUser getUserByID(long id){
+		em = factory.createEntityManager();
+		Query q = em.createQuery("select u from JPAUser u where u.id=:userId");
+		q.setParameter("userId", id);
+		JPAUser res=(JPAUser)q.getSingleResult();
+		em.close();
+		return res;
+	}
+  
+	/**
+	 * Returns an user identified by the given LoginName
+	 * @param login The user's login name
+	 * @return The JPA object of user found in the database
+	 */
+	public JPAUser getUserByLogin(String login){
+		em = factory.createEntityManager();
+		Query q = em.createQuery("select u from JPAUser u where u.login=:userLogin");
+		q.setParameter("userLogin", login);
+		JPAUser res=(JPAUser)q.getSingleResult();
+		em.close();
+		return res;
+	}
+  
+  /**
+   * Changes the password for the user identified by the given ID stored in the database. The function returns PasswordChangeResult.Success for successful password change and PasswordChangeResult.Error otherwise.
+   * @param id The ID of the user for whom the password should be changed
+   * @param oldPassword The old password of the user
+   * @param newPassword The new password of the user
+   * @return Result of the password change
+   */
+  public PasswordChangeResult changeUserPasswordForId(long id, String oldPassword,String newPassword){
+	  JPAUser target=this.getUserByID(id);
+	  if(target.getPassword().equals(oldPassword)){
+		  target.setPassword(newPassword);
+		  persist(target);
+		  return PasswordChangeResult.Success;
+	  }else{
+		  return PasswordChangeResult.Error;
+	  }
+  }
+  
+  /**
 	 * The function stores a general purpose file for the given user. 
 	 * @param userId The ID of the user, with whom the file'll be associated.
 	 * @param description Description of the file.
@@ -45,7 +182,7 @@ public class Database {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-  public JPAGeneralFile saveGeneralFile(long userId,String description,File file) throws SQLException, IOException{
+public JPAGeneralFile saveGeneralFile(long userId,String description,File file) throws SQLException, IOException{
 	  long oid=saveFileAsLargeObject(file);
 	  
 	  JPAGeneralFile gf=new JPAGeneralFile();
@@ -57,7 +194,7 @@ public class Database {
 	  persist(gf);
 	  
 	  return gf;
-  }
+}
   
   /**
    * Returns the list of all general purpose files stored in the database.
