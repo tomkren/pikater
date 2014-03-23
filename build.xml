@@ -114,6 +114,7 @@
         <pathelement location="libraries/swtgraphics2d.jar"/>
         <pathelement location="libraries/weka.jar"/>
         <pathelement location="libraries/weka-src.jar"/>
+        <pathelement location="libraries/java-json/java-json-schema.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>

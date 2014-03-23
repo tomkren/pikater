@@ -255,7 +255,7 @@ public class Agent_Manager extends PikaterAgent {
 				n = receivedProblemsID.get(problemID);
 			}
 			receivedProblemsID.put(problemID, n+1);
-			
+
 			// send subscription to gui agent after each received task
 			sendSubscription(inform);
 			
@@ -477,14 +477,14 @@ public class Agent_Manager extends PikaterAgent {
 								MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
 										MessageTemplate.MatchOntology(ontology.getName()))));
 
-		public RequestServer(Agent agent) {			
+		public RequestServer(Agent agent) {
 			super(agent);
 		}
 
 		@Override 
 		public void action() {
 			ACLMessage request = receive(requestMsgTemplate);
-			
+
 			if (request != null) {
 				System.out.println(getLocalName()
 						+ ": REQUEST received from "

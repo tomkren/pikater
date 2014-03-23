@@ -2,7 +2,6 @@ package pikater.tests.ontology.description;
 
 import java.util.ArrayList;
 
-import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 
 import pikater.ontology.description.BooleanParameter;
