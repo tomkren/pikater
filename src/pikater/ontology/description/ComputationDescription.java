@@ -35,9 +35,7 @@ public class ComputationDescription implements Concept {
     
 	public String exportXML() {
 
-		XStream xstream = new XStream();		
-//		xstream.alias("ComputationDescription",
-//				pikater.ontology.description.ComputationDescription.class);
+		XStream xstream = new XStream();
 		xstream.aliasPackage("", "pikater.ontology.description");
 		
 		String xml = xstream.toXML(this);
@@ -60,4 +58,41 @@ public class ComputationDescription implements Concept {
 		setGlobalParameters(computDes.getGlobalParameters());
 	}
 
+	public String exportJSON() {
+/*
+		Reflections reflections = new Reflections("pikater");
+
+		Set<Class<? extends PikaterAgent>> allClassesAgents = 
+			     reflections.getSubTypesOf(pikater.agents.PikaterAgent.class);
+		
+		List<Class<? extends PikaterAgent>> listAgents =
+				new ArrayList<Class<? extends PikaterAgent>>();
+		listAgents.addAll(allClassesAgents);
+
+		for (int i = 0; i < listAgents.size(); i++) {
+
+			Class<? extends PikaterAgent> classI = listAgents.get(i);
+			String classNameI = classI.toString();
+			classNameI = classNameI.substring("class ".length());
+
+			Class<?> c = null;
+			try {
+				c = Class.forName(classNameI);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			Method lMethod = null;
+			try {
+				lMethod = c.getDeclaredMethod("getAgentType", null);
+			} catch (NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+			
+			System.out.println("method = " + lMethod.toString());			
+		}
+*/
+		return "Still not implemented";
+	}
+	
 }

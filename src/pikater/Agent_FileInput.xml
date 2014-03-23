@@ -1,0 +1,20 @@
+<pikater.utility.boxTypes.Box>
+  <name>FileInput</name>
+  <agentName>pikater/Agent_FileInput</agentName>
+  <type>Input</type>
+  <ontology>pikater.ontology.description.FileDataProvider</ontology>
+  <picture>picture0.jpg</picture>
+  <description>Box is a file data source.</description>
+  <parameters>
+    <pikater.utility.pikaterDatabase.tables.experiments.parameters.UStringParameter>
+      <name>FileName</name>
+      <value>file.txt</value>
+    </pikater.utility.pikaterDatabase.tables.experiments.parameters.UStringParameter>
+  </parameters>
+  <inputSlots/>
+  <outputSlots>
+    <pikater.utility.pikaterDatabase.tables.experiments.slots.DataProviderSlot>
+      <slotName>Dataset</slotName>
+    </pikater.utility.pikaterDatabase.tables.experiments.slots.DataProviderSlot>
+  </outputSlots>
+</pikater.utility.boxTypes.Box>

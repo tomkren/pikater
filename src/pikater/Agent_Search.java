@@ -317,12 +317,12 @@ public abstract class Agent_Search extends PikaterAgent {
 								// System.out.println("OK: Pars - Update");
 								updateFinished(evaluations);
 							}
-							
+
 							if (finished()) {
 								//konec vsech evaluaci
 								// System.out.println("OK: Pars - Ukoncovani");
-								solutions_new = null; 
-								evaluations = null; 
+								solutions_new = null;
+								evaluations = null;
 								cont = false;
 								ACLMessage reply = ((ACLMessage)getDataStore().get(REQUEST_KEY)).createReply();
 								reply.setPerformative(ACLMessage.INFORM);

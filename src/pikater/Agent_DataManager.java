@@ -12,9 +12,12 @@ import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
+
 import org.apache.commons.codec.digest.DigestUtils;
+
 import pikater.agents.PikaterAgent;
 import pikater.data.ConnectionProvider;
+import pikater.data.jpa.JPAResult;
 import pikater.data.schema.SqlQueryFactory;
 import pikater.logging.Severity;
 import pikater.ontology.messages.*;
@@ -23,6 +26,9 @@ import java.io.*;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 public class Agent_DataManager extends PikaterAgent {
     private final String DEFAULT_CONNECTION_PROVIDER="defaultConnection";
@@ -397,21 +403,21 @@ public class Agent_DataManager extends PikaterAgent {
     private ACLMessage RespondToSaveResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
         SaveResults sr = (SaveResults) a.getAction();
         Task res = sr.getTask();
-
-        if (!(new File("studentMode").exists()) ) {
-
-            openDBConnection();
-            Statement stmt = db.createStatement();
-
-            String query = "INSERT INTO results (userID, agentName, agentType, options, dataFile, testFile,"
-                    + "errorRate, kappaStatistic, meanAbsoluteError, rootMeanSquaredError, relativeAbsoluteError,"
-                    + "rootRelativeSquaredError, start, finish, duration, durationLR, objectFilename, experimentID, experimentName, note) VALUES ( 1, ";
-            query += "\'" + res.getAgent().getName() + "\',";
-            query += "\'" + res.getAgent().getType() + "\',";
-            query += "\'" + res.getAgent().optionsToString() + "\',";
-            query += "\'" + res.getData().removePath(res.getData().getTrain_file_name()) + "\',";
-            query += "\'" + res.getData().removePath(res.getData().getTest_file_name()) + "\',";
-
+        
+        EntityManager entityManager = emf.createEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            JPAResult jparesult = new JPAResult();
+    
+            jparesult.setAgentName(res.getAgent().getName());
+            // nesedi na novy model kde jsou ciselne ID agentu - stary model pouziva Stringy... 
+            //jparesult.setAgentTypeId(res.getAgent().getType());
+            jparesult.setOptions(res.getAgent().optionsToString());
+            // cim se ma naplnit serializedFilename?
+            // co tyhle hodnoty co v novem model nejsou?
+            //query += "\'" + res.getData().removePath(res.getData().getTrain_file_name()) + "\',";
+            //query += "\'" + res.getData().removePath(res.getData().getTest_file_name()) + "\',";
+    
             float Error_rate = Float.MAX_VALUE;
             float Kappa_statistic = Float.MAX_VALUE;
             float Mean_absolute_error = Float.MAX_VALUE;
@@ -420,34 +426,34 @@ public class Agent_DataManager extends PikaterAgent {
             float Root_relative_squared_error = Float.MAX_VALUE; // percent
             int duration = Integer.MAX_VALUE; // miliseconds
             float durationLR = Float.MAX_VALUE;
-
+    
             Iterator itr = res.getResult().getEvaluations().iterator();
             while (itr.hasNext()) {
                 Eval next_eval = (Eval) itr.next();
                 if (next_eval.getName().equals("error_rate")){
                     Error_rate = next_eval.getValue();
                 }
-
+    
                 if (next_eval.getName().equals("kappa_statistic")){
                     Kappa_statistic = next_eval.getValue();
                 }
-
+    
                 if (next_eval.getName().equals("mean_absolute_error")){
                     Mean_absolute_error = next_eval.getValue();
                 }
-
+    
                 if (next_eval.getName().equals("root_mean_squared_error")){
                     Root_mean_squared_error = next_eval.getValue();
                 }
-
+    
                 if (next_eval.getName().equals("relative_absolute_error")){
                     Relative_absolute_error = next_eval.getValue();
                 }
-
+    
                 if (next_eval.getName().equals("root_relative_squared_error")){
                     Root_relative_squared_error = next_eval.getValue();
                 }
-
+    
                 if (next_eval.getName().equals("duration")){
                     duration = (int)next_eval.getValue();
                 }
@@ -455,31 +461,38 @@ public class Agent_DataManager extends PikaterAgent {
                     durationLR = (float)next_eval.getValue();
                 }
             }
-
-            query += Error_rate + ",";
-            query += Kappa_statistic + ",";
-            query += Mean_absolute_error + ",";
-            query += Root_mean_squared_error + ",";
-            query += Relative_absolute_error + ",";
-            query += Root_relative_squared_error;
-
-            query += ",";
-            query += "\'" + Timestamp.valueOf(res.getStart()) + "\',";
-            query += "\'" + Timestamp.valueOf(res.getFinish()) + "\',";
-
-            query += "\'" + duration + "\',";
-            query += "\'" + durationLR + "\',";
-
-            query += "\'" + res.getResult().getObject_filename() + "\', ";
-            query += "\'" + res.getId().getIdentificator() + "\',";  // TODO - pozor - neni jednoznacne, pouze pro jednoho managera
-            query += "\'" + res.getProblem_name() + "\',";
-            query += "\'" + res.getNote() + "\'";
-            query += ")";
-
-            log("Executing query: " + query);
-
-            stmt.executeUpdate(query);
-            db.close();
+            
+            jparesult.setErrorRate(Error_rate);
+            jparesult.setKappaStatistic(Kappa_statistic);
+            jparesult.setMeanAbsoluteError(Mean_absolute_error);
+            jparesult.setRootMeanSquaredError(Root_mean_squared_error);
+            jparesult.setRelativeAbsoluteError(Relative_absolute_error);
+            jparesult.setRootRelativeSquaredError(Root_relative_squared_error);
+            jparesult.setStart(new Date(Timestamp.valueOf(res.getStart()).getTime()));
+            //query += "\'" + Timestamp.valueOf(res.getStart()) + "\',";
+            jparesult.setFinish(new Date(Timestamp.valueOf(res.getFinish()).getTime()));
+            //query += "\'" + Timestamp.valueOf(res.getFinish()) + "\',";
+            
+            // v novem modelu tohle neni        
+            //query += "\'" + duration + "\',";
+            //query += "\'" + durationLR + "\',";
+    
+            // je to ono?
+            jparesult.setSerializedFileName(res.getResult().getObject_filename());
+            //query += "\'" + res.getResult().getObject_filename() + "\', ";
+            
+            //jparesult.setExperiment(TODO);
+            //query += "\'" + res.getId().getIdentificator() + "\',";  // TODO - pozor - neni jednoznacne, pouze pro jednoho managera
+            //query += "\'" + res.getProblem_name() + "\',";
+            jparesult.setNote(res.getNote());
+    
+            entityManager.persist(jparesult);
+            entityManager.getTransaction().commit();
+            log("persisted a JPAResult");
+        } finally {
+            if (entityManager.getTransaction().isActive())
+                entityManager.getTransaction().rollback();
+            entityManager.close();
         }
 
         ACLMessage reply = request.createReply();

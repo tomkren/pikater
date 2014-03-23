@@ -1,0 +1,14 @@
+<pikater.utility.boxTypes.Box>
+  <name>Visualizer</name>
+  <agentName>pikater/Agent_Visualizer</agentName>
+  <type>Visualizer</type>
+  <picture>picture4.jpg</picture>
+  <description>Visualiser shows dates from dataSource.</description>
+  <parameters/>
+  <inputSlots>
+    <pikater.utility.pikaterDatabase.tables.experiments.slots.DataConsumerSlot>
+      <slotName>Data Source</slotName>
+    </pikater.utility.pikaterDatabase.tables.experiments.slots.DataConsumerSlot>
+  </inputSlots>
+  <outputSlots/>
+</pikater.utility.boxTypes.Box>

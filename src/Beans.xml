@@ -28,6 +28,9 @@
         <constructor-arg name="userName" value="pikater"/>
         <constructor-arg name="password" value="a"/>
     </bean>
+    <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="pikaterDataModel"/>
+    </bean>
     <!--
     <bean id="jakubMSSQLConnection" class="pikater.data.MSSQLConnectionProvider" scope="singleton">
         <constructor-arg name="connectionUrl" value="jdbc:sqlserver://KUBA-NTB\SQLEXPRESS;databaseName=Autoskola;user=jakub;password=Diplomka-42;"/>
