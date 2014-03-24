@@ -14,14 +14,17 @@ public class JPAUser {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 	@Column(unique=true)
 	private String login;
+	@Column(nullable=false)
 	private String password;
-	private Long priorityMax;
+	private int priorityMax;
 	private String email;
+	private JPARole role;
 	
-	public Long getId() {
+	
+	public int getId() {
 		return id;
 	}
 	public String getLogin() {
@@ -36,10 +39,10 @@ public class JPAUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Long getPriorityMax() {
+	public int getPriorityMax() {
 		return priorityMax;
 	}
-	public void setPriorityMax(Long priorityMax) {
+	public void setPriorityMax(int priorityMax) {
 		this.priorityMax = priorityMax;
 	}
 	public String getEmail() {
@@ -48,4 +51,11 @@ public class JPAUser {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public JPARole getRole() {
+		return role;
+	}
+	public void setRole(JPARole role) {
+		this.role = role;
+	}
+	
 }

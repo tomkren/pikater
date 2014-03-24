@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
@@ -17,17 +18,21 @@ import org.postgresql.largeobject.LargeObjectManager;
 
 import pikater.data.jpa.JPADataSetLO;
 import pikater.data.jpa.JPAGeneralFile;
+import pikater.data.jpa.JPARole;
 import pikater.data.jpa.JPAUser;
+import pikater.utility.pikaterDatabase.exceptions.UserNotFoundException;
 
 public class Database {
 	
-	PGConnection connection;
 	public enum PasswordChangeResult{Success,Error};
-	private EntityManagerFactory factory;
+	
+	PGConnection connection;
+	EntityManagerFactory emf=null;
 	EntityManager em = null;
 	
-	public Database(){
-		factory = Persistence.createEntityManagerFactory("pikaterDataModel");
+	public Database(EntityManagerFactory emf,PGConnection connection){
+		this.emf=emf;
+		this.connection=connection;
 	}
 	
     public void saveExperimentXML(int userID, File xmlExperiment) {
@@ -45,8 +50,9 @@ public class Database {
 	 * @param loadTestData If the parameter is set to true the function also loads some test data
 	 * @throws IOException 
 	 * @throws SQLException 
+	 * @throws UserNotFoundException 
 	 */
-	public void init(boolean loadTestData) throws SQLException, IOException{
+	public void init(boolean loadTestData) throws SQLException, IOException, UserNotFoundException{
 		//createDataBase();
 		if(loadTestData){
 			loadTestData();
@@ -54,28 +60,141 @@ public class Database {
 	}
 	
 	/**
-	 * Creates the database 'pikater' if not existing
-	 */
-	private void createDataBase(){
-		
-	}
-	
-	/**
 	 * Loads test data to the DataBase
 	 * @throws IOException 
 	 * @throws SQLException 
+	 * @throws UserNotFoundException 
 	 */
-	private void loadTestData() throws SQLException, IOException{
-		this.addUser("johndoe", "123", "nassoftwerak@gmail.com", 6);
-		this.addUser("vomacka", "12345", "nassoftwerak@gmail.com", 4);
-		this.addUser("alfa", "12", "nassoftwerak@gmail.com", 3);
-		this.addUser("beta", "123", "nassoftwerak@gmail.com", 2);
+	private void loadTestData() throws SQLException, IOException, UserNotFoundException{
 		
+		this.addRole("user", "Standard user role");
+		this.addRole("admin","Standard administrator role");
+		
+
+		try {
+			this.deleteUserByLogin("bs");
+		} catch (UserNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		try {
+			this.deleteUserByLogin("kj");
+		} catch (UserNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		try {
+			this.deleteUserByLogin("sj");
+		} catch (UserNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		try {
+			this.deleteUserByLogin("sp");
+		} catch (UserNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		try {
+			this.deleteUserByLogin("johndoe");
+		} catch (UserNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		
+		this.addUser("bs", "123", "nassoftwerak@gmail.com", 6);
+		this.addUser("kj", "123", "nassoftwerak@gmail.com", 6);
+		this.addUser("sj", "123", "nassoftwerak@gmail.com", 6);
+		this.addUser("sp", "123", "nassoftwerak@gmail.com", 6);
+		this.addUser("johndoe", "123", "nassoftwerak@gmail.com",3);
+		
+		this.setRoleForUser("bs", "admin");
+		this.setRoleForUser("kj", "admin");
+		this.setRoleForUser("sj", "admin");
+		this.setRoleForUser("sp", "admin");
+		this.setRoleForUser("johndoe", "user");
+		
+		/**
 		JPAUser john=this.getUserByLogin("johndoe");
 		this.saveGeneralFile(john.getId(), "First Data File",new File( "./data/files/25d7d5d689042a3816aa1598d5fd56ef"));
 		this.saveGeneralFile(john.getId(), "Second Data File",new File( "./data/files/772c551b8486b932aed784a582b9c1b1"));
 		this.saveGeneralFile(john.getId(), "Third Data File",new File( "./data/files/dc7ce6dea5a75110486760cfac1051a5"));
+		**/
 	}
+	
+	
+	/**
+	 * Adds an existing role object to the database
+	 * @param role The role's object
+	 */
+	public void addRole(JPARole role){
+		persist(role);
+	}
+	
+	/**
+	 * Creates a new role with the given name and description. The created role is saved to the database. The name must be unique in the database, where to object is intended to be saved.
+	 * @param name The name of the new role
+	 * @param description The description of the new role
+	 */
+	public void addRole(String name,String description){
+		JPARole newRole=new JPARole();
+		newRole.setName(name);
+		newRole.setDescription(description);
+		addRole(newRole);
+	}
+	
+	/**
+	 * Returns the list of all roles stored in the database.
+	 * @return The List of roles.
+	 */
+	public List<JPARole> getRoles(){
+		try{
+			em=emf.createEntityManager();
+			Query q = em.createQuery("select r from JPARole r");
+			List<JPARole> roleList = q.getResultList();
+			return roleList;
+		}finally{
+			cleanUpEntityManager();
+		}
+	}
+	
+	/**
+	 * Returns a role identified by the given roleName
+	 * @param roleName The role's name
+	 * @return The JPA object of role found in the database
+	 */
+	public JPARole getRoleByName(String roleName){
+		try{
+			em=emf.createEntityManager();
+			Query q = em.createQuery("select r from JPARole r where r.name=:roleName");
+			q.setParameter("roleName", roleName);
+			JPARole res=(JPARole)q.getSingleResult();
+			return res;
+		}finally{
+			cleanUpEntityManager();
+		}
+	}
+	
+	/**
+	 * For the user with the given loginName sets the role specified by the name of the role
+	 * @param login The user's login
+	 * @param roleName The role's name
+	 * @throws UserNotFoundException 
+	 */
+	public void setRoleForUser(String login,String roleName) throws UserNotFoundException{
+		JPARole role=this.getRoleByName(roleName);
+		JPAUser user=this.getUserByLogin(login);
+		setRoleForUser(user, role);
+	}
+	
+	/**
+	 * For the user's JPA object sets a role, that is given by its JPA object.
+	 * @param user The user's JPA object
+	 * @param role The role's JPA object
+	 */
+	public void setRoleForUser(JPAUser user,JPARole role){
+		role.getUsersWithThisRole().add(user);
+		user.setRole(role);
+		persist(user);
+		persist(role);
+	}
+	
 	
 	/**
 	 * Adds an existing user object to the database
@@ -106,7 +225,7 @@ public class Database {
 	 * @param email The new user's e-mail
 	 * @param maxPriority The new user's maximal priority
 	 */
-	public void addUser(String login,String password,String email,long maxPriority){
+	public void addUser(String login,String password,String email,int maxPriority){
 		JPAUser newUser=new JPAUser();
 		newUser.setLogin(login);
 		newUser.setPassword(password);
@@ -120,11 +239,14 @@ public class Database {
 	 * @return The List of users.
 	 */
 	public List<JPAUser> getUsers(){
-		em = factory.createEntityManager();
-		Query q = em.createQuery("select u from JPAUser u");
-		List<JPAUser> userList = q.getResultList();
-		em.close();
-		return userList;
+		try{
+			em=emf.createEntityManager();
+			Query q = em.createQuery("select u from JPAUser u");
+			List<JPAUser> userList = q.getResultList();
+			return userList;
+		}finally{
+			cleanUpEntityManager();
+		}
 	}
   
 	/**
@@ -133,26 +255,67 @@ public class Database {
 	 * @return The JPA object of user found in the database
 	 */
 	public JPAUser getUserByID(long id){
-		em = factory.createEntityManager();
-		Query q = em.createQuery("select u from JPAUser u where u.id=:userId");
-		q.setParameter("userId", id);
-		JPAUser res=(JPAUser)q.getSingleResult();
-		em.close();
-		return res;
+		try{
+			em=emf.createEntityManager();
+			Query q = em.createQuery("select u from JPAUser u where u.id=:userId");
+			q.setParameter("userId", id);
+			return (JPAUser)q.getSingleResult();
+		}finally{
+			cleanUpEntityManager();
+		}
 	}
   
 	/**
 	 * Returns an user identified by the given LoginName
 	 * @param login The user's login name
 	 * @return The JPA object of user found in the database
+	 * @throws UserNotFoundException 
 	 */
-	public JPAUser getUserByLogin(String login){
-		em = factory.createEntityManager();
-		Query q = em.createQuery("select u from JPAUser u where u.login=:userLogin");
-		q.setParameter("userLogin", login);
-		JPAUser res=(JPAUser)q.getSingleResult();
-		em.close();
-		return res;
+	public JPAUser getUserByLogin(String login) throws UserNotFoundException{
+		try{
+			em=emf.createEntityManager();
+			Query q = em.createQuery("select u from JPAUser u where u.login=:userLogin");
+			q.setParameter("userLogin", login);
+			JPAUser res;
+			try{
+			    res=(JPAUser)q.getSingleResult();
+			}catch(javax.persistence.NoResultException nre){
+				throw new UserNotFoundException(login);
+			}
+			return res;
+		}finally{
+			cleanUpEntityManager();
+		}
+	}
+	
+	/**
+	 * Delete user with the given ID
+	 * @param id The ID of the user to be deleted
+	 * @throws UserNotFoundException 
+	 */
+	public void deleteUserByID(int id) throws UserNotFoundException{
+		JPAUser user=this.getUserByID(id);
+		if(user==null) throw new UserNotFoundException(id);
+		deleteUser(user);
+	}
+	
+	/**
+	 * Delete user with the given loginName
+	 * @param login The loginName of the user to be deleted
+	 * @throws UserNotFoundException 
+	 */
+	public void deleteUserByLogin(String login) throws UserNotFoundException{
+		JPAUser user=this.getUserByLogin(login);
+		if(user==null) throw new UserNotFoundException(login);
+		deleteUser(user);
+	}
+	
+	/**
+	 * Delete user represented with the given JPA object
+	 * @param user The JPA object of the user to be deleted
+	 */
+	public void deleteUser(JPAUser user){
+		unpersist(user);
 	}
   
   /**
@@ -182,13 +345,13 @@ public class Database {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-public JPAGeneralFile saveGeneralFile(long userId,String description,File file) throws SQLException, IOException{
+public JPAGeneralFile saveGeneralFile(int userId,String description,File file) throws SQLException, IOException{
 	  long oid=saveFileAsLargeObject(file);
 	  
 	  JPAGeneralFile gf=new JPAGeneralFile();
 	  gf.setDescription(description);
 	  gf.setFileName(file.getName());
-	  gf.setUserID(userId);
+	  gf.setUserId(userId);
 	  gf.setOID(oid);
 	  
 	  persist(gf);
@@ -201,11 +364,14 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @return The List of general files.
    */
   public List<JPAGeneralFile> getAllGeneralFiles(){
-	  em = factory.createEntityManager();
-	  Query q = em.createQuery("select gf from JPAGeneralFile gf");
-	  List<JPAGeneralFile> generalFileList = q.getResultList();
-	  em.close();
-	  return generalFileList;
+	  try{
+		  em=emf.createEntityManager();
+		  Query q = em.createQuery("select gf from JPAGeneralFile gf");
+		  List<JPAGeneralFile> generalFileList = q.getResultList();
+		  return generalFileList;
+	  }finally{
+		  cleanUpEntityManager();
+	  }
   }
   
   /**
@@ -214,12 +380,15 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @return List of JPAGeneralFile objects.
    */
   public List<JPAGeneralFile> getGeneralFilesByUser(long userId){
-	  em = factory.createEntityManager();
-	  Query q = em.createQuery("select gf from JPAGeneralFile gf where gf.userId=:userId");
-	  q.setParameter("userId", userId);
-	  List<JPAGeneralFile> generalFileList = q.getResultList();
-	  em.close();
-	  return generalFileList;
+	  try{
+		  em=emf.createEntityManager();
+		  Query q = em.createQuery("select gf from JPAGeneralFile gf where gf.userId=:userId");
+		  q.setParameter("userId", userId);
+		  List<JPAGeneralFile> generalFileList = q.getResultList();
+		  return generalFileList;
+	  }finally{
+		  cleanUpEntityManager();
+	  }
   }
   
   /**
@@ -245,12 +414,15 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @return JPAGeneralFile object for the stored file.
    */
   public JPAGeneralFile getGeneralFileByID(long fileId){
-	  em = factory.createEntityManager();
-	  Query q = em.createQuery("select gf from JPAGeneralFile gf where gf.id=:fileId");
-	  q.setParameter("fileId", fileId);
-	  JPAGeneralFile res=(JPAGeneralFile)q.getSingleResult();
-	  em.close();
-	  return res;
+	  try{
+		  em = emf.createEntityManager();
+		  Query q = em.createQuery("select gf from JPAGeneralFile gf where gf.id=:fileId");
+		  q.setParameter("fileId", fileId);
+		  JPAGeneralFile res=(JPAGeneralFile)q.getSingleResult();
+		  return res;
+	  }finally{
+		  cleanUpEntityManager();
+	  }
   }
   
   /**
@@ -277,11 +449,11 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @throws IOException
    * @return The persisted JPADataSetLO object for the stored file
    */
-  public JPADataSetLO saveDataSet(long userID, File dataSet) throws SQLException, IOException {
+  public JPADataSetLO saveDataSet(int userID, File dataSet) throws SQLException, IOException {
       long oid=saveFileAsLargeObject(dataSet);
       JPADataSetLO jpaDataSetLD=new JPADataSetLO();
       jpaDataSetLD.setOID(oid);
-      jpaDataSetLD.setUserID(userID);
+      jpaDataSetLD.setUserId(userID);
       jpaDataSetLD.setDataSetFileName(dataSet.getName());
       //persisting the object jpaDataSet
       persist(jpaDataSetLD);
@@ -293,11 +465,14 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @return The List of datasets.
    */
   public List<JPADataSetLO> getAllDataSetLargeObjects(){
-	  em = factory.createEntityManager();
-	  Query q = em.createQuery("select dslo from JPADataSetLO dslo");
-	  List<JPADataSetLO> dataSetLOList = q.getResultList();
-	  em.close();
-	  return dataSetLOList;
+	  try{
+		  em=emf.createEntityManager();
+		  Query q = em.createQuery("select dslo from JPADataSetLO dslo");
+		  List<JPADataSetLO> dataSetLOList = q.getResultList();
+		  return dataSetLOList;
+	  }finally{
+		  cleanUpEntityManager();
+	  }
   }
   
   
@@ -307,12 +482,14 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @return List of JPADataSetLO objects.
    */
   public List<JPADataSetLO> getDataSetLargeObjectsByUser(long userId){
-	  em = factory.createEntityManager();
-	  Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.userId=:userId");
-	  q.setParameter("userId", userId);
-	  List<JPADataSetLO> dataSetLOList = q.getResultList();
-	  em.close();
-	  return dataSetLOList;
+	  try{
+		  Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.userId=:userId");
+		  q.setParameter("userId", userId);
+		  List<JPADataSetLO> dataSetLOList = q.getResultList();
+		  return dataSetLOList;
+	  }finally{
+		  cleanUpEntityManager();
+	  }
   }
   
   
@@ -339,12 +516,14 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @return The JPADataSetLO object.
    */
   public JPADataSetLO getDataSetLOByID(long dataSetId){
-	  em = factory.createEntityManager();
-	  Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.id=:dataSetId");
-	  q.setParameter("dataSetId", dataSetId);
-	  JPADataSetLO res=(JPADataSetLO)q.getSingleResult();
-	  em.close();
-	  return res;
+	  try{
+		  em=emf.createEntityManager();
+		  Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.id=:dataSetId");
+		  q.setParameter("dataSetId", dataSetId);
+		  return (JPADataSetLO)q.getSingleResult();
+	  }finally{
+		  cleanUpEntityManager();
+	  }
   }
   
   /**
@@ -358,15 +537,17 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
 	  unpersist(dslo);
   }
   
-  
+  /**
   
   /**
    * Sets the Connection object used to communicate with the database. 
    * @param connection The PGConnection object representing the connection.
-   */
+   
   public void setPostgreConnection(PGConnection connection){
 	  this.connection=connection;
   }
+  
+  */
   
   
   
@@ -449,19 +630,20 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
   }
   
   
-  
-  
-  
   /**
    * The function persists the given object to the database using Java Persistence API.
    * @param object The object to be persisted.
    */
   private void persist(Object object){
-	    em = factory.createEntityManager();
+	  try{
+	    em=emf.createEntityManager();
 	  	em.getTransaction().begin();
-	    em.persist(object);
+	  	Object o=em.merge(object);
+	    em.persist(o);
 	    em.getTransaction().commit();
-	    em.close();
+	  }finally{
+	    cleanUpEntityManager();
+	  }
   }
   
   /**
@@ -469,12 +651,23 @@ public JPAGeneralFile saveGeneralFile(long userId,String description,File file) 
    * @param object The object to be deleted.
    */
   private void unpersist(Object object){
-	    em = factory.createEntityManager();
+	  if(object!=null){
+	  try{
+	    em=emf.createEntityManager();
 	  	em.getTransaction().begin();
 	  	Object o=em.merge(object);
 	    em.remove(o);
 	    em.getTransaction().commit();
-	    em.close();
+      }finally{
+	    cleanUpEntityManager();
+	  }
+	  }
+  }
+  
+  private void cleanUpEntityManager(){
+	  if(em!=null){
+		  em.close();
+	  }
   }
   
 }
