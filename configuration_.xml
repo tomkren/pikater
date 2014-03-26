@@ -27,32 +27,33 @@
         
         <agent type="pikater.agents.management.ManagerAgent" name="agentManager">
         </agent>
-
+<!--
         <agent type="pikater.Agent_Duration" name="duration">
             <arguments>
                 <argument key="log_LR_durations" value="true"/>
                 <argument key="user" value="root"/>
             </arguments>
         </agent>
-
+-->
+<!--
         <agent type="pikater.Agent_GUI_config_file" name="UI">
             <arguments>
                 <argument key="config" value="test.xml"/>
                 <argument key="user" value="root"/>
             </arguments>
         </agent>
-
+-->
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
-                <argument key="sniffed" value="agentManager" sendOnlyValue="true" />
+                <argument key="sniffed" value="Reader_Cervenacek" sendOnlyValue="true" />
             </arguments>
         </agent>
-<!--
+
         <agent type="pikater.Agent_ComputingManager" name="ComputingManager">
         </agent>
 
         <agent type="pikater.Agent_Scheduler" name="Scheduler">
         </agent>
--->
+
     </agents>
 </configuration>

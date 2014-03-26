@@ -448,7 +448,6 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 		@Override
 		public void action() {			
-			
 						
 				ContentElement content;
 				try {				
@@ -467,10 +466,10 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 						return;
 					}
                                 
-                                ACLMessage CFPproposal = receive(CFPproposalMsgTemplate);
+                    ACLMessage CFPproposal = receive(CFPproposalMsgTemplate);
 					if (CFPproposal != null){
 						content = getContentManager().extractContent(CFPproposal);
-						if (((Action) content).getAction() instanceof Execute) {						
+						if (((Action) content).getAction() instanceof Execute) {
 							ACLMessage propose = CFPproposal.createReply();
 							propose.setPerformative(ACLMessage.PROPOSE);
 							int size = taskFIFO.size();
@@ -483,14 +482,14 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 					}
 					
                                 ACLMessage CFPreq = receive(CFPreqMsgTemplate);
-					if (CFPreq != null){					
+					if (CFPreq != null){
 						engaged = false;
 						content = getContentManager().extractContent(CFPreq);
 						if (((Action) content).getAction() instanceof Execute) {												
 							send(processExecute(CFPreq));
 						}
 						
-						// TODO create search agent here						
+						// TODO create search agent here
 						return;					
 					}
 				} catch (CodecException ce) {

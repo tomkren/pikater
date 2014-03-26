@@ -38,6 +38,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,6 +54,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+
+import com.thoughtworks.xstream.XStream;
 
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
@@ -141,7 +145,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	private boolean print_distance_matrix = true;
 	
-	protected class ExecuteTask extends ContractNetInitiator{
+	protected class ExecuteTask extends ContractNetInitiator {
 
 		private static final long serialVersionUID = -2044738642107219180L;
 
@@ -698,6 +702,15 @@ public class Agent_Manager extends PikaterAgent {
 							ex.setMethod(problem.getMethod());
 							
 							
+							System.out.println("-----------------------------------------------");
+							XStream xstream = new XStream();							
+							String xml = xstream.toXML(ex);
+
+							PrintWriter writer = new PrintWriter("ExecuteOntology.txt", "UTF-8");
+							writer.println(xml);
+							writer.close();
+							
+							
 							msgList.add(createCFPmessage(ex, problemId, findCFPmessageReceivers(ex, problemId)));
 						}
 					} // end while (iteration over files)
@@ -718,6 +731,12 @@ public class Agent_Manager extends PikaterAgent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OntologyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

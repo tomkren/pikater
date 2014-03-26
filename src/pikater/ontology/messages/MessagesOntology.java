@@ -8,7 +8,10 @@ import jade.content.schema.ConceptSchema;
 import jade.content.schema.ObjectSchema;
 import jade.content.schema.PredicateSchema;
 import jade.content.schema.PrimitiveSchema;
-
+import pikater.ontology.description.ComputationDescription;
+import pikater.ontology.description.ComputingAgent;
+import pikater.ontology.description.DataSourceDescription;
+import pikater.ontology.description.FileVisualizer;
 import pikater.ontology.messages.metadata.*;
 
 public class MessagesOntology extends Ontology {
@@ -340,6 +343,22 @@ public class MessagesOntology extends Ontology {
 	public static final String SEND_EMAIL_TO_ADDRESS = "to_address";
 	public static final String SEND_EMAIL_TYPE = "email_type";
 	
+	public static final String EXPERIMENT = "EXPERIMENT";
+	public static final String EXPERIMENT_DESCRIPTION = "description";
+	
+	public static final String COMP_DESCRIPTION = "ComputationDescription";
+	public static final String COMP_DESCRIPTION_ROOT = "rootElement";
+	
+	public static final String FILEVISUALIZER = "FileVisualizer"; 
+	public static final String FILEVISUALIZER_DATASOURCE = "dataSource";
+
+	public static final String DATAPROVIDER = "DataSourceDescription";
+	public static final String DATAPROVIDER_DATAPROVIDER = "dataProvider";
+	
+	public static final String COMPUTINGAGENT = "ComputingAgent";
+	public static final String COMPUTINGAGENT_MODEL = "modelClass";
+
+
 	// public static final String SEND_OPTIONS = "SEND-OPTIONS";
 	// public static final String SEND_OPTIONS_OPTIONS = "options";
 
@@ -425,7 +444,16 @@ public class MessagesOntology extends Ontology {
 					ShutdownDatabase.class);
 			add(new AgentActionSchema(RECOMMEND), Recommend.class);
 			add(new AgentActionSchema(SEND_EMAIL), SendEmail.class);
+			
+			
+			add(new AgentActionSchema(EXPERIMENT), ExecuteExperiment.class);
+			
+			add(new ConceptSchema(COMP_DESCRIPTION), ComputationDescription.class);
+			add(new ConceptSchema(FILEVISUALIZER), FileVisualizer.class);
+			add(new ConceptSchema(DATAPROVIDER), DataSourceDescription.class);
+			add(new ConceptSchema(COMPUTINGAGENT), ComputingAgent.class);
 
+	
 			ConceptSchema cs = (ConceptSchema) getSchema(ID);
 			cs.add(ID_IDENTIFICATOR,
 					(PrimitiveSchema) getSchema(BasicOntology.STRING));
@@ -1026,7 +1054,24 @@ public class MessagesOntology extends Ontology {
                     ObjectSchema.MANDATORY);
             as.add(SEND_EMAIL_TYPE, (PrimitiveSchema) getSchema(BasicOntology.STRING),
                     ObjectSchema.MANDATORY);
-			
+            
+            as = (AgentActionSchema) getSchema(EXPERIMENT);
+            as.add(EXPERIMENT_DESCRIPTION, (ConceptSchema) getSchema(COMP_DESCRIPTION),
+            		ObjectSchema.MANDATORY);
+
+            cs = (ConceptSchema) getSchema(COMP_DESCRIPTION);
+            cs.add(COMP_DESCRIPTION_ROOT, (ConceptSchema) getSchema(FILEVISUALIZER),
+            		ObjectSchema.OPTIONAL);
+
+            cs = (ConceptSchema) getSchema(FILEVISUALIZER);
+            cs.add(FILEVISUALIZER_DATASOURCE, (ConceptSchema) getSchema(DATAPROVIDER));
+            
+            cs = (ConceptSchema) getSchema(DATAPROVIDER);
+            cs.add(DATAPROVIDER_DATAPROVIDER, (ConceptSchema) getSchema(COMPUTINGAGENT));
+            
+            cs = (ConceptSchema) getSchema(COMPUTINGAGENT);
+            cs.add(COMPUTINGAGENT_MODEL, (PrimitiveSchema) getSchema(BasicOntology.STRING));
+            
 		} catch (OntologyException oe) {
 			oe.printStackTrace();
 		}

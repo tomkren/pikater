@@ -53,12 +53,16 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 			return;
 			//
 		try {
+//:TODO	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! wekaClassName has static value		
 			//TODO: May take options as a second parameter:
+			wekaClassName = "weka.classifiers.functions.MultilayerPerceptron";
+			System.out.println("               "+wekaClassName);
 			cls = Classifier.forName(wekaClassName,null);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	@Override

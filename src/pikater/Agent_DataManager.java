@@ -13,6 +13,7 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import pikater.agents.PikaterAgent;
@@ -404,7 +405,7 @@ public class Agent_DataManager extends PikaterAgent {
         SaveResults sr = (SaveResults) a.getAction();
         Task res = sr.getTask();
         
-        EntityManager entityManager = emf.createEntityManager();
+        EntityManager entityManager = null; //emf.createEntityManager();
         try {
             entityManager.getTransaction().begin();
             JPAResult jparesult = new JPAResult();

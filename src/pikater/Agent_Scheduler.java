@@ -1,5 +1,7 @@
 package pikater;
 
+import java.io.IOException;
+
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -11,74 +13,105 @@ import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.JADEAgentManagement.JADEManagementOntology;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.leap.List;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
 import pikater.ontology.description.ComputationDescription;
 import pikater.ontology.description.ComputingAgent;
+import pikater.ontology.description.DataSourceDescription;
+import pikater.ontology.description.FileDataProvider;
+import pikater.ontology.description.FileVisualizer;
 import pikater.ontology.description.IComputationElement;
+import pikater.ontology.messages.ExecuteExperiment;
 import pikater.ontology.messages.MessagesOntology;
+import pikater.ontology.messages.SendEmail;
 import pikater.ontology.messages.Solve;
 
-/*
- *  Napsano Stepanem - nedivte se kdyz to nebude fungovat :-)
- */
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+
+
 public class Agent_Scheduler extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7226837600070711675L;
 
+	
 	@Override
 	protected void setup() {
-		initDefault();
-		//registerWithDF();
 		
-	  	System.out.println("Hello World! My name is " ); //+getLocalName());
-	  	
-	  	//addBehaviour(new SchedulerBehaviour(this));
+	  	System.out.println("Agent: " +getLocalName() + " starts.");
 
-/*	  	
-	  	
-		// Creating new computing angent
-        ManagerAgentCommunicator communicator =
-        		new ManagerAgentCommunicator("agentManager");
-        String type = "Agent_ComputingManager";
-        String name = null;
-        List options = null;
-        AID computingAgent = communicator.createAgent((PikaterAgent) this,
-        		type, name, options);
-
-	  	
-        // Creating instance of ontology for computing angent
-        Solve solve = new Solve();
-        
-        Action solveAction = new Action();
-        solveAction.setAction(solve);
-        solveAction.setActor(getAID());
+		initDefault();
+		registerWithDF("Scheduler");
 
 
-        // Creating new message
-        ACLMessage msgOut = new ACLMessage(ACLMessage.REQUEST);
-        msgOut.addReceiver(computingAgent);
-
+		// wait until another agents start
 		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-			getContentManager().fillContent(msgOut, solveAction);
 
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI("weather.arff");
+
+        DataSourceDescription fileDataSource = new DataSourceDescription();
+        fileDataSource.setDataProvider(fileDataProvider);
+
+		ComputingAgent comAgent = new ComputingAgent();
+		comAgent.setTrainingData(fileDataSource);
+		comAgent.setModelClass("pikater.agents.computing.Agent_WekaCA");
+
+		DataSourceDescription computingDataSource = new DataSourceDescription();
+		computingDataSource.setDataProvider(comAgent);
+
+        FileVisualizer visualizer = new FileVisualizer();
+        visualizer.setDataSource(computingDataSource);
+
+        ComputationDescription comDescription = new ComputationDescription();
+		comDescription.setRootElement(visualizer);
+
+
+		ExecuteExperiment executeExpAction = new ExecuteExperiment(comDescription);
+
+
+        AID receiver = new AID("ComputingManager", false);		
+
+        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+        msg.addReceiver(receiver);
+        msg.setLanguage(getCodec().getName());
+        msg.setOntology(getOntology().getName());
+        try {
+			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
+			
+			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
+			
+			System.out.println("Reply: " + reply.getContent());
+			
 		} catch (CodecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OntologyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		send(msgOut);
 
-*/	  	
-			  	
 	  	// Make this agent terminate
 	  	//doDelete();
 	}
@@ -89,32 +122,4 @@ public class Agent_Scheduler extends PikaterAgent {
 		return "Scheduler";
 	}
 	
-}
-
-
-class SchedulerBehaviour extends CyclicBehaviour {
-
-	private static final long serialVersionUID = 1L;
-
-	private Agent agent;
-	
-	private Codec codec = new SLCodec();
-	private Ontology ontology = MessagesOntology.getInstance();
-
-	private MessageTemplate requestMsgTemplate = MessageTemplate
-			.and(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-					MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-							MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-									MessageTemplate.MatchOntology(ontology.getName()))));
-	
-	public SchedulerBehaviour(Agent agent) {	
-		super(agent);
-		this.agent = agent;
-	}
-	
-	@Override
-	public void action() {
-		// TODO Auto-generated method stub			
-	}
-
 }
