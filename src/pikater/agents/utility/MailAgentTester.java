@@ -20,7 +20,7 @@ public class MailAgentTester extends PikaterAgent {
     @Override
     protected void setup() {
         initDefault();
-        
+
         // dal by se taky najit v DF, kdybych nevedel, jak se jmenuje
         AID receiver = new AID("mailAgent", false);
 
@@ -42,7 +42,7 @@ public class MailAgentTester extends PikaterAgent {
             logError("FIPA error occurred: "+e.getMessage());
             e.printStackTrace();
         }
-        
+
         log("MailAgentTester ending");
         doDelete();
     }

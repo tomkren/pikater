@@ -2,7 +2,6 @@ package pikater.tests.ontology.description;
 
 import java.util.ArrayList;
 
-import org.json.JSONObject;
 
 import pikater.ontology.description.BooleanParameter;
 import pikater.ontology.description.ComputationDescription;
