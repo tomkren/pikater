@@ -701,7 +701,7 @@ public class Agent_Manager extends PikaterAgent {
 							ex.setTask(task);
 							ex.setMethod(problem.getMethod());
 							
-							
+						/*	
 							System.out.println("-----------------------------------------------");
 							XStream xstream = new XStream();							
 							String xml = xstream.toXML(ex);
@@ -709,7 +709,7 @@ public class Agent_Manager extends PikaterAgent {
 							PrintWriter writer = new PrintWriter("ExecuteOntology.txt", "UTF-8");
 							writer.println(xml);
 							writer.close();
-							
+						*/	
 							
 							msgList.add(createCFPmessage(ex, problemId, findCFPmessageReceivers(ex, problemId)));
 						}
@@ -731,12 +731,6 @@ public class Agent_Manager extends PikaterAgent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

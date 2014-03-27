@@ -72,7 +72,7 @@ public class DatabaseTest {
 		List<JPADataSetLO> list= db.getAllDataSetLargeObjects();
 		System.out.println("All DataSets: ");
 		for(JPADataSetLO dslo:list){
-			System.out.println(dslo.getId()+" "+dslo.getDataSetFileName()+" "+dslo.getOID());
+			System.out.println(dslo.getID()+" "+dslo.getDataSetFileName()+" "+dslo.getOID());
 		}
 		System.out.println(list.size()+" items found.");
 		System.out.println();
@@ -82,7 +82,7 @@ public class DatabaseTest {
 		List<JPAGeneralFile> list2= db.getAllGeneralFiles();
 		System.out.println("All GeneralFiles: ");
 		for(JPAGeneralFile gf:list2){
-			System.out.println(gf.getId()+" "+gf.getFileName()+" "+gf.getOID());
+			System.out.println(gf.getID()+" "+gf.getFileName()+" "+gf.getOID());
 		}
 		System.out.println(list2.size()+" items found.");
 		System.out.println();

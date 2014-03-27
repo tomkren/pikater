@@ -351,7 +351,7 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
 	  JPAGeneralFile gf=new JPAGeneralFile();
 	  gf.setDescription(description);
 	  gf.setFileName(file.getName());
-	  gf.setUserId(userId);
+	  gf.setUserID((long) userId);
 	  gf.setOID(oid);
 	  
 	  persist(gf);
@@ -453,7 +453,7 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
       long oid=saveFileAsLargeObject(dataSet);
       JPADataSetLO jpaDataSetLD=new JPADataSetLO();
       jpaDataSetLD.setOID(oid);
-      jpaDataSetLD.setUserId(userID);
+      jpaDataSetLD.setUserID((long)userID);
       jpaDataSetLD.setDataSetFileName(dataSet.getName());
       //persisting the object jpaDataSet
       persist(jpaDataSetLD);
