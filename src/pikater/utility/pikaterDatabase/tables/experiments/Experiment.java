@@ -11,16 +11,14 @@ public class Experiment {
 
 	public static void experiment1() throws IOException {
 
-		BoxesModel model = BoxesModel.importXML();
-		
 		UniversalDataProvider inputFile = new UniversalDataProvider();
-		inputFile.setBoxDescription(model.getBoxByName("Agent_FileInput"));
+		inputFile.setBoxDescription(BoxesModel.boxes.get(BoxesModel.box_fileInput));
 		DataProviderSlot inputFileDatasetOutputSlot =
 				(DataProviderSlot) inputFile.getOutputSlotByName("Dataset");
 
 		
 		UniversalDataProvider computing = new UniversalDataProvider();
-		computing.setBoxDescription(model.getBoxByName("Agent_Visualizer"));
+		computing.setBoxDescription(BoxesModel.boxes.get(BoxesModel.box_visualizer));
 		DataConsumerSlot computingTrainingDataInputSlot =
 				(DataConsumerSlot) computing.getInputSlotByName("Training data");
 		DataConsumerSlot computingTestingDataInputSlot =
@@ -36,7 +34,7 @@ public class Experiment {
 
 
 		UniversalDataConsumer visualizer = new UniversalDataConsumer();
-		visualizer.setBoxDescription(model.getBoxByName("Agent_Visualizer"));
+		visualizer.setBoxDescription(BoxesModel.boxes.get(BoxesModel.box_visualizer));
 		DataConsumerSlot visualizerInputSlot =
 				(DataConsumerSlot) visualizer.getInputSlotByName("Data Source");
 		visualizerInputSlot.connect(computingDataOutputSlot);
