@@ -44,6 +44,7 @@
 
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
+                <argument key="sniffed" value="RBFNetwork" sendOnlyValue="true" />
                 <argument key="sniffed" value="agentManager" sendOnlyValue="true" />
             </arguments>
         </agent>

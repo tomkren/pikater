@@ -210,11 +210,12 @@ public class Database {
 	 * @param password The new user's password
 	 * @param email The new user's e-mail
 	 */
-	public void addUser(String login,String password,String email){
+	public void addUser(String login,String password,String email, String roleName){
 		JPAUser newUser=new JPAUser();
 		newUser.setLogin(login);
 		newUser.setPassword(password);
 		newUser.setEmail(email);
+		newUser.setRole(getRoleByName(roleName));
 		this.addUser(newUser);
 	}
 	
@@ -634,7 +635,7 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
    * The function persists the given object to the database using Java Persistence API.
    * @param object The object to be persisted.
    */
-  private void persist(Object object){
+  void persist(Object object){
 	  try{
 	    em=emf.createEntityManager();
 	  	em.getTransaction().begin();

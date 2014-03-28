@@ -11,10 +11,13 @@
         <class>pikater.data.jpa.JPAResult</class>
         <class>pikater.data.jpa.JPAGeneralFile</class>
         <class>pikater.data.jpa.JPADataSetLO</class>
+        <class>pikater.data.jpa.JPAUser</class>
+        <class>pikater.data.jpa.JPARole</class>
+        <class>pikater.data.jpa.JPAUserPriviledge</class>
       <properties>
 
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/pikater" />
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater" />
       <property name="javax.persistence.jdbc.user" value="pikater" />
       <property name="javax.persistence.jdbc.password" value="a" />
       <property name="eclipselink.ddl-generation" value="create-tables" />

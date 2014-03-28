@@ -248,6 +248,13 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 		registerWithDF(typeDescList);
 		
+		//System.out.println("******------*******----****** " + getLocalName() );
+		//try {
+		//	Thread.sleep(10000);
+		//} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
 		
 		if (!newAgent) {
 			resurrected = true;

@@ -405,7 +405,8 @@ public class Agent_DataManager extends PikaterAgent {
         SaveResults sr = (SaveResults) a.getAction();
         Task res = sr.getTask();
         
-        EntityManager entityManager = null; //emf.createEntityManager();
+        EntityManager entityManager = emf.createEntityManager();
+
         try {
             entityManager.getTransaction().begin();
             JPAResult jparesult = new JPAResult();

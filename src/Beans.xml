@@ -24,9 +24,9 @@
     </bean>
     -->
     <bean id="honza_local" class="pikater.data.PostgreSQLConnectionProvider" scope="singleton">
-        <constructor-arg name="url" value="jdbc:postgresql://localhost:5432/pikater"/>
+        <constructor-arg name="url" value="jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater"/>
         <constructor-arg name="userName" value="pikater"/>
-        <constructor-arg name="password" value="SrapRoPy"/>
+        <constructor-arg name="password" value="a"/>
     </bean>
     <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="pikaterDataModel"/>
