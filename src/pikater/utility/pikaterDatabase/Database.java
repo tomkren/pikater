@@ -15,6 +15,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.persistence.internal.xr.XRServiceFactory.JPAMetadataSource;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
@@ -123,6 +125,8 @@ public class Database {
 		**/
 	}
 	
+	
+	
 	/**
 	 * Adds a JPAGlobalMetaData object to the database
 	 * @param jpaGlobalMetaData The object to be stored.
@@ -143,6 +147,7 @@ public class Database {
 		if(storedTask==null){
 			storedTask=this.createTaskType(defaultTaskTypeName);
 			this.addTaskType(storedTask);
+			storedTask=this.getTaskTypeByName(defaultTaskTypeName);
 		}
 		JPAGlobalMetaData gMetaData=new JPAGlobalMetaData();
 		gMetaData.setDefaultTaskType(storedTask);
@@ -183,11 +188,16 @@ public class Database {
 	}
 	
 	public JPATaskType getTaskTypeByName(String name){
+		JPATaskType res=null;
 		try{
 			em=emf.createEntityManager();
 			Query q = em.createQuery("select tt from JPATaskType tt where tt.name=:taskTypeName");
 			q.setParameter("taskTypeName", name);
-			JPATaskType res=(JPATaskType)q.getSingleResult();
+			try{
+			res=(JPATaskType)q.getSingleResult();
+			}catch(javax.persistence.NoResultException nre){
+				res=null;
+			}
 			return res;
 		}finally{
 			cleanUpEntityManager();
@@ -541,6 +551,31 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
 	  return res;
   }
   
+  private String klaraMD5(String path) {
+      StringBuffer sb = null;
+      try {
+          FileInputStream fs = new FileInputStream(path);
+          sb = new StringBuffer();
+
+          int ch;
+          while ((ch = fs.read()) != -1) {
+              sb.append((char) ch);
+          }
+          fs.close();
+      } catch (FileNotFoundException e) {
+          e.printStackTrace();
+          //logError("File not found: " + path + " -- " + e.getMessage());
+      } catch (IOException e) {
+          e.printStackTrace();
+          //logError("Error reading file: " + path + " -- " + e.getMessage());
+      }
+      String md5 = DigestUtils.md5Hex(sb.toString());
+      return md5;
+  }
+
+  
+  
+  
   /**
    * The function returns all DataSet entries in the database, which has an associated file with the same MD5 hash as given.
    * @param hash The Hash whose occurences are we searching for.
@@ -584,6 +619,39 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
       persist(jpaDataSetLD);
       return jpaDataSetLD;
   }
+  
+  
+  /**
+   * The function stores the given file to the Database as a DataSet through JPA. The dataset will be associated with the given user, description. Please note, that new dataset's MD5 hash will be compared to the already stored dataset's MD5 hashes and if there are matching entries in the database the LargeObject won't be created, but instead a link is being created.
+   * @param user The JPAUser object  of the owner
+   * @param dataSet The File object of the file to be stored.
+   * @param description The description of the DataSet.
+   * @param globalMetaData The GlobalMetaData object containing global metadata information for the dataset
+   * @throws SQLException
+   * @throws IOException
+   * @return The persisted JPADataSetLO object for the stored file
+   */
+  public JPADataSetLO saveDataSet(JPAUser user, File dataSet,String description,JPAGlobalMetaData globalMetaData) throws SQLException, IOException {
+	  long oid=-1;
+	  String hash=this.getMD5Hash(dataSet);
+	  List<JPADataSetLO> sameHashDS=this.getDataSetByHash(hash);
+	  if(sameHashDS.size()>0){
+		  oid=sameHashDS.get(0).getOID();
+	  }else{
+		  oid=saveFileAsLargeObject(dataSet);
+	  }
+      JPADataSetLO jpaDataSetLD=new JPADataSetLO();
+      jpaDataSetLD.setHash(hash);
+      jpaDataSetLD.setOID(oid);
+      jpaDataSetLD.setOwner(user);
+      jpaDataSetLD.setDescription(description);
+      jpaDataSetLD.setGlobalMetaData(globalMetaData);
+      persist(jpaDataSetLD);
+      return jpaDataSetLD;
+  }
+  
+  
+  
   
   /**
    * Returns all datasets stored in the database using LargeObjects.

@@ -9,9 +9,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.postgresql.PGConnection;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 
 import pikater.data.PostgreSQLConnectionProvider;
 import pikater.data.jpa.JPADataSetLO;
@@ -42,7 +39,7 @@ public class DatabaseInitialisation {
 	 * @throws UserNotFoundException 
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException{
-		
+				
 		File f=new File("data/files/25d7d5d689042a3816aa1598d5fd56ef");
 		System.out.println("--------------------");
 		System.out.println(f.getAbsolutePath());
@@ -63,17 +60,32 @@ public class DatabaseInitialisation {
 		JPAUser user=database.getUserByLogin("stepan");
 		System.out.println(user.getEmail());
 		
-		JPADataSetLO first= database.saveDataSet(user, f, "First dataset");
-		JPADataSetLO second=database.saveDataSet(user, f, "Second dataset identical with the first.");
-		JPADataSetLO third=database.saveDataSet(user, f2, "Dataset from second file");
+		JPADataSetLO first= database.saveDataSet(user, f, "Iris",database.createGlobalMetaData(150,"Classification"));
+		//first.setGlobalMetaData();
+		//database.persist(first);
+		
+		
+		
+		JPADataSetLO second=database.saveDataSet(user, f2, "Weather",database.createGlobalMetaData(14,"Multivariate"));
+		//second.setGlobalMetaData(database.createGlobalMetaData(14,"Multivariate"));
+		//database.persist(second);
+		
+		JPADataSetLO third=database.saveDataSet(user, f3, "Linear Data",database.createGlobalMetaData(5000,"Regression"));
+		//third.setGlobalMetaData(database.createGlobalMetaData(5000,"Regression"));//!!!!CHECK DEFAULT TASK TYPE
+		//database.persist(third);
+		
+		/**
 		JPADataSetLO fourth=database.saveDataSet(user, f2, "Dataset from second file, but identical with previous");
 		JPADataSetLO fifth=database.saveDataSet(user, f3, "Dataset from the third file");
 		JPADataSetLO sixth=database.saveDataSet(user, f3, "Dataset from the third file, but identical with previous");
+		**/
+		
+		
+		
 		
 		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
-			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin());
+			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
 		}
-		
 		
 		
 /**
@@ -183,6 +195,11 @@ public class DatabaseInitialisation {
 		this.saveGeneralFile(john.getId(), "Second Data File",new File( "./data/files/772c551b8486b932aed784a582b9c1b1"));
 		this.saveGeneralFile(john.getId(), "Third Data File",new File( "./data/files/dc7ce6dea5a75110486760cfac1051a5"));
 		**/
+		
+		
+		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
+			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
+		}
 
 	}
 	
@@ -190,7 +207,7 @@ public class DatabaseInitialisation {
         
 		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
 		
-		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "SrapRoPy").getConnection()));
+		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "a").getConnection()));
 		data.itialisationData();
 	}
 }

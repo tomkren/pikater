@@ -9,7 +9,7 @@ import javax.persistence.Id;
 @Entity	
 public class JPADataSetLO {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	//ID of the LargeObject stored in the Postgre DB, that contains
 	//Use method in pikater.utility.pikaterDatabase.Database to retrieve the data based on OID
