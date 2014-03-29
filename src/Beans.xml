@@ -26,8 +26,10 @@
         </constructor-arg>
     </bean>
 
-    <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="pikaterDataModel"/>
+    <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" scope="singleton">
+        <constructor-arg index="0">
+              <value>pikaterDataModel</value>
+        </constructor-arg>
     </bean>
 
     <bean id="queryFactory" class="pikater.data.schema.SqlQueryFromFileFactory" scope="singleton">
