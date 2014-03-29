@@ -5,11 +5,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <bean id="configuration" class="pikater.configuration.XmlConfigurationProvider" scope="singleton">
-        <constructor-arg index="0">  <!-- filePath -->
+        <constructor-arg index="0">
               <value>configuration.xml</value>
         </constructor-arg>
     </bean>
-
+<!--
+    <bean id="configuration" class="pikater.configuration.XmlConfigurationProvider" scope="singleton">
+        <constructor-arg name="filePath" value="configuration.xml"/>
+    </bean>
+-->
     <bean id="logger" class="pikater.logging.ConsoleLogger" scope="singleton"/>
 
     <bean id="agentTypesProvider" class="pikater.agents.management.AgentTypesFromFileProvider" scope="singleton"/>
@@ -25,11 +29,16 @@
               <value>a</value>
         </constructor-arg>
     </bean>
-
+<!--
     <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" scope="singleton">
         <constructor-arg index="0">
               <value>pikaterDataModel</value>
         </constructor-arg>
+    </bean>
+-->
+
+    <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+         <property name="persistenceUnitName" value="pikaterDataModel"/>
     </bean>
 
     <bean id="queryFactory" class="pikater.data.schema.SqlQueryFromFileFactory" scope="singleton">
