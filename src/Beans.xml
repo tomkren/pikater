@@ -5,38 +5,34 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <bean id="configuration" class="pikater.configuration.XmlConfigurationProvider" scope="singleton">
-        <constructor-arg name="filePath" value="configuration.xml"/>
+        <constructor-arg index="0">  <!-- filePath -->
+              <value>configuration.xml</value>
+        </constructor-arg>
     </bean>
+
     <bean id="logger" class="pikater.logging.ConsoleLogger" scope="singleton"/>
+
     <bean id="agentTypesProvider" class="pikater.agents.management.AgentTypesFromFileProvider" scope="singleton"/>
-    <!--
-    <bean id="defaultConnection" class="pikater.data.MySQLConnectionProvider" scope="singleton">
-        <constructor-arg name="url" value="jdbc:mysql://174.120.245.222/marp_pikater"/>
-        <constructor-arg name="userName" value="marp_pikater"/>
-        <constructor-arg name="password" value="pikater"/>
-    </bean>
-    -->
-    <!--
-    <bean id="klara_local" class="pikater.data.MySQLConnectionProvider" scope="singleton">
-        <constructor-arg name="url" value="jdbc:mysql://localhost/pikater"/>
-        <constructor-arg name="userName" value="root"/>
-        <constructor-arg name="password" value=""/>
-    </bean>
-    -->
+
     <bean id="honza_local" class="pikater.data.PostgreSQLConnectionProvider" scope="singleton">
-        <constructor-arg name="url" value="jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater"/>
-        <constructor-arg name="userName" value="pikater"/>
-        <constructor-arg name="password" value="a"/>
+        <constructor-arg index="0">  <!-- url -->
+              <value>jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater</value>
+        </constructor-arg>
+        <constructor-arg index="1">  <!-- username -->
+              <value>pikater</value>
+        </constructor-arg>
+        <constructor-arg index="2">  <!-- password -->
+              <value>a</value>
+        </constructor-arg>
     </bean>
+
     <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="pikaterDataModel"/>
     </bean>
-    <!--
-    <bean id="jakubMSSQLConnection" class="pikater.data.MSSQLConnectionProvider" scope="singleton">
-        <constructor-arg name="connectionUrl" value="jdbc:sqlserver://KUBA-NTB\SQLEXPRESS;databaseName=Autoskola;user=jakub;password=Diplomka-42;"/>
-    </bean>
-    -->
+
     <bean id="queryFactory" class="pikater.data.schema.SqlQueryFromFileFactory" scope="singleton">
-        <constructor-arg name="queryDirectoryPath" value="databaseSchema"/>
+        <constructor-arg index="0">  <!-- queryDirectoryPath -->
+              <value>databaseSchema</value>
+        </constructor-arg>
     </bean>
 </beans>
