@@ -1,5 +1,6 @@
 package pikater.utility.pikaterDatabase;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -12,6 +13,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 
+import pikater.data.PostgreSQLConnectionProvider;
+import pikater.data.jpa.JPADataSetLO;
 import pikater.data.jpa.JPARole;
 import pikater.data.jpa.JPAUser;
 import pikater.data.jpa.JPAUserPriviledge;
@@ -40,7 +43,25 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException{
 		
-
+		File f=new File("data/files/25d7d5d689042a3816aa1598d5fd56ef");
+		System.out.println("--------------------");
+		System.out.println(f.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(f));
+		System.out.println("--------------------");
+		
+		JPAUser user=database.getUserByLogin("stepan");
+		System.out.println(user.getEmail());
+		
+		JPADataSetLO first= database.saveDataSet(user, f, "First dataset");
+		JPADataSetLO second=database.saveDataSet(user, f, "Second dataset identical with the first.");
+		
+		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
+			System.out.println("OID: "+dslo.getOID()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin());
+		}
+		
+		
+		
+/**
 		JPAUserPriviledge priviledgeSaveData = new JPAUserPriviledge();
 		priviledgeSaveData.setName("SaveDatates");
 
@@ -94,9 +115,16 @@ public class DatabaseInitialisation {
 		martinUser.setEmail("Martin.Pilat@mff.cuni.cz");
 		martinUser.setPriorityMax(9);
 		martinUser.setRole(userRole);
-
 		
 		database.persist(stepanUser);
+		
+		
+		
+		JPADataSetLO dslo=database.saveDataSet(stepanUser, new File());
+		**/
+		
+		
+		
 		
 	}
 
@@ -118,7 +146,7 @@ public class DatabaseInitialisation {
 		database.setRoleForUser("martin", "user");
 				
 		JPAUserPriviledge priviledgeSaveData = new JPAUserPriviledge();
-		priviledgeSaveData.setName("SaveDatates");
+		priviledgeSaveData.setName("SaveDataSet");
 
 		JPAUserPriviledge priviledgeSaveBox = new JPAUserPriviledge();
 		priviledgeSaveBox.setName("SaveBox");
@@ -133,7 +161,7 @@ public class DatabaseInitialisation {
 		JPAUser stepan = database.getUserByLogin("stepan");
 		stepan.setRole(roleAdmin);
 
-		
+		database.persist(stepan);
 		/**
 		JPAUser john=this.getUserByLogin("johndoe");
 		this.saveGeneralFile(john.getId(), "First Data File",new File( "./data/files/25d7d5d689042a3816aa1598d5fd56ef"));
@@ -143,18 +171,11 @@ public class DatabaseInitialisation {
 
 	}
 	
-	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException {
-
-		/**
-		ApplicationContext context =  new ClassPathXmlApplicationContext("Beans.xml");
-		
-        EntityManagerFactoryInfo emfi = (EntityManagerFactoryInfo)(context.getBean("dataModel"));
-        EntityManagerFactory emf=emfi.getNativeEntityManagerFactory();
-**/
+	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException {
         
 		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
 		
-		DatabaseInitialisation data = new DatabaseInitialisation(emf, null);
+		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://localhost:5432/postgres", "postgres", "SrapRoPy").getConnection()));
 		data.itialisationData();
 	}
 }
