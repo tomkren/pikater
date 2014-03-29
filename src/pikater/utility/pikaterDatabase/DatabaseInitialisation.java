@@ -49,11 +49,26 @@ public class DatabaseInitialisation {
 		System.out.println("MD5 hash: "+database.getMD5Hash(f));
 		System.out.println("--------------------");
 		
+		File f2=new File("data/files/772c551b8486b932aed784a582b9c1b1");
+		System.out.println(f2.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(f2));
+		System.out.println("--------------------");
+		
+		File f3=new File("data/files/dc7ce6dea5a75110486760cfac1051a5");
+		System.out.println(f3.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(f3));
+		System.out.println("--------------------");
+		
+		
 		JPAUser user=database.getUserByLogin("stepan");
 		System.out.println(user.getEmail());
 		
 		JPADataSetLO first= database.saveDataSet(user, f, "First dataset");
 		JPADataSetLO second=database.saveDataSet(user, f, "Second dataset identical with the first.");
+		JPADataSetLO third=database.saveDataSet(user, f2, "Dataset from second file");
+		JPADataSetLO fourth=database.saveDataSet(user, f2, "Dataset from second file, but identical with previous");
+		JPADataSetLO fifth=database.saveDataSet(user, f3, "Dataset from the third file");
+		JPADataSetLO sixth=database.saveDataSet(user, f3, "Dataset from the third file, but identical with previous");
 		
 		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
 			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin());
@@ -175,7 +190,7 @@ public class DatabaseInitialisation {
         
 		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
 		
-		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "a").getConnection()));
+		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "SrapRoPy").getConnection()));
 		data.itialisationData();
 	}
 }
