@@ -17,16 +17,15 @@ public class JPADataSetLO {
 	private JPAUser owner;
 	private String description;
 	private JPAGlobalMetaData globalMetaData;
+	private String hash;
+	
 	public String getHash() {
 		return hash;
 	}
-
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
 
-	private String hash;
-	
 	public void setOID(Long OID){
 		this.OID=OID;
 	}

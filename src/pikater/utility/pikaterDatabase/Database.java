@@ -577,6 +577,7 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
 		  oid=saveFileAsLargeObject(dataSet);
 	  }
       JPADataSetLO jpaDataSetLD=new JPADataSetLO();
+      jpaDataSetLD.setHash(hash);
       jpaDataSetLD.setOID(oid);
       jpaDataSetLD.setOwner(user);
       jpaDataSetLD.setDescription(description);

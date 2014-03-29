@@ -56,7 +56,7 @@ public class DatabaseInitialisation {
 		JPADataSetLO second=database.saveDataSet(user, f, "Second dataset identical with the first.");
 		
 		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
-			System.out.println("OID: "+dslo.getOID()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin());
+			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin());
 		}
 		
 		
@@ -175,7 +175,7 @@ public class DatabaseInitialisation {
         
 		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
 		
-		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://localhost:5432/postgres", "postgres", "SrapRoPy").getConnection()));
+		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "a").getConnection()));
 		data.itialisationData();
 	}
 }
