@@ -11,7 +11,10 @@ import javax.persistence.Persistence;
 import org.postgresql.PGConnection;
 
 import pikater.data.PostgreSQLConnectionProvider;
+import pikater.data.jpa.JPAAttributeMetaData;
+import pikater.data.jpa.JPAAttributeNumericalMetadata;
 import pikater.data.jpa.JPADataSetLO;
+import pikater.data.jpa.JPAGlobalMetaData;
 import pikater.data.jpa.JPARole;
 import pikater.data.jpa.JPAUser;
 import pikater.data.jpa.JPAUserPriviledge;
@@ -31,7 +34,7 @@ public class DatabaseInitialisation {
 		this.connection=connection;
 		this.database = new Database(emf, connection);
 	}
-	
+
 	/**
 	 * Initialisation of test-data in DataBase
 	 * @throws IOException 
@@ -40,49 +43,16 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException{
 				
-		File f=new File("data/files/25d7d5d689042a3816aa1598d5fd56ef");
-		System.out.println("--------------------");
-		System.out.println(f.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(f));
-		System.out.println("--------------------");
 		
-		File f2=new File("data/files/772c551b8486b932aed784a582b9c1b1");
-		System.out.println(f2.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(f2));
-		System.out.println("--------------------");
+		// Initialisation of Datasets
+		this.addIrisDataset();
 		
-		File f3=new File("data/files/dc7ce6dea5a75110486760cfac1051a5");
-		System.out.println(f3.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(f3));
-		System.out.println("--------------------");
+		this.addWeatherDataset();
+		
+		this.addLinearDataset();
 		
 		
-		JPAUser user=database.getUserByLogin("stepan");
-		System.out.println(user.getEmail());
-		
-		JPADataSetLO first= database.saveDataSet(user, f, "Iris",database.createGlobalMetaData(150,"Classification"));
-		//first.setGlobalMetaData();
-		//database.persist(first);
-		
-		
-		
-		JPADataSetLO second=database.saveDataSet(user, f2, "Weather",database.createGlobalMetaData(14,"Multivariate"));
-		//second.setGlobalMetaData(database.createGlobalMetaData(14,"Multivariate"));
-		//database.persist(second);
-		
-		JPADataSetLO third=database.saveDataSet(user, f3, "Linear Data",database.createGlobalMetaData(5000,"Regression"));
-		//third.setGlobalMetaData(database.createGlobalMetaData(5000,"Regression"));//!!!!CHECK DEFAULT TASK TYPE
-		//database.persist(third);
-		
-		/**
-		JPADataSetLO fourth=database.saveDataSet(user, f2, "Dataset from second file, but identical with previous");
-		JPADataSetLO fifth=database.saveDataSet(user, f3, "Dataset from the third file");
-		JPADataSetLO sixth=database.saveDataSet(user, f3, "Dataset from the third file, but identical with previous");
-		**/
-		
-		
-		
-		
+		// Test of Datasets
 		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
 			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
 		}
@@ -153,6 +123,87 @@ public class DatabaseInitialisation {
 		
 		
 		
+	}
+	
+	private void addIrisDataset() throws SQLException, IOException, UserNotFoundException{
+		
+		JPAUser user = database.getUserByLogin("stepan");
+		System.out.println(user.getEmail());
+
+
+		File irisFile = new File("data/files/25d7d5d689042a3816aa1598d5fd56ef");
+		System.out.println("--------------------");
+		System.out.println(irisFile.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(irisFile));
+		System.out.println("--------------------");
+
+		JPAGlobalMetaData irisGlobalMD = database.createGlobalMetaData(150, "Classification");
+
+
+
+		JPAAttributeNumericalMetadata sepallengthAtr = new JPAAttributeNumericalMetadata();
+		sepallengthAtr.setReal(true);
+
+		JPAAttributeNumericalMetadata sepalwidthAtr = new JPAAttributeNumericalMetadata();
+		sepalwidthAtr.setReal(true);
+
+		JPAAttributeNumericalMetadata petallengthAtr = new JPAAttributeNumericalMetadata();
+		petallengthAtr.setReal(true);
+
+		JPAAttributeNumericalMetadata petalwidthAtr = new JPAAttributeNumericalMetadata();
+		petalwidthAtr.setReal(true);
+
+		JPAAttributeNumericalMetadata classAtr = new JPAAttributeNumericalMetadata();
+		classAtr.setReal(false);
+
+		JPAAttributeMetaData irisAttributeMD = new JPAAttributeMetaData();
+		irisAttributeMD.addAttribute(sepallengthAtr);
+		irisAttributeMD.addAttribute(sepalwidthAtr);
+		irisAttributeMD.addAttribute(petallengthAtr);
+		irisAttributeMD.addAttribute(petalwidthAtr);
+		irisAttributeMD.addAttribute(classAtr);
+
+		
+		JPADataSetLO irisDataset = database.saveDataSet(user, irisFile, "Iris", irisGlobalMD);
+		irisDataset.setIrisAttributeMD(irisAttributeMD);
+		//database.persist(irisDataset);
+
+	}
+
+	private void addWeatherDataset() throws SQLException, IOException, UserNotFoundException{
+		
+		JPAUser user = database.getUserByLogin("stepan");
+		System.out.println(user.getEmail());
+
+		
+		File weatherFile = new File("data/files/772c551b8486b932aed784a582b9c1b1");
+		System.out.println(weatherFile.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(weatherFile));
+		System.out.println("--------------------");		
+		
+		JPADataSetLO weatherDataset = database.saveDataSet(user, weatherFile, "Weather",database.createGlobalMetaData(14,"Multivariate"));
+		//weatherDataset.setGlobalMetaData(database.createGlobalMetaData(14,"Multivariate"));
+		//database.persist(weatherDataset);
+
+		JPAAttributeMetaData weatherAttributeMD = new JPAAttributeMetaData();
+	}
+
+	private void addLinearDataset() throws SQLException, IOException, UserNotFoundException{
+		
+		JPAUser user = database.getUserByLogin("stepan");
+		System.out.println(user.getEmail());
+
+		
+		File linearFile = new File("data/files/dc7ce6dea5a75110486760cfac1051a5");
+		System.out.println(linearFile.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(linearFile));
+		System.out.println("--------------------");
+
+		JPADataSetLO linearDataset = database.saveDataSet(user, linearFile, "Linear Data",database.createGlobalMetaData(5000,"Regression"));
+		//linearDataset.setGlobalMetaData(database.createGlobalMetaData(5000,"Regression"));//!!!!CHECK DEFAULT TASK TYPE
+		//database.persist(linearDataset);
+
+		JPAAttributeMetaData linearAttributeMD = new JPAAttributeMetaData();
 	}
 
 	private void testData() throws SQLException, IOException, UserNotFoundException{

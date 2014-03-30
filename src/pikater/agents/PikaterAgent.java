@@ -174,7 +174,12 @@ public abstract class PikaterAgent extends Agent {
         //emf = new org.springframework.orm.jpa.LocalEntityManagerFactoryBean();
         
         EntityManagerFactoryInfo emfi = (EntityManagerFactoryInfo)(context.getBean(DATAMODEL_BEAN));
-        emf=emfi.getNativeEntityManagerFactory();
+        emf = emfi.getNativeEntityManagerFactory();
+        
+        
+        //org.springframework.orm.jpa.LocalEntityManagerFactoryBean loc = (LocalEntityManagerFactoryBean) context.getBean(DATAMODEL_BEAN);
+        //loc.setPersistenceUnitName("pikaterDataModel");
+        //emf=loc.getNativeEntityManagerFactory();
         
         log("is alive...", 1);
         getContentManager().registerLanguage(codec);

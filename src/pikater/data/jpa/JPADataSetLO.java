@@ -17,6 +17,7 @@ public class JPADataSetLO {
 	private JPAUser owner;
 	private String description;
 	private JPAGlobalMetaData globalMetaData;
+	private JPAAttributeMetaData irisAttributeMD;
 	private String hash;
 	
 	public String getHash() {
@@ -28,12 +29,10 @@ public class JPADataSetLO {
 
 	public void setOID(Long OID){
 		this.OID=OID;
-	}
-		
+	}	
 	public Long getOID(){
 		return this.OID;
 	}
-	
 	public int getID(){
 		return id;
 	}
@@ -41,15 +40,20 @@ public class JPADataSetLO {
 	public JPAGlobalMetaData getGlobalMetaData() {
 		return globalMetaData;
 	}
-
 	public void setGlobalMetaData(JPAGlobalMetaData globalMetaData) {
 		this.globalMetaData = globalMetaData;
+	}
+
+	public JPAAttributeMetaData getIrisAttributeMD() {
+		return irisAttributeMD;
+	}
+	public void setIrisAttributeMD(JPAAttributeMetaData irisAttributeMD) {
+		this.irisAttributeMD = irisAttributeMD;
 	}
 
 	public JPAUser getOwner() {
 		return owner;
 	}
-
 	public void setOwner(JPAUser owner) {
 		this.owner = owner;
 	}
@@ -57,7 +61,6 @@ public class JPADataSetLO {
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
