@@ -21,6 +21,7 @@ import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 
+import pikater.data.jpa.JPAAttributeMetaData;
 import pikater.data.jpa.JPADataSetLO;
 import pikater.data.jpa.JPAGeneralFile;
 import pikater.data.jpa.JPAGlobalMetaData;
@@ -649,6 +650,39 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
       persist(jpaDataSetLD);
       return jpaDataSetLD;
   }
+  
+  
+  /**
+   * The function stores the given file to the Database as a DataSet through JPA. The dataset will be associated with the given user, description. Please note, that new dataset's MD5 hash will be compared to the already stored dataset's MD5 hashes and if there are matching entries in the database the LargeObject won't be created, but instead a link is being created.
+   * @param user The JPAUser object  of the owner
+   * @param dataSet The File object of the file to be stored.
+   * @param description The description of the DataSet.
+   * @param globalMetaData The JPAGlobalMetaData object containing global metadata information for the dataset
+   * @param attributeMetaData The JPAAttributeMetaData object caontaining attribute metadata for the dataset
+   * @throws SQLException
+   * @throws IOException
+   * @return The persisted JPADataSetLO object for the stored file
+   */
+  public JPADataSetLO saveDataSet(JPAUser user, File dataSet,String description,JPAGlobalMetaData globalMetaData,JPAAttributeMetaData attributeMetaData) throws SQLException, IOException {
+	  long oid=-1;
+	  String hash=this.getMD5Hash(dataSet);
+	  List<JPADataSetLO> sameHashDS=this.getDataSetByHash(hash);
+	  if(sameHashDS.size()>0){
+		  oid=sameHashDS.get(0).getOID();
+	  }else{
+		  oid=saveFileAsLargeObject(dataSet);
+	  }
+      JPADataSetLO jpaDataSetLD=new JPADataSetLO();
+      jpaDataSetLD.setHash(hash);
+      jpaDataSetLD.setOID(oid);
+      jpaDataSetLD.setOwner(user);
+      jpaDataSetLD.setDescription(description);
+      jpaDataSetLD.setGlobalMetaData(globalMetaData);
+      jpaDataSetLD.setAttributeMetaData(attributeMetaData);
+      persist(jpaDataSetLD);
+      return jpaDataSetLD;
+  }
+  
   
   
   

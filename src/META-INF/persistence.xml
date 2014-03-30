@@ -16,6 +16,9 @@
         <class>pikater.data.jpa.JPAUserPriviledge</class>
         <class>pikater.data.jpa.JPATaskType</class>
         <class>pikater.data.jpa.JPAGlobalMetaData</class>
+        <class>pikater.data.jpa.JPAAttributeMetaData</class>
+        <class>pikater.data.jpa.JPAAttributeNumericalMetaData</class>
+        <class>pikater.data.jpa.JPAAttributeCategoricalMetaData</class>
       <properties>
 
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />

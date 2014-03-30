@@ -1,6 +1,7 @@
 package pikater.data.jpa;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,13 +15,24 @@ public class JPAAttributeMetaData {
     private int id;
 	private float ratioOfMissingValues;
 	private boolean isTarget;
-	private ArrayList<JPAAttributeNumericalMetadata> attributes;
+	private List<JPAAttributeNumericalMetaData> numericalMetaData;
+	private List<JPAAttributeCategoricalMetaData> categoricalMetaData;
 	
+	public JPAAttributeMetaData(){
+		this.numericalMetaData=new LinkedList<JPAAttributeNumericalMetaData>();
+		this.categoricalMetaData=new LinkedList<JPAAttributeCategoricalMetaData>();
+	}
+	
+	public List<JPAAttributeNumericalMetaData> getNumericalMetaData() {
+		return numericalMetaData;
+	}
+
+	public List<JPAAttributeCategoricalMetaData> getCategoricalMetaData() {
+		return categoricalMetaData;
+	}
+
 	public int getId() {
 		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public float getRatioOfMissingValues() {
@@ -36,14 +48,4 @@ public class JPAAttributeMetaData {
 	public void setTarget(boolean isTarget) {
 		this.isTarget = isTarget;
 	}
-
-	public ArrayList<JPAAttributeNumericalMetadata> getAttributes() {
-		return attributes;
-	}
-	public void setAttributes(ArrayList<JPAAttributeNumericalMetadata> attributes) {
-		this.attributes = attributes;
-	}
-	public void addAttribute(JPAAttributeNumericalMetadata attribute) {
-		this.attributes.add(attribute);
-	}	
 }
