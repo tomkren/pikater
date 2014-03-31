@@ -3,6 +3,7 @@ package pikater.utility.pikaterDatabase;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,8 +14,11 @@ import org.postgresql.PGConnection;
 import pikater.data.PostgreSQLConnectionProvider;
 import pikater.data.jpa.JPAAttributeMetaData;
 import pikater.data.jpa.JPAAttributeNumericalMetaData;
+import pikater.data.jpa.JPABatch;
 import pikater.data.jpa.JPADataSetLO;
+import pikater.data.jpa.JPAExperiment;
 import pikater.data.jpa.JPAGlobalMetaData;
+import pikater.data.jpa.JPAResult;
 import pikater.data.jpa.JPARole;
 import pikater.data.jpa.JPAUser;
 import pikater.data.jpa.JPAUserPriviledge;
@@ -44,13 +48,12 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException{		
 		
-		
 		// Initialisation of Datasets
-		this.addIrisDataset();
+//		this.addIrisDataset();
 		
-		this.addWeatherDataset();
+//		this.addWeatherDataset();
 		
-		this.addLinearDataset();
+//		this.addLinearDataset();
 		
 		/**
 		// Test of Datasets
@@ -58,14 +61,89 @@ public class DatabaseInitialisation {
 			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
 		}
 		**/
+
+		this.createRoles();
+
+//		this.insertFinishedBatch();
 		
-/**
+	}
+	
+	private void addIrisDataset() throws SQLException, IOException, UserNotFoundException{
+		
+		JPAUser user = database.getUserByLogin("stepan");
+		System.out.println(user.getEmail());
+
+		File file = new File("data/files/25d7d5d689042a3816aa1598d5fd56ef");
+		
+		JPAMetaDataReader mdr=new JPAMetaDataReader();
+		mdr.readFile(file);
+		
+				
+		System.out.println("--------------------");
+		System.out.println(file.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(file));
+		System.out.println("--------------------");
+
+		JPAGlobalMetaData irisGlobalMD = database.createGlobalMetaData(150, "Classification");
+		JPAAttributeMetaData attrMD=mdr.getJPAAttributeMetaData();
+		
+		
+		JPADataSetLO dslo=database.saveDataSet(user, file, "Iris", irisGlobalMD, attrMD);
+
+	}
+
+	private void addWeatherDataset() throws SQLException, IOException, UserNotFoundException{
+		
+		JPAUser user = database.getUserByLogin("stepan");
+		System.out.println(user.getEmail());
+		
+		File weatherFile = new File("data/files/772c551b8486b932aed784a582b9c1b1");
+		
+		JPAMetaDataReader mdr=new JPAMetaDataReader();
+		mdr.readFile(weatherFile);
+		
+		
+		System.out.println(weatherFile.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(weatherFile));
+		System.out.println("--------------------");		
+				
+		JPAGlobalMetaData weatherGlobalMD = database.createGlobalMetaData(14,"Multivariate");
+		JPAAttributeMetaData attrMD=mdr.getJPAAttributeMetaData();
+		
+		JPADataSetLO dslo=database.saveDataSet(user, weatherFile, "Weather", weatherGlobalMD, attrMD);
+	}
+
+	private void addLinearDataset() throws SQLException, IOException, UserNotFoundException{
+		
+		JPAUser user = database.getUserByLogin("stepan");
+		System.out.println(user.getEmail());
+		
+		File linearFile = new File("data/files/dc7ce6dea5a75110486760cfac1051a5");
+		
+		JPAMetaDataReader mdr=new JPAMetaDataReader();
+		mdr.readFile(linearFile);
+		
+		
+		System.out.println(linearFile.getAbsolutePath());
+		System.out.println("MD5 hash: "+database.getMD5Hash(linearFile));
+		System.out.println("--------------------");		
+		
+		JPAGlobalMetaData weatherGlobalMD = database.createGlobalMetaData(5000,"Regression");
+		JPAAttributeMetaData attrMD=mdr.getJPAAttributeMetaData();
+		
+		JPADataSetLO dslo=database.saveDataSet(user, linearFile, "Linear Data", weatherGlobalMD, attrMD);
+		
+	}
+
+	private void createRoles() {
+
 		JPAUserPriviledge priviledgeSaveData = new JPAUserPriviledge();
 		priviledgeSaveData.setName("SaveDatates");
 
 		JPAUserPriviledge priviledgeSaveBox = new JPAUserPriviledge();
 		priviledgeSaveBox.setName("SaveBox");
 
+		database.persist(priviledgeSaveData);
 		
 		JPARole userRole = new JPARole();
 		userRole.setName("user");
@@ -77,6 +155,9 @@ public class DatabaseInitialisation {
 		adminRole.setDescription("Admin role");
 		userRole.addPriviledge(priviledgeSaveData);
 		userRole.addPriviledge(priviledgeSaveBox);
+
+		database.persist(userRole);
+		database.persist(adminRole);
 
 		
 		JPAUser stepanUser = new JPAUser();
@@ -115,120 +196,43 @@ public class DatabaseInitialisation {
 		martinUser.setRole(userRole);
 		
 		database.persist(stepanUser);
-		
-		
-		
-		JPADataSetLO dslo=database.saveDataSet(stepanUser, new File());
-		**/
-		
-		
+		database.persist(kjUser);
+		database.persist(sjUser);
+		database.persist(spUser);
+		database.persist(martinUser);
 		
 		
 	}
 	
-	private void addIrisDataset() throws SQLException, IOException, UserNotFoundException{
+	private void insertFinishedBatch() {
 		
-		JPAUser user = database.getUserByLogin("stepan");
-		System.out.println(user.getEmail());
+		JPAExperiment experiment = new JPAExperiment();
+		experiment.setStatus("Finished");
+		experiment.setXMLDescription("XML");
+	
+		JPAResult result = new JPAResult();
+		result.setAgentName("RBFNetwork");
+		result.setAgentTypeId(0);
+		result.setErrorRate(0.214285716414452);
+		result.setFinish(new Date("2014-03-29 11:06:57"));
+		result.setKappaStatistic(0.511627912521362);
+		result.setMeanAbsoluteError(0.264998614788055);
+		result.setNote("Note of result :-)");
+		result.setOptions("-S 0 -M 0.2 ");
+		result.setRelativeAbsoluteError(55.6497116088867);
+		result.setRootMeanSquaredError(0.462737262248993);
+		result.setRootRelativeSquaredError(93.7923049926758);
+		result.setSerializedFileName("");
+		result.setStart(new Date("2014-03-29 11:06:55"));
+		result.setExperiment(experiment);
+		
+		JPABatch batch = new JPABatch();
+		batch.setName("Stepan's batch of experiments - school project");
+		batch.setPriority(99);
+		batch.addExperiment(experiment);
 
-		File file = new File("data/files/25d7d5d689042a3816aa1598d5fd56ef");
-		
-		JPAMetaDataReader mdr=new JPAMetaDataReader();
-		mdr.readFile(file);
-		
-		
-		
-		
-		
-		
-		//File irisFile = new File("data/files/25d7d5d689042a3816aa1598d5fd56ef");
-		System.out.println("--------------------");
-		System.out.println(file.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(file));
-		System.out.println("--------------------");
-
-		JPAGlobalMetaData irisGlobalMD = database.createGlobalMetaData(150, "Classification");
-		JPAAttributeMetaData attrMD=mdr.getJPAAttributeMetaData();
-		
-		
-		JPADataSetLO dslo=database.saveDataSet(user, file, "Iris", irisGlobalMD, attrMD);
-
-/**
-
-		JPAAttributeNumericalMetadata sepallengthAtr = new JPAAttributeNumericalMetadata();
-		sepallengthAtr.setReal(true);
-
-		JPAAttributeNumericalMetadata sepalwidthAtr = new JPAAttributeNumericalMetadata();
-		sepalwidthAtr.setReal(true);
-
-		JPAAttributeNumericalMetadata petallengthAtr = new JPAAttributeNumericalMetadata();
-		petallengthAtr.setReal(true);
-
-		JPAAttributeNumericalMetadata petalwidthAtr = new JPAAttributeNumericalMetadata();
-		petalwidthAtr.setReal(true);
-
-		JPAAttributeNumericalMetadata classAtr = new JPAAttributeNumericalMetadata();
-		classAtr.setReal(false);
-
-		JPAAttributeMetaData irisAttributeMD = new JPAAttributeMetaData();
-		irisAttributeMD.addAttribute(sepallengthAtr);
-		irisAttributeMD.addAttribute(sepalwidthAtr);
-		irisAttributeMD.addAttribute(petallengthAtr);
-		irisAttributeMD.addAttribute(petalwidthAtr);
-		irisAttributeMD.addAttribute(classAtr);
-
-		
-		JPADataSetLO irisDataset = database.saveDataSet(user, irisFile, "Iris", irisGlobalMD);
-		irisDataset.setIrisAttributeMD(irisAttributeMD);
-		//database.persist(irisDataset);
-**/
-	}
-
-	private void addWeatherDataset() throws SQLException, IOException, UserNotFoundException{
-		
-		JPAUser user = database.getUserByLogin("stepan");
-		System.out.println(user.getEmail());
-		
-		File weatherFile = new File("data/files/772c551b8486b932aed784a582b9c1b1");
-		
-		JPAMetaDataReader mdr=new JPAMetaDataReader();
-		mdr.readFile(weatherFile);
-		
-		
-		System.out.println(weatherFile.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(weatherFile));
-		System.out.println("--------------------");		
-		
-		
-		
-		JPAGlobalMetaData weatherGlobalMD = database.createGlobalMetaData(14,"Multivariate");
-		JPAAttributeMetaData attrMD=mdr.getJPAAttributeMetaData();
-		
-		JPADataSetLO dslo=database.saveDataSet(user, weatherFile, "Weather", weatherGlobalMD, attrMD);
-	}
-
-	private void addLinearDataset() throws SQLException, IOException, UserNotFoundException{
-		
-		JPAUser user = database.getUserByLogin("stepan");
-		System.out.println(user.getEmail());
-		
-		File linearFile = new File("data/files/dc7ce6dea5a75110486760cfac1051a5");
-		
-		JPAMetaDataReader mdr=new JPAMetaDataReader();
-		mdr.readFile(linearFile);
-		
-		
-		System.out.println(linearFile.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(linearFile));
-		System.out.println("--------------------");		
-		
-		
-		
-		JPAGlobalMetaData weatherGlobalMD = database.createGlobalMetaData(5000,"Regression");
-		JPAAttributeMetaData attrMD=mdr.getJPAAttributeMetaData();
-		
-		JPADataSetLO dslo=database.saveDataSet(user, linearFile, "Linear Data", weatherGlobalMD, attrMD);
-		
+		this.database.persist(result);
+		this.database.persist(batch);
 	}
 
 	private void testData() throws SQLException, IOException, UserNotFoundException{
@@ -273,16 +277,18 @@ public class DatabaseInitialisation {
 		**/
 		
 		
+		
 		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
 			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
 		}
 
 	}
-	
+
+
 	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException {
         
 		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
-		
+
 		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "a").getConnection()));
 		data.itialisationData();
 	}
