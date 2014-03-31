@@ -101,5 +101,6 @@
 	<classpathentry kind="lib" path="libraries/jpaEclipseLink/javax.persistence.source_2.1.0.v201304241213.jar"/>
 	<classpathentry kind="lib" path="libraries/json/java-json.jar"/>
 	<classpathentry kind="lib" path="libraries/reflections/reflections-0.9.9-RC1-uberjar.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
