@@ -22,6 +22,7 @@ import pikater.data.jpa.JPAResult;
 import pikater.data.jpa.JPARole;
 import pikater.data.jpa.JPAUser;
 import pikater.data.jpa.JPAUserPriviledge;
+import pikater.data.temporaryNoJPA.Filemapping;
 import pikater.utility.pikaterDatabase.exceptions.UserNotFoundException;
 
 public class DatabaseInitialisation {
@@ -49,11 +50,11 @@ public class DatabaseInitialisation {
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException{		
 		
 		// Initialisation of Datasets
-//		this.addIrisDataset();
+		this.addIrisDataset();
 		
-//		this.addWeatherDataset();
+		this.addWeatherDataset();
 		
-//		this.addLinearDataset();
+		this.addLinearDataset();
 		
 		/**
 		// Test of Datasets
@@ -64,8 +65,10 @@ public class DatabaseInitialisation {
 
 		this.createRoles();
 
-//		this.insertFinishedBatch();
-		
+		this.insertFinishedBatch();
+
+		this.createFileMaping();
+
 	}
 	
 	private void addIrisDataset() throws SQLException, IOException, UserNotFoundException{
@@ -233,6 +236,22 @@ public class DatabaseInitialisation {
 
 		this.database.persist(result);
 		this.database.persist(batch);
+	}
+	
+	private void createFileMaping() {
+		
+		Filemapping f = new Filemapping();
+		f.setUserid(1);
+		f.setExternalfilename("iris.arff");
+		f.setInternalfilename("25d7d5d689042a3816aa1598d5fd56ef");
+		database.persist(f);
+		
+		Filemapping f2 = new Filemapping();
+		f2.setUserid(1);
+		f2.setExternalfilename("weather.arff");
+		f2.setInternalfilename("772c551b8486b932aed784a582b9c1b1");
+		database.persist(f2);
+
 	}
 
 	private void testData() throws SQLException, IOException, UserNotFoundException{
