@@ -3,19 +3,21 @@ package pikater.data.jpa;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+@Entity
 public class JPABatch {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	private String name;
-	private Long ownerId;
+	private int ownerId;
 	private int priority;
 	private int totalPriority;
 	
@@ -34,10 +36,10 @@ public class JPABatch {
 		return this.name;
 	}
 	
-	public void setOwnerID(Long ownerID){
-		this.ownerId=ownerID;
+	public void setOwnerID(int id){
+		this.ownerId=id;
 	}
-	public Long getOwnerID(){
+	public int getOwnerID(){
 		return this.ownerId;
 	}
 

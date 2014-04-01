@@ -3,6 +3,9 @@ package pikater.utility.pikaterDatabase;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -46,9 +49,10 @@ public class DatabaseInitialisation {
 	 * @throws IOException 
 	 * @throws SQLException 
 	 * @throws UserNotFoundException 
+	 * @throws ParseException 
 	 */
-	private void itialisationData() throws SQLException, IOException, UserNotFoundException{		
-		
+	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{		
+/*		
 		// Initialisation of Datasets
 		this.addIrisDataset();
 		
@@ -56,18 +60,11 @@ public class DatabaseInitialisation {
 		
 		this.addLinearDataset();
 		
-		/**
-		// Test of Datasets
-		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
-			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
-		}
-		**/
-
 		this.createRoles();
-
+*/
 		this.insertFinishedBatch();
 
-		this.createFileMaping();
+//		this.createFileMaping();
 
 	}
 	
@@ -104,8 +101,8 @@ public class DatabaseInitialisation {
 		
 		JPAMetaDataReader mdr=new JPAMetaDataReader();
 		mdr.readFile(weatherFile);
-		
-		
+
+
 		System.out.println(weatherFile.getAbsolutePath());
 		System.out.println("MD5 hash: "+database.getMD5Hash(weatherFile));
 		System.out.println("--------------------");		
@@ -207,17 +204,15 @@ public class DatabaseInitialisation {
 		
 	}
 	
-	private void insertFinishedBatch() {
+	private void insertFinishedBatch() throws ParseException {
 		
-		JPAExperiment experiment = new JPAExperiment();
-		experiment.setStatus("Finished");
-		experiment.setXMLDescription("XML");
-	
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 		JPAResult result = new JPAResult();
 		result.setAgentName("RBFNetwork");
 		result.setAgentTypeId(0);
 		result.setErrorRate(0.214285716414452);
-		result.setFinish(new Date("2014-03-29 11:06:57"));
+		result.setFinish(dateFormat.parse("2014-03-29 11:06:57"));
 		result.setKappaStatistic(0.511627912521362);
 		result.setMeanAbsoluteError(0.264998614788055);
 		result.setNote("Note of result :-)");
@@ -226,15 +221,20 @@ public class DatabaseInitialisation {
 		result.setRootMeanSquaredError(0.462737262248993);
 		result.setRootRelativeSquaredError(93.7923049926758);
 		result.setSerializedFileName("");
-		result.setStart(new Date("2014-03-29 11:06:55"));
-		result.setExperiment(experiment);
+		result.setStart(dateFormat.parse("2014-03-29 11:06:55"));
+		
+		JPAExperiment experiment = new JPAExperiment();
+		experiment.setStatus("Finished");
+		experiment.setXMLDescription("XML");
+		experiment.setResult(result);
+
 		
 		JPABatch batch = new JPABatch();
 		batch.setName("Stepan's batch of experiments - school project");
 		batch.setPriority(99);
 		batch.addExperiment(experiment);
+		batch.setOwnerID(1);
 
-		this.database.persist(result);
 		this.database.persist(batch);
 	}
 	
@@ -296,7 +296,7 @@ public class DatabaseInitialisation {
 		**/
 		
 		
-		
+		// Test of Datasets
 		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
 			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
 		}
@@ -304,11 +304,14 @@ public class DatabaseInitialisation {
 	}
 
 
-	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException {
-        
+	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException, ParseException {
+
 		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
 
 		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "a").getConnection()));
 		data.itialisationData();
+
+		
+		System.out.println("mm");
 	}
 }

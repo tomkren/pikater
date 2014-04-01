@@ -22,8 +22,9 @@ public class JPAExperiment {
 	private int modelId;
 	private String status;
 	private String xmlDescription;
+	private JPAResult result;
 
-    public int getId() {
+	public int getId() {
         return id;
     }
     public void setId(int id) {
@@ -71,11 +72,19 @@ public class JPAExperiment {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
 	public void setXMLDescription(String xmlDescription){
 		this.xmlDescription=xmlDescription;
 	}
 	public String getXMLDescription(){
 		return this.xmlDescription;
 	}
+
+	public void setResult(JPAResult result) {
+		this.result = result;
+	}
+    public JPAResult getResult() {
+		return result;
+	}
+
 }
