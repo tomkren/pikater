@@ -50,18 +50,18 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 	public void createClassifierClass(){
 		//TODO: Create cls according to agentType!!!
 		if(wekaClassName == null || wekaClassName.length()==0)
-			return;
-			//
+		    return;
+
 		try {
-//:TODO	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! wekaClassName has static value		
-			//TODO: May take options as a second parameter:
-			wekaClassName = "weka.classifiers.functions.MultilayerPerceptron";
-			System.out.println("               "+wekaClassName);
-			cls = Classifier.forName(wekaClassName,null);
+//:TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! wekaClassName has static value
+		    //TODO: May take options as a second parameter:
+		    wekaClassName = "weka.classifiers.functions.MultilayerPerceptron";
+		    System.out.println(" "+wekaClassName);
+		    cls = Classifier.forName(wekaClassName,null);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
 		}
 	}
 
