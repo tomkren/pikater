@@ -418,6 +418,7 @@ public class Agent_Manager extends PikaterAgent {
 		initDefault();
 		
 		registerWithDF("UserInterface");
+		//registerWithDF("manager");
 		
 		if (containsArgument(NO_XML_OUTPUT)) {
 			if (isArgumentValueTrue(NO_XML_OUTPUT)){
@@ -471,7 +472,7 @@ public class Agent_Manager extends PikaterAgent {
 						MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 								MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
 										MessageTemplate.MatchOntology(ontology.getName()))));
-
+		
 		public RequestServer(Agent agent) {			
 			super(agent);
 		}
@@ -479,6 +480,7 @@ public class Agent_Manager extends PikaterAgent {
 		@Override 
 		public void action() {
 			ACLMessage request = receive(requestMsgTemplate);
+
 			
 			if (request != null) {
 				System.out.println(getLocalName()
