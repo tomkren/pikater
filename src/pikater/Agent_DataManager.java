@@ -139,7 +139,7 @@ public class Agent_DataManager extends PikaterAgent {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-        
+
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
         addBehaviour(new AchieveREResponder(this, mt) {
@@ -405,7 +405,8 @@ public class Agent_DataManager extends PikaterAgent {
         SaveResults sr = (SaveResults) a.getAction();
         Task res = sr.getTask();
         
-        EntityManager entityManager = null; //emf.createEntityManager();
+        EntityManager entityManager = emf.createEntityManager();
+
         try {
             entityManager.getTransaction().begin();
             JPAResult jparesult = new JPAResult();

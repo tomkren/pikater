@@ -11,6 +11,7 @@ import jade.domain.FIPAException;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 
 import pikater.configuration.Argument;
@@ -45,8 +46,8 @@ public abstract class PikaterAgent extends Agent {
     protected Verbosity verbosity=Verbosity.NORMAL;
     private Logger logger;
     protected Arguments arguments;
-    protected LocalEntityManagerFactoryBean emf;
-
+    protected EntityManagerFactory emf;
+    
     public Codec getCodec() {
         return codec;
     }
@@ -163,15 +164,22 @@ public abstract class PikaterAgent extends Agent {
            Object[] args=getArguments();
             initDefault(args);
     }
-
+    
     public void initDefault(Object[] args)
     {
         parseArguments(args);
         initLogging();
         // this bean provides JPA database access to the agent, which can create EntityManagers as needed (and should close them when done)
-        //emf = (LocalEntityManagerFactoryBean)context.getBean(DATAMODEL_BEAN);
-        emf = new LocalEntityManagerFactoryBean();
-        emf.setPersistenceUnitName("pikaterDataModel");
+        //emf = (LocalEntityManagerFactoryBean)(context.getBean(DATAMODEL_BEAN));
+        //emf = new org.springframework.orm.jpa.LocalEntityManagerFactoryBean();
+        
+        EntityManagerFactoryInfo emfi = (EntityManagerFactoryInfo)(context.getBean(DATAMODEL_BEAN));
+        emf = emfi.getNativeEntityManagerFactory();
+        
+        
+        //org.springframework.orm.jpa.LocalEntityManagerFactoryBean loc = (LocalEntityManagerFactoryBean) context.getBean(DATAMODEL_BEAN);
+        //loc.setPersistenceUnitName("pikaterDataModel");
+        //emf=loc.getNativeEntityManagerFactory();
         
         log("is alive...", 1);
         getContentManager().registerLanguage(codec);

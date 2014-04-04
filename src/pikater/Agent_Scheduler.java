@@ -22,6 +22,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.JADEAgentManagement.JADEManagementOntology;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.proto.AchieveREInitiator;
 import jade.util.leap.List;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
@@ -56,15 +57,6 @@ public class Agent_Scheduler extends PikaterAgent {
 		registerWithDF("Scheduler");
 
 
-		// wait until another agents start
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI("weather.arff");
 
@@ -87,6 +79,12 @@ public class Agent_Scheduler extends PikaterAgent {
 
 		ExecuteExperiment executeExpAction = new ExecuteExperiment(comDescription);
 
+		try {
+			Thread.sleep(9000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
         AID receiver = new AID("ComputingManager", false);		
 
@@ -96,10 +94,10 @@ public class Agent_Scheduler extends PikaterAgent {
         msg.setOntology(getOntology().getName());
         try {
 			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
+			this.addBehaviour(new SendProblemToComManager(this, msg) );
 			
-			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
-			
-			System.out.println("Reply: " + reply.getContent());
+			//ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
+			//System.out.println("Reply: " + reply.getContent());
 			
 		} catch (CodecException e) {
 			// TODO Auto-generated catch block
@@ -107,10 +105,8 @@ public class Agent_Scheduler extends PikaterAgent {
 		} catch (OntologyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+        
 
 	  	// Make this agent terminate
 	  	//doDelete();
@@ -123,3 +119,49 @@ public class Agent_Scheduler extends PikaterAgent {
 	}
 	
 }
+
+
+
+
+class SendProblemToComManager extends AchieveREInitiator {
+
+	private static final long serialVersionUID = 8923548223375000884L;
+
+	String gui_id;
+	PikaterAgent agent;
+	
+	public SendProblemToComManager(Agent agent, ACLMessage msg) {
+		super(agent, msg);
+		this.gui_id = gui_id;
+		this.agent = (PikaterAgent) agent;
+	}
+
+	protected void handleAgree(ACLMessage agree) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ agree.getSender().getName() + " agreed.");
+	}
+
+	protected void handleInform(ACLMessage inform) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ inform.getSender().getName() + " replied.");
+	}
+
+	protected void handleRefuse(ACLMessage refuse) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ refuse.getSender().getName()
+				+ " refused to perform the requested action");
+	}
+
+	protected void handleFailure(ACLMessage failure) {
+		if (failure.getSender().equals(myAgent.getAMS())) {
+			// FAILURE notification from the JADE runtime: the receiver
+			// does not exist
+			System.out.println(agent.getLocalName() + ": Responder does not exist");
+		} else {
+			System.out.println(agent.getLocalName() + ": Agent " + failure.getSender().getName()
+					+ " failed to perform the requested action");
+		}
+	}
+
+}
+

@@ -1,6 +1,7 @@
 package pikater;
 
 import jade.content.ContentElement;
+
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;

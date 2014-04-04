@@ -9,61 +9,55 @@ import javax.persistence.Id;
 @Entity	
 public class JPADataSetLO {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
 	//ID of the LargeObject stored in the Postgre DB, that contains
 	//Use method in pikater.utility.pikaterDatabase.Database to retrieve the data based on OID
-	private Long OID;
-	private Long userId;
-	private Long globalMetaDataId;
-	private String dataSetFileName;
-		
-	/**	
-	public void setDataSetFile(byte[] dataSetFile){
-		this.dataSetFile=dataSetFile;
+	private long OID;
+	private JPAUser owner;
+	private String description;
+	private JPAGlobalMetaData globalMetaData;
+	private JPAAttributeMetaData attributeMetaData;
+	private String hash;
+	
+	public String getHash() {
+		return hash;
 	}
-		
-	public byte[] getDataSetFile(){
-		return this.dataSetFile;
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
-		**/
 	public void setOID(Long OID){
-		this.OID=OID;;
-	}
-		
+		this.OID=OID;
+	}	
 	public Long getOID(){
 		return this.OID;
 	}
-	public void setUserID(Long userID){
-		this.userId=userID;
-	}
-		
-	public Long getUserID(){
-		return this.userId;
-	}
-		
-	public void setGlobalMetaDataID(Long globalMetaDataID){
-		this.globalMetaDataId=globalMetaDataID;
-	}
-		
-	public Long getGlobalMetaDataID(){
-		return this.globalMetaDataId;
-	}
-	
-	public void setDataSetFileName(String dataSetFileName){
-		this.dataSetFileName=dataSetFileName;
-	}
-		
-	public String getDataSetFileName(){
-		return this.dataSetFileName;
-	}
-	
-	/**
-	 * Returns the generated ID of the dataset after it has persisted.
-	 * @return dataset ID
-	 */
-	public Long getID(){
+	public int getID(){
 		return id;
+	}
+	public JPAGlobalMetaData getGlobalMetaData() {
+		return globalMetaData;
+	}
+	public void setGlobalMetaData(JPAGlobalMetaData globalMetaData) {
+		this.globalMetaData = globalMetaData;
+	}
+	public JPAAttributeMetaData getAttributeMetaData() {
+		return attributeMetaData;
+	}
+	public void setAttributeMetaData(JPAAttributeMetaData attributeMetaData) {
+		this.attributeMetaData = attributeMetaData;
+	}
+	public JPAUser getOwner() {
+		return owner;
+	}
+	public void setOwner(JPAUser owner) {
+		this.owner = owner;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }

@@ -2,7 +2,10 @@ package pikater.utility.pikaterDatabase;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,13 +15,18 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.persistence.internal.xr.XRServiceFactory.JPAMetadataSource;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 
+import pikater.data.jpa.JPAAttributeMetaData;
 import pikater.data.jpa.JPADataSetLO;
 import pikater.data.jpa.JPAGeneralFile;
+import pikater.data.jpa.JPAGlobalMetaData;
 import pikater.data.jpa.JPARole;
+import pikater.data.jpa.JPATaskType;
 import pikater.data.jpa.JPAUser;
 import pikater.utility.pikaterDatabase.exceptions.UserNotFoundException;
 
@@ -119,6 +127,86 @@ public class Database {
 	}
 	
 	
+	
+	/**
+	 * Adds a JPAGlobalMetaData object to the database
+	 * @param jpaGlobalMetaData The object to be stored.
+	 */
+	public void addGlobalMetaData(JPAGlobalMetaData jpaGlobalMetaData){
+		persist(jpaGlobalMetaData);
+	}
+	
+	/**
+	 * Creates a new instance of JPAGlobalMetaData class for the given numberOfInstances and defaultTaskTypeName
+	 * If the defaultTaskTypeName references a new task type, then a new JPATaskType object will also be created.
+	 * @param numberOfInstances The number of instances for the new object
+	 * @param defaultTaskTypeName The name of the dafault task type.
+	 * @return
+	 */
+	public JPAGlobalMetaData createGlobalMetaData(int numberOfInstances, String defaultTaskTypeName){
+		JPATaskType storedTask=this.getTaskTypeByName(defaultTaskTypeName);
+		if(storedTask==null){
+			storedTask=this.createTaskType(defaultTaskTypeName);
+			this.addTaskType(storedTask);
+			storedTask=this.getTaskTypeByName(defaultTaskTypeName);
+		}
+		JPAGlobalMetaData gMetaData=new JPAGlobalMetaData();
+		gMetaData.setDefaultTaskType(storedTask);
+		gMetaData.setNumberofInstances(numberOfInstances);
+		return gMetaData;
+	}
+	
+	/**
+	 * Creates a new instance of JPAGlobalMetaData class
+	 * @param numberOfInstances The number of instances of the new object
+	 * @param defaultTaskType The JPATaskType object of the default task type for the new object
+	 * @return The new object
+	 */
+	public JPAGlobalMetaData createGlobalMetaData(int numberOfInstances, JPATaskType defaultTaskType){
+		JPAGlobalMetaData res=new JPAGlobalMetaData();
+		res.setDefaultTaskType(defaultTaskType);
+		res.setNumberofInstances(numberOfInstances);
+		return res;
+	}
+	
+	/**
+	 * Creates a new instance of JPATaskType class
+	 * @param name The name of the new task.
+	 * @return The new instance
+	 */
+	public JPATaskType createTaskType(String name){
+		JPATaskType result=new JPATaskType();
+		result.setName(name);
+		return result;
+	}
+	
+	/**
+	 * Adds a JPATaskType object to the database
+	 * @param taskType The object to be stored.
+	 */
+	public void addTaskType(JPATaskType taskType){
+		persist(taskType);
+	}
+	
+	public JPATaskType getTaskTypeByName(String name){
+		JPATaskType res=null;
+		try{
+			em=emf.createEntityManager();
+			Query q = em.createQuery("select tt from JPATaskType tt where tt.name=:taskTypeName");
+			q.setParameter("taskTypeName", name);
+			try{
+			res=(JPATaskType)q.getSingleResult();
+			}catch(javax.persistence.NoResultException nre){
+				res=null;
+			}
+			return res;
+		}finally{
+			cleanUpEntityManager();
+		}
+	}
+	
+	
+	
 	/**
 	 * Adds an existing role object to the database
 	 * @param role The role's object
@@ -210,11 +298,12 @@ public class Database {
 	 * @param password The new user's password
 	 * @param email The new user's e-mail
 	 */
-	public void addUser(String login,String password,String email){
+	public void addUser(String login,String password,String email, String roleName){
 		JPAUser newUser=new JPAUser();
 		newUser.setLogin(login);
 		newUser.setPassword(password);
 		newUser.setEmail(email);
+		newUser.setRole(getRoleByName(roleName));
 		this.addUser(newUser);
 	}
 	
@@ -436,29 +525,167 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
 	  unpersist(file);
   }
   
+  /**
+   * Returns an MD5 hash for the given file. The hash is computed upon the whole content of the file.
+   * @param file The object referencing to the file.
+   * @return The computed MD5 hash
+   * @throws IOException
+   */
+  public String getMD5Hash(File file) throws IOException{
+	  FileInputStream fis=null;
+	  String res=null;
+	  try{
+		  fis = new FileInputStream(file);
+		  MessageDigest md=MessageDigest.getInstance("MD5");
+		  byte buf[] = new byte[2048];
+		  int s;
+		  while ((s = fis.read(buf, 0, 2048)) > 0) {
+			  md.update(buf, 0, s);
+		  }
+		  byte[] dig=md.digest();
+		  res=new String(dig);
+	  }catch(NoSuchAlgorithmException nsae){
+		  nsae.printStackTrace();
+	  }finally{
+		  fis.close();
+	  }
+	  return res;
+  }
   
-  
+  private String klaraMD5(String path) {
+      StringBuffer sb = null;
+      try {
+          FileInputStream fs = new FileInputStream(path);
+          sb = new StringBuffer();
+
+          int ch;
+          while ((ch = fs.read()) != -1) {
+              sb.append((char) ch);
+          }
+          fs.close();
+      } catch (FileNotFoundException e) {
+          e.printStackTrace();
+          //logError("File not found: " + path + " -- " + e.getMessage());
+      } catch (IOException e) {
+          e.printStackTrace();
+          //logError("Error reading file: " + path + " -- " + e.getMessage());
+      }
+      String md5 = DigestUtils.md5Hex(sb.toString());
+      return md5;
+  }
+
   
   
   
   /**
-   * The function stores the given file to the Database through JPA. It uses the file's name as one of the identificators in the database, that is returned by java.io.File.getName() function.
-   * @param userID 
-   * @param dataSet
+   * The function returns all DataSet entries in the database, which has an associated file with the same MD5 hash as given.
+   * @param hash The Hash whose occurences are we searching for.
+   * @return The list of found DataSet entries.
+   */
+  public List<JPADataSetLO> getDataSetByHash(String hash){
+	  try{
+		  em=emf.createEntityManager();
+		  Query q = em.createQuery("select ds from JPADataSetLO ds where ds.hash=:hash");
+		  q.setParameter("hash", hash);
+		  List<JPADataSetLO> dataSetList = q.getResultList();
+		  return dataSetList;
+	  }finally{
+		  cleanUpEntityManager();
+	  }
+  }
+  
+  /**
+   * The function stores the given file to the Database as a DataSet through JPA. The dataset will be associated with the given user, description. Please note, that new dataset's MD5 hash will be compared to the already stored dataset's MD5 hashes and if there are matching entries in the database the LargeObject won't be created, but instead a link is being created.
+   * @param user The JPAUser object  of the owner
+   * @param dataSet The File object of the file to be stored.
+   * @param description The description of the DataSet.
    * @throws SQLException
    * @throws IOException
    * @return The persisted JPADataSetLO object for the stored file
    */
-  public JPADataSetLO saveDataSet(int userID, File dataSet) throws SQLException, IOException {
-      long oid=saveFileAsLargeObject(dataSet);
+  public JPADataSetLO saveDataSet(JPAUser user, File dataSet,String description) throws SQLException, IOException {
+	  long oid=-1;
+	  String hash=this.getMD5Hash(dataSet);
+	  List<JPADataSetLO> sameHashDS=this.getDataSetByHash(hash);
+	  if(sameHashDS.size()>0){
+		  oid=sameHashDS.get(0).getOID();
+	  }else{
+		  oid=saveFileAsLargeObject(dataSet);
+	  }
       JPADataSetLO jpaDataSetLD=new JPADataSetLO();
+      jpaDataSetLD.setHash(hash);
       jpaDataSetLD.setOID(oid);
-      jpaDataSetLD.setUserID((long)userID);
-      jpaDataSetLD.setDataSetFileName(dataSet.getName());
-      //persisting the object jpaDataSet
+      jpaDataSetLD.setOwner(user);
+      jpaDataSetLD.setDescription(description);
       persist(jpaDataSetLD);
       return jpaDataSetLD;
   }
+  
+  
+  /**
+   * The function stores the given file to the Database as a DataSet through JPA. The dataset will be associated with the given user, description. Please note, that new dataset's MD5 hash will be compared to the already stored dataset's MD5 hashes and if there are matching entries in the database the LargeObject won't be created, but instead a link is being created.
+   * @param user The JPAUser object  of the owner
+   * @param dataSet The File object of the file to be stored.
+   * @param description The description of the DataSet.
+   * @param globalMetaData The GlobalMetaData object containing global metadata information for the dataset
+   * @throws SQLException
+   * @throws IOException
+   * @return The persisted JPADataSetLO object for the stored file
+   */
+  public JPADataSetLO saveDataSet(JPAUser user, File dataSet,String description,JPAGlobalMetaData globalMetaData) throws SQLException, IOException {
+	  long oid=-1;
+	  String hash=this.getMD5Hash(dataSet);
+	  List<JPADataSetLO> sameHashDS=this.getDataSetByHash(hash);
+	  if(sameHashDS.size()>0){
+		  oid=sameHashDS.get(0).getOID();
+	  }else{
+		  oid=saveFileAsLargeObject(dataSet);
+	  }
+      JPADataSetLO jpaDataSetLD=new JPADataSetLO();
+      jpaDataSetLD.setHash(hash);
+      jpaDataSetLD.setOID(oid);
+      jpaDataSetLD.setOwner(user);
+      jpaDataSetLD.setDescription(description);
+      jpaDataSetLD.setGlobalMetaData(globalMetaData);
+      persist(jpaDataSetLD);
+      return jpaDataSetLD;
+  }
+  
+  
+  /**
+   * The function stores the given file to the Database as a DataSet through JPA. The dataset will be associated with the given user, description. Please note, that new dataset's MD5 hash will be compared to the already stored dataset's MD5 hashes and if there are matching entries in the database the LargeObject won't be created, but instead a link is being created.
+   * @param user The JPAUser object  of the owner
+   * @param dataSet The File object of the file to be stored.
+   * @param description The description of the DataSet.
+   * @param globalMetaData The JPAGlobalMetaData object containing global metadata information for the dataset
+   * @param attributeMetaData The JPAAttributeMetaData object caontaining attribute metadata for the dataset
+   * @throws SQLException
+   * @throws IOException
+   * @return The persisted JPADataSetLO object for the stored file
+   */
+  public JPADataSetLO saveDataSet(JPAUser user, File dataSet,String description,JPAGlobalMetaData globalMetaData,JPAAttributeMetaData attributeMetaData) throws SQLException, IOException {
+	  long oid=-1;
+	  String hash=this.getMD5Hash(dataSet);
+	  List<JPADataSetLO> sameHashDS=this.getDataSetByHash(hash);
+	  if(sameHashDS.size()>0){
+		  oid=sameHashDS.get(0).getOID();
+	  }else{
+		  oid=saveFileAsLargeObject(dataSet);
+	  }
+      JPADataSetLO jpaDataSetLD=new JPADataSetLO();
+      jpaDataSetLD.setHash(hash);
+      jpaDataSetLD.setOID(oid);
+      jpaDataSetLD.setOwner(user);
+      jpaDataSetLD.setDescription(description);
+      jpaDataSetLD.setGlobalMetaData(globalMetaData);
+      jpaDataSetLD.setAttributeMetaData(attributeMetaData);
+      persist(jpaDataSetLD);
+      return jpaDataSetLD;
+  }
+  
+  
+  
+  
   
   /**
    * Returns all datasets stored in the database using LargeObjects.
@@ -481,10 +708,10 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
    * @param userId ID of the user.
    * @return List of JPADataSetLO objects.
    */
-  public List<JPADataSetLO> getDataSetLargeObjectsByUser(long userId){
+  public List<JPADataSetLO> getDataSetLargeObjectsByUser(JPAUser user){
 	  try{
-		  Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.userId=:userId");
-		  q.setParameter("userId", userId);
+		  Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.owner=:user");
+		  q.setParameter("user", user);
 		  List<JPADataSetLO> dataSetLOList = q.getResultList();
 		  return dataSetLOList;
 	  }finally{
@@ -499,9 +726,9 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
    * @return Number of deleted datasets.
    * @throws SQLException
    */
-  public long deleteAllDataSetLargeObjectsByUser(long userId) throws SQLException{
+  public long deleteAllDataSetLargeObjectsByUser(JPAUser user) throws SQLException{
 	  long count=0;
-	  List<JPADataSetLO> datasets=this.getDataSetLargeObjectsByUser(userId);
+	  List<JPADataSetLO> datasets=this.getDataSetLargeObjectsByUser(user);
 	  for(JPADataSetLO dslo:datasets){
 		  deleteLargeObject(dslo.getOID());
 		  unpersist(dslo);
@@ -515,7 +742,7 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
    * @param dataSetId The ID of the DataSet.
    * @return The JPADataSetLO object.
    */
-  public JPADataSetLO getDataSetLOByID(long dataSetId){
+  public JPADataSetLO getDataSetLOByID(int dataSetId){
 	  try{
 		  em=emf.createEntityManager();
 		  Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.id=:dataSetId");
@@ -531,24 +758,12 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
    * @param dataSetId The ID of the DataSet.
    * @throws SQLException
    */
-  public void deleteDataSetLOById(long dataSetId) throws SQLException{
+  public void deleteDataSetLOById(int dataSetId) throws SQLException{
 	  JPADataSetLO dslo=this.getDataSetLOByID(dataSetId);
 	  deleteLargeObject(dslo.getOID());
 	  unpersist(dslo);
   }
-  
-  /**
-  
-  /**
-   * Sets the Connection object used to communicate with the database. 
-   * @param connection The PGConnection object representing the connection.
-   
-  public void setPostgreConnection(PGConnection connection){
-	  this.connection=connection;
-  }
-  
-  */
-  
+
   
   
   /**
@@ -634,7 +849,7 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
    * The function persists the given object to the database using Java Persistence API.
    * @param object The object to be persisted.
    */
-  private void persist(Object object){
+  void persist(Object object){
 	  try{
 	    em=emf.createEntityManager();
 	  	em.getTransaction().begin();

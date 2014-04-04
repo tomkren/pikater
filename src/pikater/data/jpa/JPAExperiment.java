@@ -21,47 +21,70 @@ public class JPAExperiment {
 	// TODO link to model table
 	private int modelId;
 	private String status;
+	private String xmlDescription;
+	private JPAResult result;
 
-    public int getId() {
+	public int getId() {
         return id;
     }
     public void setId(int id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
     }
+
     public String getNote() {
         return note;
     }
     public void setNote(String note) {
         this.note = note;
     }
+
     public byte getWorkflow() {
         return workflow;
     }
     public void setWorkflow(byte workflow) {
         this.workflow = workflow;
     }
+
     public int getBatchId() {
         return batchId;
     }
     public void setBatchId(int batchId) {
         this.batchId = batchId;
     }
+
     public int getModelId() {
         return modelId;
     }
     public void setModelId(int modelId) {
         this.modelId = modelId;
     }
+
     public String getStatus() {
         return status;
     }
     public void setStatus(String status) {
         this.status = status;
     }
+
+	public void setXMLDescription(String xmlDescription){
+		this.xmlDescription=xmlDescription;
+	}
+	public String getXMLDescription(){
+		return this.xmlDescription;
+	}
+
+	public void setResult(JPAResult result) {
+		this.result = result;
+	}
+    public JPAResult getResult() {
+		return result;
+	}
+
 }

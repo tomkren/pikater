@@ -1,5 +1,6 @@
 package pikater.data.jpa;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,6 +21,9 @@ public class JPARole {
 	@Column(unique=true)
 	private String name;
 	private String description;
+	
+	private final List<JPAUserPriviledge> priviledges = new ArrayList<JPAUserPriviledge>(); 
+	
 	public String getName() {
 		return name;
 	}
@@ -37,5 +41,10 @@ public class JPARole {
 	}
 	public List<JPAUser> getUsersWithThisRole() {
 		return usersWithThisRole;
+	}
+	
+	public void addPriviledge(JPAUserPriviledge priviledge) {
+		this.priviledges.add(priviledge);
+		
 	}
 }
