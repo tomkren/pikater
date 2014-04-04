@@ -100,11 +100,8 @@
 	<classpathentry kind="lib" path="libraries/jpaEclipseLink/javax.persistence.source_2.1.0.v201304241213.jar"/>
 	<classpathentry kind="lib" path="libraries/json/java-json.jar"/>
 	<classpathentry kind="lib" path="libraries/reflections/reflections-0.9.9-RC1-uberjar.jar"/>
-<<<<<<< HEAD
 	<classpathentry kind="lib" path="libraries/commons-collections4-4.0/commons-collections4-4.0-javadoc.jar"/>
 	<classpathentry kind="lib" path="libraries/commons-collections4-4.0/commons-collections4-4.0.jar"/>
-=======
->>>>>>> FETCH_HEAD
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
