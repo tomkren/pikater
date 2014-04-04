@@ -291,27 +291,27 @@ public class Agent_OptionsManager extends PikaterAgent {
 			// We want to receive a reply in 10 secs
 			cfp.setReplyByDate(new Date(System.currentTimeMillis() + 5000));
 			Execute ex = new Execute();
-			
+
 			// add task id
 			Id id = new Id(Integer.toString(task_number));
 			Id rtid = received_task.getId();
 			rtid.setSubid(id);
 			received_task.setId(rtid);
-			
+
 			received_task.setStart(getDateTime());
 			received_task.setNote(Integer.toString(task_number));
 			task_number++;
-			
+
 			// add the new options to the task
 			pikater.ontology.messages.Agent ag = received_task.getAgent();							
 			ag.setOptions(opt.getList());							
 			received_task.setAgent(ag);
 			ex.setTask(received_task);		
-										
+		
 			Action a = new Action();
 			a.setAction(ex);
 			a.setActor(this.getAID());
-										
+
 			getContentManager().fillContent(cfp, a);
 		} catch (UngroundedException e) {
 			// TODO Auto-generated catch block

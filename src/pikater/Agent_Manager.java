@@ -454,13 +454,23 @@ public class Agent_Manager extends PikaterAgent {
 			// return null;
 			// }
 		};
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+		
 		addBehaviour(send_results);
 
-		addBehaviour(new RequestServer(this));		
+		addBehaviour(new RequestServer(this));
 
 	} // end setup
 
 
+	private static int debug = 0;
+	
 	protected class RequestServer extends CyclicBehaviour {
 		/**
 		 * 
@@ -479,12 +489,12 @@ public class Agent_Manager extends PikaterAgent {
 
 		@Override 
 		public void action() {
+			
 			ACLMessage request = receive(requestMsgTemplate);
 
-			
 			if (request != null) {
 				System.out.println(getLocalName()
-						+ ": REQUEST received from "
+						+ ": RERRQUEST received from "
 						+ request.getSender().getName());
 
 				try {

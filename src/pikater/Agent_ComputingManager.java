@@ -50,6 +50,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import jade.proto.AchieveREInitiator;
 import jade.proto.AchieveREResponder;
 import jade.util.leap.List;
 import jade.wrapper.AgentController;
@@ -70,7 +71,8 @@ public class Agent_ComputingManager extends PikaterAgent {
 		registerWithDF("ComputingManager");
 
         addBehaviour(new ComputingManagerBehaviour(this));
-        
+
+		
 	  	// Make this agent terminate
 	  	//doDelete();
 	}
@@ -329,20 +331,21 @@ public class Agent_ComputingManager extends PikaterAgent {
 						problem.setEvaluation_method(evaluation_method);
 								
 						solve.setProblem(problem);
+
+
+
+						System.out.println("Sending SOLVE");
 						
-			
-									
 						// create a request message with SendProblem content
 						ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-						msg.addReceiver(new AID("UserInterface"));
+						msg.setSender(getAID());
+						msg.addReceiver(new AID("manager", false));
 						msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 						msg.setLanguage(codec.getName());
 						msg.setOntology(ontology.getName());
-
 						// We want to receive a reply in 30 secs
 						msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
-
 						msg.setConversationId(problem.getGui_id() + getLocalName());
 
 						Action a = new Action();
@@ -359,6 +362,7 @@ public class Agent_ComputingManager extends PikaterAgent {
 							oe.printStackTrace();
 						}
 
+						agent.addBehaviour(new SendProblemToManager(agent, msg));
 						
 				}
 				
@@ -369,3 +373,48 @@ public class Agent_ComputingManager extends PikaterAgent {
 
 }
 
+
+
+
+
+
+
+class SendProblemToManager extends AchieveREInitiator {
+
+	private static final long serialVersionUID = 8923548223375000884L;
+
+	PikaterAgent agent;
+	
+	public SendProblemToManager(Agent agent, ACLMessage msg) {
+		super(agent, msg);
+		this.agent = (PikaterAgent) agent;
+	}
+
+	protected void handleAgree(ACLMessage agree) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ agree.getSender().getName() + " agreed.");
+	}
+
+	protected void handleInform(ACLMessage inform) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ inform.getSender().getName() + " replied.");
+	}
+
+	protected void handleRefuse(ACLMessage refuse) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ refuse.getSender().getName()
+				+ " refused to perform the requested action");
+	}
+
+	protected void handleFailure(ACLMessage failure) {
+		if (failure.getSender().equals(myAgent.getAMS())) {
+			// FAILURE notification from the JADE runtime: the receiver
+			// does not exist
+			System.out.println(agent.getLocalName() + ": Responder does not exist");
+		} else {
+			System.out.println(agent.getLocalName() + ": Agent " + failure.getSender().getName()
+					+ " failed to perform the requested action");
+		}
+	}
+
+}

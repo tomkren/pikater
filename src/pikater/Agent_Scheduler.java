@@ -57,15 +57,6 @@ public class Agent_Scheduler extends PikaterAgent {
 		registerWithDF("Scheduler");
 
 
-		// wait until another agents start
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI("weather.arff");
 
@@ -103,7 +94,7 @@ public class Agent_Scheduler extends PikaterAgent {
         msg.setOntology(getOntology().getName());
         try {
 			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
-			this.addBehaviour(new SendProblemToManager(this, msg) );
+			this.addBehaviour(new SendProblemToComManager(this, msg) );
 			
 			//ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
 			//System.out.println("Reply: " + reply.getContent());
@@ -132,14 +123,14 @@ public class Agent_Scheduler extends PikaterAgent {
 
 
 
-class SendProblemToManager extends AchieveREInitiator {
+class SendProblemToComManager extends AchieveREInitiator {
 
 	private static final long serialVersionUID = 8923548223375000884L;
 
 	String gui_id;
 	PikaterAgent agent;
 	
-	public SendProblemToManager(Agent agent, ACLMessage msg) {
+	public SendProblemToComManager(Agent agent, ACLMessage msg) {
 		super(agent, msg);
 		this.gui_id = gui_id;
 		this.agent = (PikaterAgent) agent;
