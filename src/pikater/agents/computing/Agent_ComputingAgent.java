@@ -266,7 +266,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		}
 		newAgent = false;
 
-
+		setEnabledO2ACommunication(true, 0);
 
 		addBehaviour(send_options_behaviour = new RequestServer(this));
 		addBehaviour(execution_behaviour = new ProcessAction(this));
@@ -331,6 +331,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 			// content
 			GetData get_data = new GetData();
 			get_data.setFile_name(fileName);
+			get_data.setO2a_agent(getLocalName());
 			Action a = new Action();
 			a.setAction(get_data);
 			a.setActor(this.getAID());
@@ -587,8 +588,16 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 				if (content instanceof Result) {
 					Result result = (Result) content;
 					if (result.getValue() instanceof pikater.ontology.messages.DataInstances) {
-						return (pikater.ontology.messages.DataInstances) result
-								.getValue();
+						return (pikater.ontology.messages.DataInstances) result.getValue();
+					} else if (result.getValue() instanceof Boolean) {
+						// log("getting o2a data");
+						Object o = getO2AObject();
+						if (o == null)
+							throw new IllegalStateException("received GetData response without o2a object in queue");
+						else
+							return (pikater.ontology.messages.DataInstances) o;
+					} else {
+						throw new IllegalStateException("received unexpected Inform");
 					}
 				}
 			} catch (UngroundedException e) {
