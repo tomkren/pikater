@@ -1,0 +1,20 @@
+<LogicalUnit>
+  <isBox>true</isBox>
+  <name>FileInput</name>
+  <agentName>null</agentName>
+  <type>InputBox</type>
+  <picture>picture0.jpg</picture>
+  <description>This box provides a data source to other boxes.</description>
+  <parameters>
+    <ValueParameter>
+      <value class="string">file.txt</value>
+    </ValueParameter>
+  </parameters>
+  <inputSlots/>
+  <outputSlots>
+    <DataSlot>
+      <description>Dataset</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+  </outputSlots>
+</LogicalUnit>

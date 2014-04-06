@@ -1,0 +1,16 @@
+<LogicalUnit>
+  <isBox>true</isBox>
+  <name>FileVisualizer</name>
+  <agentName>pikater/Agent_Visualizer</agentName>
+  <type>VisualizerBox</type>
+  <picture>picture4.jpg</picture>
+  <description>Visualiser shows dates from dataSource.</description>
+  <parameters/>
+  <inputSlots>
+    <DataSlot>
+      <description>Data Source</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+  </inputSlots>
+  <outputSlots/>
+</LogicalUnit>

@@ -1,0 +1,29 @@
+<LogicalUnit>
+  <isBox>true</isBox>
+  <name>CrossValidation-Method</name>
+  <agentName>Agent_CrossValidation</agentName>
+  <type>ComputingBox</type>
+  <picture>picture3.jpg</picture>
+  <description>Computing agent used for training neural networks deterministic library WEKA. As a training method is used default Cross Validation WEKA method.</description>
+  <parameters/>
+  <inputSlots>
+    <DataSlot>
+      <description>Training data</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+    <DataSlot>
+      <description>Testing data</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+    <DataSlot>
+      <description>Validation data</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+  </inputSlots>
+  <outputSlots>
+    <DataSlot>
+      <description>Computed data</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+  </outputSlots>
+</LogicalUnit>

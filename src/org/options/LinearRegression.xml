@@ -1,0 +1,31 @@
+<LogicalUnit>
+  <isBox>false</isBox>
+  <name>NoName</name>
+  <agentName>Agent_Duration</agentName>
+  <type>NoType</type>
+  <picture>NoPicture</picture>
+  <description>A dummy linear regression box</description>
+  <parameters>
+    <RangedValueParameter>
+      <value class="int">0</value>
+      <range>
+        <min class="int">0</min>
+        <max class="int">2</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+    <ValueParameter>
+      <value class="boolean">true</value>
+    </ValueParameter>
+    <RangedValueParameter>
+      <value class="float">1.0E-8</value>
+      <range>
+        <min class="float">1.0E-10</min>
+        <max class="float">1.0E-4</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+  </parameters>
+  <inputSlots/>
+  <outputSlots/>
+</LogicalUnit>

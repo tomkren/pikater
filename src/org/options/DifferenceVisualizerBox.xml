@@ -1,0 +1,20 @@
+<LogicalUnit>
+  <isBox>true</isBox>
+  <name>DifferenceVisualizer</name>
+  <agentName>Agent_DifferenceVisualizer</agentName>
+  <type>VisualizerBox</type>
+  <picture>picture4.jpg</picture>
+  <description>Shows difference between input and model data sources.</description>
+  <parameters/>
+  <inputSlots>
+    <DataSlot>
+      <description>Target Data Source</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+    <DataSlot>
+      <description>Model Data Source</description>
+      <connectedSlots class="list"/>
+    </DataSlot>
+  </inputSlots>
+  <outputSlots/>
+</LogicalUnit>

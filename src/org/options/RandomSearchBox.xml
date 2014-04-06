@@ -1,0 +1,28 @@
+<LogicalUnit>
+  <isBox>true</isBox>
+  <name>Random-Searcher</name>
+  <agentName>pikater/Agent_RandomSearch</agentName>
+  <type>SearcherBox</type>
+  <picture>picture1.jpg</picture>
+  <description>Selects and provides random values for its output parameters.</description>
+  <parameters>
+    <RangedValueParameter>
+      <value class="double">0.01</value>
+      <range>
+        <min class="double">0.0</min>
+        <max class="double">1.0</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+    <RangedValueParameter>
+      <value class="int">10</value>
+      <range>
+        <min class="int">1</min>
+        <max class="int">100000</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+  </parameters>
+  <inputSlots/>
+  <outputSlots/>
+</LogicalUnit>

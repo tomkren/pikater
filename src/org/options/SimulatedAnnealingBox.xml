@@ -1,0 +1,44 @@
+<LogicalUnit>
+  <isBox>true</isBox>
+  <name>SimulatedAnnealing-Searcher</name>
+  <agentName>pikater/Agent_SimulatedAnnealing</agentName>
+  <type>SearcherBox</type>
+  <picture>picture2.jpg</picture>
+  <description>Searcher is using to find values of parameters for computing agents. For search the solution is used method simulated annaling.</description>
+  <parameters>
+    <RangedValueParameter>
+      <value class="double">0.1</value>
+      <range>
+        <min class="double">0.0</min>
+        <max class="double">1.0</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+    <RangedValueParameter>
+      <value class="int">50</value>
+      <range>
+        <min class="int">1</min>
+        <max class="int">1000</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+    <RangedValueParameter>
+      <value class="double">1.0</value>
+      <range>
+        <min class="double">0.0</min>
+        <max class="double">100.0</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+    <RangedValueParameter>
+      <value class="double">0.5</value>
+      <range>
+        <min class="double">0.0</min>
+        <max class="double">1.0</max>
+      </range>
+      <isStrict>false</isStrict>
+    </RangedValueParameter>
+  </parameters>
+  <inputSlots/>
+  <outputSlots/>
+</LogicalUnit>
