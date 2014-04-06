@@ -6,16 +6,19 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.Agent;
+import jade.core.AgentContainer;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
+import jade.wrapper.ContainerController;
 import pikater.agents.PikaterAgent;
 import pikater.ontology.messages.DataInstances;
 import pikater.ontology.messages.GetData;
 import weka.core.Attribute;
 import weka.core.AttributeStats;
 import weka.core.Instances;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -73,22 +76,29 @@ public class Agent_ARFFReader extends PikaterAgent {
 				throw new FailureException("File haven't been read. Wrong file-name?");
 			}
 
-			instances.fillWekaInstances(data);
-                        ArrayList<Integer> types = new ArrayList<Integer>();
+            instances.fillWekaInstances(data);
+            ArrayList<Integer> types = new ArrayList<Integer>();
 
-                        for (int i = 0; i < data.numAttributes(); i++) {
-                            Attribute a = data.attribute(i);
-                            AttributeStats as = data.attributeStats(i);
+            for (int i = 0; i < data.numAttributes(); i++) {
+                Attribute a = data.attribute(i);
+                AttributeStats as = data.attributeStats(i);
 
-                            if (i != (data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1)) {
-                                if (!types.contains(a.type())) {
-                                    types.add(a.type());
-                                }
-                            }
-                        }
+                if (i != (data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1)) {
+                    if (!types.contains(a.type())) {
+                        types.add(a.type());
+                    }
+                }
+            }
 
-			// Prepare the content
-			Result result = new Result((Action) content, instances);
+            Result result;
+            if (gd.getO2a_agent() != null) {
+                //log("putting o2a data to "+gd.getO2a_agent());
+                getContainerController().getAgent(gd.getO2a_agent()).putO2AObject(instances, false);
+                result = new Result((Action) content, true);
+            } else {
+                result = new Result((Action) content, instances);
+            }
+                        
 			try {
 				getContentManager().fillContent(msgOut, result);
 			} catch (CodecException ce) {

@@ -18,9 +18,6 @@ public class MessagesOntology extends Ontology {
 
 	// A symbolic constant, containing the name of this ontology.
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1634256259949979087L;
 
 	public static final String NAME = "messages-ontology";
@@ -232,6 +229,7 @@ public class MessagesOntology extends Ontology {
 
 	public static final String GET_DATA = "GET-DATA";
 	public static final String GET_DATA_FILE_NAME = "file_name";
+	public static final String GET_DATA_O2A_AGENT = "o2a_agent";
 
 	public static final String SAVE_METADATA = "SAVE-METADATA";
 	public static final String SAVE_METADATA_METADATA = "metadata";
@@ -868,6 +866,9 @@ public class MessagesOntology extends Ontology {
 
 			as = (AgentActionSchema) getSchema(GET_DATA);
 			as.add(GET_DATA_FILE_NAME,
+					(PrimitiveSchema) getSchema(BasicOntology.STRING),
+					ObjectSchema.OPTIONAL);
+			as.add(GET_DATA_O2A_AGENT,
 					(PrimitiveSchema) getSchema(BasicOntology.STRING),
 					ObjectSchema.OPTIONAL);
 
