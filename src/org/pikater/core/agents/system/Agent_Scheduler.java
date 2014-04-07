@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.system;
 
 import java.io.IOException;
 

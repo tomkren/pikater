@@ -48,12 +48,6 @@
                 <argument key="sniffed" value="manager" sendOnlyValue="true" />
             </arguments>
         </agent>
-<!--
-        <agent type="pikater.Agent_ComputingManager" name="ComputingManager">
-        </agent>
 
-        <agent type="pikater.Agent_Scheduler" name="Scheduler">
-        </agent>
--->
     </agents>
 </configuration>

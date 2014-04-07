@@ -4,8 +4,8 @@
         </method>
         
         <evaluation name="CrossValidation">
-          <parameter name="F" value="10" />        
-        </evaluation>               
+          <parameter name="F" value="10" />
+        </evaluation>
 
         <dataset train="weather.arff" test="weather.arff" />
         <agent type="RBFNetwork">

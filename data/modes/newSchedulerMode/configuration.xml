@@ -46,14 +46,14 @@
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
 <!--                <argument key="sniffed" value="Reader_Cervenacek" sendOnlyValue="true" /> -->
-                <argument key="sniffed" value="Reader_Cervenacek" sendOnlyValue="true" />
+                <argument key="sniffed" value="manager" sendOnlyValue="true" />
             </arguments>
         </agent>
 
-        <agent type="pikater.Agent_ComputingManager" name="ComputingManager">
+        <agent type="org.pikater.core.agents.system.Agent_ComputingManager" name="ComputingManager">
         </agent>
 
-        <agent type="pikater.Agent_Scheduler" name="Scheduler">
+        <agent type="org.pikater.core.agents.system.Agent_Scheduler" name="Scheduler">
         </agent>
 
     </agents>
