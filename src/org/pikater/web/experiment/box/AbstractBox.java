@@ -1,8 +1,6 @@
 package org.pikater.web.experiment.box;
 
-import java.io.IOException;
-
-import org.pikater.shared.XStreamHelper;
+import org.pikater.shared.experiment.BoxType;
 
 public abstract class AbstractBox
 {
@@ -15,34 +13,33 @@ public abstract class AbstractBox
 	public final String displayName;
 	
 	/**
+	 * The description to display to the user when asking for details. 
+	 */
+	public final String description;
+	
+	/**
 	 * The box's container rectangle's background image.
 	 */
 	public final String picture;
 	
 	/**
-	 * The description to display to the user when asking for details. 
+	 * The type of this box. 
 	 */
-	public final String description;
+	public final BoxType type;
 	
 	// -----------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public AbstractBox(String displayName, String picture, String description)
+	public AbstractBox(String displayName, String description, String picture, BoxType type)
 	{
 		this.displayName = displayName;
-		this.picture = picture;
 		this.description = description;
+		this.picture = picture;
+		this.type = type;
 	}
 	
-	public static <T extends AbstractBox> T deserializeFromPath(String path) throws IOException
+	public boolean isLeaf()
 	{
-		return XStreamHelper.deserializeFromPath(path);
+		return this.type != BoxType.WRAPPER;
 	}
-	
-	public static <T extends AbstractBox> T deserializeFromXML(String xml)
-	{
-		return XStreamHelper.deserializeFromXML(xml);
-	}
-
-	public abstract boolean isLeaf();
 }
