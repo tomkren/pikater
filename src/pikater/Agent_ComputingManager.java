@@ -446,9 +446,9 @@ class ComputingDescriptionParser {
 
 
 			Data data = new Data();
-			data.setTrain_file_name("data/files/772c551b8486b932aed784a582b9c1b1");
+			data.setTrain_file_name("772c551b8486b932aed784a582b9c1b1");
 			data.setExternal_train_file_name("weather.arff");
-			data.setTest_file_name("data/files/772c551b8486b932aed784a582b9c1b1");
+			data.setTest_file_name("772c551b8486b932aed784a582b9c1b1");
 			data.setExternal_test_file_name("weather.arff");
 			data.setOutput("evaluation_only");
 			data.setMode("train_test");

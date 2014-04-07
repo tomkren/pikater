@@ -25,39 +25,42 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Agent_ARFFReader extends PikaterAgent {
+	private static final String DATA_DIR="data/files/";
 	private static final long serialVersionUID = 7116837600070711675L;
 	// data read from file
 	protected Instances data;
+
 	boolean ReadFromFile(String fileName) {
 		if (fileName == null || fileName.length() == 0) {
 			return false;
 		}
+		String path = DATA_DIR+fileName;
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(fileName));
+			BufferedReader reader = new BufferedReader(new FileReader(path));
 			data = new Instances(reader);
 			reader.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			logError("Reading of data from file " + fileName + " failed.");
+			logError("Reading of data from file " + path + " failed.");
 			return false;
 		}
-		log("Reading of data from file " + fileName + " succesful.");
+		log("Reading of data from file " + path + " succesful.");
 		return true;
 	}
 
 	@Override
-	protected String getAgentType(){
+	protected String getAgentType() {
 		return "ARFFReader";
 	}
-	
+
 	@Override
 	protected void setup() {
 		initDefault();
 		registerWithDF();
 
-        MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-        addBehaviour(new GetDataResponder(this, template));
+		MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+		addBehaviour(new GetDataResponder(this, template));
 	} // end Setup
 
 	protected ACLMessage sendData(ACLMessage request) {
@@ -65,40 +68,39 @@ public class Agent_ARFFReader extends PikaterAgent {
 		ACLMessage msgOut = request.createReply();
 		msgOut.setPerformative(ACLMessage.INFORM);
 		try {
-			ContentElement content = getContentManager()
-					.extractContent(request);
-                        GetData gd = (GetData) ((Action) content).getAction();
+			ContentElement content = getContentManager().extractContent(request);
+			GetData gd = (GetData) ((Action) content).getAction();
 			String file_name = gd.getFile_name();
 			DataInstances instances = new DataInstances();
 			// Read the file
 			boolean file_read = ReadFromFile(file_name);
 			if (!file_read) {
-				throw new FailureException("File haven't been read. Wrong file-name?");
+				throw new FailureException("File hasn't been read. Wrong file-name?");
 			}
 
-            instances.fillWekaInstances(data);
-            ArrayList<Integer> types = new ArrayList<Integer>();
+			instances.fillWekaInstances(data);
+			ArrayList<Integer> types = new ArrayList<Integer>();
 
-            for (int i = 0; i < data.numAttributes(); i++) {
-                Attribute a = data.attribute(i);
-                AttributeStats as = data.attributeStats(i);
+			for (int i = 0; i < data.numAttributes(); i++) {
+				Attribute a = data.attribute(i);
+				AttributeStats as = data.attributeStats(i);
 
-                if (i != (data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1)) {
-                    if (!types.contains(a.type())) {
-                        types.add(a.type());
-                    }
-                }
-            }
+				if (i != (data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1)) {
+					if (!types.contains(a.type())) {
+						types.add(a.type());
+					}
+				}
+			}
 
-            Result result;
-            if (gd.getO2a_agent() != null) {
-                //log("putting o2a data to "+gd.getO2a_agent());
-                getContainerController().getAgent(gd.getO2a_agent()).putO2AObject(instances, false);
-                result = new Result((Action) content, true);
-            } else {
-                result = new Result((Action) content, instances);
-            }
-                        
+			Result result;
+			if (gd.getO2a_agent() != null) {
+				// log("putting o2a data to "+gd.getO2a_agent());
+				getContainerController().getAgent(gd.getO2a_agent()).putO2AObject(instances, false);
+				result = new Result((Action) content, true);
+			} else {
+				result = new Result((Action) content, instances);
+			}
+
 			try {
 				getContentManager().fillContent(msgOut, result);
 			} catch (CodecException ce) {
@@ -127,11 +129,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 		} // end prepareResponse
 
 		@Override
-		protected ACLMessage prepareResultNotification(ACLMessage request,
-				ACLMessage response) {
+		protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) {
 			try {
-				ContentElement content = getContentManager().extractContent(
-						request);
+				ContentElement content = getContentManager().extractContent(request);
 				// GetData
 				if (((Action) content).getAction() instanceof GetData) {
 					return sendData(request);
