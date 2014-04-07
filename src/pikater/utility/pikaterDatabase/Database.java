@@ -14,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.persistence.internal.xr.XRServiceFactory.JPAMetadataSource;
@@ -543,7 +544,7 @@ public JPAGeneralFile saveGeneralFile(int userId,String description,File file) t
 			  md.update(buf, 0, s);
 		  }
 		  byte[] dig=md.digest();
-		  res=new String(dig);
+		  res=DatatypeConverter.printHexBinary(dig).toLowerCase();
 	  }catch(NoSuchAlgorithmException nsae){
 		  nsae.printStackTrace();
 	  }finally{
