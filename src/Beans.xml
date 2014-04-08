@@ -4,7 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="configuration" class="pikater.configuration.XmlConfigurationProvider" scope="singleton">
+    <bean id="configuration" class="org.pikater.core.agents.configuration.XmlConfigurationProvider" scope="singleton">
         <constructor-arg index="0">
               <value>configuration.xml</value>
         </constructor-arg>
@@ -14,9 +14,9 @@
         <constructor-arg name="filePath" value="configuration.xml"/>
     </bean>
 -->
-    <bean id="logger" class="pikater.logging.ConsoleLogger" scope="singleton"/>
+    <bean id="logger" class="org.pikater.shared.logging.ConsoleLogger" scope="singleton"/>
 
-    <bean id="agentTypesProvider" class="pikater.agents.management.AgentTypesFromFileProvider" scope="singleton"/>
+    <bean id="agentTypesProvider" class="org.pikater.core.agents.system.Agent_TypesFromFileProvider" scope="singleton"/>
 
     <bean id="honza_local" class="org.pikater.shared.database.PostgreSQLConnectionProvider" scope="singleton">
         <constructor-arg index="0">  <!-- url -->

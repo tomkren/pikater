@@ -5,7 +5,7 @@ package org.pikater.core.agents.system;
 import java.util.ArrayList;
 import java.util.Date;
 
-import pikater.agents.PikaterAgent;
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
@@ -29,6 +29,7 @@ import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.Problem;
 import org.pikater.core.ontology.messages.Recommend;
 import org.pikater.core.ontology.messages.Solve;
+
 import jade.content.Concept;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;

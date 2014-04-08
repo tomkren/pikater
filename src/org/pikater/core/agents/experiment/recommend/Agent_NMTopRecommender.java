@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import org.pikater.core.agents.system.DataManagerService;
-
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.GetAllMetadata;

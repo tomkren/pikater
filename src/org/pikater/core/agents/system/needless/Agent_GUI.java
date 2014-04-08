@@ -36,9 +36,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.pikater.core.agents.system.DataManagerService;
-
-import pikater.agents.PikaterAgent;
+import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.messages.*;
 
 import java.io.*;

@@ -20,9 +20,10 @@ import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
-import pikater.agents.PikaterAgent;
-import pikater.agents.management.ManagerAgentCommunicator;
-import pikater.logging.Verbosity;
+
+import org.pikater.core.agents.system.data.DataManagerService;
+import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.messages.*;
 
 import java.io.BufferedReader;
@@ -30,7 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.pikater.core.agents.system.DataManagerService;
+import org.pikater.core.agents.PikaterAgent;
 
 public abstract class Agent_Recommender extends PikaterAgent {
 	private static final long serialVersionUID = 4413578066473667553L;

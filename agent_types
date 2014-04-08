@@ -1,6 +1,5 @@
 RBFNetwork:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.functions.RBFNetwork
 MultilayerPerceptron:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.functions.MultilayerPerceptron
-Regression:pikater.agents.computing.Agent_Regression
 NaiveBayes:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.bayes.NaiveBayes
 LinearRegression:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.functions.LinearRegression
 J48:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.trees.J48
@@ -12,7 +11,6 @@ PART:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.cl
 OneR:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.rules.OneR
 RandomTree:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.trees.RandomTree
 NBTree:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.trees.NBTree
-Perceptron:pikater.agents.computing.Agent_Perceptron
 ChooseXValues:org.pikater.core.agents.experiment.search.Agent_ChooseXValues
 GASearch:org.pikater.core.agents.experiment.search.Agent_GASearch
 EASearch:org.pikater.core.agents.experiment.search.Agent_EASearch

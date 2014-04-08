@@ -1,11 +1,11 @@
 package org.pikater.core.agents.experiment.recommend;
 
-import org.pikater.core.agents.system.DataManagerService;
-
-import pikater.logging.Verbosity;
+import org.pikater.core.agents.system.data.DataManagerService;
+import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.Metadata;
+
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 

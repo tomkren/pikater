@@ -1,6 +1,6 @@
 package org.pikater.core.agents.system;
 
-import pikater.agents.PikaterAgent;
+import org.pikater.core.agents.PikaterAgent;
 
 
 public class Agent_GUI extends PikaterAgent {

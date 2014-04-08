@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.pikater.core.agents.PikaterAgent;
 import org.reflections.Reflections;
-
-import pikater.agents.PikaterAgent;
 
 import com.thoughtworks.xstream.XStream;
 

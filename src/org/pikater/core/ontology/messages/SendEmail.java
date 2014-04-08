@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.messages;
 
-import pikater.agents.utility.MailAgent.EmailType;
+import org.pikater.core.agents.system.Agent_Mailing.EmailType;
+
 import jade.content.AgentAction;
 
 /** Reprezentuje pozadavek na zaslani e-mailu urciteho druhu. */

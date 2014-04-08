@@ -33,11 +33,10 @@ import java.util.Vector;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 
+import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
-
-import pikater.agents.PikaterAgent;
-import pikater.agents.management.ManagerAgentCommunicator;
-
+import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.messages.BoolSItem;
 import org.pikater.core.ontology.messages.Duration;
 import org.pikater.core.ontology.messages.Eval;

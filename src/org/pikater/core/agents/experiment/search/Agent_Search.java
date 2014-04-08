@@ -3,14 +3,14 @@ package org.pikater.core.agents.experiment.search;
 import java.io.*;
 
 import org.hsqldb.lib.Iterator;
-
-import pikater.agents.PikaterAgent;
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.ExecuteParameters;
 import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.MessagesOntology;
 import org.pikater.core.ontology.messages.Option;
+
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;

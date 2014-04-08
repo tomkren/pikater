@@ -52,11 +52,10 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-
-import pikater.BusyAgent;
-import pikater.agents.PikaterAgent;
-import pikater.agents.management.ManagerAgentCommunicator;
-
+import org.pikater.core.agents.system.data.DataManagerService;
+import org.pikater.core.agents.system.duration.BusyAgent;
+import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;

@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
 
-import pikater.agents.PikaterAgent;
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
@@ -48,6 +48,7 @@ import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.MessagesOntology;
 import org.pikater.core.ontology.messages.PartialResults;
 import org.pikater.core.ontology.messages.Task;
+
 import weka.core.Instances;
 
 public abstract class Agent_ComputingAgent extends PikaterAgent {

@@ -25,7 +25,7 @@
         <agent type="org.pikater.core.agents.system.Agent_MetadataQueen" name="Freddie">
         </agent>
 
-        <agent type="pikater.agents.management.ManagerAgent" name="agentManager">
+        <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="agentManager">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_Duration" name="duration">

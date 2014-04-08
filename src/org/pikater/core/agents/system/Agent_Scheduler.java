@@ -27,8 +27,9 @@ import jade.util.leap.List;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import pikater.agents.PikaterAgent;
-import pikater.agents.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
@@ -39,7 +40,6 @@ import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.core.ontology.messages.MessagesOntology;
 import org.pikater.core.ontology.messages.SendEmail;
 import org.pikater.core.ontology.messages.Solve;
-
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 
 

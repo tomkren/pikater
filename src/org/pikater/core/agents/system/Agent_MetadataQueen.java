@@ -29,11 +29,11 @@ import java.util.Enumeration;
 import java.util.Random;
 import java.util.Vector;
 
-import pikater.agents.PikaterAgent;
-import pikater.agents.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.data.DataManagerService;
+import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataListItem;
 import org.pikater.core.agents.system.metadata.MetadataReader;
-
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;

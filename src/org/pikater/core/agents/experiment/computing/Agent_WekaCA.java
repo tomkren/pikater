@@ -3,8 +3,10 @@ package org.pikater.core.agents.experiment.computing;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
-import pikater.gui.java.MyWekaOption;
+
 import org.pikater.core.ontology.messages.*;
+import org.pikater.core.utilities.gui.MyWekaOption;
+
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;

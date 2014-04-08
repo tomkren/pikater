@@ -12,9 +12,11 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.wrapper.ContainerController;
-import pikater.agents.PikaterAgent;
+
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.GetData;
+
 import weka.core.Attribute;
 import weka.core.AttributeStats;
 import weka.core.Instances;
