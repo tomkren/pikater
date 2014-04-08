@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
@@ -34,7 +34,15 @@ public class Agent_ARFFReader extends PikaterAgent {
 		if (fileName == null || fileName.length() == 0) {
 			return false;
 		}
-		String path = DATA_DIR+fileName;
+		
+		//TODO: jen hack aby to nepadalo
+		String path = "core/";
+		if (fileName.startsWith("data/files")) {
+			path += fileName;
+		} else {
+			path += DATA_DIR+fileName;
+		}
+		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
 			data = new Instances(reader);
