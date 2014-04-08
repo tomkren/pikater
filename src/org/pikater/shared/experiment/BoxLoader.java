@@ -24,15 +24,7 @@ public final class BoxLoader
 	// Load boxes when first accessed (in the worst case) without explicitly calling the load method.
 	static
 	{
-		try
-		{
-			load();
-		}
-		catch (FileNotFoundException e)
-		{
-			// TODO: log this
-			e.printStackTrace();
-		}
+		load();
 	}
 	
 	// -----------------------------------------------------------------
@@ -55,35 +47,30 @@ public final class BoxLoader
 		return null;
 	}
 	
-	public static void load() throws FileNotFoundException 
+	public static void load() 
 	{
 		boxes.clear();
 		
-		List<LogicalUnit> logicalUnits = loadLogicalUnits(false);
+		List<LogicalUnit> logicalUnits = loadLogicalUnits();
 		for (LogicalUnit logUnit : logicalUnits)
 		{
 			boxes.add(new LeafBox(logUnit));
 		}
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException
-	{
-		loadLogicalUnits(true);
-	}
-	
 	// -----------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	public static List<LogicalUnit> loadLogicalUnits(boolean invokedFromConsole) throws FileNotFoundException
+	public static List<LogicalUnit> loadLogicalUnits()
 	{
 		List<LogicalUnit> result = new ArrayList<LogicalUnit>();
 
-		addIfNotNull(result, loadLogicalUnit(contextPath + "CrossValidationBox.xml", invokedFromConsole));
-		addIfNotNull(result, loadLogicalUnit(contextPath + "DifferenceVisualizerBox.xml", invokedFromConsole));
-		addIfNotNull(result, loadLogicalUnit(contextPath + "FileInputBox.xml", invokedFromConsole));
-		addIfNotNull(result, loadLogicalUnit(contextPath + "FileVisualizerBox.xml", invokedFromConsole));
-		addIfNotNull(result, loadLogicalUnit(contextPath + "RandomSearchBox.xml", invokedFromConsole));
-		addIfNotNull(result, loadLogicalUnit(contextPath + "SimulatedAnnealingBox.xml", invokedFromConsole));
+		addIfNotNull(result, loadLogicalUnit(contextPath + "CrossValidationBox.xml"));
+		addIfNotNull(result, loadLogicalUnit(contextPath + "DifferenceVisualizerBox.xml"));
+		addIfNotNull(result, loadLogicalUnit(contextPath + "FileInputBox.xml"));
+		addIfNotNull(result, loadLogicalUnit(contextPath + "FileVisualizerBox.xml"));
+		addIfNotNull(result, loadLogicalUnit(contextPath + "RandomSearchBox.xml"));
+		addIfNotNull(result, loadLogicalUnit(contextPath + "SimulatedAnnealingBox.xml"));
 
 		return result;
 	}
@@ -96,7 +83,7 @@ public final class BoxLoader
 		}
 	}
 	
-	private static LogicalUnit loadLogicalUnit(String filePath, boolean invokedFromConsole) throws FileNotFoundException
+	private static LogicalUnit loadLogicalUnit(String filePath)
 	{
 		try
 		{
@@ -104,15 +91,8 @@ public final class BoxLoader
 		}
 		catch (FileNotFoundException e)
 		{
-			if(invokedFromConsole)
-			{
-				throw e;
-			}
-			else
-			{
-				// TODO: log this
-				return null;
-			}
+			// TODO: log this
+			return null;
 		}
 	}
 }
