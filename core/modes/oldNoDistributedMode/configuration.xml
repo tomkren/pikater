@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <agents>
-        <agent type="pikater.agents.computing.Agent_WekaCA" name="LR">
+        <agent type="org.pikater.core.agents.system.computing.Agent_WekaCA" name="LR">
             <arguments>
                 <argument key="className" value="CrossValidation"/>
             </arguments>

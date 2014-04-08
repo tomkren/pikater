@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <agents>
-        <agent type="pikater.agents.computing.Agent_WekaCA" name="LR">
+        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaCA" name="LR">
             <arguments>
                 <argument key="className" value="CrossValidation"/>
             </arguments>
@@ -9,7 +9,7 @@
 
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
-        
+
         <agent type="pikater.Agent_Manager" name="manager">
             <arguments>
                 <argument key="no_xml_output" value="true"/>
@@ -24,7 +24,7 @@
 
         <agent type="pikater.agents.metadataQueen.Agent_MetadataQueen" name="Freddie">
         </agent>
-        
+
         <agent type="pikater.agents.management.ManagerAgent" name="agentManager">
         </agent>
 <!--

@@ -1,4 +1,4 @@
-package pikater.agents.computing;
+package org.pikater.core.agents.experiment.computing;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
