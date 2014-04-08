@@ -10,7 +10,7 @@
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
 
-        <agent type="pikater.Agent_Manager" name="manager">
+        <agent type="org.pikater.core.agents.system.Agent_Manager" name="manager">
             <arguments>
                 <argument key="no_xml_output" value="true"/>
             </arguments>

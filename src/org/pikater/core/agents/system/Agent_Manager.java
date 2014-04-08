@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -52,10 +52,11 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.pikater.core.agents.system.DataManagerService;
 
+import pikater.BusyAgent;
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
+
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;

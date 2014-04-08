@@ -19,6 +19,6 @@ EASearch:org.pikater.core.agents.experiment.search.Agent_EASearch
 GridSearch:org.pikater.core.agents.experiment.search.Agent_GridSearch
 SimulatedAnnealing:org.pikater.core.agents.experiment.search.Agent_SimulatedAnnealing
 RandomSearch:org.pikater.core.agents.experiment.search.Agent_RandomSearch
-OptionsManager:pikater.Agent_OptionsManager
+OptionsManager:org.pikater.core.agents.system.Agent_OptionsManager
 BasicRecommender:org.pikater.core.agents.experiment.recommend.Agent_Basic
 NMTopRecommender:org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender

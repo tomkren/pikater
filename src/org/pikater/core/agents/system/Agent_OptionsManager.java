@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -33,7 +33,6 @@ import java.util.Vector;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 
-import org.pikater.core.agents.system.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
 
 import pikater.agents.PikaterAgent;
