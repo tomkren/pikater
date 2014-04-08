@@ -1,6 +1,7 @@
 package org.pikater.core.agents.experiment.recommend;
 
-import pikater.DataManagerService;
+import org.pikater.core.agents.system.DataManagerService;
+
 import pikater.logging.Verbosity;
 import pikater.ontology.messages.Data;
 import pikater.ontology.messages.GetAllMetadata;

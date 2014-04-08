@@ -1,7 +1,6 @@
 package pikater;
 
 import jade.content.ContentElement;
-
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
@@ -32,10 +31,13 @@ import jade.util.leap.List;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.pikater.core.agents.system.DataManagerService;
+
 import pikater.agents.PikaterAgent;
 import pikater.ontology.messages.*;
 

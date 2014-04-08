@@ -26,11 +26,15 @@ import jade.proto.ContractNetInitiator;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
+
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
+
+import org.pikater.core.agents.system.DataManagerService;
+
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
 import pikater.ontology.messages.BoolSItem;

@@ -16,7 +16,7 @@
             </arguments>
         </agent>
 
-        <agent type="pikater.Agent_DataManager" name="dataManager">
+        <agent type="org.pikater.core.agents.system.Agent_DataManager" name="dataManager">
             <arguments>
                 <argument key="connection" value="honza_local"/>
             </arguments>

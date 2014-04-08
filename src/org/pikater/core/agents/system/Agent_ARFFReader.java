@@ -12,7 +12,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.wrapper.ContainerController;
-import pikater.Agent_DataManager;
 import pikater.agents.PikaterAgent;
 import pikater.ontology.messages.DataInstances;
 import pikater.ontology.messages.GetData;

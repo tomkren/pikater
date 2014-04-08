@@ -52,6 +52,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.pikater.core.agents.system.DataManagerService;
 
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;

@@ -18,7 +18,7 @@
 
     <bean id="agentTypesProvider" class="pikater.agents.management.AgentTypesFromFileProvider" scope="singleton"/>
 
-    <bean id="honza_local" class="pikater.data.PostgreSQLConnectionProvider" scope="singleton">
+    <bean id="honza_local" class="org.pikater.shared.database.PostgreSQLConnectionProvider" scope="singleton">
         <constructor-arg index="0">  <!-- url -->
               <value>jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater</value>
         </constructor-arg>
@@ -41,7 +41,7 @@
          <property name="persistenceUnitName" value="pikaterDataModel"/>
     </bean>
 
-    <bean id="queryFactory" class="pikater.data.schema.SqlQueryFromFileFactory" scope="singleton">
+    <bean id="queryFactory" class="org.pikater.shared.database.schema.SqlQueryFromFileFactory" scope="singleton">
         <constructor-arg index="0">  <!-- queryDirectoryPath -->
               <value>databaseSchema</value>
         </constructor-arg>

@@ -29,7 +29,7 @@ import java.util.Enumeration;
 import java.util.Random;
 import java.util.Vector;
 
-import pikater.DataManagerService;
+import org.pikater.core.agents.system.DataManagerService;
 
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
