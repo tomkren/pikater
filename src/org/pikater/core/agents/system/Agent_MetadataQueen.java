@@ -1,4 +1,4 @@
-package pikater.agents.metadataQueen;
+package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
@@ -29,10 +29,11 @@ import java.util.Enumeration;
 import java.util.Random;
 import java.util.Vector;
 
-import org.pikater.core.agents.system.DataManagerService;
-
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.metadata.MetadataListItem;
+import org.pikater.core.agents.system.metadata.MetadataReader;
+
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;

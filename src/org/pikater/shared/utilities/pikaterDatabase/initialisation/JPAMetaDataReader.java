@@ -5,11 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import pikater.agents.metadataQueen.MetadataReader;
+import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;

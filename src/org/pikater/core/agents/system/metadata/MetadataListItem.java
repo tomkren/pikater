@@ -1,4 +1,4 @@
-package pikater.agents.metadataQueen;
+package org.pikater.core.agents.system.metadata;
 
 import jade.util.leap.ArrayList;
 import org.pikater.core.ontology.messages.Metadata;
@@ -6,7 +6,7 @@ import org.pikater.core.ontology.messages.Metadata;
 public class MetadataListItem {
 	private Metadata metadata;
 	private int id;
-	ArrayList to_compute = new ArrayList();
+	public ArrayList to_compute = new ArrayList();
 	
 	public MetadataListItem(Metadata _metadata, int _id){
 		setMetadata(_metadata);
