@@ -19,7 +19,7 @@ import pikater.configuration.Arguments;
 import pikater.logging.Logger;
 import pikater.logging.Severity;
 import pikater.logging.Verbosity;
-import pikater.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.MessagesOntology;
 
 import java.util.ArrayList;
 import java.util.HashMap;

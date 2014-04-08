@@ -8,11 +8,11 @@ import jade.util.leap.Iterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import pikater.ontology.messages.Metadata;
-import pikater.ontology.messages.Attribute;
-import pikater.ontology.messages.DataInstances;
-import pikater.ontology.messages.Instance;
-import pikater.ontology.messages.metadata.*;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.Attribute;
+import org.pikater.core.ontology.messages.DataInstances;
+import org.pikater.core.ontology.messages.Instance;
+import org.pikater.core.ontology.messages.metadata.*;
 
 /**
  * Class that can read metadata from the list of instances and attributes

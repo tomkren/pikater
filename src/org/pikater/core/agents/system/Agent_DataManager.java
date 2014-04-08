@@ -21,7 +21,7 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.schema.SqlQueryFactory;
 import org.pikater.shared.database.ConnectionProvider;
 import pikater.logging.Severity;
-import pikater.ontology.messages.*;
+import org.pikater.core.ontology.messages.*;
 
 import java.io.*;
 import java.sql.*;

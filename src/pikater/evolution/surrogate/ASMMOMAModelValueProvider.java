@@ -10,9 +10,9 @@ import pikater.evolution.individuals.Individual;
 import pikater.evolution.individuals.SearchItemIndividual;
 import pikater.evolution.multiobjective.MultiobjectiveFitnessEvaluator;
 import pikater.evolution.multiobjective.NSGAFitnessEvaluator;
-import pikater.ontology.messages.FloatSItem;
-import pikater.ontology.messages.IntSItem;
-import pikater.ontology.messages.SearchItem;
+import org.pikater.core.ontology.messages.FloatSItem;
+import org.pikater.core.ontology.messages.IntSItem;
+import org.pikater.core.ontology.messages.SearchItem;
 
 /**
  *

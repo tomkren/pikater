@@ -3,10 +3,10 @@ package pikater.tests.ontology.description;
 import java.util.ArrayList;
 
 
-import pikater.ontology.description.BooleanParameter;
-import pikater.ontology.description.ComputationDescription;
-import pikater.ontology.description.FileVisualizer;
-import pikater.ontology.description.examples.SearchOnly;
+import org.pikater.core.ontology.description.BooleanParameter;
+import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.examples.SearchOnly;
 
 public class ImportExportJSON {
 

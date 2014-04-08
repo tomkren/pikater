@@ -16,21 +16,21 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
-import pikater.ontology.messages.DeleteTempFiles;
-import pikater.ontology.messages.GetAllMetadata;
-import pikater.ontology.messages.GetFileInfo;
-import pikater.ontology.messages.GetFiles;
-import pikater.ontology.messages.GetMetadata;
-import pikater.ontology.messages.GetTheBestAgent;
-import pikater.ontology.messages.ImportFile;
-import pikater.ontology.messages.MessagesOntology;
-import pikater.ontology.messages.Metadata;
-import pikater.ontology.messages.SaveMetadata;
-import pikater.ontology.messages.SaveResults;
-import pikater.ontology.messages.ShutdownDatabase;
-import pikater.ontology.messages.Task;
-import pikater.ontology.messages.TranslateFilename;
-import pikater.ontology.messages.UpdateMetadata;
+import org.pikater.core.ontology.messages.DeleteTempFiles;
+import org.pikater.core.ontology.messages.GetAllMetadata;
+import org.pikater.core.ontology.messages.GetFileInfo;
+import org.pikater.core.ontology.messages.GetFiles;
+import org.pikater.core.ontology.messages.GetMetadata;
+import org.pikater.core.ontology.messages.GetTheBestAgent;
+import org.pikater.core.ontology.messages.ImportFile;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.SaveMetadata;
+import org.pikater.core.ontology.messages.SaveResults;
+import org.pikater.core.ontology.messages.ShutdownDatabase;
+import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.TranslateFilename;
+import org.pikater.core.ontology.messages.UpdateMetadata;
 
 public class DataManagerService extends FIPAService {
 
@@ -238,8 +238,8 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 	
-        public static pikater.ontology.messages.Agent getTheBestAgent(Agent agent, String fileName) {
-            return (pikater.ontology.messages.Agent) getTheBestAgents(agent, fileName, 1).get(0);
+        public static org.pikater.core.ontology.messages.Agent getTheBestAgent(Agent agent, String fileName) {
+            return (org.pikater.core.ontology.messages.Agent) getTheBestAgents(agent, fileName, 1).get(0);
         }
         
 	public static List getTheBestAgents(Agent agent, String fileName, int number) {

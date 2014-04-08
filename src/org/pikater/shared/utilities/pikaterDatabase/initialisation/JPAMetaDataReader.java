@@ -13,12 +13,12 @@ import pikater.agents.metadataQueen.MetadataReader;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
-import pikater.ontology.messages.DataInstances;
-import pikater.ontology.messages.Metadata;
-import pikater.ontology.messages.metadata.AttributeMetadata;
-import pikater.ontology.messages.metadata.CategoricalAttributeMetadata;
-import pikater.ontology.messages.metadata.IntegerAttributeMetadata;
-import pikater.ontology.messages.metadata.RealAttributeMetadata;
+import org.pikater.core.ontology.messages.DataInstances;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
+import org.pikater.core.ontology.messages.metadata.CategoricalAttributeMetadata;
+import org.pikater.core.ontology.messages.metadata.IntegerAttributeMetadata;
+import org.pikater.core.ontology.messages.metadata.RealAttributeMetadata;
 import weka.core.Instances;
 
 public class JPAMetaDataReader {

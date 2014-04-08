@@ -28,9 +28,9 @@ import pikater.evolution.surrogate.IdentityNormalizer;
 import pikater.evolution.surrogate.LogarithmicNormalizer;
 import pikater.evolution.surrogate.SearchItemIndividualArchive;
 import pikater.evolution.surrogate.SurrogateMutationOperator;
-import pikater.ontology.messages.Option;
-import pikater.ontology.messages.SearchItem;
-import pikater.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.SearchItem;
+import org.pikater.core.ontology.messages.SearchSolution;
 
 public class Agent_EASearch extends Agent_Search {
     /*

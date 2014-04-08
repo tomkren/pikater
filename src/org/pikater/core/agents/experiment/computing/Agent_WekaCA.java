@@ -4,7 +4,7 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 import pikater.gui.java.MyWekaOption;
-import pikater.ontology.messages.*;
+import org.pikater.core.ontology.messages.*;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
@@ -66,7 +66,7 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 	}
 
 	@Override
-	protected Date train(pikater.ontology.messages.Evaluation evaluation) throws Exception {
+	protected Date train(org.pikater.core.ontology.messages.Evaluation evaluation) throws Exception {
 		working = true;
 						
 		if (getLocalName().equals("DurationServiceRegression")){
@@ -155,7 +155,7 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 			int folds = -1; 
 			Iterator itr = evaluation_method.getOptions().iterator();
 			while (itr.hasNext()) {
-				pikater.ontology.messages.Option next = (pikater.ontology.messages.Option) itr.next();
+				org.pikater.core.ontology.messages.Option next = (org.pikater.core.ontology.messages.Option) itr.next();
 				if (next.getName().equals("F")){
 					folds = Integer.parseInt( (String)next.getValue() );
 				}
@@ -185,7 +185,7 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 
 	@Override
 	protected void evaluateCA(EvaluationMethod evaluation_method,
-			pikater.ontology.messages.Evaluation evaluation) throws Exception{
+			org.pikater.core.ontology.messages.Evaluation evaluation) throws Exception{
 		
 		float default_value = Float.MAX_VALUE;
 		Evaluation eval = test(evaluation_method);
@@ -279,9 +279,9 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 		return onto_test;
 	}
 
-	private pikater.ontology.messages.Option convertOption(
+	private org.pikater.core.ontology.messages.Option convertOption(
 			MyWekaOption _weka_opt) {
-		pikater.ontology.messages.Option opt = new pikater.ontology.messages.Option();
+		org.pikater.core.ontology.messages.Option opt = new org.pikater.core.ontology.messages.Option();
 		Interval interval = null;
 		opt.setMutable(_weka_opt.mutable);
 
@@ -333,7 +333,7 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 
 		String optPath = System.getProperty("user.dir") + getOptFileName();
 
-		agent_options = new pikater.ontology.messages.Agent();
+		agent_options = new org.pikater.core.ontology.messages.Agent();
 		agent_options.setName(getLocalName());
 		agent_options.setType(getAgentType());
 		// read options from file

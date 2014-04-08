@@ -4,8 +4,8 @@
  */
 package pikater.evolution.surrogate;
 
-import pikater.ontology.messages.FloatSItem;
-import pikater.ontology.messages.IntSItem;
+import org.pikater.core.ontology.messages.FloatSItem;
+import org.pikater.core.ontology.messages.IntSItem;
 
 /**
  *

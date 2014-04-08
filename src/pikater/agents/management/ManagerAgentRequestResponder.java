@@ -10,10 +10,10 @@ import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
-import pikater.ontology.messages.CreateAgent;
-import pikater.ontology.messages.Execute;
-import pikater.ontology.messages.LoadAgent;
-import pikater.ontology.messages.SaveAgent;
+import org.pikater.core.ontology.messages.CreateAgent;
+import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.messages.LoadAgent;
+import org.pikater.core.ontology.messages.SaveAgent;
 
 import java.io.*;
 import java.sql.Timestamp;
@@ -46,7 +46,7 @@ public class ManagerAgentRequestResponder {
 
         int userID = sa.getUserID();
 
-        pikater.ontology.messages.Agent agent = sa.getAgent();
+        org.pikater.core.ontology.messages.Agent agent = sa.getAgent();
 
         String name = agent.getName(); // TODO - zajistit unikatni pro konkretniho uzivatele
         Timestamp currentTimestamp =

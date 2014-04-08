@@ -1,6 +1,6 @@
 package pikater.tests;
 
-import pikater.ontology.description.FileDataProvider;
+import org.pikater.core.ontology.description.FileDataProvider;
 import pikater.tests.ontology.description.ImportExportJSON;
 import pikater.tests.ontology.description.ImportExportXML;
 

@@ -37,24 +37,24 @@ import org.pikater.core.agents.system.DataManagerService;
 
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
-import pikater.ontology.messages.BoolSItem;
-import pikater.ontology.messages.Duration;
-import pikater.ontology.messages.Eval;
-import pikater.ontology.messages.Evaluation;
-import pikater.ontology.messages.Execute;
-import pikater.ontology.messages.ExecuteParameters;
-import pikater.ontology.messages.FloatSItem;
-import pikater.ontology.messages.GetAgents;
-import pikater.ontology.messages.GetDuration;
-import pikater.ontology.messages.GetParameters;
-import pikater.ontology.messages.Id;
-import pikater.ontology.messages.IntSItem;
-import pikater.ontology.messages.Options;
-import pikater.ontology.messages.MessagesOntology;
-import pikater.ontology.messages.Option;
-import pikater.ontology.messages.SearchSolution;
-import pikater.ontology.messages.SetSItem;
-import pikater.ontology.messages.Task;
+import org.pikater.core.ontology.messages.BoolSItem;
+import org.pikater.core.ontology.messages.Duration;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.messages.ExecuteParameters;
+import org.pikater.core.ontology.messages.FloatSItem;
+import org.pikater.core.ontology.messages.GetAgents;
+import org.pikater.core.ontology.messages.GetDuration;
+import org.pikater.core.ontology.messages.GetParameters;
+import org.pikater.core.ontology.messages.Id;
+import org.pikater.core.ontology.messages.IntSItem;
+import org.pikater.core.ontology.messages.Options;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.SetSItem;
+import org.pikater.core.ontology.messages.Task;
 
 public class Agent_OptionsManager extends PikaterAgent {
 
@@ -62,9 +62,9 @@ public class Agent_OptionsManager extends PikaterAgent {
 	
 	private List results = new ArrayList();
 	
-	protected pikater.ontology.messages.Evaluation evaluation;
+	protected org.pikater.core.ontology.messages.Evaluation evaluation;
 	protected List Options;
-	protected pikater.ontology.messages.Agent Agent;
+	protected org.pikater.core.ontology.messages.Agent Agent;
 
 	private int task_number = 0;
 	private int max_number_of_tasks;
@@ -307,7 +307,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 			task_number++;
 
 			// add the new options to the task
-			pikater.ontology.messages.Agent ag = received_task.getAgent();							
+			org.pikater.core.ontology.messages.Agent ag = received_task.getAgent();							
 			ag.setOptions(opt.getList());							
 			received_task.setAgent(ag);
 			ex.setTask(received_task);		
@@ -503,7 +503,8 @@ public class Agent_OptionsManager extends PikaterAgent {
 						req.addReceiver(received_request.getSender());
 						req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 						
-						pikater.ontology.messages.Agent ag = new pikater.ontology.messages.Agent();
+						org.pikater.core.ontology.messages.Agent ag =
+								new org.pikater.core.ontology.messages.Agent();
 					    ag.setType(received_task.getAgent().getType());
 					    
 						GetAgents ga = new GetAgents();					    					    

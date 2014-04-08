@@ -14,9 +14,9 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 import pikater.agents.PikaterAgent;
 import pikater.configuration.Argument;
-import pikater.ontology.messages.CreateAgent;
-import pikater.ontology.messages.LoadAgent;
-import pikater.ontology.messages.SaveAgent;
+import org.pikater.core.ontology.messages.CreateAgent;
+import org.pikater.core.ontology.messages.LoadAgent;
+import org.pikater.core.ontology.messages.SaveAgent;
 
 import java.io.File;
 import java.util.ArrayList;

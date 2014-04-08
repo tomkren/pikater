@@ -10,13 +10,13 @@ import jade.util.leap.List;
 
 import java.util.ArrayList;
 
-import pikater.ontology.messages.BoolSItem;
-import pikater.ontology.messages.FloatSItem;
-import pikater.ontology.messages.IntSItem;
-import pikater.ontology.messages.Option;
-import pikater.ontology.messages.SearchItem;
-import pikater.ontology.messages.SearchSolution;
-import pikater.ontology.messages.SetSItem;
+import org.pikater.core.ontology.messages.BoolSItem;
+import org.pikater.core.ontology.messages.FloatSItem;
+import org.pikater.core.ontology.messages.IntSItem;
+import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.SearchItem;
+import org.pikater.core.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.SetSItem;
 
 /**
  *

@@ -5,12 +5,12 @@ import java.io.*;
 import org.hsqldb.lib.Iterator;
 
 import pikater.agents.PikaterAgent;
-import pikater.ontology.messages.Eval;
-import pikater.ontology.messages.ExecuteParameters;
-import pikater.ontology.messages.GetParameters;
-import pikater.ontology.messages.GetOptions;
-import pikater.ontology.messages.MessagesOntology;
-import pikater.ontology.messages.Option;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.ExecuteParameters;
+import org.pikater.core.ontology.messages.GetParameters;
+import org.pikater.core.ontology.messages.GetOptions;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.Option;
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -54,7 +54,7 @@ public abstract class Agent_Search extends PikaterAgent {
 	protected ACLMessage getParameters(ACLMessage request) {
 		ACLMessage reply = request.createReply();
 		
-		pikater.ontology.messages.Agent agent = null;
+		org.pikater.core.ontology.messages.Agent agent = null;
 
 		String optPath = System.getProperty("user.dir") +
 			System.getProperty("file.separator") + "options" + 
@@ -78,7 +78,7 @@ public abstract class Agent_Search extends PikaterAgent {
 
 			// list of ontology.messages.Option
 			List _options = new ArrayList();
-			agent = new pikater.ontology.messages.Agent();
+			agent = new org.pikater.core.ontology.messages.Agent();
 			agent.setName(getLocalName());
 			agent.setType(getAgentType());
 			

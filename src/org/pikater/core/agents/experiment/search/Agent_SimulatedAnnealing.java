@@ -2,10 +2,10 @@ package org.pikater.core.agents.experiment.search;
 
 import java.util.Random;
 
-import pikater.ontology.messages.Evaluation;
-import pikater.ontology.messages.Option;
-import pikater.ontology.messages.SearchItem;
-import pikater.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.SearchItem;
+import org.pikater.core.ontology.messages.SearchSolution;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;

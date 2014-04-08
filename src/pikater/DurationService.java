@@ -16,22 +16,22 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
-import pikater.ontology.messages.DeleteTempFiles;
-import pikater.ontology.messages.Duration;
-import pikater.ontology.messages.ExecuteParameters;
-import pikater.ontology.messages.GetAllMetadata;
-import pikater.ontology.messages.GetDuration;
-import pikater.ontology.messages.GetFileInfo;
-import pikater.ontology.messages.GetFiles;
-import pikater.ontology.messages.GetTheBestAgent;
-import pikater.ontology.messages.ImportFile;
-import pikater.ontology.messages.MessagesOntology;
-import pikater.ontology.messages.Metadata;
-import pikater.ontology.messages.SaveMetadata;
-import pikater.ontology.messages.SaveResults;
-import pikater.ontology.messages.Task;
-import pikater.ontology.messages.TranslateFilename;
-import pikater.ontology.messages.UpdateMetadata;
+import org.pikater.core.ontology.messages.DeleteTempFiles;
+import org.pikater.core.ontology.messages.Duration;
+import org.pikater.core.ontology.messages.ExecuteParameters;
+import org.pikater.core.ontology.messages.GetAllMetadata;
+import org.pikater.core.ontology.messages.GetDuration;
+import org.pikater.core.ontology.messages.GetFileInfo;
+import org.pikater.core.ontology.messages.GetFiles;
+import org.pikater.core.ontology.messages.GetTheBestAgent;
+import org.pikater.core.ontology.messages.ImportFile;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.SaveMetadata;
+import org.pikater.core.ontology.messages.SaveResults;
+import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.TranslateFilename;
+import org.pikater.core.ontology.messages.UpdateMetadata;
 
 public class DurationService extends FIPAService {
 

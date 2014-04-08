@@ -1,7 +1,7 @@
 package pikater.agents.utility;
 
 import pikater.agents.PikaterAgent;
-import pikater.ontology.messages.SendEmail;
+import org.pikater.core.ontology.messages.SendEmail;
 import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;

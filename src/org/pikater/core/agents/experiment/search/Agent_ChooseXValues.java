@@ -3,9 +3,9 @@ package org.pikater.core.agents.experiment.search;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
-import pikater.ontology.messages.Option;
-import pikater.ontology.messages.SearchItem;
-import pikater.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.SearchItem;
+import org.pikater.core.ontology.messages.SearchSolution;
 
 public class Agent_ChooseXValues extends Agent_Search {
 	/*

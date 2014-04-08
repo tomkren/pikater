@@ -3,9 +3,9 @@ package org.pikater.core.agents.experiment.recommend;
 import org.pikater.core.agents.system.DataManagerService;
 
 import pikater.logging.Verbosity;
-import pikater.ontology.messages.Data;
-import pikater.ontology.messages.GetAllMetadata;
-import pikater.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.GetAllMetadata;
+import org.pikater.core.ontology.messages.Metadata;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
@@ -26,7 +26,7 @@ public class Agent_Basic extends Agent_Recommender {
 	}
 		
 	@Override
-	protected pikater.ontology.messages.Agent chooseBestAgent(Data data){
+	protected org.pikater.core.ontology.messages.Agent chooseBestAgent(Data data){
 		// in data there are already metadata filled in 
 		// return agent with (partially/not at all) filled options
 		
@@ -87,7 +87,7 @@ public class Agent_Basic extends Agent_Recommender {
 		String nearestInternalName = m_best.getInternal_name();
 
 		// 2. find the agent with the lowest error_rate
-		pikater.ontology.messages.Agent agent = DataManagerService
+		org.pikater.core.ontology.messages.Agent agent = DataManagerService
 				.getTheBestAgent(this, nearestInternalName);
 		
 		if (agent != null){

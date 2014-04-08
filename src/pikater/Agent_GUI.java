@@ -39,7 +39,7 @@ import org.jdom.input.SAXBuilder;
 import org.pikater.core.agents.system.DataManagerService;
 
 import pikater.agents.PikaterAgent;
-import pikater.ontology.messages.*;
+import org.pikater.core.ontology.messages.*;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -231,9 +231,9 @@ public abstract class Agent_GUI extends PikaterAgent {
 		ContentElement content = getContentManager().extractContent(reply);
 		if (content instanceof Result) {
 			Result result = (Result) content;
-			if (result.getValue() instanceof pikater.ontology.messages.Agent) {
-				pikater.ontology.messages.Agent agent = 
-					(pikater.ontology.messages.Agent) result.getValue();
+			if (result.getValue() instanceof org.pikater.core.ontology.messages.Agent) {
+				org.pikater.core.ontology.messages.Agent agent = 
+					(org.pikater.core.ontology.messages.Agent) result.getValue();
 				options = agent.getOptions();
 			}
 		}
@@ -295,9 +295,9 @@ public abstract class Agent_GUI extends PikaterAgent {
 					if (content instanceof Result) {
 						Result result = (Result) content;
 
-						if (result.getValue() instanceof pikater.ontology.messages.Agent) {
+						if (result.getValue() instanceof org.pikater.core.ontology.messages.Agent) {
 
-							pikater.ontology.messages.Agent agent = (pikater.ontology.messages.Agent) result
+							org.pikater.core.ontology.messages.Agent agent = (org.pikater.core.ontology.messages.Agent) result
 									.getValue();
 
 							refreshOptions(agent, inform.getPerformative());
@@ -318,7 +318,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 			}
 
 			protected void handleRefuse(ACLMessage refuse) {
-				pikater.ontology.messages.Agent agent = new pikater.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent agent =
+						new org.pikater.core.ontology.messages.Agent();
 				agent.setName(refuse.getSender().getName());
 
 				System.out.println(getLocalName() + ": Agent "
@@ -338,7 +339,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 				Iterator receivers = request.getAllIntendedReceiver();
 				String agentName = ((AID) receivers.next()).getLocalName();
 
-				pikater.ontology.messages.Agent agent = new pikater.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent agent =
+						new org.pikater.core.ontology.messages.Agent();
 				agent.setName(agentName);
 
 				if (failure.getSender().equals(myAgent.getAMS())) {
@@ -499,7 +501,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		msg.setLanguage(codec.getName());
 		msg.setOntology(ontology.getName());
 
-		// We want to receive a reply in 30 secs
+		// We want to receive a reply in 30 secspikater.ontology
 		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
 
 		msg.setConversationId(problem.getGui_id() + getLocalName());
@@ -720,8 +722,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 				// find the given agent
 				Iterator itr = next_problem.getAgents().iterator();
 				while (itr.hasNext()) {
-					pikater.ontology.messages.Agent next_agent = (pikater.ontology.messages.Agent) itr
-							.next();
+					org.pikater.core.ontology.messages.Agent next_agent =
+							(org.pikater.core.ontology.messages.Agent) itr.next();
 					if (Integer.parseInt(next_agent.getGui_id()) == _agent_id) {
 						next_problem.getAgents().remove(next_agent);
 					}
@@ -764,7 +766,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (next_problem.getStatus().equals("new")) {
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
-					pikater.ontology.messages.Agent agent = new pikater.ontology.messages.Agent();
+					org.pikater.core.ontology.messages.Agent agent =
+							new org.pikater.core.ontology.messages.Agent();
 					agent.setName(name);
 					agent.setType(type);
 					agent.setGui_id(Integer.toString(_agent_id));
@@ -797,8 +800,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
 					Iterator itr = next_problem.getAgents().iterator();
 					while (itr.hasNext()) {
-						pikater.ontology.messages.Agent next_agent =
-							(pikater.ontology.messages.Agent) itr.next();
+						org.pikater.core.ontology.messages.Agent next_agent =
+							(org.pikater.core.ontology.messages.Agent) itr.next();
 						// find the right agent
 						if (Integer.parseInt(next_agent.getGui_id()) == _agent_id) {
 
@@ -856,7 +859,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (next_problem.getStatus().equals("new")) {
 				
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
-					pikater.ontology.messages.Agent method = next_problem.getMethod();
+					org.pikater.core.ontology.messages.Agent method =
+							next_problem.getMethod();
 									
 						Option option = new Option();
 						option.setName(option_name);
@@ -1001,7 +1005,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (Integer.parseInt(next_problem.getGui_id()) == problem_id
 					&& next_problem.getStatus().equals("new")) {
 
-				pikater.ontology.messages.Agent method = new pikater.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent method =
+						new org.pikater.core.ontology.messages.Agent();
 				method.setType(name);
 				method.setOptions(new ArrayList());
 
@@ -1032,7 +1037,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (Integer.parseInt(next_problem.getGui_id()) == problem_id
 					&& next_problem.getStatus().equals("new")) {
 
-				pikater.ontology.messages.Agent recommender = new pikater.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent recommender =
+						new org.pikater.core.ontology.messages.Agent();
 				recommender.setType(name);
 				// method.setOptions(new ArrayList());
 
@@ -1062,8 +1068,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 				boolean done = true;
 				Iterator aitr = next_problem.getAgents().iterator();
 				while (aitr.hasNext()) {
-					pikater.ontology.messages.Agent next_agent = (pikater.ontology.messages.Agent) aitr
-							.next();
+					org.pikater.core.ontology.messages.Agent next_agent =
+							(org.pikater.core.ontology.messages.Agent) aitr.next();
 
 					String type = "";
 					if (next_agent.getType() != null) {
@@ -1108,7 +1114,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		}
 	}
 
-	private void refreshOptions(pikater.ontology.messages.Agent agent,
+	private void refreshOptions(org.pikater.core.ontology.messages.Agent agent,
 			int performative) {
 		// refresh options in all problems, where the agent is involved
 
@@ -1119,8 +1125,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 					Iterator aitr = next_problem.getAgents().iterator();
 					while (aitr.hasNext()) {
-						pikater.ontology.messages.Agent next_agent = (pikater.ontology.messages.Agent) aitr
-								.next();
+						org.pikater.core.ontology.messages.Agent next_agent =
+								(org.pikater.core.ontology.messages.Agent) aitr.next();
 
 						// all problems where the agent (input parameter)
 						// figures
@@ -1157,8 +1163,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 		}
 	} // end refreshOptions
 
-	private List _refreshOptions(pikater.ontology.messages.Agent next_agent,
-			pikater.ontology.messages.Agent agent, Problem next_problem) {
+	private List _refreshOptions(org.pikater.core.ontology.messages.Agent next_agent,
+			org.pikater.core.ontology.messages.Agent agent, Problem next_problem) {
 		List newOptions = null;
 
 		if (agent.getOptions() != null) {
@@ -1515,7 +1521,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			}
 		}
 		
-		if (finished && end_pikater_when_finished){
+		if (finished && end_pikater_when_finished) {
 			terminatePikater();
 		}
 	}
@@ -1577,7 +1583,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 
 	protected void loadAgent(String _filename, Execute action, byte [] object) throws FIPAException {
-		pikater.ontology.messages.LoadAgent _loadAgent = new pikater.ontology.messages.LoadAgent();
+		org.pikater.core.ontology.messages.LoadAgent _loadAgent
+		= new org.pikater.core.ontology.messages.LoadAgent();
 		
 		_loadAgent.setFilename(_filename);
 		_loadAgent.setFirst_action(action);

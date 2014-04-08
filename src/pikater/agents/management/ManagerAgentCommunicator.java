@@ -10,7 +10,7 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.List;
 import pikater.agents.PikaterAgent;
-import pikater.ontology.messages.CreateAgent;
+import org.pikater.core.ontology.messages.CreateAgent;
 
 /**
  * Created with IntelliJ IDEA.

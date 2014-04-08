@@ -37,17 +37,17 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import pikater.agents.PikaterAgent;
-import pikater.ontology.messages.Data;
-import pikater.ontology.messages.DataInstances;
-import pikater.ontology.messages.Eval;
-import pikater.ontology.messages.Evaluation;
-import pikater.ontology.messages.EvaluationMethod;
-import pikater.ontology.messages.Execute;
-import pikater.ontology.messages.GetData;
-import pikater.ontology.messages.GetOptions;
-import pikater.ontology.messages.MessagesOntology;
-import pikater.ontology.messages.PartialResults;
-import pikater.ontology.messages.Task;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.DataInstances;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.messages.EvaluationMethod;
+import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.messages.GetData;
+import org.pikater.core.ontology.messages.GetOptions;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.PartialResults;
+import org.pikater.core.ontology.messages.Task;
 import weka.core.Instances;
 
 public abstract class Agent_ComputingAgent extends PikaterAgent {
@@ -73,7 +73,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 	public boolean hasGotRightData = false;
 
 	// protected Vector<MyWekaOption> Options;
-	protected pikater.ontology.messages.Agent agent_options = null;
+	protected org.pikater.core.ontology.messages.Agent agent_options = null;
 
 	protected Instances data; // data read from fileName file
 	Instances train;
@@ -86,7 +86,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 	int convId = 0;
 
 	protected String[] OPTIONS;
-	protected pikater.ontology.messages.Task current_task = null;
+	protected org.pikater.core.ontology.messages.Task current_task = null;
 	// protected String[] OPTIONS_;
 	protected String className;
 
@@ -273,7 +273,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 	} // end setup
 
-	public boolean setOptions(pikater.ontology.messages.Task task) {
+	public boolean setOptions(org.pikater.core.ontology.messages.Task task) {
 		/*
 		 * INPUT: task with weka options Fills the OPTIONS array and
 		 * current_task.
@@ -525,7 +525,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		ACLMessage result_msg;
 		Execute execute_action;
 		boolean success;
-		pikater.ontology.messages.Evaluation eval = new Evaluation();
+		org.pikater.core.ontology.messages.Evaluation eval = new Evaluation();
 		String train_fn;
 		String test_fn;
 		String label_fn;
@@ -581,21 +581,21 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		}
 
 		/* Extract data from INFORM message (ARFF reader) */
-		pikater.ontology.messages.DataInstances processGetData(ACLMessage inform) {
+		org.pikater.core.ontology.messages.DataInstances processGetData(ACLMessage inform) {
 			ContentElement content;
 			try {
 				content = getContentManager().extractContent(inform);
 				if (content instanceof Result) {
 					Result result = (Result) content;
-					if (result.getValue() instanceof pikater.ontology.messages.DataInstances) {
-						return (pikater.ontology.messages.DataInstances) result.getValue();
+					if (result.getValue() instanceof org.pikater.core.ontology.messages.DataInstances) {
+						return (org.pikater.core.ontology.messages.DataInstances) result.getValue();
 					} else if (result.getValue() instanceof Boolean) {
 						// log("getting o2a data");
 						Object o = getO2AObject();
 						if (o == null)
 							throw new IllegalStateException("received GetData response without o2a object in queue");
 						else
-							return (pikater.ontology.messages.DataInstances) o;
+							return (org.pikater.core.ontology.messages.DataInstances) o;
 					} else {
 						throw new IllegalStateException("received unexpected Inform");
 					}
@@ -637,7 +637,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 					setOptions(execute_action.getTask());
 					
 					// set agent name in Task
-					pikater.ontology.messages.Agent agent = current_task.getAgent();
+					org.pikater.core.ontology.messages.Agent agent = current_task.getAgent();
 					agent.setName(getLocalName());
 					current_task.setAgent(agent);
 					
@@ -697,7 +697,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 				@Override
 				protected void handleInform(ACLMessage inform) {
-					pikater.ontology.messages.DataInstances _train = processGetData(inform);
+					org.pikater.core.ontology.messages.DataInstances _train = processGetData(inform);
 					if (_train != null) {
 						trainFileName = train_fn;
 						onto_train = _train;
@@ -732,7 +732,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 				@Override
 				protected void handleInform(ACLMessage inform) {
-					pikater.ontology.messages.DataInstances _test = processGetData(inform);
+					org.pikater.core.ontology.messages.DataInstances _test = processGetData(inform);
 					if (_test != null) {
 						testFileName = test_fn;
 						onto_test = _test;
@@ -769,7 +769,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 				@Override
 				protected void handleInform(ACLMessage inform) {
-					pikater.ontology.messages.DataInstances _label = processGetData(inform);
+					org.pikater.core.ontology.messages.DataInstances _label = processGetData(inform);
 					if (_label != null) {
 						labelFileName = label_fn;
 						onto_label = _label;
@@ -992,10 +992,10 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		return data;
 	}
 
-	private pikater.ontology.messages.Agent getAgentWithFilledObject()
+	private org.pikater.core.ontology.messages.Agent getAgentWithFilledObject()
 			throws IOException {
 
-		pikater.ontology.messages.Agent savedAgent = current_task.getAgent();
+		org.pikater.core.ontology.messages.Agent savedAgent = current_task.getAgent();
 		savedAgent.setObject(getAgentObject());
 
 		return savedAgent;
@@ -1004,7 +1004,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 	private String saveAgentToFile() throws IOException, CodecException,
 			OntologyException, FIPAException {
 
-		pikater.ontology.messages.SaveAgent saveAgent = new pikater.ontology.messages.SaveAgent();
+		org.pikater.core.ontology.messages.SaveAgent saveAgent = new org.pikater.core.ontology.messages.SaveAgent();
 
 		saveAgent.setAgent(getAgentWithFilledObject());
 

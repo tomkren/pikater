@@ -23,7 +23,7 @@ import jade.util.leap.List;
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
 import pikater.logging.Verbosity;
-import pikater.ontology.messages.*;
+import org.pikater.core.ontology.messages.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -35,10 +35,10 @@ import org.pikater.core.agents.system.DataManagerService;
 public abstract class Agent_Recommender extends PikaterAgent {
 	private static final long serialVersionUID = 4413578066473667553L;
 	
-	protected abstract pikater.ontology.messages.Agent chooseBestAgent(Data data);
+	protected abstract org.pikater.core.ontology.messages.Agent chooseBestAgent(Data data);
 	protected abstract String getAgentType();
     
-	private pikater.ontology.messages.Agent myAgentOntology = new pikater.ontology.messages.Agent();
+	private org.pikater.core.ontology.messages.Agent myAgentOntology = new org.pikater.core.ontology.messages.Agent();
 	
 	protected String getOptFileName(){
 		return "/options/"+getAgentType() +".opt";
@@ -106,7 +106,7 @@ public abstract class Agent_Recommender extends PikaterAgent {
 
 					// else TODO - overit, jestli jsou metadata OK, pripadne vygenerovat
 					
-                    pikater.ontology.messages.Agent recommended_agent = chooseBestAgent(rec.getData());
+					org.pikater.core.ontology.messages.Agent recommended_agent = chooseBestAgent(rec.getData());
                     
                     // fill options
                 	recommended_agent.setOptions(mergeOptions(recommended_agent.getOptions(), getAgentOptions(recommended_agent.getType()) ));
@@ -201,7 +201,7 @@ public abstract class Agent_Recommender extends PikaterAgent {
 		request.setLanguage(codec.getName());
 		request.setOntology(ontology.getName());
 
-		pikater.ontology.messages.GetOptions get = new pikater.ontology.messages.GetOptions();
+		GetOptions get = new GetOptions();
 		Action a = new Action();
 		a.setAction(get);
 		a.setActor(this.getAID());
@@ -218,7 +218,7 @@ public abstract class Agent_Recommender extends PikaterAgent {
 
 			Result r = (Result) getContentManager().extractContent(inform);
 
-			return ((pikater.ontology.messages.Agent) r.getItems().get(0)).getOptions();
+			return ((org.pikater.core.ontology.messages.Agent) r.getItems().get(0)).getOptions();
 
 		} catch (CodecException ce) {
 			ce.printStackTrace();

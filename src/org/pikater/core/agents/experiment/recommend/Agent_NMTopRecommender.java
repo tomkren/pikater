@@ -17,12 +17,12 @@ import java.util.HashMap;
 
 import org.pikater.core.agents.system.DataManagerService;
 
-import pikater.ontology.messages.Agent;
-import pikater.ontology.messages.Data;
-import pikater.ontology.messages.GetAllMetadata;
-import pikater.ontology.messages.Interval;
-import pikater.ontology.messages.Metadata;
-import pikater.ontology.messages.Option;
+import org.pikater.core.ontology.messages.Agent;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.GetAllMetadata;
+import org.pikater.core.ontology.messages.Interval;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.Option;
 
 /**
  *

@@ -1,7 +1,7 @@
 package pikater.agents.metadataQueen;
 
 import jade.util.leap.ArrayList;
-import pikater.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.Metadata;
 
 public class MetadataListItem {
 	private Metadata metadata;

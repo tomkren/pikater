@@ -33,17 +33,17 @@ import org.pikater.core.agents.system.DataManagerService;
 
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
-import pikater.ontology.messages.Data;
-import pikater.ontology.messages.DataInstances;
-import pikater.ontology.messages.Eval;
-import pikater.ontology.messages.Evaluation;
-import pikater.ontology.messages.EvaluationMethod;
-import pikater.ontology.messages.Execute;
-import pikater.ontology.messages.GetData;
-import pikater.ontology.messages.GetMetadata;
-import pikater.ontology.messages.Id;
-import pikater.ontology.messages.Metadata;
-import pikater.ontology.messages.Task;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.DataInstances;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.messages.EvaluationMethod;
+import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.messages.GetData;
+import org.pikater.core.ontology.messages.GetMetadata;
+import org.pikater.core.ontology.messages.Id;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.Task;
 
 public class Agent_MetadataQueen extends PikaterAgent {
 
@@ -140,14 +140,14 @@ public class Agent_MetadataQueen extends PikaterAgent {
     }				        
                 
     
-    pikater.ontology.messages.DataInstances processGetData(ACLMessage inform) {
+    org.pikater.core.ontology.messages.DataInstances processGetData(ACLMessage inform) {
 		ContentElement content;
 		try {
 			content = getContentManager().extractContent(inform);
 			if (content instanceof Result) {
 				Result result = (Result) content;
-				if (result.getValue() instanceof pikater.ontology.messages.DataInstances) {
-					return (pikater.ontology.messages.DataInstances) result.getValue();
+				if (result.getValue() instanceof org.pikater.core.ontology.messages.DataInstances) {
+					return (org.pikater.core.ontology.messages.DataInstances) result.getValue();
 				}
 			}
 		} catch (UngroundedException e) {
@@ -284,7 +284,8 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		// We want to receive a reply in 10 secs
 		cfp.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 
-		pikater.ontology.messages.Agent ag = new pikater.ontology.messages.Agent();
+		org.pikater.core.ontology.messages.Agent ag =
+				new org.pikater.core.ontology.messages.Agent();
 		ag.setType(agent_type);
 		ag.setOptions(new ArrayList());
 

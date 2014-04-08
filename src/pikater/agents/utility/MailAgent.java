@@ -16,7 +16,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import pikater.agents.PikaterAgent;
-import pikater.ontology.messages.SendEmail;
+import org.pikater.core.ontology.messages.SendEmail;
 
 /** Agent, ktery resi komunikaci s mistnim SMTP serverem, tj. odesilani ruznych e-mailu i jejich tvorbu. */
 public class MailAgent extends PikaterAgent {

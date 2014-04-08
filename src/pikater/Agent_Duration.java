@@ -25,15 +25,15 @@ import java.util.Vector;
 
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
-import pikater.ontology.messages.Data;
-import pikater.ontology.messages.Duration;
-import pikater.ontology.messages.Eval;
-import pikater.ontology.messages.Evaluation;
-import pikater.ontology.messages.EvaluationMethod;
-import pikater.ontology.messages.Execute;
-import pikater.ontology.messages.GetDuration;
-import pikater.ontology.messages.Id;
-import pikater.ontology.messages.Task;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.Duration;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.messages.EvaluationMethod;
+import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.messages.GetDuration;
+import org.pikater.core.ontology.messages.Id;
+import org.pikater.core.ontology.messages.Task;
 
 public class Agent_Duration extends PikaterAgent {
 
@@ -328,7 +328,8 @@ public class Agent_Duration extends PikaterAgent {
 		// We want to receive a reply in 10 secs
 		cfp.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 
-		pikater.ontology.messages.Agent ag = new pikater.ontology.messages.Agent();
+		org.pikater.core.ontology.messages.Agent ag =
+				new org.pikater.core.ontology.messages.Agent();
 		ag.setType("LinearRegression");
 		ag.setOptions(new ArrayList());
 

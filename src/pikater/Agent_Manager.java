@@ -56,19 +56,19 @@ import org.pikater.core.agents.system.DataManagerService;
 
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
-import pikater.ontology.messages.Data;
-import pikater.ontology.messages.Eval;
-import pikater.ontology.messages.Evaluation;
-import pikater.ontology.messages.Execute;
-import pikater.ontology.messages.GetAgents;
-import pikater.ontology.messages.Id;
-import pikater.ontology.messages.MessagesOntology;
-import pikater.ontology.messages.Option;
-import pikater.ontology.messages.Problem;
-import pikater.ontology.messages.Recommend;
-import pikater.ontology.messages.Results;
-import pikater.ontology.messages.Solve;
-import pikater.ontology.messages.Task;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.messages.GetAgents;
+import org.pikater.core.ontology.messages.Id;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.Problem;
+import org.pikater.core.ontology.messages.Recommend;
+import org.pikater.core.ontology.messages.Results;
+import org.pikater.core.ontology.messages.Solve;
+import org.pikater.core.ontology.messages.Task;
 
 public class Agent_Manager extends PikaterAgent {
 
@@ -632,10 +632,11 @@ public class Agent_Manager extends PikaterAgent {
 
 					Iterator a_itr = problem.getAgents().iterator();
 					while (a_itr.hasNext()) {												
-						pikater.ontology.messages.Agent a_next = (pikater.ontology.messages.Agent) a_itr
-								.next();
+						org.pikater.core.ontology.messages.Agent a_next =
+								(org.pikater.core.ontology.messages.Agent) a_itr.next();
 													
-						pikater.ontology.messages.Agent a_next_copy = new pikater.ontology.messages.Agent();
+						org.pikater.core.ontology.messages.Agent a_next_copy =
+								new org.pikater.core.ontology.messages.Agent();
 						a_next_copy.setGui_id(a_next.getGui_id());
 						a_next_copy.setName(a_next.getName());
 						a_next_copy.setOptions(a_next.getOptions());
@@ -674,7 +675,7 @@ public class Agent_Manager extends PikaterAgent {
 								Result r = (Result) getContentManager().extractContent(inform);
 
 								// recommended agent from recommender
-								a_next = (pikater.ontology.messages.Agent) r.getItems().get(0);
+								a_next = (org.pikater.core.ontology.messages.Agent) r.getItems().get(0);
 								a_next_copy = a_next;
 								
 							} catch (CodecException ce) {
@@ -1061,7 +1062,7 @@ public class Agent_Manager extends PikaterAgent {
 			while (itr.hasNext()) {
 				Task next_task = (Task) itr.next();
 
-				pikater.ontology.messages.Agent agent = next_task.getAgent();
+				org.pikater.core.ontology.messages.Agent agent = next_task.getAgent();
 
 				Element newExperiment = new Element("experiment");
 				Element newSetting = new Element("setting");
@@ -1073,8 +1074,8 @@ public class Agent_Manager extends PikaterAgent {
 				if (Options != null) {
 					Iterator itr_o = Options.iterator();
 					while (itr_o.hasNext()) {
-						pikater.ontology.messages.Option next_o = (pikater.ontology.messages.Option) itr_o
-								.next();
+						org.pikater.core.ontology.messages.Option next_o =
+								(org.pikater.core.ontology.messages.Option) itr_o.next();
 
 						Element newParameter = new Element("parameter");
 						newParameter.setAttribute("name", next_o.getName());

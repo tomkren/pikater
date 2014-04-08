@@ -29,16 +29,16 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import pikater.agents.PikaterAgent;
 import pikater.agents.management.ManagerAgentCommunicator;
-import pikater.ontology.description.ComputationDescription;
-import pikater.ontology.description.ComputingAgent;
-import pikater.ontology.description.DataSourceDescription;
-import pikater.ontology.description.FileDataProvider;
-import pikater.ontology.description.FileVisualizer;
-import pikater.ontology.description.IComputationElement;
-import pikater.ontology.messages.ExecuteExperiment;
-import pikater.ontology.messages.MessagesOntology;
-import pikater.ontology.messages.SendEmail;
-import pikater.ontology.messages.Solve;
+import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.ontology.description.DataSourceDescription;
+import org.pikater.core.ontology.description.FileDataProvider;
+import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.IComputationElement;
+import org.pikater.core.ontology.messages.ExecuteExperiment;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.SendEmail;
+import org.pikater.core.ontology.messages.Solve;
 
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 

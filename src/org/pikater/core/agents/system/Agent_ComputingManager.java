@@ -6,29 +6,29 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pikater.agents.PikaterAgent;
-import pikater.ontology.description.CARecSearchComplex;
-import pikater.ontology.description.ComputationDescription;
-import pikater.ontology.description.ComputingAgent;
-import pikater.ontology.description.DataSourceDescription;
-import pikater.ontology.description.DifferenceVisualizer;
-import pikater.ontology.description.FileDataProvider;
-import pikater.ontology.description.FileVisualizer;
-import pikater.ontology.description.IComputationElement;
-import pikater.ontology.description.IComputingAgent;
-import pikater.ontology.description.IDataProvider;
-import pikater.ontology.description.IErrorProvider;
-import pikater.ontology.description.IVisualizer;
-import pikater.ontology.description.Parameter;
-import pikater.ontology.description.Recommender;
-import pikater.ontology.description.Search;
-import pikater.ontology.messages.Data;
-import pikater.ontology.messages.EvaluationMethod;
-import pikater.ontology.messages.ExecuteExperiment;
-import pikater.ontology.messages.Interval;
-import pikater.ontology.messages.Option;
-import pikater.ontology.messages.Problem;
-import pikater.ontology.messages.Recommend;
-import pikater.ontology.messages.Solve;
+import org.pikater.core.ontology.description.CARecSearchComplex;
+import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.ontology.description.DataSourceDescription;
+import org.pikater.core.ontology.description.DifferenceVisualizer;
+import org.pikater.core.ontology.description.FileDataProvider;
+import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.IComputationElement;
+import org.pikater.core.ontology.description.IComputingAgent;
+import org.pikater.core.ontology.description.IDataProvider;
+import org.pikater.core.ontology.description.IErrorProvider;
+import org.pikater.core.ontology.description.IVisualizer;
+import org.pikater.core.ontology.description.Parameter;
+import org.pikater.core.ontology.description.Recommender;
+import org.pikater.core.ontology.description.Search;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.EvaluationMethod;
+import org.pikater.core.ontology.messages.ExecuteExperiment;
+import org.pikater.core.ontology.messages.Interval;
+import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.Problem;
+import org.pikater.core.ontology.messages.Recommend;
+import org.pikater.core.ontology.messages.Solve;
 import jade.content.Concept;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -322,15 +322,15 @@ class ComputingDescriptionParser {
     	System.out.println("Ontology Parser - Search");
     }
     
-    public pikater.ontology.messages.Agent process (Recommender recommender) {
+    public org.pikater.core.ontology.messages.Agent process (Recommender recommender) {
 
     	String recommenderClass =
     			recommender.getRecommenderClass();
     	
     	ArrayList<Parameter> parameters = recommender.getParameters();
     	
-		pikater.ontology.messages.Agent method =
-				new pikater.ontology.messages.Agent();
+		org.pikater.core.ontology.messages.Agent method =
+				new org.pikater.core.ontology.messages.Agent();
 		method.setName(recommenderClass);
 		method.setType(recommenderClass);
 		//TODO: Konverze parametru neni hotova
@@ -436,7 +436,7 @@ class ComputingDescriptionParser {
 			optionsAgent.add(optionS);
 			optionsAgent.add(optionM);			
 			
-			pikater.ontology.messages.Agent agent_ = new pikater.ontology.messages.Agent();
+			org.pikater.core.ontology.messages.Agent agent_ = new org.pikater.core.ontology.messages.Agent();
 			agent_.setType("RBFNetwork");
 			agent_.setGui_id("0");
 			agent_.setOptions(optionsAgent);
@@ -482,7 +482,7 @@ class ComputingDescriptionParser {
 			jade.util.leap.ArrayList optionsAgentMethod = new jade.util.leap.ArrayList();
 			optionsAgentMethod.add(optionN);
 
-			pikater.ontology.messages.Agent method = new pikater.ontology.messages.Agent();
+			org.pikater.core.ontology.messages.Agent method = new org.pikater.core.ontology.messages.Agent();
 			method.setName("ChooseXValues");
 			method.setType("ChooseXValues");				
 			method.setOptions(optionsAgentMethod);
