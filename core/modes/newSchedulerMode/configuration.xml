@@ -10,7 +10,7 @@
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
 
-        <agent type="pikater.Agent_Manager" name="manager">
+        <agent type="org.pikater.core.agents.system.Agent_Manager" name="manager">
             <arguments>
                 <argument key="no_xml_output" value="true"/>
             </arguments>
@@ -22,10 +22,10 @@
             </arguments>
         </agent>
 
-        <agent type="pikater.agents.metadataQueen.Agent_MetadataQueen" name="Freddie">
+        <agent type="org.pikater.core.agents.system.Agent_MetadataQueen" name="Freddie">
         </agent>
 
-        <agent type="pikater.agents.management.ManagerAgent" name="agentManager">
+        <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="agentManager">
         </agent>
 <!--
         <agent type="pikater.Agent_Duration" name="duration">
