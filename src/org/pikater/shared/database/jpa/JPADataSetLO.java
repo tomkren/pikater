@@ -1,5 +1,7 @@
 package org.pikater.shared.database.jpa;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +19,7 @@ public class JPADataSetLO {
 	private JPAUser owner;
 	private String description;
 	private JPAGlobalMetaData globalMetaData;
-	private JPAAttributeMetaData attributeMetaData;
+	private List<JPAAttributeMetaData> attributeMetaData;
 	private String hash;
 	
 	public String getHash() {
@@ -41,10 +43,10 @@ public class JPADataSetLO {
 	public void setGlobalMetaData(JPAGlobalMetaData globalMetaData) {
 		this.globalMetaData = globalMetaData;
 	}
-	public JPAAttributeMetaData getAttributeMetaData() {
+	public List<JPAAttributeMetaData> getAttributeMetaData() {
 		return attributeMetaData;
 	}
-	public void setAttributeMetaData(JPAAttributeMetaData attributeMetaData) {
+	public void setAttributeMetaData(List<JPAAttributeMetaData> attributeMetaData) {
 		this.attributeMetaData = attributeMetaData;
 	}
 	public JPAUser getOwner() {

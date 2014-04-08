@@ -21,7 +21,6 @@ import org.eclipse.persistence.internal.xr.XRServiceFactory.JPAMetadataSource;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
-
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAGeneralFile;
@@ -29,6 +28,7 @@ import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 
 public class Database {
@@ -227,6 +227,29 @@ public class Database {
 		}
 	}
 
+	
+	public void addUserPriviledge(JPAUserPriviledge userPriviledge){
+		persist(userPriviledge);
+	}
+	
+	public void addUserPriviledge(String name){
+		JPAUserPriviledge up=new JPAUserPriviledge();
+		up.setName(name);
+		this.addUserPriviledge(up);
+	}
+	
+	public JPAUserPriviledge getUserPriviledge(String name){
+		try {
+			em = emf.createEntityManager();
+			Query q = em.createQuery("select up from JPAUserPriviledge up where up.name=:privName");
+			q.setParameter("privName", name);
+			JPAUserPriviledge res = (JPAUserPriviledge) q.getSingleResult();
+			return res;
+		} finally {
+			cleanUpEntityManager();
+		}
+	}
+	
 	/**
 	 * Adds an existing role object to the database
 	 * 
@@ -252,6 +275,14 @@ public class Database {
 		newRole.setName(name);
 		newRole.setDescription(description);
 		addRole(newRole);
+	}
+	
+	
+	public void addPriviledgeForRole(String roleName,String priviledgeName){		
+		JPAUserPriviledge up=this.getUserPriviledge(priviledgeName);
+		JPARole role=this.getRoleByName(roleName);
+		role.addPriviledge(up);
+		persist(role);
 	}
 
 	/**
@@ -775,13 +806,13 @@ public class Database {
 	 *            The JPAGlobalMetaData object containing global metadata
 	 *            information for the dataset
 	 * @param attributeMetaData
-	 *            The JPAAttributeMetaData object caontaining attribute metadata
+	 *            The List<JPAAttributeMetaData> object containing the list of attribute metadatas for the dataset
 	 *            for the dataset
 	 * @throws SQLException
 	 * @throws IOException
 	 * @return The persisted JPADataSetLO object for the stored file
 	 */
-	public JPADataSetLO saveDataSet(JPAUser user, File dataSet, String description, JPAGlobalMetaData globalMetaData, JPAAttributeMetaData attributeMetaData) throws SQLException, IOException {
+	public JPADataSetLO saveDataSet(JPAUser user, File dataSet, String description, JPAGlobalMetaData globalMetaData, List<JPAAttributeMetaData> attributeMetaData) throws SQLException, IOException {
 		long oid = -1;
 		String hash = this.getMD5Hash(dataSet);
 		List<JPADataSetLO> sameHashDS = this.getDataSetByHash(hash);
