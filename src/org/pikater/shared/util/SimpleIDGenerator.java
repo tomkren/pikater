@@ -1,10 +1,10 @@
 package org.pikater.shared.util;
 
-public class IDGenerator
+public class SimpleIDGenerator
 {
 	private Integer currentID;
 
-	public IDGenerator()
+	public SimpleIDGenerator()
 	{
 		this.currentID = 1;
 	}

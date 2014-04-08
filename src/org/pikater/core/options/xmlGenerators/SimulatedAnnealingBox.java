@@ -1,7 +1,7 @@
 package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.options.LogicalUnit;
-import org.pikater.shared.experiment.TypesOfBox;
+import org.pikater.shared.experiment.BoxType;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
 import org.pikater.shared.util.Interval;
@@ -12,12 +12,12 @@ public class SimulatedAnnealingBox extends LogicalUnit
 	protected SimulatedAnnealingBox() {
 
 		this.setIsBox(true);
-		this.setName("SimulatedAnnealing-Searcher");
+		this.setDisplayName("SimulatedAnnealing-Searcher");
 		this.setAgentName("pikater/Agent_SimulatedAnnealing");
-		this.setType(TypesOfBox.SEARCHER_BOX);
+		this.setType(BoxType.SEARCHER);
 		this.setOntology(null);
 		this.setPicture("picture2.jpg");
-		this.setDescription("Searcher is using to find values of parameters for computing agents. For search the solution is used method simulated annaling.");
+		this.setDescription("Searches defined parameters and provides them in output slots. Simulated annealing is used for searching.");
 		
 		AbstractParameter paramE = new RangedValueParameter<Double>(
 				0.1,

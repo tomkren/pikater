@@ -1,8 +1,8 @@
 package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.options.LogicalUnit;
-import org.pikater.shared.experiment.TypesOfBox;
-import org.pikater.shared.experiment.slots.DataSlot;
+import org.pikater.shared.experiment.BoxType;
+import org.pikater.shared.experiment.slots.SimpleSlot;
 
 public class DifferenceVisualizerBox extends LogicalUnit
 {
@@ -10,14 +10,14 @@ public class DifferenceVisualizerBox extends LogicalUnit
 	protected DifferenceVisualizerBox() {
 		
 		this.setIsBox(true);
-		this.setName("DifferenceVisualizer");
+		this.setDisplayName("DifferenceVisualizer");
 		this.setAgentName("Agent_DifferenceVisualizer");
-		this.setType(TypesOfBox.VISUALIZER_BOX);
+		this.setType(BoxType.VISUALIZER);
 		this.setOntology(null);
 		this.setPicture("picture4.jpg");
 		this.setDescription("Shows difference between input and model data sources.");
 
-		this.addInputSlots(new DataSlot("Target Data Source"));
-		this.addInputSlots(new DataSlot("Model Data Source"));
+		addInputSlot(SimpleSlot.getDataSlot(FileInputBoxResources.data_parsedInput, "target data source"));
+		addInputSlot(SimpleSlot.getDataSlot(FileInputBoxResources.data_parsedInput, "model data source"));
 	}
 }

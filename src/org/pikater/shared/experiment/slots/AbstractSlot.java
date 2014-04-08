@@ -1,7 +1,8 @@
 package org.pikater.shared.experiment.slots;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Set;
+
+import org.pikater.shared.experiment.resources.Resource;
 
 public abstract class AbstractSlot
 {
@@ -10,49 +11,22 @@ public abstract class AbstractSlot
 		DATA,
 		PARAMETER,
 		ERROR
+	};
+	
+	public final SlotContent content;
+	public final Resource resource;
+	
+	public AbstractSlot(SlotContent content, Resource resource)
+	{
+		this.content = content;
+		this.resource = resource;
 	}
 	
-	public final String description;
-	private final Collection<AbstractSlot> connectedSlots;
-	
-	public AbstractSlot(String description)
-	{
-		super();
-		
-		this.description = description;
-		this.connectedSlots = new ArrayList<AbstractSlot>();
-	}
-
-	public void addConnectedSlot(AbstractSlot slot)
-	{
-		/**
-		 * IMPORTANT: don't change the collection to Set lightly... only a single element could be contained in such case
-		 * because of the equals method.
-		 * @see AbstractSlot#equals(Object obj)
-		 */
-		if(!this.connectedSlots.contains(slot))
-		{
-			this.connectedSlots.add(slot);
-		}
-	}
-	
-	public void removeConnectedSlot(AbstractSlot slot)
-	{
-		this.connectedSlots.remove(slot);
-	}
-	
-	public Collection<AbstractSlot> getConnectedSlot()
-	{
-		return this.connectedSlots;
-	}
-	
-	public boolean isAmbiguous()
-	{
-		return this.connectedSlots.size() > 1;
-	}
+	// ------------------------------------------------------------------
+	// PUBLIC INTERFACE
 	
 	/**
-	 * Children of this class are used in Set collections in several classes. As such, the equals method needs
+	 * Children of this class are used in Set collections in other code. As such, the equals method needs
 	 * to be overriden to denote whether the slots have identical meaning despite being different instances.
 	 * 
 	 * IMPORTANT:
@@ -80,16 +54,22 @@ public abstract class AbstractSlot
 		
 		// and the second part is checking the semantic meaning:
 		AbstractSlot other = (AbstractSlot) obj;
-		if(getContent() == other.getContent())
+		if(content == other.content)
 		{
-			return this.canBeConnectedToSpecific(other);
+			// note that the equals method used in the following line is overriden and this method strictly requires that particular implementation
+			return resource.equals(other.resource);
 		}
 		else
 		{
 			return false;
 		}
 	}
+	
+	// ------------------------------------------------------------------
+	// ABSTRACT METHODS
 
-	public abstract SlotContent getContent();
-	protected abstract boolean canBeConnectedToSpecific(AbstractSlot other);
+	public abstract Set<AbstractSlot> getConnectedSlots();
+	public abstract void addConnectedSlot(AbstractSlot slot);
+	public abstract void removeConnectedSlot(AbstractSlot slot);
+	public abstract boolean canAcceptMoreConnections();
 }

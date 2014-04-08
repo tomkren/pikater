@@ -6,14 +6,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.pikater.shared.experiment.BoxType;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
 import org.pikater.shared.experiment.parameters.ValueParameter;
 import org.pikater.shared.experiment.slots.AbstractSlot;
-import org.pikater.shared.experiment.slots.DataSlot;
-import org.pikater.shared.experiment.slots.MethodSlot;
-import org.pikater.shared.experiment.slots.ParameterSlot;
 import org.pikater.shared.util.Interval;
 
 import com.thoughtworks.xstream.XStream;
@@ -21,9 +19,9 @@ import com.thoughtworks.xstream.XStream;
 public class LogicalUnit
 {
 	private boolean isBox = false;
-	private String name = "NoName";
+	private String displayName = "NoName";
 	private String agentName = "NoAgent";
-	private String type = "NoType";
+	private BoxType type = null;
 	private Class ontology = null;
 	private String picture = "NoPicture";
 	private String description = "NoDescription";
@@ -32,140 +30,172 @@ public class LogicalUnit
 	private ArrayList<AbstractSlot> inputSlots = new ArrayList<AbstractSlot>();
 	private ArrayList<AbstractSlot> outputSlots = new ArrayList<AbstractSlot>();
 
-	
-	public boolean getIsBox() {
+	public boolean getIsBox()
+	{
 		return isBox;
 	}
-	public void setIsBox(boolean isBox) {
+
+	public void setIsBox(boolean isBox)
+	{
 		this.isBox = isBox;
 	}
 
-	public String getName() {
-		return name;
+	public String getDisplayName()
+	{
+		return displayName;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setDisplayName(String displayName)
+	{
+		this.displayName = displayName;
 	}
-	
-	public String getAgentName() {
+
+	public String getAgentName()
+	{
 		return agentName;
 	}
-	public void setAgentName(String agentName) {
+
+	public void setAgentName(String agentName)
+	{
 		this.agentName = agentName;
 	}
-	
-	public String getType() {
+
+	public BoxType getType()
+	{
 		return type;
 	}
-	public void setType(String type) {
+
+	public void setType(BoxType type)
+	{
 		this.type = type;
 	}
-	
-	public Class getOntology() {
+
+	public Class getOntology()
+	{
 		return ontology;
 	}
-	public void setOntology(Class ontology) {
+
+	public void setOntology(Class ontology)
+	{
 		this.ontology = ontology;
 	}
-	
-	public String getPicture() {
+
+	public String getPicture()
+	{
 		return picture;
 	}
-	public void setPicture(String picture) {
+
+	public void setPicture(String picture)
+	{
 		this.picture = picture;
 	}
-	
-	public String getDescription() {
+
+	public String getDescription()
+	{
 		return description;
 	}
-	public void setDescription(String description) {
+
+	public void setDescription(String description)
+	{
 		this.description = description;
 	}
-	
-	public ArrayList<AbstractParameter> getParameters() {
+
+	public ArrayList<AbstractParameter> getParameters()
+	{
 		return parameters;
 	}
-	public void setParameters(ArrayList<AbstractParameter> parameters) {
-		this.parameters = parameters;
-	}
-	public void addParameter(AbstractParameter parameter) {
+
+	public void addParameter(AbstractParameter parameter)
+	{
 		this.parameters.add(parameter);
 	}
-	
-	public ArrayList<AbstractSlot> getInputSlots() {
+
+	public ArrayList<AbstractSlot> getInputSlots()
+	{
 		return inputSlots;
 	}
-	public void setInputSlots(ArrayList<AbstractSlot> inputSlots) {
+
+	public void setInputSlots(ArrayList<AbstractSlot> inputSlots)
+	{
 		this.inputSlots = inputSlots;
 	}
-	public void addInputSlots(AbstractSlot inputSlot) {
+
+	public void addInputSlot(AbstractSlot inputSlot)
+	{
 		this.inputSlots.add(inputSlot);
 	}
 
-	public ArrayList<AbstractSlot> getOutputSlots() {
+	public ArrayList<AbstractSlot> getOutputSlots()
+	{
 		return outputSlots;
 	}
-	public void setOutputSlots(ArrayList<AbstractSlot> outputSlots) {
+
+	public void setOutputSlots(ArrayList<AbstractSlot> outputSlots)
+	{
 		this.outputSlots = outputSlots;
 	}
-	public void addOutputSlots(AbstractSlot outputSlot) {
+
+	public void addOutputSlot(AbstractSlot outputSlot)
+	{
 		this.outputSlots.add(outputSlot);
 	}
 
-	public void exportXML() throws FileNotFoundException {
+	public void exportXML() throws FileNotFoundException
+	{
 
 		System.out.println("Exporting: " + this.getClass().getSimpleName() + ".xml");
-		
+
 		XStream xstream = new XStream();
 		xstream.alias("LogicalUnit", this.getClass());
-		
+
 		xstream.alias("EnumeratedValueParameter", EnumeratedValueParameter.class);
 		xstream.alias("RangedValueParameter", RangedValueParameter.class);
 		xstream.alias("ValueParameter", ValueParameter.class);
 
 		xstream.alias("Interval", Interval.class);
 
-		xstream.alias("DataSlot", DataSlot.class);
-		xstream.alias("ParameterSlot", ParameterSlot.class);
-		xstream.alias("MethodSlot", MethodSlot.class);
+		// TODO:
+		// xstream.alias("DataSlot", DataSlot.class);
+		// xstream.alias("ParameterSlot", ParameterSlot.class);
+		// xstream.alias("MethodSlot", MethodSlot.class);
 
 		String xml = xstream.toXML(this);
 
-		String fileName = 
-				System.getProperty("user.dir") +
-				System.getProperty("file.separator") + "src" +
-				System.getProperty("file.separator") + "org" +
-				System.getProperty("file.separator") + "options" +
-				System.getProperty("file.separator") +
-				this.getClass().getSimpleName() + ".xml";
-				
+		String fileName = System.getProperty("user.dir")
+				+ System.getProperty("file.separator") + "src"
+				+ System.getProperty("file.separator") + "org"
+				+ System.getProperty("file.separator") + "options"
+				+ System.getProperty("file.separator")
+				+ this.getClass().getSimpleName() + ".xml";
+
 		PrintWriter file = new PrintWriter(fileName);
 		file.println(xml);
 		file.close();
 	}
 
-	public static LogicalUnit importXML(File configFile) throws FileNotFoundException {
-
+	public static LogicalUnit importXML(File configFile) throws FileNotFoundException
+	{
 		System.out.println("Importing: " + configFile.getName());
 
 		Scanner scanner = new Scanner(configFile);
 		String content = scanner.useDelimiter("\\Z").next();
 		scanner.close();
-		
+
 		XStream xstream = new XStream();
 		xstream.alias("LogicalUnit", LogicalUnit.class);
-		
+
 		xstream.alias("EnumeratedValueParameter", EnumeratedValueParameter.class);
 		xstream.alias("RangedValueParameter", RangedValueParameter.class);
 		xstream.alias("ValueParameter", ValueParameter.class);
 
 		xstream.alias("Interval", Interval.class);
 
-		xstream.alias("DataSlot", DataSlot.class);
-		xstream.alias("ParameterSlot", ParameterSlot.class);
-		xstream.alias("MethodSlot", MethodSlot.class);
+		// TODO:
+		// xstream.alias("DataSlot", DataSlot.class);
+		// xstream.alias("ParameterSlot", ParameterSlot.class);
+		// xstream.alias("MethodSlot", MethodSlot.class);
 
-		LogicalUnit unit = (LogicalUnit)xstream.fromXML(content);
+		LogicalUnit unit = (LogicalUnit) xstream.fromXML(content);
 
 		return unit;
 	}
