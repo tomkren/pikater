@@ -2,12 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pikater;
+package org.pikater.core.agents.experiment.search;
 
 import jade.util.leap.Iterator;
 import jade.util.leap.LinkedList;
 import jade.util.leap.List;
+
 import java.util.ArrayList;
+
 import pikater.ontology.messages.BoolSItem;
 import pikater.ontology.messages.FloatSItem;
 import pikater.ontology.messages.IntSItem;

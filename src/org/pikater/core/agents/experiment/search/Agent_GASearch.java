@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.experiment.search;
 
 import java.io.FileWriter;
 import java.io.IOException;

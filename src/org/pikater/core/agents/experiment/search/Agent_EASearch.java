@@ -1,10 +1,12 @@
-package pikater;
+package org.pikater.core.agents.experiment.search;
 
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
+
 import java.util.Arrays;
 import java.util.Random;
+
 import pikater.evolution.MergingReplacement;
 import pikater.evolution.Population;
 import pikater.evolution.RandomNumberGenerator;
