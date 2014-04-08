@@ -12,6 +12,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.wrapper.ContainerController;
+import pikater.Agent_DataManager;
 import pikater.agents.PikaterAgent;
 import pikater.ontology.messages.DataInstances;
 import pikater.ontology.messages.GetData;
@@ -36,11 +37,12 @@ public class Agent_ARFFReader extends PikaterAgent {
 		}
 		
 		//TODO: jen hack aby to nepadalo
+		// Agent_DataManager.dataPath - tady by se dala vzit konstanta - je public static
 		String path = "core/";
 		if (fileName.startsWith("data/files")) {
 			path += fileName;
 		} else {
-			path += DATA_DIR+fileName;
+			path = Agent_DataManager.dataPath + fileName;
 		}
 		
 		try {
