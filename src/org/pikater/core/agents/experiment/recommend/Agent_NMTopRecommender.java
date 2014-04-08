@@ -2,17 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pikater.agents.recommenders;
+package org.pikater.core.agents.experiment.recommend;
 
 import jade.util.leap.Iterator;
 import jade.util.leap.LinkedList;
 import jade.util.leap.List;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+
 import pikater.DataManagerService;
 import pikater.ontology.messages.Agent;
 import pikater.ontology.messages.Data;

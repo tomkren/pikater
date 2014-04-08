@@ -1,4 +1,4 @@
-package pikater.agents.recommenders;
+package org.pikater.core.agents.experiment.recommend;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;

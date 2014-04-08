@@ -1,4 +1,4 @@
-package pikater.agents.recommenders;
+package org.pikater.core.agents.experiment.recommend;
 
 import pikater.DataManagerService;
 import pikater.logging.Verbosity;
