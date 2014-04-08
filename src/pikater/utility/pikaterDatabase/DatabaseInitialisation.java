@@ -20,12 +20,12 @@ import pikater.data.jpa.JPAAttributeNumericalMetaData;
 import pikater.data.jpa.JPABatch;
 import pikater.data.jpa.JPADataSetLO;
 import pikater.data.jpa.JPAExperiment;
+import pikater.data.jpa.JPAFilemapping;
 import pikater.data.jpa.JPAGlobalMetaData;
 import pikater.data.jpa.JPAResult;
 import pikater.data.jpa.JPARole;
 import pikater.data.jpa.JPAUser;
 import pikater.data.jpa.JPAUserPriviledge;
-import pikater.data.temporaryNoJPA.Filemapping;
 import pikater.utility.pikaterDatabase.exceptions.UserNotFoundException;
 
 public class DatabaseInitialisation {
@@ -61,10 +61,10 @@ public class DatabaseInitialisation {
 		this.addLinearDataset();
 		
 		this.createRoles();
-*/
-		this.insertFinishedBatch();
 
-//		this.createFileMaping();
+		this.insertFinishedBatch();
+*/
+		this.createFileMaping();
 
 	}
 	
@@ -240,13 +240,13 @@ public class DatabaseInitialisation {
 	
 	private void createFileMaping() {
 		
-		Filemapping f = new Filemapping();
+		JPAFilemapping f = new JPAFilemapping();
 		f.setUserid(1);
 		f.setExternalfilename("iris.arff");
 		f.setInternalfilename("25d7d5d689042a3816aa1598d5fd56ef");
 		database.persist(f);
 		
-		Filemapping f2 = new Filemapping();
+		JPAFilemapping f2 = new JPAFilemapping();
 		f2.setUserid(1);
 		f2.setExternalfilename("weather.arff");
 		f2.setInternalfilename("772c551b8486b932aed784a582b9c1b1");

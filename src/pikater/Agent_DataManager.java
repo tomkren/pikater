@@ -272,7 +272,7 @@ public class Agent_DataManager extends PikaterAgent {
 
             openDBConnection();
             Statement stmt = db.createStatement();
-            String query = "SELECT COUNT(*) AS num FROM filemapping WHERE internalFilename = \'" + internalFilename + "\'";
+            String query = "SELECT COUNT(*) AS num FROM jpafilemapping WHERE internalFilename = \'" + internalFilename + "\'";
             log("Executing query " + query);
 
             ResultSet rs = stmt.executeQuery(query);
@@ -289,7 +289,7 @@ public class Agent_DataManager extends PikaterAgent {
 
                 stmt = db.createStatement();
 
-                query = "INSERT into filemapping (userId, externalFilename, internalFilename) VALUES (" + im.getUserID() + ",\'" + im.getExternalFilename() + "\',\'" + internalFilename + "\')";
+                query = "INSERT into jpafilemapping (userId, externalFilename, internalFilename) VALUES (" + im.getUserID() + ",\'" + im.getExternalFilename() + "\',\'" + internalFilename + "\')";
                 log("Executing query: " + query);
 
                 stmt.executeUpdate(query);
@@ -320,7 +320,7 @@ public class Agent_DataManager extends PikaterAgent {
 
             openDBConnection();
             Statement stmt = db.createStatement();
-            String query = "SELECT COUNT(*) AS num FROM filemapping WHERE internalFilename = \'" + internalFilename + "\'";
+            String query = "SELECT COUNT(*) AS num FROM jpafilemapping WHERE internalFilename = \'" + internalFilename + "\'";
             log("Executing query " + query);
 
             ResultSet rs = stmt.executeQuery(query);
@@ -337,7 +337,7 @@ public class Agent_DataManager extends PikaterAgent {
                 stmt = db.createStatement();
 
                 log("Executing query: " + query);
-                query = "INSERT into filemapping (userId, externalFilename, internalFilename) VALUES (" + im.getUserID() + ",\'" + im.getExternalFilename() + "\',\'" + internalFilename + "\')";
+                query = "INSERT into jpafilemapping (userId, externalFilename, internalFilename) VALUES (" + im.getUserID() + ",\'" + im.getExternalFilename() + "\',\'" + internalFilename + "\')";
 
                 stmt.executeUpdate(query);
                 stmt.close();
@@ -370,9 +370,9 @@ public class Agent_DataManager extends PikaterAgent {
 
         String query;
         if (tf.getInternalFilename() == null) {
-            query = "SELECT internalFilename AS filename FROM filemapping WHERE userID=" + tf.getUserID() + " AND externalFilename=\'" + tf.getExternalFilename() + "\'";
+            query = "SELECT internalFilename AS filename FROM jpafilemapping WHERE userID=" + tf.getUserID() + " AND externalFilename=\'" + tf.getExternalFilename() + "\'";
         } else {
-            query = "SELECT externalFilename AS filename FROM filemapping WHERE userID=" + tf.getUserID() + " AND internalFilename=\'" + tf.getInternalFilename() + "\'";
+            query = "SELECT externalFilename AS filename FROM jpafilemapping WHERE userID=" + tf.getUserID() + " AND internalFilename=\'" + tf.getInternalFilename() + "\'";
         }
 
         log("Executing query: " + query);
@@ -686,7 +686,7 @@ public class Agent_DataManager extends PikaterAgent {
     private ACLMessage RespondToGetFiles(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
         GetFiles gf = (GetFiles) a.getAction();
 
-        String query = "SELECT * FROM filemapping WHERE userid = " + gf.getUserID();
+        String query = "SELECT * FROM jpafilemapping WHERE userid = " + gf.getUserID();
 
         log("Executing query: " + query);
 
@@ -796,7 +796,7 @@ public class Agent_DataManager extends PikaterAgent {
 	    Statement stmt = db.createStatement();
 	    
 	    String query  = "SELECT COUNT(*) AS number FROM metadata WHERE internalFilename = \'" + internalFilename + "\'";
-	    String query1 = "SELECT COUNT(*) AS number FROM filemapping WHERE internalFilename = \'" + internalFilename + "\'";
+	    String query1 = "SELECT COUNT(*) AS number FROM jpafilemapping WHERE internalFilename = \'" + internalFilename + "\'";
 	    
 	    log("Executing query " + query);
 	    log("Executing query " + query1);

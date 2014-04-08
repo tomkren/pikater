@@ -1,4 +1,4 @@
-package pikater.data.temporaryNoJPA;
+package pikater.data.jpa;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 
 @Entity
-public class Filemapping {
+public class JPAFilemapping {
 		
 	private int userid;
 	private String externalfilename;
