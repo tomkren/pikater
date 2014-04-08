@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.system.needless;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -13,7 +13,6 @@ import java.io.IOException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-
 import org.jdom.input.SAXBuilder;
 import org.pikater.core.ontology.messages.*;
 

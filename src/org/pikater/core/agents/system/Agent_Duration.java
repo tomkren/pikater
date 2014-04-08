@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;

@@ -1,4 +1,4 @@
-package pikater;
+package org.pikater.core.agents.system.duration;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
