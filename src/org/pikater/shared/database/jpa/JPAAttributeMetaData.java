@@ -1,44 +1,27 @@
 package org.pikater.shared.database.jpa;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class JPAAttributeMetaData {
+public abstract class JPAAttributeMetaData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-	private float ratioOfMissingValues;
+	private double ratioOfMissingValues;
 	private boolean isTarget;
-	private List<JPAAttributeNumericalMetaData> numericalMetaData;
-	private List<JPAAttributeCategoricalMetaData> categoricalMetaData;
 	
-	public JPAAttributeMetaData(){
-		this.numericalMetaData=new LinkedList<JPAAttributeNumericalMetaData>();
-		this.categoricalMetaData=new LinkedList<JPAAttributeCategoricalMetaData>();
-	}
-	
-	public List<JPAAttributeNumericalMetaData> getNumericalMetaData() {
-		return numericalMetaData;
-	}
-
-	public List<JPAAttributeCategoricalMetaData> getCategoricalMetaData() {
-		return categoricalMetaData;
-	}
-
 	public int getId() {
 		return id;
 	}
 
-	public float getRatioOfMissingValues() {
+	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;
 	}
-	public void setRatioOfMissingValues(float ratioOfMissingValues) {
+
+	public void setRatioOfMissingValues(double ratioOfMissingValues) {
 		this.ratioOfMissingValues = ratioOfMissingValues;
 	}
 

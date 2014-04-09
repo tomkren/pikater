@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class JPAAttributeNumericalMetaData {
+public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

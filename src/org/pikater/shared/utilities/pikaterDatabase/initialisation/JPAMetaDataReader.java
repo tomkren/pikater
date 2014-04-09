@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
@@ -16,6 +18,7 @@ import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.CategoricalAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.IntegerAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.RealAttributeMetadata;
+
 import weka.core.Instances;
 
 public class JPAMetaDataReader {
@@ -41,6 +44,9 @@ public class JPAMetaDataReader {
             }else if(att instanceof RealAttributeMetadata){
             	RealAttributeMetadata ram= ((RealAttributeMetadata)att);
                 System.out.println("Real: min="+ram.getMin()+" max="+ram.getMax()+" avg="+ram.getAvg()+" median="+ram.getMedian()+" modus= N/impl var="+ram.getStandardDeviation());
+            }else if(att instanceof IntegerAttributeMetadata){
+            	IntegerAttributeMetadata ram= ((IntegerAttributeMetadata)att);
+                System.out.println("Integer: min="+ram.getMin()+" max="+ram.getMax()+" avg="+ram.getAvg()+" median="+ram.getMedian()+" modus= N/impl var="+ram.getStandardDeviation());
             }else{	
             	System.out.println(att.toString());
             }
@@ -48,10 +54,9 @@ public class JPAMetaDataReader {
 	}
 	
 	
-	public JPAAttributeMetaData getJPAAttributeMetaData(){
+	public List<JPAAttributeMetaData> getJPAAttributeMetaData(){
 		
-		
-		JPAAttributeMetaData attr=new JPAAttributeMetaData();
+		List<JPAAttributeMetaData> attrs=new LinkedList<JPAAttributeMetaData>();
 		
 		for (int i=md.getAttribute_metadata_list().size()-1;i>=0;i--)
         {
@@ -61,9 +66,9 @@ public class JPAMetaDataReader {
             	int numberOfCategories=((CategoricalAttributeMetadata)att).getNumberOfCategories();
             	JPAAttributeCategoricalMetaData attrCat=new JPAAttributeCategoricalMetaData();
             	attrCat.setNumberOfCategories(numberOfCategories);
-            	
-            	attr.getCategoricalMetaData().add(attrCat);
-            	
+            	attrCat.setRatioOfMissingValues(att.getRatioOfMissingValues());
+            	attrCat.setTarget(att.isIsTarget());
+            	attrs.add(attrCat);
             }else if(att instanceof RealAttributeMetadata){
             	RealAttributeMetadata ram= ((RealAttributeMetadata)att);
             	
@@ -78,9 +83,9 @@ public class JPAMetaDataReader {
             	
             	numericalAttributeMetaData.setReal(true);
             	numericalAttributeMetaData.setVariance(ram.getStandardDeviation());
-            	
-            	
-            	attr.getNumericalMetaData().add(numericalAttributeMetaData);
+            	numericalAttributeMetaData.setTarget(att.isIsTarget());
+            	numericalAttributeMetaData.setRatioOfMissingValues(att.getRatioOfMissingValues());
+            	attrs.add(numericalAttributeMetaData);
             }else if(att instanceof IntegerAttributeMetadata){
             	IntegerAttributeMetadata ram= ((IntegerAttributeMetadata)att);
             	
@@ -96,8 +101,9 @@ public class JPAMetaDataReader {
             	numericalAttributeMetaData.setReal(false);
             	numericalAttributeMetaData.setVariance(ram.getStandardDeviation());
             	
-            	
-            	attr.getNumericalMetaData().add(numericalAttributeMetaData);
+            	numericalAttributeMetaData.setTarget(att.isIsTarget());
+            	numericalAttributeMetaData.setRatioOfMissingValues(att.getRatioOfMissingValues());
+            	attrs.add(numericalAttributeMetaData);
             }else{
             	System.out.println(att.toString());
             }
@@ -105,7 +111,7 @@ public class JPAMetaDataReader {
 		
 		
 		
-		return attr;
+		return attrs;
 	}
 	
 }
