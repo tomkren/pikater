@@ -1,0 +1,14 @@
+<ComputationDescription>
+  <rootElement type="FileVisualizer">
+    <dataSource>
+      <dataProvider type="ComputingAgent">
+        <modelClass>pikater.agents.computing.Agent_WekaCA</modelClass>
+        <trainingData>
+          <dataProvider type="FileDataProvider">
+            <fileURI>weather.arff</fileURI>
+          </dataProvider>
+        </trainingData>
+      </dataProvider>
+    </dataSource>
+  </rootElement>
+</ComputationDescription>

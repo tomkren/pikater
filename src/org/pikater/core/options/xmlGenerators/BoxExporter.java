@@ -15,7 +15,7 @@ public final class BoxExporter
 			IllegalArgumentException, InvocationTargetException
 	{
 		// TODO: rewrite this using XStream
-		
+
 		System.out.println("Exporting LogicalUnit configuration to XML");
 
 		FileInputBox ib = new FileInputBox();

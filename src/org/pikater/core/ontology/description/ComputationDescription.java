@@ -2,7 +2,11 @@ package org.pikater.core.ontology.description;
 
 import jade.content.Concept;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -33,29 +37,43 @@ public class ComputationDescription implements Concept {
         this.globalParameters = globalParameters;
     }
     
-	public String exportXML() {
+	public String exportXML(String fileName) throws FileNotFoundException {
 
 		XStream xstream = new XStream();
-		xstream.aliasPackage("", "pikater.ontology.description");
+
+		Class<ComputationDescription> descriptionOntology =
+				org.pikater.core.ontology.description.ComputationDescription.class;
 		
+		xstream.aliasPackage("", descriptionOntology.getPackage().getName());
+		xstream.aliasAttribute("type", "class");
+
 		String xml = xstream.toXML(this);
-		xml = xml.replace("class=\"", "type=\"");
+
+		PrintWriter file = new PrintWriter(fileName);
+		file.println(xml);
+		file.close();
 
 		return xml;
 	}
 
-	public void importXML(String xml) {
+	public static ComputationDescription importXML(String fileName) throws FileNotFoundException {
 
-		xml = xml.replace("type=\"", "class=\"");
-		
 		XStream xstream = new XStream();
-		xstream.aliasPackage("", "pikater.ontology.description");
+
+		Class<ComputationDescription> descriptionOntology =
+				org.pikater.core.ontology.description.ComputationDescription.class;
+
+		xstream.aliasPackage("", descriptionOntology.getPackage().getName());
+		xstream.aliasAttribute("type", "class");
+
+		Scanner scanner = new Scanner(new File(fileName));
+		String xml = scanner.useDelimiter("\\Z").next();
+		scanner.close();
 		
 		ComputationDescription computDes =
 				(ComputationDescription)xstream.fromXML(xml);
 		
-		setRootElement(computDes.getRootElement());
-		setGlobalParameters(computDes.getGlobalParameters());
+		return computDes;
 	}
 
 	public String exportJSON() {

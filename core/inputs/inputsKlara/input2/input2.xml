@@ -1,0 +1,19 @@
+<ComputationDescription>
+  <rootElement type="FileVisualizer">
+    <dataSource>
+      <dataProvider type="CARecSearchComplex">
+        <search>
+          <searchClass>org.pikater.core.agents.experiment.search.Agent_ChooseXValues</searchClass>
+        </search>
+        <computingAgent type="ComputingAgent">
+          <modelClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</modelClass>
+          <trainingData>
+            <dataProvider type="FileDataProvider">
+              <fileURI>weather.arff</fileURI>
+            </dataProvider>
+          </trainingData>
+        </computingAgent>
+      </dataProvider>
+    </dataSource>
+  </rootElement>
+</ComputationDescription>

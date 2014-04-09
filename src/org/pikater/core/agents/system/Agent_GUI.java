@@ -1,24 +1,25 @@
 package org.pikater.core.agents.system;
 
-import jade.wrapper.StaleProxyException;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.description.ComputationDescription;
 
 
 public class Agent_GUI extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
 
-	public static String filePath = "core" + System.getProperty("file.separator") +
-			"inputs" + System.getProperty("file.separator") +
-			"inputsKlara" + System.getProperty("file.separator");
-	
+	public static String filePath = "core"
+			+ System.getProperty("file.separator") + "inputs"
+			+ System.getProperty("file.separator") + "inputsKlara"
+			+ System.getProperty("file.separator");
+
 	@Override
 	protected void setup() {
 		initDefault();
@@ -33,10 +34,19 @@ public class Agent_GUI extends PikaterAgent {
 				);
 
 		if (System.console() == null) {
-			
+
 			System.out.println("Error, console not found.");
-			
-			this.takeDown();
+
+			try {
+				DFService.deregister(this);
+				
+				System.out.println("Agent, will be termined.");
+				doDelete();
+				
+			} catch (FIPAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
 		}
 
@@ -52,18 +62,23 @@ public class Agent_GUI extends PikaterAgent {
 		}
 
 		System.out.println(" I welcome you Klara !!!");
-		
+
 		String defaultFileName = "input.xml";
 		File testFile = new File(filePath + defaultFileName);
-		
+
 		if(testFile.exists() && !testFile.isDirectory()) {
 
 			System.out.println(" Do you wish to run experiment from file "
 					+ filePath + defaultFileName + " ? (y/n)");
 			System.out.print(">");
-			
+
 			if (System.console().readLine().equals("y")) {
-				runFile(filePath + defaultFileName);
+				try {
+					runFile(filePath + defaultFileName);
+					return;
+				} catch (FileNotFoundException e) {
+					System.out.println(" File not found.");
+				}
 			}
 
 		}
@@ -91,13 +106,17 @@ public class Agent_GUI extends PikaterAgent {
 						" --help"
 						);
 			}
-			
 		}
+
 	}
 
-	private void runFile(String fileName) {
+	private void runFile(String fileName) throws FileNotFoundException {
 
 		System.out.println("Loading experiment from file: " + fileName);
+		
+		ComputationDescription comDescription =
+				ComputationDescription.importXML(fileName);
+		
 		//TODO:
 	}
 

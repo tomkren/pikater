@@ -8,12 +8,12 @@ import org.pikater.core.agents.configuration.AgentConfiguration;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Configuration;
 import org.pikater.core.agents.configuration.ConfigurationProvider;
+import org.pikater.core.agents.PikaterAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import org.pikater.core.agents.PikaterAgent;
 
 public class Agent_Initiator extends PikaterAgent {
 	
