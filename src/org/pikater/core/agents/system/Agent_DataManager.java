@@ -16,7 +16,6 @@ import jade.util.leap.List;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.shared.database.jpa.JPAResult;
-import org.pikater.shared.database.schema.SqlQueryFactory;
 import org.pikater.shared.database.ConnectionProvider;
 
 import org.pikater.shared.logging.Severity;
