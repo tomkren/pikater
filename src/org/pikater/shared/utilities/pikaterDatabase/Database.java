@@ -55,26 +55,6 @@ public class Database {
 	}
 
 	/**
-	 * !!!IMPORTANT!!!! For now it just creates some test data (example users,
-	 * saves test files)
-	 * 
-	 * Initializes the database for storing the Java Persistence API objects.
-	 * 
-	 * @param loadTestData
-	 *            If the parameter is set to true the function also loads some
-	 *            test data
-	 * @throws IOException
-	 * @throws SQLException
-	 * @throws UserNotFoundException
-	 */
-	public void init(boolean loadTestData) throws SQLException, IOException, UserNotFoundException {
-		// createDataBase();
-		if (loadTestData) {
-			loadTestData();
-		}
-	}
-
-	/**
 	 * Loads test data to the DataBase
 	 * 
 	 * @throws IOException

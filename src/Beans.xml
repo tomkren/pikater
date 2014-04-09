@@ -40,10 +40,5 @@
     <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
          <property name="persistenceUnitName" value="pikaterDataModel"/>
     </bean>
-
-    <bean id="queryFactory" class="org.pikater.shared.database.schema.SqlQueryFromFileFactory" scope="singleton">
-        <constructor-arg index="0">  <!-- queryDirectoryPath -->
-              <value>databaseSchema</value>
-        </constructor-arg>
-    </bean>
+    
 </beans>

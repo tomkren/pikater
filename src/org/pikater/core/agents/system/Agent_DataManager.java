@@ -34,41 +34,15 @@ import javax.persistence.EntityManagerFactory;
 
 public class Agent_DataManager extends PikaterAgent {
     private final String DEFAULT_CONNECTION_PROVIDER="defaultConnection";
-    private final String QUERY_FACTORY_BEAN="queryFactory";
     private static final String CONNECTION_ARG_NAME="connection";
     private String connectionBean;
     private ConnectionProvider connectionProvider;
-    private SqlQueryFactory sqlQueryFactory;
     private static final long serialVersionUID = 1L;
     Connection db;
     
     public static String dataPath = "core" + System.getProperty("file.separator") +
     		"data" + System.getProperty("file.separator") + "files" + 
     		System.getProperty("file.separator");
-
-    protected void CreateTablesIfNotInDB(java.util.List<String> tableNames)
-    {
-        LinkedList<String> tableNamesInDB = new LinkedList<>();
-        String[] types = {"TABLE", "VIEW"};
-        ResultSet tables;
-        try {
-            tables = db.getMetaData().getTables(null, connectionProvider.getSchema(), "%" ,types);
-            while (tables.next()) {
-                tableNamesInDB.add(tables.getString(3).toUpperCase());
-            }
-            for (String tableName:tableNames)
-            {
-                if (!tableNamesInDB.contains(tableName.toUpperCase()))
-                {
-                    log("Creating table "+tableName);
-                    String createQuery=sqlQueryFactory.getCreateQuery(tableName);
-                    db.createStatement().executeUpdate(createQuery);
-                }
-            }
-        } catch (SQLException e) {
-            logError("Error creating tables " + e.getMessage(),Severity.Critical);
-        }
-    }
 
     @Override
     protected void setup() {
@@ -85,48 +59,13 @@ public class Agent_DataManager extends PikaterAgent {
                 connectionBean=DEFAULT_CONNECTION_PROVIDER;
             }
             connectionProvider=(ConnectionProvider)context.getBean(connectionBean);
-            sqlQueryFactory=(SqlQueryFactory)context.getBean(QUERY_FACTORY_BEAN);
         	
     		log("Connecting to " + connectionProvider.getConnectionInfo() + ".");
     		openDBConnection();
-            java.util.List<String> tableNames=sqlQueryFactory.getTableNames();
-            CreateTablesIfNotInDB(tableNames);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        LinkedList<String> tableNames = new LinkedList<>();
-        LinkedList<String> triggerNames = new LinkedList<>();
-        try {
-            String[] types = {"TABLE", "VIEW"};
-            ResultSet tables = db.getMetaData().getTables(null, connectionProvider.getSchema(), "%" ,types);
-            while (tables.next()) {
-                tableNames.add(tables.getString(3).toUpperCase());
-            }
-
-            ResultSet triggers = db.createStatement().executeQuery(
-                    "SELECT trigger_name FROM INFORMATION_SCHEMA.TRIGGERS");
-            while (triggers.next()) {
-                triggerNames.add(triggers.getString("trigger_name"));
-            }
-
-        } catch (SQLException e) {
-            logError("Error getting tables list: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        StringBuilder sb=new StringBuilder("Found the following tables: ");
-        for (String s : tableNames) {
-            sb.append(s+" ");
-        }
-        log(sb.toString());
-
-        sb=new StringBuilder("Found the following triggers: ");
-        for (String s : triggerNames) {
-            sb.append(s+" ");
-        }
-        log(sb.toString());
 
         File data = new File(dataPath + "temp");
         if (!data.exists()) {

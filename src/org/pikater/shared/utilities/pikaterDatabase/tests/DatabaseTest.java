@@ -21,7 +21,7 @@ public class DatabaseTest {
 	PostgreSQLConnectionProvider pscp;
 	
 	public DatabaseTest(){
-		pscp=new PostgreSQLConnectionProvider("jdbc:postgresql://localhost:5432/postgres", "postgres", "");
+		pscp=new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "SrapRoPy");
 	}
 	
 	public void test() throws ClassNotFoundException, SQLException, IOException, UserNotFoundException{
@@ -29,9 +29,7 @@ public class DatabaseTest {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("pikaterDataModel");
 		
 		Database db=new Database(factory,(PGConnection)pscp.getConnection());
-		//db.setPostgreConnection((PGConnection)pscp.getConnection());
 		
-		db.init(true);
 		
 		List<JPAUser> userlist= db.getUsers();
 		System.out.println("Users in database: ");
