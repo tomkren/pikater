@@ -13,6 +13,8 @@ public class DescriptionOntology extends BeanOntology{
 
         try {
             add("pikater.ontology.description");
+            add(org.pikater.core.ontology.messages.ExecuteExperiment.class);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -27,12 +27,13 @@ import jade.util.leap.List;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 
+import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
+import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileVisualizer;
 import org.pikater.core.ontology.description.IComputationElement;
@@ -50,13 +51,18 @@ public class Agent_Scheduler extends PikaterAgent {
 	
 	@Override
 	protected void setup() {
-		
+
 	  	System.out.println("Agent: " +getLocalName() + " starts.");
 
 		initDefault();
 		registerWithDF("Scheduler");
 
 
+		RecieveExperiment recieveExp =
+			new RecieveExperiment(this, this.getCodec(), this.getOntology());
+		addBehaviour(recieveExp);
+
+/*********REMOVE DOWN********/
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI("weather.arff");
 
@@ -94,7 +100,7 @@ public class Agent_Scheduler extends PikaterAgent {
         msg.setOntology(getOntology().getName());
         try {
 			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
-			this.addBehaviour(new SendProblemToComManager(this, msg) );
+			this.addBehaviour(new SendProblemToCompManager(this, msg) );
 			
 			//ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
 			//System.out.println("Reply: " + reply.getContent());
@@ -106,7 +112,7 @@ public class Agent_Scheduler extends PikaterAgent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+/*********REMOVE UP********/
 
 	  	// Make this agent terminate
 	  	//doDelete();
@@ -117,22 +123,93 @@ public class Agent_Scheduler extends PikaterAgent {
 	protected String getAgentType(){
 		return "Scheduler";
 	}
+
+	@Override
+    public Ontology getOntology() {
+        return DescriptionOntology.getInstance();
+    }
+
+}
+
+
+class RecieveExperiment extends CyclicBehaviour {
+
+	private Agent agent = null;
+	private Codec codec = null;
+	private Ontology ontology = null;
 	
+	public RecieveExperiment(Agent agent, Codec codec, Ontology ontology) {
+		this.agent = agent;
+		this.codec = codec;
+		this.ontology = ontology;
+	}
+
+	public void action() {
+
+		ACLMessage request= this.agent.receive();
+		
+		if (request != null) {
+			
+			ContentElement ce = null;
+			try {
+				ce = agent.getContentManager().extractContent(request);
+			} catch (CodecException | OntologyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Action act = (Action)ce;
+			
+			if (!(act.getAction() instanceof ExecuteExperiment)) {
+				return;
+			}
+           
+			ExecuteExperiment exeExperiment = (ExecuteExperiment) act.getAction();
+            ComputationDescription compDescription = exeExperiment.getDescription();
+            
+            ACLMessage reply = request.createReply();
+            reply.setPerformative(ACLMessage.INFORM);
+            reply.setContent("OK");
+            agent.send(reply);
+
+
+
+            AID receiver = new AID("ComputingManager", false);		
+
+            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+            msg.addReceiver(receiver);
+            msg.setLanguage(codec.getName());
+            msg.setOntology(ontology.getName());
+            try {
+    			agent.getContentManager().fillContent(msg, new Action(receiver, exeExperiment));
+    			agent.addBehaviour(new SendProblemToCompManager(agent, msg) );
+    			
+    			//ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
+    			//System.out.println("Reply: " + reply.getContent());
+    			
+    		} catch (CodecException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (OntologyException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+		}
+	}
 }
 
 
 
-
-class SendProblemToComManager extends AchieveREInitiator {
+class SendProblemToCompManager extends AchieveREInitiator {
 
 	private static final long serialVersionUID = 8923548223375000884L;
 
 	String gui_id;
 	PikaterAgent agent;
 	
-	public SendProblemToComManager(Agent agent, ACLMessage msg) {
+	public SendProblemToCompManager(Agent agent, ACLMessage msg) {
 		super(agent, msg);
-		this.gui_id = gui_id;
 		this.agent = (PikaterAgent) agent;
 	}
 

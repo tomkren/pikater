@@ -10,6 +10,7 @@ import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
+import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.description.DifferenceVisualizer;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileVisualizer;
@@ -73,6 +74,12 @@ public class Agent_ComputingManager extends PikaterAgent {
 	protected String getAgentType(){
 		return "ComputingManager";
 	}
+	
+	@Override
+    public Ontology getOntology() {
+        return DescriptionOntology.getInstance();
+    }
+
 		
 }
 

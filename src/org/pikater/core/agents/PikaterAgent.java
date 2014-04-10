@@ -90,7 +90,7 @@ public abstract class PikaterAgent extends Agent {
 
 		// add more agent service(s) (typicaly general service type, e.g. Search)
 		
-		for (String st : ServiceTypes) {	
+		for (String st : ServiceTypes) {
 			ServiceDescription servicedesc_g = new ServiceDescription();
 			servicedesc_g.setName(getLocalName());
 			servicedesc_g.setType(st);
