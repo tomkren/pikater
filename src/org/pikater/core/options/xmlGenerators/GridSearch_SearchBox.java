@@ -8,7 +8,7 @@ import org.pikater.shared.util.Interval;
 
 public class GridSearch_SearchBox extends LogicalBoxDescription {
 	protected GridSearch_SearchBox() {
-		super("Agent_GridSearch",
+		super("GridSearch",
 				Search.class,
 				"GridSearch Description"
 				);

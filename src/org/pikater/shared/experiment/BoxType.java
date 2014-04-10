@@ -3,9 +3,10 @@ package org.pikater.shared.experiment;
 public enum BoxType
 {
 	INPUT,
-	SEARCHER,
+	SEARCH,
 	COMPUTING,
-	RECOMMENDER,
+	RECOMMEND,
+	METHOD,
 	VISUALIZER,
 	WRAPPER
 }

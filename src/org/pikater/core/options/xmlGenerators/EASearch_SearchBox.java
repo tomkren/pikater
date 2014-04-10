@@ -9,7 +9,7 @@ import org.pikater.shared.util.Interval;
 public class EASearch_SearchBox extends LogicalBoxDescription {
 	
 	protected EASearch_SearchBox() {
-		super("Agent_EASearch",
+		super("EASearch",
 				Search.class,
 				"Searcher using Evolution algorithm"
 				);

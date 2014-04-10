@@ -1,7 +1,7 @@
 package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
-import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.ontology.description.Method;
 import org.pikater.core.options.LogicalBoxDescription;
 import org.pikater.shared.experiment.slots.SimpleSlot;
 
@@ -9,7 +9,7 @@ public class CrossValidation_MethodBox extends LogicalBoxDescription {
 	protected CrossValidation_MethodBox() {
 		super(
 				"CrossValidation-Method",
-				ComputingAgent.class,
+				Method.class,
 				"Computing agent used for training neural networks deterministic library WEKA. As a training method is used default Cross Validation WEKA method."
 				);
 

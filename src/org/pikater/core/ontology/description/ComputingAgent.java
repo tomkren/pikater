@@ -7,18 +7,18 @@ import java.util.ArrayList;
  */
 public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorProvider {
 
-    String modelClass;
+    Method modelClass;
     ArrayList<Parameter> parameters;
 
     DataSourceDescription trainingData;
     DataSourceDescription testingData;
     DataSourceDescription validationData;
 
-    public String getModelClass() {
+    public Method getModelClass() {
         return modelClass;
     }
 
-    public void setModelClass(String modelClass) {
+    public void setModelClass(Method modelClass) {
         this.modelClass = modelClass;
     }
 

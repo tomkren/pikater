@@ -8,7 +8,7 @@ import org.pikater.shared.util.Interval;
 
 public class GASearch_SearchBox extends LogicalBoxDescription {
 	protected GASearch_SearchBox() {
-		super("Agent_GASearch",
+		super("GASearch",
 				Search.class,
 				"Searcher using Genetic algorithm"
 				);

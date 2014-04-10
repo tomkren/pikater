@@ -19,7 +19,7 @@ public class SimpleTraining {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
-        ca.setModelClass("whatever.mlp.is.in.MLP");
+        ca.setModelClass(new Method("whatever.mlp.is.in.MLP"));
 
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new DoubleParameter("L", 0.001));

@@ -2,21 +2,30 @@ package org.pikater.core.options;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.pikater.core.ontology.description.CARecSearchComplex;
+import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.ontology.description.DifferenceVisualizer;
+import org.pikater.core.ontology.description.FileDataProvider;
+import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.Recommender;
 import org.pikater.core.ontology.description.Search;
+import org.pikater.shared.experiment.Box;
+import org.pikater.shared.experiment.BoxType;
 
 
 public class BoxesExporter {
 
-	private ArrayList<LogicalBoxDescription> boxes =
+	private ArrayList<LogicalBoxDescription> logicalBoxes =
 			new ArrayList<LogicalBoxDescription>();
 	
 	public void importXMLs() throws FileNotFoundException {
 		
 		System.out.println("Importing Boxes from configuration XMLs");
-
 		String filePath = LogicalUnitDescription.filePath;
+		
 		
 		File folder = new File(filePath);
 		File[] listOfFiles = folder.listFiles();
@@ -36,19 +45,117 @@ public class BoxesExporter {
 	    		
 	    		if (logUnit instanceof LogicalBoxDescription)  {
 	    			System.out.println("Added Box: " + fileName);
-	    			boxes.add((LogicalBoxDescription) logUnit);
+	    			logicalBoxes.add((LogicalBoxDescription) logUnit);
 	    		}
 	        }
 	    }
-			
+
 	}
 	
-	public void getSearches() {
+	public ArrayList<Box> getBoxexOfType(BoxType type) {
 		
-		for (LogicalBoxDescription boxI: this.boxes) {
+		ArrayList<Class> searchOntology = new ArrayList<Class>();
+		
+		
+		if (type == BoxType.INPUT) {
 			
-			if (boxI.getOntology() == Search.class) {}
+			searchOntology.add(FileDataProvider.class);			
+	
+		} else if (type == BoxType.COMPUTING) {
+			
+			searchOntology.add(ComputingAgent.class);
+			
+		} else if (type == BoxType.SEARCH) {
+			
+			searchOntology.add(Search.class);
+		
+		} else if (type == BoxType.RECOMMEND) {
+			
+			searchOntology.add(Recommender.class);
+		
+		} else if (type == BoxType.METHOD) {
+			
+			searchOntology.add(Method.class);
+			
+		} else if (type == BoxType.VISUALIZER) {
+			
+			searchOntology.add(FileVisualizer.class);
+			searchOntology.add(DifferenceVisualizer.class);
+			
+		} else if (type == BoxType.WRAPPER) {
+			
+			return getWrapperBoxes();
+			
+		} else {
+			return null;
 		}
+
+		ArrayList<LogicalBoxDescription> selectedBoxes =
+				getLogicalBoxesWith(logicalBoxes, searchOntology);
+
+		ArrayList<Box> transformedBoxes =
+				transformations(selectedBoxes, type);
+
+		return transformedBoxes;
+	}
+	
+	private ArrayList<LogicalBoxDescription> getLogicalBoxesWith(
+			ArrayList<LogicalBoxDescription> boxes, ArrayList<Class> ontology) {
+		
+		ArrayList<LogicalBoxDescription> logicalBoxes =
+				new ArrayList<LogicalBoxDescription>();
+		
+		for (LogicalBoxDescription logBoxI: boxes) {
+			
+			for (Class ontologyI: ontology) {
+
+				if (logBoxI.getOntology() == ontologyI) {
+					logicalBoxes.add(logBoxI);
+				}
+			}
+		}
+		
+		return logicalBoxes;
+	}
+
+	private ArrayList<Box> transformations(
+			ArrayList<LogicalBoxDescription> descriptions, BoxType type) {
+		
+		ArrayList<Box> boxes = new ArrayList<Box>();
+		
+		for (LogicalBoxDescription logicDescrI : descriptions) {
+			boxes.add(transformation(logicDescrI, type));
+		}
+		
+		return boxes;
+	}
+
+	private Box transformation(LogicalBoxDescription description, BoxType type) {
+		
+		Box box = new Box();
+		box.setType(type);
+
+		
+		return box;
+	}
+	
+	private ArrayList<Box> getWrapperBoxes() {
+		
+		LogicalBoxDescription treeLogicalBox =
+				new LogicalBoxDescription(
+						"Complex",
+						CARecSearchComplex.class,
+						"Wraper for tree boxes, Computing, Search and Recomend"
+						);
+
+		treeLogicalBox.setPicture("complex.jpg");
+		
+		Box treeBox = transformation(treeLogicalBox, BoxType.WRAPPER);
+		
+		ArrayList<Box> wrappers = new ArrayList<Box>();
+		wrappers.add(treeBox);
+		
+		return wrappers;
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {

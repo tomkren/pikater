@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.core.options.LogicalUnitDescription;
+import org.pikater.shared.experiment.Box;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.resources.ParamResource;
 import org.pikater.shared.experiment.resources.Resource;
@@ -64,9 +65,9 @@ public class LeafBox extends AbstractBox
 	// -----------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public LeafBox(LogicalUnitDescription boxConfig)
+	public LeafBox(Box boxConfig)
 	{
-		super(boxConfig.getDisplayName(), boxConfig.getDescription(), boxConfig.getPicture(), boxConfig.getType());
+		super(boxConfig.getName(), boxConfig.getDescription(), boxConfig.getPicture(), boxConfig.getType());
 		
 		this.editableNonInputParameters = new HashMap<ParamResource, AbstractParameter>();
 		this.internalParameters = new HashMap<ParamResource, AbstractParameter>();

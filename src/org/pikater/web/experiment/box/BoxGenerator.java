@@ -3,7 +3,9 @@ package org.pikater.web.experiment.box;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.options.LogicalUnitDescription;
+import org.pikater.shared.experiment.Box;
 import org.pikater.shared.experiment.BoxType;
 import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
@@ -15,16 +17,14 @@ import org.pikater.web.experiment.box.LeafBox.ParameterVisibility;
 public class BoxGenerator {
 	
 	public static LeafBox getChooseXValueBox(){
-		LogicalUnitDescription lu=new LogicalUnitDescription();
-		lu.setAgentName("Choose X Values Agent");
-		lu.setDescription("...");
-		lu.setDisplayName("Choose X Values");
-		lu.setType(BoxType.SEARCHER);
-		lu.setIsBox(true);
-		//lu.setOntology(null);
-		//lu.setPicture("");
+		Box lu=new Box();
+		lu.setName("Choose X Values Agent");
+		lu.setDescription("Search which Choose X Values");
+		lu.setType(BoxType.SEARCH);
+		lu.setPicture("picture3.jpg");
+
 		
-		LeafBox lb=new LeafBox(lu);
+		LeafBox lb = new LeafBox(lu);
 		
 		//# default number of values to try for each option (default 5)
 		//$ N int 1 1 r 1 2000 5 number_of_values_to_try Default number of values to try for each option
@@ -41,32 +41,34 @@ public class BoxGenerator {
 	 * @return
 	 */
 	public static LeafBox getCrossValidationBox(){
-		LogicalUnitDescription lu=new LogicalUnitDescription();
-		//lu.setAgentName("Choose X Values Agent");
-		lu.setDescription("....");
-		lu.setDisplayName("Cross Validation");
-		//lu.setType(BoxType.SEARCHER);
-		lu.setIsBox(true);
+		Box lu = new Box();
+		lu.setName("Cross Validation");
+		lu.setAgentClass(Agent_WekaCA.class);
+		lu.setDescription("Computing agent used for training neural networks deterministic library WEKA. As a training method is used default Cross Validation WEKA method.");
+		lu.setType(BoxType.METHOD);
 		lu.setOntology(null);
-		lu.setPicture("");
+		lu.setPicture("picture2.jpg");
+		
+		LeafBox lb = new LeafBox(lu);
 		
 		//# default number of folds
 		//$ F int 1 1 r 1 100 5 folds Folds
-		lu.addParameter(new RangedValueParameter<Integer>(5, new Interval<Integer>(1, 100), true));
-		return null;
-		//return new LeafBox(lu);
+		lb.addParameter(
+				ParameterVisibility.USER_EDITABLE,
+				new ParamResource("",""),
+				new RangedValueParameter<Integer>(5, new Interval<Integer>(1, 100), true)
+				);
+
+		return lb;
 	}
 	
 	
 	public static LeafBox getEASearchBox(){
-		LogicalUnitDescription lu=new LogicalUnitDescription();
-		lu.setAgentName("Agent_EASearch");
-		lu.setDescription("....");
-		lu.setDisplayName("EASearch");
-		lu.setType(BoxType.SEARCHER);
-		lu.setIsBox(true);
-		//lu.setOntology(null);
-		//lu.setPicture("");
+		Box lu = new Box();
+		lu.setName("EASearch");
+		lu.setDescription("Searcher using Evolution algorithm");
+		lu.setType(BoxType.SEARCH);
+		lu.setPicture("picture1.jpg");
 		
 		LeafBox lb=new LeafBox(lu);
 		
@@ -147,14 +149,13 @@ public class BoxGenerator {
 	}
 	
 	public static LeafBox getGASearchBox(){
-		LogicalUnitDescription lu=new LogicalUnitDescription();
-		lu.setAgentName("Agent_GASearch");
-		lu.setDescription("....");
-		lu.setDisplayName("GASearch");
-		lu.setType(BoxType.SEARCHER);
-		lu.setIsBox(true);
+		Box lu = new Box();
+		lu.setName("GASearch");
+		lu.setDescription("Searcher using Genetic algorithm");
+		lu.setType(BoxType.SEARCH);
+		lu.setPicture("picture15.jpg");
 		
-		LeafBox lb=new LeafBox(lu);
+		LeafBox lb = new LeafBox(lu);
 		/**
 		# minimum error rate (default 0.1)
 		$ E float 1 1 r 0 1 0.1 error_rate Error rate
@@ -215,14 +216,12 @@ public class BoxGenerator {
 	}
 	
 	public static LeafBox getGridSearchBox(){
-		LogicalUnitDescription lu=new LogicalUnitDescription();
-		lu.setAgentName("Agent_GridSearch");
-		lu.setDescription("....");
-		lu.setDisplayName("GridSearch");
-		lu.setType(BoxType.SEARCHER);
-		lu.setIsBox(true);
+		Box lu=new Box();
+		lu.setName("GridSearch");
+		lu.setDescription("GridSearch description ....");
+		lu.setType(BoxType.SEARCH);
 		
-		LeafBox lb=new LeafBox(lu);
+		LeafBox lb = new LeafBox(lu);
 		/**
 		# maximum block size (default 10)
 		$ B int 1 1 r 0 100000 10 maxBlock Block size
@@ -261,7 +260,7 @@ public class BoxGenerator {
 	 * @return
 	 */
 	public static LeafBox getJ48Box(){
-		LogicalUnitDescription lu=new LogicalUnitDescription();
+		Box lu=new Box();
 		
 		LeafBox lb=new LeafBox(lu);
 		/**

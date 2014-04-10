@@ -37,6 +37,7 @@ import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileVisualizer;
 import org.pikater.core.ontology.description.IComputationElement;
+import org.pikater.core.ontology.description.Method;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.core.ontology.messages.MessagesOntology;
 import org.pikater.core.ontology.messages.SendEmail;
@@ -71,7 +72,7 @@ public class Agent_Scheduler extends PikaterAgent {
 
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setTrainingData(fileDataSource);
-		comAgent.setModelClass("pikater.agents.computing.Agent_WekaCA");
+		comAgent.setModelClass(new Method("pikater.agents.computing.Agent_WekaCA") );
 
 		DataSourceDescription computingDataSource = new DataSourceDescription();
 		computingDataSource.setDataProvider(comAgent);

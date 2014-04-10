@@ -18,7 +18,7 @@ public class SearchOnly {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
-        ca.setModelClass("whatever.mlp.is.in.MLP");
+        ca.setModelClass(new Method("whatever.mlp.is.in.MLP"));
 
         ArrayList<Parameter> parameters = new ArrayList<>();
         DoubleParameter lr = new DoubleParameter();
