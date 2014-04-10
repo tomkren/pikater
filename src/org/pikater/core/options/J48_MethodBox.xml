@@ -1,0 +1,67 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.ComputingAgent</ontology>
+  <parameters>
+    <ValueParameter>
+      <value class="boolean">false</value>
+    </ValueParameter>
+    <EnumeratedValueParameter>
+      <value class="float">0.25</value>
+      <possibleValues>
+        <null/>
+        <null/>
+        <null/>
+        <float>1.0E-4</float>
+        <float>0.1</float>
+        <float>0.2</float>
+        <float>0.25</float>
+        <float>0.3</float>
+        <float>0.4</float>
+      </possibleValues>
+    </EnumeratedValueParameter>
+    <RangedValueParameter>
+      <value class="int">2</value>
+      <range>
+        <min class="int">1</min>
+        <max class="int">10</max>
+      </range>
+      <isStrict>true</isStrict>
+    </RangedValueParameter>
+    <ValueParameter>
+      <value class="boolean">false</value>
+    </ValueParameter>
+    <EnumeratedValueParameter>
+      <value class="int">3</value>
+      <possibleValues>
+        <null/>
+        <int>1</int>
+        <int>2</int>
+        <int>3</int>
+        <int>4</int>
+        <int>5</int>
+      </possibleValues>
+    </EnumeratedValueParameter>
+    <ValueParameter>
+      <value class="boolean">false</value>
+    </ValueParameter>
+    <ValueParameter>
+      <value class="boolean">false</value>
+    </ValueParameter>
+    <ValueParameter>
+      <value class="boolean">false</value>
+    </ValueParameter>
+    <RangedValueParameter>
+      <value class="int">1</value>
+      <range>
+        <min class="int">1</min>
+        <max class="int">2147483647</max>
+      </range>
+      <isStrict>true</isStrict>
+    </RangedValueParameter>
+  </parameters>
+  <inputSlots/>
+  <outputSlots/>
+  <name>J48</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>J48 method description</description>
+</Box>

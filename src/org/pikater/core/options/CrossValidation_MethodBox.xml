@@ -1,0 +1,114 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.ComputingAgent</ontology>
+  <parameters/>
+  <inputSlots>
+    <org.pikater.shared.experiment.slots.SimpleSlot>
+      <content>DATA</content>
+      <resource class="org.pikater.shared.experiment.resources.DataResource">
+        <id>2</id>
+        <description>Data parsed from the file provided by the &apos;param_inputFileName&apos; parameter.</description>
+        <sourceSpecification>
+          <id>1</id>
+          <displayName>File name</displayName>
+        </sourceSpecification>
+      </resource>
+      <connectedSlots>
+        <instanceSet class="java.util.Collections$SetFromMap" serialization="custom">
+          <unserializable-parents/>
+          <java.util.Collections_-SetFromMap>
+            <default>
+              <m class="java.util.IdentityHashMap" serialization="custom">
+                <unserializable-parents/>
+                <java.util.IdentityHashMap>
+                  <default>
+                    <size>0</size>
+                  </default>
+                  <int>0</int>
+                </java.util.IdentityHashMap>
+              </m>
+            </default>
+          </java.util.Collections_-SetFromMap>
+        </instanceSet>
+      </connectedSlots>
+      <capacity>1</capacity>
+    </org.pikater.shared.experiment.slots.SimpleSlot>
+    <org.pikater.shared.experiment.slots.SimpleSlot>
+      <content>DATA</content>
+      <resource class="org.pikater.shared.experiment.resources.DataResource" reference="../../org.pikater.shared.experiment.slots.SimpleSlot/resource"/>
+      <connectedSlots>
+        <instanceSet class="java.util.Collections$SetFromMap" serialization="custom">
+          <unserializable-parents/>
+          <java.util.Collections_-SetFromMap>
+            <default>
+              <m class="java.util.IdentityHashMap" serialization="custom">
+                <unserializable-parents/>
+                <java.util.IdentityHashMap>
+                  <default>
+                    <size>0</size>
+                  </default>
+                  <int>0</int>
+                </java.util.IdentityHashMap>
+              </m>
+            </default>
+          </java.util.Collections_-SetFromMap>
+        </instanceSet>
+      </connectedSlots>
+      <capacity>1</capacity>
+    </org.pikater.shared.experiment.slots.SimpleSlot>
+    <org.pikater.shared.experiment.slots.SimpleSlot>
+      <content>DATA</content>
+      <resource class="org.pikater.shared.experiment.resources.DataResource" reference="../../org.pikater.shared.experiment.slots.SimpleSlot/resource"/>
+      <connectedSlots>
+        <instanceSet class="java.util.Collections$SetFromMap" serialization="custom">
+          <unserializable-parents/>
+          <java.util.Collections_-SetFromMap>
+            <default>
+              <m class="java.util.IdentityHashMap" serialization="custom">
+                <unserializable-parents/>
+                <java.util.IdentityHashMap>
+                  <default>
+                    <size>0</size>
+                  </default>
+                  <int>0</int>
+                </java.util.IdentityHashMap>
+              </m>
+            </default>
+          </java.util.Collections_-SetFromMap>
+        </instanceSet>
+      </connectedSlots>
+      <capacity>1</capacity>
+    </org.pikater.shared.experiment.slots.SimpleSlot>
+  </inputSlots>
+  <outputSlots>
+    <org.pikater.shared.experiment.slots.SimpleSlot>
+      <content>DATA</content>
+      <resource class="org.pikater.shared.experiment.resources.DataResource">
+        <id>4</id>
+        <description>Data computed by this box.</description>
+      </resource>
+      <connectedSlots>
+        <instanceSet class="java.util.Collections$SetFromMap" serialization="custom">
+          <unserializable-parents/>
+          <java.util.Collections_-SetFromMap>
+            <default>
+              <m class="java.util.IdentityHashMap" serialization="custom">
+                <unserializable-parents/>
+                <java.util.IdentityHashMap>
+                  <default>
+                    <size>0</size>
+                  </default>
+                  <int>0</int>
+                </java.util.IdentityHashMap>
+              </m>
+            </default>
+          </java.util.Collections_-SetFromMap>
+        </instanceSet>
+      </connectedSlots>
+      <capacity>1</capacity>
+    </org.pikater.shared.experiment.slots.SimpleSlot>
+  </outputSlots>
+  <name>CrossValidation-Method</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>Computing agent used for training neural networks deterministic library WEKA. As a training method is used default Cross Validation WEKA method.</description>
+</Box>

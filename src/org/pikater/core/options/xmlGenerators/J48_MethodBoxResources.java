@@ -2,7 +2,7 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.shared.experiment.resources.ParamResource;
 
-public class J48BoxResources {
+public class J48_MethodBoxResources {
 	
 	public static final ParamResource u = new ParamResource("U", "Use unpruned tree (default false)");
 	public static final ParamResource c = new ParamResource("C", "Set confidence threshold for pruning. (Default: 0.25) (smaller values incur more pruning).");

@@ -3,7 +3,7 @@ package org.pikater.web.experiment.box;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.core.options.LogicalUnit;
+import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.resources.ParamResource;
 import org.pikater.shared.experiment.resources.Resource;
@@ -64,7 +64,7 @@ public class LeafBox extends AbstractBox
 	// -----------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public LeafBox(LogicalUnit boxConfig)
+	public LeafBox(LogicalUnitDescription boxConfig)
 	{
 		super(boxConfig.getDisplayName(), boxConfig.getDescription(), boxConfig.getPicture(), boxConfig.getType());
 		

@@ -1,20 +1,21 @@
 package org.pikater.core.options.xmlGenerators;
 
-import org.pikater.core.options.LogicalUnit;
-import org.pikater.shared.experiment.BoxType;
+import org.pikater.core.agents.experiment.search.Agent_EASearch;
+import org.pikater.core.ontology.description.Search;
+import org.pikater.core.options.LogicalBoxDescription;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
 import org.pikater.shared.util.Interval;
 
-public class EASearchBox extends LogicalUnit {
+public class EASearch_SearchBox extends LogicalBoxDescription {
 	
-	protected EASearchBox(){
-		this.setAgentName("Agent_EASearch");
-		this.setDescription("....");
-		this.setDisplayName("EASearch");
-		this.setType(BoxType.SEARCHER);
-		this.setIsBox(true);
-		this.setOntology(null);
+	protected EASearch_SearchBox() {
+		super("Agent_EASearch",
+				Search.class,
+				"Searcher using Evolution algorithm"
+				);
+
 		this.setPicture("picture3.jpg");
+		this.setAgentName(Agent_EASearch.class);
 		
 
 		RangedValueParameter<Float> parE=new RangedValueParameter<Float>(0.1f, new Interval<Float>(0.0f, 1.0f), true);

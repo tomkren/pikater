@@ -1,10 +1,5 @@
-<LogicalUnit>
-  <isBox>true</isBox>
-  <name>SimulatedAnnealing-Searcher</name>
-  <agentName>pikater/Agent_SimulatedAnnealing</agentName>
-  <type>SearcherBox</type>
-  <picture>picture2.jpg</picture>
-  <description>Searcher is using to find values of parameters for computing agents. For search the solution is used method simulated annaling.</description>
+<Box>
+  <ontology>org.pikater.core.ontology.description.Search</ontology>
   <parameters>
     <RangedValueParameter>
       <value class="double">0.1</value>
@@ -41,4 +36,8 @@
   </parameters>
   <inputSlots/>
   <outputSlots/>
-</LogicalUnit>
+  <name>SimulatedAnnealing-Searcher</name>
+  <agentClass>org.pikater.core.agents.experiment.search.Agent_SimulatedAnnealing</agentClass>
+  <picture>picture2.jpg</picture>
+  <description>Searches defined parameters and provides them in output slots. Simulated annealing is used for searching.</description>
+</Box>

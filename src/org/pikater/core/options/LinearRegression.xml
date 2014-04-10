@@ -1,10 +1,5 @@
 <LogicalUnit>
-  <isBox>false</isBox>
-  <name>NoName</name>
-  <agentName>Agent_Duration</agentName>
-  <type>NoType</type>
-  <picture>NoPicture</picture>
-  <description>A dummy linear regression box</description>
+  <ontology>org.pikater.core.ontology.description.ComputingAgent</ontology>
   <parameters>
     <RangedValueParameter>
       <value class="int">0</value>

@@ -1,0 +1,19 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.Search</ontology>
+  <parameters>
+    <RangedValueParameter>
+      <value class="int">5</value>
+      <range>
+        <min class="int">1</min>
+        <max class="int">2000</max>
+      </range>
+      <isStrict>true</isStrict>
+    </RangedValueParameter>
+  </parameters>
+  <inputSlots/>
+  <outputSlots/>
+  <name>Choose X Values Agent</name>
+  <agentClass>org.pikater.core.agents.experiment.search.Agent_ChooseXValues</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>Search which Choose X Values</description>
+</Box>

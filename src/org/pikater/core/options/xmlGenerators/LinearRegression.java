@@ -1,21 +1,19 @@
 package org.pikater.core.options.xmlGenerators;
 
-import org.pikater.core.options.LogicalUnit;
+import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
 import org.pikater.shared.experiment.parameters.ValueParameter;
 import org.pikater.shared.util.Interval;
 
-public class LinearRegression extends LogicalUnit
+public class LinearRegression extends LogicalUnitDescription
 {	
 	
 	public LinearRegression() {
 
-		this.setIsBox(false);
-		this.setAgentName("Linear regression");
-		this.setDescription("A dummy linear regression box");
-		this.setAgentName("Agent_Duration");
-		this.setOntology(null);
+		//"Linear regression"
+		this.setOntology(ComputingAgent.class);
 		
 		AbstractParameter paramS = new RangedValueParameter<Integer>(
 				0,

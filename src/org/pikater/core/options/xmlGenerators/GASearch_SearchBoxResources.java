@@ -2,7 +2,7 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.shared.experiment.resources.ParamResource;
 
-public class GASearchBoxResources {
+public class GASearch_SearchBoxResources {
 	
 	public static final ParamResource e = new ParamResource("E", "Minimum error rate (default 0.1)");
 	public static final ParamResource m = new ParamResource("M", "Maximal number of generations (default 10)");

@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.pikater.shared.experiment.BoxType;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
@@ -16,60 +15,27 @@ import org.pikater.shared.util.Interval;
 
 import com.thoughtworks.xstream.XStream;
 
-public class LogicalUnit
+public class LogicalUnitDescription
 {
-	private boolean isBox = false;
-	private String displayName = "NoName";
-	private String agentName = "NoAgent";
-	private BoxType type = null;
-	private Class ontology = null;
-	private String picture = "NoPicture";
-	private String description = "NoDescription";
-
+	public static String filePath = System.getProperty("user.dir")
+			+ System.getProperty("file.separator") + "src"
+			+ System.getProperty("file.separator") + "org"
+			+ System.getProperty("file.separator") + "pikater"
+			+ System.getProperty("file.separator") + "core"
+			+ System.getProperty("file.separator") + "options"
+			+ System.getProperty("file.separator");
+	
+	protected Class ontology = null;
+	
 	private ArrayList<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
 	private ArrayList<AbstractSlot> inputSlots = new ArrayList<AbstractSlot>();
 	private ArrayList<AbstractSlot> outputSlots = new ArrayList<AbstractSlot>();
 
 	public boolean getIsBox()
 	{
-		return isBox;
+		return this instanceof LogicalBoxDescription;
 	}
-
-	public void setIsBox(boolean isBox)
-	{
-		this.isBox = isBox;
-	}
-
-	public String getDisplayName()
-	{
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName)
-	{
-		this.displayName = displayName;
-	}
-
-	public String getAgentName()
-	{
-		return agentName;
-	}
-
-	public void setAgentName(String agentName)
-	{
-		this.agentName = agentName;
-	}
-
-	public BoxType getType()
-	{
-		return type;
-	}
-
-	public void setType(BoxType type)
-	{
-		this.type = type;
-	}
-
+	
 	public Class getOntology()
 	{
 		return ontology;
@@ -78,26 +44,6 @@ public class LogicalUnit
 	public void setOntology(Class ontology)
 	{
 		this.ontology = ontology;
-	}
-
-	public String getPicture()
-	{
-		return picture;
-	}
-
-	public void setPicture(String picture)
-	{
-		this.picture = picture;
-	}
-
-	public String getDescription()
-	{
-		return description;
-	}
-
-	public void setDescription(String description)
-	{
-		this.description = description;
 	}
 
 	public ArrayList<AbstractParameter> getParameters()
@@ -146,7 +92,11 @@ public class LogicalUnit
 		System.out.println("Exporting: " + this.getClass().getSimpleName() + ".xml");
 
 		XStream xstream = new XStream();
-		xstream.alias("LogicalUnit", this.getClass());
+		if (this instanceof LogicalBoxDescription) {
+			xstream.alias("Box", this.getClass());
+		} else {
+			xstream.alias("LogicalUnit", this.getClass());
+		}
 
 		xstream.alias("EnumeratedValueParameter", EnumeratedValueParameter.class);
 		xstream.alias("RangedValueParameter", RangedValueParameter.class);
@@ -161,11 +111,7 @@ public class LogicalUnit
 
 		String xml = xstream.toXML(this);
 
-		String fileName = System.getProperty("user.dir")
-				+ System.getProperty("file.separator") + "src"
-				+ System.getProperty("file.separator") + "org"
-				+ System.getProperty("file.separator") + "options"
-				+ System.getProperty("file.separator")
+		String fileName = filePath
 				+ this.getClass().getSimpleName() + ".xml";
 
 		PrintWriter file = new PrintWriter(fileName);
@@ -173,7 +119,7 @@ public class LogicalUnit
 		file.close();
 	}
 
-	public static LogicalUnit importXML(File configFile) throws FileNotFoundException
+	public static LogicalUnitDescription importXML(File configFile) throws FileNotFoundException
 	{
 		System.out.println("Importing: " + configFile.getName());
 
@@ -182,7 +128,8 @@ public class LogicalUnit
 		scanner.close();
 
 		XStream xstream = new XStream();
-		xstream.alias("LogicalUnit", LogicalUnit.class);
+		xstream.alias("LogicalUnit", LogicalUnitDescription.class);
+		xstream.alias("Box", LogicalBoxDescription.class);
 
 		xstream.alias("EnumeratedValueParameter", EnumeratedValueParameter.class);
 		xstream.alias("RangedValueParameter", RangedValueParameter.class);
@@ -195,7 +142,7 @@ public class LogicalUnit
 		// xstream.alias("ParameterSlot", ParameterSlot.class);
 		// xstream.alias("MethodSlot", MethodSlot.class);
 
-		LogicalUnit unit = (LogicalUnit) xstream.fromXML(content);
+		LogicalUnitDescription unit = (LogicalUnitDescription) xstream.fromXML(content);
 
 		return unit;
 	}

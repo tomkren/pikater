@@ -3,7 +3,7 @@ package org.pikater.web.experiment.box;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.pikater.core.options.LogicalUnit;
+import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.experiment.BoxType;
 import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
@@ -15,7 +15,7 @@ import org.pikater.web.experiment.box.LeafBox.ParameterVisibility;
 public class BoxGenerator {
 	
 	public static LeafBox getChooseXValueBox(){
-		LogicalUnit lu=new LogicalUnit();
+		LogicalUnitDescription lu=new LogicalUnitDescription();
 		lu.setAgentName("Choose X Values Agent");
 		lu.setDescription("...");
 		lu.setDisplayName("Choose X Values");
@@ -41,7 +41,7 @@ public class BoxGenerator {
 	 * @return
 	 */
 	public static LeafBox getCrossValidationBox(){
-		LogicalUnit lu=new LogicalUnit();
+		LogicalUnitDescription lu=new LogicalUnitDescription();
 		//lu.setAgentName("Choose X Values Agent");
 		lu.setDescription("....");
 		lu.setDisplayName("Cross Validation");
@@ -59,7 +59,7 @@ public class BoxGenerator {
 	
 	
 	public static LeafBox getEASearchBox(){
-		LogicalUnit lu=new LogicalUnit();
+		LogicalUnitDescription lu=new LogicalUnitDescription();
 		lu.setAgentName("Agent_EASearch");
 		lu.setDescription("....");
 		lu.setDisplayName("EASearch");
@@ -147,7 +147,7 @@ public class BoxGenerator {
 	}
 	
 	public static LeafBox getGASearchBox(){
-		LogicalUnit lu=new LogicalUnit();
+		LogicalUnitDescription lu=new LogicalUnitDescription();
 		lu.setAgentName("Agent_GASearch");
 		lu.setDescription("....");
 		lu.setDisplayName("GASearch");
@@ -215,7 +215,7 @@ public class BoxGenerator {
 	}
 	
 	public static LeafBox getGridSearchBox(){
-		LogicalUnit lu=new LogicalUnit();
+		LogicalUnitDescription lu=new LogicalUnitDescription();
 		lu.setAgentName("Agent_GridSearch");
 		lu.setDescription("....");
 		lu.setDisplayName("GridSearch");
@@ -261,7 +261,7 @@ public class BoxGenerator {
 	 * @return
 	 */
 	public static LeafBox getJ48Box(){
-		LogicalUnit lu=new LogicalUnit();
+		LogicalUnitDescription lu=new LogicalUnitDescription();
 		
 		LeafBox lb=new LeafBox(lu);
 		/**

@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.options.LogicalUnit;
+import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.AppConfig;
 import org.pikater.web.experiment.box.LeafBox;
 
@@ -14,7 +14,7 @@ public final class BoxLoader
 	/**
 	 * The path where all the boxes reside constructed dynamically and safely against package structures.
 	 */
-	private static final String contextPath = AppConfig.baseAppPath + LogicalUnit.class.getPackage() + System.getProperty("file.separator");
+	private static final String contextPath = AppConfig.baseAppPath + LogicalUnitDescription.class.getPackage() + System.getProperty("file.separator");
 	
 	/**
 	 * The current collection of boxes defined.
@@ -51,8 +51,8 @@ public final class BoxLoader
 	{
 		boxes.clear();
 		
-		List<LogicalUnit> logicalUnits = loadLogicalUnits();
-		for (LogicalUnit logUnit : logicalUnits)
+		List<LogicalUnitDescription> logicalUnits = loadLogicalUnits();
+		for (LogicalUnitDescription logUnit : logicalUnits)
 		{
 			boxes.add(new LeafBox(logUnit));
 		}
@@ -61,9 +61,9 @@ public final class BoxLoader
 	// -----------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	public static List<LogicalUnit> loadLogicalUnits()
+	public static List<LogicalUnitDescription> loadLogicalUnits()
 	{
-		List<LogicalUnit> result = new ArrayList<LogicalUnit>();
+		List<LogicalUnitDescription> result = new ArrayList<LogicalUnitDescription>();
 
 		addIfNotNull(result, loadLogicalUnit(contextPath + "CrossValidationBox.xml"));
 		addIfNotNull(result, loadLogicalUnit(contextPath + "DifferenceVisualizerBox.xml"));
@@ -75,7 +75,7 @@ public final class BoxLoader
 		return result;
 	}
 	
-	private static void addIfNotNull(List<LogicalUnit> collection, LogicalUnit logUnit)
+	private static void addIfNotNull(List<LogicalUnitDescription> collection, LogicalUnitDescription logUnit)
 	{
 		if(logUnit != null)
 		{
@@ -83,11 +83,11 @@ public final class BoxLoader
 		}
 	}
 	
-	private static LogicalUnit loadLogicalUnit(String filePath)
+	private static LogicalUnitDescription loadLogicalUnit(String filePath)
 	{
 		try
 		{
-			return LogicalUnit.importXML(new File(filePath));
+			return LogicalUnitDescription.importXML(new File(filePath));
 		}
 		catch (FileNotFoundException e)
 		{

@@ -3,19 +3,21 @@ package org.pikater.core.options.xmlGenerators;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.pikater.core.options.LogicalUnit;
+import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.options.LogicalBoxDescription;
 import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
 import org.pikater.shared.experiment.parameters.ValueParameter;
 import org.pikater.shared.util.Interval;
 
-public class J48Box extends LogicalUnit {
-	protected J48Box(){
-		this.setDisplayName("J48");
-		this.setDescription("...");
-		this.setOntology(null);
+public class J48_MethodBox extends LogicalBoxDescription {
+	protected J48_MethodBox() {
+		super("J48",
+				org.pikater.core.ontology.description.ComputingAgent.class,
+				"J48 method description");
+
 		this.setPicture("picture3.jpg");
-		
+		this.setAgentName(Agent_WekaCA.class);
 		
 		
 		ValueParameter<Boolean> parU=new ValueParameter<Boolean>(false);
