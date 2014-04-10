@@ -149,12 +149,12 @@ public class BoxesExporter {
 						);
 
 		treeLogicalBox.setPicture("complex.jpg");
-		
+
 		Box treeBox = transformation(treeLogicalBox, BoxType.WRAPPER);
-		
+
 		ArrayList<Box> wrappers = new ArrayList<Box>();
 		wrappers.add(treeBox);
-		
+
 		return wrappers;
 	}
 	

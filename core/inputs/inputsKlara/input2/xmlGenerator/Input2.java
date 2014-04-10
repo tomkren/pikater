@@ -12,6 +12,7 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.Method;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
@@ -38,7 +39,7 @@ public final class Input2 {
         
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setTrainingData(fileDataSource);
-		comAgent.setModelClass(comAgentClass.getName());
+		comAgent.setModelClass(new Method(comAgentClass.getName()));
 
 
 	    Class<Agent_ChooseXValues> searchClass =

@@ -1,8 +1,10 @@
 package org.pikater.core.ontology.description;
 
-public class Method  implements IVisualizer {
+import jade.content.Concept;
+
+public class Method  implements Concept {
 	
-	private String method;
+	String method;
 
 	public Method(String method) {
 		this.method = method;

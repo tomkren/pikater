@@ -64,6 +64,7 @@ public class Agent_Scheduler extends PikaterAgent {
 		addBehaviour(recieveExp);
 
 /*********REMOVE DOWN********/
+
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI("weather.arff");
 
@@ -113,6 +114,7 @@ public class Agent_Scheduler extends PikaterAgent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 /*********REMOVE UP********/
 
 	  	// Make this agent terminate

@@ -10,6 +10,7 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.Method;
 import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
 import org.pikater.shared.experiment.parameters.RangedValueParameter;
 import org.pikater.shared.experiment.parameters.ValueParameter;
@@ -35,7 +36,7 @@ public final class Input1 {
         
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setTrainingData(fileDataSource);
-		comAgent.setModelClass(comAgentClass.getName());
+		comAgent.setModelClass(new Method(comAgentClass.getName()));
 
 		DataSourceDescription computingDataSource = new DataSourceDescription();
 		computingDataSource.setDataProvider(comAgent);

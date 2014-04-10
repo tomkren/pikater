@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 
@@ -159,6 +161,12 @@ public class Agent_GUI extends PikaterAgent {
 		}
 
 	}
+	
+
+	@Override
+    public Ontology getOntology() {
+        return DescriptionOntology.getInstance();
+    }
 
 }
 
