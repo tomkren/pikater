@@ -1,0 +1,26 @@
+package org.pikater.core.options.xmlGenerators;
+
+import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.ontology.description.Method;
+import org.pikater.core.options.LogicalBoxDescription;
+import org.pikater.shared.experiment.parameters.RangedValueParameter;
+import org.pikater.shared.util.Interval;
+
+public class OneR_MethodBox extends LogicalBoxDescription {
+	public OneR_MethodBox(){
+		super("OneR",Method.class,"One R Method");
+		this.setPicture("picture3.jpg");
+		this.setAgentName(Agent_WekaCA.class);
+		
+		/**
+		# Specify the minimum number of objects in a bucket (default: 6).
+		$ B int 1 1 r 1 100
+		**/
+		RangedValueParameter<Integer> parB=new RangedValueParameter<Integer>(
+				6,
+				new Interval<Integer>(1, 100),
+				true);
+		
+		this.addParameter(parB);
+	}
+}
