@@ -182,8 +182,8 @@ public abstract class PikaterAgent extends Agent {
         //emf=loc.getNativeEntityManagerFactory();
         
         log("is alive...", 1);
-        getContentManager().registerLanguage(codec);
-        getContentManager().registerOntology(ontology);
+        getContentManager().registerLanguage(getCodec());
+        getContentManager().registerOntology(getOntology());
     }
 
     private void parseArguments(Object[] args)

@@ -22,9 +22,10 @@ import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 
 
-public class Agent_GUI extends PikaterAgent {
+public class Agent_GUIKlara extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
+	private static final boolean DEBUG_MODE = true;
 
 	public static String filePath = "core"
 			+ System.getProperty("file.separator") + "inputs"
@@ -36,6 +37,30 @@ public class Agent_GUI extends PikaterAgent {
 		initDefault();
 		registerWithDF();
 
+		this.getContentManager().registerLanguage(this.getCodec());
+		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+
+
+		if (DEBUG_MODE) {
+			
+			System.out.println("GUIKlara agent starts.");
+			
+			try {
+				runFile(filePath + "input.xml");
+				
+			} catch (FileNotFoundException e) {
+				System.out.println(" File not found.");
+			}
+			
+		} else {
+			
+			runAutomat();
+			
+		}
+	}
+
+	private void runAutomat() {
+		
 		System.out.println(
 				"--------------------------------------------------------------------------------\n" +
 				"| System Pikater: Multiagents system                                           |\n" +
@@ -44,6 +69,7 @@ public class Agent_GUI extends PikaterAgent {
 				"\n"
 				);
 
+		
 		if (System.console() == null) {
 
 			System.out.println("Error, console not found.");
@@ -127,8 +153,8 @@ public class Agent_GUI extends PikaterAgent {
 		
 		ComputationDescription comDescription =
 				ComputationDescription.importXML(fileName);
-		
-		
+
+
 		ExecuteExperiment executeExpAction = new ExecuteExperiment(comDescription);
 
 		try {
@@ -138,12 +164,14 @@ public class Agent_GUI extends PikaterAgent {
 			e1.printStackTrace();
 		}
 
-        AID receiver = new AID("Scheduler", false);		
+        AID receiver = new AID("Scheduler", false);
+        
+        Ontology ontology = DescriptionOntology.getInstance();
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.addReceiver(receiver);
         msg.setLanguage(getCodec().getName());
-        msg.setOntology(getOntology().getName());
+        msg.setOntology(ontology.getName());
 
         try {
 			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
@@ -161,12 +189,6 @@ public class Agent_GUI extends PikaterAgent {
 		}
 
 	}
-	
-
-	@Override
-    public Ontology getOntology() {
-        return DescriptionOntology.getInstance();
-    }
 
 }
 
@@ -194,6 +216,7 @@ class SendOntologyToScheduler extends AchieveREInitiator {
 	protected void handleInform(ACLMessage inform) {
 		System.out.println(agent.getLocalName() + ": Agent "
 				+ inform.getSender().getName() + " replied.");
+		System.out.println(inform.getContent());
 	}
 
 	protected void handleRefuse(ACLMessage refuse) {

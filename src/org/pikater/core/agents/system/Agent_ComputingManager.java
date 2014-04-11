@@ -1,7 +1,5 @@
 package org.pikater.core.agents.system;
 
-
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -28,7 +26,6 @@ import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.core.ontology.messages.Interval;
 import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.Problem;
-import org.pikater.core.ontology.messages.Recommend;
 import org.pikater.core.ontology.messages.Solve;
 
 import jade.content.Concept;
@@ -61,25 +58,22 @@ public class Agent_ComputingManager extends PikaterAgent {
 		initDefault();
 		registerWithDF("ComputingManager");
 
+		this.getContentManager().registerOntology(getOntology());
+		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+
 		ComputingManagerBehaviour compBehaviour =
-				new ComputingManagerBehaviour(this, this.getCodec(), this.getOntology());
+				new ComputingManagerBehaviour(this, getCodec(), getOntology());
         addBehaviour(compBehaviour);
 
 		
 	  	// Make this agent terminate
 	  	//doDelete();
 	}
-		
+	
 	@Override
 	protected String getAgentType(){
 		return "ComputingManager";
 	}
-	
-	@Override
-    public Ontology getOntology() {
-        return DescriptionOntology.getInstance();
-    }
-
 		
 }
 
@@ -117,7 +111,7 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 			e.printStackTrace();
 		}
             
-    	
+  
         ACLMessage reply = request.createReply();
         
     	if (object instanceof ExecuteExperiment) {

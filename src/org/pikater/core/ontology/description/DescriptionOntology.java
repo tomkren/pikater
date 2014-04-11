@@ -6,7 +6,7 @@ import jade.content.onto.Ontology;
 /**
  * Created by Martin Pilat on 27.12.13.
  */
-public class DescriptionOntology extends BeanOntology{
+public class DescriptionOntology extends BeanOntology {
 
     private DescriptionOntology() {
         super("DescriptionOntology");

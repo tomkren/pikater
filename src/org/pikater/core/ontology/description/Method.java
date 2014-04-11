@@ -6,6 +6,8 @@ public class Method  implements Concept {
 	
 	String method;
 
+	public Method() {}
+	
 	public Method(String method) {
 		this.method = method;
 	}

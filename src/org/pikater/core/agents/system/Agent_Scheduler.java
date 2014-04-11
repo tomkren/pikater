@@ -1,55 +1,32 @@
 package org.pikater.core.agents.system;
 
-import java.io.IOException;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
-import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.domain.DFService;
 import jade.domain.FIPAException;
-import jade.domain.FIPANames;
 import jade.domain.FIPAService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.JADEAgentManagement.JADEManagementOntology;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
-import jade.util.leap.List;
-import jade.wrapper.AgentController;
-import jade.wrapper.ContainerController;
-import jade.wrapper.StaleProxyException;
 
-import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
-import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.FileVisualizer;
-import org.pikater.core.ontology.description.IComputationElement;
-import org.pikater.core.ontology.description.Method;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
-import org.pikater.core.ontology.messages.MessagesOntology;
-import org.pikater.core.ontology.messages.SendEmail;
-import org.pikater.core.ontology.messages.Solve;
-import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 
 
 public class Agent_Scheduler extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7226837600070711675L;
 
-	
+
 	@Override
 	protected void setup() {
 
@@ -58,67 +35,14 @@ public class Agent_Scheduler extends PikaterAgent {
 		initDefault();
 		registerWithDF("Scheduler");
 
+		this.getContentManager().registerLanguage(getCodec());
+		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+
 
 		RecieveExperiment recieveExp =
-			new RecieveExperiment(this, this.getCodec(), this.getOntology());
+			new RecieveExperiment(this, getCodec());
 		addBehaviour(recieveExp);
 
-/*********REMOVE DOWN********/
-
-        FileDataProvider fileDataProvider = new FileDataProvider();
-        fileDataProvider.setFileURI("weather.arff");
-
-        DataSourceDescription fileDataSource = new DataSourceDescription();
-        fileDataSource.setDataProvider(fileDataProvider);
-
-		ComputingAgent comAgent = new ComputingAgent();
-		comAgent.setTrainingData(fileDataSource);
-		comAgent.setModelClass(new Method("pikater.agents.computing.Agent_WekaCA") );
-
-		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setDataProvider(comAgent);
-
-        FileVisualizer visualizer = new FileVisualizer();
-        visualizer.setDataSource(computingDataSource);
-
-        ComputationDescription comDescription = new ComputationDescription();
-		comDescription.setRootElement(visualizer);
-
-
-		ExecuteExperiment executeExpAction = new ExecuteExperiment(comDescription);
-
-		try {
-			Thread.sleep(9000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-        AID receiver = new AID("ComputingManager", false);		
-
-        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-        msg.addReceiver(receiver);
-        msg.setLanguage(getCodec().getName());
-        msg.setOntology(getOntology().getName());
-        try {
-			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
-			this.addBehaviour(new SendProblemToCompManager(this, msg) );
-			
-			//ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
-			//System.out.println("Reply: " + reply.getContent());
-			
-		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-/*********REMOVE UP********/
-
-	  	// Make this agent terminate
-	  	//doDelete();
 	}
 
 
@@ -127,11 +51,6 @@ public class Agent_Scheduler extends PikaterAgent {
 		return "Scheduler";
 	}
 
-	@Override
-    public Ontology getOntology() {
-        return DescriptionOntology.getInstance();
-    }
-
 }
 
 
@@ -139,17 +58,17 @@ class RecieveExperiment extends CyclicBehaviour {
 
 	private Agent agent = null;
 	private Codec codec = null;
-	private Ontology ontology = null;
 	
-	public RecieveExperiment(Agent agent, Codec codec, Ontology ontology) {
+	public RecieveExperiment(Agent agent, Codec codec) {
 		this.agent = agent;
 		this.codec = codec;
-		this.ontology = ontology;
 	}
 
 	public void action() {
 
-		ACLMessage request= this.agent.receive();
+		MessageTemplate reguestTemplate = 
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+		ACLMessage request= this.agent.receive(reguestTemplate);
 		
 		if (request != null) {
 			
@@ -167,6 +86,7 @@ class RecieveExperiment extends CyclicBehaviour {
 				return;
 			}
            
+			System.out.println(agent.getName() + ": Agent recieved ComputingDescription from " + request.getSender().getName() );
 			ExecuteExperiment exeExperiment = (ExecuteExperiment) act.getAction();
             ComputationDescription compDescription = exeExperiment.getDescription();
             
@@ -179,6 +99,8 @@ class RecieveExperiment extends CyclicBehaviour {
 
             AID receiver = new AID("ComputingManager", false);		
 
+            Ontology ontology = DescriptionOntology.getInstance();
+            
             ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
             msg.addReceiver(receiver);
             msg.setLanguage(codec.getName());
@@ -187,8 +109,8 @@ class RecieveExperiment extends CyclicBehaviour {
     			agent.getContentManager().fillContent(msg, new Action(receiver, exeExperiment));
     			agent.addBehaviour(new SendProblemToCompManager(agent, msg) );
     			
-    			//ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
-    			//System.out.println("Reply: " + reply.getContent());
+    			ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg, 10000);
+    			System.out.println("Reply: " + replyOK.getContent());
     			
     		} catch (CodecException e) {
     			// TODO Auto-generated catch block
@@ -196,7 +118,10 @@ class RecieveExperiment extends CyclicBehaviour {
     		} catch (OntologyException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
-    		}
+    		} catch (FIPAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 	}
