@@ -8,6 +8,13 @@ public class DataResource extends Resource
 	 */
 	public final ParamResource sourceSpecification;
 	
+	public DataResource(String description)
+	{
+		super(description);
+		
+		this.sourceSpecification = null;
+	}
+	
 	public DataResource(ParamResource sourceSpecification, String description)
 	{
 		super(description);
