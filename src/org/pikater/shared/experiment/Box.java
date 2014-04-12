@@ -5,21 +5,23 @@ import java.util.ArrayList;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.slots.AbstractSlot;
 
+/**
+ * An intermediate box format used in the universal computation model.
+ */
 public class Box {
 
-	private String name = "";
-	private Class agentClass = null;
-	private String picture = "";
-	private String description = "";
+	private Class<? extends Object> ontology = null;
+	private Class<? extends Object> agentClass = null;
 	
-	private Class ontology = null;
-	private BoxType type;
+	private String name = null;
+	private BoxType type = null;
+	private String picture = null;
+	private String description = null;
 	
 	private ArrayList<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
 	private ArrayList<AbstractSlot> inputSlots = new ArrayList<AbstractSlot>();
 	private ArrayList<AbstractSlot> outputSlots = new ArrayList<AbstractSlot>();
-
-
+	
 	public String getName() {
 		return name;
 	}
@@ -27,10 +29,10 @@ public class Box {
 		this.name = name;
 	}
 
-	public Class getAgentClass() {
+	public Class<? extends Object> getAgentClass() {
 		return agentClass;
 	}
-	public void setAgentClass(Class agentClass) {
+	public void setAgentClass(Class<? extends Object> agentClass) {
 		this.agentClass = agentClass;
 	}
 
@@ -48,10 +50,10 @@ public class Box {
 		this.description = description;
 	}
 
-	public Class getOntology() {
+	public Class<? extends Object> getOntology() {
 		return ontology;
 	}
-	public void setOntology(Class ontology) {
+	public void setOntology(Class<? extends Object> ontology) {
 		this.ontology = ontology;
 	}
 
