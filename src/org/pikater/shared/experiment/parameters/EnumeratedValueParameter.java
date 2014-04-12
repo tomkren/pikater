@@ -2,6 +2,9 @@ package org.pikater.shared.experiment.parameters;
 
 import java.util.ArrayList;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+@XStreamAlias("EnumeratedValueParameter")
 public class EnumeratedValueParameter<T> extends ValueParameter<T>
 {
     public final ArrayList<T> possibleValues;

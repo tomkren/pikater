@@ -7,6 +7,8 @@ import org.pikater.shared.experiment.resources.ParamResource;
 import org.pikater.shared.experiment.resources.Resource;
 import org.pikater.shared.util.InstanceSet;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 /**
  * Main slot type representing one to many connections.
  * Each instance creating static method provides a description field to programmatically assign semantic meaning to slots but
@@ -18,8 +20,10 @@ public class ArraySlot extends AbstractSlot
 	 * It is important to use instance set here. AbstractSlot overrides the equals method and all slots
 	 * added to this field are expected/required to be equal (in the sense of "slot1.equals(slot2)").
 	 */
+	@XStreamOmitField
 	private final InstanceSet<AbstractSlot> connectedSlots;
 	
+	@XStreamOmitField
 	private final int capacity;
 	
 	protected ArraySlot(SlotContent content, int capacity, Resource resource)

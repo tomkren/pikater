@@ -1,5 +1,8 @@
 package org.pikater.shared.experiment.parameters;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+@XStreamAlias("ValueParameter")
 public class ValueParameter<T> extends AbstractParameter
 {
 	private T value;

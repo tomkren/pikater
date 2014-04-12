@@ -2,6 +2,9 @@ package org.pikater.shared.experiment.parameters;
 
 import org.pikater.shared.util.Interval;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+@XStreamAlias("RangedValueParameter")
 public class RangedValueParameter<T extends Comparable<T>> extends ValueParameter<T>
 {
     public final Interval<T> range;
