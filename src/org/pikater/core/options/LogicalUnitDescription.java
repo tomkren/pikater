@@ -17,6 +17,7 @@ import com.thoughtworks.xstream.XStream;
 
 public class LogicalUnitDescription
 {
+	// TODO: use AppHelper instead?
 	public static String filePath = System.getProperty("user.dir")
 			+ System.getProperty("file.separator") + "src"
 			+ System.getProperty("file.separator") + "org"
@@ -88,6 +89,8 @@ public class LogicalUnitDescription
 
 	public void exportXML() throws FileNotFoundException
 	{
+		// TODO: initialize XStream variable just once, with automatically processed aliases?
+		// TODO: see OptionXMLSerializer
 
 		System.out.println("Exporting: " + this.getClass().getSimpleName() + ".xml");
 
@@ -121,6 +124,9 @@ public class LogicalUnitDescription
 
 	public static LogicalUnitDescription importXML(File configFile) throws FileNotFoundException
 	{
+		// TODO: initialize XStream variable just once, with automatically processed aliases?
+		// TODO: see OptionXMLSerializer
+		
 		System.out.println("Importing: " + configFile.getName());
 
 		Scanner scanner = new Scanner(configFile);

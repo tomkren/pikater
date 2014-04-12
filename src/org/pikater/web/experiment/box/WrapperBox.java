@@ -3,7 +3,6 @@ package org.pikater.web.experiment.box;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.experiment.Box;
 import org.pikater.shared.experiment.BoxType;
 

@@ -1,15 +1,10 @@
 package org.pikater.shared.experiment;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.pikater.core.options.BoxesExporter;
-import org.pikater.core.options.LogicalUnitDescription;
-import org.pikater.shared.AppConfig;
-import org.pikater.web.experiment.box.LeafBox;
 
+// TODO: merge this with BoxesExporter. Pointless to have 2 classes do the same.
 public final class BoxLoader {
 
 	private BoxesExporter exporter = null;

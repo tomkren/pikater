@@ -9,6 +9,7 @@ import org.pikater.core.options.LogicalBoxDescription;
 import org.pikater.core.options.LogicalUnitDescription;
 import org.reflections.Reflections;
 
+// TODO: rename to something simple like "Exporter"?
 public final class AAA_LogicalUnitsXMLGenerator
 {
 	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, SecurityException,

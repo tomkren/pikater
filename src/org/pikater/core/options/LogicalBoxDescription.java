@@ -1,19 +1,5 @@
 package org.pikater.core.options;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
-import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.experiment.parameters.ValueParameter;
-import org.pikater.shared.util.Interval;
-
-import com.thoughtworks.xstream.XStream;
-
-import jade.core.Agent;
-
-
 public class LogicalBoxDescription extends LogicalUnitDescription {
 
 	private static String NONAME = "NoName";

@@ -15,7 +15,7 @@ import org.pikater.core.ontology.description.Search;
 import org.pikater.shared.experiment.Box;
 import org.pikater.shared.experiment.BoxType;
 
-
+// TODO: this class is pointless... merge with BoxLoader or OptionLoader in the "shared" package.
 public class BoxesExporter {
 
 	private ArrayList<LogicalBoxDescription> logicalBoxes =

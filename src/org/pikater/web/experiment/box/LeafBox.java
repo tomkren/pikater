@@ -3,7 +3,6 @@ package org.pikater.web.experiment.box;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.experiment.Box;
 import org.pikater.shared.experiment.parameters.AbstractParameter;
 import org.pikater.shared.experiment.resources.ParamResource;
@@ -13,14 +12,6 @@ import org.pikater.shared.experiment.slots.SimpleSlot;
 
 public class LeafBox extends AbstractBox
 {
-	public enum LeafBoxCategory
-	{
-		INPUT,
-		SEARCHER,
-		COMPUTING,
-		VISUALIZER
-	};
-	
 	public enum ParameterVisibility
 	{
 		USER_EDITABLE,
