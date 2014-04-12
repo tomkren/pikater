@@ -2,9 +2,10 @@
   <rootElement type="FileVisualizer">
     <dataSource>
       <dataProvider type="ComputingAgent">
-        <modelClass>
-          <method>org.pikater.core.agents.experiment.computing.Agent_WekaCA</method>
-        </modelClass>
+        <modelClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</modelClass>
+        <method>
+          <method>RBFNetwork</method>
+        </method>
         <trainingData>
           <dataProvider type="FileDataProvider">
             <fileURI>weather.arff</fileURI>

@@ -65,9 +65,6 @@ public class Agent_ComputingManager extends PikaterAgent {
 				new ComputingManagerBehaviour(this, getCodec(), getOntology());
         addBehaviour(compBehaviour);
 
-		
-	  	// Make this agent terminate
-	  	//doDelete();
 	}
 	
 	@Override
@@ -301,7 +298,7 @@ class ComputingDescriptionParser {
     	
     	return this.process(dataProvider);
     }
-    
+
     public String process (FileDataProvider file) {
 
     	System.out.println("Ontology Parser - FileDataProvider");

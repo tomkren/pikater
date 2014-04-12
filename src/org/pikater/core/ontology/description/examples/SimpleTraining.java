@@ -1,5 +1,6 @@
 package org.pikater.core.ontology.description.examples;
 
+import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.ontology.description.*;
 
 import java.util.ArrayList;
@@ -19,7 +20,8 @@ public class SimpleTraining {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
-        ca.setModelClass(new Method("whatever.mlp.is.in.MLP"));
+        ca.setModelClass(Agent_WekaCA.class.getName());
+        ca.setMethod(new Method("whatever.mlp.is.in.MLP"));
 
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new DoubleParameter("L", 0.001));

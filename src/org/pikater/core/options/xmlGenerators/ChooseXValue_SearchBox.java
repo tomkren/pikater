@@ -11,7 +11,7 @@ public class ChooseXValue_SearchBox extends LogicalBoxDescription {
 	
 	protected ChooseXValue_SearchBox() {
 		super(
-				"Choose X Values Agent",
+			"Choose X Values Agent",
 		        Search.class,
 		        "Search which Choose X Values"
 		        );

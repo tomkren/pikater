@@ -164,7 +164,7 @@ public abstract class PikaterAgent extends Agent {
            Object[] args=getArguments();
             initDefault(args);
     }
-    
+
     public void initDefault(Object[] args)
     {
         parseArguments(args);
@@ -172,15 +172,15 @@ public abstract class PikaterAgent extends Agent {
         // this bean provides JPA database access to the agent, which can create EntityManagers as needed (and should close them when done)
         //emf = (LocalEntityManagerFactoryBean)(context.getBean(DATAMODEL_BEAN));
         //emf = new org.springframework.orm.jpa.LocalEntityManagerFactoryBean();
-        
+
         EntityManagerFactoryInfo emfi = (EntityManagerFactoryInfo)(context.getBean(DATAMODEL_BEAN));
         emf = emfi.getNativeEntityManagerFactory();
-        
-        
+
+
         //org.springframework.orm.jpa.LocalEntityManagerFactoryBean loc = (LocalEntityManagerFactoryBean) context.getBean(DATAMODEL_BEAN);
         //loc.setPersistenceUnitName("pikaterDataModel");
         //emf=loc.getNativeEntityManagerFactory();
-        
+
         log("is alive...", 1);
         getContentManager().registerLanguage(getCodec());
         getContentManager().registerOntology(getOntology());

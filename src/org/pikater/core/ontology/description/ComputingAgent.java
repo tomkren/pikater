@@ -7,25 +7,32 @@ import java.util.ArrayList;
  */
 public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorProvider {
 
-    Method modelClass;
+	String modelClass;
+	Method method;
+    
     ArrayList<Parameter> parameters;
 
     DataSourceDescription trainingData;
     DataSourceDescription testingData;
     DataSourceDescription validationData;
 
-    public Method getModelClass() {
-        return modelClass;
-    }
+    public String getModelClass() {
+		return modelClass;
+	}
+	public void setModelClass(String modelClass) {
+		this.modelClass = modelClass;
+	}
 
-    public void setModelClass(Method modelClass) {
-        this.modelClass = modelClass;
-    }
+	public Method getMethod() {
+		return method;
+	}
+	public void setMethod(Method method) {
+		this.method = method;
+	}
 
     public ArrayList<Parameter> getParameters() {
         return parameters;
     }
-
     public void setParameters(ArrayList<Parameter> parameters) {
         this.parameters = parameters;
     }
@@ -33,7 +40,6 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
     public DataSourceDescription getTrainingData() {
         return trainingData;
     }
-
     public void setTrainingData(DataSourceDescription trainingData) {
         this.trainingData = trainingData;
     }
@@ -41,7 +47,6 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
     public DataSourceDescription getTestingData() {
         return testingData;
     }
-
     public void setTestingData(DataSourceDescription testingData) {
         this.testingData = testingData;
     }
@@ -49,8 +54,8 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
     public DataSourceDescription getValidationData() {
         return validationData;
     }
-
     public void setValidationData(DataSourceDescription validationData) {
         this.validationData = validationData;
     }
+    
 }

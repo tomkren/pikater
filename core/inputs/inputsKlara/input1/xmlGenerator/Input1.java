@@ -1,22 +1,16 @@
-package org.pikater.core;
+package input1.xmlGenerator;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
-import org.pikater.core.agents.system.Agent_GUI;
+import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileVisualizer;
 import org.pikater.core.ontology.description.Method;
-import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.experiment.parameters.ValueParameter;
-import org.pikater.shared.util.Interval;
 
-import com.thoughtworks.xstream.XStream;
 
 public final class Input1 {
 
@@ -33,10 +27,11 @@ public final class Input1 {
 
         Class<Agent_WekaCA> comAgentClass =
         		org.pikater.core.agents.experiment.computing.Agent_WekaCA.class;
-        
+
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setTrainingData(fileDataSource);
-		comAgent.setModelClass(new Method(comAgentClass.getName()));
+		comAgent.setModelClass(Agent_WekaCA.class.getName());
+		comAgent.setMethod(new Method("RBFNetwork"));
 
 		DataSourceDescription computingDataSource = new DataSourceDescription();
 		computingDataSource.setDataProvider(comAgent);
@@ -50,7 +45,7 @@ public final class Input1 {
 		
 
 
-		String fileName = Agent_GUI.filePath + "input1"
+		String fileName = Agent_GUIKlara.filePath + "input1"
 				+ System.getProperty("file.separator")
 				+ "input1.xml";
 

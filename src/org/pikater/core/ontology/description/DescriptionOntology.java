@@ -12,7 +12,6 @@ public class DescriptionOntology extends BeanOntology {
         super("DescriptionOntology");
 
         String thisPackage = DescriptionOntology.class.getPackage().getName();
-        System.out.println("                   " + thisPackage);
         
         try {
             add(thisPackage);

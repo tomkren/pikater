@@ -1,11 +1,11 @@
-package org.pikater.core;
+package input2.xmlGenerator;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.agents.experiment.search.Agent_ChooseXValues;
-import org.pikater.core.agents.system.Agent_GUI;
+import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
@@ -33,13 +33,11 @@ public final class Input2 {
 
         DataSourceDescription fileDataSource = new DataSourceDescription();
         fileDataSource.setDataProvider(fileDataProvider);
-
-        Class<Agent_WekaCA> comAgentClass =
-        		org.pikater.core.agents.experiment.computing.Agent_WekaCA.class;
         
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setTrainingData(fileDataSource);
-		comAgent.setModelClass(new Method(comAgentClass.getName()));
+		comAgent.setModelClass(Agent_WekaCA.class.getName());
+		comAgent.setMethod(new Method("RBFNetwork"));
 
 
 	    Class<Agent_ChooseXValues> searchClass =
@@ -63,7 +61,7 @@ public final class Input2 {
 
 
 
-		String fileName = Agent_GUI.filePath + "input2"
+		String fileName = Agent_GUIKlara.filePath + "input2"
 				+ System.getProperty("file.separator")
 				+ "input2.xml";
 
