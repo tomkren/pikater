@@ -12,6 +12,8 @@ import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
+import org.pikater.shared.database.jpa.JPAGlobalMetaData;
+import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
@@ -24,16 +26,18 @@ import weka.core.Instances;
 public class JPAMetaDataReader {
 	MetadataReader reader;
 	Metadata md=null;
+	Database db=null;
 	
-	public JPAMetaDataReader(){
+	public JPAMetaDataReader(Database database){
 		reader=new MetadataReader();
+		this.db=database;
 	}
 	
 	public void readFile(File file) throws FileNotFoundException, IOException{	
 		DataInstances data=new DataInstances();
 		data.fillWekaInstances(new Instances(new BufferedReader(new FileReader(file))));
 		md=reader.computeMetadata(data);
-		
+	/**
 		for (int i=md.getAttribute_metadata_list().size()-1;i>=0;i--)
         {
             AttributeMetadata att= (AttributeMetadata)md.getAttribute_metadata_list().get(i);
@@ -51,8 +55,15 @@ public class JPAMetaDataReader {
             	System.out.println(att.toString());
             }
         }
+        **/
 	}
 	
+	public JPAGlobalMetaData getJPAGlobalMetaData(){
+		JPAGlobalMetaData globMD=new JPAGlobalMetaData();
+		globMD.setNumberofInstances(md.getNumber_of_instances());
+		globMD.setDefaultTaskType(db.getOrCreateTaskTypeByName((md.getDefault_task())));
+		return globMD;
+	}
 	
 	public List<JPAAttributeMetaData> getJPAAttributeMetaData(){
 		

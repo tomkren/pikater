@@ -1,6 +1,7 @@
 package org.pikater.shared.utilities.pikaterDatabase;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -52,19 +53,56 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{				
 		
+		//this.createRolesAndUsers();
 		
-		this.createRolesAndUsers();
+		this.addWebDatasets();
 		
 		this.addIrisDataset();
 		
 		this.addWeatherDataset();
 		
 		this.addLinearDataset();
+		
+		/**
 
 		this.insertFinishedBatch();
 		
 		this.createFileMapping();
+		**/
 	}
+	
+	private void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
+		File dir=new File("core/datasets");
+		JPAUser user = database.getUserByLogin("stepan");
+		System.out.println("Target user: "+user.getLogin());
+		
+		File[] child=dir.listFiles();
+		for(File f : child){
+			if(f.isFile()){
+				try{
+				System.out.println("--------------------");
+				System.out.println("Dataset: "+f.getAbsolutePath());
+				JPAMetaDataReader mdr=new JPAMetaDataReader(database);
+				mdr.readFile(f);		
+				System.out.println("MD5 hash: "+database.getMD5Hash(f));
+			
+				JPADataSetLO dslo=database.saveDataSet(
+					user,
+					f,
+					f.getName(),
+					mdr.getJPAGlobalMetaData(),
+					mdr.getJPAAttributeMetaData()
+					);
+				System.out.println(dslo);
+				System.out.println("--------------------");
+				System.out.println();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	
 	private void addIrisDataset() throws SQLException, IOException, UserNotFoundException{
 		
@@ -73,7 +111,7 @@ public class DatabaseInitialisation {
 
 		File file = new File("core/data/files/25d7d5d689042a3816aa1598d5fd56ef");
 		
-		JPAMetaDataReader mdr=new JPAMetaDataReader();
+		JPAMetaDataReader mdr=new JPAMetaDataReader(database);
 		mdr.readFile(file);
 		
 				
@@ -97,7 +135,7 @@ public class DatabaseInitialisation {
 		
 		File weatherFile = new File("core/data/files/772c551b8486b932aed784a582b9c1b1");
 		
-		JPAMetaDataReader mdr=new JPAMetaDataReader();
+		JPAMetaDataReader mdr=new JPAMetaDataReader(database);
 		mdr.readFile(weatherFile);
 
 
@@ -118,7 +156,7 @@ public class DatabaseInitialisation {
 		
 		File linearFile = new File("core/data/files/dc7ce6dea5a75110486760cfac1051a5");
 		
-		JPAMetaDataReader mdr=new JPAMetaDataReader();
+		JPAMetaDataReader mdr=new JPAMetaDataReader(database);
 		mdr.readFile(linearFile);
 		
 		
@@ -268,7 +306,12 @@ public class DatabaseInitialisation {
 
 		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
 
-		DatabaseInitialisation data = new DatabaseInitialisation(emf,(PGConnection)(new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "a").getConnection()));
+		DatabaseInitialisation data = new DatabaseInitialisation(
+				emf,(PGConnection)(
+						new PostgreSQLConnectionProvider(
+								"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
+								"pikater",
+								"a").getConnection()));
 		data.itialisationData();
 
 		

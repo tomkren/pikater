@@ -207,6 +207,16 @@ public class Database {
 			cleanUpEntityManager();
 		}
 	}
+	
+	public JPATaskType getOrCreateTaskTypeByName(String name){
+		JPATaskType tt=this.getTaskTypeByName(name);
+		if(tt==null){
+			return this.createTaskType(name);
+		}else{
+			return tt;
+		}
+		
+	}
 
 	
 	public void addUserPriviledge(JPAUserPriviledge userPriviledge){
