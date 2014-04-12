@@ -30,6 +30,7 @@ import org.pikater.shared.database.jpa.JPATaskType;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
+import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 
 public class Database {
 
@@ -984,6 +985,25 @@ public class Database {
 		((java.sql.Connection) connection).setAutoCommit(true);
 		return buf;
 	}
+	
+	/**
+	 * Returns a PostgreLargeObjectReader object for the DataSet stored in the database,
+	 * if there exists a dataset in the DB for the given hash. 
+	 * @param hash The hash of the dataset
+	 * @return The Reader for the dataset in the database
+	 */
+	public PostgreLargeObjectReader getLargeObjectReader(String hash){
+		try {
+			em = emf.createEntityManager();
+			Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.hash=:hashString");
+			q.setParameter("hashString", hash);
+			JPADataSetLO dslo=(JPADataSetLO) q.getSingleResult();
+			return new PostgreLargeObjectReader(connection, dslo.getOID());
+		} finally {
+			cleanUpEntityManager();
+		}
+	}
+	
 
 	/**
 	 * The function persists the given object to the database using Java
