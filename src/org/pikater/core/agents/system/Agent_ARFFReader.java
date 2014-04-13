@@ -37,14 +37,8 @@ public class Agent_ARFFReader extends PikaterAgent {
 			return false;
 		}
 		
-		//TODO: jen hack aby to nepadalo
-		// Agent_DataManager.dataPath - tady by se dala vzit konstanta - je public static
-		String path = "core/";
-		if (fileName.startsWith("data/files")) {
-			path += fileName;
-		} else {
-			path = Agent_DataManager.dataPath + fileName;
-		}
+		int lastSlash = Math.max(Math.max(fileName.lastIndexOf("/"), fileName.lastIndexOf("\\")), 0);
+		String path = Agent_DataManager.dataPath + fileName.substring(lastSlash);
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
