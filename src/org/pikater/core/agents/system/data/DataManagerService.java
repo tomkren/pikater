@@ -1,5 +1,6 @@
 package org.pikater.core.agents.system.data;
 
+import java.io.File;
 import java.util.Date;
 
 import jade.content.lang.Codec;
@@ -16,6 +17,11 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
+
+import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.Agent_DataManager;
+import org.pikater.core.ontology.data.DataOntology;
+import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.GetFileInfo;
@@ -147,6 +153,28 @@ public class DataManagerService extends FIPAService {
 			e.printStackTrace();
 		}
 
+	}
+	
+	/** Makes sure the file is present in the cache or gets it from the (remote) database. */
+	public static void ensureCached(PikaterAgent agent, String filename) {
+		agent.log("making sure file "+filename+" is present");
+		if (new File(Agent_DataManager.dataPath+filename).exists())
+			return;
+		agent.log("getting file "+filename+" from dataManager");
+		GetFile gf = new GetFile();
+		gf.setHash(filename);
+
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.addReceiver(new AID("dataManager", false));
+		request.setOntology(DataOntology.getInstance().getName());
+		request.setLanguage(codec.getName());
+		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		try {
+			agent.getContentManager().fillContent(request, new Action(agent.getAID(), gf));
+			FIPAService.doFipaRequestClient(agent, request);
+		} catch (CodecException | OntologyException | FIPAException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void saveMetadata(Agent agent, Metadata m) {

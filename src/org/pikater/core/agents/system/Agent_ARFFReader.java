@@ -14,6 +14,9 @@ import jade.proto.AchieveREResponder;
 import jade.wrapper.ContainerController;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
+import org.pikater.core.ontology.data.DataOntology;
+import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.GetData;
 
@@ -32,13 +35,12 @@ public class Agent_ARFFReader extends PikaterAgent {
 	// data read from file
 	protected Instances data;
 
-	boolean ReadFromFile(String fileName) {
-		if (fileName == null || fileName.length() == 0) {
+	boolean ReadFromFile(String relativeFileName) {
+		if (relativeFileName == null || relativeFileName.length() == 0) {
 			return false;
 		}
 		
-		int lastSlash = Math.max(Math.max(fileName.lastIndexOf("/"), fileName.lastIndexOf("\\")), 0);
-		String path = Agent_DataManager.dataPath + fileName.substring(lastSlash);
+		String path = Agent_DataManager.dataPath + relativeFileName;
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
@@ -63,6 +65,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 		registerWithDF();
+		getContentManager().registerOntology(DataOntology.getInstance());
 
 		MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		addBehaviour(new GetDataResponder(this, template));
@@ -76,6 +79,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 			ContentElement content = getContentManager().extractContent(request);
 			GetData gd = (GetData) ((Action) content).getAction();
 			String file_name = gd.getFile_name();
+			int lastSlash = Math.max(Math.max(file_name.lastIndexOf("/"), file_name.lastIndexOf("\\")), 0);
+			file_name = file_name.substring(lastSlash); // trim to relative
+			DataManagerService.ensureCached(this, file_name);
 			DataInstances instances = new DataInstances();
 			// Read the file
 			boolean file_read = ReadFromFile(file_name);
