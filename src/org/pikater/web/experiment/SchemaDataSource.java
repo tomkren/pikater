@@ -43,7 +43,7 @@ public class SchemaDataSource
 	/**
 	 * IDs of boxes that encapsulate the default (top-level) schema view.
 	 */
-	private final Collection<Integer> topLevelView;
+	private final Collection<Integer> topLevelView; // TODO: compute this automatically and remove the field
 	
 	public SchemaDataSource()
 	{
@@ -71,7 +71,7 @@ public class SchemaDataSource
 	
 	public Collection<Integer> getIDsOfTopLevelBoxes()
 	{
-		return topLevelView; // TODO: compute this automatically and remove the field
+		return topLevelView;
 	}
 
 	public Collection<Integer> getIDsOfLeafBoxes()
