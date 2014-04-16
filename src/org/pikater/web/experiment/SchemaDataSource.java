@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.pikater.shared.experiment.parameters.AbstractParameter;
+import org.pikater.shared.experiment.options.AbstractOption;
 import org.pikater.shared.experiment.resources.Resource;
 import org.pikater.shared.experiment.slots.AbstractSlot;
 import org.pikater.shared.util.BidiMap;
@@ -33,7 +33,7 @@ public class SchemaDataSource
 	/**
 	 * The collection holding all defined global parameters that are going to travel from providers to leaf consumers.
 	 */
-	private final Collection<AbstractParameter> globalParameters; // TODO: integrate this functionality
+	private final Collection<AbstractOption> globalParameters; // TODO: integrate this functionality
 	
 	/**
 	 * Used for the bidirectional map of boxes - generates unique Integer keys.
@@ -51,7 +51,7 @@ public class SchemaDataSource
 		
 		this.allBoxes = new BidiMap<Integer, AbstractBox>();
 		this.edges = new HashMap<Integer, Set<Integer>>();
-		this.globalParameters = new ArrayList<AbstractParameter>();
+		this.globalParameters = new ArrayList<AbstractOption>();
 		this.idGenerator = new SimpleIDGenerator();
 		this.topLevelView = new ArrayList<Integer>();
 	}
@@ -64,7 +64,7 @@ public class SchemaDataSource
 		return allBoxes.valueSet();
 	}
 	
-	public Collection<AbstractParameter> getGlobalParameters()
+	public Collection<AbstractOption> getGlobalParameters()
 	{
 		return globalParameters;
 	}
@@ -107,7 +107,7 @@ public class SchemaDataSource
 		}
 	}
 	
-	public void addGlobalParameter(AbstractParameter parameter)
+	public void addGlobalParameter(AbstractOption parameter)
 	{
 		this.globalParameters.add(parameter);
 	}

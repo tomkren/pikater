@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.shared.experiment.Box;
-import org.pikater.shared.experiment.parameters.AbstractParameter;
+import org.pikater.shared.experiment.options.AbstractOption;
 import org.pikater.shared.experiment.resources.ParamResource;
 import org.pikater.shared.experiment.resources.Resource;
 import org.pikater.shared.experiment.slots.AbstractSlot;
@@ -31,7 +31,7 @@ public class LeafBox extends AbstractBox
 	 * The collection of parameters that ARE NOT taken from input slots and ARE editable by the user.
 	 * The map uses the "id" field of type @ParamInfo as key. See @ParamInfo for details.
 	 */
-	private final Map<ParamResource, AbstractParameter> editableNonInputParameters;
+	private final Map<ParamResource, AbstractOption> editableNonInputParameters;
 	
 	// -----------------------------------------------------------
 	// INTERNAL FIELDS NOT BEING DISPLAYED TO THE USER
@@ -41,7 +41,7 @@ public class LeafBox extends AbstractBox
 	 * feature is useful for box inheritance and changing a select few parameters to ensure a different behaviour.
 	 * The map uses the "id" field of type @ParamInfo as key. See @ParamInfo for details.
 	 */
-	private final Map<ParamResource, AbstractParameter> internalParameters;
+	private final Map<ParamResource, AbstractOption> internalParameters;
 	
 	/**
 	 * Input slots defined by this box. By default, all underlying data is required to be provided by connected boxes (incoming edges).
@@ -60,8 +60,8 @@ public class LeafBox extends AbstractBox
 	{
 		super(boxConfig.getName(), boxConfig.getDescription(), boxConfig.getPicture(), boxConfig.getType());
 		
-		this.editableNonInputParameters = new HashMap<ParamResource, AbstractParameter>();
-		this.internalParameters = new HashMap<ParamResource, AbstractParameter>();
+		this.editableNonInputParameters = new HashMap<ParamResource, AbstractOption>();
+		this.internalParameters = new HashMap<ParamResource, AbstractOption>();
 		this.inputSlots = new HashMap<Resource, AbstractSlot>();
 		this.outputSlots = new HashMap<Resource, AbstractSlot>();
 	}
@@ -69,14 +69,14 @@ public class LeafBox extends AbstractBox
 	// ---------------------------------------------------------------------------
 	// PUBLIC GETTERS
 	
-	public Map<ParamResource, AbstractParameter> getParameters(ParameterVisibility visibility)
+	public Map<ParamResource, AbstractOption> getParameters(ParameterVisibility visibility)
 	{
 		switch (visibility)
 		{
 			case INTERNAL:
-				return new HashMap<ParamResource, AbstractParameter>(internalParameters);
+				return new HashMap<ParamResource, AbstractOption>(internalParameters);
 			case USER_EDITABLE:
-				return new HashMap<ParamResource, AbstractParameter>(editableNonInputParameters);
+				return new HashMap<ParamResource, AbstractOption>(editableNonInputParameters);
 			default:
 				throw new IllegalStateException();
 		}
@@ -111,7 +111,7 @@ public class LeafBox extends AbstractBox
 	// ---------------------------------------------------------------------------
 	// OTHER PUBLIC METHODS
 
-	public void addParameter(ParameterVisibility visibility, ParamResource paramInfo, AbstractParameter param)
+	public void addParameter(ParameterVisibility visibility, ParamResource paramInfo, AbstractOption param)
 	{
 		switch (visibility)
 		{
@@ -138,7 +138,7 @@ public class LeafBox extends AbstractBox
 	
 	public void addOutputSlotFromInternalParam(ParameterVisibility visibility, ParamResource paramResource)
 	{
-		Map<ParamResource, AbstractParameter> map = null;
+		Map<ParamResource, AbstractOption> map = null;
 		switch (visibility)
 		{
 			case INTERNAL:

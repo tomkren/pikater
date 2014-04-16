@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 
 import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.AppHelper;
-import org.pikater.shared.experiment.parameters.AbstractParameter;
+import org.pikater.shared.experiment.options.AbstractOption;
 import org.pikater.shared.experiment.slots.AbstractSlot;
 import org.pikater.shared.util.Interval;
 
@@ -25,7 +25,7 @@ public final class OptionXMLSerializer
 		{
 			serializer.processAnnotations(unit);
 		}
-		for (Class<? extends AbstractParameter> unit : AppHelper.getSubtypesFromSamePackage(AbstractParameter.class))
+		for (Class<? extends AbstractOption> unit : AppHelper.getSubtypesFromSamePackage(AbstractOption.class))
 		{
 			serializer.processAnnotations(unit);
 		}
