@@ -110,6 +110,8 @@ public class LogicalUnitDescription
 		xstream.alias("OptionDefault", OptionDefault.class);
 		xstream.alias("Option", StepanuvOption.class);
 
+		xstream.aliasSystemAttribute("type", "class");
+		
 		// TODO:
 		// xstream.alias("DataSlot", DataSlot.class);
 		// xstream.alias("ParameterSlot", ParameterSlot.class);
@@ -148,6 +150,8 @@ public class LogicalUnitDescription
 		xstream.alias("OptionDefault", OptionDefault.class);
 		xstream.alias("Option", StepanuvOption.class);
 
+		xstream.aliasSystemAttribute("type", "class");
+		
 		// TODO:
 		// xstream.alias("DataSlot", DataSlot.class);
 		// xstream.alias("ParameterSlot", ParameterSlot.class);

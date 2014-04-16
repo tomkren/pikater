@@ -1,0 +1,128 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <options>
+    <OptionDefault>
+      <name>C</name>
+      <description>Num The complexity</description>
+      <value>
+        <object type="float">1.0</object>
+      </value>
+      <interval>
+        <minValue type="float">1.0E-4</minValue>
+        <maxValue type="float">5.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>E</name>
+      <description>The exponent for the polynomial kernel</description>
+      <value>
+        <object type="int">1</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>G</name>
+      <description>Num Gamma for the RBF kernel</description>
+      <value>
+        <object type="float">0.01</object>
+      </value>
+      <interval>
+        <minValue type="float">1.0E-4</minValue>
+        <maxValue type="float">4.0</maxValue>
+      </interval>
+    </OptionDefault>
+    <OptionDefault>
+      <name>N</name>
+      <description>Num Gamma for the RBF kernel</description>
+      <value>
+        <object type="int">0</object>
+      </value>
+      <list>
+        <list>
+          <int>0</int>
+          <int>1</int>
+          <int>2</int>
+        </list>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>F</name>
+      <description>Feature-space normalization (only for non-linear polynomial kernels)</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>O</name>
+      <description>Use lower-order terms (only for non-linear polynomial kernels)</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>O</name>
+      <description>Use the RBF kernel</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>A</name>
+      <description>Sets the size of the kernel cache. Should be a prime number</description>
+      <value>
+        <object type="int">250007</object>
+      </value>
+      <interval>
+        <minValue type="int">0</minValue>
+        <maxValue type="int">2147483647</maxValue>
+      </interval>
+    </OptionDefault>
+    <OptionDefault>
+      <name>L</name>
+      <description>Sets the tolerance parameter</description>
+      <value>
+        <object type="float">0.001</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>P</name>
+      <description>Sets the epsilon for round-off error</description>
+      <value>
+        <object type="float">1.0E-12</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>M</name>
+      <description>Fit logistic models to SVM outputs</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>V</name>
+      <description>Number of folds for cross-validation used to generate data for logistic models. (default -1, use training data)</description>
+      <value>
+        <object type="int">-1</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>W</name>
+      <description>Random number seed for cross-validation</description>
+      <value>
+        <object type="int">1</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">2147483647</maxValue>
+      </interval>
+    </OptionDefault>
+  </options>
+  <inputSlots/>
+  <outputSlots/>
+  <name>SMO</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>SMO Method</description>
+</Box>

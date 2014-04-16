@@ -1,34 +1,52 @@
 <Box>
   <ontology>org.pikater.core.ontology.description.Search</ontology>
-  <parameters>
-    <RangedValueParameter>
-      <value class="int">10</value>
-      <range>
-        <min class="int">0</min>
-        <max class="int">100000</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="int">10</value>
-      <range>
-        <min class="int">0</min>
-        <max class="int">1000</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="float">1.0E-9</value>
-      <range>
-        <min class="float">0.0</min>
-        <max class="float">1000.0</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-  </parameters>
+  <options>
+    <OptionDefault>
+      <name>B</name>
+      <description>Maximum block size</description>
+      <value>
+        <object type="int">10</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">100000</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>N</name>
+      <description>Default number of tries</description>
+      <value>
+        <object type="int">10</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">100000</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>Z</name>
+      <description>Zero for logarithmic steps</description>
+      <value>
+        <object type="float">1.0E-9</object>
+      </value>
+      <interval>
+        <minValue type="float">0.0</minValue>
+        <maxValue type="float">1000.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+  </options>
   <inputSlots/>
   <outputSlots/>
-  <name>Agent_GridSearch</name>
+  <name>GridSearch</name>
   <agentClass>org.pikater.core.agents.experiment.search.Agent_GridSearch</agentClass>
   <picture>picture3.jpg</picture>
   <description>GridSearch Description</description>

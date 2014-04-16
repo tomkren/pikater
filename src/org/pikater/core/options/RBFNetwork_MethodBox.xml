@@ -1,0 +1,81 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <options>
+    <OptionDefault>
+      <name>B</name>
+      <description>Number of clusters</description>
+      <value>
+        <object type="int">2</object>
+      </value>
+      <interval>
+        <minValue type="int">2</minValue>
+        <maxValue type="int">1000</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>W</name>
+      <description>minStdDev</description>
+      <value>
+        <object type="float">0.1</object>
+      </value>
+      <interval>
+        <minValue type="float">0.01</minValue>
+        <maxValue type="float">2.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>R</name>
+      <description>Ridge (Set the Ridge value for the logistic or linear regression)</description>
+      <value>
+        <object type="float">1.0E-8</object>
+      </value>
+      <interval>
+        <minValue type="float">1.0E-9</minValue>
+        <maxValue type="float">10.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>S</name>
+      <description>The value used to seed the random number generator</description>
+      <value>
+        <object type="int">0</object>
+      </value>
+      <interval>
+        <minValue type="int">0</minValue>
+        <maxValue type="int">2147483647</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>M</name>
+      <description>Set the maximum number of iterations for the logistic regression</description>
+      <value>
+        <object type="int">-1</object>
+      </value>
+      <interval>
+        <minValue type="int">-1</minValue>
+        <maxValue type="int">50</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+  </options>
+  <inputSlots/>
+  <outputSlots/>
+  <name>RBFNetwork</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>RBFNetwork Method</description>
+</Box>

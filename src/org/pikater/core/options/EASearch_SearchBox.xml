@@ -1,74 +1,115 @@
 <Box>
   <ontology>org.pikater.core.ontology.description.Search</ontology>
-  <parameters>
-    <RangedValueParameter>
-      <value class="float">0.1</value>
-      <range>
-        <min class="float">0.0</min>
-        <max class="float">1.0</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="int">10</value>
-      <range>
-        <min class="int">1</min>
-        <max class="int">1000</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="float">0.2</value>
-      <range>
-        <min class="float">0.0</min>
-        <max class="float">1.0</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="float">0.5</value>
-      <range>
-        <min class="float">0.0</min>
-        <max class="float">1.0</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="int">10</value>
-      <range>
-        <min class="int">1</min>
-        <max class="int">100</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="int">100</value>
-      <range>
-        <min class="int">1</min>
-        <max class="int">100000</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="float">0.2</value>
-      <range>
-        <min class="float">0.0</min>
-        <max class="float">1.0</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-    <RangedValueParameter>
-      <value class="float">0.1</value>
-      <range>
-        <min class="float">0.0</min>
-        <max class="float">1.0</max>
-      </range>
-      <isStrict>true</isStrict>
-    </RangedValueParameter>
-  </parameters>
+  <options>
+    <OptionDefault>
+      <name>E</name>
+      <description>Minimum error rate</description>
+      <value>
+        <object type="float">0.1</object>
+      </value>
+      <interval>
+        <minValue type="float">0.0</minValue>
+        <maxValue type="float">1.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>M</name>
+      <description>Maximal number of generations</description>
+      <value reference="../../OptionDefault/value"/>
+      <interval reference="../../OptionDefault/interval"/>
+      <list reference="../../OptionDefault/list"/>
+    </OptionDefault>
+    <OptionDefault>
+      <name>T</name>
+      <description>Mutation rate</description>
+      <value>
+        <object type="float">0.2</object>
+      </value>
+      <interval>
+        <minValue type="float">0.0</minValue>
+        <maxValue type="float">1.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>X</name>
+      <description>Crossover probability</description>
+      <value>
+        <object type="float">0.5</object>
+      </value>
+      <interval>
+        <minValue type="float">0.0</minValue>
+        <maxValue type="float">1.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>P</name>
+      <description>Population size</description>
+      <value>
+        <object type="int">10</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">100</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>I</name>
+      <description>Maximum number of option evaluations</description>
+      <value>
+        <object type="int">10</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">100</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>F</name>
+      <description>Mutation rate per field in individual</description>
+      <value>
+        <object type="float">0.2</object>
+      </value>
+      <interval>
+        <minValue type="float">0.0</minValue>
+        <maxValue type="float">1.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>L</name>
+      <description>The percentage of elite individuals</description>
+      <value>
+        <object type="float">0.1</object>
+      </value>
+      <interval>
+        <minValue type="float">0.0</minValue>
+        <maxValue type="float">1.0</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+  </options>
   <inputSlots/>
   <outputSlots/>
-  <name>Agent_EASearch</name>
+  <name>EASearch</name>
   <agentClass>org.pikater.core.agents.experiment.search.Agent_EASearch</agentClass>
   <picture>picture3.jpg</picture>
   <description>Searcher using Evolution algorithm</description>

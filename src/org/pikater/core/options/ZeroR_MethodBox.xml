@@ -1,0 +1,10 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <options/>
+  <inputSlots/>
+  <outputSlots/>
+  <name>ZeroR</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>Zero R Method</description>
+</Box>

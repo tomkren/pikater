@@ -1,6 +1,6 @@
 <Box>
   <ontology>org.pikater.core.ontology.description.FileVisualizer</ontology>
-  <parameters/>
+  <options/>
   <inputSlots/>
   <outputSlots/>
   <name>FileVisualizer</name>

@@ -1,0 +1,99 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <options>
+    <OptionDefault>
+      <name>S</name>
+      <description>The amount up to which deviation are tolerated (epsilon)</description>
+      <value>
+        <object type="float">0.001</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>C</name>
+      <description>The complexity constant</description>
+      <value>
+        <object type="int">1</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>E</name>
+      <description>The exponent for the polynomial kernel</description>
+      <value>
+        <object type="int">1</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>G</name>
+      <description>Gamma for the RBF kernel</description>
+      <value>
+        <object type="float">0.01</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>N</name>
+      <description>Random number seed for cross-validation</description>
+      <value>
+        <object type="int">1</object>
+      </value>
+      <list>
+        <list>
+          <int>0</int>
+          <int>1</int>
+          <int>2</int>
+        </list>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>F</name>
+      <description>Feature-space normalization (only for non-linear polynomial kernels)</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>O</name>
+      <description>Use lower-order terms (only for non-linear polynomial kernels)</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>R</name>
+      <description>Use RBF kernel (default poly)</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>A</name>
+      <description>Sets the size of the kernel cache. Should be a prime number</description>
+      <value>
+        <object type="int">250007</object>
+      </value>
+      <interval>
+        <minValue type="int">0</minValue>
+        <maxValue type="int">2147483647</maxValue>
+      </interval>
+    </OptionDefault>
+    <OptionDefault>
+      <name>P</name>
+      <description>Sets the epsilon for round-off error</description>
+      <value>
+        <object type="float">1.0E-12</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>T</name>
+      <description>Sets the epsilon for round-off error</description>
+      <value>
+        <object type="float">0.001</object>
+      </value>
+    </OptionDefault>
+  </options>
+  <inputSlots/>
+  <outputSlots/>
+  <name>SMO Reg</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>SMOReg Method</description>
+</Box>

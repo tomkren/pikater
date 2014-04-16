@@ -1,0 +1,39 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <options>
+    <OptionDefault>
+      <name>I</name>
+      <description>Set the number of folder to use in the computing of the mutual information</description>
+      <value>
+        <object type="int">5</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">100</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>G</name>
+      <description>Set the number of attempts of generalisation</description>
+      <value>
+        <object type="int">5</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">50</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+  </options>
+  <inputSlots/>
+  <outputSlots/>
+  <name>NNge</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>NNge Method</description>
+</Box>

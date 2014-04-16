@@ -1,0 +1,53 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <options>
+    <OptionDefault>
+      <name>K</name>
+      <description>Sets the number of randomly chosen attributes</description>
+      <value>
+        <object type="int">1</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">50</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>M</name>
+      <description>The minimum total weight of the instances in a leaf</description>
+      <value>
+        <object type="int">0</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">100</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>Q</name>
+      <description>The random number seed used for selecting attributes</description>
+      <value>
+        <object type="int">1</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">2147483647</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+  </options>
+  <inputSlots/>
+  <outputSlots/>
+  <name>RandomTree</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>Random Tree Method</description>
+</Box>

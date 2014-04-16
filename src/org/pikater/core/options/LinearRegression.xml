@@ -1,26 +1,42 @@
 <LogicalUnit>
   <ontology>org.pikater.core.ontology.description.ComputingAgent</ontology>
-  <parameters>
-    <RangedValueParameter>
-      <value class="int">0</value>
-      <range>
-        <min class="int">0</min>
-        <max class="int">2</max>
-      </range>
-      <isStrict>false</isStrict>
-    </RangedValueParameter>
-    <ValueParameter>
-      <value class="boolean">true</value>
-    </ValueParameter>
-    <RangedValueParameter>
-      <value class="float">1.0E-8</value>
-      <range>
-        <min class="float">1.0E-10</min>
-        <max class="float">1.0E-4</max>
-      </range>
-      <isStrict>false</isStrict>
-    </RangedValueParameter>
-  </parameters>
+  <options>
+    <OptionDefault>
+      <name>S</name>
+      <description></description>
+      <value>
+        <object type="int">0</object>
+      </value>
+      <interval>
+        <minValue type="int">0</minValue>
+        <maxValue type="int">2</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>C</name>
+      <description></description>
+      <value>
+        <object type="boolean">true</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>R</name>
+      <description></description>
+      <value>
+        <object type="float">1.0E-8</object>
+      </value>
+      <interval>
+        <minValue type="float">1.0E-10</minValue>
+        <maxValue type="float">1.0E-4</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
+    </OptionDefault>
+  </options>
   <inputSlots/>
   <outputSlots/>
 </LogicalUnit>

@@ -1,10 +1,10 @@
 <Box>
   <ontology>org.pikater.core.ontology.description.DifferenceVisualizer</ontology>
-  <parameters/>
+  <options/>
   <inputSlots>
     <org.pikater.shared.experiment.slots.SimpleSlot>
       <content>DATA</content>
-      <resource class="org.pikater.shared.experiment.resources.DataResource">
+      <resource type="org.pikater.shared.experiment.resources.DataResource">
         <id>2</id>
         <description>Data parsed from the file provided by the &apos;param_inputFileName&apos; parameter.</description>
         <sourceSpecification>
@@ -13,11 +13,11 @@
         </sourceSpecification>
       </resource>
       <connectedSlots>
-        <instanceSet class="java.util.Collections$SetFromMap" serialization="custom">
+        <instanceSet type="java.util.Collections$SetFromMap" serialization="custom">
           <unserializable-parents/>
           <java.util.Collections_-SetFromMap>
             <default>
-              <m class="java.util.IdentityHashMap" serialization="custom">
+              <m type="java.util.IdentityHashMap" serialization="custom">
                 <unserializable-parents/>
                 <java.util.IdentityHashMap>
                   <default>
@@ -34,13 +34,13 @@
     </org.pikater.shared.experiment.slots.SimpleSlot>
     <org.pikater.shared.experiment.slots.SimpleSlot>
       <content>DATA</content>
-      <resource class="org.pikater.shared.experiment.resources.DataResource" reference="../../org.pikater.shared.experiment.slots.SimpleSlot/resource"/>
+      <resource type="org.pikater.shared.experiment.resources.DataResource" reference="../../org.pikater.shared.experiment.slots.SimpleSlot/resource"/>
       <connectedSlots>
-        <instanceSet class="java.util.Collections$SetFromMap" serialization="custom">
+        <instanceSet type="java.util.Collections$SetFromMap" serialization="custom">
           <unserializable-parents/>
           <java.util.Collections_-SetFromMap>
             <default>
-              <m class="java.util.IdentityHashMap" serialization="custom">
+              <m type="java.util.IdentityHashMap" serialization="custom">
                 <unserializable-parents/>
                 <java.util.IdentityHashMap>
                   <default>
