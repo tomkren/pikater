@@ -6,12 +6,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.pikater.shared.experiment.parameters.AbstractParameter;
-import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.experiment.parameters.ValueParameter;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.StepanuvOption;
+import org.pikater.core.ontology.options.types.AbstractOption;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.shared.experiment.slots.AbstractSlot;
-import org.pikater.shared.util.Interval;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -28,7 +29,7 @@ public class LogicalUnitDescription
 	
 	protected Class ontology = null;
 	
-	private ArrayList<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
+	private ArrayList<OptionDefault> options = new ArrayList<OptionDefault>();
 	private ArrayList<AbstractSlot> inputSlots = new ArrayList<AbstractSlot>();
 	private ArrayList<AbstractSlot> outputSlots = new ArrayList<AbstractSlot>();
 
@@ -47,14 +48,14 @@ public class LogicalUnitDescription
 		this.ontology = ontology;
 	}
 
-	public ArrayList<AbstractParameter> getParameters()
+	public ArrayList<OptionDefault> getParameters()
 	{
-		return parameters;
+		return options;
 	}
 
-	public void addParameter(AbstractParameter parameter)
+	public void addParameter(OptionDefault parameter)
 	{
-		this.parameters.add(parameter);
+		this.options.add(parameter);
 	}
 
 	public ArrayList<AbstractSlot> getInputSlots()
@@ -101,11 +102,13 @@ public class LogicalUnitDescription
 			xstream.alias("LogicalUnit", this.getClass());
 		}
 
-		xstream.alias("EnumeratedValueParameter", EnumeratedValueParameter.class);
-		xstream.alias("RangedValueParameter", RangedValueParameter.class);
-		xstream.alias("ValueParameter", ValueParameter.class);
-
-		xstream.alias("Interval", Interval.class);
+		xstream.alias("AbstractOption", AbstractOption.class);
+		xstream.alias("OptionInterval", OptionInterval.class);
+		xstream.alias("OptionList", OptionList.class);
+		xstream.alias("OptionValue", OptionValue.class);
+		
+		xstream.alias("OptionDefault", OptionDefault.class);
+		xstream.alias("Option", StepanuvOption.class);
 
 		// TODO:
 		// xstream.alias("DataSlot", DataSlot.class);
@@ -137,11 +140,13 @@ public class LogicalUnitDescription
 		xstream.alias("LogicalUnit", LogicalUnitDescription.class);
 		xstream.alias("Box", LogicalBoxDescription.class);
 
-		xstream.alias("EnumeratedValueParameter", EnumeratedValueParameter.class);
-		xstream.alias("RangedValueParameter", RangedValueParameter.class);
-		xstream.alias("ValueParameter", ValueParameter.class);
-
-		xstream.alias("Interval", Interval.class);
+		xstream.alias("AbstractOption", AbstractOption.class);
+		xstream.alias("OptionInterval", OptionInterval.class);
+		xstream.alias("OptionList", OptionList.class);
+		xstream.alias("OptionValue", OptionValue.class);
+		
+		xstream.alias("OptionDefault", OptionDefault.class);
+		xstream.alias("Option", StepanuvOption.class);
 
 		// TODO:
 		// xstream.alias("DataSlot", DataSlot.class);

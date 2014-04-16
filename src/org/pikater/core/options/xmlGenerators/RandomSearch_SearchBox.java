@@ -2,12 +2,11 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.description.Search;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.core.options.LogicalUnitDescription;
-import org.pikater.shared.experiment.BoxType;
-import org.pikater.shared.experiment.parameters.AbstractParameter;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.util.Interval;
 
 public class RandomSearch_SearchBox extends LogicalBoxDescription {
 
@@ -20,10 +19,27 @@ public class RandomSearch_SearchBox extends LogicalBoxDescription {
 		this.setPicture("picture1.jpg");
 		this.setAgentName(Agent_RandomSearch.class);
 
-		AbstractParameter paramE = new RangedValueParameter<Double>(0.01, new Interval<Double>(0.0, 1.0), false);
-		AbstractParameter paramM = new RangedValueParameter<Integer>(10, new Interval<Integer>(1, 100000), false);
 
-		this.addParameter(paramE);
-		this.addParameter(paramM);
+		OptionDefault optionE = new OptionDefault();
+		optionE.setName("E");
+		optionE.setDescription("E");
+		optionE.setValue(
+				new OptionValue( new Double(0.01)) );
+		optionE.setInterval(
+				new OptionInterval(new Double(0.0), new Double(1.0)) );
+		optionE.setList( new OptionList() );
+		
+		
+		OptionDefault optionM = new OptionDefault();
+		optionM.setName("M");
+		optionM.setDescription("M");
+		optionM.setValue(
+				new OptionValue( new Integer(10)) );
+		optionM.setInterval(
+				new OptionInterval(new Integer(1), new Integer(100000)) );
+		optionM.setList( new OptionList() );
+		
+		this.addParameter(optionE);
+		this.addParameter(optionM);
 	}
 }

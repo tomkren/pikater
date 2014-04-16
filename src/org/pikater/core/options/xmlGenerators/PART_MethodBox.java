@@ -5,11 +5,11 @@ import java.util.Arrays;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.experiment.parameters.ValueParameter;
-import org.pikater.shared.util.Interval;
 
 public class PART_MethodBox extends LogicalBoxDescription {
 	public PART_MethodBox(){
@@ -21,59 +21,106 @@ public class PART_MethodBox extends LogicalBoxDescription {
 		# Set confidence threshold for pruning. (Default: 0.25)
 		# $ C float 1 1 r 0.0001 0.4 
 		$ C float 1 1 s null, 0.0001, 0.1, 0.2, 0.25, 0.3, 0.4, 0.5
-		**/
-		EnumeratedValueParameter<Float> parC=new EnumeratedValueParameter<Float>(
-				0.25f,
-				new ArrayList<Float>(Arrays.asList(new Float[] {null,0.0001f,0.1f,0.2f,0.25f,0.3f,0.4f,0.5f}))
-				);
+		**/		
+		OptionDefault optionC = new OptionDefault();
+		optionC.setName("C");
+		optionC.setDescription("Set the number of folder to use in the computing of the mutual information");
+		optionC.setValue(
+				new OptionValue(new Float(0.25f)) );
+		optionC.setInterval(
+				null );
+		OptionList listC = new OptionList();
+		listC.setList(
+				new ArrayList<Object>(
+						Arrays.asList(new Float[] {null,0.0001f,0.1f,0.2f,0.25f,0.3f,0.4f,0.5f})
+						) );
+		optionC.setList( listC );
+		
 		/**
 		# Set minimum number of instances per leaf. (Default: 2)
 		$ M int 1 1 r 1 10
 		**/
-		RangedValueParameter<Integer> parM=new RangedValueParameter<Integer>(
-				2,
-				new Interval<Integer>(1, 10),
-				true);
+		OptionDefault optionM = new OptionDefault();
+		optionM.setName("M");
+		optionM.setDescription("Set minimum number of instances per leaf");
+		optionM.setValue(
+				new OptionValue(new Integer(2)) );
+		optionM.setInterval(
+				new OptionInterval(new Integer(1), new Integer(10)) );
+		optionM.setList( new OptionList() );
+		
+		
 		/**
 		# Use reduced error pruning.
 		$ R boolean
-		**/
-		ValueParameter<Boolean> parR=new ValueParameter<Boolean>(false);
+		**/		
+		OptionDefault optionR = new OptionDefault();
+		optionR.setName("R");
+		optionR.setDescription("Use reduced error pruning");
+		optionR.setValue(
+				new OptionValue(new Boolean(false)) );
+
+
 		/**
 		# Set number of folds for reduced error pruning. One fold is used as the pruning set. (Default: 3)
 		$ N int 1 1 s null, 1, 2, 3, 4, 5
 		**/
-		EnumeratedValueParameter<Integer> parN=new EnumeratedValueParameter<Integer>(
-				3,
-				new ArrayList<Integer>(Arrays.asList(new Integer[] {null,1,2,3,4,5}))
-				);
+		OptionDefault optionN = new OptionDefault();
+		optionN.setName("N");
+		optionN.setDescription("Set the number of folder to use in the computing of the mutual information");
+		optionN.setValue(
+				new OptionValue(new Integer(3)) );
+		OptionList listN = new OptionList();
+		listN.setList(
+				new ArrayList<Object>(
+						Arrays.asList(new Integer[] {null,1,2,3,4,5})
+						) );
+		optionC.setList( listN );
+
+
 		/**
 		# Use binary splits for nominal attributes.
 		$ B boolean
 		**/
-		ValueParameter<Boolean> parB=new ValueParameter<Boolean>(false);
+		OptionDefault optionB = new OptionDefault();
+		optionB.setName("B");
+		optionB.setDescription("Use reduced error pruning");
+		optionB.setValue(
+				new OptionValue(new Boolean(false)) );
+
+
 		/**
 		# Generate unpruned decision list.
 		$ U boolean
 		**/
-		ValueParameter<Boolean> parU=new ValueParameter<Boolean>(false);
+		OptionDefault optionU = new OptionDefault();
+		optionU.setName("U");
+		optionU.setDescription("Generate unpruned decision list");
+		optionU.setValue(
+				new OptionValue(new Boolean(false)) );
+
+
 		/**
 		# The seed for reduced-error pruning.
 		$ Q int 1 1 r 1 MAXINT
-		**/
-		RangedValueParameter<Integer> parQ=new RangedValueParameter<Integer>(
-				1,
-				new Interval<Integer>(1, Integer.MAX_VALUE),
-				true);
+		**/		
+		OptionDefault optionQ = new OptionDefault();
+		optionQ.setName("Q");
+		optionQ.setDescription("The seed for reduced-error pruning");
+		optionQ.setValue(
+				new OptionValue(new Integer(1)) );
+		optionQ.setInterval(
+				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
+		optionQ.setList( new OptionList() );
 		
 		
-		this.addParameter(parC);
-		this.addParameter(parM);
-		this.addParameter(parR);
-		this.addParameter(parN);
-		this.addParameter(parB);
-		this.addParameter(parU);
-		this.addParameter(parQ);
+		this.addParameter(optionC);
+		this.addParameter(optionM);
+		this.addParameter(optionR);
+		this.addParameter(optionN);
+		this.addParameter(optionB);
+		this.addParameter(optionU);
+		this.addParameter(optionQ);
 		
 		
 	}

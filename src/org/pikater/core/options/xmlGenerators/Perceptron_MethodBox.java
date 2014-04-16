@@ -2,10 +2,11 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.experiment.parameters.ValueParameter;
-import org.pikater.shared.util.Interval;
 
 public class Perceptron_MethodBox extends LogicalBoxDescription {
 	public Perceptron_MethodBox(){
@@ -16,38 +17,61 @@ public class Perceptron_MethodBox extends LogicalBoxDescription {
 		/**
 		# learning rate, default 0.3; 1 arguments
 		$ L float 1 1 r 0 1
-		**/
-		RangedValueParameter<Float> parL=new RangedValueParameter<Float>(
-				0.3f,
-				new Interval<Float>(0.0f, 1.0f),
-				true);
+		**/	
+		OptionDefault optionL = new OptionDefault();
+		optionL.setName("L");
+		optionL.setDescription("Learning rate");
+		optionL.setValue(
+				new OptionValue(new Float(0.3f)) );
+		optionL.setInterval(
+				new OptionInterval(new Float(0.0f), new Float(1.0f)) );
+		optionL.setList( new OptionList() );
+		
+		
 		/**
 		#  Number of epochs to train through.
 		$ N int 1 1 r 1 1000
 		 **/
-		RangedValueParameter<Integer> parN=new RangedValueParameter<Integer>(
-				1,
-				new Interval<Integer>(1, 1000),
-				true);
+		OptionDefault optionN = new OptionDefault();
+		optionN.setName("N");
+		optionN.setDescription("Number of epochs to train through");
+		optionN.setValue(
+				new OptionValue(new Integer(1)) );
+		optionN.setInterval(
+				new OptionInterval(new Integer(1), new Integer(1000)) );
+		optionN.setList( new OptionList() );
+		
+		
 		/**
 		/**
 		#  Seed of the random number generator (Default = 0).
 		$ S int 1 1 r 0 MAXINT
-		**/
-		RangedValueParameter<Integer> parS=new RangedValueParameter<Integer>(
-				0,
-				new Interval<Integer>(0, Integer.MAX_VALUE),
-				true);
+		**/		
+		OptionDefault optionS = new OptionDefault();
+		optionS.setName("S");
+		optionS.setDescription("Seed of the random number generator");
+		optionS.setValue(
+				new OptionValue(new Integer(0)) );
+		optionS.setInterval(
+				new OptionInterval(new Integer(0), new Integer(Integer.MAX_VALUE)) );
+		optionS.setList( new OptionList() );
+		
+		
+		
 		/**
 		#  Normalizing a numeric class will NOT be done.
 		#  (Set this to not normalize the class if it's numeric).
 		$ C boolean
 		**/
-		ValueParameter<Boolean> parC=new ValueParameter<Boolean>(false);
+		OptionDefault optionC = new OptionDefault();
+		optionC.setName("C");
+		optionC.setDescription("Normalizing a numeric class will NOT be done");
+		optionC.setValue(
+				new OptionValue(new Boolean(false)) );
 		
-		this.addParameter(parL);
-		this.addParameter(parN);
-		this.addParameter(parS);
-		this.addParameter(parC);
+		this.addParameter(optionL);
+		this.addParameter(optionN);
+		this.addParameter(optionS);
+		this.addParameter(optionC);
 	}
 }

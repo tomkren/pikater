@@ -2,9 +2,11 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.util.Interval;
 
 public class RandomTree_MethodBox extends LogicalBoxDescription {
 	public RandomTree_MethodBox(){
@@ -16,29 +18,47 @@ public class RandomTree_MethodBox extends LogicalBoxDescription {
 		# Sets the number of randomly chosen attributes.
 		$ K int 1 1 r 1 50
 		**/
-		RangedValueParameter<Integer> parK=new RangedValueParameter<Integer>(
-				1,
-				new Interval<Integer>(1, 50),
-				true);
+		OptionDefault optionK = new OptionDefault();
+		optionK.setName("K");
+		optionK.setDescription("Sets the number of randomly chosen attributes");
+		optionK.setValue(
+				new OptionValue(new Integer(1)) );
+		optionK.setInterval(
+				new OptionInterval(new Integer(1), new Integer(50)) );
+		optionK.setList( new OptionList() );
+		
+		
 		/**
 		# The minimum total weight of the instances in a leaf.
 		$ M int 1 1 r 0 100
 		**/
-		RangedValueParameter<Integer> parM=new RangedValueParameter<Integer>(
-				0,
-				new Interval<Integer>(0, 100),
-				true);
+		OptionDefault optionM = new OptionDefault();
+		optionM.setName("M");
+		optionM.setDescription("The minimum total weight of the instances in a leaf");
+		optionM.setValue(
+				new OptionValue(new Integer(0)) );
+		optionM.setInterval(
+				new OptionInterval(new Integer(1), new Integer(100)) );
+		optionM.setList( new OptionList() );
+		
+		
 		/**
 		# The random number seed used for selecting attributes.
 		$ Q int 1 1 r 1 MAXINT
 		**/
-		RangedValueParameter<Integer> parQ=new RangedValueParameter<Integer>(
-				1,
-				new Interval<Integer>(1, Integer.MAX_VALUE),
-				true);
-
-		this.addParameter(parK);
-		this.addParameter(parM);
-		this.addParameter(parQ);
+		OptionDefault optionQ = new OptionDefault();
+		optionQ.setName("Q");
+		optionQ.setDescription("The random number seed used for selecting attributes");
+		optionQ.setValue(
+				new OptionValue(new Integer(1)) );
+		optionQ.setInterval(
+				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
+		optionQ.setList( new OptionList() );
+		
+		
+		
+		this.addParameter(optionK);
+		this.addParameter(optionM);
+		this.addParameter(optionQ);
 	}
 }

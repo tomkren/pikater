@@ -2,8 +2,9 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.experiment.parameters.ValueParameter;
 
 public class NaiveBayes_MethodBox extends LogicalBoxDescription {
 	public NaiveBayes_MethodBox(){
@@ -15,14 +16,23 @@ public class NaiveBayes_MethodBox extends LogicalBoxDescription {
 		#Use kernel estimation for modelling numeric attributes rather than a single normal distribution.
 		$ K boolean
 		**/
-		ValueParameter<Boolean> parK=new ValueParameter<Boolean>(false);
+		OptionDefault optionK = new OptionDefault();
+		optionK.setName("K");
+		optionK.setDescription("Use kernel estimation for modelling numeric attributes rather than a single normal distribution");
+		optionK.setValue(
+				new OptionValue(new Boolean(false)) );
+		
 		/**
 		# Use supervised discretization to process numeric attributes.
 		$ D boolean
 		**/
-		ValueParameter<Boolean> parD=new ValueParameter<Boolean>(false);
+		OptionDefault optionD = new OptionDefault();
+		optionD.setName("D");
+		optionD.setDescription("Use supervised discretization to process numeric attributes");
+		optionD.setValue(
+				new OptionValue(new Boolean(false)) );
 		
-		this.addParameter(parK);
-		this.addParameter(parD);
+		this.addParameter(optionK);
+		this.addParameter(optionD);
 	}
 }

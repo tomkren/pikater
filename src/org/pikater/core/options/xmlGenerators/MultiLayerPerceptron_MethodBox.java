@@ -1,11 +1,15 @@
 package org.pikater.core.options.xmlGenerators;
 
+import java.util.Arrays;
+
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.experiment.parameters.ValueParameter;
-import org.pikater.shared.util.Interval;
+
 
 public class MultiLayerPerceptron_MethodBox extends LogicalBoxDescription {
 	public MultiLayerPerceptron_MethodBox(){
@@ -23,79 +27,125 @@ public class MultiLayerPerceptron_MethodBox extends LogicalBoxDescription {
 		# learning rate, default 0.3; 1 arguments
 		$ L float 1 1 r 0.001 1
 		**/
-		RangedValueParameter<Float> parL=new RangedValueParameter<Float>(
-				0.3f, 
-				new Interval<Float>(0.001f, 1.0f),
-				true
-				);
+		OptionDefault optionL = new OptionDefault();
+		optionL.setName("L");
+		optionL.setDescription("Learning rate");
+		optionL.setValue(
+				new OptionValue(new Float(0.3f)) );
+		optionL.setInterval(
+				new OptionInterval(new Float(0.001f), new Float(1.0f)) );
+		optionL.setList(
+				new OptionList() );
+		
 		
 		/**
 		# Momentum Rate for the backpropagation algorithm., Default = 0.2
 		$ M float 1 1 r 0 0.9
 		**/
-		RangedValueParameter<Float> parM=new RangedValueParameter<Float>(
-				0.2f, 
-				new Interval<Float>(0.0f, 0.9f),
-				true
-				);
+		OptionDefault optionM = new OptionDefault();
+		optionM.setName("M");
+		optionM.setDescription("Momentum Rate for the backpropagation algorithm");
+		optionM.setValue(
+				new OptionValue(new Float(0.2f)) );
+		optionL.setInterval(
+				new OptionInterval(new Float(0.0f), new Float(0.9f)) );
+		optionL.setList(
+				new OptionList() );
+		
 		
 		/**
 		#  Number of epochs to train through.
 		$ N int 1 1 r 1 10000
 		**/
-		RangedValueParameter<Integer> parN=new RangedValueParameter<Integer>(
-				1, 
-				new Interval<Integer>(1, 10000),
-				true
-				);
+		OptionDefault optionN = new OptionDefault();
+		optionN.setName("N");
+		optionN.setDescription("Number of epochs to train through");
+		optionN.setValue(
+				new OptionValue(new Integer(1)) );
+		optionN.setInterval(
+				new OptionInterval(new Integer(1), new Integer(10000)) );
+		optionN.setList(
+				new OptionList() );
+		
 		/**
 		#  Percentage size of validation set to use to terminate
 		#  training (if this is non zero it can pre-empt num of epochs.
 		#  (Value should be between 0 - 100, Default = 0).
 		$ V int 1 1 r 0 100
 		**/
-		RangedValueParameter<Integer> parV=new RangedValueParameter<Integer>(
-				0, 
-				new Interval<Integer>(0, 100),
-				true
-				);
+		OptionDefault optionV = new OptionDefault();
+		optionV.setName("V");
+		optionV.setDescription("Percentage size of validation");
+		optionV.setValue(
+				new OptionValue(new Integer(0)) );
+		optionV.setInterval(
+				new OptionInterval(new Integer(0), new Integer(100)) );
+		optionV.setList(
+				new OptionList() );
+		
 		/**
 		#  The value used to seed the random number generator
 		#  (Value should be >= 0 and and a long, Default = 0).
 		$ S int 1 1 r 0 MAXINT
 		**/
-		RangedValueParameter<Integer> parS=new RangedValueParameter<Integer>(
-				0, 
-				new Interval<Integer>(0, Integer.MAX_VALUE),
-				true
-				);
+		OptionDefault optionS = new OptionDefault();
+		optionS.setName("S");
+		optionS.setDescription("Seed the random number generator");
+		optionS.setValue(
+				new OptionValue(new Integer(0)) );
+		optionS.setInterval(
+				new OptionInterval(new Integer(0), new Integer(Integer.MAX_VALUE)) );
+		optionS.setList(
+				new OptionList() );
+		
 		/**
 		#  The consequetive number of errors allowed for validation
 		#  testing before the netwrok terminates.
 		#  (Value should be > 0, Default = 20).
 		$ E int 1 1 r 0 50
 		**/
-		RangedValueParameter<Integer> parE=new RangedValueParameter<Integer>(
-				20, 
-				new Interval<Integer>(0, 50),
-				true
-				);
+		OptionDefault optionE = new OptionDefault();
+		optionE.setName("E");
+		optionE.setDescription("The consequetive number of errors allowed for validation");
+		optionE.setValue(
+				new OptionValue(new Integer(20)) );
+		optionE.setInterval(
+				new OptionInterval(new Integer(0), new Integer(50)) );
+		optionE.setList(
+				new OptionList() );
+		
 		/**
 		# Learning rate decay will occur; 0 arguments
 		$ D boolean
 		**/
-		ValueParameter<Boolean> parD=new ValueParameter<Boolean>(false);
+		OptionDefault optionD = new OptionDefault();
+		optionD.setName("D");
+		optionD.setDescription("Learning rate");
+		optionD.setValue(
+				new OptionValue(new Boolean(false)) );
+		
 		/**
 		# Normalizing the attributes will NOT be done.
 		$ I boolean
 		**/
-		ValueParameter<Boolean> parI=new ValueParameter<Boolean>(false);
+		OptionDefault optionI = new OptionDefault();
+		optionI.setName("I");
+		optionI.setDescription("Normalizing the attributes will NOT be done");
+		optionI.setValue(
+				new OptionValue(new Boolean(false)) );
+
+		
 		/**
 		#  GUI will be opened.
 		#  (Use this to bring up a GUI).
 		$ G boolean
 		**/
-		ValueParameter<Boolean> parG=new ValueParameter<Boolean>(false);
+		OptionDefault optionG = new OptionDefault();
+		optionG.setName("G");
+		optionG.setDescription("GUI will be opened");
+		optionG.setValue(
+				new OptionValue(new Boolean(false)) );
+		
 		/**
 		# The hidden layers to be created for the network.
 		# (Value should be a list of comma seperated Natural numbers or the letters 'a' = (attribs + classes) / 2,
@@ -103,32 +153,51 @@ public class MultiLayerPerceptron_MethodBox extends LogicalBoxDescription {
 		# type list - length (2 numbers), range (2 numbers)  ... max
 		$ H mixed 1 3 s 2, 3, 4, 5, 6, 7, 8, 9, 10, i, o
 		**/		
-		ValueParameter<String> parH=new ValueParameter<String>("2, 3, 4, 5, 6, 7, 8, 9, 10, i, o");
+		
+		OptionDefault optionH = new OptionDefault();
+		optionH.setName("H");
+		optionH.setDescription("The hidden layers to be created for the network");
+		optionH.setValue( null );
+		optionH.setInterval( null );
+		OptionList listH = new OptionList();
+		listH.setList(Arrays.asList(new Object[] {2, 3, 4, 5, 6, 7, 8, 9, 10, "i", "o"}));
+		optionH.setList(
+				listH );
+		
 		/**
 		#  A NominalToBinary filter will NOT automatically be used.
 		#  (Set this to not use a NominalToBinary filter).
 		$ B boolean
         ***/
-		ValueParameter<Boolean> parB=new ValueParameter<Boolean>(false);
+		OptionDefault optionB = new OptionDefault();
+		optionB.setName("B");
+		optionB.setDescription("A NominalToBinary filter will NOT automatically be used");
+		optionB.setValue(
+				new OptionValue(new Boolean(false)) );
+		
 		/**
 		#  Normalizing a numeric class will NOT be done.
 		#  (Set this to not normalize the class if it's numeric).
 		$ C boolean
-		**/
-		ValueParameter<Boolean> parC=new ValueParameter<Boolean>(false);
+		**/		
+		OptionDefault optionC = new OptionDefault();
+		optionC.setName("C");
+		optionC.setDescription("Normalizing a numeric class will NOT be done");
+		optionC.setValue(
+				new OptionValue(new Boolean(false)) );
 		
 		
-		this.addParameter(parC);
-		this.addParameter(parB);
-		this.addParameter(parG);
-		this.addParameter(parI);
-		this.addParameter(parD);
-		this.addParameter(parE);
-		this.addParameter(parS);
-		this.addParameter(parV);
-		this.addParameter(parN);
-		this.addParameter(parM);
-		this.addParameter(parL);
-		this.addParameter(parH);
+		this.addParameter(optionC);
+		this.addParameter(optionB);
+		this.addParameter(optionG);
+		this.addParameter(optionI);
+		this.addParameter(optionD);
+		this.addParameter(optionE);
+		this.addParameter(optionS);
+		this.addParameter(optionV);
+		this.addParameter(optionN);
+		this.addParameter(optionM);
+		this.addParameter(optionL);
+		this.addParameter(optionH);
 	}
 }

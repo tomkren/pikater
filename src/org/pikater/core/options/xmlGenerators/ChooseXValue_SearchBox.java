@@ -2,10 +2,11 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.search.Agent_ChooseXValues;
 import org.pikater.core.ontology.description.Search;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.experiment.parameters.AbstractParameter;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.util.Interval;
 
 public class ChooseXValue_SearchBox extends LogicalBoxDescription {
 	
@@ -18,13 +19,18 @@ public class ChooseXValue_SearchBox extends LogicalBoxDescription {
 
 		this.setPicture("picture3.jpg");
 		this.setAgentName(Agent_ChooseXValues.class);
+
 		
-		AbstractParameter paramN = new RangedValueParameter<Integer>(
-				new Integer(5),
-				new Interval<Integer>(1, 2000) ,
-				true
-				);
-		
-		this.addParameter(paramN);
+		OptionDefault optionN = new OptionDefault();
+		optionN.setName("N");
+		optionN.setDescription("Number of values to try for each option");
+		optionN.setValue(
+				new OptionValue(new Integer(5)) );
+		optionN.setInterval(
+				new OptionInterval(new Integer(1), new Integer(2000)) );
+		optionN.setList(
+				new OptionList() );
+
+		this.addParameter(optionN);
 	}
 }

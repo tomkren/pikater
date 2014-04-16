@@ -2,9 +2,12 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.search.Agent_GridSearch;
 import org.pikater.core.ontology.description.Search;
+import org.pikater.core.ontology.options.OptionDefault;
+import org.pikater.core.ontology.options.types.OptionInterval;
+import org.pikater.core.ontology.options.types.OptionList;
+import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.util.Interval;
+
 
 public class GridSearch_SearchBox extends LogicalBoxDescription {
 	protected GridSearch_SearchBox() {
@@ -16,12 +19,42 @@ public class GridSearch_SearchBox extends LogicalBoxDescription {
 		this.setPicture("picture3.jpg");
 		this.setAgentName(Agent_GridSearch.class);
 		
-		RangedValueParameter<Integer> parB=new RangedValueParameter<Integer>(10, new Interval<Integer>(0,100000), true);
-		RangedValueParameter<Integer> parN=new RangedValueParameter<Integer>(10, new Interval<Integer>(0,1000), true);
-		RangedValueParameter<Float> parZ=new RangedValueParameter<Float>(0.000000001f, new Interval<Float>(0.0f, 1000.0f), true);
+	
+		OptionDefault optionB = new OptionDefault();
+		optionB.setName("B");
+		optionB.setDescription("Maximum block size");
+		optionB.setValue(
+				new OptionValue(new Integer(10)) );
+		optionB.setInterval(
+				new OptionInterval(new Integer(1), new Integer(100000)) );
+		optionB.setList(
+				new OptionList() );
 		
-		this.addParameter(parB);
-		this.addParameter(parN);
-		this.addParameter(parZ);
+		
+		OptionDefault optionN = new OptionDefault();
+		optionN.setName("N");
+		optionN.setDescription("Default number of tries");
+		optionN.setValue(
+				new OptionValue(new Integer(10)) );
+		optionN.setInterval(
+				new OptionInterval(new Integer(1), new Integer(100000)) );
+		optionN.setList(
+				new OptionList() );
+		
+		
+		OptionDefault optionZ = new OptionDefault();
+		optionZ.setName("Z");
+		optionZ.setDescription("Zero for logarithmic steps");
+		optionZ.setValue(
+				new OptionValue(new Float(0.000000001f)) );
+		optionZ.setInterval(
+				new OptionInterval(new Float(0.0f), new Float(1000.0f)) );
+		optionZ.setList(
+				new OptionList() );
+		
+		
+		this.addParameter(optionB);
+		this.addParameter(optionN);
+		this.addParameter(optionZ);
 	}
 }

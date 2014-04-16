@@ -2,7 +2,7 @@ package org.pikater.shared.experiment;
 
 import java.util.ArrayList;
 
-import org.pikater.shared.experiment.parameters.AbstractParameter;
+import org.pikater.core.ontology.options.StepanuvOption;
 import org.pikater.shared.experiment.slots.AbstractSlot;
 
 /**
@@ -18,7 +18,7 @@ public class Box {
 	private String picture = null;
 	private String description = null;
 	
-	private ArrayList<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
+	private ArrayList<StepanuvOption> options = new ArrayList<StepanuvOption>();
 	private ArrayList<AbstractSlot> inputSlots = new ArrayList<AbstractSlot>();
 	private ArrayList<AbstractSlot> outputSlots = new ArrayList<AbstractSlot>();
 	
@@ -64,11 +64,11 @@ public class Box {
 		this.type = type;
 	}
 	
-	public ArrayList<AbstractParameter> getParameters() {
-		return parameters;
+	public ArrayList<StepanuvOption> getParameters() {
+		return options;
 	}
-	public void setParameters(ArrayList<AbstractParameter> parameters) {
-		this.parameters = parameters;
+	public void setParameters(ArrayList<StepanuvOption> parameters) {
+		this.options = parameters;
 	}
 
 	public ArrayList<AbstractSlot> getInputSlots() {

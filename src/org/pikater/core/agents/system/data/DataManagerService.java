@@ -20,6 +20,8 @@ import jade.util.leap.List;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_DataManager;
+import org.pikater.core.ontology.data.DataOntology;
+import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.GetFileInfo;
@@ -156,7 +158,7 @@ public class DataManagerService extends FIPAService {
 	/** Makes sure the file is present in the cache or gets it from the (remote) database. */
 	public static void ensureCached(PikaterAgent agent, String filename) {
 		agent.log("making sure file "+filename+" is present");
-		if (new File(Agent_DataManager.dataPath+filename).exists())
+		if (new File(Agent_DataManager.dataPath + filename).exists())
 			return;
 		agent.log("getting file "+filename+" from dataManager");
 		GetFile gf = new GetFile();
