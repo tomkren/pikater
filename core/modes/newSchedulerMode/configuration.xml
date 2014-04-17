@@ -53,7 +53,7 @@
         <agent type="org.pikater.core.agents.system.Agent_ComputationDescriptionParser" name="ComputationDescriptionParser">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_Scheduler" name="Scheduler">
+        <agent type="org.pikater.core.agents.system.Agent_InputTransformer" name="InputTransformer">
         </agent>
 
     </agents>

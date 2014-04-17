@@ -164,7 +164,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			e1.printStackTrace();
 		}
 
-        AID receiver = new AID("Scheduler", false);
+        AID receiver = new AID("InputTransformer", false);
         
         Ontology ontology = DescriptionOntology.getInstance();
 

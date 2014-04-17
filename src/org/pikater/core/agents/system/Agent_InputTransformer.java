@@ -22,7 +22,7 @@ import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
 
 
-public class Agent_Scheduler extends PikaterAgent {
+public class Agent_InputTransformer extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7226837600070711675L;
 
@@ -33,7 +33,7 @@ public class Agent_Scheduler extends PikaterAgent {
 	  	System.out.println("Agent: " +getLocalName() + " starts.");
 
 		initDefault();
-		registerWithDF("Scheduler");
+		registerWithDF("InputTransformer");
 
 		this.getContentManager().registerLanguage(getCodec());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
@@ -48,7 +48,7 @@ public class Agent_Scheduler extends PikaterAgent {
 
 	@Override
 	protected String getAgentType(){
-		return "Scheduler";
+		return "InputTransformer";
 	}
 
 }
