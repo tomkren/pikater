@@ -46,7 +46,7 @@ import jade.proto.AchieveREInitiator;
 import jade.proto.AchieveREResponder;
 
 
-public class Agent_ComputingManager extends PikaterAgent {
+public class Agent_ComputationDescriptionParser extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7116837600070411675L;
 	
@@ -56,7 +56,7 @@ public class Agent_ComputingManager extends PikaterAgent {
 		System.out.println("Agent: " +getLocalName() + " starts.");
 	  	
 		initDefault();
-		registerWithDF("ComputingManager");
+		registerWithDF("ComputationDescriptionParser");
 
 		this.getContentManager().registerOntology(getOntology());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
@@ -69,7 +69,7 @@ public class Agent_ComputingManager extends PikaterAgent {
 	
 	@Override
 	protected String getAgentType(){
-		return "ComputingManager";
+		return "ComputationDescriptionParser";
 	}
 		
 }

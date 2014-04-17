@@ -34,7 +34,7 @@
             </arguments>
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_ComputingManager" name="ComputingManager">
+        <agent type="org.pikater.core.agents.system.Agent_ComputationDescriptionParser" name="ComputationDescriptionParser">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_Scheduler" name="Scheduler">

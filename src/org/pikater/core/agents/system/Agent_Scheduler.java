@@ -97,7 +97,7 @@ class RecieveExperiment extends CyclicBehaviour {
 
 
 
-            AID receiver = new AID("ComputingManager", false);		
+            AID receiver = new AID("ComputationDescriptionParser", false);		
 
             Ontology ontology = DescriptionOntology.getInstance();
             
