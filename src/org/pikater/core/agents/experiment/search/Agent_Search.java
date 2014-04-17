@@ -2,13 +2,13 @@ package org.pikater.core.agents.experiment.search;
 
 import java.io.*;
 
-import org.hsqldb.lib.Iterator;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.ExecuteParameters;
 import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.Option;
 
 import jade.content.ContentElement;
@@ -22,13 +22,8 @@ import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
@@ -385,7 +380,7 @@ public abstract class Agent_Search extends PikaterAgent {
 								Result res;
 								try {
 									res = (Result)getContentManager().extractContent(response);
-									List named_evals = (List)res.getValue();
+									List named_evals = ((Evaluation)res.getValue()).getEvaluations();
 									evaluations[id]=namedEvalsToFitness(named_evals);
 								} catch (UngroundedException e) {
 									// TODO Auto-generated catch block

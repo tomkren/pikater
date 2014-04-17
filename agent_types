@@ -20,3 +20,4 @@ RandomSearch:org.pikater.core.agents.experiment.search.Agent_RandomSearch
 OptionsManager:org.pikater.core.agents.system.Agent_OptionsManager
 BasicRecommender:org.pikater.core.agents.experiment.recommend.Agent_Basic
 NMTopRecommender:org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender
+Planner:org.pikater.core.agents.system.Agent_Planner

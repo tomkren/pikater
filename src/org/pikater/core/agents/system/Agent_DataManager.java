@@ -25,7 +25,14 @@ import org.pikater.core.ontology.messages.*;
 import org.postgresql.PGConnection;
 
 import java.io.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
@@ -420,15 +427,21 @@ public class Agent_DataManager extends PikaterAgent {
 				}
 			}
 
+			String start = getDateTime();
+			String finish = getDateTime();
+			
+			if (res.getStart() != null) { start = res.getStart(); }
+			if (res.getFinish() != null){ finish = res.getFinish(); }
+			
 			jparesult.setErrorRate(Error_rate);
 			jparesult.setKappaStatistic(Kappa_statistic);
 			jparesult.setMeanAbsoluteError(Mean_absolute_error);
 			jparesult.setRootMeanSquaredError(Root_mean_squared_error);
 			jparesult.setRelativeAbsoluteError(Relative_absolute_error);
 			jparesult.setRootRelativeSquaredError(Root_relative_squared_error);
-			jparesult.setStart(new Date(Timestamp.valueOf(res.getStart()).getTime()));
+			jparesult.setStart(new Date(Timestamp.valueOf(start).getTime()));
 			// query += "\'" + Timestamp.valueOf(res.getStart()) + "\',";
-			jparesult.setFinish(new Date(Timestamp.valueOf(res.getFinish()).getTime()));
+			jparesult.setFinish(new Date(Timestamp.valueOf(finish).getTime()));
 			// query += "\'" + Timestamp.valueOf(res.getFinish()) + "\',";
 
 			// v novem modelu tohle neni
@@ -458,6 +471,15 @@ public class Agent_DataManager extends PikaterAgent {
 		reply.setPerformative(ACLMessage.INFORM);
 		return reply;
 	}
+	
+	private String getDateTime() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+		Date date = new Date();
+
+		return dateFormat.format(date);
+    }
+
+	
 
 	private ACLMessage RespondToGetAclMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
 		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
