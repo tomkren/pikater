@@ -45,7 +45,7 @@ public abstract class PikaterAgent extends Agent {
     protected ApplicationContext context =  new ClassPathXmlApplicationContext(initBeansName);
     protected Verbosity verbosity=Verbosity.NORMAL;
     private Logger logger;
-    protected Arguments arguments;
+    protected Arguments arguments = new Arguments(new HashMap<String, Argument>());
     protected EntityManagerFactory emf;
     
     public Codec getCodec() {
@@ -132,7 +132,7 @@ public abstract class PikaterAgent extends Agent {
         return arguments.containsArgument(argName);
     }
 
-    private void initLogging()
+    protected void initLogging()
     {
         String loggerBean=DEFAULT_LOGGER_BEAN;
         if (containsArgument(LOGGER_BEAN_ARG))
@@ -188,7 +188,7 @@ public abstract class PikaterAgent extends Agent {
 
     private void parseArguments(Object[] args)
     {
-        Map<String, Argument> argumentsMap=new HashMap<>();
+        Map<String, Argument> argumentsMap=new HashMap<String, Argument>();
         arguments=new Arguments(argumentsMap);
         if (args==null)
         {

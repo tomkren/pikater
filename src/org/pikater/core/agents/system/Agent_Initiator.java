@@ -4,10 +4,12 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
+
 import org.pikater.core.agents.configuration.AgentConfiguration;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Configuration;
 import org.pikater.core.agents.configuration.ConfigurationProvider;
+import org.pikater.core.agents.configuration.XmlConfigurationProvider;
 import org.pikater.core.agents.PikaterAgent;
 
 import java.text.SimpleDateFormat;
@@ -18,17 +20,23 @@ import java.util.List;
 public class Agent_Initiator extends PikaterAgent {
 	
 	private static final long serialVersionUID = -3908734088006529947L;
+	
+	private String fileName = "core" +
+			System.getProperty("file.separator") +
+			"configurationMaster.xml";
 
 	@Override
-	protected void setup() {
+	protected void setup() {		
 		initDefault();
 		registerWithDF();
 		
+		System.out.println("Configuration: " + fileName);
+		
 		// read agents from configuration
 		try {
-			/* Sets up a configuration provider via spring */
-            ConfigurationProvider configProvider= (ConfigurationProvider) context.getBean("configuration");
-            Configuration configuration=configProvider.getConfiguration();
+			XmlConfigurationProvider configProvider = new XmlConfigurationProvider(fileName);
+
+			Configuration configuration=configProvider.getConfiguration();
             List<AgentConfiguration> agentConfigurations=configuration.getAgentConfigurations();
             for (AgentConfiguration agentConfiguration : agentConfigurations)
             {
@@ -91,5 +99,17 @@ public class Agent_Initiator extends PikaterAgent {
               }
          }
         return  toReturn;
+    }
+    
+    @Override
+    public void initDefault()
+    {
+           Object[] args = getArguments();
+            
+           if (args != null && args.length > 0) {
+        	   fileName = (String) args[0];
+           }
+           
+           initLogging();
     }
 }
