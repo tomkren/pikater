@@ -2,15 +2,17 @@ package org.pikater.core.ontology.description;
 
 import java.util.ArrayList;
 
+import org.pikater.core.dataStructures.options.StepanuvOption;
+import org.pikater.core.ontology.messages.Option;
+
 /**
  * Created by Martin Pilat on 28.12.13.
  */
 public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorProvider {
 
 	String modelClass;
-	Method method;
     
-    ArrayList<Parameter> parameters;
+    ArrayList<Option> options;
 
     DataSourceDescription trainingData;
     DataSourceDescription testingData;
@@ -23,18 +25,11 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
 		this.modelClass = modelClass;
 	}
 
-	public Method getMethod() {
-		return method;
-	}
-	public void setMethod(Method method) {
-		this.method = method;
-	}
-
-    public ArrayList<Parameter> getParameters() {
-        return parameters;
+    public ArrayList<Option> getOptions() {
+        return options;
     }
-    public void setParameters(ArrayList<Parameter> parameters) {
-        this.parameters = parameters;
+    public void setOptions(ArrayList<Option> options) {
+        this.options = options;
     }
 
     public DataSourceDescription getTrainingData() {

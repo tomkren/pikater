@@ -38,7 +38,6 @@ public class Agent_InputTransformer extends PikaterAgent {
 		this.getContentManager().registerLanguage(getCodec());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
 
-
 		RecieveExperiment recieveExp =
 			new RecieveExperiment(this, getCodec());
 		addBehaviour(recieveExp);

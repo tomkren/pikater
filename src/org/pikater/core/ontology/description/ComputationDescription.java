@@ -10,6 +10,9 @@ import java.util.Scanner;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.pikater.core.dataStructures.options.StepanuvOption;
+import org.pikater.core.ontology.messages.Option;
+
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -19,7 +22,7 @@ import com.thoughtworks.xstream.XStream;
 public class ComputationDescription implements Concept {
 
     IComputationElement rootElement;
-    ArrayList<Parameter> globalParameters;
+    ArrayList<Option> globalOptions;
 
     public IComputationElement getRootElement() {
         return rootElement;
@@ -29,12 +32,12 @@ public class ComputationDescription implements Concept {
         this.rootElement = rootElement;
     }
 
-    public ArrayList<Parameter> getGlobalParameters() {
-        return globalParameters;
+    public ArrayList<Option> getGlobalOptions() {
+        return globalOptions;
     }
 
-    public void setGlobalParameters(ArrayList<Parameter> globalParameters) {
-        this.globalParameters = globalParameters;
+    public void setGlobalOptions(ArrayList<Option> globalOptions) {
+        this.globalOptions = globalOptions;
     }
     
 	public String exportXML(String fileName) throws FileNotFoundException {
@@ -44,7 +47,7 @@ public class ComputationDescription implements Concept {
 		Class<ComputationDescription> descriptionOntology =
 				org.pikater.core.ontology.description.ComputationDescription.class;
 		
-		xstream.aliasPackage("", descriptionOntology.getPackage().getName());
+		//xstream.aliasPackage("", descriptionOntology.getPackage().getName());
 		xstream.aliasAttribute("type", "class");
 
 		String xml = xstream.toXML(this);
@@ -63,7 +66,7 @@ public class ComputationDescription implements Concept {
 		Class<ComputationDescription> descriptionOntology =
 				org.pikater.core.ontology.description.ComputationDescription.class;
 
-		xstream.aliasPackage("", descriptionOntology.getPackage().getName());
+		//xstream.aliasPackage("", descriptionOntology.getPackage().getName());
 		xstream.aliasAttribute("type", "class");
 
 		Scanner scanner = new Scanner(new File(fileName));

@@ -1,17 +1,14 @@
-<ComputationDescription>
-  <rootElement type="FileVisualizer">
+<org.pikater.core.ontology.description.ComputationDescription>
+  <rootElement type="org.pikater.core.ontology.description.FileVisualizer">
     <dataSource>
-      <dataProvider type="CARecSearchComplex">
+      <dataProvider type="org.pikater.core.ontology.description.CARecSearchComplex">
         <search>
           <searchClass>org.pikater.core.agents.experiment.search.Agent_ChooseXValues</searchClass>
         </search>
-        <computingAgent type="ComputingAgent">
+        <computingAgent type="org.pikater.core.ontology.description.ComputingAgent">
           <modelClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</modelClass>
-          <method>
-            <method>RBFNetwork</method>
-          </method>
           <trainingData>
-            <dataProvider type="FileDataProvider">
+            <dataProvider type="org.pikater.core.ontology.description.FileDataProvider">
               <fileURI>weather.arff</fileURI>
             </dataProvider>
           </trainingData>
@@ -19,4 +16,4 @@
       </dataProvider>
     </dataSource>
   </rootElement>
-</ComputationDescription>
+</org.pikater.core.ontology.description.ComputationDescription>

@@ -4,13 +4,16 @@ import jade.content.Concept;
 
 import java.util.ArrayList;
 
+import org.pikater.core.dataStructures.options.StepanuvOption;
+import org.pikater.core.ontology.messages.Option;
+
 /**
  * Created by Martin Pilat on 28.12.13.
  */
 public class Search implements Concept{
 
     String searchClass;
-    ArrayList<Parameter> searchParameters;
+    ArrayList<Option> searchOptions;
 
     public String getSearchClass() {
         return searchClass;
@@ -20,11 +23,11 @@ public class Search implements Concept{
         this.searchClass = searchClass;
     }
 
-    public ArrayList<Parameter> getSearchParameters() {
-        return searchParameters;
+    public ArrayList<Option> getSearchOptions() {
+        return searchOptions;
     }
 
-    public void setSearchParameters(ArrayList<Parameter> searchParameters) {
-        this.searchParameters = searchParameters;
+    public void setSearchOptions(ArrayList<Option> searchOptions) {
+        this.searchOptions = searchOptions;
     }
 }

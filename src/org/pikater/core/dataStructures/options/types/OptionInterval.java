@@ -1,6 +1,6 @@
-package org.pikater.core.ontology.options.types;
+package org.pikater.core.dataStructures.options.types;
 
-import org.pikater.core.ontology.options.StepanuvOption;
+
 
 public class OptionInterval extends AbstractOption {
 
@@ -15,7 +15,7 @@ public class OptionInterval extends AbstractOption {
 		this.maxValue = maxValue;
 	}
 
-	
+
 	@Override
 	public Class<? extends Object> getOptionClass() {
 		

@@ -1,7 +1,6 @@
-package input2.xmlGenerator;
+package xmlGenerator;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.agents.experiment.search.Agent_ChooseXValues;
@@ -12,12 +11,7 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileVisualizer;
-import org.pikater.core.ontology.description.Method;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.shared.experiment.parameters.EnumeratedValueParameter;
-import org.pikater.shared.experiment.parameters.RangedValueParameter;
-import org.pikater.shared.experiment.parameters.ValueParameter;
-import org.pikater.shared.util.Interval;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -37,7 +31,6 @@ public final class Input2 {
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setModelClass(Agent_WekaCA.class.getName());
-		comAgent.setMethod(new Method("RBFNetwork"));
 
 
 	    Class<Agent_ChooseXValues> searchClass =

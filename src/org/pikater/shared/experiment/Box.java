@@ -2,7 +2,7 @@ package org.pikater.shared.experiment;
 
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.options.StepanuvOption;
+import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.shared.experiment.slots.AbstractSlot;
 
 /**

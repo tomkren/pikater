@@ -1,10 +1,10 @@
 package org.pikater.core.options.xmlGenerators;
 
+import org.pikater.core.dataStructures.options.OptionDefault;
+import org.pikater.core.dataStructures.options.types.OptionInterval;
+import org.pikater.core.dataStructures.options.types.OptionList;
+import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.ontology.options.OptionDefault;
-import org.pikater.core.ontology.options.types.OptionInterval;
-import org.pikater.core.ontology.options.types.OptionList;
-import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalUnitDescription;
 
 public class LinearRegression extends LogicalUnitDescription

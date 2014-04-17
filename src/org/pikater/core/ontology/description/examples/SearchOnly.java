@@ -1,7 +1,11 @@
 package org.pikater.core.ontology.description.examples;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.dataStructures.options.StepanuvOption;
+import org.pikater.core.dataStructures.options.types.OptionInterval;
+import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.*;
+import org.pikater.core.ontology.messages.Option;
 
 import java.util.ArrayList;
 
@@ -20,17 +24,21 @@ public class SearchOnly {
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
         ca.setModelClass(Agent_WekaCA.class.getName());
-        ca.setMethod(new Method("whatever.mlp.is.in.MLP"));
+        //"whatever.mlp.is.in.MLP"
 
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        DoubleParameter lr = new DoubleParameter();
+        ArrayList<Option> options = new ArrayList<>();
+        StepanuvOption lr = new StepanuvOption();
         lr.setName("L");
-        lr.setSearchable(true);
-        lr.setRange(new Interval(0.0,1.0));
-        parameters.add(lr);
-        parameters.add(new IntegerParameter("H", 4));
+        lr.setOption(new OptionInterval(new Double(0.0) ,new Double(1.0)));
+ 
+        StepanuvOption hr = new StepanuvOption();
+        hr.setName("H");
+        hr.setOption(new OptionValue(new Integer(4)) );
+ 
+        options.add(lr.toOption());
+        options.add(hr.toOption());
 
-        ca.setParameters(parameters);
+        ca.setOptions(options);
 
         CARecSearchComplex crsc = new CARecSearchComplex();
         crsc.setComputingAgent(ca);
@@ -46,9 +54,19 @@ public class SearchOnly {
 
         Search sa = new Search();
         sa.setSearchClass("whatever.ea.is.in.EA");
-        ArrayList<Parameter> searchParameters = new ArrayList<>();
-        searchParameters.add(new IntegerParameter("ea.popSize", 50));
-        searchParameters.add(new DoubleParameter("ea.mutationRate", 0.03));
+
+        ArrayList<Option> searchParameters = new ArrayList<>();
+        
+        StepanuvOption pr = new StepanuvOption();
+        pr.setName("ea.popSize");
+        pr.setOption(new OptionValue(new Integer(50)) );
+        
+        StepanuvOption ear = new StepanuvOption();
+        ear.setName("ea.mutationRate");
+        ear.setOption(new OptionValue(new Double(0.03)) );
+
+        searchParameters.add(pr.toOption());
+        searchParameters.add(ear.toOption());
 
         crsc.setSearch(sa);
 

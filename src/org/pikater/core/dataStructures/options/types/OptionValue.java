@@ -1,4 +1,6 @@
-package org.pikater.core.ontology.options.types;
+package org.pikater.core.dataStructures.options.types;
+
+
 
 
 public class OptionValue extends AbstractOption {
@@ -10,7 +12,7 @@ public class OptionValue extends AbstractOption {
 	public OptionValue(Object object) {
 		this.object = object;
 	}
-	
+
 	@Override
 	public Class<? extends Object> getOptionClass() {
 		return this.object.getClass();

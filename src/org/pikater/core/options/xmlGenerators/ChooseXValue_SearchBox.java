@@ -1,11 +1,11 @@
 package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.search.Agent_ChooseXValues;
+import org.pikater.core.dataStructures.options.OptionDefault;
+import org.pikater.core.dataStructures.options.types.OptionInterval;
+import org.pikater.core.dataStructures.options.types.OptionList;
+import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.core.ontology.options.OptionDefault;
-import org.pikater.core.ontology.options.types.OptionInterval;
-import org.pikater.core.ontology.options.types.OptionList;
-import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
 
 public class ChooseXValue_SearchBox extends LogicalBoxDescription {

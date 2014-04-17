@@ -6,12 +6,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.options.OptionDefault;
-import org.pikater.core.ontology.options.StepanuvOption;
-import org.pikater.core.ontology.options.types.AbstractOption;
-import org.pikater.core.ontology.options.types.OptionInterval;
-import org.pikater.core.ontology.options.types.OptionList;
-import org.pikater.core.ontology.options.types.OptionValue;
+import org.pikater.core.dataStructures.options.OptionDefault;
+import org.pikater.core.dataStructures.options.StepanuvOption;
+import org.pikater.core.dataStructures.options.types.AbstractOption;
+import org.pikater.core.dataStructures.options.types.OptionInterval;
+import org.pikater.core.dataStructures.options.types.OptionList;
+import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.shared.experiment.slots.AbstractSlot;
 
 import com.thoughtworks.xstream.XStream;

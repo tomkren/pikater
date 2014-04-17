@@ -2,6 +2,8 @@ package org.pikater.core.ontology.description;
 
 import java.util.ArrayList;
 
+import org.pikater.core.ontology.messages.Option;
+
 /**
  * Created by Martin Pilat on 28.12.13.
  */
@@ -12,7 +14,7 @@ public class CARecSearchComplex implements IComputingAgent, IDataProvider {
     Recommender recommender;
     IComputingAgent computingAgent;
 
-    ArrayList<Parameter> parameters;
+    ArrayList<Option> options;
 
     public ArrayList<ErrorDescription> getErrors() {
         return errors;
@@ -38,12 +40,12 @@ public class CARecSearchComplex implements IComputingAgent, IDataProvider {
         this.recommender = recommender;
     }
 
-    public ArrayList<Parameter> getParameters() {
-        return parameters;
+    public ArrayList<Option> getOptions() {
+        return options;
     }
 
-    public void setParameters(ArrayList<Parameter> parameters) {
-        this.parameters = parameters;
+    public void setOptions(ArrayList<Option> options) {
+        this.options = options;
     }
 
     public IComputingAgent getComputingAgent() {

@@ -1,9 +1,9 @@
 package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.dataStructures.options.OptionDefault;
+import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.Method;
-import org.pikater.core.ontology.options.OptionDefault;
-import org.pikater.core.ontology.options.types.OptionValue;
 import org.pikater.core.options.LogicalBoxDescription;
 
 public class NaiveBayes_MethodBox extends LogicalBoxDescription {

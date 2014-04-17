@@ -1,9 +1,7 @@
-package org.pikater.core.ontology.options.types;
+package org.pikater.core.dataStructures.options.types;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.pikater.core.ontology.options.StepanuvOption;
 
 public class OptionList extends AbstractOption {
 
@@ -14,7 +12,7 @@ public class OptionList extends AbstractOption {
 	public OptionList(List<Object> list) {
 		this.list = list;
 	}
-	
+
 	@Override
 	public Class<? extends Object> getOptionClass() {
 		
@@ -32,7 +30,7 @@ public class OptionList extends AbstractOption {
 		
 		return objectClass;
 	}
-	
+
 	public List<Object> getList() {
 		return list;
 	}

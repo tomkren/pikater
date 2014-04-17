@@ -40,7 +40,6 @@ public class Agent_GUIKlara extends PikaterAgent {
 		this.getContentManager().registerLanguage(this.getCodec());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
 
-
 		if (DEBUG_MODE) {
 			
 			System.out.println("GUIKlara agent starts.");

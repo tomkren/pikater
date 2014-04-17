@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
@@ -17,7 +18,6 @@ import org.pikater.core.ontology.description.IComputingAgent;
 import org.pikater.core.ontology.description.IDataProvider;
 import org.pikater.core.ontology.description.IErrorProvider;
 import org.pikater.core.ontology.description.IVisualizer;
-import org.pikater.core.ontology.description.Parameter;
 import org.pikater.core.ontology.description.Recommender;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.core.ontology.messages.Data;
@@ -60,7 +60,7 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 
 		this.getContentManager().registerOntology(getOntology());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
-
+		
 		ComputingManagerBehaviour compBehaviour =
 				new ComputingManagerBehaviour(this, getCodec(), getOntology());
         addBehaviour(compBehaviour);
@@ -326,7 +326,7 @@ class ComputingDescriptionParser {
     	String recommenderClass =
     			recommender.getRecommenderClass();
     	
-    	ArrayList<Parameter> parameters = recommender.getParameters();
+    	ArrayList<Option> parameters = recommender.getOptions();
     	
 		org.pikater.core.ontology.messages.Agent method =
 				new org.pikater.core.ontology.messages.Agent();
@@ -349,8 +349,14 @@ class ComputingDescriptionParser {
     	DataSourceDescription validationDataSource =
     			computingAgent.getValidationData();
     	
+ /*   	
+    	System.out.println("---------------------");
+    	ArrayList<StepanuvOption> sOption= computingAgent.getOptions();
+    	for (StepanuvOption sOpt : sOption) {
+    		System.out.println(sOpt.getName());
+    	}
     	//process(rainingDataSource);
-    	
+ */   	
 			Solve solve = new Solve();
 
 			Interval inRangeB = new Interval();
