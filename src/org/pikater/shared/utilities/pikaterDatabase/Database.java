@@ -14,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -23,8 +24,10 @@ import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAGeneralFile;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
+import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -32,10 +35,15 @@ import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 
+
 public class Database {
 
 	public enum PasswordChangeResult {
 		Success, Error
+	};
+	
+	public enum ExperimentStatus{
+		Waiting,Started,Finished
 	};
 
 	PGConnection connection;
@@ -55,6 +63,64 @@ public class Database {
 		// :TODO
 	}
 
+	//public void addExperiment(JPAUser user,)
+	
+	public List<JPAExperiment> getExperimentsByStatus(JPAUser user,ExperimentStatus status){
+		try {
+			em = emf.createEntityManager();
+			Query q = em.createQuery("select exp from JPAExperiment exp where exp.status=:expStatus and exp.user=:expUser");
+			q.setParameter("expStatus", status.toString());
+			q.setParameter("expUser", user.getLogin());
+			List<JPAExperiment> expList = q.getResultList();
+			return expList;
+		} finally {
+			cleanUpEntityManager();
+		}
+	}
+	
+	public List<JPAExperiment> getExperiments(JPAUser user){
+		try {
+			em = emf.createEntityManager();
+			Query q = em.createQuery("select exp from JPAExperiment exp where exp.user=:expUser");
+			q.setParameter("expUser", user.getLogin());
+			List<JPAExperiment> expList = q.getResultList();
+			return expList;
+		} finally {
+			cleanUpEntityManager();
+		}
+	}
+	
+	public List<JPAResult> getResults(){		
+		try{
+			TypedQuery<JPAResult> q=em.createNamedQuery("Result.getAll",JPAResult.class);
+			return q.getResultList();
+		}finally{
+			cleanUpEntityManager();
+		}
+	}
+	
+	
+	public List<JPAResult> getResultsForExperiment(int experimentID){
+		try{
+			TypedQuery<JPAResult> q=em.createNamedQuery("Result.getByExperiment",JPAResult.class);
+			q.setParameter("experiment", experimentID);
+			return q.getResultList();
+		}finally{
+			cleanUpEntityManager();
+		}
+	}
+	
+	public List<JPAResult> getResultsByDataSetHash(String hash){
+		try{
+			TypedQuery<JPAResult> q=em.createNamedQuery("Result.getByDataSetHash",JPAResult.class);
+			q.setParameter("hash", hash);
+			return q.getResultList();
+		}finally{
+			cleanUpEntityManager();
+		}
+	}
+	
+	
 	/**
 	 * Loads test data to the DataBase
 	 * 
@@ -702,6 +768,25 @@ public class Database {
 			cleanUpEntityManager();
 		}
 	}
+	
+	/**
+	 * Returns a DataSet object for the given file hash. 
+	 * @param hash The hash for we want the DataSet
+	 * @return The object of the found dataset.
+	 */
+	public JPADataSetLO getSingleDataSetByHash(String hash) {
+		try {
+			em = emf.createEntityManager();
+			Query q = em.createQuery("select ds from JPADataSetLO ds where ds.hash=:hash");
+			q.setParameter("hash", hash);
+			JPADataSetLO res = (JPADataSetLO) q.getSingleResult();
+			return res;
+		} finally {
+			cleanUpEntityManager();
+		}
+	}
+	
+	
 
 	/**
 	 * The function stores the given file to the Database as a DataSet through
