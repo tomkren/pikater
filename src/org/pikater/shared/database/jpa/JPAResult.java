@@ -9,10 +9,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name="Result.getAll",query="select res from JPAResult"),
+	@NamedQuery(name="Result.getByExperiment",query="select res from JPAResult where res.experiment=:experiment"),
+	@NamedQuery(name="Result.getByDataSetHash",query="select res from JPAResult where res.serializedFileName=:hash")
+})
 public class JPAResult {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

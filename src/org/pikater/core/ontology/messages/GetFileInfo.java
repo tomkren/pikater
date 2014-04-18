@@ -1,7 +1,6 @@
 package org.pikater.core.ontology.messages;
 
 import jade.content.AgentAction;
-import jade.content.onto.basic.Action;
 
 public class GetFileInfo implements AgentAction {
 
@@ -88,6 +87,7 @@ public class GetFileInfo implements AgentAction {
         this.userID = userID;
     }
 
+    @Deprecated
     public String toSQLCondition() {
 
         String sql = "userID = " + userID;

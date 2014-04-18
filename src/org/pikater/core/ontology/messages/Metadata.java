@@ -132,26 +132,32 @@ public class Metadata implements Concept {
 		this._default_task = _default_task;
 	}
 
+	@Deprecated
 	public String getAttribute_type() {
 		return _attribute_type;
 	}
 
+	@Deprecated
 	public void setAttribute_type(String _attribute_type) {
 		this._attribute_type = _attribute_type;
 	}
 
+	@Deprecated
 	public void setInternal_name(String _internal_name) {
 		this._internal_name = _internal_name;
 	}
 
+	@Deprecated
 	public String getInternal_name() {
 		return _internal_name;
 	}
 
+	@Deprecated
 	public void setExternal_name(String _external_name) {
 		this._external_name = _external_name;
 	}
 
+	@Deprecated
 	public String getExternal_name() {
 		return _external_name;
 	}
