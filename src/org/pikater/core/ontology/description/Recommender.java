@@ -1,11 +1,8 @@
 package org.pikater.core.ontology.description;
 
 import jade.content.Concept;
+import jade.util.leap.ArrayList;
 
-import java.util.ArrayList;
-
-import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.core.ontology.messages.Option;
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -13,7 +10,7 @@ import org.pikater.core.ontology.messages.Option;
 public class Recommender implements Concept {
 
     String recommenderClass;
-    ArrayList<Option> options;
+    ArrayList options;
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -23,11 +20,11 @@ public class Recommender implements Concept {
         this.recommenderClass = recommenderClass;
     }
 
-    public ArrayList<Option> getOptions() {
+    public ArrayList getOptions() {
         return options;
     }
 
-    public void setParameters(ArrayList<Option> options) {
+    public void setParameters(ArrayList options) {
         this.options = options;
     }
 }

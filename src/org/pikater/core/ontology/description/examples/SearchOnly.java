@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.description.examples;
 
+import jade.util.leap.ArrayList;
+
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
@@ -7,7 +9,6 @@ import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.*;
 import org.pikater.core.ontology.messages.Option;
 
-import java.util.ArrayList;
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -26,7 +27,7 @@ public class SearchOnly {
         ca.setModelClass(Agent_WekaCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
-        ArrayList<Option> options = new ArrayList<>();
+        ArrayList options = new ArrayList();
         StepanuvOption lr = new StepanuvOption();
         lr.setName("L");
         lr.setOption(new OptionInterval(new Double(0.0) ,new Double(1.0)));
@@ -47,7 +48,7 @@ public class SearchOnly {
         ed.setProvider(ca);
         ed.setType("mse");
 
-        ArrayList<ErrorDescription> eds = new ArrayList<>();
+        ArrayList eds = new ArrayList();
         eds.add(ed);
 
         crsc.setErrors(eds);
@@ -55,7 +56,7 @@ public class SearchOnly {
         Search sa = new Search();
         sa.setSearchClass("whatever.ea.is.in.EA");
 
-        ArrayList<Option> searchParameters = new ArrayList<>();
+        ArrayList searchParameters = new ArrayList();
         
         StepanuvOption pr = new StepanuvOption();
         pr.setName("ea.popSize");

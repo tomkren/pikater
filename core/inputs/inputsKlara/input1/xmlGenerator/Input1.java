@@ -1,7 +1,8 @@
 package xmlGenerator;
 
+import jade.util.leap.ArrayList;
+
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
@@ -21,25 +22,15 @@ public final class Input1 {
 		
 		System.out.println("Exporting Ontology input1 to Klara's input XML configuration file.");
 
-		StepanuvOption optionB = new StepanuvOption();
-		optionB.setName("B");
-		optionB.setOption( new OptionValue(new Integer(2)) );
-
-		StepanuvOption optionR = new StepanuvOption();
-		optionR.setName("R");
-		optionR.setOption( new OptionValue(new Integer(2)) );
-
 		StepanuvOption optionS = new StepanuvOption();
 		optionS.setName("S");
-		optionS.setOption( new OptionValue(new Integer(0)) );
+		optionS.setOption( new OptionValue(new Integer(1)) );
 		
 		StepanuvOption optionM = new StepanuvOption();
 		optionM.setName("M");
-		optionM.setOption( new OptionValue(new Integer(0)) );	
+		optionM.setOption( new OptionValue(new Float(0.4)) );	
 		
-		ArrayList<Option> options = new ArrayList<Option>();
-		options.add(optionB.toOption());
-		options.add(optionR.toOption());
+		ArrayList options = new ArrayList();
 		options.add(optionS.toOption());
 		options.add(optionM.toOption());
 		

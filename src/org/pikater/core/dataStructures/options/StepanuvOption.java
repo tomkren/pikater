@@ -3,8 +3,6 @@ package org.pikater.core.dataStructures.options;
 import org.pikater.core.dataStructures.options.types.AbstractOption;
 import org.pikater.core.ontology.messages.Option;
 
-import jade.content.Concept;
-
 
 public class StepanuvOption {
 
@@ -36,6 +34,10 @@ public class StepanuvOption {
 	}
 	
 	public Option toOption() {
-		return null;
+
+		Option resultOption = option.toOption();
+		resultOption.setName(name);
+		
+		return resultOption;
 	}
 }

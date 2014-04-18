@@ -1,12 +1,13 @@
 package org.pikater.core.ontology.description.examples;
 
+import jade.util.leap.ArrayList;
+
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.*;
 import org.pikater.core.ontology.messages.Option;
 
-import java.util.ArrayList;
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -26,7 +27,7 @@ public class SimpleTraining {
         ca.setModelClass(Agent_WekaCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
-        ArrayList<Option> options = new ArrayList<>();
+        ArrayList options = new ArrayList();
         
         StepanuvOption lr = new StepanuvOption();
         lr.setName("L");

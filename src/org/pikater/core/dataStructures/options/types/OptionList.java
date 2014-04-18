@@ -3,6 +3,8 @@ package org.pikater.core.dataStructures.options.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.messages.Option;
+
 public class OptionList extends AbstractOption {
 
 	private List<Object> list = new ArrayList<Object>();
@@ -39,6 +41,12 @@ public class OptionList extends AbstractOption {
 	}
 	public void add(Object object) {
 		this.list.add(object);
+	}
+
+	@Override
+	public Option toOption() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

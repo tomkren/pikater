@@ -1,26 +1,25 @@
 package org.pikater.core.ontology.description;
 
-import java.util.ArrayList;
+import jade.util.leap.ArrayList;
 
-import org.pikater.core.ontology.messages.Option;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
 public class CARecSearchComplex implements IComputingAgent, IDataProvider {
 
-    ArrayList<ErrorDescription> errors;
+    ArrayList errors;
     Search search;
     Recommender recommender;
     IComputingAgent computingAgent;
 
-    ArrayList<Option> options;
+    ArrayList options;
 
-    public ArrayList<ErrorDescription> getErrors() {
+    public ArrayList getErrors() {
         return errors;
     }
 
-    public void setErrors(ArrayList<ErrorDescription> errors) {
+    public void setErrors(ArrayList errors) {
         this.errors = errors;
     }
 
@@ -40,11 +39,11 @@ public class CARecSearchComplex implements IComputingAgent, IDataProvider {
         this.recommender = recommender;
     }
 
-    public ArrayList<Option> getOptions() {
+    public ArrayList getOptions() {
         return options;
     }
 
-    public void setOptions(ArrayList<Option> options) {
+    public void setOptions(ArrayList options) {
         this.options = options;
     }
 

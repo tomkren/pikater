@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.description;
 
-import java.util.ArrayList;
+
+import jade.util.leap.ArrayList;
 
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.ontology.messages.Option;
@@ -12,7 +13,7 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
 
 	String modelClass;
     
-    ArrayList<Option> options;
+    ArrayList options;
 
     DataSourceDescription trainingData;
     DataSourceDescription testingData;
@@ -25,10 +26,10 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
 		this.modelClass = modelClass;
 	}
 
-    public ArrayList<Option> getOptions() {
+    public ArrayList getOptions() {
         return options;
     }
-    public void setOptions(ArrayList<Option> options) {
+    public void setOptions(ArrayList options) {
         this.options = options;
     }
 

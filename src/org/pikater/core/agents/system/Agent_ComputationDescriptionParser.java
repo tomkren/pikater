@@ -1,10 +1,12 @@
 package org.pikater.core.agents.system;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.dataStructures.options.StepanuvOption;
+import org.pikater.core.agents.system.computationDescriptionParser.ItemOfGraph;
+import org.pikater.core.agents.system.computationDescriptionParser.OntologyGraph;
+import org.pikater.core.agents.system.computationDescriptionParser.items.DatasetWrapper;
+import org.pikater.core.agents.system.computationDescriptionParser.items.ProblemWrapper;
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
@@ -23,7 +25,6 @@ import org.pikater.core.ontology.description.Search;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.EvaluationMethod;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
-import org.pikater.core.ontology.messages.Interval;
 import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.Problem;
 import org.pikater.core.ontology.messages.Solve;
@@ -44,6 +45,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
 import jade.proto.AchieveREResponder;
+import jade.util.leap.ArrayList;
 
 
 public class Agent_ComputationDescriptionParser extends PikaterAgent {
@@ -119,12 +121,51 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 					executeExperiment.getDescription();
     		
     		ComputingDescriptionParser parser =
-    				new ComputingDescriptionParser(agent, codec, ontology);
+    				new ComputingDescriptionParser((PikaterAgent) this.agent);
     		parser.process(comDescription);
     		
+    		// This will be graph - now only one problem
+    		Problem problem = parser.getProblemGraph().getProblems().get(0).getProblem();
     		
             reply.setPerformative(ACLMessage.INFORM);
             reply.setContent("OK");
+            
+            
+    		
+			System.out.println("Sending SOLVE");
+
+    		Solve solve = new Solve();
+    		solve.setProblem(problem);
+    		
+			// create a request message with SendProblem content
+			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+			msg.setSender(agent.getAID());
+			msg.addReceiver(new AID("manager", false));
+			msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+			msg.setLanguage(codec.getName());
+			msg.setOntology(ontology.getName());
+			// We want to receive a reply in 30 secs
+			msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+			msg.setConversationId(problem.getGui_id() + agent.getLocalName());
+
+			Action a = new Action();
+			a.setAction(solve);
+			a.setActor(agent.getAID());
+
+			try {
+				// Let JADE convert from Java objects to string
+				agent.getContentManager().fillContent(msg, a);
+
+			} catch (CodecException ce) {
+				ce.printStackTrace();
+			} catch (OntologyException oe) {
+				oe.printStackTrace();
+			}
+
+			agent.addBehaviour(new SendProblemToManager(agent, msg));
+    		
+    		
         }
    
         return reply;
@@ -137,42 +178,42 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 
 class ComputingDescriptionParser {
 	
-	private Agent agent = null;
-	private Codec codec = null;
-	private Ontology ontology = null;
-	
-	public ComputingDescriptionParser(Agent agent, Codec codec, Ontology ontology) {
-		
-		this.agent = agent;
-		this.codec = codec;
-		this.ontology = ontology;
+	private OntologyGraph graph = null;
+	private PikaterAgent agent = null;
+
+	public ComputingDescriptionParser(PikaterAgent agent_) {
+		this.agent = agent_;
+		this.graph = new OntologyGraph();
 	}
 
+	public OntologyGraph getProblemGraph() {
+		return this.graph;
+	}
+	
+	public ItemOfGraph process(IComputationElement element) {
 
-	public void process(IComputationElement element) {
-
-		System.out.println("Ontology Parser - IComputationElement");
+		agent.log("Ontology Parser - IComputationElement");
 
 		IVisualizer visualizer = (IVisualizer) element;
-		process(visualizer);
+		return process(visualizer);
 	}
 	
-	public void process(IVisualizer visualizer) {
+	public ItemOfGraph process(IVisualizer visualizer) {
 
-		System.out.println("Ontology Parser - IVisualizer");
+		agent.log("Ontology Parser - IVisualizer");
 
 		if (visualizer instanceof FileVisualizer) {
 
-			System.out.println("Ontology Matched - FileVisualizer");
+			agent.log("Ontology Matched - FileVisualizer");
 			
 			FileVisualizer fileVisualizer = (FileVisualizer) visualizer;
 			DataSourceDescription dataSource = fileVisualizer.getDataSource();
 			
-			this.process(dataSource);
+			return this.process(dataSource);
 			
 		} else if (visualizer instanceof DifferenceVisualizer ) {
 
-			System.out.println("Ontology Matched - DifferenceVisualizer");
+			agent.log("Ontology Matched - DifferenceVisualizer");
 
 			DifferenceVisualizer diffVisualizer =
 					(DifferenceVisualizer) visualizer;
@@ -185,20 +226,23 @@ class ComputingDescriptionParser {
 			this.process(dataSrcDataMod);
 			this.process(dataSrcTarData);
 			
+			return null;
+			
 		} else {
 
-			System.out.println("Ontology Parser - Error unknown IVisualizer");
+			agent.log("Ontology Parser - Error unknown IVisualizer");
+			return null;
 		}
 
     }
 	
-    public String process (IDataProvider dataProvider) {
+    public ItemOfGraph process (IDataProvider dataProvider) {
 
-    	System.out.println("Ontology Parser - IDataProvider");
+    	agent.log("Ontology Parser - IDataProvider");
 
     	if (dataProvider instanceof FileDataProvider) {
 
-			System.out.println("Ontology Matched - FileDataProvider");
+    		agent.log("Ontology Matched - FileDataProvider");
 			
 			FileDataProvider fileData =
 					(FileDataProvider) dataProvider;
@@ -208,37 +252,38 @@ class ComputingDescriptionParser {
     	
     	} else if (dataProvider instanceof CARecSearchComplex) {
 
-			System.out.println("Ontology Matched - CARecSearchComplex");
+    		agent.log("Ontology Matched - CARecSearchComplex");
 
 			CARecSearchComplex comlex =
 					(CARecSearchComplex) dataProvider;
 
-			this.process (comlex);
+			return this.process (comlex);
 
 		} else if (dataProvider instanceof ComputingAgent) {
 
-			System.out.println("Ontology Matched - ComputingAgent");
+			agent.log("Ontology Matched - ComputingAgent");
 
 			ComputingAgent computingAgent =
 					(ComputingAgent) dataProvider;
 
-			this.process (computingAgent);
+			return this.process (computingAgent);
 
 		} else {
 
-			System.out.println("Ontology Matched - Error unknown IDataProvider");
+			agent.log("Ontology Matched - Error unknown IDataProvider");
+
+			return null;
 		}
-		
-    	return "NOT IMPLEMENTED";
+
     }
 
     public void process (IErrorProvider errorProvider) {
 
-    	System.out.println("Ontology Parser - IErrorProvider");
+    	agent.log("Ontology Parser - IErrorProvider");
 
 		if (errorProvider instanceof ComputingAgent) {
 
-			System.out.println("Ontology Matched - ComputingAgent");
+			agent.log("Ontology Matched - ComputingAgent");
 
 			ComputingAgent computingAgent =
 					(ComputingAgent) errorProvider;
@@ -247,78 +292,95 @@ class ComputingDescriptionParser {
 
 		} else {
 
-			System.out.println("Ontology Matched - Error unknown IErrorProvider");
+			agent.log("Ontology Matched - Error unknown IErrorProvider");
 		}
 		
     }
-    public void process (IComputingAgent iAgent) {
+    public ProblemWrapper process (IComputingAgent iAgent) {
 
-    	System.out.println("Ontology Parser - IComputingAgent");
+    	agent.log("Ontology Parser - IComputingAgent");
 
 		if (iAgent instanceof CARecSearchComplex) {
 
-			System.out.println("Ontology Matched - CARecSearchComplex");
+			agent.log("Ontology Matched - CARecSearchComplex");
 
 			CARecSearchComplex complex =
 					(CARecSearchComplex) iAgent;
 
 			this.process(complex);
+			return null;
 
 		} else if (iAgent instanceof ComputingAgent) {
 
-			System.out.println("Ontology Matched - ComputingAgent");
+			agent.log("Ontology Matched - ComputingAgent");
 
 			ComputingAgent agent =
 					(ComputingAgent) iAgent;
 
-			this.process(agent);
+			ProblemWrapper problemWrapper = this.process(agent);
+			return problemWrapper;
 
 		} else {
 
-			System.out.println("Ontology Matched - Error unknown IComputingAgent");
+			agent.logError("Ontology Matched - Error unknown IComputingAgent");
+			return null;
 		}
 
 	}
     
 	public void process(ComputationDescription comDescription) {
 
-		System.out.println("Ontology Parser - ComputationDescription");
+		agent.log("Ontology Parser - ComputationDescription");
 		
 		IComputationElement element =
 				comDescription.getRootElement();
 		
-		this.process(element);
+		ItemOfGraph item = this.process(element);
+		
+		if (item instanceof ProblemWrapper) {
+
+			ProblemWrapper problem = (ProblemWrapper) item;
+			this.graph.addRootProblem(problem);
+		}
+
 	}
 	
-    public String process (DataSourceDescription dataSource) {
+    public ItemOfGraph process (DataSourceDescription dataSource) {
 
-    	System.out.println("Ontology Parser - DataSourceDescription");
+    	agent.log("Ontology Parser - DataSourceDescription");
 
     	IDataProvider dataProvider = dataSource.getDataProvider();
     	
     	return this.process(dataProvider);
     }
 
-    public String process (FileDataProvider file) {
+    public DatasetWrapper process (FileDataProvider file) {
 
-    	System.out.println("Ontology Parser - FileDataProvider");
-    	return file.getFileURI();
+    	agent.log("Ontology Parser - FileDataProvider");
+
+    	return new DatasetWrapper(file.getFileURI());
     }
     
-    public void process (CARecSearchComplex complex) {
+    public ProblemWrapper process (CARecSearchComplex complex) {
 
-    	System.out.println("Ontology Parser - CARecSearchComplex");
+    	agent.log("Ontology Parser - CARecSearchComplex");
 
     	IComputingAgent agent = complex.getComputingAgent();
-    	this.process(agent);
+    	ProblemWrapper problemWrapper = this.process(agent);
+    	Problem problem = problemWrapper.getProblem();
     	
     	Recommender recommender = complex.getRecommender();
-    	this.process(recommender);
+    	org.pikater.core.ontology.messages.Agent recommendeAgent =
+    			this.process(recommender);
+    	
+    	problem.setRecommender(recommendeAgent);
+    	
+    	return problemWrapper;
 	}
     
     public void process (Search search) {
  
-    	System.out.println("Ontology Parser - Search");
+    	agent.log("Ontology Parser - Search");
     }
     
     public org.pikater.core.ontology.messages.Agent process (Recommender recommender) {
@@ -326,21 +388,20 @@ class ComputingDescriptionParser {
     	String recommenderClass =
     			recommender.getRecommenderClass();
     	
-    	ArrayList<Option> parameters = recommender.getOptions();
+    	ArrayList options = recommender.getOptions();
     	
 		org.pikater.core.ontology.messages.Agent method =
 				new org.pikater.core.ontology.messages.Agent();
 		method.setName(recommenderClass);
 		method.setType(recommenderClass);
-		//TODO: Konverze parametru neni hotova
-		//method.setOptions(parameters);
+		method.setOptions(options);
 		
 		return method;
     }
     
-    public void process (ComputingAgent computingAgent) {
+    public ProblemWrapper process (ComputingAgent computingAgent) {
 
-    	System.out.println("Ontology Parser - ComputingAgent");
+    	agent.log("Ontology Parser - ComputingAgent");
     	
     	DataSourceDescription rainingDataSource =
     			computingAgent.getTrainingData();
@@ -349,14 +410,138 @@ class ComputingDescriptionParser {
     	DataSourceDescription validationDataSource =
     			computingAgent.getValidationData();
     	
- /*   	
-    	System.out.println("---------------------");
-    	ArrayList<StepanuvOption> sOption= computingAgent.getOptions();
-    	for (StepanuvOption sOpt : sOption) {
-    		System.out.println(sOpt.getName());
-    	}
-    	//process(rainingDataSource);
- */   	
+		
+ //   	process(rainingDataSource);
+ //   	process(testingDataSource);
+ //   	process(validationDataSource);
+
+
+			ArrayList optionsAgent = computingAgent.getOptions();
+
+			org.pikater.core.ontology.messages.Agent agent_ = new org.pikater.core.ontology.messages.Agent();
+			agent_.setType("RBFNetwork");
+			agent_.setGui_id("0");
+			agent_.setOptions(optionsAgent);
+
+			ArrayList agents = new ArrayList();
+			agents.add(agent_);
+
+
+			Data data = new Data();
+			data.setTrain_file_name("772c551b8486b932aed784a582b9c1b1");
+			data.setExternal_train_file_name("weather.arff");
+			data.setTest_file_name("772c551b8486b932aed784a582b9c1b1");
+			data.setExternal_test_file_name("weather.arff");
+			data.setOutput("evaluation_only");
+			data.setMode("train_test");
+			data.setGui_id(0);
+
+			ArrayList datas = new ArrayList();
+			datas.add(data);
+
+			
+			Option optionN = new Option();
+			optionN.setName("N");
+			optionN.setData_type("INT");
+			optionN.setSynopsis("number_of_values_to_try");
+			optionN.setValue("5");
+
+			ArrayList optionsAgentMethod = new ArrayList();
+			optionsAgentMethod.add(optionN);
+
+			org.pikater.core.ontology.messages.Agent method = new org.pikater.core.ontology.messages.Agent();
+			method.setName("ChooseXValues");
+			method.setType("ChooseXValues");				
+			method.setOptions(optionsAgentMethod);
+
+			Option optionF = new Option();
+			optionF.setName("F");
+			optionF.setData_type("INT");
+			optionF.setValue("10");
+			
+			
+			ArrayList optionsMethod = new ArrayList();
+			optionsMethod.add(optionF);
+			
+			EvaluationMethod evaluation_method = new EvaluationMethod();
+			evaluation_method.setName("CrossValidation");
+			evaluation_method.setOptions(optionsMethod);
+
+			
+			Problem problem = new Problem();
+			problem.setGui_id("0");
+			problem.setStatus("new");			
+			problem.setAgents(agents);
+			problem.setData(datas);				
+			problem.setTimeout(30000);
+			problem.setStart("2014-04-03 18:55:56.000978");
+			problem.setGet_results("after_each_computation");
+			problem.setSave_results(true);
+			problem.setGui_agent("UI");
+			problem.setName("test");
+			problem.setMethod(method);
+			problem.setEvaluation_method(evaluation_method);
+			
+			
+			ProblemWrapper problemWrapper = new ProblemWrapper();
+			problemWrapper.setProblem(problem);
+
+		return problemWrapper;
+	}
+
+}
+
+
+
+
+class SendProblemToManager extends AchieveREInitiator {
+
+	private static final long serialVersionUID = 8923548223375000884L;
+
+	PikaterAgent agent;
+	
+	public SendProblemToManager(Agent agent, ACLMessage msg) {
+		super(agent, msg);
+		this.agent = (PikaterAgent) agent;
+	}
+
+	protected void handleAgree(ACLMessage agree) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ agree.getSender().getName() + " agreed.");
+	}
+
+	protected void handleInform(ACLMessage inform) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ inform.getSender().getName() + " replied.");
+	}
+
+	protected void handleRefuse(ACLMessage refuse) {
+		System.out.println(agent.getLocalName() + ": Agent "
+				+ refuse.getSender().getName()
+				+ " refused to perform the requested action");
+	}
+
+	protected void handleFailure(ACLMessage failure) {
+		if (failure.getSender().equals(myAgent.getAMS())) {
+			// FAILURE notification from the JADE runtime: the receiver
+			// does not exist
+			System.out.println(agent.getLocalName() + ": Responder does not exist");
+		} else {
+			System.out.println(agent.getLocalName() + ": Agent " + failure.getSender().getName()
+					+ " failed to perform the requested action");
+		}
+	}
+
+}
+
+
+
+
+
+
+/*
+ * 
+ 
 			Solve solve = new Solve();
 
 			Interval inRangeB = new Interval();
@@ -556,55 +741,9 @@ class ComputingDescriptionParser {
 				oe.printStackTrace();
 			}
 
-			agent.addBehaviour(new SendProblemToManager(agent, msg));
-			
-	}
-
-}
-
-
-
-
-class SendProblemToManager extends AchieveREInitiator {
-
-	private static final long serialVersionUID = 8923548223375000884L;
-
-	PikaterAgent agent;
-	
-	public SendProblemToManager(Agent agent, ACLMessage msg) {
-		super(agent, msg);
-		this.agent = (PikaterAgent) agent;
-	}
-
-	protected void handleAgree(ACLMessage agree) {
-		System.out.println(agent.getLocalName() + ": Agent "
-				+ agree.getSender().getName() + " agreed.");
-	}
-
-	protected void handleInform(ACLMessage inform) {
-		System.out.println(agent.getLocalName() + ": Agent "
-				+ inform.getSender().getName() + " replied.");
-	}
-
-	protected void handleRefuse(ACLMessage refuse) {
-		System.out.println(agent.getLocalName() + ": Agent "
-				+ refuse.getSender().getName()
-				+ " refused to perform the requested action");
-	}
-
-	protected void handleFailure(ACLMessage failure) {
-		if (failure.getSender().equals(myAgent.getAMS())) {
-			// FAILURE notification from the JADE runtime: the receiver
-			// does not exist
-			System.out.println(agent.getLocalName() + ": Responder does not exist");
-		} else {
-			System.out.println(agent.getLocalName() + ": Agent " + failure.getSender().getName()
-					+ " failed to perform the requested action");
-		}
-	}
-
-}
-
-
+			agent.addBehaviour(new SendProblemToManager(agent, msg)); 
+ 
+ * 
+ */
 
 
