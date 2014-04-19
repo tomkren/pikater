@@ -2,8 +2,6 @@ package org.pikater.core.agents.system.computationDescriptionParser;
 
 import java.util.ArrayList;
 
-import org.pikater.core.agents.system.computationDescriptionParser.items.ProblemWrapper;
-
 public class OntologyGraph {
 
 	/*

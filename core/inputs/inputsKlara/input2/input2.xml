@@ -1,5 +1,5 @@
 <org.pikater.core.ontology.description.ComputationDescription>
-  <rootElement type="org.pikater.core.ontology.description.FileVisualizer">
+  <rootElement type="org.pikater.core.ontology.description.FileDataSaver">
     <dataSource>
       <dataProvider type="org.pikater.core.ontology.description.CARecSearchComplex">
         <search>
@@ -15,5 +15,6 @@
         </computingAgent>
       </dataProvider>
     </dataSource>
+    <nameOfFile>Output2.arff</nameOfFile>
   </rootElement>
 </org.pikater.core.ontology.description.ComputationDescription>

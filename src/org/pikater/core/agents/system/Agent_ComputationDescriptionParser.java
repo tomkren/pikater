@@ -5,8 +5,7 @@ import java.util.Date;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.ItemOfGraph;
 import org.pikater.core.agents.system.computationDescriptionParser.OntologyGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.items.DatasetWrapper;
-import org.pikater.core.agents.system.computationDescriptionParser.items.ProblemWrapper;
+import org.pikater.core.agents.system.computationDescriptionParser.ProblemWrapper;
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
@@ -193,8 +192,8 @@ class ComputingDescriptionParser {
 
 		agent.log("Ontology Parser - IComputationElement");
 
-		IDataSaver visualizer = (IDataSaver) element;
-		return process(visualizer);
+		IDataSaver dataSaver = (IDataSaver) element;
+		return process(dataSaver);
 	}
 	
 	public ItemOfGraph process(IDataSaver dataSaver) {
@@ -218,7 +217,7 @@ class ComputingDescriptionParser {
 
     }
 	
-    public ItemOfGraph process (IDataProvider dataProvider) {
+    public ProblemWrapper process (IDataProvider dataProvider) {
 
     	agent.log("Ontology Parser - IDataProvider");
 
@@ -327,7 +326,7 @@ class ComputingDescriptionParser {
 
 	}
 	
-    public ItemOfGraph process (DataSourceDescription dataSource) {
+    public ProblemWrapper process (DataSourceDescription dataSource) {
 
     	agent.log("Ontology Parser - DataSourceDescription");
 
@@ -336,11 +335,14 @@ class ComputingDescriptionParser {
     	return this.process(dataProvider);
     }
 
-    public DatasetWrapper process (FileDataProvider file) {
+    public ProblemWrapper process (FileDataProvider file) {
 
     	agent.log("Ontology Parser - FileDataProvider");
 
-    	return new DatasetWrapper(file.getFileURI());
+    	ProblemWrapper problem = new ProblemWrapper();
+    	problem.setOutputFile(file.getFileURI());
+ 
+    	return problem;
     }
     
     public ProblemWrapper process (CARecSearchComplex complex) {
@@ -385,17 +387,36 @@ class ComputingDescriptionParser {
 
     	agent.log("Ontology Parser - ComputingAgent");
     	
-    	DataSourceDescription rainingDataSource =
+    	DataSourceDescription trainingDataSource =
     			computingAgent.getTrainingData();
     	DataSourceDescription testingDataSource =
     			computingAgent.getTestingData();
     	DataSourceDescription validationDataSource =
     			computingAgent.getValidationData();
     	
-		
- //   	process(rainingDataSource);
- //   	process(testingDataSource);
- //   	process(validationDataSource);
+
+    	String trainDataFileName;
+    	String testingDataFileName;
+    	String validationDataFileName;
+    	
+    	
+    	ProblemWrapper trainingProblem = null;
+    	if (trainingDataSource != null) {
+    		trainingProblem = process(trainingDataSource);
+    		trainDataFileName = trainingProblem.getOutputFile();
+    	}
+    	
+    	ProblemWrapper testingProblem = null;
+    	if (testingDataSource != null) {
+    		testingProblem = process(testingDataSource);
+    		testingDataFileName = testingProblem.getOutputFile(); 
+    	}
+    	
+    	ProblemWrapper validationProblem = null;
+    	if (validationDataSource != null) {
+    		validationProblem = process(validationDataSource);
+    		validationDataFileName = validationProblem.getOutputFile();
+    	}
 
 
 			ArrayList optionsAgent = computingAgent.getOptions();
