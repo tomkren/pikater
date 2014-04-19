@@ -364,7 +364,7 @@ public class Agent_DataManager_New extends PikaterAgent {
 	}
 
 	private ACLMessage RespondToGetTheBestAgent(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		GetTheBestAgent g = (GetTheBestAgent) a.getAction();
+		/**GetTheBestAgent g = (GetTheBestAgent) a.getAction();
 		
 		String hash=g.getHash();
 		
@@ -399,6 +399,8 @@ public class Agent_DataManager_New extends PikaterAgent {
 		getContentManager().fillContent(reply, _result);
 
 		return reply;
+		**/
+		return null;
 	}
 
 	/**
