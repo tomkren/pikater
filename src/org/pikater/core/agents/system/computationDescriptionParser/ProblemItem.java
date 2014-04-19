@@ -2,7 +2,7 @@ package org.pikater.core.agents.system.computationDescriptionParser;
 
 import org.pikater.core.ontology.messages.Problem;
 
-public class ProblemWrapper extends ItemOfGraph {
+public class ProblemItem {
 
 	private Problem problem = null;
 	private String outputFile = null;

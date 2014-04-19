@@ -3,9 +3,8 @@ package org.pikater.core.agents.system;
 import java.util.Date;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.computationDescriptionParser.ItemOfGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.OntologyGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.ProblemWrapper;
+import org.pikater.core.agents.system.computationDescriptionParser.ProblemGraph;
+import org.pikater.core.agents.system.computationDescriptionParser.ProblemItem;
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
@@ -71,17 +70,32 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 	protected String getAgentType(){
 		return "ComputationDescriptionParser";
 	}
+	
+	public String getHashOfFile(String nameOfFile) {
 		
+		if (nameOfFile == null) {
+
+			return null;
+
+		} else if (nameOfFile.equals("weather.arff")) {
+			
+			return "772c551b8486b932aed784a582b9c1b1";
+			
+		} else {}
+		
+		return "";
+	}
 }
 
 
 class ComputingManagerBehaviour extends AchieveREResponder {
 
-    private Agent agent;
+    private Agent_ComputationDescriptionParser agent;
 	private Codec codec = null;
 	private Ontology ontology = null;
 
-    public ComputingManagerBehaviour(Agent agent, Codec codec, Ontology ontology) {
+    public ComputingManagerBehaviour(
+    		Agent_ComputationDescriptionParser agent, Codec codec, Ontology ontology) {
     	super(agent, MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
     	
 		this.agent = agent;
@@ -119,7 +133,7 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 					executeExperiment.getDescription();
     		
     		ComputingDescriptionParser parser =
-    				new ComputingDescriptionParser((PikaterAgent) this.agent);
+    				new ComputingDescriptionParser(this.agent);
     		parser.process(comDescription);
     		
     		// This will be graph - now only one problem
@@ -176,19 +190,19 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 
 class ComputingDescriptionParser {
 	
-	private OntologyGraph graph = null;
-	private PikaterAgent agent = null;
+	private ProblemGraph graph = null;
+	private Agent_ComputationDescriptionParser agent = null;
 
-	public ComputingDescriptionParser(PikaterAgent agent_) {
+	public ComputingDescriptionParser(Agent_ComputationDescriptionParser agent_) {
 		this.agent = agent_;
-		this.graph = new OntologyGraph();
+		this.graph = new ProblemGraph();
 	}
 
-	public OntologyGraph getProblemGraph() {
+	public ProblemGraph getProblemGraph() {
 		return this.graph;
 	}
 	
-	public ItemOfGraph process(IComputationElement element) {
+	public ProblemItem process(IComputationElement element) {
 
 		agent.log("Ontology Parser - IComputationElement");
 
@@ -196,7 +210,7 @@ class ComputingDescriptionParser {
 		return process(dataSaver);
 	}
 	
-	public ItemOfGraph process(IDataSaver dataSaver) {
+	public ProblemItem process(IDataSaver dataSaver) {
 
 		agent.log("Ontology Parser - IVisualizer");
 
@@ -217,7 +231,7 @@ class ComputingDescriptionParser {
 
     }
 	
-    public ProblemWrapper process (IDataProvider dataProvider) {
+    public ProblemItem process (IDataProvider dataProvider) {
 
     	agent.log("Ontology Parser - IDataProvider");
 
@@ -277,7 +291,7 @@ class ComputingDescriptionParser {
 		}
 		
     }
-    public ProblemWrapper process (IComputingAgent iAgent) {
+    public ProblemItem process (IComputingAgent iAgent) {
 
     	agent.log("Ontology Parser - IComputingAgent");
 
@@ -298,7 +312,7 @@ class ComputingDescriptionParser {
 			ComputingAgent agent =
 					(ComputingAgent) iAgent;
 
-			ProblemWrapper problemWrapper = this.process(agent);
+			ProblemItem problemWrapper = this.process(agent);
 			return problemWrapper;
 
 		} else {
@@ -316,41 +330,40 @@ class ComputingDescriptionParser {
 		IComputationElement element =
 				comDescription.getRootElement();
 		
-		ItemOfGraph item = this.process(element);
-		
-		if (item instanceof ProblemWrapper) {
-
-			ProblemWrapper problem = (ProblemWrapper) item;
-			this.graph.addRootProblem(problem);
-		}
+		ProblemItem problem = this.process(element);
+		this.graph.addRootProblem(problem);
 
 	}
 	
-    public ProblemWrapper process (DataSourceDescription dataSource) {
+    public ProblemItem process (DataSourceDescription dataSource) {
 
     	agent.log("Ontology Parser - DataSourceDescription");
 
+    	if (dataSource == null) {
+    		return null;
+    	}
+ 
     	IDataProvider dataProvider = dataSource.getDataProvider();
     	
     	return this.process(dataProvider);
     }
 
-    public ProblemWrapper process (FileDataProvider file) {
+    public ProblemItem process (FileDataProvider file) {
 
     	agent.log("Ontology Parser - FileDataProvider");
 
-    	ProblemWrapper problem = new ProblemWrapper();
+    	ProblemItem problem = new ProblemItem();
     	problem.setOutputFile(file.getFileURI());
  
     	return problem;
     }
     
-    public ProblemWrapper process (CARecSearchComplex complex) {
+    public ProblemItem process (CARecSearchComplex complex) {
 
     	agent.log("Ontology Parser - CARecSearchComplex");
 
     	IComputingAgent agent = complex.getComputingAgent();
-    	ProblemWrapper problemWrapper = this.process(agent);
+    	ProblemItem problemWrapper = this.process(agent);
     	Problem problem = problemWrapper.getProblem();
     	
     	Recommender recommender = complex.getRecommender();
@@ -383,7 +396,7 @@ class ComputingDescriptionParser {
 		return method;
     }
     
-    public ProblemWrapper process (ComputingAgent computingAgent) {
+    public ProblemItem process (ComputingAgent computingAgent) {
 
     	agent.log("Ontology Parser - ComputingAgent");
     	
@@ -395,35 +408,35 @@ class ComputingDescriptionParser {
     			computingAgent.getValidationData();
     	
 
-    	String trainDataFileName;
-    	String testingDataFileName;
-    	String validationDataFileName;
-    	
-    	
-    	ProblemWrapper trainingProblem = null;
-    	if (trainingDataSource != null) {
-    		trainingProblem = process(trainingDataSource);
+    	int problemID = this.graph.getNumOfProblems();
+    	String trainDataFileName = null;
+    	String testingDataFileName = null;
+    	String validationDataFileName = null;
+
+
+    	ProblemItem trainingProblem = process(trainingDataSource);
+    	if (trainingProblem != null) {
     		trainDataFileName = trainingProblem.getOutputFile();
     	}
-    	
-    	ProblemWrapper testingProblem = null;
-    	if (testingDataSource != null) {
-    		testingProblem = process(testingDataSource);
+    	ProblemItem testingProblem = process(testingDataSource);
+    	if (testingProblem != null) {
     		testingDataFileName = testingProblem.getOutputFile(); 
     	}
-    	
-    	ProblemWrapper validationProblem = null;
-    	if (validationDataSource != null) {
-    		validationProblem = process(validationDataSource);
+    	ProblemItem validationProblem = process(validationDataSource);
+    	if (validationProblem != null) {
     		validationDataFileName = validationProblem.getOutputFile();
     	}
 
+    	String trainDataFileHash = agent.getHashOfFile(trainDataFileName);
+    	String testingDataFileHash = agent.getHashOfFile(testingDataFileName);
+    	String validationDataFileHash = agent.getHashOfFile(validationDataFileName);
+    	
 
-			ArrayList optionsAgent = computingAgent.getOptions();
+ 			ArrayList optionsAgent = computingAgent.getOptions();
 
 			org.pikater.core.ontology.messages.Agent agent_ = new org.pikater.core.ontology.messages.Agent();
 			agent_.setType("RBFNetwork");
-			agent_.setGui_id("0");
+			agent_.setGui_id(String.valueOf(problemID));
 			agent_.setOptions(optionsAgent);
 
 			ArrayList agents = new ArrayList();
@@ -431,18 +444,18 @@ class ComputingDescriptionParser {
 
 
 			Data data = new Data();
-			data.setTrain_file_name("772c551b8486b932aed784a582b9c1b1");
-			data.setExternal_train_file_name("weather.arff");
-			data.setTest_file_name("772c551b8486b932aed784a582b9c1b1");
-			data.setExternal_test_file_name("weather.arff");
+			data.setTrain_file_name(trainDataFileHash);
+			data.setExternal_train_file_name(trainDataFileName);
+			data.setTest_file_name(testingDataFileHash);
+			data.setExternal_test_file_name(testingDataFileName);
 			data.setOutput("evaluation_only");
 			data.setMode("train_test");
-			data.setGui_id(0);
+			data.setGui_id(problemID);
 
 			ArrayList datas = new ArrayList();
 			datas.add(data);
 
-			
+
 			Option optionN = new Option();
 			optionN.setName("N");
 			optionN.setData_type("INT");
@@ -472,7 +485,7 @@ class ComputingDescriptionParser {
 
 			
 			Problem problem = new Problem();
-			problem.setGui_id("0");
+			problem.setGui_id(String.valueOf(problemID));
 			problem.setStatus("new");			
 			problem.setAgents(agents);
 			problem.setData(datas);				
@@ -486,10 +499,10 @@ class ComputingDescriptionParser {
 			problem.setEvaluation_method(evaluation_method);
 			
 			
-			ProblemWrapper problemWrapper = new ProblemWrapper();
-			problemWrapper.setProblem(problem);
+			ProblemItem problemItem = new ProblemItem();
+			problemItem.setProblem(problem);
 
-		return problemWrapper;
+		return problemItem;
 	}
 
 }

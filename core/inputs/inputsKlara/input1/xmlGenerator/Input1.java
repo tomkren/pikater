@@ -42,6 +42,7 @@ public final class Input1 {
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setOptions(options);
 		comAgent.setTrainingData(fileDataSource);
+		comAgent.setTestingData(fileDataSource);
 		comAgent.setModelClass(Agent_WekaCA.class.getName());
 
 
