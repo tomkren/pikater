@@ -12,14 +12,13 @@ import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
-import org.pikater.core.ontology.description.DifferenceVisualizer;
 import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.FileDataSaver;
 import org.pikater.core.ontology.description.IComputationElement;
 import org.pikater.core.ontology.description.IComputingAgent;
 import org.pikater.core.ontology.description.IDataProvider;
 import org.pikater.core.ontology.description.IErrorProvider;
-import org.pikater.core.ontology.description.IVisualizer;
+import org.pikater.core.ontology.description.IDataSaver;
 import org.pikater.core.ontology.description.Recommender;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.core.ontology.messages.Data;
@@ -194,43 +193,26 @@ class ComputingDescriptionParser {
 
 		agent.log("Ontology Parser - IComputationElement");
 
-		IVisualizer visualizer = (IVisualizer) element;
+		IDataSaver visualizer = (IDataSaver) element;
 		return process(visualizer);
 	}
 	
-	public ItemOfGraph process(IVisualizer visualizer) {
+	public ItemOfGraph process(IDataSaver dataSaver) {
 
 		agent.log("Ontology Parser - IVisualizer");
 
-		if (visualizer instanceof FileVisualizer) {
+		if (dataSaver instanceof FileDataSaver) {
 
-			agent.log("Ontology Matched - FileVisualizer");
+			agent.log("Ontology Matched - FileDataSaver");
 			
-			FileVisualizer fileVisualizer = (FileVisualizer) visualizer;
-			DataSourceDescription dataSource = fileVisualizer.getDataSource();
+			FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
+			DataSourceDescription dataSource = fileDataSaver.getDataSource();
 			
 			return this.process(dataSource);
 			
-		} else if (visualizer instanceof DifferenceVisualizer ) {
-
-			agent.log("Ontology Matched - DifferenceVisualizer");
-
-			DifferenceVisualizer diffVisualizer =
-					(DifferenceVisualizer) visualizer;
-
-			DataSourceDescription dataSrcDataMod =
-					diffVisualizer.getModelData();
-			DataSourceDescription dataSrcTarData =
-					diffVisualizer.getTargetData();
-
-			this.process(dataSrcDataMod);
-			this.process(dataSrcTarData);
-			
-			return null;
-			
 		} else {
 
-			agent.log("Ontology Parser - Error unknown IVisualizer");
+			agent.logError("Ontology Parser - Error unknown IDataSaver");
 			return null;
 		}
 

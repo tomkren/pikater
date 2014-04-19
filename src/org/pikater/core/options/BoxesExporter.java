@@ -7,9 +7,7 @@ import java.util.ArrayList;
 
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.ontology.description.DifferenceVisualizer;
 import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.FileVisualizer;
 import org.pikater.core.ontology.description.Recommender;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.shared.experiment.Box;
@@ -79,8 +77,7 @@ public class BoxesExporter {
 			
 		} else if (type == BoxType.VISUALIZER) {
 			
-			searchOntology.add(FileVisualizer.class);
-			searchOntology.add(DifferenceVisualizer.class);
+			searchOntology.add(FileDataProvider.class);
 			
 		} else if (type == BoxType.WRAPPER) {
 			

@@ -5,12 +5,12 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
-public class RandomTree_MethodBox extends LogicalBoxDescription {
-	public RandomTree_MethodBox(){
-		super("RandomTree",Method.class,"Random Tree Method");
+public class RandomTree_CABox extends LogicalBoxDescription {
+	public RandomTree_CABox(){
+		super("RandomTree",ComputingAgent.class,"Random Tree Method");
 		this.setPicture("picture3.jpg");
 		this.setAgentName(Agent_WekaCA.class);
 		

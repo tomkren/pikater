@@ -5,12 +5,12 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
-public class RBFNetwork_MethodBox extends LogicalBoxDescription {
-	public RBFNetwork_MethodBox(){
-		super("RBFNetwork",Method.class,"RBFNetwork Method");
+public class RBFNetwork_CABox extends LogicalBoxDescription {
+	public RBFNetwork_CABox(){
+		super("RBFNetwork",ComputingAgent.class,"RBFNetwork Method");
 		this.setAgentName(Agent_WekaCA.class);
 		this.setPicture("picture3.jpg");
 		

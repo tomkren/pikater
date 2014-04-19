@@ -3,12 +3,12 @@ package org.pikater.core.options.xmlGenerators;
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
 public class NaiveBayes_MethodBox extends LogicalBoxDescription {
 	public NaiveBayes_MethodBox(){
-		super("NaiveBayes",Method.class,"Naive Bayes Method");
+		super("NaiveBayes",ComputingAgent.class,"Naive Bayes Method");
 		this.setPicture("picture.jpg");
 		this.setAgentName(Agent_WekaCA.class);
 		

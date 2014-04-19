@@ -3,7 +3,7 @@ package org.pikater.shared;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import org.pikater.core.options.xmlGenerators.CrossValidation_MethodBox;
+import org.pikater.core.options.xmlGenerators.CrossValidation_CABox;
 import org.pikater.shared.AppHelper;
 
 public class OptionContext
@@ -36,7 +36,7 @@ public class OptionContext
 	
 	public static Package getSerializationPackage()
 	{
-		return CrossValidation_MethodBox.class.getPackage();
+		return CrossValidation_CABox.class.getPackage();
 	}
 	
 	public static File[] getFilesToDeserialize()

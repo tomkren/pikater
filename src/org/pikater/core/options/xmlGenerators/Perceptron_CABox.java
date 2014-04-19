@@ -5,12 +5,12 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
-public class Perceptron_MethodBox extends LogicalBoxDescription {
-	public Perceptron_MethodBox(){
-		super("Perceptron",Method.class,"Perceptron Method");
+public class Perceptron_CABox extends LogicalBoxDescription {
+	public Perceptron_CABox(){
+		super("Perceptron",ComputingAgent.class,"Perceptron Method");
 		this.setPicture("picture3.jpg");
 		this.setAgentName(Agent_WekaCA.class);
 		

@@ -8,10 +8,6 @@ import jade.content.schema.ConceptSchema;
 import jade.content.schema.ObjectSchema;
 import jade.content.schema.PredicateSchema;
 import jade.content.schema.PrimitiveSchema;
-import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.ontology.description.DataSourceDescription;
-import org.pikater.core.ontology.description.FileVisualizer;
 import org.pikater.core.ontology.messages.metadata.*;
 
 public class MessagesOntology extends Ontology {
@@ -343,18 +339,6 @@ public class MessagesOntology extends Ontology {
 	
 	public static final String EXPERIMENT = "EXPERIMENT";
 	public static final String EXPERIMENT_DESCRIPTION = "description";
-	
-	public static final String COMP_DESCRIPTION = "ComputationDescription";
-	public static final String COMP_DESCRIPTION_ROOT = "rootElement";
-	
-	public static final String FILEVISUALIZER = "FileVisualizer"; 
-	public static final String FILEVISUALIZER_DATASOURCE = "dataSource";
-
-	public static final String DATAPROVIDER = "DataSourceDescription";
-	public static final String DATAPROVIDER_DATAPROVIDER = "dataProvider";
-	
-	public static final String COMPUTINGAGENT = "ComputingAgent";
-	public static final String COMPUTINGAGENT_MODEL = "modelClass";
 
 
 	// public static final String SEND_OPTIONS = "SEND-OPTIONS";
@@ -445,11 +429,7 @@ public class MessagesOntology extends Ontology {
 			
 			
 			add(new AgentActionSchema(EXPERIMENT), ExecuteExperiment.class);
-			
-			add(new ConceptSchema(COMP_DESCRIPTION), ComputationDescription.class);
-			add(new ConceptSchema(FILEVISUALIZER), FileVisualizer.class);
-			add(new ConceptSchema(DATAPROVIDER), DataSourceDescription.class);
-			add(new ConceptSchema(COMPUTINGAGENT), ComputingAgent.class);
+
 
 	
 			ConceptSchema cs = (ConceptSchema) getSchema(ID);
@@ -1056,22 +1036,7 @@ public class MessagesOntology extends Ontology {
             as.add(SEND_EMAIL_TYPE, (PrimitiveSchema) getSchema(BasicOntology.STRING),
                     ObjectSchema.MANDATORY);
             
-            as = (AgentActionSchema) getSchema(EXPERIMENT);
-            as.add(EXPERIMENT_DESCRIPTION, (ConceptSchema) getSchema(COMP_DESCRIPTION),
-            		ObjectSchema.MANDATORY);
 
-            cs = (ConceptSchema) getSchema(COMP_DESCRIPTION);
-            cs.add(COMP_DESCRIPTION_ROOT, (ConceptSchema) getSchema(FILEVISUALIZER),
-            		ObjectSchema.OPTIONAL);
-
-            cs = (ConceptSchema) getSchema(FILEVISUALIZER);
-            cs.add(FILEVISUALIZER_DATASOURCE, (ConceptSchema) getSchema(DATAPROVIDER));
-            
-            cs = (ConceptSchema) getSchema(DATAPROVIDER);
-            cs.add(DATAPROVIDER_DATAPROVIDER, (ConceptSchema) getSchema(COMPUTINGAGENT));
-            
-            cs = (ConceptSchema) getSchema(COMPUTINGAGENT);
-            cs.add(COMPUTINGAGENT_MODEL, (PrimitiveSchema) getSchema(BasicOntology.STRING));
             
 		} catch (OntologyException oe) {
 			oe.printStackTrace();

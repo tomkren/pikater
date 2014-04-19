@@ -5,12 +5,12 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
-public class NNge_MethodBox extends LogicalBoxDescription {
-	public NNge_MethodBox(){
-		super("NNge",Method.class,"NNge Method");
+public class NNge_CABox extends LogicalBoxDescription {
+	public NNge_CABox(){
+		super("NNge",ComputingAgent.class,"NNge Method");
 		this.setPicture("picture3.jpg");
 		this.setAgentName(Agent_WekaCA.class);
 		

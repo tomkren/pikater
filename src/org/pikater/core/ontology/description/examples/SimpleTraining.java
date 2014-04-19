@@ -46,12 +46,11 @@ public class SimpleTraining {
         CAds.setDataProvider(ca);
         CAds.setDataType("trained");
 
-        DifferenceVisualizer diff = new DifferenceVisualizer();
-        diff.setTargetData(dsd);
-        diff.setModelData(CAds);
+        FileDataSaver fds = new FileDataSaver();
+        fds.setDataSource(CAds);
 
         ComputationDescription cd = new ComputationDescription();
-        cd.setRootElement(diff);
+        cd.setRootElement(fds);
 
     }
 

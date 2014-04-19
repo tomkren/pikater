@@ -5,13 +5,12 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.Method;
+import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.util.Interval;
 
-public class OneR_MethodBox extends LogicalBoxDescription {
-	public OneR_MethodBox(){
-		super("OneR",Method.class,"One R Method");
+public class OneR_CABox extends LogicalBoxDescription {
+	public OneR_CABox(){
+		super("OneR",ComputingAgent.class,"One R Method");
 		this.setPicture("picture3.jpg");
 		this.setAgentName(Agent_WekaCA.class);
 		

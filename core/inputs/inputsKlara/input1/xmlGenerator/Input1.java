@@ -12,8 +12,7 @@ import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.FileVisualizer;
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.description.FileDataSaver;
 
 
 public final class Input1 {
@@ -49,11 +48,11 @@ public final class Input1 {
 		DataSourceDescription computingDataSource = new DataSourceDescription();
 		computingDataSource.setDataProvider(comAgent);
 
-        FileVisualizer visualizer = new FileVisualizer();
-        visualizer.setDataSource(computingDataSource);
+        FileDataSaver saver = new FileDataSaver();
+        saver.setDataSource(computingDataSource);
 
         ComputationDescription comDescription = new ComputationDescription();
-		comDescription.setRootElement(visualizer);
+		comDescription.setRootElement(saver);
 
 		
 

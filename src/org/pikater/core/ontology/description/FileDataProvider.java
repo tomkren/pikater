@@ -5,6 +5,8 @@ package org.pikater.core.ontology.description;
  */
 public class FileDataProvider implements IDataProvider {
 
+    private String fileURI;
+
     public String getFileURI() {
         return fileURI;
     }
@@ -12,7 +14,5 @@ public class FileDataProvider implements IDataProvider {
     public void setFileURI(String fileURI) {
         this.fileURI = fileURI;
     }
-
-    private String fileURI;
 
 }

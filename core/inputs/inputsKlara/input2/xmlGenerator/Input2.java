@@ -10,7 +10,7 @@ import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.FileVisualizer;
+import org.pikater.core.ontology.description.FileDataSaver;
 import org.pikater.core.ontology.description.Search;
 
 import com.thoughtworks.xstream.XStream;
@@ -46,11 +46,12 @@ public final class Input2 {
 		DataSourceDescription computingDataSource = new DataSourceDescription();
 		computingDataSource.setDataProvider(complex);
 
-        FileVisualizer visualizer = new FileVisualizer();
-        visualizer.setDataSource(computingDataSource);
+        FileDataSaver saver = new FileDataSaver();
+        saver.setNameOfFile("Output2.arff");
+        saver.setDataSource(computingDataSource);
 
         ComputationDescription comDescription = new ComputationDescription();
-		comDescription.setRootElement(visualizer);
+		comDescription.setRootElement(saver);
 
 
 
