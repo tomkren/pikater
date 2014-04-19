@@ -18,9 +18,16 @@
     <OptionDefault>
       <name>M</name>
       <description>Maximal number of generations</description>
-      <value reference="../../OptionDefault/value"/>
-      <interval reference="../../OptionDefault/interval"/>
-      <list reference="../../OptionDefault/list"/>
+      <value>
+        <object type="int">10</object>
+      </value>
+      <interval>
+        <minValue type="int">1</minValue>
+        <maxValue type="int">1000</maxValue>
+      </interval>
+      <list>
+        <list/>
+      </list>
     </OptionDefault>
     <OptionDefault>
       <name>T</name>

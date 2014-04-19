@@ -56,8 +56,8 @@ public class GridSearch_SearchBox extends LogicalBoxDescription {
 		this.addOption(optionB);
 		this.addOption(optionN);
 		this.addOption(optionZ);
-
-
+		
+		
 
 		// Slot Definition
 		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());

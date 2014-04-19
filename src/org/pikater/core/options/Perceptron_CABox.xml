@@ -1,5 +1,5 @@
 <Box>
-  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <ontology>org.pikater.core.ontology.description.ComputingAgent</ontology>
   <options>
     <OptionDefault>
       <name>L</name>
@@ -51,8 +51,32 @@
       </value>
     </OptionDefault>
   </options>
-  <inputSlots/>
-  <outputSlots/>
+  <inputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <description>Training data</description>
+      <ontologyFieldName>trainingData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <description>Validation data</description>
+      <ontologyFieldName>testingData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <ontologyFieldName>validationData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </inputSlots>
+  <outputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>AGENT_SLOT</type>
+      <sex>PRODUCENT</sex>
+      <description>data computed</description>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </outputSlots>
   <name>Perceptron</name>
   <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
   <picture>picture3.jpg</picture>

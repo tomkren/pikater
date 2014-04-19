@@ -1,6 +1,5 @@
 package org.pikater.core.options.xmlGenerators;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;

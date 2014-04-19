@@ -1,9 +1,0 @@
-<Box>
-  <ontology>org.pikater.core.ontology.description.FileVisualizer</ontology>
-  <options/>
-  <inputSlots/>
-  <outputSlots/>
-  <name>FileVisualizer</name>
-  <picture>picture4.jpg</picture>
-  <description>Displays provided data.</description>
-</Box>

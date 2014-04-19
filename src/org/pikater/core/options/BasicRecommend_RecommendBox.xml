@@ -1,0 +1,16 @@
+<Box>
+  <ontology>org.pikater.core.ontology.messages.Recommend</ontology>
+  <options/>
+  <inputSlots/>
+  <outputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>RECOMMEND_SLOT</type>
+      <sex>PRODUCENT</sex>
+      <description>Name of agent</description>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </outputSlots>
+  <name>Basic Recommend</name>
+  <agentClass>org.pikater.core.ontology.description.Recommender</agentClass>
+  <picture>picture3.jpg</picture>
+  <description>Basic Recommend</description>
+</Box>

@@ -17,7 +17,13 @@
     </OptionDefault>
   </options>
   <inputSlots/>
-  <outputSlots/>
+  <outputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>SEARCHERCH_SLOT</type>
+      <sex>PRODUCENT</sex>
+      <description>Parameters produced by searcher</description>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </outputSlots>
   <name>Choose X Values Agent</name>
   <agentClass>org.pikater.core.agents.experiment.search.Agent_ChooseXValues</agentClass>
   <picture>picture3.jpg</picture>

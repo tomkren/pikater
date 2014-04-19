@@ -45,7 +45,13 @@
     </OptionDefault>
   </options>
   <inputSlots/>
-  <outputSlots/>
+  <outputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>SEARCHERCH_SLOT</type>
+      <sex>PRODUCENT</sex>
+      <description>Parameters produced by searcher</description>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </outputSlots>
   <name>GridSearch</name>
   <agentClass>org.pikater.core.agents.experiment.search.Agent_GridSearch</agentClass>
   <picture>picture3.jpg</picture>

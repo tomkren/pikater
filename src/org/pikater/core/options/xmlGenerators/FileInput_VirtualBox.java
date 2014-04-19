@@ -9,8 +9,7 @@ import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.options.LogicalBoxDescription;
 import org.pikater.shared.experiment.slots.SimpleSlot;
 
-public class FileInput_VirtualBox extends LogicalBoxDescription
-{
+public class FileInput_VirtualBox extends LogicalBoxDescription{
 	
 	protected FileInput_VirtualBox() {
 		super("FileInput",

@@ -1,19 +1,19 @@
 <Box>
-  <ontology>org.pikater.core.ontology.description.Method</ontology>
+  <ontology>org.pikater.core.ontology.description.ComputingAgent</ontology>
   <options>
     <OptionDefault>
-      <name>C</name>
-      <description>Num The complexity</description>
+      <name>S</name>
+      <description>The amount up to which deviation are tolerated (epsilon)</description>
       <value>
-        <object type="float">1.0</object>
+        <object type="float">0.001</object>
       </value>
-      <interval>
-        <minValue type="float">1.0E-4</minValue>
-        <maxValue type="float">5.0</maxValue>
-      </interval>
-      <list>
-        <list/>
-      </list>
+    </OptionDefault>
+    <OptionDefault>
+      <name>C</name>
+      <description>The complexity constant</description>
+      <value>
+        <object type="int">1</object>
+      </value>
     </OptionDefault>
     <OptionDefault>
       <name>E</name>
@@ -24,20 +24,16 @@
     </OptionDefault>
     <OptionDefault>
       <name>G</name>
-      <description>Num Gamma for the RBF kernel</description>
+      <description>Gamma for the RBF kernel</description>
       <value>
         <object type="float">0.01</object>
       </value>
-      <interval>
-        <minValue type="float">1.0E-4</minValue>
-        <maxValue type="float">4.0</maxValue>
-      </interval>
     </OptionDefault>
     <OptionDefault>
       <name>N</name>
-      <description>Num Gamma for the RBF kernel</description>
+      <description>Random number seed for cross-validation</description>
       <value>
-        <object type="int">0</object>
+        <object type="int">1</object>
       </value>
       <list>
         <list>
@@ -62,8 +58,8 @@
       </value>
     </OptionDefault>
     <OptionDefault>
-      <name>O</name>
-      <description>Use the RBF kernel</description>
+      <name>R</name>
+      <description>Use RBF kernel (default poly)</description>
       <value>
         <object type="boolean">false</object>
       </value>
@@ -80,13 +76,6 @@
       </interval>
     </OptionDefault>
     <OptionDefault>
-      <name>L</name>
-      <description>Sets the tolerance parameter</description>
-      <value>
-        <object type="float">0.001</object>
-      </value>
-    </OptionDefault>
-    <OptionDefault>
       <name>P</name>
       <description>Sets the epsilon for round-off error</description>
       <value>
@@ -94,35 +83,41 @@
       </value>
     </OptionDefault>
     <OptionDefault>
-      <name>M</name>
-      <description>Fit logistic models to SVM outputs</description>
+      <name>T</name>
+      <description>Sets the epsilon for round-off error</description>
       <value>
-        <object type="boolean">false</object>
+        <object type="float">0.001</object>
       </value>
-    </OptionDefault>
-    <OptionDefault>
-      <name>V</name>
-      <description>Number of folds for cross-validation used to generate data for logistic models. (default -1, use training data)</description>
-      <value>
-        <object type="int">-1</object>
-      </value>
-    </OptionDefault>
-    <OptionDefault>
-      <name>W</name>
-      <description>Random number seed for cross-validation</description>
-      <value>
-        <object type="int">1</object>
-      </value>
-      <interval>
-        <minValue type="int">1</minValue>
-        <maxValue type="int">2147483647</maxValue>
-      </interval>
     </OptionDefault>
   </options>
-  <inputSlots/>
-  <outputSlots/>
-  <name>SMO</name>
+  <inputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <description>Training data</description>
+      <ontologyFieldName>trainingData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <description>Validation data</description>
+      <ontologyFieldName>testingData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <ontologyFieldName>validationData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </inputSlots>
+  <outputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>AGENT_SLOT</type>
+      <sex>PRODUCENT</sex>
+      <description>data computed</description>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </outputSlots>
+  <name>SMO Reg</name>
   <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
   <picture>picture3.jpg</picture>
-  <description>SMO Method</description>
+  <description>SMOReg Method</description>
 </Box>

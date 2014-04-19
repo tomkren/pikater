@@ -1,0 +1,49 @@
+<Box>
+  <ontology>org.pikater.core.ontology.description.ComputingAgent</ontology>
+  <options>
+    <OptionDefault>
+      <name>K</name>
+      <description>Use kernel estimation for modelling numeric attributes rather than a single normal distribution</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+    <OptionDefault>
+      <name>D</name>
+      <description>Use supervised discretization to process numeric attributes</description>
+      <value>
+        <object type="boolean">false</object>
+      </value>
+    </OptionDefault>
+  </options>
+  <inputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <description>Training data</description>
+      <ontologyFieldName>trainingData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <description>Validation data</description>
+      <ontologyFieldName>testingData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>DATA_SLOT</type>
+      <sex>CONSUMENT</sex>
+      <ontologyFieldName>validationData</ontologyFieldName>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </inputSlots>
+  <outputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>AGENT_SLOT</type>
+      <sex>PRODUCENT</sex>
+      <description>data computed</description>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </outputSlots>
+  <name>NaiveBayes</name>
+  <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</agentClass>
+  <picture>picture.jpg</picture>
+  <description>Naive Bayes Method</description>
+</Box>

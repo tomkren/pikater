@@ -65,4 +65,20 @@ public abstract class AAA_SlotHelper {
 		
 		return slots;
 	}
+
+
+	public static ArrayList<Slot> getRecommendOutputSlots() {
+
+		Slot outputSlot = new Slot();
+		outputSlot.setDescription("Name of agent");
+		outputSlot.setType(Slot.SlotType.RECOMMEND_SLOT);
+		outputSlot.setSex(Slot.SlotSex.PRODUCENT);
+		outputSlot.setOntologyField(null);
+		
+		ArrayList<Slot> slots = new ArrayList<Slot>();
+		slots.add(outputSlot);
+		
+		return slots;
+	}
+	
 }

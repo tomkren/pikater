@@ -59,7 +59,13 @@
     </OptionDefault>
   </options>
   <inputSlots/>
-  <outputSlots/>
+  <outputSlots>
+    <org.pikater.core.dataStructures.slots.Slot>
+      <type>SEARCHERCH_SLOT</type>
+      <sex>PRODUCENT</sex>
+      <description>Parameters produced by searcher</description>
+    </org.pikater.core.dataStructures.slots.Slot>
+  </outputSlots>
   <name>SimulatedAnnealing-Searcher</name>
   <agentClass>org.pikater.core.agents.experiment.search.Agent_SimulatedAnnealing</agentClass>
   <picture>picture2.jpg</picture>

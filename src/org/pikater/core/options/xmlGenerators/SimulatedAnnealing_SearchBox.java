@@ -7,7 +7,6 @@ import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.core.options.LogicalBoxDescription;
-import org.pikater.shared.util.Interval;
 
 public class SimulatedAnnealing_SearchBox extends LogicalBoxDescription {
 
