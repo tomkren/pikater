@@ -37,15 +37,21 @@ public class OptionValue extends AbstractOption {
 			
 			Integer thisInteger = (Integer) object;
 			option.setData_type("INT");
-			option.setValue(thisInteger.toString());
+			option.setValue(String.valueOf(thisInteger));
 			
 		} else if (object instanceof Float) {
 			
 			Float thisFloat = (Float) object;
 			option.setData_type("FLOAT");
-			option.setValue(thisFloat.toString());
-		}
+			option.setValue(String.valueOf(thisFloat));
+			
+		} else if (object instanceof String) {
 		
+			String thisString = (String) object;
+			option.setData_type("STRING");
+			option.setValue(thisString);
+		}
+
 		return option;
 	}
 }

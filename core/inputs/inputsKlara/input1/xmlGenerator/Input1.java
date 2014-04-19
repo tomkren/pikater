@@ -21,6 +21,25 @@ public final class Input1 {
 		
 		System.out.println("Exporting Ontology input1 to Klara's input XML configuration file.");
 
+		
+		StepanuvOption optionEM = new StepanuvOption();
+		optionEM.setName("evaluation_method");
+		optionEM.setOption( new OptionValue(new String("CrossValidation")) );	
+		
+		StepanuvOption optionSearch = new StepanuvOption();
+		optionSearch.setName("search_method");
+		optionSearch.setOption( new OptionValue(new String("ChooseXValues")) );	
+		
+		StepanuvOption optionComMethod = new StepanuvOption();
+		optionComMethod.setName("computing_method");
+		optionComMethod.setOption( new OptionValue(new String("RBFNetwork")) );
+		
+		
+		StepanuvOption optionOutput = new StepanuvOption();
+		optionOutput.setName("output");
+		optionOutput.setOption( new OptionValue(new String("evaluation_only")) );	
+		
+		
 		StepanuvOption optionS = new StepanuvOption();
 		optionS.setName("S");
 		optionS.setOption( new OptionValue(new Integer(1)) );
@@ -28,10 +47,14 @@ public final class Input1 {
 		StepanuvOption optionM = new StepanuvOption();
 		optionM.setName("M");
 		optionM.setOption( new OptionValue(new Float(0.4)) );	
-		
+
 		ArrayList options = new ArrayList();
 		options.add(optionS.toOption());
 		options.add(optionM.toOption());
+		options.add(optionEM.toOption());
+		options.add(optionSearch.toOption());
+		options.add(optionComMethod.toOption());
+		options.add(optionOutput.toOption());
 		
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI("weather.arff");

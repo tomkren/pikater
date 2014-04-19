@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system.computationDescriptionParser;
+package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph;
 
 import java.util.ArrayList;
 

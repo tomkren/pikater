@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system.computationDescriptionParser;
+package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph;
 
 import org.pikater.core.ontology.messages.Problem;
 
