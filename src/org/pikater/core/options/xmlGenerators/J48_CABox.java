@@ -93,14 +93,19 @@ public class J48_CABox extends LogicalBoxDescription {
 				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
 
 		
-		this.addParameter(optionU);
-		this.addParameter(optionC);
-		this.addParameter(optionM);
-		this.addParameter(optionR);
-		this.addParameter(optionN);
-		this.addParameter(optionB);
-		this.addParameter(optionS);
-		this.addParameter(optionA);
-		this.addParameter(optionQ);
+		this.addOption(optionU);
+		this.addOption(optionC);
+		this.addOption(optionM);
+		this.addOption(optionR);
+		this.addOption(optionN);
+		this.addOption(optionB);
+		this.addOption(optionS);
+		this.addOption(optionA);
+		this.addOption(optionQ);
+
+
+		// Slot Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

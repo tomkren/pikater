@@ -82,10 +82,15 @@ public class RBFNetwork_CABox extends LogicalBoxDescription {
 		optionM.setList( new OptionList() );
 		
 		
-		this.addParameter(optionB);
-		this.addParameter(optionW);
-		this.addParameter(optionR);
-		this.addParameter(optionS);
-		this.addParameter(optionM);
+		this.addOption(optionB);
+		this.addOption(optionW);
+		this.addOption(optionR);
+		this.addOption(optionS);
+		this.addOption(optionM);
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

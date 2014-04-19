@@ -11,8 +11,8 @@ import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
-public class SMOReg_MethodBox extends LogicalBoxDescription {
-	public SMOReg_MethodBox(){
+public class SMOReg_CABox extends LogicalBoxDescription {
+	public SMOReg_CABox(){
 		super("SMO Reg",ComputingAgent.class,"SMOReg Method");
 		this.setAgentName(Agent_WekaCA.class);
 		this.setPicture("picture3.jpg");
@@ -125,16 +125,21 @@ public class SMOReg_MethodBox extends LogicalBoxDescription {
 		optionT.setDescription("Sets the epsilon for round-off error");
 		optionT.setValue( new OptionValue(new Float(1.0e-3f)) );
 		
-		this.addParameter(optionS);
-		this.addParameter(optionC);
-		this.addParameter(optionE);
-		this.addParameter(optionG);
-		this.addParameter(optionN);
-		this.addParameter(optionF);
-		this.addParameter(optionO);
-		this.addParameter(optionR);
-		this.addParameter(optionA);
-		this.addParameter(optionP);
-		this.addParameter(optionT);
+		this.addOption(optionS);
+		this.addOption(optionC);
+		this.addOption(optionE);
+		this.addOption(optionG);
+		this.addOption(optionN);
+		this.addOption(optionF);
+		this.addOption(optionO);
+		this.addOption(optionR);
+		this.addOption(optionA);
+		this.addOption(optionP);
+		this.addOption(optionT);
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

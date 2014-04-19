@@ -114,14 +114,18 @@ public class PART_CABox extends LogicalBoxDescription {
 		optionQ.setList( new OptionList() );
 		
 		
-		this.addParameter(optionC);
-		this.addParameter(optionM);
-		this.addParameter(optionR);
-		this.addParameter(optionN);
-		this.addParameter(optionB);
-		this.addParameter(optionU);
-		this.addParameter(optionQ);
-		
-		
+		this.addOption(optionC);
+		this.addOption(optionM);
+		this.addOption(optionR);
+		this.addOption(optionN);
+		this.addOption(optionB);
+		this.addOption(optionU);
+		this.addOption(optionQ);
+
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

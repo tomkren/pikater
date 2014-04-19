@@ -39,7 +39,11 @@ public class RandomSearch_SearchBox extends LogicalBoxDescription {
 				new OptionInterval(new Integer(1), new Integer(100000)) );
 		optionM.setList( new OptionList() );
 		
-		this.addParameter(optionE);
-		this.addParameter(optionM);
+		this.addOption(optionE);
+		this.addOption(optionM);
+
+
+		// Slot Definition
+		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());		
 	}
 }

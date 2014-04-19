@@ -44,9 +44,9 @@ public class LinearRegression extends LogicalUnitDescription
 				new OptionInterval(new Float(0.0000000001f), new Float(0.0001f)) );
 		optionR.setList(new OptionList() );
 
-		this.addParameter(optionS);
-		this.addParameter(optionC);
-		this.addParameter(optionR);
+		this.addOption(optionS);
+		this.addOption(optionC);
+		this.addOption(optionR);
 
 	}
 

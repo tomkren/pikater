@@ -60,10 +60,14 @@ public class SimulatedAnnealing_SearchBox extends LogicalBoxDescription {
 		optionS.setList( new OptionList() );
 		
 		
-		this.addParameter(optionE);
-		this.addParameter(optionM);
-		this.addParameter(optionT);
-		this.addParameter(optionS);
-		
+		this.addOption(optionE);
+		this.addOption(optionM);
+		this.addOption(optionT);
+		this.addOption(optionS);
+
+
+
+		// Slot Definition
+		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
 	}
 }

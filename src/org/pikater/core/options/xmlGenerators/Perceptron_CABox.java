@@ -69,9 +69,15 @@ public class Perceptron_CABox extends LogicalBoxDescription {
 		optionC.setValue(
 				new OptionValue(new Boolean(false)) );
 		
-		this.addParameter(optionL);
-		this.addParameter(optionN);
-		this.addParameter(optionS);
-		this.addParameter(optionC);
+		this.addOption(optionL);
+		this.addOption(optionN);
+		this.addOption(optionS);
+		this.addOption(optionC);
+
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

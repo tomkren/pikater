@@ -57,8 +57,13 @@ public class RandomTree_CABox extends LogicalBoxDescription {
 		
 		
 		
-		this.addParameter(optionK);
-		this.addParameter(optionM);
-		this.addParameter(optionQ);
+		this.addOption(optionK);
+		this.addOption(optionM);
+		this.addOption(optionQ);
+		
+		
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

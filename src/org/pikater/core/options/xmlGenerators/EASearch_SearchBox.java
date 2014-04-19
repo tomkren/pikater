@@ -33,7 +33,7 @@ public class EASearch_SearchBox extends LogicalBoxDescription {
 		OptionInterval intervalM = new OptionInterval(new Integer(1), new Integer(1000));
 		OptionList listM = new OptionList();
 		
-		OptionDefault optionM = new OptionDefault(valueE, intervalE, listE);
+		OptionDefault optionM = new OptionDefault(valueM, intervalM, listM);
 		optionM.setName("M");
 		optionM.setDescription("Maximal number of generations");
 		
@@ -92,13 +92,13 @@ public class EASearch_SearchBox extends LogicalBoxDescription {
 		optionL.setDescription("The percentage of elite individuals");
 
 		
-		this.addParameter(optionE);
-		this.addParameter(optionM);
-		this.addParameter(optionT);
-		this.addParameter(optionX);
-		this.addParameter(optionP);
-		this.addParameter(optionI);
-		this.addParameter(optionF);
-		this.addParameter(optionL);
+		this.addOption(optionE);
+		this.addOption(optionM);
+		this.addOption(optionT);
+		this.addOption(optionX);
+		this.addOption(optionP);
+		this.addOption(optionI);
+		this.addOption(optionF);
+		this.addOption(optionL);
 	}
 }

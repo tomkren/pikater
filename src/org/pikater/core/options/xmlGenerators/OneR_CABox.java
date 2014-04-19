@@ -29,6 +29,12 @@ public class OneR_CABox extends LogicalBoxDescription {
 				new OptionList() );
 		
 		
-		this.addParameter(optionB);
+		this.addOption(optionB);
+
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

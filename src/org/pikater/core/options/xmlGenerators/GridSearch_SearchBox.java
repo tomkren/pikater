@@ -53,8 +53,13 @@ public class GridSearch_SearchBox extends LogicalBoxDescription {
 				new OptionList() );
 		
 		
-		this.addParameter(optionB);
-		this.addParameter(optionN);
-		this.addParameter(optionZ);
+		this.addOption(optionB);
+		this.addOption(optionN);
+		this.addOption(optionZ);
+
+
+
+		// Slot Definition
+		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
 	}
 }

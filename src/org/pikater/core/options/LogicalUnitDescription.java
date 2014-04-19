@@ -12,7 +12,7 @@ import org.pikater.core.dataStructures.options.types.AbstractOption;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.shared.experiment.slots.AbstractSlot;
+import org.pikater.core.dataStructures.slots.Slot;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -30,8 +30,8 @@ public class LogicalUnitDescription
 	protected Class ontology = null;
 	
 	private ArrayList<OptionDefault> options = new ArrayList<OptionDefault>();
-	private ArrayList<AbstractSlot> inputSlots = new ArrayList<AbstractSlot>();
-	private ArrayList<AbstractSlot> outputSlots = new ArrayList<AbstractSlot>();
+	private ArrayList<Slot> inputSlots = new ArrayList<Slot>();
+	private ArrayList<Slot> outputSlots = new ArrayList<Slot>();
 
 	public boolean getIsBox()
 	{
@@ -48,42 +48,42 @@ public class LogicalUnitDescription
 		this.ontology = ontology;
 	}
 
-	public ArrayList<OptionDefault> getParameters()
+	public ArrayList<OptionDefault> getOptions()
 	{
 		return options;
 	}
 
-	public void addParameter(OptionDefault parameter)
+	public void addOption(OptionDefault option)
 	{
-		this.options.add(parameter);
+		this.options.add(option);
 	}
 
-	public ArrayList<AbstractSlot> getInputSlots()
+	public ArrayList<Slot> getInputSlots()
 	{
 		return inputSlots;
 	}
 
-	public void setInputSlots(ArrayList<AbstractSlot> inputSlots)
+	public void setInputSlots(ArrayList<Slot> inputSlots)
 	{
 		this.inputSlots = inputSlots;
 	}
 
-	public void addInputSlot(AbstractSlot inputSlot)
+	public void addInputSlot(Slot inputSlot)
 	{
 		this.inputSlots.add(inputSlot);
 	}
 
-	public ArrayList<AbstractSlot> getOutputSlots()
+	public ArrayList<Slot> getOutputSlots()
 	{
 		return outputSlots;
 	}
 
-	public void setOutputSlots(ArrayList<AbstractSlot> outputSlots)
+	public void setOutputSlots(ArrayList<Slot> outputSlots)
 	{
 		this.outputSlots = outputSlots;
 	}
 
-	public void addOutputSlot(AbstractSlot outputSlot)
+	public void addOutputSlot(Slot outputSlot)
 	{
 		this.outputSlots.add(outputSlot);
 	}

@@ -3,9 +3,6 @@ package org.pikater.core.ontology.description;
 
 import jade.util.leap.ArrayList;
 
-import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.core.ontology.messages.Option;
-
 /**
  * Created by Martin Pilat on 28.12.13.
  */

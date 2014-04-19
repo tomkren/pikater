@@ -11,8 +11,8 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
 
-public class MultiLayerPerceptron_MethodBox extends LogicalBoxDescription {
-	public MultiLayerPerceptron_MethodBox(){
+public class MultiLayerPerceptron_CABox extends LogicalBoxDescription {
+	public MultiLayerPerceptron_CABox(){
 		super("MultiLayerPerceptron",
 				ComputingAgent.class,"Multi-layer perceptron method");
 		
@@ -188,17 +188,23 @@ public class MultiLayerPerceptron_MethodBox extends LogicalBoxDescription {
 				new OptionValue(new Boolean(false)) );
 		
 		
-		this.addParameter(optionC);
-		this.addParameter(optionB);
-		this.addParameter(optionG);
-		this.addParameter(optionI);
-		this.addParameter(optionD);
-		this.addParameter(optionE);
-		this.addParameter(optionS);
-		this.addParameter(optionV);
-		this.addParameter(optionN);
-		this.addParameter(optionM);
-		this.addParameter(optionL);
-		this.addParameter(optionH);
+		this.addOption(optionC);
+		this.addOption(optionB);
+		this.addOption(optionG);
+		this.addOption(optionI);
+		this.addOption(optionD);
+		this.addOption(optionE);
+		this.addOption(optionS);
+		this.addOption(optionV);
+		this.addOption(optionN);
+		this.addOption(optionM);
+		this.addOption(optionL);
+		this.addOption(optionH);
+
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

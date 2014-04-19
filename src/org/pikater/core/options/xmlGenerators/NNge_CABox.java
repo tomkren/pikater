@@ -41,7 +41,13 @@ public class NNge_CABox extends LogicalBoxDescription {
 		optionG.setList( new OptionList() );
 		
 		
-		this.addParameter(optionI);
-		this.addParameter(optionG);
+		this.addOption(optionI);
+		this.addOption(optionG);
+
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

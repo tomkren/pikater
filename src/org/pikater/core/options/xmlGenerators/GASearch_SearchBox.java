@@ -81,11 +81,16 @@ public class GASearch_SearchBox extends LogicalBoxDescription {
 				new OptionList() );
 
 		
-		this.addParameter(optionE);
-		this.addParameter(optionM);
-		this.addParameter(optionT);
-		this.addParameter(optionX);
-		this.addParameter(optionP);
-		this.addParameter(optionS);
+		this.addOption(optionE);
+		this.addOption(optionM);
+		this.addOption(optionT);
+		this.addOption(optionX);
+		this.addOption(optionP);
+		this.addOption(optionS);
+
+
+
+		// Slot Definition
+		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
 	}
 }

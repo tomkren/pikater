@@ -6,8 +6,8 @@ import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.options.LogicalBoxDescription;
 
-public class NaiveBayes_MethodBox extends LogicalBoxDescription {
-	public NaiveBayes_MethodBox(){
+public class NaiveBayes_CABox extends LogicalBoxDescription {
+	public NaiveBayes_CABox(){
 		super("NaiveBayes",ComputingAgent.class,"Naive Bayes Method");
 		this.setPicture("picture.jpg");
 		this.setAgentName(Agent_WekaCA.class);
@@ -32,7 +32,13 @@ public class NaiveBayes_MethodBox extends LogicalBoxDescription {
 		optionD.setValue(
 				new OptionValue(new Boolean(false)) );
 		
-		this.addParameter(optionK);
-		this.addParameter(optionD);
+		this.addOption(optionK);
+		this.addOption(optionD);
+
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

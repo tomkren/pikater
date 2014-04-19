@@ -9,5 +9,11 @@ public class NBTree_CABox extends LogicalBoxDescription {
 		super("NBTree",ComputingAgent.class,"NBTree MEthod");
 		this.setAgentName(Agent_WekaCA.class);
 		this.setPicture("picture3.jpg");
+
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }

@@ -165,18 +165,23 @@ public class SMO_CABox extends LogicalBoxDescription {
 				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
 		
 		
-		this.addParameter(optionC);
-		this.addParameter(optionE);
-		this.addParameter(optionG);
-		this.addParameter(optionN);
-		this.addParameter(optionF);
-		this.addParameter(optionO);
-		this.addParameter(optionR);
-		this.addParameter(optionA);
-		this.addParameter(optionL);
-		this.addParameter(optionP);
-		this.addParameter(optionM);
-		this.addParameter(optionV);
-		this.addParameter(optionW);
+		this.addOption(optionC);
+		this.addOption(optionE);
+		this.addOption(optionG);
+		this.addOption(optionN);
+		this.addOption(optionF);
+		this.addOption(optionO);
+		this.addOption(optionR);
+		this.addOption(optionA);
+		this.addOption(optionL);
+		this.addOption(optionP);
+		this.addOption(optionM);
+		this.addOption(optionV);
+		this.addOption(optionW);
+
+
+		// Slots Definition
+		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 	}
 }
