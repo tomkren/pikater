@@ -90,6 +90,7 @@ public class Database {
 		}
 	}
 	
+	/**
 	public List<JPAResult> getResults(){		
 		try{
 			TypedQuery<JPAResult> q=em.createNamedQuery("Result.getAll",JPAResult.class);
@@ -119,7 +120,7 @@ public class Database {
 			cleanUpEntityManager();
 		}
 	}
-	
+	**/
 	
 	/**
 	 * Loads test data to the DataBase
