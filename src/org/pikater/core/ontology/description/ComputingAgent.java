@@ -1,6 +1,8 @@
 package org.pikater.core.ontology.description;
 
 
+import org.pikater.core.ontology.messages.Option;
+
 import jade.util.leap.ArrayList;
 
 /**
@@ -23,13 +25,6 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
 		this.modelClass = modelClass;
 	}
 
-    public ArrayList getOptions() {
-        return options;
-    }
-    public void setOptions(ArrayList options) {
-        this.options = options;
-    }
-
     public DataSourceDescription getTrainingData() {
         return trainingData;
     }
@@ -51,5 +46,15 @@ public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorPro
         this.validationData = validationData;
     }
     
+    public ArrayList getOptions() {
+        return options;
+    }
+    public void setOptions(ArrayList options) {
+        this.options = options;
+    }
+    public void addOption(Option option) {
+        this.options.add(option);
+    }
+
 }
 

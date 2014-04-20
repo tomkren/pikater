@@ -100,7 +100,8 @@ public class Parser {
 			ComputingAgent computingAgent =
 					(ComputingAgent) dataProvider;
 
-			return this.process (computingAgent);
+			return null;
+//			return this.process (computingAgent);
 
 		} else {
 
@@ -122,7 +123,8 @@ public class Parser {
 			ComputingAgent computingAgent =
 					(ComputingAgent) errorProvider;
 
-			this.process (computingAgent);
+			return;
+//			this.process (computingAgent);
 
 		} else {
 
@@ -151,8 +153,9 @@ public class Parser {
 			ComputingAgent agent =
 					(ComputingAgent) iAgent;
 
-			ProblemItem problemWrapper = this.process(agent);
-			return problemWrapper;
+			return null;
+//			ProblemItem problemWrapper = this.process(agent);
+//			return problemWrapper;
 
 		} else {
 
@@ -201,25 +204,147 @@ public class Parser {
 
     	agent.log("Ontology Parser - CARecSearchComplex");
 
-    	IComputingAgent agent = complex.getComputingAgent();
-    	ProblemItem problemWrapper = this.process(agent);
-    	Problem problem = problemWrapper.getProblem();
+    	// Generate ID of this problem
+    	int problemID = this.graph.getNumOfProblems();
+
     	
-    	Recommender recommender = complex.getRecommender();
+    	// Option parsing
+		Option outputOption = null;
+		Option evaluationMethodOprion = null;
+
+		ArrayList options = complex.getOptions();
+		for (int i = 0; i < options.size(); i++) {
+			
+			Option optionI = (Option) options.get(i);
+			
+			if (optionI.getName().equals("evaluation_method")) {
+				evaluationMethodOprion = optionI;
+
+			} else if (optionI.getName().equals("output")) {
+				outputOption = optionI;
+			}
+		}
+		options.remove(evaluationMethodOprion);
+		options.remove(outputOption);
+
+		String evaluationMethod = evaluationMethodOprion.getValue();
+		String output = outputOption.getValue();
+
+
+    	IComputingAgent iComputingAgent = complex.getComputingAgent();
+    	ComputingAgent computingAgentO = (ComputingAgent) iComputingAgent;
+    	org.pikater.core.ontology.messages.Agent computingAgent = 
+    			processAgent(computingAgentO, problemID);
+    	
+    	Search searchAgentO = complex.getSearch();
+    	org.pikater.core.ontology.messages.Agent searchAgent =
+    			processSearch(searchAgentO);
+
+    	Recommender recommenderO = complex.getRecommender();
     	org.pikater.core.ontology.messages.Agent recommendeAgent =
-    			this.process(recommender);
+    			processRecommender(recommenderO);
+
+    	Data data = processData(computingAgentO, output);
     	
-    	problem.setRecommender(recommendeAgent);
+
     	
-    	return problemWrapper;
+    	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+		Date date = new Date();
+		String startDate = dateFormat.format(date);
+
+		ArrayList agents = new ArrayList();
+		agents.add(computingAgent);
+
+		ArrayList datas = new ArrayList();
+		datas.add(data);
+
+		Option optionF = new Option();
+		optionF.setName("F");
+		optionF.setData_type("INT");
+		optionF.setValue("10");
+		
+		ArrayList optionsMethod = new ArrayList();
+		optionsMethod.add(optionF);
+		
+		EvaluationMethod evaluation_method = new EvaluationMethod();
+		evaluation_method.setName(evaluationMethod);
+		evaluation_method.setOptions(optionsMethod);
+
+
+		Problem problem = new Problem();
+		problem.setGui_id(String.valueOf(problemID));
+		problem.setStatus("new");			
+		problem.setAgents(agents);
+		problem.setData(datas);				
+		problem.setTimeout(30000);
+		problem.setStart(startDate);
+		problem.setGet_results("after_each_computation");
+		problem.setSave_results(true);
+		problem.setGui_agent("UI");
+		problem.setName("test");
+		problem.setMethod(searchAgent);
+		problem.setRecommender(recommendeAgent);
+		problem.setEvaluation_method(evaluation_method);
+
+
+
+    	ProblemItem item = new ProblemItem();
+    	item.setProblem(problem);
+    	
+    	return item;
 	}
     
-    public void process (Search search) {
+    public org.pikater.core.ontology.messages.Agent processSearch (Search search) {
  
     	agent.log("Ontology Parser - Search");
+    	
+		Option optionN = new Option();
+		optionN.setName("N");
+		optionN.setData_type("INT");
+		optionN.setSynopsis("number_of_values_to_try");
+		optionN.setValue("5");
+
+		Option searchMethodOprion = null;
+
+
+		if (search != null) {
+			ArrayList options = search.getOptions();
+			for (int i = 0; i < options.size(); i++) {
+				
+				Option optionI = (Option) options.get(i);
+				
+				if (optionI.getName().equals("search_method")) {
+					searchMethodOprion = optionI;
+				}
+			}
+		}
+		
+		String searchMethod =  null;
+		
+		if (searchMethodOprion == null) {
+			searchMethod = "ChooseXValues";
+		} else {
+			searchMethod = searchMethodOprion.getValue();
+		}
+		
+		ArrayList optionsSearchMethod = new ArrayList();
+		optionsSearchMethod.add(optionN);
+
+		org.pikater.core.ontology.messages.Agent searchAgent = new org.pikater.core.ontology.messages.Agent();
+		searchAgent.setName(searchMethod);
+		searchAgent.setType(searchMethod);				
+		searchAgent.setOptions(optionsSearchMethod);
+		
+		return searchAgent;
     }
     
-    public org.pikater.core.ontology.messages.Agent process (Recommender recommender) {
+    public org.pikater.core.ontology.messages.Agent processRecommender (Recommender recommender) {
+
+    	agent.log("Ontology Parser - Recommender");
+
+    	if (recommender == null) {
+    		return null;
+    	}
 
     	String recommenderClass =
     			recommender.getRecommenderClass();
@@ -235,17 +360,16 @@ public class Parser {
 		return method;
     }
     
-    public ProblemItem process (ComputingAgent computingAgent) {
+    
+    public Data processData(ComputingAgent computingAgent, String output) {
 
-    	agent.log("Ontology Parser - ComputingAgent");
-    	
     	DataSourceDescription trainingDataSource =
     			computingAgent.getTrainingData();
     	DataSourceDescription testingDataSource =
     			computingAgent.getTestingData();
     	DataSourceDescription validationDataSource =
     			computingAgent.getValidationData();
-    	
+
 
     	int problemID = this.graph.getNumOfProblems();
     	String trainDataFileName = null;
@@ -271,123 +395,52 @@ public class Parser {
     	String validationDataFileHash = agent.getHashOfFile(validationDataFileName);
     	
     	
-    	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-		Date date = new Date();
+		Data data = new Data();
+		data.setTrain_file_name(trainDataFileHash);
+		data.setExternal_train_file_name(trainDataFileName);
+		data.setTest_file_name(testingDataFileHash);
+		data.setExternal_test_file_name(testingDataFileName);
+		data.setOutput(output);
+		data.setMode("train_test");
+		data.setGui_id(problemID);
+		
+		return data;
+    }
 
-		String startDate = dateFormat.format(date);
-   
-		
-		Option evaluationMethodOprion = null;
+    public org.pikater.core.ontology.messages.Agent processAgent (ComputingAgent computingAgent, int problemID) {
+
+    	agent.log("Ontology Parser - ComputingAgent");
+
+
 		Option computingMethodOprion = null;
-		Option searchMethodOprion = null;
-		Option outputOption = null;
-		
+
 		ArrayList options = computingAgent.getOptions();
 		for (int i = 0; i < options.size(); i++) {
 			
 			Option optionI = (Option) options.get(i);
 			
-			if (optionI.getName().equals("evaluation_method")) {
-				evaluationMethodOprion = optionI;
-			
-			} else if (optionI.getName().equals("search_method")) {
-				searchMethodOprion = optionI;
-
-			} else if (optionI.getName().equals("computing_method")) {
+			if (optionI.getName().equals("computing_method")) {
 				computingMethodOprion = optionI;
 				
-			} else if (optionI.getName().equals("output")) {
-				outputOption = optionI;
 			}
 		}
-		options.remove(evaluationMethodOprion);
 		options.remove(computingMethodOprion);
-		options.remove(searchMethodOprion);
-		options.remove(outputOption);
 
 
-		String evaluationMethod = evaluationMethodOprion.getValue();
-		String searchMethod = searchMethodOprion.getValue();
 		String computingMethod = computingMethodOprion.getValue();
-		String output = outputOption.getValue();
-
-		agent.log("evaluation_method:  " + evaluationMethod);
-		agent.log("search_method:  " + searchMethod);
 		agent.log("computing_method:  " + computingMethod);
-		agent.log("output:  " + output);
-		
-		
- 			ArrayList optionsAgent = computingAgent.getOptions();
 
-			org.pikater.core.ontology.messages.Agent agent_ = new org.pikater.core.ontology.messages.Agent();
-			agent_.setType(computingMethod);
-			agent_.setGui_id(String.valueOf(problemID));
-			agent_.setOptions(optionsAgent);
+				
+		ArrayList optionsCompAgent = computingAgent.getOptions();
 
-			ArrayList agents = new ArrayList();
-			agents.add(agent_);
+		org.pikater.core.ontology.messages.Agent compAgentO = new org.pikater.core.ontology.messages.Agent();
+		compAgentO.setType(computingMethod);
+		compAgentO.setGui_id(String.valueOf(problemID));
+		compAgentO.setOptions(optionsCompAgent);
 
 
-			Data data = new Data();
-			data.setTrain_file_name(trainDataFileHash);
-			data.setExternal_train_file_name(trainDataFileName);
-			data.setTest_file_name(testingDataFileHash);
-			data.setExternal_test_file_name(testingDataFileName);
-			data.setOutput(output);
-			data.setMode("train_test");
-			data.setGui_id(problemID);
 
-			ArrayList datas = new ArrayList();
-			datas.add(data);
-
-
-			Option optionN = new Option();
-			optionN.setName("N");
-			optionN.setData_type("INT");
-			optionN.setSynopsis("number_of_values_to_try");
-			optionN.setValue("5");
-
-			ArrayList optionsAgentMethod = new ArrayList();
-			optionsAgentMethod.add(optionN);
-
-			org.pikater.core.ontology.messages.Agent method = new org.pikater.core.ontology.messages.Agent();
-			method.setName(searchMethod);
-			method.setType(searchMethod);				
-			method.setOptions(optionsAgentMethod);
-
-			Option optionF = new Option();
-			optionF.setName("F");
-			optionF.setData_type("INT");
-			optionF.setValue("10");
-			
-			
-			ArrayList optionsMethod = new ArrayList();
-			optionsMethod.add(optionF);
-			
-			EvaluationMethod evaluation_method = new EvaluationMethod();
-			evaluation_method.setName(evaluationMethod);
-			evaluation_method.setOptions(optionsMethod);
-
-			
-			Problem problem = new Problem();
-			problem.setGui_id(String.valueOf(problemID));
-			problem.setStatus("new");			
-			problem.setAgents(agents);
-			problem.setData(datas);				
-			problem.setTimeout(30000);
-			problem.setStart(startDate);
-			problem.setGet_results("after_each_computation");
-			problem.setSave_results(true);
-			problem.setGui_agent("UI");
-			problem.setName("test");
-			problem.setMethod(method);
-			problem.setEvaluation_method(evaluation_method);
-			
-			
-			ProblemItem problemItem = new ProblemItem();
-			problemItem.setProblem(problem);
-
-		return problemItem;
+		return compAgentO;
 	}
 
 }

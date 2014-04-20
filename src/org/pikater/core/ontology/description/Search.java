@@ -1,33 +1,34 @@
 package org.pikater.core.ontology.description;
 
-import jade.content.Concept;
-
-import java.util.ArrayList;
-
-import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.ontology.messages.Option;
+
+import jade.content.Concept;
+import jade.util.leap.ArrayList;
+
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
 public class Search implements Concept{
 
-    String searchClass;
-    ArrayList<Option> searchOptions;
+	String searchClass;
+    ArrayList options;
 
     public String getSearchClass() {
         return searchClass;
     }
-
     public void setSearchClass(String searchClass) {
         this.searchClass = searchClass;
     }
 
-    public ArrayList<Option> getSearchOptions() {
-        return searchOptions;
+    public ArrayList getOptions() {
+        return options;
+    }
+    public void setOptions(ArrayList options) {
+        this.options = options;
+    }
+    public void addOption(Option option) {
+        this.options.add(option);
     }
 
-    public void setSearchOptions(ArrayList<Option> searchOptions) {
-        this.searchOptions = searchOptions;
-    }
 }

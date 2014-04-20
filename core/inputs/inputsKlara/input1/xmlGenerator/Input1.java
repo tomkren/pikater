@@ -8,6 +8,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
@@ -21,24 +22,9 @@ public final class Input1 {
 		
 		System.out.println("Exporting Ontology input1 to Klara's input XML configuration file.");
 
-		
-		StepanuvOption optionEM = new StepanuvOption();
-		optionEM.setName("evaluation_method");
-		optionEM.setOption( new OptionValue(new String("CrossValidation")) );	
-		
-		StepanuvOption optionSearch = new StepanuvOption();
-		optionSearch.setName("search_method");
-		optionSearch.setOption( new OptionValue(new String("ChooseXValues")) );	
-		
 		StepanuvOption optionComMethod = new StepanuvOption();
 		optionComMethod.setName("computing_method");
 		optionComMethod.setOption( new OptionValue(new String("RBFNetwork")) );
-		
-		
-		StepanuvOption optionOutput = new StepanuvOption();
-		optionOutput.setName("output");
-		optionOutput.setOption( new OptionValue(new String("evaluation_only")) );	
-		
 		
 		StepanuvOption optionS = new StepanuvOption();
 		optionS.setName("S");
@@ -46,15 +32,7 @@ public final class Input1 {
 		
 		StepanuvOption optionM = new StepanuvOption();
 		optionM.setName("M");
-		optionM.setOption( new OptionValue(new Float(0.4)) );	
-
-		ArrayList options = new ArrayList();
-		options.add(optionS.toOption());
-		options.add(optionM.toOption());
-		options.add(optionEM.toOption());
-		options.add(optionSearch.toOption());
-		options.add(optionComMethod.toOption());
-		options.add(optionOutput.toOption());
+		optionM.setOption( new OptionValue(new Float(0.4)) );
 		
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI("weather.arff");
@@ -63,14 +41,38 @@ public final class Input1 {
         fileDataSource.setDataProvider(fileDataProvider);
 
 		ComputingAgent comAgent = new ComputingAgent();
-		comAgent.setOptions(options);
+		comAgent.setOptions(new ArrayList());
+		comAgent.addOption(optionS.toOption());
+		comAgent.addOption(optionM.toOption());
+		comAgent.addOption(optionComMethod.toOption());
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
 		comAgent.setModelClass(Agent_WekaCA.class.getName());
+/*
+		StepanuvOption optionSearchMethod = new StepanuvOption();
+		optionSearchMethod.setName("search_method");
+		optionSearchMethod.setOption( new OptionValue(new String("ChooseXValues")) );	
+		
+		Search search = new Search();
+		search.setOptions(new ArrayList());
+		search.addOption(optionSearchMethod.toOption());
+*/
+		StepanuvOption optionEM = new StepanuvOption();
+		optionEM.setName("evaluation_method");
+		optionEM.setOption( new OptionValue(new String("CrossValidation")) );
 
+		StepanuvOption optionOutput = new StepanuvOption();
+		optionOutput.setName("output");
+		optionOutput.setOption( new OptionValue(new String("evaluation_only")) );
+
+		CARecSearchComplex complex = new CARecSearchComplex();
+		complex.setComputingAgent(comAgent);
+		complex.setOptions(new ArrayList());
+		complex.addOption(optionEM.toOption());
+		complex.addOption(optionOutput.toOption());
 
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setDataProvider(comAgent);
+		computingDataSource.setDataProvider(complex);
 
         FileDataSaver saver = new FileDataSaver();
         saver.setDataSource(computingDataSource);
