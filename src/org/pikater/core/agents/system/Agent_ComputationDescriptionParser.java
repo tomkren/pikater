@@ -8,20 +8,26 @@ import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
+import org.pikater.core.ontology.filenameTranslation.FilenameTranslationOntology;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.core.ontology.messages.Problem;
 import org.pikater.core.ontology.messages.Solve;
+import org.pikater.core.ontology.messages.TranslateFilename;
 
 import jade.content.Concept;
+import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -44,6 +50,7 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 
 		this.getContentManager().registerOntology(getOntology());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+		this.getContentManager().registerOntology(FilenameTranslationOntology.getInstance());
 		
 		ComputingManagerBehaviour compBehaviour =
 				new ComputingManagerBehaviour(this, getCodec(), getOntology());
@@ -58,24 +65,80 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 	
 	public String getHashOfFile(String nameOfFile) {
 		
-		if (nameOfFile == null) {
+		TranslateFilename translate = new TranslateFilename();
+		translate.setExternalFilename(nameOfFile);
+		translate.setUserID(1);
 
-			return null;
+		// create a request message with SendProblem content
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(this.getAID());
+		msg.addReceiver(new AID("dataManager", false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-		} else if (nameOfFile.equals("weather.arff")) {
-			
-			return "772c551b8486b932aed784a582b9c1b1";
-			
-		} else {}
+		msg.setLanguage(codec.getName());
+		msg.setOntology(ontology.getName());
+		// We want to receive a reply in 30 secs
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
+
+		Action a = new Action();
+		a.setAction(translate);
+		a.setActor(this.getAID());
+
+		try {
+			// Let JADE convert from Java objects to string
+			this.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			ce.printStackTrace();
+		} catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+
+
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(this, msg);
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		return "";
+		ContentElement content = null;
+		String fileHash = null;
+
+		try {
+			content = getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (CodecException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (OntologyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			fileHash = (String) result.getValue();
+		}
+		
+		return fileHash;
 	}
 }
 
 
+
+
 class ComputingManagerBehaviour extends AchieveREResponder {
 
-    private Agent_ComputationDescriptionParser agent;
+
+	private static final long serialVersionUID = 4754473043512463873L;
+	
+	private Agent_ComputationDescriptionParser agent;
 	private Codec codec = null;
 	private Ontology ontology = null;
 

@@ -351,7 +351,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-
+		
 		Result r = new Result(tf, internalFilename);
 		getContentManager().fillContent(reply, r);
 
