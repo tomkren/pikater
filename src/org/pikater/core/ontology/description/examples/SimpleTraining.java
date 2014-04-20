@@ -50,7 +50,7 @@ public class SimpleTraining {
         fds.setDataSource(CAds);
 
         ComputationDescription cd = new ComputationDescription();
-        cd.setRootElement(fds);
+        cd.addRootElement(fds);
 
     }
 

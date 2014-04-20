@@ -8,7 +8,7 @@ import jade.util.leap.ArrayList;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class CARecSearchComplex implements IComputingAgent, IDataProvider {
+public class CARecSearchComplex extends AbstractDataProcessing implements IComputingAgent, IDataProvider {
 
 	ArrayList options;
     ArrayList errors;

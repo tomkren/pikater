@@ -1,46 +1,40 @@
 package org.pikater.core.ontology.description;
 
 import jade.content.Concept;
+import jade.util.leap.ArrayList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Scanner;
-
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.core.ontology.messages.Option;
-import org.reflections.Reflections;
 
 import com.thoughtworks.xstream.XStream;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-@XmlRootElement
 public class ComputationDescription implements Concept {
 
-    IComputationElement rootElement;
-    ArrayList<Option> globalOptions;
+	ArrayList rootElements;
+    ArrayList globalOptions;
 
-    public IComputationElement getRootElement() {
-        return rootElement;
-    }
-
-    public void setRootElement(IComputationElement rootElement) {
-        this.rootElement = rootElement;
-    }
-
-    public ArrayList<Option> getGlobalOptions() {
+    public ArrayList getGlobalOptions() {
         return globalOptions;
     }
-
-    public void setGlobalOptions(ArrayList<Option> globalOptions) {
+    public void setGlobalOptions(ArrayList globalOptions) {
         this.globalOptions = globalOptions;
     }
-    
+
+    public ArrayList getRootElements() {
+        return rootElements;
+    }
+    public void setRootElements(ArrayList rootElements) {
+        this.rootElements = rootElements;
+    }
+    public void addRootElement(FileDataSaver rootElement) {
+        this.rootElements.add(rootElement);
+    }
+ 
 	public String exportXML(String fileName) throws FileNotFoundException {
 
 		XStream xstream = new XStream();

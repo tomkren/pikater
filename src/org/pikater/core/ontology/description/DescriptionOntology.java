@@ -12,12 +12,13 @@ public class DescriptionOntology extends BeanOntology {
         super("DescriptionOntology");
 
         String thisPackage = DescriptionOntology.class.getPackage().getName();
-        
+
         try {
             add(thisPackage);
+            add(org.pikater.core.ontology.messages.Option.class);
+            add(org.pikater.core.ontology.messages.Interval.class);
             add(org.pikater.core.ontology.messages.ExecuteExperiment.class);
-            
-            
+
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.description;
 
-public class FileDataSaver implements IDataSaver {
+public class FileDataSaver extends AbstractDataProcessing implements IDataSaver {
 
 	private String nameOfFile;
 	private DataSourceDescription dataSource;

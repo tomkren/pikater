@@ -7,7 +7,7 @@ import jade.util.leap.ArrayList;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Recommen implements Concept {
+public class Recommen extends AbstractDataProcessing {
 
     String recommenderClass;
     ArrayList options;

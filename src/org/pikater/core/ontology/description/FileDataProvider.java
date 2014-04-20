@@ -3,7 +3,7 @@ package org.pikater.core.ontology.description;
 /**
  * Created by Martin Pilat on 27.12.13.
  */
-public class FileDataProvider implements IDataProvider {
+public class FileDataProvider extends AbstractDataProcessing implements IDataProvider {
 
     private String fileURI;
 

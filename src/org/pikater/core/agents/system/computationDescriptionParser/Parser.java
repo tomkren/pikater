@@ -100,8 +100,12 @@ public class Parser {
 			ComputingAgent computingAgent =
 					(ComputingAgent) dataProvider;
 
-			return null;
-//			return this.process (computingAgent);
+			// Small hack - this parser is able to parse only CARecSearchComplex
+			CARecSearchComplex complex =
+					new CARecSearchComplex();
+			complex.setComputingAgent(computingAgent);
+
+			return this.process(complex);
 
 		} else {
 
@@ -123,8 +127,12 @@ public class Parser {
 			ComputingAgent computingAgent =
 					(ComputingAgent) errorProvider;
 
-			return;
-//			this.process (computingAgent);
+			// Small hack - this parser is able to parse only CARecSearchComplex
+			CARecSearchComplex complex =
+					new CARecSearchComplex();
+			complex.setComputingAgent(computingAgent);
+			
+			this.process(complex);
 
 		} else {
 
@@ -143,19 +151,21 @@ public class Parser {
 			CARecSearchComplex complex =
 					(CARecSearchComplex) iAgent;
 
-			this.process(complex);
-			return null;
+			return this.process(complex);
 
 		} else if (iAgent instanceof ComputingAgent) {
 
 			agent.log("Ontology Matched - ComputingAgent");
 
-			ComputingAgent agent =
+			ComputingAgent computingAgent =
 					(ComputingAgent) iAgent;
 
-			return null;
-//			ProblemItem problemWrapper = this.process(agent);
-//			return problemWrapper;
+			// Small hack - this parser is able to parse only CARecSearchComplex
+			CARecSearchComplex complex =
+					new CARecSearchComplex();
+			complex.setComputingAgent(computingAgent);
+			
+			return this.process(complex);
 
 		} else {
 
@@ -169,11 +179,16 @@ public class Parser {
 
 		agent.log("Ontology Parser - ComputationDescription");
 		
-		IComputationElement element =
-				comDescription.getRootElement();
-		
-		ProblemItem problem = this.process(element);
-		this.graph.addRootProblem(problem);
+		ArrayList elements =
+				comDescription.getRootElements();
+
+		// TODO: Vyresit aby se sdilene podulohy rootElementu pocitely pouze jednou
+		for (int i = 0; i < elements.size(); i++) {
+
+			IComputationElement fileSaverI = (IComputationElement) elements.get(i);
+			ProblemItem problem = this.process(fileSaverI);
+			this.graph.addRootProblem(problem);
+		}
 
 	}
 	

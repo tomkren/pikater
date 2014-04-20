@@ -51,7 +51,7 @@ public final class Input2 {
         saver.setDataSource(computingDataSource);
 
         ComputationDescription comDescription = new ComputationDescription();
-		comDescription.setRootElement(saver);
+		comDescription.addRootElement(saver);
 
 
 

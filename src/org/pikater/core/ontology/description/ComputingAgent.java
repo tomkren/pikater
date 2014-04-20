@@ -8,7 +8,7 @@ import jade.util.leap.ArrayList;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorProvider {
+public class ComputingAgent extends AbstractDataProcessing implements IDataProvider, IComputingAgent, IErrorProvider {
 
 	String modelClass;
     ArrayList options;

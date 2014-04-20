@@ -9,7 +9,7 @@ import jade.util.leap.ArrayList;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Search implements Concept{
+public class Search extends AbstractDataProcessing {
 
 	String searchClass;
     ArrayList options;

@@ -91,11 +91,11 @@ public final class Input1 {
         FileDataSaver saver = new FileDataSaver();
         saver.setDataSource(computingDataSource);
 
+        ArrayList a = new ArrayList();
+        a.add(saver);
+        
         ComputationDescription comDescription = new ComputationDescription();
-		comDescription.setRootElement(saver);
-
-		
-
+        comDescription.setRootElements(a);
 
 		String fileName = Agent_GUIKlara.filePath + "input1"
 				+ System.getProperty("file.separator")

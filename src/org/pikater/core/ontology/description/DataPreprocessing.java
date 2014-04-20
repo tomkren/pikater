@@ -3,9 +3,9 @@ package org.pikater.core.ontology.description;
 import java.util.ArrayList;
 
 /**
- * Created by marti_000 on 27.12.13.
+ * Created by Stepan on 20.4.14.
  */
-public class DataProcessing implements IDataProvider {
+public class DataPreprocessing extends AbstractDataProcessing implements IDataProvider {
 
     ArrayList<DataSourceDescription> dataSources;
 
