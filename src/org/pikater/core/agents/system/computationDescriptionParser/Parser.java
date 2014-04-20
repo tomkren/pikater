@@ -12,6 +12,8 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.ontology.description.DataPostprocessing;
+import org.pikater.core.ontology.description.DataPreprocessing;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileDataSaver;
@@ -106,6 +108,26 @@ public class Parser {
 			complex.setComputingAgent(computingAgent);
 
 			return this.process(complex);
+
+		} else if (dataProvider instanceof DataPreprocessing) {
+			
+			agent.log("Ontology Matched - DataPreprocessing");
+			
+			DataPreprocessing preprocessing =
+					(DataPreprocessing) dataProvider;
+			
+			//TODO:  process(preprocessing);
+			return null;
+
+		} else if (dataProvider instanceof DataPostprocessing) {
+
+			agent.log("Ontology Matched - DataPostprocessing");
+			
+			DataPostprocessing postprocessing =
+					(DataPostprocessing) dataProvider;
+			
+			//TODO:  process(postprocessing);
+			return null;
 
 		} else {
 
@@ -219,27 +241,27 @@ public class Parser {
 
     	agent.log("Ontology Parser - CARecSearchComplex");
 
-    	// Generate ID of this problem
-    	int problemID = this.graph.getNumOfProblems();
+    	// TODO: Generate ID of this problem
+    	int problemID = 123; //this.graph.getNumOfProblems();
 
-    	
+
     	// Option parsing
 		String evaluationMethod = null;
 		String output = null;
-		
+
 		Option optionF = null;
-		
+
 		ArrayList options = complex.getOptions();
 		for (int i = 0; i < options.size(); i++) {
-			
+
 			Option optionI = (Option) options.get(i);
-			
+
 			if (optionI.getName().equals("evaluation_method")) {
 				evaluationMethod = optionI.getValue();
 
 			} else if (optionI.getName().equals("output")) {
 				output = optionI.getValue();
-				
+
 			} else if (optionI.getName().equals("F")) {
 				optionF = optionI;
 			}
@@ -249,7 +271,7 @@ public class Parser {
     	ComputingAgent computingAgentO = (ComputingAgent) iComputingAgent;
     	org.pikater.core.ontology.messages.Agent computingAgent = 
     			processAgent(computingAgentO, problemID);
-    	
+
     	Search searchAgentO = complex.getSearch();
     	org.pikater.core.ontology.messages.Agent searchAgent =
     			processSearch(searchAgentO);
@@ -299,9 +321,15 @@ public class Parser {
 
 
 
+		// Return sons which are dependent on this Problem
+		java.util.ArrayList<ProblemItem> dependentSons =
+				getDependentSons(computingAgentO);
+		
     	ProblemItem item = new ProblemItem();
     	item.setProblem(problem);
-    	
+    	item.setDependentSons(dependentSons);
+    	item.setStatus(ProblemItem.ProblemStatus.IS_WAITING);
+
     	return item;
 	}
     
@@ -448,9 +476,37 @@ public class Parser {
 		compAgentO.setGui_id(String.valueOf(problemID));
 		compAgentO.setOptions(optionsCompAgent);
 
-
-
 		return compAgentO;
 	}
 
+    public java.util.ArrayList<ProblemItem> getDependentSons(ComputingAgent compAgent) {
+    	
+    	if (compAgent == null) {
+    		return null;
+    	}
+
+    	DataSourceDescription trainingData = compAgent.getTrainingData();
+    	DataSourceDescription testingData = compAgent.getTestingData();
+    	DataSourceDescription validationData = compAgent.getValidationData();
+    	
+    	ProblemItem trainingItem = process(trainingData);
+    	ProblemItem testingItem = process(testingData);
+    	ProblemItem validationItem = process(validationData);
+    	
+    	java.util.ArrayList<ProblemItem> dependentSons =
+    			new java.util.ArrayList<ProblemItem>();
+    	
+    	if (trainingItem != null) {
+    		dependentSons.add(trainingItem);
+    	}
+    	if (testingItem != null) {
+    		dependentSons.add(testingItem);
+    	}
+    	if (validationItem != null) {
+    		dependentSons.add(validationItem);
+    	}
+    	
+    	return dependentSons;
+    }
+    
 }

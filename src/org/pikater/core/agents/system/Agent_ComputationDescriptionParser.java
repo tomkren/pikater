@@ -193,7 +193,9 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 
             // TODO: Spusti pouze prvni problem
     		Problem problem = dependencyGraph.getProblems().get(0).getProblem();
-
+    		//dependencyGraph.areAllProblemsFinished();
+    		//dependencyGraph.getAllIndependetWaitingProblems();
+    		
     		// Sending Problem
             sendingProblem(problem);
     		

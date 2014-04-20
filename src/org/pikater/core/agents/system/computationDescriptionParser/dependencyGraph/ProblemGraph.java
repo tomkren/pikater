@@ -24,4 +24,34 @@ public class ProblemGraph {
 	public int getNumOfProblems() {
 		return this.problems.size();
 	}
+	
+	// Test if all problemItems in dependency graph are finished
+	public boolean areAllProblemsFinished() {
+		
+		// if exists some rootItem which is not finished
+		for (ProblemItem problemI : problems) {
+			
+			if (problemI.getStatus() != ProblemItem.ProblemStatus.IS_FINISHED) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public ArrayList<ProblemItem> getAllIndependetWaitingProblems() {
+		
+		ArrayList<ProblemItem> problems =
+				new ArrayList<ProblemItem>();
+		
+		for (ProblemItem problemI : problems) {
+			
+			ArrayList<ProblemItem> problemsI =
+					problemI.getIndependentItems();
+			
+			problems.addAll(problemsI);
+		}
+		
+		return problems;
+	}
+
 }

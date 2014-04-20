@@ -1,5 +1,10 @@
 package org.pikater.core.ontology.description;
 
-public class AbstractDataProcessing implements IComputationElement {
+import jade.util.leap.ArrayList;
+
+public abstract class AbstractDataProcessing implements IComputationElement {
+
+//	public abstract ArrayList getInputSlots();
+//	public abstract ArrayList getAllOptions();
 
 }

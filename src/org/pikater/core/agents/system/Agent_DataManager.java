@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 
 public class Agent_DataManager extends PikaterAgent {
+
 	private final String DEFAULT_CONNECTION_PROVIDER = "defaultConnection";
 	private static final String CONNECTION_ARG_NAME = "connection";
 	private String connectionBean;
