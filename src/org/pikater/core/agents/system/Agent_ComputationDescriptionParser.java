@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
@@ -120,46 +121,18 @@ class ComputingManagerBehaviour extends AchieveREResponder {
     		parser.process(comDescription);
     		
     		// This will be graph - now only one problem
-    		Problem problem = parser.getProblemGraph().getProblems().get(0).getProblem();
-    		
+    		ProblemGraph dependencyGraph = parser.getProblemGraph();
+
+    		// Problem parsed - reply OK
             reply.setPerformative(ACLMessage.INFORM);
             reply.setContent("OK");
-            
-            
-    		
-			System.out.println("Sending SOLVE");
 
-    		Solve solve = new Solve();
-    		solve.setProblem(problem);
-    		
-			// create a request message with SendProblem content
-			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			msg.setSender(agent.getAID());
-			msg.addReceiver(new AID("manager", false));
-			msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-			msg.setLanguage(codec.getName());
-			msg.setOntology(ontology.getName());
-			// We want to receive a reply in 30 secs
-			msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
-			msg.setConversationId(problem.getGui_id() + agent.getLocalName());
+            // TODO: Spusti pouze prvni problem
+    		Problem problem = dependencyGraph.getProblems().get(0).getProblem();
 
-			Action a = new Action();
-			a.setAction(solve);
-			a.setActor(agent.getAID());
-
-			try {
-				// Let JADE convert from Java objects to string
-				agent.getContentManager().fillContent(msg, a);
-
-			} catch (CodecException ce) {
-				ce.printStackTrace();
-			} catch (OntologyException oe) {
-				oe.printStackTrace();
-			}
-
-			agent.addBehaviour(new SendProblemToManager(agent, msg));
-    		
+    		// Sending Problem
+            sendingProblem(problem);
     		
         }
    
@@ -167,6 +140,43 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 
     }
     
+    
+    
+    private void sendingProblem(Problem problem) {
+    	
+		System.out.println("Sending Solve ontology ID:" + problem.getId());
+
+		Solve solve = new Solve();
+		solve.setProblem(problem);
+		
+		// create a request message with SendProblem content
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(agent.getAID());
+		msg.addReceiver(new AID("manager", false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+		msg.setLanguage(codec.getName());
+		msg.setOntology(ontology.getName());
+		// We want to receive a reply in 30 secs
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+		msg.setConversationId(problem.getGui_id() + agent.getLocalName());
+
+		Action a = new Action();
+		a.setAction(solve);
+		a.setActor(agent.getAID());
+
+		try {
+			// Let JADE convert from Java objects to string
+			agent.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			ce.printStackTrace();
+		} catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+
+		agent.addBehaviour(new SendProblemToManager(agent, msg));
+    }
 }
 
 
