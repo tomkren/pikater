@@ -7,13 +7,12 @@ import jade.content.Concept;
  */
 public class DataSourceDescription implements Concept {
 
-    private IDataProvider dataProvider;
     private String dataType;
+    private IDataProvider dataProvider;
 
     public IDataProvider getDataProvider() {
         return dataProvider;
     }
-
     public void setDataProvider(IDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
@@ -21,7 +20,6 @@ public class DataSourceDescription implements Concept {
     public String getDataType() {
         return dataType;
     }
-
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }

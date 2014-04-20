@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.Recommender;
+import org.pikater.core.ontology.description.Recommen;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.shared.experiment.Box;
 import org.pikater.shared.experiment.BoxType;
@@ -69,7 +69,7 @@ public class BoxesExporter {
 		
 		} else if (type == BoxType.RECOMMEND) {
 			
-			searchOntology.add(Recommender.class);
+			searchOntology.add(Recommen.class);
 		
 		} else if (type == BoxType.METHOD) {
 			

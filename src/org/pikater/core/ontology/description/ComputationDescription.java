@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.ontology.messages.Option;
+import org.reflections.Reflections;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -77,43 +78,6 @@ public class ComputationDescription implements Concept {
 				(ComputationDescription)xstream.fromXML(xml);
 		
 		return computDes;
-	}
-
-	public String exportJSON() {
-/*
-		Reflections reflections = new Reflections("pikater");
-
-		Set<Class<? extends PikaterAgent>> allClassesAgents = 
-			     reflections.getSubTypesOf(pikater.agents.PikaterAgent.class);
-		
-		List<Class<? extends PikaterAgent>> listAgents =
-				new ArrayList<Class<? extends PikaterAgent>>();
-		listAgents.addAll(allClassesAgents);
-
-		for (int i = 0; i < listAgents.size(); i++) {
-
-			Class<? extends PikaterAgent> classI = listAgents.get(i);
-			String classNameI = classI.toString();
-			classNameI = classNameI.substring("class ".length());
-
-			Class<?> c = null;
-			try {
-				c = Class.forName(classNameI);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-
-			Method lMethod = null;
-			try {
-				lMethod = c.getDeclaredMethod("getAgentType", null);
-			} catch (NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
-			}
-			
-			System.out.println("method = " + lMethod.toString());			
-		}
-*/
-		return "Still not implemented";
 	}
 	
 }

@@ -20,7 +20,7 @@ import org.pikater.core.ontology.description.IComputingAgent;
 import org.pikater.core.ontology.description.IDataProvider;
 import org.pikater.core.ontology.description.IDataSaver;
 import org.pikater.core.ontology.description.IErrorProvider;
-import org.pikater.core.ontology.description.Recommender;
+import org.pikater.core.ontology.description.Recommen;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.EvaluationMethod;
@@ -239,7 +239,7 @@ public class Parser {
     	org.pikater.core.ontology.messages.Agent searchAgent =
     			processSearch(searchAgentO);
 
-    	Recommender recommenderO = complex.getRecommender();
+    	Recommen recommenderO = complex.getRecommender();
     	org.pikater.core.ontology.messages.Agent recommendeAgent =
     			processRecommender(recommenderO);
 
@@ -333,7 +333,7 @@ public class Parser {
 		return searchAgent;
     }
     
-    public org.pikater.core.ontology.messages.Agent processRecommender (Recommender recommender) {
+    public org.pikater.core.ontology.messages.Agent processRecommender (Recommen recommender) {
 
     	agent.log("Ontology Parser - Recommender");
 

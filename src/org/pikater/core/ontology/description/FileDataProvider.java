@@ -7,10 +7,10 @@ public class FileDataProvider implements IDataProvider {
 
     private String fileURI;
 
+
     public String getFileURI() {
         return fileURI;
     }
-
     public void setFileURI(String fileURI) {
         this.fileURI = fileURI;
     }

@@ -2,9 +2,10 @@ package org.pikater.core.ontology.description;
 
 public class FileDataSaver implements IDataSaver {
 
-	private DataSourceDescription dataSource = null;
-	private String nameOfFile = "";
-	
+	private String nameOfFile;
+	private DataSourceDescription dataSource;
+
+
 	public void  setDataSource(DataSourceDescription dataSource) {
 		this.dataSource = dataSource;
 	}

@@ -11,7 +11,6 @@ import jade.util.leap.ArrayList;
 public class ComputingAgent implements IDataProvider, IComputingAgent, IErrorProvider {
 
 	String modelClass;
-    
     ArrayList options;
 
     DataSourceDescription trainingData;

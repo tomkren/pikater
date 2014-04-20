@@ -12,8 +12,8 @@ public class DataProcessing implements IDataProvider {
     public ArrayList<DataSourceDescription> getDataSources() {
         return dataSources;
     }
-
     public void setDataSources(ArrayList<DataSourceDescription> dataSources) {
         this.dataSources = dataSources;
     }
+
 }

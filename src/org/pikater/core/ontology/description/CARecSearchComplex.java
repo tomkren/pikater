@@ -10,12 +10,12 @@ import jade.util.leap.ArrayList;
  */
 public class CARecSearchComplex implements IComputingAgent, IDataProvider {
 
+	ArrayList options;
     ArrayList errors;
-    Search search;
-    Recommender recommender;
-    IComputingAgent computingAgent;
 
-    ArrayList options;
+    Search search;
+    Recommen recommender;
+    IComputingAgent computingAgent;
 
     public ArrayList getErrors() {
         return errors;
@@ -38,10 +38,10 @@ public class CARecSearchComplex implements IComputingAgent, IDataProvider {
         this.search = search;
     }
 
-    public Recommender getRecommender() {
+    public Recommen getRecommender() {
         return recommender;
     }
-    public void setRecommender(Recommender recommender) {
+    public void setRecommender(Recommen recommender) {
         this.recommender = recommender;
     }
 
