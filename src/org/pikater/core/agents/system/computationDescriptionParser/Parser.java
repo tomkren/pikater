@@ -209,27 +209,26 @@ public class Parser {
 
     	
     	// Option parsing
-		Option outputOption = null;
-		Option evaluationMethodOprion = null;
-
+		String evaluationMethod = null;
+		String output = null;
+		
+		Option optionF = null;
+		
 		ArrayList options = complex.getOptions();
 		for (int i = 0; i < options.size(); i++) {
 			
 			Option optionI = (Option) options.get(i);
 			
 			if (optionI.getName().equals("evaluation_method")) {
-				evaluationMethodOprion = optionI;
+				evaluationMethod = optionI.getValue();
 
 			} else if (optionI.getName().equals("output")) {
-				outputOption = optionI;
+				output = optionI.getValue();
+				
+			} else if (optionI.getName().equals("F")) {
+				optionF = optionI;
 			}
 		}
-		options.remove(evaluationMethodOprion);
-		options.remove(outputOption);
-
-		String evaluationMethod = evaluationMethodOprion.getValue();
-		String output = outputOption.getValue();
-
 
     	IComputingAgent iComputingAgent = complex.getComputingAgent();
     	ComputingAgent computingAgentO = (ComputingAgent) iComputingAgent;
@@ -258,13 +257,10 @@ public class Parser {
 		ArrayList datas = new ArrayList();
 		datas.add(data);
 
-		Option optionF = new Option();
-		optionF.setName("F");
-		optionF.setData_type("INT");
-		optionF.setValue("10");
-		
 		ArrayList optionsMethod = new ArrayList();
-		optionsMethod.add(optionF);
+		if (optionF != null) {
+			optionsMethod.add(optionF);
+		}
 		
 		EvaluationMethod evaluation_method = new EvaluationMethod();
 		evaluation_method.setName(evaluationMethod);
@@ -298,14 +294,9 @@ public class Parser {
  
     	agent.log("Ontology Parser - Search");
     	
-		Option optionN = new Option();
-		optionN.setName("N");
-		optionN.setData_type("INT");
-		optionN.setSynopsis("number_of_values_to_try");
-		optionN.setValue("5");
-
+    	// Option parsing
 		Option searchMethodOprion = null;
-
+		Option optionN = null;
 
 		if (search != null) {
 			ArrayList options = search.getOptions();
@@ -316,23 +307,27 @@ public class Parser {
 				if (optionI.getName().equals("search_method")) {
 					searchMethodOprion = optionI;
 				}
+				if (optionI.getName().equals("N")) {
+					optionN = optionI;
+				}
 			}
 		}
 		
 		String searchMethod =  null;
-		
+
 		if (searchMethodOprion == null) {
 			searchMethod = "ChooseXValues";
 		} else {
 			searchMethod = searchMethodOprion.getValue();
 		}
-		
-		ArrayList optionsSearchMethod = new ArrayList();
-		optionsSearchMethod.add(optionN);
 
+		ArrayList optionsSearchMethod = new ArrayList();
+		if (optionN != null) {
+			optionsSearchMethod.add(optionN);
+		}		
 		org.pikater.core.ontology.messages.Agent searchAgent = new org.pikater.core.ontology.messages.Agent();
 		searchAgent.setName(searchMethod);
-		searchAgent.setType(searchMethod);				
+		searchAgent.setType(searchMethod);
 		searchAgent.setOptions(optionsSearchMethod);
 		
 		return searchAgent;

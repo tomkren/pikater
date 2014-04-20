@@ -14,6 +14,8 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileDataSaver;
+import org.pikater.core.ontology.description.Search;
+import org.pikater.core.ontology.messages.Option;
 
 
 public final class Input1 {
@@ -24,6 +26,7 @@ public final class Input1 {
 
 		StepanuvOption optionComMethod = new StepanuvOption();
 		optionComMethod.setName("computing_method");
+		optionComMethod.setSynopsis("computing_method");
 		optionComMethod.setOption( new OptionValue(new String("RBFNetwork")) );
 		
 		StepanuvOption optionS = new StepanuvOption();
@@ -52,10 +55,16 @@ public final class Input1 {
 		StepanuvOption optionSearchMethod = new StepanuvOption();
 		optionSearchMethod.setName("search_method");
 		optionSearchMethod.setOption( new OptionValue(new String("ChooseXValues")) );	
+
+		StepanuvOption optionN = new StepanuvOption();
+		optionN.setName("N");
+		optionN.setSynopsis("number_of_values_to_try");
+		optionN.setOption( new OptionValue(new Integer(5)) );
 		
 		Search search = new Search();
 		search.setOptions(new ArrayList());
 		search.addOption(optionSearchMethod.toOption());
+		search.addOption(optionN.toOption());
 */
 		StepanuvOption optionEM = new StepanuvOption();
 		optionEM.setName("evaluation_method");
@@ -65,11 +74,16 @@ public final class Input1 {
 		optionOutput.setName("output");
 		optionOutput.setOption( new OptionValue(new String("evaluation_only")) );
 
+		StepanuvOption optionF = new StepanuvOption();
+		optionF.setName("F");
+		optionF.setOption( new OptionValue(new Integer(10)) );
+		
 		CARecSearchComplex complex = new CARecSearchComplex();
 		complex.setComputingAgent(comAgent);
 		complex.setOptions(new ArrayList());
 		complex.addOption(optionEM.toOption());
 		complex.addOption(optionOutput.toOption());
+		complex.addOption(optionF.toOption());
 
 		DataSourceDescription computingDataSource = new DataSourceDescription();
 		computingDataSource.setDataProvider(complex);

@@ -31,6 +31,7 @@
                     <__is__a__set>false</__is__a__set>
                     <__data__type>STRING</__data__type>
                     <__name>computing_method</__name>
+                    <__synopsis>computing_method</__synopsis>
                     <__value>RBFNetwork</__value>
                     <__number__of__values__to__try>0</__number__of__values__to__try>
                     <numberOfOptions>0</numberOfOptions>
@@ -65,6 +66,15 @@
                   <__data__type>STRING</__data__type>
                   <__name>output</__name>
                   <__value>evaluation_only</__value>
+                  <__number__of__values__to__try>0</__number__of__values__to__try>
+                  <numberOfOptions>0</numberOfOptions>
+                </org.pikater.core.ontology.messages.Option>
+                <org.pikater.core.ontology.messages.Option>
+                  <__mutable>false</__mutable>
+                  <__is__a__set>false</__is__a__set>
+                  <__data__type>INT</__data__type>
+                  <__name>F</__name>
+                  <__value>10</__value>
                   <__number__of__values__to__try>0</__number__of__values__to__try>
                   <numberOfOptions>0</numberOfOptions>
                 </org.pikater.core.ontology.messages.Option>

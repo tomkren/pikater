@@ -8,6 +8,8 @@ public class StepanuvOption {
 
 	private String name;
 	private String description;
+	private String synopsis;
+
 
 	private AbstractOption option;
 
@@ -33,11 +35,19 @@ public class StepanuvOption {
 		this.option = option;
 	}
 	
+	public String getSynopsis() {
+		return synopsis;
+	}
+	public void setSynopsis(String synopsis) {
+		this.synopsis = synopsis;
+	}
+	
 	public Option toOption() {
 
 		Option resultOption = option.toOption();
 		resultOption.setName(name);
-		
+		resultOption.setSynopsis(synopsis);
+
 		return resultOption;
 	}
 }
