@@ -12,11 +12,11 @@ import jade.util.leap.List;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
+
 import org.pikater.core.agents.system.management.AgentTypeDefinition;
 import org.pikater.core.agents.system.management.AgentTypesProvider;
 import org.pikater.core.agents.system.management.ManagerAgentRequestResponder;
 import org.pikater.core.agents.configuration.Argument;
-
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.CreateAgent;
 import org.pikater.core.ontology.messages.LoadAgent;
@@ -32,10 +32,14 @@ public class Agent_ManagerAgent extends PikaterAgent {
     private AgentTypesProvider agentTypesProvider=(AgentTypesProvider)context.getBean("agentTypesProvider");
     private ManagerAgentRequestResponder responder=new ManagerAgentRequestResponder(this);
 
+    public static String saveDirectoryPath =
+    		"core" + System.getProperty("file.separator") +
+    		"saved" + System.getProperty("file.separator");
+    
 	@Override
 	protected void setup() {
         initDefault();
-		File data = new File("saved");
+		File data = new File(saveDirectoryPath);
         if (!data.exists()) {
             log("Creating directory saved");
             if (data.mkdirs()) {

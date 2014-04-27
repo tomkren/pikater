@@ -29,6 +29,7 @@ import java.util.Calendar;
 public class ManagerAgentRequestResponder {
     private Agent_ManagerAgent managerAgent;
 
+    
     public ManagerAgentRequestResponder(Agent_ManagerAgent managerAgent) {
         this.managerAgent = managerAgent;
     }
@@ -62,7 +63,7 @@ public class ManagerAgentRequestResponder {
         // save serialized object to file
         byte [] object = sa.getAgent().getObject();
         ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream("saved" + System.getProperty("file.separator") + filename + ".model"));
+                new FileOutputStream(Agent_ManagerAgent.saveDirectoryPath + filename + ".model"));
 
 
         oos.writeObject(toObject(object));
@@ -112,8 +113,8 @@ public class ManagerAgentRequestResponder {
         else {
 
             // read agent from file
-            String filename = "saved" + System.getProperty("file.separator")
-                    +  la.getFilename() + ".model";
+            String filename = Agent_ManagerAgent.saveDirectoryPath
+            		+ la.getFilename() + ".model";
 
             //Construct the ObjectInputStream object
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename));
