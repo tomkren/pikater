@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import org.pikater.core.options.xmlGenerators.CrossValidation_CABox;
-import org.pikater.shared.AppHelper;
+import org.pikater.web.AppHelper;
 
 public class OptionContext
 {

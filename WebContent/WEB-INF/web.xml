@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>NewPikaterDebug</display-name>
+  
+  <!-- VAADIN CONFIGURATION. -->
+	<context-param>
+		<description>Vaadin production mode - should override any annotation settings.</description>
+		<param-name>productionMode</param-name>
+    	<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<description>Heartbeat request interval (in seconds) for Vaadin client side engine.</description>
+		<param-name>heartbeatInterval</param-name>
+    	<param-value>300</param-value>
+	</context-param>
+	<session-config>
+		<!--
+			Session timeont in minutes. Should be at least slightly longer than heartbeat interval, otherwise the session will expire before the first heartbeat from client.
+			This also means that shorter heartbeat interval will keep the session alive for as long as the client has a tab or page loaded. 
+		-->
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+  <!-- CONTEXT LISTENER. Listens for startup and quit events. -->
+	<listener>
+		<listener-class>org.pikater.web.StartupAndQuitListener</listener-class>
+	</listener>
+  
+</web-app>
