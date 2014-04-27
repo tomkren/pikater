@@ -1,3 +1,9 @@
+# Ignoring Eclipse project configuration files/folders.
+.project
+.classpath
+.settings/
+
+# Miscellaneous.
 bin/
 APDescription.txt
 MTPs-Main-Container.txt
