@@ -1,3 +1,19 @@
-bin/
+# Ignoring Eclipse project configuration files/folders.
+.project
+.classpath
+.settings
+
+# Ignore compiled binaries.
+bin
+build
+
+# Ignore compiled javascript code.
+WebContent/VAADIN/widgetsets
+
+# Ignore GWT-specific temp files.
+WebContent/VAADIN/gwt-unitCache
+
+# Miscellaneous.
+.DS_Store
 APDescription.txt
 MTPs-Main-Container.txt

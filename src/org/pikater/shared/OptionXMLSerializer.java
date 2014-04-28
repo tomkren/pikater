@@ -3,10 +3,10 @@ package org.pikater.shared;
 import java.io.PrintWriter;
 
 import org.pikater.core.options.LogicalUnitDescription;
-import org.pikater.shared.AppHelper;
 import org.pikater.shared.experiment.options.AbstractOption;
 import org.pikater.shared.experiment.slots.AbstractSlot;
 import org.pikater.shared.util.Interval;
+import org.pikater.web.AppHelper;
 
 import com.thoughtworks.xstream.XStream;
 
