@@ -1,10 +1,7 @@
-package org.pikater.web.pikater;
+package org.newpikater.pikater;
 
 import org.pikater.core.ontology.messages.MessagesOntology;
-
 import jade.content.AgentAction;
-import jade.core.ProfileImpl;
-import jade.core.Runtime;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -13,18 +10,16 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
-import jade.wrapper.AgentContainer;
+import jade.wrapper.ControllerException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.gateway.GatewayAgent;
+import jade.wrapper.gateway.JadeGateway;
 
 @SuppressWarnings("serial")
 public class PikaterGateway extends GatewayAgent {
     static final public Codec codec = new SLCodec();
     static final public Ontology ontology = MessagesOntology.getInstance();
     static private ContentManager contentManager;
-    // nevim jak se obejit bez jednoho kontejneru navic, pokud totiz neexistuje, tak nejde vytvaret AID (haze runtime vyjimky "No platform found")
-    // (kontejner s GW agentem v doby kdy vytvarim pozadavek jeste nemusi existovat)
-    static private AgentContainer container;
 
     @Override
     protected void setup() {
@@ -36,12 +31,12 @@ public class PikaterGateway extends GatewayAgent {
     }
 
     /** receiver je jmeno agenta (prijemce), action je nejaka AgentAction z Pikateri ontologie */
-    static public ACLMessage makeActionRequest(String receiver, AgentAction action) throws CodecException, OntologyException {
+    static public ACLMessage makeActionRequest(String receiver, AgentAction action) throws CodecException, OntologyException, ControllerException {
+        JadeGateway.checkJADE(); // force gateway container initialization to make AID resolution possible
         if (contentManager == null) {
             contentManager = new ContentManager();
             contentManager.registerLanguage(codec);
             contentManager.registerOntology(ontology);
-            container = Runtime.instance().createAgentContainer(new ProfileImpl());
         }
 
         AID target = new AID(receiver, AID.ISLOCALNAME);
