@@ -11,46 +11,45 @@ import jade.util.leap.ArrayList;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Search extends AbstractDataProcessing {
+public class Recommend extends AbstractDataProcessing {
 
-	String searchClass;
+    String recommenderClass;
     ArrayList options;
 
-    public String getSearchClass() {
-        return searchClass;
+    public String getRecommenderClass() {
+        return recommenderClass;
     }
-    public void setSearchClass(String searchClass) {
-        this.searchClass = searchClass;
+
+    public void setRecommenderClass(String recommenderClass) {
+        this.recommenderClass = recommenderClass;
     }
 
     public ArrayList getOptions() {
         return options;
     }
-    public void setOptions(ArrayList options) {
+
+    public void setParameters(ArrayList options) {
         this.options = options;
-    }
-    public void addOption(Option option) {
-        this.options.add(option);
     }
 
 	@Override
 	UniversalElementWrapper exportUniversalElement() {
-
-		Option searchClassOption = new Option();
-		searchClassOption.setName("searchClass");
-		searchClassOption.setValue(searchClass);
+		
+		Option recommenderClassOption = new Option();
+		recommenderClassOption.setName("recommenderClass");
+		recommenderClassOption.setValue(recommenderClass);
 		
 		ArrayList options = new ArrayList();
-		options.add(searchClassOption);
-
+		options.add(recommenderClassOption);
+		
 		UniversalElement element = new UniversalElement();
 		element.setType(this.getClass());
 		element.setOptions(options);
 		
-		UniversalElementWrapper wrapper = new UniversalElementWrapper();
+		UniversalElementWrapper wrapper =
+				new UniversalElementWrapper();
 		wrapper.setElement(element);
 		
 		return wrapper;
 	}
-
 }

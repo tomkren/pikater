@@ -44,7 +44,7 @@ public class StepanuvOption {
 	
 	public Option toOption() {
 
-		Option resultOption = option.toOption();
+		Option resultOption = new Option();
 		resultOption.setName(name);
 		resultOption.setSynopsis(synopsis);
 

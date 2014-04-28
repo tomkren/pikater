@@ -12,8 +12,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.ontology.description.CARecSearchComplex;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.ontology.description.DataPostprocessing;
-import org.pikater.core.ontology.description.DataPreprocessing;
+import org.pikater.core.ontology.description.DataProcessing;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileDataSaver;
@@ -22,7 +21,7 @@ import org.pikater.core.ontology.description.IComputingAgent;
 import org.pikater.core.ontology.description.IDataProvider;
 import org.pikater.core.ontology.description.IDataSaver;
 import org.pikater.core.ontology.description.IErrorProvider;
-import org.pikater.core.ontology.description.Recommen;
+import org.pikater.core.ontology.description.Recommend;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.EvaluationMethod;
@@ -109,22 +108,12 @@ public class Parser {
 
 			return this.process(complex);
 
-		} else if (dataProvider instanceof DataPreprocessing) {
-			
-			agent.log("Ontology Matched - DataPreprocessing");
-			
-			DataPreprocessing preprocessing =
-					(DataPreprocessing) dataProvider;
-			
-			//TODO:  process(preprocessing);
-			return null;
+		} else if (dataProvider instanceof DataProcessing) {
 
-		} else if (dataProvider instanceof DataPostprocessing) {
-
-			agent.log("Ontology Matched - DataPostprocessing");
+			agent.log("Ontology Matched - DataProcessing");
 			
-			DataPostprocessing postprocessing =
-					(DataPostprocessing) dataProvider;
+			DataProcessing postprocessing =
+					(DataProcessing) dataProvider;
 			
 			//TODO:  process(postprocessing);
 			return null;
@@ -276,7 +265,7 @@ public class Parser {
     	org.pikater.core.ontology.messages.Agent searchAgent =
     			processSearch(searchAgentO);
 
-    	Recommen recommenderO = complex.getRecommender();
+    	Recommend recommenderO = complex.getRecommender();
     	org.pikater.core.ontology.messages.Agent recommendeAgent =
     			processRecommender(recommenderO);
 
@@ -376,7 +365,7 @@ public class Parser {
 		return searchAgent;
     }
     
-    public org.pikater.core.ontology.messages.Agent processRecommender (Recommen recommender) {
+    public org.pikater.core.ontology.messages.Agent processRecommender (Recommend recommender) {
 
     	agent.log("Ontology Parser - Recommender");
 

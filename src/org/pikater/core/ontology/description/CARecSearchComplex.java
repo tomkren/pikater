@@ -1,6 +1,10 @@
 package org.pikater.core.ontology.description;
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalConnector;
+import org.pikater.shared.database.experiment.UniversalElement;
+import org.pikater.shared.database.experiment.UniversalElementWrapper;
+import org.pikater.shared.database.experiment.UniversalGui;
 
 import jade.util.leap.ArrayList;
 
@@ -14,7 +18,7 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
     ArrayList errors;
 
     Search search;
-    Recommen recommender;
+    Recommend recommender;
     IComputingAgent computingAgent;
 
     public ArrayList getErrors() {
@@ -38,10 +42,10 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
         this.search = search;
     }
 
-    public Recommen getRecommender() {
+    public Recommend getRecommender() {
         return recommender;
     }
-    public void setRecommender(Recommen recommender) {
+    public void setRecommender(Recommend recommender) {
         this.recommender = recommender;
     }
 
@@ -54,5 +58,56 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
     public void addOption(Option option) {
         this.options.add(option);
     }
+ 
+	@Override
+	UniversalElementWrapper exportUniversalElement() {
+
+		UniversalElement element = new UniversalElement();
+		element.setType(this.getClass());
+		element.setOptions(options);
+		element.setErrors(errors);
+
+		if (computingAgent != null) {
+
+			UniversalElementWrapper computingAgentInputSlot =
+					((AbstractDataProcessing) computingAgent).exportUniversalElement();
+
+			UniversalConnector universalComputingAgent = new UniversalConnector();
+			universalComputingAgent.setInputDataType("computingAgent");
+			universalComputingAgent.setUniversalDataProvider(computingAgentInputSlot);
+			
+			element.addInputSlot(universalComputingAgent);
+		}
+		if (search != null) {
+			
+			UniversalElementWrapper searchInputSlot =
+					search.exportUniversalElement();
+					
+			UniversalConnector universalSearch = new UniversalConnector();
+			universalSearch.setInputDataType("search");
+			universalSearch.setUniversalDataProvider(searchInputSlot);
+			
+			element.addInputSlot(universalSearch);
+		}
+
+		if (recommender != null) {
+
+			UniversalElementWrapper recommenderInputSlot =
+					recommender.exportUniversalElement();
+
+			UniversalConnector universalRecommend = new UniversalConnector();
+			universalRecommend.setInputDataType("recommend");
+			universalRecommend.setUniversalDataProvider(recommenderInputSlot);
+
+			element.addInputSlot(universalRecommend);
+		}
+		
+		
+		UniversalElementWrapper wrapper =
+				new UniversalElementWrapper();
+		wrapper.setElement(element);
+		
+		return wrapper;
+	}
 
 }

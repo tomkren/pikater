@@ -8,6 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.experiment.UniversalElementWrapper;
+
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -15,8 +18,8 @@ import com.thoughtworks.xstream.XStream;
  */
 public class ComputationDescription implements Concept {
 
-	ArrayList rootElements;
     ArrayList globalOptions;
+    ArrayList rootElements;
 
     public ArrayList getGlobalOptions() {
         return globalOptions;
@@ -32,8 +35,32 @@ public class ComputationDescription implements Concept {
         this.rootElements = rootElements;
     }
     public void addRootElement(FileDataSaver rootElement) {
-        this.rootElements.add(rootElement);
+    	
+    	if (rootElements == null) {
+    		this.rootElements = new ArrayList();
+    	}
+    	this.rootElements.add(rootElement);
     }
+    
+	public UniversalComputationDescription ExportUniversalComputationDescription() {
+		
+		ArrayList options = getGlobalOptions();
+		ArrayList rootElements = getRootElements();
+
+		UniversalComputationDescription uDescription =
+				new UniversalComputationDescription();
+		uDescription.setGlobalOptions(options);
+
+		for (int i = 0; i < rootElements.size(); i++) {
+			
+			FileDataSaver saver = (FileDataSaver) rootElements.get(i);
+			UniversalElementWrapper uew = saver.exportUniversalElement();
+			
+			uDescription.addRootElement(uew);
+		}
+
+		return uDescription;
+	}
  
 	public String exportXML(String fileName) throws FileNotFoundException {
 

@@ -46,7 +46,10 @@ public class Agent_DataManager extends PikaterAgent {
 	private static final long serialVersionUID = 1L;
 	Connection db;
 
-	public static String dataPath = "core" + System.getProperty("file.separator") + "data" + System.getProperty("file.separator") + "files" + System.getProperty("file.separator");
+	public static String dataPath =
+			"core" + System.getProperty("file.separator") +
+			"data" + System.getProperty("file.separator") +
+			"files" + System.getProperty("file.separator");
 
 	@Override
 	protected void setup() {
@@ -71,7 +74,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		File data = new File(dataPath + "temp");
 		if (!data.exists()) {
-			log("Creating directory: " + this.dataPath);
+			log("Creating directory: " + Agent_DataManager.dataPath);
 			if (data.mkdirs()) {
 				log("Succesfully created directory: " + dataPath);
 			} else {

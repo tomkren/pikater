@@ -1,5 +1,9 @@
 package org.pikater.core.ontology.description;
 
+import org.pikater.shared.database.experiment.UniversalConnector;
+import org.pikater.shared.database.experiment.UniversalElement;
+import org.pikater.shared.database.experiment.UniversalElementWrapper;
+
 import jade.content.Concept;
 
 /**
@@ -23,4 +27,21 @@ public class DataSourceDescription implements Concept {
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
+    
+    UniversalConnector exportUniversalConnector() {
+    	    	
+    	AbstractDataProcessing dataProcessing =
+    			(AbstractDataProcessing) dataProvider;
+    	
+    	UniversalElementWrapper universalDataProvider =
+    			dataProcessing.exportUniversalElement();
+    	
+    	UniversalConnector connector =
+    			new UniversalConnector();
+    	connector.setOutputDataType(dataType);
+    	connector.setUniversalDataProvider(universalDataProvider);
+    	
+    	return connector;
+    }
+
 }

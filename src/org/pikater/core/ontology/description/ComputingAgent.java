@@ -2,6 +2,9 @@ package org.pikater.core.ontology.description;
 
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalConnector;
+import org.pikater.shared.database.experiment.UniversalElement;
+import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
 import jade.util.leap.ArrayList;
 
@@ -54,6 +57,26 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
     public void addOption(Option option) {
         this.options.add(option);
     }
+
+
+	@Override
+	UniversalElementWrapper exportUniversalElement() {
+			    
+	    UniversalConnector universalTrainingData =
+	    		trainingData.exportUniversalConnector();
+	    universalTrainingData.setInputDataType("trainingData");
+
+		UniversalElement element = new UniversalElement();
+		element.setType(this.getClass());
+		element.setOptions(options);
+		element.addInputSlot(universalTrainingData);
+		
+		UniversalElementWrapper wrapper =
+				new UniversalElementWrapper();
+		wrapper.setElement(element);
+		
+		return wrapper;
+	}
 
 }
 
