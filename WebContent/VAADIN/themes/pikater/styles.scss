@@ -1,9 +1,9 @@
 @import "addons.scss";
-@import "newpikaterdebug.scss";
+@import "pikater.scss";
 
 /* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
 /* The actual styles should be defined in newpikaterdebug.scss */
-.newpikaterdebug {
+.pikater {
   @include addons;
-  @include newpikaterdebug;
+  @include pikater;
 }

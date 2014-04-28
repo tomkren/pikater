@@ -23,10 +23,10 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
 
 @SuppressWarnings("serial")
-@Theme("newpikaterdebug")
+@Theme("pikater")
 @com.vaadin.annotations.JavaScript(value = "public/kinetic-v4.7.3-dev.js")
 @Push(value = PushMode.MANUAL)
-public class NewpikaterdebugUI extends UI
+public class PikaterUI extends UI
 {
 	/*
 	 * Automatic UI finding takes this even one step further and allows you to leave out @VaadinServletConfiguration
@@ -36,7 +36,7 @@ public class NewpikaterdebugUI extends UI
 	 * which might be important if you are migrating an older application. 
 	 */
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = NewpikaterdebugUI.class, widgetset = "org.pikater.web.vaadin.gui.NewpikaterdebugWidgetset")
+	@VaadinServletConfiguration(productionMode = false, ui = PikaterUI.class, widgetset = "org.pikater.web.vaadin.gui.PikaterWidgetset")
 	public static class Servlet extends CustomConfiguredUIServlet
 	{
 	}
@@ -201,7 +201,7 @@ public class NewpikaterdebugUI extends UI
 			public void buttonClick(ClickEvent event)
 			{
 				// getUI().getPage().setLocation("/NewPikater/static/hokus_pokus.txt"); // ./WEB-INF/static/hokus_pokus.txt
-				getUI().getPage().setLocation("/NewPikater/staticDownload"); // servlet mapped to /staticDownload
+				getUI().getPage().setLocation("/Pikater/staticDownload"); // servlet mapped to /staticDownload
 			}
 		});
 		vLayout.addComponent(btn);
