@@ -1,4 +1,4 @@
-package org.newpikater.appserver.servlets;
+package org.pikater.web.servlets;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.newpikater.pikater.PikaterGateway;
-import org.newpikater.pikater.PikaterActionInitiator;
+import org.pikater.web.pikater.PikaterGateway;
+import org.pikater.web.pikater.PikaterActionInitiator;
 
 import org.pikater.core.agents.system.Agent_Mailing;
 import org.pikater.core.ontology.messages.SendEmail;

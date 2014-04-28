@@ -1,4 +1,4 @@
-package org.newpikater.pikater;
+package org.pikater.web.pikater;
 
 import org.pikater.core.ontology.messages.MessagesOntology;
 import jade.content.AgentAction;
