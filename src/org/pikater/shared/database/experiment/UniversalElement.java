@@ -1,6 +1,5 @@
 package org.pikater.shared.database.experiment;
 
-import org.pikater.core.ontology.description.FileDataSaver;
 
 public class UniversalElement {
 
@@ -17,24 +16,31 @@ public class UniversalElement {
 		this.uModel = description;
 	}
 
-	
+
 	public UniversalOntology getElement() {
 		return element;
 	}
 	public void setElement(UniversalOntology element) {
-		this.element = element;
 		
-		this.uModel.addElement(this);
-		
-		if (element.getType() == FileDataSaver.class) {
-			this.uModel.addRootElement(this);
+		if (element == null) {
+			throw new IllegalStateException("UniversalElement cann't be null");
 		}
+		
+		this.element = element;
+
+		this.uModel.addElement(this);
+
 	}
 
 	public UniversalGui getGui() {
 		return gui;
 	}
 	public void setGui(UniversalGui gui) {
+
+		if (this.gui != null && gui == null) {
+			throw new IllegalStateException("UniversalGui cann't be changed to null");
+		}
+
 		this.gui = gui;
 	}
 
