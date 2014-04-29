@@ -15,18 +15,18 @@ public class JPABatch {
 	private Long id;
 	
 	private String name;
-	private int ownerId;
+	private String note;
+
+	private String xmlBatch;
+	
+	private JPAUser owner;
+
 	private int priority;
 	private int totalPriority;
 	
 	private List<JPAExperiment> experiments = new ArrayList<JPAExperiment>();
 
-//	@Transient
-//	private static final String PERSISTENCE_UNIT_NAME = "batches";
-//	@Transient
-//	private static EntityManagerFactory factory;
-	
-	
+
 	public void setName(String name){
 		this.name=name;
 	}
@@ -34,11 +34,25 @@ public class JPABatch {
 		return this.name;
 	}
 	
-	public void setOwnerID(int id){
-		this.ownerId=id;
+	public String getNote() {
+		return note;
 	}
-	public int getOwnerID(){
-		return this.ownerId;
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public String getXmlBatch() {
+		return xmlBatch;
+	}
+	public void setXmlBatch(String xmlBatch) {
+		this.xmlBatch = xmlBatch;
+	}
+
+	public JPAUser getOwner() {
+		return owner;
+	}
+	public void setOwner(JPAUser owner) {
+		this.owner = owner;
 	}
 
 	public void setPriority(int priority){

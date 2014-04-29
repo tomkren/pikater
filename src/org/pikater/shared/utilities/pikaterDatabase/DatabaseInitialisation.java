@@ -223,15 +223,13 @@ public class DatabaseInitialisation {
 		
 		JPAExperiment experiment = new JPAExperiment();
 		experiment.setStatus("Finished");
-		experiment.setXMLDescription("XML");
-		experiment.setResult(result);
+		experiment.addResult(result);
 
-		
 		JPABatch batch = new JPABatch();
 		batch.setName("Stepan's batch of experiments - school project");
+		batch.setXmlBatch("XML");
 		batch.setPriority(99);
 		batch.addExperiment(experiment);
-		batch.setOwnerID(1);
 
 		this.database.persist(batch);
 	}

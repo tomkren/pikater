@@ -1,24 +1,25 @@
 package org.pikater.shared.database.experiment;
 
 
-import jade.util.leap.ArrayList;
+import java.util.ArrayList;
 
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.FileDataSaver;
 import org.pikater.core.ontology.description.examples.SearchOnly;
+import org.pikater.core.ontology.messages.Option;
 
 import com.thoughtworks.xstream.XStream;
 
 public class UniversalComputationDescription {
 
-	private ArrayList globalOptions;
+	private ArrayList<Option> globalOptions;
 
 	/* Contain all ontology elements */
-	private java.util.ArrayList<UniversalElement> elements;
+	private ArrayList<UniversalElement> elements;
 
 	/* Tree of ComputingDescription Ontology elements wrapped in UniversalElement
 	 * ArrayList contains only FileDataSavers */
-	private java.util.ArrayList<UniversalElement> rootElements;
+	private ArrayList<UniversalElement> rootElements;
 
 	/* Tree of Gui wrapperBoxes
 	 * Null if all UniversalElements doesn't contains any UniversalGui object */
@@ -28,17 +29,29 @@ public class UniversalComputationDescription {
 	/*
 	 * Global options of experiment.
 	 */
-	public ArrayList getGlobalOptions() {
+	public ArrayList<Option> getGlobalOptions() {
+		if (this.globalOptions == null) {
+			return new ArrayList<Option>();
+		}
 		return globalOptions;
 	}
-	public void setGlobalOptions(ArrayList globalOptions) {
-		this.globalOptions = globalOptions;
+	public void addGlobalOptions(ArrayList<Option> globalOptions) {
+		if (this.globalOptions == null) {
+			this.globalOptions = new ArrayList<Option>();
+		}
+		this.globalOptions.addAll(globalOptions);
+	}
+	public void addGlobalOption(Option globalOption) {
+		if (this.globalOptions == null) {
+			this.globalOptions = new ArrayList<Option>();
+		}
+		this.globalOptions.add(globalOption);
 	}
 
 	/*
 	 * UniversalElements containing FileDataSavers ontology + guiInfo
 	 */
-    public java.util.ArrayList<UniversalElement> getRootElements() {
+    public ArrayList<UniversalElement> getRootElements() {
 
         return rootElements;
     }
@@ -49,12 +62,12 @@ public class UniversalComputationDescription {
     void addElement(UniversalElement element) {
 
     	if (element.getElement() == null) {
-    		throw new IllegalStateException("UniversalElement dosn't contain element");
+    		throw new IllegalArgumentException("UniversalElement doesn't contain element");
     	}
 
 
     	if (this.elements == null) {
-    		this.elements = new java.util.ArrayList<UniversalElement>();
+    		this.elements = new ArrayList<UniversalElement>();
     	}
     	this.elements.add(element);
 
@@ -62,7 +75,7 @@ public class UniversalComputationDescription {
 		if (element.getElement().getType() == FileDataSaver.class) {
 
 			if (this.rootElements == null) {
-				this.rootElements = new java.util.ArrayList<UniversalElement>();
+				this.rootElements = new ArrayList<UniversalElement>();
 	    	}
 			this.rootElements.add(element);
 		}
@@ -85,16 +98,16 @@ public class UniversalComputationDescription {
      *  UniversalGuiWrapper.
      */
 	public void insertIntoGuiWrapper(
-			java.util.ArrayList<UniversalGuiWrapper> guiWrappers,
-			java.util.ArrayList<UniversalElement> elements) {
+			ArrayList<UniversalGuiWrapper> guiWrappers,
+			ArrayList<UniversalElement> elements) {
 		
 		if (guiWrappers == null && elements == null) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Both lists are null (guiWrappers and elements)");
 		}
 
 		if (guiWrappers.isEmpty() && elements.isEmpty()) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Both lists are empty (guiWrappers and elements)");
 		}
 
@@ -110,7 +123,7 @@ public class UniversalComputationDescription {
 			UniversalGuiWrapper parentI =
 					this.getParentWrapperOf(wrapperI);
 			if (parentI != parent) {
-				throw new IllegalStateException(
+				throw new IllegalArgumentException(
 						"GuiWrappers and elements are not "
 						+ "in the same UniversalGuiWrapper");
 			}
@@ -120,7 +133,7 @@ public class UniversalComputationDescription {
 			UniversalGuiWrapper parentI =
 					this.getParentWrapperOf(elementI);
 			if (parentI != parent) {
-				throw new IllegalStateException(
+				throw new IllegalArgumentException(
 						"GuiWrappers and elements are not "
 						+ "in the same UniversalGuiWrapper");
 			}
@@ -155,7 +168,7 @@ public class UniversalComputationDescription {
 		}
 		return true;
 	}
-	
+
 	/*
 	 * Export to XML
 	 */

@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import org.pikater.core.ontology.messages.Option;
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 
 import com.thoughtworks.xstream.XStream;
@@ -44,13 +45,16 @@ public class ComputationDescription implements Concept {
     }
     
 	public UniversalComputationDescription ExportUniversalComputationDescription() {
-		
-		ArrayList options = getGlobalOptions();
+
 		ArrayList rootElements = getRootElements();
 
 		UniversalComputationDescription uModel =
 				new UniversalComputationDescription();
-		uModel.setGlobalOptions(options);
+
+		for (int i = 0; i < getGlobalOptions().size(); i++) {
+			Option optionI = (Option) getGlobalOptions().get(i);
+			uModel.addGlobalOption( optionI );
+		}
 
 		for (int i = 0; i < rootElements.size(); i++) {
 			
