@@ -40,7 +40,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 			return false;
 		}
 		
-		String path = Agent_DataManager.dataPath + relativeFileName;
+		String path = Agent_DataManager.dataFilesPath + relativeFileName;
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));

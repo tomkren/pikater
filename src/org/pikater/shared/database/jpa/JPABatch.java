@@ -17,7 +17,7 @@ public class JPABatch {
 	private String name;
 	private String note;
 
-	private String xmlBatch;
+	private long xmlOID;
 	
 	private JPAUser owner;
 
@@ -48,11 +48,11 @@ public class JPABatch {
 		this.note = note;
 	}
 
-	public String getXmlBatch() {
-		return xmlBatch;
+	public long getXmlOID() {
+		return xmlOID;
 	}
-	public void setXmlBatch(String xmlBatch) {
-		this.xmlBatch = xmlBatch;
+	public void setXmlOID(long xmlOID) {
+		this.xmlOID = xmlOID;
 	}
 
 	public JPAUser getOwner() {

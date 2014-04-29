@@ -158,7 +158,7 @@ public class DataManagerService extends FIPAService {
 	/** Makes sure the file is present in the cache or gets it from the (remote) database. */
 	public static void ensureCached(PikaterAgent agent, String filename) {
 		agent.log("making sure file "+filename+" is present");
-		if (new File(Agent_DataManager.dataPath + filename).exists())
+		if (new File(Agent_DataManager.dataFilesPath + filename).exists())
 			return;
 		agent.log("getting file "+filename+" from dataManager");
 		GetFile gf = new GetFile();

@@ -23,6 +23,7 @@ import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
+import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAGeneralFile;
@@ -55,15 +56,25 @@ public class Database {
 		this.connection = connection;
 	}
 
-	public void saveExperimentXML(int userID, File xmlExperiment) {
-		// :TODO
+	public void saveBatch (int userId, JPABatch batch, String batchXml) {
+
+		//TODO: Save as large object? or as String?
+		long largeObjectID = 0; //this.saveFileAsLargeObject(file);
+
+		JPAUser user = this.getUserByID(userId);
+
+		int totalPriority = 10*user.getPriorityMax() + batch.getPriority();
+
+		batch.setXmlOID(largeObjectID);
+		batch.setOwner(user);
+		batch.setTotalPriority(totalPriority);
+
+		this.persist(batch);
 	}
 
-	public void insertExperiment(int userID, String xmlExperimetId, Long dataSetId, int priority) {
+	public void saveExperiment(int batchID, JPAExperiment experiment) {
 		// :TODO
 	}
-
-	//public void addExperiment(JPAUser user,)
 	
 	public List<JPAExperiment> getExperimentsByStatus(JPAUser user,ExperimentStatus status){
 		try {

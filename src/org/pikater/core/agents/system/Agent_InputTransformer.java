@@ -25,6 +25,7 @@ import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.utilities.pikaterDatabase.Database;
 
 
 public class Agent_InputTransformer extends PikaterAgent {
@@ -100,23 +101,21 @@ class RecieveExperiment extends CyclicBehaviour {
 
 ///////////////////////////THIS WILL BE MOVED TO DATAMANGER/////////////////////////////
             
-            //TODO: Save xml
             UniversalComputationDescription description =
             		compDescription.ExportUniversalComputationDescription();
-            String xml = description.exportXML();
+            String batchXml = description.exportXML();
 
-            EntityManager entityManager = emf.createEntityManager();
-            entityManager.getTransaction().begin();
-
+            
+            int klaraID = 6;
+            
             JPABatch batch = new JPABatch();
             batch.setName("Klara's Batch");
             batch.setNote("Inputed by GuiKlara Agent");
             batch.setPriority(9);
-            batch.setXmlBatch("XML");
 
-			entityManager.persist(batch);
-			entityManager.getTransaction().commit();
-			entityManager.close();
+            Database database = new Database(emf, null);
+            database.saveBatch(klaraID, batch, batchXml);
+
 ////////////////////////////////////////////////////////////////////////////////////////            
 
 

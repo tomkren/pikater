@@ -14,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.postgresql.PGConnection;
+import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -53,15 +54,9 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{				
 		
-		//this.createRolesAndUsers();
+		this.createRolesAndUsers();
 		
-		this.addWebDatasets();
-		
-		this.addIrisDataset();
-		
-		this.addWeatherDataset();
-		
-		this.addLinearDataset();
+		//this.addWebDatasets();
 		
 		/**
 
@@ -72,24 +67,24 @@ public class DatabaseInitialisation {
 	}
 	
 	private void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
-		File dir=new File("core/datasets");
+		File dir=new File(Agent_DataManager.datasetsPath);
 		JPAUser user = database.getUserByLogin("stepan");
 		System.out.println("Target user: "+user.getLogin());
 		
-		File[] child=dir.listFiles();
-		for(File f : child){
-			if(f.isFile()){
+		File[] datasets=dir.listFiles();
+		for(File datasetI : datasets){
+			if(datasetI.isFile()){
 				try{
 				System.out.println("--------------------");
-				System.out.println("Dataset: "+f.getAbsolutePath());
+				System.out.println("Dataset: "+datasetI.getAbsolutePath());
 				JPAMetaDataReader mdr=new JPAMetaDataReader(database);
-				mdr.readFile(f);		
-				System.out.println("MD5 hash: "+database.getMD5Hash(f));
+				mdr.readFile(datasetI);		
+				System.out.println("MD5 hash: "+database.getMD5Hash(datasetI));
 			
 				JPADataSetLO dslo=database.saveDataSet(
 					user,
-					f,
-					f.getName(),
+					datasetI,
+					datasetI.getName(),
 					mdr.getJPAGlobalMetaData(),
 					mdr.getJPAAttributeMetaData()
 					);
@@ -103,73 +98,7 @@ public class DatabaseInitialisation {
 		}
 	}
 	
-	
-	private void addIrisDataset() throws SQLException, IOException, UserNotFoundException{
-		
-		JPAUser user = database.getUserByLogin("stepan");
-		System.out.println(user.getEmail());
 
-		File file = new File("core/data/files/25d7d5d689042a3816aa1598d5fd56ef");
-		
-		JPAMetaDataReader mdr=new JPAMetaDataReader(database);
-		mdr.readFile(file);
-		
-				
-		System.out.println("--------------------");
-		System.out.println(file.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(file));
-		System.out.println("--------------------");
-
-		JPAGlobalMetaData irisGlobalMD = database.createGlobalMetaData(150, "Classification");
-		List<JPAAttributeMetaData> attrMD=mdr.getJPAAttributeMetaData();
-		
-		
-		JPADataSetLO dslo=database.saveDataSet(user, file, "Iris", irisGlobalMD, attrMD);
-
-	}
-
-	private void addWeatherDataset() throws SQLException, IOException, UserNotFoundException{
-		
-		JPAUser user = database.getUserByLogin("stepan");
-		System.out.println(user.getEmail());
-		
-		File weatherFile = new File("core/data/files/772c551b8486b932aed784a582b9c1b1");
-		
-		JPAMetaDataReader mdr=new JPAMetaDataReader(database);
-		mdr.readFile(weatherFile);
-
-
-		System.out.println(weatherFile.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(weatherFile));
-		System.out.println("--------------------");		
-				
-		JPAGlobalMetaData weatherGlobalMD = database.createGlobalMetaData(14,"Multivariate");
-		List<JPAAttributeMetaData> attrMD=mdr.getJPAAttributeMetaData();
-		
-		JPADataSetLO dslo=database.saveDataSet(user, weatherFile, "Weather", weatherGlobalMD, attrMD);
-	}
-
-	private void addLinearDataset() throws SQLException, IOException, UserNotFoundException{
-		
-		JPAUser user = database.getUserByLogin("stepan");
-		System.out.println(user.getEmail());
-		
-		File linearFile = new File("core/data/files/dc7ce6dea5a75110486760cfac1051a5");
-		
-		JPAMetaDataReader mdr=new JPAMetaDataReader(database);
-		mdr.readFile(linearFile);
-		
-		
-		System.out.println(linearFile.getAbsolutePath());
-		System.out.println("MD5 hash: "+database.getMD5Hash(linearFile));
-		System.out.println("--------------------");		
-		
-		JPAGlobalMetaData weatherGlobalMD = database.createGlobalMetaData(5000,"Regression");
-		List<JPAAttributeMetaData> attrMD=mdr.getJPAAttributeMetaData();
-		
-		JPADataSetLO dslo=database.saveDataSet(user, linearFile, "Linear Data", weatherGlobalMD, attrMD);
-		
-	}
 
 	private void createRolesAndUsers() throws UserNotFoundException {
 
@@ -200,6 +129,9 @@ public class DatabaseInitialisation {
 		
 		database.addUser("martin", "123", "Martin.Pilat@mff.cuni.cz", 9);
 		database.setRoleForUser("martin", "user");
+		
+		database.addUser("klara", "123", "peskova@braille.mff.cuni.cz", 9);
+		database.setRoleForUser("klara", "user");
 	}
 	
 	private void insertFinishedBatch() throws ParseException {
@@ -227,7 +159,6 @@ public class DatabaseInitialisation {
 
 		JPABatch batch = new JPABatch();
 		batch.setName("Stepan's batch of experiments - school project");
-		batch.setXmlBatch("XML");
 		batch.setPriority(99);
 		batch.addExperiment(experiment);
 

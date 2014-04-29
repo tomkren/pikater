@@ -46,11 +46,14 @@ public class Agent_DataManager extends PikaterAgent {
 	private static final long serialVersionUID = 1L;
 	Connection db;
 
-	public static String dataPath =
+	public static String dataFilesPath =
 			"core" + System.getProperty("file.separator") +
 			"data" + System.getProperty("file.separator") +
 			"files" + System.getProperty("file.separator");
-
+	public static String datasetsPath =
+			"core" + System.getProperty("file.separator") +
+			"data" + System.getProperty("file.separator");
+	
 	@Override
 	protected void setup() {
 		try {
@@ -72,13 +75,13 @@ public class Agent_DataManager extends PikaterAgent {
 			e.printStackTrace();
 		}
 
-		File data = new File(dataPath + "temp");
+		File data = new File(dataFilesPath + "temp");
 		if (!data.exists()) {
-			log("Creating directory: " + Agent_DataManager.dataPath);
+			log("Creating directory: " + Agent_DataManager.dataFilesPath);
 			if (data.mkdirs()) {
-				log("Succesfully created directory: " + dataPath);
+				log("Succesfully created directory: " + dataFilesPath);
 			} else {
-				logError("Error creating directory: " + dataPath);
+				logError("Error creating directory: " + dataFilesPath);
 			}
 		}
 
@@ -170,7 +173,7 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			openDBConnection();
 			PostgreLargeObjectReader reader = new Database(emf, (PGConnection) db).getLargeObjectReader(hash);
-			File temp = new File(dataPath + "temp" + System.getProperty("file.separator") + hash);
+			File temp = new File(dataFilesPath + "temp" + System.getProperty("file.separator") + hash);
 			FileOutputStream out = new FileOutputStream(temp);
 			try {
 				byte[] buf = new byte[100*1024];
@@ -178,7 +181,7 @@ public class Agent_DataManager extends PikaterAgent {
 				while ((read = reader.read(buf, 0, buf.length)) > 0) {
 					out.write(buf, 0, read);
 				}
-				temp.renameTo(new File(dataPath + hash));
+				temp.renameTo(new File(dataFilesPath + hash));
 			} finally {
 				db.close();
 				out.close();
@@ -202,7 +205,7 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage RespondToImportFile(ACLMessage request, Action a) throws IOException, CodecException, OntologyException, SQLException, ClassNotFoundException {
 		ImportFile im = (ImportFile) a.getAction();
 
-		String pathPrefix = dataPath + "temp" + System.getProperty("file.separator");
+		String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
 
 		if (im.isTempFile()) {
 
@@ -257,7 +260,7 @@ public class Agent_DataManager extends PikaterAgent {
 				stmt.close();
 
 				// move the file to db\files directory
-				String newName = dataPath + internalFilename;
+				String newName = dataFilesPath + internalFilename;
 				move(f, new File(newName));
 
 			}
@@ -302,7 +305,7 @@ public class Agent_DataManager extends PikaterAgent {
 				stmt.executeUpdate(query);
 				stmt.close();
 
-				String newName = this.dataPath + internalFilename;
+				String newName = this.dataFilesPath + internalFilename;
 
 				FileWriter file = new FileWriter(newName);
 				file.write(fileContent);
@@ -346,7 +349,7 @@ public class Agent_DataManager extends PikaterAgent {
 			internalFilename = rs.getString("filename");
 
 		} else {
-			String pathPrefix = dataPath + "temp" + System.getProperty("file.separator");
+			String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
 
 			String tempFileName = pathPrefix + tf.getExternalFilename();
 			if (new File(tempFileName).exists())
@@ -705,7 +708,7 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage RespondToDeleteTempFiles(ACLMessage request) {
-		String path = this.dataPath + "temp" + System.getProperty("file.separator");
+		String path = this.dataFilesPath + "temp" + System.getProperty("file.separator");
 
 		File tempDir = new File(path);
 		String[] files = tempDir.list();
