@@ -2,6 +2,7 @@ package org.pikater.web;
 
 import java.util.Set;
 
+import org.pikater.web.config.ServerConfigurationInterface;
 import org.reflections.Reflections;
 
 public class AppHelper
@@ -9,9 +10,9 @@ public class AppHelper
 	// ----------------------------------------------------------------------------------------------------------
 	// PATHS TO RESOURCES
 	
-	public static final String baseAppPath = System.getProperty("user.dir") + System.getProperty("file.separator"); 
+	public static final String baseAppPath = ServerConfigurationInterface.getContext().getRealPath("/");
 	public static final String srcPath = joinPathComponents(baseAppPath, "src");
-	public static final String webInfPath = joinPathComponents(baseAppPath, "WebContent" + System.getProperty("file.separator") + "WEB-INF");
+	public static final String webInfPath = joinPathComponents(baseAppPath, "WEB-INF");
 	public static final String webInfConfPath = joinPathComponents(webInfPath, "conf");
 	public static final String webInfJadeDeployPath = joinPathComponents(webInfPath, "jadeDeploy");
 	public static final String webInfLibPath = joinPathComponents(webInfPath, "lib");
