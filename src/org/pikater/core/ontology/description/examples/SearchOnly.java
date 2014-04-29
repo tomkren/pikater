@@ -14,7 +14,7 @@ import org.pikater.core.ontology.description.*;
  */
 public class SearchOnly {
 
-    public static void createDescription() {
+    public static ComputationDescription createDescription() {
 
         FileDataProvider fdp = new FileDataProvider();
         fdp.setFileURI("iris.arff");
@@ -80,7 +80,7 @@ public class SearchOnly {
         ComputationDescription cd = new ComputationDescription();
         cd.addRootElement(fds);
 
-
+        return cd;
     }
 
 }
