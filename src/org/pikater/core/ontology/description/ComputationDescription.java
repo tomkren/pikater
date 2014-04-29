@@ -51,17 +51,20 @@ public class ComputationDescription implements Concept {
 		UniversalComputationDescription uModel =
 				new UniversalComputationDescription();
 
-		for (int i = 0; i < getGlobalOptions().size(); i++) {
-			Option optionI = (Option) getGlobalOptions().get(i);
-			uModel.addGlobalOption( optionI );
+		if (getGlobalOptions() != null) {
+			for (int i = 0; i < getGlobalOptions().size(); i++) {
+				Option optionI = (Option) getGlobalOptions().get(i);
+				uModel.addGlobalOption( optionI );
+			}
 		}
 
-		for (int i = 0; i < rootElements.size(); i++) {
-			
-			FileDataSaver saver = (FileDataSaver) rootElements.get(i);
-			saver.exportUniversalElement(uModel);
+		if (rootElements != null) {
+			for (int i = 0; i < rootElements.size(); i++) {
+				
+				FileDataSaver saver = (FileDataSaver) rootElements.get(i);
+				saver.exportUniversalElement(uModel);
+			}
 		}
-
 		return uModel;
 	}
  

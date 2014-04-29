@@ -21,6 +21,7 @@
         <class>org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData</class>
         <class>org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData</class>
         <class>org.pikater.shared.database.jpa.JPAFilemapping</class>
+        <class>org.pikater.shared.database.jpa.JPAModel</class>
       <properties>
 
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />

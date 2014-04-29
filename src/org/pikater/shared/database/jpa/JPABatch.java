@@ -13,7 +13,7 @@ public class JPABatch {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
 	private String note;
 
@@ -26,6 +26,13 @@ public class JPABatch {
 	
 	private List<JPAExperiment> experiments = new ArrayList<JPAExperiment>();
 
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public void setName(String name){
 		this.name=name;

@@ -1,6 +1,9 @@
 package org.pikater.core.agents.system;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -20,6 +23,8 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.jpa.JPABatch;
 
 
 public class Agent_InputTransformer extends PikaterAgent {
@@ -39,7 +44,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
 
 		RecieveExperiment recieveExp =
-			new RecieveExperiment(this, getCodec());
+			new RecieveExperiment(this, getCodec(), this.emf);
 		addBehaviour(recieveExp);
 
 	}
@@ -57,10 +62,12 @@ class RecieveExperiment extends CyclicBehaviour {
 
 	private Agent agent = null;
 	private Codec codec = null;
+	private EntityManagerFactory emf = null;
 	
-	public RecieveExperiment(Agent agent, Codec codec) {
+	public RecieveExperiment(Agent agent, Codec codec, EntityManagerFactory emf) {
 		this.agent = agent;
 		this.codec = codec;
+		this.emf = emf;
 	}
 
 	public void action() {
@@ -88,12 +95,35 @@ class RecieveExperiment extends CyclicBehaviour {
 			System.out.println(agent.getName() + ": Agent recieved ComputingDescription from " + request.getSender().getName() );
 			ExecuteExperiment exeExperiment = (ExecuteExperiment) act.getAction();
             ComputationDescription compDescription = exeExperiment.getDescription();
+
+
+
+///////////////////////////THIS WILL BE MOVED TO DATAMANGER/////////////////////////////
             
+            //TODO: Save xml
+            UniversalComputationDescription description =
+            		compDescription.ExportUniversalComputationDescription();
+            String xml = description.exportXML();
+
+            EntityManager entityManager = emf.createEntityManager();
+            entityManager.getTransaction().begin();
+
+            JPABatch batch = new JPABatch();
+            batch.setName("Klara's Batch");
+            batch.setNote("Inputed by GuiKlara Agent");
+            batch.setPriority(9);
+            batch.setXmlBatch("XML");
+
+			entityManager.persist(batch);
+			entityManager.getTransaction().commit();
+			entityManager.close();
+////////////////////////////////////////////////////////////////////////////////////////            
+
+
             ACLMessage reply = request.createReply();
             reply.setPerformative(ACLMessage.INFORM);
             reply.setContent("OK");
             agent.send(reply);
-
 
 
             AID receiver = new AID("ComputationDescriptionParser", false);		
