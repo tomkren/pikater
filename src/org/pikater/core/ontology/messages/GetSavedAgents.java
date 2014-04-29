@@ -1,9 +1,11 @@
 package org.pikater.core.ontology.messages;
 
 import jade.content.AgentAction;
-import jade.content.onto.basic.Action;
 
 public class GetSavedAgents implements AgentAction {
+
+	private static final long serialVersionUID = 3809082629852138041L;
+
 	private int userID;
 
 	public void setUserID(int userID) {

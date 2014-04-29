@@ -8,7 +8,9 @@ import jade.content.onto.Ontology;
  */
 public class FilenameTranslationOntology extends BeanOntology {
 
-    private FilenameTranslationOntology() {
+	private static final long serialVersionUID = 4284091955440820705L;
+
+	private FilenameTranslationOntology() {
         super("FilenameTranslationOntology");
 
         try {

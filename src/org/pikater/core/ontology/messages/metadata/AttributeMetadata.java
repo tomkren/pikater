@@ -10,7 +10,10 @@ import jade.content.Concept;
  * @author Kuba
  */
 public class AttributeMetadata implements Concept {
-    private double _ratioOfMissingValues=0;
+
+	private static final long serialVersionUID = -1009786277447730894L;
+
+	private double _ratioOfMissingValues=0;
     private int _order;
     private double _entropy=0;
     private double _attributeClassEntropy=0;

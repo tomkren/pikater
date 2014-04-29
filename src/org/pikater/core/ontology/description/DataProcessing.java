@@ -3,14 +3,17 @@ package org.pikater.core.ontology.description;
 
 import jade.util.leap.ArrayList;
 
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.experiment.UniversalConnector;
+import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
 /**
  * Created by Stepan on 20.4.14.
  */
 public class DataProcessing extends AbstractDataProcessing implements IDataProvider {
+
+	private static final long serialVersionUID = -2418323249803736416L;
 
 	private boolean isPreprocessing;
 	private ArrayList options;
@@ -53,9 +56,10 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
     }
 
 	@Override
-	UniversalElementWrapper exportUniversalElement() {
+	UniversalElement exportUniversalElement(
+			UniversalComputationDescription uModel) {
 
-		UniversalElement element = new UniversalElement();
+		UniversalOntology element = new UniversalOntology();
 		element.setType(this.getClass());
 		element.setOptions(options);
 
@@ -63,12 +67,12 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
 
 			DataSourceDescription dI =
 					(DataSourceDescription) dataSources.get(i);
-			UniversalConnector uc = dI.exportUniversalConnector();
+			UniversalConnector uc = dI.exportUniversalConnector(uModel);
 
 			element.addInputSlot(uc);
 		}
 
-		UniversalElementWrapper wrapper = new UniversalElementWrapper();
+		UniversalElement wrapper = new UniversalElement(uModel);
 		wrapper.setElement(element);
 		
 		return wrapper;

@@ -1,10 +1,10 @@
 package org.pikater.core.ontology.description;
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
-import jade.content.Concept;
 import jade.util.leap.ArrayList;
 
 
@@ -13,8 +13,10 @@ import jade.util.leap.ArrayList;
  */
 public class Search extends AbstractDataProcessing {
 
-	String searchClass;
-    ArrayList options;
+	private static final long serialVersionUID = 7856131679884259768L;
+	
+	private String searchClass;
+    private ArrayList options;
 
     public String getSearchClass() {
         return searchClass;
@@ -34,7 +36,8 @@ public class Search extends AbstractDataProcessing {
     }
 
 	@Override
-	UniversalElementWrapper exportUniversalElement() {
+	UniversalElement exportUniversalElement(
+			UniversalComputationDescription uModel) {
 
 		Option searchClassOption = new Option();
 		searchClassOption.setName("searchClass");
@@ -43,11 +46,11 @@ public class Search extends AbstractDataProcessing {
 		ArrayList options = new ArrayList();
 		options.add(searchClassOption);
 
-		UniversalElement element = new UniversalElement();
+		UniversalOntology element = new UniversalOntology();
 		element.setType(this.getClass());
 		element.setOptions(options);
 		
-		UniversalElementWrapper wrapper = new UniversalElementWrapper();
+		UniversalElement wrapper = new UniversalElement(uModel);
 		wrapper.setElement(element);
 		
 		return wrapper;

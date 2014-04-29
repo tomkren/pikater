@@ -2,9 +2,10 @@ package org.pikater.core.ontology.description;
 
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.experiment.UniversalConnector;
+import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
 import jade.util.leap.ArrayList;
 
@@ -13,12 +14,14 @@ import jade.util.leap.ArrayList;
  */
 public class ComputingAgent extends AbstractDataProcessing implements IDataProvider, IComputingAgent, IErrorProvider {
 
-	String modelClass;
-    ArrayList options;
+	private static final long serialVersionUID = 2127755171666013125L;
 
-    DataSourceDescription trainingData;
-    DataSourceDescription testingData;
-    DataSourceDescription validationData;
+	private String modelClass;
+    private ArrayList options;
+
+    private DataSourceDescription trainingData;
+    private DataSourceDescription testingData;
+    private DataSourceDescription validationData;
 
     public String getModelClass() {
 		return modelClass;
@@ -60,19 +63,20 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 
 
 	@Override
-	UniversalElementWrapper exportUniversalElement() {
+	UniversalElement exportUniversalElement(
+			UniversalComputationDescription uModel) {
 			    
 	    UniversalConnector universalTrainingData =
-	    		trainingData.exportUniversalConnector();
+	    		trainingData.exportUniversalConnector(uModel);
 	    universalTrainingData.setInputDataType("trainingData");
 
-		UniversalElement element = new UniversalElement();
+		UniversalOntology element = new UniversalOntology();
 		element.setType(this.getClass());
 		element.setOptions(options);
 		element.addInputSlot(universalTrainingData);
 		
-		UniversalElementWrapper wrapper =
-				new UniversalElementWrapper();
+		UniversalElement wrapper =
+				new UniversalElement(uModel);
 		wrapper.setElement(element);
 		
 		return wrapper;

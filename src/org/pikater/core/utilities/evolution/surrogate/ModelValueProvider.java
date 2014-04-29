@@ -4,7 +4,6 @@
  */
 package org.pikater.core.utilities.evolution.surrogate;
 
-import java.util.ArrayList;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 
 /**

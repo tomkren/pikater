@@ -1,10 +1,10 @@
 package org.pikater.core.ontology.description;
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
-import jade.content.Concept;
 import jade.util.leap.ArrayList;
 
 
@@ -13,8 +13,10 @@ import jade.util.leap.ArrayList;
  */
 public class Recommend extends AbstractDataProcessing {
 
-    String recommenderClass;
-    ArrayList options;
+	private static final long serialVersionUID = -1204258141585020540L;
+
+	private String recommenderClass;
+    private ArrayList options;
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -33,7 +35,8 @@ public class Recommend extends AbstractDataProcessing {
     }
 
 	@Override
-	UniversalElementWrapper exportUniversalElement() {
+	UniversalElement exportUniversalElement(
+			UniversalComputationDescription uModel) {
 		
 		Option recommenderClassOption = new Option();
 		recommenderClassOption.setName("recommenderClass");
@@ -42,12 +45,12 @@ public class Recommend extends AbstractDataProcessing {
 		ArrayList options = new ArrayList();
 		options.add(recommenderClassOption);
 		
-		UniversalElement element = new UniversalElement();
+		UniversalOntology element = new UniversalOntology();
 		element.setType(this.getClass());
 		element.setOptions(options);
 		
-		UniversalElementWrapper wrapper =
-				new UniversalElementWrapper();
+		UniversalElement wrapper =
+				new UniversalElement(uModel);
 		wrapper.setElement(element);
 		
 		return wrapper;

@@ -3,15 +3,18 @@ package org.pikater.core.ontology.description;
 import jade.util.leap.ArrayList;
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
 /**
  * Created by Martin Pilat on 27.12.13.
  */
 public class FileDataProvider extends AbstractDataProcessing implements IDataProvider {
 
-    private String fileURI;
+	private static final long serialVersionUID = -7222688693820033064L;
+
+	private String fileURI;
 
 
     public String getFileURI() {
@@ -22,7 +25,8 @@ public class FileDataProvider extends AbstractDataProcessing implements IDataPro
     }
 
 	@Override
-	UniversalElementWrapper exportUniversalElement() {
+	UniversalElement exportUniversalElement(
+			UniversalComputationDescription uModel) {
 
 		Option fileURIOption = new Option();
 		fileURIOption.setName("fileURI");
@@ -31,12 +35,12 @@ public class FileDataProvider extends AbstractDataProcessing implements IDataPro
 		ArrayList options = new ArrayList();
 		options.add(fileURIOption);
 		
-		UniversalElement element = new UniversalElement();
+		UniversalOntology element = new UniversalOntology();
 		element.setType(this.getClass());
 		element.setOptions(options);
 
-		UniversalElementWrapper wrapper =
-				new UniversalElementWrapper();
+		UniversalElement wrapper =
+				new UniversalElement(uModel);
 		wrapper.setElement(element);
 		
 		return wrapper;

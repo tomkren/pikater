@@ -5,10 +5,7 @@
 
 package org.pikater.core.ontology.messages;
 
-import com.jgoodies.forms.layout.FormLayout.Measure;
-
 import jade.content.AgentAction;
-import jade.content.onto.basic.Action;
 
 /**
  * Ontology class which represents the request to load the results
@@ -20,8 +17,9 @@ import jade.content.onto.basic.Action;
  */
 public class LoadResults implements AgentAction {
 
+	private static final long serialVersionUID = -5184334421291769440L;
 
-    int userID;
+	int userID;
 
     Double mseLower;
     Double mseUpper;

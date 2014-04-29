@@ -1,10 +1,10 @@
 package org.pikater.core.ontology.description;
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.experiment.UniversalConnector;
+import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
-import org.pikater.shared.database.experiment.UniversalGui;
 
 import jade.util.leap.ArrayList;
 
@@ -14,12 +14,14 @@ import jade.util.leap.ArrayList;
  */
 public class CARecSearchComplex extends AbstractDataProcessing implements IComputingAgent, IDataProvider {
 
-	ArrayList options;
-    ArrayList errors;
+	private static final long serialVersionUID = -913470799010962236L;
 
-    Search search;
-    Recommend recommender;
-    IComputingAgent computingAgent;
+	private ArrayList options;
+    private ArrayList errors;
+
+    private Search search;
+    private Recommend recommender;
+    private IComputingAgent computingAgent;
 
     public ArrayList getErrors() {
         return errors;
@@ -60,17 +62,18 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
     }
  
 	@Override
-	UniversalElementWrapper exportUniversalElement() {
+	UniversalElement exportUniversalElement(
+			UniversalComputationDescription uModel) {
 
-		UniversalElement element = new UniversalElement();
+		UniversalOntology element = new UniversalOntology();
 		element.setType(this.getClass());
 		element.setOptions(options);
 		element.setErrors(errors);
 
 		if (computingAgent != null) {
 
-			UniversalElementWrapper computingAgentInputSlot =
-					((AbstractDataProcessing) computingAgent).exportUniversalElement();
+			UniversalElement computingAgentInputSlot =
+					((AbstractDataProcessing) computingAgent).exportUniversalElement(uModel);
 
 			UniversalConnector universalComputingAgent = new UniversalConnector();
 			universalComputingAgent.setInputDataType("computingAgent");
@@ -80,8 +83,8 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 		}
 		if (search != null) {
 			
-			UniversalElementWrapper searchInputSlot =
-					search.exportUniversalElement();
+			UniversalElement searchInputSlot =
+					search.exportUniversalElement(uModel);
 					
 			UniversalConnector universalSearch = new UniversalConnector();
 			universalSearch.setInputDataType("search");
@@ -92,8 +95,8 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 
 		if (recommender != null) {
 
-			UniversalElementWrapper recommenderInputSlot =
-					recommender.exportUniversalElement();
+			UniversalElement recommenderInputSlot =
+					recommender.exportUniversalElement(uModel);
 
 			UniversalConnector universalRecommend = new UniversalConnector();
 			universalRecommend.setInputDataType("recommend");
@@ -103,8 +106,8 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 		}
 		
 		
-		UniversalElementWrapper wrapper =
-				new UniversalElementWrapper();
+		UniversalElement wrapper =
+				new UniversalElement(uModel);
 		wrapper.setElement(element);
 		
 		return wrapper;

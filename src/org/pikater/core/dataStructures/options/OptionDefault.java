@@ -4,8 +4,6 @@ import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 
-import jade.content.Concept;
-
 
 public class OptionDefault {
 

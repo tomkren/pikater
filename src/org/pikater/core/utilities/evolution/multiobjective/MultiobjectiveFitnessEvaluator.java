@@ -10,8 +10,6 @@ import org.pikater.core.utilities.evolution.individuals.MultiobjectiveIndividual
 
 public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator {
 
-    private static final long serialVersionUID = 8773243530620828997L;
-
     /**
      *
      * @param pop Population from which the non-dominated front is chosen

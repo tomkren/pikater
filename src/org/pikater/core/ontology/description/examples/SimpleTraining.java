@@ -6,7 +6,6 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.*;
-import org.pikater.core.ontology.messages.Option;
 
 
 /**

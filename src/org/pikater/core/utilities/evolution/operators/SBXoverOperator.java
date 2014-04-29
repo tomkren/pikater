@@ -7,7 +7,6 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 
 public class SBXoverOperator implements Operator {
 
-	private static final long serialVersionUID = -4994609314340986323L;
 	private double xover_rate;
 	private final double EPS = 0.00001;
 	private final double ETA_C = 20;

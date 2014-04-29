@@ -9,7 +9,10 @@ package org.pikater.core.ontology.messages.metadata;
  * @author Kuba
  */
 public class CategoricalAttributeMetadata extends AttributeMetadata {
-    private int _numberOfCategories;
+
+	private static final long serialVersionUID = 5050710635914157333L;
+
+	private int _numberOfCategories;
 
     public int getNumberOfCategories() {
         return _numberOfCategories;

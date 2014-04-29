@@ -8,7 +8,9 @@ import jade.content.onto.Ontology;
  */
 public class DescriptionOntology extends BeanOntology {
 
-    private DescriptionOntology() {
+	private static final long serialVersionUID = 4471377586541937606L;
+
+	private DescriptionOntology() {
         super("DescriptionOntology");
 
         String thisPackage = DescriptionOntology.class.getPackage().getName();

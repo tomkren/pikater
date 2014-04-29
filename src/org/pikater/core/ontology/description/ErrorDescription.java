@@ -7,8 +7,10 @@ import jade.content.Concept;
  */
 public class ErrorDescription implements Concept {
 
-    IErrorProvider provider;
-    String type;
+	private static final long serialVersionUID = 1229354484860699593L;
+	
+	private IErrorProvider provider;
+    private String type;
 
     public IErrorProvider getProvider() {
         return provider;

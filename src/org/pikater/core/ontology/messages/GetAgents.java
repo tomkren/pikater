@@ -1,7 +1,6 @@
 package org.pikater.core.ontology.messages;
 
 import jade.content.AgentAction;
-import jade.content.onto.basic.Action;
 
 public class GetAgents implements AgentAction {
 

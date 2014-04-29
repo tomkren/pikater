@@ -9,7 +9,10 @@ package org.pikater.core.ontology.messages.metadata;
  * @author Kuba
  */
 public class NumericalAttributeMetadata extends AttributeMetadata  {
-    private double _min;
+
+	private static final long serialVersionUID = -4614350036978302414L;
+
+	private double _min;
     private double _max;
     private double _avg;
     private double _median;

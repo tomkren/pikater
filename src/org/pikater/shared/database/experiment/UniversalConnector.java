@@ -2,7 +2,7 @@ package org.pikater.shared.database.experiment;
 
 public class UniversalConnector {
 	
-    private UniversalElementWrapper universalDataProvider;
+    private UniversalElement universalDataProvider;
     private String inputDataType;
 	private String outputDataType;
 
@@ -20,10 +20,10 @@ public class UniversalConnector {
 		this.outputDataType = dataType;
 	}
 
-	public UniversalElementWrapper getUniversalDataProvider() {
+	public UniversalElement getUniversalDataProvider() {
 		return universalDataProvider;
 	}
-	public void setUniversalDataProvider(UniversalElementWrapper universalDataProvider) {
+	public void setUniversalDataProvider(UniversalElement universalDataProvider) {
 		this.universalDataProvider = universalDataProvider;
 	}
 

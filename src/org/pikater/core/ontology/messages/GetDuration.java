@@ -1,7 +1,5 @@
 package org.pikater.core.ontology.messages;
 
-import java.util.Date;
-
 import jade.content.AgentAction;
 
 public class GetDuration implements AgentAction {

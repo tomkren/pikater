@@ -1,12 +1,14 @@
 package org.pikater.core.ontology.data;
 
-import org.pikater.core.ontology.description.DescriptionOntology;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.BeanOntologyException;
 import jade.content.onto.Ontology;
 
 public class DataOntology extends BeanOntology {
+
+	private static final long serialVersionUID = -2595494753081736728L;
+
 	private DataOntology() {
 		super("DataOntology");
 

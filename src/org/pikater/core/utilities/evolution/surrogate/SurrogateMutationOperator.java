@@ -10,9 +10,6 @@ import org.pikater.core.utilities.evolution.operators.Operator;
 import org.pikater.core.utilities.evolution.operators.SearchItemIndividualMutation;
 import org.pikater.core.utilities.evolution.selectors.TournamentSelector;
 import weka.classifiers.functions.GaussianProcesses;
-import weka.classifiers.functions.LinearRegression;
-import weka.classifiers.functions.RBFNetwork;
-import weka.classifiers.functions.SMOreg;
 import weka.core.Instances;
 
 /**

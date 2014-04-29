@@ -7,7 +7,6 @@ import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.*;
-import org.pikater.core.ontology.messages.Option;
 
 
 /**

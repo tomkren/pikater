@@ -7,7 +7,6 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 
 public class PolynomialMutationOperator implements Operator {
 
-    private static final long serialVersionUID = 478521898268270468L;
     private double mutRate;
     private final double ETA_M = 100;
 

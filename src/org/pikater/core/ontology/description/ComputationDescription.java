@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -18,8 +17,10 @@ import com.thoughtworks.xstream.XStream;
  */
 public class ComputationDescription implements Concept {
 
-    ArrayList globalOptions;
-    ArrayList rootElements;
+	private static final long serialVersionUID = -7951850172320173523L;
+
+	private ArrayList globalOptions;
+    private ArrayList rootElements;
 
     public ArrayList getGlobalOptions() {
         return globalOptions;
@@ -47,27 +48,25 @@ public class ComputationDescription implements Concept {
 		ArrayList options = getGlobalOptions();
 		ArrayList rootElements = getRootElements();
 
-		UniversalComputationDescription uDescription =
+		UniversalComputationDescription uModel =
 				new UniversalComputationDescription();
-		uDescription.setGlobalOptions(options);
+		uModel.setGlobalOptions(options);
 
 		for (int i = 0; i < rootElements.size(); i++) {
 			
 			FileDataSaver saver = (FileDataSaver) rootElements.get(i);
-			UniversalElementWrapper uew = saver.exportUniversalElement();
-			
-			uDescription.addRootElement(uew);
+			saver.exportUniversalElement(uModel);
 		}
 
-		return uDescription;
+		return uModel;
 	}
  
 	public String exportXML(String fileName) throws FileNotFoundException {
 
 		XStream xstream = new XStream();
 
-		Class<ComputationDescription> descriptionOntology =
-				org.pikater.core.ontology.description.ComputationDescription.class;
+		//Class<ComputationDescription> descriptionOntology =
+		//		org.pikater.core.ontology.description.ComputationDescription.class;
 		
 		//xstream.aliasPackage("", descriptionOntology.getPackage().getName());
 		xstream.aliasAttribute("type", "class");
@@ -85,8 +84,8 @@ public class ComputationDescription implements Concept {
 
 		XStream xstream = new XStream();
 
-		Class<ComputationDescription> descriptionOntology =
-				org.pikater.core.ontology.description.ComputationDescription.class;
+		//Class<ComputationDescription> descriptionOntology =
+		//		org.pikater.core.ontology.description.ComputationDescription.class;
 
 		//xstream.aliasPackage("", descriptionOntology.getPackage().getName());
 		xstream.aliasAttribute("type", "class");

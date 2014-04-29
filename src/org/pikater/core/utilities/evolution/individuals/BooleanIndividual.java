@@ -2,7 +2,6 @@ package org.pikater.core.utilities.evolution.individuals;
 
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import java.util.Arrays;
-import java.util.Collections;
 
 /** Individual represented using an array of booleans.
  *

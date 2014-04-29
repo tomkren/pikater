@@ -3,11 +3,14 @@ package org.pikater.core.ontology.description;
 import jade.util.leap.ArrayList;
 
 import org.pikater.core.ontology.messages.Option;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.experiment.UniversalConnector;
+import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
 public class FileDataSaver extends AbstractDataProcessing implements IDataSaver {
+
+	private static final long serialVersionUID = 2763495775498995530L;
 
 	private String nameOfFile;
 	private DataSourceDescription dataSource;
@@ -28,7 +31,8 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 	}
 
 	@Override
-	UniversalElementWrapper exportUniversalElement() {
+	UniversalElement exportUniversalElement(
+			UniversalComputationDescription uModel) {
 
 		Option nameOfFileOption = new Option();
 		nameOfFileOption.setName("nameOfFile");
@@ -38,15 +42,15 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 	    options.add(nameOfFileOption);
 	    
 	    UniversalConnector universalDataSource =
-	    		dataSource.exportUniversalConnector();
+	    		dataSource.exportUniversalConnector(uModel);
 	    universalDataSource.setInputDataType("dataSource");
 	    
-		UniversalElement element = new UniversalElement();
+		UniversalOntology element = new UniversalOntology();
 		element.setType(this.getClass());
 		element.setOptions(options);
 		element.addInputSlot(universalDataSource);
 
-		UniversalElementWrapper wrapper = new UniversalElementWrapper();
+		UniversalElement wrapper = new UniversalElement(uModel);
 		wrapper.setElement(element);
 		
 		return wrapper;

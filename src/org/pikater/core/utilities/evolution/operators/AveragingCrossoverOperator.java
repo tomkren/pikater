@@ -2,10 +2,8 @@ package org.pikater.core.utilities.evolution.operators;
 
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
-import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.RealIndividual;
-import java.util.ArrayList;
-import java.util.Collections;
+
 
 /**
  *

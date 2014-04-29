@@ -1,8 +1,8 @@
 package org.pikater.core.ontology.description;
 
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.experiment.UniversalConnector;
 import org.pikater.shared.database.experiment.UniversalElement;
-import org.pikater.shared.database.experiment.UniversalElementWrapper;
 
 import jade.content.Concept;
 
@@ -11,7 +11,9 @@ import jade.content.Concept;
  */
 public class DataSourceDescription implements Concept {
 
-    private String dataType;
+	private static final long serialVersionUID = 2090764353306584887L;
+
+	private String dataType;
     private IDataProvider dataProvider;
 
     public IDataProvider getDataProvider() {
@@ -28,13 +30,14 @@ public class DataSourceDescription implements Concept {
         this.dataType = dataType;
     }
     
-    UniversalConnector exportUniversalConnector() {
+    UniversalConnector exportUniversalConnector(
+    		UniversalComputationDescription uModel) {
     	    	
     	AbstractDataProcessing dataProcessing =
     			(AbstractDataProcessing) dataProvider;
     	
-    	UniversalElementWrapper universalDataProvider =
-    			dataProcessing.exportUniversalElement();
+    	UniversalElement universalDataProvider =
+    			dataProcessing.exportUniversalElement(uModel);
     	
     	UniversalConnector connector =
     			new UniversalConnector();

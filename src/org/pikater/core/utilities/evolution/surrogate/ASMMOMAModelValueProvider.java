@@ -9,7 +9,6 @@ import java.util.List;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 import org.pikater.core.utilities.evolution.multiobjective.MultiobjectiveFitnessEvaluator;
-import org.pikater.core.utilities.evolution.multiobjective.NSGAFitnessEvaluator;
 import org.pikater.core.ontology.messages.FloatSItem;
 import org.pikater.core.ontology.messages.IntSItem;
 import org.pikater.core.ontology.messages.SearchItem;

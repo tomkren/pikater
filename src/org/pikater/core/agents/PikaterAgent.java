@@ -47,7 +47,7 @@ public abstract class PikaterAgent extends Agent {
     private Logger logger;
     protected Arguments arguments = new Arguments(new HashMap<String, Argument>());
     protected EntityManagerFactory emf;
-    
+
     public Codec getCodec() {
         return codec;
     }
@@ -70,7 +70,7 @@ public abstract class PikaterAgent extends Agent {
 		st.add(service);
 		return registerWithDF(st);
 	}
-	
+
 	protected boolean registerWithDF(List<String> ServiceTypes) {
 		// register with the DF
 

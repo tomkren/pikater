@@ -1,8 +1,6 @@
 package org.pikater.core.ontology.messages;
 
 import jade.content.Concept;
-import jade.util.leap.LinkedList;
-import jade.util.leap.List;
 
 public class Eval implements Concept {
 	/**

@@ -1,12 +1,7 @@
 package org.pikater.shared.database.experiment;
 
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.Set;
 
 import jade.util.leap.ArrayList;
 
@@ -22,14 +17,15 @@ import org.pikater.core.ontology.description.ErrorDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileDataSaver;
 import org.pikater.core.ontology.description.Search;
-import org.reflections.Reflections;
 
 import com.thoughtworks.xstream.XStream;
 
 public class UniversalComputationDescription {
 
 	private ArrayList globalOptions;
-	private java.util.ArrayList<UniversalElementWrapper> rootElements;
+
+	private java.util.ArrayList<UniversalElement> rootElements;
+	private java.util.ArrayList<UniversalElement> elements;
 
 
 	public ArrayList getGlobalOptions() {
@@ -39,24 +35,25 @@ public class UniversalComputationDescription {
 		this.globalOptions = globalOptions;
 	}
 
-    public java.util.ArrayList<UniversalElementWrapper> getRootElements() {
+    public java.util.ArrayList<UniversalElement> getRootElements() {
 
         return rootElements;
     }
-    public void setRootElements(
-    		java.util.ArrayList<UniversalElementWrapper> rootElements) {
-    	
-        this.rootElements = rootElements;
-    }
-    public void addRootElement(UniversalElementWrapper rootElement) {
+    void addRootElement(UniversalElement rootElement) {
     	
     	if (rootElements == null) {
-    		rootElements = new java.util.ArrayList<UniversalElementWrapper>();
+    		rootElements = new java.util.ArrayList<UniversalElement>();
     	}
         this.rootElements.add(rootElement);
     }
-
-
+    void addElement(UniversalElement element) {
+    	
+    	if (elements == null) {
+    		elements = new java.util.ArrayList<UniversalElement>();
+    	}
+    	
+    	elements.add(element);
+    }
 
 	
 	

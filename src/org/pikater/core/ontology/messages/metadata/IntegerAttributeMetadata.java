@@ -9,7 +9,10 @@ package org.pikater.core.ontology.messages.metadata;
  * @author Kuba
  */
 public class IntegerAttributeMetadata extends NumericalAttributeMetadata {
-    @Override
+
+	private static final long serialVersionUID = 2610042360742781585L;
+
+	@Override
     public  String getType()
     {
         return "Integer";

@@ -6,8 +6,6 @@ import org.pikater.core.utilities.evolution.individuals.Individual;
 
 public class NSGAFitnessEvaluator extends MultiobjectiveFitnessEvaluator {
 
-    private static final long serialVersionUID = 687521583781927562L;
-
     @Override
     public void evaluate(Population pop) {
         double fitness = pop.getPopulationSize();
