@@ -2,7 +2,7 @@
 @import "pikater.scss";
 
 /* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
-/* The actual styles should be defined in newpikaterdebug.scss */
+/* The actual styles should be defined in pikater.scss */
 .pikater {
   @include addons;
   @include pikater;
