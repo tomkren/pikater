@@ -49,4 +49,9 @@ public class AppHelper
 		Reflections reflections = new Reflections(pkg.getName());
 		return reflections.getSubTypesOf(Object.class);
 	}
+	
+	public void do_somth()
+	{
+		
+	}
 }
