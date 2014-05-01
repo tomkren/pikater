@@ -97,38 +97,56 @@ public class SimpleConsoleComponent extends VerticalLayout
 		this.consoleOutputLog = new StringBuilder();
 	}
 	
-	public boolean execSync(String command)
+	// --------------------------------------------------------------------------------------------
+	// PUBLIC INTERFACE
+	
+	/**
+	 * Use this method, when you ARE interested in the response. If you're NOT, use {@link #execAsync} instead.
+	 * @param commands Navigate to the referenced execSync method to display more information.
+	 * @return The response to the commands wrapped in a special class. If the commands are not executed, the errors are logged.
+	 * @see org.pikater.shared.ssh.SSHRemoteExec#execSync(String command)
+	 */
+	public ExecSyncResult execSync(String commands)
 	{
 		try
 		{
-			remoteExec.execSync(command);
-			return true;
+			return new ExecSyncResult(remoteExec.execSync(commands), true);
 		}
 		catch (JSchException e)
 		{
 			// don't log this, it is most likely a user related error
-			remoteExec.getSession().getNotificationHandler().handleError("the last command was probably invalid and could not be executed", e); // forward to session handler
-			return false;
+			remoteExec.getSession().getNotificationHandler().handleError(
+					String.format("Commands could not be executed and probably are invalid: '%s'", commands),
+					e); // forward to session handler
+			return new ExecSyncResult(null, false);
 		}
 		catch (InterruptedException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return new ExecSyncResult(null, false);
 		}
 	}
 	
-	public boolean execAsync(String command)
+	/**
+	 * Use this method, when you're NOT interested in the response. If you ARE, use {@link #execSync} instead.
+	 * @param command Navigate to the referenced execSync method to display more information about this parameter.
+	 * @return True, if the commands were sent to the command output stream successfully, otherwise false and corresponding errors are logged.
+	 * @see org.pikater.shared.ssh.SSHRemoteExec#execSync(String command)
+	 */
+	public boolean execAsync(String commands)
 	{
 		try
 		{
-			remoteExec.execAsync(command); // it will be sent and executed remotely sometime later
+			remoteExec.execAsync(commands); // it will be sent and executed remotely sometime later
 			return true;
 		}
 		catch (JSchException e)
 		{
 			// don't log this, it is most likely a user related error
-			remoteExec.getSession().getNotificationHandler().handleError("the last command was probably invalid and could not be executed", e); // forward to session handler
+			remoteExec.getSession().getNotificationHandler().handleError(
+					String.format("Commands could not be executed and are probably invalid: '%s'", commands),
+					e); // forward to session handler
 			return false;
 		}
 		catch (IOException e)
