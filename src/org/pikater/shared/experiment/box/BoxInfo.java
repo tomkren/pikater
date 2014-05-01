@@ -1,14 +1,25 @@
-package org.pikater.web.experiment;
+package org.pikater.shared.experiment.box;
 
 import java.util.ArrayList;
 
 import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.web.experiment.slots.AbstractSlot;
+import org.pikater.web.vaadin.gui.shared.slots.AbstractSlot;
 
 /**
  * An intermediate box format used in the universal computation model.
  */
-public class Box {
+public class BoxInfo {
+	
+	public enum BoxType
+	{
+		INPUT,
+		SEARCHER,
+		COMPUTING,
+		RECOMMENDER,
+		METHOD,
+		VISUALIZER,
+		WRAPPER
+	}
 
 	private Class<? extends Object> ontology = null;
 	private Class<? extends Object> agentClass = null;
