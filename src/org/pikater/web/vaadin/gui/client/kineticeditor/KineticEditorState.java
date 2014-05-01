@@ -4,5 +4,18 @@ import com.vaadin.shared.AbstractComponentState;
 
 public class KineticEditorState extends AbstractComponentState
 {
-	public String text = "This is MyComponent";
+	/*
+	private UniversalComputationDescription experimentToLoad = null;
+	private UniversalComputationDescription lastLoadedExperiment = null;
+
+	public UniversalComputationDescription getExperimentToLoad()
+	{
+		return experimentToLoad;
+	}
+
+	public void setExperimentToLoad(UniversalComputationDescription experimentToLoad)
+	{
+		this.experimentToLoad = experimentToLoad;
+	}
+	*/
 }

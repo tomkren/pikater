@@ -3,6 +3,7 @@ package org.pikater.web.vaadin.gui.client.kineticeditor;
 import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.ClientVars;
+import org.pikater.web.vaadin.gui.client.ICustomVaadinWidget;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
@@ -13,14 +14,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.vaadin.client.ui.VButton;
+import com.vaadin.shared.communication.ServerRpc;
 
-public class KineticEditorWidget extends VerticalPanel
+public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinWidget
 {
 	/**
 	 * Reference to the client connector communicating with the server.	
@@ -98,16 +100,6 @@ public class KineticEditorWidget extends VerticalPanel
 		this.add(kineticCanvas);
 	}
 	
-	public void setConnector(KineticEditorServerRpc server)
-	{
-		this.server = server;
-	}
-	
-	public void setToolbar(boolean enabled)
-	{
-		this.toolbar.setVisible(enabled);
-	}
-	
 	@Override
 	protected void onLoad()
 	{
@@ -131,12 +123,33 @@ public class KineticEditorWidget extends VerticalPanel
 		}
 	}
 	
+	@Override
+	public void setServerRPC(ServerRpc rpc)
+	{
+		this.server = (KineticEditorServerRpc) rpc;
+	}
+	
+	public void loadExperiment()
+	{
+		// TODO:
+	}
+	
+	public void setToolbarVisible(boolean visible)
+	{
+		this.toolbar.setVisible(visible);
+	}
+	
+	// ----------------------------------------------------------------------
+	// PRIVATE INTERFACE
+	
 	private void setupToolbar()
 	{
 		this.toolbar = new FlowPanel();
 		if(ClientVars.DEBUG_MODE)
 		{
-			Button btn_setLeftTA1 = new Button("Set boxes layer (left)", new ClickHandler()
+			VButton btn_setLeftTA1 = new VButton();
+			btn_setLeftTA1.setText("Set boxes layer (left)");
+			btn_setLeftTA1.addClickHandler(new ClickHandler()
 			{
 				@Override
 				public void onClick(ClickEvent event)
@@ -144,10 +157,12 @@ public class KineticEditorWidget extends VerticalPanel
 					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, ClientVars.jsonAttrsToSerialize));
 				}
 			});
-			btn_setLeftTA1.setStyleName("pointCursorOnHover");
+			// btn_setLeftTA1.addStyleName("pointCursorOnHover");
 			toolbar.add(btn_setLeftTA1);
 			
-			Button btn_setLeftTA2 = new Button("Set edge layer (left)", new ClickHandler()
+			VButton btn_setLeftTA2 = new VButton();
+			btn_setLeftTA2.setText("Set edge layer (left)");
+			btn_setLeftTA2.addClickHandler(new ClickHandler()
 			{
 				@Override
 				public void onClick(ClickEvent event)
@@ -156,10 +171,12 @@ public class KineticEditorWidget extends VerticalPanel
 					leftTextArea.setText(kineticCanvas.getEngine().serializeToJSON(EngineComponent.LAYER_EDGES));
 				}
 			});
-			btn_setLeftTA2.setStyleName("pointCursorOnHover");
+			// btn_setLeftTA2.setStyleName("pointCursorOnHover");
 			toolbar.add(btn_setLeftTA2);
 			
-			Button btn_setRightTA = new Button("Set selection (right)", new ClickHandler()
+			VButton btn_setRightTA = new VButton();
+			btn_setRightTA.setText("Set selection (right)");
+			btn_setRightTA.addClickHandler(new ClickHandler()
 			{
 				@Override
 				public void onClick(ClickEvent event)
@@ -167,10 +184,12 @@ public class KineticEditorWidget extends VerticalPanel
 					rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, ClientVars.jsonAttrsToSerialize));
 				}
 			});
-			btn_setRightTA.setStyleName("pointCursorOnHover");
+			// btn_setRightTA.setStyleName("pointCursorOnHover");
 			toolbar.add(btn_setRightTA);
 			
-			Button btn_displayComparison = new Button("Display JSON comparison", new ClickHandler()
+			VButton btn_displayComparison = new VButton();
+			btn_displayComparison.setText("Display JSON comparison");
+			btn_displayComparison.addClickHandler(new ClickHandler()
 			{
 				@Override
 				public void onClick(ClickEvent event)
@@ -178,11 +197,13 @@ public class KineticEditorWidget extends VerticalPanel
 					jsonComparisonPanel.show();
 				}
 			});
-			btn_displayComparison.setStyleName("pointCursorOnHover");
+			// btn_displayComparison.setStyleName("pointCursorOnHover");
 			toolbar.add(btn_displayComparison);
 		}
 		
-		Button btn_saveStageJSON = new Button("Serialize", new ClickHandler()
+		VButton btn_saveStageJSON = new VButton();
+		btn_saveStageJSON.setText("Serialize");
+		btn_saveStageJSON.addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event)
@@ -205,10 +226,12 @@ public class KineticEditorWidget extends VerticalPanel
 				});
 			}
 		});
-		btn_saveStageJSON.setStyleName("pointCursorOnHover");
+		// btn_saveStageJSON.setStyleName("pointCursorOnHover");
 		toolbar.add(btn_saveStageJSON);
 		
-		Button btn_loadStageJSON = new Button("Deserialize", new ClickHandler()
+		VButton btn_loadStageJSON = new VButton();
+		btn_loadStageJSON.setText("Deserialize");
+		btn_loadStageJSON.addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event)
@@ -220,7 +243,7 @@ public class KineticEditorWidget extends VerticalPanel
 				// setFocus(true);
 			}
 		});
-		btn_loadStageJSON.setStyleName("pointCursorOnHover");
+		// btn_loadStageJSON.setStyleName("pointCursorOnHover");
 		toolbar.add(btn_loadStageJSON);
 	}
 	

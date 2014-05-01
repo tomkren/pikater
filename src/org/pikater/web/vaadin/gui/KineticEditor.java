@@ -1,5 +1,6 @@
 package org.pikater.web.vaadin.gui;
 
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorState;
 
@@ -14,6 +15,11 @@ public class KineticEditor extends AbstractComponent
 	public KineticEditor()
 	{
 		registerRpc(rpc);
+	}
+	
+	public void loadExperiment(UniversalComputationDescription experiment)
+	{
+		// getState().setExperimentToLoad(experiment);
 	}
 
 	@Override

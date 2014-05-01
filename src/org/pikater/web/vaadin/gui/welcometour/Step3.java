@@ -94,7 +94,7 @@ public class Step3 extends WelcomeTourWizardStep
 				if(!includedNotConnectedServerIDs.isEmpty())
 				{
 					// first check that all the included servers are reachable
-					if(!areServersReachable(includedNotConnectedServerIDs, true)) // updates GUI accordingly
+					if(!areServersReachable(includedNotConnectedServerIDs, false)) // updates GUI accordingly
 					{
 						Notification.show("Some of the servers are unreachable. Exclude them or double check / repair their availability and connection information.", 
 								Type.ERROR_MESSAGE);

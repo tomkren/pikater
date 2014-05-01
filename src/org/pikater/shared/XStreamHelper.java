@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.pikater.web.WebAppLogger;
 
@@ -48,17 +45,7 @@ public class XStreamHelper
 	
 	public static <T> T deserializeFromPath(Class<T> clazz, String path, XStream deserializer)
 	{
-		try
-		{
-			byte[] encoded = Files.readAllBytes(Paths.get(path));
-			String xml = Charset.defaultCharset().decode(ByteBuffer.wrap(encoded)).toString();
-			return deserializeFromXML(clazz, xml, deserializer);
-		}
-		catch (IOException e)
-		{
-			WebAppLogger.logThrowable(String.format("Could not deserialize the '%s' file because of the below IO error:", path), e);
-			return null;
-		}
+		return deserializeFromXML(clazz, AppHelper.readTextFile(path), deserializer);
 	}
 	
 	@SuppressWarnings("unchecked")

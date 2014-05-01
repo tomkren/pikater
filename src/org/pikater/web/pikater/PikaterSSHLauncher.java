@@ -1,14 +1,19 @@
 package org.pikater.web.pikater;
 
+import org.pikater.web.vaadin.gui.ExecSyncResult;
 import org.pikater.web.vaadin.gui.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.SimpleConsoleComponent.MessageStyle;
 import org.pikater.web.vaadin.gui.welcometour.RemoteServerInfoItem;
 import org.pikater.web.vaadin.gui.welcometour.RemoteServerInfoItem.Header;
+import org.pikater.shared.AppHelper;
+import org.pikater.shared.FieldVerifier;
 import org.pikater.shared.RemoteServerInfo.FieldType;
 import org.pikater.shared.ssh.SSHSession;
 
 public class PikaterSSHLauncher
 {
+	private static int slaveID = 1;
+	
 	/**
 	 * Class providing all the information for making the connection and launching.
 	 */
@@ -115,10 +120,29 @@ public class PikaterSSHLauncher
 			// all errors are forwarded to the @handleError method of @SSHSession.ISSHSessionNotificationHandler - see above
 			this.outputConsoleComponent = new SimpleConsoleComponent(session);
 			
-			// TODO: launch pikater properly
-			this.outputConsoleComponent.execAsync("ls"); // errors automatically update status - see above
-			updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched);
-			return true;
+			// first change the working directory if need be
+			String directory = serverInfo.underlyingInfoInstance.getField(FieldType.DIRECTORY);
+			if(!FieldVerifier.isStringNullOrEmpty(directory))
+			{
+				// try to change the directory and see what happens
+				ExecSyncResult result = this.outputConsoleComponent.execSync(
+						String.format("cd \"%s\"", serverInfo.underlyingInfoInstance.getField(FieldType.DIRECTORY)));
+				if(!result.commandWasExecuted() || !FieldVerifier.isStringNullOrEmpty(result.response)) // cd commands produce no output if no errors occur
+				{
+					handleError("Could not navigate to the predetermined directory.", false);
+				}
+			}
+			
+			// now launch pikater
+			switch (serverInfo.getServerType())
+			{
+				case MASTER:
+					return launchPikaterInMasterMode();
+				case SLAVE:
+					return launchPikaterInSlaveMode();
+				default:
+					throw new IllegalStateException();
+			}
 		}
 		else
 		{
@@ -128,6 +152,51 @@ public class PikaterSSHLauncher
 	
 	// -----------------------------------------------------------
 	// PRIVATE INTERFACE
+	
+	private int getNextSlaveID()
+	{
+		return slaveID++;
+	}
+	
+	private boolean launchPikaterInMasterMode()
+	{
+		// TODO: tady si to napis, pouzij "remoteExec.execSync" a "remoteExec.execAsync" - detaily najdes v Javadocu
+		
+		// predpripravenej prectenej skript
+		String command = AppHelper.readTextFile(AppHelper.joinPathComponents(AppHelper.corePath, "runPikaterMaster.sh"));
+		
+		boolean launchedSuccessfully = false;
+		
+		// TODO: az to dodelas, nastav zaznamu v tabulce spravnej stav:
+		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched); // vsechno probehlo v poradku
+		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_error); // behem spousteni se vyskytla chyba
+		
+		// TODO: kdybys chtel napsat do konzole nejakou vlastni chybovou zpravu, pouzij:
+		// handleError("tvoje zprava", false); // jestli tohle pouzijes, nemusis nastavovat zaznamu v tabulce chybu (viz predchozi TODO) - dela se to automaticky
+		
+		return launchedSuccessfully;
+	}
+	
+	private boolean launchPikaterInSlaveMode()
+	{
+		int currentSlaveID = getNextSlaveID(); // TODO: staci jenom pouzit, nic vic neni treba - inkrementuje se automaticky
+		
+		// predpripravenej prectenej skript
+		String command = AppHelper.readTextFile(AppHelper.joinPathComponents(AppHelper.corePath, "runPikaterSlave.sh"));
+		
+		// TODO: tady si to napis, pouzij "remoteExec.execSync" a "remoteExec.execAsync" - detaily najdes v Javadocu
+		
+		boolean launchedSuccessfully = false;
+		
+		// TODO: az to dodelas, nastav zaznamu v tabulce spravnej stav:
+		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched); // vsechno probehlo v poradku
+		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_error); // behem spousteni se vyskytla chyba
+		
+		// TODO: kdybys chtel napsat do konzole nejakou vlastni chybovou zpravu, pouzij:
+		// handleError("tvoje zprava", false); // jestli tohle pouzijes, nemusis nastavovat zaznamu v tabulce chybu (viz predchozi TODO) - dela se to automaticky
+				
+		return launchedSuccessfully;
+	}
 	
 	private void updateConnectionStatus(String newValue)
 	{
