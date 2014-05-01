@@ -3,12 +3,12 @@ package org.pikater.web.experiment.box;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.shared.experiment.Box;
-import org.pikater.shared.experiment.options.AbstractOption;
-import org.pikater.shared.experiment.resources.ParamResource;
-import org.pikater.shared.experiment.resources.Resource;
-import org.pikater.shared.experiment.slots.AbstractSlot;
-import org.pikater.shared.experiment.slots.SimpleSlot;
+import org.pikater.web.experiment.Box;
+import org.pikater.web.experiment.options.AbstractOption;
+import org.pikater.web.experiment.resources.ParamResource;
+import org.pikater.web.experiment.resources.Resource;
+import org.pikater.web.experiment.slots.AbstractSlot;
+import org.pikater.web.experiment.slots.SimpleSlot;
 
 public class LeafBox extends AbstractBox
 {

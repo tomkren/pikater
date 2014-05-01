@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment.resources;
+package org.pikater.web.experiment.resources;
 
 /**
  * A class encapsulating parameter information.

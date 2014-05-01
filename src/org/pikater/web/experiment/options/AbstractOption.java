@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment.options;
+package org.pikater.web.experiment.options;
 
 import java.util.ArrayList;
 import java.util.List;

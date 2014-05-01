@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.pikater.web.AppLogger;
+import org.pikater.web.WebAppLogger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
@@ -19,11 +19,14 @@ public class XStreamHelper
 	// -------------------------------------------------------------
 	// INSTANCE CREATION
 	
-	public static final XStream topologySerializer;
-	static
+	public static XStream getSerializerWithProcessedAnnotations(Class<?>... annotationsToProcess)
 	{
-		topologySerializer = new XStream();
-		topologySerializer.processAnnotations(TopologyModel.class);
+		XStream result = new XStream();
+		for(Class<?> clazz : annotationsToProcess)
+		{
+			result.processAnnotations(clazz);
+		}
+		return result;
 	}
 	
 	// -------------------------------------------------------------
@@ -53,7 +56,7 @@ public class XStreamHelper
 		}
 		catch (IOException e)
 		{
-			AppLogger.logThrowable(String.format("Could not deserialize the '%s' file because of the below IO error:", path), e);
+			WebAppLogger.logThrowable(String.format("Could not deserialize the '%s' file because of the below IO error:", path), e);
 			return null;
 		}
 	}
@@ -67,7 +70,7 @@ public class XStreamHelper
 		}
 		catch (XStreamException e)
 		{
-			AppLogger.logThrowable(String.format("Could not deserialize the following XML to the '%s' class.", clazz.getSimpleName()), e);
+			WebAppLogger.logThrowable(String.format("Could not deserialize the following XML to the '%s' class.", clazz.getSimpleName()), e);
 			return null;
 		}
 	}

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.connector.ClientAbortException;
 import org.apache.http.HttpStatus;
-import org.pikater.web.AppLogger;
+import org.pikater.web.WebAppLogger;
 import org.pikater.web.vaadin.MyResources;
 
 import com.vaadin.server.FileResource;
@@ -27,10 +27,10 @@ public class StaticDownloadServlet extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		FileResource resource = MyResources.exampleResource;
+		FileResource resource = MyResources.prop_appConf;
 		if(resource.getSourceFile().length() > Integer.MAX_VALUE) // "HttpServletResponse.setContentLength()" only accepts int type
 		{
-			AppLogger.log(Level.SEVERE, String.format("The file '%s' was not served because it is too large (larger than MAX_INT).", resource.getFilename()));
+			WebAppLogger.log(Level.SEVERE, String.format("The file '%s' was not served because it is too large (larger than MAX_INT).", resource.getFilename()));
 			resp.sendError(HttpStatus.SC_BAD_REQUEST, "The requested file was too large to serve.");
 		}
 		else
@@ -59,11 +59,11 @@ public class StaticDownloadServlet extends HttpServlet
 	        	if(e instanceof ClientAbortException)
 	        	{
 	        		// TODO: Note: this might better be off being logged as a warning.
-	        		AppLogger.logThrowable(String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", resource.getFilename()), e);
+	        		WebAppLogger.logThrowable(String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", resource.getFilename()), e);
 	        	}
 	        	else
 	        	{
-	        		AppLogger.logThrowable(String.format("Input/output error while serving file '%s'.", resource.getFilename()), e);
+	        		WebAppLogger.logThrowable(String.format("Input/output error while serving file '%s'.", resource.getFilename()), e);
 	        	}
 	        }
 	        finally

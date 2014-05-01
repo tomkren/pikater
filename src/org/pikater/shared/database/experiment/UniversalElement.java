@@ -1,47 +1,48 @@
 package org.pikater.shared.database.experiment;
 
-
-public class UniversalElement {
-
+public class UniversalElement
+{
 	private UniversalComputationDescription uModel;
 	private UniversalOntology element;
 	private UniversalGui gui;
 
-
 	@SuppressWarnings("all")
-	private UniversalElement() {}
+	private UniversalElement()
+	{
+	}
 
-	public UniversalElement(
-			UniversalComputationDescription description) {
+	public UniversalElement(UniversalComputationDescription description)
+	{
 		this.uModel = description;
 	}
 
 
-	public UniversalOntology getElement() {
+	public UniversalOntology getElement()
+	{
 		return element;
 	}
-	public void setElement(UniversalOntology element) {
-		
-		if (element == null) {
-			throw new IllegalStateException("UniversalElement cann't be null");
+	
+	public void setElement(UniversalOntology element) 
+	{
+		if (element == null)
+		{
+			throw new NullPointerException("Argument can not be null");
 		}
-		
 		this.element = element;
-
-		this.uModel.addElement(this);
-
+		this.uModel.addElement(this); // TODO: bug if called multiple times?
 	}
 
-	public UniversalGui getGui() {
+	public UniversalGui getGui()
+	{
 		return gui;
 	}
-	public void setGui(UniversalGui gui) {
-
-		if (this.gui != null && gui == null) {
-			throw new IllegalStateException("UniversalGui cann't be changed to null");
+	
+	public void setGui(UniversalGui gui)
+	{
+		if (this.gui != null && gui == null)
+		{
+			throw new NullPointerException("UniversalGui can not be changed to null");
 		}
-
 		this.gui = gui;
 	}
-
 }

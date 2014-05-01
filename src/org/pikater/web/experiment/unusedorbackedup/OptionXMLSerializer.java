@@ -1,12 +1,12 @@
-package org.pikater.shared;
+package org.pikater.web.experiment.unusedorbackedup;
 
 import java.io.PrintWriter;
 
 import org.pikater.core.options.LogicalUnitDescription;
-import org.pikater.shared.experiment.options.AbstractOption;
-import org.pikater.shared.experiment.slots.AbstractSlot;
+import org.pikater.shared.AppHelper;
 import org.pikater.shared.util.Interval;
-import org.pikater.web.AppHelper;
+import org.pikater.web.experiment.options.AbstractOption;
+import org.pikater.web.experiment.slots.AbstractSlot;
 
 import com.thoughtworks.xstream.XStream;
 

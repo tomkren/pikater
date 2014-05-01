@@ -1,9 +1,9 @@
-package org.pikater.shared.experiment;
+package org.pikater.web.experiment;
 
 import java.util.ArrayList;
 
 import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.shared.experiment.slots.AbstractSlot;
+import org.pikater.web.experiment.slots.AbstractSlot;
 
 /**
  * An intermediate box format used in the universal computation model.

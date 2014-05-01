@@ -3,8 +3,8 @@ package org.pikater.web.experiment.box;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.pikater.shared.experiment.Box;
-import org.pikater.shared.experiment.BoxType;
+import org.pikater.web.experiment.Box;
+import org.pikater.web.experiment.BoxType;
 
 public class WrapperBox extends AbstractBox
 {

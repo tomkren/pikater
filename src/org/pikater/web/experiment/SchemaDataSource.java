@@ -8,14 +8,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.pikater.shared.experiment.options.AbstractOption;
-import org.pikater.shared.experiment.resources.Resource;
-import org.pikater.shared.experiment.slots.AbstractSlot;
 import org.pikater.shared.util.BidiMap;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.experiment.box.AbstractBox;
 import org.pikater.web.experiment.box.LeafBox;
 import org.pikater.web.experiment.box.LeafBox.SlotType;
+import org.pikater.web.experiment.options.AbstractOption;
+import org.pikater.web.experiment.resources.Resource;
+import org.pikater.web.experiment.slots.AbstractSlot;
 
 public class SchemaDataSource
 {

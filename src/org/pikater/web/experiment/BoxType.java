@@ -1,11 +1,11 @@
-package org.pikater.shared.experiment;
+package org.pikater.web.experiment;
 
 public enum BoxType
 {
 	INPUT,
-	SEARCH,
+	SEARCHER,
 	COMPUTING,
-	RECOMMEND,
+	RECOMMENDER,
 	METHOD,
 	VISUALIZER,
 	WRAPPER
