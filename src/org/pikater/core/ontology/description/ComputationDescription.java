@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
 import com.thoughtworks.xstream.XStream;
 

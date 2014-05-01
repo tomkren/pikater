@@ -112,7 +112,7 @@ public class UniversalComputationDescription
 	 */
 	public void insertIntoGuiWrapper(ArrayList<UniversalGuiWrapper> guiWrappers, ArrayList<UniversalElement> elements)
 	{
-		// TODO: some states don't seem to be handled properly and a bug may occur
+		// TODO: some states don't seem to be handled properly which could produce bugs.
 		
 		if (guiWrappers == null && elements == null)
 		{

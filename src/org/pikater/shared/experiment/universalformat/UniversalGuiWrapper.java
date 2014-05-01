@@ -10,7 +10,7 @@ public class UniversalGuiWrapper {
 
 	UniversalGuiWrapper() {}
 
-	/*
+	/**
 	 *  Create and save new GuiWrapper
 	 */
     void replaceByWrapper(UniversalGuiWrapper wrapper) {

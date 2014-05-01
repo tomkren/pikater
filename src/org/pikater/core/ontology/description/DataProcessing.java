@@ -3,10 +3,10 @@ package org.pikater.core.ontology.description;
 
 import jade.util.leap.ArrayList;
 
-import org.pikater.shared.database.experiment.UniversalComputationDescription;
-import org.pikater.shared.database.experiment.UniversalConnector;
-import org.pikater.shared.database.experiment.UniversalOntology;
-import org.pikater.shared.database.experiment.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.universalformat.UniversalConnector;
+import org.pikater.shared.experiment.universalformat.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
  * Created by Stepan on 20.4.14.
