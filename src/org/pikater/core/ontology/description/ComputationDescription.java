@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 
 import com.thoughtworks.xstream.XStream;

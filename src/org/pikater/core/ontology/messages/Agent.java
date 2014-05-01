@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.messages;
 
+import org.pikater.core.ontology.messages.option.Option;
+
 import jade.content.Concept;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
@@ -107,8 +109,8 @@ public class Agent implements Concept, Cloneable {
 		}
 		Iterator itr = _options.iterator();
 		while (itr.hasNext()) {
-			org.pikater.core.ontology.messages.Option next_opt =
-					(org.pikater.core.ontology.messages.Option) itr.next();
+			org.pikater.core.ontology.messages.option.Option next_opt =
+					(org.pikater.core.ontology.messages.option.Option) itr.next();
 			if (next_opt.getValue() == null || next_opt.getValue().equals("null")){
 				// don't include this option to the string
 			}
@@ -145,8 +147,8 @@ public class Agent implements Concept, Cloneable {
                 String str = "";
 		Iterator itr = _options.iterator();
 		while (itr.hasNext()) {
-			org.pikater.core.ontology.messages.Option next_opt =
-					(org.pikater.core.ontology.messages.Option) itr.next();
+			org.pikater.core.ontology.messages.option.Option next_opt =
+					(org.pikater.core.ontology.messages.option.Option) itr.next();
                         if (next_opt.getData_type().equals("BOOLEAN")) {
                         	if (next_opt.getValue().equals("True")) {
                                 str += "-" + next_opt.getName() + " ";

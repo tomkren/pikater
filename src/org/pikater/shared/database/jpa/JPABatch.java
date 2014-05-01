@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="Batch_20140430")
-public class JPABatch extends JPAAbstractEntity{
+public class JPABatch extends JPAAbstractEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

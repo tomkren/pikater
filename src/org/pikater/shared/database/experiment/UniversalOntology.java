@@ -2,7 +2,7 @@ package org.pikater.shared.database.experiment;
 
 
 import org.pikater.core.ontology.description.ErrorDescription;
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 
 public class UniversalOntology {
 

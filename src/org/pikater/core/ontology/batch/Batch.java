@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.batch;
 
 import org.pikater.core.ontology.description.ComputationDescription;
 

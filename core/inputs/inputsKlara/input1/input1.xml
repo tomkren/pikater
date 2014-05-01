@@ -10,7 +10,7 @@
                   <jade.util.leap.ArrayList>
                     <default>
                       <hiddenList>
-                        <org.pikater.core.ontology.messages.Option>
+                        <org.pikater.core.ontology.messages.option.Option>
                           <__mutable>false</__mutable>
                           <__is__a__set>false</__is__a__set>
                           <__data__type>STRING</__data__type>
@@ -18,8 +18,8 @@
                           <__value>CrossValidation</__value>
                           <__number__of__values__to__try>0</__number__of__values__to__try>
                           <numberOfOptions>0</numberOfOptions>
-                        </org.pikater.core.ontology.messages.Option>
-                        <org.pikater.core.ontology.messages.Option>
+                        </org.pikater.core.ontology.messages.option.Option>
+                        <org.pikater.core.ontology.messages.option.Option>
                           <__mutable>false</__mutable>
                           <__is__a__set>false</__is__a__set>
                           <__data__type>STRING</__data__type>
@@ -27,8 +27,8 @@
                           <__value>evaluation_only</__value>
                           <__number__of__values__to__try>0</__number__of__values__to__try>
                           <numberOfOptions>0</numberOfOptions>
-                        </org.pikater.core.ontology.messages.Option>
-                        <org.pikater.core.ontology.messages.Option>
+                        </org.pikater.core.ontology.messages.option.Option>
+                        <org.pikater.core.ontology.messages.option.Option>
                           <__mutable>false</__mutable>
                           <__is__a__set>false</__is__a__set>
                           <__data__type>INT</__data__type>
@@ -36,7 +36,7 @@
                           <__value>10</__value>
                           <__number__of__values__to__try>0</__number__of__values__to__try>
                           <numberOfOptions>0</numberOfOptions>
-                        </org.pikater.core.ontology.messages.Option>
+                        </org.pikater.core.ontology.messages.option.Option>
                       </hiddenList>
                     </default>
                   </jade.util.leap.ArrayList>
@@ -47,7 +47,7 @@
                     <jade.util.leap.ArrayList>
                       <default>
                         <hiddenList>
-                          <org.pikater.core.ontology.messages.Option>
+                          <org.pikater.core.ontology.messages.option.Option>
                             <__mutable>false</__mutable>
                             <__is__a__set>false</__is__a__set>
                             <__data__type>INT</__data__type>
@@ -55,8 +55,8 @@
                             <__value>1</__value>
                             <__number__of__values__to__try>0</__number__of__values__to__try>
                             <numberOfOptions>0</numberOfOptions>
-                          </org.pikater.core.ontology.messages.Option>
-                          <org.pikater.core.ontology.messages.Option>
+                          </org.pikater.core.ontology.messages.option.Option>
+                          <org.pikater.core.ontology.messages.option.Option>
                             <__mutable>false</__mutable>
                             <__is__a__set>false</__is__a__set>
                             <__data__type>FLOAT</__data__type>
@@ -64,8 +64,8 @@
                             <__value>0.4</__value>
                             <__number__of__values__to__try>0</__number__of__values__to__try>
                             <numberOfOptions>0</numberOfOptions>
-                          </org.pikater.core.ontology.messages.Option>
-                          <org.pikater.core.ontology.messages.Option>
+                          </org.pikater.core.ontology.messages.option.Option>
+                          <org.pikater.core.ontology.messages.option.Option>
                             <__mutable>false</__mutable>
                             <__is__a__set>false</__is__a__set>
                             <__data__type>STRING</__data__type>
@@ -74,7 +74,7 @@
                             <__value>RBFNetwork</__value>
                             <__number__of__values__to__try>0</__number__of__values__to__try>
                             <numberOfOptions>0</numberOfOptions>
-                          </org.pikater.core.ontology.messages.Option>
+                          </org.pikater.core.ontology.messages.option.Option>
                         </hiddenList>
                       </default>
                     </jade.util.leap.ArrayList>

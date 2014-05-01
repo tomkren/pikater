@@ -40,8 +40,8 @@ public class JPAExperiment {
     public String getStatus() {
         return status;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(ExperimentStatus finished) {
+        this.status = finished.toString();
     }
 
 	public JPABatch getBatch() {

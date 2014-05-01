@@ -23,12 +23,13 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.Actions.BatchOntology;
+import org.pikater.core.ontology.batch.Batch;
+import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
-import org.pikater.core.ontology.messages.Batch;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.core.ontology.messages.MessagesOntology;
-import org.pikater.core.ontology.messages.SaveBatch;
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
@@ -49,6 +50,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 
 		this.getContentManager().registerLanguage(getCodec());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+		this.getContentManager().registerOntology(BatchOntology.getInstance());
 		this.getContentManager().registerOntology(MessagesOntology.getInstance());
 
 		RecieveExperiment recieveExp =
@@ -67,6 +69,11 @@ public class Agent_InputTransformer extends PikaterAgent {
 
 
 class RecieveExperiment extends CyclicBehaviour {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6561793512467823420L;
 
 	private Agent agent = null;
 	private Codec codec = null;
@@ -159,7 +166,7 @@ class RecieveExperiment extends CyclicBehaviour {
 		SaveBatch saveBatch = new SaveBatch();
 		saveBatch.setBatch(batch);
         
-        Ontology ontology = MessagesOntology.getInstance();
+        Ontology ontology = BatchOntology.getInstance();
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setSender(this.agent.getAID());

@@ -5,6 +5,7 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.pikater.core.ontology.messages.*;
+import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.utilities.gui.MyWekaOption;
 
 import weka.classifiers.Classifier;
@@ -157,7 +158,7 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 			int folds = -1; 
 			Iterator itr = evaluation_method.getOptions().iterator();
 			while (itr.hasNext()) {
-				org.pikater.core.ontology.messages.Option next = (org.pikater.core.ontology.messages.Option) itr.next();
+				org.pikater.core.ontology.messages.option.Option next = (org.pikater.core.ontology.messages.option.Option) itr.next();
 				if (next.getName().equals("F")){
 					folds = Integer.parseInt( (String)next.getValue() );
 				}
@@ -281,9 +282,9 @@ public class Agent_WekaCA extends Agent_ComputingAgent {
 		return onto_test;
 	}
 
-	private org.pikater.core.ontology.messages.Option convertOption(
+	private org.pikater.core.ontology.messages.option.Option convertOption(
 			MyWekaOption _weka_opt) {
-		org.pikater.core.ontology.messages.Option opt = new org.pikater.core.ontology.messages.Option();
+		org.pikater.core.ontology.messages.option.Option opt = new org.pikater.core.ontology.messages.option.Option();
 		Interval interval = null;
 		opt.setMutable(_weka_opt.mutable);
 

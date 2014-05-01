@@ -25,6 +25,7 @@ import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.messages.*;
+import org.pikater.core.ontology.messages.option.Option;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

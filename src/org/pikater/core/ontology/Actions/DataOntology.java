@@ -1,5 +1,7 @@
-package org.pikater.core.ontology.data;
+package org.pikater.core.ontology.Actions;
 
+
+import org.pikater.core.ontology.data.GetFile;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.BeanOntologyException;
@@ -12,9 +14,9 @@ public class DataOntology extends BeanOntology {
 	private DataOntology() {
 		super("DataOntology");
 
-		String thisPackage = DataOntology.class.getPackage().getName();
+		String getFilePackage = GetFile.class.getPackage().getName();
 		try {
-			add(thisPackage);
+			add(getFilePackage);
 		} catch (BeanOntologyException e) {
 			e.printStackTrace();
 		}

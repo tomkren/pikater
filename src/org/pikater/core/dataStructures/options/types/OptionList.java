@@ -3,7 +3,7 @@ package org.pikater.core.dataStructures.options.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 
 public class OptionList extends AbstractOption {
 

@@ -7,14 +7,10 @@ import jade.util.leap.List;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.utilities.evolution.*;
-import org.pikater.core.utilities.evolution.MergingReplacement;
-import org.pikater.core.utilities.evolution.Population;
-import org.pikater.core.utilities.evolution.RandomNumberGenerator;
-import org.pikater.core.utilities.evolution.Replacement;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 import org.pikater.core.utilities.evolution.multiobjective.NSGAFitnessEvaluator;

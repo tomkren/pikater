@@ -21,7 +21,10 @@ import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.data.DataOntology;
+import org.pikater.core.ontology.Actions.BatchOntology;
+import org.pikater.core.ontology.Actions.DataOntology;
+import org.pikater.core.ontology.batch.Batch;
+import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
@@ -64,7 +67,7 @@ public class Agent_DataManager extends PikaterAgent {
 			initDefault();
 			registerWithDF();
 			getContentManager().registerOntology(DataOntology.getInstance());
-			getContentManager().registerOntology(DescriptionOntology.getInstance());
+			getContentManager().registerOntology(BatchOntology.getInstance());
 
 			if (containsArgument(CONNECTION_ARG_NAME)) {
 				connectionBean = getArgumentValue(CONNECTION_ARG_NAME);

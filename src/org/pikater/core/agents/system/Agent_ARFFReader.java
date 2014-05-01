@@ -15,7 +15,7 @@ import jade.wrapper.ContainerController;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.data.DataOntology;
+import org.pikater.core.ontology.Actions.DataOntology;
 import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.GetData;

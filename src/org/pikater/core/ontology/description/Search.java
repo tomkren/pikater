@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.description;
 
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.experiment.UniversalOntology;
 import org.pikater.shared.database.experiment.UniversalElement;

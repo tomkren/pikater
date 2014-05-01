@@ -14,8 +14,6 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileDataSaver;
-import org.pikater.core.ontology.description.Search;
-import org.pikater.core.ontology.messages.Option;
 
 
 public final class Input1 {

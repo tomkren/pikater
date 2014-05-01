@@ -5,10 +5,11 @@ import java.util.Random;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
+
 import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.option.Option;
 
 public class Agent_RandomSearch extends Agent_Search {
 

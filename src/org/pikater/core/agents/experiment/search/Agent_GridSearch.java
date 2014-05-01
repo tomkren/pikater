@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import org.pikater.core.ontology.messages.BoolSItem;
 import org.pikater.core.ontology.messages.FloatSItem;
 import org.pikater.core.ontology.messages.IntSItem;
-import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.SetSItem;
+import org.pikater.core.ontology.messages.option.Option;
 
 /**
  *

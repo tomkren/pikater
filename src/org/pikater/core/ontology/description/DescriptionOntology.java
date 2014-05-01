@@ -17,8 +17,8 @@ public class DescriptionOntology extends BeanOntology {
 
         try {
             add(thisPackage);
-            add(org.pikater.core.ontology.messages.Option.class);
-            add(org.pikater.core.ontology.messages.Interval.class);
+            add(org.pikater.core.ontology.messages.option.Option.class);
+            add(org.pikater.core.ontology.messages.option.Interval.class);
             add(org.pikater.core.ontology.messages.ExecuteExperiment.class);
 
 
