@@ -5,6 +5,5 @@ public enum BatchStatus {
 	WAITING ,
 	STARTED ,
 	FINISHED,
-	COMPUTING,
 	FAILED
 }
