@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment.resources;
+package org.pikater.web.experiment.resources;
 
 public class DataResource extends Resource
 {

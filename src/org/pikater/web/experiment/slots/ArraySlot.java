@@ -1,11 +1,11 @@
-package org.pikater.shared.experiment.slots;
+package org.pikater.web.experiment.slots;
 
 import java.util.Set;
 
-import org.pikater.shared.experiment.resources.DataResource;
-import org.pikater.shared.experiment.resources.ParamResource;
-import org.pikater.shared.experiment.resources.Resource;
 import org.pikater.shared.util.InstanceSet;
+import org.pikater.web.experiment.resources.DataResource;
+import org.pikater.web.experiment.resources.ParamResource;
+import org.pikater.web.experiment.resources.Resource;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 

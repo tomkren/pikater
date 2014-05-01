@@ -1,6 +1,5 @@
 package org.pikater.shared;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,11 +57,6 @@ public class TopologyModel
 
 	public boolean isWellFormed()
 	{
-		return isServersCollectionValid(masters) && isServersCollectionValid(slaves);
-	}
-	
-	private boolean isServersCollectionValid(Collection<RemoteServerInfo> coll)
-	{
-		return (coll != null) && (coll.size() > 0); 
+		return !masters.isEmpty() && !slaves.isEmpty();
 	}
 }

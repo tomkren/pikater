@@ -10,8 +10,8 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.Recommend;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.shared.experiment.Box;
-import org.pikater.shared.experiment.BoxType;
+import org.pikater.web.experiment.Box;
+import org.pikater.web.experiment.BoxType;
 
 // TODO: this class is pointless... merge with BoxLoader or OptionLoader in the "shared" package.
 public class BoxesExporter {
@@ -63,11 +63,11 @@ public class BoxesExporter {
 			
 			searchOntology.add(ComputingAgent.class);
 			
-		} else if (type == BoxType.SEARCH) {
+		} else if (type == BoxType.SEARCHER) {
 			
 			searchOntology.add(Search.class);
 		
-		} else if (type == BoxType.RECOMMEND) {
+		} else if (type == BoxType.RECOMMENDER) {
 			
 			searchOntology.add(Recommend.class);
 		

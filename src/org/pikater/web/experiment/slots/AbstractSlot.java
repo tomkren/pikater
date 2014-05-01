@@ -1,8 +1,8 @@
-package org.pikater.shared.experiment.slots;
+package org.pikater.web.experiment.slots;
 
 import java.util.Set;
 
-import org.pikater.shared.experiment.resources.Resource;
+import org.pikater.web.experiment.resources.Resource;
 
 public abstract class AbstractSlot
 {

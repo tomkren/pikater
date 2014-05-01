@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.pikater.web.AppLogger;
+import org.pikater.web.WebAppLogger;
 
 import com.vaadin.server.FileResource;
 
@@ -57,7 +57,7 @@ public abstract class PropertiesHandler
 			}
     		catch (IOException e)
     		{
-    			AppLogger.logThrowable(String.format("Weird... Could not close the input stream for the following properties file:\n '%s'", resource.getFilename()), e);
+    			WebAppLogger.logThrowable(String.format("Weird... Could not close the input stream for the following properties file:\n '%s'", resource.getFilename()), e);
 			}
     	}
 	}
@@ -73,7 +73,7 @@ public abstract class PropertiesHandler
 		String result = properties.getProperty(property);
 		if(result == null)
 		{
-			AppLogger.log(Level.SEVERE, String.format("The '%s' property has not been found in the following properties file:\n '%s'", property, filePath));
+			WebAppLogger.log(Level.SEVERE, String.format("The '%s' property has not been found in the following properties file:\n '%s'", property, filePath));
 		}
 		else
 		{
@@ -90,6 +90,6 @@ public abstract class PropertiesHandler
 	 */
 	protected void logErrorMessage(String customMessage)
 	{
-		AppLogger.log(Level.SEVERE, customMessage);
+		WebAppLogger.log(Level.SEVERE, customMessage);
 	}
 }

@@ -5,7 +5,7 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AppLogger
+public class WebAppLogger
 {
 	private static final Logger logger = Logger.getAnonymousLogger();
 			
