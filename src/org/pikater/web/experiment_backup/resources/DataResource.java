@@ -1,4 +1,4 @@
-package org.pikater.web.experiment.resources;
+package org.pikater.web.experiment_backup.resources;
 
 public class DataResource extends Resource
 {

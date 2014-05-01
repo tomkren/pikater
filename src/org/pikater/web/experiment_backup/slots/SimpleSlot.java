@@ -1,8 +1,8 @@
-package org.pikater.web.experiment.slots;
+package org.pikater.web.experiment_backup.slots;
 
-import org.pikater.web.experiment.resources.DataResource;
-import org.pikater.web.experiment.resources.ParamResource;
-import org.pikater.web.experiment.resources.Resource;
+import org.pikater.web.experiment_backup.resources.DataResource;
+import org.pikater.web.experiment_backup.resources.ParamResource;
+import org.pikater.web.experiment_backup.resources.Resource;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
