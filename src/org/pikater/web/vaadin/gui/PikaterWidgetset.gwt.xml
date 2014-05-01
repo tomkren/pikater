@@ -3,6 +3,8 @@
 <module>
 	
 	<inherits name="com.vaadin.DefaultWidgetSet" />
+	<inherits name="org.pikater.web.vaadin.gui.gwtInit" />
+	<inherits name="org.pikater.shared.gwtSharedSourceIncludes" />
 	<inherits name="net.edzard.kinetic" />
 	
     <!--

@@ -18,6 +18,12 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	{
 		registerRpc(KineticEditorClientRpc.class, new KineticEditorClientRpc()
 		{
+			@Override
+			public void loadExperimentFromSharedState()
+			{
+				// TODO Auto-generated method stub
+				
+			}
 		});
 	}
 
@@ -25,7 +31,7 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	protected KineticEditorWidget createWidget()
 	{
 		KineticEditorWidget result = GWT.create(KineticEditorWidget.class);
-		result.setConnector(serverRPC);
+		result.setServerRPC(serverRPC);
 		return result;
 	}
 
@@ -46,5 +52,4 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	{
 		super.onStateChanged(stateChangeEvent);
 	}
-
 }

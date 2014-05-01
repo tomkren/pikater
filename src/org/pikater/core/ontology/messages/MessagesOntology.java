@@ -1,10 +1,16 @@
 package org.pikater.core.ontology.messages;
 
+import org.pikater.core.ontology.batch.Batch;
+import org.pikater.core.ontology.batch.ExecuteBatch;
+import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.CategoricalAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.IntegerAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.NumericalAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.RealAttributeMetadata;
+import org.pikater.core.ontology.messages.option.Interval;
+import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.messages.option.Options;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -20,6 +26,13 @@ public class MessagesOntology extends BeanOntology {
         super("MessagesOntology");
 
         try {
+
+        	add(SaveBatch.class);
+        	add(Batch.class);
+        	
+            add(SendEmail.class);
+
+        	///////////////OLD PIKATER////////////////////////
         	// messages
             add(Agent.class);
             add(Attribute.class);
@@ -33,7 +46,7 @@ public class MessagesOntology extends BeanOntology {
             add(Evaluation.class);
             add(EvaluationMethod.class);
             add(Execute.class);
-            add(ExecuteExperiment.class);
+            add(ExecuteBatch.class);
             add(ExecuteParameters.class);
             add(Fitness.class);
             add(FloatSItem.class);
@@ -69,7 +82,6 @@ public class MessagesOntology extends BeanOntology {
             add(SaveResults.class);
             add(SearchItem.class);
             add(SearchSolution.class);
-            add(SendEmail.class);
             add(SetSItem.class);
             add(ShutdownDatabase.class);
             add(Solve.class);

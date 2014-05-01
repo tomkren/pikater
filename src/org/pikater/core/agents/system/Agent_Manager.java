@@ -886,8 +886,8 @@ public class Agent_Manager extends PikaterAgent {
 				if (Options != null) {
 					Iterator itr_o = Options.iterator();
 					while (itr_o.hasNext()) {
-						org.pikater.core.ontology.messages.Option next_o =
-								(org.pikater.core.ontology.messages.Option) itr_o.next();
+						org.pikater.core.ontology.messages.option.Option next_o =
+								(org.pikater.core.ontology.messages.option.Option) itr_o.next();
 
 						Element newParameter = new Element("parameter");
 						newParameter.setAttribute("name", next_o.getName());

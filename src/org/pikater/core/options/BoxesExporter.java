@@ -49,7 +49,7 @@ public class BoxesExporter {
 	    }
 
 	}
-	
+
 	public ArrayList<Box> getBoxexOfType(BoxType type) {
 		
 		ArrayList<Class> searchOntology = new ArrayList<Class>();
@@ -160,4 +160,5 @@ public class BoxesExporter {
 		BoxesExporter be = new BoxesExporter();
 		be.importXMLs();
 	}
+
 }

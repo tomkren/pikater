@@ -7,7 +7,7 @@ public interface ISSHSyncCommandExec
 	/** 
 	 * @param command
 	 * Multiple commands may be specified in this string, e.g. "cd /etc; pwd"
-	 * @return
+	 * @return The response to your commands.
 	 * @throws JSchException
 	 * @throws InterruptedException
 	 */

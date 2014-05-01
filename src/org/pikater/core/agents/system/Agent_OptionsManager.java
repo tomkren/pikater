@@ -37,11 +37,11 @@ import org.pikater.core.ontology.messages.FloatSItem;
 import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.Id;
 import org.pikater.core.ontology.messages.IntSItem;
-import org.pikater.core.ontology.messages.Options;
-import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.SetSItem;
 import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.messages.option.Options;
 
 import java.util.Random;
 

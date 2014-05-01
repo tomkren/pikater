@@ -1,6 +1,6 @@
 package org.pikater.core.dataStructures.options.types;
 
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 
 public abstract class AbstractOption {
 

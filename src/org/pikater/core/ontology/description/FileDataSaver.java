@@ -2,7 +2,7 @@ package org.pikater.core.ontology.description;
 
 import jade.util.leap.ArrayList;
 
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.experiment.UniversalConnector;
 import org.pikater.shared.database.experiment.UniversalOntology;

@@ -9,7 +9,7 @@ import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.MessagesOntology;
 import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;

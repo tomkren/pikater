@@ -1,18 +1,18 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.batch;
 
 import org.pikater.core.ontology.description.ComputationDescription;
 import jade.content.AgentAction;
 
-public class ExecuteExperiment implements AgentAction {
+public class ExecuteBatch implements AgentAction {
 
 	private static final long serialVersionUID = 1L;
 	private ComputationDescription description;
 
-	public ExecuteExperiment(ComputationDescription description) {
+	public ExecuteBatch(ComputationDescription description) {
 		this.description = description;
 	}
 
-	public ExecuteExperiment() {
+	public ExecuteBatch() {
 	}
 
 	public ComputationDescription getDescription() {

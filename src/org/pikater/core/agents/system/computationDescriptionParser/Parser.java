@@ -25,8 +25,8 @@ import org.pikater.core.ontology.description.Recommend;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.EvaluationMethod;
-import org.pikater.core.ontology.messages.Option;
 import org.pikater.core.ontology.messages.Problem;
+import org.pikater.core.ontology.messages.option.Option;
 
 public class Parser {
 	

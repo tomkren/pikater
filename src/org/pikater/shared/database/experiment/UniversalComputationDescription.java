@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.FileDataSaver;
 import org.pikater.core.ontology.description.examples.SearchOnly;
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 
 import com.thoughtworks.xstream.XStream;
 

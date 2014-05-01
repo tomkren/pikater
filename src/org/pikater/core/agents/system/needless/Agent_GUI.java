@@ -39,6 +39,8 @@ import org.jdom.input.SAXBuilder;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.messages.*;
+import org.pikater.core.ontology.messages.option.Interval;
+import org.pikater.core.ontology.messages.option.Option;
 
 import java.io.*;
 import java.text.DateFormat;

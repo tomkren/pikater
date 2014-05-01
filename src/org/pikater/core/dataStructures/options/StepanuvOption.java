@@ -1,7 +1,7 @@
 package org.pikater.core.dataStructures.options;
 
 import org.pikater.core.dataStructures.options.types.AbstractOption;
-import org.pikater.core.ontology.messages.Option;
+import org.pikater.core.ontology.messages.option.Option;
 
 
 public class StepanuvOption {
@@ -44,10 +44,10 @@ public class StepanuvOption {
 	
 	public Option toOption() {
 
-		Option resultOption = new Option();
+		Option resultOption = option.toOption();
 		resultOption.setName(name);
 		resultOption.setSynopsis(synopsis);
-
+		
 		return resultOption;
 	}
 }
