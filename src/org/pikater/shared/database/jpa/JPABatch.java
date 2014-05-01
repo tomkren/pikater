@@ -1,9 +1,10 @@
 package org.pikater.shared.database.jpa;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,6 +22,11 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="Batch_20140430")
+@NamedQueries({
+	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
+	@NamedQuery(name="Batch.getByID",query="select b from JPABatch b where b.id=:id"),
+	@NamedQuery(name="Batch.getByStatus",query="select b from JPABatch b where b.status=:status")
+})
 public class JPABatch extends JPAAbstractEntity{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,13 +45,13 @@ public class JPABatch extends JPAAbstractEntity{
 	@Enumerated(EnumType.STRING)
 	private BatchStatus status;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.PERSIST)
 	private List<JPAExperiment> experiments = new ArrayList<JPAExperiment>();
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar created;
+	private Date created;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar finished;
+	private Date finished;
 
 	public void setName(String name){
 		this.name=name;
@@ -97,17 +105,17 @@ public class JPABatch extends JPAAbstractEntity{
 		this.experiments.add(experiment);
 	}
 
-	public Calendar getCreated() {
+	public Date getCreated() {
 		return created;
 	}
 
-	public void setCreated(Calendar created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
-	public Calendar getFinished() {
+	public Date getFinished() {
 		return finished;
 	}
-	public void setFinished(Calendar finished) {
+	public void setFinished(Date finished) {
 		this.finished = finished;
 	}
 	public BatchStatus getStatus() {

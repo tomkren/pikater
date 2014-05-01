@@ -55,17 +55,43 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{				
 		
-		this.createRolesAndUsers();
+		//this.createRolesAndUsers();
 		this.testUser();
+		
+		this.createSampleResult();
+		this.listResults();
+		
+		//this.createFileMapping();
+		this.testFileMappings();
+		
+		this.listExperiments();
+		this.listBatches();
 		
 		//this.addWebDatasets();
 		
-		/**
-
-		this.insertFinishedBatch();
+		//this.insertFinishedBatch();
 		
+		/**
 		this.createFileMapping();
 		**/
+	}
+	
+	private void createSampleResult(){
+		JPAResult res=new JPAResult();
+		res.setAgentName("SampleAgent");
+		res.setAgentTypeId(-1);
+		res.setStart(new Date());
+		
+		DAOs.resultDAO.storeEntity(res);
+	}
+	
+	private void listResults(){
+		List<JPAResult> results=DAOs.resultDAO.getAll();
+		for(JPAResult res:results){
+			p(res.getId()+". "+res.getAgentName()+"    "+res.getStart());
+		}
+		p("------------");
+		p("");
 	}
 	
 	private void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
@@ -227,6 +253,54 @@ public class DatabaseInitialisation {
 		
 	}
 	
+	public void listBatches(){
+		List<JPABatch> batches=DAOs.batchDAO.getAll();
+		p("No. of Batches in the system : "+batches.size());
+		for(JPABatch b:batches){
+			p(b.getId()+". "+b.getName()+" : "+b.getCreated()+" - "+b.getFinished());
+		}
+		p("---------------------");
+		p("");
+	}
+	
+	private void createFileMapping() {
+		
+		JPAFilemapping f = new JPAFilemapping();
+		f.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
+		f.setExternalfilename("iris.arff");
+		f.setInternalfilename("25d7d5d689042a3816aa1598d5fd56ef");
+		DAOs.filemappingDAO.storeEntity(f);
+		
+		JPAFilemapping f2 = new JPAFilemapping();
+		f2.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
+		f2.setExternalfilename("weather.arff");
+		f2.setInternalfilename("772c551b8486b932aed784a582b9c1b1");
+		DAOs.filemappingDAO.storeEntity(f2);
+
+	}
+	
+	private void testFileMappings(){
+		List<JPAFilemapping> fms=DAOs.filemappingDAO.getAll();
+		p("No. of FileMappings "+fms.size());
+		for(JPAFilemapping fm:fms){
+			p(fm.getId()+". "+fm.getInternalfilename()+" - "+fm.getExternalfilename());
+		}
+		
+		p("---------------------");
+		p("");
+	}
+	
+	private void listExperiments(){
+		List<JPAExperiment> exps=DAOs.experimentDAO.getAll();
+		p("No. of Experiments "+exps.size());
+		for(JPAExperiment exp:exps){
+			p(exp.getId()+". "+exp.getStatus()+" : "+exp.getStarted()+" - "+exp.getFinished());
+		}
+		
+		p("---------------------");
+		p("");
+	}
+	
 	private void p(String s){
 		System.out.println(s);
 	}
@@ -239,7 +313,7 @@ public class DatabaseInitialisation {
 		result.setAgentName("RBFNetwork");
 		result.setAgentTypeId(0);
 		result.setErrorRate(0.214285716414452);
-		result.setFinish(dateFormat.parse("2014-03-29 11:06:57"));
+		result.setFinish(new Date());
 		result.setKappaStatistic(0.511627912521362);
 		result.setMeanAbsoluteError(0.264998614788055);
 		result.setNote("Note of result :-)");
@@ -258,22 +332,17 @@ public class DatabaseInitialisation {
 		batch.setName("Stepan's batch of experiments - school project");
 		batch.setPriority(99);
 		batch.addExperiment(experiment);
+		batch.setCreated(new Date());
 
-		//this.database.persist(batch);
+		DAOs.batchDAO.storeEntity(batch);
 	}
 	
 
 
 	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException, ParseException {
 
-		EntityManagerFactory emf=null;//Persistence.createEntityManagerFactory("pikaterDataModel");
-
 		DatabaseInitialisation data = new DatabaseInitialisation(
-				emf,(PGConnection)(
-						new PostgreSQLConnectionProvider(
-								"jdbc:postgresql://localhost:5432/pikater",
-								"postgres",
-								"kukacok").getConnection()));
+				null,null);
 		data.itialisationData();
 
 		

@@ -27,6 +27,7 @@ import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
+import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 import org.pikater.shared.utilities.pikaterDatabase.initialisation.JPAMetaDataReader;
 
@@ -169,16 +170,16 @@ public class DatabaseInitialisation {
 	private void createFileMapping() {
 		
 		JPAFilemapping f = new JPAFilemapping();
-		f.setUserid(1);
+		f.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
 		f.setExternalfilename("iris.arff");
 		f.setInternalfilename("25d7d5d689042a3816aa1598d5fd56ef");
-		database.persist(f);
+		DAOs.filemappingDAO.storeEntity(f);
 		
 		JPAFilemapping f2 = new JPAFilemapping();
-		f2.setUserid(1);
+		f2.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
 		f2.setExternalfilename("weather.arff");
 		f2.setInternalfilename("772c551b8486b932aed784a582b9c1b1");
-		database.persist(f2);
+		DAOs.filemappingDAO.storeEntity(f);
 
 	}
 
@@ -241,7 +242,7 @@ public class DatabaseInitialisation {
 						new PostgreSQLConnectionProvider(
 								"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
 								"pikater",
-								"a").getConnection()));
+								"SrapRoPy").getConnection()));
 		data.itialisationData();
 
 		
