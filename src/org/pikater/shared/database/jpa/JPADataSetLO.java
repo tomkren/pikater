@@ -61,5 +61,9 @@ public class JPADataSetLO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public String getEntityName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

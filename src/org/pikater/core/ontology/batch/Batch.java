@@ -70,4 +70,5 @@ public class Batch implements Concept {
 	public void setDescription(ComputationDescription description) {
 		this.description = description;
 	}
+
 }

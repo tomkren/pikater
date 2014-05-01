@@ -39,6 +39,11 @@ public class JPAGlobalMetaData {
 	public int getId() {
 		return id;
 	}
+
+	public String getEntityName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

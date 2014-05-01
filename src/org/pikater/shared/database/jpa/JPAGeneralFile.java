@@ -20,7 +20,6 @@ public class JPAGeneralFile extends JPAAbstractEntity{
 	//ID of the LargeObject stored in the Postgre DB, that contains
 	//Use method in pikater.utility.pikaterDatabase.Database to retrieve the data based on OID
 	private long OID;
-	@ManyToOne
 	private JPAUser user;
 	private String fileName;
 	private String description;
@@ -49,7 +48,6 @@ public class JPAGeneralFile extends JPAAbstractEntity{
 	public String getDescription(){
 		return this.description;
 	}
-
 	public JPAUser getUser() {
 		return user;
 	}
@@ -57,7 +55,6 @@ public class JPAGeneralFile extends JPAAbstractEntity{
 	public void setUser(JPAUser user) {
 		this.user = user;
 	}
-	
 	@Override
 	public String getEntityName() {
 		return "GeneralFile";
@@ -69,6 +66,6 @@ public class JPAGeneralFile extends JPAAbstractEntity{
 		this.description=updateValues.getDescription();
 		this.fileName=updateValues.getFileName();
 		this.OID=updateValues.getOID();
-		this.user=updateValues.getUser();
+		//this.user=updateValues.getUser();
 	}
 }
