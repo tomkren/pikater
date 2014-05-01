@@ -9,4 +9,5 @@ public class DAOs {
 	public static final ResultDAO resultDAO=new ResultDAO();
 	public static final ExperimentDAO experimentDAO=new ExperimentDAO();
 	public static final BatchDAO batchDAO=new BatchDAO();
+	public static final TaskTypeDAO taskTypeDAO=new TaskTypeDAO();
 }
