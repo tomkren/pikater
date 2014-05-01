@@ -28,6 +28,18 @@ import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.messages.MessagesOntology;
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.utilities.pikaterDatabase.Database;
+=======
+>>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
+>>>>>>> Stashed changes
 
 
 public class Agent_InputTransformer extends PikaterAgent {

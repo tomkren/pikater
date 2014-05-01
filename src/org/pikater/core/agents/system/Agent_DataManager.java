@@ -14,6 +14,7 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+<<<<<<< Updated upstream
 
 import org.pikater.shared.database.jpa.JPAFilemapping;
 
@@ -22,6 +23,34 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAResult;
+import org.pikater.shared.database.ConnectionProvider;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+=======
+
+import org.pikater.shared.database.jpa.JPAFilemapping;
+
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAResult;
+import org.pikater.shared.database.ConnectionProvider;
+import org.pikater.shared.utilities.logging.PikaterLogger;
+>>>>>>> FETCH_HEAD
+=======
+
+import org.pikater.shared.database.jpa.JPAFilemapping;
+
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAResult;
+import org.pikater.shared.database.ConnectionProvider;
+import org.pikater.shared.utilities.logging.PikaterLogger;
+>>>>>>> FETCH_HEAD
+>>>>>>> Stashed changes
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
