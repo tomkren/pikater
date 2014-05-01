@@ -4,33 +4,34 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
-public class JPAGeneralFile {
+@Table(name="GeneralFile_20140430")
+public class JPAGeneralFile extends JPAAbstractEntity{
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+	
+	public int getId() {
+        return id;
+    }
 	//ID of the LargeObject stored in the Postgre DB, that contains
 	//Use method in pikater.utility.pikaterDatabase.Database to retrieve the data based on OID
-	private Long OID;
-	private Long userId;
+	private long OID;
+	@ManyToOne
+	private JPAUser user;
 	private String fileName;
 	private String description;
 	
 	
-	public void setOID(Long OID){
+	public void setOID(long OID){
 		this.OID=OID;;
 	}
 		
-	public Long getOID(){
+	public long getOID(){
 		return this.OID;
-	}
-	public void setUserID(Long userID){
-		this.userId=userID;
-	}
-		
-	public Long getUserID(){
-		return this.userId;
 	}
 		
 	public void setFileName(String fileName){
@@ -48,12 +49,26 @@ public class JPAGeneralFile {
 	public String getDescription(){
 		return this.description;
 	}
+
+	public JPAUser getUser() {
+		return user;
+	}
+
+	public void setUser(JPAUser user) {
+		this.user = user;
+	}
 	
-	/**
-	 * Returns the generated ID of the dataset after it has persisted.
-	 * @return dataset ID
-	 */
-	public Long getID(){
-		return id;
+	@Override
+	public String getEntityName() {
+		return "GeneralFile";
+	}
+
+	@Override
+	public void updateValues(JPAAbstractEntity newValues) throws Exception {
+		JPAGeneralFile updateValues=(JPAGeneralFile)newValues;
+		this.description=updateValues.getDescription();
+		this.fileName=updateValues.getFileName();
+		this.OID=updateValues.getOID();
+		this.user=updateValues.getUser();
 	}
 }
