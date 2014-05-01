@@ -606,13 +606,13 @@ public class Database {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public JPAGeneralFile saveGeneralFile(int userId, String description, File file) throws SQLException, IOException {
+	public JPAGeneralFile saveGeneralFile(JPAUser user, String description, File file) throws SQLException, IOException {
 		long oid = saveFileAsLargeObject(file);
 
 		JPAGeneralFile gf = new JPAGeneralFile();
 		gf.setDescription(description);
 		gf.setFileName(file.getName());
-		gf.setUserID((long) userId);
+		gf.setUser(user);
 		gf.setOID(oid);
 
 		persist(gf);
