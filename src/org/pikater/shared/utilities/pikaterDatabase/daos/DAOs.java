@@ -5,4 +5,6 @@ public class DAOs {
 	public static final UserDAO userDAO=new UserDAO();
 	public static final UserPriviledgeDAO userPrivDAO=new UserPriviledgeDAO();
 	public static final RoleDAO roleDAO=new RoleDAO();
+	public static final FileMappingDAO filemappingDAO=new FileMappingDAO();
+	public static final ResultDAO resultDAO=new ResultDAO();
 }
