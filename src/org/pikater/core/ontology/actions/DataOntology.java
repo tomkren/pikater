@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.Actions;
+package org.pikater.core.ontology.actions;
 
 
 import org.pikater.core.ontology.data.GetFile;

@@ -1,4 +1,6 @@
-package org.pikater.core.ontology.filenameTranslation;
+package org.pikater.core.ontology.actions;
+
+import org.pikater.core.ontology.messages.TranslateFilename;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -14,7 +16,7 @@ public class FilenameTranslationOntology extends BeanOntology {
         super("FilenameTranslationOntology");
 
         try {
-            add(org.pikater.core.ontology.messages.TranslateFilename.class);
+            add(TranslateFilename.class);
 
 
         } catch (Exception e) {

@@ -20,7 +20,7 @@ import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.Actions.DataOntology;
+import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.messages.*;
 import org.postgresql.PGConnection;

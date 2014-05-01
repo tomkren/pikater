@@ -20,7 +20,7 @@ import jade.util.leap.List;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_DataManager;
-import org.pikater.core.ontology.Actions.DataOntology;
+import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.GetAllMetadata;

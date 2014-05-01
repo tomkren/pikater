@@ -23,7 +23,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.Actions.BatchOntology;
+import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
