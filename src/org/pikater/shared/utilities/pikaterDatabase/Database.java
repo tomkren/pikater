@@ -33,6 +33,7 @@ import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
+import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 
@@ -58,14 +59,11 @@ public class Database {
 
 	public void saveBatch (int userId, JPABatch batch, String batchXml) {
 
-		//TODO: Save as large object? or as String?
-		long largeObjectID = 0; //this.saveFileAsLargeObject(file);
-
-		JPAUser user = this.getUserByID(userId);
+		JPAUser user=DAOs.userDAO.getByID(userId).get(0);
 
 		int totalPriority = 10*user.getPriorityMax() + batch.getPriority();
 
-		batch.setXmlOID(largeObjectID);
+		batch.setXML(batchXml);
 		batch.setOwner(user);
 		batch.setTotalPriority(totalPriority);
 
