@@ -9,12 +9,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class JPAResult {
-    @Id
+@Table(name="Result_20140430")
+@NamedQueries({
+	@NamedQuery(name="Result.getAll",query="select res from JPAResult res"),
+	@NamedQuery(name="Result.getByID",query="select res from JPAResult res where res.id=:id"),
+	@NamedQuery(name="Result.getByAgentName",query="select res from JPAResult res where res.agentName=:agentName"),
+	@NamedQuery(name="Result.getByExperiment",query="select res from JPAResult res where res.experiment=:experiment"),
+	@NamedQuery(name="Result.getByDataSetHash",query="select res from JPAResult res where res.serializedFileName=:hash")
+})
+public class JPAResult extends JPAAbstractEntity{
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(nullable = false)
@@ -42,21 +53,16 @@ public class JPAResult {
 	private String serializedFileName;
 	private String note;
     @ManyToOne
-    @JoinColumn(name = "experimentId")
     private JPAExperiment experiment;
 
+
+	public int getId() {
+        return id;
+    }
     public JPAExperiment getExperiment() {
         return experiment;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public int getAgentTypeId() {
         return agentTypeId;
     }
@@ -164,4 +170,32 @@ public class JPAResult {
     public void setExperiment(JPAExperiment experiment) {
         this.experiment = experiment;
     }
+    
+    public void updateValues(JPAResult updateValues){
+    	
+    }
+
+	@Override
+	public String getEntityName() {
+		return "Result";
+	}
+
+	@Override
+	public void updateValues(JPAAbstractEntity newValues) {
+		JPAResult updateValues=(JPAResult)newValues;
+		this.agentName=updateValues.getAgentName();
+    	this.agentTypeId=updateValues.getAgentTypeId();
+    	this.errorRate=updateValues.getErrorRate();
+    	this.experiment=updateValues.getExperiment();
+    	this.finish=updateValues.getFinish();
+    	this.kappaStatistic=updateValues.getKappaStatistic();
+    	this.meanAbsoluteError=updateValues.getMeanAbsoluteError();
+    	this.note=updateValues.getNote();
+    	this.options=updateValues.getOptions();
+    	this.relativeAbsoluteError=updateValues.getRelativeAbsoluteError();
+    	this.rootMeanSquaredError=updateValues.getRootMeanSquaredError();
+    	this.rootRelativeSquaredError=updateValues.getRootRelativeSquaredError();
+    	this.serializedFileName=updateValues.getSerializedFileName();
+    	this.start=updateValues.getStart();
+	}
 }

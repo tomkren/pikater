@@ -14,11 +14,16 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
+import org.pikater.shared.database.jpa.JPAFilemapping;
+
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.ConnectionProvider;
+import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
+import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
@@ -279,49 +284,35 @@ public class Agent_DataManager extends PikaterAgent {
 
 			String internalFilename = md5(path);
 
+			
+			/**
+			 * CREATE??? a new DataSet with empty metadata
+			 */
 			emptyMetadataToDB(internalFilename, im.getExternalFilename());
 
 			File f = new File(path);
 
-			openDBConnection();
-			Statement stmt = db.createStatement();
-			String query = "SELECT COUNT(*) AS num FROM jpafilemapping WHERE internalFilename = \'" + internalFilename + "\'";
-			log("Executing query " + query);
-
-			ResultSet rs = stmt.executeQuery(query);
-
-			rs.next();
-			int count = rs.getInt("num");
-
-			stmt.close();
-
-			if (count > 0) {
+			if(DAOs.filemappingDAO.fileExists(internalFilename)){
 				f.delete();
-				log("File " + internalFilename + " already present in the database");
-			} else {
+				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
+			}else{
+				JPAFilemapping fm=new JPAFilemapping();
+				fm.setUser(DAOs.userDAO.getByID(im.getUserID()).get(0));
+				fm.setInternalfilename(internalFilename);
+				fm.setExternalfilename(im.getExternalFilename());
+				
+				DAOs.filemappingDAO.storeEntity(fm);
 
-				stmt = db.createStatement();
-
-				query = "INSERT into jpafilemapping (userId, externalFilename, internalFilename) VALUES (" + im.getUserID() + ",\'" + im.getExternalFilename() + "\',\'" + internalFilename + "\')";
-				log("Executing query: " + query);
-
-				stmt.executeUpdate(query);
-
-				stmt.close();
-
-				// move the file to db\files directory
-				String newName = dataFilesPath + internalFilename;
+				String newName = Agent_DataManager.dataFilesPath + internalFilename;
 				move(f, new File(newName));
-
 			}
-
+			
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
 
 			Result r = new Result(im, internalFilename);
 			getContentManager().fillContent(reply, r);
 
-			db.close();
 			return reply;
 		} else {
 
@@ -331,37 +322,24 @@ public class Agent_DataManager extends PikaterAgent {
 
 			emptyMetadataToDB(internalFilename, fileName);
 
-			openDBConnection();
-			Statement stmt = db.createStatement();
-			String query = "SELECT COUNT(*) AS num FROM jpafilemapping WHERE internalFilename = \'" + internalFilename + "\'";
-			log("Executing query " + query);
 
-			ResultSet rs = stmt.executeQuery(query);
+			if(DAOs.filemappingDAO.fileExists(internalFilename)){
+				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
+			}else{
+				JPAFilemapping fm=new JPAFilemapping();
+				fm.setUser(DAOs.userDAO.getByID(im.getUserID()).get(0));
+				fm.setInternalfilename(internalFilename);
+				fm.setExternalfilename(im.getExternalFilename());
+				
+				DAOs.filemappingDAO.storeEntity(fm);
 
-			rs.next();
-			int count = rs.getInt("num");
-
-			stmt.close();
-
-			if (count > 0) {
-				log("File " + internalFilename + " already present in the database");
-			} else {
-
-				stmt = db.createStatement();
-
-				log("Executing query: " + query);
-				query = "INSERT into jpafilemapping (userId, externalFilename, internalFilename) VALUES (" + im.getUserID() + ",\'" + im.getExternalFilename() + "\',\'" + internalFilename + "\')";
-
-				stmt.executeUpdate(query);
-				stmt.close();
-
-				String newName = this.dataFilesPath + internalFilename;
+				String newName = Agent_DataManager.dataFilesPath + internalFilename;
 
 				FileWriter file = new FileWriter(newName);
 				file.write(fileContent);
 				file.close();
 
-				log("Created file: " + newName);
+				PikaterLogger.getLogger(Agent_DataManager.class).info("Created file: " + newName);
 			}
 
 			ACLMessage reply = request.createReply();
@@ -377,33 +355,35 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage RespondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		TranslateFilename tf = (TranslateFilename) a.getAction();
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query;
-		if (tf.getInternalFilename() == null) {
-			query = "SELECT internalFilename AS filename FROM jpafilemapping WHERE userID=" + tf.getUserID() + " AND externalFilename=\'" + tf.getExternalFilename() + "\'";
-		} else {
-			query = "SELECT externalFilename AS filename FROM jpafilemapping WHERE userID=" + tf.getUserID() + " AND internalFilename=\'" + tf.getInternalFilename() + "\'";
-		}
-
-		log("Executing query: " + query);
-
-		ResultSet rs = stmt.executeQuery(query);
-
+		
+		java.util.List<JPAFilemapping> files=null;
+		
+		
 		String internalFilename = "error";
+		
+		if (tf.getInternalFilename() == null) {
+			files=DAOs.filemappingDAO.getByUserIDandExternalFilename(tf.getUserID(), tf.getExternalFilename());
+			if(files.size()>0){
+				internalFilename=files.get(0).getInternalfilename();
+			} else {
+				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
 
-		if (rs.next()) { // should return single line (or none,
-			// if file does not exist)
-			internalFilename = rs.getString("filename");
-
+				String tempFileName = pathPrefix + tf.getExternalFilename();
+				if (new File(tempFileName).exists())
+					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
+			}
+			
 		} else {
-			String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
+			files=DAOs.filemappingDAO.getByUserIDandInternalFilename(tf.getUserID(), tf.getInternalFilename());
+			if(files.size()>0){
+				internalFilename=files.get(0).getExternalfilename();
+			} else {
+				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
 
-			String tempFileName = pathPrefix + tf.getExternalFilename();
-			if (new File(tempFileName).exists())
-				internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
+				String tempFileName = pathPrefix + tf.getExternalFilename();
+				if (new File(tempFileName).exists())
+					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
+			}
 		}
 
 		ACLMessage reply = request.createReply();
@@ -412,18 +392,14 @@ public class Agent_DataManager extends PikaterAgent {
 		Result r = new Result(tf, internalFilename);
 		getContentManager().fillContent(reply, r);
 
-		db.close();
 		return reply;
 	}
 
 	private ACLMessage RespondToSaveResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
 		SaveResults sr = (SaveResults) a.getAction();
 		Task res = sr.getTask();
-
-		EntityManager entityManager = emf.createEntityManager();
-
+	
 		try {
-			entityManager.getTransaction().begin();
 			JPAResult jparesult = new JPAResult();
 
 			jparesult.setAgentName(res.getAgent().getName());
@@ -514,14 +490,11 @@ public class Agent_DataManager extends PikaterAgent {
 			// pozor - neni jednoznacne, pouze pro jednoho managera
 			// query += "\'" + res.getProblem_name() + "\',";
 			jparesult.setNote(res.getNote());
-
-			entityManager.persist(jparesult);
-			entityManager.getTransaction().commit();
-			log("persisted a JPAResult");
-		} finally {
-			if (entityManager.getTransaction().isActive())
-				entityManager.getTransaction().rollback();
-			entityManager.close();
+			
+			DAOs.resultDAO.storeEntity(jparesult);
+			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).info("Persisted JPAResult");
+		}catch(Exception e){
+			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).error("Error in SaveResults", e);;
 		}
 
 		ACLMessage reply = request.createReply();
@@ -714,18 +687,12 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage RespondToGetFiles(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetFiles gf = (GetFiles) a.getAction();
 
-		String query = "SELECT * FROM jpafilemapping WHERE userid = " + gf.getUserID();
-
-		log("Executing query: " + query);
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
-
+		java.util.List<JPAFilemapping> userFiles=DAOs.filemappingDAO.getByUserID(gf.getUserID());
+		
 		ArrayList files = new ArrayList();
 
-		while (rs.next()) {
-			files.add(rs.getString("externalFilename"));
+		for(JPAFilemapping fm:userFiles){
+			files.add(fm.getExternalfilename());
 		}
 
 		Result r = new Result(a.getAction(), files);
@@ -739,18 +706,8 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage RespondToShutdownDatabase(ACLMessage request) throws SQLException, ClassNotFoundException {
-		String query = "SHUTDOWN";
-		log(query);
-		openDBConnection();
-
-		// Makes all changes made since the previous commit/rollback permanent
-		// and releases any database locks currently held by this Connection
-		// object.
-		db.commit();
-
-		Statement stmt = db.createStatement();
-
-		stmt.execute(query);
+		
+		PikaterLogger.getLogger(Agent_DataManager.class).warn("Database SHUTDOWN initiated in DataManager");
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
