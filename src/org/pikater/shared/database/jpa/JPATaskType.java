@@ -5,12 +5,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class JPATaskType {
+@Table(name="TaskType_20140430")
+public class JPATaskType extends JPAAbstractEntity{
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+	
+	public int getId() {
+        return id;
+    }
 	@Column(unique=true)
 	private String name;
 	
@@ -28,7 +34,15 @@ public class JPATaskType {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getId() {
-		return id;
+
+	@Override
+	public String getEntityName() {
+		return "TaskType";
+	}
+
+	@Override
+	public void updateValues(JPAAbstractEntity newValues) throws Exception {
+		JPATaskType updatedValues=(JPATaskType)newValues;
+		this.name=updatedValues.getName();
 	}
 }

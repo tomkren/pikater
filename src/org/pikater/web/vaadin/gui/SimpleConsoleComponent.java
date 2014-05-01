@@ -8,7 +8,7 @@ import org.fusesource.jansi.HtmlAnsiOutputStream;
 import org.pikater.shared.ssh.SSHBatchExecChannel.ISSHBatchChannelNotificationHandler;
 import org.pikater.shared.ssh.SSHRemoteExec;
 import org.pikater.shared.ssh.SSHSession;
-import org.pikater.web.AppLogger;
+import org.pikater.web.WebAppLogger;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.jcraft.jsch.JSchException;
@@ -133,7 +133,7 @@ public class SimpleConsoleComponent extends VerticalLayout
 		}
 		catch (IOException e)
 		{
-			AppLogger.logThrowable("Could not write command to the console input stream. Weird...", e);
+			WebAppLogger.logThrowable("Could not write command to the console input stream. Weird...", e);
 			remoteExec.getSession().getNotificationHandler().handleError("could not execute the last command", e); // forward to session handler
 			return false;
 		}

@@ -62,10 +62,10 @@ public class UniversalGuiWrapper {
     	this.guiWrappers.add(wrapper);
     }
 
-    /*
+    /**
      * Return parentWrapper of wrapper in parameter
      */
-    UniversalGuiWrapper findWrapper(UniversalGuiWrapper wrapper) {
+    UniversalGuiWrapper getParentWrapper(UniversalGuiWrapper wrapper) {
 
     	if (this.guiWrappers.contains(wrapper)) {
     		return this;
@@ -73,7 +73,7 @@ public class UniversalGuiWrapper {
 
     		for (UniversalGuiWrapper wrapperI : this.guiWrappers) {
     			UniversalGuiWrapper result =
-    					wrapperI.findWrapper(wrapper);
+    					wrapperI.getParentWrapper(wrapper);
     			if ( result != null ) {
     				return result;
     			}
@@ -82,10 +82,10 @@ public class UniversalGuiWrapper {
     	}
     }
  
-    /*
+    /**
      * Return parentWrapper of element in parameter
      */
-    UniversalGuiWrapper findWrapper(UniversalElement element) {
+    UniversalGuiWrapper getParentWrapper(UniversalElement element) {
 
     	if (this.elements.contains(element)) {
     		return this;
@@ -93,7 +93,7 @@ public class UniversalGuiWrapper {
 
     		for (UniversalGuiWrapper wrapperI : guiWrappers) {
     			UniversalGuiWrapper result =
-    					wrapperI.findWrapper(element);
+    					wrapperI.getParentWrapper(element);
     			if ( result != null ) {
     				return result;
     			}

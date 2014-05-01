@@ -105,38 +105,6 @@ public class PikaterUI extends UI
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
 	
-	private void test_console()
-	{
-		VerticalLayout vLayout = new VerticalLayout();
-		setContent(vLayout);
-		
-		SimpleConsoleComponent console = new SimpleConsoleComponent(new SSHSession("u-pl1.ms.mff.cuni.cz", "19:dd:b4:3b:e3:e7:ab:44:e0:6a:eb:0e:0d:ae:d1:b1",
-				"smolj7bm", "olaplap23", new ISSHSessionNotificationHandler()
-				{
-					@Override
-					public void notifySessionClosed()
-					{
-						// TODO Auto-generated method stub
-					}
-					
-					@Override
-					public void notifyChannelClosed(int exitStatus)
-					{
-						// TODO Auto-generated method stub
-					}
-					
-					@Override
-					public void handleError(String description, Throwable t)
-					{
-						// TODO Auto-generated method stub
-					}
-				}));
-		console.setWidth("800px");
-		console.setHeight("600px");
-		
-		vLayout.addComponent(console);
-	}
-	
 	private void test_editor()
 	{
 		VerticalLayout vLayout = new VerticalLayout();

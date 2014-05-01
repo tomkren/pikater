@@ -44,7 +44,7 @@ public class RemoteServerInfo
 			case USERNAME:
 				return username;
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalStateException();
 		}
 	}
 	
@@ -66,7 +66,7 @@ public class RemoteServerInfo
 				username = value;
 				break;
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalStateException();
 		}
 	}
 	

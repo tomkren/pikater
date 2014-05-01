@@ -41,20 +41,20 @@ public class StartupAndQuitListener implements ServletContextListener
 		ServerConfigurationInterface.setField(ServerConfItem.JADE_TOPOLOGIES, new JadeTopologies());
 		
 		// *****************************************************************************************************
-		AppLogger.log(Level.INFO, "***** Reading basic application configuration files. *****");
+		WebAppLogger.log(Level.INFO, "***** Reading basic application configuration files. *****");
 		
 		ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(MyResources.prop_appConf));
 		if(!ServerConfigurationInterface.getConfig().isValid())
 		{
-			AppLogger.log(Level.SEVERE, "Erros were encountered while parsing the application configuratio. All client "
+			WebAppLogger.log(Level.SEVERE, "Erros were encountered while parsing the application configuratio. All client "
 					+ "requests will result in 'Service temporarily unavailable'.");
 		}
 		else
 	    {
-	    	AppLogger.log(Level.INFO, "Application settings were successfully read and parsed.");
+	    	WebAppLogger.log(Level.INFO, "Application settings were successfully read and parsed.");
 	    }
 		
-		AppLogger.log(Level.INFO, "***** Finished reading .properties files. *****");
+		WebAppLogger.log(Level.INFO, "***** Finished reading .properties files. *****");
 		// *****************************************************************************************************
 	}
 	
