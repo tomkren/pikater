@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.messages;
 
 import org.pikater.core.ontology.batch.Batch;
+import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.CategoricalAttributeMetadata;
@@ -45,7 +46,7 @@ public class MessagesOntology extends BeanOntology {
             add(Evaluation.class);
             add(EvaluationMethod.class);
             add(Execute.class);
-            add(ExecuteExperiment.class);
+            add(ExecuteBatch.class);
             add(ExecuteParameters.class);
             add(Fitness.class);
             add(FloatSItem.class);

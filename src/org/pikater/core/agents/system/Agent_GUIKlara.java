@@ -16,9 +16,9 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.BatchOntology;
+import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.DescriptionOntology;
-import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 
 
@@ -38,7 +38,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		registerWithDF();
 
 		this.getContentManager().registerLanguage(this.getCodec());
-		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+		this.getContentManager().registerOntology(BatchOntology.getInstance());
 
 		if (DEBUG_MODE) {
 			
@@ -154,7 +154,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				ComputationDescription.importXML(fileName);
 
 
-		ExecuteExperiment executeExpAction = new ExecuteExperiment(comDescription);
+		ExecuteBatch executeExpAction = new ExecuteBatch(comDescription);
 
 		try {
 			Thread.sleep(9000);
@@ -165,7 +165,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 
         AID receiver = new AID("InputTransformer", false);
         
-        Ontology ontology = DescriptionOntology.getInstance();
+        Ontology ontology = BatchOntology.getInstance();
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.addReceiver(receiver);

@@ -4,7 +4,7 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.batch.Batch;
-import org.pikater.core.ontology.description.DescriptionOntology;
+import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.messages.option.Option;
 
 
@@ -15,7 +15,7 @@ public class BatchOntology extends BeanOntology {
 	private BatchOntology() {
         super("BatchOntology");
 
-        String computingDescriptionPackage = DescriptionOntology.class.getPackage().getName();
+        String computingDescriptionPackage = ComputationDescription.class.getPackage().getName();
         String batchPackage = Batch.class.getPackage().getName();
         String optionPackage = Option.class.getPackage().getName();
         

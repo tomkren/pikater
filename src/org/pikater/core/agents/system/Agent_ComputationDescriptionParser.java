@@ -6,10 +6,10 @@ import java.util.Date;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
+import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.FilenameTranslationOntology;
+import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.DescriptionOntology;
-import org.pikater.core.ontology.messages.ExecuteExperiment;
 import org.pikater.core.ontology.messages.Problem;
 import org.pikater.core.ontology.messages.Solve;
 import org.pikater.core.ontology.messages.TranslateFilename;
@@ -49,7 +49,7 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 		registerWithDF("ComputationDescriptionParser");
 
 		this.getContentManager().registerOntology(getOntology());
-		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+		this.getContentManager().registerOntology(BatchOntology.getInstance());
 		this.getContentManager().registerOntology(FilenameTranslationOntology.getInstance());
 		
 		ComputingManagerBehaviour compBehaviour =
@@ -173,10 +173,10 @@ class ComputingManagerBehaviour extends AchieveREResponder {
   
         ACLMessage reply = request.createReply();
         
-    	if (object instanceof ExecuteExperiment) {
+    	if (object instanceof ExecuteBatch) {
     		
-    		ExecuteExperiment executeExperiment =
-    				(ExecuteExperiment) object;
+    		ExecuteBatch executeExperiment =
+    				(ExecuteBatch) object;
     		ComputationDescription comDescription =
 					executeExperiment.getDescription();
     		
@@ -188,6 +188,8 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 
     		// Problem parsed - reply OK
             reply.setPerformative(ACLMessage.INFORM);
+            reply.setLanguage(codec.getName());
+            reply.setOntology(ontology.getName());
             reply.setContent("OK");
 
 

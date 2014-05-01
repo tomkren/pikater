@@ -18,4 +18,5 @@ public class SaveBatch implements AgentAction {
 	public void setBatch(Batch batch) {
 		this.batch = batch;
 	}
+
 }

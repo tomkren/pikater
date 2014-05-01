@@ -27,7 +27,6 @@ import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.*;
 import org.postgresql.PGConnection;
 
