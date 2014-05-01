@@ -1,14 +1,14 @@
-package org.pikater.web.experiment.box;
+package org.pikater.web.experiment_backup.box;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.web.experiment.Box;
-import org.pikater.web.experiment.options.AbstractOption;
-import org.pikater.web.experiment.resources.ParamResource;
-import org.pikater.web.experiment.resources.Resource;
-import org.pikater.web.experiment.slots.AbstractSlot;
-import org.pikater.web.experiment.slots.SimpleSlot;
+import org.pikater.shared.experiment.box.BoxInfo;
+import org.pikater.web.experiment_backup.options.AbstractOption;
+import org.pikater.web.experiment_backup.resources.ParamResource;
+import org.pikater.web.experiment_backup.resources.Resource;
+import org.pikater.web.experiment_backup.slots.AbstractSlot;
+import org.pikater.web.experiment_backup.slots.SimpleSlot;
 
 public class LeafBox extends AbstractBox
 {
@@ -56,7 +56,7 @@ public class LeafBox extends AbstractBox
 	// -----------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public LeafBox(Box boxConfig)
+	public LeafBox(BoxInfo boxConfig)
 	{
 		super(boxConfig.getName(), boxConfig.getDescription(), boxConfig.getPicture(), boxConfig.getType());
 		

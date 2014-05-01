@@ -77,16 +77,11 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 		
 		// first, setup the toolbar
 		setupToolbar();
+		this.toolbar.addStyleName("showBorder"); // showBorder
 		
 		// then, setup the kinetic canvas
 		this.kineticCanvas = new KineticEditorCanvas();
-		
-		// TODO: delete this eventually:
-		BoxPrototype b1 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 1", new Vector2d(10, 10), new Vector2d(200, 100));
-		BoxPrototype b2 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 2", new Vector2d(500, 10), new Vector2d(200, 100));
-		BoxPrototype b3 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 3", new Vector2d(400, 300), new Vector2d(200, 100));
-		EdgePrototype e1 = this.kineticCanvas.getShapeCreator().createEdge(NodeRegisterType.MANUAL, b1, b2);
-		this.kineticCanvas.getEngine().registerCreated(b1, b2, b3, e1);
+		this.kineticCanvas.addStyleName("showBorder");
 		
 		// then, setup the debug panel if necessary
 		if(ClientVars.DEBUG_MODE)
@@ -132,6 +127,13 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 	public void loadExperiment()
 	{
 		// TODO:
+		
+		// TODO: delete this eventually:
+		BoxPrototype b1 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 1", new Vector2d(10, 10), new Vector2d(200, 100));
+		BoxPrototype b2 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 2", new Vector2d(500, 10), new Vector2d(200, 100));
+		BoxPrototype b3 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 3", new Vector2d(400, 300), new Vector2d(200, 100));
+		EdgePrototype e1 = this.kineticCanvas.getShapeCreator().createEdge(NodeRegisterType.MANUAL, b1, b2);
+		this.kineticCanvas.getEngine().registerCreated(b1, b2, b3, e1);
 	}
 	
 	public void setToolbarVisible(boolean visible)

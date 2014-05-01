@@ -1,4 +1,4 @@
-package org.pikater.web.experiment;
+package org.pikater.web.experiment_backup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,12 +10,12 @@ import java.util.Set;
 
 import org.pikater.shared.util.BidiMap;
 import org.pikater.shared.util.SimpleIDGenerator;
-import org.pikater.web.experiment.box.AbstractBox;
-import org.pikater.web.experiment.box.LeafBox;
-import org.pikater.web.experiment.box.LeafBox.SlotType;
-import org.pikater.web.experiment.options.AbstractOption;
-import org.pikater.web.experiment.resources.Resource;
-import org.pikater.web.experiment.slots.AbstractSlot;
+import org.pikater.web.experiment_backup.box.AbstractBox;
+import org.pikater.web.experiment_backup.box.LeafBox;
+import org.pikater.web.experiment_backup.box.LeafBox.SlotType;
+import org.pikater.web.experiment_backup.options.AbstractOption;
+import org.pikater.web.experiment_backup.resources.Resource;
+import org.pikater.web.experiment_backup.slots.AbstractSlot;
 
 public class SchemaDataSource
 {
@@ -40,11 +40,6 @@ public class SchemaDataSource
 	 */
 	private final SimpleIDGenerator idGenerator;
 	
-	/**
-	 * IDs of boxes that encapsulate the default (top-level) schema view.
-	 */
-	private final Collection<Integer> topLevelView; // TODO: compute this automatically and remove the field
-	
 	public SchemaDataSource()
 	{
 		super();
@@ -53,7 +48,6 @@ public class SchemaDataSource
 		this.edges = new HashMap<Integer, Set<Integer>>();
 		this.globalParameters = new ArrayList<AbstractOption>();
 		this.idGenerator = new SimpleIDGenerator();
-		this.topLevelView = new ArrayList<Integer>();
 	}
 	
 	// ------------------------------------------------------------------
@@ -69,11 +63,6 @@ public class SchemaDataSource
 		return globalParameters;
 	}
 	
-	public Collection<Integer> getIDsOfTopLevelBoxes()
-	{
-		return topLevelView;
-	}
-
 	public Collection<Integer> getIDsOfLeafBoxes()
 	{
 		Collection<Integer> result = new ArrayList<Integer>();

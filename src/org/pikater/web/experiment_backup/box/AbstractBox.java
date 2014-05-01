@@ -1,6 +1,6 @@
-package org.pikater.web.experiment.box;
+package org.pikater.web.experiment_backup.box;
 
-import org.pikater.web.experiment.BoxType;
+import org.pikater.shared.experiment.box.BoxInfo.BoxType;
 
 public abstract class AbstractBox
 {
