@@ -1,9 +1,6 @@
 package org.pikater.core.dataStructures.options.types;
 
-import org.pikater.core.ontology.messages.option.Option;
-
-
-
+// import org.pikater.core.ontology.messages.option.Option;
 
 public class OptionValue extends AbstractOption {
 
@@ -27,6 +24,7 @@ public class OptionValue extends AbstractOption {
 		this.object = object;
 	}
 
+	/*
 	@Override
 	public Option toOption() {
 		// TODO Not complete
@@ -54,4 +52,5 @@ public class OptionValue extends AbstractOption {
 
 		return option;
 	}
+	*/
 }
