@@ -14,6 +14,8 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.pikater.shared.database.experiment.UniversalComputationDescription;
+import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
@@ -21,6 +23,8 @@ import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.data.DataOntology;
 import org.pikater.core.ontology.data.GetFile;
+import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.description.DescriptionOntology;
 import org.pikater.core.ontology.messages.*;
 import org.postgresql.PGConnection;
 
@@ -60,6 +64,7 @@ public class Agent_DataManager extends PikaterAgent {
 			initDefault();
 			registerWithDF();
 			getContentManager().registerOntology(DataOntology.getInstance());
+			getContentManager().registerOntology(DescriptionOntology.getInstance());
 
 			if (containsArgument(CONNECTION_ARG_NAME)) {
 				connectionBean = getArgumentValue(CONNECTION_ARG_NAME);
@@ -108,6 +113,9 @@ public class Agent_DataManager extends PikaterAgent {
 					}
 					if (a.getAction() instanceof TranslateFilename) {
 						return RespondToTranslateFilename(request, a);
+					}
+					if (a.getAction() instanceof SaveBatch) {
+						return RespondToSaveBatch(request, a);
 					}
 					if (a.getAction() instanceof SaveResults) {
 						return RespondToSaveResults(request, a);
@@ -163,8 +171,48 @@ public class Agent_DataManager extends PikaterAgent {
 				logError("Failure responding to request: " + request.getContent());
 				return failure;
 			}
+
 		});
 
+	}
+
+	private ACLMessage RespondToSaveBatch(ACLMessage request, Action a) {
+		
+		System.out.println("RespondToSaveBatch");
+
+		SaveBatch saveBatch = (SaveBatch) a.getAction();
+		Batch batch = saveBatch.getBatch();
+		ComputationDescription description = batch.getDescription();
+		
+        UniversalComputationDescription uDescription =
+        		description.ExportUniversalComputationDescription();
+        
+		int userId = batch.getOwnerID();
+        String batchXml = uDescription.exportXML();		
+		
+        JPABatch batchJpa = new JPABatch();
+        batchJpa.setName(batch.getName());
+        batchJpa.setNote(batch.getNote()); 
+        batchJpa.setPriority(batch.getPriority());
+
+		Database database = new Database(emf, null);
+        database.saveBatch(userId, batchJpa, batchXml);
+
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		Result r = new Result(a, "OK");
+		try {
+			getContentManager().fillContent(reply, r);
+		} catch (CodecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return reply;
 	}
 
 	private ACLMessage RespondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException {

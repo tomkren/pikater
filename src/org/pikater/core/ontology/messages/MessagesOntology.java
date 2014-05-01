@@ -20,6 +20,13 @@ public class MessagesOntology extends BeanOntology {
         super("MessagesOntology");
 
         try {
+
+        	add(SaveBatch.class);
+        	add(Batch.class);
+        	
+            add(SendEmail.class);
+
+        	///////////////OLD PIKATER////////////////////////
         	// messages
             add(Agent.class);
             add(Attribute.class);
@@ -69,7 +76,6 @@ public class MessagesOntology extends BeanOntology {
             add(SaveResults.class);
             add(SearchItem.class);
             add(SearchSolution.class);
-            add(SendEmail.class);
             add(SetSItem.class);
             add(ShutdownDatabase.class);
             add(Solve.class);

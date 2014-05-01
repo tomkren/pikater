@@ -1,6 +1,8 @@
 package org.pikater.core.agents.system;
 
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -14,6 +16,7 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAException;
+import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -22,7 +25,10 @@ import jade.proto.AchieveREInitiator;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.description.DescriptionOntology;
+import org.pikater.core.ontology.messages.Batch;
 import org.pikater.core.ontology.messages.ExecuteExperiment;
+import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.messages.SaveBatch;
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
@@ -43,6 +49,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 
 		this.getContentManager().registerLanguage(getCodec());
 		this.getContentManager().registerOntology(DescriptionOntology.getInstance());
+		this.getContentManager().registerOntology(MessagesOntology.getInstance());
 
 		RecieveExperiment recieveExp =
 			new RecieveExperiment(this, getCodec(), this.emf);
@@ -99,24 +106,17 @@ class RecieveExperiment extends CyclicBehaviour {
 
 
 
-///////////////////////////THIS WILL BE MOVED TO DATAMANGER/////////////////////////////
-            
-            UniversalComputationDescription description =
-            		compDescription.ExportUniversalComputationDescription();
-            String batchXml = description.exportXML();
-
-            
+            // send received ComputationDescription as Batch to DataManger to save to DB
             int klaraID = 6;
-            
-            JPABatch batch = new JPABatch();
+
+            Batch batch = new Batch();
             batch.setName("Klara's Batch");
             batch.setNote("Inputed by GuiKlara Agent");
             batch.setPriority(9);
-
-            Database database = new Database(emf, null);
-            database.saveBatch(klaraID, batch, batchXml);
-
-////////////////////////////////////////////////////////////////////////////////////////            
+            batch.setOwnerID(klaraID);
+            batch.setDescription(compDescription);
+            
+            this.sendBatchToSave(batch);
 
 
             ACLMessage reply = request.createReply();
@@ -153,6 +153,39 @@ class RecieveExperiment extends CyclicBehaviour {
 
 		}
 	}
+	
+	private void sendBatchToSave(Batch batch) {
+
+		SaveBatch saveBatch = new SaveBatch();
+		saveBatch.setBatch(batch);
+        
+        Ontology ontology = MessagesOntology.getInstance();
+
+        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+        msg.setSender(this.agent.getAID());
+		msg.addReceiver(new AID("dataManager", false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		
+        msg.setLanguage(codec.getName());
+        msg.setOntology(ontology.getName());
+        msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+
+		Action a = new Action();
+		a.setAction(saveBatch);
+		a.setActor(this.agent.getAID());
+
+		try {
+			// Let JADE convert from Java objects to string
+			this.agent.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			ce.printStackTrace();
+		} catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+
+	}
+	
 }
 
 
