@@ -28,7 +28,7 @@ public class SimpleTraining {
         //"whatever.mlp.is.in.MLP"
 
         ArrayList options = new ArrayList();
-        
+
         StepanuvOption lr = new StepanuvOption();
         lr.setName("L");
         lr.setOption(new OptionValue(new Double(0.001)) );
@@ -36,7 +36,7 @@ public class SimpleTraining {
         StepanuvOption hr = new StepanuvOption();
         hr.setName("H");
         hr.setOption(new OptionValue(new Integer(4)) );
-        
+
         options.add(Converter.toOption(lr));
         options.add(Converter.toOption(hr));
 

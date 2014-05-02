@@ -3,55 +3,72 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Pikater">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="pikater">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../usr/eclipse"/>
+    <property name="ECLIPSE_HOME" value="../../../../../../../Applications/Eclipse Java EE"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
-    <path id="Apache Tomcat v7.0 [Apache Tomcat v7.0].libraryclasspath">
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/jasper-el.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/catalina.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-util.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/annotations-api.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/catalina-tribes.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/el-api.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-api.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/servlet-api.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat7-websocket.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/catalina-ha.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/ecj-4.2.2.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/websocket-api.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-dbcp.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-i18n-fr.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/jsp-api.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-jdbc.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/catalina-ant.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-i18n-es.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-i18n-ja.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/tomcat-coyote.jar"/>
-        <pathelement location="../../../../usr/share/apache-tomcat-7.0.47/lib/jasper.jar"/>
-    </path>
-    <path id="Web App Libraries.libraryclasspath">
-        <pathelement location="WebContent/WEB-INF/lib/jade-commons-codec-1.3.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jade.jar"/>
-    </path>
     <path id="EAR Libraries.libraryclasspath"/>
     <path id="Ivy.libraryclasspath">
-        <pathelement location="../../../../root/.ivy2/cache/javax.servlet/javax.servlet-api/jars/javax.servlet-api-3.0.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-server/jars/vaadin-server-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-shared/jars/vaadin-shared-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-shared-deps/jars/vaadin-shared-deps-1.0.2.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-theme-compiler/jars/vaadin-theme-compiler-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.apache.commons/commons-jexl/jars/commons-jexl-2.1.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.w3c.css/sac/jars/sac-1.3.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/net.sourceforge.cssparser/cssparser/jars/cssparser-0.9.5.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/commons-cli/commons-cli/jars/commons-cli-1.2.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.jsoup/jsoup/jars/jsoup-1.6.3.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-themes/jars/vaadin-themes-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-push/jars/vaadin-push-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin.external.atmosphere/atmosphere-runtime/bundles/atmosphere-runtime-1.0.18.vaadin3.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin.external.atmosphere/atmosphere-compat-jbossweb/bundles/atmosphere-compat-jbossweb-1.0.18.vaadin3.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin.external.slf4j/vaadin-slf4j-jdk14/jars/vaadin-slf4j-jdk14-1.6.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin.external.atmosphere/atmosphere-compat-tomcat/bundles/atmosphere-compat-tomcat-1.0.18.vaadin3.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin.external.atmosphere/atmosphere-compat-tomcat7/bundles/atmosphere-compat-tomcat7-1.0.18.vaadin3.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-client-compiled/jars/vaadin-client-compiled-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.vaadin.addon/confirmdialog/jars/confirmdialog-2.0.4.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.vaadin.addons/wizards-for-vaadin/jars/wizards-for-vaadin-1.0.2.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.eclipse.persistence/javax.persistence/jars/javax.persistence-2.1.0.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.eclipse.persistence/eclipselink/jars/eclipselink-2.5.2-M1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.eclipse.persistence/commonj.sdo/jars/commonj.sdo-2.1.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.postgresql/postgresql/jars/postgresql-9.3-1101-jdbc41.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.jcraft/jsch/jars/jsch-0.1.50.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.fusesource.jansi/jansi/jars/jansi-1.11.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.thoughtworks.xstream/xstream/jars/xstream-1.4.7.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/xmlpull/xmlpull/jars/xmlpull-1.1.3.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/xpp3/xpp3_min/jars/xpp3_min-1.1.4c.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.apache.tomcat/catalina/jars/catalina-6.0.39.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.apache.tomcat/coyote/jars/coyote-6.0.39.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.apache.tomcat/servlet-api/jars/servlet-api-6.0.39.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.apache.tomcat/juli/jars/juli-6.0.39.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.apache.tomcat/annotations-api/jars/annotations-api-6.0.39.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-client/jars/vaadin-client-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/javax.validation/validation-api/jars/validation-api-1.0.0.GA-sources.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-client-compiler/jars/vaadin-client-compiler-7.1.14.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/commons-collections/commons-collections/jars/commons-collections-3.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/ant/ant/jars/ant-1.6.5.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/ant/ant-launcher/jars/ant-launcher-1.6.5.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.mortbay.jetty/jetty/jars/jetty-6.1.11.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.mortbay.jetty/jetty-util/jars/jetty-util-6.1.11.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.mortbay.jetty/servlet-api-2.5/jars/servlet-api-2.5-6.1.11.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.jdesktop/swing-worker/jars/swing-worker-1.1.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.3.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/commons-io/commons-io/jars/commons-io-2.2.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/commons-lang/commons-lang/jars/commons-lang-2.6.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/org.apache.james/apache-mime4j/jars/apache-mime4j-0.6.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-client-compiler-deps/jars/vaadin-client-compiler-deps-1.0.2.jar"/>
+        <pathelement location="../../../../../.ivy2/cache/javax.servlet/javax.servlet-api/jars/javax.servlet-api-3.0.1.jar"/>
     </path>
-    <path id="Pikater.classpath">
-        <pathelement location="build/classes"/>
-        <path refid="Apache Tomcat v7.0 [Apache Tomcat v7.0].libraryclasspath"/>
-        <path refid="Web App Libraries.libraryclasspath"/>
-        <path refid="EAR Libraries.libraryclasspath"/>
-        <path refid="Ivy.libraryclasspath"/>
+    <path id="pikater.classpath">
+        <pathelement location="bin"/>
         <pathelement location="libraries/commons-codec-1.3.jar"/>
         <pathelement location="libraries/forms-1.1.0.jar"/>
         <pathelement location="libraries/hsqldb.jar"/>
         <pathelement location="libraries/iText-2.1.5.jar"/>
         <pathelement location="libraries/jade.jar"/>
-        <pathelement location="libraries/javax.mail.jar"/>
         <pathelement location="libraries/jcommon-1.0.16.jar"/>
         <pathelement location="libraries/jdom.jar"/>
         <pathelement location="libraries/jfreechart-1.0.13.jar"/>
@@ -61,51 +78,12 @@
         <pathelement location="libraries/log4j-1.2.16.jar"/>
         <pathelement location="libraries/looks-2.1.4.jar"/>
         <pathelement location="libraries/mysql-connector-java-5.1.18-bin.jar"/>
-        <pathelement location="libraries/postgresql-9.3-1101.jdbc41.jar"/>
         <pathelement location="libraries/remoteExperimentServer.jar"/>
         <pathelement location="libraries/servlet.jar"/>
         <pathelement location="libraries/sqltool.jar"/>
         <pathelement location="libraries/swtgraphics2d.jar"/>
         <pathelement location="libraries/weka.jar"/>
         <pathelement location="libraries/weka-src.jar"/>
-        <pathelement location="libraries/aa/commons-logging-1.1.2.jar"/>
-        <pathelement location="libraries/aa/org.springframework.context.jar"/>
-        <pathelement location="libraries/beans/antlr-runtime-3.0.1.jar"/>
-        <pathelement location="libraries/beans/commons-logging-1.1.1.jar"/>
-        <pathelement location="libraries/beans/org.springframework.aop-3.1.0.M2.jar"/>
-        <pathelement location="libraries/beans/org.springframework.asm-3.1.0.M2.jar"/>
-        <pathelement location="libraries/beans/org.springframework.aspects-3.1.0.M2.jar"/>
-        <pathelement location="libraries/beans/org.springframework.beans-3.1.0.M2.jar"/>
-        <pathelement location="libraries/beans/org.springframework.context.support-3.1.0.M2.jar"/>
-        <pathelement location="libraries/beans/org.springframework.context-3.1.0.M2.jar"/>
-        <pathelement location="libraries/beans/org.springframework.core-3.1.0.M2.jar"/>
-        <pathelement location="libraries/beans/org.springframework.expression-3.1.0.M2.jar"/>
-        <pathelement location="libraries/commons-collections4-4.0/commons-collections4-4.0.jar"/>
-        <pathelement location="libraries/commons-collections4-4.0/commons-collections4-4.0-javadoc.jar"/>
-        <pathelement location="libraries/commons-collections4-4.0/commons-collections4-4.0-sources.jar"/>
-        <pathelement location="libraries/commons-collections4-4.0/commons-collections4-4.0-test-sources.jar"/>
-        <pathelement location="libraries/commons-collections4-4.0/commons-collections4-4.0-tests.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-javadoc.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-sources.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-test-sources.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-tests.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-adapters-1.1.3.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-api-1.1.3.jar"/>
-        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-tests.jar"/>
-        <pathelement location="libraries/java-json/java-json-schema.jar"/>
-        <pathelement location="libraries/jpaEclipseLink/eclipselink.jar"/>
-        <pathelement location="libraries/jpaEclipseLink/javax.persistence.source_2.1.0.v201304241213.jar"/>
-        <pathelement location="libraries/jpaEclipseLink/javax.persistence_2.1.0.v201304241213.jar"/>
-        <pathelement location="libraries/json/java-json.jar"/>
-        <pathelement location="libraries/junit/hamcrest-core-1.3.jar"/>
-        <pathelement location="libraries/junit/junit-4.11.jar"/>
-        <pathelement location="libraries/microsoft-jdbc/sqljdbc4.jar"/>
-        <pathelement location="libraries/reflections/guava-16.0.1.jar"/>
-        <pathelement location="libraries/reflections/javassist.jar"/>
-        <pathelement location="libraries/reflections/reflections-0.9.9-RC1-uberjar.jar"/>
-        <pathelement location="libraries/spring-framework/org.springframework.orm.jar"/>
-        <pathelement location="libraries/spring-framework/org.springframework.transaction_3.0.5.RELEASE.jar"/>
         <pathelement location="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2.jar"/>
         <pathelement location="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-javadoc.jar"/>
         <pathelement location="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-sources.jar"/>
@@ -167,44 +145,33 @@
         <pathelement location="libraries/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2.jar"/>
         <pathelement location="libraries/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2-javadoc.jar"/>
         <pathelement location="libraries/spring-framework-4.0.0.M2/libs/spring-websocket-4.0.0.M2-sources.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/cglib-nodep-2.2.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/dom4j-1.6.1.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/jdom2-2.0.5.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/jdom-1.1.3.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/jettison-1.2.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/joda-time-1.6.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/json-20080701.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/kxml2-2.3.0.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/kxml2-min-2.3.0.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/stax-1.2.0.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/stax-api-1.0.1.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/wstx-asl-3.2.7.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/xmlpull-1.1.3.1.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/xom-1.1.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream/xpp3_min-1.1.4c.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/antlr-2.7.7.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/dom4j-1.6.1.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/hibernate-commons-annotations-4.0.2.Final.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/hibernate-core-4.2.5.Final.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/hibernate-entitymanager-4.2.5.Final.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/hibernate-envers-4.2.5.Final.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/javassist-3.15.0-GA.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/jboss-logging-3.1.0.GA.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/jboss-transaction-api_1.1_spec-1.0.1.Final.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate/slf4j-api-1.6.1.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-javadoc.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-sources.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-tests.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-1.1.3-test-sources.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-adapters-1.1.3.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-api-1.1.3.jar"/>
+        <pathelement location="libraries/commons-logging-1.1.3/commons-logging-tests.jar"/>
+        <pathelement location="libraries/junit/hamcrest-core-1.3.jar"/>
+        <pathelement location="libraries/junit/junit-4.11.jar"/>
+        <pathelement location="libraries/javax.mail.jar"/>
+        <pathelement location="libraries/postgresql-9.3-1101.jdbc41.jar"/>
         <pathelement location="libraries/xstream-1.4.7/lib/xstream-1.4.7.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-benchmark-1.4.7.jar"/>
-        <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate-1.4.7.jar"/>
+        <pathelement location="libraries/jpaEclipseLink/javax.persistence_2.1.0.v201304241213.jar"/>
+        <pathelement location="libraries/jpaEclipseLink/eclipselink.jar"/>
+        <pathelement location="libraries/jpaEclipseLink/javax.persistence.source_2.1.0.v201304241213.jar"/>
+        <pathelement location="libraries/json/java-json.jar"/>
+        <pathelement location="libraries/reflections/reflections-0.9.9-RC1-uberjar.jar"/>
+        <pathelement location="libraries/commons-collections4-4.0/commons-collections4-4.0-javadoc.jar"/>
+        <pathelement location="libraries/commons-collections4-4.0/commons-collections4-4.0.jar"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+        <pathelement location="libraries/xstream-1.4.7/lib/xstream/kxml2-2.3.0.jar"/>
+        <path refid="Ivy.libraryclasspath"/>
     </path>
-    <path id="run.GWT-DevMode.classpath">
-        <path refid="Pikater.classpath"/>
-        <pathelement location="src"/>
-    </path>
-    <path id="run.GWT-DevMode.bootclasspath"/>
     <target name="init">
-        <mkdir dir="build/classes"/>
-        <copy includeemptydirs="false" todir="build/classes">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
                 <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
@@ -212,16 +179,16 @@
         </copy>
     </target>
     <target name="clean">
-        <delete dir="build/classes"/>
+        <delete dir="bin"/>
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="Pikater.classpath"/>
+            <classpath refid="pikater.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -237,32 +204,5 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
-    </target>
-    <target name="UniversalComputationDescription (1)">
-        <java classname="org.pikater.shared.database.experiment.UniversalComputationDescription" failonerror="true" fork="yes">
-            <classpath refid="Pikater.classpath"/>
-        </java>
-    </target>
-    <target name="DatabaseInitialisation">
-        <java classname="org.pikater.shared.utilities.pikaterDatabase.DatabaseInitialisation" failonerror="true" fork="yes">
-            <classpath refid="Pikater.classpath"/>
-        </java>
-    </target>
-    <target name="PikaterCore">
-        <java classname="jade.Boot" failonerror="true" fork="yes">
-            <jvmarg line="-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"/>
-            <arg line="-gui Iniciator:org.pikater.core.agents.system.Agent_Initiator"/>
-            <classpath refid="Pikater.classpath"/>
-        </java>
-    </target>
-    <target name="GWT-DevMode">
-        <java classname="com.google.gwt.dev.DevMode" dir="../../../../Users/Smolodon/Work/Programming/Eclipse projects - School/Pikater" failonerror="true" fork="yes">
-            <jvmarg line="-Xmx512M -XX:MaxPermSize=256M"/>
-            <arg line="-noserver -war WebContent/VAADIN/widgetsets org.pikater.web.vaadin.gui.NewpikaterdebugWidgetset -startupUrl http://localhost:8080/Pikater -bindAddress 127.0.0.1"/>
-            <classpath refid="run.GWT-DevMode.classpath"/>
-            <bootclasspath>
-                <path refid="run.GWT-DevMode.bootclasspath"/>
-            </bootclasspath>
-        </java>
     </target>
 </project>
