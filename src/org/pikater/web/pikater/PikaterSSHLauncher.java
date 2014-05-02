@@ -137,9 +137,11 @@ public class PikaterSSHLauncher
 			switch (serverInfo.getServerType())
 			{
 				case MASTER:
-					return launchPikaterInMasterMode();
+					// return launchPikaterInMasterMode();
+					return false;
 				case SLAVE:
-					return launchPikaterInSlaveMode();
+					// return launchPikaterInSlaveMode();
+					return false;
 				default:
 					throw new IllegalStateException();
 			}
