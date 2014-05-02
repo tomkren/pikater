@@ -35,8 +35,8 @@ public class SearchOnly {
         hr.setName("H");
         hr.setOption(new OptionValue(new Integer(4)) );
  
-        options.add(lr.toOption());
-        options.add(hr.toOption());
+        // options.add(lr.toOption());
+        // options.add(hr.toOption());
 
         ca.setOptions(options);
 
@@ -65,8 +65,8 @@ public class SearchOnly {
         ear.setName("ea.mutationRate");
         ear.setOption(new OptionValue(new Double(0.03)) );
 
-        searchParameters.add(pr.toOption());
-        searchParameters.add(ear.toOption());
+        // searchParameters.add(pr.toOption());
+        // searchParameters.add(ear.toOption());
 
         crsc.setSearch(sa);
 

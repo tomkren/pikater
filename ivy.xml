@@ -37,6 +37,7 @@
 		<dependency org="com.jcraft" name="jsch" rev="0.1.50" />
 		<dependency org="org.fusesource.jansi" name="jansi" rev="1.11" />
 		<dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.7" />
+		<dependency org="org.apache.tomcat" name="catalina" rev="6.0.39" />
 		
 	</dependencies>
 </ivy-module>

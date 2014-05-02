@@ -36,8 +36,8 @@ public class SimpleTraining {
         hr.setName("H");
         hr.setOption(new OptionValue(new Integer(4)) );
         
-        options.add(lr.toOption());
-        options.add(hr.toOption());
+        // options.add(lr.toOption());
+        // options.add(hr.toOption());
 
         ca.setOptions(options);
 
