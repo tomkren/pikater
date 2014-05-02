@@ -1,26 +1,16 @@
 package org.pikater.core.options.xmlGenerators;
 
-import org.pikater.core.agents.experiment.search.Agent_ChooseXValues;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class ChooseXValue_SearchBox extends LogicalBoxDescription {
+public class ChooseXValue_SearchBox {
 	
-	protected ChooseXValue_SearchBox() {
-		super(
-			"Choose X Values Agent",
-		        Search.class,
-		        "Search which Choose X Values"
-		        );
+	public static AgentInfo get() {
 
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_ChooseXValues.class);
-
-		
 		OptionDefault optionN = new OptionDefault();
 		optionN.setName("N");
 		optionN.setDescription("Number of values to try for each option");
@@ -31,11 +21,20 @@ public class ChooseXValue_SearchBox extends LogicalBoxDescription {
 		optionN.setList(
 				new OptionList() );
 
-		this.addOption(optionN);
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(null); // some virtual-box provider agent
+		agentInfo.setOntologyClass(Search.class.getName());
+	
+		agentInfo.setName("Choose X Values Agent");
+		agentInfo.setPicture("picture0.jpg");
+		agentInfo.setDescription("Search which Choose X Values");
 
-
-
+		agentInfo.addOption(optionN.toOption());
+		
 		// Slot Definition
-		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
+
+		return agentInfo;
 	}
+
 }

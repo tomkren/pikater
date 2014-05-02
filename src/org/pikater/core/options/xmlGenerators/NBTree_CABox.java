@@ -1,19 +1,26 @@
 package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class NBTree_CABox extends LogicalBoxDescription {
-	public NBTree_CABox(){
-		super("NBTree",ComputingAgent.class,"NBTree MEthod");
-		this.setAgentName(Agent_WekaCA.class);
-		this.setPicture("picture3.jpg");
+public class NBTree_CABox {
+	
+	public static AgentInfo get() {
 
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("NBTree");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("NBTree Method");
 
 
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
 }

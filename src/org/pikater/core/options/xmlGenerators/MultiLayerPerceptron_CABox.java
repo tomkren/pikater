@@ -7,18 +7,16 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
+import org.pikater.core.ontology.agentInfo.Slot;
+import org.pikater.core.ontology.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
 
-public class MultiLayerPerceptron_CABox extends LogicalBoxDescription {
-	public MultiLayerPerceptron_CABox(){
-		super("MultiLayerPerceptron",
-				ComputingAgent.class,"Multi-layer perceptron method");
-		
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-		
+public class MultiLayerPerceptron_CABox {
+	
+	public static AgentInfo get() {
+
 		/**
 		# name, type, number od values, parameters range / set
 		# r ... range
@@ -186,25 +184,39 @@ public class MultiLayerPerceptron_CABox extends LogicalBoxDescription {
 		optionC.setDescription("Normalizing a numeric class will NOT be done");
 		optionC.setValue(
 				new OptionValue(new Boolean(false)) );
-		
-		
-		this.addOption(optionC);
-		this.addOption(optionB);
-		this.addOption(optionG);
-		this.addOption(optionI);
-		this.addOption(optionD);
-		this.addOption(optionE);
-		this.addOption(optionS);
-		this.addOption(optionV);
-		this.addOption(optionN);
-		this.addOption(optionM);
-		this.addOption(optionL);
-		this.addOption(optionH);
 
+
+		Slot outputSlot = new Slot();
+		outputSlot.setSlotType("input");
+		outputSlot.setDataType(SlotTypes.DATA_TYPE);
+
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(ComputingAgent.class.getName());
+		agentInfo.setOntologyClass(Agent_WekaCA.class.getName());
+	
+		agentInfo.setName("MultiLayerPerceptron");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("Multi-layer perceptron method");
+
+		agentInfo.addOption(optionC.toOption());
+		agentInfo.addOption(optionB.toOption());
+		agentInfo.addOption(optionG.toOption());
+		agentInfo.addOption(optionI.toOption());
+		agentInfo.addOption(optionD.toOption());
+		agentInfo.addOption(optionE.toOption());
+		agentInfo.addOption(optionS.toOption());
+		agentInfo.addOption(optionV.toOption());
+		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionL.toOption());
+		agentInfo.addOption(optionH.toOption());
 
 
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
 }

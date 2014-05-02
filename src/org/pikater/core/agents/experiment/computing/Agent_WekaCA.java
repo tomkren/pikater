@@ -20,7 +20,9 @@ import java.util.Enumeration;
 import java.util.Random;
 
 public class Agent_WekaCA extends Agent_ComputingAgent {
+
 	private static final long serialVersionUID = -3594051562022044000L;
+
 	private Classifier cls = null;//TODO: constructors
 	private String agentType = null;
 	private String wekaClassName = null;

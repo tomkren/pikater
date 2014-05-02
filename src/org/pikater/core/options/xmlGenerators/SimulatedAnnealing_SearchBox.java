@@ -5,20 +5,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class SimulatedAnnealing_SearchBox extends LogicalBoxDescription {
+public class SimulatedAnnealing_SearchBox {
 
-	protected SimulatedAnnealing_SearchBox() {
-		super("SimulatedAnnealing-Searcher",
-				Search.class,
-				"Searches defined parameters and provides them in output slots. Simulated annealing is used for searching."
-				);
+	public static AgentInfo get() {
 
-		this.setPicture("picture2.jpg");
-		this.setAgentName(Agent_SimulatedAnnealing.class);
-		
 		OptionDefault optionE = new OptionDefault();
 		optionE.setName("E");
 		optionE.setDescription("Set minimum number of instances per leaf");
@@ -58,15 +51,24 @@ public class SimulatedAnnealing_SearchBox extends LogicalBoxDescription {
 				new OptionInterval(new Double(0.0), new Double(1.0)) );
 		optionS.setList( new OptionList() );
 		
-		
-		this.addOption(optionE);
-		this.addOption(optionM);
-		this.addOption(optionT);
-		this.addOption(optionS);
 
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_SimulatedAnnealing.class.toString());
+		agentInfo.setOntologyClass(Search.class.getName());
+	
+		agentInfo.setName("SimulatedAnnealing-Searcher");
+		agentInfo.setPicture("picture2.jpg");
+		agentInfo.setDescription("Searches defined parameters and provides them in output slots. Simulated annealing is used for searching.");
 
+		agentInfo.addOption(optionE.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionT.toOption());
+		agentInfo.addOption(optionS.toOption());
 
 		// Slot Definition
-		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());		
+
+		return agentInfo;
 	}
+
 }

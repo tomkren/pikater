@@ -2,21 +2,15 @@ package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.dataStructures.slots.Slot;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
+import org.pikater.core.ontology.agentInfo.Slot;
+import org.pikater.core.ontology.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class FileInput_VirtualBox extends LogicalBoxDescription{
+public class FileInput_VirtualBox {
 	
-	protected FileInput_VirtualBox() {
-		super("FileInput",
-				FileDataProvider.class,
-				"This box provides a data source to other boxes."
-				);
+	public static AgentInfo get() {
 
-		this.setPicture("picture0.jpg");
-		this.setAgentName(null);
-		
 		OptionDefault optionIN = new OptionDefault();
 		optionIN.setName("File");
 		optionIN.setDescription("");
@@ -24,19 +18,25 @@ public class FileInput_VirtualBox extends LogicalBoxDescription{
 				new OptionValue(new String("inputFile.ARFF")) );
 		optionIN.setInterval(null);
 		optionIN.setList(null);
-		
-		this.addOption(optionIN);
-		
-		
+
 		Slot outputSlot = new Slot();
-		outputSlot.setDescription("Data loaded from dataset file");
-		outputSlot.setType(Slot.SlotType.DATA_SLOT);
-		outputSlot.setSex(Slot.SlotSex.PRODUCENT);
-		outputSlot.setOntologyField(null);
+		outputSlot.setSlotType("input");
+		outputSlot.setDataType(SlotTypes.DATA_TYPE);
 
 
+		AgentInfo agentInfo = new AgentInfo();
+		// TODO: some virtual-box provider agent
+		agentInfo.setAgentClass(null);
+		agentInfo.setOntologyClass(FileDataProvider.class.getName());
+	
+		agentInfo.setName("FileInput");
+		agentInfo.setPicture("picture0.jpg");
+		agentInfo.setDescription("This box provides a data source to other boxes.");
 
-		// Slot Definition
-		this.addOutputSlot(outputSlot);
+		agentInfo.addOption(optionIN.toOption());
+		agentInfo.addOutputSlots(outputSlot);
+
+		return agentInfo;
 	}
+
 }

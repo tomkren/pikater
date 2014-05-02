@@ -5,19 +5,12 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.Search;
-import org.pikater.core.options.LogicalBoxDescription;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 
-public class GASearch_SearchBox extends LogicalBoxDescription {
-	protected GASearch_SearchBox() {
-		super("GASearch",
-				Search.class,
-				"Searcher using Genetic algorithm"
-				);
+public class GASearch_SearchBox {
+	
+	public static AgentInfo get() {
 
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_GASearch.class);		
-		
 		OptionDefault optionE = new OptionDefault();
 		optionE.setName("E");
 		optionE.setDescription("Minimum error rate");
@@ -80,17 +73,28 @@ public class GASearch_SearchBox extends LogicalBoxDescription {
 		optionS.setList(
 				new OptionList() );
 
+
 		
-		this.addOption(optionE);
-		this.addOption(optionM);
-		this.addOption(optionT);
-		this.addOption(optionX);
-		this.addOption(optionP);
-		this.addOption(optionS);
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(null); // some virtual-box provider agent
+		agentInfo.setOntologyClass(Agent_GASearch.class.getName());
+	
+		agentInfo.setName("GASearch");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("Searcher using Genetic algorithm");
+
+		agentInfo.addOption(optionE.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionT.toOption());
+		agentInfo.addOption(optionX.toOption());
+		agentInfo.addOption(optionP.toOption());
+		agentInfo.addOption(optionS.toOption());
 
 
+		//Slot Definition
+		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
 
-		// Slot Definition
-		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
+		return agentInfo;
 	}
+
 }

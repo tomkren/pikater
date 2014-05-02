@@ -1,7 +1,7 @@
 package org.pikater.core.dataStructures.options;
 
 import org.pikater.core.dataStructures.options.types.AbstractOption;
-//import org.pikater.core.ontology.messages.option.Option;
+
 
 public class StepanuvOption {
 

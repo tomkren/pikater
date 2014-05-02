@@ -8,15 +8,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class PART_CABox extends LogicalBoxDescription {
-	public PART_CABox(){
-		super("PART",ComputingAgent.class,"PART Method");
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-		
+public class PART_CABox {
+	
+	public static AgentInfo get() {
+
 		/**
 		# Set confidence threshold for pruning. (Default: 0.25)
 		# $ C float 1 1 r 0.0001 0.4 
@@ -113,19 +111,28 @@ public class PART_CABox extends LogicalBoxDescription {
 				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
 		optionQ.setList( new OptionList() );
 		
-		
-		this.addOption(optionC);
-		this.addOption(optionM);
-		this.addOption(optionR);
-		this.addOption(optionN);
-		this.addOption(optionB);
-		this.addOption(optionU);
-		this.addOption(optionQ);
 
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("PART");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("PART Method");
 
+		agentInfo.addOption(optionC.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionR.toOption());
+		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionB.toOption());
+		agentInfo.addOption(optionU.toOption());
+		agentInfo.addOption(optionQ.toOption());
 
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

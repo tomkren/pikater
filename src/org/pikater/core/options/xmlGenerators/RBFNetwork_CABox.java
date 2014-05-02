@@ -5,15 +5,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class RBFNetwork_CABox extends LogicalBoxDescription {
-	public RBFNetwork_CABox(){
-		super("RBFNetwork",ComputingAgent.class,"RBFNetwork Method");
-		this.setAgentName(Agent_WekaCA.class);
-		this.setPicture("picture3.jpg");
-		
+public class RBFNetwork_CABox {
+	
+	public static AgentInfo get() {
+
 		/**
 		# number of clusters, default 2
 		$ B int 1 1 r 2 1000
@@ -80,17 +78,28 @@ public class RBFNetwork_CABox extends LogicalBoxDescription {
 		optionM.setInterval(
 				new OptionInterval(new Integer(-1), new Integer(50)) );
 		optionM.setList( new OptionList() );
-		
-		
-		this.addOption(optionB);
-		this.addOption(optionW);
-		this.addOption(optionR);
-		this.addOption(optionS);
-		this.addOption(optionM);
 
+
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+
+		agentInfo.setName("RBFNetwork");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("RBFNetwork Method");
+
+		agentInfo.addOption(optionB.toOption());
+		agentInfo.addOption(optionW.toOption());
+		agentInfo.addOption(optionR.toOption());
+		agentInfo.addOption(optionS.toOption());
+		agentInfo.addOption(optionM.toOption());
 
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

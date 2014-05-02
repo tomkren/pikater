@@ -8,15 +8,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class SMO_CABox extends LogicalBoxDescription {
-	public SMO_CABox(){
-		super("SMO",ComputingAgent.class,"SMO Method");
-		this.setAgentName(Agent_WekaCA.class);
-		this.setPicture("picture3.jpg");
-		
+public class SMO_CABox {
+	
+	public static AgentInfo get() {
+
 		/**
 		# -C num The complexity constant C. (default 1)
 		$ C float 1 1 r 0.0001 5
@@ -164,24 +162,35 @@ public class SMO_CABox extends LogicalBoxDescription {
 		optionW.setInterval(
 				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
 		
-		
-		this.addOption(optionC);
-		this.addOption(optionE);
-		this.addOption(optionG);
-		this.addOption(optionN);
-		this.addOption(optionF);
-		this.addOption(optionO);
-		this.addOption(optionR);
-		this.addOption(optionA);
-		this.addOption(optionL);
-		this.addOption(optionP);
-		this.addOption(optionM);
-		this.addOption(optionV);
-		this.addOption(optionW);
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("SMO");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("SMO Method");
+
+		agentInfo.addOption(optionC.toOption());
+		agentInfo.addOption(optionE.toOption());
+		agentInfo.addOption(optionG.toOption());
+		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionF.toOption());
+		agentInfo.addOption(optionO.toOption());
+		agentInfo.addOption(optionR.toOption());
+		agentInfo.addOption(optionA.toOption());
+		agentInfo.addOption(optionL.toOption());
+		agentInfo.addOption(optionP.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionV.toOption());
+		agentInfo.addOption(optionW.toOption());
 
 
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

@@ -1,17 +1,25 @@
 package org.pikater.core.options.xmlGenerators;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class ZeroR_CABox extends LogicalBoxDescription {
-	public ZeroR_CABox(){
-		super("ZeroR",ComputingAgent.class,"Zero R Method");
-		this.setAgentName(Agent_WekaCA.class);
-		this.setPicture("picture3.jpg");
-		
+public class ZeroR_CABox {
+	
+	public static AgentInfo get() {
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("ZeroR");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("Zero R Method");
+
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		
+		return agentInfo;
 	}
 }

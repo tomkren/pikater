@@ -5,15 +5,14 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class OneR_CABox extends LogicalBoxDescription {
-	public OneR_CABox(){
-		super("OneR",ComputingAgent.class,"One R Method");
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-		
+public class OneR_CABox {
+	
+
+	public static AgentInfo get() {
+
 		/**
 		# Specify the minimum number of objects in a bucket (default: 6).
 		$ B int 1 1 r 1 100
@@ -28,13 +27,23 @@ public class OneR_CABox extends LogicalBoxDescription {
 		optionB.setList(
 				new OptionList() );
 		
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("OneR");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("One R Method");
+
+		agentInfo.addOption(optionB.toOption());
 		
-		this.addOption(optionB);
-
-
 
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

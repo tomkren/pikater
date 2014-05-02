@@ -5,15 +5,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
+import org.pikater.core.ontology.description.FileDataProvider;
 
-public class NNge_CABox extends LogicalBoxDescription {
-	public NNge_CABox(){
-		super("NNge",ComputingAgent.class,"NNge Method");
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-		
+public class NNge_CABox {
+	
+	public static AgentInfo get() {
+
 		/**
 		# Set the number of folder to use in the computing of the mutual information (default 5)
 		$ I int 1 1 r 1 100 
@@ -40,14 +38,24 @@ public class NNge_CABox extends LogicalBoxDescription {
 				new OptionInterval(new Integer(1), new Integer(50)) );
 		optionG.setList( new OptionList() );
 		
-		
-		this.addOption(optionI);
-		this.addOption(optionG);
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName()); // some virtual-box provider agent
+		agentInfo.setOntologyClass(FileDataProvider.class.getName());
+	
+		agentInfo.setName("NNge");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("NNge Method");
+
+		agentInfo.addOption(optionI.toOption());
+		agentInfo.addOption(optionG.toOption());
 
 
+		//Slot Definition
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 
-		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		return agentInfo;
 	}
+	
 }

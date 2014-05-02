@@ -1,20 +1,25 @@
 package org.pikater.core.options.xmlGenerators;
 
+import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.Recommend;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class NMTopRecommender_RecommendBox extends LogicalBoxDescription {
+public class NMTopRecommender_RecommendBox {
 
-	public NMTopRecommender_RecommendBox() {
-		super("NMTop Recommend",
-				Recommend.class,
-				"NMTop Recommend"
-				);
+	public static AgentInfo get() {
 
-		this.setPicture("picture4.jpg");
-		this.setAgentName(Recommend.class);
-		
-		this.setOutputSlots(AAA_SlotHelper.getRecommendOutputSlots());
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_NMTopRecommender.class.getName());
+		agentInfo.setOntologyClass(Recommend.class.getName());
+	
+		agentInfo.setName("NMTop Recommend");
+		agentInfo.setPicture("picture0.jpg");
+		agentInfo.setDescription("NMTop Recommend");
+
+		//Slot Definition
+		agentInfo.setOutputSlots(AAA_SlotHelper.getRecommendOutputSlots());
+
+		return agentInfo;
 	}
 
 }
