@@ -66,13 +66,8 @@ public class SearchOnly {
         ear.setName("ea.mutationRate");
         ear.setOption(new OptionValue(new Double(0.03)) );
 
-<<<<<<< HEAD
         searchParameters.add(Converter.toOption(pr));
         searchParameters.add(Converter.toOption(ear));
-=======
-        // searchParameters.add(pr.toOption());
-        // searchParameters.add(ear.toOption());
->>>>>>> 139a8bb723ecf8873580477052ea8e8b9f930fdb
 
         crsc.setSearch(sa);
 
