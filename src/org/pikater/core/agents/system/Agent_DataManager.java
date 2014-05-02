@@ -15,10 +15,8 @@ import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.shared.database.jpa.JPAFilemapping;
-import org.pikater.shared.database.experiment.UniversalComputationDescription;
+//import org.pikater.shared.database.experiment.
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
@@ -32,10 +30,8 @@ import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.messages.*;
 import org.postgresql.PGConnection;
 
-import java.io.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
