@@ -29,6 +29,7 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.jpa.UserStatus;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
+import org.pikater.shared.utilities.pikaterDatabase.daos.utils.Hash;
 import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 import org.pikater.shared.utilities.pikaterDatabase.initialisation.JPAMetaDataReader;
 
@@ -55,7 +56,7 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{				
 		
-		//this.createRolesAndUsers();
+		this.createRolesAndUsers();
 		this.testUser();
 		
 		this.createSampleResult();
@@ -67,13 +68,22 @@ public class DatabaseInitialisation {
 		this.listExperiments();
 		this.listBatches();
 		
-		//this.addWebDatasets();
+		this.addWebDatasets();
 		
 		//this.insertFinishedBatch();
 		
 		/**
 		this.createFileMapping();
 		**/
+	}
+	
+	private void listDataSets(){
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll();
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
+		}
+		p("------------");
+		p("");
 	}
 	
 	private void createSampleResult(){
@@ -95,30 +105,25 @@ public class DatabaseInitialisation {
 	}
 	
 	private void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
-		File dir=new File(Agent_DataManager.datasetsPath);
+		File dir=new File("C:\\Users\\Sipos Péter\\Documents\\GitHub\\pikater\\core\\datasets");
 		
-		JPAUser user = DAOs.userDAO.getByLogin("stepan").get(0);
-		System.out.println("Target user: "+user.getLogin());
+		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
+		System.out.println("Target user: "+owner.getLogin());
 		
-		/**
 		File[] datasets=dir.listFiles();
 		for(File datasetI : datasets){
 			if(datasetI.isFile()){
 				try{
 				System.out.println("--------------------");
 				System.out.println("Dataset: "+datasetI.getAbsolutePath());
-				JPAMetaDataReader mdr=new JPAMetaDataReader(database);
-				mdr.readFile(datasetI);		
-				System.out.println("MD5 hash: "+database.getMD5Hash(datasetI));
-			
-				JPADataSetLO dslo=database.saveDataSet(
-					user,
-					datasetI,
-					datasetI.getName(),
-					mdr.getJPAGlobalMetaData(),
-					mdr.getJPAAttributeMetaData()
-					);
-				System.out.println(dslo);
+				
+				JPADataSetLO newDSLO=new JPADataSetLO();
+				newDSLO.setCreated(new Date());
+				newDSLO.setDescription(datasetI.getName());
+				newDSLO.setOwner(owner);
+				//hash a OID will be set using DAO
+				DAOs.dataSetDAO.storeNewDataSet(datasetI, newDSLO);
+				
 				System.out.println("--------------------");
 				System.out.println();
 				}catch(Exception e){
@@ -126,7 +131,61 @@ public class DatabaseInitialisation {
 				}
 			}
 		}
-		**/
+		
+		
+		
+		
+		///Update metadata
+		
+		
+		File[] datasets2=dir.listFiles();
+		for(File datasetI : datasets2){
+			if(datasetI.isFile()){
+				try{
+				System.out.println("--------------------");
+				
+				this.updateMetaDataForHash(datasetI);
+				
+				System.out.println("--------------------");
+				System.out.println();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+		
+	}
+	
+	
+	private void updateMetaDataForHash(File file) throws IOException{
+		
+		String hash;
+
+			hash = Hash.getMD5Hash(file);
+		List<JPADataSetLO> dsloDataSetLO=DAOs.dataSetDAO.getByHash(hash);
+		if(dsloDataSetLO.size()>0){
+			JPADataSetLO dslo=dsloDataSetLO.get(0);
+			
+			NewJPAMetaDataReader readr=new NewJPAMetaDataReader();
+			try {
+				readr.readFile(file);
+				
+				dslo.setGlobalMetaData(readr.getJPAGlobalMetaData());
+				dslo.setAttributeMetaData(readr.getJPAAttributeMetaData());
+				
+				DAOs.dataSetDAO.updateEntity(dslo);
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}else{
+			System.out.println("DataSet not found");
+		}
 	}
 	
 

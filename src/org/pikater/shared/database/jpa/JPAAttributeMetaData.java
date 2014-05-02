@@ -4,18 +4,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+
+import org.pikater.shared.utilities.pikaterDatabase.newDB.exceptions.NotUpdatableEntityException;
 
 @Entity
-public abstract class JPAAttributeMetaData {
-    @Id
+@Table(name="AttributeMetaData_20140430")
+@Inheritance(strategy=InheritanceType.JOINED)
+public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-	private double ratioOfMissingValues;
-	private boolean isTarget;
 	
 	public int getId() {
-		return id;
-	}
+        return id;
+    }
+	private double ratioOfMissingValues;
+	private boolean isTarget;
 
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;
@@ -30,5 +37,10 @@ public abstract class JPAAttributeMetaData {
 	}
 	public void setTarget(boolean isTarget) {
 		this.isTarget = isTarget;
+	}
+	
+	@Override
+	public void updateValues(JPAAbstractEntity newValues) throws NotUpdatableEntityException{
+		throw new NotUpdatableEntityException();
 	}
 }

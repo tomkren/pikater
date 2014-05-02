@@ -30,7 +30,7 @@ public abstract class AbstractDAO
 			item.updateValues(changedEntity);
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't update JPA DataSetLO object.", e);
+			logger.error("Can't update JPA AbstractEntity object.", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();
