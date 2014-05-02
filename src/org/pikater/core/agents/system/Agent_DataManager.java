@@ -14,11 +14,11 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
-
 import org.pikater.shared.database.jpa.JPAFilemapping;
-
 import org.pikater.shared.database.experiment.UniversalComputationDescription;
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
@@ -846,6 +846,24 @@ public class Agent_DataManager extends PikaterAgent {
 
 		openDBConnection();
 		Statement stmt = db.createStatement();
+		
+		/**
+		JPAGlobalMetaData newValues=new JPAGlobalMetaData();
+		newValues.setDefaultTaskType(DAOs.taskTypeDAO.createOrGetByName(metadata.getDefault_task()));
+		newValues.setNumberofInstances(metadata.getNumber_of_instances());
+		
+		java.util.List<JPADataSetLO> dslos=DAOs.dataSetDAO.getByHash(metadata.getInternal_name());
+		
+		if(dslos.size()>0){
+			
+			
+			
+			JPAGlobalMetaData globMD=dslos.get(0).getGlobalMetaData();
+			if(globMD==null){
+				glo
+			}
+		}
+		**/
 
 		String query = "UPDATE metadata SET ";
 		query += "numberOfInstances=" + metadata.getNumber_of_instances() + ", ";
