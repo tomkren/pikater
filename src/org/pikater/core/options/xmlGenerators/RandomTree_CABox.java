@@ -5,15 +5,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class RandomTree_CABox extends LogicalBoxDescription {
-	public RandomTree_CABox(){
-		super("RandomTree",ComputingAgent.class,"Random Tree Method");
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-		
+public class RandomTree_CABox {
+	
+	public static AgentInfo get() {
+
 		/**
 		# Sets the number of randomly chosen attributes.
 		$ K int 1 1 r 1 50
@@ -54,16 +52,25 @@ public class RandomTree_CABox extends LogicalBoxDescription {
 		optionQ.setInterval(
 				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
 		optionQ.setList( new OptionList() );
-		
-		
-		
-		this.addOption(optionK);
-		this.addOption(optionM);
-		this.addOption(optionQ);
-		
-		
+
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("RandomTree");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("Random Tree Method");
+
+		agentInfo.addOption(optionK.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionQ.toOption());
+
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

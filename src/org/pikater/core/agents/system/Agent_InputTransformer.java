@@ -1,10 +1,6 @@
 package org.pikater.core.agents.system;
 
 
-import java.util.Date;
-
-import javax.persistence.EntityManagerFactory;
-
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -12,14 +8,16 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.proto.AchieveREInitiator;
+
+import java.util.Date;
+
+import javax.persistence.EntityManagerFactory;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
@@ -28,7 +26,6 @@ import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.messages.MessagesOntology;
-
 
 public class Agent_InputTransformer extends PikaterAgent {
 	

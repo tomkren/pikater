@@ -137,9 +137,11 @@ public class PikaterSSHLauncher
 			switch (serverInfo.getServerType())
 			{
 				case MASTER:
-					return launchPikaterInMasterMode();
+					// return launchPikaterInMasterMode();
+					return false;
 				case SLAVE:
-					return launchPikaterInSlaveMode();
+					// return launchPikaterInSlaveMode();
+					return false;
 				default:
 					throw new IllegalStateException();
 			}
@@ -165,7 +167,16 @@ public class PikaterSSHLauncher
 		// predpripravenej prectenej skript
 		String command = AppHelper.readTextFile(AppHelper.joinPathComponents(AppHelper.corePath, "runPikaterMaster.sh"));
 		
+
 		boolean launchedSuccessfully = false;
+
+		this.outputConsoleComponent.execAsync("cd BIG/Softwerak");
+		this.outputConsoleComponent.execAsync("git clone https://github.com/krajj7/pikater");
+		this.outputConsoleComponent.execAsync("cd pikater");
+		this.outputConsoleComponent.execAsync("cd core");
+		this.outputConsoleComponent.execAsync("./buildPikaterCore.sh");
+		//this.outputConsoleComponent.execAsync("./runPikaterCoreMaster.sh");
+		
 		
 		// TODO: az to dodelas, nastav zaznamu v tabulce spravnej stav:
 		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched); // vsechno probehlo v poradku

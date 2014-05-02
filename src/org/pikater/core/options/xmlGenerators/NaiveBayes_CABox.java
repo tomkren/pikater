@@ -3,15 +3,13 @@ package org.pikater.core.options.xmlGenerators;
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class NaiveBayes_CABox extends LogicalBoxDescription {
-	public NaiveBayes_CABox(){
-		super("NaiveBayes",ComputingAgent.class,"Naive Bayes Method");
-		this.setPicture("picture.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-		
+public class NaiveBayes_CABox {
+
+	public static AgentInfo get() {
+
 		/**
 		#Use kernel estimation for modelling numeric attributes rather than a single normal distribution.
 		$ K boolean
@@ -31,14 +29,24 @@ public class NaiveBayes_CABox extends LogicalBoxDescription {
 		optionD.setDescription("Use supervised discretization to process numeric attributes");
 		optionD.setValue(
 				new OptionValue(new Boolean(false)) );
+
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("NaiveBayes");
+		agentInfo.setPicture("picture5.jpg");
+		agentInfo.setDescription("Naive Bayes Method");
+
+		agentInfo.addOption(optionK.toOption());
+		agentInfo.addOption(optionD.toOption());
 		
-		this.addOption(optionK);
-		this.addOption(optionD);
-
-
-
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

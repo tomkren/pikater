@@ -7,18 +7,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class J48_CABox extends LogicalBoxDescription {
-	protected J48_CABox() {
-		super("J48",
-				ComputingAgent.class,
-				"J48 method description");
-
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-				
+public class J48_CABox {
+	
+	public static AgentInfo get() {
+		
 		OptionDefault optionU = new OptionDefault();
 		optionU.setName("U");
 		optionU.setDescription("Use unpruned tree");
@@ -92,19 +87,31 @@ public class J48_CABox extends LogicalBoxDescription {
 				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
 
 		
-		this.addOption(optionU);
-		this.addOption(optionC);
-		this.addOption(optionM);
-		this.addOption(optionR);
-		this.addOption(optionN);
-		this.addOption(optionB);
-		this.addOption(optionS);
-		this.addOption(optionA);
-		this.addOption(optionQ);
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("J48");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("J48 method description");
+
+		agentInfo.addOption(optionU.toOption());
+		agentInfo.addOption(optionC.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionR.toOption());
+		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionB.toOption());
+		agentInfo.addOption(optionS.toOption());
+		agentInfo.addOption(optionA.toOption());
+		agentInfo.addOption(optionQ.toOption());
 
 
-		// Slot Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		//Slot Definition
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

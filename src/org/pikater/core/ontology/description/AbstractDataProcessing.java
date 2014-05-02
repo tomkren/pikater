@@ -1,7 +1,7 @@
 package org.pikater.core.ontology.description;
 
-import org.pikater.shared.database.experiment.UniversalComputationDescription;
-import org.pikater.shared.database.experiment.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.universalformat.UniversalElement;
 
 
 public abstract class AbstractDataProcessing implements IComputationElement {

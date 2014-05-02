@@ -8,15 +8,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class SMOReg_CABox extends LogicalBoxDescription {
-	public SMOReg_CABox(){
-		super("SMO Reg",ComputingAgent.class,"SMOReg Method");
-		this.setAgentName(Agent_WekaCA.class);
-		this.setPicture("picture3.jpg");
-		
+public class SMOReg_CABox  {
+	
+	public static AgentInfo get() {
+
 		/**
 		# -S num
 		# The amount up to which deviation are tolerated (epsilon). (default 1e-3)
@@ -124,22 +122,33 @@ public class SMOReg_CABox extends LogicalBoxDescription {
 		optionT.setName("T");
 		optionT.setDescription("Sets the epsilon for round-off error");
 		optionT.setValue( new OptionValue(new Float(1.0e-3f)) );
-		
-		this.addOption(optionS);
-		this.addOption(optionC);
-		this.addOption(optionE);
-		this.addOption(optionG);
-		this.addOption(optionN);
-		this.addOption(optionF);
-		this.addOption(optionO);
-		this.addOption(optionR);
-		this.addOption(optionA);
-		this.addOption(optionP);
-		this.addOption(optionT);
 
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("SMO Reg");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("SMOReg Method");
+
+		agentInfo.addOption(optionS.toOption());
+		agentInfo.addOption(optionC.toOption());
+		agentInfo.addOption(optionE.toOption());
+		agentInfo.addOption(optionG.toOption());
+		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionF.toOption());
+		agentInfo.addOption(optionO.toOption());
+		agentInfo.addOption(optionR.toOption());
+		agentInfo.addOption(optionA.toOption());
+		agentInfo.addOption(optionP.toOption());
+		agentInfo.addOption(optionT.toOption());
 
 		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+
+		return agentInfo;
 	}
+
 }

@@ -3,6 +3,7 @@ package org.pikater.core.ontology.description.examples;
 import jade.util.leap.ArrayList;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.dataStructures.options.Converter;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.*;
@@ -27,7 +28,7 @@ public class SimpleTraining {
         //"whatever.mlp.is.in.MLP"
 
         ArrayList options = new ArrayList();
-        
+
         StepanuvOption lr = new StepanuvOption();
         lr.setName("L");
         lr.setOption(new OptionValue(new Double(0.001)) );
@@ -35,9 +36,9 @@ public class SimpleTraining {
         StepanuvOption hr = new StepanuvOption();
         hr.setName("H");
         hr.setOption(new OptionValue(new Integer(4)) );
-        
-        options.add(lr.toOption());
-        options.add(hr.toOption());
+
+        options.add(Converter.toOption(lr));
+        options.add(Converter.toOption(hr));
 
         ca.setOptions(options);
 

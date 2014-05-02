@@ -3,9 +3,9 @@ package org.pikater.core.ontology.description;
 import jade.util.leap.ArrayList;
 
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.shared.database.experiment.UniversalComputationDescription;
-import org.pikater.shared.database.experiment.UniversalOntology;
-import org.pikater.shared.database.experiment.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.universalformat.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
  * Created by Martin Pilat on 27.12.13.

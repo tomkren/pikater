@@ -5,21 +5,14 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.core.options.LogicalBoxDescription;
 
 
-public class GridSearch_SearchBox extends LogicalBoxDescription {
-	protected GridSearch_SearchBox() {
-		super("GridSearch",
-				Search.class,
-				"GridSearch Description"
-				);
-
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_GridSearch.class);
-		
+public class GridSearch_SearchBox {
 	
+	public static AgentInfo get() {
+		
 		OptionDefault optionB = new OptionDefault();
 		optionB.setName("B");
 		optionB.setDescription("Maximum block size");
@@ -51,15 +44,23 @@ public class GridSearch_SearchBox extends LogicalBoxDescription {
 				new OptionInterval(new Float(0.0f), new Float(1000.0f)) );
 		optionZ.setList(
 				new OptionList() );
-		
-		
-		this.addOption(optionB);
-		this.addOption(optionN);
-		this.addOption(optionZ);
-		
-		
 
-		// Slot Definition
-		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Search.class.getName()); // some virtual-box provider agent
+		agentInfo.setOntologyClass(Agent_GridSearch.class.getName());
+	
+		agentInfo.setName("GridSearch");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("GridSearch Description");
+		
+		agentInfo.addOption(optionB.toOption());
+		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionZ.toOption());
+
+		//Slot Definition
+		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
+		
+		return agentInfo;
 	}
+
 }

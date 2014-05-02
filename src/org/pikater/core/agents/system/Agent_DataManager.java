@@ -36,6 +36,14 @@ import org.pikater.core.ontology.messages.*;
 import org.postgresql.PGConnection;
 
 import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,7 +54,42 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import javax.persistence.EntityManager;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.BatchOntology;
+import org.pikater.core.ontology.actions.DataOntology;
+import org.pikater.core.ontology.batch.Batch;
+import org.pikater.core.ontology.batch.SaveBatch;
+import org.pikater.core.ontology.data.GetFile;
+import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.messages.Agent;
+import org.pikater.core.ontology.messages.DeleteTempFiles;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.GetAllMetadata;
+import org.pikater.core.ontology.messages.GetFileInfo;
+import org.pikater.core.ontology.messages.GetFiles;
+import org.pikater.core.ontology.messages.GetMetadata;
+import org.pikater.core.ontology.messages.GetTheBestAgent;
+import org.pikater.core.ontology.messages.ImportFile;
+import org.pikater.core.ontology.messages.LoadResults;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.SaveMetadata;
+import org.pikater.core.ontology.messages.SaveResults;
+import org.pikater.core.ontology.messages.SavedResult;
+import org.pikater.core.ontology.messages.ShutdownDatabase;
+import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.TranslateFilename;
+import org.pikater.core.ontology.messages.UpdateMetadata;
+import org.pikater.shared.database.ConnectionProvider;
+import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAFilemapping;
+import org.pikater.shared.database.jpa.JPAResult;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.utilities.logging.PikaterLogger;
+import org.pikater.shared.utilities.pikaterDatabase.Database;
+import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
+import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
+import org.postgresql.PGConnection;
 
 public class Agent_DataManager extends PikaterAgent {
 

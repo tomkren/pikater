@@ -5,15 +5,13 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class Perceptron_CABox extends LogicalBoxDescription {
-	public Perceptron_CABox(){
-		super("Perceptron",ComputingAgent.class,"Perceptron Method");
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_WekaCA.class);
-		
+public class Perceptron_CABox {
+
+	public static AgentInfo get() {
+
 		/**
 		# learning rate, default 0.3; 1 arguments
 		$ L float 1 1 r 0 1
@@ -68,16 +66,26 @@ public class Perceptron_CABox extends LogicalBoxDescription {
 		optionC.setDescription("Normalizing a numeric class will NOT be done");
 		optionC.setValue(
 				new OptionValue(new Boolean(false)) );
+
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+	
+		agentInfo.setName("Perceptron");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("Perceptron Method");
+
+		agentInfo.addOption(optionL.toOption());
+		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionS.toOption());
+		agentInfo.addOption(optionC.toOption());
+
+		//Slot Definition
+		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
 		
-		this.addOption(optionL);
-		this.addOption(optionN);
-		this.addOption(optionS);
-		this.addOption(optionC);
-
-
-
-		// Slots Definition
-		this.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		this.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		return agentInfo;
 	}
+
 }

@@ -4,5 +4,4 @@ import com.vaadin.shared.communication.ClientRpc;
 
 public interface KineticEditorClientRpc extends ClientRpc
 {
-	void loadExperimentFromSharedState();
 }

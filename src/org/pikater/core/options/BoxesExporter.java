@@ -10,8 +10,8 @@ import org.pikater.core.ontology.description.ComputingAgent;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.Recommend;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.web.experiment.Box;
-import org.pikater.web.experiment.BoxType;
+import org.pikater.shared.experiment.box.BoxInfo;
+import org.pikater.shared.experiment.box.BoxInfo.BoxType;
 
 // TODO: this class is pointless... merge with BoxLoader or OptionLoader in the "shared" package.
 public class BoxesExporter {
@@ -50,7 +50,7 @@ public class BoxesExporter {
 
 	}
 
-	public ArrayList<Box> getBoxexOfType(BoxType type) {
+	public ArrayList<BoxInfo> getBoxexOfType(BoxType type) {
 		
 		ArrayList<Class> searchOntology = new ArrayList<Class>();
 		
@@ -90,7 +90,7 @@ public class BoxesExporter {
 		ArrayList<LogicalBoxDescription> selectedBoxes =
 				getLogicalBoxesWith(logicalBoxes, searchOntology);
 
-		ArrayList<Box> transformedBoxes =
+		ArrayList<BoxInfo> transformedBoxes =
 				transformations(selectedBoxes, type);
 
 		return transformedBoxes;
@@ -115,10 +115,10 @@ public class BoxesExporter {
 		return logicalBoxes;
 	}
 
-	private ArrayList<Box> transformations(
+	private ArrayList<BoxInfo> transformations(
 			ArrayList<LogicalBoxDescription> descriptions, BoxType type) {
 		
-		ArrayList<Box> boxes = new ArrayList<Box>();
+		ArrayList<BoxInfo> boxes = new ArrayList<BoxInfo>();
 		
 		for (LogicalBoxDescription logicDescrI : descriptions) {
 			boxes.add(transformation(logicDescrI, type));
@@ -127,16 +127,16 @@ public class BoxesExporter {
 		return boxes;
 	}
 
-	private Box transformation(LogicalBoxDescription description, BoxType type) {
+	private BoxInfo transformation(LogicalBoxDescription description, BoxType type) {
 		
-		Box box = new Box();
+		BoxInfo box = new BoxInfo();
 		box.setType(type);
 
 		
 		return box;
 	}
 	
-	private ArrayList<Box> getWrapperBoxes() {
+	private ArrayList<BoxInfo> getWrapperBoxes() {
 		
 		LogicalBoxDescription treeLogicalBox =
 				new LogicalBoxDescription(
@@ -147,9 +147,9 @@ public class BoxesExporter {
 
 		treeLogicalBox.setPicture("complex.jpg");
 
-		Box treeBox = transformation(treeLogicalBox, BoxType.WRAPPER);
+		BoxInfo treeBox = transformation(treeLogicalBox, BoxType.WRAPPER);
 
-		ArrayList<Box> wrappers = new ArrayList<Box>();
+		ArrayList<BoxInfo> wrappers = new ArrayList<BoxInfo>();
 		wrappers.add(treeBox);
 
 		return wrappers;

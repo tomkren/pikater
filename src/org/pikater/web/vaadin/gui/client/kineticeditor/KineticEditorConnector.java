@@ -12,18 +12,15 @@ import com.vaadin.client.communication.StateChangeEvent;
 @Connect(KineticEditor.class)
 public class KineticEditorConnector extends AbstractComponentConnector
 {
+	private static final long serialVersionUID = 3442248033567337353L;
+	
 	private final KineticEditorServerRpc serverRPC = RpcProxy.create(KineticEditorServerRpc.class, this);
 
 	public KineticEditorConnector()
 	{
 		registerRpc(KineticEditorClientRpc.class, new KineticEditorClientRpc()
 		{
-			@Override
-			public void loadExperimentFromSharedState()
-			{
-				// TODO Auto-generated method stub
-				
-			}
+			private static final long serialVersionUID = -263115608289713347L;
 		});
 	}
 
@@ -32,6 +29,7 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	{
 		KineticEditorWidget result = GWT.create(KineticEditorWidget.class);
 		result.setServerRPC(serverRPC);
+		result.loadExperiment();
 		return result;
 	}
 
@@ -51,5 +49,7 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	public void onStateChanged(StateChangeEvent stateChangeEvent)
 	{
 		super.onStateChanged(stateChangeEvent);
+		
+		// TODO:
 	}
 }

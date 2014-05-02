@@ -5,21 +5,14 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.core.options.LogicalBoxDescription;
 
 
-public class EASearch_SearchBox extends LogicalBoxDescription {
-	
-	protected EASearch_SearchBox() {
-		super("EASearch",
-				Search.class,
-				"Searcher using Evolution algorithm"
-				);
+public class EASearch_SearchBox {
 
-		this.setPicture("picture3.jpg");
-		this.setAgentName(Agent_EASearch.class);
-			
+	public static AgentInfo get() {
+
 		OptionValue valueE = new OptionValue(new Float(0.1f));
 		OptionInterval intervalE = new OptionInterval(new Float(0.0f), new Float(1.0f));
 		OptionList listE = new OptionList();
@@ -91,14 +84,26 @@ public class EASearch_SearchBox extends LogicalBoxDescription {
 		optionL.setName("L");
 		optionL.setDescription("The percentage of elite individuals");
 
+
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_EASearch.class.getName());
+		agentInfo.setOntologyClass(Search.class.getName());
+	
+		agentInfo.setName("EASearch");
+		agentInfo.setPicture("picture3.jpg");
+		agentInfo.setDescription("Searcher using Evolution algorithm");
+
+		agentInfo.addOption(optionE.toOption());
+		agentInfo.addOption(optionM.toOption());
+		agentInfo.addOption(optionT.toOption());
+		agentInfo.addOption(optionX.toOption());
+		agentInfo.addOption(optionP.toOption());
+		agentInfo.addOption(optionI.toOption());
+		agentInfo.addOption(optionF.toOption());
+		agentInfo.addOption(optionL.toOption());
+
+		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
 		
-		this.addOption(optionE);
-		this.addOption(optionM);
-		this.addOption(optionT);
-		this.addOption(optionX);
-		this.addOption(optionP);
-		this.addOption(optionI);
-		this.addOption(optionF);
-		this.addOption(optionL);
+		return agentInfo;
 	}
 }

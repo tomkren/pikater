@@ -1,5 +1,6 @@
 package org.pikater.web.servlets;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,10 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.catalina.connector.ClientAbortException;
 import org.apache.http.HttpStatus;
 import org.pikater.web.WebAppLogger;
-import org.pikater.web.vaadin.MyResources;
 
 import com.vaadin.server.FileResource;
 
@@ -27,7 +26,7 @@ public class StaticDownloadServlet extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		FileResource resource = MyResources.prop_appConf;
+		FileResource resource = new FileResource(new File("/Users/Smolodon/Downloads/Daisy (2006) JK HK.avi"));
 		if(resource.getSourceFile().length() > Integer.MAX_VALUE) // "HttpServletResponse.setContentLength()" only accepts int type
 		{
 			WebAppLogger.log(Level.SEVERE, String.format("The file '%s' was not served because it is too large (larger than MAX_INT).", resource.getFilename()));
@@ -55,16 +54,8 @@ public class StaticDownloadServlet extends HttpServlet
 	        }
 	        catch (IOException e)
 	        {
-	        	// IMPORTANT: ClientAbortException might be specific to Tomcat! If other servlet containers are used, adjust accordingly! Some servlet containers might not need this at all.
-	        	if(e instanceof ClientAbortException)
-	        	{
-	        		// TODO: Note: this might better be off being logged as a warning.
-	        		WebAppLogger.logThrowable(String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", resource.getFilename()), e);
-	        	}
-	        	else
-	        	{
-	        		WebAppLogger.logThrowable(String.format("Input/output error while serving file '%s'.", resource.getFilename()), e);
-	        	}
+	        	WebAppLogger.logThrowable(
+	        			String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", resource.getFilename()), e);
 	        }
 	        finally
 	        {

@@ -5,20 +5,12 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.Search;
-import org.pikater.core.options.LogicalBoxDescription;
 
-public class RandomSearch_SearchBox extends LogicalBoxDescription {
+public class RandomSearch_SearchBox {
 
-	protected RandomSearch_SearchBox() {
-		super("Random-Searcher",
-				Search.class,
-				"Selects and provides random values for its output parameters."
-				);
-
-		this.setPicture("picture1.jpg");
-		this.setAgentName(Agent_RandomSearch.class);
-
+	public static AgentInfo get() {
 
 		OptionDefault optionE = new OptionDefault();
 		optionE.setName("E");
@@ -39,11 +31,22 @@ public class RandomSearch_SearchBox extends LogicalBoxDescription {
 				new OptionInterval(new Integer(1), new Integer(100000)) );
 		optionM.setList( new OptionList() );
 		
-		this.addOption(optionE);
-		this.addOption(optionM);
 
+		AgentInfo agentInfo = new AgentInfo();
+		agentInfo.setAgentClass(Agent_RandomSearch.class.getName());
+		agentInfo.setOntologyClass(Search.class.getName());
+	
+		agentInfo.setName("Random-Searcher");
+		agentInfo.setPicture("picture1.jpg");
+		agentInfo.setDescription("Selects and provides random values for its output parameters.");
 
-		// Slot Definition
-		this.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());		
+		agentInfo.addOption(optionE.toOption());
+		agentInfo.addOption(optionM.toOption());
+
+		//Slot Definition
+		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());		
+
+		return agentInfo;
 	}
+
 }
