@@ -16,6 +16,7 @@ import jade.util.leap.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.shared.database.jpa.BatchStatus;
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAResult;
@@ -61,6 +62,8 @@ import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.experiment.Experiment;
+import org.pikater.core.ontology.experiment.SaveExperiment;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.Eval;
@@ -161,49 +164,52 @@ public class Agent_DataManager extends PikaterAgent {
 					Action a = (Action) getContentManager().extractContent(request);
 
 					if (a.getAction() instanceof ImportFile) {
-						return RespondToImportFile(request, a);
+						return respondToImportFile(request, a);
 					}
 					if (a.getAction() instanceof TranslateFilename) {
-						return RespondToTranslateFilename(request, a);
+						return respondToTranslateFilename(request, a);
 					}
 					if (a.getAction() instanceof SaveBatch) {
-						return RespondToSaveBatch(request, a);
+						return respondToSaveBatch(request, a);
+					}
+					if (a.getAction() instanceof SaveExperiment) {
+						return respondToSaveExperiment(request, a);
 					}
 					if (a.getAction() instanceof SaveResults) {
-						return RespondToSaveResults(request, a);
+						return respondToSaveResults(request, a);
 					}
 					if (a.getAction() instanceof SaveMetadata) {
-						return RespondToGetAclMessage(request, a);
+						return respondToGetAclMessage(request, a);
 					}
 					if (a.getAction() instanceof GetMetadata) {
-						return ReplyToGetMetadata(request, a);
+						return replyToGetMetadata(request, a);
 					}
 					if (a.getAction() instanceof GetAllMetadata) {
-						return RespondToGetAllMetadata(request, a);
+						return respondToGetAllMetadata(request, a);
 					}
 					if (a.getAction() instanceof GetTheBestAgent) {
-						return RespondToGetTheBestAgent(request, a);
+						return respondToGetTheBestAgent(request, a);
 					}
 					if (a.getAction() instanceof GetFileInfo) {
-						return RespondToGetFileInfo(request, a);
+						return respondToGetFileInfo(request, a);
 					}
 					if (a.getAction() instanceof UpdateMetadata) {
-						return ReplyToUpdateMetadata(request, a);
+						return replyToUpdateMetadata(request, a);
 					}
 					if (a.getAction() instanceof GetFiles) {
-						return RespondToGetFiles(request, a);
+						return respondToGetFiles(request, a);
 					}
 					if (a.getAction() instanceof LoadResults) {
-						return RespondToLoadResults(request, a);
+						return respondToLoadResults(request, a);
 					}
 					if (a.getAction() instanceof DeleteTempFiles) {
-						return RespondToDeleteTempFiles(request);
+						return respondToDeleteTempFiles(request);
 					}
 					if (a.getAction() instanceof ShutdownDatabase) {
-						return RespondToShutdownDatabase(request);
+						return respondToShutdownDatabase(request);
 					}
 					if (a.getAction() instanceof GetFile) {
-						return RespondToGetFile(request, a);
+						return respondToGetFile(request, a);
 					}
 				} catch (OntologyException e) {
 					e.printStackTrace();
@@ -228,9 +234,9 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
-	private ACLMessage RespondToSaveBatch(ACLMessage request, Action a) {
+	private ACLMessage respondToSaveBatch(ACLMessage request, Action a) {
 		
-		System.out.println("RespondToSaveBatch");
+		log("RespondToSaveBatch");
 
 		SaveBatch saveBatch = (SaveBatch) a.getAction();
 		Batch batch = saveBatch.getBatch();
@@ -280,7 +286,39 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException {
+	private ACLMessage respondToSaveExperiment(ACLMessage request,
+			Action a) {
+		
+		log("respondToSaveExperiment");
+		
+		SaveExperiment saveExperiment = (SaveExperiment) a.getAction();
+		Experiment experiment = saveExperiment.getExperiment();
+		
+		int batchID = experiment.getBatchID();
+		JPABatch batch=DAOs.batchDAO.getByID(batchID).get(0);
+		
+		JPAExperiment jpaExperiment = new JPAExperiment();
+		jpaExperiment.setBatch(batch);
+		//jpaExperiment.setStatus( experiment.getStatus() );
+		//jpaExperiment.setWorkflow(experiment.getWorkflow());
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		Result r = new Result(a, "OK");
+		try {
+			getContentManager().fillContent(reply, r);
+		} catch (CodecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return reply;
+	}
+
+	private ACLMessage respondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException {
 		String hash = ((GetFile)a.getAction()).getHash();
 		log(new Date().toString()+" DataManager.GetFile");
 		
@@ -333,7 +371,7 @@ public class Agent_DataManager extends PikaterAgent {
 	 * Obsolete methods
 	 * 
 	 */
-	private ACLMessage RespondToImportFile(ACLMessage request, Action a) throws IOException, CodecException, OntologyException, SQLException, ClassNotFoundException {
+	private ACLMessage respondToImportFile(ACLMessage request, Action a) throws IOException, CodecException, OntologyException, SQLException, ClassNotFoundException {
 		ImportFile im = (ImportFile) a.getAction();
 
 		String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
@@ -429,7 +467,7 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 	}
 
-	private ACLMessage RespondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		TranslateFilename tf = (TranslateFilename) a.getAction();
 		
 		log(new Date()+" RespondToTranslateFilename External File Name "+tf.getExternalFilename());
@@ -481,7 +519,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToSaveResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
+	private ACLMessage respondToSaveResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
 		SaveResults sr = (SaveResults) a.getAction();
 		Task res = sr.getTask();
 	
@@ -597,7 +635,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	
 
-	private ACLMessage RespondToGetAclMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
+	private ACLMessage respondToGetAclMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
 		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
 		Metadata metadata = saveMetadata.getMetadata();
 
@@ -630,7 +668,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToGetAllMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
 
 		openDBConnection();
@@ -697,7 +735,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToGetTheBestAgent(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetTheBestAgent g = (GetTheBestAgent) a.getAction();
 		String name = g.getNearest_file_name();
 
@@ -734,7 +772,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToGetFileInfo(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToGetFileInfo(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetFileInfo gfi = (GetFileInfo) a.getAction();
 
 		String query = "SELECT * FROM filemetadata WHERE " + gfi.toSQLCondition();
@@ -770,7 +808,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToGetFiles(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToGetFiles(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		
 		log("DataManager . GetFiles");
 		GetFiles gf = (GetFiles) a.getAction();
@@ -792,7 +830,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToShutdownDatabase(ACLMessage request) throws SQLException, ClassNotFoundException {
+	private ACLMessage respondToShutdownDatabase(ACLMessage request) throws SQLException, ClassNotFoundException {
 		
 		PikaterLogger.getLogger(Agent_DataManager.class).warn("Database SHUTDOWN initiated in DataManager");
 
@@ -801,7 +839,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToDeleteTempFiles(ACLMessage request) {
+	private ACLMessage respondToDeleteTempFiles(ACLMessage request) {
 		String path = this.dataFilesPath + "temp" + System.getProperty("file.separator");
 
 		File tempDir = new File(path);
@@ -820,7 +858,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage RespondToLoadResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToLoadResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		LoadResults lr = (LoadResults) a.getAction();
 
 		String query = "SELECT * FROM resultsExternal " + lr.asSQLCondition();
@@ -893,7 +931,7 @@ public class Agent_DataManager extends PikaterAgent {
 		db.close();
 	}
 
-	private ACLMessage ReplyToGetMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetMetadata gm = (GetMetadata) a.getAction();
 
 		openDBConnection();
@@ -927,7 +965,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage ReplyToUpdateMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
+	private ACLMessage replyToUpdateMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
 		UpdateMetadata updateMetadata = (UpdateMetadata) a.getAction();
 		Metadata metadata = updateMetadata.getMetadata();
 
