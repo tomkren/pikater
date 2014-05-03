@@ -19,11 +19,13 @@ import jade.lang.acl.MessageTemplate;
 
 import java.util.Date;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.batch.SaveBatch;
+import org.pikater.core.ontology.batch.SavedBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.messages.MessagesOntology;
 
@@ -38,7 +40,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 	  	System.out.println("Agent: " +getLocalName() + " starts.");
 
 		initDefault();
-		registerWithDF("InputTransformer");
+		registerWithDF(AgentNames.INPUT_TRANSFORMER);
 
 		this.getContentManager().registerLanguage(getCodec());
 		this.getContentManager().registerOntology(BatchOntology.getInstance());
@@ -50,13 +52,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 
 	}
 
-
-	@Override
-	protected String getAgentType(){
-		return "InputTransformer";
-	}
-
-	public void sendBatchToSave(Batch batch) {
+	public int sendBatchToSave(Batch batch) {
 
 		SaveBatch saveBatch = new SaveBatch();
 		saveBatch.setBatch(batch);
@@ -65,7 +61,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setSender(this.getAID());
-		msg.addReceiver(new AID("dataManager", false));
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
         msg.setLanguage(codec.getName());
@@ -111,15 +107,15 @@ public class Agent_InputTransformer extends PikaterAgent {
 		if (content instanceof Result) {
 			Result result = (Result) content;
 			
-			String resultValue = (String) result.getValue();
-			this.log(resultValue);
+			SavedBatch savedBatch = (SavedBatch) result.getValue();
+			this.log(savedBatch.getMessage());
 			
-			if (!resultValue.equals("OK")) {
-				this.logError("Error - Batch wasn't saved");
-			}
+			return savedBatch.getSavedBatchId();
 		} else {
 			this.logError("Error - No Result ontology");
 		}
+		
+		return -1;
 	}
 }
 
@@ -181,11 +177,11 @@ class RecieveExperiment extends CyclicBehaviour {
             batch.setPriority(9);
             batch.setOwnerID(klaraID);
             batch.setDescription(compDescription);
-            
-            this.agent.sendBatchToSave(batch);
 
+            int batchId = agent.sendBatchToSave(batch);
+            agent.log("BatchId: " + batchId);
 
-            AID receiver = new AID("ComputationDescriptionParser", false);		
+            AID receiver = new AID(AgentNames.COMPUTATION_DESCRIPTION_PARSER, false);		
 
             Ontology ontology = BatchOntology.getInstance();
             

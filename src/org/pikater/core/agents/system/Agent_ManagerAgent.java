@@ -23,11 +23,16 @@ import org.pikater.core.ontology.messages.LoadAgent;
 import org.pikater.core.ontology.messages.SaveAgent;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Agent_ManagerAgent extends PikaterAgent {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4898611781694963107L;
+
 	private Map<String, AgentTypeDefinition> agentTypes = new HashMap<>();
     private AgentTypesProvider agentTypesProvider=(AgentTypesProvider)context.getBean("agentTypesProvider");
     private ManagerAgentRequestResponder responder=new ManagerAgentRequestResponder(this);

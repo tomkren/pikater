@@ -31,6 +31,7 @@ import java.util.Vector;
 
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataListItem;
 import org.pikater.core.agents.system.metadata.MetadataReader;
@@ -169,7 +170,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		// Make the list of reader agents
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("ARFFReader");
+		sd.setType(AgentNames.ARRFF_READER);
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] result = DFService.search(this, template);
@@ -258,7 +259,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 	} // end getAgentByType
 
 	public AID createAgent(String type, String name, List options) {
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator("agentManager");
+        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER);
         AID aid=communicator.createAgent(this,type,name,options);
 		return aid;		
 	}

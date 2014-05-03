@@ -23,15 +23,15 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
-import org.pikater.shared.utilities.pikaterDatabase.Database;
-import org.pikater.shared.utilities.pikaterDatabase.daos.BatchDAO;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.DataOntology;
+import org.pikater.core.ontology.actions.ExperimentOntology;
 import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
+import org.pikater.core.ontology.batch.SavedBatch;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.postgresql.PGConnection;
@@ -54,16 +54,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.actions.BatchOntology;
-import org.pikater.core.ontology.actions.DataOntology;
-import org.pikater.core.ontology.batch.Batch;
-import org.pikater.core.ontology.batch.SaveBatch;
-import org.pikater.core.ontology.data.GetFile;
-import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.experiment.Experiment;
 import org.pikater.core.ontology.experiment.SaveExperiment;
+import org.pikater.core.ontology.experiment.SavedExperiment;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.Eval;
@@ -82,17 +75,7 @@ import org.pikater.core.ontology.messages.ShutdownDatabase;
 import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.TranslateFilename;
 import org.pikater.core.ontology.messages.UpdateMetadata;
-import org.pikater.shared.database.ConnectionProvider;
-import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.database.jpa.JPAFilemapping;
-import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.utilities.logging.PikaterLogger;
-import org.pikater.shared.utilities.pikaterDatabase.Database;
-import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
-import org.pikater.shared.utilities.pikaterDatabase.daos.utils.DBFiles;
-import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
-import org.postgresql.PGConnection;
 
 public class Agent_DataManager extends PikaterAgent {
 
@@ -118,7 +101,8 @@ public class Agent_DataManager extends PikaterAgent {
 			registerWithDF();
 			getContentManager().registerOntology(DataOntology.getInstance());
 			getContentManager().registerOntology(BatchOntology.getInstance());
-
+			getContentManager().registerOntology(ExperimentOntology.getInstance());
+			
 			if (containsArgument(CONNECTION_ARG_NAME)) {
 				connectionBean = getArgumentValue(CONNECTION_ARG_NAME);
 			} else {
@@ -269,12 +253,16 @@ public class Agent_DataManager extends PikaterAgent {
         
         DAOs.batchDAO.storeEntity(batchJpa);
 
-
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(a, "OK");
+		
+		SavedBatch savedBatch = new SavedBatch();
+		savedBatch.setSavedBatchId(batchJpa.getId());
+		savedBatch.setMessage("OK");
+		
+		Result result = new Result(a, savedBatch);
 		try {
-			getContentManager().fillContent(reply, r);
+			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -304,9 +292,14 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(a, "OK");
+		
+		SavedExperiment savedExperiment = new SavedExperiment();
+		savedExperiment.setSavedExperimentId(jpaExperiment.getId());
+		savedExperiment.setMessage("OK");
+		
+		Result result = new Result(a, savedExperiment);
 		try {
-			getContentManager().fillContent(reply, r);
+			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

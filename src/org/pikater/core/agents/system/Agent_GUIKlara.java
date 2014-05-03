@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.batch.ExecuteBatch;
@@ -161,7 +162,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			e1.printStackTrace();
 		}
 
-        AID receiver = new AID("InputTransformer", false);
+        AID receiver = new AID(AgentNames.INPUT_TRANSFORMER, false);
         
         Ontology ontology = BatchOntology.getInstance();
 
