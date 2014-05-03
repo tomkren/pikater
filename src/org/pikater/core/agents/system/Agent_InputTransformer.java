@@ -6,7 +6,9 @@ import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
+import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAException;
@@ -16,8 +18,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.util.Date;
-
-import javax.persistence.EntityManagerFactory;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
@@ -45,7 +45,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 		this.getContentManager().registerOntology(MessagesOntology.getInstance());
 
 		RecieveExperiment recieveExp =
-			new RecieveExperiment(this, getCodec(), this.emf);
+			new RecieveExperiment(this, getCodec());
 		addBehaviour(recieveExp);
 
 	}
@@ -61,7 +61,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 		SaveBatch saveBatch = new SaveBatch();
 		saveBatch.setBatch(batch);
         
-        //Ontology ontology = BatchOntology.getInstance();
+        Ontology ontology = BatchOntology.getInstance();
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setSender(this.getAID());
@@ -86,6 +86,40 @@ public class Agent_InputTransformer extends PikaterAgent {
 			oe.printStackTrace();
 		}
 
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(this, msg);
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ContentElement content = null;
+		try {
+			content = getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (CodecException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (OntologyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			String resultValue = (String) result.getValue();
+			this.log(resultValue);
+			
+			if (!resultValue.equals("OK")) {
+				this.logError("Error - Batch wasn't saved");
+			}
+		} else {
+			this.logError("Error - No Result ontology");
+		}
 	}
 }
 
@@ -99,12 +133,10 @@ class RecieveExperiment extends CyclicBehaviour {
 
 	private Agent_InputTransformer agent = null;
 	private Codec codec = null;
-	private EntityManagerFactory emf = null;
 	
-	public RecieveExperiment(Agent_InputTransformer agent, Codec codec, EntityManagerFactory emf) {
+	public RecieveExperiment(Agent_InputTransformer agent, Codec codec) {
 		this.agent = agent;
 		this.codec = codec;
-		this.emf = emf;
 	}
 
 	public void action() {
@@ -150,7 +182,7 @@ class RecieveExperiment extends CyclicBehaviour {
             batch.setOwnerID(klaraID);
             batch.setDescription(compDescription);
             
-            //this.agent.sendBatchToSave(batch);
+            this.agent.sendBatchToSave(batch);
 
 
             AID receiver = new AID("ComputationDescriptionParser", false);		

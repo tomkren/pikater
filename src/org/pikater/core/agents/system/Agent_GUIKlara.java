@@ -5,11 +5,10 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
+import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
-import jade.proto.AchieveREInitiator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +18,6 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.shared.utilities.pikaterDatabase.Database;
 
 
 public class Agent_GUIKlara extends PikaterAgent {
@@ -174,10 +172,12 @@ public class Agent_GUIKlara extends PikaterAgent {
 
         try {
 			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
-			this.addBehaviour(new SendOntologyToScheduler(this, msg) );
 			
-			//ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
-			//System.out.println("Reply: " + reply.getContent());
+			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
+			String replyText = reply.getContent();
+			
+			log("Reply: " + replyText);
+			System.out.println("Reply: " + replyText);
 			
 		} catch (CodecException e) {
 			// TODO Auto-generated catch block
@@ -185,54 +185,11 @@ public class Agent_GUIKlara extends PikaterAgent {
 		} catch (OntologyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-	}
-
-}
-
-
-
-
-class SendOntologyToScheduler extends AchieveREInitiator {
-
-	private static final long serialVersionUID = 8923548223375000884L;
-
-	String gui_id;
-	PikaterAgent agent;
-	
-	public SendOntologyToScheduler(Agent agent, ACLMessage msg) {
-		super(agent, msg);
-		this.gui_id = gui_id;
-		this.agent = (PikaterAgent) agent;
-	}
-
-	protected void handleAgree(ACLMessage agree) {
-		System.out.println(agent.getLocalName() + ": Agent "
-				+ agree.getSender().getName() + " agreed.");
-	}
-
-	protected void handleInform(ACLMessage inform) {
-		System.out.println(agent.getLocalName() + ": Agent "
-				+ inform.getSender().getName() + " replied.");
-		System.out.println(inform.getContent());
-	}
-
-	protected void handleRefuse(ACLMessage refuse) {
-		System.out.println(agent.getLocalName() + ": Agent "
-				+ refuse.getSender().getName()
-				+ " refused to perform the requested action");
-	}
-
-	protected void handleFailure(ACLMessage failure) {
-		if (failure.getSender().equals(myAgent.getAMS())) {
-			// FAILURE notification from the JADE runtime: the receiver
-			// does not exist
-			System.out.println(agent.getLocalName() + ": Responder does not exist");
-		} else {
-			System.out.println(agent.getLocalName() + ": Agent " + failure.getSender().getName()
-					+ " failed to perform the requested action");
-		}
 	}
 
 }
