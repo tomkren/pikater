@@ -1,6 +1,6 @@
 package org.pikater.core.options.xmlGenerators;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionValue;
@@ -8,7 +8,7 @@ import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.description.ComputingAgent;
 
 
-public class CrossValidation_CABox {
+public class _CrossValidation_CABox {
 
 	public static AgentInfo get() {
 
@@ -23,7 +23,7 @@ public class CrossValidation_CABox {
 		optionF.setList(null);
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setAgentClass(null);
 		agentInfo.setOntologyClass(ComputingAgent.class.getName());
 	
 		agentInfo.setName("CrossValidation-Method");
