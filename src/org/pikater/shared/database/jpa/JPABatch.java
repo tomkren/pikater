@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,6 +38,7 @@ public class JPABatch extends JPAAbstractEntity{
     }
 	private String name;
 	private String note;
+	@Lob
 	private String XML;
 	@ManyToOne
 	private JPAUser owner;
