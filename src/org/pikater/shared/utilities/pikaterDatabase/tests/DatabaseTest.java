@@ -69,7 +69,7 @@ public class DatabaseTest {
 		List<JPADataSetLO> list= db.getAllDataSetLargeObjects();
 		System.out.println("All DataSets: ");
 		for(JPADataSetLO dslo:list){
-			System.out.println(dslo.getID()+" "+dslo.getDescription()+" "+dslo.getOID());
+			System.out.println(dslo.getId() +" "+dslo.getDescription()+" "+dslo.getOID());
 		}
 		System.out.println(list.size()+" items found.");
 		System.out.println();
