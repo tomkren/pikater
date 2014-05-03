@@ -37,6 +37,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.AgentDataSource;
+import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
@@ -835,11 +837,20 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 								if (output.equals("predictions")) {
 									DataInstances di = new DataInstances();
 									di.fillWekaInstances(test);
-									labeledData.add(getPredictions(test, di));
+                                    DataInstances labeledTest=getPredictions(test, di);
+									labeledData.add(labeledTest);
+                                    //Save datasource and inform datasource manager about this particular datasource
+                                    AgentDataSource.SerializeFile(labeledTest,result_msg.getConversationId()+".labeledtest");
+                                    AgentDataSourceCommunicator dsCom=new AgentDataSourceCommunicator((PikaterAgent)myAgent,true);
+                                    dsCom.registerDataSources(result_msg.getConversationId(),new String[]{"labeledtest"});
 									if (!labelFileName.equals("")) {
 										di = new DataInstances();
 										di.fillWekaInstances(label);
-										labeledData.add(getPredictions(label, di));
+                                        DataInstances labeledPredictions=getPredictions(label, di);
+                                        //Save datasource and inform datasource manager about this particular datasource
+                                        AgentDataSource.SerializeFile(labeledPredictions,result_msg.getConversationId()+".labeledpredictions");
+                                        dsCom.registerDataSources(result_msg.getConversationId(),new String[]{"labeledpredictions"});
+										labeledData.add(labeledPredictions);
 									}
 									eval.setLabeled_data(labeledData);
 								}
