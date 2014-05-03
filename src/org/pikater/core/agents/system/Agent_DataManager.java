@@ -238,6 +238,12 @@ public class Agent_DataManager extends PikaterAgent {
         		description.ExportUniversalComputationDescription();
         
 		int userId = batch.getOwnerID();
+		//napevno ulozim pre Klaru
+		
+		JPAUser userKlara=DAOs.userDAO.getByLogin("klara").get(0);
+		
+		userId=userKlara.getId();
+		
         String batchXml = uDescription.exportXML();		
 		
         JPABatch batchJpa = new JPABatch();
