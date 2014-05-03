@@ -57,7 +57,7 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	public void setOID(long OID){
 		this.OID=OID;
 	}	
-	public Long getOID(){
+	public long getOID(){
 		return this.OID;
 	}
 	public JPAGlobalMetaData getGlobalMetaData() {

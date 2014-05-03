@@ -56,19 +56,19 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{				
 		
-		this.createRolesAndUsers();
+		//this.createRolesAndUsers();
 		this.testUser();
 		
-		this.createSampleResult();
-		this.listResults();
+	//	this.createSampleResult();
+	//	this.listResults();
 		
 		//this.createFileMapping();
 		this.testFileMappings();
 		
-		this.listExperiments();
-		this.listBatches();
+	//	this.listExperiments();
+//		this.listBatches();
 		
-		this.addWebDatasets();
+		//this.addWebDatasets();
 		
 		//this.insertFinishedBatch();
 		
@@ -105,7 +105,7 @@ public class DatabaseInitialisation {
 	}
 	
 	private void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
-		File dir=new File("C:\\Users\\Sipos Péter\\Documents\\GitHub\\pikater\\core\\datasets");
+		File dir=new File("...");
 		
 		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
 		System.out.println("Target user: "+owner.getLogin());
@@ -324,17 +324,35 @@ public class DatabaseInitialisation {
 	
 	private void createFileMapping() {
 		
-		JPAFilemapping f = new JPAFilemapping();
-		f.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
-		f.setExternalfilename("iris.arff");
-		f.setInternalfilename("25d7d5d689042a3816aa1598d5fd56ef");
-		DAOs.filemappingDAO.storeEntity(f);
+        File dir=new File("...");
 		
-		JPAFilemapping f2 = new JPAFilemapping();
-		f2.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
-		f2.setExternalfilename("weather.arff");
-		f2.setInternalfilename("772c551b8486b932aed784a582b9c1b1");
-		DAOs.filemappingDAO.storeEntity(f2);
+		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
+		System.out.println("Target user: "+owner.getLogin());
+		
+		File[] datasets=dir.listFiles();
+		for(File datasetI : datasets){
+			if(datasetI.isFile()){
+				try{
+				System.out.println("--------------------");
+				System.out.println("FileMapping for Dataset: "+datasetI.getAbsolutePath());
+				
+				String hash=Hash.getMD5Hash(datasetI);
+				
+				JPAFilemapping f = new JPAFilemapping();
+				f.setUser(owner);
+				f.setExternalfilename(datasetI.getName());
+				f.setInternalfilename(hash);
+				DAOs.filemappingDAO.storeEntity(f);
+				
+				System.out.println("--------------------");
+				System.out.println();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
 
 	}
 	

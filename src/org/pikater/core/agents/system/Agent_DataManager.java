@@ -14,10 +14,12 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 //import org.pikater.shared.database.experiment.
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAResult;
+import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
@@ -84,6 +86,7 @@ import org.pikater.shared.experiment.universalformat.UniversalComputationDescrip
 import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
+import org.pikater.shared.utilities.pikaterDatabase.daos.utils.DBFiles;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.postgresql.PGConnection;
 
@@ -136,12 +139,14 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 		}
 
+		/**
 		try {
 			db.close();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		**/
 
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 
@@ -263,25 +268,43 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage RespondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException {
 		String hash = ((GetFile)a.getAction()).getHash();
-
-		try {
-			openDBConnection();
-			PostgreLargeObjectReader reader = new Database(emf, (PGConnection) db).getLargeObjectReader(hash);
-			File temp = new File(dataFilesPath + "temp" + System.getProperty("file.separator") + hash);
-			FileOutputStream out = new FileOutputStream(temp);
+		log(new Date().toString()+" DataManager.GetFile");
+		
+		java.util.List<JPADataSetLO> dslos=DAOs.dataSetDAO.getByHash(hash);
+		if(dslos.size()>0){
+			
 			try {
-				byte[] buf = new byte[100*1024];
-				int read;
-				while ((read = reader.read(buf, 0, buf.length)) > 0) {
-					out.write(buf, 0, read);
+				JPADataSetLO dslo=dslos.get(0);
+				log(new Date().toString()+" Found DSLO: "+dslo.getDescription()+" - "+dslo.getOID()+" - "+dslo.getHash());
+				openDBConnection();
+				PostgreLargeObjectReader reader = new PostgreLargeObjectReader((PGConnection)db,dslo.getOID());
+				log(reader.toString());
+				File temp = new File(dataFilesPath + "temp" + System.getProperty("file.separator") + hash);
+				FileOutputStream out = new FileOutputStream(temp);
+				try {
+					byte[] buf = new byte[100*1024];
+					int read;
+					while ((read = reader.read(buf, 0, buf.length)) > 0) {
+						out.write(buf, 0, read);
+					}
+					
+					File target=new File(dataFilesPath + hash);
+					log(new Date()+" Moving file to: "+target.getAbsolutePath());
+					if(temp.renameTo(target)){
+						log(new Date()+"File was successfully moved");
+					}else{
+						logError(new Date()+" Error while moving file with hash "+dslo.getHash()+" to new location "+target.getAbsolutePath());
+					}
+				} finally {
+					reader.close();
+					out.close();
+					db.close();
 				}
-				temp.renameTo(new File(dataFilesPath + hash));
-			} finally {
-				db.close();
-				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		}else{
+			logError("DataSet file with hash "+hash+" not found.");
 		}
 		
 		ACLMessage reply = request.createReply();
@@ -395,13 +418,22 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage RespondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		TranslateFilename tf = (TranslateFilename) a.getAction();
 		
+		log(new Date()+" RespondToTranslateFilename External File Name "+tf.getExternalFilename());
+		log(new Date()+" RespondToTranslateFilename Internal File Name "+tf.getInternalFilename());
+		log(new Date()+" RespondToTranslateFilename User ID "+tf.getUserID());
+		
+		JPAUser user=DAOs.userDAO.getByLogin("stepan").get(0);
+		logError(new Date()+" Using default user...");
+		
+		
 		java.util.List<JPAFilemapping> files=null;
 		
 		
 		String internalFilename = "error";
 		
 		if (tf.getInternalFilename() == null) {
-			files=DAOs.filemappingDAO.getByUserIDandExternalFilename(tf.getUserID(), tf.getExternalFilename());
+			//files=DAOs.filemappingDAO.getByUserIDandExternalFilename(tf.getUserID(), tf.getExternalFilename());
+			files=DAOs.filemappingDAO.getByUserIDandExternalFilename(user.getId(), tf.getExternalFilename());
 			if(files.size()>0){
 				internalFilename=files.get(0).getInternalfilename();
 			} else {
@@ -413,7 +445,8 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 			
 		} else {
-			files=DAOs.filemappingDAO.getByUserIDandInternalFilename(tf.getUserID(), tf.getInternalFilename());
+			//files=DAOs.filemappingDAO.getByUserIDandInternalFilename(tf.getUserID(), tf.getInternalFilename());
+			files=DAOs.filemappingDAO.getByUserIDandInternalFilename(user.getId(), tf.getInternalFilename());
 			if(files.size()>0){
 				internalFilename=files.get(0).getExternalfilename();
 			} else {
@@ -529,7 +562,7 @@ public class Agent_DataManager extends PikaterAgent {
 			// pozor - neni jednoznacne, pouze pro jednoho managera
 			// query += "\'" + res.getProblem_name() + "\',";
 			jparesult.setNote(res.getNote());
-			
+			log("JPA Result    "+jparesult.getErrorRate());
 			DAOs.resultDAO.storeEntity(jparesult);
 			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).info("Persisted JPAResult");
 		}catch(Exception e){
@@ -724,6 +757,8 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage RespondToGetFiles(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+		
+		log("DataManager . GetFiles");
 		GetFiles gf = (GetFiles) a.getAction();
 
 		java.util.List<JPAFilemapping> userFiles=DAOs.filemappingDAO.getByUserID(gf.getUserID());
@@ -740,7 +775,6 @@ public class Agent_DataManager extends PikaterAgent {
 
 		getContentManager().fillContent(reply, r);
 
-		db.close();
 		return reply;
 	}
 
@@ -948,6 +982,7 @@ public class Agent_DataManager extends PikaterAgent {
 		out.close();
 	}
 
+	
 	private String md5(String path) {
 
 		StringBuffer sb = null;

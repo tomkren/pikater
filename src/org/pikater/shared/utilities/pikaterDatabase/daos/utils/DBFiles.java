@@ -5,15 +5,22 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
+import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class DBFiles {
 	static PGConnection con=null;
+	
+	
 	static {
 		try {
+			
 			con=(PGConnection)(
 					new PostgreSQLConnectionProvider(
 							"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
@@ -22,6 +29,10 @@ public class DBFiles {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static PostgreLargeObjectReader getPostgreLargeObjectReader(long oid){
+		return new PostgreLargeObjectReader(con, oid);
 	}
 	
 	public static long saveFileToDB(File file) throws SQLException, IOException{
