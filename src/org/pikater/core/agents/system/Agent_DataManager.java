@@ -22,6 +22,7 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
+import org.pikater.shared.utilities.pikaterDatabase.daos.BatchDAO;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
@@ -240,9 +241,9 @@ public class Agent_DataManager extends PikaterAgent {
 		int userId = batch.getOwnerID();
 		//napevno ulozim pre Klaru
 		
-		JPAUser userKlara=DAOs.userDAO.getByLogin("klara").get(0);
+		JPAUser user=DAOs.userDAO.getByLogin("klara").get(0);
 		
-		userId=userKlara.getId();
+		userId=user.getId();
 		
         String batchXml = uDescription.exportXML();		
 		
@@ -250,9 +251,14 @@ public class Agent_DataManager extends PikaterAgent {
         batchJpa.setName(batch.getName());
         batchJpa.setNote(batch.getNote()); 
         batchJpa.setPriority(batch.getPriority());
+        
+        int totalPriority = 10*user.getPriorityMax() + batch.getPriority();
+        batchJpa.setTotalPriority(totalPriority);
 
-		Database database = new Database(emf, null);
-        database.saveBatch(userId, batchJpa, batchXml);
+		batchJpa.setXML(batchXml);
+		batchJpa.setOwner(user);
+        
+        DAOs.batchDAO.storeEntity(batchJpa);
 
 
 		ACLMessage reply = request.createReply();
