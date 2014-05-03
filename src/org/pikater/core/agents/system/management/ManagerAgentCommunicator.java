@@ -13,6 +13,8 @@ import jade.util.leap.List;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.CreateAgent;
 
+import java.util.HashSet;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Kuba
@@ -42,9 +44,7 @@ public class ManagerAgentCommunicator {
         }
         ca.setType(type);
 
-        Action a = new Action();
-        a.setAction(ca);
-        a.setActor(agent.getAID());
+        Action a = new Action(agent.getAID(),ca);
 
         AID aid = null;
         try {
