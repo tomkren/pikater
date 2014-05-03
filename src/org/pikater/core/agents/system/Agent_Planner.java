@@ -23,6 +23,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetInitiator;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.messages.Execute;
 
@@ -43,7 +44,7 @@ public class Agent_Planner extends PikaterAgent {
 
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("ComputingAgent");
+        sd.setType(AgentNames.COMPUTING_AGENT);
         template.addServices(sd);
         try {
             DFAgentDescription[] result = DFService.search(this, template);
@@ -62,7 +63,7 @@ public class Agent_Planner extends PikaterAgent {
     protected void setup() {
             initDefault();
 
-            registerWithDF("Planner");
+            registerWithDF(AgentNames.PLANNER);
 
             addBehaviour(new RequestServer(this));
     }

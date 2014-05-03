@@ -2,7 +2,7 @@ package org.pikater.core.ontology.description.examples;
 
 import jade.util.leap.ArrayList;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.dataStructures.options.Converter;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
@@ -24,7 +24,7 @@ public class SimpleTraining {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
-        ca.setModelClass(Agent_WekaCA.class.getName());
+        ca.setModelClass(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
         ArrayList options = new ArrayList();

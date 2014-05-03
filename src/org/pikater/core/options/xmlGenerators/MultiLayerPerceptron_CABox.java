@@ -2,7 +2,7 @@ package org.pikater.core.options.xmlGenerators;
 
 import java.util.Arrays;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
@@ -193,7 +193,7 @@ public class MultiLayerPerceptron_CABox {
 
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.setAgentClass(ComputingAgent.class.getName());
-		agentInfo.setOntologyClass(Agent_WekaCA.class.getName());
+		agentInfo.setOntologyClass(Agent_WekaPerceptronCA.class.getName());
 	
 		agentInfo.setName("MultiLayerPerceptron");
 		agentInfo.setPicture("picture3.jpg");

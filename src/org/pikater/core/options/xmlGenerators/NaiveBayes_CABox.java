@@ -1,6 +1,6 @@
 package org.pikater.core.options.xmlGenerators;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.agents.experiment.computing.Agent_WekaNaiveBayesCA;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.agentInfo.AgentInfo;
@@ -32,7 +32,7 @@ public class NaiveBayes_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setAgentClass(Agent_WekaNaiveBayesCA.class.getName());
 		agentInfo.setOntologyClass(ComputingAgent.class.getName());
 	
 		agentInfo.setName("NaiveBayes");

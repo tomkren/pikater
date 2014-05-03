@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
@@ -239,7 +240,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
         getParameters();
 
         java.util.ArrayList<String> typeDescList = new java.util.ArrayList< String >();
-		typeDescList.add("ComputingAgent");
+		typeDescList.add(AgentNames.COMPUTING_AGENT);
 
         String typeDesc;
 		if (state == states.TRAINED) { // add fileName to service description
@@ -305,7 +306,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		// Make the list of reader agents
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("ARFFReader");
+		sd.setType(AgentNames.ARRFF_READER);
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] result = DFService.search(this, template);
@@ -370,7 +371,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("GUIAgent");
+		sd.setType(AgentNames.GUI_AGENT);
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] gui_agents = DFService.search(this, template);

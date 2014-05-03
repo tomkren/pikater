@@ -7,6 +7,8 @@ public abstract class AgentNames {
 	public static String INPUT_TRANSFORMER = "InputTransformer";
 	public static String ARRFF_READER = "ARFFReader";
 	public static String MANAGER = "agentManager";
+	public static String COMPUTING_AGENT = "ComputingAgent";
 	public static String PLANNER = "Planner";
+	public static String GUI_AGENT = "GUIAgent";
 
 }

@@ -1,6 +1,6 @@
 package org.pikater.core.options.xmlGenerators;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
@@ -82,7 +82,7 @@ public class RBFNetwork_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaCA.class.getName());
+		agentInfo.setAgentClass(Agent_WekaRBFNetworkCA.class.getName());
 		agentInfo.setOntologyClass(ComputingAgent.class.getName());
 
 		agentInfo.setName("RBFNetwork");

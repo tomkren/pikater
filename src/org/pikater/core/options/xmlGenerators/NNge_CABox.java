@@ -1,6 +1,6 @@
 package org.pikater.core.options.xmlGenerators;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.agents.experiment.computing.Agent_WekaNNgeCA;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
@@ -40,7 +40,7 @@ public class NNge_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaCA.class.getName()); // some virtual-box provider agent
+		agentInfo.setAgentClass(Agent_WekaNNgeCA.class.getName()); // some virtual-box provider agent
 		agentInfo.setOntologyClass(FileDataProvider.class.getName());
 	
 		agentInfo.setName("NNge");
