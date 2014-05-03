@@ -3,7 +3,7 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Pikater">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="pikater">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="../../../../usr/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -37,7 +37,7 @@
     <path id="Ivy.libraryclasspath">
         <pathelement location="../../../../root/.ivy2/cache/javax.servlet/javax.servlet-api/jars/javax.servlet-api-3.0.1.jar"/>
     </path>
-    <path id="Pikater.classpath">
+    <path id="pikater.classpath">
         <pathelement location="build/classes"/>
         <path refid="Apache Tomcat v7.0 [Apache Tomcat v7.0].libraryclasspath"/>
         <path refid="Web App Libraries.libraryclasspath"/>
@@ -195,7 +195,7 @@
         <pathelement location="libraries/xstream-1.4.7/lib/xstream-hibernate-1.4.7.jar"/>
     </path>
     <path id="run.GWT-DevMode.classpath">
-        <path refid="Pikater.classpath"/>
+        <path refid="pikater.classpath"/>
         <pathelement location="src"/>
     </path>
     <path id="run.GWT-DevMode.bootclasspath"/>
@@ -227,7 +227,7 @@
             <exclude name="org/pikater/shared/ssh/"/>
             <exclude name="org/pikater/shared/AppHelper.java"/>
             <exclude name="org/pikater/shared/XStreamHelper.java"/>
-            <classpath refid="Pikater.classpath"/>
+            <classpath refid="pikater.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -246,35 +246,35 @@
     </target>
     <target name="UniversalComputationDescription (1)">
         <java classname="org.pikater.shared.database.experiment.UniversalComputationDescription" failonerror="true" fork="yes">
-            <classpath refid="Pikater.classpath"/>
+            <classpath refid="pikater.classpath"/>
         </java>
     </target>
     <target name="DatabaseInitialisation">
         <java classname="org.pikater.shared.utilities.pikaterDatabase.DatabaseInitialisation" failonerror="true" fork="yes">
-            <classpath refid="Pikater.classpath"/>
+            <classpath refid="pikater.classpath"/>
         </java>
     </target>
     <target name="Input2 (2)">
         <java classname="xmlGenerator.Input2" failonerror="true" fork="yes">
-            <classpath refid="Pikater.classpath"/>
+            <classpath refid="pikater.classpath"/>
         </java>
     </target>
-    <target name="PikaterCore">
+    <target name="pikaterCore">
         <java classname="jade.Boot" failonerror="true" fork="yes">
             <jvmarg line="-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"/>
             <arg line="-gui Iniciator:org.pikater.core.agents.system.Agent_Initiator"/>
-            <classpath refid="Pikater.classpath"/>
+            <classpath refid="pikater.classpath"/>
         </java>
     </target>
     <target name="Input1 (2)">
         <java classname="xmlGenerator.Input1" failonerror="true" fork="yes">
-            <classpath refid="Pikater.classpath"/>
+            <classpath refid="pikater.classpath"/>
         </java>
     </target>
     <target name="GWT-DevMode">
-        <java classname="com.google.gwt.dev.DevMode" dir="../../../../Users/Smolodon/Work/Programming/Eclipse projects - School/Pikater" failonerror="true" fork="yes">
+        <java classname="com.google.gwt.dev.DevMode" dir="../../../../Users/Smolodon/Work/Programming/Eclipse projects - School/pikater" failonerror="true" fork="yes">
             <jvmarg line="-Xmx512M -XX:MaxPermSize=256M"/>
-            <arg line="-noserver -war WebContent/VAADIN/widgetsets org.pikater.web.vaadin.gui.NewpikaterdebugWidgetset -startupUrl http://localhost:8080/Pikater -bindAddress 127.0.0.1"/>
+            <arg line="-noserver -war WebContent/VAADIN/widgetsets org.pikater.web.vaadin.gui.NewpikaterdebugWidgetset -startupUrl http://localhost:8080/pikater -bindAddress 127.0.0.1"/>
             <classpath refid="run.GWT-DevMode.classpath"/>
             <bootclasspath>
                 <path refid="run.GWT-DevMode.bootclasspath"/>
