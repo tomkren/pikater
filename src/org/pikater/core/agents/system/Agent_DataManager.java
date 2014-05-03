@@ -258,7 +258,7 @@ public class Agent_DataManager extends PikaterAgent {
 		batchJpa.setXML(batchXml);
 		batchJpa.setOwner(user);
         
-        DAOs.batchDAO.storeEntity(batchJpa);
+        //DAOs.batchDAO.storeEntity(batchJpa);
 
 
 		ACLMessage reply = request.createReply();
