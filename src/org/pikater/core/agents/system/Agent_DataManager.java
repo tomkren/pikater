@@ -14,6 +14,7 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.pikater.shared.database.jpa.BatchStatus;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPABatch;
@@ -257,6 +258,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 		batchJpa.setXML(batchXml);
 		batchJpa.setOwner(user);
+		batchJpa.setCreated(new Date());
+		batchJpa.setStatus(BatchStatus.CREATED);
         
         DAOs.batchDAO.storeEntity(batchJpa);
 
