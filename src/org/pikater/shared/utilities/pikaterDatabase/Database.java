@@ -11,14 +11,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.persistence.internal.xr.XRServiceFactory.JPAMetadataSource;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
@@ -28,7 +24,6 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAGeneralFile;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
-import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -67,7 +62,9 @@ public class Database {
 		batch.setOwner(user);
 		batch.setTotalPriority(totalPriority);
 
-		this.persist(batch);
+		//TODO:
+		//this.persist(batch);
+
 	}
 
 	public void saveExperiment(int batchID, JPAExperiment experiment) {

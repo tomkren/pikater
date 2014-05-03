@@ -261,7 +261,7 @@ public class Agent_DataManager extends PikaterAgent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return reply;
 	}
 
