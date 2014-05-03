@@ -100,12 +100,11 @@ public class SimpleConsoleComponent extends VerticalLayout
 	// --------------------------------------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
-	/**
+	/*
 	 * Use this method, when you ARE interested in the response. If you're NOT, use {@link #execAsync} instead.
 	 * @param commands Navigate to the referenced execSync method to display more information.
 	 * @return The response to the commands wrapped in a special class. If the commands are not executed, the errors are logged.
 	 * @see org.pikater.shared.ssh.SSHRemoteExec#execSync(String command)
-	 */
 	public ExecSyncResult execSync(String commands)
 	{
 		try
@@ -127,6 +126,7 @@ public class SimpleConsoleComponent extends VerticalLayout
 			return new ExecSyncResult(null, false);
 		}
 	}
+	*/
 	
 	/**
 	 * Use this method, when you're NOT interested in the response. If you ARE, use {@link #execSync} instead.

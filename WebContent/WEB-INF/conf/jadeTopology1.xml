@@ -10,7 +10,7 @@
     </server>
   </masters>
   <slaves>
-    <server>
+  	<server>
       <hostname>u-pl3.ms.mff.cuni.cz</hostname>
       <fingerprint>19:dd:b4:3b:e3:e7:ab:44:e0:6a:eb:0e:0d:ae:d1:b1</fingerprint>
       <username>smolj7bm</username>

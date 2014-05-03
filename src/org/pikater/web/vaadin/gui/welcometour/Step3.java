@@ -7,11 +7,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.pikater.PikaterSSHLauncher;
+import org.pikater.web.vaadin.gui.welcometour.RemoteServerInfoItem.Header;
 import org.pikater.web.vaadin.gui.welcometour.Step3TableContainer;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -70,12 +73,14 @@ public class Step3 extends WelcomeTourWizardStep
 			@Override
 			public void buttonClick(ClickEvent event)
 			{ 
-				Collection<Object> connectedNotLaunchedMasterIDs = getConnectedNotLaunchedMasterServerIDs();
-				if(!connectedNotLaunchedMasterIDs.isEmpty())
+				Collection<Object> connectedNotLaunchedMasterServerIDs = getConnectedNotLaunchedMasterServerIDs();
+				Collection<Object> connectedNotLaunchedSlaveServerIDs = getConnectedNotLaunchedSlaveServerIDs();
+				if(!connectedNotLaunchedMasterServerIDs.isEmpty() || !connectedNotLaunchedSlaveServerIDs.isEmpty())
 				{
-					if(!areMastersLaunchedWithNoErrors(connectedNotLaunchedMasterIDs)) // updates GUI accordingly 
+					if(!isPikaterLaunchedWithNoErrors(connectedNotLaunchedMasterServerIDs) 
+							|| !isPikaterLaunchedWithNoErrors(connectedNotLaunchedSlaveServerIDs)) // updates GUI accordingly 
 					{
-						Notification.show("Pikater could not be launched on some of the masters. Either do nothing or use the console to find out what went wrong.", 
+						Notification.show("Pikater could not be launched on some of the servers. You can use the console to find out what went wrong.", 
 								Type.ERROR_MESSAGE);
 					}
 				}
@@ -85,7 +90,7 @@ public class Step3 extends WelcomeTourWizardStep
 				}
 			}
 		});
-		Button btn_checkAvailabilityOfIncludedServers = new Button("Connect to designated machines", new Button.ClickListener()
+		Button btn_checkAvailabilityOfIncludedServers = new Button("Connect to designated machines if possible", new Button.ClickListener()
 		{
 			@Override
 			public void buttonClick(ClickEvent event)
@@ -296,7 +301,7 @@ public class Step3 extends WelcomeTourWizardStep
 		return rowIDs;
 	}
 	
-	private Collection<Object> getIncludedNotConnectedServerIDs()
+	private Set<Object> getIncludedNotConnectedServerIDs()
 	{
 		Set<Object> result = new HashSet<Object>();
 		result.addAll(getIncludedServerIDs());
@@ -304,7 +309,7 @@ public class Step3 extends WelcomeTourWizardStep
 		return result;
 	}
 	
-	private Collection<Object> getLaunchedOrConnectedServerIDs()
+	private Set<Object> getLaunchedOrConnectedServerIDs()
 	{
 		Set<Object> result = new HashSet<Object>();
 		result.addAll(getLaunchedServerIDs());
@@ -312,11 +317,19 @@ public class Step3 extends WelcomeTourWizardStep
 		return result;
 	}
 	
-	private Collection<Object> getConnectedNotLaunchedMasterServerIDs()
+	private Set<Object> getConnectedNotLaunchedMasterServerIDs()
 	{
 		Set<Object> result = new HashSet<Object>();
 		result.addAll(filterByType(getConnectedServerIDs(), ServerType.MASTER));
 		result.removeAll(filterByType(getLaunchedServerIDs(), ServerType.MASTER));
+		return result;
+	}
+	
+	private Set<Object> getConnectedNotLaunchedSlaveServerIDs()
+	{
+		Set<Object> result = new HashSet<Object>();
+		result.addAll(filterByType(getConnectedServerIDs(), ServerType.SLAVE));
+		result.removeAll(filterByType(getLaunchedServerIDs(), ServerType.SLAVE));
 		return result;
 	}
 	
@@ -360,12 +373,21 @@ public class Step3 extends WelcomeTourWizardStep
 		return result;
 	}
 	
-	private boolean areMastersLaunchedWithNoErrors(Collection<Object> masterIDs)
+	private boolean isPikaterLaunchedWithNoErrors(Collection<Object> serverIDs)
 	{
-		boolean result = true;
-		for(Object rowID : masterIDs)
+		Map<String, Object> hostnameToIDMapping = new HashMap<String, Object>();
+		SortedSet<String> sortedHostnames = new TreeSet<String>(); // TODO: sorts lexicographically - "12" comes before "5"
+		for(Object serverID : serverIDs)
 		{
-			if(!serverIDToLauncherMapping.get(rowID).launchPikater()) // updates GUI accordingly - no custom actions needed
+			String hostname = (String) dataSource.getInfoInstanceByID(serverID).getProperty(Header.HOSTNAME).getValue();
+			hostnameToIDMapping.put(hostname, serverID);
+			sortedHostnames.add(hostname);
+		}
+		
+		boolean result = true;
+		for(String hostname : sortedHostnames)
+		{
+			if(!serverIDToLauncherMapping.get(hostnameToIDMapping.get(hostname)).launchPikater()) // updates GUI accordingly - no custom actions needed
 			{
 				result = false;
 			}

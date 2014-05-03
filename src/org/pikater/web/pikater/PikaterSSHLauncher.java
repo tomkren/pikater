@@ -1,11 +1,10 @@
 package org.pikater.web.pikater;
 
-import org.pikater.web.vaadin.gui.ExecSyncResult;
+import org.pikater.web.vaadin.gui.ExecSequence;
 import org.pikater.web.vaadin.gui.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.SimpleConsoleComponent.MessageStyle;
 import org.pikater.web.vaadin.gui.welcometour.RemoteServerInfoItem;
 import org.pikater.web.vaadin.gui.welcometour.RemoteServerInfoItem.Header;
-import org.pikater.shared.AppHelper;
 import org.pikater.shared.FieldVerifier;
 import org.pikater.shared.RemoteServerInfo.FieldType;
 import org.pikater.shared.ssh.SSHSession;
@@ -120,28 +119,15 @@ public class PikaterSSHLauncher
 			// all errors are forwarded to the @handleError method of @SSHSession.ISSHSessionNotificationHandler - see above
 			this.outputConsoleComponent = new SimpleConsoleComponent(session);
 			
-			// first change the working directory if need be
-			String directory = serverInfo.underlyingInfoInstance.getField(FieldType.DIRECTORY);
-			if(!FieldVerifier.isStringNullOrEmpty(directory))
-			{
-				// try to change the directory and see what happens
-				ExecSyncResult result = this.outputConsoleComponent.execSync(
-						String.format("cd \"%s\"", serverInfo.underlyingInfoInstance.getField(FieldType.DIRECTORY)));
-				if(!result.commandWasExecuted() || !FieldVerifier.isStringNullOrEmpty(result.response)) // cd commands produce no output if no errors occur
-				{
-					handleError("Could not navigate to the predetermined directory.", false);
-				}
-			}
-			
 			// now launch pikater
 			switch (serverInfo.getServerType())
 			{
 				case MASTER:
-					// return launchPikaterInMasterMode();
-					return false;
+					return launchPikaterInMasterMode();
+					// return false;
 				case SLAVE:
-					// return launchPikaterInSlaveMode();
-					return false;
+					return launchPikaterInSlaveMode();
+					// return false;
 				default:
 					throw new IllegalStateException();
 			}
@@ -162,51 +148,50 @@ public class PikaterSSHLauncher
 	
 	private boolean launchPikaterInMasterMode()
 	{
-		// TODO: tady si to napis, pouzij "remoteExec.execSync" a "remoteExec.execAsync" - detaily najdes v Javadocu
-		
-		// predpripravenej prectenej skript
-		String command = AppHelper.readTextFile(AppHelper.joinPathComponents(AppHelper.corePath, "runPikaterMaster.sh"));
-		
-
-		boolean launchedSuccessfully = false;
-
-		this.outputConsoleComponent.execAsync("cd BIG/Softwerak");
-		this.outputConsoleComponent.execAsync("git clone https://github.com/krajj7/pikater");
-		this.outputConsoleComponent.execAsync("cd pikater");
-		this.outputConsoleComponent.execAsync("cd core");
-		this.outputConsoleComponent.execAsync("./buildPikaterCore.sh");
-		//this.outputConsoleComponent.execAsync("./runPikaterCoreMaster.sh");
-		
-		
-		// TODO: az to dodelas, nastav zaznamu v tabulce spravnej stav:
-		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched); // vsechno probehlo v poradku
-		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_error); // behem spousteni se vyskytla chyba
-		
-		// TODO: kdybys chtel napsat do konzole nejakou vlastni chybovou zpravu, pouzij:
-		// handleError("tvoje zprava", false); // jestli tohle pouzijes, nemusis nastavovat zaznamu v tabulce chybu (viz predchozi TODO) - dela se to automaticky
-		
-		return launchedSuccessfully;
+		return doLaunchPikater("./runPikaterCoreMaster.sh");
 	}
 	
 	private boolean launchPikaterInSlaveMode()
 	{
-		int currentSlaveID = getNextSlaveID(); // TODO: staci jenom pouzit, nic vic neni treba - inkrementuje se automaticky
+		return doLaunchPikater("./runPikaterCoreSlave.sh " + String.valueOf(getNextSlaveID()));
+	}
+	
+	private boolean doLaunchPikater(String finalLaunchingCommand)
+	{
+		ExecSequence commands = new ExecSequence(true);
 		
-		// predpripravenej prectenej skript
-		String command = AppHelper.readTextFile(AppHelper.joinPathComponents(AppHelper.corePath, "runPikaterSlave.sh"));
+		/*
+		 * Gradually define the command sequence.
+		 */
 		
-		// TODO: tady si to napis, pouzij "remoteExec.execSync" a "remoteExec.execAsync" - detaily najdes v Javadocu
+		// first change the working directory if need be
+		String directory = serverInfo.underlyingInfoInstance.getField(FieldType.DIRECTORY);
+		if(!FieldVerifier.isStringNullOrEmpty(directory))
+		{
+			commands.enqueueCommand(String.format("cd \"%s\"", directory));
+		}
 		
-		boolean launchedSuccessfully = false;
+		// the rest of the commands
+		commands.enqueueCommand("git clone https://github.com/krajj7/pikater");
+		commands.enqueueCommand("cd pikater/core");
+		commands.enqueueCommand("./buildPikaterCore.sh");
+		commands.enqueueCommand(finalLaunchingCommand);
 		
-		// TODO: az to dodelas, nastav zaznamu v tabulce spravnej stav:
-		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched); // vsechno probehlo v poradku
-		// updateConnectionStatus(RemoteServerInfoItem.connectionStatus_error); // behem spousteni se vyskytla chyba
+		/*
+		 * And now try to execute them in the defined order.
+		 */
 		
-		// TODO: kdybys chtel napsat do konzole nejakou vlastni chybovou zpravu, pouzij:
-		// handleError("tvoje zprava", false); // jestli tohle pouzijes, nemusis nastavovat zaznamu v tabulce chybu (viz predchozi TODO) - dela se to automaticky
-				
-		return launchedSuccessfully;
+		if(commands.exec(outputConsoleComponent)) // commands successfully sent for execution - execution errors are not handled here
+		{
+			updateConnectionStatus(RemoteServerInfoItem.connectionStatus_launched);
+			return true;
+		}
+		else // an error occured while trying to send a command for execution
+		{
+			handleError(String.format("Pikater launching failed at command: '%s'", commands.getFailedCommand()), false);
+			updateConnectionStatus(RemoteServerInfoItem.connectionStatus_error);
+			return false;
+		}
 	}
 	
 	private void updateConnectionStatus(String newValue)
