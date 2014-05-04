@@ -4,4 +4,5 @@ public class UniversalGui {
 
 	public int x;
 	public int y;
+	
 }
