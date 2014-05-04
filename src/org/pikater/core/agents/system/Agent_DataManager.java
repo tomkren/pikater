@@ -286,7 +286,7 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		JPAExperiment jpaExperiment = new JPAExperiment();
 		jpaExperiment.setBatch(batch);
-		//jpaExperiment.setStatus( experiment.getStatus() );
+		jpaExperiment.setStatus(experiment.getStatus());
 		//jpaExperiment.setWorkflow(experiment.getWorkflow());
 		
 		ACLMessage reply = request.createReply();

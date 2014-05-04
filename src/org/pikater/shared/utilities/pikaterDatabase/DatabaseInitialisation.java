@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
 
 import org.postgresql.PGConnection;
 import org.pikater.core.agents.system.Agent_DataManager;
-import org.pikater.shared.database.jpa.ExperimentStatus;
+import org.pikater.shared.database.jpa.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -156,7 +156,7 @@ public class DatabaseInitialisation {
 		result.setStart(dateFormat.parse("2014-03-29 11:06:55"));
 		
 		JPAExperiment experiment = new JPAExperiment();
-		experiment.setStatus(ExperimentStatus.FINISHED);
+		experiment.setStatus(JPAExperimentStatus.FINISHED);
 		experiment.addResult(result);
 
 		JPABatch batch = new JPABatch();

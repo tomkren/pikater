@@ -3,10 +3,10 @@ package org.pikater.core.ontology.batch.batchStatuses;
 
 public abstract class BatchStatuses {
 
-	public static String CREATED = "CREATED";
-	public static String WAITING = "WAITING";
-	public static String COMPUTING = "COMPUTING";
-	public static String FINISHED = "FINISHED";
-	public static String FAILED = "FAILED";
+	public static String CREATED = "BATCH_CREATED";
+	public static String WAITING = "BATCH_WAITING";
+	public static String COMPUTING = "BATCH_COMPUTING";
+	public static String FINISHED = "BATCH_FINISHED";
+	public static String FAILED = "BATCH_FAILED";
 	
 }

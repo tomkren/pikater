@@ -1,7 +1,6 @@
 package org.pikater.shared.database.jpa;
 
-public enum ExperimentStatus {
-	CREATED ,
+public enum JPAExperimentStatus {
 	WAITING ,
 	STARTED ,
 	FINISHED,

@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.pikater.core.ontology.experiment.experimentStatuses.ExperimentStatuses;
+
 @Entity
 @Table(name="Experiment_20140430")
 @NamedQueries({
@@ -36,7 +38,7 @@ public class JPAExperiment extends JPAAbstractEntity{
     @Column(nullable = false)
 	private byte workflow;
     @Enumerated(EnumType.STRING)
-	private ExperimentStatus status;
+	private JPAExperimentStatus status;
     @ManyToOne
 	private JPABatch batch;
 	private JPAModel model;
@@ -53,30 +55,49 @@ public class JPAExperiment extends JPAAbstractEntity{
 	public int getId() {
         return id;
     }
+
     public byte getWorkflow() {
         return workflow;
     }
     public void setWorkflow(byte workflow) {
         this.workflow = workflow;
     }
-	public ExperimentStatus getStatus() {
+
+	public JPAExperimentStatus getStatus() {
 		return status;
 	}
-	public void setStatus(ExperimentStatus status) {
+	public void setStatus(JPAExperimentStatus status) {
 		this.status = status;
 	}
+	public void setStatus(String status) {
+
+		if ( status.equals(ExperimentStatuses.WAITING) ) {
+			this.status = JPAExperimentStatus.WAITING;
+		} else if ( status.equals(ExperimentStatuses.COMPUTING) ) {
+			this.status = JPAExperimentStatus.STARTED;
+		} else if ( status.equals(ExperimentStatuses.FINISHED) ) {
+			this.status = JPAExperimentStatus.FINISHED;
+		} else if ( status.equals(ExperimentStatuses.FAILED) ) {
+			this.status = JPAExperimentStatus.FAILED;
+		} else {
+			throw new IllegalArgumentException("Experiment status is not valid");
+		}
+	}
+	
 	public JPABatch getBatch() {
 		return batch;
 	}
 	public void setBatch(JPABatch batch) {
 		this.batch = batch;
 	}
+
 	public JPAModel getModel() {
 		return model;
 	}
 	public void setModel(JPAModel model) {
 		this.model = model;
 	}
+
 	public List<JPAResult> getResults() {
 		return results;
 	}
@@ -89,6 +110,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 		}
 		this.results.add(result);
 	}
+
 	public Calendar getCreated() {
 		return created;
 	}
@@ -98,6 +120,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 	public Calendar getStarted() {
 		return started;
 	}
+
 	public void setStarted(Calendar started) {
 		this.started = started;
 	}
@@ -107,6 +130,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 	public void setFinished(Calendar finished) {
 		this.finished = finished;
 	}
+
 	@Override
 	public String getEntityName() {
 		return "Experiment";
