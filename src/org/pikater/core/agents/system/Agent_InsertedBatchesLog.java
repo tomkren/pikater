@@ -27,6 +27,7 @@ import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.batch.SavedBatch;
+import org.pikater.core.ontology.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.description.ComputationDescription;
 
 public class Agent_InsertedBatchesLog extends PikaterAgent {
@@ -174,6 +175,7 @@ class RecieveExperiment extends CyclicBehaviour {
             Batch batch = new Batch();
             batch.setName("Klara's Batch");
             batch.setNote("Inputed by GuiKlara Agent");
+            batch.setStatus(BatchStatuses.WAITING);
             batch.setPriority(9);
             batch.setOwnerID(klaraID);
             batch.setDescription(compDescription);

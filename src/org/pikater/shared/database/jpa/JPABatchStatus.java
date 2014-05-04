@@ -1,6 +1,6 @@
 package org.pikater.shared.database.jpa;
 
-public enum BatchStatus {
+public enum JPABatchStatus {
 	CREATED ,
 	WAITING ,
 	STARTED ,

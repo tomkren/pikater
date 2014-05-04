@@ -14,7 +14,6 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.pikater.shared.database.jpa.BatchStatus;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAFilemapping;
@@ -237,19 +236,19 @@ public class Agent_DataManager extends PikaterAgent {
 		userId=user.getId();
 		
         String batchXml = uDescription.exportXML();		
-		
-        JPABatch batchJpa = new JPABatch();
-        batchJpa.setName(batch.getName());
-        batchJpa.setNote(batch.getNote()); 
-        batchJpa.setPriority(batch.getPriority());
         
         int totalPriority = 10*user.getPriorityMax() + batch.getPriority();
-        batchJpa.setTotalPriority(totalPriority);
 
+
+        JPABatch batchJpa = new JPABatch();
+        batchJpa.setName(batch.getName());
+        batchJpa.setNote(batch.getNote());
+		batchJpa.setStatus(batch.getStatus());
+        batchJpa.setPriority(batch.getPriority());
+        batchJpa.setTotalPriority(totalPriority);
 		batchJpa.setXML(batchXml);
 		batchJpa.setOwner(user);
 		batchJpa.setCreated(new Date());
-		batchJpa.setStatus(BatchStatus.CREATED);
         
         DAOs.batchDAO.storeEntity(batchJpa);
 

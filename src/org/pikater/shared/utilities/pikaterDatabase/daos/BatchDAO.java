@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.pikater.shared.database.jpa.BatchStatus;
+import org.pikater.shared.database.jpa.JPABatchStatus;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
@@ -34,7 +34,7 @@ public class BatchDAO extends AbstractDAO {
 		return getByTypedNamedQuery("Batch.getByID", "id", ID);
 	}
 	
-	public List<JPABatch> getByStatus(BatchStatus status) {
+	public List<JPABatch> getByStatus(JPABatchStatus status) {
 		return getByTypedNamedQuery("Batch.getByStatus", "status", status);
 	}
 	

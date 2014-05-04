@@ -13,8 +13,9 @@ public class Batch implements Concept {
 	private String name;
 	private String note;
 
-	private long xmlOID;
+	private String status;
 	
+	private long xmlOID;
 	private int ownerID;
 
 	private int priority;
@@ -41,6 +42,13 @@ public class Batch implements Concept {
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public long getXmlOID() {
