@@ -27,7 +27,7 @@ public class LogicalUnitDescription
 			+ System.getProperty("file.separator") + "options"
 			+ System.getProperty("file.separator");
 	
-	protected Class ontology = null;
+	protected Class<? extends Object> ontology = null;
 	
 	private ArrayList<OptionDefault> options = new ArrayList<OptionDefault>();
 	private ArrayList<Slot> inputSlots = new ArrayList<Slot>();
@@ -38,12 +38,12 @@ public class LogicalUnitDescription
 		return this instanceof LogicalBoxDescription;
 	}
 	
-	public Class getOntology()
+	public Class<? extends Object> getOntology()
 	{
 		return ontology;
 	}
 
-	public void setOntology(Class ontology)
+	public void setOntology(Class<? extends Object> ontology)
 	{
 		this.ontology = ontology;
 	}
