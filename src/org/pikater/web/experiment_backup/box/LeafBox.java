@@ -3,7 +3,7 @@ package org.pikater.web.experiment_backup.box;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.shared.experiment.box.BoxInfo;
+import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.web.experiment_backup.options.AbstractOption;
 import org.pikater.web.experiment_backup.resources.ParamResource;
 import org.pikater.web.experiment_backup.resources.Resource;
@@ -58,7 +58,7 @@ public class LeafBox extends AbstractBox
 	
 	public LeafBox(BoxInfo boxConfig)
 	{
-		super(boxConfig.getName(), boxConfig.getDescription(), boxConfig.getPicture(), boxConfig.getType());
+		super(boxConfig.name, boxConfig.description, boxConfig.picture, boxConfig.type);
 		
 		this.editableNonInputParameters = new HashMap<ParamResource, AbstractOption>();
 		this.internalParameters = new HashMap<ParamResource, AbstractOption>();

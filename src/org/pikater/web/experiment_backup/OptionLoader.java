@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.options.LogicalUnitDescription;
-import org.pikater.web.vaadin.gui.shared.box.LeafBox;
+import org.pikater.shared.experiment.webformat.box.LeafBox;
 
 public final class OptionLoader
 {

@@ -1,6 +1,6 @@
 package org.pikater.web.experiment_backup.validity;
 
-import org.pikater.web.vaadin.gui.shared.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
 
 public abstract class CommonState
 {

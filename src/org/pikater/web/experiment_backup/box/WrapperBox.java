@@ -3,8 +3,8 @@ package org.pikater.web.experiment_backup.box;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.pikater.shared.experiment.box.BoxInfo;
-import org.pikater.shared.experiment.box.BoxInfo.BoxType;
+import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.BoxInfo.BoxType;
 
 public class WrapperBox extends AbstractBox
 {
@@ -12,7 +12,7 @@ public class WrapperBox extends AbstractBox
 	
 	public WrapperBox(BoxInfo boxConfig, AbstractBox... childBoxes)
 	{
-		super(boxConfig.getName(), boxConfig.getDescription(), boxConfig.getPicture(), BoxType.WRAPPER); 
+		super(boxConfig.name, boxConfig.description, boxConfig.picture, BoxType.WRAPPER); 
 		
 		this.childBoxes = Arrays.asList(childBoxes);
 	}
