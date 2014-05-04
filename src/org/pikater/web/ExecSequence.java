@@ -1,7 +1,9 @@
-package org.pikater.web.vaadin.gui;
+package org.pikater.web;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.pikater.web.vaadin.gui.SimpleConsoleComponent;
 
 public class ExecSequence
 {
@@ -14,7 +16,7 @@ public class ExecSequence
 	public ExecSequence(boolean stopIfAnErrorIsEncountered) 
 	{
 		this.commands = new ArrayList<String>();
-		this.stopIfAnErrorIsEncountered = stopIfAnErrorIsEncountered;;
+		this.stopIfAnErrorIsEncountered = stopIfAnErrorIsEncountered;
 		resetState();
 	}
 	
