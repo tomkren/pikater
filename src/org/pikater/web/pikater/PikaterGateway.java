@@ -1,6 +1,14 @@
 package org.pikater.web.pikater;
 
-import org.pikater.core.ontology.messages.MessagesOntology;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.pikater.core.ontology.actions.BatchOntology;
+import org.pikater.core.ontology.actions.ExperimentOntology;
+import org.pikater.core.ontology.actions.FilenameTranslationOntology;
+import org.pikater.core.ontology.actions.MailingOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
+
 import jade.content.AgentAction;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
@@ -18,20 +26,32 @@ import jade.wrapper.gateway.JadeGateway;
 @SuppressWarnings("serial")
 public class PikaterGateway extends GatewayAgent {
     static final public Codec codec = new SLCodec();
-    static final public Ontology ontology = MessagesOntology.getInstance();
     static private ContentManager contentManager;
+
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(BatchOntology.getInstance());
+		ontologies.add(MailingOntology.getInstance());
+		
+		return ontologies;
+	}
 
     @Override
     protected void setup() {
         super.setup();
         getContentManager().registerLanguage(codec);
-        getContentManager().registerOntology(ontology);
+        
+        for ( Ontology ontologyI : getOntologies() ) {
+        	getContentManager().registerOntology(ontologyI);
+        }
 
         System.out.println("PikaterGateway started");
     }
 
     /** receiver je jmeno agenta (prijemce), action je nejaka AgentAction z Pikateri ontologie */
-    static public ACLMessage makeActionRequest(String receiver, AgentAction action) throws CodecException, OntologyException, ControllerException {
+    static public ACLMessage makeActionRequest(String receiver, Ontology ontology, AgentAction action) throws CodecException, OntologyException, ControllerException {
         JadeGateway.checkJADE(); // force gateway container initialization to make AID resolution possible
         if (contentManager == null) {
             contentManager = new ContentManager();
