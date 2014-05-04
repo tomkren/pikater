@@ -58,7 +58,7 @@ public class LeafBox extends AbstractBox
 	
 	public LeafBox(BoxInfo boxConfig)
 	{
-		super(boxConfig.name, boxConfig.description, boxConfig.picture, boxConfig.type);
+		super(boxConfig.getName(), boxConfig.getDescription(), boxConfig.getPicture(), boxConfig.getType());
 		
 		this.editableNonInputParameters = new HashMap<ParamResource, AbstractOption>();
 		this.internalParameters = new HashMap<ParamResource, AbstractOption>();

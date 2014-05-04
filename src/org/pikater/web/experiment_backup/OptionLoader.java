@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.options.LogicalUnitDescription;
+import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.box.LeafBox;
 
 public final class OptionLoader
@@ -12,7 +12,7 @@ public final class OptionLoader
 	/**
 	 * The current collection of boxes defined.
 	 */
-	private static List<LogicalUnitDescription> loadedLogicalUnits = new ArrayList<LogicalUnitDescription>();
+	private static List<BoxInfo> loadedLogicalUnits = new ArrayList<BoxInfo>();
 	
 	// Load boxes when first accessed (in the worst case) without explicitly calling the load method.
 	static
@@ -23,7 +23,7 @@ public final class OptionLoader
 	// -----------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
-	public static List<LogicalUnitDescription> getAllLogicalUnits()
+	public static List<BoxInfo> getAllLogicalUnits()
 	{
 		return loadedLogicalUnits;
 	}
@@ -31,12 +31,9 @@ public final class OptionLoader
 	public static List<LeafBox> getAllBoxes()
 	{
 		List<LeafBox> result = new ArrayList<LeafBox>();
-		for (LogicalUnitDescription logUnit : loadedLogicalUnits)
+		for (BoxInfo logUnit : loadedLogicalUnits)
 		{
-			if(logUnit.getIsBox())
-			{
-				// result.add(new LeafBox(logUnit));
-			}
+			// result.add(new LeafBox(logUnit));
 		}
 		return result;
 	}
@@ -59,7 +56,7 @@ public final class OptionLoader
 		}
 	}
 	
-	private static void addIfNotNull(LogicalUnitDescription logUnit)
+	private static void addIfNotNull(BoxInfo logUnit)
 	{
 		if(logUnit != null)
 		{
@@ -67,11 +64,12 @@ public final class OptionLoader
 		}
 	}
 	
-	private static LogicalUnitDescription loadLogicalUnit(File file)
+	private static BoxInfo loadLogicalUnit(File file)
 	{
 		try
 		{
-			return LogicalUnitDescription.importXML(file);
+			// return BoxInfo.importXML(file);
+			return null;
 		}
 		catch (Throwable e)
 		{

@@ -4,7 +4,7 @@ import org.pikater.shared.experiment.universalformat.UniversalComputationDescrip
 import org.pikater.shared.experiment.webformat.WebBoxInfoProvider;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
 
-public class UniToWebConverter
+public class UniToWebFormatConverter
 {
 	public static SchemaDataSource convert(UniversalComputationDescription uniFormat, WebBoxInfoProvider boxInfoProvider) throws ConversionException
 	{

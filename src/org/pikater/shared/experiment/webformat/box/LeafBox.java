@@ -24,24 +24,24 @@ public class LeafBox extends AbstractBox
 	@Override
 	public String getDisplayName()
 	{
-		return info.name;
+		return info.getName();
 	}
 
 	@Override
 	public String getDescription()
 	{
-		return info.description;
+		return info.getDescription();
 	}
 
 	@Override
 	public String getPicture()
 	{
-		return info.picture;
+		return info.getPicture();
 	}
 
 	@Override
 	public BoxType getType()
 	{
-		return info.type;
+		return info.getType();
 	}
 }

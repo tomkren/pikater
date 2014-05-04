@@ -2,8 +2,8 @@ package org.pikater.web.experiment_backup;
 
 import java.io.PrintWriter;
 
-import org.pikater.core.options.LogicalUnitDescription;
 import org.pikater.shared.AppHelper;
+import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.util.Interval;
 import org.pikater.web.experiment_backup.options.AbstractOption;
 import org.pikater.web.experiment_backup.slots.AbstractSlot;
@@ -17,7 +17,7 @@ public final class OptionXMLSerializer
 	{
 		// prepare serializer
 		serializer = new XStream();
-		for (Class<? extends LogicalUnitDescription> unit : AppHelper.getSubtypesFromSamePackage(LogicalUnitDescription.class))
+		for (Class<? extends BoxInfo> unit : AppHelper.getSubtypesFromSamePackage(BoxInfo.class))
 		{
 			serializer.processAnnotations(unit);
 		}
@@ -38,12 +38,12 @@ public final class OptionXMLSerializer
 	public static void serialize()
 	{
 		// process types and serialize them
-		for (Class<? extends LogicalUnitDescription> unit : AppHelper.getSubtypesFromSamePackage(LogicalUnitDescription.class))
+		for (Class<? extends BoxInfo> unit : AppHelper.getSubtypesFromSamePackage(BoxInfo.class))
 		{
 			try
 			{
 				// prepare type to serialize
-				LogicalUnitDescription unitInstance = (LogicalUnitDescription) unit.getDeclaredConstructor(new Class<?>[0]).newInstance();
+				BoxInfo unitInstance = (BoxInfo) unit.getDeclaredConstructor(new Class<?>[0]).newInstance();
 				
 				// and serialize
 				PrintWriter file = new PrintWriter(OptionContext.getSerializationPathFor(unitInstance.getClass().getSimpleName()));
