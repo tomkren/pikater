@@ -1,7 +1,5 @@
 package org.pikater.core.dataStructures.options.types;
 
-// import org.pikater.core.ontology.messages.option.Option;
-
 public class OptionInterval extends AbstractOption {
 
 	private Number minValue;
@@ -14,7 +12,6 @@ public class OptionInterval extends AbstractOption {
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 	}
-
 
 	@Override
 	public Class<? extends Object> getOptionClass() {
@@ -41,12 +38,4 @@ public class OptionInterval extends AbstractOption {
 	public void setMaxValue(Number maxValue) {
 		this.maxValue = maxValue;
 	}
-
-	/*
-	@Override
-	public Option toOption() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	*/
 }

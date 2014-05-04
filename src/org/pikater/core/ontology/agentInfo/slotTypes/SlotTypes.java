@@ -2,9 +2,6 @@ package org.pikater.core.ontology.agentInfo.slotTypes;
 
 public class SlotTypes {
 
-	public static String INPUT_SEX = "INPUT_SEX";
-	public static String OUTPUT_SEX = "OUTPUT_SEX";
-	
 	public static String DATA_TYPE = "DATA_TYPE";
 	public static String ERROR_TYPE = "ERROR_TYPE";
 	public static String AGENT_TYPE = "AGENT_TYPE";
