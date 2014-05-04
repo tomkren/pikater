@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.management;
 
 import jade.content.lang.Codec;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
@@ -11,6 +12,7 @@ import jade.lang.acl.ACLMessage;
 import jade.util.leap.List;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.CreateAgent;
 
 import java.util.HashSet;
@@ -30,10 +32,12 @@ public class ManagerAgentCommunicator {
     }
 
     public AID createAgent(PikaterAgent agent, String type, String name, List options) {
+    	Ontology ontology = MessagesOntology.getInstance();
+    	
         ACLMessage msg_ca = new ACLMessage(ACLMessage.REQUEST);
         msg_ca.addReceiver(new AID(_initAgentAID, false));
         msg_ca.setLanguage(agent.getCodec().getName());
-        msg_ca.setOntology(agent.getOntology().getName());
+        msg_ca.setOntology(ontology.getName());
 
         CreateAgent ca = new CreateAgent();
         if (name != null){

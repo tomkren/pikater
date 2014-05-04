@@ -12,7 +12,9 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
@@ -32,12 +34,18 @@ public class Agent_GUIKlara extends PikaterAgent {
 			+ System.getProperty("file.separator");
 
 	@Override
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(BatchOntology.getInstance());
+		
+		return ontologies;
+	}
+	
+	@Override
 	protected void setup() {
 		initDefault();
 		registerWithDF();
-
-		this.getContentManager().registerLanguage(this.getCodec());
-		this.getContentManager().registerOntology(BatchOntology.getInstance());
 
 		if (DEBUG_MODE) {
 			

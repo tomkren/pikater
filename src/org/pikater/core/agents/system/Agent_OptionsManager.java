@@ -2,6 +2,7 @@ package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
@@ -25,6 +26,7 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.BoolSItem;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.ExecuteParameters;
@@ -179,6 +181,8 @@ public class Agent_OptionsManager extends PikaterAgent {
 			// there is only one solution at the time
 			Options opt = fillOptionsWithSolution(Options, (SearchSolution)(ep.getSolutions().get(0)));
 		
+			Ontology ontology = MessagesOntology.getInstance();
+
 			// create CFP message					  		
 			request = new ACLMessage(ACLMessage.REQUEST);
 			request.setLanguage(codec.getName());
@@ -235,6 +239,8 @@ public class Agent_OptionsManager extends PikaterAgent {
 		private static final long serialVersionUID = 1902726126096385876L;
         private PikaterAgent agent;
 
+        Ontology ontology = MessagesOntology.getInstance();
+        
         private MessageTemplate reqMsgTemplate = MessageTemplate.and(
         			MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
         			MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),

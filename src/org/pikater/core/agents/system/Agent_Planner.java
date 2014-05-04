@@ -8,6 +8,7 @@ import java.util.Vector;
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
@@ -25,6 +26,7 @@ import jade.proto.ContractNetInitiator;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.Execute;
 
 /**
@@ -71,6 +73,8 @@ public class Agent_Planner extends PikaterAgent {
 
     protected class RequestServer extends CyclicBehaviour {
 
+    	Ontology ontology = MessagesOntology.getInstance();
+    	
         private MessageTemplate reqMsgTemplate = MessageTemplate.and(
                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                 MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),

@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.data;
 
 import jade.content.lang.Codec;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -13,7 +14,9 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.data.DataSourcePath;
 import org.pikater.core.ontology.data.GetDataSourcePath;
 import org.pikater.core.ontology.data.RegisterDataSourceConcept;
@@ -52,10 +55,12 @@ public class AgentDataSourceCommunicator {
     }
 
     public String getDataSourceLocalPath(String taskId,String type) {
+    	Ontology ontology = MessagesOntology.getInstance();
+    	
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.addReceiver(receiverAid);
         msg.setLanguage(initAgent.getCodec().getName());
-        msg.setOntology(initAgent.getOntology().getName());
+        msg.setOntology(ontology.getName());
 
         GetDataSourcePath getDataSourcePath = new GetDataSourcePath();
         getDataSourcePath.setTaskId(taskId);
@@ -75,10 +80,12 @@ public class AgentDataSourceCommunicator {
     }
 
     public void registerDataSources(String taskId,String[] typeList) {
+    	Ontology ontology = MessagesOntology.getInstance();
+    	
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
         msg.addReceiver(receiverAid);
         msg.setLanguage(initAgent.getCodec().getName());
-        msg.setOntology(initAgent.getOntology().getName());
+        msg.setOntology(ontology.getName());
 
         RegisterDataSourceConcept registerDS = new RegisterDataSourceConcept();
         registerDS.setTaskId(taskId);

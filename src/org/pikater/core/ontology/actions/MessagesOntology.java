@@ -1,8 +1,56 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.actions;
 
-import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.ExecuteBatch;
-import org.pikater.core.ontology.batch.SaveBatch;
+import org.pikater.core.ontology.messages.Agent;
+import org.pikater.core.ontology.messages.Attribute;
+import org.pikater.core.ontology.messages.BoolSItem;
+import org.pikater.core.ontology.messages.CreateAgent;
+import org.pikater.core.ontology.messages.Data;
+import org.pikater.core.ontology.messages.DataInstances;
+import org.pikater.core.ontology.messages.DeleteTempFiles;
+import org.pikater.core.ontology.messages.Duration;
+import org.pikater.core.ontology.messages.Eval;
+import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.messages.EvaluationMethod;
+import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.messages.ExecuteParameters;
+import org.pikater.core.ontology.messages.Fitness;
+import org.pikater.core.ontology.messages.FloatSItem;
+import org.pikater.core.ontology.messages.GetAgents;
+import org.pikater.core.ontology.messages.GetAllMetadata;
+import org.pikater.core.ontology.messages.GetData;
+import org.pikater.core.ontology.messages.GetDuration;
+import org.pikater.core.ontology.messages.GetFileInfo;
+import org.pikater.core.ontology.messages.GetFiles;
+import org.pikater.core.ontology.messages.GetMetadata;
+import org.pikater.core.ontology.messages.GetOptions;
+import org.pikater.core.ontology.messages.GetParameters;
+import org.pikater.core.ontology.messages.GetSavedAgents;
+import org.pikater.core.ontology.messages.GetTheBestAgent;
+import org.pikater.core.ontology.messages.Id;
+import org.pikater.core.ontology.messages.ImportFile;
+import org.pikater.core.ontology.messages.Instance;
+import org.pikater.core.ontology.messages.IntSItem;
+import org.pikater.core.ontology.messages.LoadAgent;
+import org.pikater.core.ontology.messages.LoadResults;
+import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.ontology.messages.Method;
+import org.pikater.core.ontology.messages.PartialResults;
+import org.pikater.core.ontology.messages.Problem;
+import org.pikater.core.ontology.messages.Recommend;
+import org.pikater.core.ontology.messages.Results;
+import org.pikater.core.ontology.messages.SaveAgent;
+import org.pikater.core.ontology.messages.SaveMetadata;
+import org.pikater.core.ontology.messages.SaveResults;
+import org.pikater.core.ontology.messages.SavedResult;
+import org.pikater.core.ontology.messages.SearchItem;
+import org.pikater.core.ontology.messages.SearchSolution;
+import org.pikater.core.ontology.messages.SetSItem;
+import org.pikater.core.ontology.messages.ShutdownDatabase;
+import org.pikater.core.ontology.messages.Solve;
+import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.TranslateFilename;
+import org.pikater.core.ontology.messages.UpdateMetadata;
 import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.CategoricalAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.IntegerAttributeMetadata;
@@ -20,17 +68,15 @@ import jade.content.onto.Ontology;
  */
 public class MessagesOntology extends BeanOntology {
 
-	private static final long serialVersionUID = 4471377586541937606L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1829196889268218770L;
 
 	private MessagesOntology() {
         super("MessagesOntology");
 
         try {
-
-        	add(SaveBatch.class);
-        	add(Batch.class);
-        	
-            add(SendEmail.class);
 
         	///////////////OLD PIKATER////////////////////////
         	// messages

@@ -1,7 +1,9 @@
 package org.pikater.core.agents.system;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
@@ -10,6 +12,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.ExperimentOntology;
 import org.pikater.core.ontology.actions.FilenameTranslationOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.messages.Problem;
@@ -43,6 +46,18 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 	private static final long serialVersionUID = 7116837600070411675L;
 	
 	@Override
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(BatchOntology.getInstance());
+		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(FilenameTranslationOntology.getInstance());
+		
+		return ontologies;
+	}
+	
+	@Override
 	protected void setup() {
 		
 		System.out.println("Agent: " +getLocalName() + " starts.");
@@ -50,13 +65,10 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 		initDefault();
 		registerWithDF(AgentNames.COMPUTATION_DESCRIPTION_PARSER);
 
-		this.getContentManager().registerOntology(getOntology());
-		this.getContentManager().registerOntology(BatchOntology.getInstance());
-		this.getContentManager().registerOntology(ExperimentOntology.getInstance());
-		this.getContentManager().registerOntology(FilenameTranslationOntology.getInstance());
-		
+		Ontology ontology = MessagesOntology.getInstance();
+
 		ComputingManagerBehaviour compBehaviour =
-				new ComputingManagerBehaviour(this, getCodec(), getOntology());
+				new ComputingManagerBehaviour(this, getCodec(), ontology);
         addBehaviour(compBehaviour);
 
 	}
@@ -74,7 +86,7 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		msg.setLanguage(codec.getName());
-		msg.setOntology(ontology.getName());
+		msg.setOntology(MessagesOntology.getInstance().getName());
 		// We want to receive a reply in 30 secs
 		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
 		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());

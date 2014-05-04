@@ -2,6 +2,7 @@ package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
@@ -35,6 +36,7 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataListItem;
 import org.pikater.core.agents.system.metadata.MetadataReader;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
@@ -76,11 +78,12 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			}
 		}		    	
 
+		Ontology ontology = MessagesOntology.getInstance();
         getContentManager().registerLanguage(getCodec());
-        getContentManager().registerOntology(getOntology());
+        getContentManager().registerOntology(ontology);
         
         // receive request
-        MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(getOntology().getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+        MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 		addBehaviour(new receiveRequest(this, mt));
 
     }  // end setup()
@@ -188,12 +191,14 @@ public class Agent_MetadataQueen extends PikaterAgent {
 
 		    log("Using " + reader + ", filename: " + fileName, 2);
 			
+		    Ontology ontology = MessagesOntology.getInstance();
+		    
 			// request
 			msgOut = new ACLMessage(ACLMessage.REQUEST);
 			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 			// msgOut.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 			msgOut.setLanguage(getCodec().getName());
-			msgOut.setOntology(getOntology().getName());
+			msgOut.setOntology(ontology.getName());
 			msgOut.addReceiver(reader);
 			// content
 			GetData get_data = new GetData();
@@ -276,10 +281,12 @@ public class Agent_MetadataQueen extends PikaterAgent {
 	
     protected ACLMessage createCFPmessage(AID aid, String agent_type, String filename) {
 
+    	Ontology ontology = MessagesOntology.getInstance();
+    	
 		// create CFP message for a Computing Agent							  		
 		ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
 		cfp.setLanguage(getCodec().getName());
-		cfp.setOntology(getOntology().getName());
+		cfp.setOntology(ontology.getName());
 		cfp.addReceiver(aid);
 		cfp.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 

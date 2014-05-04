@@ -1,6 +1,7 @@
 package org.pikater.core.agents.experiment.recommend;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -24,6 +25,7 @@ import jade.util.leap.List;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.shared.logging.Verbosity;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.*;
 import org.pikater.core.ontology.messages.option.Option;
 
@@ -35,15 +37,20 @@ import java.io.IOException;
 import org.pikater.core.agents.PikaterAgent;
 
 public abstract class Agent_Recommender extends PikaterAgent {
-	private static final long serialVersionUID = 4413578066473667553L;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1314060594137998065L;
+
 	protected abstract org.pikater.core.ontology.messages.Agent chooseBestAgent(Data data);
 	protected abstract String getAgentType();
     
 	private org.pikater.core.ontology.messages.Agent myAgentOntology = new org.pikater.core.ontology.messages.Agent();
 	
 	protected String getOptFileName(){
-		return "/options/"+getAgentType() +".opt";
+		return System.getProperty("file.separator") + "options" +
+				System.getProperty("file.separator") + getAgentType() +".opt";
 	}
 
 	
@@ -53,6 +60,8 @@ public abstract class Agent_Recommender extends PikaterAgent {
         initDefault();
         
         registerWithDF("Recommender");
+        
+        Ontology ontology = MessagesOntology.getInstance();
         
         // receive request
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));        
@@ -193,6 +202,8 @@ public abstract class Agent_Recommender extends PikaterAgent {
 	
 	protected List getAgentOptions(String agentType) {
 
+		Ontology ontology = MessagesOntology.getInstance();
+		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		// find an agent according to type
 		List agents = getAgentsByType(agentType);

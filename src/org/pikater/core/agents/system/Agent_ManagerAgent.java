@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
@@ -17,7 +18,9 @@ import org.pikater.core.agents.system.management.AgentTypeDefinition;
 import org.pikater.core.agents.system.management.AgentTypesProvider;
 import org.pikater.core.agents.system.management.ManagerAgentRequestResponder;
 import org.pikater.core.agents.configuration.Argument;
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.CreateAgent;
 import org.pikater.core.ontology.messages.LoadAgent;
 import org.pikater.core.ontology.messages.SaveAgent;
@@ -34,7 +37,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	private static final long serialVersionUID = 4898611781694963107L;
 
 	private Map<String, AgentTypeDefinition> agentTypes = new HashMap<>();
-    private AgentTypesProvider agentTypesProvider=(AgentTypesProvider)context.getBean("agentTypesProvider");
+    private AgentTypesProvider agentTypesProvider=(AgentTypesProvider)context.getBean(AgentNames.TYPES_PROVIDER);
     private ManagerAgentRequestResponder responder=new ManagerAgentRequestResponder(this);
 
     public static String saveDirectoryPath =
@@ -58,6 +61,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
         
 		getAgentTypesFromFile();
 		
+		Ontology ontology = MessagesOntology.getInstance();
 		MessageTemplate mt = MessageTemplate.and(MessageTemplate
 				.MatchOntology(ontology.getName()), MessageTemplate
 				.MatchPerformative(ACLMessage.REQUEST));

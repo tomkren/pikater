@@ -3,11 +3,11 @@ package org.pikater.core.agents.experiment.search;
 import java.io.*;
 
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.ExecuteParameters;
 import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.GetOptions;
-import org.pikater.core.ontology.messages.MessagesOntology;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.option.Option;
 

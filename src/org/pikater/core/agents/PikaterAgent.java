@@ -12,14 +12,12 @@ import jade.domain.FIPAException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
-import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
-
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.shared.logging.Logger;
 import org.pikater.shared.logging.Severity;
 import org.pikater.shared.logging.Verbosity;
-import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +38,6 @@ public abstract class PikaterAgent extends Agent {
 	private final String VERBOSITY_ARG = "verbosity";
 	protected final String DATAMODEL_BEAN = "dataModel";
 	protected Codec codec = new SLCodec();
-	protected Ontology ontology = MessagesOntology.getInstance();
 	protected String initBeansName = "Beans.xml";
 	protected ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
 	protected Verbosity verbosity = Verbosity.NORMAL;
@@ -54,8 +51,12 @@ public abstract class PikaterAgent extends Agent {
 		return codec;
 	}
 
-	public Ontology getOntology() {
-		return ontology;
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		
+		return ontologies;
 	}
 
 	protected String getAgentType() {
@@ -180,7 +181,10 @@ public abstract class PikaterAgent extends Agent {
 
 		log("is alive...", 1);
 		getContentManager().registerLanguage(getCodec());
-		getContentManager().registerOntology(getOntology());
+		
+		for (Ontology ontologyI : getOntologies() ) {
+			getContentManager().registerOntology(ontologyI);
+		}
 	}
 
 	private void parseArguments(Object[] args) {

@@ -3,6 +3,7 @@ package org.pikater.core.agents.system;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
+import jade.content.onto.Ontology;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -25,8 +26,9 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
-
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.Duration;
 import org.pikater.core.ontology.messages.Eval;
@@ -71,7 +73,7 @@ public class Agent_Duration extends PikaterAgent {
     	        
         // create linear regression agent
         // send message to AgentManager to create an agent
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator("agentManager");
+        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER);
         aid=communicator.createAgent(this,"LinearRegression","DurationServiceRegression",null);
         		
 		// compute one LR (as the first one is usually longer) 
@@ -80,6 +82,7 @@ public class Agent_Duration extends PikaterAgent {
 		
         addBehaviour(new Test(this, t));			  
         
+        Ontology ontology = MessagesOntology.getInstance();
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
         addBehaviour(new AchieveREResponder(this, mt) {
@@ -320,6 +323,8 @@ public class Agent_Duration extends PikaterAgent {
         
     protected ACLMessage createCFPmessage(AID aid, String filename) {
 
+        Ontology ontology = MessagesOntology.getInstance();
+    	
 		// create CFP message for Linear Regression Computing Agent							  		
 		ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
 		cfp.setLanguage(codec.getName());

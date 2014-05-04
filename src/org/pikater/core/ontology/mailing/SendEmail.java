@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.mailing;
 
 import org.pikater.core.agents.system.Agent_Mailing.EmailType;
 
