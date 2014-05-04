@@ -20,8 +20,8 @@ public class BoxInfo
 		WRAPPER
 	}
 
-	public final Class<? extends Object> ontology;
-	public final Class<? extends Object> agentClass;
+	public final String ontology;
+	public final String agentClass;
 	
 	public final String name;
 	public final BoxType type;
@@ -32,7 +32,7 @@ public class BoxInfo
 	private final Collection<AbstractSlot> inputSlots;
 	private final Collection<AbstractSlot> outputSlots;
 	
-	public BoxInfo(Class<? extends Object> ontology, Class<? extends Object> agentClass, String name, BoxType type, String picture, String description)
+	public BoxInfo(String ontology, String agentClass, String name, BoxType type, String picture, String description)
 	{
 		this.ontology = ontology;
 		this.agentClass = agentClass;

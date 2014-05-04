@@ -1,7 +1,9 @@
 package org.pikater.shared.experiment.webformat;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import org.pikater.shared.experiment.webformat.BoxInfo.BoxType;
 import org.pikater.shared.util.BidiMap;
 
 public class WebBoxInfoProvider
@@ -13,13 +15,24 @@ public class WebBoxInfoProvider
 		boxInfo.clear();
 		for(BoxInfo definition : definitions)
 		{
-			boxInfo.put(definition.ontology.getSimpleName(), definition);
+			boxInfo.put(definition.ontology, definition);
 		}
 	}
 	
+	public Collection<BoxInfo> getByType(BoxType type)
+	{
+		Collection<BoxInfo> result = new ArrayList<BoxInfo>();
+		for(BoxInfo info : boxInfo.valueSet())
+		{
+			if(info.type == type)
+			{
+				result.add(info);
+			}
+		}
+		return result;
+	}
 	
-	
-	public BoxInfo getByType()
+	public BoxInfo getByID()
 	{
 		// TODO:
 		
