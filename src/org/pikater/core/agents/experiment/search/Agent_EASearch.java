@@ -11,7 +11,7 @@ import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.options.xmlGenerators.EASearch_SearchBox;
+import org.pikater.core.options.EASearch_SearchBox;
 import org.pikater.core.utilities.evolution.*;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;

@@ -23,7 +23,7 @@ import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.options.xmlGenerators.NMTopRecommender_RecommendBox;
+import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
  *

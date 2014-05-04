@@ -18,7 +18,7 @@ import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.SetSItem;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.options.xmlGenerators.GridSearch_SearchBox;
+import org.pikater.core.options.GridSearch_SearchBox;
 
 /**
  *

@@ -6,7 +6,7 @@ import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.Metadata;
-import org.pikater.core.options.xmlGenerators.BasicRecommend_RecommendBox;
+import org.pikater.core.options.BasicRecommend_RecommendBox;
 
 import jade.util.leap.Iterator;
 import jade.util.leap.List;

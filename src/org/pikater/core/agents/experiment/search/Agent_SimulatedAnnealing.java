@@ -7,7 +7,7 @@ import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.options.xmlGenerators.SimulatedAnnealing_SearchBox;
+import org.pikater.core.options.SimulatedAnnealing_SearchBox;
 
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;

@@ -7,9 +7,9 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.options.xmlGenerators.CARecSearchComplex_VirtualBox;
-import org.pikater.core.options.xmlGenerators.FileInput_VirtualBox;
-import org.pikater.core.options.xmlGenerators.FileSaver_VirtualBox;
+import org.pikater.core.options.CARecSearchComplex_VirtualBox;
+import org.pikater.core.options.FileInput_VirtualBox;
+import org.pikater.core.options.FileSaver_VirtualBox;
 
 public class Agent_VirtualBoxProvider extends Agent_AbstractExperiment {
 

@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.options.xmlGenerators.SMOReg_CABox;
+import org.pikater.core.options.SMOReg_CABox;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.SMOreg;

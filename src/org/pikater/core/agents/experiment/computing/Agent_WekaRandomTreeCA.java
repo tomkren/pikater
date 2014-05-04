@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.options.xmlGenerators.RandomTree_CABox;
+import org.pikater.core.options.RandomTree_CABox;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.RandomTree;

@@ -3,7 +3,7 @@ package org.pikater.web.experiment_backup;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import org.pikater.core.options.xmlGenerators.RBFNetwork_CABox;
+import org.pikater.core.options.RBFNetwork_CABox;
 import org.pikater.shared.AppHelper;
 
 public class OptionContext
