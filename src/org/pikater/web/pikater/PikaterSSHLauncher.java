@@ -1,6 +1,6 @@
 package org.pikater.web.pikater;
 
-import org.pikater.web.vaadin.gui.ExecSequence;
+import org.pikater.web.ExecSequence;
 import org.pikater.web.vaadin.gui.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.SimpleConsoleComponent.MessageStyle;
 import org.pikater.web.vaadin.gui.welcometour.RemoteServerInfoItem;
