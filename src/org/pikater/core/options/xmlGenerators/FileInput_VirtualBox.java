@@ -34,7 +34,7 @@ public class FileInput_VirtualBox {
 		agentInfo.setDescription("This box provides a data source to other boxes.");
 
 		agentInfo.addOption(optionIN.toOption());
-		agentInfo.addOutputSlots(outputSlot);
+		agentInfo.addOutputSlot(outputSlot);
 
 		return agentInfo;
 	}

@@ -66,6 +66,9 @@ public class AgentInfo implements Concept {
 		this.options = options;
 	}
 	public void addOption(Option option) {
+		if (this.options == null) {
+			this.options = new ArrayList();
+		}
 		this.options.add(option);
 	}
 
@@ -75,7 +78,10 @@ public class AgentInfo implements Concept {
 	public void setInputSlots(ArrayList inputSlots) {
 		this.inputSlots = inputSlots;
 	}
-	public void addInputSlots(Slot inputSlot) {
+	public void addInputSlot(Slot inputSlot) {
+		if (this.inputSlots == null) {
+			this.inputSlots = new ArrayList();
+		}
 		this.inputSlots.add(inputSlot);
 	}
 
@@ -85,7 +91,10 @@ public class AgentInfo implements Concept {
 	public void setOutputSlots(ArrayList outputSlots) {
 		this.outputSlots = outputSlots;
 	}
-	public void addOutputSlots(Slot outputSlot) {
+	public void addOutputSlot(Slot outputSlot) {
+		if (this.outputSlots == null) {
+			this.outputSlots = new ArrayList();
+		}
 		this.outputSlots.add(outputSlot);
 	}
 	

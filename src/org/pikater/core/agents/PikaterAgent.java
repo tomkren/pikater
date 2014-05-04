@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -33,6 +32,11 @@ import javax.persistence.EntityManagerFactory;
  * Time: 9:38
  */
 public abstract class PikaterAgent extends Agent {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3427874121438630714L;
+
 	private final String DEFAULT_LOGGER_BEAN = "logger";
 	private final String LOGGER_BEAN_ARG = "logger";
 	private final String VERBOSITY_ARG = "verbosity";

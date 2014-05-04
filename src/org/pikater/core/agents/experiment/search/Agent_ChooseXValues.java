@@ -4,9 +4,11 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.options.xmlGenerators.ChooseXValue_SearchBox;
 
 public class Agent_ChooseXValues extends Agent_Search {
 	/*
@@ -21,6 +23,17 @@ public class Agent_ChooseXValues extends Agent_Search {
 	//private Vector<String> sub_options_vector ;
 
 	@Override
+	protected String getAgentType() {
+		return "ChooseXValues";
+	}
+	
+	@Override
+	protected AgentInfo getAgentInfo() {
+
+		return ChooseXValue_SearchBox.get();
+	}
+
+	@Override
 	protected boolean finished() {
 		if (ni < n) {
 			return false;
@@ -29,11 +42,6 @@ public class Agent_ChooseXValues extends Agent_Search {
 		}
 	}
 
-	@Override
-	protected String getAgentType() {
-		return "ChooseXValues";
-	}
-	
 	//TODO: Something less recursive
 	private void generate(List cur_solution_part, List possible_solution_values, int beg_ind) {
 		if (possible_solution_values.size()-beg_ind < 1) {//if we are at the end
@@ -107,4 +115,5 @@ public class Agent_ChooseXValues extends Agent_Search {
 	protected void updateFinished(float[][] evaluations) {
 		//???
 	}
+
 }

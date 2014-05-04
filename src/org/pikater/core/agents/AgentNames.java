@@ -11,5 +11,7 @@ public abstract class AgentNames {
 	public static String PLANNER = "Planner";
 	public static String GUI_AGENT = "GUIAgent";
 	public static String TYPES_PROVIDER = "agentTypesProvider";
+	public static String GATEWAY = "Gateway";
+	public static String VIRTUAL_BOX_PROVIDER = "VirtualBoxProvider";
 
 }

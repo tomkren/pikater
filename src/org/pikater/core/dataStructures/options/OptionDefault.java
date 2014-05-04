@@ -63,6 +63,6 @@ public class OptionDefault {
 
 	public Option toOption() {
 		//TODO: napsat export
-		return null;
+		return new Option();
 	}
 }

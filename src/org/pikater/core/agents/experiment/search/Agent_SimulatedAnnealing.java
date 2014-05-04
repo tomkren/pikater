@@ -2,10 +2,12 @@ package org.pikater.core.agents.experiment.search;
 
 import java.util.Random;
 
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.options.xmlGenerators.SimulatedAnnealing_SearchBox;
 
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
@@ -39,9 +41,28 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	private double final_error_rate = 0.1;
 	private boolean minimization = true;
 	protected Random rnd_gen = new Random(1);
+
 	@Override
 	protected String getAgentType() {
 		return "SimulatedAnnealing";
+	}
+	
+	@Override
+	protected AgentInfo getAgentInfo() {
+
+		return SimulatedAnnealing_SearchBox.get();
+	}
+
+	@Override
+	protected boolean finished() {
+		//n>=nmax
+		if (number_of_tries >= maximum_tries) {
+			return true;
+		}
+		if (best_error_rate <= final_error_rate){
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -68,19 +89,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 			}
 		}
 	}
-	
-	@Override
-	protected boolean finished() {
-		//n>=nmax
-		if (number_of_tries >= maximum_tries) {
-			return true;
-		}
-		if (best_error_rate <= final_error_rate){
-			return true;
-		}
-		return false;
-	}
-	
+
 	@Override
 	protected List generateNewSolutions(List solutions, float[][] evaluations) {
 		
@@ -177,6 +186,5 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	private void Cooling(){
 		temperature = 0.8*temperature;
 	}
-
 
 }

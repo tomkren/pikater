@@ -2,9 +2,11 @@ package org.pikater.core.agents.experiment.recommend;
 
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.shared.logging.Verbosity;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.Metadata;
+import org.pikater.core.options.xmlGenerators.BasicRecommend_RecommendBox;
 
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
@@ -24,7 +26,13 @@ public class Agent_Basic extends Agent_Recommender {
 	protected String getAgentType(){
 		return "BasicRecommender";
 	}
-		
+	
+	@Override
+	protected AgentInfo getAgentInfo() {
+
+		return BasicRecommend_RecommendBox.get();
+	}
+
 	@Override
 	protected org.pikater.core.ontology.messages.Agent chooseBestAgent(Data data){
 		// in data there are already metadata filled in 

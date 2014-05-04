@@ -6,7 +6,7 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
-import org.pikater.core.ontology.messages.Evaluation;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
@@ -21,6 +21,29 @@ public class Agent_RandomSearch extends Agent_Search {
 	private int maximum_tries;
 	private float final_error_rate;
 	protected Random rnd_gen = new Random(1);
+
+	@Override
+	protected String getAgentType() {
+		return "RandomSearch";
+	}
+
+	@Override
+	protected AgentInfo getAgentInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected boolean finished() {
+		if (number_of_tries >= maximum_tries) {
+			return true;
+		}
+
+		if (error_rate <= final_error_rate) {
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected void loadSearchOptions(){
@@ -43,23 +66,6 @@ public class Agent_RandomSearch extends Agent_Search {
 		System.out.println(getLocalName()+" parameters are: ");
 		System.out.println("   final_error_rate: " + final_error_rate);
 		System.out.println("   maximum_tries: " + maximum_tries);		
-	}
-	
-	@Override
-	protected String getAgentType() {
-		return "RandomSearch";
-	}
-
-	@Override
-	protected boolean finished() {
-		if (number_of_tries >= maximum_tries) {
-			return true;
-		}
-
-		if (error_rate <= final_error_rate) {
-			return true;
-		}
-		return false;
 	}
 
 	@Override

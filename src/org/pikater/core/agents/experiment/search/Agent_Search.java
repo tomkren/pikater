@@ -1,8 +1,11 @@
 package org.pikater.core.agents.experiment.search;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
-import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.ExecuteParameters;
@@ -30,7 +33,7 @@ import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 
-public abstract class Agent_Search extends PikaterAgent {	
+public abstract class Agent_Search extends Agent_AbstractExperiment {	
 
 	private static final long serialVersionUID = 8637677510056974015L;
 	private Codec codec = new SLCodec();
@@ -46,197 +49,25 @@ public abstract class Agent_Search extends PikaterAgent {
 	protected abstract void updateFinished(float[][] evaluations);
 	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
 	
-	protected ACLMessage getParameters(ACLMessage request) {
-		ACLMessage reply = request.createReply();
+	protected void setup() {
+
+		initDefault();
 		
-		org.pikater.core.ontology.messages.Agent agent = null;
-
-		String optPath = System.getProperty("user.dir") +
-			System.getProperty("file.separator") + "options" + 
-			System.getProperty("file.separator") + getAgentType() + ".opt";
-
-		// read options from file
+		registerWithDF("Search");
+		
+		addBehaviour(new RequestServer(this));
+		
+		
 		try {
-			/* Sets up a file reader to read the options file */
-			FileReader input = new FileReader(optPath);
-			/*
-			 * Filter FileReader through a Buffered read to read a line at a
-			 * time
-			 */
-			BufferedReader bufRead = new BufferedReader(input);
-
-			String line; // String that holds current file line
-			int count = 0; // Line number of count
-			// Read first line
-			line = bufRead.readLine();
-			count++;
-
-			// list of ontology.messages.Option
-			List _options = new ArrayList();
-			agent = new org.pikater.core.ontology.messages.Agent();
-			agent.setName(getLocalName());
-			agent.setType(getAgentType());
-			
-			// Read through file one line at time. Print line # and line
-			while (line != null) {
-				// parse the line
-				String delims = "[ ]+";
-				String[] params = line.split(delims, 11);
-
-				if (params[0].equals("$")) {
-					
-					String dt = null; 										
-					if (params[2].equals("boolean")) {
-						dt = "BOOLEAN";
-					}
-					if (params[2].equals("float")) {
-						dt = "FLOAT";
-					}
-					if (params[2].equals("int")) {
-						dt = "INT";
-					}
-					if (params[2].equals("mixed")) {
-						dt = "MIXED";
-					}					
-					
-					float numArgsMin;
-					float numArgsMax;
-					float rangeMin = 0;
-					float rangeMax = 0;
-					String range;
-					List set = null;
-					
-					if (dt.equals("BOOLEAN")){
-						numArgsMin = 1;
-						numArgsMax = 1;
-						range = null;						
-					}
-					else{
-						numArgsMin = Float.parseFloat(params[3]);
-						numArgsMax = Float.parseFloat(params[4]);
-						range = params[5];
-
-						if (range.equals("r")){
-							rangeMin = Float.parseFloat(params[6]);
-							rangeMax = Float.parseFloat(params[7]);
-						}
-						if (range.equals("s")){
-							set = new ArrayList();
-							String[] s = params[6].split("[ ]+");
-							for (int i=0; i<s.length; i++){
-								set.add(s[i]);
-							}
-						}
-					}
-					
-					Option o = new Option(params[1], dt,
-							numArgsMin, numArgsMax,
-							range, rangeMin, rangeMax, set,
-							params[params.length-3],
-							params[params.length-2],
-							params[params.length-1]);
-					
-					_options.add(o);
-					
-				}
-
-				line = bufRead.readLine();
-
-				count++;
-			}
-			agent.setOptions(_options);
-			bufRead.close();
-
-			reply.setPerformative(ACLMessage.INFORM);
-
-			// Prepare the content
-			ContentElement content = getContentManager()
-					.extractContent(request); // TODO exception block?
-			Result result = new Result((Action) content, agent);
-
-			getContentManager().fillContent(reply, result);
-			
-		} catch (ArrayIndexOutOfBoundsException e) {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent(e.getMessage());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent(e.getMessage());
-		} catch (CodecException e) {
-			e.printStackTrace();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent(e.getMessage());
-		} catch (OntologyException e) {
-			e.printStackTrace();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent(e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent(e.getMessage());
 		}
-		
-		return reply;
-	} // end getParameters
-	
-	//Run the search protocol
-	/*protected ACLMessage runSearchProtocol(ACLMessage request, GetParameters gnp) {
-		search_options = gnp.getSearch_options();
-		schema = gnp.getSchema();														
-		loadSearchOptions();
-		
-		List solutions_new = null;
-		List evaluations = null;
-		ACLMessage reply = request.createReply();
-		try{
-			while (!finished()){
-				ExecuteParameters ep = new ExecuteParameters();
-				solutions_new = generateNewSolutions(solutions_new, evaluations);
-				ep.setSolutions(solutions_new); // List of Lists of Options
+		sendAgentInfo(getAgentInfo());
 
-				Action a = new Action();
-				a.setAction(ep);
-				a.setActor(getAID());
+	} // end setup()
 
-				ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
-				req.addReceiver(request.getSender());
-				req.setLanguage(codec.getName());
-				req.setOntology(ontology.getName());
-				req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-				getContentManager().fillContent(req, a);
-
-				ACLMessage get_next_parameters_results = FIPAService.doFipaRequestClient(this, req);
-				// extract List of Evaluations from response
-				ContentElement content = getContentManager().extractContent(get_next_parameters_results);				
-				if (content instanceof Result) {					
-					Result result = (Result) content;
-					evaluations = (List)((List)result.getValue()).get(1);
-					solutions_new = (List)((List)result.getValue()).get(0);
-				}
-				updateFinished(evaluations);							
-			}
-			reply.setPerformative(ACLMessage.INFORM);
-			reply.setContent("finished");
-		} catch (FIPAException e) {
-			e.printStackTrace();
-			reply.setContent(e.getMessage());
-			reply.setPerformative(ACLMessage.FAILURE);
-		} catch (CodecException e) {
-			e.printStackTrace();
-			reply.setContent(e.getMessage());
-			reply.setPerformative(ACLMessage.FAILURE);
-		} catch (OntologyException e) {
-			e.printStackTrace();
-			reply.setContent(e.getMessage());
-			reply.setPerformative(ACLMessage.FAILURE);
-		}
-		
-		return reply;
-
-	}*/
 	
 	protected List getSchema() {
 		if(schema != null){
@@ -459,14 +290,198 @@ public abstract class Agent_Search extends PikaterAgent {
 
 	}
 		
-	protected void setup() {
 
-		initDefault();
+	
+	protected ACLMessage getParameters(ACLMessage request) {
+		ACLMessage reply = request.createReply();
 		
-		registerWithDF("Search");
+		org.pikater.core.ontology.messages.Agent agent = null;
+
+		String optPath = System.getProperty("user.dir") +
+			System.getProperty("file.separator") + "options" + 
+			System.getProperty("file.separator") + getAgentType() + ".opt";
+
+		// read options from file
+		try {
+			/* Sets up a file reader to read the options file */
+			FileReader input = new FileReader(optPath);
+			/*
+			 * Filter FileReader through a Buffered read to read a line at a
+			 * time
+			 */
+			BufferedReader bufRead = new BufferedReader(input);
+
+			String line; // String that holds current file line
+			int count = 0; // Line number of count
+			// Read first line
+			line = bufRead.readLine();
+			count++;
+
+			// list of ontology.messages.Option
+			List _options = new ArrayList();
+			agent = new org.pikater.core.ontology.messages.Agent();
+			agent.setName(getLocalName());
+			agent.setType(getAgentType());
+			
+			// Read through file one line at time. Print line # and line
+			while (line != null) {
+				// parse the line
+				String delims = "[ ]+";
+				String[] params = line.split(delims, 11);
+
+				if (params[0].equals("$")) {
+					
+					String dt = null; 										
+					if (params[2].equals("boolean")) {
+						dt = "BOOLEAN";
+					}
+					if (params[2].equals("float")) {
+						dt = "FLOAT";
+					}
+					if (params[2].equals("int")) {
+						dt = "INT";
+					}
+					if (params[2].equals("mixed")) {
+						dt = "MIXED";
+					}					
+					
+					float numArgsMin;
+					float numArgsMax;
+					float rangeMin = 0;
+					float rangeMax = 0;
+					String range;
+					List set = null;
+					
+					if (dt.equals("BOOLEAN")){
+						numArgsMin = 1;
+						numArgsMax = 1;
+						range = null;						
+					}
+					else{
+						numArgsMin = Float.parseFloat(params[3]);
+						numArgsMax = Float.parseFloat(params[4]);
+						range = params[5];
+
+						if (range.equals("r")){
+							rangeMin = Float.parseFloat(params[6]);
+							rangeMax = Float.parseFloat(params[7]);
+						}
+						if (range.equals("s")){
+							set = new ArrayList();
+							String[] s = params[6].split("[ ]+");
+							for (int i=0; i<s.length; i++){
+								set.add(s[i]);
+							}
+						}
+					}
+					
+					Option o = new Option(params[1], dt,
+							numArgsMin, numArgsMax,
+							range, rangeMin, rangeMax, set,
+							params[params.length-3],
+							params[params.length-2],
+							params[params.length-1]);
+					
+					_options.add(o);
+					
+				}
+
+				line = bufRead.readLine();
+
+				count++;
+			}
+			agent.setOptions(_options);
+			bufRead.close();
+
+			reply.setPerformative(ACLMessage.INFORM);
+
+			// Prepare the content
+			ContentElement content = getContentManager()
+					.extractContent(request); // TODO exception block?
+			Result result = new Result((Action) content, agent);
+
+			getContentManager().fillContent(reply, result);
+			
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent(e.getMessage());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent(e.getMessage());
+		} catch (CodecException e) {
+			e.printStackTrace();
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent(e.getMessage());
+		} catch (OntologyException e) {
+			e.printStackTrace();
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent(e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent(e.getMessage());
+		}
 		
-		addBehaviour(new RequestServer(this));
+		return reply;
+	} // end getParameters
+	
+	//Run the search protocol
+	/*protected ACLMessage runSearchProtocol(ACLMessage request, GetParameters gnp) {
+		search_options = gnp.getSearch_options();
+		schema = gnp.getSchema();														
+		loadSearchOptions();
 		
-	} // end setup()
+		List solutions_new = null;
+		List evaluations = null;
+		ACLMessage reply = request.createReply();
+		try{
+			while (!finished()){
+				ExecuteParameters ep = new ExecuteParameters();
+				solutions_new = generateNewSolutions(solutions_new, evaluations);
+				ep.setSolutions(solutions_new); // List of Lists of Options
+
+				Action a = new Action();
+				a.setAction(ep);
+				a.setActor(getAID());
+
+				ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
+				req.addReceiver(request.getSender());
+				req.setLanguage(codec.getName());
+				req.setOntology(ontology.getName());
+				req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+				getContentManager().fillContent(req, a);
+
+				ACLMessage get_next_parameters_results = FIPAService.doFipaRequestClient(this, req);
+				// extract List of Evaluations from response
+				ContentElement content = getContentManager().extractContent(get_next_parameters_results);				
+				if (content instanceof Result) {					
+					Result result = (Result) content;
+					evaluations = (List)((List)result.getValue()).get(1);
+					solutions_new = (List)((List)result.getValue()).get(0);
+				}
+				updateFinished(evaluations);							
+			}
+			reply.setPerformative(ACLMessage.INFORM);
+			reply.setContent("finished");
+		} catch (FIPAException e) {
+			e.printStackTrace();
+			reply.setContent(e.getMessage());
+			reply.setPerformative(ACLMessage.FAILURE);
+		} catch (CodecException e) {
+			e.printStackTrace();
+			reply.setContent(e.getMessage());
+			reply.setPerformative(ACLMessage.FAILURE);
+		} catch (OntologyException e) {
+			e.printStackTrace();
+			reply.setContent(e.getMessage());
+			reply.setPerformative(ACLMessage.FAILURE);
+		}
 		
+		return reply;
+
+	}*/
+
 }

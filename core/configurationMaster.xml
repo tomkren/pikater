@@ -45,5 +45,11 @@
         <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara">
         </agent>
 
+        <agent type="org.pikater.core.agents.gateway.Agent_PikaterGateway" name="Gateway">
+        </agent>
+
+        <agent type="org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider" name="VirtualBoxProvider">
+        </agent>
+
     </agents>
 </configuration>

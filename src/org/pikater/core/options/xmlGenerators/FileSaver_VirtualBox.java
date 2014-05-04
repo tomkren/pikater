@@ -22,7 +22,7 @@ public class FileSaver_VirtualBox  {
 		agentInfo.setPicture("picture0.jpg");
 		agentInfo.setDescription("This box save data to Pikater database");
 
-		agentInfo.addInputSlots(inputSlot);
+		agentInfo.addInputSlot(inputSlot);
 
 		return agentInfo;
 

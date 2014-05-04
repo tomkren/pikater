@@ -27,12 +27,6 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	
 	protected abstract Classifier getClassifierClass();
 
-	protected abstract AgentInfo getAgentInfo();
-
-	@Override
-	protected void getParameters() {
-		//TODO
-	}
 
 	@Override
 	public String getAgentType() {
