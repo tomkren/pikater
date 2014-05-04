@@ -3,6 +3,7 @@ package org.pikater.core.agents;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -168,7 +169,7 @@ public abstract class PikaterAgent extends Agent {
 
 	public void initDefault(Object[] args) {
 		if (getName().contains("-")) {
-			nodeName = getName().substring(getName().lastIndexOf('-'));
+			nodeName = getLocalName().substring(getLocalName().lastIndexOf('-')+1);
 		}
 		parseArguments(args);
 		initLogging();
@@ -227,5 +228,10 @@ public abstract class PikaterAgent extends Agent {
 
 	public void logError(String errorDescription, Severity severity) {
 		logger.logError(getLocalName(), errorDescription, severity);
+	}
+	
+	public boolean isSameNode(AID id) {
+		return ((nodeName == null || nodeName.isEmpty()) && !id.getLocalName().contains("-")) ||
+				nodeName != null && id.getLocalName().endsWith("-" + nodeName);
 	}
 }

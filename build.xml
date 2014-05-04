@@ -5,10 +5,10 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="pikater">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../../../../Applications/Eclipse Java EE"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
+    <import file="build-core.xml"/>
     <path id="EAR Libraries.libraryclasspath"/>
     <path id="Ivy.libraryclasspath">
         <pathelement location="../../../../../.ivy2/cache/com.vaadin/vaadin-server/jars/vaadin-server-7.1.14.jar"/>
@@ -168,12 +168,12 @@
         <path refid="EAR Libraries.libraryclasspath"/>
         <pathelement location="libraries/xstream-1.4.7/lib/xstream/kxml2-2.3.0.jar"/>
         <path refid="Ivy.libraryclasspath"/>
+        <pathelement location="libraries/commons-io-2.4.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
-                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -192,17 +192,4 @@
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
 </project>
