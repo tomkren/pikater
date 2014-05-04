@@ -55,9 +55,6 @@ import org.pikater.core.ontology.messages.Task;
 import weka.core.Instances;
 
 public abstract class Agent_ComputingAgent extends PikaterAgent {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7927583436579620995L;
 	protected Codec codec = new SLCodec();
 	private Ontology ontology = MessagesOntology.getInstance();
@@ -301,7 +298,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 	protected ACLMessage sendGetDataReq(String fileName) {
 		AID[] ARFFReaders;
-		AID reader;
+		AID reader = null;
 		ACLMessage msgOut = null;
 		// Make the list of reader agents
 		DFAgentDescription template = new DFAgentDescription();
@@ -309,21 +306,32 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		sd.setType(AgentNames.ARRFF_READER);
 		template.addServices(sd);
 		try {
+			GetData get_data = new GetData();
+
 			DFAgentDescription[] result = DFService.search(this, template);
 			// System.out.println(getLocalName() + ": Found the following ARFFReader agents:");
 			ARFFReaders = new AID[result.length];
 			for (int i = 0; i < result.length; ++i) {
+				if (isSameNode(result[i].getName())) {
+					// prefer local reader for O2A transfer
+					reader = result[i].getName();
+					log("preferring reader "+reader.getName());
+					get_data.setO2a_agent(getLocalName());
+					break;
+				}
 				ARFFReaders[i] = result[i].getName();
 				// System.out.println("    " + ARFFReaders[i].getName());
 			}
-			
-			// randomly choose one of the readers
-			Random randomGenerator = new Random();		    
-		    int randomInt = randomGenerator.nextInt(result.length);
-		    reader = ARFFReaders[randomInt];
 
-		    // System.out.println(getLocalName() + ": using " + reader + ", filename: " + fileName);
-			
+			// randomly choose one of the readers if none preferred
+			if (reader == null) {
+				Random randomGenerator = new Random();
+				int randomInt = randomGenerator.nextInt(result.length);
+				reader = ARFFReaders[randomInt];
+			}
+
+			log("using reader " + reader + ", filename: " + fileName);
+
 			// request
 			msgOut = new ACLMessage(ACLMessage.REQUEST);
 			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -333,9 +341,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 			msgOut.addReceiver(reader);
 			msgOut.setConversationId("get-data_" + convId++);
 			// content
-			GetData get_data = new GetData();
 			get_data.setFile_name(fileName);
-			get_data.setO2a_agent(getLocalName());
 			Action a = new Action();
 			a.setAction(get_data);
 			a.setActor(this.getAID());
