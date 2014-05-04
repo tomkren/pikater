@@ -162,7 +162,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			e1.printStackTrace();
 		}
 
-        AID receiver = new AID(AgentNames.INPUT_TRANSFORMER, false);
+        AID receiver = new AID(AgentNames.INSERTED_BATCHES_LOG, false);
         
         Ontology ontology = BatchOntology.getInstance();
 

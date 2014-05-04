@@ -29,7 +29,7 @@ import org.pikater.core.ontology.batch.SavedBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.pikater.core.ontology.messages.MessagesOntology;
 
-public class Agent_InputTransformer extends PikaterAgent {
+public class Agent_InsertedBatchesLog extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7226837600070711675L;
 
@@ -40,7 +40,7 @@ public class Agent_InputTransformer extends PikaterAgent {
 	  	System.out.println("Agent: " +getLocalName() + " starts.");
 
 		initDefault();
-		registerWithDF(AgentNames.INPUT_TRANSFORMER);
+		registerWithDF(AgentNames.INSERTED_BATCHES_LOG);
 
 		this.getContentManager().registerLanguage(getCodec());
 		this.getContentManager().registerOntology(BatchOntology.getInstance());
@@ -127,10 +127,10 @@ class RecieveExperiment extends CyclicBehaviour {
 	 */
 	private static final long serialVersionUID = 6561793512467823420L;
 
-	private Agent_InputTransformer agent = null;
+	private Agent_InsertedBatchesLog agent = null;
 	private Codec codec = null;
 	
-	public RecieveExperiment(Agent_InputTransformer agent, Codec codec) {
+	public RecieveExperiment(Agent_InsertedBatchesLog agent, Codec codec) {
 		this.agent = agent;
 		this.codec = codec;
 	}
