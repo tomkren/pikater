@@ -10,7 +10,7 @@
 	
 	<!-- include the Java code from this package that is going to be translated to Javascript -->
 	<source path="client" />
-	<source path="shared" />
+	<!-- <source path="shared" /> -->
 	
 	<!-- include custom styles for the client widgets; defined in the public folder -->
 	<stylesheet src="clientStyles.css"/>
