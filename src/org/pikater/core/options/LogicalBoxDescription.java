@@ -2,18 +2,12 @@ package org.pikater.core.options;
 
 public class LogicalBoxDescription extends LogicalUnitDescription {
 
-	private static String NONAME = "NoName";
-	public static Class NOAGENTCLASS = null;
-	public static String NOPICTURE = "NoPicture";
-	private static String NODESCRIPTION = "NoDescription";
+	private String name = null;
+	private Class<? extends Object> agentClass = null;
+	private String picture = null;
+	private String description = null;
 
-	private String name = NONAME;
-	private Class agentClass = NOAGENTCLASS;
-	private String picture = NOPICTURE;
-	private String description = NODESCRIPTION;
-
-
-	public LogicalBoxDescription(String name, Class ontology,
+	public LogicalBoxDescription(String name, Class<? extends Object> ontology,
 			String description) {
 
 		this.name = name;
@@ -30,11 +24,11 @@ public class LogicalBoxDescription extends LogicalUnitDescription {
 		this.name = name;
 	}
 
-	public Class getagentClass()
+	public Class<? extends Object> getAgentClass()
 	{
 		return agentClass;
 	}
-	public void setAgentName(Class agentClass)
+	public void setAgentName(Class<? extends Object> agentClass)
 	{
 		this.agentClass = agentClass;
 	}
