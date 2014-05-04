@@ -1,12 +1,12 @@
-package org.pikater.web.vaadin.gui.shared.box;
+package org.pikater.shared.experiment.webformat.box;
 
-import org.pikater.shared.experiment.box.BoxInfo;
-import org.pikater.shared.experiment.box.BoxInfo.BoxType;
+import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.BoxInfo.BoxType;
 
 public class LeafBox extends AbstractBox
 {
 	// -----------------------------------------------------------
-	// INTERNAL FIELDS NOT BEING DISPLAYED TO THE USER
+	// FIELDS NOT BEING DISPLAYED TO THE USER
 	
 	private final BoxInfo info;
 	
@@ -17,28 +17,31 @@ public class LeafBox extends AbstractBox
 	{
 		this.info = info;
 	}
+	
+	// -----------------------------------------------------------
+	// FIELDS BEING DISPLAYED TO THE USER
 
 	@Override
 	public String getDisplayName()
 	{
-		return info.getName();
+		return info.name;
 	}
 
 	@Override
 	public String getDescription()
 	{
-		return info.getDescription();
+		return info.description;
 	}
 
 	@Override
 	public String getPicture()
 	{
-		return info.getPicture();
+		return info.picture;
 	}
 
 	@Override
 	public BoxType getType()
 	{
-		return info.getType();
+		return info.type;
 	}
 }

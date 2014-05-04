@@ -1,9 +1,9 @@
-package org.pikater.web.vaadin.gui.shared.box;
+package org.pikater.shared.experiment.webformat.box;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.pikater.shared.experiment.box.BoxInfo.BoxType;
+import org.pikater.shared.experiment.webformat.BoxInfo.BoxType;
 
 public class WrapperBox extends AbstractBox
 {

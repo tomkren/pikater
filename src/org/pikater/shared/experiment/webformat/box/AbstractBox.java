@@ -1,6 +1,6 @@
-package org.pikater.web.vaadin.gui.shared.box;
+package org.pikater.shared.experiment.webformat.box;
 
-import org.pikater.shared.experiment.box.BoxInfo.BoxType;
+import org.pikater.shared.experiment.webformat.BoxInfo.BoxType;
 
 public abstract class AbstractBox
 {

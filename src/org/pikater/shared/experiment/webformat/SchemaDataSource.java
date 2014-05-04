@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.shared;
+package org.pikater.shared.experiment.webformat;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.pikater.shared.experiment.webformat.box.AbstractBox;
+import org.pikater.shared.experiment.webformat.box.LeafBox;
 import org.pikater.shared.util.BidiMap;
 import org.pikater.shared.util.SimpleIDGenerator;
-import org.pikater.web.vaadin.gui.shared.box.AbstractBox;
-import org.pikater.web.vaadin.gui.shared.box.LeafBox;
 
 public class SchemaDataSource
 {
