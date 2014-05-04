@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticeditor;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
@@ -21,6 +22,12 @@ public class KineticEditorConnector extends AbstractComponentConnector
 		registerRpc(KineticEditorClientRpc.class, new KineticEditorClientRpc()
 		{
 			private static final long serialVersionUID = -263115608289713347L;
+
+			@Override
+			public void experimentChangedCallback()
+			{
+				Window.alert("New experiment about to be loaded");
+			}
 		});
 	}
 

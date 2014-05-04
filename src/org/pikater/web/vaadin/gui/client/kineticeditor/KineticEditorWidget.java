@@ -3,7 +3,6 @@ package org.pikater.web.vaadin.gui.client.kineticeditor;
 import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.ClientVars;
-import org.pikater.web.vaadin.gui.client.ICustomVaadinWidget;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
@@ -22,7 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.vaadin.client.ui.VButton;
 import com.vaadin.shared.communication.ServerRpc;
 
-public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinWidget
+public class KineticEditorWidget extends VerticalPanel
 {
 	/**
 	 * Reference to the client connector communicating with the server.	
@@ -118,7 +117,6 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 		}
 	}
 	
-	@Override
 	public void setServerRPC(ServerRpc rpc)
 	{
 		this.server = (KineticEditorServerRpc) rpc;

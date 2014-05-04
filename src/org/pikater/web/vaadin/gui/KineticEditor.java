@@ -1,6 +1,10 @@
 package org.pikater.web.vaadin.gui;
 
+import org.pikater.shared.experiment.ConversionException;
+import org.pikater.shared.experiment.UniToWebConverter;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.web.WebAppLogger;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorState;
 
@@ -18,11 +22,26 @@ public class KineticEditor extends AbstractComponent
 	public KineticEditor()
 	{
 		registerRpc(rpc);
+		
+		// to call client side RPC:
+		// getRpcProxy(KineticEditorClientRpc.class).experimentChangedCallback();
 	}
 	
 	public void loadExperiment(UniversalComputationDescription experiment)
 	{
-		// TODO:
+		try
+		{
+			SchemaDataSource webFormat = UniToWebConverter.convert(experiment, KineticEditorState.getBoxInfoProvider());
+			getState().setExperimentToLoad(webFormat);
+		}
+		catch (ConversionException e)
+		{
+			// TODO: convert to XML and append to the log
+			WebAppLogger.logThrowable(
+					String.format("An error occured when trying to convert the following %s to the web format:\n", UniversalComputationDescription.class.getSimpleName()),
+					e
+			);
+		}
 	}
 
 	@Override

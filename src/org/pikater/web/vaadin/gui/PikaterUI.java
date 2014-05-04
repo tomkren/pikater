@@ -44,10 +44,10 @@ public class PikaterUI extends UI
 	@Override
 	protected void init(VaadinRequest request)
 	{
-		primary_displayWelcomeWizard();
+		// primary_displayWelcomeWizard();
 		
 		// test_console();
-		// test_editor();
+		test_editor();
 		// test_simpleButton();
 		// test_JSCH();
 	}
