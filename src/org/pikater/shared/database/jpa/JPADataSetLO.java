@@ -24,7 +24,8 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name="DataSetLO.getByID",query="select dslo from JPADataSetLO dslo where dslo.id=:id"),
 	@NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner"),
 	@NamedQuery(name="DataSetLO.getByOID",query="select dslo from JPADataSetLO dslo where dslo.OID=:oid"),
-	@NamedQuery(name="DataSetLO.getByHash",query="select dslo from JPADataSetLO dslo where dslo.hash=:hash")
+	@NamedQuery(name="DataSetLO.getByHash",query="select dslo from JPADataSetLO dslo where dslo.hash=:hash"),
+	@NamedQuery(name="DataSetLO.getByDescription",query="select dslo from JPADataSetLO dslo where dslo.description=:description")
 })
 public class JPADataSetLO extends JPAAbstractEntity{
 	@Id

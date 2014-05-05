@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,11 +62,14 @@ public class DatabaseInitialisation {
 		//this.createRolesAndUsers();
 		this.testUser();
 		
+		this.listDataSets();
+		this.listDataSetWithExclusion();
+		
 	//	this.createSampleResult();
 	//	this.listResults();
 		
 		//this.createFileMapping();
-		this.testFileMappings();
+		//this.testFileMappings();
 		
 	//	this.listExperiments();
 //		this.listBatches();
@@ -81,6 +85,35 @@ public class DatabaseInitialisation {
 	
 	private void listDataSets(){
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll();
+		p("No. of found DataSets: "+dslos.size());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
+		}
+		p("------------");
+		p("");
+	}
+	
+	private void listDataSetWithExclusion(){
+		List<String> exList=new ArrayList<String>();
+		List<JPADataSetLO> wDslos=DAOs.dataSetDAO.getByDescription("weather.arff");
+		if(wDslos.size()>0){
+			JPADataSetLO wdslo=wDslos.get(0);
+			exList.add(wdslo.getHash());
+		}
+		
+		List<JPADataSetLO> iDslos=DAOs.dataSetDAO.getByDescription("iris.arff");
+		if(iDslos.size()>0){
+			JPADataSetLO idslo=iDslos.get(0);
+			exList.add(idslo.getHash());
+		}
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllExcludingHashes(exList);
+		
+		p("No. of found DataSets: "+dslos.size());
+		System.out.print("Excluded: ");
+		for(String s :exList){
+			System.out.print(s+" ");
+		}
+		System.out.println();
 		for(JPADataSetLO dslo:dslos){
 			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
 		}

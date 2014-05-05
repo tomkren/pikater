@@ -14,10 +14,14 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
+import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.ConnectionProvider;
@@ -52,6 +56,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
+
+import javax.swing.JPanel;
 
 import org.pikater.core.ontology.experiment.Experiment;
 import org.pikater.core.ontology.experiment.SaveExperiment;
@@ -665,31 +671,21 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		log("Agent_DataManager.respondToGetAllMetadata");
 
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query;
-		
 		java.util.List<JPADataSetLO> datasets=null;
 		
 		if (gm.getResults_required()) {
-			
-			query = "SELECT * FROM metadata WHERE EXISTS " + "(SELECT * FROM results WHERE results.dataFile=metadata.internalFilename)";
 			if (gm.getExceptions() != null) {
+				java.util.List<String> exHash=new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
 					Metadata m = (Metadata) itr.next();
-					query += " AND ";
-					query += "internalFilename <> '" + new File(m.getInternal_name()).getName() + "'";
+					exHash.add(m.getInternal_name());
 				}
+				datasets=DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
+			}else{
+				datasets=DAOs.dataSetDAO.getAllWithResults();
 			}
-			query += " ORDER BY externalFilename";
 		} else {
-			datasets=DAOs.dataSetDAO.getAll();
-			
-			
-			query = "SELECT * FROM metadata";
-
 			if (gm.getExceptions() != null) {
 				
 				java.util.List<String> excludedHashes = new java.util.ArrayList<String>();
@@ -701,29 +697,48 @@ public class Agent_DataManager extends PikaterAgent {
 				}
 				
 				datasets=DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
-				
-				query += " WHERE ";
-				boolean first = true;
-				Iterator itr2 = gm.getExceptions().iterator();
-				while (itr2.hasNext()) {
-					Metadata m = (Metadata) itr2.next();
-					if (!first) {
-						query += " AND ";
-					}
-					query += "internalFilename <> '" + new File(m.getInternal_name()).getName() + "'";
-					first = false;
-				}
-				
-				
-
+			}else{
+				datasets=DAOs.dataSetDAO.getAll();
 			}
-			query += " ORDER BY externalFilename";
+			
 		}
 
 		List allMetadata = new ArrayList();
 
-		ResultSet rs = stmt.executeQuery(query);
-
+		for(JPADataSetLO dslo:datasets){
+			
+			//Getting the Global MetaData for the respond
+			JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
+			
+			java.util.List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
+			for(JPAAttributeMetaData amd:attrMDs){
+				Metadata aM=new Metadata();
+				
+				
+				aM.setInternal_name(dslo.getHash());
+				aM.setExternal_name(dslo.getDescription());
+				
+				aM.setDefault_task(gmd.getDefaultTaskType().getName());
+				aM.setNumber_of_instances(gmd.getNumberofInstances());
+				
+				aM.setMissing_values(amd.getRatioOfMissingValues()>0);
+				aM.setNumber_of_attributes(attrMDs.size());
+				
+				if(amd instanceof JPAAttributeNumericalMetaData){
+					aM.setAttribute_type("Numerical");
+				}else if(amd instanceof JPAAttributeCategoricalMetaData){
+					aM.setAttribute_type("Categorical");
+				}else{
+					aM.setAttribute_type("Mixed");
+				}
+				
+				allMetadata.add(aM);
+			}
+			
+		}
+		
+		
+		/**
 		while (rs.next()) {
 			Metadata m = new Metadata();
 			m.setAttribute_type(rs.getString("attributeType"));
@@ -736,8 +751,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 			allMetadata.add(m);
 		}
-
-		log("Executing query: " + query);
+		**/
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
@@ -745,7 +759,6 @@ public class Agent_DataManager extends PikaterAgent {
 		Result _result = new Result(a.getAction(), allMetadata);
 		getContentManager().fillContent(reply, _result);
 
-		db.close();
 		return reply;
 	}
 

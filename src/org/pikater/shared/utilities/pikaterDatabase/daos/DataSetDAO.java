@@ -66,6 +66,18 @@ public class DataSetDAO extends AbstractDAO{
 		return getByTypedNamedQuery("DataSetLO.getByHash", "hash", hash);
 	}
 	
+	public List<JPADataSetLO> getByDescription(String description) {
+		return getByTypedNamedQuery("DataSetLO.getByDescription", "description", description);
+	}
+	
+	public List<JPADataSetLO> getAllWithResults(){
+		return null;
+	}
+	
+	public List<JPADataSetLO> getAllWithResultsExcludingHashes(List<String> hashesToBeExcluded){
+		return null;
+	}
+	
 	public void storeNewDataSet(File dataset,JPADataSetLO initialData) throws IOException{
 		long oid = -1;
 		String hash = Hash.getMD5Hash(dataset);
