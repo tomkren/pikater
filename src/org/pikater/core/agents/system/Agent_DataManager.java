@@ -662,12 +662,18 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
+		
+		log("Agent_DataManager.respondToGetAllMetadata");
 
 		openDBConnection();
 		Statement stmt = db.createStatement();
 
 		String query;
+		
+		java.util.List<JPADataSetLO> datasets=null;
+		
 		if (gm.getResults_required()) {
+			
 			query = "SELECT * FROM metadata WHERE EXISTS " + "(SELECT * FROM results WHERE results.dataFile=metadata.internalFilename)";
 			if (gm.getExceptions() != null) {
 				Iterator itr = gm.getExceptions().iterator();
@@ -679,20 +685,36 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 			query += " ORDER BY externalFilename";
 		} else {
+			datasets=DAOs.dataSetDAO.getAll();
+			
+			
 			query = "SELECT * FROM metadata";
 
 			if (gm.getExceptions() != null) {
-				query += " WHERE ";
-				boolean first = true;
+				
+				java.util.List<String> excludedHashes = new java.util.ArrayList<String>();
+				
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
 					Metadata m = (Metadata) itr.next();
+					excludedHashes.add(m.getInternal_name());
+				}
+				
+				datasets=DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
+				
+				query += " WHERE ";
+				boolean first = true;
+				Iterator itr2 = gm.getExceptions().iterator();
+				while (itr2.hasNext()) {
+					Metadata m = (Metadata) itr2.next();
 					if (!first) {
 						query += " AND ";
 					}
 					query += "internalFilename <> '" + new File(m.getInternal_name()).getName() + "'";
 					first = false;
 				}
+				
+				
 
 			}
 			query += " ORDER BY externalFilename";

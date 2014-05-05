@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -26,6 +31,22 @@ public class DataSetDAO extends AbstractDAO{
 		.getEntityManagerInstance()
 		.createNamedQuery("DataSetLO.getAll", JPADataSetLO.class)
 		.getResultList();
+	}
+	
+	public List<JPADataSetLO> getAllExcludingHashes(List<String> hashesToBeExcluded){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaBuilder cb= em.getCriteriaBuilder();
+		CriteriaQuery<JPADataSetLO> cq=cb.createQuery(JPADataSetLO.class);
+		Root<JPADataSetLO> r=cq.from(JPADataSetLO.class);
+		
+		Predicate p=cb.conjunction();
+		for(String exHash:hashesToBeExcluded){
+			p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
+		}
+		cq=cq.where(p);
+		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
+		
+		return res;
 	}
 
 	@Override
