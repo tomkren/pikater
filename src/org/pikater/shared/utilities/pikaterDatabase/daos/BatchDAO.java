@@ -6,12 +6,12 @@ import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.jpa.JPABatchStatus;
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.UserStatus;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.AbstractDAO;
 import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 public class BatchDAO extends AbstractDAO {
@@ -51,5 +51,19 @@ public class BatchDAO extends AbstractDAO {
 		}
 	}
 
+	public void updateEntity(JPABatch changedEntity){
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			JPABatch item=em.find(JPABatch.class, changedEntity.getId());
+			item.updateValues(changedEntity);
+			em.getTransaction().commit();
+		}catch(Exception e){
+			logger.error("Can't update JPA Batch object.", e);
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+	}
 	
 }

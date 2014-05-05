@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.UserStatus;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.AbstractDAO;
 import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 public class UserDAO extends AbstractDAO {
@@ -55,5 +55,19 @@ public class UserDAO extends AbstractDAO {
 		}
 	}
 
+	public void updateEntity(JPAUser changedEntity){
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			JPAUser item=em.find(JPAUser.class, changedEntity.getId());
+			item.updateValues(changedEntity);
+			em.getTransaction().commit();
+		}catch(Exception e){
+			logger.error("Can't update JPA User object.", e);
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+	}
 	
 }

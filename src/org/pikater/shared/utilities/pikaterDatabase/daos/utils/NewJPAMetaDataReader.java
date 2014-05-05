@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos;
+package org.pikater.shared.utilities.pikaterDatabase.daos.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,6 +13,7 @@ import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
+import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.metadata.AttributeMetadata;

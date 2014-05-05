@@ -11,7 +11,6 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.utilities.pikaterDatabase.daos.utils.DBFiles;
 import org.pikater.shared.utilities.pikaterDatabase.daos.utils.Hash;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.AbstractDAO;
 import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 public class DataSetDAO extends AbstractDAO{

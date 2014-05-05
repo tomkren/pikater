@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -26,8 +27,11 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
+import org.pikater.shared.database.jpa.UserStatus;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
+import org.pikater.shared.utilities.pikaterDatabase.daos.utils.Hash;
+import org.pikater.shared.utilities.pikaterDatabase.daos.utils.NewJPAMetaDataReader;
 import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 import org.pikater.shared.utilities.pikaterDatabase.initialisation.JPAMetaDataReader;
 
@@ -38,12 +42,10 @@ public class DatabaseInitialisation {
 	PGConnection connection;
 	EntityManagerFactory emf=null;
 	EntityManager em = null;
-	Database database = null;
 	
 	public DatabaseInitialisation(EntityManagerFactory emf,PGConnection connection){
 		this.emf=emf;
 		this.connection=connection;
-		this.database = new Database(emf, connection);
 	}
 
 	
@@ -56,22 +58,59 @@ public class DatabaseInitialisation {
 	 */
 	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{				
 		
-		this.createRolesAndUsers();
+		//this.createRolesAndUsers();
+		this.testUser();
+		
+	//	this.createSampleResult();
+	//	this.listResults();
+		
+		//this.createFileMapping();
+		this.testFileMappings();
+		
+	//	this.listExperiments();
+//		this.listBatches();
 		
 		//this.addWebDatasets();
 		
-		/**
-
-		this.insertFinishedBatch();
+		//this.insertFinishedBatch();
 		
+		/**
 		this.createFileMapping();
 		**/
 	}
 	
+	private void listDataSets(){
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll();
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
+		}
+		p("------------");
+		p("");
+	}
+	
+	private void createSampleResult(){
+		JPAResult res=new JPAResult();
+		res.setAgentName("SampleAgent");
+		res.setAgentTypeId(-1);
+		res.setStart(new Date());
+		
+		DAOs.resultDAO.storeEntity(res);
+	}
+	
+	private void listResults(){
+		List<JPAResult> results=DAOs.resultDAO.getAll();
+		for(JPAResult res:results){
+			p(res.getId()+". "+res.getAgentName()+"    "+res.getStart());
+		}
+		p("------------");
+		p("");
+	}
+	
 	private void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
-		File dir=new File(Agent_DataManager.datasetsPath);
-		JPAUser user = database.getUserByLogin("stepan");
-		System.out.println("Target user: "+user.getLogin());
+		File dir=new File("...");
+		
+		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
+		System.out.println("Target user: "+owner.getLogin());
 		
 		File[] datasets=dir.listFiles();
 		for(File datasetI : datasets){
@@ -79,18 +118,14 @@ public class DatabaseInitialisation {
 				try{
 				System.out.println("--------------------");
 				System.out.println("Dataset: "+datasetI.getAbsolutePath());
-				JPAMetaDataReader mdr=new JPAMetaDataReader(database);
-				mdr.readFile(datasetI);		
-				System.out.println("MD5 hash: "+database.getMD5Hash(datasetI));
-			
-				JPADataSetLO dslo=database.saveDataSet(
-					user,
-					datasetI,
-					datasetI.getName(),
-					mdr.getJPAGlobalMetaData(),
-					mdr.getJPAAttributeMetaData()
-					);
-				System.out.println(dslo);
+				
+				JPADataSetLO newDSLO=new JPADataSetLO();
+				newDSLO.setCreated(new Date());
+				newDSLO.setDescription(datasetI.getName());
+				newDSLO.setOwner(owner);
+				//hash a OID will be set using DAO
+				DAOs.dataSetDAO.storeNewDataSet(datasetI, newDSLO);
+				
 				System.out.println("--------------------");
 				System.out.println();
 				}catch(Exception e){
@@ -98,42 +133,255 @@ public class DatabaseInitialisation {
 				}
 			}
 		}
+		
+		
+		
+		
+		///Update metadata
+		
+		
+		File[] datasets2=dir.listFiles();
+		for(File datasetI : datasets2){
+			if(datasetI.isFile()){
+				try{
+				System.out.println("--------------------");
+				
+				this.updateMetaDataForHash(datasetI);
+				
+				System.out.println("--------------------");
+				System.out.println();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+		
+	}
+	
+	
+	private void updateMetaDataForHash(File file) throws IOException{
+		
+		String hash;
+
+			hash = Hash.getMD5Hash(file);
+		List<JPADataSetLO> dsloDataSetLO=DAOs.dataSetDAO.getByHash(hash);
+		if(dsloDataSetLO.size()>0){
+			JPADataSetLO dslo=dsloDataSetLO.get(0);
+			
+			NewJPAMetaDataReader readr=new NewJPAMetaDataReader();
+			try {
+				readr.readFile(file);
+				
+				dslo.setGlobalMetaData(readr.getJPAGlobalMetaData());
+				dslo.setAttributeMetaData(readr.getJPAAttributeMetaData());
+				
+				DAOs.dataSetDAO.updateEntity(dslo);
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}else{
+			System.out.println("DataSet not found");
+		}
 	}
 	
 
 
-	private void createRolesAndUsers() throws UserNotFoundException {
+	private void createRolesAndUsers() throws UserNotFoundException {		
+		
+		JPAUserPriviledge sdsPriv=new JPAUserPriviledge();
+		sdsPriv.setName("SaveDataSet");
+		DAOs.userPrivDAO.storeEntity(sdsPriv);
 
-		database.addUserPriviledge("SaveDataSet");
-		database.addUserPriviledge("SaveBox");
+		
+		JPAUserPriviledge sbPriv=new JPAUserPriviledge();
+		sbPriv.setName("SaveBox");
+		DAOs.userPrivDAO.storeEntity(sbPriv);
+		
+		JPARole u=new JPARole();
+		u.setName("user");
+		u.setDescription("Standard User Role");
+		u.addPriviledge(sdsPriv);
+		DAOs.roleDAO.storeEntity(u);
 		
 		
-		database.addRole("user", "Standard User Role");
-		database.addRole("admin","Admin role");
+		JPARole a=new JPARole();
+		a.setName("admin");
+		a.setDescription("Admin Role");
+		a.addPriviledge(sdsPriv);
+		a.addPriviledge(sbPriv);
+		DAOs.roleDAO.storeEntity(a);
 		
-		database.addPriviledgeForRole("user", "SaveDataSet");
 		
-		database.addPriviledgeForRole("admin", "SaveDataSet");
-		database.addPriviledgeForRole("admin", "SaveBox");
+		JPAUser u0=new JPAUser();
+		u0.setLogin("zombie");
+		u0.setPassword("xxx");
+		u0.setEmail("invalid@mail.com");
+		u0.setPriorityMax(-1);
+		u0.setStatus(UserStatus.PASSIVE);
+		u0.setCreated(new Date());
+		u0.setRole(u);
+		DAOs.userDAO.storeEntity(u0);
 		
 		
-		database.addUser("stepan", "123", "Bc.Stepan.Balcar@gmail.com", 9);
-		database.setRoleForUser("stepan", "admin");
+		JPAUser u1=new JPAUser();
+		u1.setLogin("stepan");
+		u1.setPassword("123");
+		u1.setEmail("Bc.Stepan.Balcar@gmail.com");
+		u1.setPriorityMax(9);
+		u1.setStatus(UserStatus.ACTIVE);
+		u1.setCreated(new Date());
+		u1.setRole(a);
+		DAOs.userDAO.storeEntity(u1);
 		
-		database.addUser("kj", "123", "kj@gmail.com", 9);
-		database.setRoleForUser("kj", "admin");
 		
-		database.addUser("sj", "123", "sj@gmail.com", 9);
-		database.setRoleForUser("sj", "admin");
+		JPAUser u2=new JPAUser();
+		u2.setLogin("kj");
+		u2.setPassword("123");
+		u2.setEmail("kj@gmail.com");
+		u2.setPriorityMax(9);
+		u2.setStatus(UserStatus.ACTIVE);
+		u2.setCreated(new Date());
+		u2.setRole(a);
+		DAOs.userDAO.storeEntity(u2);
+	
 		
-		database.addUser("sp", "123", "sp@gmail.com", 9);
-		database.setRoleForUser("sp", "admin");
+		JPAUser u3=new JPAUser();
+		u3.setLogin("sj");
+		u3.setPassword("123");
+		u3.setEmail("sj@gmail.com");
+		u3.setPriorityMax(9);
+		u3.setStatus(UserStatus.ACTIVE);
+		u3.setCreated(new Date());
+		u3.setRole(a);
+		DAOs.userDAO.storeEntity(u3);
 		
-		database.addUser("martin", "123", "Martin.Pilat@mff.cuni.cz", 9);
-		database.setRoleForUser("martin", "user");
+		JPAUser u4=new JPAUser();
+		u4.setLogin("sp");
+		u4.setPassword("123");
+		u4.setEmail("sp@gmail.com");
+		u4.setPriorityMax(9);
+		u4.setStatus(UserStatus.ACTIVE);
+		u4.setCreated(new Date());
+		u4.setRole(a);
+		DAOs.userDAO.storeEntity(u4);
 		
-		database.addUser("klara", "123", "peskova@braille.mff.cuni.cz", 9);
-		database.setRoleForUser("klara", "user");
+		JPAUser u5=new JPAUser();
+		u5.setLogin("martin");
+		u5.setPassword("123");
+		u5.setEmail("Martin.Pilat@mff.cuni.cz");
+		u5.setPriorityMax(9);
+		u5.setStatus(UserStatus.ACTIVE);
+		u5.setCreated(new Date());
+		u5.setRole(u);
+		DAOs.userDAO.storeEntity(u5);
+	
+		
+		JPAUser u6=new JPAUser();
+		u6.setLogin("klara");
+		u6.setPassword("123");
+		u6.setEmail("peskova@braille.mff.cuni.cz");
+		u6.setPriorityMax(9);
+		u6.setStatus(UserStatus.ACTIVE);
+		u6.setCreated(new Date());
+		u6.setRole(u);
+		DAOs.userDAO.storeEntity(u6);
+	}
+	
+	public void testUser(){
+		List<JPARole> roles=DAOs.roleDAO.getAll();
+		p("No. of Roles in the system : "+roles.size());
+		for(JPARole r:roles){
+			p(r.getId()+". "+r.getName()+" : "+r.getDescription());
+		}
+		p("---------------------");
+		p("");
+		
+		List<JPAUser> users=DAOs.userDAO.getAll();
+		p("No. of Users in the system : "+users.size());
+		for(JPAUser r:users){
+			p(r.getId()+". "+r.getLogin()+" : "+r.getStatus()+" - "+r.getEmail()+"   "+r.getCreated().toString());
+		}
+		p("---------------------");
+		p("");
+		
+		
+		
+	}
+	
+	public void listBatches(){
+		List<JPABatch> batches=DAOs.batchDAO.getAll();
+		p("No. of Batches in the system : "+batches.size());
+		for(JPABatch b:batches){
+			p(b.getId()+". "+b.getName()+" : "+b.getCreated()+" - "+b.getFinished());
+		}
+		p("---------------------");
+		p("");
+	}
+	
+	private void createFileMapping() {
+		
+        File dir=new File("...");
+		
+		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
+		System.out.println("Target user: "+owner.getLogin());
+		
+		File[] datasets=dir.listFiles();
+		for(File datasetI : datasets){
+			if(datasetI.isFile()){
+				try{
+				System.out.println("--------------------");
+				System.out.println("FileMapping for Dataset: "+datasetI.getAbsolutePath());
+				
+				String hash=Hash.getMD5Hash(datasetI);
+				
+				JPAFilemapping f = new JPAFilemapping();
+				f.setUser(owner);
+				f.setExternalfilename(datasetI.getName());
+				f.setInternalfilename(hash);
+				DAOs.filemappingDAO.storeEntity(f);
+				
+				System.out.println("--------------------");
+				System.out.println();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+
+	}
+	
+	private void testFileMappings(){
+		List<JPAFilemapping> fms=DAOs.filemappingDAO.getAll();
+		p("No. of FileMappings "+fms.size());
+		for(JPAFilemapping fm:fms){
+			p(fm.getId()+". "+fm.getInternalfilename()+" - "+fm.getExternalfilename());
+		}
+		
+		p("---------------------");
+		p("");
+	}
+	
+	private void listExperiments(){
+		List<JPAExperiment> exps=DAOs.experimentDAO.getAll();
+		p("No. of Experiments "+exps.size());
+		for(JPAExperiment exp:exps){
+			p(exp.getId()+". "+exp.getStatus()+" : "+exp.getStarted()+" - "+exp.getFinished());
+		}
+		
+		p("---------------------");
+		p("");
+	}
+	
+	private void p(String s){
+		System.out.println(s);
 	}
 	
 	private void insertFinishedBatch() throws ParseException {
@@ -144,7 +392,7 @@ public class DatabaseInitialisation {
 		result.setAgentName("RBFNetwork");
 		result.setAgentTypeId(0);
 		result.setErrorRate(0.214285716414452);
-		result.setFinish(dateFormat.parse("2014-03-29 11:06:57"));
+		result.setFinish(new Date());
 		result.setKappaStatistic(0.511627912521362);
 		result.setMeanAbsoluteError(0.264998614788055);
 		result.setNote("Note of result :-)");
@@ -163,86 +411,17 @@ public class DatabaseInitialisation {
 		batch.setName("Stepan's batch of experiments - school project");
 		batch.setPriority(99);
 		batch.addExperiment(experiment);
+		batch.setCreated(new Date());
 
-		this.database.persist(batch);
+		DAOs.batchDAO.storeEntity(batch);
 	}
 	
-	private void createFileMapping() {
-		
-		JPAFilemapping f = new JPAFilemapping();
-		f.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
-		f.setExternalfilename("iris.arff");
-		f.setInternalfilename("25d7d5d689042a3816aa1598d5fd56ef");
-		DAOs.filemappingDAO.storeEntity(f);
-		
-		JPAFilemapping f2 = new JPAFilemapping();
-		f2.setUser(DAOs.userDAO.getByLogin("stepan").get(0));
-		f2.setExternalfilename("weather.arff");
-		f2.setInternalfilename("772c551b8486b932aed784a582b9c1b1");
-		DAOs.filemappingDAO.storeEntity(f);
-
-	}
-
-	private void testData() throws SQLException, IOException, UserNotFoundException{
-		
-		database.addRole("user", "Standard user role");
-		database.addRole("admin","Standard administrator role");
-		
-		database.addUser("stepan", "123", "bc.stepan.balcar@gmail.com", 9); // + role
-		database.addUser("kj", "123", "nassoftwerak@gmail.com", 6);
-		database.addUser("sj", "123", "nassoftwerak@gmail.com", 6);
-		database.addUser("sp", "123", "nassoftwerak@gmail.com", 6);
-		database.addUser("martin", "123", "Martin.Pilat@mff.cuni.cz", 0);
-
-		database.setRoleForUser("stepan", "admin");
-		database.setRoleForUser("kj", "admin");
-		database.setRoleForUser("sj", "admin");
-		database.setRoleForUser("sp", "admin");
-		database.setRoleForUser("martin", "user");
-				
-		JPAUserPriviledge priviledgeSaveData = new JPAUserPriviledge();
-		priviledgeSaveData.setName("SaveDataSet");
-
-		JPAUserPriviledge priviledgeSaveBox = new JPAUserPriviledge();
-		priviledgeSaveBox.setName("SaveBox");
-
-		JPARole roleAdmin = database.getRoleByName("admin");
-		roleAdmin.addPriviledge(priviledgeSaveData);
-		roleAdmin.addPriviledge(priviledgeSaveBox);
-		
-		JPARole roleUser = database.getRoleByName("user");
-		roleUser.addPriviledge(priviledgeSaveData);
-	
-		JPAUser stepan = database.getUserByLogin("stepan");
-		stepan.setRole(roleAdmin);
-
-		database.persist(stepan);
-		/**
-		JPAUser john=this.getUserByLogin("johndoe");
-		this.saveGeneralFile(john.getId(), "First Data File",new File( "./data/files/25d7d5d689042a3816aa1598d5fd56ef"));
-		this.saveGeneralFile(john.getId(), "Second Data File",new File( "./data/files/772c551b8486b932aed784a582b9c1b1"));
-		this.saveGeneralFile(john.getId(), "Third Data File",new File( "./data/files/dc7ce6dea5a75110486760cfac1051a5"));
-		**/
-		
-		
-		// Test of Datasets
-		for(JPADataSetLO dslo:database.getAllDataSetLargeObjects()){
-			System.out.println("OID: "+dslo.getOID()+"  Hash:  "+dslo.getHash()+"  "+dslo.getDescription()+" ---  "+dslo.getOwner().getLogin()+"  GM.noInst: "+dslo.getGlobalMetaData().getNumberofInstances()+"  GM.DefTT: "+dslo.getGlobalMetaData().getDefaultTaskType().getName() );
-		}
-
-	}
 
 
 	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException, ParseException {
 
-		EntityManagerFactory emf=Persistence.createEntityManagerFactory("pikaterDataModel");
-
 		DatabaseInitialisation data = new DatabaseInitialisation(
-				emf,(PGConnection)(
-						new PostgreSQLConnectionProvider(
-								"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
-								"pikater",
-								"SrapRoPy").getConnection()));
+				null,null);
 		data.itialisationData();
 
 		
