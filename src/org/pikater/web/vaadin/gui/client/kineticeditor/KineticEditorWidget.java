@@ -1,12 +1,20 @@
 package org.pikater.web.vaadin.gui.client.kineticeditor;
 
-import net.edzard.kinetic.Vector2d;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.web.vaadin.gui.client.ClientVars;
+import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.EdgePrototype;
+import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.ExperimentGraphItem;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.TempDeselectOperation;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,10 +31,36 @@ import com.vaadin.shared.communication.ServerRpc;
 
 public class KineticEditorWidget extends VerticalPanel
 {
+	// --------------------------------------------------------
+	// GWT GUI
+	
+	/**
+	 * Main widgets.
+	 */
+	private FlowPanel toolbar;
+	private final KineticEditorCanvas kineticCanvas;
+	
+	/**
+	 * Special debug components.
+	 */
+	private PopupPanel jsonComparisonPanel;
+	private TextArea leftTextArea;
+	private TextArea rightTextArea;
+	
+	// --------------------------------------------------------
+	// VARIOUS VARIABLES
+	
 	/**
 	 * Reference to the client connector communicating with the server.	
 	 */
 	private KineticEditorServerRpc server;
+	
+	/**
+	 * Backup of the last loaded box definitions and experiment. Since they are shared in the component's state, we have
+	 * to know when they are changed and when they are not.	
+	 */
+	private BoxInfoCollection lastLoadedBoxDefinitions;
+	private SchemaDataSource lastLoadedExperiment;
 	
 	/**
 	 * Inner GWT variables to keep track of.
@@ -34,24 +68,16 @@ public class KineticEditorWidget extends VerticalPanel
 	private final Window.ClosingHandler closingHandler;
 	private boolean closingHandlerAdded;
 	
-	/**
-	 * Inner GWT GUI.
-	 */
-	private FlowPanel toolbar;
-	private KineticEditorCanvas kineticCanvas;
-	
-	/**
-	 * Custom widgets to remember and use in event handlers.
-	 */
-	private PopupPanel jsonComparisonPanel;
-	private TextArea leftTextArea;
-	private TextArea rightTextArea;
+	// --------------------------------------------------------
+	// CONSTRUCTOR
 	
 	public KineticEditorWidget()
 	{
 		super();
 		
 		this.server = null;
+		this.lastLoadedBoxDefinitions = null;
+		this.lastLoadedExperiment = null;
 		this.closingHandler = new Window.ClosingHandler()
 		{
 			/*
@@ -117,26 +143,72 @@ public class KineticEditorWidget extends VerticalPanel
 		}
 	}
 	
-	public void setServerRPC(ServerRpc rpc)
+	public KineticEditorServerRpc getServerRPC()
 	{
-		this.server = (KineticEditorServerRpc) rpc;
-	}
-	
-	public void loadExperiment()
-	{
-		// TODO:
-		
-		// TODO: delete this eventually:
-		BoxPrototype b1 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 1", new Vector2d(10, 10), new Vector2d(200, 100));
-		BoxPrototype b2 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 2", new Vector2d(500, 10), new Vector2d(200, 100));
-		BoxPrototype b3 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 3", new Vector2d(400, 300), new Vector2d(200, 100));
-		EdgePrototype e1 = this.kineticCanvas.getShapeCreator().createEdge(NodeRegisterType.MANUAL, b1, b2);
-		this.kineticCanvas.getEngine().registerCreated(b1, b2, b3, e1);
+		return server;
 	}
 	
 	public void setToolbarVisible(boolean visible)
 	{
 		this.toolbar.setVisible(visible);
+	}
+	
+	// ----------------------------------------------------------------------
+	// METHODS TO CALL FROM THE CONNECTOR
+	
+	public void setServerRPC(ServerRpc rpc)
+	{
+		this.server = (KineticEditorServerRpc) rpc;
+	}
+	
+	public void loadBoxDefinitions(BoxInfoCollection newBoxDefinitions)
+	{
+		if(lastLoadedBoxDefinitions != newBoxDefinitions)
+		{
+			lastLoadedBoxDefinitions = newBoxDefinitions;
+		}
+	}
+	
+	public void loadExperiment(SchemaDataSource newExperiment)
+	{
+		if(lastLoadedExperiment != newExperiment)
+		{
+			if(newExperiment != null)
+			{
+				KineticShapeCreator shapeCreator = this.kineticCanvas.getShapeCreator();
+				
+				// first convert all boxes
+				Map<Integer, BoxPrototype> guiBoxes = new HashMap<Integer, BoxPrototype>();
+				for(Integer leafBoxID : newExperiment.leafBoxes.keySet())
+				{
+					BoxPrototype guiBox = shapeCreator.createBox(NodeRegisterType.MANUAL, newExperiment.leafBoxes.get(leafBoxID));
+					guiBoxes.put(leafBoxID, guiBox);
+				}
+				
+				// then convert all edges
+				Collection<ExperimentGraphItem> allGraphItems = new ArrayList<ExperimentGraphItem>(guiBoxes.values()); // boxes should to be registered before edges
+				for(Entry<Integer, Set<Integer>> entry : newExperiment.edges.entrySet())
+				{
+					for(Integer toLeafBoxID : entry.getValue())
+					{
+						BoxPrototype fromBox = guiBoxes.get(entry.getKey());
+						BoxPrototype toBox = guiBoxes.get(toLeafBoxID);
+						allGraphItems.add(shapeCreator.createEdge(NodeRegisterType.MANUAL, fromBox, toBox));
+					}
+				}
+				
+				// put everything into Kinetic
+				this.kineticCanvas.getEngine().registerCreated(allGraphItems.toArray(new ExperimentGraphItem[0]));
+				
+				// and remember the loaded instance
+				lastLoadedExperiment = newExperiment;
+			}
+			else
+			{
+				// TODO: clear everything
+			}
+		}
+		// else - do nothing
 	}
 	
 	// ----------------------------------------------------------------------

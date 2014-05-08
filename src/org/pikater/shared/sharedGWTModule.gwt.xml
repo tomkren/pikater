@@ -2,7 +2,12 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0rc1//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0-rc1/distro-source/core/src/gwt-module.dtd">
 <module>
 	
-	<source path="experiment/webformat" />
+	<!-- Only sources actually used (transitively referenced) are compiled and included to GWT, so it's ok to include whole packages. -->
+	
+	<!-- Web format is used in GWT and at least one source from universal format (UniversalGui) as well. -->
+	<source path="experiment" />
+	
+	<!-- At least SimpleIDGenerator is used. -->
 	<source path="util" />
 	
 </module>

@@ -22,15 +22,20 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
+import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.GlobalEngineConfig;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
 
 @SuppressWarnings("deprecation")
 public class BoxPrototype extends ExperimentGraphItem
 {
+	// **********************************************************************************************
+	// "CONFIGURATION" AND TYPES
+	
+	private static final Vector2d defaultSize = new Vector2d(200, 100);
+	
 	// **********************************************************************************************
 	// PROGRAMMATIC VARIABLES
 	
@@ -49,21 +54,27 @@ public class BoxPrototype extends ExperimentGraphItem
 	private final Rectangle masterShape;
 	private final Text textLabel;
 	
+	// **********************************************************************************************
+	// EXTERNAL REFERENCES
+	
+	public final BoxInfo info;
+	
 	/**
 	 * Regular constructor.
 	 */
-	public BoxPrototype(KineticEngine kineticEngine, String ID, String label, Vector2d position, Vector2d size)
+	public BoxPrototype(KineticEngine kineticEngine, String ID, BoxInfo info, Vector2d position)
 	{
 		super(kineticEngine);
+		this.info = info;
 		this.connectedEdges = new HashSet<EdgePrototype>();
 		
 		// setup master rectangle
-		this.masterShape = Kinetic.createRectangle(new Box2d(Vector2d.origin, size));
+		this.masterShape = Kinetic.createRectangle(new Box2d(Vector2d.origin, defaultSize));
 		this.masterShape.setDraggable(false);
 		this.masterShape.setName(GlobalEngineConfig.name_box_masterRectangle); // the master shape that defines the bounds of the whole "box"
 		
 		// setup text label
-	    this.textLabel = Kinetic.createText(Vector2d.origin, label);
+	    this.textLabel = Kinetic.createText(Vector2d.origin, info.name);
 	    this.textLabel.setName(GlobalEngineConfig.name_box_textLabel);
 	    this.textLabel.setListening(false);
 	    
@@ -176,6 +187,7 @@ public class BoxPrototype extends ExperimentGraphItem
 	// **********************************************************************************************
 	// PUBLIC INTERFACE
 	
+	@Deprecated
 	public static Map<String, BoxPrototype> getInstancesFrom(KineticShapeCreator shapeCreator, Layer dynamicLayer)
 	{
 		Map<String, BoxPrototype> result = new HashMap<String, BoxPrototype>();
@@ -183,12 +195,15 @@ public class BoxPrototype extends ExperimentGraphItem
 		for(int i = 0; i < boxContainers.length(); i++)
 		{
 			// if we try to load existing nodes into a new box instance, it just won't work for some reason... we have to make a clone
+			/*
 			Group boxContainer = boxContainers.get(i).cast();
 			Text textLabel = boxContainer.find("." + GlobalEngineConfig.name_box_textLabel).get(0).cast();
 			Rectangle masterShape = boxContainer.find("." + GlobalEngineConfig.name_box_masterRectangle).get(0).cast();			
 			
-			BoxPrototype newInstance = shapeCreator.createBox(NodeRegisterType.MANUAL, textLabel.getText(), boxContainer.getPosition(), masterShape.getSize());
+			// TODO: serialize/deserialize box info instances
+			BoxPrototype newInstance = shapeCreator.createBox(NodeRegisterType.MANUAL, textLabel.getText(), boxContainer.getPosition());
 			result.put(boxContainer.getID(), newInstance); // IMPORTANT: register the original ID, not the new one
+			*/
 		}
 		return result;
 	}

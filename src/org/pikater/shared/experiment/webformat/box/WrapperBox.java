@@ -3,6 +3,7 @@ package org.pikater.shared.experiment.webformat.box;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.pikater.shared.experiment.universalformat.UniversalGui;
 import org.pikater.shared.experiment.webformat.BoxType;
 
 public class WrapperBox extends AbstractBox implements IAbstractBox
@@ -11,9 +12,9 @@ public class WrapperBox extends AbstractBox implements IAbstractBox
 	
 	public final Collection<AbstractBox> childBoxes;
 	
-	public WrapperBox(Integer id, AbstractBox... childBoxes)
+	public WrapperBox(Integer id, UniversalGui guiInfo, AbstractBox... childBoxes)
 	{
-		super(id);
+		super(id, guiInfo);
 		this.childBoxes = Arrays.asList(childBoxes); 
 	}
 

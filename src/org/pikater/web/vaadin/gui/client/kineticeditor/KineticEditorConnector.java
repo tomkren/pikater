@@ -5,8 +5,6 @@ import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
 
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.web.vaadin.gui.KineticEditor;
 
 import com.vaadin.client.communication.StateChangeEvent;
@@ -17,7 +15,7 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	private static final long serialVersionUID = 3442248033567337353L;
 	
 	private final KineticEditorServerRpc serverRPC = RpcProxy.create(KineticEditorServerRpc.class, this);
-
+	
 	/**
 	 * Called first when creating the connector.
 	 */
@@ -42,7 +40,6 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	{
 		KineticEditorWidget result = GWT.create(KineticEditorWidget.class);
 		result.setServerRPC(serverRPC);
-		result.loadExperiment();
 		return result;
 	}
 
@@ -66,10 +63,7 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	{
 		super.onStateChanged(stateChangeEvent);
 	
-		SchemaDataSource experiment = getState().experimentToLoad;
-		BoxInfoCollection boxDefinitions = getState().boxDefinitions;
-		System.out.println(experiment.toString());
-		// BoxInfo test = getState().testInfo;
-		// TODO:
+		getWidget().loadBoxDefinitions(getState().boxDefinitions);
+		getWidget().loadExperiment(getState().experimentToLoad);
 	}
 }

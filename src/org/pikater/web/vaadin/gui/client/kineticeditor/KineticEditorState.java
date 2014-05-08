@@ -10,10 +10,6 @@ public class KineticEditorState extends AbstractComponentState
 	private static final long serialVersionUID = 7400546695911691608L;
 	
 	/*
-	 * VAADIN SERIALIZATION ISSUES:
-	 * For more information:
-	 * http://dev.vaadin.com/wiki/Vaadin7/SharedState
-	 * 
 	 * GWT SERIALIZATION ISSUES:
 	 * - GENERAL - Classes used in GWT RPC have to implement isSerializable or Serializable.
 	 * - GENERAL - Protected constructor makes GWT happy.

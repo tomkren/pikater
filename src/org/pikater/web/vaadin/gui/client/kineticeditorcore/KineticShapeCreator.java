@@ -4,13 +4,15 @@ import net.edzard.kinetic.Group;
 import net.edzard.kinetic.Line;
 import net.edzard.kinetic.Vector2d;
 
+import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.box.LeafBox;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.EdgePrototype;
 
 public class KineticShapeCreator
 {
 	/**
-	 * Used to denote, whether the newly created node should be registered automatically or the calling code takes responsibility to do it.
+	 * Denotes whether a newly created node should be added to Kinetic automatically or the calling code takes responsibility to do it.
 	 * Always use AUTOMATIC unless we add many nodes at once - then it is more efficient to call batch creation callback on kinetic state.  
 	 */
 	public static enum NodeRegisterType
@@ -36,11 +38,19 @@ public class KineticShapeCreator
 	}
 	
 	/**
-	 * Creates a fully initialized box, if registered automatically.
+	 * Creates a fully initialized box, if registered automatically. Only use this method when importing experiments serialized from the server.
 	 */
-	public BoxPrototype createBox(NodeRegisterType nrt, String label, Vector2d position, Vector2d size)
+	public BoxPrototype createBox(NodeRegisterType nrt, LeafBox origin)
 	{
-		BoxPrototype result = new BoxPrototype(kineticEngine, GlobalEngineConfig.getBoxIDFromNumber(nextBoxID++), label, position, size);
+		return createBox(nrt, origin.boxInfo, new Vector2d(origin.guiInfo.x, origin.guiInfo.y));
+	}
+	
+	/**
+	 * Creates a fully initialized box, if registered automatically. Only use this method when creating boxes in the GUI.
+	 */
+	public BoxPrototype createBox(NodeRegisterType nrt, BoxInfo info, Vector2d position)
+	{
+		BoxPrototype result = new BoxPrototype(kineticEngine, GlobalEngineConfig.getBoxIDFromNumber(nextBoxID++), info, position);
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
 			kineticEngine.registerCreated(result);
@@ -49,11 +59,12 @@ public class KineticShapeCreator
 	}
 	
 	/**
-	 * Creates a partially initialized edge. The following methods have to be called later to make it fully initialized:
-	 * 1) connectFromBox
-	 * 2) connectToBox
-	 * 3) updateEdge
-	 * 
+	 * Creates a partially initialized edge. The following methods have to be called later to make it fully initialized: <br>
+	 * <ul>
+	 * <li>connectFromBox</li>
+	 * <li>connectToBox</li>
+	 * <li>updateEdge</li>
+	 * </ul>
 	 * In addition, the edge has to be registered, if not done so automatically by this method.
 	 */
 	public EdgePrototype createEdge(NodeRegisterType nrt, Group container, Line baseLine)

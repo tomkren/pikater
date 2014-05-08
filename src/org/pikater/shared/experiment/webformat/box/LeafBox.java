@@ -1,5 +1,6 @@
 package org.pikater.shared.experiment.webformat.box;
 
+import org.pikater.shared.experiment.universalformat.UniversalGui;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxType;
 
@@ -10,15 +11,22 @@ public class LeafBox extends AbstractBox implements IAbstractBox
 	// -----------------------------------------------------------
 	// FIELDS NOT BEING DISPLAYED TO THE USER
 	
-	private final BoxInfo info;
+	public BoxInfo boxInfo;
 	
 	// -----------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public LeafBox(Integer id, BoxInfo info)
+	/**
+	 * Default Ctor keeps GWT and Vaadin happy.
+	 */
+	protected LeafBox()
 	{
-		super(id);
-		this.info = info;
+	}
+	
+	public LeafBox(Integer id, UniversalGui guiInfo, BoxInfo boxInfo) 
+	{
+		super(id, guiInfo);
+		this.boxInfo = boxInfo;
 	}
 	
 	// -----------------------------------------------------------
@@ -27,24 +35,24 @@ public class LeafBox extends AbstractBox implements IAbstractBox
 	@Override
 	public String getDisplayName()
 	{
-		return info.getName();
+		return boxInfo.getName();
 	}
 
 	@Override
 	public String getDescription()
 	{
-		return info.getDescription();
+		return boxInfo.getDescription();
 	}
 
 	@Override
 	public String getPicture()
 	{
-		return info.getPicture();
+		return boxInfo.getPicture();
 	}
 
 	@Override
 	public BoxType getType()
 	{
-		return info.getType();
+		return boxInfo.getType();
 	}
 }
