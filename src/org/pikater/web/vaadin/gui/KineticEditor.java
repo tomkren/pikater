@@ -49,7 +49,7 @@ public class KineticEditor extends AbstractComponent
 	}
 
 	@Override
-	public KineticEditorState getState()
+	protected KineticEditorState getState()
 	{
 		return (KineticEditorState) super.getState();
 	}
