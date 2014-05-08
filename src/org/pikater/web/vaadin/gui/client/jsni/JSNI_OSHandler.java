@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.jsni;
 
-public class JavascriptEntryPoint
+public class JSNI_OSHandler
 {
 	public static enum UnderlyingOS
 	{
@@ -11,19 +11,7 @@ public class JavascriptEntryPoint
 		UNKNOWN;
 	}
 	
-	public final static native void initializeComparisonTab(String title)
-	/*-{
-		window.myChild = window.open(null, "_blank");
-		window.myChild.document.title = title;
-	}-*/;
-	
-	public final static native void updateComparisonTab(String content)
-	/*-{
-		window.myChild.document.body.innerHTML = content;
-		window.myChild.focus();
-	}-*/;
-	
-	private final static native int getOS()
+	private static native int getOS()
 	/*-{
 		return OSName;
 	}-*/;
