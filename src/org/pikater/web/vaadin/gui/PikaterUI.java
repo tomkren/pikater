@@ -116,15 +116,19 @@ public class PikaterUI extends UI
 	{
 		// TODO: use the server interface to get box definitions
 		
-		List<BoxInfo> boxInfo = new ArrayList<BoxInfo>();
-		boxInfo.add(new BoxInfo("bla", "bla", "Bla1", BoxType.INPUT, "", ""));
-		boxInfo.add(new BoxInfo("bla", "bla", "Bla2", BoxType.RECOMMENDER, "", ""));
-		boxInfo.add(new BoxInfo("bla", "bla", "Bla3", BoxType.VISUALIZER, "", ""));
+		BoxInfo info1 = new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", "");
+		BoxInfo info2 = new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", "");
+		BoxInfo info3 = new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", "");
+		
+		BoxInfoCollection boxDefinitions = new BoxInfoCollection();
+		boxDefinitions.addDefinition(info1);
+		boxDefinitions.addDefinition(info2);
+		boxDefinitions.addDefinition(info3);
 		
 		SchemaDataSource newExperiment = new SchemaDataSource();
-		Integer b1 = newExperiment.addLeafBoxAndReturnID(boxInfo.get(0));
-		Integer b2 = newExperiment.addLeafBoxAndReturnID(boxInfo.get(1));
-		Integer b3 = newExperiment.addLeafBoxAndReturnID(boxInfo.get(2));
+		Integer b1 = newExperiment.addLeafBoxAndReturnID(info1);
+		Integer b2 = newExperiment.addLeafBoxAndReturnID(info2);
+		Integer b3 = newExperiment.addLeafBoxAndReturnID(info3);
 		newExperiment.connect(b1, b2);
 		
 		VerticalLayout vLayout = new VerticalLayout();
@@ -133,7 +137,7 @@ public class PikaterUI extends UI
 		KineticEditor editor = new KineticEditor();
 		// kineticComponent.setWidth("800px");
 		// kineticComponent.setHeight("600px");
-		editor.setBoxDefinitions(new BoxInfoCollection(boxInfo));
+		editor.setBoxDefinitions(boxDefinitions);
 		editor.setExperimentToLoad(newExperiment);
 		
 		vLayout.addComponent(editor);

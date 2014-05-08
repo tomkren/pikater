@@ -2,7 +2,6 @@ package org.pikater.shared.experiment.webformat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,19 +15,21 @@ public class BoxInfoCollection implements Serializable
 	/**
 	 * Default constructor keeps GWT and Vaadin happy.
 	 */
-	protected BoxInfoCollection()
+	public BoxInfoCollection()
 	{
 		this.boxInfo = new HashMap<String, BoxInfo>(); 
 	}
 	
-	public BoxInfoCollection(Collection<BoxInfo> definitions)
+	public boolean addDefinition(BoxInfo info)
 	{
-		this();
-		
-		this.boxInfo.clear();
-		for(BoxInfo definition : definitions)
+		if(boxInfo.containsKey(info.getOntology()))
 		{
-			this.boxInfo.put(definition.getOntology(), definition);
+			return false;
+		}
+		else
+		{
+			this.boxInfo.put(info.getOntology(), info);
+			return true;
 		}
 	}
 

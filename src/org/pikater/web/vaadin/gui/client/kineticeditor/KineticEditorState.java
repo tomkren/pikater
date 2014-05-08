@@ -28,7 +28,7 @@ public class KineticEditorState extends AbstractComponentState
 	
 	/*
 	 * TODO: instead of sharing the box definitions like this, use a UI extension to make it "global"?
-	 * Well, it would have to get transferred every time a user opens that UI... not good.
+	 * Well, it would have to get transferred every time a user opens that UI... unless only called when needed - a boolean value indicating whether it had been sent already.
 	 * 
 	 * Another possibility would be to wrap this feature in a dedicated component. Doh... terrible but doable.
 	 */
@@ -37,7 +37,7 @@ public class KineticEditorState extends AbstractComponentState
 	 * The box definitions that this Editor component's boxes will refer to. Has to be set on the server-component before
 	 * being pushed to the client.
 	 */
-	public BoxInfoCollection infoProvider = null;
+	public BoxInfoCollection boxDefinitions = null;
 	
 	/**
 	 * The previously defined experiment to view in the editor. It is expected expected to be valid and will be loaded

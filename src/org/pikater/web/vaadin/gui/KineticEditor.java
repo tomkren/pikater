@@ -24,7 +24,7 @@ public class KineticEditor extends AbstractComponent
 	
 	public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
 	{
-		getState().infoProvider = boxDefinitions;
+		getState().boxDefinitions = boxDefinitions;
 	}
 	
 	public void setExperimentToLoad(SchemaDataSource experiment)

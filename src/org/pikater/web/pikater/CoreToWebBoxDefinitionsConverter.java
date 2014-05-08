@@ -1,7 +1,6 @@
 package org.pikater.web.pikater;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,14 +31,14 @@ public class CoreToWebBoxDefinitionsConverter
 		ontologyToBoxTypeMapping.put(FileDataProvider.class.getSimpleName(), BoxType.VISUALIZER); // TODO: an error?
 	}
 	
-	public static void convert(AgentInfo... boxDefinitionsFromCore)
+	public static void convert(AgentInfo... boxDefinitionsFromCore) throws Exception
 	{
-		Collection<BoxInfo> boxInfoColl = new ArrayList<BoxInfo>();
+		BoxInfoCollection boxInfoColl = new BoxInfoCollection();
 		for (AgentInfo box : boxDefinitionsFromCore)
 		{
-			boxInfoColl.add(coreBoxToWebBox(box, ontologyToBoxTypeMapping.get(box.getOntologyClass())));
+			boxInfoColl.addDefinition(coreBoxToWebBox(box, ontologyToBoxTypeMapping.get(box.getOntologyClass())));
 		}
-		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, new BoxInfoCollection(boxInfoColl));
+		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitionsFromCore);
 	}
 	
 	@SuppressWarnings("unchecked")

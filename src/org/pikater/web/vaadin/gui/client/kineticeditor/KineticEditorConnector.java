@@ -66,10 +66,8 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	{
 		super.onStateChanged(stateChangeEvent);
 	
-		// TODO: only 1 box definition gets serialized...
-		
 		SchemaDataSource experiment = getState().experimentToLoad;
-		BoxInfoCollection boxDefinitions = getState().infoProvider;
+		BoxInfoCollection boxDefinitions = getState().boxDefinitions;
 		System.out.println(experiment.toString());
 		// BoxInfo test = getState().testInfo;
 		// TODO:
