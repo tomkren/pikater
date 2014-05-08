@@ -2,13 +2,16 @@ package org.pikater.web.config;
 
 import javax.servlet.ServletContext;
 
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+
 public class ServerConfigurationInterface
 {
 	public enum ServerConfItem
 	{
 		CONTEXT,
 		CONFIG,
-		JADE_TOPOLOGIES
+		JADE_TOPOLOGIES,
+		BOX_DEFINITIONS
 	};
 	
 	/**
@@ -17,6 +20,7 @@ public class ServerConfigurationInterface
 	private static ServerConfiguration config = null;
 	private static JadeTopologies jadeTopologies = null;
 	private static ServletContext context = null;
+	private static BoxInfoCollection boxDefinitions = null;
 	
 	// **************************************************************************************************
 	// PUBLIC INTERFACE
@@ -55,6 +59,10 @@ public class ServerConfigurationInterface
 					jadeTopologies = (JadeTopologies) value;
 				}
 				break;
+			case BOX_DEFINITIONS:
+				boxDefinitions = (BoxInfoCollection) value;
+				// TODO: call some kind of a refresh?
+				break;
 			default:
 				throw new IllegalArgumentException();
 		}
@@ -73,6 +81,11 @@ public class ServerConfigurationInterface
 	public static JadeTopologies getJadeTopologies()
 	{
 		return jadeTopologies;
+	}
+	
+	public static BoxInfoCollection getBoxDefinitions()
+	{
+		return boxDefinitions;
 	}
 
 	public static boolean isEverythingOK()

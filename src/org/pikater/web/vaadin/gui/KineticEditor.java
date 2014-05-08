@@ -1,10 +1,7 @@
 package org.pikater.web.vaadin.gui;
 
-import org.pikater.shared.experiment.ConversionException;
-import org.pikater.shared.experiment.UniToWebConverter;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
-import org.pikater.web.WebAppLogger;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorState;
 
@@ -14,21 +11,27 @@ public class KineticEditor extends AbstractComponent
 {
 	private static final long serialVersionUID = -539901377528727478L;
 	
-	private final KineticEditorServerRpc rpc = new KineticEditorServerRpc()
-	{
-		private static final long serialVersionUID = -2769231541745495584L;
-	};
-
 	public KineticEditor()
 	{
-		registerRpc(rpc);
+		// first define server RPC
+		registerRpc(new KineticEditorServerRpc()
+		{
+			private static final long serialVersionUID = -2769231541745495584L;
+		});
 		
-		// to call client side RPC:
-		// getRpcProxy(KineticEditorClientRpc.class).experimentChangedCallback();
+		// getRpcProxy(KineticEditorClientRpc.class).response_BoxInfoProvider(SchemaDataSource.infoProvider);
 	}
 	
-	public void loadExperiment(UniversalComputationDescription experiment)
+	public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
 	{
+		getState().infoProvider = boxDefinitions;
+	}
+	
+	public void setExperimentToLoad(SchemaDataSource experiment)
+	{
+		getState().experimentToLoad = experiment;
+		
+		/*
 		try
 		{
 			SchemaDataSource webFormat = UniToWebConverter.convert(experiment, KineticEditorState.getBoxInfoProvider());
@@ -42,6 +45,7 @@ public class KineticEditor extends AbstractComponent
 					e
 			);
 		}
+		*/
 	}
 
 	@Override

@@ -1,51 +1,76 @@
 package org.pikater.shared.experiment.webformat;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.Serializable;
 
-import org.pikater.shared.experiment.webformat.options.AbstractOption;
-import org.pikater.shared.experiment.webformat.slots.AbstractSlot;
-
-public class BoxInfo
+public class BoxInfo implements Serializable
 {
-	// TODO: merge this with the core types?
-	public enum BoxType
+	private static final long serialVersionUID = 7775620949481137845L;
+	
+	public String name;
+	public BoxType type;
+	public String picture;
+	public String description;
+	
+	public String ontology;
+	public String agentClass;
+	
+	// private final Collection<AbstractOption> options;
+	// private final Collection<AbstractSlot> inputSlots;
+	// private final Collection<AbstractSlot> outputSlots;
+	
+	/** Protected Ctor keeps GWT happy */
+	protected BoxInfo()
 	{
-		INPUT,
-		SEARCHER,
-		COMPUTING,
-		RECOMMENDER,
-		METHOD,
-		VISUALIZER,
-		WRAPPER
 	}
-
-	public final String ontology;
-	public final String agentClass;
-	
-	public final String name;
-	public final BoxType type;
-	public final String picture;
-	public final String description;
-	
-	private final Collection<AbstractOption> options;
-	private final Collection<AbstractSlot> inputSlots;
-	private final Collection<AbstractSlot> outputSlots;
 	
 	public BoxInfo(String ontology, String agentClass, String name, BoxType type, String picture, String description)
 	{
-		this.ontology = ontology;
-		this.agentClass = agentClass;
 		this.name = name;
 		this.type = type;
 		this.picture = picture;
 		this.description = description;
 		
+		this.ontology = ontology;
+		this.agentClass = agentClass;
+		
+		/*
 		this.options = new ArrayList<AbstractOption>();
 		this.inputSlots = new ArrayList<AbstractSlot>();
 		this.outputSlots = new ArrayList<AbstractSlot>();
+		*/
+	}
+
+	public String getOntology()
+	{
+		return ontology;
+	}
+
+	public String getAgentClass()
+	{
+		return agentClass;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public BoxType getType()
+	{
+		return type;
+	}
+
+	public String getPicture()
+	{
+		return picture;
+	}
+
+	public String getDescription()
+	{
+		return description;
 	}
 	
+	/*
 	public void addOption(AbstractOption option)
 	{
 		this.options.add(option);
@@ -60,4 +85,5 @@ public class BoxInfo
 	{
 		this.outputSlots.add(slot);
 	}
+	*/
 }

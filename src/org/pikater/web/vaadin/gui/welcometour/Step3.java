@@ -209,7 +209,7 @@ public class Step3 extends WelcomeTourWizardStep
 		Collection<TopologyModel> finalModels = new ArrayList<TopologyModel>();
 		for(TopologyModel model : topologyView.values())
 		{
-			if(model.isWellFormed()) // at least 1 master has pikater launched and 1 slave is connected - also determined by the way which 'topologyView' is constructed 
+			if(model.isWellFormed()) 
 			{
 				finalModels.add(model);
 			}

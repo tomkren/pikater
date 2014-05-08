@@ -1,11 +1,12 @@
 package org.pikater.web.vaadin.gui.client.kineticeditor;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
 
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.web.vaadin.gui.KineticEditor;
 
 import com.vaadin.client.communication.StateChangeEvent;
@@ -17,20 +18,25 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	
 	private final KineticEditorServerRpc serverRPC = RpcProxy.create(KineticEditorServerRpc.class, this);
 
+	/**
+	 * Called first when creating the connector.
+	 */
 	public KineticEditorConnector()
 	{
+		/*
+		 * NOTE: calling the server RPC in the constructor will cause a null pointer exception. Rather use the widget's
+		 * onLoad method for some further initializations if shared state is not suitable. 
+		 */
+		
 		registerRpc(KineticEditorClientRpc.class, new KineticEditorClientRpc()
 		{
 			private static final long serialVersionUID = -263115608289713347L;
-
-			@Override
-			public void experimentChangedCallback()
-			{
-				Window.alert("New experiment about to be loaded");
-			}
 		});
 	}
 
+	/**
+	 * Called second when creating the connector.
+	 */
 	@Override
 	protected KineticEditorWidget createWidget()
 	{
@@ -52,11 +58,20 @@ public class KineticEditorConnector extends AbstractComponentConnector
 		return (KineticEditorState) super.getState();
 	}
 
+	/**
+	 * Called third when creating the connector.
+	 */
 	@Override
 	public void onStateChanged(StateChangeEvent stateChangeEvent)
 	{
 		super.onStateChanged(stateChangeEvent);
+	
+		// TODO: only 1 box definition gets serialized...
 		
+		SchemaDataSource experiment = getState().experimentToLoad;
+		BoxInfoCollection boxDefinitions = getState().infoProvider;
+		System.out.println(experiment.toString());
+		// BoxInfo test = getState().testInfo;
 		// TODO:
 	}
 }

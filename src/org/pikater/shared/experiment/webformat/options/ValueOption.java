@@ -5,6 +5,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("ValueParameter")
 public class ValueOption<T> extends AbstractOption<T>
 {
+	private static final long serialVersionUID = -9000045022848736919L;
+
 	public ValueOption(String name, String description, String synopsis, T value)
 	{
 		super(name, description, synopsis);

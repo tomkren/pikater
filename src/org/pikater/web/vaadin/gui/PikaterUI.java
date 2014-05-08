@@ -1,7 +1,14 @@
 package org.pikater.web.vaadin.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.annotation.WebServlet;
 
+import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.config.ServerConfiguration;
@@ -107,12 +114,27 @@ public class PikaterUI extends UI
 	
 	private void test_editor()
 	{
+		// TODO: use the server interface to get box definitions
+		
+		List<BoxInfo> boxInfo = new ArrayList<BoxInfo>();
+		boxInfo.add(new BoxInfo("bla", "bla", "Bla1", BoxType.INPUT, "", ""));
+		boxInfo.add(new BoxInfo("bla", "bla", "Bla2", BoxType.RECOMMENDER, "", ""));
+		boxInfo.add(new BoxInfo("bla", "bla", "Bla3", BoxType.VISUALIZER, "", ""));
+		
+		SchemaDataSource newExperiment = new SchemaDataSource();
+		Integer b1 = newExperiment.addLeafBoxAndReturnID(boxInfo.get(0));
+		Integer b2 = newExperiment.addLeafBoxAndReturnID(boxInfo.get(1));
+		Integer b3 = newExperiment.addLeafBoxAndReturnID(boxInfo.get(2));
+		newExperiment.connect(b1, b2);
+		
 		VerticalLayout vLayout = new VerticalLayout();
 		setContent(vLayout);
 		
 		KineticEditor editor = new KineticEditor();
 		// kineticComponent.setWidth("800px");
 		// kineticComponent.setHeight("600px");
+		editor.setBoxDefinitions(new BoxInfoCollection(boxInfo));
+		editor.setExperimentToLoad(newExperiment);
 		
 		vLayout.addComponent(editor);
 	}

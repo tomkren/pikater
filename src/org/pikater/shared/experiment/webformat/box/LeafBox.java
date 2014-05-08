@@ -1,10 +1,12 @@
 package org.pikater.shared.experiment.webformat.box;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.BoxInfo.BoxType;
+import org.pikater.shared.experiment.webformat.BoxType;
 
-public class LeafBox extends AbstractBox
+public class LeafBox extends AbstractBox implements IAbstractBox
 {
+	private static final long serialVersionUID = 2147762129911609358L;
+	
 	// -----------------------------------------------------------
 	// FIELDS NOT BEING DISPLAYED TO THE USER
 	
@@ -13,8 +15,9 @@ public class LeafBox extends AbstractBox
 	// -----------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public LeafBox(BoxInfo info)
+	public LeafBox(Integer id, BoxInfo info)
 	{
+		super(id);
 		this.info = info;
 	}
 	

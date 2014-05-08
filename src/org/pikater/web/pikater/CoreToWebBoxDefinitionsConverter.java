@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment;
+package org.pikater.web.pikater;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -14,8 +14,10 @@ import org.pikater.core.ontology.description.Recommend;
 import org.pikater.core.ontology.description.Search;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.WebBoxInfoProvider;
-import org.pikater.shared.experiment.webformat.BoxInfo.BoxType;
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 
 public class CoreToWebBoxDefinitionsConverter
 {
@@ -37,7 +39,7 @@ public class CoreToWebBoxDefinitionsConverter
 		{
 			boxInfoColl.add(coreBoxToWebBox(box, ontologyToBoxTypeMapping.get(box.getOntologyClass())));
 		}
-		WebBoxInfoProvider.setBoxDefinitions(boxInfoColl);
+		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, new BoxInfoCollection(boxInfoColl));
 	}
 	
 	@SuppressWarnings("unchecked")

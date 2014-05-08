@@ -82,7 +82,7 @@ public class BidiMap<K,V>
 		return valueToKey.keySet();
 	}
 
-	public Set<java.util.Map.Entry<K, V>> entrySet()
+	public Set<Entry<K, V>> entrySet()
 	{
 		return keyToValue.entrySet();
 	}

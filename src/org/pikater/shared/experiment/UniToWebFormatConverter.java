@@ -1,12 +1,12 @@
 package org.pikater.shared.experiment;
 
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.webformat.WebBoxInfoProvider;
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
 
 public class UniToWebFormatConverter
 {
-	public static SchemaDataSource convert(UniversalComputationDescription uniFormat, WebBoxInfoProvider boxInfoProvider) throws ConversionException
+	public static SchemaDataSource convert(UniversalComputationDescription uniFormat, BoxInfoCollection boxInfoProvider) throws ConversionException
 	{
 		// first some checks
 		if(uniFormat == null)

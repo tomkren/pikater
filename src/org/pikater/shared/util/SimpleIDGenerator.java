@@ -1,7 +1,11 @@
 package org.pikater.shared.util;
 
-public class SimpleIDGenerator
+import java.io.Serializable;
+
+public class SimpleIDGenerator implements Serializable
 {
+	private static final long serialVersionUID = -8774263381709855657L;
+	
 	private Integer currentID;
 
 	public SimpleIDGenerator()
