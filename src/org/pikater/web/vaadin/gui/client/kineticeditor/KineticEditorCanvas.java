@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.client.kineticeditor;
 
 import net.edzard.kinetic.Kinetic;
 
-import org.pikater.web.vaadin.gui.client.ClientVars;
+import org.pikater.web.vaadin.gui.client.config.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.undoredo.KineticUndoRedoManager;
@@ -88,13 +88,13 @@ public class KineticEditorCanvas extends FocusPanel
 						kineticState.deleteSelected();
 						break;
 					case 90: // Z
-						if(ClientVars.isControlKeyDown())
+						if(GWTKeyboardManager.isControlKeyDown())
 						{
 							undoRedoManager.undo();
 						}
 						break;
 					case 89: // Y
-						if(ClientVars.isControlKeyDown())
+						if(GWTKeyboardManager.isControlKeyDown())
 						{
 							undoRedoManager.redo();
 						}

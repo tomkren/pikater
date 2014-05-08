@@ -1,10 +1,10 @@
 package org.pikater.web.vaadin.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.annotation.WebServlet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.pikater.shared.experiment.universalformat.UniversalGui;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.BoxType;
@@ -22,6 +22,8 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.JavaScript;
+import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -29,12 +31,13 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
 
-@SuppressWarnings("serial")
 @Theme("pikater")
 @com.vaadin.annotations.JavaScript(value = "public/kinetic-v4.7.3-dev.js")
 @Push(value = PushMode.MANUAL)
 public class PikaterUI extends UI
 {
+	private static final long serialVersionUID = 1964653532060950402L;
+
 	/*
 	 * Automatic UI finding takes this even one step further and allows you to leave out @VaadinServletConfiguration
 	 * completely if you define your servlet class as a static inner class to your UI class.
@@ -116,19 +119,23 @@ public class PikaterUI extends UI
 	{
 		// TODO: use the server interface to get box definitions
 		
-		BoxInfo info1 = new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", "");
-		BoxInfo info2 = new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", "");
-		BoxInfo info3 = new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", "");
+		BoxInfo boxInfo1 = new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", "");
+		BoxInfo boxInfo2 = new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", "");
+		BoxInfo boxInfo3 = new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", "");
+		
+		UniversalGui guiInfo1 = new UniversalGui(10, 10);
+		UniversalGui guiInfo2 = new UniversalGui(500, 10);
+		UniversalGui guiInfo3 = new UniversalGui(400, 300);
 		
 		BoxInfoCollection boxDefinitions = new BoxInfoCollection();
-		boxDefinitions.addDefinition(info1);
-		boxDefinitions.addDefinition(info2);
-		boxDefinitions.addDefinition(info3);
+		boxDefinitions.addDefinition(boxInfo1);
+		boxDefinitions.addDefinition(boxInfo2);
+		boxDefinitions.addDefinition(boxInfo3);
 		
 		SchemaDataSource newExperiment = new SchemaDataSource();
-		Integer b1 = newExperiment.addLeafBoxAndReturnID(info1);
-		Integer b2 = newExperiment.addLeafBoxAndReturnID(info2);
-		Integer b3 = newExperiment.addLeafBoxAndReturnID(info3);
+		Integer b1 = newExperiment.addLeafBoxAndReturnID(guiInfo1, boxInfo1);
+		Integer b2 = newExperiment.addLeafBoxAndReturnID(guiInfo2, boxInfo2);
+		newExperiment.addLeafBoxAndReturnID(guiInfo3, boxInfo3);
 		newExperiment.connect(b1, b2);
 		
 		VerticalLayout vLayout = new VerticalLayout();
@@ -200,6 +207,34 @@ public class PikaterUI extends UI
 		});
 		vLayout.addComponent(btn);
 		setContent(vLayout);
+	}
+	
+	// -------------------------------------------------------------------
+	// JAVASCRIPT TESTING
+	
+	@SuppressWarnings("unused")
+	private void something1()
+	{
+		JavaScript.getCurrent().addFunction("pikater_setAppMode", new JavaScriptFunction()
+		{
+			private static final long serialVersionUID = 4291049321598205127L;
+
+			@Override
+			public void call(JSONArray arguments) throws JSONException
+			{
+				// this is called on the server when the function is called on the client
+				System.out.println(arguments.length());
+				System.out.println(arguments.getBoolean(0));
+			}
+		});
+		JavaScript.getCurrent().execute("window.pikater_setAppMode(true)"); // calls the function on the client
+	}
+	
+	@SuppressWarnings("unused")
+	private void something2()
+	{
+		// just an example
+		JavaScript.getCurrent().execute("window.ns_pikater.setAppMode(\"DEBUG\");"); // calls the function on the client
 	}
 	
 	// -------------------------------------------------------------------

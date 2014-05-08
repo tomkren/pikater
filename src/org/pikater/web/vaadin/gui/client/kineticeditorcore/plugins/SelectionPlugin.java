@@ -6,8 +6,8 @@ import java.util.Set;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.ClientVars;
-import org.pikater.web.vaadin.gui.client.GlobalInterface;
+import org.pikater.web.vaadin.gui.client.config.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
@@ -49,7 +49,7 @@ public class SelectionPlugin implements IEnginePlugin
 		@Override
 		protected void handleInner(KineticEvent event)
 		{
-			if(ClientVars.isShiftKeyDown())
+			if(GWTKeyboardManager.isShiftKeyDown())
  			{
  				// select or deselect this box only
 	 			invertSelection(false, parentBox);
@@ -93,7 +93,7 @@ public class SelectionPlugin implements IEnginePlugin
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
  	};
 	
@@ -103,7 +103,7 @@ public class SelectionPlugin implements IEnginePlugin
 	 */
 	public SelectionPlugin(KineticEngine kineticEngine)
 	{
-		pluginID = GlobalInterface.getSimpleName(this.getClass());
+		pluginID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.selectedBoxes = new HashSet<BoxPrototype>();
 		this.edgesInBetween = new HashSet<EdgePrototype>();
@@ -121,7 +121,7 @@ public class SelectionPlugin implements IEnginePlugin
 	@Override
 	public String[] getItemsToAttachTo()
 	{
-		return new String[] { GlobalInterface.getSimpleName(BoxPrototype.class) };
+		return new String[] { GWTMisc.getSimpleName(BoxPrototype.class) };
 	}
 
 	@Override

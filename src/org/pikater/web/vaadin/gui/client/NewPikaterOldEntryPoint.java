@@ -1,16 +1,11 @@
 package org.pikater.web.vaadin.gui.client;
 
-import net.edzard.kinetic.Vector2d;
-
+import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorCanvas;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.TempDeselectOperation;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.storage.client.Storage;
@@ -20,7 +15,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -67,7 +61,7 @@ public class NewPikaterOldEntryPoint implements EntryPoint
 		SimplePanel userControlPanel = new SimplePanel();
 		userControlPanel.addStyleName("horizontallyCenterAlignedElement");
 		userControlPanel.addStyleName("verticallyCenterAlignedElement");
-		userControlPanel.add(new Label(ClientVars.translation.userControlPanelLabel()));
+		// userControlPanel.add(new Label(GWTMisc.translation.userControlPanelLabel()));
 		RootPanel.get("td_usercp").add(userControlPanel);
 		
 		// set the client window size
@@ -86,9 +80,11 @@ public class NewPikaterOldEntryPoint implements EntryPoint
 		
 		// add individual menus and compute the minimum needed width
 		int maxWidth = 0;
-		maxWidth = addMenuItemAndReturnGreatestWidthSoFar(menu, createMenuItem(ClientVars.translation.firstMenuItem()), maxWidth);
-		maxWidth = addMenuItemAndReturnGreatestWidthSoFar(menu, createMenuItem(ClientVars.translation.secondMenuItem()), maxWidth);
-		maxWidth = addMenuItemAndReturnGreatestWidthSoFar(menu, createMenuItem(ClientVars.translation.thirdMenuItem()), maxWidth);
+		/*
+		maxWidth = addMenuItemAndReturnGreatestWidthSoFar(menu, createMenuItem(GWTMisc.translation.firstMenuItem()), maxWidth);
+		maxWidth = addMenuItemAndReturnGreatestWidthSoFar(menu, createMenuItem(GWTMisc.translation.secondMenuItem()), maxWidth);
+		maxWidth = addMenuItemAndReturnGreatestWidthSoFar(menu, createMenuItem(GWTMisc.translation.thirdMenuItem()), maxWidth);
+		*/
 		
 		// set the wrapper's and parent element's width accordingly
 		String newWidth = String.valueOf(maxWidth + 4) + "px"; // 4 for some silent borders (to avoid text wrapping) 
@@ -149,17 +145,15 @@ public class NewPikaterOldEntryPoint implements EntryPoint
 	
 	private void setLocale(String locale)
 	{
-		if(Window.confirm(ClientVars.translation.confirm_PageLeaveOrReload()))
+		/*
+		if(Window.confirm(GWTMisc.translation.confirm_PageLeaveOrReload()))
 		{
 			// TODO: detect the user's locale on the server and automatically send the right URL?
-			/*
-			 * Read the following and decide:
-			 * http://www.gwtproject.org/doc/latest/DevGuideI18nLocale.html#LocaleSpecifying  
-			 */
+			// Read the following and decide: http://www.gwtproject.org/doc/latest/DevGuideI18nLocale.html#LocaleSpecifying  
 			String newURL = GWT.getModuleBaseURL() + "?locale=" + locale;
 			Window.Location.replace(newURL);
-			
 		}
+		*/
 	}
 	
 	private void setupKineticCanvasButtonInterface(FlowPanel fPanel)
@@ -169,7 +163,7 @@ public class NewPikaterOldEntryPoint implements EntryPoint
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, ClientVars.jsonAttrsToSerialize));
+				leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, GWTMisc.jsonAttrsToSerialize));
 			}
 		});
 		btn_setLeftTA1.setStyleName("pointCursorOnHover");
@@ -203,7 +197,7 @@ public class NewPikaterOldEntryPoint implements EntryPoint
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, ClientVars.jsonAttrsToSerialize));
+				rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, GWTMisc.jsonAttrsToSerialize));
 			}
 		});
 		btn_setRightTA.setStyleName("pointCursorOnHover");
@@ -278,10 +272,12 @@ public class NewPikaterOldEntryPoint implements EntryPoint
 					}
 					else
 					{
-						if(Window.confirm(ClientVars.translation.confirm_KineticLeaveOrLoad()))
+						/*
+						if(Window.confirm(GWTMisc.translation.confirm_KineticLeaveOrLoad()))
 						{
 							// kineticCanvas.deserialize(dLayerJSON, edgeListJSON);
 						}
+						*/
 					}
 				}
 			}
@@ -294,17 +290,19 @@ public class NewPikaterOldEntryPoint implements EntryPoint
 	{
 	    kineticCanvas = new KineticEditorCanvas();
 	    
+	    /*
 	    // TODO: delete this eventually:
 	    BoxPrototype b1 = kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 1", new Vector2d(10, 10), new Vector2d(200, 100));
 	    BoxPrototype b2 = kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 2", new Vector2d(500, 10), new Vector2d(200, 100));
 	    BoxPrototype b3 = kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 3", new Vector2d(400, 300), new Vector2d(200, 100));
 	    EdgePrototype e1 = kineticCanvas.getShapeCreator().createEdge(NodeRegisterType.MANUAL, b1, b2);
 	    kineticCanvas.getEngine().registerCreated(b1, b2, b3, e1);
+	    */
 	}
 	
 	private MenuItem createMenuItem(String label)
 	{
-		MenuItem result = new MenuItem(label, ClientVars.alertNotImplemented);
+		MenuItem result = new MenuItem(label, GWTMisc.alertNotImplemented);
 		result.addStyleName("showBorder");
 		return result;
 	}

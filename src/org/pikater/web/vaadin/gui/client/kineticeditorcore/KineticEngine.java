@@ -22,9 +22,9 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.ClientVars;
-import org.pikater.web.vaadin.gui.client.GlobalInterface;
-import org.pikater.web.vaadin.gui.client.MyCursor;
+import org.pikater.web.vaadin.gui.client.config.GWTCursorManager;
+import org.pikater.web.vaadin.gui.client.config.GWTCursorManager.MyCursor;
+import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorCanvas;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.EdgePrototype;
@@ -131,7 +131,7 @@ public final class KineticEngine
 		@Override
 		public void handle(KineticEvent event)
 		{
-			ClientVars.setCursorType(getParentDOMElement(), MyCursor.MOVE);
+			GWTCursorManager.setCursorType(getParentDOMElement(), MyCursor.MOVE);
 			
 			// start of a drag operation - turn all edges in between into dashed lines of a special color that connect the centers of their endpoints boxes
 			SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
@@ -154,7 +154,7 @@ public final class KineticEngine
 		@Override
 		public void handle(KineticEvent event)
 		{
-			ClientVars.rollBackCursor(getParentDOMElement());
+			GWTCursorManager.rollBackCursor(getParentDOMElement());
 			
 			// end of a drag - undo the effects of drag start and propagate the drag changes to selection items
 			SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
@@ -553,7 +553,7 @@ public final class KineticEngine
 	
 	public void attachPluginHandlersTo(ExperimentGraphItem graphItem)
 	{
-		for(IEnginePlugin plugin : pluginsForGraphItem.get(GlobalInterface.getSimpleName(graphItem.getClass())))
+		for(IEnginePlugin plugin : pluginsForGraphItem.get(GWTMisc.getSimpleName(graphItem.getClass())))
 		{
 			plugin.attachEventListeners(graphItem);
 		}

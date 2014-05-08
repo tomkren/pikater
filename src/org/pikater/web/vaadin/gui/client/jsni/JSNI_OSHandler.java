@@ -11,11 +11,6 @@ public class JSNI_OSHandler
 		UNKNOWN;
 	}
 	
-	private static native int getOS()
-	/*-{
-		return OSName;
-	}-*/;
-	
 	public static UnderlyingOS getUnderlyingOS()
 	{
 		switch (getOS())
@@ -32,4 +27,12 @@ public class JSNI_OSHandler
 				return UnderlyingOS.UNKNOWN;
 		}
 	}
+	
+	// ---------------------------------------------------------
+	// PRIVATE METHODS
+	
+	private static native int getOS()
+	/*-{
+		return OSName;
+	}-*/;
 }

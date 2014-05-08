@@ -4,8 +4,8 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.ClientVars;
-import org.pikater.web.vaadin.gui.client.GlobalInterface;
+import org.pikater.web.vaadin.gui.client.config.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
@@ -56,7 +56,7 @@ public final class CreateEdgePlugin implements IEnginePlugin
 				event.stopVerticalPropagation();
 				event.setProcessed();
 			}
-			else if(ClientVars.isAltKeyDown()) 
+			else if(GWTKeyboardManager.isAltKeyDown()) 
 			{
 				// start this create edge operation
 				
@@ -78,7 +78,7 @@ public final class CreateEdgePlugin implements IEnginePlugin
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	}
 	private class BoxMouseOverListener extends PluginEventListener
@@ -106,7 +106,7 @@ public final class CreateEdgePlugin implements IEnginePlugin
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	}
 	
@@ -163,7 +163,7 @@ public final class CreateEdgePlugin implements IEnginePlugin
 	 */
 	public CreateEdgePlugin(KineticEngine kineticEngine)
 	{
-		pluginID = GlobalInterface.getSimpleName(this.getClass());
+		pluginID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.fromEndPoint = null;
 		this.newEdge = null;
@@ -181,7 +181,7 @@ public final class CreateEdgePlugin implements IEnginePlugin
 	@Override
 	public String[] getItemsToAttachTo()
 	{
-		return new String[] { GlobalInterface.getSimpleName(BoxPrototype.class) };
+		return new String[] { GWTMisc.getSimpleName(BoxPrototype.class) };
 	}
 	
 	@Override

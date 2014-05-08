@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.ClientVars;
+import org.pikater.web.vaadin.gui.client.jsni.JSNI_SharedConfig;
 
 public abstract class PluginEventListener implements IEventListener
 {
@@ -13,7 +13,7 @@ public abstract class PluginEventListener implements IEventListener
 		if(!event.isProcessed())
 		{
 			handleInner(event);
-			if(ClientVars.DEBUG_MODE)
+			if(JSNI_SharedConfig.isDebugModeActivated())
 			{
 				if(event.isProcessed())
 				{
@@ -25,7 +25,7 @@ public abstract class PluginEventListener implements IEventListener
 				}
 			}
 		}
-		else if(ClientVars.DEBUG_MODE)
+		else if(JSNI_SharedConfig.isDebugModeActivated())
 		{
 			System.out.println(getListenerID() + " suppressed by " + event.getProcessedBy());
 		}

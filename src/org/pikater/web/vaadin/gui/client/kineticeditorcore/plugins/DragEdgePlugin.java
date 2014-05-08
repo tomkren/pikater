@@ -5,7 +5,7 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.GlobalInterface;
+import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
@@ -63,7 +63,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	}
 	private class BoxMouseOverListener extends PluginEventListener
@@ -91,7 +91,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	}
 	private class BoxMouseOutListener extends PluginEventListener
@@ -119,7 +119,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	}
 	private class BoxMouseUpListener extends PluginEventListener
@@ -139,7 +139,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	};
 	
@@ -187,7 +187,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 	 */
 	public DragEdgePlugin(KineticEngine kineticEngine)
 	{
-		pluginID = GlobalInterface.getSimpleName(this.getClass());
+		pluginID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.draggedEdge = null;
 	}
@@ -205,8 +205,8 @@ public final class DragEdgePlugin implements IEnginePlugin
 	public String[] getItemsToAttachTo()
 	{
 		return new String[] {
-				GlobalInterface.getSimpleName(EdgePrototype.class),
-				GlobalInterface.getSimpleName(BoxPrototype.class),
+				GWTMisc.getSimpleName(EdgePrototype.class),
+				GWTMisc.getSimpleName(BoxPrototype.class),
 		};
 	}
 	

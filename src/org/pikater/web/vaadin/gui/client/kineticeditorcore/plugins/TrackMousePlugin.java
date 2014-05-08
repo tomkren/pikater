@@ -3,9 +3,9 @@ package org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.ClientVars;
-import org.pikater.web.vaadin.gui.client.GlobalInterface;
-import org.pikater.web.vaadin.gui.client.MyCursor;
+import org.pikater.web.vaadin.gui.client.config.GWTCursorManager.MyCursor;
+import org.pikater.web.vaadin.gui.client.config.GWTCursorManager;
+import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.ExperimentGraphItem;
@@ -40,13 +40,13 @@ public final class TrackMousePlugin implements IEnginePlugin
 		protected void handleInner(KineticEvent event)
 		{
 			setCurrentlyHoveredBox(parentBox);
-			ClientVars.setCursorType(kineticEngine.getParentDOMElement(), MyCursor.POINTER);
+			GWTCursorManager.setCursorType(kineticEngine.getParentDOMElement(), MyCursor.POINTER);
 		}
 
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	}
 	private class BoxMouseOutHandler extends PluginEventListener
@@ -55,13 +55,13 @@ public final class TrackMousePlugin implements IEnginePlugin
 		protected void handleInner(KineticEvent event)
 		{
 			unsetCurrentlyHoveredBox();
-			ClientVars.setCursorType(kineticEngine.getParentDOMElement(), MyCursor.AUTO);
+			GWTCursorManager.setCursorType(kineticEngine.getParentDOMElement(), MyCursor.AUTO);
 		}
 
 		@Override
 		protected String getListenerID()
 		{
-			return GlobalInterface.getSimpleName(this.getClass());
+			return GWTMisc.getSimpleName(this.getClass());
 		}
 	};
 
@@ -70,7 +70,7 @@ public final class TrackMousePlugin implements IEnginePlugin
 	 */
 	public TrackMousePlugin(KineticEngine kineticEngine)
 	{
-		pluginID = GlobalInterface.getSimpleName(this.getClass());
+		pluginID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.currentlyHoveredBox = null;
 	}
@@ -87,7 +87,7 @@ public final class TrackMousePlugin implements IEnginePlugin
 	@Override
 	public String[] getItemsToAttachTo()
 	{
-		return new String[] { GlobalInterface.getSimpleName(BoxPrototype.class) };
+		return new String[] { GWTMisc.getSimpleName(BoxPrototype.class) };
 	}
 
 	@Override

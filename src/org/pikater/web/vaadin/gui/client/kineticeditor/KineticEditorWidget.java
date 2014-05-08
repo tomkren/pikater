@@ -9,7 +9,8 @@ import java.util.Set;
 
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
-import org.pikater.web.vaadin.gui.client.ClientVars;
+import org.pikater.web.vaadin.gui.client.config.GWTMisc;
+import org.pikater.web.vaadin.gui.client.jsni.JSNI_SharedConfig;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
@@ -93,7 +94,7 @@ public class KineticEditorWidget extends VerticalPanel
 				{
 					if(kineticCanvas.existsUnsavedContent())
 					{
-						closingEvent.setMessage(ClientVars.translation.confirm_KineticLeaveOrLoad());
+						closingEvent.setMessage("Are you sure? Editor content will be lost, if unsaved.");
 					}
 				}
 			}
@@ -109,7 +110,7 @@ public class KineticEditorWidget extends VerticalPanel
 		this.kineticCanvas.addStyleName("showBorder");
 		
 		// then, setup the debug panel if necessary
-		if(ClientVars.DEBUG_MODE)
+		if(JSNI_SharedConfig.isDebugModeActivated())
 		{
 			setupDebugPanel();
 		}
@@ -129,7 +130,7 @@ public class KineticEditorWidget extends VerticalPanel
 			Window.addWindowClosingHandler(closingHandler);
 			closingHandlerAdded = true;
 		}
-		if(ClientVars.DEBUG_MODE)
+		if(JSNI_SharedConfig.isDebugModeActivated())
 		{
 			String mainWidth = String.valueOf(this.getOffsetWidth()) + "px";
 			String halfWidth = String.valueOf(this.getOffsetWidth() / 2) + "px";
@@ -217,7 +218,7 @@ public class KineticEditorWidget extends VerticalPanel
 	private void setupToolbar()
 	{
 		this.toolbar = new FlowPanel();
-		if(ClientVars.DEBUG_MODE)
+		if(JSNI_SharedConfig.isDebugModeActivated())
 		{
 			VButton btn_setLeftTA1 = new VButton();
 			btn_setLeftTA1.setText("Set boxes layer (left)");
@@ -226,7 +227,7 @@ public class KineticEditorWidget extends VerticalPanel
 				@Override
 				public void onClick(ClickEvent event)
 				{
-					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, ClientVars.jsonAttrsToSerialize));
+					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, GWTMisc.jsonAttrsToSerialize));
 				}
 			});
 			// btn_setLeftTA1.addStyleName("pointCursorOnHover");
@@ -239,7 +240,7 @@ public class KineticEditorWidget extends VerticalPanel
 				@Override
 				public void onClick(ClickEvent event)
 				{
-					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_EDGES, ClientVars.jsonAttrsToSerialize));
+					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_EDGES, GWTMisc.jsonAttrsToSerialize));
 					leftTextArea.setText(kineticCanvas.getEngine().serializeToJSON(EngineComponent.LAYER_EDGES));
 				}
 			});
@@ -253,7 +254,7 @@ public class KineticEditorWidget extends VerticalPanel
 				@Override
 				public void onClick(ClickEvent event)
 				{
-					rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, ClientVars.jsonAttrsToSerialize));
+					rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, GWTMisc.jsonAttrsToSerialize));
 				}
 			});
 			// btn_setRightTA.setStyleName("pointCursorOnHover");
@@ -286,7 +287,7 @@ public class KineticEditorWidget extends VerticalPanel
 					public void execute()
 					{
 						// TODO:
-						ClientVars.alertNotImplemented.execute();
+						GWTMisc.alertNotImplemented.execute();
 						
 						/*
 						server.experimentSchemaSerialized(
@@ -309,7 +310,7 @@ public class KineticEditorWidget extends VerticalPanel
 			public void onClick(ClickEvent event)
 			{
 				// TODO:
-				ClientVars.alertNotImplemented.execute();
+				GWTMisc.alertNotImplemented.execute();
 				
 				// kineticState.deserialize(dLayerJSON, edgeListJSON);
 				// setFocus(true);
