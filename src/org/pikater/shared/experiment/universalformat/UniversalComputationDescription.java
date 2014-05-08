@@ -68,6 +68,11 @@ public class UniversalComputationDescription
 	{
 		return rootElements;
 	}
+	
+	public ArrayList<UniversalElement> getElements()
+	{
+		return elements;
+	}
 
 	/**
 	 * Add UniversalElement

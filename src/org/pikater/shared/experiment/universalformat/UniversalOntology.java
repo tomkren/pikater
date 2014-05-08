@@ -1,5 +1,6 @@
 package org.pikater.shared.experiment.universalformat;
 
+import java.util.Collection;
 
 import org.pikater.core.ontology.description.ErrorDescription;
 import org.pikater.core.ontology.messages.option.Option;
@@ -70,6 +71,11 @@ public class UniversalOntology {
     	}
     	errors.add(error);
 	}
+    
+    public Collection<UniversalConnector> getInputSlots()
+    {
+    	return inputSlots;
+    }
 
 	public void addInputSlot(UniversalConnector connector) {
 		
