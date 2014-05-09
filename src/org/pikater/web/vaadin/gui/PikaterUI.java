@@ -1,5 +1,9 @@
 package org.pikater.web.vaadin.gui;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.servlet.annotation.WebServlet;
 
 import org.json.JSONArray;
@@ -49,11 +53,19 @@ public class PikaterUI extends UI
 	@VaadinServletConfiguration(productionMode = false, ui = PikaterUI.class, widgetset = "org.pikater.web.vaadin.gui.PikaterWidgetset")
 	public static class Servlet extends CustomConfiguredUIServlet
 	{
+		private static final long serialVersionUID = -3494370492799211606L;
 	}
 
 	@Override
 	protected void init(VaadinRequest request)
 	{
+		// IMPORTANT: enables sending exceptions with undistorted messages and stack trace from client to server
+		new MainUIExtension().extend(this);
+		
+		/*
+		 * Which application scenario should be loaded when the webpages are accessed?
+		 */
+		
 		// primary_displayWelcomeWizard();
 		
 		// test_console();
@@ -235,6 +247,26 @@ public class PikaterUI extends UI
 	{
 		// just an example
 		JavaScript.getCurrent().execute("window.ns_pikater.setAppMode(\"DEBUG\");"); // calls the function on the client
+	}
+	
+	// -------------------------------------------------------------------
+	// TIPS AND TRICKS
+	
+	private void smth(PushMode newPushMode)
+	{
+		// Dynamically switch the push mode of the current UI. The
+	    // options are DISABLED, MANUAL and AUTOMATIC.
+	    UI.getCurrent().getPushConfiguration().setPushMode(newPushMode);
+	    
+	    // The background thread that updates clock times once every second.
+        new Timer().scheduleAtFixedRate(new TimerTask()
+		{
+			@Override
+			public void run()
+			{
+				// TODO Auto-generated method stub
+			}
+		}, new Date(), 1000);
 	}
 	
 	// -------------------------------------------------------------------
