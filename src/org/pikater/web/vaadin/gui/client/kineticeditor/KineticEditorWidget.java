@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.vaadin.client.VConsole;
 import com.vaadin.client.ui.VButton;
 import com.vaadin.shared.communication.ServerRpc;
 
@@ -309,7 +310,6 @@ public class KineticEditorWidget extends VerticalPanel
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				// TODO:
 				GWTMisc.alertNotImplemented.execute();
 				
 				// kineticState.deserialize(dLayerJSON, edgeListJSON);

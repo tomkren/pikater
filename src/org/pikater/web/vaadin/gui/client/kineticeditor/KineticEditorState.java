@@ -12,7 +12,7 @@ public class KineticEditorState extends AbstractComponentState
 	/*
 	 * GWT SERIALIZATION ISSUES:
 	 * - GENERAL - Classes used in GWT RPC have to implement isSerializable or Serializable.
-	 * - GENERAL - Protected constructor makes GWT happy.
+	 * - GENERAL - Default constructor of any visibility makes GWT happy.
 	 * - GENERAL - Final fields are not serialized in GWT.
 	 * - SPECIFIC - String.format method is not translatable to GWT.
 	 * For more information:
