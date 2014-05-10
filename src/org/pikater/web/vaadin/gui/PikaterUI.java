@@ -17,6 +17,7 @@ import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
 import org.pikater.web.vaadin.gui.welcometour.WelcomeTourWizard;
 
@@ -41,7 +42,7 @@ import com.vaadin.ui.Notification.Type;
 public class PikaterUI extends UI
 {
 	private static final long serialVersionUID = 1964653532060950402L;
-
+	
 	/*
 	 * Automatic UI finding takes this even one step further and allows you to leave out @VaadinServletConfiguration
 	 * completely if you define your servlet class as a static inner class to your UI class.
@@ -59,8 +60,21 @@ public class PikaterUI extends UI
 	@Override
 	protected void init(VaadinRequest request)
 	{
-		// IMPORTANT: enables sending exceptions with undistorted messages and stack trace from client to server
-		new MainUIExtension().extend(this);
+		/*
+		 * NOTE: do not change this. Instance of this class acts as a mediator between client and server in
+		 * the sense that custom messages and data structures are sent over it. 
+		 */
+		
+		MainUIExtension mainUIExtension = new MainUIExtension();
+		mainUIExtension.extend(this);
+		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension);
+		
+		/*
+		 * TODO: box definition changes will take an application restart... only make the RPC method a one-time push
+		 * TODO: BoxInfo reference should be a reversible IDs... since box definitions have no decent IDs, we have to make
+		 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
+		 * case we will have to manually check for newer versions when validating the experiments.
+		 */ 
 		
 		/*
 		 * Which application scenario should be loaded when the webpages are accessed?
@@ -143,6 +157,7 @@ public class PikaterUI extends UI
 		boxDefinitions.addDefinition(boxInfo1);
 		boxDefinitions.addDefinition(boxInfo2);
 		boxDefinitions.addDefinition(boxInfo3);
+		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitions);
 		
 		SchemaDataSource newExperiment = new SchemaDataSource();
 		Integer b1 = newExperiment.addLeafBoxAndReturnID(guiInfo1, boxInfo1);
@@ -156,7 +171,6 @@ public class PikaterUI extends UI
 		KineticEditor editor = new KineticEditor();
 		// kineticComponent.setWidth("800px");
 		// kineticComponent.setHeight("600px");
-		editor.setBoxDefinitions(boxDefinitions);
 		editor.setExperimentToLoad(newExperiment);
 		
 		vLayout.addComponent(editor);

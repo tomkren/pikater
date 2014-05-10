@@ -1,7 +1,9 @@
 package org.pikater.web.vaadin.gui.client.mainuiextension;
 
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.web.vaadin.gui.MainUIExtension;
-import org.pikater.web.vaadin.gui.client.config.GWTLogger;
+import org.pikater.web.vaadin.gui.client.managers.GWTLogger;
+import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
 
 import com.vaadin.client.ServerConnector;
 import com.vaadin.client.communication.RpcProxy;
@@ -17,17 +19,16 @@ public class MainUIExtensionConnector extends AbstractExtensionConnector
 
 	public MainUIExtensionConnector()
 	{
-		/*
-		registerRpc(MainUIExtensionClientRpc.class,
-				new MainUIExtensionClientRpc()
-				{
-					public void alert(String message)
-					{
-						// TODO Do something useful
-						Window.alert(message);
-					}
-				});
-		*/
+		registerRpc(MainUIExtensionClientRpc.class, new MainUIExtensionClientRpc()
+		{
+			private static final long serialVersionUID = 5749987507481194601L;
+
+			@Override
+			public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
+			{
+				GWTMisc.setBoxDefinitions(boxDefinitions);
+			}
+		});
 		
 		// getConnection().
 		// getParent()
@@ -37,6 +38,5 @@ public class MainUIExtensionConnector extends AbstractExtensionConnector
 	protected void extend(ServerConnector target)
 	{
 		GWTLogger.setRemoteLogger(serverRPC);
-		// GWTLogger.logThrowable("something", new NullPointerException("YAY"));
 	}
 }

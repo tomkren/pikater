@@ -1,7 +1,6 @@
 package org.pikater.web.vaadin.gui.client.kineticeditor;
 
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 
 import com.vaadin.shared.AbstractComponentState;
 
@@ -28,12 +27,6 @@ public class KineticEditorState extends AbstractComponentState
 	 * 
 	 * Another possibility would be to wrap this feature in a dedicated component. Doh... terrible but doable.
 	 */
-	
-	/**
-	 * The box definitions that this Editor component's boxes will refer to. Has to be set on the server-component before
-	 * being pushed to the client.
-	 */
-	public BoxInfoCollection boxDefinitions = null;
 	
 	/**
 	 * The previously defined experiment to view in the editor. It is expected expected to be valid and will be loaded

@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
-import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.jsni.JSNI_SharedConfig;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
@@ -17,6 +15,7 @@ import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.N
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.ExperimentGraphItem;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.TempDeselectOperation;
+import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -27,7 +26,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.ui.VButton;
 import com.vaadin.shared.communication.ServerRpc;
 
@@ -58,10 +56,9 @@ public class KineticEditorWidget extends VerticalPanel
 	private KineticEditorServerRpc server;
 	
 	/**
-	 * Backup of the last loaded box definitions and experiment. Since they are shared in the component's state, we have
-	 * to know when they are changed and when they are not.	
+	 * Backup of the last loaded experiment. Since it is shared in the component's state, we have
+	 * to know when it is changed and when it is not.	
 	 */
-	private BoxInfoCollection lastLoadedBoxDefinitions;
 	private SchemaDataSource lastLoadedExperiment;
 	
 	/**
@@ -78,7 +75,6 @@ public class KineticEditorWidget extends VerticalPanel
 		super();
 		
 		this.server = null;
-		this.lastLoadedBoxDefinitions = null;
 		this.lastLoadedExperiment = null;
 		this.closingHandler = new Window.ClosingHandler()
 		{
@@ -161,14 +157,6 @@ public class KineticEditorWidget extends VerticalPanel
 	public void setServerRPC(ServerRpc rpc)
 	{
 		this.server = (KineticEditorServerRpc) rpc;
-	}
-	
-	public void loadBoxDefinitions(BoxInfoCollection newBoxDefinitions)
-	{
-		if(lastLoadedBoxDefinitions != newBoxDefinitions)
-		{
-			lastLoadedBoxDefinitions = newBoxDefinitions;
-		}
 	}
 	
 	public void loadExperiment(SchemaDataSource newExperiment)

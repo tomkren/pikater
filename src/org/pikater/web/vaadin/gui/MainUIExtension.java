@@ -2,7 +2,9 @@ package org.pikater.web.vaadin.gui;
 
 import java.util.logging.Level;
 
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.web.WebAppLogger;
+import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionServerRpc;
 
 import com.vaadin.server.AbstractExtension;
@@ -11,30 +13,46 @@ public class MainUIExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;
 	
-	private MainUIExtensionServerRpc rpc = new MainUIExtensionServerRpc()
-	{
-		private static final long serialVersionUID = -5824200287684658506L;
-		
-		@Override
-		public void logWarning(String message)
-		{
-			WebAppLogger.log(Level.WARNING, message);
-		}
-
-		@Override
-		public void logThrowable(String message, String throwableStackTrace)
-		{
-			WebAppLogger.log(Level.SEVERE, String.format("%s\n%s", message, throwableStackTrace));
-		}
-	};
+	private BoxInfoCollection boxDefinitions;
 	
 	public MainUIExtension()
 	{
-		registerRpc(rpc);
+		this.boxDefinitions = null;
+		registerRpc(new MainUIExtensionServerRpc()
+		{
+			private static final long serialVersionUID = -5824200287684658506L;
+			
+			@Override
+			public void logWarning(String message)
+			{
+				WebAppLogger.log(Level.WARNING, message);
+			}
+
+			@Override
+			public void logThrowable(String message, String throwableStackTrace)
+			{
+				WebAppLogger.log(Level.SEVERE, String.format("%s\n%s", message, throwableStackTrace));
+			}
+		});
 	}
 	
-    public void extend(PikaterUI mainUI)
+	/**
+	 * Exposing the inherited API.
+	 * @param mainUI
+	 */
+	public void extend(PikaterUI mainUI)
     {
         super.extend(mainUI);
     }
+	
+	public BoxInfoCollection getBoxDefinitions()
+	{
+		return boxDefinitions;
+	}
+	
+	public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
+	{
+		this.boxDefinitions = boxDefinitions;
+		getRpcProxy(MainUIExtensionClientRpc.class).setBoxDefinitions(boxDefinitions);
+	}
 }
