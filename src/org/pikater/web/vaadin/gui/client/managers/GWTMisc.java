@@ -1,4 +1,6 @@
-package org.pikater.web.vaadin.gui.client.config;
+package org.pikater.web.vaadin.gui.client.managers;
+
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.user.client.Command;
@@ -8,6 +10,8 @@ public class GWTMisc
 {
 	// *************************************************************************************
 	// PUBLIC FIELDS
+	
+	private static BoxInfoCollection boxDefinitions = null;
 	
 	/**
 	 * Just something to avoid bug/implementation confusion.
@@ -42,5 +46,22 @@ public class GWTMisc
 	{
 		String name = cls.getName(); 
 		return name.substring(name.lastIndexOf('.') + 1);
+	}
+	
+	public static BoxInfoCollection getBoxDefinitions()
+	{
+		if(boxDefinitions == null)
+		{
+			throw new NullPointerException("Box definitions have not yet been globally set: they are null.");
+		}
+		else
+		{
+			return boxDefinitions;
+		}
+	}
+	
+	public static void setBoxDefinitions(BoxInfoCollection boxDefinitions)
+	{
+		GWTMisc.boxDefinitions = boxDefinitions;
 	}
 }

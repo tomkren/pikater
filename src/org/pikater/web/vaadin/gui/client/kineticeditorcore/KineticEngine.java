@@ -22,9 +22,6 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.config.GWTCursorManager;
-import org.pikater.web.vaadin.gui.client.config.GWTCursorManager.MyCursor;
-import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorCanvas;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.EdgePrototype;
@@ -38,6 +35,9 @@ import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.undoredo.S
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.IEnginePlugin;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.SelectionPlugin;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.TrackMousePlugin;
+import org.pikater.web.vaadin.gui.client.managers.GWTCursorManager;
+import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
+import org.pikater.web.vaadin.gui.client.managers.GWTCursorManager.MyCursor;
 
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.json.client.JSONArray;

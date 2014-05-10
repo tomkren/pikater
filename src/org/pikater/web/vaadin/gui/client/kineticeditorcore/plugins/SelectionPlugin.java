@@ -6,13 +6,13 @@ import java.util.Set;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.config.GWTKeyboardManager;
-import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.managers.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
 
 @SuppressWarnings("deprecation")
 public class SelectionPlugin implements IEnginePlugin

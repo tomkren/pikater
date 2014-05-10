@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client;
 
-import org.pikater.web.vaadin.gui.client.config.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.managers.GWTKeyboardManager;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Event;

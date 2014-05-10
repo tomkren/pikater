@@ -2,7 +2,6 @@ package org.pikater.web.vaadin.gui.client.kineticeditor;
 
 import net.edzard.kinetic.Kinetic;
 
-import org.pikater.web.vaadin.gui.client.config.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.undoredo.KineticUndoRedoManager;
@@ -10,6 +9,7 @@ import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.CreateEdgePlu
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.DragEdgePlugin;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.SelectionPlugin;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.TrackMousePlugin;
+import org.pikater.web.vaadin.gui.client.managers.GWTKeyboardManager;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
