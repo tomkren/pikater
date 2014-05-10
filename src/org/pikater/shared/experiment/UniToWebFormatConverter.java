@@ -33,7 +33,7 @@ public class UniToWebFormatConverter
 			Map<UniversalElement, Integer> uniBoxToWebBoxID = new HashMap<UniversalElement, Integer>();
 			for(UniversalElement element : uniFormat.getElements())
 			{
-				BoxInfo info = boxInfoProvider.getByID(element.getElement().getType().getName()); 
+				BoxInfo info = boxInfoProvider.getByOntology(element.getElement().getType()); 
 				if(info != null)
 				{
 					Integer convertedBoxID = webFormat.addLeafBoxAndReturnID(element.getGui(), info);

@@ -9,6 +9,10 @@ import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionServerRp
 
 import com.vaadin.server.AbstractExtension;
 
+/**
+ * Instances of this class act as a mediator between client and server in
+ * the sense that custom messages and data structures are sent over it.
+ */
 public class MainUIExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;

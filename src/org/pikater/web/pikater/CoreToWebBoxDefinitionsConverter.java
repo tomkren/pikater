@@ -38,7 +38,7 @@ public class CoreToWebBoxDefinitionsConverter
 		{
 			boxInfoColl.addDefinition(coreBoxToWebBox(box, ontologyToBoxTypeMapping.get(box.getOntologyClass())));
 		}
-		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitionsFromCore);
+		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxInfoColl);
 	}
 	
 	@SuppressWarnings("unchecked")

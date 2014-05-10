@@ -39,6 +39,11 @@ public class BoxInfo implements Serializable
 		this.outputSlots = new ArrayList<AbstractSlot>();
 		*/
 	}
+	
+	public int getID()
+	{
+		return this.hashCode();
+	}
 
 	public String getOntology()
 	{
