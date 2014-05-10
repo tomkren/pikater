@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Date: 10.5.2014
  * Time: 13:33
  */
-public class ErrorEdge {
+public class ErrorEdge extends EdgeValue {
     private ArrayList<Error> errors=new ArrayList<>();
 
     public ArrayList<Error> getErrors() {

@@ -3,8 +3,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.edges;
 /**
  * User: Kuba
  * Date: 10.5.2014
- * Time: 13:03
+ * Time: 14:27
  */
-public class DataSourceEdge extends EdgeValue {
-    private String dataSourceId;
+public abstract class EdgeValue {
 }

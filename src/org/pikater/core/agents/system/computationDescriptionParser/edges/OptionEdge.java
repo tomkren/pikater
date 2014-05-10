@@ -7,7 +7,7 @@ import org.pikater.core.ontology.messages.option.Option;
  * Date: 10.5.2014
  * Time: 13:28
  */
-public class OptionEdge {
+public class OptionEdge extends EdgeValue {
     private Option options;
 
     public Option getOptions() {
