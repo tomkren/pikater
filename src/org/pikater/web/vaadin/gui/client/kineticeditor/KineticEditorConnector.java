@@ -63,7 +63,6 @@ public class KineticEditorConnector extends AbstractComponentConnector
 	{
 		super.onStateChanged(stateChangeEvent);
 	
-		getWidget().loadBoxDefinitions(getState().boxDefinitions);
 		getWidget().loadExperiment(getState().experimentToLoad);
 	}
 }

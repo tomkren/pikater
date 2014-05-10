@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.config;
+package org.pikater.web.vaadin.gui.client.managers;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Event.NativePreviewEvent;

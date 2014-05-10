@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui;
 
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorState;
@@ -20,11 +19,6 @@ public class KineticEditor extends AbstractComponent
 		});
 		
 		// getRpcProxy(KineticEditorClientRpc.class).response_BoxInfoProvider(SchemaDataSource.infoProvider);
-	}
-	
-	public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
-	{
-		getState().boxDefinitions = boxDefinitions;
 	}
 	
 	public void setExperimentToLoad(SchemaDataSource experiment)

@@ -10,27 +10,40 @@ public class BoxInfoCollection implements Serializable
 {
 	private static final long serialVersionUID = 3532490361387785163L;
 	
-	public Map<String, BoxInfo> boxInfo;
+	public Map<Integer, BoxInfo> boxInfo;
 	
 	/**
 	 * Default constructor keeps GWT and Vaadin happy.
 	 */
 	public BoxInfoCollection()
 	{
-		this.boxInfo = new HashMap<String, BoxInfo>(); 
+		this.boxInfo = new HashMap<Integer, BoxInfo>(); 
 	}
 	
 	public boolean addDefinition(BoxInfo info)
 	{
-		if(boxInfo.containsKey(info.getOntology()))
+		Integer id = info.getID();
+		if(boxInfo.containsKey(id))
 		{
 			return false;
 		}
 		else
 		{
-			this.boxInfo.put(info.getOntology(), info);
+			this.boxInfo.put(id, info);
 			return true;
 		}
+	}
+	
+	public BoxInfo getByOntology(Class<?> ontology)
+	{
+		for(BoxInfo info : boxInfo.values())
+		{
+			if(info.getOntology().equals(ontology.getName()))
+			{
+				return info;
+			}
+		}
+		return null;
 	}
 
 	public List<BoxInfo> getByType(BoxType type)
@@ -46,29 +59,27 @@ public class BoxInfoCollection implements Serializable
 		return result;
 	}
 	
-	public BoxInfo getByID(String ontologyClassName)
+	public BoxInfo getByID(Integer id)
 	{
-		// TODO:
-		
-		/*
-		private ArrayList<BoxInfo> getWrapperBoxes()
-		{
-
-			LogicalBoxDescription treeLogicalBox = new LogicalBoxDescription(
-					"Complex", CARecSearchComplex.class,
-					"Wraper for tree boxes, Computing, Search and Recomend");
-
-			treeLogicalBox.setPicture("complex.jpg");
-
-			BoxInfo treeBox = transformation(treeLogicalBox, BoxType.WRAPPER);
-
-			ArrayList<BoxInfo> wrappers = new ArrayList<BoxInfo>();
-			wrappers.add(treeBox);
-
-			return wrappers;
-		}
-		*/
-		
-		return this.boxInfo.get(ontologyClassName);
+		return this.boxInfo.get(id);
 	}
+	
+	/*
+	private ArrayList<BoxInfo> getWrapperBoxes()
+	{
+
+		LogicalBoxDescription treeLogicalBox = new LogicalBoxDescription(
+				"Complex", CARecSearchComplex.class,
+				"Wraper for tree boxes, Computing, Search and Recomend");
+
+		treeLogicalBox.setPicture("complex.jpg");
+
+		BoxInfo treeBox = transformation(treeLogicalBox, BoxType.WRAPPER);
+
+		ArrayList<BoxInfo> wrappers = new ArrayList<BoxInfo>();
+		wrappers.add(treeBox);
+
+		return wrappers;
+	}
+	*/
 }

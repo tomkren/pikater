@@ -3,12 +3,12 @@ package org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.config.GWTCursorManager.MyCursor;
-import org.pikater.web.vaadin.gui.client.config.GWTCursorManager;
-import org.pikater.web.vaadin.gui.client.config.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.managers.GWTCursorManager;
+import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
+import org.pikater.web.vaadin.gui.client.managers.GWTCursorManager.MyCursor;
 
 public final class TrackMousePlugin implements IEnginePlugin
 {
