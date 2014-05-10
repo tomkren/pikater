@@ -25,6 +25,7 @@
 		<!-- Vaadin add-ons located in the Add-on online directory -->
 		<dependency org="org.vaadin.addon" name="confirmdialog" rev="2.0.4" />
 		<dependency org="org.vaadin.addons" name="wizards-for-vaadin" rev="1.0.2" />
+		<dependency org="com.wcs.wcslib" name="wcslib-vaadin-widget-multifileupload" rev="1.7.1" />
 		
 		<!-- Database includes -->
 		<!-- <dependency org="javax.persistence" name="persistence-api" rev="1.0-rev-1" /> Java Persistence API -->

@@ -1,5 +1,7 @@
 package org.pikater.web.vaadin.gui;
 
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,10 +17,13 @@ import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
+import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
+import org.pikater.web.vaadin.gui.upload.IUploadedFileHandler;
+import org.pikater.web.vaadin.gui.upload.MyUploads;
 import org.pikater.web.vaadin.gui.welcometour.WelcomeTourWizard;
 
 import com.vaadin.annotations.Push;
@@ -56,18 +61,24 @@ public class PikaterUI extends UI
 	{
 		private static final long serialVersionUID = -3494370492799211606L;
 	}
+	
+	/*
+	 * UIs are already session-bound, so we can safely do the following, as long as the field is serializable:
+	 */
+	private MyUploads thisUsersUploads;
 
 	@Override
 	protected void init(VaadinRequest request)
 	{
 		/*
-		 * NOTE: do not change this. Instance of this class acts as a mediator between client and server in
-		 * the sense that custom messages and data structures are sent over it. 
+		 * NOTE: do not remove or replace this code. 
 		 */
 		
 		MainUIExtension mainUIExtension = new MainUIExtension();
 		mainUIExtension.extend(this);
 		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension);
+		
+		thisUsersUploads = new MyUploads();
 		
 		/*
 		 * TODO: box definition changes will take an application restart... only make the RPC method a one-time push
@@ -82,8 +93,9 @@ public class PikaterUI extends UI
 		
 		// primary_displayWelcomeWizard();
 		
+		test_multiFileUpload();
 		// test_console();
-		test_editor();
+		// test_editor();
 		// test_simpleButton();
 		// test_JSCH();
 	}
@@ -140,6 +152,24 @@ public class PikaterUI extends UI
 	
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
+	
+	private void test_multiFileUpload()
+	{
+		VerticalLayout vLayout = new VerticalLayout();
+		setContent(vLayout);
+		
+		vLayout.addComponent(thisUsersUploads.getNewComponent(
+				Arrays.asList(HttpContentType.APPLICATION_JAR),
+				new IUploadedFileHandler()
+				{
+					@Override
+					public void handleFile(InputStream streamToLocalFile, String fileName, String mimeType, long sizeInBytes)
+					{
+						// TODO Auto-generated method stub
+					}
+				}
+		));
+	}
 	
 	private void test_editor()
 	{
@@ -266,12 +296,8 @@ public class PikaterUI extends UI
 	// -------------------------------------------------------------------
 	// TIPS AND TRICKS
 	
-	private void smth(PushMode newPushMode)
+	private void smth()
 	{
-		// Dynamically switch the push mode of the current UI. The
-	    // options are DISABLED, MANUAL and AUTOMATIC.
-	    UI.getCurrent().getPushConfiguration().setPushMode(newPushMode);
-	    
 	    // The background thread that updates clock times once every second.
         new Timer().scheduleAtFixedRate(new TimerTask()
 		{
