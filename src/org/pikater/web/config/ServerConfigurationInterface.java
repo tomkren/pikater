@@ -3,7 +3,7 @@ package org.pikater.web.config;
 import javax.servlet.ServletContext;
 
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-import org.pikater.web.vaadin.gui.MainUIExtension;
+import org.pikater.web.vaadin.gui.server.MainUIExtension;
 
 public class ServerConfigurationInterface
 {

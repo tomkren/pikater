@@ -22,9 +22,13 @@ import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
-import org.pikater.web.vaadin.gui.upload.IUploadedFileHandler;
-import org.pikater.web.vaadin.gui.upload.MyUploads;
-import org.pikater.web.vaadin.gui.welcometour.WelcomeTourWizard;
+import org.pikater.web.vaadin.gui.server.MainUIExtension;
+import org.pikater.web.vaadin.gui.server.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.KineticEditor;
+import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
+import org.pikater.web.vaadin.upload.IUploadedFileHandler;
+import org.pikater.web.vaadin.upload.MyUploads;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
@@ -93,9 +97,9 @@ public class PikaterUI extends UI
 		
 		// primary_displayWelcomeWizard();
 		
-		test_multiFileUpload();
+		// test_multiFileUpload();
 		// test_console();
-		// test_editor();
+		test_editor();
 		// test_simpleButton();
 		// test_JSCH();
 	}

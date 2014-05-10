@@ -5,7 +5,7 @@ import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
 
-import org.pikater.web.vaadin.gui.KineticEditor;
+import org.pikater.web.vaadin.gui.server.components.KineticEditor;
 
 import com.vaadin.client.communication.StateChangeEvent;
 

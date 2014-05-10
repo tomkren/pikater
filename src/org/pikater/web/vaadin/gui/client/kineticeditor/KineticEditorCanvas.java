@@ -2,13 +2,13 @@ package org.pikater.web.vaadin.gui.client.kineticeditor;
 
 import net.edzard.kinetic.Kinetic;
 
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.undoredo.KineticUndoRedoManager;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.CreateEdgePlugin;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.DragEdgePlugin;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.SelectionPlugin;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.plugins.TrackMousePlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.KineticUndoRedoManager;
+import org.pikater.web.vaadin.gui.client.kineticengine.plugins.CreateEdgePlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.plugins.DragEdgePlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.plugins.TrackMousePlugin;
 import org.pikater.web.vaadin.gui.client.managers.GWTKeyboardManager;
 
 import com.google.gwt.event.dom.client.KeyCodes;

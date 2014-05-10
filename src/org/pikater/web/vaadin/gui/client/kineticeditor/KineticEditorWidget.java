@@ -9,12 +9,12 @@ import java.util.Set;
 
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.web.vaadin.gui.client.jsni.JSNI_SharedConfig;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.ExperimentGraphItem;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.TempDeselectOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.TempDeselectOperation;
 import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
 
 import com.google.gwt.event.dom.client.ClickEvent;
