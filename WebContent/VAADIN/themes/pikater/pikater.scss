@@ -26,6 +26,44 @@
   	font-family: "Courier New", Courier, monospace;
   }
   
+  /* Cell browser */
+  .cellbrowser
+  {
+  	border: 1px solid black;
+  }
+  .cellbrowser-column
+  {
+  	height: 100%;
+  }
+  .cellbrowser-column-cell
+  {
+  	width: 100%; /* this is needed for some parent containers too */
+  	min-width: 150px;
+  	border-style: ridge;
+  }
+  .cellbrowser-column-cell:hover
+  {
+  	border-style: groove;
+  }
+  .cellbrowser-column-cell-inner-layout
+  {
+  	width: 100%;
+  }
+  .cellbrowser-column-cell-inner-layout-table:hover, .cellbrowser-column-cell-inner-layout-table-selected 
+  {
+  	background-color: lightyellow;
+  }
+  .cellbrowser-column-cell-component
+  {
+  	padding-top: 3px;
+  	padding-bottom: 3px;
+  	margin-left: 10px;
+  	margin-right: 25px;
+  }
+  .cellbrowser-column-cell-image
+  {
+  }
+  
   /* Miscellaneous */
   .displayBorder
   {
@@ -38,5 +76,9 @@
   .errorLabel
   {
   	color: red;
+  }
+  .autoHeight
+  {
+  	height: auto;
   }
 }

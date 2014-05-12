@@ -24,6 +24,7 @@ import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
 import org.pikater.web.vaadin.gui.server.MainUIExtension;
 import org.pikater.web.vaadin.gui.server.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.KineticBoxCellBrowser;
 import org.pikater.web.vaadin.gui.server.components.KineticEditor;
 import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
@@ -99,7 +100,8 @@ public class PikaterUI extends UI
 		
 		// test_multiFileUpload();
 		// test_console();
-		test_editor();
+		test_boxCellBrowser();
+		// test_editor();
 		// test_simpleButton();
 		// test_JSCH();
 	}
@@ -169,10 +171,28 @@ public class PikaterUI extends UI
 					@Override
 					public void handleFile(InputStream streamToLocalFile, String fileName, String mimeType, long sizeInBytes)
 					{
-						// TODO Auto-generated method stub
+						// TODO: upload the file to DB
 					}
 				}
 		));
+	}
+	
+	private void test_boxCellBrowser()
+	{
+		BoxInfoCollection boxDefinitions = new BoxInfoCollection();
+		boxDefinitions.addDefinition(new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", ""));
+		boxDefinitions.addDefinition(new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", ""));
+		boxDefinitions.addDefinition(new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", ""));
+		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitions);
+		
+		VerticalLayout vLayout = new VerticalLayout();
+		setContent(vLayout);
+		
+		KineticBoxCellBrowser cellBrowser = new KineticBoxCellBrowser();
+		cellBrowser.addStyleName("displayBorder");
+		cellBrowser.setWidth("800px");
+		cellBrowser.setHeight("500px");
+		vLayout.addComponent(cellBrowser);
 	}
 	
 	private void test_editor()
@@ -203,11 +223,18 @@ public class PikaterUI extends UI
 		setContent(vLayout);
 		
 		KineticEditor editor = new KineticEditor();
-		// kineticComponent.setWidth("800px");
-		// kineticComponent.setHeight("600px");
+		editor.setWidth("800px");
+		editor.setHeight("600px");
 		editor.setExperimentToLoad(newExperiment);
 		
+		/*
+		KineticBoxBrowser boxBrowser = new KineticBoxBrowser();
+		boxBrowser.setWidth("800px");
+		boxBrowser.setHeight("250px");
+		*/
+		
 		vLayout.addComponent(editor);
+		// vLayout.addComponent(boxBrowser);
 	}
 	
 	@SuppressWarnings("unused")
