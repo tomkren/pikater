@@ -38,6 +38,12 @@ public class MainUIExtension extends AbstractExtension
 			{
 				WebAppLogger.log(Level.SEVERE, String.format("%s\n%s", message, throwableStackTrace));
 			}
+
+			@Override
+			public void logUncaughtNativeClientException()
+			{
+				WebAppLogger.log(Level.SEVERE, "An uncaught native client exception has been thrown. Best to launch a thorough debug.");
+			}
 		});
 	}
 	

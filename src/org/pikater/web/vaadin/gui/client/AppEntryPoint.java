@@ -1,8 +1,13 @@
 package org.pikater.web.vaadin.gui.client;
 
 import org.pikater.web.vaadin.gui.client.managers.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.managers.GWTLogger;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.core.client.JavaScriptException;
+import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.user.client.Event;
 
 public class AppEntryPoint implements EntryPoint
@@ -10,12 +15,6 @@ public class AppEntryPoint implements EntryPoint
 	@Override
 	public void onModuleLoad()
 	{
-		/*
-		 * NOTES:
-		 * - Don't use the "GWT.setUncaughtExceptionHandler(handler);" with the GWT logger. These uncaught exceptions
-		 * are native and contain useless (javascript related) information for a Java/GWT programmer.  
-		 */
-		
 		/*
 		 * Creates a special JS namespace, injects it into the window object and
 		 * exports some JSNI functions that can be called from the server.
@@ -29,5 +28,25 @@ public class AppEntryPoint implements EntryPoint
 		 * events.
 		 */
 		Event.addNativePreviewHandler(GWTKeyboardManager.getNativePreviewHandler());
+		
+		/*
+		 * Send uncaught exceptions to the server:  
+		 */
+		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler()
+		{
+			@Override
+			public void onUncaughtException(Throwable e)
+			{
+				if((e instanceof UmbrellaException) || (e instanceof JavaScriptException))
+				{
+					// native exceptions usually contain no useful information => send a generic "warning" instead:
+					GWTLogger.logUncaughtNativeClientException();
+				}
+				else
+				{
+					GWTLogger.logThrowable("Uncaught exception from the client", e);
+				}
+			}
+		});
 	}
 }
