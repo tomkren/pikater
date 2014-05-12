@@ -1,5 +1,3 @@
-package xmlGenerator;
-
 
 
 import jade.util.leap.ArrayList;
