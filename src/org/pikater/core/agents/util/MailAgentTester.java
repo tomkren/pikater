@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system.mailing;
+package org.pikater.core.agents.util;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Mailing;
