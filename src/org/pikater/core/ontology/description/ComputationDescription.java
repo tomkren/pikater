@@ -31,13 +31,15 @@ public class ComputationDescription implements Concept {
     }
 
     public ArrayList getRootElements() {
+    	if (rootElements == null) {
+    		return new ArrayList();
+    	}
         return rootElements;
     }
     public void setRootElements(ArrayList rootElements) {
         this.rootElements = rootElements;
     }
     public void addRootElement(FileDataSaver rootElement) {
-    	
     	if (rootElements == null) {
     		this.rootElements = new ArrayList();
     	}

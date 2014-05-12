@@ -42,7 +42,7 @@
                   </jade.util.leap.ArrayList>
                 </options>
                 <computingAgent type="org.pikater.core.ontology.description.ComputingAgent">
-                  <modelClass>org.pikater.core.agents.experiment.computing.Agent_WekaCA</modelClass>
+                  <modelClass>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</modelClass>
                   <options serialization="custom">
                     <jade.util.leap.ArrayList>
                       <default>
@@ -59,19 +59,9 @@
                           <org.pikater.core.ontology.messages.option.Option>
                             <__mutable>false</__mutable>
                             <__is__a__set>false</__is__a__set>
-                            <__data__type>FLOAT</__data__type>
+                            <__data__type>INT</__data__type>
                             <__name>M</__name>
-                            <__value>0.4</__value>
-                            <__number__of__values__to__try>0</__number__of__values__to__try>
-                            <numberOfOptions>0</numberOfOptions>
-                          </org.pikater.core.ontology.messages.option.Option>
-                          <org.pikater.core.ontology.messages.option.Option>
-                            <__mutable>false</__mutable>
-                            <__is__a__set>false</__is__a__set>
-                            <__data__type>STRING</__data__type>
-                            <__name>computing_method</__name>
-                            <__synopsis>computing_method</__synopsis>
-                            <__value>RBFNetwork</__value>
+                            <__value>-1</__value>
                             <__number__of__values__to__try>0</__number__of__values__to__try>
                             <numberOfOptions>0</numberOfOptions>
                           </org.pikater.core.ontology.messages.option.Option>

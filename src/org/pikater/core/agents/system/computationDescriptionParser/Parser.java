@@ -438,30 +438,14 @@ public class Parser {
 
     	agent.log("Ontology Parser - ComputingAgent");
 
-
-		Option computingMethodOprion = null;
-
-		ArrayList options = computingAgent.getOptions();
-		for (int i = 0; i < options.size(); i++) {
-			
-			Option optionI = (Option) options.get(i);
-			
-			if (optionI.getName().equals("computing_method")) {
-				computingMethodOprion = optionI;
-				
-			}
-		}
-		options.remove(computingMethodOprion);
-
-
-		String computingMethod = computingMethodOprion.getValue();
-		agent.log("computing_method:  " + computingMethod);
+		String modelClass = computingAgent.getModelClass();
+		agent.log("ModelClass:  " + modelClass);
 
 				
 		ArrayList optionsCompAgent = computingAgent.getOptions();
 
 		org.pikater.core.ontology.messages.Agent compAgentO = new org.pikater.core.ontology.messages.Agent();
-		compAgentO.setType(computingMethod);
+		compAgentO.setType(computingAgent.getModelClass());
 		compAgentO.setGui_id(String.valueOf(problemID));
 		compAgentO.setOptions(optionsCompAgent);
 

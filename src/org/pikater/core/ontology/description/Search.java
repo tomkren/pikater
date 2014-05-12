@@ -26,12 +26,18 @@ public class Search extends AbstractDataProcessing {
     }
 
     public ArrayList getOptions() {
+    	if (this.options == null) {
+    		return new ArrayList();
+    	}
         return options;
     }
     public void setOptions(ArrayList options) {
         this.options = options;
     }
     public void addOption(Option option) {
+    	if (this.options == null) {
+    		this.options = new ArrayList();
+    	}
         this.options.add(option);
     }
 

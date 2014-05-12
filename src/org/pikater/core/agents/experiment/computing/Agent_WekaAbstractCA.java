@@ -3,6 +3,7 @@ package org.pikater.core.agents.experiment.computing;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
+
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.RBFNetwork;
@@ -11,7 +12,6 @@ import weka.core.Instances;
 import java.util.Date;
 import java.util.Random;
 
-import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.EvaluationMethod;
