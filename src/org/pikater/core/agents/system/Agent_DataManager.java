@@ -4,6 +4,9 @@ import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
+import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -29,6 +32,7 @@ import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.actions.ExperimentOntology;
@@ -36,6 +40,7 @@ import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.batch.SavedBatch;
 import org.pikater.core.ontology.data.GetFile;
+import org.pikater.core.ontology.data.PrepareFileUpload;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.postgresql.PGConnection;
 
@@ -47,6 +52,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.SocketException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -200,6 +207,9 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof GetFile) {
 						return respondToGetFile(request, a);
 					}
+					if (a.getAction() instanceof PrepareFileUpload) {
+						return respondToPrepareFileUpload(request, a);
+					}
 				} catch (OntologyException e) {
 					e.printStackTrace();
 					logError("Problem extracting content: " + e.getMessage());
@@ -313,6 +323,34 @@ public class Agent_DataManager extends PikaterAgent {
 			e.printStackTrace();
 		}
 		
+		return reply;
+	}
+
+	@SuppressWarnings("serial")
+	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
+		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
+		log("DataManager.respondToPrepareFileUpload");
+
+		final ServerSocket serverSocket = new ServerSocket();
+		serverSocket.setSoTimeout(15000);
+		serverSocket.bind(null);
+		log("Listening on port: " + serverSocket.getLocalPort());
+
+		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
+			@Override
+			public void action() {
+				try {
+					DataTransferService.handleUploadConnection(serverSocket, hash);
+				} catch (IOException e) {
+					logError("Data upload failed");
+					e.printStackTrace();
+				}
+			}
+		}));
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
 		return reply;
 	}
 
