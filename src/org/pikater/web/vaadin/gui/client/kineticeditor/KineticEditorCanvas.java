@@ -43,7 +43,7 @@ public class KineticEditorCanvas extends FocusPanel
 		
 		this.scrollPanel = new ScrollPanel();
 		// this.scrollPanel.setSize(String.valueOf((int)this.minimumKineticStageSize.x) + "px", String.valueOf((int)this.minimumKineticStageSize.y) + "px");
-		this.scrollPanel.setSize("800px", "600px");
+		// this.scrollPanel.setSize("800px", "600px");
 		this.scrollPanel.scrollToLeft();
 		this.scrollPanel.scrollToTop();
 		setWidget(this.scrollPanel);
