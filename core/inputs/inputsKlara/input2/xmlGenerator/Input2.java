@@ -1,7 +1,7 @@
 
-import jade.util.leap.ArrayList;
-
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
@@ -83,7 +83,7 @@ public final class Input2 {
         FileDataSaver saver = new FileDataSaver();
         saver.setDataSource(computingDataSource);
 
-        ArrayList a = new ArrayList();
+        List<FileDataSaver> a = new ArrayList<FileDataSaver>();
         a.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();

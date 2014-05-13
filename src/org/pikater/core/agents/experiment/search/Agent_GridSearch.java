@@ -4,20 +4,19 @@
  */
 package org.pikater.core.agents.experiment.search;
 
-import jade.util.leap.Iterator;
 import jade.util.leap.LinkedList;
 import jade.util.leap.List;
 
 import java.util.ArrayList;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.BoolSItem;
-import org.pikater.core.ontology.messages.FloatSItem;
 import org.pikater.core.ontology.messages.IntSItem;
-import org.pikater.core.ontology.messages.SearchItem;
-import org.pikater.core.ontology.messages.SearchSolution;
-import org.pikater.core.ontology.messages.SetSItem;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.messages.search.SearchSolution;
+import org.pikater.core.ontology.messages.searchItems.BoolSItem;
+import org.pikater.core.ontology.messages.searchItems.FloatSItem;
+import org.pikater.core.ontology.messages.searchItems.SearchItem;
+import org.pikater.core.ontology.messages.searchItems.SetSItem;
 import org.pikater.core.options.GridSearch_SearchBox;
 
 /**
@@ -32,7 +31,7 @@ public class Agent_GridSearch extends Agent_Search {
 	private static final long serialVersionUID = -5728853644752654450L;
 
 	int defaultTries = 10;
-    List schema;
+	java.util.List<SearchItem> schema;
     boolean linearSteps = true;
     boolean logSteps = true;
     double logZero = 1.0E-8;
@@ -69,7 +68,7 @@ public class Agent_GridSearch extends Agent_Search {
         
         for (int i = 0; i < values.size(); i++) {
             SearchSolution ss = new SearchSolution();
-            LinkedList v = new LinkedList();
+            java.util.List<String> v = new java.util.ArrayList<String>();
             for (String s: values.get(i).split(",")) {
                 v.add(s);
             }
@@ -88,9 +87,7 @@ public class Agent_GridSearch extends Agent_Search {
         
         ArrayList<ArrayList<String>> valsForOpts = new ArrayList<ArrayList<String>>();
 
-        Iterator it = schema.iterator();
-        while (it.hasNext()) {
-            SearchItem si = (SearchItem) it.next();
+        for (SearchItem si : schema ) {
             Integer tries = si.getNumber_of_values_to_try();
             if (tries == 0) {
                 tries = defaultTries;
@@ -193,10 +190,9 @@ public class Agent_GridSearch extends Agent_Search {
 
     @Override
     protected void loadSearchOptions() { 
-        List search_options = getSearch_options();
-        Iterator itr = search_options.iterator();
-        while (itr.hasNext()) {
-            Option next = (Option) itr.next();
+        java.util.List<Option> search_options = getSearch_options();
+        
+        for (Option next : search_options) {
 
             if (next.getName().equals("N")) {
                 defaultTries = Integer.parseInt(next.getValue());

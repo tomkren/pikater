@@ -1,8 +1,7 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.messages.searchItems;
 
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class FloatSItem extends SearchItem {
@@ -31,9 +30,9 @@ public class FloatSItem extends SearchItem {
 		return Float.toString(rFloat);
 	}
 	@Override
-	public List possibleValues() {
+	public List<String> possibleValues() {
 		// TODO Auto-generated method stub
-		List posVals = new ArrayList();
+		List<String> posVals = new ArrayList<String>();
 		int x = getNumber_of_values_to_try();
 		float dv = (getMax() - getMin())/ (x - 1);
 		for (int i = 0; i < x; i++) {

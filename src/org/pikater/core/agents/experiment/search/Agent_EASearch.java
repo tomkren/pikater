@@ -1,16 +1,14 @@
 package org.pikater.core.agents.experiment.search;
 
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.SearchItem;
-import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.messages.search.SearchSolution;
+import org.pikater.core.ontology.messages.searchItems.SearchItem;
 import org.pikater.core.options.EASearch_SearchBox;
 import org.pikater.core.utilities.evolution.*;
 import org.pikater.core.utilities.evolution.individuals.Individual;
@@ -157,13 +155,13 @@ public class Agent_EASearch extends Agent_Search {
             parents = new Population();
             parents.setPopulationSize(popSize);
             
-            List schema = getSchema();
+            java.util.List<SearchItem> schema = getSchema();
             
             SearchItemIndividual sampleIndividual = new SearchItemIndividual(schema.size());
-            Iterator it = schema.iterator();
-            for (int i = 0; it.hasNext(); i++) {
+            
+            for (int i = 0; i < schema.size(); i++) {
                 sampleIndividual.set(i, "");
-                sampleIndividual.setSchema(i, (SearchItem)it.next());
+                sampleIndividual.setSchema(i, schema.get(i));
             }
             
             parents.setSampleIndividual(sampleIndividual);
@@ -225,7 +223,7 @@ public class Agent_EASearch extends Agent_Search {
         List ret = new ArrayList();
         for (Individual i : pop.getSortedIndividuals()) {
             SearchItemIndividual si = (SearchItemIndividual)i;
-            ArrayList vals = new ArrayList();
+            java.util.List<String> vals = new java.util.ArrayList<String>();
             
             for (int j = 0; j < si.length(); j++) {
                 vals.add(si.get(j).toString());
@@ -315,11 +313,11 @@ public class Agent_EASearch extends Agent_Search {
         xOverProb = 0.5;
         maxGeneration = 5;
         goalError = 0.02;
-        List search_options = getSearch_options();
+        java.util.List<Option> search_options = getSearch_options();
         // find maximum tries in Options
-        Iterator itr = search_options.iterator();
-        while (itr.hasNext()) {
-            Option next = (Option) itr.next();
+        
+        for (Option next : search_options) {
+        	
             if (next.getName().equals("E")) {
                 goalError = Float.parseFloat(next.getValue());
             }

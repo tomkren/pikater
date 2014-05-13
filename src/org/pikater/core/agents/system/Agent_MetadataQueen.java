@@ -48,6 +48,7 @@ import org.pikater.core.ontology.messages.GetMetadata;
 import org.pikater.core.ontology.messages.Id;
 import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.option.Option;
 
 public class Agent_MetadataQueen extends PikaterAgent {
 
@@ -296,7 +297,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		org.pikater.core.ontology.messages.Agent ag =
 				new org.pikater.core.ontology.messages.Agent();
 		ag.setType(agent_type);
-		ag.setOptions(new ArrayList());
+		ag.setOptions(new java.util.ArrayList<Option>() );
 
 		Data d = new Data();
 		d.setTest_file_name("xxx");

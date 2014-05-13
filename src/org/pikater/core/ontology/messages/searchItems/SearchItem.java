@@ -1,9 +1,10 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.messages.searchItems;
 
+import java.util.List;
 import java.util.Random;
 
 import jade.content.Concept;
-import jade.util.leap.List;
+
 
 public abstract class SearchItem implements Concept {
 	/**
@@ -14,7 +15,7 @@ public abstract class SearchItem implements Concept {
 	//Create random solution item
 	public abstract String randomValue(Random rnd_gen);
 	//Returns all possible values from this schema
-	public abstract List possibleValues();
+	public abstract List<String> possibleValues();
 	public Integer getNumber_of_values_to_try() {
 		return number_of_values_to_try;
 	}

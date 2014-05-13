@@ -3,13 +3,12 @@ package org.pikater.core.agents.experiment.search;
 import java.util.Random;
 
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.SearchItem;
-import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.messages.search.SearchSolution;
+import org.pikater.core.ontology.messages.searchItems.SearchItem;
 
 public class Agent_RandomSearch extends Agent_Search {
 
@@ -47,13 +46,15 @@ public class Agent_RandomSearch extends Agent_Search {
 
 	@Override
 	protected void loadSearchOptions(){
-		List search_options = getSearch_options();
+		
+		java.util.List<Option> search_options = getSearch_options();
 		// find maximum tries in Options
-		Iterator itr = search_options.iterator();
+
 		final_error_rate = (float) 0.01;
 		maximum_tries= 10;
-		while (itr.hasNext()) {
-			Option next = (Option) itr.next();
+		
+		for (Option next : search_options) {
+			
 			if (next.getName().equals("E")){
 				final_error_rate = Float.parseFloat(next.getValue());
 			}
@@ -85,11 +86,9 @@ public class Agent_RandomSearch extends Agent_Search {
 	
 	private SearchSolution genRandomSolution(){
 		// go through the solutions Vector, generate random values
-		List new_solution = new ArrayList();
-		Iterator itr = getSchema().iterator();
-		while (itr.hasNext()) {
-			SearchItem si = (SearchItem) itr.next();
-			//opt.setValue(randomOptValue(opt));
+		java.util.List<String> new_solution = new java.util.ArrayList<String>();
+		
+		for (SearchItem si : getSchema() ) {
 			new_solution.add(si.randomValue(rnd_gen));
 		}
 		SearchSolution sol = new SearchSolution();

@@ -13,6 +13,7 @@ import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.messages.searchItems.SearchItem;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -41,8 +42,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	
 	protected int query_block_size = 1;
 
-	private List search_options = null;
-	private List schema = null;
+	private java.util.List<Option> search_options = null;
+	private java.util.List<SearchItem> schema = null;
 	
 	protected abstract List generateNewSolutions(List solutions, float[][] evaluations); //returns List of Options
 	protected abstract boolean finished();
@@ -69,19 +70,20 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	} // end setup()
 
 	
-	protected List getSchema() {
-		if(schema != null){
+	protected java.util.List<SearchItem> getSchema() {
+		if(schema != null) {
 			return schema;
-		}else{
-			return new ArrayList();
+		} else {
+			return new java.util.ArrayList<SearchItem>();
 		}
 		
 	}
-	protected List getSearch_options() {
-		if(search_options!=null){
+	protected java.util.List<Option> getSearch_options() {
+
+		if(search_options != null) {
 			return search_options;
-		}else{
-			return new ArrayList();
+		} else {
+			return new java.util.ArrayList<Option>();
 		}
 	}
 	
@@ -120,6 +122,11 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 											MessageTemplate.MatchOntology(ontology
 													.getName())))));
 			this.registerPrepareResultNotification(new Behaviour(a) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -5801676857376453194L;
+
 				boolean cont;
 				List solutions_new = null;
 				float evaluations[][] = null;
@@ -275,18 +282,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			}
 			throw new NotUnderstoodException("Not understood");
 		}
-		/*
-		@Override
-		protected ACLMessage prepareResultNotification(ACLMessage request,
-				ACLMessage response) {
-			if(get_option_action != null){
-				return getParameters(request);
-			}
-			if(get_next_parameters_action!=null){
-				return runSearchProtocol(request, get_next_parameters_action);
-			}
-			return null;
-		}*/
 
 	}
 		
@@ -318,7 +313,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			count++;
 
 			// list of ontology.messages.Option
-			List _options = new ArrayList();
+			java.util.List<Option> _options = new java.util.ArrayList<Option>();
 			agent = new org.pikater.core.ontology.messages.Agent();
 			agent.setName(getLocalName());
 			agent.setType(getAgentType());
@@ -350,7 +345,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					float rangeMin = 0;
 					float rangeMax = 0;
 					String range;
-					List set = null;
+					java.util.List<String> set = null;
 					
 					if (dt.equals("BOOLEAN")){
 						numArgsMin = 1;
@@ -367,7 +362,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							rangeMax = Float.parseFloat(params[7]);
 						}
 						if (range.equals("s")){
-							set = new ArrayList();
+							set = new java.util.ArrayList<String>();
 							String[] s = params[6].split("[ ]+");
 							for (int i=0; i<s.length; i++){
 								set.add(s[i]);
@@ -426,62 +421,5 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		
 		return reply;
 	} // end getParameters
-	
-	//Run the search protocol
-	/*protected ACLMessage runSearchProtocol(ACLMessage request, GetParameters gnp) {
-		search_options = gnp.getSearch_options();
-		schema = gnp.getSchema();														
-		loadSearchOptions();
-		
-		List solutions_new = null;
-		List evaluations = null;
-		ACLMessage reply = request.createReply();
-		try{
-			while (!finished()){
-				ExecuteParameters ep = new ExecuteParameters();
-				solutions_new = generateNewSolutions(solutions_new, evaluations);
-				ep.setSolutions(solutions_new); // List of Lists of Options
-
-				Action a = new Action();
-				a.setAction(ep);
-				a.setActor(getAID());
-
-				ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
-				req.addReceiver(request.getSender());
-				req.setLanguage(codec.getName());
-				req.setOntology(ontology.getName());
-				req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-				getContentManager().fillContent(req, a);
-
-				ACLMessage get_next_parameters_results = FIPAService.doFipaRequestClient(this, req);
-				// extract List of Evaluations from response
-				ContentElement content = getContentManager().extractContent(get_next_parameters_results);				
-				if (content instanceof Result) {					
-					Result result = (Result) content;
-					evaluations = (List)((List)result.getValue()).get(1);
-					solutions_new = (List)((List)result.getValue()).get(0);
-				}
-				updateFinished(evaluations);							
-			}
-			reply.setPerformative(ACLMessage.INFORM);
-			reply.setContent("finished");
-		} catch (FIPAException e) {
-			e.printStackTrace();
-			reply.setContent(e.getMessage());
-			reply.setPerformative(ACLMessage.FAILURE);
-		} catch (CodecException e) {
-			e.printStackTrace();
-			reply.setContent(e.getMessage());
-			reply.setPerformative(ACLMessage.FAILURE);
-		} catch (OntologyException e) {
-			e.printStackTrace();
-			reply.setContent(e.getMessage());
-			reply.setPerformative(ACLMessage.FAILURE);
-		}
-		
-		return reply;
-
-	}*/
 
 }

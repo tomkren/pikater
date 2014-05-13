@@ -31,7 +31,12 @@ import org.pikater.core.options.NMTopRecommender_RecommendBox;
  */
 public class Agent_NMTopRecommender extends Agent_Recommender {
 
-    private int minAttributes;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5466662784862244724L;
+
+	private int minAttributes;
     private int maxAttributes;
     private int minInstances;
     private int maxInstances;
@@ -156,25 +161,24 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             }
         }
 
-        List optionSamples = getAgentOptions(bestAgentType);
-        List options = new LinkedList();
-        it = optionSamples.iterator();
-        while (it.hasNext()) {
-            Option o = (Option) it.next();
+        java.util.List<Option> optionSamples = getAgentOptions(bestAgentType);
+        java.util.List<Option> options = new java.util.ArrayList<Option>();
+        
+        for (Option optionI : optionSamples) {
 
-            Option newOpt = o.copyOption();        	
+            Option newOpt = optionI.copyOption();        	
             
             //ignore boolean and set options for now, set their value to the one of the best agent on closest file
-            if (o.getData_type().equals("BOOLEAN") || o.getData_type().equals("MIXED")) {
-                if (bestAgentOptions.get(0).getOptionByName(o.getName()) == null){
+            if (optionI.getData_type().equals("BOOLEAN") || optionI.getData_type().equals("MIXED")) {
+                if (bestAgentOptions.get(0).getOptionByName(optionI.getName()) == null){
                 	continue;
                 }
-                newOpt.setValue(bestAgentOptions.get(0).getOptionByName(o.getName()).getValue());                
+                newOpt.setValue(bestAgentOptions.get(0).getOptionByName(optionI.getName()).getValue());                
             }
             else {
 	            double sum = 0;
 	            int count = 0;
-	            String optionName = o.getName();
+	            String optionName = optionI.getName();
 	            for (Agent a : bestAgentOptions) {
 	            	if (a.getOptionByName(optionName) != null){
 	            		sum += Double.parseDouble(a.getOptionByName(optionName).getValue());
@@ -197,15 +201,15 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	                newOpt.setUser_value("?");
 	                newOpt.setMutable(true);
 	                Interval range = new Interval();
-	                range.setMin((float)Math.max(avg - 2*stdDev, o.getRange().getMin()));
-	                range.setMax((float)Math.min(avg + 2*stdDev, o.getRange().getMax()));
+	                range.setMin((float)Math.max(avg - 2*stdDev, optionI.getRange().getMin()));
+	                range.setMax((float)Math.min(avg + 2*stdDev, optionI.getRange().getMax()));
 	                newOpt.setRange(range);
 	            }
 	            else {
-	                if (o.getData_type().equals("FLOAT")) {
+	                if (optionI.getData_type().equals("FLOAT")) {
 	                    newOpt.setValue(Double.toString(avg));
 	                }
-	                if (o.getData_type().equals("INT")) {
+	                if (optionI.getData_type().equals("INT")) {
 	                    newOpt.setValue(Integer.toString((int)avg));
 	                }
 	            }
@@ -345,7 +349,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                     float rangeMin = 0;
                     float rangeMax = 0;
                     String range;
-                    List set = null;
+                    java.util.List<String> set = null;
 
                     if (dt.equals("BOOLEAN")) {
                         numArgsMin = 1;
@@ -361,7 +365,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                             rangeMax = Float.parseFloat(params[7]);
                         }
                         if (range.equals("s")) {
-                            set = new jade.util.leap.ArrayList();
+                            set = new java.util.ArrayList<String>();
                             String[] s = params[6].split("[ ]+");
                             for (int i = 0; i < s.length; i++) {
                                 set.add(s[i]);

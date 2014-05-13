@@ -68,7 +68,6 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	private long timeout = 10000;
 
-	
 	private HashMap<String, String> agentTypes;
 	private HashMap<String, Object[]> agentOptions;
 	private float default_error_rate = (float) 0.3;
@@ -77,11 +76,11 @@ public abstract class Agent_GUI extends PikaterAgent {
 	private String default_get_results = "after_each_computation";
 	private boolean default_save_results = true;
 	private String default_recommender = "BasicRecommender";
-	
+
 	protected boolean end_pikater_when_finished = false;
-	
+
 	protected boolean shutdown_database = false;
-	
+
 	/*
 	 * should use the following methods: refreshOptions(ontology.messages.Agent
 	 * agent) should be called after user changes options of an agent
@@ -95,42 +94,42 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	/* returns the string with agent type */
 
-	// protected abstract void displayOptions(Problem problem, int performative);
+	// protected abstract void displayOptions(Problem problem, int
+	// performative);
 
 	/*
 	 * method should be used to display agent options, it is called
 	 * automatically after receiving the message from a computing agent
 	 */
 
-
-    protected abstract void displayResult(List tasks, String type);
+	protected abstract void displayResult(List tasks, String type);
 
 	/*
 	 * method should be used to display the result, it is called automatically
 	 * after receiving the message from a manager
 	 */
 
-    protected abstract void displayFailure(AID agent, String message);
+	protected abstract void displayFailure(AID agent, String message);
 
-    protected abstract void displayPartialResult();
+	protected abstract void displayPartialResult();
 
-    protected abstract void displayFileImportProgress(int completed, int all);
-	
+	protected abstract void displayFileImportProgress(int completed, int all);
+
 	protected abstract void mySetup();
 
-	/* obsolete, but still informative
-	 * it should call ... int createNewProblem() - returns the _problem_id ...
-	 * addAgentToProblem(int _problem_id, String name, String type) - either
-	 * name or type is set, the other parameter should be null - throws
+	/*
+	 * obsolete, but still informative it should call ... int createNewProblem()
+	 * - returns the _problem_id ... addAgentToProblem(int _problem_id, String
+	 * name, String type) - either name or type is set, the other parameter
+	 * should be null - throws FailureExeption, if the agent could not be found
+	 * / created ... addAgentToProblemWekaStyle(int _problem_id, String
+	 * agentName, String agentType, String [] agentParams) - similar to
+	 * addAgentToProblem, but it adds also agent options - throws
 	 * FailureExeption, if the agent could not be found / created ...
-	 * addAgentToProblemWekaStyle(int _problem_id, String agentName, String
-	 * agentType, String [] agentParams) - similar to addAgentToProblem, but it
-	 * adds also agent options - throws FailureExeption, if the agent could not
-	 * be found / created ... addOptionToAgent(int _problem_id, String
-	 * agent_name, String option_name, String option_value ) ...
-	 * addFileToProblem(int _problem_id, String _fileName) ...
-	 * addMethodToProblem(int problem_id, String name, String errorRate) -
-	 * name...{ChooseXValue, Random}
+	 * addOptionToAgent(int _problem_id, String agent_name, String option_name,
+	 * String option_value ) ... addFileToProblem(int _problem_id, String
+	 * _fileName) ... addMethodToProblem(int problem_id, String name, String
+	 * errorRate) - name...{ChooseXValue, Random}
 	 * 
 	 * ... getAgentOptions(String agentName) to receive the options from each
 	 * computing agent
@@ -181,13 +180,13 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	} // end getComputingAgents
 
-	protected List getOptions(String agentType) throws
-			CodecException, OntologyException, FIPAException {
-		
-		long _timeout = System.currentTimeMillis() + 2000; 
+	protected java.util.List<Option> getOptions(String agentType)
+			throws CodecException, OntologyException, FIPAException {
+
+		long _timeout = System.currentTimeMillis() + 2000;
 		AID aid = null;
 		String newName = null;
-		
+
 		while (aid == null && System.currentTimeMillis() < _timeout) {
 			// try until you find agent of the given type or you manage to
 			// create it
@@ -196,11 +195,11 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (aid == null) {
 				// agent of given type doesn't exist
 				newName = generateName(agentType);
-				
+
 				if (agentTypes == null) {
 					createAgentTypesHashMap();
 				}
-									
+
 				aid = createAgent(agentType, null, null);
 			}
 		}
@@ -208,7 +207,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			throw new FailureException("Agent of the " + agentType
 					+ " type could not be found or created.");
 		}
-		
+
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(aid);
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -229,21 +228,21 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 		ACLMessage reply = FIPAService.doFipaRequestClient(this, msg);
 
-		List options = null;
+		java.util.List<Option> options = null;
 		ContentElement content = getContentManager().extractContent(reply);
 		if (content instanceof Result) {
 			Result result = (Result) content;
 			if (result.getValue() instanceof org.pikater.core.ontology.messages.Agent) {
-				org.pikater.core.ontology.messages.Agent agent = 
-					(org.pikater.core.ontology.messages.Agent) result.getValue();
+				org.pikater.core.ontology.messages.Agent agent = (org.pikater.core.ontology.messages.Agent) result
+						.getValue();
 				options = agent.getOptions();
 			}
 		}
-		
+
 		return options;
-	
-	} // end getAgentOptions 
-			
+
+	} // end getAgentOptions
+
 	protected void getAgentOptions(String receiver) {
 		// returns the ontology class Agent (containing agent options) for an
 		// agent "receiver", specified by its localName
@@ -280,7 +279,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			oe.printStackTrace();
 		}
 
-		// get options behaviour:		
+		// get options behaviour:
 		AchieveREInitiator behav = new AchieveREInitiator(this, msg) {
 
 			protected void handleInform(ACLMessage inform) {
@@ -288,8 +287,9 @@ public abstract class Agent_GUI extends PikaterAgent {
 						+ inform.getSender().getName() + " replied.");
 				// we've just received the Options in an inform message
 
-				// System.out.println("Conversation id:" + inform.getConversationId());
-				
+				// System.out.println("Conversation id:" +
+				// inform.getConversationId());
+
 				ContentElement content;
 				try {
 					content = getContentManager().extractContent(inform);
@@ -320,8 +320,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			}
 
 			protected void handleRefuse(ACLMessage refuse) {
-				org.pikater.core.ontology.messages.Agent agent =
-						new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent agent = new org.pikater.core.ontology.messages.Agent();
 				agent.setName(refuse.getSender().getName());
 
 				System.out.println(getLocalName() + ": Agent "
@@ -341,25 +340,24 @@ public abstract class Agent_GUI extends PikaterAgent {
 				Iterator receivers = request.getAllIntendedReceiver();
 				String agentName = ((AID) receivers.next()).getLocalName();
 
-				org.pikater.core.ontology.messages.Agent agent =
-						new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent agent = new org.pikater.core.ontology.messages.Agent();
 				agent.setName(agentName);
 
 				if (failure.getSender().equals(myAgent.getAMS())) {
 					// FAILURE notification from the JADE runtime: the receiver
 					// does not exist
-					System.out.println(myAgent.getLocalName()
-							+ "Responder " + agentName + " does not exist.");
+					System.out.println(myAgent.getLocalName() + "Responder "
+							+ agentName + " does not exist.");
 				} else {
-					System.out.println(myAgent.getLocalName()
-							+ ": Agent " + agentName
+					System.out.println(myAgent.getLocalName() + ": Agent "
+							+ agentName
 							+ " failed to perform the requested action");
 				}
 
 				// refreshOptions(agent, failure.getPerformative());
 				checkProblems();
 				displayFailure(failure.getSender(), failure.getContent());
-				
+
 			}
 
 		};
@@ -368,71 +366,72 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	} // end getAgentOptions
 
+	private List getResultsFromACLMessage(ACLMessage inform) {
+		ContentElement content;
 
-    private List getResultsFromACLMessage(ACLMessage inform){
-        ContentElement content;
+		try {
+			content = getContentManager().extractContent(inform);
+			if (content instanceof Result) {
+				Result result = (Result) content;
+				if (result.getValue() instanceof Results) {
+					List tasks = ((Results) result.getValue()).getResults();
+					return tasks;
+				}
+			}
+		} catch (CodecException e) {
+			e.printStackTrace(); // To change body of catch statement use File |
+									// Settings | File Templates.
+		} catch (OntologyException e) {
+			e.printStackTrace(); // To change body of catch statement use File |
+									// Settings | File Templates.
+		}
 
-        try {
-            content = getContentManager().extractContent(inform);
-            if (content instanceof Result) {
-                Result result = (Result) content;
-                if (result.getValue() instanceof Results) {
-                    List tasks = ((Results) result.getValue()).getResults();
-                    return tasks;
-                }
-            }
-        } catch (CodecException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (OntologyException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+		return null;
+	}
 
-        return null;
-    }
+	private List getTaskFromACLMessage(ACLMessage inform) {
 
+		ContentElement content;
 
-    private List getTaskFromACLMessage(ACLMessage inform){
+		try {
+			content = getContentManager().extractContent(inform);
+			if (content instanceof Result) {
 
-        ContentElement content;
+				Result result = (Result) content;
+				if (result.getValue() instanceof Task) {
+					Task task = ((Task) result.getValue());
 
-        try {
-            content = getContentManager().extractContent(inform);
-            if (content instanceof Result) {
+					List list = new ArrayList();
+					list.add(task);
+					return list;
+				}
+			}
+		} catch (CodecException e) {
+			e.printStackTrace(); // To change body of catch statement use File |
+									// Settings | File Templates.
+		} catch (OntologyException e) {
+			e.printStackTrace(); // To change body of catch statement use File |
+									// Settings | File Templates.
+		}
 
-                Result result = (Result) content;
-                if (result.getValue() instanceof Task) {
-                    Task task = ((Task) result.getValue());
+		return null;
+	}
 
-                    List list = new ArrayList();
-                    list.add(task);
-                    return list;
-                }
-            }
-        } catch (CodecException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (OntologyException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        return null;
-    }
-
-
-	protected class SendProblem extends AchieveREInitiator{
+	protected class SendProblem extends AchieveREInitiator {
 
 		private static final long serialVersionUID = 8923548223375000884L;
 
 		String gui_id;
-		
+
 		public SendProblem(Agent a, ACLMessage msg, String gui_id) {
 			super(a, msg);
-			this.gui_id = gui_id;			
+			this.gui_id = gui_id;
 		}
 
 		protected void handleAgree(ACLMessage agree) {
 			System.out.println(getLocalName() + ": Agent "
 					+ agree.getSender().getName() + " agreed.");
-			
+
 			updateProblemId(gui_id, Integer.parseInt(agree.getContent()));
 		}
 
@@ -450,7 +449,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			System.out.println(getLocalName() + ": Agent "
 					+ refuse.getSender().getName()
 					+ " refused to perform the requested action");
-            displayFailure(refuse.getSender(), refuse.getContent());
+			displayFailure(refuse.getSender(), refuse.getContent());
 			updateProblemStatus(gui_id, "refused");
 			allProblemsFinished();
 		}
@@ -459,18 +458,20 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (failure.getSender().equals(myAgent.getAMS())) {
 				// FAILURE notification from the JADE runtime: the receiver
 				// does not exist
-				System.out.println(getLocalName() + ": Responder does not exist");
+				System.out.println(getLocalName()
+						+ ": Responder does not exist");
 			} else {
-				System.out.println(getLocalName() + ": Agent " + failure.getSender().getName()
+				System.out.println(getLocalName() + ": Agent "
+						+ failure.getSender().getName()
 						+ " failed to perform the requested action");
 			}
-            displayFailure(failure.getSender(), failure.getContent());
+			displayFailure(failure.getSender(), failure.getContent());
 			updateProblemStatus(gui_id, "failed");
 			allProblemsFinished();
 		}
 
 	}
-	
+
 	protected void sendProblem(int _problem_id) throws Exception {
 		// find the problem according to a _problem_id
 		Problem problem = null;
@@ -479,7 +480,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (Integer.parseInt(next_problem.getGui_id()) == _problem_id
-					&& next_problem.getStatus().equals("new") ) {
+					&& next_problem.getStatus().equals("new")) {
 				problem = next_problem;
 			}
 		}
@@ -487,14 +488,14 @@ public abstract class Agent_GUI extends PikaterAgent {
 		if (problem == null) { // TODO exception
 			throw new Exception("Error creating problem.");
 		}
-		
+
 		String error = checkProblem(problem);
-		if (error != null){
+		if (error != null) {
 			throw new Exception(error);
 		}
-		
+
 		problem.setStart(getDateTime());
-		
+
 		// create a request message with SendProblem content
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(new AID("manager", AID.ISLOCALNAME));
@@ -507,7 +508,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
 
 		msg.setConversationId(problem.getGui_id() + getLocalName());
-		
+
 		// Prepare the content.
 		Solve solve = new Solve();
 		solve.setProblem(problem);
@@ -555,52 +556,55 @@ public abstract class Agent_GUI extends PikaterAgent {
 				System.out.println(getLocalName() + ": Agent "
 						+ refuse.getSender().getName()
 						+ " refused to perform the requested action");
-                displayFailure(refuse.getSender(), refuse.getContent());
+				displayFailure(refuse.getSender(), refuse.getContent());
 			}
 
 			protected void handleFailure(ACLMessage failure) {
 				if (failure.getSender().equals(myAgent.getAMS())) {
 					// FAILURE notification from the JADE runtime: the receiver
 					// does not exist
-					System.out.println(getLocalName() + ": Responder does not exist");
+					System.out.println(getLocalName()
+							+ ": Responder does not exist");
 				} else {
-					System.out.println(getLocalName() + ": Agent " + failure.getSender().getName()
+					System.out.println(getLocalName() + ": Agent "
+							+ failure.getSender().getName()
 							+ " failed to perform the requested action");
 				}
-                displayFailure(failure.getSender(), failure.getContent());
+				displayFailure(failure.getSender(), failure.getContent());
 			}
 
 		};
-		
-		if (problem.getGet_results().equals("after_each_computation")){
+
+		if (problem.getGet_results().equals("after_each_computation")) {
 			addBehaviour(receive_results);
 		}
 
 	}
 
-	private String checkProblem(Problem problem){
+	private String checkProblem(Problem problem) {
 		String error = null;
-		if (problem.getAgents().isEmpty()){
+		if (problem.getAgents().isEmpty()) {
 			error = "No agents specified";
 		}
-		if (problem.getData().isEmpty()){
+		if (problem.getData().isEmpty()) {
 			error = "No datasets specified";
 		}
-		
+
 		return error;
 	}
-	
+
 	protected int createNewProblem(String timeout, String get_results,
 			String save_results, String name) {
 		int _timeout;
 		String _get_results;
 		boolean _save_results;
 		Problem problem = new Problem();
-		problem.setGui_id(Integer.toString(problem_id)); 
-		// agent manager changes the id afterwards		
-		if (name != null){
+		problem.setGui_id(Integer.toString(problem_id));
+		// agent manager changes the id afterwards
+		if (name != null) {
 			problem.setName(name);
-			System.out.println(getLocalName() + ": experiment " + name + " received.");
+			System.out.println(getLocalName() + ": experiment " + name
+					+ " received.");
 		}
 		if (timeout == null) {
 			_timeout = default_timeout;
@@ -617,19 +621,17 @@ public abstract class Agent_GUI extends PikaterAgent {
 		if (save_results == null) {
 			_save_results = default_save_results;
 		} else {
-			if (save_results.equals("no")){
+			if (save_results.equals("no")) {
 				_save_results = false;
-			}
-			else{
-				if (save_results.equals("yes")){
+			} else {
+				if (save_results.equals("yes")) {
 					_save_results = true;
-				}
-				else{
+				} else {
 					_save_results = default_save_results;
 				}
 			}
-			
-		}		
+
+		}
 
 		problem.setTimeout(_timeout);
 		problem.setAgents(new ArrayList());
@@ -656,7 +658,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		String newName = null;
 
 		if (type != null) {
-			if (type.contains("?")) {				
+			if (type.contains("?")) {
 				addAgent(_problem_id, agent_id, name, type, optString);
 				checkProblems();
 				return agent_id++;
@@ -724,8 +726,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 				// find the given agent
 				Iterator itr = next_problem.getAgents().iterator();
 				while (itr.hasNext()) {
-					org.pikater.core.ontology.messages.Agent next_agent =
-							(org.pikater.core.ontology.messages.Agent) itr.next();
+					org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) itr
+							.next();
 					if (Integer.parseInt(next_agent.getGui_id()) == _agent_id) {
 						next_problem.getAgents().remove(next_agent);
 					}
@@ -768,17 +770,15 @@ public abstract class Agent_GUI extends PikaterAgent {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (next_problem.getStatus().equals("new")) {
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
-					org.pikater.core.ontology.messages.Agent agent =
-							new org.pikater.core.ontology.messages.Agent();
+					org.pikater.core.ontology.messages.Agent agent = new org.pikater.core.ontology.messages.Agent();
 					agent.setName(name);
 					agent.setType(type);
 					agent.setGui_id(Integer.toString(_agent_id));
 					if (optString == null) {
-						agent.setOptions(new ArrayList());
+						agent.setOptions(new java.util.ArrayList<Option>());
 					} else {
-						List options = agent.stringToOptions(optString);
-						Iterator it = options.iterator();
-
+						java.util.List<Option> options = agent
+								.stringToOptions(optString);
 						agent.setOptions(options);
 
 					}
@@ -802,8 +802,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
 					Iterator itr = next_problem.getAgents().iterator();
 					while (itr.hasNext()) {
-						org.pikater.core.ontology.messages.Agent next_agent =
-							(org.pikater.core.ontology.messages.Agent) itr.next();
+						org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) itr
+								.next();
 						// find the right agent
 						if (Integer.parseInt(next_agent.getGui_id()) == _agent_id) {
 
@@ -828,7 +828,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 								if (set != null) {
 									String[] set_array = (set.replace(" ", ""))
 											.split(",");
-									List set_list = new ArrayList();
+									java.util.List<String> set_list = new java.util.ArrayList<String>();
 									for (int i = 0; i < set_array.length; i++) {
 										set_list.add(set_array[i]);
 									}
@@ -838,13 +838,16 @@ public abstract class Agent_GUI extends PikaterAgent {
 							}
 							option.setValue(option_value);
 
-							if (next_problem.getMethod().getType().equals("ChooseXValues")) {
-								if (number_of_values_to_try != null){	
-									option.setNumber_of_values_to_try(Integer.parseInt(number_of_values_to_try));								
+							if (next_problem.getMethod().getType()
+									.equals("ChooseXValues")) {
+								if (number_of_values_to_try != null) {
+									option.setNumber_of_values_to_try(Integer
+											.parseInt(number_of_values_to_try));
 								}
 							}
 
-							List options = next_agent.getOptions();
+							java.util.List<Option> options = next_agent
+									.getOptions();
 							options.add(option);
 							next_agent.setOptions(options);
 						}
@@ -855,72 +858,75 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	}
 
-	protected void addSearchOption(int _problem_id, String option_name, String option_value) {
+	protected void addSearchOption(int _problem_id, String option_name,
+			String option_value) {
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (next_problem.getStatus().equals("new")) {
-				
+
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
-					org.pikater.core.ontology.messages.Agent method =
-							next_problem.getMethod();
-									
-						Option option = new Option();
-						option.setName(option_name);
+					org.pikater.core.ontology.messages.Agent method = next_problem
+							.getMethod();
 
-						if (option_value == null) {
-							option_value = "True";
-						}
-						option.setUser_value(option_value);
-						option.setValue(option_value);						
+					Option option = new Option();
+					option.setName(option_name);
 
-						List options = method.getOptions();
-						options.add(option);
-						method.setOptions(options);
-				}							
+					if (option_value == null) {
+						option_value = "True";
+					}
+					option.setUser_value(option_value);
+					option.setValue(option_value);
+
+					java.util.List<Option> options = method.getOptions();
+					options.add(option);
+					method.setOptions(options);
+				}
 			}
 		}
 	}
-	
+
 	protected void addEvaluationMethodToProblem(int problem_id, String name) {
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (next_problem.getStatus().equals("new")) {
 				if (Integer.parseInt(next_problem.getGui_id()) == problem_id) {
-					
+
 					EvaluationMethod evaluation_method = new EvaluationMethod();
 					evaluation_method.setName(name);
 					evaluation_method.setOptions(new ArrayList());
 					next_problem.setEvaluation_method(evaluation_method);
 				}
 			}
-		}		
+		}
 	}
-	
-	protected void addEvaluationMethodOption(int _problem_id, String option_name, String option_value) {
+
+	protected void addEvaluationMethodOption(int _problem_id,
+			String option_name, String option_value) {
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (next_problem.getStatus().equals("new")) {
-				
+
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
-						EvaluationMethod evaluation_method = next_problem.getEvaluation_method();
+					EvaluationMethod evaluation_method = next_problem
+							.getEvaluation_method();
 
-						Option option = new Option();
-						option.setName(option_name);
+					Option option = new Option();
+					option.setName(option_name);
 
-						if (option_value == null) {
-							option_value = "True";
-						}
-						option.setUser_value(option_value);
-						option.setValue(option_value);						
+					if (option_value == null) {
+						option_value = "True";
+					}
+					option.setUser_value(option_value);
+					option.setValue(option_value);
 
-						List options = evaluation_method.getOptions();
-						options.add(option);
-						evaluation_method.setOptions(options);
-				}							
+					List options = evaluation_method.getOptions();
+					options.add(option);
+					evaluation_method.setOptions(options);
+				}
 			}
 		}
-	}	
-	
+	}
+
 	protected int addDatasetToProblem(int _problem_id, String _train,
 			String _test, String _label, String _output, String _mode) {
 		// get the problem
@@ -944,7 +950,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 							+ System.getProperty("file.separator")
 							+ DataManagerService.translateFilename(this, 1,
 									_test, null));
-					if (_label != null){  // if there is a file to label
+					if (_label != null) { // if there is a file to label
 						d.setLabel_file_name("data"
 								+ System.getProperty("file.separator")
 								+ "files"
@@ -1001,19 +1007,18 @@ public abstract class Agent_GUI extends PikaterAgent {
 	}
 
 	protected void addMethodToProblem(int problem_id, String name) {
-		// get the problem	
+		// get the problem
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (Integer.parseInt(next_problem.getGui_id()) == problem_id
 					&& next_problem.getStatus().equals("new")) {
 
-				org.pikater.core.ontology.messages.Agent method =
-						new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent method = new org.pikater.core.ontology.messages.Agent();
 				method.setType(name);
-				method.setOptions(new ArrayList());
+				method.setOptions(new java.util.ArrayList<Option>());
 
 				next_problem.setMethod(method);
-				
+
 				try {
 					method.setOptions(getOptions(name));
 				} catch (CodecException e) {
@@ -1033,45 +1038,39 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	protected void addRecommenderToProblem(int problem_id, String name) {
 		// get the problem
-	
+
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (Integer.parseInt(next_problem.getGui_id()) == problem_id
 					&& next_problem.getStatus().equals("new")) {
 
-				org.pikater.core.ontology.messages.Agent recommender =
-						new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.messages.Agent recommender = new org.pikater.core.ontology.messages.Agent();
 				recommender.setType(name);
 				// method.setOptions(new ArrayList());
 
 				next_problem.setRecommender(recommender);
 
-				/*try {
-					method.setOptions(getOptions(name));
-				} catch (CodecException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (OntologyException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (FIPAException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				*/
+				/*
+				 * try { method.setOptions(getOptions(name)); } catch
+				 * (CodecException e) { // TODO Auto-generated catch block
+				 * e.printStackTrace(); } catch (OntologyException e) { // TODO
+				 * Auto-generated catch block e.printStackTrace(); } catch
+				 * (FIPAException e) { // TODO Auto-generated catch block
+				 * e.printStackTrace(); }
+				 */
 			}
 		}
-	}	
-	
-	private void checkProblems() {		
+	}
+
+	private void checkProblems() {
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (next_problem.getStatus().equals("new")) {
 				boolean done = true;
 				Iterator aitr = next_problem.getAgents().iterator();
 				while (aitr.hasNext()) {
-					org.pikater.core.ontology.messages.Agent next_agent =
-							(org.pikater.core.ontology.messages.Agent) aitr.next();
+					org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) aitr
+							.next();
 
 					String type = "";
 					if (next_agent.getType() != null) {
@@ -1082,7 +1081,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 						// if we will recomend the type of the agent, we don't
 						// wait for the options to be received
 						if (next_agent.getOptions() == null) {
-							next_agent.setOptions(new ArrayList());
+							next_agent
+									.setOptions(new java.util.ArrayList<Option>());
 						}
 						if (next_agent.getOptions().size() > 0) { // if there is
 																	// at least
@@ -1097,14 +1097,15 @@ public abstract class Agent_GUI extends PikaterAgent {
 								done = false;
 							}
 						}
-					}
-					else{
+					} else {
 						// type contains ?
 						// check whether the recommender type is set
 						// if not, set default_recommender
-						if (next_problem.getRecommender() == null){
+						if (next_problem.getRecommender() == null) {
 							System.out.print("sss");
-							addRecommenderToProblem(Integer.parseInt(next_problem.getGui_id()), default_recommender);
+							addRecommenderToProblem(
+									Integer.parseInt(next_problem.getGui_id()),
+									default_recommender);
 						}
 					}
 				}
@@ -1127,8 +1128,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 					Iterator aitr = next_problem.getAgents().iterator();
 					while (aitr.hasNext()) {
-						org.pikater.core.ontology.messages.Agent next_agent =
-								(org.pikater.core.ontology.messages.Agent) aitr.next();
+						org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) aitr
+								.next();
 
 						// all problems where the agent (input parameter)
 						// figures
@@ -1148,9 +1149,12 @@ public abstract class Agent_GUI extends PikaterAgent {
 							}
 						} // end if getType != null
 					} // end while - iterate over agents
-					if (next_problem.getMethod().getType() != null){
-						if (next_problem.getMethod().getType().equals(agent.getType())){
-							next_problem.getMethod().setOptions(_refreshOptions(next_problem.getMethod(), agent, next_problem));
+					if (next_problem.getMethod().getType() != null) {
+						if (next_problem.getMethod().getType()
+								.equals(agent.getType())) {
+							next_problem.getMethod().setOptions(
+									_refreshOptions(next_problem.getMethod(),
+											agent, next_problem));
 						}
 					}
 				} // end if performative = inform
@@ -1165,111 +1169,105 @@ public abstract class Agent_GUI extends PikaterAgent {
 		}
 	} // end refreshOptions
 
-	private List _refreshOptions(org.pikater.core.ontology.messages.Agent next_agent,
+	private java.util.List<Option> _refreshOptions(
+			org.pikater.core.ontology.messages.Agent next_agent,
 			org.pikater.core.ontology.messages.Agent agent, Problem next_problem) {
-		List newOptions = null;
 
-		if (agent.getOptions() != null) {
-			// update the options (merge them)
+		if (agent.getOptions() == null) {
+			return new java.util.ArrayList<Option>();
+		}
 
-			// copy agent's options
-			java.util.List mergedOptions = new java.util.ArrayList();
-			Iterator oitr = agent.getOptions().iterator();
-			while (oitr.hasNext()) {
-				Option next_option = (Option) oitr.next();
-				// next_option.setValue(next_option.getDefault_value());
-				Option o = new Option();
-				o.setData_type(next_option.getData_type());
-				o.setDefault_value(next_option.getDefault_value());
-				o.setIs_a_set(next_option.getIs_a_set());
-				o.setName(next_option.getName());
-				o.setNumber_of_args(next_option.getNumber_of_args());
-				o.setRange(next_option.getRange());
-				o.setSet(next_option.getSet());
-				o.setValue(next_option.getDefault_value());
-				// mergedOptions.add(next_option);
-				mergedOptions.add(o);
-			}
+		// update the options (merge them)
 
-			// go through the options set in the problem
-			// and replace the options send by an computing agent
-			Iterator opitr = next_agent.getOptions().iterator();
-			while (opitr.hasNext()) {
-				Option next_problem_option = (Option) opitr.next();
-				ListIterator ocaitr = mergedOptions.listIterator();
-				while (ocaitr.hasNext()) {
-					Option next_merged_option = (Option) ocaitr.next();
-					if (next_problem_option.getName().equals(
-							next_merged_option.getName())
-					// && (next_problem_option.getValue() != null
-					// || next_problem_option.getUser_value() != null )
-					) {
-						// copy all the parameters (problem -> merged)
-						if (next_problem_option.getMutable()) {
-							next_merged_option.setMutable(true);
-							next_merged_option.setUser_value(
-									next_problem_option.getValue());
-							if (next_problem_option.getIs_a_set()){
-								next_merged_option.setIs_a_set(true);
-							}
+		// copy agent's options
+		java.util.List<Option> mergedOptions = new java.util.ArrayList<Option>();
 
-							if (next_problem_option.getRange() != null) {
-								next_merged_option.getRange().setMin(
+		for (Option next_option : agent.getOptions()) {
+			// next_option.setValue(next_option.getDefault_value());
+			Option o = new Option();
+			o.setData_type(next_option.getData_type());
+			o.setDefault_value(next_option.getDefault_value());
+			o.setIs_a_set(next_option.getIs_a_set());
+			o.setName(next_option.getName());
+			o.setNumber_of_args(next_option.getNumber_of_args());
+			o.setRange(next_option.getRange());
+			o.setSet(next_option.getSet());
+			o.setValue(next_option.getDefault_value());
+			// mergedOptions.add(next_option);
+			mergedOptions.add(o);
+		}
+
+		// go through the options set in the problem
+		// and replace the options send by an computing agent
+		for (Option next_problem_option : next_agent.getOptions()) {
+
+			ListIterator<Option> ocaitr = mergedOptions.listIterator();
+			while (ocaitr.hasNext()) {
+				Option next_merged_option = (Option) ocaitr.next();
+				if (next_problem_option.getName().equals(
+						next_merged_option.getName())
+				// && (next_problem_option.getValue() != null
+				// || next_problem_option.getUser_value() != null )
+				) {
+					// copy all the parameters (problem -> merged)
+					if (next_problem_option.getMutable()) {
+						next_merged_option.setMutable(true);
+						next_merged_option.setUser_value(next_problem_option
+								.getValue());
+						if (next_problem_option.getIs_a_set()) {
+							next_merged_option.setIs_a_set(true);
+						}
+
+						if (next_problem_option.getRange() != null) {
+							next_merged_option.getRange().setMin(
 									next_problem_option.getRange().getMin());
-								next_merged_option.getRange().setMax(
+							next_merged_option.getRange().setMax(
 									next_problem_option.getRange().getMax());
-								next_merged_option.setIs_a_set(false);
-							}							
-							next_merged_option
-									.setNumber_of_values_to_try(next_problem_option
-											.getNumber_of_values_to_try());
+							next_merged_option.setIs_a_set(false);
 						}
-						// check the value
-						if (!next_merged_option.getData_type()
-								.equals("BOOLEAN")
-								&& next_problem_option.getValue()
-										.equals("True")) {
-							DisplayWrongOption(Integer.parseInt(next_problem
-									.getGui_id()), next_agent.getName(),
-									next_problem_option.getName(),
-									next_problem_option.getName()
-											+ " is not a BOOLEAN type option.");
-						} else {
-							next_merged_option.setValue(next_problem_option
-									.getValue());
-						}
-
-						if (next_problem_option.getSet() != null) {
-							next_merged_option.setSet(next_problem_option
-									.getSet());
-						}
-
-						if (next_problem_option.getNumber_of_args() != null) {
-							next_merged_option
-									.setNumber_of_args(next_problem_option
-											.getNumber_of_args());
-						}
-
-						ocaitr.set(next_merged_option);
+						next_merged_option
+								.setNumber_of_values_to_try(next_problem_option
+										.getNumber_of_values_to_try());
 					}
+					// check the value
+					if (!next_merged_option.getData_type().equals("BOOLEAN")
+							&& next_problem_option.getValue().equals("True")) {
+						DisplayWrongOption(
+								Integer.parseInt(next_problem.getGui_id()),
+								next_agent.getName(),
+								next_problem_option.getName(),
+								next_problem_option.getName()
+										+ " is not a BOOLEAN type option.");
+					} else {
+						next_merged_option.setValue(next_problem_option
+								.getValue());
+					}
+
+					if (next_problem_option.getSet() != null) {
+						next_merged_option.setSet(next_problem_option.getSet());
+					}
+
+					if (next_problem_option.getNumber_of_args() != null) {
+						next_merged_option
+								.setNumber_of_args(next_problem_option
+										.getNumber_of_args());
+					}
+
+					ocaitr.set(next_merged_option);
 				}
-			} // end while - iterate over options
-			// create jade.util.leap.ArrayList again
-			ArrayList mergedOptionsArrayList = new ArrayList();
-			mergedOptionsArrayList.fromList(mergedOptions);
-			// next_agent.setOptions(mergedOptionsArrayList);
-			newOptions = mergedOptionsArrayList;
-		} // end if (empty option list)
-		return newOptions;
+			}
+		} // end while - iterate over options
+
+		return mergedOptions;
 	} // end function _refreshOption
 
-	protected void createAgentTypesHashMap(){
+	protected void createAgentTypesHashMap() {
 		// read agent types from file
 
 		// Sets up a file reader to read the agent_types file
-		
+
 		agentTypes = new HashMap<String, String>();
-			agentOptions = new HashMap<String, Object[]>();
+		agentOptions = new HashMap<String, Object[]>();
 		FileReader input;
 		try {
 			input = new FileReader(path + "agent_types");
@@ -1280,14 +1278,14 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 			// Read through file one line at time
 			while (line != null) {
-					String[] agentClass = line.split(":");
-					agentTypes.put(agentClass[0], agentClass[1]);
-					if(agentClass.length>2){
-						Object[] opts = new Object[agentClass.length-2];
-						for(int i = 0; i < opts.length; i++)
-							opts[i] = agentClass[i+2];
-						this.agentOptions.put(agentClass[0], opts);
-					}
+				String[] agentClass = line.split(":");
+				agentTypes.put(agentClass[0], agentClass[1]);
+				if (agentClass.length > 2) {
+					Object[] opts = new Object[agentClass.length - 2];
+					for (int i = 0; i < opts.length; i++)
+						opts[i] = agentClass[i + 2];
+					this.agentOptions.put(agentClass[0], opts);
+				}
 				line = bufRead.readLine();
 			}
 
@@ -1297,7 +1295,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
 
 	protected Vector<String> offerAgentTypes() {
@@ -1312,34 +1310,34 @@ public abstract class Agent_GUI extends PikaterAgent {
 	}
 
 	public AID createAgent(String type, String name, List options) {
-		
+
 		ACLMessage msg_ca = new ACLMessage(ACLMessage.REQUEST);
 		msg_ca.addReceiver(new AID("agentManager", false));
 		msg_ca.setLanguage(codec.getName());
 		msg_ca.setOntology(ontology.getName());
-						
+
 		CreateAgent ca = new CreateAgent();
-		if (name != null){
+		if (name != null) {
 			ca.setName(name);
 		}
-		if (options != null){
+		if (options != null) {
 			ca.setArguments(options);
 		}
 		ca.setType(type);
-		
+
 		Action a = new Action();
 		a.setAction(ca);
 		a.setActor(this.getAID());
-				
-		AID aid = null; 
+
+		AID aid = null;
 		try {
-			getContentManager().fillContent(msg_ca, a);	
+			getContentManager().fillContent(msg_ca, a);
 			ACLMessage msg_name = FIPAService.doFipaRequestClient(this, msg_ca);
-			
+
 			aid = new AID(msg_name.getContent(), AID.ISLOCALNAME);
 		} catch (FIPAException e) {
-			System.err.println(getLocalName() + ": Exception while adding agent "
-					+ type + ": " + e);		
+			System.err.println(getLocalName()
+					+ ": Exception while adding agent " + type + ": " + e);
 		} catch (CodecException e) {
 			System.err.print(getLocalName() + ": ");
 			e.printStackTrace();
@@ -1347,10 +1345,9 @@ public abstract class Agent_GUI extends PikaterAgent {
 			System.err.print(getLocalName() + ": ");
 			e.printStackTrace();
 		}
-		
-		return aid;		
-	}
 
+		return aid;
+	}
 
 	protected AID getAgentByType(String agentType) {
 		AID[] Agents;
@@ -1362,7 +1359,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] result = DFService.search(this, template);
-			// System.out.println("Found the following " + agentType + " agents:");
+			// System.out.println("Found the following " + agentType +
+			// " agents:");
 			Agents = new AID[result.length];
 
 			for (int i = 0; i < result.length; ++i) {
@@ -1384,86 +1382,94 @@ public abstract class Agent_GUI extends PikaterAgent {
 		}
 	}
 
+	private void handleIncomingFiles() {
+		// checks incoming directory for dataset files,
+		// gets metadata from metadata queen Freddie
 
-    private void handleIncomingFiles(){
-        // checks incoming directory for dataset files,
-        // gets metadata from metadata queen Freddie
+		String incomingFilesPath = path + "incoming"
+				+ System.getProperty("file.separator");
+		File incomingFiles = new File(incomingFilesPath);
 
-        String incomingFilesPath = path + "incoming" + System.getProperty("file.separator");
-        File incomingFiles = new File(incomingFilesPath);
+		int incomingFilesNumber = incomingFiles.list().length;
+		int currenInFile = 0;
+		for (String fileName : incomingFiles.list()) {
 
-        int incomingFilesNumber = incomingFiles.list().length;
-        int currenInFile = 0;
-        for (String fileName : incomingFiles.list()) {
+			displayFileImportProgress(currenInFile, incomingFilesNumber);
+			currenInFile++;
+			DataManagerService.importFile(this, 1, fileName, null);
 
-            displayFileImportProgress(currenInFile, incomingFilesNumber);
-            currenInFile++;
-            DataManagerService.importFile(this, 1, fileName, null);
+			String internalFilename = DataManagerService.translateFilename(
+					this, 1, (String) fileName, null);
+			internalFilename = "data" + System.getProperty("file.separator")
+					+ "files" + System.getProperty("file.separator")
+					+ internalFilename;
 
-            String internalFilename = DataManagerService.translateFilename(this, 1, (String) fileName, null);
-            internalFilename = "data" + System.getProperty("file.separator") + "files" + System.getProperty("file.separator") + internalFilename;
+			try {
 
-            try {
+				GetMetadata gm = new GetMetadata();
+				gm.setInternal_filename(internalFilename);
+				gm.setExternal_filename(fileName);
 
-                GetMetadata gm = new GetMetadata();
-                gm.setInternal_filename(internalFilename);
-                gm.setExternal_filename(fileName);
+				Action a = new Action();
+				a.setAction(gm);
+				a.setActor(this.getAID());
 
-                Action a = new Action();
-                a.setAction(gm);
-                a.setActor(this.getAID());
+				ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
+				req.addReceiver(new AID("Freddie", false));
+				req.setLanguage(codec.getName());
+				req.setOntology(ontology.getName());
+				req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-                ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
-                req.addReceiver(new AID("Freddie", false));
-                req.setLanguage(codec.getName());
-                req.setOntology(ontology.getName());
-                req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+				getContentManager().fillContent(req, a);
 
-                getContentManager().fillContent(req, a);
+				ACLMessage response = FIPAService
+						.doFipaRequestClient(this, req);
 
-                ACLMessage response = FIPAService.doFipaRequestClient(this, req);
+				if (response.getPerformative() != ACLMessage.INFORM) {
+					System.err.println(getLocalName()
+							+ ": Error in getting metadata");
+				}
 
-                if (response.getPerformative() != ACLMessage.INFORM) {
-                    System.err.println(getLocalName() + ": Error in getting metadata");
-                }
-
-            } catch (CodecException ce) {
-                ce.printStackTrace();
-            } catch (FIPAException fe) {
-                fe.printStackTrace();
-            } catch (OntologyException oe) {
-                oe.printStackTrace();
-            }
-        }
-        displayFileImportProgress(incomingFilesNumber, incomingFilesNumber);
-    }
+			} catch (CodecException ce) {
+				ce.printStackTrace();
+			} catch (FIPAException fe) {
+				fe.printStackTrace();
+			} catch (OntologyException oe) {
+				oe.printStackTrace();
+			}
+		}
+		displayFileImportProgress(incomingFilesNumber, incomingFilesNumber);
+	}
 
 	protected void setup() {
 		// wait for duration to compute a task
 		doWait(15000);
-		
+
 		initDefault();
-		
+
 		registerWithDF("UserInterface");
 
 		// Incoming results handler
 		addBehaviour(new CompAgentResultsServer(this));
 
-        // handleIncomingFiles();
+		// handleIncomingFiles();
 
 		mySetup();
 
 	} // end setup
 
-	/* This behavior captures partial results from computating agents and results from ressurected agents */
+	/*
+	 * This behavior captures partial results from computating agents and
+	 * results from ressurected agents
+	 */
 	protected class CompAgentResultsServer extends CyclicBehaviour {
 		private static final long serialVersionUID = -8456018173216610239L;
 		private MessageTemplate partialMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 				MessageTemplate.MatchConversationId("partial-results"));
 
-		private MessageTemplate afterTaskMsgTemplate =
-				(MessageTemplate.MatchConversationId("result_after_task"));
+		private MessageTemplate afterTaskMsgTemplate = (MessageTemplate
+				.MatchConversationId("result_after_task"));
 
 		public CompAgentResultsServer(Agent agent) {
 			super(agent);
@@ -1474,90 +1480,90 @@ public abstract class Agent_GUI extends PikaterAgent {
 			ACLMessage par = receive(partialMsgTemplate);
 			ACLMessage aft = receive(afterTaskMsgTemplate);
 
-            if (par != null) {
-                // TODO:
-                // PartialResults pr = getPartialResultsFromACLMessage(par);
-                // displayPartialResult(pr.getTask_id(), pr.getTask(), pr.getResults());
-                return;
-            }
-            else{
-                if (aft != null) {
-                    displayResult(getTaskFromACLMessage(aft), "result_after_task");
-                    return;
-                }
-                else{
-                    block();
-                }
-            }
+			if (par != null) {
+				// TODO:
+				// PartialResults pr = getPartialResultsFromACLMessage(par);
+				// displayPartialResult(pr.getTask_id(), pr.getTask(),
+				// pr.getResults());
+				return;
+			} else {
+				if (aft != null) {
+					displayResult(getTaskFromACLMessage(aft),
+							"result_after_task");
+					return;
+				} else {
+					block();
+				}
+			}
 		}
 	}
 
 	/*
-	 * updates the status of problems in the problem list
-	 * after receiving a message from manager - 
-	 * - either "finished", "failed" or "refused"
+	 * updates the status of problems in the problem list after receiving a
+	 * message from manager - - either "finished", "failed" or "refused"
 	 */
-	protected void updateProblemStatus(String gui_id, String status){
+	protected void updateProblemStatus(String gui_id, String status) {
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
-			if (next_problem.getGui_id().equals(gui_id)){
+			if (next_problem.getGui_id().equals(gui_id)) {
 				next_problem.setStatus(status);
 			}
 		}
 	}
-	
+
 	/*
-	 * checks whether all problems in the problem list are finished,
-	 * if the end_pikater_when_finished == true,
-	 * it finishes the system
+	 * checks whether all problems in the problem list are finished, if the
+	 * end_pikater_when_finished == true, it finishes the system
 	 */
-	private void allProblemsFinished(){
+	private void allProblemsFinished() {
 		boolean finished = true;
 		for (Enumeration pe = problems.elements(); pe.hasMoreElements();) {
 			Problem next_problem = (Problem) pe.nextElement();
-			if (! (next_problem.getStatus().equals("finished")
-				|| next_problem.getStatus().equals("failed")
-				|| next_problem.getStatus().equals("refused")) ){
+			if (!(next_problem.getStatus().equals("finished")
+					|| next_problem.getStatus().equals("failed") || next_problem
+					.getStatus().equals("refused"))) {
 
 				finished = false;
 			}
 		}
-		
+
 		if (finished && end_pikater_when_finished) {
 			terminatePikater();
 		}
 	}
-		
-	private void terminatePikater(){
+
+	private void terminatePikater() {
 		log("Shutting down Pikater...");
-		// if running on local database send message to data manager to shuttdown the database
-		if (shutdown_database){
+		// if running on local database send message to data manager to
+		// shuttdown the database
+		if (shutdown_database) {
 			System.out.println(getLocalName() + ": Shutting down database...");
-			if (DataManagerService.shutdownDatabase(this)){
+			if (DataManagerService.shutdownDatabase(this)) {
 				System.out.println(getLocalName() + ": Database shut down.");
-			}
-			else{
-				System.out.println(getLocalName() + ": Database did not shut down properly.");
+			} else {
+				System.out.println(getLocalName()
+						+ ": Database did not shut down properly.");
 			}
 		}
-		
+
 		doWait(100);
 
-		getContentManager().registerOntology(JADEManagementOntology.getInstance());
-		
+		getContentManager().registerOntology(
+				JADEManagementOntology.getInstance());
+
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(getAMS());
 		request.setSender(getAID());
-     	request.setOntology(JADEManagementOntology.getInstance().getName());
+		request.setOntology(JADEManagementOntology.getInstance().getName());
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-		ShutdownPlatform sp = new ShutdownPlatform();		
-		
+		ShutdownPlatform sp = new ShutdownPlatform();
+
 		Action a = new Action();
 		a.setActor(this.getAID());
 		a.setAction(sp);
-		
+
 		try {
 			getContentManager().fillContent(request, a);
 			FIPAService.doFipaRequestClient(this, request);
@@ -1583,11 +1589,10 @@ public abstract class Agent_GUI extends PikaterAgent {
 		}
 	}
 
+	protected void loadAgent(String _filename, Execute action, byte[] object)
+			throws FIPAException {
+		org.pikater.core.ontology.messages.LoadAgent _loadAgent = new org.pikater.core.ontology.messages.LoadAgent();
 
-	protected void loadAgent(String _filename, Execute action, byte [] object) throws FIPAException {
-		org.pikater.core.ontology.messages.LoadAgent _loadAgent
-		= new org.pikater.core.ontology.messages.LoadAgent();
-		
 		_loadAgent.setFilename(_filename);
 		_loadAgent.setFirst_action(action);
 		_loadAgent.setObject(object);
@@ -1602,7 +1607,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		Action a = new Action();
 		a.setActor(this.getAID());
 		a.setAction(_loadAgent);
-		
+
 		try {
 			getContentManager().fillContent(request, a);
 		} catch (CodecException e) {
@@ -1616,10 +1621,11 @@ public abstract class Agent_GUI extends PikaterAgent {
 		FIPAService.doFipaRequestClient(this, request);
 	}
 
-    private String getDateTime() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
+	private String getDateTime() {
+		DateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss.SSSSSS");
+		Date date = new Date();
+		return dateFormat.format(date);
+	}
 
 }

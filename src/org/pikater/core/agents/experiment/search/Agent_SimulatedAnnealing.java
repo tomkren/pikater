@@ -3,10 +3,9 @@ package org.pikater.core.agents.experiment.search;
 import java.util.Random;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.SearchItem;
-import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.messages.search.SearchSolution;
+import org.pikater.core.ontology.messages.searchItems.SearchItem;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
 
 import jade.util.leap.ArrayList;
@@ -71,10 +70,11 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		maximum_tries = 50;
 		stability = 0.5;
 		final_error_rate = 0.01;
-		List search_options = getSearch_options();
-		Iterator itr = search_options.iterator();
-		while (itr.hasNext()) {
-			Option next = (Option) itr.next();
+		
+		java.util.List<Option> search_options = getSearch_options();
+		
+		for (Option next : search_options) {
+
 			if (next.getName().equals("E")){
 				final_error_rate = Float.parseFloat(next.getValue()); 
 			}
@@ -141,24 +141,24 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	
 	//Neighbor function: Random solutions in case of beginning, or mutation of existing
 	private SearchSolution Neighbor(SearchSolution sol){
-		List new_solution = new ArrayList();
+
+		java.util.List<String> new_solution = new java.util.ArrayList<String>();
 		if(sol == null){
 			//Completely new solution
-			Iterator itr = getSchema().iterator();
-			while (itr.hasNext()) {
+			for (SearchItem si : getSchema() ) {
 				//dont want to change old solutions
-				SearchItem si  = (SearchItem) itr.next();
 				new_solution.add(si.randomValue(rnd_gen));
 			}
 		}else{
 			//Neighbor function
-			Iterator sol_itr = sol.getValues().iterator();
-			Iterator schema_itr = getSchema().iterator();
-			while (sol_itr.hasNext()) {
-				String val = ((String) sol_itr.next());
-				SearchItem si = (SearchItem) schema_itr.next();
-				if(rnd_gen.nextDouble() > stability)
+			for (int i = 0; i < getSchema().size(); i++) {
+				
+				SearchItem si = getSchema().get(i);
+				String val = sol.getValues().get(i);
+				
+				if(rnd_gen.nextDouble() > stability) {
 					val = si.randomValue(rnd_gen);
+				}
 				new_solution.add(val);
 			}
 		}

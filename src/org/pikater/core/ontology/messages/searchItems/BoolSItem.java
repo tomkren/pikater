@@ -1,8 +1,7 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.messages.searchItems;
 
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BoolSItem extends SearchItem {
@@ -23,9 +22,9 @@ public class BoolSItem extends SearchItem {
 	}
 
 	@Override
-	public List possibleValues() {
+	public List<String> possibleValues() {
 		// TODO Auto-generated method stub
-		List posVals = new ArrayList();
+		List<String> posVals = new ArrayList<String>();
 		posVals.add("True");
 		posVals.add("False");
 		return posVals;

@@ -5,6 +5,7 @@ import jade.util.leap.ArrayList;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.pikater.core.agents.system.Agent_ComputationDescriptionParser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
@@ -190,7 +191,7 @@ public class Parser {
 
 		agent.log("Ontology Parser - ComputationDescription");
 		
-		ArrayList elements =
+		List<FileDataSaver> elements =
 				comDescription.getRootElements();
 
 		// TODO: Vyresit aby se sdilene podulohy rootElementu pocitely pouze jednou
@@ -240,7 +241,7 @@ public class Parser {
 
 		Option optionF = null;
 
-		ArrayList options = complex.getOptions();
+		List<Option> options = complex.getOptions();
 		for (int i = 0; i < options.size(); i++) {
 
 			Option optionI = (Option) options.get(i);
@@ -331,10 +332,7 @@ public class Parser {
 		Option optionN = null;
 
 		if (search != null) {
-			ArrayList options = search.getOptions();
-			for (int i = 0; i < options.size(); i++) {
-				
-				Option optionI = (Option) options.get(i);
+			for (Option optionI : search.getOptions()) {
 				
 				if (optionI.getName().equals("search_method")) {
 					searchMethodOprion = optionI;
@@ -353,7 +351,7 @@ public class Parser {
 			searchMethod = searchMethodOprion.getValue();
 		}
 
-		ArrayList optionsSearchMethod = new ArrayList();
+		java.util.ArrayList<Option> optionsSearchMethod = new java.util.ArrayList<Option>();
 		if (optionN != null) {
 			optionsSearchMethod.add(optionN);
 		}		
@@ -376,7 +374,7 @@ public class Parser {
     	String recommenderClass =
     			recommender.getRecommenderClass();
     	
-    	ArrayList options = recommender.getOptions();
+    	java.util.List<Option> options = recommender.getOptions();
     	
 		org.pikater.core.ontology.messages.Agent method =
 				new org.pikater.core.ontology.messages.Agent();
@@ -442,7 +440,7 @@ public class Parser {
 		agent.log("ModelClass:  " + modelClass);
 
 				
-		ArrayList optionsCompAgent = computingAgent.getOptions();
+		java.util.List<Option> optionsCompAgent = computingAgent.getOptions();
 
 		org.pikater.core.ontology.messages.Agent compAgentO = new org.pikater.core.ontology.messages.Agent();
 		compAgentO.setType(computingAgent.getModelClass());

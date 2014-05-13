@@ -19,7 +19,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
@@ -170,8 +169,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         }
     }				        
     
-	private List mergeOptions(List o1_CA, List o2) {
-		List new_options = new ArrayList();
+	private java.util.List<Option> mergeOptions(java.util.List<Option> o1_CA, java.util.List<Option> o2) {
+		
+		java.util.List<Option> new_options = new java.util.ArrayList<Option>();
 		if (o1_CA != null) {
 
 			// if this type of agent has got some options
@@ -179,15 +179,12 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 			// go through the CA options
 			// replace the value and add it to the new options
-			Iterator o2itr = o2.iterator();
-			while (o2itr.hasNext()) {
-				Option next_option = (Option) o2itr.next();
+
+			for (Option next_option : o2) {
 				
 				next_option.setValue(next_option.getDefault_value());
 				
-				Iterator o1CAitr = o1_CA.iterator();
-				while (o1CAitr.hasNext()) {
-					Option next_CA_option = (Option) o1CAitr.next();
+				for (Option next_CA_option : o1_CA) {
 
 					if (next_option.getName().equals(next_CA_option.getName())) {
 						// ostatni optiony zustanou puvodni (= ze souboru)			
@@ -218,7 +215,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		return new_options;
 	}
 	
-	protected List getAgentOptions(String agentType) {
+	protected java.util.List<Option> getAgentOptions(String agentType) {
 
 		Ontology ontology = MessagesOntology.getInstance();
 		
@@ -299,8 +296,8 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         return aid;
 	}
 	
-	protected List getParameters(){
-		ArrayList optFileOptions = getParametersFromOptFile();
+	protected java.util.List<Option> getParameters(){
+		java.util.ArrayList<Option> optFileOptions = getParametersFromOptFile();
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	
@@ -309,12 +306,12 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 				System.getProperty("file.separator") + getAgentType() +".opt";
 	}
 
-	private ArrayList getParametersFromOptFile(){
+	private java.util.ArrayList<Option> getParametersFromOptFile(){
 		// set default values of options
 		// if values exceed intervals in .opt file -> warning
 
 		// fill the Options vector:
-		ArrayList Options = new ArrayList();
+		java.util.ArrayList<Option> optionsResult = new java.util.ArrayList<Option>();
 		
 		String optPath = System.getProperty("user.dir") +
 				System.getProperty("file.separator") + "options" + 
@@ -363,7 +360,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						float rangeMin = 0;
 						float rangeMax = 0;
 						String range;
-						List set = null;
+						java.util.List<String> set = null;
 						
 						if (dt.equals("BOOLEAN")){
 							numArgsMin = 1;
@@ -380,7 +377,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 								rangeMax = Float.parseFloat(params[7]);
 							}
 							if (range.equals("s")){
-								set = new ArrayList();
+								set = new java.util.ArrayList<String>();
 								String[] s = params[6].split("[ ]+");
 								for (int i=0; i<s.length; i++){
 									set.add(s[i]);
@@ -395,7 +392,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 								params[params.length-2],
 								params[params.length-1]);
 						
-						Options.add(o);
+						optionsResult.add(o);
 						
 					}
 
@@ -413,6 +410,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 				e.printStackTrace();
 			}
 			
-			return Options;
+			return optionsResult;
 	} // end getParameters
 }

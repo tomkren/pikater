@@ -1,8 +1,12 @@
 package org.pikater.core.ontology.description;
 
 
-import jade.util.leap.ArrayList;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
@@ -16,10 +20,10 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
 	private static final long serialVersionUID = -2418323249803736416L;
 
 	private boolean isPreprocessing;
-	private ArrayList options;
+	private List<Option> options;
     
-	private ArrayList errors;
-	private ArrayList dataSources;
+	private List<ErrorDescription> errors;
+	private List<DataSourceDescription> dataSources;
 
 	public boolean isPreprocessing() {
 		return isPreprocessing;
@@ -28,29 +32,29 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
 		this.isPreprocessing = isPreprocessing;
 	}
 
-	public ArrayList getOptions() {
+	public List<Option> getOptions() {
 		return options;
 	}
-	public void setOptions(ArrayList options) {
+	public void setOptions(List<Option> options) {
 		this.options = options;
 	}
 
-	public ArrayList getErrors() {
+	public List<ErrorDescription> getErrors() {
 		return errors;
 	}
-	public void setErrors(ArrayList errors) {
+	public void setErrors(List<ErrorDescription> errors) {
 		this.errors = errors;
 	}
 
-    public ArrayList getDataSources() {
+    public List<DataSourceDescription> getDataSources() {
         return dataSources;
     }
-    public void setDataSources(ArrayList dataSources) {
+    public void setDataSources(List<DataSourceDescription> dataSources) {
         this.dataSources = dataSources;
     }
     public void addDataSources(DataSourceDescription dataSources) {
     	if (this.dataSources == null) {
-    		this.dataSources = new ArrayList();
+    		this.dataSources = new ArrayList<DataSourceDescription>();
     	}
         this.dataSources.add(dataSources);
     }
