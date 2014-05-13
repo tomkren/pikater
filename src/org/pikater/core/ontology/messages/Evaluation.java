@@ -10,7 +10,7 @@ public class Evaluation implements Concept {
 
 	private static final long serialVersionUID = 1319671908304254420L;
 
-	private float maxValue = (float)Integer.MAX_VALUE;
+	//private float maxValue = (float)Integer.MAX_VALUE;
 
 	private List evaluations;
 	private Date start;

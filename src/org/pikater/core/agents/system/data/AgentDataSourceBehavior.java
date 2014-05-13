@@ -21,7 +21,12 @@ import org.pikater.core.ontology.data.RegisterDataSourceConcept;
  * Behaviors for AgentDataSource - registering datasources and obtaining path to Local DataSources
  */
    public class AgentDataSourceBehavior extends CyclicBehaviour {
-    protected Codec codec;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1953739710427491422L;
+
+	protected Codec codec;
     protected Ontology ontology;
     protected AgentDataSource dsAgent;
     public AgentDataSourceBehavior(Codec codec,Ontology ontology,AgentDataSource agent)

@@ -8,12 +8,16 @@ import jade.content.Concept;
  * Time: 13:21
  */
 public class DataSourcePath implements Concept {
-    private String path;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -651945976173141864L;
+
+	private String path;
     
     public String getPath() {
         return path;
     }
-
     public void setPath(String path) {
         this.path = path;
     }

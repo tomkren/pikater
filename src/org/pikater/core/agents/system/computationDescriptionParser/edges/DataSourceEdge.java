@@ -7,4 +7,11 @@ package org.pikater.core.agents.system.computationDescriptionParser.edges;
  */
 public class DataSourceEdge extends EdgeValue {
     private String dataSourceId;
+
+	public String getDataSourceId() {
+		return dataSourceId;
+	}
+	public void setDataSourceId(String dataSourceId) {
+		this.dataSourceId = dataSourceId;
+	}
 }

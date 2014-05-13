@@ -1,7 +1,6 @@
 package org.pikater.core.agents.experiment.search;
 
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
@@ -61,7 +60,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 			return;
 		}
 		
-		java.util.List<String> pos_vals = (java.util.List)possible_solution_values.get(beg_ind);
+		java.util.List<String> pos_vals = possible_solution_values.get(beg_ind);
 		for (int i = 0; i < pos_vals.size(); i++) {//For each possible value on the index beg_ind
 			cur_solution_part.add(pos_vals.get(i));//append the value to the part of the solution
 			

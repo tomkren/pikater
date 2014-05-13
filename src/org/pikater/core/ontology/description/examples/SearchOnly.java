@@ -59,7 +59,7 @@ public class SearchOnly {
         Search sa = new Search();
         sa.setSearchClass("whatever.ea.is.in.EA");
 
-        ArrayList searchParameters = new ArrayList();
+        List<Option> searchParameters = new ArrayList<Option>();
         
         StepanuvOption pr = new StepanuvOption();
         pr.setName("ea.popSize");

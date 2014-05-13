@@ -328,10 +328,8 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 				BufferedReader bufRead = new BufferedReader(input);
 
 				String line; // String that holds current file line
-				int count = 0; // Line number of count
 				// Read first line
 				line = bufRead.readLine();
-				count++;
 
 				// Read through file one line at time. Print line # and line
 				while (line != null) {
@@ -398,7 +396,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 					line = bufRead.readLine();
 
-					count++;
 				}
 				bufRead.close();
 				

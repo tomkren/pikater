@@ -307,10 +307,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			BufferedReader bufRead = new BufferedReader(input);
 
 			String line; // String that holds current file line
-			int count = 0; // Line number of count
 			// Read first line
 			line = bufRead.readLine();
-			count++;
 
 			// list of ontology.messages.Option
 			java.util.List<Option> _options = new java.util.ArrayList<Option>();
@@ -383,7 +381,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 				line = bufRead.readLine();
 
-				count++;
 			}
 			agent.setOptions(_options);
 			bufRead.close();

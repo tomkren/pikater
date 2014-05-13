@@ -10,19 +10,19 @@ public class GetMetadata implements AgentAction {
 	private String internal_filename;
 	private String hash;
 	
-	@Deprecated
+	//Deprecated
 	public String getExternal_filename() {
 		return external_filename;
 	}
-	@Deprecated
+	//Deprecated
 	public void setExternal_filename(String external_filename) {
 		this.external_filename = external_filename;
 	}
-	@Deprecated
+	//Deprecated
 	public String getInternal_filename() {
 		return internal_filename;
 	}
-	@Deprecated
+	//Deprecated
 	public void setInternal_filename(String internal_filename) {
 		this.internal_filename = internal_filename;
 	}

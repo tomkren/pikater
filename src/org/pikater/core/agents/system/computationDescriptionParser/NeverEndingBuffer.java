@@ -1,7 +1,5 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
-
 /**
  * User: Kuba
  * Date: 10.5.2014

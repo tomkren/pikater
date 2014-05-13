@@ -4,16 +4,11 @@ import java.io.IOException;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.Agent_Mailing;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.ontology.actions.DataOntology;
-import org.pikater.core.ontology.actions.MailingOntology;
 import org.pikater.core.ontology.data.PrepareFileUpload;
-import org.pikater.core.ontology.mailing.SendEmail;
 
-import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
-import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;

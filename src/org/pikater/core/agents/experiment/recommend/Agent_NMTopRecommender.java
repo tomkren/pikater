@@ -308,10 +308,8 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             BufferedReader bufRead = new BufferedReader(input);
 
             String line; // String that holds current file line
-            int count = 0; // Line number of count
             // Read first line
             line = bufRead.readLine();
-            count++;
 
             // list of ontology.messages.Option
             List _options = new jade.util.leap.ArrayList();
@@ -385,7 +383,6 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                 }
 
                 line = bufRead.readLine();
-                count++;
             }
             bufRead.close();
             return _options;

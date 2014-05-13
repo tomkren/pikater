@@ -9,7 +9,6 @@ import org.pikater.core.ontology.messages.searchItems.SearchItem;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
 
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 public class Agent_SimulatedAnnealing extends Agent_Search {
@@ -29,6 +28,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	 * Stability of generation of new option - probability of keeping of option (default 0.5)
 	 */
 	private static final long serialVersionUID = -5087231723984887596L;
+
 	private SearchSolution solution = null;
 	private SearchSolution new_solution = null;
 	private float evaluation = Float.MAX_VALUE;

@@ -105,8 +105,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	LinkedList<ACLMessage> taskFIFO = new LinkedList<ACLMessage>();
 
 	private Behaviour execution_behaviour = null;
-	private Behaviour send_options_behaviour = null;
-
+	
 	private boolean newAgent = true;
 	private boolean resurrected = false;
 	
@@ -284,7 +283,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 		setEnabledO2ACommunication(true, 0);
 
-		addBehaviour(send_options_behaviour = new RequestServer(this));
+		addBehaviour(new RequestServer(this));
 		addBehaviour(execution_behaviour = new ProcessAction(this));
 		
 
