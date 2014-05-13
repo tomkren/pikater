@@ -1,12 +1,15 @@
 package org.pikater.shared.util;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class BidiMap<K,V>
+public class BidiMap<K,V> implements Serializable
 {
+	private static final long serialVersionUID = 5011484513683193827L;
+	
 	private final Map<K,V> keyToValue;
 	private final Map<V,K> valueToKey;
 

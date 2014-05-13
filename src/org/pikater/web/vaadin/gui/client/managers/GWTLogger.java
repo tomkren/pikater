@@ -11,12 +11,56 @@ public class GWTLogger
 		GWTLogger.serverRPC = serverRPC;
 	}
 	
+	// ----------------------------------------------------------
+	// LOGGING METHODS
+	
+	/**
+	 * Sends a message to the server where it will be logged as a warning.
+	 * @param message
+	 */
+	public static void logWarning(String message)
+	{
+		if(checkLogger())
+		{
+			serverRPC.logWarning(message);
+		}
+	}
+
+	/**
+	 * Sends a message and a throwable to the server where they will be logged as an error. Only use this
+	 * with your own Java exceptions in GWT code. Native exceptions are useless for a GWT developer and
+	 * {@link #logUncaughtNativeClientException} should be used instead. 
+	 * @param properJavaThrowable
+	 * @return
+	 */
+	public static void logThrowable(String message, Throwable t)
+	{
+		if(checkLogger())
+		{
+			serverRPC.logThrowable(message, printThrowable(t));
+		}
+	}
+	
+	/**
+	 * Sends a notification to the server that a native and unpredicted exception occured in the client code.
+	 */
+	public static void logUncaughtNativeClientException()
+	{
+		if(checkLogger())
+		{
+			serverRPC.logUncaughtNativeClientException();
+		}
+	}
+	
+	// ----------------------------------------------------------
+	// PRIVATE METHODS
+	
 	private static boolean checkLogger()
 	{
 		if(serverRPC == null)
 		{
-			throw new NullPointerException("Remote logger has not been set. Ensure that your main UI is extended with a remote logger. Everything else should be "
-					+ "taken case of automatically.");
+			throw new NullPointerException("Remote client logger was needed but had not been set. Ensure that your main UI is extended"
+					+ "with a remote logger. Everything else should be taken case of automatically.");
 		}
 		else
 		{
@@ -40,35 +84,5 @@ public class GWTLogger
 			sb.append(printThrowable(properJavaThrowable.getCause()));
 		}
 		return sb.toString();
-	}
-	
-	// ----------------------------------------------------------
-	// LOGGING METHODS
-	
-	/**
-	 * Use this to send a warning message to the server - it will be logged there.
-	 * @param message
-	 */
-	public static void logWarning(String message)
-	{
-		if(checkLogger())
-		{
-			serverRPC.logWarning(message);
-		}
-	}
-
-	/**
-	 * Only use this with your own Java exceptions in GWT code - they will be sent to the server and logged. 
-	 * Don't use this with native exceptions - these have stack traces like "at http://localhost:8080/.../ijk:1500" and that's
-	 * obviously useless.
-	 * @param properJavaThrowable
-	 * @return
-	 */
-	public static void logThrowable(String message, Throwable t)
-	{
-		if(checkLogger())
-		{
-			serverRPC.logThrowable(message, printThrowable(t));
-		}
 	}
 }

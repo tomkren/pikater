@@ -51,9 +51,8 @@ public class FileUploadTester extends PikaterAgent {
 				log("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
 
 			int port = Integer.parseInt(reply.getContent());
-			// tuhle case uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
+			// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
 			DataTransferService.doClientFileTransfer("772c551b8486b932aed784a582b9c1b1_", "localhost", port);
-
 		} catch (CodecException | OntologyException e) {
 			logError("Ontology/codec error occurred: " + e.getMessage());
 			e.printStackTrace();

@@ -25,7 +25,6 @@ public class KineticEditorConnector extends AbstractComponentConnector
 		 * NOTE: calling the server RPC in the constructor will cause a null pointer exception. Rather use the widget's
 		 * onLoad method for some further initializations if shared state is not suitable. 
 		 */
-		
 		registerRpc(KineticEditorClientRpc.class, new KineticEditorClientRpc()
 		{
 			private static final long serialVersionUID = -263115608289713347L;

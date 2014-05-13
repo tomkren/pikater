@@ -22,7 +22,7 @@ public class MainUIExtensionConnector extends AbstractExtensionConnector
 		registerRpc(MainUIExtensionClientRpc.class, new MainUIExtensionClientRpc()
 		{
 			private static final long serialVersionUID = 5749987507481194601L;
-
+			
 			@Override
 			public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
 			{
