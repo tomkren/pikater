@@ -14,25 +14,11 @@ import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
 
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.Duration;
-import org.pikater.core.ontology.messages.ExecuteParameters;
-import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.GetDuration;
-import org.pikater.core.ontology.messages.GetFileInfo;
-import org.pikater.core.ontology.messages.GetFiles;
-import org.pikater.core.ontology.messages.GetTheBestAgent;
-import org.pikater.core.ontology.messages.ImportFile;
-import org.pikater.core.ontology.messages.Metadata;
-import org.pikater.core.ontology.messages.SaveMetadata;
-import org.pikater.core.ontology.messages.SaveResults;
-import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.TranslateFilename;
-import org.pikater.core.ontology.messages.UpdateMetadata;
+
 
 public class DurationService extends FIPAService {
 

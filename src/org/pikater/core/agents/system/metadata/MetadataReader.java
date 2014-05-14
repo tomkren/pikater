@@ -61,9 +61,9 @@ public class MetadataReader {
                 //Attributes
                 readAttributesMetadata(data,metadata);  
                 
-                int c=metadata.getNumberOfCategorical();
-                int r=metadata.getNumberOfReal();
-                int i=metadata.getNumberOfInteger();
+                //int c=metadata.getNumberOfCategorical();
+                //int r=metadata.getNumberOfReal();
+                //int i=metadata.getNumberOfInteger();
 		return metadata;
     }
     
@@ -173,7 +173,7 @@ public class MetadataReader {
         double numberOfValues=data.getInstances().size();
         double numberOfMissingValues=0;
         Iterator itr = data.getInstances().iterator();
-		while(itr.hasNext()){                        
+		while(itr.hasNext()) {                        
 			Instance i = (Instance)itr.next();
 			jade.util.leap.List missingList=i.getMissing();
                         if ((boolean)missingList.get(attributeNumber))

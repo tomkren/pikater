@@ -12,10 +12,11 @@ import java.util.HashMap;
  * Time: 12:35
  */
 public class ComputationNode {
+
     private boolean idle;
     private int id;
-    private HashMap<String,ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs;
-    private HashMap<String,ComputationOutputBuffer> inputs;
+    private HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs;
+    private HashMap<String, ComputationOutputBuffer> inputs;
     private StartComputationBehavior startBehavior;
 
     public boolean canComputationStart()
@@ -25,7 +26,7 @@ public class ComputationNode {
             //another computation is running
             return false;
         }
-        for (ComputationOutputBuffer input:inputs.values())
+        for (ComputationOutputBuffer input : inputs.values())
         {
             if (input.size()==0)
             {

@@ -10,6 +10,7 @@ import jade.content.onto.basic.Result;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
 import org.pikater.core.ontology.data.DataSourcePath;
 import org.pikater.core.ontology.data.GetDataSourcePath;
 import org.pikater.core.ontology.data.RegisterDataSourceConcept;
@@ -57,7 +58,7 @@ import org.pikater.core.ontology.data.RegisterDataSourceConcept;
             ACLMessage inf = myAgent.receive(RegisterDSTemplate);
             if (inf != null) {
                 content = myAgent.getContentManager().extractContent(inf);
-                if (((Action) content).getAction() instanceof RegisterDataSourceConcept)  {
+                if (((Action) content).getAction() instanceof RegisterDataSourceConcept) {
                     RegisterDataSourceConcept regConcept = (RegisterDataSourceConcept) ((Action) content).getAction();
                     for (String type : regConcept.getDataTypes()) {
                         dsAgent.addDataSourceToOwned(regConcept.getTaskId() + "." + type);
@@ -79,7 +80,9 @@ import org.pikater.core.ontology.data.RegisterDataSourceConcept;
                 content = myAgent.getContentManager().extractContent(req);
                 if (((Action) content).getAction() instanceof GetDataSourcePath)  {
                     GetDataSourcePath getDSPathAction=(GetDataSourcePath)((Action) content).getAction();
-                    ACLMessage result_msg = inf.createReply();
+                    
+                    @SuppressWarnings("null")
+					ACLMessage result_msg = inf.createReply();
                     result_msg.setPerformative(ACLMessage.INFORM);
                     DataSourcePath dsPath=new DataSourcePath();
                     dsPath.setPath(dsAgent.getPathToDataSource(getDSPathAction.getTaskId()+"."+getDSPathAction.getType()));
@@ -90,6 +93,8 @@ import org.pikater.core.ontology.data.RegisterDataSourceConcept;
                     myAgent.send(result_msg);
                     return;
                 }
+
+                @SuppressWarnings("null")
                 ACLMessage result_msg = inf.createReply();
                 result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
                 myAgent.send(result_msg);

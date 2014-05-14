@@ -4,7 +4,6 @@ import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
@@ -53,7 +52,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
-import java.net.SocketException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,8 +61,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
-
-import javax.swing.JPanel;
 
 import org.pikater.core.ontology.experiment.Experiment;
 import org.pikater.core.ontology.experiment.SaveExperiment;
@@ -244,6 +240,7 @@ public class Agent_DataManager extends PikaterAgent {
         UniversalComputationDescription uDescription =
         		description.ExportUniversalComputationDescription();
         
+		@SuppressWarnings("unused")
 		int userId = batch.getOwnerID();
 		//napevno ulozim pre Klaru
 		
@@ -582,7 +579,10 @@ public class Agent_DataManager extends PikaterAgent {
 			float Root_mean_squared_error = Float.MAX_VALUE;
 			float Relative_absolute_error = Float.MAX_VALUE; // percent
 			float Root_relative_squared_error = Float.MAX_VALUE; // percent
+			
+			@SuppressWarnings("unused")
 			int duration = Integer.MAX_VALUE; // miliseconds
+			@SuppressWarnings("unused")
 			float durationLR = Float.MAX_VALUE;
 
 			Iterator itr = res.getResult().getEvaluations().iterator();
@@ -653,7 +653,7 @@ public class Agent_DataManager extends PikaterAgent {
 			log("JPA Result    "+jparesult.getErrorRate());
 			DAOs.resultDAO.storeEntity(jparesult);
 			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).info("Persisted JPAResult");
-		}catch(Exception e){
+		} catch(Exception e) {
 			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).error("Error in SaveResults", e);;
 		}
 
@@ -905,7 +905,8 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage respondToDeleteTempFiles(ACLMessage request) {
-		String path = this.dataFilesPath + "temp" + System.getProperty("file.separator");
+		String path = Agent_DataManager.dataFilesPath +
+				"temp" + System.getProperty("file.separator");
 
 		File tempDir = new File(path);
 		String[] files = tempDir.list();

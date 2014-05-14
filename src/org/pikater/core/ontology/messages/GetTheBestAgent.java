@@ -7,6 +7,7 @@ public class GetTheBestAgent implements AgentAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 5959112027209211332L;
+
 	private String _nearest_file_name;
     private int numberOfAgents;
     private String hash;
@@ -27,12 +28,12 @@ public class GetTheBestAgent implements AgentAction {
         this.numberOfAgents = numberOfAgents;
     }
 
-    @Deprecated
+    //@Deprecated
 	public void setNearest_file_name(String _nearest_file_name) {
 		this._nearest_file_name = _nearest_file_name;
 	}
 
-    @Deprecated
+    //@Deprecated
 	public String getNearest_file_name() {
 		return _nearest_file_name;
 	}

@@ -87,7 +87,7 @@ public class GetFileInfo implements AgentAction {
         this.userID = userID;
     }
 
-    @Deprecated
+    //@Deprecated
     public String toSQLCondition() {
 
         String sql = "userID = " + userID;

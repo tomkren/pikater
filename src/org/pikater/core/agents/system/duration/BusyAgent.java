@@ -1,7 +1,5 @@
 package org.pikater.core.agents.system.duration;
 
-import javax.swing.JFrame;
-
 import jade.core.AID;
 
 public class BusyAgent {

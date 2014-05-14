@@ -5,7 +5,6 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
@@ -14,8 +13,6 @@ import jade.util.leap.List;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.CreateAgent;
-
-import java.util.HashSet;
 
 /**
  * Created with IntelliJ IDEA.
