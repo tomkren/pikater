@@ -15,9 +15,9 @@ import org.pikater.core.ontology.actions.FilenameTranslationOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.batch.ExecuteBatch;
 import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.messages.Problem;
 import org.pikater.core.ontology.messages.Solve;
-import org.pikater.core.ontology.messages.TranslateFilename;
 
 import jade.content.Concept;
 import jade.content.ContentElement;

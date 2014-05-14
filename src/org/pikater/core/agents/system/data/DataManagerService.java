@@ -25,6 +25,7 @@ import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.data.GetFile;
+import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.GetFileInfo;
 import org.pikater.core.ontology.messages.GetFiles;
@@ -33,12 +34,11 @@ import org.pikater.core.ontology.messages.ImportFile;
 import org.pikater.core.ontology.messages.SaveResults;
 import org.pikater.core.ontology.messages.ShutdownDatabase;
 import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.TranslateFilename;
-import org.pikater.core.ontology.messages.UpdateMetadata;
 import org.pikater.core.ontology.metadata.GetAllMetadata;
 import org.pikater.core.ontology.metadata.GetMetadata;
 import org.pikater.core.ontology.metadata.Metadata;
 import org.pikater.core.ontology.metadata.SaveMetadata;
+import org.pikater.core.ontology.metadata.UpdateMetadata;
 
 public class DataManagerService extends FIPAService {
 

@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.actions;
 
 import org.pikater.core.ontology.batch.ExecuteBatch;
+import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.Attribute;
 import org.pikater.core.ontology.messages.CreateAgent;
@@ -40,8 +41,6 @@ import org.pikater.core.ontology.messages.SavedResult;
 import org.pikater.core.ontology.messages.ShutdownDatabase;
 import org.pikater.core.ontology.messages.Solve;
 import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.TranslateFilename;
-import org.pikater.core.ontology.messages.UpdateMetadata;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.ontology.messages.option.Options;
@@ -50,12 +49,11 @@ import org.pikater.core.ontology.messages.searchItems.BoolSItem;
 import org.pikater.core.ontology.messages.searchItems.FloatSItem;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
 import org.pikater.core.ontology.messages.searchItems.SetSItem;
-
 import org.pikater.core.ontology.metadata.GetAllMetadata;
 import org.pikater.core.ontology.metadata.GetMetadata;
 import org.pikater.core.ontology.metadata.Metadata;
 import org.pikater.core.ontology.metadata.SaveMetadata;
-
+import org.pikater.core.ontology.metadata.UpdateMetadata;
 import org.pikater.core.ontology.metadata.attributes.AttributeMetadata;
 import org.pikater.core.ontology.metadata.attributes.CategoricalAttributeMetadata;
 import org.pikater.core.ontology.metadata.attributes.IntegerAttributeMetadata;
@@ -94,17 +92,14 @@ public class MessagesOntology extends BeanOntology {
             add(Evaluation.class);
             add(EvaluationMethod.class);
             add(Execute.class);
-            add(ExecuteBatch.class);
             add(ExecuteParameters.class);
             add(Fitness.class);
             add(FloatSItem.class);
             add(GetAgents.class);
-            add(GetAllMetadata.class);
             add(GetData.class);
             add(GetDuration.class);
             add(GetFileInfo.class);
             add(GetFiles.class);
-            add(GetMetadata.class);
             add(GetOptions.class);
             add(GetParameters.class);
             add(GetSavedAgents.class);
@@ -116,7 +111,6 @@ public class MessagesOntology extends BeanOntology {
             add(IntSItem.class);
             add(LoadAgent.class);
             add(LoadResults.class);
-            add(Metadata.class);
             add(Method.class);
             add(Option.class);
             add(Options.class);
@@ -126,7 +120,6 @@ public class MessagesOntology extends BeanOntology {
             add(Results.class);
             add(SaveAgent.class);
             add(SavedResult.class);
-            add(SaveMetadata.class);
             add(SaveResults.class);
             add(SearchItem.class);
             add(SearchSolution.class);
@@ -134,15 +127,6 @@ public class MessagesOntology extends BeanOntology {
             add(ShutdownDatabase.class);
             add(Solve.class);
             add(Task.class);
-            add(TranslateFilename.class);
-            add(UpdateMetadata.class);
-            
-            // metadata
-            add(AttributeMetadata.class);
-            add(CategoricalAttributeMetadata.class);
-            add(IntegerAttributeMetadata.class);
-            add(NumericalAttributeMetadata.class);
-            add(RealAttributeMetadata.class);
  
         } catch (Exception e) {
             e.printStackTrace();

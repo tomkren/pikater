@@ -1,6 +1,4 @@
-package org.pikater.core.ontology.messages;
-
-import org.pikater.core.ontology.metadata.Metadata;
+package org.pikater.core.ontology.metadata;
 
 import jade.content.AgentAction;
 

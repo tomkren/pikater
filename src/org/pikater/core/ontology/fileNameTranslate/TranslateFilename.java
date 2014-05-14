@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.fileNameTranslate;
 
 import jade.content.AgentAction;
 
