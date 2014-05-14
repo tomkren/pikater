@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.pikater.core.ontology.messages.metadata;
+package org.pikater.core.ontology.metadata.attributes;
 
 /**
  *

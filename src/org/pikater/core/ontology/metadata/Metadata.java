@@ -3,7 +3,7 @@ package org.pikater.core.ontology.metadata;
 import jade.content.Concept;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
-import org.pikater.core.ontology.messages.metadata.*;
+import org.pikater.core.ontology.metadata.attributes.*;
 
 public class Metadata implements Concept {
 

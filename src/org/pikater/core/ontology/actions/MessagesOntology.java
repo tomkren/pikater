@@ -42,11 +42,6 @@ import org.pikater.core.ontology.messages.Solve;
 import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.TranslateFilename;
 import org.pikater.core.ontology.messages.UpdateMetadata;
-import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
-import org.pikater.core.ontology.messages.metadata.CategoricalAttributeMetadata;
-import org.pikater.core.ontology.messages.metadata.IntegerAttributeMetadata;
-import org.pikater.core.ontology.messages.metadata.NumericalAttributeMetadata;
-import org.pikater.core.ontology.messages.metadata.RealAttributeMetadata;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.ontology.messages.option.Options;
@@ -55,10 +50,17 @@ import org.pikater.core.ontology.messages.searchItems.BoolSItem;
 import org.pikater.core.ontology.messages.searchItems.FloatSItem;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
 import org.pikater.core.ontology.messages.searchItems.SetSItem;
+
 import org.pikater.core.ontology.metadata.GetAllMetadata;
 import org.pikater.core.ontology.metadata.GetMetadata;
 import org.pikater.core.ontology.metadata.Metadata;
 import org.pikater.core.ontology.metadata.SaveMetadata;
+
+import org.pikater.core.ontology.metadata.attributes.AttributeMetadata;
+import org.pikater.core.ontology.metadata.attributes.CategoricalAttributeMetadata;
+import org.pikater.core.ontology.metadata.attributes.IntegerAttributeMetadata;
+import org.pikater.core.ontology.metadata.attributes.NumericalAttributeMetadata;
+import org.pikater.core.ontology.metadata.attributes.RealAttributeMetadata;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
