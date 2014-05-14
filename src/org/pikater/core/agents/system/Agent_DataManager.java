@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -32,9 +33,12 @@ import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
+import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.actions.ExperimentOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.batch.SavedBatch;
@@ -68,21 +72,21 @@ import org.pikater.core.ontology.experiment.SavedExperiment;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.Eval;
-import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.GetFileInfo;
 import org.pikater.core.ontology.messages.GetFiles;
-import org.pikater.core.ontology.messages.GetMetadata;
 import org.pikater.core.ontology.messages.GetTheBestAgent;
 import org.pikater.core.ontology.messages.ImportFile;
 import org.pikater.core.ontology.messages.LoadResults;
-import org.pikater.core.ontology.messages.Metadata;
-import org.pikater.core.ontology.messages.SaveMetadata;
 import org.pikater.core.ontology.messages.SaveResults;
 import org.pikater.core.ontology.messages.SavedResult;
 import org.pikater.core.ontology.messages.ShutdownDatabase;
 import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.TranslateFilename;
 import org.pikater.core.ontology.messages.UpdateMetadata;
+import org.pikater.core.ontology.metadata.GetAllMetadata;
+import org.pikater.core.ontology.metadata.GetMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.metadata.SaveMetadata;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
 public class Agent_DataManager extends PikaterAgent {
@@ -103,13 +107,23 @@ public class Agent_DataManager extends PikaterAgent {
 			"data" + System.getProperty("file.separator");
 	
 	@Override
+	public java.util.List<Ontology> getOntologies() {
+			
+		java.util.List<Ontology> ontologies =
+				new java.util.ArrayList<Ontology>();
+		ontologies.add(DataOntology.getInstance());
+		ontologies.add(BatchOntology.getInstance());
+		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(AgentInfoOntology.getInstance());
+		
+		return ontologies;
+	}
+	
+	@Override
 	protected void setup() {
 		try {
 			initDefault();
 			registerWithDF();
-			getContentManager().registerOntology(DataOntology.getInstance());
-			getContentManager().registerOntology(BatchOntology.getInstance());
-			getContentManager().registerOntology(ExperimentOntology.getInstance());
 			
 			if (containsArgument(CONNECTION_ARG_NAME)) {
 				connectionBean = getArgumentValue(CONNECTION_ARG_NAME);
@@ -709,19 +723,19 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		log("Agent_DataManager.respondToGetAllMetadata");
 
-		java.util.List<JPADataSetLO> datasets=null;
+		java.util.List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResults_required()) {
 			if (gm.getExceptions() != null) {
-				java.util.List<String> exHash=new java.util.LinkedList<String>();
+				java.util.List<String> exHash = new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
 					Metadata m = (Metadata) itr.next();
 					exHash.add(m.getInternal_name());
 				}
-				datasets=DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
+				datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
 			}else{
-				datasets=DAOs.dataSetDAO.getAllWithResults();
+				datasets = DAOs.dataSetDAO.getAllWithResults();
 			}
 		} else {
 			if (gm.getExceptions() != null) {
@@ -734,9 +748,9 @@ public class Agent_DataManager extends PikaterAgent {
 					excludedHashes.add(m.getInternal_name());
 				}
 				
-				datasets=DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
+				datasets = DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
 			}else{
-				datasets=DAOs.dataSetDAO.getAll();
+				datasets = DAOs.dataSetDAO.getAll();
 			}
 			
 		}

@@ -28,20 +28,17 @@ import jade.proto.SubscriptionInitiator;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
-import jade.wrapper.AgentController;
-import jade.wrapper.ControllerException;
-import jade.wrapper.PlatformController;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.messages.*;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.metadata.GetMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -1413,11 +1410,11 @@ public abstract class Agent_GUI extends PikaterAgent {
 				Action a = new Action();
 				a.setAction(gm);
 				a.setActor(this.getAID());
-
+		
 				ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
-				req.addReceiver(new AID("Freddie", false));
+				req.addReceiver(new AID(AgentNames.FREDDIE, false));
 				req.setLanguage(codec.getName());
-				req.setOntology(ontology.getName());
+				req.setOntology(MetadataOntology.getInstance().getName());
 				req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 				getContentManager().fillContent(req, a);

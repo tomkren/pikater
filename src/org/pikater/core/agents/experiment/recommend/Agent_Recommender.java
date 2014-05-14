@@ -27,8 +27,11 @@ import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.messages.*;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.metadata.GetMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -57,6 +60,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
 		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		
 		return ontologies;

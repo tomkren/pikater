@@ -15,11 +15,11 @@ import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.core.ontology.messages.DataInstances;
-import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.metadata.AttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.CategoricalAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.IntegerAttributeMetadata;
 import org.pikater.core.ontology.messages.metadata.RealAttributeMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
 
 import weka.core.Instances;
 

@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.messages;
 
+import org.pikater.core.ontology.metadata.Metadata;
+
 import jade.content.AgentAction;
 
 public class UpdateMetadata implements AgentAction {

@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.metadata;
 
 import jade.content.Concept;
 import jade.util.leap.ArrayList;

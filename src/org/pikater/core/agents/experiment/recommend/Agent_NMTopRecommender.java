@@ -19,10 +19,10 @@ import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.Data;
-import org.pikater.core.ontology.messages.GetAllMetadata;
-import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.metadata.GetAllMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
