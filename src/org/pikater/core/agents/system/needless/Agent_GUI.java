@@ -1309,7 +1309,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 	public AID createAgent(String type, String name, List options) {
 
 		ACLMessage msg_ca = new ACLMessage(ACLMessage.REQUEST);
-		msg_ca.addReceiver(new AID("agentManager", false));
+		msg_ca.addReceiver(new AID(AgentNames.MANAGER, false));
 		msg_ca.setLanguage(codec.getName());
 		msg_ca.setOntology(ontology.getName());
 
@@ -1595,7 +1595,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		_loadAgent.setObject(object);
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID("agentManager", false));
+		request.addReceiver(new AID(AgentNames.MANAGER, false));
 		request.setOntology(MessagesOntology.getInstance().getName());
 		request.setLanguage(codec.getName());
 		request.setConversationId("resurrected-results");

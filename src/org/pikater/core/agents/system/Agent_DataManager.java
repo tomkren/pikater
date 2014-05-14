@@ -37,6 +37,7 @@ import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.actions.ExperimentOntology;
+import org.pikater.core.ontology.actions.FilenameTranslationOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.batch.Batch;
@@ -111,7 +112,9 @@ public class Agent_DataManager extends PikaterAgent {
 			
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
+		ontologies.add(FilenameTranslationOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());

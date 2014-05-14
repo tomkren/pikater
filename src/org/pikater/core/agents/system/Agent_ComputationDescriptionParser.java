@@ -86,7 +86,7 @@ public class Agent_ComputationDescriptionParser extends PikaterAgent {
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		msg.setLanguage(codec.getName());
-		msg.setOntology(MessagesOntology.getInstance().getName());
+		msg.setOntology(FilenameTranslationOntology.getInstance().getName());
 		// We want to receive a reply in 30 secs
 		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
 		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
