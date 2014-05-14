@@ -16,12 +16,14 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import org.pikater.core.agents.system.data.DataManagerService;
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
  *
@@ -224,6 +226,12 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         return "NMTopRecommender";
     }
 
+	@Override
+	protected AgentInfo getAgentInfo() {
+
+		return NMTopRecommender_RecommendBox.get();
+	}
+
     private double distance(Metadata m1, Metadata m2) {
 
         double wAttribute_type = 1;
@@ -384,4 +392,5 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         }
         return null;
     }
+
 }

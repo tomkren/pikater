@@ -5,12 +5,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 @Entity
-public class JPAGlobalMetaData {
+@Table(name="GlobalMetaData_20140430")
+@NamedQueries({
+	@NamedQuery(name="GlobalMetaData.getAll",query="select gmd from JPAGlobalMetaData gmd"),
+	@NamedQuery(name="GlobalMetaData.getById",query="select gmd from JPAGlobalMetaData gmd where gmd.id=:id")
+})
+public class JPAGlobalMetaData extends JPAAbstractEntity{
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+	
+	public int getId() {
+        return id;
+    }
 	@ManyToOne
 	private JPATaskType defaultTaskType;
 	private int numberofInstances;
@@ -36,13 +48,16 @@ public class JPAGlobalMetaData {
 	public void setNumberofInstances(int numberofInstances) {
 		this.numberofInstances = numberofInstances;
 	}
-	public int getId() {
-		return id;
+	@Override
+	public String getEntityName() {
+		return "GlobalMetaData";
 	}
 
-	public String getEntityName() {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public void updateValues(JPAAbstractEntity newValues) throws Exception {
+		JPAGlobalMetaData updatedValues=(JPAGlobalMetaData)newValues;
+		this.defaultTaskType=updatedValues.getDefaultTaskType();
+		this.numberofInstances=updatedValues.getNumberofInstances();
 	}
 	
 	

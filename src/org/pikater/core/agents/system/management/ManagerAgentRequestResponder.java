@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.management;
 
 import jade.content.lang.Codec;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
@@ -12,6 +13,7 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 
 import org.pikater.core.agents.system.Agent_ManagerAgent;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.CreateAgent;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.LoadAgent;
@@ -148,9 +150,11 @@ public class ManagerAgentRequestResponder {
             ac.setAction(fa);
             ac.setActor(request.getSender());
 
+            Ontology ontology = MessagesOntology.getInstance();
+            
             jade.lang.acl.ACLMessage first_message = new jade.lang.acl.ACLMessage(jade.lang.acl.ACLMessage.REQUEST);
             first_message.setLanguage(managerAgent.getCodec().getName());
-            first_message.setOntology(managerAgent.getOntology().getName());
+            first_message.setOntology(ontology.getName());
             first_message.addReceiver(new AID(la.getFilename(), AID.ISLOCALNAME));
             first_message.clearAllReplyTo();
             first_message.addReplyTo(request.getSender());

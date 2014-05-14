@@ -4,15 +4,9 @@
         <agent type="org.pikater.core.agents.system.Agent_Planner" name="Planner">
         </agent>
 
-        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaCA" name="RBF1">
-            <arguments>
-                <argument key="className" value="weka.classifiers.functions.RBFNetwork"/>
-            </arguments>
+        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA" name="RBF1">
         </agent>
-        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaCA" name="RBF2">
-            <arguments>
-                <argument key="className" value="weka.classifiers.functions.RBFNetwork"/>
-            </arguments>
+        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA" name="RBF2">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
@@ -45,10 +39,16 @@
         <agent type="org.pikater.core.agents.system.Agent_ComputationDescriptionParser" name="ComputationDescriptionParser">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_InputTransformer" name="InputTransformer">
+        <agent type="org.pikater.core.agents.system.Agent_InsertedBatchesLog" name="InsertedBatchesLog">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara">
+        </agent>
+
+        <agent type="org.pikater.core.agents.gateway.Agent_PikaterGateway" name="Gateway">
+        </agent>
+
+        <agent type="org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider" name="VirtualBoxProvider">
         </agent>
 
     </agents>

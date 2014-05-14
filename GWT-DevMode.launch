@@ -6,7 +6,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-noserver -war WebContent/VAADIN/widgetsets org.pikater.web.vaadin.gui.NewpikaterdebugWidgetset -startupUrl http://localhost:8080/Pikater -bindAddress 127.0.0.1"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-noserver -war WebContent/VAADIN/widgetsets org.pikater.web.vaadin.gui.PikaterWidgetset -startupUrl http://localhost:8080/Pikater -bindAddress 127.0.0.1"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Pikater"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512M -XX:MaxPermSize=256M"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="/Users/Smolodon/Work/Programming/Eclipse projects - School/Pikater"/>

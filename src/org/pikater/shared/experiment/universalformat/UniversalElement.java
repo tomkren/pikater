@@ -16,7 +16,6 @@ public class UniversalElement
 		this.uModel = description;
 	}
 
-
 	public UniversalOntology getElement()
 	{
 		return element;

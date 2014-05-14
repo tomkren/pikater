@@ -7,9 +7,11 @@ import jade.util.leap.List;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.options.EASearch_SearchBox;
 import org.pikater.core.utilities.evolution.*;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
@@ -86,6 +88,36 @@ public class Agent_EASearch extends Agent_Search {
      *
      */
     private static final long serialVersionUID = -387458001824777077L;
+    
+
+    @Override
+    protected String getAgentType() {
+        return "EASearch";
+    }
+    
+	@Override
+	protected AgentInfo getAgentInfo() {
+
+		return EASearch_SearchBox.get();
+	}
+
+    @Override
+    protected boolean finished() {
+        //number of generations, best error rate
+        
+        if (genNumber >= maxGeneration) {
+            return true;
+        }
+
+        if (bestError <= goalError) {
+            return true;
+        }
+        
+        if (archive.size() >= maxEval) 
+            return true;
+        
+        return false;
+    }
     
     @Override
     protected List generateNewSolutions(List solutions, float[][] evaluations) {
@@ -274,29 +306,6 @@ public class Agent_EASearch extends Agent_Search {
 
         parents.clear();
         parents.addAll(selected);
-    }
-
-    @Override
-    protected boolean finished() {
-        //number of generations, best error rate
-        
-        if (genNumber >= maxGeneration) {
-            return true;
-        }
-
-        if (bestError <= goalError) {
-            return true;
-        }
-        
-        if (archive.size() >= maxEval) 
-            return true;
-        
-        return false;
-    }
-
-    @Override
-    protected String getAgentType() {
-        return "EASearch";
     }
 
     @Override

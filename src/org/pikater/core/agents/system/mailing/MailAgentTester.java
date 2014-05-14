@@ -2,10 +2,12 @@ package org.pikater.core.agents.system.mailing;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Mailing;
-import org.pikater.core.ontology.messages.SendEmail;
+import org.pikater.core.ontology.actions.MailingOntology;
+import org.pikater.core.ontology.mailing.SendEmail;
 
 import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
@@ -51,10 +53,12 @@ public class MailAgentTester extends PikaterAgent {
     
     /** Naplni pozadavek na konkretni akci pro jednoho ciloveho agenta */
     private ACLMessage makeActionRequest(AID target, AgentAction action) throws CodecException, OntologyException {
+    	Ontology ontology = MailingOntology.getInstance();
+    	
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.addReceiver(target);
         msg.setLanguage(getCodec().getName());
-        msg.setOntology(getOntology().getName());
+        msg.setOntology(ontology.getName());
         getContentManager().fillContent(msg, new Action(target, action));
         return msg;
     }

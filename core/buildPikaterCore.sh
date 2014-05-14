@@ -1,5 +1,6 @@
 #!/bin/sh
 
-cd ../;
+dir="`dirname $0`/.."
+cd "$dir"
 
-ant build;
+ant -buildfile buildCore.xml build;

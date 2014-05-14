@@ -3,6 +3,7 @@ package org.pikater.core.agents;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -12,21 +13,18 @@ import jade.domain.FIPAException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
-import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
-
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.shared.logging.Logger;
 import org.pikater.shared.logging.Severity;
 import org.pikater.shared.logging.Verbosity;
-import org.pikater.core.ontology.messages.MessagesOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -35,12 +33,16 @@ import javax.persistence.EntityManagerFactory;
  * Time: 9:38
  */
 public abstract class PikaterAgent extends Agent {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3427874121438630714L;
+
 	private final String DEFAULT_LOGGER_BEAN = "logger";
 	private final String LOGGER_BEAN_ARG = "logger";
 	private final String VERBOSITY_ARG = "verbosity";
 	protected final String DATAMODEL_BEAN = "dataModel";
 	protected Codec codec = new SLCodec();
-	protected Ontology ontology = MessagesOntology.getInstance();
 	protected String initBeansName = "Beans.xml";
 	protected ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
 	protected Verbosity verbosity = Verbosity.NORMAL;
@@ -54,8 +56,12 @@ public abstract class PikaterAgent extends Agent {
 		return codec;
 	}
 
-	public Ontology getOntology() {
-		return ontology;
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		
+		return ontologies;
 	}
 
 	protected String getAgentType() {
@@ -163,7 +169,7 @@ public abstract class PikaterAgent extends Agent {
 
 	public void initDefault(Object[] args) {
 		if (getName().contains("-")) {
-			nodeName = getName().substring(getName().lastIndexOf('-'));
+			nodeName = getLocalName().substring(getLocalName().lastIndexOf('-')+1);
 		}
 		parseArguments(args);
 		initLogging();
@@ -180,7 +186,10 @@ public abstract class PikaterAgent extends Agent {
 
 		log("is alive...", 1);
 		getContentManager().registerLanguage(getCodec());
-		getContentManager().registerOntology(getOntology());
+		
+		for (Ontology ontologyI : getOntologies() ) {
+			getContentManager().registerOntology(ontologyI);
+		}
 	}
 
 	private void parseArguments(Object[] args) {
@@ -219,5 +228,10 @@ public abstract class PikaterAgent extends Agent {
 
 	public void logError(String errorDescription, Severity severity) {
 		logger.logError(getLocalName(), errorDescription, severity);
+	}
+	
+	public boolean isSameNode(AID id) {
+		return ((nodeName == null || nodeName.isEmpty()) && !id.getLocalName().contains("-")) ||
+				nodeName != null && id.getLocalName().endsWith("-" + nodeName);
 	}
 }

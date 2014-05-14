@@ -2,7 +2,8 @@ package org.pikater.core.ontology.description.examples;
 
 import jade.util.leap.ArrayList;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaCA;
+import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
+import org.pikater.core.dataStructures.options.Converter;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionValue;
@@ -23,7 +24,7 @@ public class SearchOnly {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
-        ca.setModelClass(Agent_WekaCA.class.getName());
+        ca.setModelClass(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
         ArrayList options = new ArrayList();
@@ -35,8 +36,8 @@ public class SearchOnly {
         hr.setName("H");
         hr.setOption(new OptionValue(new Integer(4)) );
  
-        options.add(lr.toOption());
-        options.add(hr.toOption());
+        options.add(Converter.toOption(lr));
+        options.add(Converter.toOption(hr));
 
         ca.setOptions(options);
 
@@ -65,8 +66,8 @@ public class SearchOnly {
         ear.setName("ea.mutationRate");
         ear.setOption(new OptionValue(new Double(0.03)) );
 
-        searchParameters.add(pr.toOption());
-        searchParameters.add(ear.toOption());
+        searchParameters.add(Converter.toOption(pr));
+        searchParameters.add(Converter.toOption(ear));
 
         crsc.setSearch(sa);
 

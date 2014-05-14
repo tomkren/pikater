@@ -1,6 +1,8 @@
 package org.pikater.web.servlets;
 
+import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
@@ -17,13 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.pikater.web.pikater.PikaterGateway;
 import org.pikater.web.pikater.PikaterActionInitiator;
-
 import org.pikater.core.agents.system.Agent_Mailing;
-import org.pikater.core.ontology.messages.SendEmail;
+import org.pikater.core.ontology.actions.MailingOntology;
+import org.pikater.core.ontology.mailing.SendEmail;
 
 /**
- * Servlet testuje propojení: Tomcat <=> JADE Gateway <=> lokální JADE.
- * Očekává, že je na lokálním JADE spuštěný mailAgent a skrz něj pošle testovací mail na zadanou adresu.
+ * Servlet testuje propojeni: Tomcat <=> JADE Gateway <=> lokalni JADE.
+ * Ocekava, ze je na lokalnim JADE spusteny mailAgent a skrz nej posle testovaci mail na zadanou adresu.
  */
 
 @SuppressWarnings("serial")
@@ -31,7 +33,8 @@ import org.pikater.core.ontology.messages.SendEmail;
 public class JadeGatewayExample extends HttpServlet {
     @Override
     public void init() throws ServletException {
-        JadeGateway.init("org.newpikater.pikater.PikaterGateway", null);
+    	Class<PikaterGateway> gateway = org.pikater.web.pikater.PikaterGateway.class;
+        JadeGateway.init(gateway.getName(), null);
     }
 
     @Override
@@ -53,8 +56,12 @@ public class JadeGatewayExample extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ACLMessage response;
         try {
-            ACLMessage msg = PikaterGateway.makeActionRequest("mailAgent",
-                    new SendEmail(Agent_Mailing.EmailType.TEST, req.getParameter("addr")));
+        	AgentAction sendEmailAction = new SendEmail(Agent_Mailing.EmailType.TEST, req.getParameter("addr"));
+        	Ontology mailingOntology = MailingOntology.getInstance();
+        	
+            ACLMessage msg = PikaterGateway.makeActionRequest(
+            		"mailAgent", mailingOntology, sendEmailAction);
+
             PikaterActionInitiator initiator = new PikaterActionInitiator(msg);
             JadeGateway.execute(initiator, 10000);
             response = initiator.getOkResponse();

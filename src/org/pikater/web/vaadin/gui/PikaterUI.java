@@ -1,13 +1,34 @@
 package org.pikater.web.vaadin.gui;
 
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.servlet.annotation.WebServlet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.pikater.shared.experiment.universalformat.UniversalGui;
+import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
+import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
-import org.pikater.web.vaadin.gui.welcometour.WelcomeTourWizard;
+import org.pikater.web.vaadin.gui.server.MainUIExtension;
+import org.pikater.web.vaadin.gui.server.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.KineticEditor;
+import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
+import org.pikater.web.vaadin.upload.IUploadedFileHandler;
+import org.pikater.web.vaadin.upload.MyUploads;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
@@ -15,6 +36,8 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.JavaScript;
+import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -22,12 +45,13 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
 
-@SuppressWarnings("serial")
 @Theme("pikater")
 @com.vaadin.annotations.JavaScript(value = "public/kinetic-v4.7.3-dev.js")
 @Push(value = PushMode.MANUAL)
 public class PikaterUI extends UI
 {
+	private static final long serialVersionUID = 1964653532060950402L;
+	
 	/*
 	 * Automatic UI finding takes this even one step further and allows you to leave out @VaadinServletConfiguration
 	 * completely if you define your servlet class as a static inner class to your UI class.
@@ -39,15 +63,43 @@ public class PikaterUI extends UI
 	@VaadinServletConfiguration(productionMode = false, ui = PikaterUI.class, widgetset = "org.pikater.web.vaadin.gui.PikaterWidgetset")
 	public static class Servlet extends CustomConfiguredUIServlet
 	{
+		private static final long serialVersionUID = -3494370492799211606L;
 	}
+	
+	/*
+	 * UIs are already session-bound, so we can safely do the following, as long as the field is serializable:
+	 */
+	private MyUploads thisUsersUploads;
 
 	@Override
 	protected void init(VaadinRequest request)
 	{
-		primary_displayWelcomeWizard();
+		/*
+		 * NOTE: do not remove or replace this code. 
+		 */
 		
+		MainUIExtension mainUIExtension = new MainUIExtension();
+		mainUIExtension.extend(this);
+		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension);
+		
+		thisUsersUploads = new MyUploads();
+		
+		/*
+		 * TODO: box definition changes will take an application restart... only make the RPC method a one-time push
+		 * TODO: BoxInfo reference should be a reversible IDs... since box definitions have no decent IDs, we have to make
+		 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
+		 * case we will have to manually check for newer versions when validating the experiments.
+		 */ 
+		
+		/*
+		 * Which application scenario should be loaded when the webpages are accessed?
+		 */
+		
+		// primary_displayWelcomeWizard();
+		
+		// test_multiFileUpload();
 		// test_console();
-		// test_editor();
+		test_editor();
 		// test_simpleButton();
 		// test_JSCH();
 	}
@@ -105,14 +157,55 @@ public class PikaterUI extends UI
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
 	
+	private void test_multiFileUpload()
+	{
+		VerticalLayout vLayout = new VerticalLayout();
+		setContent(vLayout);
+		
+		vLayout.addComponent(thisUsersUploads.getNewComponent(
+				Arrays.asList(HttpContentType.APPLICATION_JAR),
+				new IUploadedFileHandler()
+				{
+					@Override
+					public void handleFile(InputStream streamToLocalFile, String fileName, String mimeType, long sizeInBytes)
+					{
+						// TODO Auto-generated method stub
+					}
+				}
+		));
+	}
+	
 	private void test_editor()
 	{
+		// TODO: use the server interface to get box definitions
+		
+		BoxInfo boxInfo1 = new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", "");
+		BoxInfo boxInfo2 = new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", "");
+		BoxInfo boxInfo3 = new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", "");
+		
+		UniversalGui guiInfo1 = new UniversalGui(10, 10);
+		UniversalGui guiInfo2 = new UniversalGui(500, 10);
+		UniversalGui guiInfo3 = new UniversalGui(400, 300);
+		
+		BoxInfoCollection boxDefinitions = new BoxInfoCollection();
+		boxDefinitions.addDefinition(boxInfo1);
+		boxDefinitions.addDefinition(boxInfo2);
+		boxDefinitions.addDefinition(boxInfo3);
+		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitions);
+		
+		SchemaDataSource newExperiment = new SchemaDataSource();
+		Integer b1 = newExperiment.addLeafBoxAndReturnID(guiInfo1, boxInfo1);
+		Integer b2 = newExperiment.addLeafBoxAndReturnID(guiInfo2, boxInfo2);
+		newExperiment.addLeafBoxAndReturnID(guiInfo3, boxInfo3);
+		newExperiment.connect(b1, b2);
+		
 		VerticalLayout vLayout = new VerticalLayout();
 		setContent(vLayout);
 		
 		KineticEditor editor = new KineticEditor();
 		// kineticComponent.setWidth("800px");
 		// kineticComponent.setHeight("600px");
+		editor.setExperimentToLoad(newExperiment);
 		
 		vLayout.addComponent(editor);
 	}
@@ -174,6 +267,50 @@ public class PikaterUI extends UI
 		});
 		vLayout.addComponent(btn);
 		setContent(vLayout);
+	}
+	
+	// -------------------------------------------------------------------
+	// JAVASCRIPT TESTING
+	
+	@SuppressWarnings("unused")
+	private void something1()
+	{
+		JavaScript.getCurrent().addFunction("pikater_setAppMode", new JavaScriptFunction()
+		{
+			private static final long serialVersionUID = 4291049321598205127L;
+
+			@Override
+			public void call(JSONArray arguments) throws JSONException
+			{
+				// this is called on the server when the function is called on the client
+				System.out.println(arguments.length());
+				System.out.println(arguments.getBoolean(0));
+			}
+		});
+		JavaScript.getCurrent().execute("window.pikater_setAppMode(true)"); // calls the function on the client
+	}
+	
+	@SuppressWarnings("unused")
+	private void something2()
+	{
+		// just an example
+		JavaScript.getCurrent().execute("window.ns_pikater.setAppMode(\"DEBUG\");"); // calls the function on the client
+	}
+	
+	// -------------------------------------------------------------------
+	// TIPS AND TRICKS
+	
+	private void smth()
+	{
+	    // The background thread that updates clock times once every second.
+        new Timer().scheduleAtFixedRate(new TimerTask()
+		{
+			@Override
+			public void run()
+			{
+				// TODO Auto-generated method stub
+			}
+		}, new Date(), 1000);
 	}
 	
 	// -------------------------------------------------------------------

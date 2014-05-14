@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
@@ -54,6 +55,32 @@ public class Agent_GASearch extends Agent_Search {
 	 * 
 	 */
 	private static final long serialVersionUID = -387458001824777077L;
+	
+	
+	@Override
+	protected String getAgentType() {
+		return "GASearch";
+	}
+	
+	@Override
+	protected AgentInfo getAgentInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected boolean finished() {
+		//number of generation, best error rate
+		if (number_of_generations >= maximum_generations) {
+			return true;
+		}
+
+		if (best_error_rate <= final_error_rate) {			
+			return true;
+		}
+		return false;
+
+	}
 	
 	@Override
 	protected List generateNewSolutions(List solutions, float[][] evaluations) {
@@ -124,26 +151,6 @@ public class Agent_GASearch extends Agent_Search {
 			}
 		}
 
-	}
-
-	@Override
-	protected boolean finished() {
-		//number of generation, best error rate
-		if (number_of_generations >= maximum_generations) {
-			return true;
-		}
-
-		if (best_error_rate <= final_error_rate) {			
-			return true;
-		}
-		return false;
-
-	}
-
-	
-	@Override
-	protected String getAgentType() {
-		return "GASearch";
 	}
 
 	@Override
@@ -257,7 +264,5 @@ public class Agent_GASearch extends Agent_Search {
 		res_sol.setValues(new_solution);
 		return res_sol;
 	}
-	
-
 	
 }

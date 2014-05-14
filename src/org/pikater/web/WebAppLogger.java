@@ -21,11 +21,6 @@ public class WebAppLogger
 		logger.log(Level.SEVERE, header + stackTrace);
 	}
 	
-	public static void logErrorWithoutException(String fileAndMethod, String problemDescription)
-	{
-		logger.log(Level.SEVERE, fileAndMethod + "' :\n" + problemDescription);
-	}
-	
 	public static void log(Level logLevel, String message)
 	{
 		logger.log(logLevel, message);

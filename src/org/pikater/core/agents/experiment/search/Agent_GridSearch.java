@@ -10,6 +10,7 @@ import jade.util.leap.List;
 
 import java.util.ArrayList;
 
+import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.BoolSItem;
 import org.pikater.core.ontology.messages.FloatSItem;
 import org.pikater.core.ontology.messages.IntSItem;
@@ -17,6 +18,7 @@ import org.pikater.core.ontology.messages.SearchItem;
 import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.SetSItem;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.options.GridSearch_SearchBox;
 
 /**
  *
@@ -24,7 +26,12 @@ import org.pikater.core.ontology.messages.option.Option;
  */
 public class Agent_GridSearch extends Agent_Search {
 
-    int defaultTries = 10;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5728853644752654450L;
+
+	int defaultTries = 10;
     List schema;
     boolean linearSteps = true;
     boolean logSteps = true;
@@ -34,6 +41,17 @@ public class Agent_GridSearch extends Agent_Search {
     @Override
     protected String getAgentType() {
         return "GridSearch";
+    }
+
+	@Override
+	protected AgentInfo getAgentInfo() {
+		
+		return GridSearch_SearchBox.get();
+	}
+
+    @Override
+    protected boolean finished() {
+        return values != null;
     }
 
     @Override
@@ -171,11 +189,6 @@ public class Agent_GridSearch extends Agent_Search {
     }
 
     @Override
-    protected boolean finished() {
-        return values != null;
-    }
-
-    @Override
     protected void updateFinished(float[][] evaluations) {}
 
     @Override
@@ -203,4 +216,5 @@ public class Agent_GridSearch extends Agent_Search {
         }
         schema = getSchema();
     }
+
 }

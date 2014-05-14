@@ -3,8 +3,8 @@ package org.pikater.web.experiment_backup.box;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.pikater.shared.experiment.box.BoxInfo;
-import org.pikater.shared.experiment.box.BoxInfo.BoxType;
+import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.BoxType;
 
 public class WrapperBox extends AbstractBox
 {

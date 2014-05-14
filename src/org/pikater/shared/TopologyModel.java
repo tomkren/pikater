@@ -1,5 +1,6 @@
 package org.pikater.shared;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,6 +58,6 @@ public class TopologyModel
 
 	public boolean isWellFormed()
 	{
-		return !masters.isEmpty() && !slaves.isEmpty();
+		return !masters.isEmpty() && !slaves.isEmpty() && Collections.disjoint(masters, slaves);
 	}
 }

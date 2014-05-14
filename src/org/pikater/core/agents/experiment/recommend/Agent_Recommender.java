@@ -1,6 +1,7 @@
 package org.pikater.core.agents.experiment.recommend;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -21,9 +22,12 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
+import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.shared.logging.Verbosity;
+import org.pikater.core.ontology.actions.AgentInfoOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.*;
 import org.pikater.core.ontology.messages.option.Option;
 
@@ -32,20 +36,32 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.pikater.core.agents.PikaterAgent;
 
-public abstract class Agent_Recommender extends PikaterAgent {
-	private static final long serialVersionUID = 4413578066473667553L;
+public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1314060594137998065L;
+
 	protected abstract org.pikater.core.ontology.messages.Agent chooseBestAgent(Data data);
 	protected abstract String getAgentType();
     
-	private org.pikater.core.ontology.messages.Agent myAgentOntology = new org.pikater.core.ontology.messages.Agent();
+	private org.pikater.core.ontology.messages.Agent myAgentOntology =
+			new org.pikater.core.ontology.messages.Agent();
 	
-	protected String getOptFileName(){
-		return "/options/"+getAgentType() +".opt";
-	}
 
+
+    @Override
+	public java.util.List<Ontology> getOntologies() {
+		
+		java.util.List<Ontology> ontologies =
+				new java.util.ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(AgentInfoOntology.getInstance());
+		
+		return ontologies;
+	}
 	
     @Override
     protected void setup() {
@@ -54,9 +70,20 @@ public abstract class Agent_Recommender extends PikaterAgent {
         
         registerWithDF("Recommender");
         
+        Ontology ontology = MessagesOntology.getInstance();
+        
         // receive request
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));        
 		addBehaviour(new receiveRequest(this, mt));
+
+
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sendAgentInfo(getAgentInfo());
 
     }  // end setup()
          
@@ -193,6 +220,8 @@ public abstract class Agent_Recommender extends PikaterAgent {
 	
 	protected List getAgentOptions(String agentType) {
 
+		Ontology ontology = MessagesOntology.getInstance();
+		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		// find an agent according to type
 		List agents = getAgentsByType(agentType);
@@ -275,6 +304,11 @@ public abstract class Agent_Recommender extends PikaterAgent {
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	
+	protected String getOptFileName(){
+		return System.getProperty("file.separator") + "options" +
+				System.getProperty("file.separator") + getAgentType() +".opt";
+	}
+
 	private ArrayList getParametersFromOptFile(){
 		// set default values of options
 		// if values exceed intervals in .opt file -> warning

@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.AbstractDAO;
 import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 public class FileMappingDAO extends AbstractDAO {

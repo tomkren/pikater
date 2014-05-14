@@ -2,13 +2,18 @@ package org.pikater.web.config;
 
 import javax.servlet.ServletContext;
 
+import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.web.vaadin.gui.server.MainUIExtension;
+
 public class ServerConfigurationInterface
 {
 	public enum ServerConfItem
 	{
 		CONTEXT,
 		CONFIG,
-		JADE_TOPOLOGIES
+		JADE_TOPOLOGIES,
+		BOX_DEFINITIONS,
+		UNIVERSAL_CLIENT_CONNECTOR
 	};
 	
 	/**
@@ -17,6 +22,8 @@ public class ServerConfigurationInterface
 	private static ServerConfiguration config = null;
 	private static JadeTopologies jadeTopologies = null;
 	private static ServletContext context = null;
+	private static BoxInfoCollection boxDefinitions = null;
+	private static MainUIExtension universalClientConnector = null;
 	
 	// **************************************************************************************************
 	// PUBLIC INTERFACE
@@ -55,6 +62,20 @@ public class ServerConfigurationInterface
 					jadeTopologies = (JadeTopologies) value;
 				}
 				break;
+			case BOX_DEFINITIONS:
+				boxDefinitions = (BoxInfoCollection) value;
+				if(getUniversalClientConnector() == null)
+				{
+					throw new NullPointerException("Can not delegate the newly set box definitions to the client because universal client connector is null.");
+				}
+				else
+				{
+					getUniversalClientConnector().setBoxDefinitions(boxDefinitions);
+				}
+				break;
+			case UNIVERSAL_CLIENT_CONNECTOR:
+				universalClientConnector = (MainUIExtension) value;
+				break;
 			default:
 				throw new IllegalArgumentException();
 		}
@@ -73,6 +94,16 @@ public class ServerConfigurationInterface
 	public static JadeTopologies getJadeTopologies()
 	{
 		return jadeTopologies;
+	}
+	
+	public static BoxInfoCollection getBoxDefinitions()
+	{
+		return boxDefinitions;
+	}
+	
+	public static MainUIExtension getUniversalClientConnector()
+	{
+		return universalClientConnector;
 	}
 
 	public static boolean isEverythingOK()

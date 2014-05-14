@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.pikater.shared.database.jpa.ExperimentStatus;
+import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.AbstractDAO;
 import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 public class ExperimentDAO extends AbstractDAO {
@@ -34,7 +34,7 @@ public class ExperimentDAO extends AbstractDAO {
 		return getByTypedNamedQuery("Experiment.getByBatch", "batch", batch);
 	}
 	
-	public List<JPAExperiment> getByStatus(ExperimentStatus status) {
+	public List<JPAExperiment> getByStatus(JPAExperimentStatus status) {
 		return getByTypedNamedQuery("Experiment.getByStatus", "status", status);
 	}
 	
@@ -46,6 +46,22 @@ public class ExperimentDAO extends AbstractDAO {
 				.createNamedQuery(queryName,JPAExperiment.class)
 				.setParameter(paramName, param)
 				.getResultList();
+		}finally{
+			em.close();
+		}
+	}
+	
+	
+	public void updateEntity(JPAExperiment changedEntity){
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			JPAExperiment item=em.find(JPAExperiment.class, changedEntity.getId());
+			item.updateValues(changedEntity);
+			em.getTransaction().commit();
+		}catch(Exception e){
+			logger.error("Can't update JPA Experiment object.", e);
+			em.getTransaction().rollback();
 		}finally{
 			em.close();
 		}

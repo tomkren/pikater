@@ -1,14 +1,21 @@
 package org.pikater.web.vaadin.gui.client.kineticeditor;
 
-import net.edzard.kinetic.Vector2d;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
-import org.pikater.web.vaadin.gui.client.ClientVars;
-import org.pikater.web.vaadin.gui.client.ICustomVaadinWidget;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticeditorcore.operations.TempDeselectOperation;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.web.vaadin.gui.client.jsni.JSNI_SharedConfig;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.TempDeselectOperation;
+import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -22,12 +29,37 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.vaadin.client.ui.VButton;
 import com.vaadin.shared.communication.ServerRpc;
 
-public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinWidget
+public class KineticEditorWidget extends VerticalPanel
 {
+	// --------------------------------------------------------
+	// GWT GUI
+	
+	/**
+	 * Main widgets.
+	 */
+	private FlowPanel toolbar;
+	private final KineticEditorCanvas kineticCanvas;
+	
+	/**
+	 * Special debug components.
+	 */
+	private PopupPanel jsonComparisonPanel;
+	private TextArea leftTextArea;
+	private TextArea rightTextArea;
+	
+	// --------------------------------------------------------
+	// VARIOUS VARIABLES
+	
 	/**
 	 * Reference to the client connector communicating with the server.	
 	 */
 	private KineticEditorServerRpc server;
+	
+	/**
+	 * Backup of the last loaded experiment. Since it is shared in the component's state, we have
+	 * to know when it is changed and when it is not.	
+	 */
+	private SchemaDataSource lastLoadedExperiment;
 	
 	/**
 	 * Inner GWT variables to keep track of.
@@ -35,24 +67,15 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 	private final Window.ClosingHandler closingHandler;
 	private boolean closingHandlerAdded;
 	
-	/**
-	 * Inner GWT GUI.
-	 */
-	private FlowPanel toolbar;
-	private KineticEditorCanvas kineticCanvas;
-	
-	/**
-	 * Custom widgets to remember and use in event handlers.
-	 */
-	private PopupPanel jsonComparisonPanel;
-	private TextArea leftTextArea;
-	private TextArea rightTextArea;
+	// --------------------------------------------------------
+	// CONSTRUCTOR
 	
 	public KineticEditorWidget()
 	{
 		super();
 		
 		this.server = null;
+		this.lastLoadedExperiment = null;
 		this.closingHandler = new Window.ClosingHandler()
 		{
 			/*
@@ -68,7 +91,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 				{
 					if(kineticCanvas.existsUnsavedContent())
 					{
-						closingEvent.setMessage(ClientVars.translation.confirm_KineticLeaveOrLoad());
+						closingEvent.setMessage("Are you sure? Editor content will be lost, if unsaved.");
 					}
 				}
 			}
@@ -84,7 +107,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 		this.kineticCanvas.addStyleName("showBorder");
 		
 		// then, setup the debug panel if necessary
-		if(ClientVars.DEBUG_MODE)
+		if(JSNI_SharedConfig.isDebugModeActivated())
 		{
 			setupDebugPanel();
 		}
@@ -104,7 +127,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 			Window.addWindowClosingHandler(closingHandler);
 			closingHandlerAdded = true;
 		}
-		if(ClientVars.DEBUG_MODE)
+		if(JSNI_SharedConfig.isDebugModeActivated())
 		{
 			String mainWidth = String.valueOf(this.getOffsetWidth()) + "px";
 			String halfWidth = String.valueOf(this.getOffsetWidth() / 2) + "px";
@@ -118,22 +141,9 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 		}
 	}
 	
-	@Override
-	public void setServerRPC(ServerRpc rpc)
+	public KineticEditorServerRpc getServerRPC()
 	{
-		this.server = (KineticEditorServerRpc) rpc;
-	}
-	
-	public void loadExperiment()
-	{
-		// TODO:
-		
-		// TODO: delete this eventually:
-		BoxPrototype b1 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 1", new Vector2d(10, 10), new Vector2d(200, 100));
-		BoxPrototype b2 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 2", new Vector2d(500, 10), new Vector2d(200, 100));
-		BoxPrototype b3 = this.kineticCanvas.getShapeCreator().createBox(NodeRegisterType.MANUAL, "Super box 3", new Vector2d(400, 300), new Vector2d(200, 100));
-		EdgePrototype e1 = this.kineticCanvas.getShapeCreator().createEdge(NodeRegisterType.MANUAL, b1, b2);
-		this.kineticCanvas.getEngine().registerCreated(b1, b2, b3, e1);
+		return server;
 	}
 	
 	public void setToolbarVisible(boolean visible)
@@ -142,12 +152,62 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 	}
 	
 	// ----------------------------------------------------------------------
+	// METHODS TO CALL FROM THE CONNECTOR
+	
+	public void setServerRPC(ServerRpc rpc)
+	{
+		this.server = (KineticEditorServerRpc) rpc;
+	}
+	
+	public void loadExperiment(SchemaDataSource newExperiment)
+	{
+		if(lastLoadedExperiment != newExperiment)
+		{
+			if(newExperiment != null)
+			{
+				KineticShapeCreator shapeCreator = this.kineticCanvas.getShapeCreator();
+				
+				// first convert all boxes
+				Map<Integer, BoxPrototype> guiBoxes = new HashMap<Integer, BoxPrototype>();
+				for(Integer leafBoxID : newExperiment.leafBoxes.keySet())
+				{
+					BoxPrototype guiBox = shapeCreator.createBox(NodeRegisterType.MANUAL, newExperiment.leafBoxes.get(leafBoxID));
+					guiBoxes.put(leafBoxID, guiBox);
+				}
+				
+				// then convert all edges
+				Collection<ExperimentGraphItem> allGraphItems = new ArrayList<ExperimentGraphItem>(guiBoxes.values()); // boxes should to be registered before edges
+				for(Entry<Integer, Set<Integer>> entry : newExperiment.edges.entrySet())
+				{
+					for(Integer toLeafBoxID : entry.getValue())
+					{
+						BoxPrototype fromBox = guiBoxes.get(entry.getKey());
+						BoxPrototype toBox = guiBoxes.get(toLeafBoxID);
+						allGraphItems.add(shapeCreator.createEdge(NodeRegisterType.MANUAL, fromBox, toBox));
+					}
+				}
+				
+				// put everything into Kinetic
+				this.kineticCanvas.getEngine().registerCreated(allGraphItems.toArray(new ExperimentGraphItem[0]));
+				
+				// and remember the loaded instance
+				lastLoadedExperiment = newExperiment;
+			}
+			else
+			{
+				// TODO: clear everything
+			}
+		}
+		// else - do nothing
+	}
+	
+	// ----------------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
 	private void setupToolbar()
 	{
 		this.toolbar = new FlowPanel();
-		if(ClientVars.DEBUG_MODE)
+		if(JSNI_SharedConfig.isDebugModeActivated())
 		{
 			VButton btn_setLeftTA1 = new VButton();
 			btn_setLeftTA1.setText("Set boxes layer (left)");
@@ -156,7 +216,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 				@Override
 				public void onClick(ClickEvent event)
 				{
-					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, ClientVars.jsonAttrsToSerialize));
+					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, GWTMisc.jsonAttrsToSerialize));
 				}
 			});
 			// btn_setLeftTA1.addStyleName("pointCursorOnHover");
@@ -169,7 +229,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 				@Override
 				public void onClick(ClickEvent event)
 				{
-					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_EDGES, ClientVars.jsonAttrsToSerialize));
+					leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_EDGES, GWTMisc.jsonAttrsToSerialize));
 					leftTextArea.setText(kineticCanvas.getEngine().serializeToJSON(EngineComponent.LAYER_EDGES));
 				}
 			});
@@ -183,7 +243,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 				@Override
 				public void onClick(ClickEvent event)
 				{
-					rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, ClientVars.jsonAttrsToSerialize));
+					rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, GWTMisc.jsonAttrsToSerialize));
 				}
 			});
 			// btn_setRightTA.setStyleName("pointCursorOnHover");
@@ -216,7 +276,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 					public void execute()
 					{
 						// TODO:
-						ClientVars.alertNotImplemented.execute();
+						GWTMisc.alertNotImplemented.execute();
 						
 						/*
 						server.experimentSchemaSerialized(
@@ -238,8 +298,7 @@ public class KineticEditorWidget extends VerticalPanel implements ICustomVaadinW
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				// TODO:
-				ClientVars.alertNotImplemented.execute();
+				GWTMisc.alertNotImplemented.execute();
 				
 				// kineticState.deserialize(dLayerJSON, edgeListJSON);
 				// setFocus(true);

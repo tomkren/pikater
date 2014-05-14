@@ -36,7 +36,13 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
+import org.pikater.core.agents.system.data.AgentDataSource;
+import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
+import org.pikater.core.ontology.actions.AgentInfoOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
@@ -45,17 +51,18 @@ import org.pikater.core.ontology.messages.EvaluationMethod;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.GetData;
 import org.pikater.core.ontology.messages.GetOptions;
-import org.pikater.core.ontology.messages.MessagesOntology;
 import org.pikater.core.ontology.messages.PartialResults;
 import org.pikater.core.ontology.messages.Task;
 
 import weka.core.Instances;
 
-public abstract class Agent_ComputingAgent extends PikaterAgent {
+
+public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7927583436579620995L;
+
 	protected Codec codec = new SLCodec();
 	private Ontology ontology = MessagesOntology.getInstance();
 
@@ -115,10 +122,18 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 	public abstract String getAgentType();
 
-	// public boolean loadAgent(String agentName);
 
-	protected abstract void getParameters();
+	@Override
+	public java.util.List<Ontology> getOntologies() {
 
+		java.util.List<Ontology> ontologies =
+				new java.util.ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(AgentInfoOntology.getInstance());
+
+		return ontologies;
+	}
+	
 	protected boolean registerWithDF() {
 		// register with the DF
 		if (this.getAID().getLocalName().contains("Service")){
@@ -237,7 +252,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
         getParameters();
 
         java.util.ArrayList<String> typeDescList = new java.util.ArrayList< String >();
-		typeDescList.add("ComputingAgent");
+		typeDescList.add(AgentNames.COMPUTING_AGENT);
 
         String typeDesc;
 		if (state == states.TRAINED) { // add fileName to service description
@@ -271,9 +286,27 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 		addBehaviour(send_options_behaviour = new RequestServer(this));
 		addBehaviour(execution_behaviour = new ProcessAction(this));
+		
+
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sendAgentInfo(getAgentInfo());
 
 	} // end setup
 
+
+
+	protected void getParameters() {
+		
+		//AgentInfo agentInfo = getAgentInfo();
+		//TODO:  transformation from agentInfo to parameters + send to old guiAgent
+	}
+
+	
 	public boolean setOptions(org.pikater.core.ontology.messages.Task task) {
 		/*
 		 * INPUT: task with weka options Fills the OPTIONS array and
@@ -298,29 +331,40 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 	protected ACLMessage sendGetDataReq(String fileName) {
 		AID[] ARFFReaders;
-		AID reader;
+		AID reader = null;
 		ACLMessage msgOut = null;
 		// Make the list of reader agents
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("ARFFReader");
+		sd.setType(AgentNames.ARRFF_READER);
 		template.addServices(sd);
 		try {
+			GetData get_data = new GetData();
+
 			DFAgentDescription[] result = DFService.search(this, template);
 			// System.out.println(getLocalName() + ": Found the following ARFFReader agents:");
 			ARFFReaders = new AID[result.length];
 			for (int i = 0; i < result.length; ++i) {
+				if (isSameNode(result[i].getName())) {
+					// prefer local reader for O2A transfer
+					reader = result[i].getName();
+					log("preferring reader "+reader.getName());
+					get_data.setO2a_agent(getLocalName());
+					break;
+				}
 				ARFFReaders[i] = result[i].getName();
 				// System.out.println("    " + ARFFReaders[i].getName());
 			}
-			
-			// randomly choose one of the readers
-			Random randomGenerator = new Random();		    
-		    int randomInt = randomGenerator.nextInt(result.length);
-		    reader = ARFFReaders[randomInt];
 
-		    // System.out.println(getLocalName() + ": using " + reader + ", filename: " + fileName);
-			
+			// randomly choose one of the readers if none preferred
+			if (reader == null) {
+				Random randomGenerator = new Random();
+				int randomInt = randomGenerator.nextInt(result.length);
+				reader = ARFFReaders[randomInt];
+			}
+
+			log("using reader " + reader + ", filename: " + fileName);
+
 			// request
 			msgOut = new ACLMessage(ACLMessage.REQUEST);
 			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -330,9 +374,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 			msgOut.addReceiver(reader);
 			msgOut.setConversationId("get-data_" + convId++);
 			// content
-			GetData get_data = new GetData();
 			get_data.setFile_name(fileName);
-			get_data.setO2a_agent(getLocalName());
 			Action a = new Action();
 			a.setAction(get_data);
 			a.setActor(this.getAID());
@@ -368,7 +410,7 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("GUIAgent");
+		sd.setType(AgentNames.GUI_AGENT);
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] gui_agents = DFService.search(this, template);
@@ -617,7 +659,12 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 			// init state
 
 			registerFirstState(new Behaviour(a) {
-				int next;
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -4607390644948524477L;
+				
+				//int next;
 				boolean cont;
 
 				@Override
@@ -694,6 +741,11 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 			// get train data state
 			registerState(new AchieveREInitiator(a, null) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -133823979702541803L;
+
 				public int next = NEXT_JMP;
 
 				@Override
@@ -721,7 +773,6 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 				@Override
 				public int onEnd() {
-					int next_val = next;
 					next = NEXT_JMP;
 					return next;
 				}
@@ -729,6 +780,11 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 			// get test data state
 			registerState(new AchieveREInitiator(a, null) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 2398937572588954013L;
+
 				public int next = NEXT_JMP;
 
 				@Override
@@ -758,7 +814,6 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 				@Override
 				public int onEnd() {
-					int next_val = next;
 					next = NEXT_JMP;
 					return next;
 				}
@@ -766,6 +821,11 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 			// get label data state
 			registerState(new AchieveREInitiator(a, null) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -968264895781473739L;
+
 				public int next = NEXT_JMP;
 
 				@Override
@@ -793,7 +853,6 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 				@Override
 				public int onEnd() {
-					int next_val = next;
 					next = NEXT_JMP;
 					return next;
 				}
@@ -801,6 +860,11 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 			// Train&test&label state
 			registerState(new Behaviour(a) {
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1479579948554502568L;
 
 				@Override
 				public void action() {
@@ -825,7 +889,6 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 						// int duration = (int) (end.getTime() - start.getTime());
 						
 						
-						List test_evals = new ArrayList();
 						if (state == Agent_ComputingAgent.states.TRAINED) {
 							EvaluationMethod evaluation_method = execute_action.getTask().getEvaluation_method();
 							
@@ -835,11 +898,20 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 								if (output.equals("predictions")) {
 									DataInstances di = new DataInstances();
 									di.fillWekaInstances(test);
-									labeledData.add(getPredictions(test, di));
+                                    DataInstances labeledTest=getPredictions(test, di);
+									labeledData.add(labeledTest);
+                                    //Save datasource and inform datasource manager about this particular datasource
+                                    AgentDataSource.SerializeFile(labeledTest,result_msg.getConversationId()+".labeledtest");
+                                    AgentDataSourceCommunicator dsCom=new AgentDataSourceCommunicator((PikaterAgent)myAgent,true);
+                                    dsCom.registerDataSources(result_msg.getConversationId(),new String[]{"labeledtest"});
 									if (!labelFileName.equals("")) {
 										di = new DataInstances();
 										di.fillWekaInstances(label);
-										labeledData.add(getPredictions(label, di));
+                                        DataInstances labeledPredictions=getPredictions(label, di);
+                                        //Save datasource and inform datasource manager about this particular datasource
+                                        AgentDataSource.SerializeFile(labeledPredictions,result_msg.getConversationId()+".labeledpredictions");
+                                        dsCom.registerDataSources(result_msg.getConversationId(),new String[]{"labeledpredictions"});
+										labeledData.add(labeledPredictions);
 									}
 									eval.setLabeled_data(labeledData);
 								}
@@ -864,6 +936,11 @@ public abstract class Agent_ComputingAgent extends PikaterAgent {
 
 			// send results state
 			registerState(new OneShotBehaviour(a) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -7838676822707371053L;
+
 				@Override
 				public void action() {
 

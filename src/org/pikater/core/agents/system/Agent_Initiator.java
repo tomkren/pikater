@@ -19,7 +19,8 @@ public class Agent_Initiator extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
 
-	private String fileName = "core" + System.getProperty("file.separator") + "configurationMaster.xml";
+	private String fileName = "core" + System.getProperty("file.separator")
+			+ "configurationMaster.xml";
 
 	@Override
 	protected void setup() {
@@ -48,6 +49,11 @@ public class Agent_Initiator extends PikaterAgent {
 		}
 
 		addBehaviour(new TickerBehaviour(this, 60000) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 2962563585712447816L;
+
 			Calendar cal;
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

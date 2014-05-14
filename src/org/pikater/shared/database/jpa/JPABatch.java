@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.pikater.core.ontology.batch.batchStatuses.BatchStatuses;
 
 
 @Entity
@@ -37,13 +40,14 @@ public class JPABatch extends JPAAbstractEntity{
     }
 	private String name;
 	private String note;
+	@Lob
 	private String XML;
 	@ManyToOne
 	private JPAUser owner;
 	private int priority;
 	private int totalPriority;
 	@Enumerated(EnumType.STRING)
-	private BatchStatus status;
+	private JPABatchStatus status;
 	
 	@OneToMany(cascade=CascadeType.PERSIST)
 	private List<JPAExperiment> experiments = new ArrayList<JPAExperiment>();
@@ -118,12 +122,29 @@ public class JPABatch extends JPAAbstractEntity{
 	public void setFinished(Date finished) {
 		this.finished = finished;
 	}
-	public BatchStatus getStatus() {
+	public JPABatchStatus getStatus() {
 		return status;
 	}
-	public void setStatus(BatchStatus status) {
+	public void setStatus(JPABatchStatus status) {
 		this.status = status;
 	}
+	public void setStatus(String status) {
+
+		if ( status.equals(BatchStatuses.CREATED) ) {
+			this.status = JPABatchStatus.CREATED;
+		} else if ( status.equals(BatchStatuses.WAITING) ) {
+			this.status = JPABatchStatus.WAITING;
+		} else if ( status.equals(BatchStatuses.COMPUTING) ) {
+			this.status = JPABatchStatus.STARTED;
+		} else if ( status.equals(BatchStatuses.FINISHED) ) {
+			this.status = JPABatchStatus.FINISHED;
+		} else if ( status.equals(BatchStatuses.FAILED) ) {
+			this.status = JPABatchStatus.FAILED;
+		} else {
+			throw new IllegalArgumentException("Batch status is not valid");
+		}
+	}
+
 	@Override
 	public String getEntityName() {
 		return "Batch";

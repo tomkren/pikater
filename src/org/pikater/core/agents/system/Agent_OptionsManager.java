@@ -1,9 +1,7 @@
 package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
-import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
-import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
@@ -12,24 +10,23 @@ import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
-import jade.proto.ContractNetInitiator;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.BoolSItem;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.ExecuteParameters;
@@ -57,10 +54,10 @@ public class Agent_OptionsManager extends PikaterAgent {
 	protected org.pikater.core.ontology.messages.Agent Agent;
 
 	private int task_number = 0;
-	private int max_number_of_tasks;
-	private List query_queue = new ArrayList();
-	private int number_of_current_tasks = 0;
-	private List computing_agents;  // list of AIDs
+	//private int max_number_of_tasks;
+	//private List query_queue = new ArrayList();
+	//private int number_of_current_tasks = 0;
+	//private List computing_agents;  // list of AIDs
 	private Task received_task;
 	private ACLMessage received_request = null;
 	
@@ -145,7 +142,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("Planner");
+        sd.setType(AgentNames.PLANNER);
         template.addServices(sd);
 
         try {
@@ -184,6 +181,8 @@ public class Agent_OptionsManager extends PikaterAgent {
 			// there is only one solution at the time
 			Options opt = fillOptionsWithSolution(Options, (SearchSolution)(ep.getSolutions().get(0)));
 		
+			Ontology ontology = MessagesOntology.getInstance();
+
 			// create CFP message					  		
 			request = new ACLMessage(ACLMessage.REQUEST);
 			request.setLanguage(codec.getName());
@@ -240,6 +239,8 @@ public class Agent_OptionsManager extends PikaterAgent {
 		private static final long serialVersionUID = 1902726126096385876L;
         private PikaterAgent agent;
 
+        Ontology ontology = MessagesOntology.getInstance();
+        
         private MessageTemplate reqMsgTemplate = MessageTemplate.and(
         			MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
         			MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
@@ -391,6 +392,11 @@ public class Agent_OptionsManager extends PikaterAgent {
 
 	private class StartGettingParameters extends AchieveREInitiator {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 5309424547670344991L;
+
 		public StartGettingParameters(Agent a, ACLMessage msg) {
 			super(a, msg);
             log("StartGettingParameters behavior created.", 2);
