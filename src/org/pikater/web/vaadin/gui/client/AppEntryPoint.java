@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.client;
 
-import org.pikater.web.vaadin.gui.client.managers.GWTKeyboardManager;
-import org.pikater.web.vaadin.gui.client.managers.GWTLogger;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -40,7 +40,8 @@ public class AppEntryPoint implements EntryPoint
 				if((e instanceof UmbrellaException) || (e instanceof JavaScriptException))
 				{
 					// native exceptions usually contain no useful information => send a generic "warning" instead:
-					GWTLogger.logUncaughtNativeClientException();
+					GWTLogger.logThrowable("Uncaught exception from the client", e);
+					// GWTLogger.logUncaughtNativeClientException();
 				}
 				else
 				{
