@@ -35,33 +35,52 @@
   {
   	height: 100%;
   }
-  .cellbrowser-column-cell
+  .cellbrowser-cell-container
   {
-  	width: 100%; /* this is needed for some parent containers too */
+  	width: 100%; /* this is needed for some parent containers as well as the cell itself */
+  }
+  .cellbrowser-cell
+  {
+  	width: 100%; /* CSS3: extends: cellbrowser-cell-container; */
   	min-width: 150px;
   	border-style: ridge;
   }
-  .cellbrowser-column-cell:hover
+  .cellbrowser-cell:hover
   {
   	border-style: groove;
   }
-  .cellbrowser-column-cell-inner-layout
+  .cellbrowser-cell-inner-layout
   {
   	width: 100%;
   }
-  .cellbrowser-column-cell-inner-layout-table:hover, .cellbrowser-column-cell-inner-layout-table-selected 
+  .cellbrowser-cell-inner-layout-table:hover, .cellbrowser-cell-inner-layout-table-selected 
   {
   	background-color: lightyellow;
   }
-  .cellbrowser-column-cell-component
+  .cellbrowser-cell-component
   {
   	padding-top: 3px;
   	padding-bottom: 3px;
   	margin-left: 10px;
   	margin-right: 25px;
   }
-  .cellbrowser-column-cell-image
+  .cellbrowser-cell-image
   {
+  }
+  
+  /* Experiment editor */
+  .experiment-editor
+  {
+  }
+  .experiment-editor .v-captiontext
+  {
+  	font-size: 14px;
+  	font-weight: bold;
+  }
+  .experiment-editor-kinetic-container
+  {
+  	width: 100%;
+  	height: 100%;
   }
   
   /* Miscellaneous */

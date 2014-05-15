@@ -31,4 +31,6 @@ public class MyResources
 	
 	public static final ThemeResource img_nextIcon16 = new ThemeResource("images/Arrow-Next-icon-16x16.png");
 	public static final ThemeResource img_nextIcon20 = new ThemeResource("images/Arrow-Next-icon-20x20.png");
+	public static final ThemeResource img_addIcon24 = new ThemeResource("images/add-icon-24x24.png");
+	public static final ThemeResource img_plusIcon32 = new ThemeResource("images/Plus-icon-32x32.png");
 }
