@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server;
+package org.pikater.web.vaadin.gui.server.components.cellbrowser.cell;
 
 import org.pikater.web.vaadin.gui.client.cellbrowsercellextension.CellBrowserCellExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.cellbrowsercellextension.CellBrowserCellExtensionSharedState;

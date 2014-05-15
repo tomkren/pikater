@@ -1,10 +1,14 @@
-package org.pikater.web.vaadin.upload;
+package org.pikater.web.vaadin.gui.server.components.upload;
+
+import java.io.Serializable;
 
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.UI;
 
-public class UploadState
+public class UploadState implements Serializable
 {
+	private static final long serialVersionUID = 7358164834029892739L;
+	
 	private int currentUploadsCount;
 	private PushMode originalPushMode;
 

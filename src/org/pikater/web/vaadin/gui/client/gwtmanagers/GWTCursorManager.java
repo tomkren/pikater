@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.managers;
+package org.pikater.web.vaadin.gui.client.gwtmanagers;
 
 import java.util.HashMap;
 import java.util.Map;

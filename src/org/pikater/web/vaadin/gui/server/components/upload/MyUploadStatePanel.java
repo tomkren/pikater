@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.upload;
+package org.pikater.web.vaadin.gui.server.components.upload;
 
 import com.vaadin.server.StreamVariable;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
@@ -6,7 +6,6 @@ import com.vaadin.server.StreamVariable.StreamingErrorEvent;
 import com.vaadin.server.StreamVariable.StreamingStartEvent;
 import com.wcs.wcslib.vaadin.widget.multifileupload.component.SmartMultiUpload;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStatePanel;
-import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 
 public class MyUploadStatePanel extends UploadStatePanel
 {
@@ -14,7 +13,7 @@ public class MyUploadStatePanel extends UploadStatePanel
 	
 	private UploadState uploadState;
 
-	public MyUploadStatePanel(UploadStateWindow window)
+	public MyUploadStatePanel(MyUploadStateWindow window)
     {
         super(window);
     }

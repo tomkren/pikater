@@ -1,25 +1,21 @@
-package org.pikater.web.vaadin.gui.server.components;
-
-import org.pikater.web.vaadin.upload.MyUploadStatePanel;
-import org.pikater.web.vaadin.upload.UploadState;
+package org.pikater.web.vaadin.gui.server.components.upload;
 
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.MultiFileUpload;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
-import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStatePanel;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 
 public class MyMultiUpload extends MultiFileUpload
 {
 	private static final long serialVersionUID = 1274280572318620L;
 	
-	public MyMultiUpload(UploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UploadState uploadState)
+	public MyMultiUpload(MyUploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UploadState uploadState)
     {
         super(handler, uploadStateWindow);
         
         ((MyUploadStatePanel) getUploadStatePanel()).setUploadStateInstance(uploadState);
     }
 
-    public MyMultiUpload(UploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UploadState uploadState, boolean multiple)
+    public MyMultiUpload(MyUploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UploadState uploadState, boolean multiple)
     {
         super(handler, uploadStateWindow, multiple);
         
@@ -27,8 +23,8 @@ public class MyMultiUpload extends MultiFileUpload
     }
     
     @Override
-    protected UploadStatePanel createStatePanel(UploadStateWindow uploadStateWindow)
+    protected MyUploadStatePanel createStatePanel(UploadStateWindow uploadStateWindow)
     {
-        return new MyUploadStatePanel(uploadStateWindow);
+        return new MyUploadStatePanel((MyUploadStateWindow) uploadStateWindow);
     }
 }

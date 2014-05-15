@@ -1,12 +1,9 @@
-package org.pikater.web.vaadin.upload;
+package org.pikater.web.vaadin.gui.server.components.upload;
 
 import java.io.Serializable;
 import java.util.List;
 
 import org.pikater.web.HttpContentType;
-import org.pikater.web.vaadin.gui.server.components.MyMultiUpload;
-
-import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 
 /**
  * A class wrapping multi-file upload functionality. A single instance is meant to be used in each vaadin session - when
@@ -36,7 +33,7 @@ public class MyUploads implements Serializable
 	 * One upload state window for each user. If he issues uploads from multiple upload components,
 	 * he will still see a single upload state window with all his issued uploads.
 	 */
-	private final UploadStateWindow stateWindow;
+	private final MyUploadStateWindow stateWindow;
 	
 	/**
 	 * The class providing information about how many files are currently being uploaded.
@@ -48,8 +45,8 @@ public class MyUploads implements Serializable
 	
 	public MyUploads()
 	{
-		this.stateWindow = new UploadStateWindow();
-		this.stateWindow.setWindowPosition(UploadStateWindow.WindowPosition.BOTTOM_RIGHT);
+		this.stateWindow = new MyUploadStateWindow();
+		this.stateWindow.setWindowPosition(MyUploadStateWindow.WindowPosition.BOTTOM_RIGHT);
 		this.uploadState = new UploadState();
 	}
 	
