@@ -3,6 +3,10 @@ package org.pikater.web.vaadin.gui.server.components.cellbrowser;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCell;
+import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCellSource;
+import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.DraggableCellBrowserCell;
+
 import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -11,11 +15,20 @@ public class CellBrowser extends HorizontalLayout
 {
 	private static final long serialVersionUID = 4542038527458028778L;
 	
+	public enum CellBrowserDragSelection
+	{
+		NONE,
+		ALL_CELLS,
+		LEAF_CELLS,
+		LAST_LEVEL_LEAF_CELLS;
+	}
+	
 	// -----------------------------------------------------------------
 	// FIELDS
 	
 	private static final int level_root = 0;
 	
+	private final CellBrowserDragSelection dragSelection;
 	private final ICellBrowserTreeViewModel viewModel;
 	private final Map<Integer, CellBrowserColumnInfoWrapper> columnInfos;
 	private final Map<CellBrowserCellSource, CellBrowserCellProvider> sourceToChildColumnComponentsMapping;
@@ -30,7 +43,7 @@ public class CellBrowser extends HorizontalLayout
 		{
 			// some prerequisites
 			CellBrowserCell sourceCell = (CellBrowserCell) event.getSource();
-			CellBrowserColumn parentColumn = (CellBrowserColumn) sourceCell.getParent();
+			CellBrowserColumn parentColumn = (CellBrowserColumn) ((DraggableCellBrowserCell) sourceCell.getParent()).getParent();
 			int sourceCellsLevel = parentColumn.getCellBrowserLevel();
 			
 			// actually do stuff
@@ -64,25 +77,26 @@ public class CellBrowser extends HorizontalLayout
 	// -----------------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public CellBrowser(ICellBrowserTreeViewModel viewModel, Object userRootValue)
+	public CellBrowser(ICellBrowserTreeViewModel viewModel, Object userRootValue, CellBrowserDragSelection dragSelection)
 	{
 		super();
 		
 		this.addStyleName("cellbrowser");
 		
+		this.dragSelection = dragSelection;
 		this.viewModel = viewModel;
 		this.columnInfos = new HashMap<Integer, CellBrowserColumnInfoWrapper>();
 		this.sourceToChildColumnComponentsMapping = new HashMap<CellBrowserCellSource, CellBrowserCellProvider>();
 		this.innerRootValue = new CellBrowserCellSource(userRootValue);
 		
-		recursivelyConstructComponentTree(level_root, innerRootValue, null);
+		recursivelyConstructComponentTree(level_root, innerRootValue);
 		registerComponents();
 	}
 	
 	// -----------------------------------------------------------------
 	// COMPONENT CONSTRUCTION METHODS
 	
-	private void recursivelyConstructComponentTree(int level, CellBrowserCellSource parentSource, CellBrowserCell parentCell)
+	private void recursivelyConstructComponentTree(final int level, final CellBrowserCellSource parentSource)
 	{
 		/*
 		 * IMPORTANT: at this point we assume that none of the previous levels was a leaf level (viewModel.isValueInLeafColumn()).
@@ -103,13 +117,7 @@ public class CellBrowser extends HorizontalLayout
 		
 		// fetch and construct all information and cells for this level
 		ICellBrowserCellProvider infoForThisLevel = viewModel.getChildInfoForSource(parentSource.source);
-		CellBrowserCellProvider cellProviderForThisLevel = new CellBrowserCellProvider(infoForThisLevel, sharedCellClickListener);
-		
-		// a little "flashback" - mark previous level's cell as leaf if no child sources are provided
-		if((parentCell != null) && cellProviderForThisLevel.getCells().isEmpty())
-		{
-			parentCell.setLeaf();
-		}
+		CellBrowserCellProvider cellProviderForThisLevel = new CellBrowserCellProvider(infoForThisLevel, sharedCellClickListener, dragSelection);
 		
 		// register created cells to the inner map for nice and quick future reference
 		sourceToChildColumnComponentsMapping.put(parentSource, cellProviderForThisLevel);
@@ -122,16 +130,49 @@ public class CellBrowser extends HorizontalLayout
 		 * create a new collection of these objects and references from the created children would be
 		 * useless.
 		 */
-		for(CellBrowserCell cell : cellProviderForThisLevel.getCells())
+		for(DraggableCellBrowserCell dragWrapperForCell : cellProviderForThisLevel.getChildCells())
 		{
-			if(!viewModel.isValueInLeafColumn(cell.getSourceObject().source)) // condition preventing stack overflow
+			CellBrowserCell cell = dragWrapperForCell.getWrappedCell();
+			boolean dontExpandAnymore = viewModel.isValueInLeafColumn(cell.getSourceObject().source);
+			if(!dontExpandAnymore) // do still expand
 			{
-				recursivelyConstructComponentTree(level + 1, cell.getSourceObject(), cell);
+				recursivelyConstructComponentTree(level + 1, cell.getSourceObject());
 			}
-			else
-			{
-				cell.setLeaf();
-			}
+			
+			postProcessCell(dragWrapperForCell, cell, dontExpandAnymore);
+		}
+	}
+	
+	private void postProcessCell(DraggableCellBrowserCell dragWrapper, CellBrowserCell cell, boolean isCellInLeafColumn)
+	{
+		// this is pretty self-explanatory
+		boolean isCellLeaf = isCellInLeafColumn || sourceToChildColumnComponentsMapping.get(cell.getSourceObject()).noChildCellsDefined(); 
+		if(isCellLeaf)
+		{
+			cell.setLeaf();
+		}
+		
+		// remove D&D functionality from cell if it is excluded by the desired drag selection
+		switch (dragSelection)
+		{
+			case NONE: // cell IS NOT allowed to implement D&D:
+				dragWrapper.disableDnD();
+				break;
+			case ALL_CELLS: // cell IS allowed to implement D&D and by default, it does... do nothing
+				break;
+			case LAST_LEVEL_LEAF_CELLS:
+				if(!isCellInLeafColumn)
+				{
+					dragWrapper.disableDnD();
+				}
+				break;
+			case LEAF_CELLS:
+				if(!isCellLeaf)
+				{
+					dragWrapper.disableDnD();
+				}
+			default:
+				throw new IllegalArgumentException(String.format("Drag selection '%s' not implemented yet.", dragSelection.name()));
 		}
 	}
 	

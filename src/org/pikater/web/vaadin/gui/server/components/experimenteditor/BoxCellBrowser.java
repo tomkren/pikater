@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components;
+package org.pikater.web.vaadin.gui.server.components.experimenteditor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,24 +9,27 @@ import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.shared.util.CustomOrderSet;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowser;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowserCellSource;
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.ICellBrowserTreeViewModel;
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.ICellBrowserCellProvider;
+import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowser.CellBrowserDragSelection;
+import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCellSource;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 
-public class KineticBoxCellBrowser extends CustomComponent
+public class BoxCellBrowser extends CustomComponent
 {
 	private static final long serialVersionUID = -3713343452343142549L;
 
-	public KineticBoxCellBrowser()
+	public BoxCellBrowser()
 	{
 		super();
 		
 		ICellBrowserTreeViewModel viewModel = new ICellBrowserTreeViewModel()
 		{
+			private static final long serialVersionUID = -6017232301646386206L;
+
 			@Override
 			public ICellBrowserCellProvider getChildInfoForSource(final Object value)
 			{
@@ -34,6 +37,8 @@ public class KineticBoxCellBrowser extends CustomComponent
 				{
 					return new ICellBrowserCellProvider()
 					{
+						private static final long serialVersionUID = 2631696253310693866L;
+
 						@Override
 						public CustomOrderSet<CellBrowserCellSource> getSourceObjects()
 						{
@@ -67,6 +72,8 @@ public class KineticBoxCellBrowser extends CustomComponent
 				{
 					return new ICellBrowserCellProvider()
 					{
+						private static final long serialVersionUID = -1466084171199940432L;
+
 						@Override
 						public CustomOrderSet<CellBrowserCellSource> getSourceObjects()
 						{
@@ -119,6 +126,6 @@ public class KineticBoxCellBrowser extends CustomComponent
 			}
 		};
 		
-		setCompositionRoot(new CellBrowser(viewModel, null));
+		setCompositionRoot(new CellBrowser(viewModel, null, CellBrowserDragSelection.LAST_LEVEL_LEAF_CELLS));
 	}
 }

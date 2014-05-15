@@ -1,7 +1,6 @@
-package org.pikater.web.vaadin.gui.server.components.cellbrowser;
+package org.pikater.web.vaadin.gui.server.components.cellbrowser.cell;
 
 import org.pikater.web.vaadin.MyResources;
-import org.pikater.web.vaadin.gui.server.CellBrowserCellExtension;
 
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.ui.AbstractComponent;
@@ -20,19 +19,21 @@ public class CellBrowserCell extends Panel
 	public CellBrowserCell(AbstractComponent cellComponent, CellBrowserCellSource thisCellsSource, ClickListener clickListener)
 	{
 		super();
-		setStyleName("cellbrowser-column-cell");
+		setStyleName("cellbrowser-cell");
 		
-		this.extension = new CellBrowserCellExtension("cellbrowser-column-cell-inner-layout-table-selected");
+		this.extension = new CellBrowserCellExtension("cellbrowser-cell-inner-layout-table-selected");
 		this.thisCellsSource = thisCellsSource;
 		
-		cellComponent.addStyleName("cellbrowser-column-cell-component");
+		cellComponent.addStyleName("cellbrowser-cell-component");
 		Image nextIconComponent = new Image(null, MyResources.img_nextIcon16);
-		nextIconComponent.setStyleName("cellbrowser-column-cell-image");
+		nextIconComponent.setStyleName("cellbrowser-cell-image");
 		
-		innerLayout = new CustomLayout("cellBrowserColumnCellLayout");
-		innerLayout.addStyleName("cellbrowser-column-cell-inner-layout");
+		innerLayout = new CustomLayout("cellBrowserCellLayout");
+		innerLayout.addStyleName("cellbrowser-cell-inner-layout");
 		innerLayout.addComponent(cellComponent, "component");
 		innerLayout.addComponent(nextIconComponent, "image");
+		innerLayout.setData(thisCellsSource.source); // this is solely for DnD to work
+		
 		this.extension.extend(innerLayout); // this is required for selection to work
 		
 		addClickListener(clickListener);

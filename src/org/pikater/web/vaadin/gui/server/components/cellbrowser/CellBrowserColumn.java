@@ -25,7 +25,7 @@ public class CellBrowserColumn extends VerticalLayout
 	{
 		setImmediate(false);
 		removeAllComponents();
-		addComponents(cellProvider.getCells().toArray(new CellBrowserCell[0]));
+		addComponents(cellProvider.getChildCells());
 		setImmediate(true);
 	}
 }
