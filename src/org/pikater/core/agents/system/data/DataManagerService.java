@@ -33,12 +33,12 @@ import org.pikater.core.ontology.subtrees.messages.GetTheBestAgent;
 import org.pikater.core.ontology.subtrees.messages.ImportFile;
 import org.pikater.core.ontology.subtrees.messages.SaveResults;
 import org.pikater.core.ontology.subtrees.messages.ShutdownDatabase;
-import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 public class DataManagerService extends FIPAService {
 

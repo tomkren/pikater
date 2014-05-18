@@ -25,9 +25,9 @@ import org.pikater.core.ontology.subtrees.description.IDataSaver;
 import org.pikater.core.ontology.subtrees.description.IErrorProvider;
 import org.pikater.core.ontology.subtrees.description.Recommend;
 import org.pikater.core.ontology.subtrees.description.Search;
-import org.pikater.core.ontology.subtrees.messages.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.messages.Problem;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 public class Parser {
 	

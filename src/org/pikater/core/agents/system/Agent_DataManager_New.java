@@ -26,6 +26,8 @@ import org.pikater.core.ontology.subtrees.messages.*;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Task;
 import org.postgresql.PGConnection;
 
 import java.io.*;
@@ -267,7 +269,7 @@ public class Agent_DataManager_New extends PikaterAgent {
 			// query += "\'" + durationLR + "\',";
 
 			// je to ono?
-			jparesult.setSerializedFileName(res.getResult().getObject_filename());
+			jparesult.setSerializedFileName(res.getResult().getObjectFilename());
 			// query += "\'" + res.getResult().getObject_filename() + "\', ";
 
 			// jparesult.setExperiment(TODO);

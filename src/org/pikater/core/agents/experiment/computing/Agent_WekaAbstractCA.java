@@ -12,10 +12,10 @@ import java.util.Date;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
-import org.pikater.core.ontology.subtrees.messages.Eval;
-import org.pikater.core.ontology.subtrees.messages.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.messages.Instance;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
@@ -37,7 +37,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	}
 	
 	@Override
-	protected Date train(org.pikater.core.ontology.subtrees.messages.Evaluation evaluation) throws Exception {
+	protected Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
 						
 		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){
@@ -145,7 +145,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	@Override
 	protected void evaluateCA(EvaluationMethod evaluation_method,
-			org.pikater.core.ontology.subtrees.messages.Evaluation evaluation) throws Exception{
+			org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception{
 		
 		float default_value = Float.MAX_VALUE;
 		Evaluation eval = test(evaluation_method);

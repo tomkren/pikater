@@ -43,6 +43,8 @@ import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.option.Interval;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.io.*;
 import java.text.DateFormat;

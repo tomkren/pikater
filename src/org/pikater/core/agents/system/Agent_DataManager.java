@@ -73,7 +73,6 @@ import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
 import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.messages.DeleteTempFiles;
-import org.pikater.core.ontology.subtrees.messages.Eval;
 import org.pikater.core.ontology.subtrees.messages.GetFileInfo;
 import org.pikater.core.ontology.subtrees.messages.GetFiles;
 import org.pikater.core.ontology.subtrees.messages.GetTheBestAgent;
@@ -82,12 +81,13 @@ import org.pikater.core.ontology.subtrees.messages.LoadResults;
 import org.pikater.core.ontology.subtrees.messages.SaveResults;
 import org.pikater.core.ontology.subtrees.messages.SavedResult;
 import org.pikater.core.ontology.subtrees.messages.ShutdownDatabase;
-import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
 public class Agent_DataManager extends PikaterAgent {
@@ -659,7 +659,7 @@ public class Agent_DataManager extends PikaterAgent {
 			// query += "\'" + durationLR + "\',";
 
 			// je to ono?
-			jparesult.setSerializedFileName(res.getResult().getObject_filename());
+			jparesult.setSerializedFileName(res.getResult().getObjectFilename());
 			// query += "\'" + res.getResult().getObject_filename() + "\', ";
 
 			// jparesult.setExperiment(TODO);

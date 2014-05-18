@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.messages;
+package org.pikater.core.ontology.subtrees.task;
 
 import org.pikater.core.ontology.subtrees.option.Option;
 
@@ -17,7 +17,6 @@ public class EvaluationMethod implements Concept {
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -25,7 +24,6 @@ public class EvaluationMethod implements Concept {
 	public void setOptions(List<Option> options) {
 		this.options = options;
 	}
-
 	public List<Option> getOptions() {
 		return options;
 	}

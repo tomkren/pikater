@@ -30,7 +30,6 @@ import org.pikater.core.ontology.subtrees.messages.Execute;
 import org.pikater.core.ontology.subtrees.messages.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.messages.GetParameters;
 import org.pikater.core.ontology.subtrees.messages.Id;
-import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -39,6 +38,7 @@ import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.Random;
 
@@ -49,7 +49,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 	
 	private List results = new ArrayList();
 	
-	protected org.pikater.core.ontology.subtrees.messages.Evaluation evaluation;
+	protected org.pikater.core.ontology.subtrees.task.Evaluation evaluation;
 	protected java.util.List<Option> optionsList;
 	protected org.pikater.core.ontology.subtrees.management.Agent Agent;
 
@@ -106,7 +106,7 @@ public class Agent_OptionsManager extends PikaterAgent {
             		Task t = (Task) tasks.get(0);
 					
 					// save results to the database
-					if (t.getSave_results()){						
+					if (t.getSaveResults()){						
 						DataManagerService.saveResult(myAgent, t);
 					}
 					
@@ -361,7 +361,7 @@ public class Agent_OptionsManager extends PikaterAgent {
                         results.add(t);
 
                         // save results to the database
-                        if (t.getSave_results()){
+                        if (t.getSaveResults()){
                             DataManagerService.saveResult(myAgent, t);
                         }
 

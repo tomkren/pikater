@@ -31,14 +31,14 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.messages.Duration;
-import org.pikater.core.ontology.subtrees.messages.Eval;
-import org.pikater.core.ontology.subtrees.messages.Evaluation;
-import org.pikater.core.ontology.subtrees.messages.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.messages.Execute;
 import org.pikater.core.ontology.subtrees.messages.GetDuration;
 import org.pikater.core.ontology.subtrees.messages.Id;
-import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Evaluation;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 public class Agent_Duration extends PikaterAgent {
 
@@ -360,8 +360,8 @@ public class Agent_Duration extends PikaterAgent {
 		
 		t.setEvaluation_method(em);
 		
-		t.setGet_results("after_each_computation");
-		t.setSave_results(false);
+		t.setGetResults("after_each_computation");
+		t.setSaveResults(false);
 
 		Execute ex = new Execute();
 		ex.setTask(t);

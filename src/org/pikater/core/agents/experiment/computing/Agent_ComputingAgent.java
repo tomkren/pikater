@@ -45,14 +45,14 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
-import org.pikater.core.ontology.subtrees.messages.Eval;
-import org.pikater.core.ontology.subtrees.messages.Evaluation;
-import org.pikater.core.ontology.subtrees.messages.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.messages.Execute;
 import org.pikater.core.ontology.subtrees.messages.GetData;
 import org.pikater.core.ontology.subtrees.messages.GetOptions;
 import org.pikater.core.ontology.subtrees.messages.PartialResults;
-import org.pikater.core.ontology.subtrees.messages.Task;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Evaluation;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
 
@@ -94,7 +94,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	int convId = 0;
 
 	protected String[] OPTIONS;
-	protected org.pikater.core.ontology.subtrees.messages.Task current_task = null;
+	protected org.pikater.core.ontology.subtrees.task.Task current_task = null;
 	// protected String[] OPTIONS_;
 	protected String className;
 
@@ -306,7 +306,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	}
 
 	
-	public boolean setOptions(org.pikater.core.ontology.subtrees.messages.Task task) {
+	public boolean setOptions(org.pikater.core.ontology.subtrees.task.Task task) {
 		/*
 		 * INPUT: task with weka options Fills the OPTIONS array and
 		 * current_task.
@@ -567,7 +567,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		ACLMessage result_msg;
 		Execute execute_action;
 		boolean success;
-		org.pikater.core.ontology.subtrees.messages.Evaluation eval = new Evaluation();
+		org.pikater.core.ontology.subtrees.task.Evaluation eval = new Evaluation();
 		String train_fn;
 		String test_fn;
 		String label_fn;
@@ -869,7 +869,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 				public void action() {
 					try {
 
-						List labeledData = new ArrayList();
+						java.util.List<DataInstances> labeledData = new java.util.ArrayList<DataInstances>();
 						
 						eval = new Evaluation();
 						
@@ -912,7 +912,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
                                         dsCom.registerDataSources(result_msg.getConversationId(),new String[]{"labeledpredictions"});
 										labeledData.add(labeledPredictions);
 									}
-									eval.setLabeled_data(labeledData);
+									eval.setLabeledData(labeledData);
 								}
 							}														
 						}
@@ -957,11 +957,11 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						 * catch block e.printStackTrace(); }
 						 */
 
-						if ((current_task.getSave_mode() != null && current_task
-								.getSave_mode().equals("file")) && !resurrected) {
+						if ((current_task.getSaveMode() != null && current_task
+								.getSaveMode().equals("file")) && !resurrected) {
 							try {
 								String objectFilename = saveAgentToFile();
-								eval.setObject_filename(objectFilename);
+								eval.setObjectFilename(objectFilename);
 
 							} catch (CodecException e) {
 								// TODO Auto-generated catch block
@@ -978,8 +978,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 							}
 						}
 
-						if ((current_task.getSave_mode() != null && current_task
-								.getSave_mode().equals("message"))) {
+						if ((current_task.getSaveMode() != null && current_task
+								.getSaveMode().equals("message"))) {
 							try {
 								eval.setObject(getAgentObject());
 							} catch (IOException e1) {
@@ -1016,8 +1016,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						e.printStackTrace();
 					}
 			
-					if (current_task.getGet_results().equals("after_each_task")) {								
-						result_msg.addReceiver(new AID(current_task.getGui_agent(), false));
+					if (current_task.getGetResults().equals("after_each_task")) {								
+						result_msg.addReceiver(new AID(current_task.getGuiAgent(), false));
 					}			
 					current_task.setFinish(getDateTime());
 					

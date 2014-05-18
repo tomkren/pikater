@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.subtrees.messages;
 
+import org.pikater.core.ontology.subtrees.task.Task;
+
 import jade.content.AgentAction;
 
 public class SaveResults implements AgentAction {

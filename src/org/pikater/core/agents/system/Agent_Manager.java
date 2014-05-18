@@ -60,17 +60,17 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
-import org.pikater.core.ontology.subtrees.messages.Eval;
-import org.pikater.core.ontology.subtrees.messages.Evaluation;
+import org.pikater.core.ontology.subtrees.management.GetAgents;
 import org.pikater.core.ontology.subtrees.messages.Execute;
-import org.pikater.core.ontology.subtrees.messages.GetAgents;
 import org.pikater.core.ontology.subtrees.messages.Id;
 import org.pikater.core.ontology.subtrees.messages.Problem;
 import org.pikater.core.ontology.subtrees.messages.Results;
 import org.pikater.core.ontology.subtrees.messages.Solve;
-import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Evaluation;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 public class Agent_Manager extends PikaterAgent {
 
@@ -627,10 +627,10 @@ public class Agent_Manager extends PikaterAgent {
 							task.setProblem_id(new Id(problemId));
 							task.setId(new Id(Integer.toString(task_i)));							
 							task.setStart(getDateTime()); // if sent to options manager, overwritten							
-							task.setGet_results(problem.getGet_results());
-							task.setSave_results(problem.getSave_results());
-							task.setGui_agent(problem.getGui_agent());
-							task.setProblem_name(problem.getName());
+							task.setGetResults(problem.getGet_results());
+							task.setSaveResults(problem.getSave_results());
+							task.setGuiAgent(problem.getGui_agent());
+							task.setProblemName(problem.getName());
 							task.setEvaluation_method(problem.getEvaluation_method());
 							task_i++;
 

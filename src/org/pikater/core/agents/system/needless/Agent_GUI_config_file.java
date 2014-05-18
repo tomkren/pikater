@@ -13,6 +13,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.pikater.core.ontology.subtrees.messages.*;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 public class Agent_GUI_config_file extends Agent_GUI {
 

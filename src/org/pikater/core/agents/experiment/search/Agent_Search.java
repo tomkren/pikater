@@ -11,14 +11,14 @@ import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.SearchOntology;
-import org.pikater.core.ontology.subtrees.messages.Eval;
-import org.pikater.core.ontology.subtrees.messages.Evaluation;
 import org.pikater.core.ontology.subtrees.messages.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.messages.GetOptions;
 import org.pikater.core.ontology.subtrees.messages.GetParameters;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
