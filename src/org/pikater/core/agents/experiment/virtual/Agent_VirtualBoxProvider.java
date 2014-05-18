@@ -5,7 +5,7 @@ import jade.content.onto.Ontology;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
-import org.pikater.core.ontology.actions.AgentInfoOntology;
+import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.options.CARecSearchComplex_VirtualBox;
 import org.pikater.core.options.FileInput_VirtualBox;

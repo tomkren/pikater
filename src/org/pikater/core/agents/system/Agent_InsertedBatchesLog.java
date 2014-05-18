@@ -21,8 +21,8 @@ import java.util.Date;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.actions.BatchOntology;
-import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;

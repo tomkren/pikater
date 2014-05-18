@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.management;
 
-import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.subtrees.messages.Execute;
 
 import jade.content.AgentAction;
 

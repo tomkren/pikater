@@ -19,7 +19,7 @@ import org.pikater.core.agents.system.management.ManagerAgentRequestResponder;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.actions.AgentManagementOntology;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;

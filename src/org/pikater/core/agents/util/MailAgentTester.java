@@ -2,7 +2,7 @@ package org.pikater.core.agents.util;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Mailing;
-import org.pikater.core.ontology.actions.MailingOntology;
+import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 
 import jade.content.AgentAction;

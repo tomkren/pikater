@@ -11,7 +11,7 @@ import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.configuration.Argument;
-import org.pikater.core.ontology.actions.AgentManagementOntology;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 
 /**

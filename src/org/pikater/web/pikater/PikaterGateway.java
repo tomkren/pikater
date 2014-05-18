@@ -3,9 +3,9 @@ package org.pikater.web.pikater;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.actions.BatchOntology;
-import org.pikater.core.ontology.actions.MailingOntology;
-import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.MailingOntology;
+import org.pikater.core.ontology.MessagesOntology;
 
 import jade.content.AgentAction;
 import jade.content.ContentManager;

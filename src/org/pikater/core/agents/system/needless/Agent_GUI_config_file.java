@@ -12,7 +12,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.pikater.core.ontology.messages.*;
+import org.pikater.core.ontology.subtrees.messages.*;
 
 public class Agent_GUI_config_file extends Agent_GUI {
 

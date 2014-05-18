@@ -16,7 +16,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.dataSource.DataSourcePath;
 import org.pikater.core.ontology.subtrees.dataSource.GetDataSourcePath;
 import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;

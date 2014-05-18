@@ -28,16 +28,16 @@ import java.util.Vector;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.Duration;
-import org.pikater.core.ontology.messages.Eval;
-import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.EvaluationMethod;
-import org.pikater.core.ontology.messages.Execute;
-import org.pikater.core.ontology.messages.GetDuration;
-import org.pikater.core.ontology.messages.Id;
-import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.messages.Duration;
+import org.pikater.core.ontology.subtrees.messages.Eval;
+import org.pikater.core.ontology.subtrees.messages.Evaluation;
+import org.pikater.core.ontology.subtrees.messages.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.messages.Execute;
+import org.pikater.core.ontology.subtrees.messages.GetDuration;
+import org.pikater.core.ontology.subtrees.messages.Id;
+import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 public class Agent_Duration extends PikaterAgent {

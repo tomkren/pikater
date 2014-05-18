@@ -18,7 +18,7 @@ import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.shared.logging.Logger;
 import org.pikater.shared.logging.Severity;
 import org.pikater.shared.logging.Verbosity;
-import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.MessagesOntology;
 
 import java.util.ArrayList;
 import java.util.HashMap;

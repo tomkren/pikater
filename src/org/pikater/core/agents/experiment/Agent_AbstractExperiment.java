@@ -11,7 +11,7 @@ import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.actions.AgentInfoOntology;
+import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 
 public abstract class Agent_AbstractExperiment extends PikaterAgent {

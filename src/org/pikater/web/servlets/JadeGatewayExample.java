@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.pikater.web.pikater.PikaterGateway;
 import org.pikater.web.pikater.PikaterActionInitiator;
 import org.pikater.core.agents.system.Agent_Mailing;
-import org.pikater.core.ontology.actions.MailingOntology;
+import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 
 /**

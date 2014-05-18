@@ -36,17 +36,17 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataListItem;
 import org.pikater.core.agents.system.metadata.MetadataReader;
-import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.actions.MetadataOntology;
-import org.pikater.core.ontology.messages.DataInstances;
-import org.pikater.core.ontology.messages.Eval;
-import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.EvaluationMethod;
-import org.pikater.core.ontology.messages.Execute;
-import org.pikater.core.ontology.messages.GetData;
-import org.pikater.core.ontology.messages.Id;
-import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.messages.DataInstances;
+import org.pikater.core.ontology.subtrees.messages.Eval;
+import org.pikater.core.ontology.subtrees.messages.Evaluation;
+import org.pikater.core.ontology.subtrees.messages.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.messages.Execute;
+import org.pikater.core.ontology.subtrees.messages.GetData;
+import org.pikater.core.ontology.subtrees.messages.Id;
+import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.option.Option;
@@ -155,14 +155,14 @@ public class Agent_MetadataQueen extends PikaterAgent {
     }				        
                 
     
-    org.pikater.core.ontology.messages.DataInstances processGetData(ACLMessage inform) {
+    org.pikater.core.ontology.subtrees.messages.DataInstances processGetData(ACLMessage inform) {
 		ContentElement content;
 		try {
 			content = getContentManager().extractContent(inform);
 			if (content instanceof Result) {
 				Result result = (Result) content;
-				if (result.getValue() instanceof org.pikater.core.ontology.messages.DataInstances) {
-					return (org.pikater.core.ontology.messages.DataInstances) result.getValue();
+				if (result.getValue() instanceof org.pikater.core.ontology.subtrees.messages.DataInstances) {
+					return (org.pikater.core.ontology.subtrees.messages.DataInstances) result.getValue();
 				}
 			}
 		} catch (UngroundedException e) {

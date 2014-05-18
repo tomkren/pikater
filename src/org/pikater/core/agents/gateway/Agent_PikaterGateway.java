@@ -3,10 +3,10 @@ package org.pikater.core.agents.gateway;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.actions.AgentInfoOntology;
-import org.pikater.core.ontology.actions.BatchOntology;
-import org.pikater.core.ontology.actions.MailingOntology;
-import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.MailingOntology;
+import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 
 import jade.content.AgentAction;

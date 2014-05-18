@@ -13,11 +13,11 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 
 import org.pikater.core.agents.system.Agent_ManagerAgent;
-import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.Execute;
+import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
+import org.pikater.core.ontology.subtrees.messages.Execute;
 
 import java.io.*;
 import java.sql.Timestamp;

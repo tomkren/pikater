@@ -25,12 +25,12 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
-import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.Execute;
-import org.pikater.core.ontology.messages.ExecuteParameters;
-import org.pikater.core.ontology.messages.GetParameters;
-import org.pikater.core.ontology.messages.Id;
-import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.subtrees.messages.Execute;
+import org.pikater.core.ontology.subtrees.messages.ExecuteParameters;
+import org.pikater.core.ontology.subtrees.messages.GetParameters;
+import org.pikater.core.ontology.subtrees.messages.Id;
+import org.pikater.core.ontology.subtrees.messages.Task;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -49,7 +49,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 	
 	private List results = new ArrayList();
 	
-	protected org.pikater.core.ontology.messages.Evaluation evaluation;
+	protected org.pikater.core.ontology.subtrees.messages.Evaluation evaluation;
 	protected java.util.List<Option> optionsList;
 	protected org.pikater.core.ontology.subtrees.management.Agent Agent;
 
