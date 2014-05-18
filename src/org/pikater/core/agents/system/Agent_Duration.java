@@ -340,8 +340,8 @@ public class Agent_Duration extends PikaterAgent {
 		ag.setOptions(new java.util.ArrayList<Option>());
 
 		Data d = new Data();
-		d.setTest_file_name("xxx");
-		d.setTrain_file_name(filename);
+		d.setTestFileName("xxx");
+		d.setTrainFileName(filename);
 		d.setExternal_test_file_name("xxx");
 		d.setExternal_train_file_name("xxx");
 		d.setMode("train_only");

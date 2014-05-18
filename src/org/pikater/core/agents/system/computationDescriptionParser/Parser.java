@@ -421,9 +421,9 @@ public class Parser {
     	
     	
 		Data data = new Data();
-		data.setTrain_file_name(trainDataFileHash);
+		data.setTrainFileName(trainDataFileHash);
 		data.setExternal_train_file_name(trainDataFileName);
-		data.setTest_file_name(testingDataFileHash);
+		data.setTestFileName(testingDataFileHash);
 		data.setExternal_test_file_name(testingDataFileName);
 		data.setOutput(output);
 		data.setMode("train_test");

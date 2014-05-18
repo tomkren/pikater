@@ -44,9 +44,9 @@ import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
 import org.pikater.core.ontology.subtrees.messages.Execute;
-import org.pikater.core.ontology.subtrees.messages.GetData;
 import org.pikater.core.ontology.subtrees.messages.GetOptions;
 import org.pikater.core.ontology.subtrees.messages.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -348,7 +348,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 					// prefer local reader for O2A transfer
 					reader = result[i].getName();
 					log("preferring reader "+reader.getName());
-					get_data.setO2a_agent(getLocalName());
+					get_data.setO2aAgent(getLocalName());
 					break;
 				}
 				ARFFReaders[i] = result[i].getName();
@@ -373,7 +373,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 			msgOut.addReceiver(reader);
 			msgOut.setConversationId("get-data_" + convId++);
 			// content
-			get_data.setFile_name(fileName);
+			get_data.setFileName(fileName);
 			Action a = new Action();
 			a.setAction(get_data);
 			a.setActor(this.getAID());
@@ -694,7 +694,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 					output = data.getOutput();
 					mode = data.getMode();
 					
-					train_fn = data.getTrain_file_name();
+					train_fn = data.getTrainFileName();
 					AchieveREInitiator get_train_behaviour = (AchieveREInitiator) ((ProcessAction) parent).getState(GETTRAINDATA_STATE);
 					
 					// get_train_behaviour.reset(sendGetDataReq(train_fn));
@@ -708,7 +708,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 					
 
 					if (!mode.equals("train_only")) {
-						test_fn = data.getTest_file_name();
+						test_fn = data.getTestFileName();
 						AchieveREInitiator get_test_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
 								.getState(GETTESTDATA_STATE);
 						if (!test_fn.equals(testFileName)) {
@@ -719,8 +719,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						}
 					}
 					
-					if (data.getLabel_file_name() != null) {
-						label_fn = data.getLabel_file_name();
+					if (data.getLabelFileName() != null) {
+						label_fn = data.getLabelFileName();
 						AchieveREInitiator get_label_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
 								.getState(GETLABELDATA_STATE);
 						if (!label_fn.equals(labelFileName)) {

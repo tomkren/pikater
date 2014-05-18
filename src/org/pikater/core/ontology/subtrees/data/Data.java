@@ -24,81 +24,74 @@ public class Data implements Concept {
 
 	private int guiId; // not included in ontology
 
-	public void setLabel_file_name(String label_file_name) {
-		this.labelFileName = label_file_name;
-	}
-	public String getLabel_file_name() {
+	public String getLabelFileName() {
 		return labelFileName;
 	}
-	public void setExternal_label_file_name(String external_label_file_name) {
-		this.externalLabelFileName = external_label_file_name;
+	public void setLabelFileName(String labelFileName) {
+		this.labelFileName = labelFileName;
 	}
+	
 	public String getExternal_label_file_name() {
 		return externalLabelFileName;
 	}
-	
-	public void setTrain_file_name(String train_file_name) {
-		this.internalTrainFileName = train_file_name;
+	public void setExternalLabelFileName(String externalLabelFileName) {
+		this.externalLabelFileName = externalLabelFileName;
 	}
 
-	public String getTrain_file_name() {
+	public String getTrainFileName() {
 		return internalTrainFileName;
 	}
-
-	public void setTest_file_name(String test_file_name) {
-		this.internalTestFileName = test_file_name;
+	public void setTrainFileName(String trainFileName) {
+		this.internalTrainFileName = trainFileName;
 	}
 
-	public String getTest_file_name() {
+	public String getTestFileName() {
 		return internalTestFileName;
 	}
-
-	public void setMetadata(Metadata metadata) {
-		this.metadata = metadata;
+	public void setTestFileName(String testFileName) {
+		this.internalTestFileName = testFileName;
 	}
 
 	public Metadata getMetadata() {
 		return metadata;
 	}
-
-	public void setOutput(String _output) {
-		this.output = _output;
+	public void setMetadata(Metadata metadata) {
+		this.metadata = metadata;
 	}
 
 	public String getOutput() {
 		return output;
 	}
-
-	public void setGui_id(int _gui_id) {
-		this.guiId = _gui_id;
+	public void setOutput(String _output) {
+		this.output = _output;
 	}
 
 	public int getGui_id() {
 		return guiId;
 	}
-
-	public void setMode(String mode) {
-		this.mode = mode;
+	public void setGui_id(int _gui_id) {
+		this.guiId = _gui_id;
 	}
 
 	public String getMode() {
 		return mode;
 	}
-
-	public void setExternal_train_file_name(String _external_train_file_name) {
-		this.externalTrainFileName = _external_train_file_name;
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 
 	public String getExternal_train_file_name() {
 		return externalTrainFileName;
 	}
-
-	public void setExternal_test_file_name(String _external_test_file_name) {
-		this.externalTestFileName = _external_test_file_name;
+	public void setExternal_train_file_name(String _external_train_file_name) {
+		this.externalTrainFileName = _external_train_file_name;
 	}
 
 	public String getExternal_test_file_name() {
 		return externalTestFileName;
+	}
+	public void setExternal_test_file_name(String _external_test_file_name) {
+		this.externalTestFileName = _external_test_file_name;
 	}
 	
 	public String removePath(String filename){				

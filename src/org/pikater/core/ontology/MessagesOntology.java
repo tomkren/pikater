@@ -1,6 +1,7 @@
 package org.pikater.core.ontology;
 
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.GetAgents;
 import org.pikater.core.ontology.subtrees.messages.Attribute;
@@ -10,7 +11,6 @@ import org.pikater.core.ontology.subtrees.messages.Duration;
 import org.pikater.core.ontology.subtrees.messages.Execute;
 import org.pikater.core.ontology.subtrees.messages.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.messages.Fitness;
-import org.pikater.core.ontology.subtrees.messages.GetData;
 import org.pikater.core.ontology.subtrees.messages.GetDuration;
 import org.pikater.core.ontology.subtrees.messages.GetFileInfo;
 import org.pikater.core.ontology.subtrees.messages.GetFiles;

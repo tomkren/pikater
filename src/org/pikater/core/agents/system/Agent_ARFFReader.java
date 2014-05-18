@@ -14,8 +14,8 @@ import jade.proto.AchieveREResponder;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.DataOntology;
+import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
-import org.pikater.core.ontology.subtrees.messages.GetData;
 
 import weka.core.Attribute;
 import weka.core.Instances;
@@ -73,7 +73,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 		try {
 			ContentElement content = getContentManager().extractContent(request);
 			GetData gd = (GetData) ((Action) content).getAction();
-			String file_name = gd.getFile_name();
+			String file_name = gd.getFileName();
 			int lastSlash = Math.max(Math.max(file_name.lastIndexOf("/"), file_name.lastIndexOf("\\")), 0);
 			file_name = file_name.substring(lastSlash); // trim to relative
 			DataManagerService.ensureCached(this, file_name);
@@ -99,9 +99,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 			}
 
 			Result result;
-			if (gd.getO2a_agent() != null) {
+			if (gd.getO2aAgent() != null) {
 				// log("putting o2a data to "+gd.getO2a_agent());
-				getContainerController().getAgent(gd.getO2a_agent()).putO2AObject(instances, false);
+				getContainerController().getAgent(gd.getO2aAgent()).putO2AObject(instances, false);
 				result = new Result((Action) content, true);
 			} else {
 				result = new Result((Action) content, instances);

@@ -39,9 +39,9 @@ import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
 import org.pikater.core.ontology.subtrees.messages.Execute;
-import org.pikater.core.ontology.subtrees.messages.GetData;
 import org.pikater.core.ontology.subtrees.messages.Id;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
@@ -212,7 +212,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			msgOut.addReceiver(reader);
 			// content
 			GetData get_data = new GetData();
-			get_data.setFile_name(fileName);
+			get_data.setFileName(fileName);
 			Action a = new Action();
 			a.setAction(get_data);
 			a.setActor(this.getAID());
@@ -309,8 +309,8 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		ag.setOptions(new java.util.ArrayList<Option>() );
 
 		Data d = new Data();
-		d.setTest_file_name("xxx");
-		d.setTrain_file_name(filename);
+		d.setTestFileName("xxx");
+		d.setTrainFileName(filename);
 		d.setExternal_test_file_name("xxx");
 		d.setExternal_train_file_name("xxx");
 		d.setMode("train_only");

@@ -559,7 +559,7 @@ public class Agent_Manager extends PikaterAgent {
 
 					if (next_data.getMetadata() != null) {
 						next_data.getMetadata().setInternal_name(
-								next_data.getTrain_file_name());
+								next_data.getTrainFileName());
 					}
 
 					Iterator a_itr = problem.getAgents().iterator();

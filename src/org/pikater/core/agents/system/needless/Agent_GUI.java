@@ -941,20 +941,20 @@ public abstract class Agent_GUI extends PikaterAgent {
 					Data d = new Data();
 					d.setExternal_test_file_name(_test);
 					d.setExternal_train_file_name(_train);
-					d.setTrain_file_name("data"
+					d.setTrainFileName("data"
 							+ System.getProperty("file.separator")
 							+ "files"
 							+ System.getProperty("file.separator")
 							+ DataManagerService.translateFilename(this, 1,
 									_train, null));
-					d.setTest_file_name("data"
+					d.setTestFileName("data"
 							+ System.getProperty("file.separator")
 							+ "files"
 							+ System.getProperty("file.separator")
 							+ DataManagerService.translateFilename(this, 1,
 									_test, null));
 					if (_label != null) { // if there is a file to label
-						d.setLabel_file_name("data"
+						d.setLabelFileName("data"
 								+ System.getProperty("file.separator")
 								+ "files"
 								+ System.getProperty("file.separator")
