@@ -52,6 +52,8 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	public java.util.List<Ontology> getOntologies() {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
+		
+		//ontologies.add(MessagesOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		
 		return ontologies;
@@ -74,7 +76,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
         
 		getAgentTypesFromFile();
 		
-		Ontology ontology = MessagesOntology.getInstance();
+		Ontology ontology = AgentManagementOntology.getInstance();
 		MessageTemplate mt = MessageTemplate.and(MessageTemplate
 				.MatchOntology(ontology.getName()), MessageTemplate
 				.MatchPerformative(ACLMessage.REQUEST));
