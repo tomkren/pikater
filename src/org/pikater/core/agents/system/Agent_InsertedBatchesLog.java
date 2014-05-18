@@ -23,12 +23,12 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.batch.Batch;
-import org.pikater.core.ontology.batch.ExecuteBatch;
-import org.pikater.core.ontology.batch.SaveBatch;
-import org.pikater.core.ontology.batch.SavedBatch;
-import org.pikater.core.ontology.batch.batchStatuses.BatchStatuses;
-import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batch.Batch;
+import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
+import org.pikater.core.ontology.subtrees.batch.SaveBatch;
+import org.pikater.core.ontology.subtrees.batch.SavedBatch;
+import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
+import org.pikater.core.ontology.subtrees.description.ComputationDescription;
 
 public class Agent_InsertedBatchesLog extends PikaterAgent {
 	

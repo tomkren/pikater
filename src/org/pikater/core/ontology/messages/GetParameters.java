@@ -2,8 +2,8 @@ package org.pikater.core.ontology.messages;
 
 import java.util.List;
 
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 
 import jade.content.AgentAction;
 

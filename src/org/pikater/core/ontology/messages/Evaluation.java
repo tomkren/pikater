@@ -10,27 +10,24 @@ public class Evaluation implements Concept {
 
 	private static final long serialVersionUID = 1319671908304254420L;
 
-	//private float maxValue = (float)Integer.MAX_VALUE;
-
 	private java.util.List<Eval> evaluations;
 	private Date start;
-	private String _status;
+	private String status;
 
 	private String object_filename;
 	
-	//private DataInstances data_table;
-	private List _labeled_data = new LinkedList(); // List of DataInstances
+	private List labeledData = new LinkedList(); // List of DataInstances
 
     private DataInstances data_table;
 
 	private byte [] object;  // saved agent
 
     public void setStatus(String status) {
-            _status = status;
+            this.status = status;
         }
 
     public String getStatus() {
-            return _status;
+            return status;
         }
 
     public DataInstances getData_table() {
@@ -42,11 +39,11 @@ public class Evaluation implements Concept {
 	}
 
 	public List getLabeled_data() {
-		return _labeled_data;
+		return labeledData;
 	}
 
-	public void setLabeled_data(List labeled_data) {
-		_labeled_data = labeled_data;
+	public void setLabeled_data(List labeledData) {
+		this.labeledData = labeledData;
 	}
 	
 	public void setObject_filename(String object_filename) {

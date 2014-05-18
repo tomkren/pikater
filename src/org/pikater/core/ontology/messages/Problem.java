@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.messages;
 
+import org.pikater.core.ontology.subtrees.management.Agent;
+
 import jade.content.Concept;
 import jade.util.leap.List;
 

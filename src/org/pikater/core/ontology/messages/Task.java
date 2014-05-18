@@ -1,5 +1,8 @@
 package org.pikater.core.ontology.messages;
 
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.management.Agent;
+
 import jade.content.Concept;
 
 public class Task implements Concept, Cloneable {

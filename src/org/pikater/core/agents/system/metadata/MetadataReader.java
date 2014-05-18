@@ -13,8 +13,8 @@ import java.util.List;
 import org.pikater.core.ontology.messages.Attribute;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Instance;
-import org.pikater.core.ontology.metadata.attributes.*;
-import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.attributes.*;
 
 /**
  * Class that can read metadata from the list of instances and attributes

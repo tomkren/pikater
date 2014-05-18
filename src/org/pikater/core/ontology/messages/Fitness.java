@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.messages;
 
-import org.pikater.core.ontology.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.search.SearchSolution;
 
 import jade.content.Concept;
 import jade.util.leap.List;

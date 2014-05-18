@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.surrogate.ModelInputNormalizer;
-import org.pikater.core.ontology.search.searchItems.BoolSItem;
-import org.pikater.core.ontology.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.search.searchItems.IntSItem;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
-import org.pikater.core.ontology.search.searchItems.SetSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 import weka.core.Attribute;
 import weka.core.FastVector;

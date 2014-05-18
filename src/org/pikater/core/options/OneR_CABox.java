@@ -5,8 +5,8 @@ import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.description.ComputingAgent;
 
 public class OneR_CABox {
 	

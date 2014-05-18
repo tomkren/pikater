@@ -7,7 +7,7 @@ import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.MailingOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 
 import jade.content.AgentAction;
 import jade.content.ContentManager;

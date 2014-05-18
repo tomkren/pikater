@@ -31,14 +31,14 @@ import org.pikater.core.ontology.messages.ExecuteParameters;
 import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.Id;
 import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.option.Options;
-import org.pikater.core.ontology.search.searchItems.BoolSItem;
-import org.pikater.core.ontology.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
-import org.pikater.core.ontology.search.searchItems.SetSItem;
-import org.pikater.core.ontology.search.searchItems.IntSItem;
-import org.pikater.core.ontology.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.option.Options;
+import org.pikater.core.ontology.subtrees.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 import java.util.Random;
 
@@ -51,7 +51,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 	
 	protected org.pikater.core.ontology.messages.Evaluation evaluation;
 	protected java.util.List<Option> optionsList;
-	protected org.pikater.core.ontology.messages.Agent Agent;
+	protected org.pikater.core.ontology.subtrees.management.Agent Agent;
 
 	private int task_number = 0;
 	//private int max_number_of_tasks;
@@ -203,7 +203,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 			task_number++;
 
 			// add the new options to the task
-			org.pikater.core.ontology.messages.Agent ag = received_task.getAgent();							
+			org.pikater.core.ontology.subtrees.management.Agent ag = received_task.getAgent();							
 			ag.setOptions(opt.getList());							
 			received_task.setAgent(ag);
 			ex.setTask(received_task);		

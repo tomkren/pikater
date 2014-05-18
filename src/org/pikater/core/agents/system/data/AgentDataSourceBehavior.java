@@ -11,9 +11,9 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import org.pikater.core.ontology.data.DataSourcePath;
-import org.pikater.core.ontology.data.GetDataSourcePath;
-import org.pikater.core.ontology.data.RegisterDataSourceConcept;
+import org.pikater.core.ontology.subtrees.dataSource.DataSourcePath;
+import org.pikater.core.ontology.subtrees.dataSource.GetDataSourcePath;
+import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
 
 /**
  * User: Kuba

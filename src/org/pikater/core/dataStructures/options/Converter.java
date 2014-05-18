@@ -4,7 +4,7 @@ import org.pikater.core.dataStructures.options.types.AbstractOption;
 import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.subtrees.option.Option;
 
 public abstract class Converter {
 

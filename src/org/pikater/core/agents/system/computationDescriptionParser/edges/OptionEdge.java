@@ -1,7 +1,8 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
 import jade.util.leap.ArrayList;
-import org.pikater.core.ontology.messages.option.Option;
+
+import org.pikater.core.ontology.subtrees.option.Option;
 
 /**
  * User: Kuba

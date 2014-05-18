@@ -3,7 +3,6 @@ package org.pikater.core.agents.experiment.computing;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
-
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.RBFNetwork;
@@ -16,6 +15,7 @@ import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.EvaluationMethod;
 import org.pikater.core.ontology.messages.Instance;
+import org.pikater.core.ontology.subtrees.option.Option;
 
 public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
@@ -114,9 +114,8 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		
 		if (evaluation_method.getName().equals("CrossValidation") ){
 			int folds = -1; 
-			Iterator itr = evaluation_method.getOptions().iterator();
-			while (itr.hasNext()) {
-				org.pikater.core.ontology.messages.option.Option next = (org.pikater.core.ontology.messages.option.Option) itr.next();
+			for (Option next : evaluation_method.getOptions()) {
+				
 				if (next.getName().equals("F")){
 					folds = Integer.parseInt( (String)next.getValue() );
 				}

@@ -1,6 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
-import org.pikater.core.ontology.messages.Agent;
+import org.pikater.core.ontology.subtrees.management.Agent;
 
 /**
  * User: Kuba

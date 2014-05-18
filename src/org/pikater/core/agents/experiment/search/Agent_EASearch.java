@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
-import org.pikater.core.ontology.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.EASearch_SearchBox;
 import org.pikater.core.utilities.evolution.*;
 import org.pikater.core.utilities.evolution.individuals.Individual;

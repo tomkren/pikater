@@ -19,8 +19,8 @@ import java.util.List;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.BatchOntology;
-import org.pikater.core.ontology.batch.ExecuteBatch;
-import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
+import org.pikater.core.ontology.subtrees.description.ComputationDescription;
 
 
 public class Agent_GUIKlara extends PikaterAgent {

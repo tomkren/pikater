@@ -16,13 +16,13 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.Agent;
-import org.pikater.core.ontology.messages.Data;
-import org.pikater.core.ontology.messages.option.Interval;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.metadata.GetAllMetadata;
-import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.management.Agent;
+import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.option.Interval;
+import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**

@@ -2,8 +2,8 @@ package org.pikater.core.options;
 
 import jade.util.leap.ArrayList;
 
-import org.pikater.core.ontology.agentInfo.Slot;
-import org.pikater.core.ontology.agentInfo.slotTypes.SlotTypes;
+import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 
 
 public abstract class AAA_SlotHelper {

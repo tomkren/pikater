@@ -24,8 +24,6 @@ import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
-import org.pikater.core.ontology.data.GetFile;
-import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.GetFileInfo;
 import org.pikater.core.ontology.messages.GetFiles;
@@ -34,11 +32,13 @@ import org.pikater.core.ontology.messages.ImportFile;
 import org.pikater.core.ontology.messages.SaveResults;
 import org.pikater.core.ontology.messages.ShutdownDatabase;
 import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.metadata.GetAllMetadata;
-import org.pikater.core.ontology.metadata.GetMetadata;
-import org.pikater.core.ontology.metadata.Metadata;
-import org.pikater.core.ontology.metadata.SaveMetadata;
-import org.pikater.core.ontology.metadata.UpdateMetadata;
+import org.pikater.core.ontology.subtrees.dataSource.GetFile;
+import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
+import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
+import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
+import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
 
 public class DataManagerService extends FIPAService {
 
@@ -268,8 +268,8 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 	
-        public static org.pikater.core.ontology.messages.Agent getTheBestAgent(Agent agent, String fileName) {
-            return (org.pikater.core.ontology.messages.Agent) getTheBestAgents(agent, fileName, 1).get(0);
+        public static org.pikater.core.ontology.subtrees.management.Agent getTheBestAgent(Agent agent, String fileName) {
+            return (org.pikater.core.ontology.subtrees.management.Agent) getTheBestAgents(agent, fileName, 1).get(0);
         }
         
 	public static List getTheBestAgents(Agent agent, String fileName, int number) {

@@ -1,8 +1,6 @@
 package org.pikater.core.ontology.actions;
 
-import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.Attribute;
-import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.Duration;
@@ -27,16 +25,18 @@ import org.pikater.core.ontology.messages.LoadResults;
 import org.pikater.core.ontology.messages.Method;
 import org.pikater.core.ontology.messages.PartialResults;
 import org.pikater.core.ontology.messages.Problem;
-import org.pikater.core.ontology.messages.Recommend;
 import org.pikater.core.ontology.messages.Results;
 import org.pikater.core.ontology.messages.SaveResults;
 import org.pikater.core.ontology.messages.SavedResult;
 import org.pikater.core.ontology.messages.ShutdownDatabase;
 import org.pikater.core.ontology.messages.Solve;
 import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.option.Interval;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.option.Options;
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.management.Agent;
+import org.pikater.core.ontology.subtrees.option.Interval;
+import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.option.Options;
+import org.pikater.core.ontology.subtrees.recomend.Recommend;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;

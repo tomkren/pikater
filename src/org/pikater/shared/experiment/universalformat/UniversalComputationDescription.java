@@ -2,10 +2,10 @@ package org.pikater.shared.experiment.universalformat;
 
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.FileDataSaver;
-import org.pikater.core.ontology.description.examples.SearchOnly;
-import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.description.FileDataSaver;
+import org.pikater.core.ontology.subtrees.description.examples.SearchOnly;
+import org.pikater.core.ontology.subtrees.option.Option;
 
 import com.thoughtworks.xstream.XStream;
 

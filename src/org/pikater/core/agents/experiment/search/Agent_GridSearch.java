@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.search.searchItems.BoolSItem;
-import org.pikater.core.ontology.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.search.searchItems.IntSItem;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
-import org.pikater.core.ontology.search.searchItems.SetSItem;
-import org.pikater.core.ontology.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 import org.pikater.core.options.GridSearch_SearchBox;
 
 /**

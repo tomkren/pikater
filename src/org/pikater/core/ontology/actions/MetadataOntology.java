@@ -1,8 +1,8 @@
 package org.pikater.core.ontology.actions;
 
 
-import org.pikater.core.ontology.metadata.attributes.AttributeMetadata;
-import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;

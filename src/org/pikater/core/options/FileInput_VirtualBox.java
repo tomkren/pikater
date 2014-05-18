@@ -2,10 +2,10 @@ package org.pikater.core.options;
 
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.agentInfo.Slot;
-import org.pikater.core.ontology.agentInfo.slotTypes.SlotTypes;
-import org.pikater.core.ontology.description.FileDataProvider;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
+import org.pikater.core.ontology.subtrees.description.FileDataProvider;
 
 public class FileInput_VirtualBox {
 	

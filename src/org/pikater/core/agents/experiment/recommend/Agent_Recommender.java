@@ -29,10 +29,13 @@ import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
+import org.pikater.core.ontology.actions.RecomendOntology;
 import org.pikater.core.ontology.messages.*;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.metadata.GetMetadata;
-import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.recomend.Recommend;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -47,11 +50,11 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	 */
 	private static final long serialVersionUID = 1314060594137998065L;
 
-	protected abstract org.pikater.core.ontology.messages.Agent chooseBestAgent(Data data);
+	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data data);
 	protected abstract String getAgentType();
     
-	private org.pikater.core.ontology.messages.Agent myAgentOntology =
-			new org.pikater.core.ontology.messages.Agent();
+	private org.pikater.core.ontology.subtrees.management.Agent myAgentOntology =
+			new org.pikater.core.ontology.subtrees.management.Agent();
 	
 
 
@@ -60,7 +63,8 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
+
+		ontologies.add(RecomendOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		
@@ -74,7 +78,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         
         registerWithDF("Recommender");
         
-        Ontology ontology = MessagesOntology.getInstance();
+        Ontology ontology = RecomendOntology.getInstance();
         
         // receive request
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));        
@@ -139,7 +143,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 					// else TODO - overit, jestli jsou metadata OK, pripadne vygenerovat
 					
-					org.pikater.core.ontology.messages.Agent recommended_agent = chooseBestAgent(rec.getData());
+					org.pikater.core.ontology.subtrees.management.Agent recommended_agent = chooseBestAgent(rec.getData());
                     
                     // fill options
                 	recommended_agent.setOptions(mergeOptions(recommended_agent.getOptions(), getAgentOptions(recommended_agent.getType()) ));
@@ -251,7 +255,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 			Result r = (Result) getContentManager().extractContent(inform);
 
-			return ((org.pikater.core.ontology.messages.Agent) r.getItems().get(0)).getOptions();
+			return ((org.pikater.core.ontology.subtrees.management.Agent) r.getItems().get(0)).getOptions();
 
 		} catch (CodecException ce) {
 			ce.printStackTrace();

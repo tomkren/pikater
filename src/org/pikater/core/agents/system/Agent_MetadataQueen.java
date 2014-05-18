@@ -38,7 +38,6 @@ import org.pikater.core.agents.system.metadata.MetadataListItem;
 import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
-import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;
@@ -47,9 +46,10 @@ import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.GetData;
 import org.pikater.core.ontology.messages.Id;
 import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.metadata.GetMetadata;
-import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.option.Option;
 
 public class Agent_MetadataQueen extends PikaterAgent {
 
@@ -303,8 +303,8 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		// We want to receive a reply in 10 secs
 		cfp.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 
-		org.pikater.core.ontology.messages.Agent ag =
-				new org.pikater.core.ontology.messages.Agent();
+		org.pikater.core.ontology.subtrees.management.Agent ag =
+				new org.pikater.core.ontology.subtrees.management.Agent();
 		ag.setType(agent_type);
 		ag.setOptions(new java.util.ArrayList<Option>() );
 

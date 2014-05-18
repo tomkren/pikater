@@ -21,11 +21,11 @@ import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.DataOntology;
-import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.messages.*;
-import org.pikater.core.ontology.metadata.GetAllMetadata;
-import org.pikater.core.ontology.metadata.GetMetadata;
-import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.dataSource.GetFile;
+import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
+import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.postgresql.PGConnection;
 
 import java.io.*;

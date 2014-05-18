@@ -3,8 +3,8 @@ package org.pikater.core.ontology.actions;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.option.Option;
 
 
 public class AgentInfoOntology extends BeanOntology {

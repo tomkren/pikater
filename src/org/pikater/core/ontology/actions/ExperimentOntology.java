@@ -3,7 +3,7 @@ package org.pikater.core.ontology.actions;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
-import org.pikater.core.ontology.experiment.Experiment;
+import org.pikater.core.ontology.subtrees.experiment.Experiment;
 
 
 public class ExperimentOntology extends BeanOntology {

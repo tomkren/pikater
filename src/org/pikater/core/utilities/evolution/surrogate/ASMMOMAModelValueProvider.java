@@ -10,9 +10,9 @@ import java.util.List;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 import org.pikater.core.utilities.evolution.multiobjective.MultiobjectiveFitnessEvaluator;
-import org.pikater.core.ontology.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
-import org.pikater.core.ontology.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 
 /**
  *

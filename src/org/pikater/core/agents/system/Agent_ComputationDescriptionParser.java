@@ -13,11 +13,11 @@ import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.ExperimentOntology;
 import org.pikater.core.ontology.actions.FilenameTranslationOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.batch.ExecuteBatch;
-import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.messages.Problem;
 import org.pikater.core.ontology.messages.Solve;
+import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
+import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
 
 import jade.content.Concept;
 import jade.content.ContentElement;

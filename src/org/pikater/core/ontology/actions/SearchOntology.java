@@ -1,7 +1,7 @@
 package org.pikater.core.ontology.actions;
 
-import org.pikater.core.ontology.search.SearchSolution;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;

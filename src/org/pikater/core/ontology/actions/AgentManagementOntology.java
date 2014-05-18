@@ -3,7 +3,7 @@ package org.pikater.core.ontology.actions;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
-import org.pikater.core.ontology.management.CreateAgent;
+import org.pikater.core.ontology.subtrees.management.CreateAgent;
 
 
 public class AgentManagementOntology extends BeanOntology {

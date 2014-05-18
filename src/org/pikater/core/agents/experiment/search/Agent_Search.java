@@ -16,9 +16,9 @@ import org.pikater.core.ontology.messages.ExecuteParameters;
 import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.search.searchItems.SearchItem;
-import org.pikater.core.ontology.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.search.SearchSolution;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -309,7 +309,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	protected ACLMessage getParameters(ACLMessage request) {
 		ACLMessage reply = request.createReply();
 		
-		org.pikater.core.ontology.messages.Agent agent = null;
+		org.pikater.core.ontology.subtrees.management.Agent agent = null;
 
 		String optPath = System.getProperty("user.dir") +
 			System.getProperty("file.separator") + "options" + 
@@ -331,7 +331,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 			// list of ontology.messages.Option
 			List<Option> _options = new ArrayList<Option>();
-			agent = new org.pikater.core.ontology.messages.Agent();
+			agent = new org.pikater.core.ontology.subtrees.management.Agent();
 			agent.setName(getLocalName());
 			agent.setType(getAgentType());
 			

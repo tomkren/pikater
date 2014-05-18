@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.pikater.core.ontology.batch.batchStatuses.BatchStatuses;
+import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 
 
 @Entity

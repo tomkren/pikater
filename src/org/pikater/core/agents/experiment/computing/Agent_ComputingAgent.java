@@ -43,7 +43,6 @@ import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;
@@ -53,6 +52,7 @@ import org.pikater.core.ontology.messages.GetData;
 import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.PartialResults;
 import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.subtrees.data.Data;
 
 import weka.core.Instances;
 
@@ -81,7 +81,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	public boolean hasGotRightData = false;
 
 	// protected Vector<MyWekaOption> Options;
-	protected org.pikater.core.ontology.messages.Agent agent_options = null;
+	protected org.pikater.core.ontology.subtrees.management.Agent agent_options = null;
 
 	protected Instances data; // data read from fileName file
 	Instances train;
@@ -684,7 +684,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 					setOptions(execute_action.getTask());
 					
 					// set agent name in Task
-					org.pikater.core.ontology.messages.Agent agent = current_task.getAgent();
+					org.pikater.core.ontology.subtrees.management.Agent agent = current_task.getAgent();
 					agent.setName(getLocalName());
 					current_task.setAgent(agent);
 					
@@ -1069,10 +1069,10 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		return data;
 	}
 
-	private org.pikater.core.ontology.messages.Agent getAgentWithFilledObject()
+	private org.pikater.core.ontology.subtrees.management.Agent getAgentWithFilledObject()
 			throws IOException {
 
-		org.pikater.core.ontology.messages.Agent savedAgent = current_task.getAgent();
+		org.pikater.core.ontology.subtrees.management.Agent savedAgent = current_task.getAgent();
 		savedAgent.setObject(getAgentObject());
 
 		return savedAgent;
@@ -1081,7 +1081,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	private String saveAgentToFile() throws IOException, CodecException,
 			OntologyException, FIPAException {
 
-		org.pikater.core.ontology.management.SaveAgent saveAgent = new org.pikater.core.ontology.management.SaveAgent();
+		org.pikater.core.ontology.subtrees.management.SaveAgent saveAgent = new org.pikater.core.ontology.subtrees.management.SaveAgent();
 
 		saveAgent.setAgent(getAgentWithFilledObject());
 

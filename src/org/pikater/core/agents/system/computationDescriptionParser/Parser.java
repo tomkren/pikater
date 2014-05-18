@@ -10,24 +10,24 @@ import java.util.List;
 import org.pikater.core.agents.system.Agent_ComputationDescriptionParser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemItem;
-import org.pikater.core.ontology.description.CARecSearchComplex;
-import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.ontology.description.DataProcessing;
-import org.pikater.core.ontology.description.DataSourceDescription;
-import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.FileDataSaver;
-import org.pikater.core.ontology.description.IComputationElement;
-import org.pikater.core.ontology.description.IComputingAgent;
-import org.pikater.core.ontology.description.IDataProvider;
-import org.pikater.core.ontology.description.IDataSaver;
-import org.pikater.core.ontology.description.IErrorProvider;
-import org.pikater.core.ontology.description.Recommend;
-import org.pikater.core.ontology.description.Search;
-import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.EvaluationMethod;
 import org.pikater.core.ontology.messages.Problem;
-import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.description.CARecSearchComplex;
+import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.description.ComputingAgent;
+import org.pikater.core.ontology.subtrees.description.DataProcessing;
+import org.pikater.core.ontology.subtrees.description.DataSourceDescription;
+import org.pikater.core.ontology.subtrees.description.FileDataProvider;
+import org.pikater.core.ontology.subtrees.description.FileDataSaver;
+import org.pikater.core.ontology.subtrees.description.IComputationElement;
+import org.pikater.core.ontology.subtrees.description.IComputingAgent;
+import org.pikater.core.ontology.subtrees.description.IDataProvider;
+import org.pikater.core.ontology.subtrees.description.IDataSaver;
+import org.pikater.core.ontology.subtrees.description.IErrorProvider;
+import org.pikater.core.ontology.subtrees.description.Recommend;
+import org.pikater.core.ontology.subtrees.description.Search;
+import org.pikater.core.ontology.subtrees.option.Option;
 
 public class Parser {
 	
@@ -259,15 +259,15 @@ public class Parser {
 
     	IComputingAgent iComputingAgent = complex.getComputingAgent();
     	ComputingAgent computingAgentO = (ComputingAgent) iComputingAgent;
-    	org.pikater.core.ontology.messages.Agent computingAgent = 
+    	org.pikater.core.ontology.subtrees.management.Agent computingAgent = 
     			processAgent(computingAgentO, problemID);
 
     	Search searchAgentO = complex.getSearch();
-    	org.pikater.core.ontology.messages.Agent searchAgent =
+    	org.pikater.core.ontology.subtrees.management.Agent searchAgent =
     			processSearch(searchAgentO);
 
     	Recommend recommenderO = complex.getRecommender();
-    	org.pikater.core.ontology.messages.Agent recommendeAgent =
+    	org.pikater.core.ontology.subtrees.management.Agent recommendeAgent =
     			processRecommender(recommenderO);
 
     	Data data = processData(computingAgentO, output);
@@ -284,7 +284,7 @@ public class Parser {
 		ArrayList datas = new ArrayList();
 		datas.add(data);
 
-		ArrayList optionsMethod = new ArrayList();
+		java.util.List<Option> optionsMethod = new java.util.ArrayList<Option>();
 		if (optionF != null) {
 			optionsMethod.add(optionF);
 		}
@@ -323,7 +323,7 @@ public class Parser {
     	return item;
 	}
     
-    public org.pikater.core.ontology.messages.Agent processSearch (Search search) {
+    public org.pikater.core.ontology.subtrees.management.Agent processSearch (Search search) {
  
     	agent.log("Ontology Parser - Search");
     	
@@ -355,7 +355,7 @@ public class Parser {
 		if (optionN != null) {
 			optionsSearchMethod.add(optionN);
 		}		
-		org.pikater.core.ontology.messages.Agent searchAgent = new org.pikater.core.ontology.messages.Agent();
+		org.pikater.core.ontology.subtrees.management.Agent searchAgent = new org.pikater.core.ontology.subtrees.management.Agent();
 		searchAgent.setName(searchMethod);
 		searchAgent.setType(searchMethod);
 		searchAgent.setOptions(optionsSearchMethod);
@@ -363,7 +363,7 @@ public class Parser {
 		return searchAgent;
     }
     
-    public org.pikater.core.ontology.messages.Agent processRecommender (Recommend recommender) {
+    public org.pikater.core.ontology.subtrees.management.Agent processRecommender (Recommend recommender) {
 
     	agent.log("Ontology Parser - Recommender");
 
@@ -376,8 +376,8 @@ public class Parser {
     	
     	java.util.List<Option> options = recommender.getOptions();
     	
-		org.pikater.core.ontology.messages.Agent method =
-				new org.pikater.core.ontology.messages.Agent();
+		org.pikater.core.ontology.subtrees.management.Agent method =
+				new org.pikater.core.ontology.subtrees.management.Agent();
 		method.setName(recommenderClass);
 		method.setType(recommenderClass);
 		method.setOptions(options);
@@ -432,7 +432,7 @@ public class Parser {
 		return data;
     }
 
-    public org.pikater.core.ontology.messages.Agent processAgent (ComputingAgent computingAgent, int problemID) {
+    public org.pikater.core.ontology.subtrees.management.Agent processAgent (ComputingAgent computingAgent, int problemID) {
 
     	agent.log("Ontology Parser - ComputingAgent");
 
@@ -442,7 +442,7 @@ public class Parser {
 				
 		java.util.List<Option> optionsCompAgent = computingAgent.getOptions();
 
-		org.pikater.core.ontology.messages.Agent compAgentO = new org.pikater.core.ontology.messages.Agent();
+		org.pikater.core.ontology.subtrees.management.Agent compAgentO = new org.pikater.core.ontology.subtrees.management.Agent();
 		compAgentO.setType(computingAgent.getModelClass());
 		compAgentO.setGui_id(String.valueOf(problemID));
 		compAgentO.setOptions(optionsCompAgent);

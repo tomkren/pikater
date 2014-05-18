@@ -35,13 +35,14 @@ import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
-import org.pikater.core.ontology.management.CreateAgent;
 import org.pikater.core.ontology.messages.*;
-import org.pikater.core.ontology.messages.option.Interval;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.metadata.GetMetadata;
-import org.pikater.core.ontology.metadata.Metadata;
-import org.pikater.core.ontology.management.LoadAgent;
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.management.CreateAgent;
+import org.pikater.core.ontology.subtrees.management.LoadAgent;
+import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.option.Interval;
+import org.pikater.core.ontology.subtrees.option.Option;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -232,8 +233,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 		ContentElement content = getContentManager().extractContent(reply);
 		if (content instanceof Result) {
 			Result result = (Result) content;
-			if (result.getValue() instanceof org.pikater.core.ontology.messages.Agent) {
-				org.pikater.core.ontology.messages.Agent agent = (org.pikater.core.ontology.messages.Agent) result
+			if (result.getValue() instanceof org.pikater.core.ontology.subtrees.management.Agent) {
+				org.pikater.core.ontology.subtrees.management.Agent agent = (org.pikater.core.ontology.subtrees.management.Agent) result
 						.getValue();
 				options = agent.getOptions();
 			}
@@ -297,9 +298,9 @@ public abstract class Agent_GUI extends PikaterAgent {
 					if (content instanceof Result) {
 						Result result = (Result) content;
 
-						if (result.getValue() instanceof org.pikater.core.ontology.messages.Agent) {
+						if (result.getValue() instanceof org.pikater.core.ontology.subtrees.management.Agent) {
 
-							org.pikater.core.ontology.messages.Agent agent = (org.pikater.core.ontology.messages.Agent) result
+							org.pikater.core.ontology.subtrees.management.Agent agent = (org.pikater.core.ontology.subtrees.management.Agent) result
 									.getValue();
 
 							refreshOptions(agent, inform.getPerformative());
@@ -320,7 +321,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			}
 
 			protected void handleRefuse(ACLMessage refuse) {
-				org.pikater.core.ontology.messages.Agent agent = new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.subtrees.management.Agent agent = new org.pikater.core.ontology.subtrees.management.Agent();
 				agent.setName(refuse.getSender().getName());
 
 				System.out.println(getLocalName() + ": Agent "
@@ -340,7 +341,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 				Iterator receivers = request.getAllIntendedReceiver();
 				String agentName = ((AID) receivers.next()).getLocalName();
 
-				org.pikater.core.ontology.messages.Agent agent = new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.subtrees.management.Agent agent = new org.pikater.core.ontology.subtrees.management.Agent();
 				agent.setName(agentName);
 
 				if (failure.getSender().equals(myAgent.getAMS())) {
@@ -726,7 +727,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 				// find the given agent
 				Iterator itr = next_problem.getAgents().iterator();
 				while (itr.hasNext()) {
-					org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) itr
+					org.pikater.core.ontology.subtrees.management.Agent next_agent = (org.pikater.core.ontology.subtrees.management.Agent) itr
 							.next();
 					if (Integer.parseInt(next_agent.getGui_id()) == _agent_id) {
 						next_problem.getAgents().remove(next_agent);
@@ -770,7 +771,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			Problem next_problem = (Problem) pe.nextElement();
 			if (next_problem.getStatus().equals("new")) {
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
-					org.pikater.core.ontology.messages.Agent agent = new org.pikater.core.ontology.messages.Agent();
+					org.pikater.core.ontology.subtrees.management.Agent agent = new org.pikater.core.ontology.subtrees.management.Agent();
 					agent.setName(name);
 					agent.setType(type);
 					agent.setGui_id(Integer.toString(_agent_id));
@@ -802,7 +803,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
 					Iterator itr = next_problem.getAgents().iterator();
 					while (itr.hasNext()) {
-						org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) itr
+						org.pikater.core.ontology.subtrees.management.Agent next_agent = (org.pikater.core.ontology.subtrees.management.Agent) itr
 								.next();
 						// find the right agent
 						if (Integer.parseInt(next_agent.getGui_id()) == _agent_id) {
@@ -865,7 +866,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (next_problem.getStatus().equals("new")) {
 
 				if (Integer.parseInt(next_problem.getGui_id()) == _problem_id) {
-					org.pikater.core.ontology.messages.Agent method = next_problem
+					org.pikater.core.ontology.subtrees.management.Agent method = next_problem
 							.getMethod();
 
 					Option option = new Option();
@@ -893,7 +894,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 					EvaluationMethod evaluation_method = new EvaluationMethod();
 					evaluation_method.setName(name);
-					evaluation_method.setOptions(new ArrayList());
+					evaluation_method.setOptions(new java.util.ArrayList<Option>());
 					next_problem.setEvaluation_method(evaluation_method);
 				}
 			}
@@ -919,7 +920,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 					option.setUser_value(option_value);
 					option.setValue(option_value);
 
-					List options = evaluation_method.getOptions();
+					java.util.List<Option> options = evaluation_method.getOptions();
 					options.add(option);
 					evaluation_method.setOptions(options);
 				}
@@ -1013,7 +1014,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (Integer.parseInt(next_problem.getGui_id()) == problem_id
 					&& next_problem.getStatus().equals("new")) {
 
-				org.pikater.core.ontology.messages.Agent method = new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.subtrees.management.Agent method = new org.pikater.core.ontology.subtrees.management.Agent();
 				method.setType(name);
 				method.setOptions(new java.util.ArrayList<Option>());
 
@@ -1044,7 +1045,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 			if (Integer.parseInt(next_problem.getGui_id()) == problem_id
 					&& next_problem.getStatus().equals("new")) {
 
-				org.pikater.core.ontology.messages.Agent recommender = new org.pikater.core.ontology.messages.Agent();
+				org.pikater.core.ontology.subtrees.management.Agent recommender = new org.pikater.core.ontology.subtrees.management.Agent();
 				recommender.setType(name);
 				// method.setOptions(new ArrayList());
 
@@ -1069,7 +1070,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 				boolean done = true;
 				Iterator aitr = next_problem.getAgents().iterator();
 				while (aitr.hasNext()) {
-					org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) aitr
+					org.pikater.core.ontology.subtrees.management.Agent next_agent = (org.pikater.core.ontology.subtrees.management.Agent) aitr
 							.next();
 
 					String type = "";
@@ -1117,7 +1118,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		}
 	}
 
-	private void refreshOptions(org.pikater.core.ontology.messages.Agent agent,
+	private void refreshOptions(org.pikater.core.ontology.subtrees.management.Agent agent,
 			int performative) {
 		// refresh options in all problems, where the agent is involved
 
@@ -1128,7 +1129,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 					Iterator aitr = next_problem.getAgents().iterator();
 					while (aitr.hasNext()) {
-						org.pikater.core.ontology.messages.Agent next_agent = (org.pikater.core.ontology.messages.Agent) aitr
+						org.pikater.core.ontology.subtrees.management.Agent next_agent = (org.pikater.core.ontology.subtrees.management.Agent) aitr
 								.next();
 
 						// all problems where the agent (input parameter)
@@ -1170,8 +1171,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 	} // end refreshOptions
 
 	private java.util.List<Option> _refreshOptions(
-			org.pikater.core.ontology.messages.Agent next_agent,
-			org.pikater.core.ontology.messages.Agent agent, Problem next_problem) {
+			org.pikater.core.ontology.subtrees.management.Agent next_agent,
+			org.pikater.core.ontology.subtrees.management.Agent agent, Problem next_problem) {
 
 		if (agent.getOptions() == null) {
 			return new java.util.ArrayList<Option>();

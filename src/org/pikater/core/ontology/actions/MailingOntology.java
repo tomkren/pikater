@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.actions;
 
-import org.pikater.core.ontology.mailing.SendEmail;
+import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;

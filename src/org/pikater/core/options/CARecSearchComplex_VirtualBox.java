@@ -1,10 +1,10 @@
 package org.pikater.core.options;
 
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.agentInfo.Slot;
-import org.pikater.core.ontology.agentInfo.slotTypes.SlotTypes;
-import org.pikater.core.ontology.description.CARecSearchComplex;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
+import org.pikater.core.ontology.subtrees.description.CARecSearchComplex;
 
 public class CARecSearchComplex_VirtualBox {
 

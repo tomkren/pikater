@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.pikater.core.ontology.experiment.experimentStatuses.ExperimentStatuses;
+import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 
 @Entity
 @Table(name="Experiment_20140430")

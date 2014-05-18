@@ -1,8 +1,8 @@
 package org.pikater.core.options;
 
 import org.pikater.core.agents.experiment.computing.Agent_ZeroRCA;
-import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.description.ComputingAgent;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.description.ComputingAgent;
 
 public class ZeroR_CABox {
 	
