@@ -58,6 +58,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.AgentManagementOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
+import org.pikater.core.ontology.actions.SearchOntology;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;
@@ -82,6 +83,7 @@ public class Agent_Manager extends PikaterAgent {
 
 		ontologies.add(MessagesOntology.getInstance());
 		
+		ontologies.add(SearchOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		

@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.util.List;
 import java.util.ArrayList;
 
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
+import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.actions.SearchOntology;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.ExecuteParameters;
 import org.pikater.core.ontology.messages.GetParameters;
@@ -52,6 +53,18 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	protected abstract boolean finished();
 	protected abstract void updateFinished(float[][] evaluations);
 	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
+	
+	
+	@Override
+	public java.util.List<Ontology> getOntologies() {
+			
+		java.util.List<Ontology> ontologies =
+				new java.util.ArrayList<Ontology>();
+		ontologies.add(SearchOntology.getInstance());
+		ontologies.add(AgentInfoOntology.getInstance());
+		
+		return ontologies;
+	}
 	
 	protected void setup() {
 
