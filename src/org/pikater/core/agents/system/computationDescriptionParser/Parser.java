@@ -25,7 +25,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.IErrorProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.data.Data;
-import org.pikater.core.ontology.subtrees.messages.Problem;
+import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 

@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.attribute.Instance;
-import org.pikater.core.ontology.subtrees.messages.DataInstances;
+import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;

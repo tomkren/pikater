@@ -40,7 +40,7 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
-import org.pikater.core.ontology.subtrees.messages.DataInstances;
+import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.option.Option;
@@ -155,14 +155,14 @@ public class Agent_MetadataQueen extends PikaterAgent {
     }				        
                 
     
-    org.pikater.core.ontology.subtrees.messages.DataInstances processGetData(ACLMessage inform) {
+    org.pikater.core.ontology.subtrees.dataInstance.DataInstances processGetData(ACLMessage inform) {
 		ContentElement content;
 		try {
 			content = getContentManager().extractContent(inform);
 			if (content instanceof Result) {
 				Result result = (Result) content;
-				if (result.getValue() instanceof org.pikater.core.ontology.subtrees.messages.DataInstances) {
-					return (org.pikater.core.ontology.subtrees.messages.DataInstances) result.getValue();
+				if (result.getValue() instanceof org.pikater.core.ontology.subtrees.dataInstance.DataInstances) {
+					return (org.pikater.core.ontology.subtrees.dataInstance.DataInstances) result.getValue();
 				}
 			}
 		} catch (UngroundedException e) {

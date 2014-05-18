@@ -62,7 +62,7 @@ import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.experiment.Solve;
 import org.pikater.core.ontology.subtrees.management.GetAgents;
-import org.pikater.core.ontology.subtrees.messages.Problem;
+import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
 import org.pikater.core.ontology.subtrees.result.Results;

@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.experiment;
 
-import org.pikater.core.ontology.subtrees.messages.Problem;
+import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
 
 import jade.content.Concept;
 

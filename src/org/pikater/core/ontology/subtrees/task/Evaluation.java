@@ -2,9 +2,10 @@ package org.pikater.core.ontology.subtrees.task;
 
 import java.util.Date;
 
-import org.pikater.core.ontology.subtrees.messages.DataInstances;
+import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 
 import jade.content.Concept;
+
 import java.util.LinkedList;
 import java.util.List;
 

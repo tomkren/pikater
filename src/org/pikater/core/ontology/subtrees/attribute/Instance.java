@@ -4,7 +4,7 @@ import jade.content.Concept;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.messages.DataInstances;
+import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 
 public class Instance implements Concept {
 	/**

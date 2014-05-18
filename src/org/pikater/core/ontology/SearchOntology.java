@@ -1,5 +1,7 @@
 package org.pikater.core.ontology;
 
+import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
+import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 
@@ -25,6 +27,8 @@ public class SearchOntology extends BeanOntology {
             String searchItemPackage = SearchItem.class.getPackage().getName();
             
             add(SearchSolution.class);
+            add(ExecuteParameters.class);
+            add(GetParameters.class);
 
             add(searchItemPackage);
             

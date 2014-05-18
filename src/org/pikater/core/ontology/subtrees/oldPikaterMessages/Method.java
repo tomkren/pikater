@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.messages;
+package org.pikater.core.ontology.subtrees.oldPikaterMessages;
 
 import org.pikater.core.ontology.subtrees.option.Option;
 

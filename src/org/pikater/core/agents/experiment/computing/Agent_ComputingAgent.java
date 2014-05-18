@@ -45,7 +45,7 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
-import org.pikater.core.ontology.subtrees.messages.DataInstances;
+import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.result.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -623,21 +623,21 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		}
 
 		/* Extract data from INFORM message (ARFF reader) */
-		org.pikater.core.ontology.subtrees.messages.DataInstances processGetData(ACLMessage inform) {
+		org.pikater.core.ontology.subtrees.dataInstance.DataInstances processGetData(ACLMessage inform) {
 			ContentElement content;
 			try {
 				content = getContentManager().extractContent(inform);
 				if (content instanceof Result) {
 					Result result = (Result) content;
-					if (result.getValue() instanceof org.pikater.core.ontology.subtrees.messages.DataInstances) {
-						return (org.pikater.core.ontology.subtrees.messages.DataInstances) result.getValue();
+					if (result.getValue() instanceof org.pikater.core.ontology.subtrees.dataInstance.DataInstances) {
+						return (org.pikater.core.ontology.subtrees.dataInstance.DataInstances) result.getValue();
 					} else if (result.getValue() instanceof Boolean) {
 						// log("getting o2a data");
 						Object o = getO2AObject();
 						if (o == null)
 							throw new IllegalStateException("received GetData response without o2a object in queue");
 						else
-							return (org.pikater.core.ontology.subtrees.messages.DataInstances) o;
+							return (org.pikater.core.ontology.subtrees.dataInstance.DataInstances) o;
 					} else {
 						throw new IllegalStateException("received unexpected Inform");
 					}
@@ -749,7 +749,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 				@Override
 				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.messages.DataInstances _train = processGetData(inform);
+					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _train = processGetData(inform);
 					if (_train != null) {
 						trainFileName = train_fn;
 						onto_train = _train;
@@ -788,7 +788,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 				@Override
 				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.messages.DataInstances _test = processGetData(inform);
+					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _test = processGetData(inform);
 					if (_test != null) {
 						testFileName = test_fn;
 						onto_test = _test;
@@ -829,7 +829,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 				@Override
 				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.messages.DataInstances _label = processGetData(inform);
+					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _label = processGetData(inform);
 					if (_label != null) {
 						labelFileName = label_fn;
 						onto_label = _label;

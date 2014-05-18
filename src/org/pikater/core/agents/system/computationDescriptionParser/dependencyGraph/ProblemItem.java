@@ -2,7 +2,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.messages.Problem;
+import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
 
 public class ProblemItem {
 
