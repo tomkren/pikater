@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.messages;
+package org.pikater.core.ontology.subtrees.search;
 
 import java.util.List;
 
