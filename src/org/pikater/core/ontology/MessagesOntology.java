@@ -2,6 +2,7 @@ package org.pikater.core.ontology;
 
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
+import org.pikater.core.ontology.subtrees.database.ShutdownDatabase;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.GetAgents;
 import org.pikater.core.ontology.subtrees.messages.Attribute;
@@ -27,7 +28,6 @@ import org.pikater.core.ontology.subtrees.messages.Problem;
 import org.pikater.core.ontology.subtrees.messages.Results;
 import org.pikater.core.ontology.subtrees.messages.SaveResults;
 import org.pikater.core.ontology.subtrees.messages.SavedResult;
-import org.pikater.core.ontology.subtrees.messages.ShutdownDatabase;
 import org.pikater.core.ontology.subtrees.messages.Solve;
 import org.pikater.core.ontology.subtrees.option.Interval;
 import org.pikater.core.ontology.subtrees.option.Option;

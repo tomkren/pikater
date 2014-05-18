@@ -22,6 +22,7 @@ import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.dataSource.GetFile;
+import org.pikater.core.ontology.subtrees.database.ShutdownDatabase;
 import org.pikater.core.ontology.subtrees.messages.*;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;

@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.messages;
+package org.pikater.core.ontology.subtrees.database;
 
 import jade.content.Concept;
 
