@@ -20,7 +20,7 @@ import jade.proto.AchieveREInitiator;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
-import jade.util.leap.ArrayList;
+// import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
@@ -31,8 +31,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -63,7 +65,13 @@ public class Agent_Manager extends PikaterAgent {
 	private boolean no_xml_output = true;
 	private Set<Subscription> subscriptions = new HashSet<Subscription>();
 	private int problem_i = 0;
+	protected HashMap<Integer, ComputationCollectionItem> computationCollection = 
+			new HashMap<Integer, ComputationCollectionItem>();
 	
+	
+	public ComputationCollectionItem getComputation(Integer id){
+		return computationCollection.get(id);
+	}
 	
 	protected void setup() {
 
@@ -94,7 +102,7 @@ public class Agent_Manager extends PikaterAgent {
 	} // end setup
 	
 	
-	protected class ExecuteTask extends AchieveREInitiator{
+	public class ExecuteTask extends AchieveREInitiator{
 
 		private static final long serialVersionUID = -2044738642107219180L;
 
@@ -103,7 +111,7 @@ public class Agent_Manager extends PikaterAgent {
 								// gui agent);
 								// to be able to send a reply
 		
-		public ExecuteTask(PikaterAgent a, ACLMessage req, ACLMessage msg) {
+		public ExecuteTask(Agent_Manager a, ACLMessage req, ACLMessage msg) {
 			super(a, req);
 			this.msg = msg;
 		}
@@ -427,7 +435,7 @@ public class Agent_Manager extends PikaterAgent {
 	}
 	
 	
-	protected ACLMessage execute2Message(Execute execute) {		
+	public ACLMessage execute2Message(Execute execute) {		
 		// create ACLMessage from Execute ontology action
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
