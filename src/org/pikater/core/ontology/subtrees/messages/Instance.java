@@ -2,41 +2,36 @@ package org.pikater.core.ontology.subtrees.messages;
 
 import jade.content.Concept;
 import jade.util.leap.Iterator;
-import jade.util.leap.List;
+import java.util.List;
 
 public class Instance implements Concept {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -767943628175500132L;
-	private List values;// Double[]
-	private List missing;// Boolean[]
+	private List<Double> values;// Double[]
+	private List<Boolean> missing;// Boolean[]
 
 	/**
 	 * @return the values
 	 */
-	public List getValues() {
+	public List<Double> getValues() {
 		return values;
 	}
-
 	/**
 	 * @param values
 	 *            the values to set
 	 */
-	public void setValues(List values) {
+	public void setValues(List<Double> values) {
 		this.values = values;
 	}
 
-	/*
-	 * public void print() { Iterator itr = values.iterator();
-	 * while(itr.hasNext()){ System.out.print((Double)itr.next()+" "); } }
-	 */
 
-	public List getMissing() {
+	public List<Boolean> getMissing() {
 		return missing;
 	}
 
-	public void setMissing(List missing) {
+	public void setMissing(List<Boolean> missing) {
 		this.missing = missing;
 	}
 
@@ -51,14 +46,15 @@ public class Instance implements Concept {
 			return "\n";
 		}
 		StringBuffer text = new StringBuffer();
-		Iterator itrval = values.iterator();
-		Iterator itrmis = missing.iterator();
-		Iterator itratt = _insts.getAttributes().iterator();
+
 		int i = 0;
-		while (itrval.hasNext()) {
-			boolean missing = (Boolean) itrmis.next();
-			double value = (Double) itrval.next();
-			Attribute attr = (Attribute) itratt.next();
+
+		for (int indexI = 0; indexI < values.size(); indexI++) {
+
+			boolean missing = getMissing().get(indexI);
+			double value = getValues().get(indexI);
+			Attribute attr = _insts.getAttributes().get(indexI);
+			
 			if (i > 0) {
 				text.append(',');
 			}

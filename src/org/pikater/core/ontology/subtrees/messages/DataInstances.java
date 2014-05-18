@@ -1,18 +1,18 @@
 package org.pikater.core.ontology.subtrees.messages;
 
 import jade.content.Concept;
-import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
-import jade.util.leap.List;
 import weka.core.FastVector;
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class DataInstances implements Concept {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4166896666680482675L;
-	private List attributes;
-	private List instances;
+	private List<Attribute> attributes;
+	private List<Instance> instances;
 	private String name;
 	private int class_index;
 
@@ -34,7 +34,7 @@ public class DataInstances implements Concept {
 	/**
 	 * @return the attributes
 	 */
-	public List getAttributes() {
+	public List<Attribute> getAttributes() {
 		return attributes;
 	}
 
@@ -42,14 +42,14 @@ public class DataInstances implements Concept {
 	 * @param attributes
 	 *            the attributes to set
 	 */
-	public void setAttributes(List attributes) {
+	public void setAttributes(List<Attribute> attributes) {
 		this.attributes = attributes;
 	}
 
 	/**
 	 * @return the instaces
 	 */
-	public List getInstances() {
+	public List<Instance> getInstances() {
 		return instances;
 	}
 
@@ -57,7 +57,7 @@ public class DataInstances implements Concept {
 	 * @param instances
 	 *            the instaces to set
 	 */
-	public void setInstances(List instances) {
+	public void setInstances(List<Instance> instances) {
 		this.instances = instances;
 	}
 
@@ -74,24 +74,19 @@ public class DataInstances implements Concept {
 	public weka.core.Instances toWekaInstances() {
 		// attributes
 		FastVector wattrs = new FastVector();
-		Iterator itr = attributes.iterator();
-		while (itr.hasNext()) {
-			Attribute attr = (Attribute) itr.next();
+		for (Attribute attr : attributes) {
 			wattrs.addElement(attr.toWekaAttribute());
 		}
 		// data instances
 		weka.core.Instances winsts = new weka.core.Instances(name, wattrs,
 				instances.size());
-		itr = instances.iterator();
 
-		while (itr.hasNext()) {
-			Instance inst = (Instance) itr.next();
-			Iterator itrval = inst.getValues().iterator();
-			Iterator itrmis = inst.getMissing().iterator();
+		for (Instance inst : instances) {
+
 			double[] vals = new double[wattrs.size()];
 			for (int i = 0; i < wattrs.size(); i++) {
-				double val = (Double) itrval.next();
-				if ((Boolean) itrmis.next()) {
+				double val = inst.getValues().get(i);
+				if ( inst.getMissing().get(i) ) {
 					vals[i] = weka.core.Instance.missingValue();
 				} else {
 					vals[i] = val;
@@ -109,7 +104,7 @@ public class DataInstances implements Concept {
 		// set name
 		setName(winsts.relationName());
 		// set attributes
-		List onto_attrs = new ArrayList();
+		List<Attribute> onto_attrs = new ArrayList<Attribute>();
 		for (int i = 0; i < winsts.numAttributes(); i++) {
 			Attribute a = new Attribute();
 			a.fillWekaAttribute(winsts.attribute(i));
@@ -118,13 +113,13 @@ public class DataInstances implements Concept {
 		setAttributes(onto_attrs);
 
 		// set instances
-		List onto_insts = new ArrayList();
+		List<Instance> onto_insts = new ArrayList<Instance>();
 		for (int i = 0; i < winsts.numInstances(); i++) {
 			Instance inst = new Instance();
 			weka.core.Instance winst = winsts.instance(i);
 
-			List instvalues = new ArrayList();
-			List instmis = new ArrayList();
+			List<Double> instvalues = new ArrayList<Double>();
+			List<Boolean> instmis = new ArrayList<Boolean>();
 			for (int j = 0; j < winst.numValues(); j++) {
 				if (winst.isMissing(j)) {
 					instvalues.add(new Double(0.0));
@@ -152,10 +147,9 @@ public class DataInstances implements Concept {
 		if (instances == null) {
 			return "";
 		}
+
 		StringBuffer text = new StringBuffer();
-		Iterator institr = instances.iterator();
-		while (institr.hasNext()) {
-			Instance inst = (Instance) institr.next();
+		for (Instance inst : instances ) {
 			text.append(inst.toString(this));
 			text.append('\n');
 		}
@@ -170,12 +164,4 @@ public class DataInstances implements Concept {
 		Instance inst = (Instance) instances.get(row);
 		return inst.toString(this, index);
 	}
-	/*
-	 * public void print(){ } System.out.println(name);
-	 * System.out.println("Atributy:"); Iterator itr = attributes.iterator();
-	 * while(itr.hasNext()){ Attribute attr = (Attribute)itr.next();
-	 * attr.print(); System.out.println(); } System.out.println("Instance:");
-	 * itr = instances.iterator(); while(itr.hasNext()){ Instance inst =
-	 * (Instance)itr.next(); inst.print(); System.out.println(); } }
-	 */
 }
