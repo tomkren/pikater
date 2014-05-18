@@ -8,7 +8,6 @@ import org.pikater.shared.experiment.universalformat.UniversalComputationDescrip
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
-
 /**
  * Created by Martin Pilat on 28.12.13.
  */
@@ -62,5 +61,4 @@ public class Search extends AbstractDataProcessing {
 		
 		return wrapper;
 	}
-
 }

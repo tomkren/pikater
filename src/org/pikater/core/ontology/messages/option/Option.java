@@ -23,6 +23,7 @@ public class Option implements Concept {
 	private String _default_value;
 	private String _user_value;
 	private int _number_of_values_to_try;
+
         private int numberOfOptions;
 
     public int getNumberOfOptions() {
