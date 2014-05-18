@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.management;
 
+import org.pikater.core.agents.configuration.Argument;
+
 import jade.content.AgentAction;
 import jade.util.leap.List;
 
@@ -9,7 +11,7 @@ public class CreateAgent implements AgentAction {
 	
 	private String type;
 	private String name;
-	private List arguments;
+	private java.util.List<Argument> arguments;
 	
 	public void setType(String type) {
 		this.type = type;
@@ -23,10 +25,10 @@ public class CreateAgent implements AgentAction {
 	public String getName() {
 		return name;
 	}
-	public void setArguments(List arguments) {
+	public void setArguments(java.util.List<Argument> arguments) {
 		this.arguments = arguments;
 	}
-	public List getArguments() {
+	public java.util.List<Argument> getArguments() {
 		return arguments;
 	}
 }

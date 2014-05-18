@@ -51,10 +51,13 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.AgentManagementOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;
@@ -70,7 +73,22 @@ import org.pikater.core.ontology.messages.option.Option;
 
 public class Agent_Manager extends PikaterAgent {
 
+	
+    @Override
+	public java.util.List<Ontology> getOntologies() {
+		
+		java.util.List<Ontology> ontologies =
+				new java.util.ArrayList<Ontology>();
 
+		ontologies.add(MessagesOntology.getInstance());
+		
+		ontologies.add(MetadataOntology.getInstance());
+		ontologies.add(AgentManagementOntology.getInstance());
+		
+		
+		return ontologies;
+	}
+	
 	public Agent_Manager() {
 		
 		// TODO tohle asi uz neni potreba
@@ -690,9 +708,9 @@ public class Agent_Manager extends PikaterAgent {
 	} // end offerAgentTypes
 
 
-	public AID createAgent(String type, String name, List options) {
+	public AID createAgent(String type, String name, java.util.List<Argument> arguments) {
         ManagerAgentCommunicator communicator=new ManagerAgentCommunicator("agentManager");
-        AID aid=communicator.createAgent(this,type,name,options);
+        AID aid=communicator.createAgent(this,type,name,arguments);
 		return aid;		
 	}
 

@@ -29,6 +29,7 @@ import java.util.Enumeration;
 import java.util.Random;
 import java.util.Vector;
 
+import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.agents.AgentNames;
@@ -272,9 +273,9 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		
 	} // end getAgentByType
 
-	public AID createAgent(String type, String name, List options) {
+	public AID createAgent(String type, String name, java.util.List<Argument> arguments) {
         ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER);
-        AID aid=communicator.createAgent(this,type,name,options);
+        AID aid=communicator.createAgent(this,type,name,arguments);
 		return aid;		
 	}
 	

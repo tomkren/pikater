@@ -31,6 +31,7 @@ import jade.util.leap.List;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
@@ -1308,7 +1309,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		return agents;
 	}
 
-	public AID createAgent(String type, String name, List options) {
+	public AID createAgent(String type, String name, java.util.List<Argument> arguments) {
 
 		ACLMessage msg_ca = new ACLMessage(ACLMessage.REQUEST);
 		msg_ca.addReceiver(new AID(AgentNames.MANAGER, false));
@@ -1319,8 +1320,8 @@ public abstract class Agent_GUI extends PikaterAgent {
 		if (name != null) {
 			ca.setName(name);
 		}
-		if (options != null) {
-			ca.setArguments(options);
+		if (arguments != null) {
+			ca.setArguments(arguments);
 		}
 		ca.setType(type);
 

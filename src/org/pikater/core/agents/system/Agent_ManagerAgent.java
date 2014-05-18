@@ -9,7 +9,6 @@ import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.util.leap.List;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
@@ -20,6 +19,7 @@ import org.pikater.core.agents.system.management.ManagerAgentRequestResponder;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.actions.AgentManagementOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.management.CreateAgent;
 import org.pikater.core.ontology.management.LoadAgent;
@@ -28,6 +28,9 @@ import org.pikater.core.ontology.management.SaveAgent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class Agent_ManagerAgent extends PikaterAgent {
 	
@@ -43,6 +46,16 @@ public class Agent_ManagerAgent extends PikaterAgent {
     public static String saveDirectoryPath =
     		"core" + System.getProperty("file.separator") +
     		"saved" + System.getProperty("file.separator");
+    
+    
+	@Override
+	public java.util.List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(AgentManagementOntology.getInstance());
+		
+		return ontologies;
+	}
     
 	@Override
 	protected void setup() {
@@ -103,7 +116,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		});
 	}
     
-	public String createAgent(String type, String name, List args){
+	public String createAgent(String type, String name, List<Argument> args){
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
