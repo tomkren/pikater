@@ -384,7 +384,7 @@ public class Agent_Manager extends PikaterAgent {
 	} // end setup
 
 
-	private static int debug = 0;
+	//private static int debug = 0;
 	
 	protected class RequestServer extends CyclicBehaviour {
 		/**
@@ -776,9 +776,8 @@ public class Agent_Manager extends PikaterAgent {
 						// will < 0
 						// error rate is a manadatory slot
 
-						Iterator ev_itr = evaluation.getEvaluations().iterator();							
-						while (ev_itr.hasNext()) {
-							Eval next_eval = (Eval) ev_itr.next();
+						for (Eval next_eval : evaluation.getEvaluations() ) {
+
 							if (next_eval.getName().equals("error_rate")){ 
 								sumError_rate += next_eval.getValue();
 							}
@@ -908,9 +907,7 @@ public class Agent_Manager extends PikaterAgent {
 				Element newEvaluation = new Element("evaluation");
 								
 				Element newMetric;
-				Iterator ev_itr = next_task.getResult().getEvaluations().iterator();											
-				while (ev_itr.hasNext()) {
-					Eval next_eval = (Eval) ev_itr.next();
+				for (Eval next_eval : next_task.getResult().getEvaluations() ) {
 
 					newMetric = new Element("metric");					
 					newMetric.setAttribute(next_eval.getName(), getXMLValue(next_eval.getValue()));

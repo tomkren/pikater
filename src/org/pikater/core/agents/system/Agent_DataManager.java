@@ -115,6 +115,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ontologies.add(MessagesOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
+		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
@@ -602,9 +603,8 @@ public class Agent_DataManager extends PikaterAgent {
 			@SuppressWarnings("unused")
 			float durationLR = Float.MAX_VALUE;
 
-			Iterator itr = res.getResult().getEvaluations().iterator();
-			while (itr.hasNext()) {
-				Eval next_eval = (Eval) itr.next();
+			for ( Eval next_eval: res.getResult().getEvaluations() ) {
+
 				if (next_eval.getName().equals("error_rate")) {
 					Error_rate = next_eval.getValue();
 				}

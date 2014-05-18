@@ -1,15 +1,14 @@
 package org.pikater.core.agents.experiment.search;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.search.SearchSolution;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
+import org.pikater.core.ontology.search.SearchSolution;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
-
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
 
 public class Agent_SimulatedAnnealing extends Agent_Search {
 	/*
@@ -71,7 +70,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		stability = 0.5;
 		final_error_rate = 0.01;
 		
-		java.util.List<Option> search_options = getSearch_options();
+		List<Option> search_options = getSearch_options();
 		
 		for (Option next : search_options) {
 
@@ -91,7 +90,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	}
 
 	@Override
-	protected List generateNewSolutions(List solutions, float[][] evaluations) {
+	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 		
 		if(evaluations == null){
 			//inicializace
@@ -108,7 +107,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		number_of_tries++;
 		
 		//List of solutions to send
-		List solutions_list = new ArrayList();
+		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
 		solutions_list.add(new_solution);
 		return solutions_list;
 	}
@@ -142,7 +141,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	//Neighbor function: Random solutions in case of beginning, or mutation of existing
 	private SearchSolution Neighbor(SearchSolution sol){
 
-		java.util.List<String> new_solution = new java.util.ArrayList<String>();
+		List<String> new_solution = new ArrayList<String>();
 		if(sol == null){
 			//Completely new solution
 			for (SearchItem si : getSchema() ) {

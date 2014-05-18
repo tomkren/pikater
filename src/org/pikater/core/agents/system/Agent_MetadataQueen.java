@@ -22,7 +22,6 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.proto.ContractNetInitiator;
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import java.util.Date;
@@ -446,7 +445,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 				// get the original cfp message:
 				content = getContentManager().extractContent(cfp);
 				Execute execute = (Execute) (((Action) content).getAction());
-				String internal_filename = execute.getTask().getData().getTrain_file_name();
+				//String internal_filename = execute.getTask().getData().getTrain_file_name();
 				String agent_type = execute.getTask().getAgent().getType();
 								
 				content = getContentManager().extractContent(inform);
@@ -457,11 +456,9 @@ public class Agent_MetadataQueen extends PikaterAgent {
 										
 					// save the duration of the computation to the list
 					Evaluation evaluation = (Evaluation)t.getResult();
-					List ev = evaluation.getEvaluations();
+					java.util.List<Eval> ev = evaluation.getEvaluations();
 					
-					Iterator itr = ev.iterator();					
-					while (itr.hasNext()) {
-						Eval eval = (Eval) itr.next();						
+					for (Eval eval : ev) {
 						if(eval.getName().equals("duration")){
 							// find the correct metadata's slot
 							

@@ -4,19 +4,18 @@
  */
 package org.pikater.core.agents.experiment.search;
 
-import jade.util.leap.LinkedList;
-import jade.util.leap.List;
-
+import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.IntSItem;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.search.SearchSolution;
 import org.pikater.core.ontology.messages.searchItems.BoolSItem;
 import org.pikater.core.ontology.messages.searchItems.FloatSItem;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
 import org.pikater.core.ontology.messages.searchItems.SetSItem;
+import org.pikater.core.ontology.search.SearchSolution;
 import org.pikater.core.options.GridSearch_SearchBox;
 
 /**
@@ -31,7 +30,7 @@ public class Agent_GridSearch extends Agent_Search {
 	private static final long serialVersionUID = -5728853644752654450L;
 
 	int defaultTries = 10;
-	java.util.List<SearchItem> schema;
+	List<SearchItem> schema;
     boolean linearSteps = true;
     boolean logSteps = true;
     double logZero = 1.0E-8;
@@ -54,7 +53,7 @@ public class Agent_GridSearch extends Agent_Search {
     }
 
     @Override
-    protected List generateNewSolutions(List solutions, float[][] evaluations) {
+    protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 
         System.err.println("GENERATING");
 
@@ -64,11 +63,11 @@ public class Agent_GridSearch extends Agent_Search {
         
         System.err.println("VALUES: " + values.size());
         
-        List ret = new LinkedList();
+        List<SearchSolution> ret = new LinkedList<SearchSolution>();
         
         for (int i = 0; i < values.size(); i++) {
             SearchSolution ss = new SearchSolution();
-            java.util.List<String> v = new java.util.ArrayList<String>();
+            List<String> v = new ArrayList<String>();
             for (String s: values.get(i).split(",")) {
                 v.add(s);
             }
@@ -190,7 +189,7 @@ public class Agent_GridSearch extends Agent_Search {
 
     @Override
     protected void loadSearchOptions() { 
-        java.util.List<Option> search_options = getSearch_options();
+        List<Option> search_options = getSearch_options();
         
         for (Option next : search_options) {
 

@@ -1,15 +1,15 @@
 package org.pikater.core.agents.experiment.search;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.search.SearchSolution;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
+import org.pikater.core.ontology.search.SearchSolution;
 
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
 
 public class Agent_GASearch extends Agent_Search {
 	/*
@@ -34,7 +34,7 @@ public class Agent_GASearch extends Agent_Search {
 	 * -S int
 	 * Size of tournament in selection (default 2)
 	 */
-	private ArrayList population;
+	private ArrayList<SearchSolution> population;
 	//fitness is the error rate - the lower, the better!
 	float fitnesses[];
 	int pop_size = 0;
@@ -80,8 +80,8 @@ public class Agent_GASearch extends Agent_Search {
 	}
 	
 	@Override
-	protected List generateNewSolutions(List solutions, float[][] evaluations) {
-		ArrayList new_population = new ArrayList(pop_size);
+	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
+		ArrayList<SearchSolution> new_population = new ArrayList<SearchSolution>(pop_size);
 		if(evaluations==null){
 			//create new population			
 			number_of_generations = 0;
@@ -159,7 +159,7 @@ public class Agent_GASearch extends Agent_Search {
 		final_error_rate = 0.1;
 		tournament_size = 2;
 		
-		java.util.List<Option> search_options = getSearch_options();
+		List<Option> search_options = getSearch_options();
 		// find maximum tries in Options
 		for (Option next : search_options) {
 			if (next.getName().equals("E")){
@@ -188,7 +188,7 @@ public class Agent_GASearch extends Agent_Search {
 	//new random options
 	private SearchSolution randomIndividual() {
 		
-		java.util.List<String> new_solution = new java.util.ArrayList<String>();
+		List<String> new_solution = new ArrayList<String>();
 		for (SearchItem si : getSchema() ) {
 			String val = si.randomValue(rnd_gen);
 			new_solution.add(val);
@@ -215,8 +215,8 @@ public class Agent_GASearch extends Agent_Search {
 	
 	//Half uniform crossover
 	private void xoverIndividuals(SearchSolution sol1, SearchSolution sol2){
-		java.util.List<String> new_solution1 = new java.util.ArrayList<String>();
-		java.util.List<String> new_solution2 = new java.util.ArrayList<String>();
+		List<String> new_solution1 = new ArrayList<String>();
+		List<String> new_solution2 = new ArrayList<String>();
 		
 		for (int i = 0; i < new_solution1.size(); i++) {
 			String val1 = (String) sol1.getValues().get(i);
@@ -238,7 +238,7 @@ public class Agent_GASearch extends Agent_Search {
 	//mutation of the option
 	private void mutateIndividual(SearchSolution sol){
 		
-		java.util.List<String> new_sol = new java.util.ArrayList<String>();
+		List<String> new_sol = new ArrayList<String>();
 		for (int i = 0; i < getSchema().size(); i++ ) {
 			
 			SearchItem si = getSchema().get(i);
@@ -253,7 +253,7 @@ public class Agent_GASearch extends Agent_Search {
 	
 	//Clone options
 	private SearchSolution cloneSol(SearchSolution sol){
-		java.util.List<String> new_solution = sol.getValues();
+		List<String> new_solution = sol.getValues();
 		SearchSolution res_sol = new SearchSolution();
 		res_sol.setValues(new_solution);
 		return res_sol;

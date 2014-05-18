@@ -577,7 +577,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		/* Resulting message: FAILURE */
 
 		void failureMsg(String desc) {
-			List evaluations = new ArrayList();
+			java.util.List<Eval> evaluations = new java.util.ArrayList<Eval>();
 			
 			Eval er = new Eval();
 			er.setName("error_rate");
@@ -873,7 +873,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						
 						eval = new Evaluation();
 						
-						eval.setEvaluations(new ArrayList());
+						eval.setEvaluations(new java.util.ArrayList<Eval>());
 						// Date start = new Date();
 						Date start = null;
 						if (state != Agent_ComputingAgent.states.TRAINED) {

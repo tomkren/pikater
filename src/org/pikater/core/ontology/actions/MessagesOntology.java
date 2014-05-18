@@ -44,7 +44,6 @@ import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.ontology.messages.option.Options;
-import org.pikater.core.ontology.messages.search.SearchSolution;
 import org.pikater.core.ontology.messages.searchItems.BoolSItem;
 import org.pikater.core.ontology.messages.searchItems.FloatSItem;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
@@ -59,6 +58,7 @@ import org.pikater.core.ontology.metadata.attributes.CategoricalAttributeMetadat
 import org.pikater.core.ontology.metadata.attributes.IntegerAttributeMetadata;
 import org.pikater.core.ontology.metadata.attributes.NumericalAttributeMetadata;
 import org.pikater.core.ontology.metadata.attributes.RealAttributeMetadata;
+import org.pikater.core.ontology.search.SearchSolution;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;

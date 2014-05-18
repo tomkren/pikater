@@ -34,11 +34,11 @@ import org.pikater.core.ontology.messages.IntSItem;
 import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.ontology.messages.option.Options;
-import org.pikater.core.ontology.messages.search.SearchSolution;
 import org.pikater.core.ontology.messages.searchItems.BoolSItem;
 import org.pikater.core.ontology.messages.searchItems.FloatSItem;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
 import org.pikater.core.ontology.messages.searchItems.SetSItem;
+import org.pikater.core.ontology.search.SearchSolution;
 
 import java.util.Random;
 

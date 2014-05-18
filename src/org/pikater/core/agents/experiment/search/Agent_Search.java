@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.messages.Eval;
@@ -14,6 +17,7 @@ import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
+import org.pikater.core.ontology.search.SearchSolution;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -31,8 +35,7 @@ import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
+
 
 public abstract class Agent_Search extends Agent_AbstractExperiment {	
 
@@ -42,10 +45,10 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	
 	protected int query_block_size = 1;
 
-	private java.util.List<Option> search_options = null;
-	private java.util.List<SearchItem> schema = null;
+	private List<Option> search_options = null;
+	private List<SearchItem> schema = null;
 	
-	protected abstract List generateNewSolutions(List solutions, float[][] evaluations); //returns List of Options
+	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
 	protected abstract boolean finished();
 	protected abstract void updateFinished(float[][] evaluations);
 	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
@@ -70,29 +73,30 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	} // end setup()
 
 	
-	protected java.util.List<SearchItem> getSchema() {
+	protected List<SearchItem> getSchema() {
 		if(schema != null) {
 			return schema;
 		} else {
-			return new java.util.ArrayList<SearchItem>();
+			return new ArrayList<SearchItem>();
 		}
 		
 	}
-	protected java.util.List<Option> getSearch_options() {
+	protected List<Option> getSearch_options() {
 
 		if(search_options != null) {
 			return search_options;
 		} else {
-			return new java.util.ArrayList<Option>();
+			return new ArrayList<Option>();
 		}
 	}
 	
 	/*Converts List of Evals to an array of values - at the moment only error_rate*/
-	private float[] namedEvalsToFitness(List named_evals) {
+	private float[] namedEvalsToFitness(List<Eval> named_evals) {
+		
 		float[] res = new float[3];//named_evals.size...
-		jade.util.leap.Iterator itr = named_evals.iterator();
-		while(itr.hasNext()){
-			Eval e = (Eval)itr.next();
+		
+		for (Eval e : named_evals) {
+
 			if(e.getName().equals("error_rate")) {
 				res[0]=e.getValue();
                         }
@@ -128,7 +132,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 				private static final long serialVersionUID = -5801676857376453194L;
 
 				boolean cont;
-				List solutions_new = null;
+				List<SearchSolution> solutions_new = null;
 				float evaluations[][] = null;
 				int queriesToProcess = 0;
 				@Override
@@ -173,8 +177,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 								for(int i = 0; i < solutions_new.size(); i++){
 									//posli queries
 									ExecuteParameters ep = new ExecuteParameters();
+
 									//TODO zmena ExecuteParameters na jeden prvek
-									List solution_list = new ArrayList(1);
+									List<SearchSolution> solution_list = new ArrayList<SearchSolution>(1);
 									solution_list.add(solutions_new.get(i));
 									ep.setSolutions(solution_list);
 
@@ -218,7 +223,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 								Result res;
 								try {
 									res = (Result)getContentManager().extractContent(response);
-									List named_evals = ((Evaluation)res.getValue()).getEvaluations();
+									Evaluation eval = (Evaluation) res.getValue();
+									List<Eval> named_evals = eval.getEvaluations();
 									evaluations[id]=namedEvalsToFitness(named_evals);
 								} catch (UngroundedException e) {
 									// TODO Auto-generated catch block
@@ -311,7 +317,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			line = bufRead.readLine();
 
 			// list of ontology.messages.Option
-			java.util.List<Option> _options = new java.util.ArrayList<Option>();
+			List<Option> _options = new ArrayList<Option>();
 			agent = new org.pikater.core.ontology.messages.Agent();
 			agent.setName(getLocalName());
 			agent.setType(getAgentType());
@@ -343,7 +349,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					float rangeMin = 0;
 					float rangeMax = 0;
 					String range;
-					java.util.List<String> set = null;
+					List<String> set = null;
 					
 					if (dt.equals("BOOLEAN")){
 						numArgsMin = 1;
@@ -360,7 +366,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							rangeMax = Float.parseFloat(params[7]);
 						}
 						if (range.equals("s")){
-							set = new java.util.ArrayList<String>();
+							set = new ArrayList<String>();
 							String[] s = params[6].split("[ ]+");
 							for (int i=0; i<s.length; i++){
 								set.add(s[i]);

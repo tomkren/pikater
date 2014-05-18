@@ -1,14 +1,14 @@
 package org.pikater.core.agents.experiment.search;
 
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.search.SearchSolution;
 import org.pikater.core.ontology.messages.searchItems.SearchItem;
+import org.pikater.core.ontology.search.SearchSolution;
 import org.pikater.core.options.EASearch_SearchBox;
 import org.pikater.core.utilities.evolution.*;
 import org.pikater.core.utilities.evolution.individuals.Individual;
@@ -66,9 +66,9 @@ public class Agent_EASearch extends Agent_Search {
     Population toEvaluate = new Population();
     Population evaluated = new Population();
     Replacement replacement = new MergingReplacement();
-    java.util.ArrayList<Selector> environmentalSelectors;
-    java.util.ArrayList<Selector> matingSelectors;
-    java.util.ArrayList<Operator> operators;
+    ArrayList<Selector> environmentalSelectors;
+    ArrayList<Selector> matingSelectors;
+    ArrayList<Operator> operators;
     boolean multiobjective = true;
     boolean surrogate = false;
     double eliteSize = 0.1;
@@ -118,7 +118,7 @@ public class Agent_EASearch extends Agent_Search {
     }
     
     @Override
-    protected List generateNewSolutions(List solutions, float[][] evaluations) {
+    protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 
         offspring = new Population();
         offspring.setPopulationSize(popSize);
@@ -128,9 +128,9 @@ public class Agent_EASearch extends Agent_Search {
         if (evaluations == null) {
             //create new population
             
-            matingSelectors = new java.util.ArrayList<Selector>();
-            environmentalSelectors = new java.util.ArrayList<Selector>();
-            operators = new java.util.ArrayList<Operator>();
+            matingSelectors = new ArrayList<Selector>();
+            environmentalSelectors = new ArrayList<Selector>();
+            operators = new ArrayList<Operator>();
             archive = new SearchItemIndividualArchive();
             
             if (!multiobjective) {
@@ -155,7 +155,7 @@ public class Agent_EASearch extends Agent_Search {
             parents = new Population();
             parents.setPopulationSize(popSize);
             
-            java.util.List<SearchItem> schema = getSchema();
+            List<SearchItem> schema = getSchema();
             
             SearchItemIndividual sampleIndividual = new SearchItemIndividual(schema.size());
             
@@ -218,12 +218,12 @@ public class Agent_EASearch extends Agent_Search {
         
     }
 
-    private List populationToList(Population pop) {
+    private List<SearchSolution> populationToList(Population pop) {
         
-        List ret = new ArrayList();
+        List<SearchSolution> ret = new ArrayList<SearchSolution>();
         for (Individual i : pop.getSortedIndividuals()) {
             SearchItemIndividual si = (SearchItemIndividual)i;
-            java.util.List<String> vals = new java.util.ArrayList<String>();
+            List<String> vals = new ArrayList<String>();
             
             for (int j = 0; j < si.length(); j++) {
                 vals.add(si.get(j).toString());
@@ -275,7 +275,7 @@ public class Agent_EASearch extends Agent_Search {
         
         Population selected = new Population();
 
-        java.util.ArrayList<Individual> sortedOld = parents.getSortedIndividuals();
+        ArrayList<Individual> sortedOld = parents.getSortedIndividuals();
         for (int i = 0; i < eliteSize*parents.getPopulationSize(); i++) {
             selected.add(sortedOld.get(i));
         }
@@ -313,7 +313,7 @@ public class Agent_EASearch extends Agent_Search {
         xOverProb = 0.5;
         maxGeneration = 5;
         goalError = 0.02;
-        java.util.List<Option> search_options = getSearch_options();
+        List<Option> search_options = getSearch_options();
         // find maximum tries in Options
         
         for (Option next : search_options) {
