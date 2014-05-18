@@ -221,9 +221,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		// copy results to the DataInstancs
 		int i = 0;
-		Iterator itr = onto_test.getInstances().iterator();
-		while (itr.hasNext()) {
-			Instance next_instance = (Instance) itr.next();
+		for (Instance next_instance : onto_test.getInstances()) {
 			next_instance.setPrediction(pre[i]);
 			i++;
 		}

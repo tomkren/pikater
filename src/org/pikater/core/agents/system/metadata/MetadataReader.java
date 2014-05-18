@@ -4,11 +4,9 @@
  */
 package org.pikater.core.agents.system.metadata;
 
-import jade.util.leap.Iterator;
-
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import org.pikater.core.ontology.subtrees.messages.Attribute;
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
@@ -33,9 +31,7 @@ public class MetadataReader {
 
 		// missing values
 		boolean missing = false; 
-		jade.util.leap.Iterator itr = data.getInstances().iterator();
-		while(itr.hasNext()){
-			Instance i = (Instance)itr.next();
+		for (Instance i : data.getInstances()) {
 			if (i.getMissing().size() != 0){
 				missing = true;
 			}			
@@ -43,10 +39,8 @@ public class MetadataReader {
 		metadata.setMissing_values(missing);
 		
 		// data type
-		String type = ""; 
-		itr = data.getAttributes().iterator();
-		while(itr.hasNext()){
-			Attribute a = (Attribute)itr.next();
+		String type = "";
+		for (Attribute a : data.getAttributes()) {
 			if (type.isEmpty()){
 				type = a.getType();
 			}
@@ -113,20 +107,19 @@ public class MetadataReader {
     {
         List<Object> values=new ArrayList<>();     
         List<Object> classValues=new ArrayList<>();        
-        Iterator itr = data.getInstances().iterator();
-        while(itr.hasNext()){                        
-		Instance i = (Instance)itr.next();
-		jade.util.leap.List missingList=i.getMissing();
+
+		for (Instance instanceI : data.getInstances()) {
+		List<Boolean> missingList = instanceI.getMissing();
                 if ((boolean)missingList.get(attributeNumber))
                 {
                     continue;
                 }
-                values.add(i.getValues().get(attributeNumber));
-                classValues.add(i.getValues().get(data.getClass_index()));
+                values.add(instanceI.getValues().get(attributeNumber));
+                classValues.add(instanceI.getValues().get(data.getClass_index()));
         }
-        double entropy=Entropy.CountEntropy(values);
+        double entropy = Entropy.CountEntropy(values);
         metadata.setEntropy(entropy);        
-        double classEntropy=Entropy.CountEntropyClassAttribute(values, classValues);
+        double classEntropy = Entropy.CountEntropyClassAttribute(values, classValues);
         metadata.setAttributeClassEntropy(classEntropy);
     }
     
@@ -141,15 +134,14 @@ public class MetadataReader {
     {
         List<Double> values=new ArrayList<>();        
         NumericalAttributeMetadata met=(NumericalAttributeMetadata)metadata;
-        Iterator itr = data.getInstances().iterator();
-        while(itr.hasNext()){                        
-		Instance i = (Instance)itr.next();
-		jade.util.leap.List missingList=i.getMissing();
+        
+		for (Instance instanceI : data.getInstances()) {
+		List<Boolean> missingList = instanceI.getMissing();
                 if ((boolean)missingList.get(attributeNumber))
                 {
                     continue;
                 }
-                values.add((Double)i.getValues().get(attributeNumber));
+                values.add((Double)instanceI.getValues().get(attributeNumber));
         }
         Collections.sort(values);
         met.setMin(values.get(0));
@@ -174,10 +166,9 @@ public class MetadataReader {
     {
         double numberOfValues=data.getInstances().size();
         double numberOfMissingValues=0;
-        Iterator itr = data.getInstances().iterator();
-		while(itr.hasNext()) {                        
-			Instance i = (Instance)itr.next();
-			jade.util.leap.List missingList=i.getMissing();
+
+		for (Instance instanceI : data.getInstances() ) {
+			List<Boolean> missingList = instanceI.getMissing();
                         if ((boolean)missingList.get(attributeNumber))
                         {
                             numberOfMissingValues++;
@@ -207,18 +198,16 @@ public class MetadataReader {
         {
             return AttributeType.Categorical;
         }
-        boolean canBeInt=true;        
-        Iterator itr = data.getInstances().iterator();
-		while(itr.hasNext()){                        
-			Instance i = (Instance)itr.next();
-			jade.util.leap.List missingList=i.getMissing();
+        boolean canBeInt = true;
+		for (Instance i : data.getInstances() ) {
+			List<Boolean> missingList=i.getMissing();
                         if ((boolean)missingList.get(attributeNumber))
                         {
                             continue;
                         }
                         else
                         {
-                            jade.util.leap.List values=i.getValues();
+                        	List<Double> values=i.getValues();
                             Object value=values.get(attributeNumber);                            
                             if (value instanceof Double)
                             {
