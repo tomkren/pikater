@@ -22,7 +22,6 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.proto.ContractNetInitiator;
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import java.util.Date;
@@ -37,6 +36,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataListItem;
 import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.messages.Data;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
@@ -44,10 +44,11 @@ import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.EvaluationMethod;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.GetData;
-import org.pikater.core.ontology.messages.GetMetadata;
 import org.pikater.core.ontology.messages.Id;
-import org.pikater.core.ontology.messages.Metadata;
 import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.metadata.GetMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
 
 public class Agent_MetadataQueen extends PikaterAgent {
 
@@ -58,6 +59,17 @@ public class Agent_MetadataQueen extends PikaterAgent {
 	
 	ArrayList metadata_list = new ArrayList(); 
 	
+    @Override
+	public java.util.List<Ontology> getOntologies() {
+		
+		java.util.List<Ontology> ontologies =
+				new java.util.ArrayList<Ontology>();
+
+		ontologies.add(MetadataOntology.getInstance());
+		
+		return ontologies;
+	}
+    
     @Override
     protected void setup() {
 
@@ -77,23 +89,20 @@ public class Agent_MetadataQueen extends PikaterAgent {
 				i++;
 			}
 		}		    	
-
-		Ontology ontology = MessagesOntology.getInstance();
-        getContentManager().registerLanguage(getCodec());
-        getContentManager().registerOntology(ontology);
         
         // receive request
+		Ontology ontology = MetadataOntology.getInstance();
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-		addBehaviour(new receiveRequest(this, mt));
+		addBehaviour(new ReceiveRequest(this, mt));
 
     }  // end setup()
 
 
-    protected class receiveRequest extends AchieveREResponder {
+    protected class ReceiveRequest extends AchieveREResponder {
 
 		private static final long serialVersionUID = -1849883814703874922L;
 
-		public receiveRequest(Agent a, MessageTemplate mt) {
+		public ReceiveRequest(Agent a, MessageTemplate mt) {
 			super(a, mt);
 			// TODO Auto-generated constructor stub
 		}
@@ -296,7 +305,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		org.pikater.core.ontology.messages.Agent ag =
 				new org.pikater.core.ontology.messages.Agent();
 		ag.setType(agent_type);
-		ag.setOptions(new ArrayList());
+		ag.setOptions(new java.util.ArrayList<Option>() );
 
 		Data d = new Data();
 		d.setTest_file_name("xxx");
@@ -436,7 +445,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 				// get the original cfp message:
 				content = getContentManager().extractContent(cfp);
 				Execute execute = (Execute) (((Action) content).getAction());
-				String internal_filename = execute.getTask().getData().getTrain_file_name();
+				//String internal_filename = execute.getTask().getData().getTrain_file_name();
 				String agent_type = execute.getTask().getAgent().getType();
 								
 				content = getContentManager().extractContent(inform);
@@ -447,11 +456,9 @@ public class Agent_MetadataQueen extends PikaterAgent {
 										
 					// save the duration of the computation to the list
 					Evaluation evaluation = (Evaluation)t.getResult();
-					List ev = evaluation.getEvaluations();
+					java.util.List<Eval> ev = evaluation.getEvaluations();
 					
-					Iterator itr = ev.iterator();					
-					while (itr.hasNext()) {
-						Eval eval = (Eval) itr.next();						
+					for (Eval eval : ev) {
 						if(eval.getName().equals("duration")){
 							// find the correct metadata's slot
 							

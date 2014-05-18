@@ -16,7 +16,12 @@ import java.util.HashSet;
  * If the datasource is not in the local the agent tries to get it from other containers(TODO).
  */
 public class AgentDataSource extends PikaterAgent {
-    private static final String pathToLocalSources =
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2175414070329509621L;
+
+	private static final String pathToLocalSources =
             "core" + System.getProperty("file.separator") +
                     "data" + System.getProperty("file.separator") +
                     "dataSources" + System.getProperty("file.separator");

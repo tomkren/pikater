@@ -22,7 +22,10 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.kineticeditor.KineticEditorCanvas;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
+import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
@@ -35,9 +38,6 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.SwapE
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.IEnginePlugin;
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.TrackMousePlugin;
-import org.pikater.web.vaadin.gui.client.managers.GWTCursorManager;
-import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
-import org.pikater.web.vaadin.gui.client.managers.GWTCursorManager.MyCursor;
 
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.json.client.JSONArray;
@@ -121,7 +121,7 @@ public final class KineticEngine
 	/**
 	 * The wrapper managing integration and communication between GWT and this engine.
 	 */
-	private final KineticEditorCanvas parentCanvas;
+	private final KineticComponentWidget parentWidget;
 	
 	/**
 	 * All the event handlers of the engine.
@@ -241,7 +241,7 @@ public final class KineticEngine
 	
 	/*
 	 * GENERAL NOTES ABOUT KINETIC BEHAVIOUR:
-	 * - Each node can only have 1 parent (container) - a group or a layer! Beware what happens when you cross add a node into a different layer...
+	 * - Each node can only have 1 parent (container) - a group or a layer! Beware of what happens when you cross add a node into a different layer...
 	 * - When moving a node from a group to a layer, both layers need to be drawn, if distinct.
 	 * - Hidden objects don't listen for events... makes sense :).
 	 * - When a group is dragged, leaf draggable nodes get updated (X and Y attributes)... not the group itself. Make sure to set children not draggable :).
@@ -251,7 +251,7 @@ public final class KineticEngine
 	 * - Events are fired in the order they were added, whether named or not.
 	 * - Events can not be simulated from named events... bug?
 	 */
-	public KineticEngine(KineticEditorCanvas parentCanvas, final Stage stage) 
+	public KineticEngine(KineticComponentWidget parentWidget, final Stage stage) 
 	{
 		/*
 		 * First setup the basic Kinetic variables.
@@ -331,7 +331,7 @@ public final class KineticEngine
 		this.allBoxes = new HashSet<BoxPrototype>();
 		this.plugins = new HashMap<String, IEnginePlugin>();
 		this.pluginsForGraphItem = new HashMap<String, Set<IEnginePlugin>>();
-		this.parentCanvas = parentCanvas;
+		this.parentWidget = parentWidget;
 		
 		// and finally, draw the stage
 		draw(EngineComponent.STAGE);
@@ -374,8 +374,8 @@ public final class KineticEngine
 		Layer deserializedLayer = Kinetic.createNode(dLayerJSON).cast();
 		
 		// make clones of original objects
-		Map<String, BoxPrototype> originalIdToBoxWithNewID = BoxPrototype.getInstancesFrom(this.parentCanvas.getShapeCreator(), deserializedLayer);
-		List<EdgePrototype> unbindedEdges = EdgePrototype.getInstancesFrom(this.parentCanvas.getShapeCreator(), deserializedLayer);
+		Map<String, BoxPrototype> originalIdToBoxWithNewID = BoxPrototype.getInstancesFrom(this.parentWidget.getShapeCreator(), deserializedLayer);
+		List<EdgePrototype> unbindedEdges = EdgePrototype.getInstancesFrom(this.parentWidget.getShapeCreator(), deserializedLayer);
 		
 		// register the clones in our engine
 		List<ExperimentGraphItem> allItems = new ArrayList<ExperimentGraphItem>(originalIdToBoxWithNewID.values());
@@ -453,6 +453,30 @@ public final class KineticEngine
 	        }
 	    }
 	    return result;
+	}
+	
+	// *****************************************************************************************************
+	// INTERFACE TO USE FROM GUI
+	
+	/**
+	 * This method only resets the engine, e.g. boxes, edges and selection. Further cleanup is expected to be done elsewhere.
+	 */
+	public void resetEnvironment()
+	{
+		// TODO
+		
+		// first reset selection
+		
+		// then remove edges
+		
+		// and finally, remove boxes
+	}
+	
+	public void resize(int newWidth, int newHeight)
+	{
+		Vector2d newSize = new Vector2d(newWidth, newHeight); 
+		stage.setSize(newSize);
+		fillRectangle.setSize(newSize);
 	}
 	
 	// *****************************************************************************************************
@@ -603,17 +627,17 @@ public final class KineticEngine
 	
 	public Element getParentDOMElement()
 	{
-		return parentCanvas.getDOMElement();
+		return parentWidget.getKineticEnvParentElement();
 	}
 	
 	public KineticShapeCreator getShapeCreator()
 	{
-		return parentCanvas.getShapeCreator();
+		return parentWidget.getShapeCreator();
 	}
 	
 	public KineticUndoRedoManager getUndoRedoManager()
 	{
-		return parentCanvas.getUndoRedoManager();
+		return parentWidget.getUndoRedoManager();
 	}
 	
 	public void draw(EngineComponent component)
@@ -640,7 +664,12 @@ public final class KineticEngine
 	
 	private void pushNewOperation(BiDiOperation operation)
 	{
-		parentCanvas.getUndoRedoManager().push(operation);
+		parentWidget.getUndoRedoManager().push(operation);
+		
+		if(!parentWidget.getSharedState().serverThinksThatSchemaIsModified)
+		{
+			parentWidget.getServerRPC().setSchemaModified(true); 
+		}
 	}
 	
 	private void setFirstArgHigherZIndex(Node node1, Node node2)

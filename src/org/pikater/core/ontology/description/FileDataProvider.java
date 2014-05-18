@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.description;
 
-import jade.util.leap.ArrayList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
@@ -32,7 +33,7 @@ public class FileDataProvider extends AbstractDataProcessing implements IDataPro
 		fileURIOption.setName("fileURI");
 		fileURIOption.setValue(fileURI);
 		
-		ArrayList options = new ArrayList();
+		List<Option> options = new ArrayList<Option>();
 		options.add(fileURIOption);
 		
 		UniversalOntology element = new UniversalOntology();

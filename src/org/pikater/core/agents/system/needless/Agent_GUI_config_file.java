@@ -1,10 +1,8 @@
 package org.pikater.core.agents.system.needless;
 
-import jade.content.lang.Codec.CodecException;
-import jade.content.onto.OntologyException;
+
 import jade.core.AID;
 import jade.domain.FIPAAgentManagement.FailureException;
-import jade.domain.FIPAException;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
@@ -34,9 +32,7 @@ public class Agent_GUI_config_file extends Agent_GUI {
                 Task task = (Task) itr.next();
 
                 Float error_rate = null;
-                Iterator ev_itr = task.getResult().getEvaluations().iterator();
-                while (ev_itr.hasNext()) {
-                    Eval next_eval = (Eval) ev_itr.next();
+                for (Eval next_eval : task.getResult().getEvaluations() ) {
                     if (next_eval.getName().equals("error_rate")){
                         error_rate = next_eval.getValue();
                     }

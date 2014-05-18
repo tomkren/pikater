@@ -1,7 +1,8 @@
 package org.pikater.core.ontology.messages.option;
 
+import java.util.List;
+
 import jade.content.Concept;
-import jade.util.leap.List;
 
 public class Option implements Concept {
 
@@ -11,7 +12,7 @@ public class Option implements Concept {
 	private static final long serialVersionUID = -6943758563650887842L;
 	private boolean _mutable;
 	private Interval _range;
-	private List _set;
+	private List<String> _set;
 	private boolean _is_a_set;
 	private Interval _number_of_args;
 	private String _data_type;
@@ -51,11 +52,11 @@ public class Option implements Concept {
 		return _range;
 	}
 
-	public void setSet(List set) {
+	public void setSet(List<String> set) {
 		_set = set;
 	}
 
-	public List getSet() {
+	public List<String> getSet() {
 		return _set;
 	}
 
@@ -145,7 +146,7 @@ public class Option implements Concept {
 	
 	public Option(String name, String data_type,
 			float numArgsMin, float numArgsMax,
-			String range, float rangeMin, float rangeMax, List set,
+			String range, float rangeMin, float rangeMax, List<String> set,
 			String default_value, String synopsis, String description){		
 
 		_mutable = false;

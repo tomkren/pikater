@@ -3,6 +3,7 @@ package org.pikater.core.agents.experiment.computing;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
+
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.RBFNetwork;
@@ -11,7 +12,6 @@ import weka.core.Instances;
 import java.util.Date;
 import java.util.Random;
 
-import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.EvaluationMethod;
@@ -89,7 +89,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		working = false;
 		
 		// add evals to Evaluation
-		List evaluations_new = evaluation.getEvaluations();
+		java.util.List<Eval> evaluations_new = evaluation.getEvaluations();
 		
 		Iterator itr = evals.iterator();
 		while (itr.hasNext()) {
@@ -151,7 +151,8 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		float default_value = Float.MAX_VALUE;
 		Evaluation eval = test(evaluation_method);
 		
-		List evaluations = new ArrayList();
+		java.util.List<Eval> evaluations = evaluation.getEvaluations();
+		//List evaluations = new ArrayList();
 		Eval ev = new Eval();
 		ev.setName("error_rate");
 		ev.setValue((float) eval.errorRate());
@@ -202,16 +203,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		}
 		evaluations.add(ev);
 		
-		
-		List evaluations_new = evaluation.getEvaluations();
-		
-		Iterator itr = evaluations.iterator();
-		while (itr.hasNext()) {
-			Eval _ev = (Eval) itr.next();
-			evaluations_new.add(_ev);
-		}
-		
-		evaluation.setEvaluations(evaluations_new);		
+		evaluation.setEvaluations(evaluations);		
 	}
 
 	@Override

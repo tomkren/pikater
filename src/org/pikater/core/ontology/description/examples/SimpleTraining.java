@@ -1,12 +1,15 @@
 package org.pikater.core.ontology.description.examples;
 
-import jade.util.leap.ArrayList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.dataStructures.options.Converter;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.description.*;
+import org.pikater.core.ontology.messages.option.Option;
 
 
 /**
@@ -27,7 +30,7 @@ public class SimpleTraining {
         ca.setModelClass(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
-        ArrayList options = new ArrayList();
+        List<Option> options = new ArrayList<Option>();
 
         StepanuvOption lr = new StepanuvOption();
         lr.setName("L");

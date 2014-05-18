@@ -1,11 +1,12 @@
 package org.pikater.core.ontology.description;
 
 import jade.content.Concept;
-import jade.util.leap.ArrayList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.pikater.core.ontology.messages.option.Option;
@@ -20,33 +21,35 @@ public class ComputationDescription implements Concept {
 
 	private static final long serialVersionUID = -7951850172320173523L;
 
-	private ArrayList globalOptions;
-    private ArrayList rootElements;
+	private List<Option> globalOptions;
+    private List<FileDataSaver> rootElements;
 
-    public ArrayList getGlobalOptions() {
+    public List<Option> getGlobalOptions() {
         return globalOptions;
     }
-    public void setGlobalOptions(ArrayList globalOptions) {
+    public void setGlobalOptions(ArrayList<Option> globalOptions) {
         this.globalOptions = globalOptions;
     }
 
-    public ArrayList getRootElements() {
+    public List<FileDataSaver> getRootElements() {
+    	if (rootElements == null) {
+    		return new ArrayList<FileDataSaver>();
+    	}
         return rootElements;
     }
-    public void setRootElements(ArrayList rootElements) {
+    public void setRootElements(List<FileDataSaver> rootElements) {
         this.rootElements = rootElements;
     }
     public void addRootElement(FileDataSaver rootElement) {
-    	
     	if (rootElements == null) {
-    		this.rootElements = new ArrayList();
+    		this.rootElements = new ArrayList<FileDataSaver>();
     	}
     	this.rootElements.add(rootElement);
     }
     
 	public UniversalComputationDescription ExportUniversalComputationDescription() {
 
-		ArrayList rootElements = getRootElements();
+		List<FileDataSaver> rootElements = getRootElements();
 
 		UniversalComputationDescription uModel =
 				new UniversalComputationDescription();
@@ -61,7 +64,7 @@ public class ComputationDescription implements Concept {
 		if (rootElements != null) {
 			for (int i = 0; i < rootElements.size(); i++) {
 				
-				FileDataSaver saver = (FileDataSaver) rootElements.get(i);
+				FileDataSaver saver = rootElements.get(i);
 				saver.exportUniversalElement(uModel);
 			}
 		}

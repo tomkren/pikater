@@ -1,23 +1,24 @@
 package org.pikater.core.ontology.messages.option;
 
+import java.util.List;
+
 import jade.content.Concept;
-import jade.util.leap.List;
 
 public class Options implements Concept{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8578686409784032991L;
-	private List list;
+	private List<Option> list;
 	
-	public void setList(List list) {
+	public void setList(List<Option> list) {
 		this.list = list;
 	}
-	public List getList() {
+	public List<Option> getList() {
 		return list;
 	}
 	
-	public Options(List list){
+	public Options(List<Option> list){
 		setList(list);
 	}
 	public Options(){

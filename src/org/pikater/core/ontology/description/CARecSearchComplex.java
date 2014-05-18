@@ -1,12 +1,14 @@
 package org.pikater.core.ontology.description;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
-import jade.util.leap.ArrayList;
 
 
 /**
@@ -16,17 +18,17 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 
 	private static final long serialVersionUID = -913470799010962236L;
 
-	private ArrayList options;
-    private ArrayList errors;
+	private List<Option> options;
+    private List<ErrorDescription> errors;
 
     private Search search;
     private Recommend recommender;
     private IComputingAgent computingAgent;
 
-    public ArrayList getErrors() {
+    public List<ErrorDescription> getErrors() {
         return errors;
     }
-    public void setErrors(ArrayList errors) {
+    public void setErrors(List<ErrorDescription> errors) {
         this.errors = errors;
     }
 
@@ -51,13 +53,19 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
         this.recommender = recommender;
     }
 
-    public ArrayList getOptions() {
+    public List<Option> getOptions() {
+    	if (this.options == null) {
+    		return new ArrayList<Option>();
+    	}
         return options;
     }
-    public void setOptions(ArrayList options) {
+    public void setOptions(List<Option> options) {
         this.options = options;
     }
     public void addOption(Option option) {
+    	if (this.options == null) {
+    		this.options = new ArrayList<Option>();
+    	}
         this.options.add(option);
     }
  

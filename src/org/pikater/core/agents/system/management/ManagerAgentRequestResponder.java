@@ -122,6 +122,8 @@ public class ManagerAgentRequestResponder {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename));
 
             newAgent = (Agent) inputStream.readObject();
+
+            inputStream.close();
         }
 
         managerAgent.log("Resurrected agent : " + newAgent);

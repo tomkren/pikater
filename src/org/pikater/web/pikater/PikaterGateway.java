@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.actions.BatchOntology;
-import org.pikater.core.ontology.actions.ExperimentOntology;
-import org.pikater.core.ontology.actions.FilenameTranslationOntology;
 import org.pikater.core.ontology.actions.MailingOntology;
 import org.pikater.core.ontology.actions.MessagesOntology;
 

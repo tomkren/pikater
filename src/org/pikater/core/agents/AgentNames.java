@@ -13,5 +13,6 @@ public abstract class AgentNames {
 	public static String TYPES_PROVIDER = "agentTypesProvider";
 	public static String GATEWAY = "Gateway";
 	public static String VIRTUAL_BOX_PROVIDER = "VirtualBoxProvider";
+	public static String FREDDIE = "Freddie";
 
 }

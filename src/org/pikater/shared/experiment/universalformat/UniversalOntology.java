@@ -9,10 +9,10 @@ public class UniversalOntology {
 
 	private Class<?> type;
 
-	private java.util.ArrayList<UniversalConnector> inputSlots;
-	private java.util.ArrayList<ErrorDescription> errors;
+	private java.util.List<UniversalConnector> inputSlots;
+	private java.util.List<ErrorDescription> errors;
 
-	private java.util.ArrayList<Option> options;
+	private java.util.List<Option> options;
 
 	public Class<?> getType() {
 		return type;
@@ -21,10 +21,10 @@ public class UniversalOntology {
 		this.type = type;
 	}
 
-    public java.util.ArrayList<Option> getOptions() {
+    public java.util.List<Option> getOptions() {
 		return options;
 	}
-	public void setOptions(java.util.ArrayList<Option> options) {
+	public void setOptions(java.util.List<Option> options) {
 		this.options = options;
 	}
 	public void setOptions(jade.util.leap.ArrayList options) {
@@ -47,10 +47,10 @@ public class UniversalOntology {
 	}
 
     
-	public java.util.ArrayList<ErrorDescription> getErrors() {
+	public java.util.List<ErrorDescription> getErrors() {
 		return errors;
 	}
-	public void setErrors(java.util.ArrayList<ErrorDescription> errors) {
+	public void setErrors(java.util.List<ErrorDescription> errors) {
 		this.errors = errors;
 	}
 

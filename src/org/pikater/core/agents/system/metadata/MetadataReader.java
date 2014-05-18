@@ -5,14 +5,16 @@
 package org.pikater.core.agents.system.metadata;
 
 import jade.util.leap.Iterator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.pikater.core.ontology.messages.Metadata;
+
 import org.pikater.core.ontology.messages.Attribute;
 import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.Instance;
-import org.pikater.core.ontology.messages.metadata.*;
+import org.pikater.core.ontology.metadata.attributes.*;
+import org.pikater.core.ontology.metadata.Metadata;
 
 /**
  * Class that can read metadata from the list of instances and attributes
@@ -61,9 +63,9 @@ public class MetadataReader {
                 //Attributes
                 readAttributesMetadata(data,metadata);  
                 
-                int c=metadata.getNumberOfCategorical();
-                int r=metadata.getNumberOfReal();
-                int i=metadata.getNumberOfInteger();
+                //int c=metadata.getNumberOfCategorical();
+                //int r=metadata.getNumberOfReal();
+                //int i=metadata.getNumberOfInteger();
 		return metadata;
     }
     
@@ -173,7 +175,7 @@ public class MetadataReader {
         double numberOfValues=data.getInstances().size();
         double numberOfMissingValues=0;
         Iterator itr = data.getInstances().iterator();
-		while(itr.hasNext()){                        
+		while(itr.hasNext()) {                        
 			Instance i = (Instance)itr.next();
 			jade.util.leap.List missingList=i.getMissing();
                         if ((boolean)missingList.get(attributeNumber))

@@ -1,9 +1,12 @@
 package org.pikater.core.ontology.messages;
 
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import org.pikater.core.ontology.messages.searchItems.SearchItem;
 
 public class IntSItem extends SearchItem {
 	/**
@@ -32,9 +35,9 @@ public class IntSItem extends SearchItem {
 		return Integer.toString(rInt);
 	}
 	@Override
-	public List possibleValues() {
+	public List<String> possibleValues() {
 		// TODO Auto-generated method stub
-		List posVals = new ArrayList();
+		List<String> posVals = new ArrayList<String>();
 		int x = getNumber_of_values_to_try();
 		int range = (int) (getMax()	- getMin() + 1);
 		// if there is less possibilities than x -> change x

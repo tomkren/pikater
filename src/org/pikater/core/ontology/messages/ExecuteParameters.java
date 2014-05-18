@@ -1,7 +1,7 @@
 package org.pikater.core.ontology.messages;
 
 import jade.content.AgentAction;
-import jade.util.leap.List;
+import java.util.List;
 
 public class ExecuteParameters implements AgentAction{
 	

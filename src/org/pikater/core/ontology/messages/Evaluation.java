@@ -10,9 +10,9 @@ public class Evaluation implements Concept {
 
 	private static final long serialVersionUID = 1319671908304254420L;
 
-	private float maxValue = (float)Integer.MAX_VALUE;
+	//private float maxValue = (float)Integer.MAX_VALUE;
 
-	private List evaluations;
+	private java.util.List<Eval> evaluations;
 	private Date start;
 	private String _status;
 
@@ -64,10 +64,10 @@ public class Evaluation implements Concept {
 		return object;
 	}
 
-	public List getEvaluations() {
+	public java.util.List<Eval> getEvaluations() {
 		return evaluations;
 	}
-	public void setEvaluations(List evaluations) {
+	public void setEvaluations(java.util.List<Eval> evaluations) {
 		this.evaluations = evaluations;
 	}
 	
