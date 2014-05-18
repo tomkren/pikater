@@ -1,12 +1,10 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.search.searchItems;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import org.pikater.core.ontology.messages.searchItems.SearchItem;
 
 public class IntSItem extends SearchItem {
 	/**

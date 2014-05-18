@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.messages.searchItems;
+package org.pikater.core.ontology.search.searchItems;
 
 import java.util.List;
 import java.util.Random;

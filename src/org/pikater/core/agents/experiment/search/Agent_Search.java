@@ -16,7 +16,7 @@ import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.GetOptions;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.searchItems.SearchItem;
+import org.pikater.core.ontology.search.searchItems.SearchItem;
 import org.pikater.core.ontology.search.SearchSolution;
 
 import jade.content.ContentElement;

@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.messages.searchItems;
+package org.pikater.core.ontology.search.searchItems;
 
 import java.util.ArrayList;
 import java.util.List;

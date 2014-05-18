@@ -4,8 +4,8 @@
  */
 package org.pikater.core.utilities.evolution.surrogate;
 
-import org.pikater.core.ontology.messages.IntSItem;
-import org.pikater.core.ontology.messages.searchItems.FloatSItem;
+import org.pikater.core.ontology.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.search.searchItems.IntSItem;
 
 /**
  *

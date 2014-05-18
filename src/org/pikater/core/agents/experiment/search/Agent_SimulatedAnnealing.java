@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.searchItems.SearchItem;
+import org.pikater.core.ontology.search.searchItems.SearchItem;
 import org.pikater.core.ontology.search.SearchSolution;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
 
