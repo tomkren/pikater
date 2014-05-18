@@ -6,12 +6,10 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.Agent;
-import jade.core.AgentContainer;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.wrapper.ContainerController;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -20,7 +18,6 @@ import org.pikater.core.ontology.messages.DataInstances;
 import org.pikater.core.ontology.messages.GetData;
 
 import weka.core.Attribute;
-import weka.core.AttributeStats;
 import weka.core.Instances;
 
 import java.io.BufferedReader;
@@ -29,7 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Agent_ARFFReader extends PikaterAgent {
-	private static final String DATA_DIR="data/files/";
 	private static final long serialVersionUID = 7116837600070711675L;
 	// data read from file
 	protected Instances data;
@@ -93,7 +89,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 
 			for (int i = 0; i < data.numAttributes(); i++) {
 				Attribute a = data.attribute(i);
-				AttributeStats as = data.attributeStats(i);
+				//AttributeStats as = data.attributeStats(i);
 
 				if (i != (data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1)) {
 					if (!types.contains(a.type())) {

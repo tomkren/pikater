@@ -1,15 +1,13 @@
 package org.pikater.core.agents.experiment.search;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
-import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
-import jade.util.leap.List;
-
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.SearchItem;
-import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.search.searchItems.SearchItem;
+import org.pikater.core.ontology.search.SearchSolution;
 
 public class Agent_RandomSearch extends Agent_Search {
 
@@ -47,13 +45,15 @@ public class Agent_RandomSearch extends Agent_Search {
 
 	@Override
 	protected void loadSearchOptions(){
-		List search_options = getSearch_options();
+		
+		List<Option> search_options = getSearch_options();
 		// find maximum tries in Options
-		Iterator itr = search_options.iterator();
+
 		final_error_rate = (float) 0.01;
 		maximum_tries= 10;
-		while (itr.hasNext()) {
-			Option next = (Option) itr.next();
+		
+		for (Option next : search_options) {
+			
 			if (next.getName().equals("E")){
 				final_error_rate = Float.parseFloat(next.getValue());
 			}
@@ -85,11 +85,9 @@ public class Agent_RandomSearch extends Agent_Search {
 	
 	private SearchSolution genRandomSolution(){
 		// go through the solutions Vector, generate random values
-		List new_solution = new ArrayList();
-		Iterator itr = getSchema().iterator();
-		while (itr.hasNext()) {
-			SearchItem si = (SearchItem) itr.next();
-			//opt.setValue(randomOptValue(opt));
+		List<String> new_solution = new ArrayList<String>();
+		
+		for (SearchItem si : getSchema() ) {
 			new_solution.add(si.randomValue(rnd_gen));
 		}
 		SearchSolution sol = new SearchSolution();
@@ -98,10 +96,10 @@ public class Agent_RandomSearch extends Agent_Search {
 	}
 		
 	@Override
-	protected List generateNewSolutions(List solutions, float[][] evaluations) {
+	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 		number_of_tries+=query_block_size;
 		
-		List solutions_list = new ArrayList();
+		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
 		//generate sequence of random solutions
 		for(int i = 0; i < query_block_size; i++){
 			solutions_list.add(genRandomSolution());

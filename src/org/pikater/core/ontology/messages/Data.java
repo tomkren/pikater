@@ -2,6 +2,8 @@ package org.pikater.core.ontology.messages;
 
 import java.util.regex.Pattern;
 
+import org.pikater.core.ontology.metadata.Metadata;
+
 import jade.content.Concept;
 
 public class Data implements Concept {

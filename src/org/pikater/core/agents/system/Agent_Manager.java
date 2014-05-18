@@ -55,7 +55,7 @@ import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.SetSItem;
 import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.messages.option.Options;
+
 
 public class Agent_Manager extends PikaterAgent {
 
@@ -546,9 +546,8 @@ public class Agent_Manager extends PikaterAgent {
 						// will < 0
 						// error rate is a manadatory slot
 
-						Iterator ev_itr = evaluation.getEvaluations().iterator();							
-						while (ev_itr.hasNext()) {
-							Eval next_eval = (Eval) ev_itr.next();
+						for (Eval next_eval : evaluation.getEvaluations() ) {
+
 							if (next_eval.getName().equals("error_rate")){ 
 								sumError_rate += next_eval.getValue();
 							}
@@ -651,12 +650,9 @@ public class Agent_Manager extends PikaterAgent {
 				newAlgorithm.setAttribute("name", agent.getType());
 				newAlgorithm.setAttribute("libname", "weka");
 
-				List Options = agent.getOptions();
+				java.util.List<Option> Options = agent.getOptions();
 				if (Options != null) {
-					Iterator itr_o = Options.iterator();
-					while (itr_o.hasNext()) {
-						org.pikater.core.ontology.messages.option.Option next_o =
-								(org.pikater.core.ontology.messages.option.Option) itr_o.next();
+					for (Option next_o : Options) {
 
 						Element newParameter = new Element("parameter");
 						newParameter.setAttribute("name", next_o.getName());
@@ -679,9 +675,7 @@ public class Agent_Manager extends PikaterAgent {
 				Element newEvaluation = new Element("evaluation");
 								
 				Element newMetric;
-				Iterator ev_itr = next_task.getResult().getEvaluations().iterator();											
-				while (ev_itr.hasNext()) {
-					Eval next_eval = (Eval) ev_itr.next();
+				for (Eval next_eval : next_task.getResult().getEvaluations() ) {
 
 					newMetric = new Element("metric");					
 					newMetric.setAttribute(next_eval.getName(), getXMLValue(next_eval.getValue()));

@@ -1,11 +1,13 @@
 package org.pikater.core.ontology.description;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
-import jade.util.leap.ArrayList;
 
 
 /**
@@ -16,7 +18,7 @@ public class Recommend extends AbstractDataProcessing {
 	private static final long serialVersionUID = -1204258141585020540L;
 
 	private String recommenderClass;
-    private ArrayList options;
+    private List<Option> options;
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -26,12 +28,20 @@ public class Recommend extends AbstractDataProcessing {
         this.recommenderClass = recommenderClass;
     }
 
-    public ArrayList getOptions() {
+    public List<Option> getOptions() {
+    	if (this.options == null) {
+    		return new ArrayList<Option>();
+    	}
         return options;
     }
-
-    public void setParameters(ArrayList options) {
+    public void setOptions(ArrayList<Option> options) {
         this.options = options;
+    }
+    public void addOption(Option option) {
+    	if (this.options == null) {
+    		this.options = new ArrayList<Option>();
+    	}
+        this.options.add(option);
     }
 
 	@Override
@@ -42,7 +52,7 @@ public class Recommend extends AbstractDataProcessing {
 		recommenderClassOption.setName("recommenderClass");
 		recommenderClassOption.setValue(recommenderClass);
 		
-		ArrayList options = new ArrayList();
+		ArrayList<Option> options = new ArrayList<Option>();
 		options.add(recommenderClassOption);
 		
 		UniversalOntology element = new UniversalOntology();

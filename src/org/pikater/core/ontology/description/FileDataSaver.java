@@ -16,7 +16,7 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 	private DataSourceDescription dataSource;
 
 
-	public void  setDataSource(DataSourceDescription dataSource) {
+	public void setDataSource(DataSourceDescription dataSource) {
 		this.dataSource = dataSource;
 	}
 	public DataSourceDescription getDataSource() {

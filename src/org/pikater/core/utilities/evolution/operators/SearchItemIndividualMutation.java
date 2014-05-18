@@ -3,9 +3,9 @@ package org.pikater.core.utilities.evolution.operators;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
-import org.pikater.core.ontology.messages.FloatSItem;
-import org.pikater.core.ontology.messages.IntSItem;
-import org.pikater.core.ontology.messages.SetSItem;
+import org.pikater.core.ontology.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.search.searchItems.SetSItem;
+import org.pikater.core.ontology.search.searchItems.IntSItem;
 
 /**
  *

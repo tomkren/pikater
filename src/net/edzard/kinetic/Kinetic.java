@@ -54,6 +54,18 @@ public class Kinetic {
 	}-*/;
 	
 	/**
+	 * Create a new stage object.
+	 * @param stageContainer The DOM element that Kinetic should use 
+	 * @return A stage object.
+	 * @see Stage
+	 */
+	public static native Stage createStage(Element stageContainer) /*-{
+	    return new $wnd.Kinetic.Stage({
+	        container: stageContainer,
+		});
+	}-*/;
+	
+	/**
 	 * Create a stage with JSON string. De-serialization does not generate custom shape drawing functions,
 	 * images, or event handlers (this would make the serialized object huge). If your app uses custom shapes,
 	 * images, and event handlers (it probably does), then you need to select the appropriate shapes after

@@ -8,7 +8,12 @@ import jade.content.Concept;
  * Time: 17:24
  */
 public class RegisterDataSourceConcept implements Concept {
-    private String taskId;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4747799712901200743L;
+
+	private String taskId;
     private String[] dataTypes;
 
     public String getTaskId() {

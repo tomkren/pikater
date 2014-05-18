@@ -24,11 +24,11 @@ import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
 import org.pikater.web.vaadin.gui.server.MainUIExtension;
 import org.pikater.web.vaadin.gui.server.MyDialogs;
-import org.pikater.web.vaadin.gui.server.components.KineticEditor;
 import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.components.experimenteditor.ExperimentEditor;
+import org.pikater.web.vaadin.gui.server.components.upload.IUploadedFileHandler;
+import org.pikater.web.vaadin.gui.server.components.upload.MyUploads;
 import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
-import org.pikater.web.vaadin.upload.IUploadedFileHandler;
-import org.pikater.web.vaadin.upload.MyUploads;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
@@ -85,7 +85,7 @@ public class PikaterUI extends UI
 		thisUsersUploads = new MyUploads();
 		
 		/*
-		 * TODO: box definition changes will take an application restart... only make the RPC method a one-time push
+		 * TODO: box definition changes will take an application restart... only make the RPC method a one-time push?
 		 * TODO: BoxInfo reference should be a reversible IDs... since box definitions have no decent IDs, we have to make
 		 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
 		 * case we will have to manually check for newer versions when validating the experiments.
@@ -169,12 +169,12 @@ public class PikaterUI extends UI
 					@Override
 					public void handleFile(InputStream streamToLocalFile, String fileName, String mimeType, long sizeInBytes)
 					{
-						// TODO Auto-generated method stub
+						// TODO: upload the file to DB
 					}
 				}
 		));
 	}
-	
+
 	private void test_editor()
 	{
 		// TODO: use the server interface to get box definitions
@@ -202,12 +202,12 @@ public class PikaterUI extends UI
 		VerticalLayout vLayout = new VerticalLayout();
 		setContent(vLayout);
 		
-		KineticEditor editor = new KineticEditor();
-		// kineticComponent.setWidth("800px");
-		// kineticComponent.setHeight("600px");
-		editor.setExperimentToLoad(newExperiment);
-		
+		ExperimentEditor editor = new ExperimentEditor(!getSession().getConfiguration().isProductionMode());
+		editor.setWidth("1200px");
+		editor.setHeight("900px");
 		vLayout.addComponent(editor);
+		
+		// editor.loadExperiment(newExperiment);
 	}
 	
 	@SuppressWarnings("unused")

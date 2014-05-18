@@ -8,9 +8,6 @@ public abstract class AbstractDataProcessing implements IComputationElement {
 
 	private static final long serialVersionUID = 8230702618515429166L;
 
-//  public abstract ArrayList getInputSlots();
-//	public abstract ArrayList getAllOptions();
-
 	abstract UniversalElement exportUniversalElement(
 			UniversalComputationDescription uModel);
 	public static AbstractDataProcessing importUniversalElement() {

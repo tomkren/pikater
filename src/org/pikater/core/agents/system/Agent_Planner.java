@@ -38,7 +38,12 @@ import org.pikater.core.ontology.messages.Execute;
  */
 public class Agent_Planner extends PikaterAgent {
 
-    protected LinkedList<ACLMessage> requestsFIFO = new LinkedList<ACLMessage>();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 820846175393846627L;
+
+	protected LinkedList<ACLMessage> requestsFIFO = new LinkedList<ACLMessage>();
     protected int nResponders;
 
     private AID[] getAllComputingAgents(){
@@ -73,7 +78,12 @@ public class Agent_Planner extends PikaterAgent {
 
     protected class RequestServer extends CyclicBehaviour {
 
-    	Ontology ontology = MessagesOntology.getInstance();
+    	/**
+		 * 
+		 */
+		private static final long serialVersionUID = -8439191651609121039L;
+
+		Ontology ontology = MessagesOntology.getInstance();
     	
         private MessageTemplate reqMsgTemplate = MessageTemplate.and(
                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
@@ -134,7 +144,12 @@ public class Agent_Planner extends PikaterAgent {
     }
 
     protected class askComputingAgents extends ContractNetInitiator {
-        ACLMessage req;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -7890655626575943947L;
+
+		ACLMessage req;
         ACLMessage cfp;
 
         public askComputingAgents(Agent agent, ACLMessage _cfp, ACLMessage _req) {

@@ -19,7 +19,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
 import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.pikater.core.agents.AgentNames;
@@ -27,18 +26,19 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.BoolSItem;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.ExecuteParameters;
-import org.pikater.core.ontology.messages.FloatSItem;
 import org.pikater.core.ontology.messages.GetParameters;
 import org.pikater.core.ontology.messages.Id;
-import org.pikater.core.ontology.messages.IntSItem;
-import org.pikater.core.ontology.messages.SearchSolution;
-import org.pikater.core.ontology.messages.SetSItem;
 import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.ontology.messages.option.Options;
+import org.pikater.core.ontology.search.searchItems.BoolSItem;
+import org.pikater.core.ontology.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.search.searchItems.SearchItem;
+import org.pikater.core.ontology.search.searchItems.SetSItem;
+import org.pikater.core.ontology.search.searchItems.IntSItem;
+import org.pikater.core.ontology.search.SearchSolution;
 
 import java.util.Random;
 
@@ -50,7 +50,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 	private List results = new ArrayList();
 	
 	protected org.pikater.core.ontology.messages.Evaluation evaluation;
-	protected List Options;
+	protected java.util.List<Option> optionsList;
 	protected org.pikater.core.ontology.messages.Agent Agent;
 
 	private int task_number = 0;
@@ -179,7 +179,7 @@ public class Agent_OptionsManager extends PikaterAgent {
 			ExecuteParameters ep = (ExecuteParameters) (((Action) content).getAction());
 			
 			// there is only one solution at the time
-			Options opt = fillOptionsWithSolution(Options, (SearchSolution)(ep.getSolutions().get(0)));
+			Options opt = fillOptionsWithSolution(optionsList, (SearchSolution)(ep.getSolutions().get(0)));
 		
 			Ontology ontology = MessagesOntology.getInstance();
 
@@ -286,9 +286,9 @@ public class Agent_OptionsManager extends PikaterAgent {
 						Execute execute = (Execute) (((Action) content).getAction());
 						received_task = execute.getTask();
 						
-						Options = received_task.getAgent().getOptions();
+						optionsList = received_task.getAgent().getOptions();
 						
-						List mutableOptions = getMutableOptions(Options);
+						List mutableOptions = getMutableOptions(optionsList);
 						
 						if (mutableOptions.size() > 0){							
 							// create search agent
@@ -305,9 +305,8 @@ public class Agent_OptionsManager extends PikaterAgent {
 							msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 	
 							GetParameters gp = new GetParameters();
-							List schema = convertOptionsToSchema(received_task.getAgent().getOptions());
-							gp.setSchema(schema);
-							//gp.setOptions(getMutableOptions(computation.getAgent().getOptions()));						
+							java.util.List<SearchItem> schema = convertOptionsToSchema(received_task.getAgent().getOptions());
+							gp.setSchema(schema);						
 							gp.setSearch_options(execute.getMethod().getOptions());
 
                             Action a = new Action();
@@ -466,51 +465,57 @@ public class Agent_OptionsManager extends PikaterAgent {
 	}
 
 	
-	private List getMutableOptions(List Options){
+	private List getMutableOptions(java.util.List<Option> Options){
+		
 		List mutable = new ArrayList();
-		Iterator itr = Options.iterator();
-		while (itr.hasNext()) {
-			Option o = (Option) itr.next();
-			if (o.getMutable()){				
-				mutable.add(o);
+		for (Option optionI : Options) {
+			if (optionI.getMutable()){				
+				mutable.add(optionI);
 			}
 		}
 		return mutable;
 	}
 		
 	//Create new options from solution with filled ? values (convert solution->options) 
-	private Options fillOptionsWithSolution(List options, SearchSolution solution){
+	private Options fillOptionsWithSolution(java.util.List<Option> options, SearchSolution solution) {
+		
 		Options res_options = new Options();
-		List options_list = new ArrayList();
-		if(options==null){
+		
+		if(options == null){
 			return res_options;
 		}
+		
 		//if no solution values to fill - return the option
 		if(solution.getValues() == null){
 			res_options.setList(options);
 			return res_options;
-		}
-		Iterator sol_itr = solution.getValues().iterator();
-		Iterator opt_itr = options.iterator();
-		while (opt_itr.hasNext()) {
-			Option opt = (Option) opt_itr.next();
-			Option new_opt = opt.copyOption();
-			if(opt.getMutable())
-				new_opt.setValue(fillOptWithSolution(opt, sol_itr));
+		}		
+
+		java.util.List<Option> options_list = new java.util.ArrayList<Option>();
+
+		for (int i = 0; i < options.size(); i++) {
+			
+			Option optionI = options.get(i);
+			
+			Option new_opt = optionI.copyOption();
+			if(optionI.getMutable()) {
+				new_opt.setValue(fillOptWithSolution(optionI, solution, 0));
+			}
 			options_list.add(new_opt);
 		}
+
 		res_options.setList(options_list);
 		return res_options;
 	}
 
 	//Fill an option's ? with values in iterator
-	private String fillOptWithSolution(Option opt, Iterator solution_itr){		
+	private String fillOptWithSolution(Option opt, SearchSolution solution, int solutionIndex){		
 		String res_values = "";
 		String[] values = ((String)opt.getUser_value()).split(",");
 		int numArgs = values.length;
 		for (int i = 0; i < numArgs; i++) {
 			if (values[i].equals("?")) {
-				res_values+=(String)solution_itr.next();
+				res_values+=(String)solution.getValues().get(solutionIndex);
 			}else{
 				res_values+=values[i];
 			}
@@ -523,20 +528,22 @@ public class Agent_OptionsManager extends PikaterAgent {
 	}
 	
 	//Create schema of solutions from options (Convert options->schema)
-	private List convertOptionsToSchema(List options){
-		List new_schema = new ArrayList();
-		if(options==null)
+	private java.util.List<SearchItem> convertOptionsToSchema(java.util.List<Option> options) {
+		
+		java.util.List<SearchItem> new_schema = new java.util.ArrayList<SearchItem>();
+		if(options == null) {
 			return new_schema;
-		Iterator itr = options.iterator();
-		while (itr.hasNext()) {
-			Option opt = (Option) itr.next();
-			if(opt.getMutable())
-				addOptionToSchema(opt, new_schema);
+		}
+
+		for (Option optI : options) {
+			if(optI.getMutable()) {
+				addOptionToSchema(optI, new_schema);
+			}
 		}
 		return new_schema;
 	}
 	
-	private void addOptionToSchema(Option opt, List schema){
+	private void addOptionToSchema(Option opt, java.util.List<SearchItem> schema){
 		String[] values = ((String)opt.getUser_value()).split(",");
 		int numArgs = values.length;
 		if (!opt.getIs_a_set()) {

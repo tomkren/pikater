@@ -9,5 +9,5 @@ public enum BoxType
 	RECOMMENDER,
 	METHOD,
 	VISUALIZER,
-	WRAPPER
+	WRAPPER;
 }

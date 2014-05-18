@@ -39,32 +39,31 @@ public class Entropy {
         return result;
     }
     
-    public static double CountEntropyClassAttribute(List<Object> attributeValues,List<Object> classValues)
+    public static double CountEntropyClassAttribute(List<Object> attributeValues, List<Object> classValues)
     {   
-        double result=0;
-        HashSet targetValues=new HashSet();
-        HashSet sourceValues=new HashSet();
-        for (Object o:classValues)
-        {
-            if (!targetValues.contains(o))
-            {
+        double result = 0;
+        HashSet<Object> targetValues = new HashSet<Object>();
+        HashSet<Object> sourceValues = new HashSet<Object>();
+
+        for (Object o : classValues) {
+
+            if (!targetValues.contains(o)) {
                 targetValues.add(o);
             }            
         }
-        for (Object o:attributeValues)
-        {
-            if (!sourceValues.contains(o))
-            {
+        for (Object o : attributeValues) {
+        	
+            if (!sourceValues.contains(o)) {
                 sourceValues.add(o);
             }            
         }
         //count H(A(v))
         
-        double n=attributeValues.size();
-        for (Object o:sourceValues)
+        double n = attributeValues.size();
+        for (Object o : sourceValues)
         {
-            double nav=getNumberOfInstancesWithSpecifiedAttributeValue(attributeValues, o);
-            double hav=0;
+            double nav = getNumberOfInstancesWithSpecifiedAttributeValue(attributeValues, o);
+            double hav = 0;
             for (Object target:targetValues)
             {
                 double ntav=getNumberOfInstancesWithSpecifiedAttributeClassValue(attributeValues, classValues, o, target);
@@ -72,8 +71,8 @@ public class Entropy {
                 if (ratio==0) continue;
                 hav+=(ratio)*Math.log(ratio)/Math.log(2);
             }
-            hav=hav*-1;         
-            result+=(nav*hav)/n;            
+            hav = hav*-1;         
+            result += (nav*hav)/n;            
         }        
         return result;
     }

@@ -1,7 +1,8 @@
 package org.pikater.core.agents.system.metadata;
 
 import jade.util.leap.ArrayList;
-import org.pikater.core.ontology.messages.Metadata;
+
+import org.pikater.core.ontology.metadata.Metadata;
 
 public class MetadataListItem {
 	private Metadata metadata;

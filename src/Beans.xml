@@ -16,6 +16,8 @@
 -->
     <bean id="logger" class="org.pikater.shared.logging.ConsoleLogger" scope="singleton"/>
 
+    <bean id="guidGenerator" class="org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.IncrementalGUIDGenerator" scope="singleton"/>
+
     <bean id="agentTypesProvider" class="org.pikater.core.agents.system.Agent_TypesFromFileProvider" scope="singleton"/>
 
     <bean id="honza_local" class="org.pikater.shared.database.PostgreSQLConnectionProvider" scope="singleton">

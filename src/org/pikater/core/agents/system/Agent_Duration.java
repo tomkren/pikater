@@ -38,6 +38,7 @@ import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.GetDuration;
 import org.pikater.core.ontology.messages.Id;
 import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.option.Option;
 
 public class Agent_Duration extends PikaterAgent {
 
@@ -288,12 +289,10 @@ public class Agent_Duration extends PikaterAgent {
 					
 					// save the duration of the computation to the list
 					Evaluation evaluation = (Evaluation)t.getResult();
-					List ev = evaluation.getEvaluations();
+					java.util.List<Eval> ev = evaluation.getEvaluations();
 					
 					Duration d = new Duration();
-					Iterator itr = ev.iterator();					
-					while (itr.hasNext()) {
-						Eval eval = (Eval) itr.next();						
+					for (Eval eval : ev) {
 						if(eval.getName().equals("duration")){
 							d.setDuration((int)eval.getValue());
 						}
@@ -338,7 +337,7 @@ public class Agent_Duration extends PikaterAgent {
 		org.pikater.core.ontology.messages.Agent ag =
 				new org.pikater.core.ontology.messages.Agent();
 		ag.setType("LinearRegression");
-		ag.setOptions(new ArrayList());
+		ag.setOptions(new java.util.ArrayList<Option>());
 
 		Data d = new Data();
 		d.setTest_file_name("xxx");

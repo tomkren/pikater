@@ -1,5 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
+import jade.util.leap.ArrayList;
 import org.pikater.core.ontology.messages.option.Option;
 
 /**
@@ -8,13 +9,13 @@ import org.pikater.core.ontology.messages.option.Option;
  * Time: 13:28
  */
 public class OptionEdge extends EdgeValue {
-    private Option options;
+    private ArrayList options;
 
-    public Option getOptions() {
+    public ArrayList getOptions() {
         return options;
     }
 
-    public void setOptions(Option options) {
+    public void setOptions(ArrayList options) {
         this.options = options;
     }
 }

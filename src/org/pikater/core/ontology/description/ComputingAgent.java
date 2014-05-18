@@ -1,13 +1,15 @@
 package org.pikater.core.ontology.description;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
-import jade.util.leap.ArrayList;
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -17,7 +19,7 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 	private static final long serialVersionUID = 2127755171666013125L;
 
 	private String modelClass;
-    private ArrayList options;
+    private List<Option> options;
 
     private DataSourceDescription trainingData;
     private DataSourceDescription testingData;
@@ -51,13 +53,19 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
         this.validationData = validationData;
     }
     
-    public ArrayList getOptions() {
+    public List<Option> getOptions() {
+    	if (this.options == null) {
+    		return new ArrayList<Option>();
+    	}
         return options;
     }
-    public void setOptions(ArrayList options) {
+    public void setOptions(List<Option> options) {
         this.options = options;
     }
     public void addOption(Option option) {
+    	if (this.options == null) {
+    		this.options = new ArrayList<Option>();
+    	}
         this.options.add(option);
     }
 

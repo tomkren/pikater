@@ -22,7 +22,7 @@ public class Agent_TypesFromFileProvider implements AgentTypesProvider {
 
     public Map<String, AgentTypeDefinition> GetAgentTypes() {
         Map<String, AgentTypeDefinition> toReturn=new HashMap<>();
-        FileReader input;
+        FileReader input = null;
         try {
             input = new FileReader(path + "agent_types");
             // Filter FileReader through a Buffered read to read a line at a
@@ -52,9 +52,13 @@ public class Agent_TypesFromFileProvider implements AgentTypesProvider {
                 line = bufRead.readLine();
             }
 
+            input.close();
+            bufRead.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return toReturn;
     }
 }

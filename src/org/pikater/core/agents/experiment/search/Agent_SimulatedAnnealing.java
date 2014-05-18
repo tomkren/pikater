@@ -1,17 +1,14 @@
 package org.pikater.core.agents.experiment.search;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.pikater.core.ontology.agentInfo.AgentInfo;
-import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.SearchItem;
-import org.pikater.core.ontology.messages.SearchSolution;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.search.searchItems.SearchItem;
+import org.pikater.core.ontology.search.SearchSolution;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
-
-import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
-import jade.util.leap.List;
 
 public class Agent_SimulatedAnnealing extends Agent_Search {
 	/*
@@ -30,6 +27,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	 * Stability of generation of new option - probability of keeping of option (default 0.5)
 	 */
 	private static final long serialVersionUID = -5087231723984887596L;
+
 	private SearchSolution solution = null;
 	private SearchSolution new_solution = null;
 	private float evaluation = Float.MAX_VALUE;
@@ -71,10 +69,11 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		maximum_tries = 50;
 		stability = 0.5;
 		final_error_rate = 0.01;
-		List search_options = getSearch_options();
-		Iterator itr = search_options.iterator();
-		while (itr.hasNext()) {
-			Option next = (Option) itr.next();
+		
+		List<Option> search_options = getSearch_options();
+		
+		for (Option next : search_options) {
+
 			if (next.getName().equals("E")){
 				final_error_rate = Float.parseFloat(next.getValue()); 
 			}
@@ -91,7 +90,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	}
 
 	@Override
-	protected List generateNewSolutions(List solutions, float[][] evaluations) {
+	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 		
 		if(evaluations == null){
 			//inicializace
@@ -108,7 +107,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		number_of_tries++;
 		
 		//List of solutions to send
-		List solutions_list = new ArrayList();
+		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
 		solutions_list.add(new_solution);
 		return solutions_list;
 	}
@@ -141,24 +140,24 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	
 	//Neighbor function: Random solutions in case of beginning, or mutation of existing
 	private SearchSolution Neighbor(SearchSolution sol){
-		List new_solution = new ArrayList();
+
+		List<String> new_solution = new ArrayList<String>();
 		if(sol == null){
 			//Completely new solution
-			Iterator itr = getSchema().iterator();
-			while (itr.hasNext()) {
+			for (SearchItem si : getSchema() ) {
 				//dont want to change old solutions
-				SearchItem si  = (SearchItem) itr.next();
 				new_solution.add(si.randomValue(rnd_gen));
 			}
 		}else{
 			//Neighbor function
-			Iterator sol_itr = sol.getValues().iterator();
-			Iterator schema_itr = getSchema().iterator();
-			while (sol_itr.hasNext()) {
-				String val = ((String) sol_itr.next());
-				SearchItem si = (SearchItem) schema_itr.next();
-				if(rnd_gen.nextDouble() > stability)
+			for (int i = 0; i < getSchema().size(); i++) {
+				
+				SearchItem si = getSchema().get(i);
+				String val = sol.getValues().get(i);
+				
+				if(rnd_gen.nextDouble() > stability) {
 					val = si.randomValue(rnd_gen);
+				}
 				new_solution.add(val);
 			}
 		}

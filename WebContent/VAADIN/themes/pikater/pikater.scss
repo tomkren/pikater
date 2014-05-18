@@ -26,6 +26,63 @@
   	font-family: "Courier New", Courier, monospace;
   }
   
+  /* Cell browser */
+  .cellbrowser
+  {
+  	border: 1px solid black;
+  }
+  .cellbrowser-column
+  {
+  	height: 100%;
+  }
+  .cellbrowser-cell-container
+  {
+  	width: 100%; /* this is needed for some parent containers as well as the cell itself */
+  }
+  .cellbrowser-cell
+  {
+  	width: 100%; /* CSS3: extends: cellbrowser-cell-container; */
+  	min-width: 150px;
+  	border-style: ridge;
+  }
+  .cellbrowser-cell:hover
+  {
+  	border-style: groove;
+  }
+  .cellbrowser-cell-inner-layout
+  {
+  	width: 100%;
+  }
+  .cellbrowser-cell-inner-layout-table:hover, .cellbrowser-cell-inner-layout-table-selected 
+  {
+  	background-color: lightyellow;
+  }
+  .cellbrowser-cell-component
+  {
+  	padding-top: 3px;
+  	padding-bottom: 3px;
+  	margin-left: 10px;
+  	margin-right: 25px;
+  }
+  .cellbrowser-cell-image
+  {
+  }
+  
+  /* Experiment editor */
+  .experiment-editor
+  {
+  }
+  .experiment-editor .v-captiontext
+  {
+  	font-size: 14px;
+  	font-weight: bold;
+  }
+  .experiment-editor-kinetic-container
+  {
+  	width: 100%;
+  	height: 100%;
+  }
+  
   /* Miscellaneous */
   .displayBorder
   {
@@ -38,5 +95,9 @@
   .errorLabel
   {
   	color: red;
+  }
+  .autoHeight
+  {
+  	height: auto;
   }
 }

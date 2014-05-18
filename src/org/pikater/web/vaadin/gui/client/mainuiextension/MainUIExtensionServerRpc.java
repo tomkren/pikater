@@ -6,4 +6,5 @@ public interface MainUIExtensionServerRpc extends ServerRpc
 {
 	void logWarning(String message);
 	void logThrowable(String message, String throwableStackTrace);
+	void logUncaughtNativeClientException();
 }

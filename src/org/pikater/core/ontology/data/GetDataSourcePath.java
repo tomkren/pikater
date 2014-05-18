@@ -8,7 +8,12 @@ import jade.content.AgentAction;
  * Time: 13:21
  */
 public class GetDataSourcePath implements AgentAction {
-    private String taskId;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2808234460031853327L;
+
+	private String taskId;
     private String type;
 
     public String getTaskId() {

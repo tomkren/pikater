@@ -4,14 +4,14 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
-import org.pikater.web.vaadin.gui.client.managers.GWTKeyboardManager;
-import org.pikater.web.vaadin.gui.client.managers.GWTMisc;
 
 @SuppressWarnings("deprecation")
 public final class CreateEdgePlugin implements IEnginePlugin

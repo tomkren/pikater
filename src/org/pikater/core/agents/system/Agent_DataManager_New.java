@@ -23,6 +23,9 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.data.GetFile;
 import org.pikater.core.ontology.messages.*;
+import org.pikater.core.ontology.metadata.GetAllMetadata;
+import org.pikater.core.ontology.metadata.GetMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
 import org.postgresql.PGConnection;
 
 import java.io.*;
@@ -208,9 +211,8 @@ public class Agent_DataManager_New extends PikaterAgent {
 			int duration = Integer.MAX_VALUE; // miliseconds
 			float durationLR = Float.MAX_VALUE;
 
-			Iterator itr = res.getResult().getEvaluations().iterator();
-			while (itr.hasNext()) {
-				Eval next_eval = (Eval) itr.next();
+
+			for (Eval next_eval : res.getResult().getEvaluations() ) {
 				if (next_eval.getName().equals("error_rate")) {
 					Error_rate = next_eval.getValue();
 				}

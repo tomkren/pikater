@@ -1,9 +1,12 @@
 package org.pikater.core.agents.system;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -29,13 +32,19 @@ import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
 import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataTransferService;
+import org.pikater.core.ontology.actions.AgentInfoOntology;
 import org.pikater.core.ontology.actions.BatchOntology;
 import org.pikater.core.ontology.actions.DataOntology;
 import org.pikater.core.ontology.actions.ExperimentOntology;
+import org.pikater.core.ontology.actions.FilenameTranslationOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.actions.MetadataOntology;
 import org.pikater.core.ontology.batch.Batch;
 import org.pikater.core.ontology.batch.SaveBatch;
 import org.pikater.core.ontology.batch.SavedBatch;
 import org.pikater.core.ontology.data.GetFile;
+import org.pikater.core.ontology.data.PrepareFileUpload;
 import org.pikater.core.ontology.description.ComputationDescription;
 import org.postgresql.PGConnection;
 
@@ -47,6 +56,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ServerSocket;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,29 +67,27 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import javax.swing.JPanel;
-
 import org.pikater.core.ontology.experiment.Experiment;
 import org.pikater.core.ontology.experiment.SaveExperiment;
 import org.pikater.core.ontology.experiment.SavedExperiment;
+import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.messages.Agent;
 import org.pikater.core.ontology.messages.DeleteTempFiles;
 import org.pikater.core.ontology.messages.Eval;
-import org.pikater.core.ontology.messages.GetAllMetadata;
 import org.pikater.core.ontology.messages.GetFileInfo;
 import org.pikater.core.ontology.messages.GetFiles;
-import org.pikater.core.ontology.messages.GetMetadata;
 import org.pikater.core.ontology.messages.GetTheBestAgent;
 import org.pikater.core.ontology.messages.ImportFile;
 import org.pikater.core.ontology.messages.LoadResults;
-import org.pikater.core.ontology.messages.Metadata;
-import org.pikater.core.ontology.messages.SaveMetadata;
 import org.pikater.core.ontology.messages.SaveResults;
 import org.pikater.core.ontology.messages.SavedResult;
 import org.pikater.core.ontology.messages.ShutdownDatabase;
 import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.TranslateFilename;
-import org.pikater.core.ontology.messages.UpdateMetadata;
+import org.pikater.core.ontology.metadata.GetAllMetadata;
+import org.pikater.core.ontology.metadata.GetMetadata;
+import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.metadata.SaveMetadata;
+import org.pikater.core.ontology.metadata.UpdateMetadata;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
 public class Agent_DataManager extends PikaterAgent {
@@ -100,13 +108,26 @@ public class Agent_DataManager extends PikaterAgent {
 			"data" + System.getProperty("file.separator");
 	
 	@Override
+	public java.util.List<Ontology> getOntologies() {
+			
+		java.util.List<Ontology> ontologies =
+				new java.util.ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(DataOntology.getInstance());
+		ontologies.add(FilenameTranslationOntology.getInstance());
+		ontologies.add(MetadataOntology.getInstance());
+		ontologies.add(BatchOntology.getInstance());
+		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(AgentInfoOntology.getInstance());
+		
+		return ontologies;
+	}
+	
+	@Override
 	protected void setup() {
 		try {
 			initDefault();
 			registerWithDF();
-			getContentManager().registerOntology(DataOntology.getInstance());
-			getContentManager().registerOntology(BatchOntology.getInstance());
-			getContentManager().registerOntology(ExperimentOntology.getInstance());
 			
 			if (containsArgument(CONNECTION_ARG_NAME)) {
 				connectionBean = getArgumentValue(CONNECTION_ARG_NAME);
@@ -200,6 +221,9 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof GetFile) {
 						return respondToGetFile(request, a);
 					}
+					if (a.getAction() instanceof PrepareFileUpload) {
+						return respondToPrepareFileUpload(request, a);
+					}
 				} catch (OntologyException e) {
 					e.printStackTrace();
 					logError("Problem extracting content: " + e.getMessage());
@@ -234,6 +258,7 @@ public class Agent_DataManager extends PikaterAgent {
         UniversalComputationDescription uDescription =
         		description.ExportUniversalComputationDescription();
         
+		@SuppressWarnings("unused")
 		int userId = batch.getOwnerID();
 		//napevno ulozim pre Klaru
 		
@@ -313,6 +338,34 @@ public class Agent_DataManager extends PikaterAgent {
 			e.printStackTrace();
 		}
 		
+		return reply;
+	}
+
+	@SuppressWarnings("serial")
+	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
+		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
+		log("DataManager.respondToPrepareFileUpload");
+
+		final ServerSocket serverSocket = new ServerSocket();
+		serverSocket.setSoTimeout(15000);
+		serverSocket.bind(null);
+		log("Listening on port: " + serverSocket.getLocalPort());
+
+		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
+			@Override
+			public void action() {
+				try {
+					DataTransferService.handleUploadConnection(serverSocket, hash);
+				} catch (IOException e) {
+					logError("Data upload failed");
+					e.printStackTrace();
+				}
+			}
+		}));
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
 		return reply;
 	}
 
@@ -544,12 +597,14 @@ public class Agent_DataManager extends PikaterAgent {
 			float Root_mean_squared_error = Float.MAX_VALUE;
 			float Relative_absolute_error = Float.MAX_VALUE; // percent
 			float Root_relative_squared_error = Float.MAX_VALUE; // percent
+			
+			@SuppressWarnings("unused")
 			int duration = Integer.MAX_VALUE; // miliseconds
+			@SuppressWarnings("unused")
 			float durationLR = Float.MAX_VALUE;
 
-			Iterator itr = res.getResult().getEvaluations().iterator();
-			while (itr.hasNext()) {
-				Eval next_eval = (Eval) itr.next();
+			for ( Eval next_eval: res.getResult().getEvaluations() ) {
+
 				if (next_eval.getName().equals("error_rate")) {
 					Error_rate = next_eval.getValue();
 				}
@@ -615,7 +670,7 @@ public class Agent_DataManager extends PikaterAgent {
 			log("JPA Result    "+jparesult.getErrorRate());
 			DAOs.resultDAO.storeEntity(jparesult);
 			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).info("Persisted JPAResult");
-		}catch(Exception e){
+		} catch(Exception e) {
 			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).error("Error in SaveResults", e);;
 		}
 
@@ -671,19 +726,19 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		log("Agent_DataManager.respondToGetAllMetadata");
 
-		java.util.List<JPADataSetLO> datasets=null;
+		java.util.List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResults_required()) {
 			if (gm.getExceptions() != null) {
-				java.util.List<String> exHash=new java.util.LinkedList<String>();
+				java.util.List<String> exHash = new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
 					Metadata m = (Metadata) itr.next();
 					exHash.add(m.getInternal_name());
 				}
-				datasets=DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
+				datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
 			}else{
-				datasets=DAOs.dataSetDAO.getAllWithResults();
+				datasets = DAOs.dataSetDAO.getAllWithResults();
 			}
 		} else {
 			if (gm.getExceptions() != null) {
@@ -696,9 +751,9 @@ public class Agent_DataManager extends PikaterAgent {
 					excludedHashes.add(m.getInternal_name());
 				}
 				
-				datasets=DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
+				datasets = DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
 			}else{
-				datasets=DAOs.dataSetDAO.getAll();
+				datasets = DAOs.dataSetDAO.getAll();
 			}
 			
 		}
@@ -867,7 +922,8 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage respondToDeleteTempFiles(ACLMessage request) {
-		String path = this.dataFilesPath + "temp" + System.getProperty("file.separator");
+		String path = Agent_DataManager.dataFilesPath +
+				"temp" + System.getProperty("file.separator");
 
 		File tempDir = new File(path);
 		String[] files = tempDir.list();

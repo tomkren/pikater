@@ -10,7 +10,14 @@ import org.pikater.core.ontology.messages.Agent;
 public class RecommendationEdge extends EdgeValue {
     private Agent recommendation;
 
-    public RecommendationEdge(Agent recommendation) {
+    public Agent getRecommendation() {
+		return recommendation;
+	}
+
+	public void setRecommendation(Agent recommendation) {
+		this.recommendation = recommendation;
+	}
+	public RecommendationEdge(Agent recommendation) {
         this.recommendation = recommendation;
     }
 }

@@ -1,14 +1,15 @@
 package org.pikater.core.utilities.evolution.individuals;
 
-import jade.util.leap.Iterator;
 import java.util.Arrays;
+
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.surrogate.ModelInputNormalizer;
-import org.pikater.core.ontology.messages.BoolSItem;
-import org.pikater.core.ontology.messages.FloatSItem;
-import org.pikater.core.ontology.messages.IntSItem;
-import org.pikater.core.ontology.messages.SearchItem;
-import org.pikater.core.ontology.messages.SetSItem;
+import org.pikater.core.ontology.search.searchItems.BoolSItem;
+import org.pikater.core.ontology.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.search.searchItems.IntSItem;
+import org.pikater.core.ontology.search.searchItems.SearchItem;
+import org.pikater.core.ontology.search.searchItems.SetSItem;
+
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -96,9 +97,9 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         for (int i = 0; i < length(); i++) {
             if (schema[i] instanceof SetSItem) {
                 FastVector values = new FastVector();
-                Iterator it = schema[i].possibleValues().iterator();
-                while (it.hasNext()) {
-                    values.addElement(it.next());
+                
+                for (String valueI : schema[i].possibleValues() ) {
+                    values.addElement(valueI);
                 }
                 attributes.addElement(new Attribute("a" + i, values));
                 continue;
