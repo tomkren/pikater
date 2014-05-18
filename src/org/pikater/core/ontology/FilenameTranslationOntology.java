@@ -1,6 +1,6 @@
 package org.pikater.core.ontology;
 
-import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
+import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;

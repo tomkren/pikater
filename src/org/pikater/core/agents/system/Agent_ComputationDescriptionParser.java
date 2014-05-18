@@ -16,7 +16,7 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.experiment.Solve;
-import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
+import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
 
 import jade.content.Concept;

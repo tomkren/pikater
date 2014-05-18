@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.fileNameTranslate;
+package org.pikater.core.ontology.subtrees.file;
 
 import jade.content.AgentAction;
 

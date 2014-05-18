@@ -75,7 +75,7 @@ import org.pikater.core.ontology.subtrees.file.GetFileInfo;
 import org.pikater.core.ontology.subtrees.file.GetFiles;
 import org.pikater.core.ontology.subtrees.file.ImportFile;
 import org.pikater.core.ontology.subtrees.file.PrepareFileUpload;
-import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
+import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;

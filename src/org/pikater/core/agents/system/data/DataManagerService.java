@@ -30,7 +30,7 @@ import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.file.GetFileInfo;
 import org.pikater.core.ontology.subtrees.file.GetFiles;
 import org.pikater.core.ontology.subtrees.file.ImportFile;
-import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
+import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
