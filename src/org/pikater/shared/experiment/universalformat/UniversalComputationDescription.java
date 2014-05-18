@@ -2,8 +2,8 @@ package org.pikater.shared.experiment.universalformat;
 
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.description.ComputationDescription;
-import org.pikater.core.ontology.subtrees.description.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.description.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.option.Option;
 

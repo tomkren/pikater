@@ -2,6 +2,7 @@ package org.pikater.core.ontology.subtrees.messages;
 
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Id;
 
 import jade.content.Concept;
 import jade.util.leap.List;

@@ -3,7 +3,7 @@ package org.pikater.core.options;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
-import org.pikater.core.ontology.subtrees.description.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 
 public class FileSaver_VirtualBox  {
 

@@ -28,7 +28,7 @@ import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
-import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
 public class Agent_InsertedBatchesLog extends PikaterAgent {
 	

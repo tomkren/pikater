@@ -2,7 +2,7 @@ package org.pikater.core.options;
 
 import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.description.Recommend;
+import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 
 public class NMTopRecommender_RecommendBox {
 

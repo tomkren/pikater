@@ -24,20 +24,20 @@ import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
-import org.pikater.core.ontology.subtrees.dataSource.GetFile;
 import org.pikater.core.ontology.subtrees.database.ShutdownDatabase;
+import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
+import org.pikater.core.ontology.subtrees.file.GetFile;
+import org.pikater.core.ontology.subtrees.file.GetFileInfo;
+import org.pikater.core.ontology.subtrees.file.GetFiles;
+import org.pikater.core.ontology.subtrees.file.ImportFile;
 import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
-import org.pikater.core.ontology.subtrees.messages.DeleteTempFiles;
-import org.pikater.core.ontology.subtrees.messages.GetFileInfo;
-import org.pikater.core.ontology.subtrees.messages.GetFiles;
-import org.pikater.core.ontology.subtrees.messages.GetTheBestAgent;
-import org.pikater.core.ontology.subtrees.messages.ImportFile;
-import org.pikater.core.ontology.subtrees.messages.SaveResults;
+import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
+import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class DataManagerService extends FIPAService {

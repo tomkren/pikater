@@ -31,13 +31,13 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.duration.Duration;
-import org.pikater.core.ontology.subtrees.messages.Execute;
-import org.pikater.core.ontology.subtrees.messages.GetDuration;
-import org.pikater.core.ontology.subtrees.messages.Id;
+import org.pikater.core.ontology.subtrees.duration.GetDuration;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class Agent_Duration extends PikaterAgent {

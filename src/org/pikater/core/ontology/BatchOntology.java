@@ -4,7 +4,7 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.batch.Batch;
-import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 

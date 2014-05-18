@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.batch;
 
-import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
 import jade.content.Concept;
 

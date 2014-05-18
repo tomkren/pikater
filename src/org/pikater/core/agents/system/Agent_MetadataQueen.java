@@ -41,14 +41,14 @@ import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
-import org.pikater.core.ontology.subtrees.messages.Execute;
-import org.pikater.core.ontology.subtrees.messages.Id;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class Agent_MetadataQueen extends PikaterAgent {

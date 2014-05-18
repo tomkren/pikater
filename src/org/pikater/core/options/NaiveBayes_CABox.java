@@ -4,7 +4,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaNaiveBayesCA;
 import org.pikater.core.dataStructures.options.OptionDefault;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.description.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 
 public class NaiveBayes_CABox {
 

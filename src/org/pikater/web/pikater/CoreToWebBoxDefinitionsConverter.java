@@ -7,10 +7,10 @@ import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.description.ComputingAgent;
-import org.pikater.core.ontology.subtrees.description.FileDataProvider;
-import org.pikater.core.ontology.subtrees.description.Recommend;
-import org.pikater.core.ontology.subtrees.description.Search;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
+import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
+import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;

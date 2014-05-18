@@ -26,9 +26,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.MessagesOntology;
-import org.pikater.core.ontology.subtrees.messages.Execute;
 import org.pikater.core.ontology.subtrees.messages.ExecuteParameters;
-import org.pikater.core.ontology.subtrees.messages.Id;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
@@ -38,6 +36,8 @@ import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
+import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.Random;

@@ -17,7 +17,7 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
-import org.pikater.core.ontology.subtrees.messages.Execute;
+import org.pikater.core.ontology.subtrees.task.Execute;
 
 import java.io.*;
 import java.sql.Timestamp;

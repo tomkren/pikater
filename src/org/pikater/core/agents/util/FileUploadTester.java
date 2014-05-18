@@ -6,7 +6,7 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.ontology.DataOntology;
-import org.pikater.core.ontology.subtrees.dataSource.PrepareFileUpload;
+import org.pikater.core.ontology.subtrees.file.PrepareFileUpload;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;

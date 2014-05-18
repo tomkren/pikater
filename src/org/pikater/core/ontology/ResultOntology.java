@@ -1,7 +1,7 @@
 package org.pikater.core.ontology;
 
 
-import org.pikater.core.ontology.subtrees.messages.Results;
+import org.pikater.core.ontology.subtrees.result.Results;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;

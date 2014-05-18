@@ -8,7 +8,7 @@ import org.pikater.core.dataStructures.options.types.OptionInterval;
 import org.pikater.core.dataStructures.options.types.OptionList;
 import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.description.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 
 public class J48_CABox {
 	

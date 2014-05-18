@@ -27,7 +27,7 @@ import jade.proto.ContractNetInitiator;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MessagesOntology;
-import org.pikater.core.ontology.subtrees.messages.Execute;
+import org.pikater.core.ontology.subtrees.task.Execute;
 
 /**
  * Created with IntelliJ IDEA.

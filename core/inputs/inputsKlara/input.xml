@@ -1,9 +1,9 @@
-<org.pikater.core.ontology.subtrees.description.ComputationDescription>
+<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
   <rootElements>
-    <org.pikater.core.ontology.subtrees.description.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
       <dataSource>
         <dataType>Data</dataType>
-        <dataProvider type="org.pikater.core.ontology.subtrees.description.CARecSearchComplex">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex">
           <options>
             <org.pikater.core.ontology.subtrees.option.Option>
               <__mutable>false</__mutable>
@@ -33,7 +33,7 @@
               <numberOfOptions>0</numberOfOptions>
             </org.pikater.core.ontology.subtrees.option.Option>
           </options>
-          <computingAgent type="org.pikater.core.ontology.subtrees.description.ComputingAgent">
+          <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
             <modelClass>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</modelClass>
             <options>
               <org.pikater.core.ontology.subtrees.option.Option>
@@ -56,7 +56,7 @@
               </org.pikater.core.ontology.subtrees.option.Option>
             </options>
             <trainingData>
-              <dataProvider type="org.pikater.core.ontology.subtrees.description.FileDataProvider">
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
             </trainingData>
@@ -64,6 +64,6 @@
           </computingAgent>
         </dataProvider>
       </dataSource>
-    </org.pikater.core.ontology.subtrees.description.FileDataSaver>
+    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>
-</org.pikater.core.ontology.subtrees.description.ComputationDescription>
+</org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>

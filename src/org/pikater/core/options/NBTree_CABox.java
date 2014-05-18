@@ -2,7 +2,7 @@ package org.pikater.core.options;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaNBTreeCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.description.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 
 public class NBTree_CABox {
 	

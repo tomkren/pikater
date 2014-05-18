@@ -2,7 +2,7 @@ package org.pikater.shared.experiment.universalformat;
 
 import java.util.Collection;
 
-import org.pikater.core.ontology.subtrees.description.ErrorDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 public class UniversalOntology {

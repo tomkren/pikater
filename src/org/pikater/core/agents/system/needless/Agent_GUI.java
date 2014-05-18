@@ -36,6 +36,7 @@ import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.experiment.Solve;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.messages.*;
@@ -44,7 +45,10 @@ import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.option.Interval;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.result.Results;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.io.*;

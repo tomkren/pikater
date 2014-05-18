@@ -9,13 +9,13 @@ import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.dataStructures.options.Converter;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.subtrees.description.CARecSearchComplex;
-import org.pikater.core.ontology.subtrees.description.ComputationDescription;
-import org.pikater.core.ontology.subtrees.description.ComputingAgent;
-import org.pikater.core.ontology.subtrees.description.DataSourceDescription;
-import org.pikater.core.ontology.subtrees.description.FileDataProvider;
-import org.pikater.core.ontology.subtrees.description.FileDataSaver;
-import org.pikater.core.ontology.subtrees.description.Search;
+import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
+import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchDescription.Search;
 
 
 public final class Input2 {

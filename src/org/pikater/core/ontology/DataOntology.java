@@ -1,7 +1,7 @@
 package org.pikater.core.ontology;
 
 
-import org.pikater.core.ontology.subtrees.dataSource.GetFile;
+import org.pikater.core.ontology.subtrees.file.GetFile;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.BeanOntologyException;

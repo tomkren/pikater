@@ -4,7 +4,7 @@ import org.pikater.core.agents.experiment.recommend.Agent_Basic;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
-import org.pikater.core.ontology.subtrees.description.Recommend;
+import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 
 public class BasicRecommend_RecommendBox {
 

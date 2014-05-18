@@ -2,7 +2,6 @@ package org.pikater.core.ontology.subtrees.task;
 
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.messages.Id;
 
 import jade.content.Concept;
 

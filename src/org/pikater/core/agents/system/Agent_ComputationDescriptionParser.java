@@ -14,10 +14,10 @@ import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
-import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.experiment.Solve;
 import org.pikater.core.ontology.subtrees.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.subtrees.messages.Problem;
-import org.pikater.core.ontology.subtrees.messages.Solve;
 
 import jade.content.Concept;
 import jade.content.ContentElement;

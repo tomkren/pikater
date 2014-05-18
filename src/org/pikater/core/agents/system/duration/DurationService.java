@@ -17,7 +17,7 @@ import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.duration.Duration;
-import org.pikater.core.ontology.subtrees.messages.GetDuration;
+import org.pikater.core.ontology.subtrees.duration.GetDuration;
 
 
 public class DurationService extends FIPAService {

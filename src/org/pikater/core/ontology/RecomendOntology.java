@@ -3,7 +3,7 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
-import org.pikater.core.ontology.subtrees.description.Recommend;
+import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 
 
 /**

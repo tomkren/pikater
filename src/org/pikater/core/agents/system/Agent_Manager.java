@@ -60,16 +60,16 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.experiment.Solve;
 import org.pikater.core.ontology.subtrees.management.GetAgents;
-import org.pikater.core.ontology.subtrees.messages.Execute;
-import org.pikater.core.ontology.subtrees.messages.Id;
 import org.pikater.core.ontology.subtrees.messages.Problem;
-import org.pikater.core.ontology.subtrees.messages.Results;
-import org.pikater.core.ontology.subtrees.messages.Solve;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
+import org.pikater.core.ontology.subtrees.result.Results;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
+import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class Agent_Manager extends PikaterAgent {
@@ -768,7 +768,7 @@ public class Agent_Manager extends PikaterAgent {
 				Result result = (Result) content;
 				
 				List listOfResults = result.getItems();
-				results.setProblem_id(problemID);
+				results.setProblemId(problemID);
 				results.setResults(listOfResults);				
 				
 				float sumError_rate = 0;
@@ -789,7 +789,7 @@ public class Agent_Manager extends PikaterAgent {
 						Evaluation evaluation;
 						evaluation = next.getResult();
 						
-						results.setTask_id(next.getId()); // one of the tasks will do							
+						results.setTaskId(next.getId()); // one of the tasks will do							
 						
 						// if the value has not been set by the CA, the sum
 						// will < 0
@@ -825,7 +825,7 @@ public class Agent_Manager extends PikaterAgent {
 					}
 					
 					if (sumError_rate > -1) {
-						results.setAvg_error_rate(sumError_rate
+						results.setAvgErrorRate(sumError_rate
 								/ listOfResults.size());
 					}
 					if (sumKappa_statistic > -1) {
@@ -834,7 +834,7 @@ public class Agent_Manager extends PikaterAgent {
 					}
 					if (sumMean_absolute_error > -1) {
 						results
-								.setAvg_mean_absolute_error(sumMean_absolute_error
+								.setAvgMeanAbsoluteError(sumMean_absolute_error
 										/ listOfResults.size());
 					}
 					if (sumRoot_mean_squared_error > -1) {
@@ -844,12 +844,12 @@ public class Agent_Manager extends PikaterAgent {
 					}
 					if (sumRelative_absolute_error > -1) {
 						results
-								.setAvg_relative_absolute_error(sumRelative_absolute_error
+								.setAvgRelativeAbsoluteError(sumRelative_absolute_error
 										/ listOfResults.size());
 					}
 					if (sumRoot_relative_squared_error > -1) {
 						results
-								.setAvg_root_relative_squared_error(sumRoot_relative_squared_error
+								.setAvgRootRelativeSquaredError(sumRoot_relative_squared_error
 										/ listOfResults.size());
 					}
 				}
@@ -871,7 +871,7 @@ public class Agent_Manager extends PikaterAgent {
 
 	protected boolean writeXMLResults(Results results) {
 		String file_name = "xml" + System.getProperty("file.separator")
-				+ getDateTimeXML() + "_" + results.getTask_id().getIdentificator() + ".xml";
+				+ getDateTimeXML() + "_" + results.getTaskId().getIdentificator() + ".xml";
 
 		// create the "xml" directory, if it doesn't exist
 		boolean exists = (new File("xml")).exists();
@@ -946,22 +946,22 @@ public class Agent_Manager extends PikaterAgent {
 		Element newStatistics = new Element("statistics");
 		Element newMetric1 = new Element("metric");
 		newMetric1.setAttribute("average_error_rate", getXMLValue(results
-				.getAvg_error_rate()));
+				.getAvgErrorRate()));
 		Element newMetric2 = new Element("metric");
 		newMetric2.setAttribute("average_kappa_statistic", getXMLValue(results
-				.getAvg_kappa_statistic()));
+				.getAvgKappaStatistic()));
 		Element newMetric3 = new Element("metric");
 		newMetric3.setAttribute("average_mean_absolute_error",
-				getXMLValue(results.getAvg_mean_absolute_error()));
+				getXMLValue(results.getAvgMeanAbsoluteError()));
 		Element newMetric4 = new Element("metric");
 		newMetric4.setAttribute("average_root_mean_squared_error",
-				getXMLValue(results.getAvg_root_mean_squared_error()));
+				getXMLValue(results.getAvgRootMeanSquaredError()));
 		Element newMetric5 = new Element("metric");
 		newMetric5.setAttribute("average_relative_absolute_error",
-				getXMLValue(results.getAvg_relative_absolute_error()));
+				getXMLValue(results.getAvgRelativeAbsoluteError()));
 		Element newMetric6 = new Element("metric");
 		newMetric6.setAttribute("average_root_relative_squared_error",
-				getXMLValue(results.getAvg_root_relative_squared_error()));
+				getXMLValue(results.getAvgRootRelativeSquaredError()));
 
 		newStatistics.addContent(newMetric1);
 		newStatistics.addContent(newMetric2);

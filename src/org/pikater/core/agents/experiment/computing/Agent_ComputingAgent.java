@@ -46,12 +46,12 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.messages.DataInstances;
-import org.pikater.core.ontology.subtrees.messages.Execute;
-import org.pikater.core.ontology.subtrees.messages.PartialResults;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
+import org.pikater.core.ontology.subtrees.result.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.task.Execute;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
