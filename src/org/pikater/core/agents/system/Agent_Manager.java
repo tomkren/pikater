@@ -82,12 +82,11 @@ public class Agent_Manager extends PikaterAgent {
 				new java.util.ArrayList<Ontology>();
 
 		ontologies.add(MessagesOntology.getInstance());
-		
+
 		ontologies.add(SearchOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
-		
-		
+
 		return ontologies;
 	}
 	
