@@ -2,9 +2,13 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
+import org.pikater.shared.logging.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: Kuba
@@ -12,12 +16,24 @@ import java.util.HashMap;
  * Time: 12:35
  */
 public class ComputationNode {
-
     private boolean idle;
     private int id;
-    private HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs;
-    private HashMap<String, ComputationOutputBuffer> inputs;
+    private Map<String,ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs=new HashMap<>();
+    private Map<String,ComputationOutputBuffer> inputs=new HashMap<>();
     private StartComputationBehavior startBehavior;
+
+    public ComputationNode()
+    {
+        String initBeansName = "Beans.xml";
+        ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
+        GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
+        id=generator.getAndAllocateGUID();
+    }
+
+    public Map<String,ComputationOutputBuffer> getInputs()
+    {
+         return inputs;
+    }
 
     public boolean canComputationStart()
     {
@@ -26,14 +42,30 @@ public class ComputationNode {
             //another computation is running
             return false;
         }
-        for (ComputationOutputBuffer input : inputs.values())
+        for (ComputationOutputBuffer input:inputs.values())
         {
-            if (input.size()==0)
+            if (input.size()==0 && !input.isBlocked())
             {
                 return false;
             }
         }
         return true;
+    }
+
+    public void addInput(String inputName,ComputationOutputBuffer buffer)
+    {
+        inputs.putIfAbsent(inputName,buffer);
+    }
+
+    public void addOutput(String outputName)
+    {
+        outputs.putIfAbsent(outputName,new ArrayList<>() );
+    }
+
+    public void addBufferToOutput(String outputName,ComputationOutputBuffer buffer)
+    {
+        addOutput(outputName);
+        outputs.get(outputName).add(buffer);
     }
 
     public void addToOutputAndProcess(EdgeValue o, String outputName)
@@ -60,7 +92,7 @@ public class ComputationNode {
 
     public void computationFinished()
     {
-         idle=true;
+        idle=true;
         if (canComputationStart())
         {
             startComputation();

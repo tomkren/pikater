@@ -10,6 +10,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 public abstract class AbstractComputationBuffer<E> implements ComputationOutputBuffer<E> {
     private ComputationNode source;
     private ComputationNode target;
+    private boolean isBlocked=false;
 
     @Override
     public ComputationNode getSource() {
@@ -30,4 +31,20 @@ public abstract class AbstractComputationBuffer<E> implements ComputationOutputB
     public void setTarget(ComputationNode target) {
         this.target=target;
     }
+
+    @Override
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    @Override
+    public void block(){
+        isBlocked=true;
+    }
+
+    @Override
+    public void unblock(){
+        isBlocked=false;
+    }
+
 }
