@@ -40,6 +40,7 @@ import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
 import org.pikater.core.ontology.metadata.GetMetadata;
 import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.management.LoadAgent;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -1589,7 +1590,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	protected void loadAgent(String _filename, Execute action, byte[] object)
 			throws FIPAException {
-		org.pikater.core.ontology.management.LoadAgent _loadAgent = new org.pikater.core.ontology.management.LoadAgent();
+		LoadAgent _loadAgent = new LoadAgent();
 
 		_loadAgent.setFilename(_filename);
 		_loadAgent.setFirst_action(action);
