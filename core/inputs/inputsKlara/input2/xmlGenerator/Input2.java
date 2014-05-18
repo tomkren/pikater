@@ -1,3 +1,4 @@
+package xmlGenerator;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -8,13 +9,13 @@ import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.dataStructures.options.Converter;
 import org.pikater.core.dataStructures.options.StepanuvOption;
 import org.pikater.core.dataStructures.options.types.OptionValue;
-import org.pikater.core.ontology.description.CARecSearchComplex;
-import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.description.ComputingAgent;
-import org.pikater.core.ontology.description.DataSourceDescription;
-import org.pikater.core.ontology.description.FileDataProvider;
-import org.pikater.core.ontology.description.FileDataSaver;
-import org.pikater.core.ontology.description.Search;
+import org.pikater.core.ontology.subtrees.description.CARecSearchComplex;
+import org.pikater.core.ontology.subtrees.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.description.ComputingAgent;
+import org.pikater.core.ontology.subtrees.description.DataSourceDescription;
+import org.pikater.core.ontology.subtrees.description.FileDataProvider;
+import org.pikater.core.ontology.subtrees.description.FileDataSaver;
+import org.pikater.core.ontology.subtrees.description.Search;
 
 
 public final class Input2 {

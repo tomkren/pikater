@@ -1,85 +1,69 @@
-<org.pikater.core.ontology.description.ComputationDescription>
-  <rootElements serialization="custom">
-    <jade.util.leap.ArrayList>
-      <default>
-        <hiddenList>
-          <org.pikater.core.ontology.description.FileDataSaver>
-            <dataSource>
-              <dataProvider type="org.pikater.core.ontology.description.CARecSearchComplex">
-                <options serialization="custom">
-                  <jade.util.leap.ArrayList>
-                    <default>
-                      <hiddenList>
-                        <org.pikater.core.ontology.messages.option.Option>
-                          <__mutable>false</__mutable>
-                          <__is__a__set>false</__is__a__set>
-                          <__data__type>STRING</__data__type>
-                          <__name>evaluation_method</__name>
-                          <__value>CrossValidation</__value>
-                          <__number__of__values__to__try>0</__number__of__values__to__try>
-                          <numberOfOptions>0</numberOfOptions>
-                        </org.pikater.core.ontology.messages.option.Option>
-                        <org.pikater.core.ontology.messages.option.Option>
-                          <__mutable>false</__mutable>
-                          <__is__a__set>false</__is__a__set>
-                          <__data__type>STRING</__data__type>
-                          <__name>output</__name>
-                          <__value>evaluation_only</__value>
-                          <__number__of__values__to__try>0</__number__of__values__to__try>
-                          <numberOfOptions>0</numberOfOptions>
-                        </org.pikater.core.ontology.messages.option.Option>
-                      </hiddenList>
-                    </default>
-                  </jade.util.leap.ArrayList>
+<org.pikater.core.ontology.subtrees.description.ComputationDescription>
+  <rootElements>
+    <org.pikater.core.ontology.subtrees.description.FileDataSaver>
+      <dataSource>
+        <dataType>Data</dataType>
+        <dataProvider type="org.pikater.core.ontology.subtrees.description.CARecSearchComplex">
+          <options>
+            <org.pikater.core.ontology.subtrees.option.Option>
+              <__mutable>false</__mutable>
+              <__is__a__set>false</__is__a__set>
+              <__data__type>STRING</__data__type>
+              <__name>evaluation_method</__name>
+              <__value>CrossValidation</__value>
+              <__number__of__values__to__try>0</__number__of__values__to__try>
+              <numberOfOptions>0</numberOfOptions>
+            </org.pikater.core.ontology.subtrees.option.Option>
+            <org.pikater.core.ontology.subtrees.option.Option>
+              <__mutable>false</__mutable>
+              <__is__a__set>false</__is__a__set>
+              <__data__type>STRING</__data__type>
+              <__name>output</__name>
+              <__value>evaluation_only</__value>
+              <__number__of__values__to__try>0</__number__of__values__to__try>
+              <numberOfOptions>0</numberOfOptions>
+            </org.pikater.core.ontology.subtrees.option.Option>
+          </options>
+          <computingAgent type="org.pikater.core.ontology.subtrees.description.ComputingAgent">
+            <modelClass>Agent_?????.class.getName()</modelClass>
+            <trainingData>
+              <dataType>Data</dataType>
+              <dataProvider type="org.pikater.core.ontology.subtrees.description.CARecSearchComplex">
+                <options>
+                  <org.pikater.core.ontology.subtrees.option.Option>
+                    <__mutable>false</__mutable>
+                    <__is__a__set>false</__is__a__set>
+                    <__data__type>STRING</__data__type>
+                    <__name>evaluation_method</__name>
+                    <__value>CrossValidation</__value>
+                    <__number__of__values__to__try>0</__number__of__values__to__try>
+                    <numberOfOptions>0</numberOfOptions>
+                  </org.pikater.core.ontology.subtrees.option.Option>
+                  <org.pikater.core.ontology.subtrees.option.Option>
+                    <__mutable>false</__mutable>
+                    <__is__a__set>false</__is__a__set>
+                    <__data__type>STRING</__data__type>
+                    <__name>output</__name>
+                    <__value>evaluation_only</__value>
+                    <__number__of__values__to__try>0</__number__of__values__to__try>
+                    <numberOfOptions>0</numberOfOptions>
+                  </org.pikater.core.ontology.subtrees.option.Option>
                 </options>
-                <computingAgent type="org.pikater.core.ontology.description.ComputingAgent">
+                <computingAgent type="org.pikater.core.ontology.subtrees.description.ComputingAgent">
                   <modelClass>Agent_?????.class.getName()</modelClass>
                   <trainingData>
-                    <dataProvider type="org.pikater.core.ontology.description.CARecSearchComplex">
-                      <options serialization="custom">
-                        <jade.util.leap.ArrayList>
-                          <default>
-                            <hiddenList>
-                              <org.pikater.core.ontology.messages.option.Option>
-                                <__mutable>false</__mutable>
-                                <__is__a__set>false</__is__a__set>
-                                <__data__type>STRING</__data__type>
-                                <__name>evaluation_method</__name>
-                                <__value>CrossValidation</__value>
-                                <__number__of__values__to__try>0</__number__of__values__to__try>
-                                <numberOfOptions>0</numberOfOptions>
-                              </org.pikater.core.ontology.messages.option.Option>
-                              <org.pikater.core.ontology.messages.option.Option>
-                                <__mutable>false</__mutable>
-                                <__is__a__set>false</__is__a__set>
-                                <__data__type>STRING</__data__type>
-                                <__name>output</__name>
-                                <__value>evaluation_only</__value>
-                                <__number__of__values__to__try>0</__number__of__values__to__try>
-                                <numberOfOptions>0</numberOfOptions>
-                              </org.pikater.core.ontology.messages.option.Option>
-                            </hiddenList>
-                          </default>
-                        </jade.util.leap.ArrayList>
-                      </options>
-                      <computingAgent type="org.pikater.core.ontology.description.ComputingAgent">
-                        <modelClass>Agent_?????.class.getName()</modelClass>
-                        <trainingData>
-                          <dataProvider type="org.pikater.core.ontology.description.FileDataProvider">
-                            <fileURI>?????.arff</fileURI>
-                          </dataProvider>
-                        </trainingData>
-                        <testingData reference="../trainingData"/>
-                      </computingAgent>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.description.FileDataProvider">
+                      <fileURI>?????.arff</fileURI>
                     </dataProvider>
                   </trainingData>
                   <testingData reference="../trainingData"/>
                 </computingAgent>
               </dataProvider>
-            </dataSource>
-          </org.pikater.core.ontology.description.FileDataSaver>
-        </hiddenList>
-      </default>
-    </jade.util.leap.ArrayList>
+            </trainingData>
+            <testingData reference="../trainingData"/>
+          </computingAgent>
+        </dataProvider>
+      </dataSource>
+    </org.pikater.core.ontology.subtrees.description.FileDataSaver>
   </rootElements>
-</org.pikater.core.ontology.description.ComputationDescription>
+</org.pikater.core.ontology.subtrees.description.ComputationDescription>
