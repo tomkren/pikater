@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.messages;
+package org.pikater.core.ontology.subtrees.attribute;
 
 import jade.content.Concept;
 import jade.util.leap.ArrayList;

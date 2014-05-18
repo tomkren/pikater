@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.messages;
+package org.pikater.core.ontology.subtrees.duration;
 
 import java.util.Date;
 import jade.content.Concept;

@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.subtrees.messages;
 
+import org.pikater.core.ontology.subtrees.duration.Duration;
+
 import jade.content.AgentAction;
 
 public class GetDuration implements AgentAction {

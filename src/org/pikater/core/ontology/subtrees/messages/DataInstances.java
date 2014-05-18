@@ -6,6 +6,9 @@ import weka.core.FastVector;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.pikater.core.ontology.subtrees.attribute.Attribute;
+import org.pikater.core.ontology.subtrees.attribute.Instance;
+
 public class DataInstances implements Concept {
 	/**
 	 * 
