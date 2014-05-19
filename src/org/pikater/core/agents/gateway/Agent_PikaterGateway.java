@@ -7,6 +7,7 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 
 import jade.content.AgentAction;
@@ -42,6 +43,7 @@ public class Agent_PikaterGateway extends GatewayAgent {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(MailingOntology.getInstance());
 		

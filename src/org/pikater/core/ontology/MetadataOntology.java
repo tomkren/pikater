@@ -29,7 +29,6 @@ public class MetadataOntology extends BeanOntology {
             add(metadataPackage);
             add(attributeMetadataPackage);
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }

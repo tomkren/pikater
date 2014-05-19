@@ -43,6 +43,7 @@ import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
@@ -116,32 +117,12 @@ public class Agent_MetadataQueen extends PikaterAgent {
                 Action a = (Action) getContentManager().extractContent(request);
 
                 if (a.getAction() instanceof GetMetadata) {
-                        GetMetadata gm = (GetMetadata) a.getAction();
+                	return respondToGetMetadata(request, a);
 
-                        // request a reader agent to read data
-                        ACLMessage response = FIPAService.doFipaRequestClient(myAgent, prepareGetDataReq(gm.getInternal_filename()));                        	
-                        
-                        DataInstances data = processGetData(response);       		
-        				if (data != null) {        					
-        					
-        					Metadata m = computeMetadata(data);        					
-        					m.setInternalName(gm.getInternal_filename());
-        					m.setExternalName(gm.getExternal_filename());        					
-        					MetadataListItem mli = new MetadataListItem(m, metadata_list_id);
-        					metadata_list.add(mli);
-        					metadata_list_id++;
-
-        					computeExternalMetadata(data, gm.getInternal_filename(), request, mli);
-        				}
-        				else {
-        					String msg = "No train data received from the reader agent: Wrong content.";
-        		        	ACLMessage reply = request.createReply();
-        		            reply.setPerformative(ACLMessage.FAILURE);
-        		            reply.setContent(msg);                                                																				
-        		            
-        		            return reply;
-        				}                        	                		                        
+                } else if (a.getAction() instanceof NewDataset) {
+                	return respondToNewDataset(request, a);
                 }
+
             } catch (OntologyException e) {
                 e.printStackTrace();
             } catch (CodecException e) {
@@ -152,6 +133,50 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			}
         	return null;
         }
+        
+        
+        private ACLMessage respondToGetMetadata(ACLMessage request, Action a) throws FIPAException, UngroundedException, CodecException, OntologyException {
+        	
+            GetMetadata gm = (GetMetadata) a.getAction();
+
+            // request a reader agent to read data
+            ACLMessage response = FIPAService.doFipaRequestClient(myAgent, prepareGetDataReq(gm.getInternal_filename()));                        	
+            
+            DataInstances data = processGetData(response);       		
+			if (data != null) {        					
+				
+				Metadata m = computeMetadata(data);        					
+				m.setInternalName(gm.getInternal_filename());
+				m.setExternalName(gm.getExternal_filename());        					
+				MetadataListItem mli = new MetadataListItem(m, metadata_list_id);
+				metadata_list.add(mli);
+				metadata_list_id++;
+
+				computeExternalMetadata(data, gm.getInternal_filename(), request, mli);
+
+			} else {
+				String msg = "No train data received from the reader agent: Wrong content.";
+	        	ACLMessage reply = request.createReply();
+	            reply.setPerformative(ACLMessage.FAILURE);
+	            reply.setContent(msg);                                                																				
+	            
+	            return reply;
+			}
+			
+			return null;
+        }
+        
+        private ACLMessage respondToNewDataset(ACLMessage request, Action a) {
+        
+        	//TODO:
+        	// Otestovat jestli uzivatel muze pridavat datasety? Nebo to bude delat Jirka?
+        	// Nacist dataset z databaze pomoci Datamanagera a ulozit na lokalni disk?
+        	// Spustit MedaTadaReader?
+        	// Odeslat vygenerovana Metadata DataManagerovi?
+        	// Pockat na potvrzeni od datamanagera a poslat informaci do GUI, ze dataset byl pridan? Nebo to delat drive?
+        	return null;
+        }
+        
     }				        
                 
     
