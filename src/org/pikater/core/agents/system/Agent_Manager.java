@@ -558,7 +558,7 @@ public class Agent_Manager extends PikaterAgent {
 					Data next_data = (Data) d_itr.next();
 
 					if (next_data.getMetadata() != null) {
-						next_data.getMetadata().setInternal_name(
+						next_data.getMetadata().setInternalName(
 								next_data.getTrainFileName());
 					}
 

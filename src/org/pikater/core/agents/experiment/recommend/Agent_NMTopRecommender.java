@@ -94,11 +94,11 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         while (itr.hasNext()) {
             Metadata next_md = (Metadata) itr.next();
 
-            int na = next_md.getNumber_of_attributes();
+            int na = next_md.getNumberOfAttributes();
             minAttributes = Math.min(minAttributes, na);
             maxAttributes = Math.max(maxAttributes, na);
 
-            int ni = next_md.getNumber_of_instances();
+            int ni = next_md.getNumberOfInstances();
             minInstances = Math.min(ni, minInstances);
             maxInstances = Math.max(ni, maxInstances);
         }
@@ -117,8 +117,8 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         List agents = new LinkedList();
         for (int i = 0; i < M; i++) {
-            log(distances.get(i).m.getExternal_name() + ": " + distances.get(i).d);
-            List ag = DataManagerService.getTheBestAgents(this, distances.get(i).m.getInternal_name(), N);
+            log(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
+            List ag = DataManagerService.getTheBestAgents(this, distances.get(i).m.getInternalName(), N);
             Iterator it = ag.iterator();
             while (it.hasNext()) {
                 agents.add(it.next());
@@ -245,13 +245,13 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         double wNumber_of_instances = 1;
 
         // can be null
-        double dAttribute_type = dCategory(m1.getAttribute_type(), m2.getAttribute_type());
-        double dDefault_task = dCategory(m1.getDefault_task(), m2.getDefault_task());
+        double dAttribute_type = dCategory(m1.getAttributeType(), m2.getAttributeType());
+        double dDefault_task = dCategory(m1.getDefaultTask(), m2.getDefaultTask());
         // default false - always set
-        double dMissing_values = dBoolean(m1.getMissing_values(), m2.getMissing_values());
+        double dMissing_values = dBoolean(m1.getMissingValues(), m2.getMissingValues());
         // mandatory attributes - always set
-        double dNumber_of_attributes = d(m1.getNumber_of_attributes(), m2.getNumber_of_attributes(), minAttributes, maxAttributes);
-        double dNumber_of_instances = d(m1.getNumber_of_instances(), m2.getNumber_of_instances(), minInstances, maxInstances);
+        double dNumber_of_attributes = d(m1.getNumberOfAttributes(), m2.getNumberOfAttributes(), minAttributes, maxAttributes);
+        double dNumber_of_instances = d(m1.getNumberOfInstances(), m2.getNumberOfInstances(), minInstances, maxInstances);
 
         double distance = wAttribute_type * dAttribute_type
                 + wDefault_task * dDefault_task

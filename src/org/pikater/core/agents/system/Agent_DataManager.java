@@ -696,19 +696,19 @@ public class Agent_DataManager extends PikaterAgent {
 		Statement stmt = db.createStatement();
 
 		String query = "UPDATE metadata SET ";
-		query += "numberOfInstances=" + metadata.getNumber_of_instances() + ", ";
-		query += "numberOfAttributes=" + metadata.getNumber_of_attributes() + ", ";
-		query += "missingValues=" + metadata.getMissing_values();
-		if (metadata.getAttribute_type() != null) {
-			query += ", attributeType=\'" + metadata.getAttribute_type() + "\' ";
+		query += "numberOfInstances=" + metadata.getNumberOfInstances() + ", ";
+		query += "numberOfAttributes=" + metadata.getNumberOfAttributes() + ", ";
+		query += "missingValues=" + metadata.getMissingValues();
+		if (metadata.getAttributeType() != null) {
+			query += ", attributeType=\'" + metadata.getAttributeType() + "\' ";
 		}
-		if (metadata.getDefault_task() != null) {
-			query += ", defaultTask=\'" + metadata.getDefault_task() + "\' ";
+		if (metadata.getDefaultTask() != null) {
+			query += ", defaultTask=\'" + metadata.getDefaultTask() + "\' ";
 		}
 
 		// the external file name contains part o the path
 		// (db/files/name) -> split and use only the [2] part
-		query += " WHERE internalFilename=\'" + metadata.getInternal_name().split(Pattern.quote(System.getProperty("file.separator")))[2] + "\'";
+		query += " WHERE internalFilename=\'" + metadata.getInternalName().split(Pattern.quote(System.getProperty("file.separator")))[2] + "\'";
 
 		log("Executing query: " + query);
 
@@ -734,7 +734,7 @@ public class Agent_DataManager extends PikaterAgent {
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
 					Metadata m = (Metadata) itr.next();
-					exHash.add(m.getInternal_name());
+					exHash.add(m.getInternalName());
 				}
 				datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
 			}else{
@@ -748,7 +748,7 @@ public class Agent_DataManager extends PikaterAgent {
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
 					Metadata m = (Metadata) itr.next();
-					excludedHashes.add(m.getInternal_name());
+					excludedHashes.add(m.getInternalName());
 				}
 				
 				datasets = DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
@@ -770,21 +770,21 @@ public class Agent_DataManager extends PikaterAgent {
 				Metadata aM=new Metadata();
 				
 				
-				aM.setInternal_name(dslo.getHash());
-				aM.setExternal_name(dslo.getDescription());
+				aM.setInternalName(dslo.getHash());
+				aM.setExternalName(dslo.getDescription());
 				
-				aM.setDefault_task(gmd.getDefaultTaskType().getName());
-				aM.setNumber_of_instances(gmd.getNumberofInstances());
+				aM.setDefaultTask(gmd.getDefaultTaskType().getName());
+				aM.setNumberOfInstances(gmd.getNumberofInstances());
 				
-				aM.setMissing_values(amd.getRatioOfMissingValues()>0);
-				aM.setNumber_of_attributes(attrMDs.size());
+				aM.setMissingValues(amd.getRatioOfMissingValues()>0);
+				aM.setNumberOfAttributes(attrMDs.size());
 				
 				if(amd instanceof JPAAttributeNumericalMetaData){
-					aM.setAttribute_type("Numerical");
+					aM.setAttributeType("Numerical");
 				}else if(amd instanceof JPAAttributeCategoricalMetaData){
-					aM.setAttribute_type("Categorical");
+					aM.setAttributeType("Categorical");
 				}else{
-					aM.setAttribute_type("Mixed");
+					aM.setAttributeType("Mixed");
 				}
 				
 				allMetadata.add(aM);
@@ -870,13 +870,13 @@ public class Agent_DataManager extends PikaterAgent {
 
 		while (rs.next()) {
 			Metadata m = new Metadata();
-			m.setAttribute_type(rs.getString("attributeType"));
-			m.setDefault_task(rs.getString("defaultTask"));
-			m.setExternal_name(rs.getString("externalFilename"));
-			m.setInternal_name(rs.getString("internalFilename"));
-			m.setMissing_values(rs.getBoolean("missingValues"));
-			m.setNumber_of_attributes(rs.getInt("numberOfAttributes"));
-			m.setNumber_of_instances(rs.getInt("numberOfInstances"));
+			m.setAttributeType(rs.getString("attributeType"));
+			m.setDefaultTask(rs.getString("defaultTask"));
+			m.setExternalName(rs.getString("externalFilename"));
+			m.setInternalName(rs.getString("internalFilename"));
+			m.setMissingValues(rs.getBoolean("missingValues"));
+			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
+			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
 			fileInfos.add(m);
 		}
 
@@ -1027,13 +1027,13 @@ public class Agent_DataManager extends PikaterAgent {
 		ResultSet rs = stmt.executeQuery(query);
 
 		while (rs.next()) {
-			m.setAttribute_type(rs.getString("attributeType"));
-			m.setDefault_task(rs.getString("defaultTask"));
-			m.setExternal_name(rs.getString("externalFilename"));
-			m.setInternal_name(rs.getString("internalFilename"));
-			m.setMissing_values(rs.getBoolean("missingValues"));
-			m.setNumber_of_attributes(rs.getInt("numberOfAttributes"));
-			m.setNumber_of_instances(rs.getInt("numberOfInstances"));
+			m.setAttributeType(rs.getString("attributeType"));
+			m.setDefaultTask(rs.getString("defaultTask"));
+			m.setExternalName(rs.getString("externalFilename"));
+			m.setInternalName(rs.getString("internalFilename"));
+			m.setMissingValues(rs.getBoolean("missingValues"));
+			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
+			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
 		}
 
 		log("Executing query: " + query);
@@ -1074,16 +1074,16 @@ public class Agent_DataManager extends PikaterAgent {
 		**/
 
 		String query = "UPDATE metadata SET ";
-		query += "numberOfInstances=" + metadata.getNumber_of_instances() + ", ";
-		query += "numberOfAttributes=" + metadata.getNumber_of_attributes() + ", ";
-		query += "missingValues=" + metadata.getMissing_values() + "";
-		if (metadata.getAttribute_type() != null) {
-			query += ", attributeType=\'" + metadata.getAttribute_type() + "\' ";
+		query += "numberOfInstances=" + metadata.getNumberOfInstances() + ", ";
+		query += "numberOfAttributes=" + metadata.getNumberOfAttributes() + ", ";
+		query += "missingValues=" + metadata.getMissingValues() + "";
+		if (metadata.getAttributeType() != null) {
+			query += ", attributeType=\'" + metadata.getAttributeType() + "\' ";
 		}
-		if (metadata.getDefault_task() != null) {
-			query += ", defaultTask=\'" + metadata.getDefault_task() + "\' ";
+		if (metadata.getDefaultTask() != null) {
+			query += ", defaultTask=\'" + metadata.getDefaultTask() + "\' ";
 		}
-		query += " WHERE internalFilename =\'" + metadata.getInternal_name() + "\'";
+		query += " WHERE internalFilename =\'" + metadata.getInternalName() + "\'";
 
 		log("Executing query: " + query);
 

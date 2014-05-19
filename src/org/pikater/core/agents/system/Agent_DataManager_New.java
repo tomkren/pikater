@@ -356,9 +356,9 @@ public class Agent_DataManager_New extends PikaterAgent {
 		
 		for(JPADataSetLO dslo:dslos){
 			Metadata m = new Metadata();
-			m.setDefault_task(dslo.getGlobalMetaData().getDefaultTaskType().getName());
-			m.setNumber_of_attributes(dslo.getAttributeMetaData().size());
-			m.setNumber_of_instances(dslo.getGlobalMetaData().getNumberofInstances());
+			m.setDefaultTask(dslo.getGlobalMetaData().getDefaultTaskType().getName());
+			m.setNumberOfAttributes(dslo.getAttributeMetaData().size());
+			m.setNumberOfInstances(dslo.getGlobalMetaData().getNumberofInstances());
 			allMetadata.add(m);
 		}
 
@@ -513,9 +513,9 @@ public class Agent_DataManager_New extends PikaterAgent {
 		JPAGlobalMetaData globm=dslo.getGlobalMetaData();
 		
 		Metadata m = new Metadata();
-		m.setDefault_task(globm.getDefaultTaskType().getName());
-		m.setNumber_of_attributes(dslo.getAttributeMetaData().size());
-		m.setNumber_of_instances(globm.getNumberofInstances());
+		m.setDefaultTask(globm.getDefaultTaskType().getName());
+		m.setNumberOfAttributes(dslo.getAttributeMetaData().size());
+		m.setNumberOfInstances(globm.getNumberofInstances());
 		
 		log("Retrieving metadata for (hash) :"+dslo.getHash());
 

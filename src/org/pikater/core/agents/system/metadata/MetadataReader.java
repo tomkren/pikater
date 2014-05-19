@@ -23,11 +23,11 @@ public class MetadataReader {
                 Metadata metadata = new Metadata();		
 							
                 // number of instances
-		metadata.setNumber_of_instances(data.getInstances().size());
+		metadata.setNumberOfInstances(data.getInstances().size());
 		
 		// number of attributes
                 // we do not count targer attribute
-		metadata.setNumber_of_attributes(data.getAttributes().size());
+		metadata.setNumberOfAttributes(data.getAttributes().size());
 
 		// missing values
 		boolean missing = false; 
@@ -36,7 +36,7 @@ public class MetadataReader {
 				missing = true;
 			}			
 		}		
-		metadata.setMissing_values(missing);
+		metadata.setMissingValues(missing);
 		
 		// data type
 		String type = "";
@@ -49,7 +49,7 @@ public class MetadataReader {
 			}
 					
 		}		
-		metadata.setAttribute_type(type);
+		metadata.setAttributeType(type);
 		
 		// default task 
                 setTaskType(data, metadata);
@@ -66,17 +66,17 @@ public class MetadataReader {
     private void setTaskType(DataInstances data, Metadata metadata)
     {
         if ( ((Attribute) data.getAttributes().get((data.getClass_index() >= 0 ? data.getClass_index() : data.getAttributes().size() - 1))).getType().equals("Numeric") ){
-            metadata.setDefault_task("Regression");
+            metadata.setDefaultTask("Regression");
         }
         else {
-            metadata.setDefault_task("Classification");
+            metadata.setDefaultTask("Classification");
         }
     }
     
     private void readAttributesMetadata(DataInstances data, Metadata metadata)
     {
-        jade.util.leap.List attributeList=metadata.getAttribute_metadata_list();
-        for (int i=0;i<metadata.getNumber_of_attributes();i++)
+    	List<AttributeMetadata> attributeList=metadata.getAttributeMetadataList();
+        for (int i=0;i<metadata.getNumberOfAttributes();i++)
         {
             AttributeMetadata attMet=readAttributeMetadata(data, i);
             attributeList.add(attMet);

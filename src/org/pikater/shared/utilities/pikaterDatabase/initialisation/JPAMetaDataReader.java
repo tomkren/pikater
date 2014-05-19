@@ -60,8 +60,8 @@ public class JPAMetaDataReader {
 	
 	public JPAGlobalMetaData getJPAGlobalMetaData(){
 		JPAGlobalMetaData globMD=new JPAGlobalMetaData();
-		globMD.setNumberofInstances(md.getNumber_of_instances());
-		globMD.setDefaultTaskType(db.getOrCreateTaskTypeByName((md.getDefault_task())));
+		globMD.setNumberofInstances(md.getNumberOfInstances());
+		globMD.setDefaultTaskType(db.getOrCreateTaskTypeByName((md.getDefaultTask())));
 		return globMD;
 	}
 	
@@ -69,9 +69,9 @@ public class JPAMetaDataReader {
 		
 		List<JPAAttributeMetaData> attrs=new LinkedList<JPAAttributeMetaData>();
 		
-		for (int i=md.getAttribute_metadata_list().size()-1;i>=0;i--)
+		for (int i=md.getAttributeMetadataList().size()-1;i>=0;i--)
         {
-            AttributeMetadata att= (AttributeMetadata)md.getAttribute_metadata_list().get(i);
+            AttributeMetadata att= (AttributeMetadata)md.getAttributeMetadataList().get(i);
             
             if(att instanceof CategoricalAttributeMetadata){
             	int numberOfCategories=((CategoricalAttributeMetadata)att).getNumberOfCategories();

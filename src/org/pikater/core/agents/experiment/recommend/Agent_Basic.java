@@ -53,7 +53,7 @@ public class Agent_Basic extends Agent_Recommender {
 		while (itr.hasNext()) {
 			Metadata next_md = (Metadata) itr.next();
 
-			int na = next_md.getNumber_of_attributes();
+			int na = next_md.getNumberOfAttributes();
 			if (na < minAttributes) {
 				minAttributes = na;
 			}
@@ -61,7 +61,7 @@ public class Agent_Basic extends Agent_Recommender {
 				maxAttributes = na;
 			}
 
-			int ni = next_md.getNumber_of_instances();
+			int ni = next_md.getNumberOfInstances();
 			if (ni < minInstances) {
 				minInstances = ni;
 			}
@@ -81,18 +81,18 @@ public class Agent_Basic extends Agent_Recommender {
 		while (itr.hasNext()) {
 			Metadata next_md = (Metadata) itr.next();
 			d_new = distance(metadata, next_md);
-			if (!next_md.getInternal_name().equals(metadata.getInternal_name())) {
+			if (!next_md.getInternalName().equals(metadata.getInternalName())) {
 				if (d_new < d_best) {
 					d_best = d_new;
 					m_best = next_md;
 				}
 			}
-			sb.append("    " + next_md.getExternal_name() + " d: " + d_new + "\n");
+			sb.append("    " + next_md.getExternalName() + " d: " + d_new + "\n");
 		}
         log(sb.toString());
 		
-		log("Nearest file: " + m_best.getExternal_name(), Verbosity.MINIMAL);
-		String nearestInternalName = m_best.getInternal_name();
+		log("Nearest file: " + m_best.getExternalName(), Verbosity.MINIMAL);
+		String nearestInternalName = m_best.getInternalName();
 
 		// 2. find the agent with the lowest error_rate
 		org.pikater.core.ontology.subtrees.management.Agent agent = DataManagerService
@@ -104,7 +104,7 @@ public class Agent_Basic extends Agent_Recommender {
 					", error rate: " + agent.getGui_id(), Verbosity.MINIMAL);
 		}
 		else{
-			log("No results in database for file " + m_best.getExternal_name());
+			log("No results in database for file " + m_best.getExternalName());
 			return null;
 		}
 
@@ -126,7 +126,7 @@ public class Agent_Basic extends Agent_Recommender {
 		while (itr_colls.hasNext()) {
 			Metadata next_coll = (Metadata) itr_colls.next();			
 	
-			int na = next_coll.getNumber_of_attributes();
+			int na = next_coll.getNumberOfAttributes();
 			if (na < minAttributes) {
 				minAttributes = na;
 			}
@@ -134,7 +134,7 @@ public class Agent_Basic extends Agent_Recommender {
 				maxAttributes = na;
 			}
 	
-			int ni = next_coll.getNumber_of_instances();
+			int ni = next_coll.getNumberOfInstances();
 			if (ni < minInstances) {
 				minInstances = ni;
 			}
@@ -148,7 +148,7 @@ public class Agent_Basic extends Agent_Recommender {
 		double d;
 		while (itr_colls.hasNext()) {
 			Metadata next_coll = (Metadata) itr_colls.next();			
-			matrix +=next_coll.getExternal_name() + ";";
+			matrix +=next_coll.getExternalName() + ";";
 			Iterator itr_rows = allMetadata.iterator();
 			
 			while (itr_rows.hasNext()) {
@@ -176,18 +176,18 @@ public class Agent_Basic extends Agent_Recommender {
 		double wNumber_of_instances = 1;
 
 		// can be null
-		double dAttribute_type = dCategory(m1.getAttribute_type(), m2
-				.getAttribute_type());
-		double dDefault_task = dCategory(m1.getDefault_task(), m2
-				.getDefault_task());
+		double dAttribute_type = dCategory(m1.getAttributeType(), m2
+				.getAttributeType());
+		double dDefault_task = dCategory(m1.getDefaultTask(), m2
+				.getDefaultTask());
 		// default false - always set
-		double dMissing_values = dBoolean(m1.getMissing_values(), m2
-				.getMissing_values());
+		double dMissing_values = dBoolean(m1.getMissingValues(), m2
+				.getMissingValues());
 		// mandatory attributes - always set
-		double dNumber_of_attributes = d(m1.getNumber_of_attributes(), m2
-				.getNumber_of_attributes(), minAttributes, maxAttributes);
-		double dNumber_of_instances = d(m1.getNumber_of_instances(), m2
-				.getNumber_of_instances(), minInstances, maxInstances);
+		double dNumber_of_attributes = d(m1.getNumberOfAttributes(), m2
+				.getNumberOfAttributes(), minAttributes, maxAttributes);
+		double dNumber_of_instances = d(m1.getNumberOfInstances(), m2
+				.getNumberOfInstances(), minInstances, maxInstances);
 
 		double distance = wAttribute_type * dAttribute_type + wDefault_task
 				* dDefault_task + wMissing_values * dMissing_values

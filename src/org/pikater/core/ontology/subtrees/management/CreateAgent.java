@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.management;
 import org.pikater.core.agents.configuration.Argument;
 
 import jade.content.AgentAction;
-import jade.util.leap.List;
+import java.util.List;
 
 public class CreateAgent implements AgentAction {
 
@@ -11,7 +11,7 @@ public class CreateAgent implements AgentAction {
 	
 	private String type;
 	private String name;
-	private java.util.List<Argument> arguments;
+	private List<Argument> arguments;
 	
 	public void setType(String type) {
 		this.type = type;
@@ -25,10 +25,10 @@ public class CreateAgent implements AgentAction {
 	public String getName() {
 		return name;
 	}
-	public void setArguments(java.util.List<Argument> arguments) {
+	public void setArguments(List<Argument> arguments) {
 		this.arguments = arguments;
 	}
-	public java.util.List<Argument> getArguments() {
+	public List<Argument> getArguments() {
 		return arguments;
 	}
 }

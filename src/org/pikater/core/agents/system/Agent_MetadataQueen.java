@@ -125,8 +125,8 @@ public class Agent_MetadataQueen extends PikaterAgent {
         				if (data != null) {        					
         					
         					Metadata m = computeMetadata(data);        					
-        					m.setInternal_name(gm.getInternal_filename());
-        					m.setExternal_name(gm.getExternal_filename());        					
+        					m.setInternalName(gm.getInternal_filename());
+        					m.setExternalName(gm.getExternal_filename());        					
         					MetadataListItem mli = new MetadataListItem(m, metadata_list_id);
         					metadata_list.add(mli);
         					metadata_list_id++;
@@ -469,7 +469,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 							int duration = (int)eval.getValue();
 							if (agent_type.equals("LinearRegression")){
 								Metadata new_metadata = mli.getMetadata();
-								new_metadata.setLinear_regression_duration(duration);
+								new_metadata.setLinearRegressionDuration(duration);
 								mli.setMetadata(new_metadata);
 							}
 							

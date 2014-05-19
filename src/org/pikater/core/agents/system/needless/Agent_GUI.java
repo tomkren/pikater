@@ -993,19 +993,19 @@ public abstract class Agent_GUI extends PikaterAgent {
 				Data next_data = (Data) itr.next();
 				if (next_data.getGui_id() == d_id) {
 					Metadata m = new Metadata();
-					m.setAttribute_type(attribute_type);
-					m.setDefault_task(default_task);
-					m.setExternal_name(file_name);
+					m.setAttributeType(attribute_type);
+					m.setDefaultTask(default_task);
+					m.setExternalName(file_name);
 					if (missing_values != null) {
 						if (missing_values.equals("True")) {
-							m.setMissing_values(true);
+							m.setMissingValues(true);
 						} else {
-							m.setMissing_values(false);
+							m.setMissingValues(false);
 						}
 					}
-					m.setNumber_of_attributes(Integer
+					m.setNumberOfAttributes(Integer
 							.parseInt(number_of_attributes));
-					m.setNumber_of_instances(Integer
+					m.setNumberOfInstances(Integer
 							.parseInt(number_of_instances));
 
 					next_data.setMetadata(m);
