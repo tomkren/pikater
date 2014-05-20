@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.options.RandomSearch_SearchBox;
 
 public class Agent_RandomSearch extends Agent_Search {
 
@@ -27,8 +28,7 @@ public class Agent_RandomSearch extends Agent_Search {
 
 	@Override
 	protected AgentInfo getAgentInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		return RandomSearch_SearchBox.get();
 	}
 
 	@Override
