@@ -1,6 +1,7 @@
 package org.pikater.core.options;
 
-import jade.util.leap.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
@@ -8,7 +9,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 
 public abstract class AAA_SlotHelper {
 	
-	public static ArrayList getCAInputSlots() {
+	public static List<Slot> getCAInputSlots() {
 		
 		Slot inputTrainingSlot = new Slot();
 		inputTrainingSlot.setDescription("Training data");
@@ -28,7 +29,7 @@ public abstract class AAA_SlotHelper {
 		inputValidationSlot.setDataType("validationData");
 		
 		
-		ArrayList inputSlots = new ArrayList();
+		List<Slot> inputSlots = new ArrayList<Slot>();
 		inputSlots.add(inputTrainingSlot);
 		inputSlots.add(inputTestingSlot);
 		inputSlots.add(inputValidationSlot);
@@ -36,42 +37,42 @@ public abstract class AAA_SlotHelper {
 		return inputSlots;
 	}
 
-	public static ArrayList getCAOutputSlots() {
+	public static List<Slot> getCAOutputSlots() {
 		
 		Slot outputSlot = new Slot();
 		outputSlot.setDescription("data computed");
 		outputSlot.setSlotType(SlotTypes.AGENT_TYPE);
 		outputSlot.setDataType("data");
 		
-		ArrayList outputSlots = new ArrayList();
+		List<Slot> outputSlots = new ArrayList<Slot>();
 		outputSlots.add(outputSlot);
 		
 		return outputSlots;
 	}
 
 
-	public static ArrayList getSearcherOutputSlots() {
+	public static List<Slot> getSearcherOutputSlots() {
 
 		Slot outputSlot = new Slot();
 		outputSlot.setDescription("Parameters produced by searcher");
 		outputSlot.setSlotType(SlotTypes.SEARCH_TYPE);
 		outputSlot.setDataType("parameters");
 		
-		ArrayList slots = new ArrayList();
+		List<Slot> slots = new ArrayList<Slot>();
 		slots.add(outputSlot);
 		
 		return slots;
 	}
 
 
-	public static ArrayList getRecommendOutputSlots() {
+	public static List<Slot> getRecommendOutputSlots() {
 
 		Slot outputSlot = new Slot();
 		outputSlot.setDescription("Name of agent");
 		outputSlot.setDataType(SlotTypes.RECOMEND_TYPE);
 		outputSlot.setDataType("recomend");
 
-		ArrayList slots = new ArrayList();
+		List<Slot> slots = new ArrayList<Slot>();
 		slots.add(outputSlot);
 		
 		return slots;

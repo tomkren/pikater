@@ -3,7 +3,9 @@ package org.pikater.core.ontology.subtrees.agentInfo;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 import jade.content.Concept;
-import jade.util.leap.ArrayList;
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class AgentInfo implements Concept {
 
@@ -19,10 +21,10 @@ public class AgentInfo implements Concept {
 	private String picture;
 	private String description;
 
-	private ArrayList options;
+	private List<Option> options;
 	
-	private ArrayList inputSlots;
-	private ArrayList outputSlots;
+	private List<Slot> inputSlots;
+	private List<Slot> outputSlots;
 
 	public String getAgentClass() {
 		return agentClass;
@@ -59,41 +61,41 @@ public class AgentInfo implements Concept {
 		this.description = description;
 	}
 
-	public ArrayList getOptions() {
+	public List<Option> getOptions() {
 		return options;
 	}
-	public void setOptions(ArrayList options) {
+	public void setOptions(List<Option> options) {
 		this.options = options;
 	}
 	public void addOption(Option option) {
 		if (this.options == null) {
-			this.options = new ArrayList();
+			this.options = new ArrayList<Option>();
 		}
 		this.options.add(option);
 	}
 
-	public ArrayList getInputSlots() {
+	public List<Slot> getInputSlots() {
 		return inputSlots;
 	}
-	public void setInputSlots(ArrayList inputSlots) {
+	public void setInputSlots(List<Slot> inputSlots) {
 		this.inputSlots = inputSlots;
 	}
 	public void addInputSlot(Slot inputSlot) {
 		if (this.inputSlots == null) {
-			this.inputSlots = new ArrayList();
+			this.inputSlots = new ArrayList<Slot>();
 		}
 		this.inputSlots.add(inputSlot);
 	}
 
-	public ArrayList getOutputSlots() {
+	public List<Slot> getOutputSlots() {
 		return outputSlots;
 	}
-	public void setOutputSlots(ArrayList outputSlots) {
+	public void setOutputSlots(List<Slot> outputSlots) {
 		this.outputSlots = outputSlots;
 	}
 	public void addOutputSlot(Slot outputSlot) {
 		if (this.outputSlots == null) {
-			this.outputSlots = new ArrayList();
+			this.outputSlots = new ArrayList<Slot>();
 		}
 		this.outputSlots.add(outputSlot);
 	}
