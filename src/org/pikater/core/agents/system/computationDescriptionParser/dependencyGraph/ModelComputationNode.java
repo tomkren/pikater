@@ -6,4 +6,13 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
  * Time: 15:52
  */
 public class ModelComputationNode extends ComputationNode {
+    private String modelClass;
+
+    public String getModelClass() {
+        return modelClass;
+    }
+
+    public void setModelClass(String modelClass) {
+        this.modelClass = modelClass;
+    }
 }

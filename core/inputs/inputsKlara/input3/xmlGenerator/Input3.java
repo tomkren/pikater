@@ -1,4 +1,4 @@
-
+package inputsKlara.input3.xmlGenerator;
 
 import java.io.FileNotFoundException;
 
@@ -13,19 +13,17 @@ import org.pikater.core.ontology.description.DataSourceDescription;
 import org.pikater.core.ontology.description.FileDataProvider;
 import org.pikater.core.ontology.description.FileDataSaver;
 
-
+//Example: meta-search
+// single datasource, search the space of parameters of search of single computation model
+// Save the results of the best iteration of search
 public final class Input3 {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		System.out.println("Exporting Ontology input3 to Klara's input XML configuration file.");
-		
-		
-        FileDataProvider fileDataProvider = new FileDataProvider();
-        fileDataProvider.setFileURI("?????.arff");
 
-        DataSourceDescription fileDataSource = new DataSourceDescription();
-        fileDataSource.setDataProvider(fileDataProvider);
+        //Specify a datasource
+        DataSourceDescription fileDataSource=new DataSourceDescription("iris.arff");
 
 		ComputingAgent comAgent1 = new ComputingAgent();
 		comAgent1.setModelClass("Agent_?????.class.getName()");
@@ -49,9 +47,6 @@ public final class Input3 {
 		computingDataSource1.setDataType("Data");
 		computingDataSource1.setDataProvider(complex1);
 
-
-
-
 		ComputingAgent comAgent2 = new ComputingAgent();
 		comAgent2.setModelClass("Agent_?????.class.getName()");
 		comAgent2.setTrainingData(computingDataSource1);
@@ -74,8 +69,6 @@ public final class Input3 {
 		computingDataSource2.setDataType("Data");
 		computingDataSource2.setDataProvider(complex2);
 
-
-
         FileDataSaver saver = new FileDataSaver();
         saver.setDataSource(computingDataSource2);
 
@@ -87,8 +80,6 @@ public final class Input3 {
 				+ "input3.xml";
 
 		comDescription.exportXML(fileName);
-
-
 	}
 
 }

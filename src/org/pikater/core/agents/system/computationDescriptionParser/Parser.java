@@ -147,11 +147,17 @@ public class Parser {
     {
         agent.log("Ontology Parser - Computing Agent Simple");
 
-        ModelComputationNode computingNode=new ModelComputationNode();
+        if (!alreadyProcessed.containsKey(computingAgent))
+        {
+            alreadyProcessed.put(computingAgent, new ModelComputationNode());
+
+        }
+        ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent);
         computationGraph.addNode(computingNode);
         addOptionsToInputs(computingNode,new ArrayList<>());
 
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
+        computingNode.setModelClass(computingAgentO.getModelClass());
         fillDataSources(computingAgentO,computingNode);
 
         return computingNode;
