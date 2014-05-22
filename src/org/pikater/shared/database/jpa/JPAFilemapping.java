@@ -9,7 +9,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="FileMapping_20140430")
+@Table(name="FileMapping")
 @NamedQueries({
 	@NamedQuery(name="FileMapping.getAll",query="select fm from JPAFilemapping fm"),
 	@NamedQuery(name="FileMapping.getByID",query="select fm from JPAFilemapping fm where fm.id=:id"),

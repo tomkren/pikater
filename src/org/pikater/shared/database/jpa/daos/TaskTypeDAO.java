@@ -8,7 +8,7 @@ import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.jpa.UserStatus;
+import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 public class TaskTypeDAO extends AbstractDAO {
 

@@ -9,7 +9,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="UserPriviledge_20140430")
+@Table(name="UserPriviledge")
 @NamedQueries({
 	@NamedQuery(name="UserPriviledge.getAll",query="select up from JPAUserPriviledge up"),
 	@NamedQuery(name="UserPriviledge.getByID",query="select up from JPAUserPriviledge up where up.id=:id"),

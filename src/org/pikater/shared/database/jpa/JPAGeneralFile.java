@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="GeneralFile_20140430")
+@Table(name="GeneralFile")
 public class JPAGeneralFile extends JPAAbstractEntity{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

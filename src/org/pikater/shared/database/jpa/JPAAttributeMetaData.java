@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 
 @Entity
-@Table(name="AttributeMetaData_20140430")
+@Table(name="AttributeMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 	@Id

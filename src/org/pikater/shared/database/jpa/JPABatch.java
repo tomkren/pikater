@@ -21,10 +21,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 
 @Entity
-@Table(name="Batch_20140430")
+@Table(name="Batch")
 @NamedQueries({
 	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
 	@NamedQuery(name="Batch.getByID",query="select b from JPABatch b where b.id=:id"),

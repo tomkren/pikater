@@ -15,7 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="Result_20140430")
+@Table(name="Result")
 @NamedQueries({
 	@NamedQuery(name="Result.getAll",query="select res from JPAResult res"),
 	@NamedQuery(name="Result.getByID",query="select res from JPAResult res where res.id=:id"),

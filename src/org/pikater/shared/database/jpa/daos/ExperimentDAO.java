@@ -6,9 +6,9 @@ import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 public class ExperimentDAO extends AbstractDAO {
 

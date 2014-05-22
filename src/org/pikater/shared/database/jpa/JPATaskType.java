@@ -10,7 +10,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="TaskType_20140430")
+@Table(name="TaskType")
 @NamedQueries({
 	@NamedQuery(name="TaskType.getAll",query="select tt from JPATaskType tt"),
 	@NamedQuery(name="TaskType.getByID",query="select tt from JPATaskType tt where tt.id=:id"),

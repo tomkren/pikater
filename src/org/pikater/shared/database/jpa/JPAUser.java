@@ -18,8 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.pikater.shared.database.jpa.status.JPAUserStatus;
+
 @Entity
-@Table(name="User_20140430")
+@Table(name="User")
 @NamedQueries({
 	@NamedQuery(name="User.getAll",query="select u from JPAUser u"),
 	@NamedQuery(name="User.getByID",query="select u from JPAUser u where u.id=:id"),
@@ -40,7 +42,7 @@ public class JPAUser extends JPAAbstractEntity{
 	@ManyToOne
 	private JPARole role;
 	@Enumerated(EnumType.STRING)
-	private UserStatus status;
+	private JPAUserStatus status;
 	@OneToMany
 	private List<JPABatch> batches;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -81,10 +83,10 @@ public class JPAUser extends JPAAbstractEntity{
 	public void setRole(JPARole role) {
 		this.role = role;
 	}
-	public UserStatus getStatus() {
+	public JPAUserStatus getStatus() {
 		return status;
 	}
-	public void setStatus(UserStatus status) {
+	public void setStatus(JPAUserStatus status) {
 		this.status = status;
 	}
 	public List<JPABatch> getBatches() {

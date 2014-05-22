@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Model_20140430")
+@Table(name="Model")
 public class JPAModel extends JPAAbstractEntity{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

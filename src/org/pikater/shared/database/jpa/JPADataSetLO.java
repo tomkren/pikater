@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 
 
 @Entity	
-@Table(name="DataSetLO_20140430")
+@Table(name="DataSetLO")
 @NamedQueries({
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getByID",query="select dslo from JPADataSetLO dslo where dslo.id=:id"),

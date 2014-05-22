@@ -8,7 +8,7 @@ import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.jpa.UserStatus;
+import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 public class UserDAO extends AbstractDAO {
 
@@ -30,7 +30,7 @@ public class UserDAO extends AbstractDAO {
 		return getByTypedNamedQuery("User.getByID", "id", ID);
 	}
 	
-	public List<JPAUser> getByStatus(UserStatus status) {
+	public List<JPAUser> getByStatus(JPAUserStatus status) {
 		return getByTypedNamedQuery("User.getByStatus", "status", status);
 	}
 	

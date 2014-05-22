@@ -21,9 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 @Entity
-@Table(name="Experiment_20140430")
+@Table(name="Experiment")
 @NamedQueries({
 	@NamedQuery(name="Experiment.getAll",query="select exp from JPAExperiment exp"),
 	@NamedQuery(name="Experiment.getByID",query="select exp from JPAExperiment exp where exp.id=:id"),

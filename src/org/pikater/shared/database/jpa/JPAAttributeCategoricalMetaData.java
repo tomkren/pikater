@@ -9,7 +9,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="AttributeCategoricalMetaData_20140430")
+@Table(name="AttributeCategoricalMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData{
 	@Id

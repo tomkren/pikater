@@ -9,7 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 @Entity
-@Table(name="Root_20140430")
+@Table(name="Root")
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class JPAAbstractEntity {
 	@Id

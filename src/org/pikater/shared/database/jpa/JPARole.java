@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Role_20140430")
+@Table(name="Role")
 @NamedQueries({
 	@NamedQuery(name="Role.getAll",query="select r from JPARole r"),
 	@NamedQuery(name="Role.getByID",query="select r from JPARole r where r.id=:id"),

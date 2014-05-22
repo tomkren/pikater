@@ -1,4 +1,4 @@
-package org.pikater.shared.database.jpa;
+package org.pikater.shared.database.jpa.status;
 
 public enum JPAExperimentStatus {
 	WAITING ,
