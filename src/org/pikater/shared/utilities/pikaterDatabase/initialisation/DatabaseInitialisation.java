@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase;
+package org.pikater.shared.utilities.pikaterDatabase.initialisation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +17,7 @@ import javax.persistence.Persistence;
 
 import org.postgresql.PGConnection;
 import org.pikater.core.agents.system.Agent_DataManager;
+import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPABatch;
@@ -29,11 +30,10 @@ import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.jpa.UserStatus;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.utils.Hash;
+import org.pikater.shared.database.utils.JPAMetaDataReader;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
-import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
-import org.pikater.shared.utilities.pikaterDatabase.daos.utils.Hash;
-import org.pikater.shared.utilities.pikaterDatabase.daos.utils.NewJPAMetaDataReader;
-import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 import org.pikater.shared.utilities.pikaterDatabase.initialisation.JPAMetaDataReader;
 
 public class DatabaseInitialisation {
@@ -203,7 +203,7 @@ public class DatabaseInitialisation {
 		if(dsloDataSetLO.size()>0){
 			JPADataSetLO dslo=dsloDataSetLO.get(0);
 			
-			NewJPAMetaDataReader readr=new NewJPAMetaDataReader();
+			JPAMetaDataReader readr=new JPAMetaDataReader();
 			try {
 				readr.readFile(file);
 				

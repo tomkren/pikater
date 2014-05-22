@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos.utils;
+package org.pikater.shared.database.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +13,7 @@ import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
-import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
@@ -23,12 +23,12 @@ import org.pikater.core.ontology.subtrees.metadata.attributes.RealAttributeMetad
 
 import weka.core.Instances;
 
-public class NewJPAMetaDataReader {
+public class JPAMetaDataReader {
 
 		MetadataReader reader;
 		Metadata md=null;
 		
-		public NewJPAMetaDataReader(){
+		public JPAMetaDataReader(){
 			reader=new MetadataReader();
 		}
 		
@@ -42,7 +42,6 @@ public class NewJPAMetaDataReader {
 			JPAGlobalMetaData globMD=new JPAGlobalMetaData();
 			globMD.setNumberofInstances(md.getNumberOfInstances());
 			globMD.setDefaultTaskType(DAOs.taskTypeDAO.createOrGetByName(md.getDefaultTask()));
-			//globMD.setDefaultTaskType(db.getOrCreateTaskTypeByName((md.getDefault_task())));
 			return globMD;
 		}
 		

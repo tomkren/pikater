@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.exceptions;
+package org.pikater.shared.database.exceptions;
 
 public class UserNotFoundException extends Exception {
 

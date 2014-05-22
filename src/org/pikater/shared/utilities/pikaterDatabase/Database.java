@@ -18,6 +18,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
+import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -28,9 +29,8 @@ import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
-import org.pikater.shared.utilities.pikaterDatabase.daos.DAOs;
-import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
-import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
 
 
 public class Database {

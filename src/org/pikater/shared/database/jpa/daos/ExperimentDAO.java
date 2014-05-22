@@ -1,14 +1,14 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos;
+package org.pikater.shared.database.jpa.daos;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 public class ExperimentDAO extends AbstractDAO {
 

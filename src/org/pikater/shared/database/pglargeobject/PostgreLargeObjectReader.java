@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.io;
+package org.pikater.shared.database.pglargeobject;
 
 import java.io.IOException;
 import java.io.Reader;

@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.newDB;
+package org.pikater.shared.database;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

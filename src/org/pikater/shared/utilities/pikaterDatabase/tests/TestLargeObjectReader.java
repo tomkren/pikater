@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase;
+package org.pikater.shared.utilities.pikaterDatabase.tests;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,8 @@ import javax.persistence.Persistence;
 
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
+import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
+import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.postgresql.PGConnection;
 
 public class TestLargeObjectReader {

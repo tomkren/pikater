@@ -1,13 +1,13 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos;
+package org.pikater.shared.database.jpa.daos;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
+import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.utilities.logging.PikaterLogger;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 
 

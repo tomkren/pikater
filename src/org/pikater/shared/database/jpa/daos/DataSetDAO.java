@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos;
+package org.pikater.shared.database.jpa.daos;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +11,12 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.utilities.pikaterDatabase.daos.utils.DBFiles;
-import org.pikater.shared.utilities.pikaterDatabase.daos.utils.Hash;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
+import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
+import org.pikater.shared.database.utils.Hash;
 
 public class DataSetDAO extends AbstractDAO{
 
@@ -86,7 +86,7 @@ public class DataSetDAO extends AbstractDAO{
 			oid = sameHashDS.get(0).getOID();
 		} else {
 			try {
-				oid = DBFiles.saveFileToDB(dataset);
+				oid = PostgreLobAccess.saveFileToDB(dataset);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

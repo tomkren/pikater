@@ -8,13 +8,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.postgresql.PGConnection;
+import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAGeneralFile;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
-import org.pikater.shared.utilities.pikaterDatabase.exceptions.UserNotFoundException;
 
 public class DatabaseTest {
 	

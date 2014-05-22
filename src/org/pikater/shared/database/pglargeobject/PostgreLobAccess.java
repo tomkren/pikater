@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos.utils;
+package org.pikater.shared.database.pglargeobject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,14 +7,13 @@ import java.sql.SQLException;
 
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
-import org.pikater.shared.utilities.pikaterDatabase.io.PostgreLargeObjectReader;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class DBFiles {
+public class PostgreLobAccess {
 	static PGConnection con=null;
 	
 	

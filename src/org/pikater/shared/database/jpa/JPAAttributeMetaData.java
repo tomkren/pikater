@@ -8,7 +8,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-import org.pikater.shared.utilities.pikaterDatabase.newDB.exceptions.NotUpdatableEntityException;
+import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 
 @Entity
 @Table(name="AttributeMetaData_20140430")

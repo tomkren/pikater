@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos.utils;
+package org.pikater.shared.database.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

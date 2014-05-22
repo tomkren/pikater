@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos;
+package org.pikater.shared.database.jpa.daos;
 
 public class DAOs {
 	public static final DataSetDAO dataSetDAO=new DataSetDAO();

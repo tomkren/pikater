@@ -1,9 +1,10 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos;
+package org.pikater.shared.database.jpa.daos;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPABatchStatus;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -12,7 +13,6 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.UserStatus;
-import org.pikater.shared.utilities.pikaterDatabase.newDB.EntityManagerInstancesCreator;
 
 public class BatchDAO extends AbstractDAO {
 

@@ -1,4 +1,4 @@
-package org.pikater.shared.utilities.pikaterDatabase.daos.utils;
+package org.pikater.shared.database.utils;
 
 import java.util.HashMap;
 import java.util.Set;
