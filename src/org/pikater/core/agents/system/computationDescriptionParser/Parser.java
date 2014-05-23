@@ -436,14 +436,14 @@ public class Parser {
 
     	agent.log("Ontology Parser - ComputingAgent");
 
-		String modelClass = computingAgent.getModelClass();
-		agent.log("ModelClass:  " + modelClass);
+		String agentClass = computingAgent.getAgentClass();
+		agent.log("AgentClass:  " + agentClass);
 
 				
 		java.util.List<Option> optionsCompAgent = computingAgent.getOptions();
 
 		org.pikater.core.ontology.subtrees.management.Agent compAgentO = new org.pikater.core.ontology.subtrees.management.Agent();
-		compAgentO.setType(computingAgent.getModelClass());
+		compAgentO.setType(computingAgent.getAgentClass());
 		compAgentO.setGui_id(String.valueOf(problemID));
 		compAgentO.setOptions(optionsCompAgent);
 

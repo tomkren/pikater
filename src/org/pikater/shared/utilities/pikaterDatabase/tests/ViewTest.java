@@ -20,7 +20,7 @@ public class ViewTest {
 		JPADataSetLO weather;
 		try {
 			weather = new ResultFormatter<JPADataSetLO>(
-					DAOs.dataSetDAO.getByDescription(dataSetDescription)
+					DAOs.dataSetDAO.getByID(2151)
 					).getSingleResult();
 			
 			this.rowTest(weather);

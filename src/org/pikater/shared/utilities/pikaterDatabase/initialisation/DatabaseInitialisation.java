@@ -16,6 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.postgresql.PGConnection;
+import org.pikater.core.agents.metadata.JPAMetaDataReader;
 import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -32,7 +33,6 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.utils.Hash;
-import org.pikater.shared.database.utils.JPAMetaDataReader;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.tests.DatabaseTest;
 
@@ -104,7 +104,7 @@ public class DatabaseInitialisation {
 		
 		
 		///Update metadata
-		
+		/**
 		
 		File[] datasets2=dir.listFiles();
 		for(File datasetI : datasets2){
@@ -121,7 +121,7 @@ public class DatabaseInitialisation {
 				}
 			}
 		}
-		
+		**/
 		
 		
 	}

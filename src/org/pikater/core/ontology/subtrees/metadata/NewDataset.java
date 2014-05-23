@@ -1,24 +1,25 @@
 package org.pikater.core.ontology.subtrees.metadata;
 
-import jade.content.Concept;
+import jade.content.AgentAction;
 
-public class NewDataset implements Concept {
+
+public class NewDataset implements AgentAction {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1014780512687910546L;
 
-	private String internalFileName;
+	private int dataSetID;
 	private int userId;
 
-	public String getInternalFileName() {
-		return internalFileName;
+	
+	public int getDataSetID() {
+		return dataSetID;
 	}
-	public void setInternalFileName(String internalFileName) {
-		this.internalFileName = internalFileName;
+	public void setDataSetID(int dataSetID) {
+		this.dataSetID = dataSetID;
 	}
-
 	public int getUserId() {
 		return userId;
 	}

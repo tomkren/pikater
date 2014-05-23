@@ -17,6 +17,7 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
@@ -28,10 +29,14 @@ import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
+import org.pikater.shared.database.utils.Hash;
+import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.metadata.JPAMetaDataReader;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
@@ -65,7 +70,9 @@ import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 import org.pikater.core.ontology.subtrees.database.ShutdownDatabase;
+import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
@@ -189,7 +196,10 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToSaveResults(request, a);
 					}
 					if (a.getAction() instanceof SaveMetadata) {
-						return respondToGetAclMessage(request, a);
+						return respondToSaveMetadataMessage(request, a);
+					}
+					if (a.getAction() instanceof SaveDataset) {
+						return respondToSaveDatasetMessage(request, a);
 					}
 					if (a.getAction() instanceof GetMetadata) {
 						return replyToGetMetadata(request, a);
@@ -318,6 +328,14 @@ public class Agent_DataManager extends PikaterAgent {
 		JPAExperiment jpaExperiment = new JPAExperiment();
 		jpaExperiment.setBatch(batch);
 		jpaExperiment.setStatus(experiment.getStatus());
+		
+		if(experiment.getModel() instanceof NewModel){
+			jpaExperiment.setModelStrategy(JPAModelStrategy.CREATION);
+			jpaExperiment.setUsedModel(null);
+		}
+		
+		DAOs.experimentDAO.storeEntity(jpaExperiment);
+		
 		//jpaExperiment.setWorkflow(experiment.getWorkflow());
 		
 		ACLMessage reply = request.createReply();
@@ -688,36 +706,89 @@ public class Agent_DataManager extends PikaterAgent {
 
 	
 
-	private ACLMessage respondToGetAclMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
+	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
 		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
 		Metadata metadata = saveMetadata.getMetadata();
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "UPDATE metadata SET ";
-		query += "numberOfInstances=" + metadata.getNumberOfInstances() + ", ";
-		query += "numberOfAttributes=" + metadata.getNumberOfAttributes() + ", ";
-		query += "missingValues=" + metadata.getMissingValues();
-		if (metadata.getAttributeType() != null) {
-			query += ", attributeType=\'" + metadata.getAttributeType() + "\' ";
+		int dataSetID =saveMetadata.getDataSetID();
+		
+		JPADataSetLO dslo;
+		try {
+			dslo = new ResultFormatter<JPADataSetLO>(
+					DAOs.dataSetDAO.getByID(dataSetID)
+					).getSingleResult();
+			
+			
+			String currentHash=dslo.getHash();
+			
+			java.util.List<JPADataSetLO> equalDataSets=DAOs.dataSetDAO.getByHash(currentHash);
+			
+			//we search for a dataset entry with the same hash and with already generated metadata
+			JPADataSetLO dsloWithMetaData=null;
+			for(JPADataSetLO candidate : equalDataSets){
+				if((candidate.getAttributeMetaData()!=null)&&(candidate.getGlobalMetaData()!=null)){
+					dsloWithMetaData=candidate;
+					break;
+				}
+			}
+			
+			if(dsloWithMetaData==null){
+				JPAMetaDataReader readr=new JPAMetaDataReader(metadata);
+				dslo.setGlobalMetaData(readr.getJPAGlobalMetaData());
+				dslo.setAttributeMetaData(readr.getJPAAttributeMetaData());
+			}else{
+				dslo.setAttributeMetaData(dsloWithMetaData.getAttributeMetaData());
+				dslo.setGlobalMetaData(dsloWithMetaData.getGlobalMetaData());
+			}
+			DAOs.dataSetDAO.updateEntity(dslo);
+			
+		} catch (NoResultException e1) {
+			logError("Dataset for ID "+dataSetID+" doesn't exist.");
+			e1.printStackTrace();
 		}
-		if (metadata.getDefaultTask() != null) {
-			query += ", defaultTask=\'" + metadata.getDefaultTask() + "\' ";
-		}
-
-		// the external file name contains part o the path
-		// (db/files/name) -> split and use only the [2] part
-		query += " WHERE internalFilename=\'" + metadata.getInternalName().split(Pattern.quote(System.getProperty("file.separator")))[2] + "\'";
-
-		log("Executing query: " + query);
-
-		stmt.executeUpdate(query);
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		db.close();
+		return reply;
+	}
+	
+	
+	
+	private ACLMessage respondToSaveDatasetMessage(ACLMessage request, Action a){
+		SaveDataset sd=(SaveDataset)a.getAction();
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
+		
+		try {
+			JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin(sd.getUserLogin())).getSingleResult();
+			File sourceFile=new File(sd.getSourceFile());
+			
+			JPADataSetLO newDSLO=new JPADataSetLO();
+			newDSLO.setCreated(new Date());
+			newDSLO.setDescription(sd.getDescription());
+			newDSLO.setOwner(user);
+			//hash a OID will be set using DAO
+			DAOs.dataSetDAO.storeNewDataSet(sourceFile, newDSLO);
+			
+			JPAFilemapping fm=new JPAFilemapping();
+			fm.setExternalfilename(sourceFile.getName());
+			fm.setInternalfilename(newDSLO.getHash());
+			fm.setUser(user);
+			DAOs.filemappingDAO.storeEntity(fm);
+			
+			
+		} catch (NoResultException e) {
+			logError("No user found with login: "+sd.getUserLogin());
+			reply.setPerformative(ACLMessage.FAILURE);
+			e.printStackTrace();
+		} catch (IOException e) {
+			logError("File can't be read.");
+			reply.setPerformative(ACLMessage.FAILURE);
+			e.printStackTrace();
+		}
+
 		return reply;
 	}
 

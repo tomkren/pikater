@@ -1,4 +1,4 @@
-package org.pikater.shared.database.utils;
+package org.pikater.core.agents.metadata;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,6 +30,10 @@ public class JPAMetaDataReader {
 		
 		public JPAMetaDataReader(){
 			reader=new MetadataReader();
+		}
+		
+		public JPAMetaDataReader(Metadata metadata){
+			this.md=metadata;
 		}
 		
 		public void readFile(File file) throws FileNotFoundException, IOException{	

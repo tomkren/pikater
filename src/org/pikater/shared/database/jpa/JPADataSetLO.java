@@ -40,9 +40,9 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	private long OID;
 	private JPAUser owner;
 	private String description;
-	@OneToOne(cascade=CascadeType.PERSIST)
+	@OneToOne(cascade=CascadeType.MERGE)
 	private JPAGlobalMetaData globalMetaData;
-	@OneToMany(cascade=CascadeType.PERSIST)
+	@OneToMany(cascade=CascadeType.MERGE)
 	private List<JPAAttributeMetaData> attributeMetaData;
 	private String hash;
 	@Temporal(TemporalType.TIMESTAMP)
