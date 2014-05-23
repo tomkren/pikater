@@ -26,64 +26,46 @@
   	font-family: "Courier New", Courier, monospace;
   }
   
-  /* Cell browser */
-  .cellbrowser
+  /* Icon button */
+  .icon-button
   {
-  	border: 1px solid black;
+	border: 1px outset #ddd;
+	
+	margin: 0;
+	padding: 0;
+	
+	border-radius: 75%; 
+	-moz-border-radius: 75%; 
+	-webkit-border-radius: 75%;
   }
-  .cellbrowser-column
+  .icon-button:active
   {
-  	height: 100%;
+    border: 1px inset #ddd;
   }
-  .cellbrowser-cell-container
+  
+  /* TODO Toggle button */
+  .toggle-button
   {
-  	width: 100%; /* this is needed for some parent containers as well as the cell itself */
+  	border: 2px outset #ddd;
   }
-  .cellbrowser-cell
+  .toggle-button:active
   {
-  	width: 100%; /* CSS3: extends: cellbrowser-cell-container; */
-  	min-width: 150px;
-  	border-style: ridge;
+    cursor: pointer;
   }
-  .cellbrowser-cell:hover
+  .toggle-button-pushed
   {
-  	border-style: groove;
+    border: 2px inset #ddd;
   }
-  .cellbrowser-cell-inner-layout
+  
+  /* Miscellaneous global styles */
+  .maxWidth
   {
   	width: 100%;
   }
-  .cellbrowser-cell-inner-layout-table:hover, .cellbrowser-cell-inner-layout-table-selected 
+  .maxHeight
   {
-  	background-color: lightyellow;
-  }
-  .cellbrowser-cell-component
-  {
-  	padding-top: 3px;
-  	padding-bottom: 3px;
-  	margin-left: 10px;
-  	margin-right: 25px;
-  }
-  .cellbrowser-cell-image
-  {
-  }
-  
-  /* Experiment editor */
-  .experiment-editor
-  {
-  }
-  .experiment-editor .v-captiontext
-  {
-  	font-size: 14px;
-  	font-weight: bold;
-  }
-  .experiment-editor-kinetic-container
-  {
-  	width: 100%;
   	height: 100%;
   }
-  
-  /* Miscellaneous */
   .displayBorder
   {
   	border: 1px solid black;
@@ -95,9 +77,5 @@
   .errorLabel
   {
   	color: red;
-  }
-  .autoHeight
-  {
-  	height: auto;
   }
 }

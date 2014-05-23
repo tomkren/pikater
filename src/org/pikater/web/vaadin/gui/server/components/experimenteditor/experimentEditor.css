@@ -1,0 +1,30 @@
+@CHARSET "US-ASCII";
+
+.experiment-editor
+{
+}
+.experiment-editor-menu
+{
+}
+.v-slot-experiment-editor-toolbar /* VerticalLayout item container for "experiment-editor-toolbar" */
+{
+	padding-left: 5px;
+}
+.experiment-editor-toolbar /* HorizontalLayout representing the toolbar itself */
+{
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.experiment-editor-toolbar-separator
+{
+	border-left: 1px solid #38546d; 
+	border-right: 1px solid #16222c;
+	height: 100%;
+}
+
+.experiment-editor-menu .v-menubar-menuitem-top-level-menu-item, .v-slot-experiment-editor-toolbar .v-captiontext /* MenuBar top-level captions and toolbar caption */
+{
+	font-size: 14px;
+	font-weight: bold;
+}
