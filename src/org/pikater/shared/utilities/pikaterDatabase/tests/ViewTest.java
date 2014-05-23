@@ -7,8 +7,10 @@ import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.views.DataSetView;
 import org.pikater.shared.database.views.MetaDataView;
 import org.pikater.shared.database.views.ViewColumns;
+import org.pikater.shared.database.views.models.DataSetRowModel;
 import org.pikater.shared.database.views.models.MetaDataModel;
 import org.pikater.shared.database.views.models.MetaDataRow;
 
@@ -22,7 +24,7 @@ public class ViewTest {
 			weather = new ResultFormatter<JPADataSetLO>(
 					DAOs.dataSetDAO.getByID(2151)
 					).getSingleResult();
-			
+			this.dataSetViewTest();
 			this.rowTest(weather);
 			//this.stringTest(weather);
 			//this.tableTest(weather);
@@ -34,6 +36,19 @@ public class ViewTest {
 			System.err.println("Dataset "+dataSetDescription+" doesn't exist.");
 			e.printStackTrace();
 		}		
+	}
+	
+	public void dataSetViewTest(){
+		DataSetView dsw=new DataSetView();
+		for(DataSetRowModel row:dsw.getAllDatasets()){
+			System.out.println(
+					row.getCreationTime().toString()+" "+
+					row.getUserName()+" "+
+					row.getDescription()+" "+
+					row.getNumberOfInstances()+" "+
+					row.getAttributeCount()
+					);
+		}
 	}
 	
 	public void rowTest(JPADataSetLO result){
