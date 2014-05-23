@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
-@Table(name="User")
+@Table(name="_User")
 @NamedQueries({
 	@NamedQuery(name="User.getAll",query="select u from JPAUser u"),
 	@NamedQuery(name="User.getByID",query="select u from JPAUser u where u.id=:id"),

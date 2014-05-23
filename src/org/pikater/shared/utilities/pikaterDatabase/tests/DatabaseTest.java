@@ -2,138 +2,138 @@ package org.pikater.shared.utilities.pikaterDatabase.tests;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import org.postgresql.PGConnection;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
+import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.JPAGeneralFile;
+import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.JPAFilemapping;
+import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.PostgreSQLConnectionProvider;
-import org.pikater.shared.utilities.pikaterDatabase.Database;
+import org.pikater.shared.database.jpa.daos.DAOs;
 
 public class DatabaseTest {
 	
-	PostgreSQLConnectionProvider pscp;
-	
-	public DatabaseTest(){
-		pscp=new PostgreSQLConnectionProvider("jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater", "pikater", "SrapRoPy");
+	public void test(){
+		listDataSets();
+		listDataSetWithExclusion();
+		listResults();
+		listUserAndRoles();
+		listBatches();
+		listExperiments();
+		listFileMappings();
 	}
 	
-	public void test() throws ClassNotFoundException, SQLException, IOException, UserNotFoundException{
-		
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("pikaterDataModel");
-		
-		Database db=new Database(factory,(PGConnection)pscp.getConnection());
-		
-		
-		List<JPAUser> userlist= db.getUsers();
-		System.out.println("Users in database: ");
-		for(JPAUser user:userlist){
-			JPARole r=user.getRole();
-			if(r!=null){
-			System.out.println(user.getLogin()+": "+user.getEmail()+"-----"+r.getName());
-			}else{
-				System.out.println(user.getLogin()+": "+user.getEmail()+"----- null");
-			}
+	public void listDataSets(){
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll();
+		p("No. of found DataSets: "+dslos.size());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
 		}
-		System.out.println(userlist.size()+" items found.");
-		System.out.println();
-		
-		
-		/**
-		
-		String filepath="C:/java/test.txt";
-		String filepath2="C:/java/test2.txt";
-		
-		File f=new File(filepath);
-		File f2=new File(filepath2);
-		
-		
-		
-		db.saveDataSet(1, f);
-		db.saveDataSet(1, f2);
-		db.saveDataSet(2, f2);
-		
-		
-		db.saveGeneralFile(1, "Just a testfile", f);
-		db.saveGeneralFile(2, "Second test file for user no. 2", f2);
-		
-		*/
-		//db.deleteDataSetLOById(29);
-		
-		List<JPADataSetLO> list= db.getAllDataSetLargeObjects();
-		System.out.println("All DataSets: ");
-		for(JPADataSetLO dslo:list){
-			System.out.println(dslo.getId() +" "+dslo.getDescription()+" "+dslo.getOID());
-		}
-		System.out.println(list.size()+" items found.");
-		System.out.println();
-		
-		//db.deleteGeneralFilesById(10);
-		
-		List<JPAGeneralFile> list2= db.getAllGeneralFiles();
-		System.out.println("All GeneralFiles: ");
-		for(JPAGeneralFile gf:list2){
-			System.out.println(gf.getId()+" "+gf.getFileName()+" "+gf.getOID());
-		}
-		System.out.println(list2.size()+" items found.");
-		System.out.println();
-		
-		
-		
-		/**
-		List<JPADataSetLO> list= db.getDataSetLargeObjectsByUser(1);
-		System.out.println("DataSets for user no. 1: ");
-		for(JPADataSetLO dslo:list){
-			System.out.println(dslo.getID()+" "+dslo.getDataSetFileName()+" "+dslo.getOID());
-		}
-		System.out.println(list.size()+" items found.");
-		System.out.println();
-		
-		list= db.getDataSetLargeObjectsByUser(2);
-		System.out.println("DataSets for user no. 2: ");
-		for(JPADataSetLO dslo:list){
-			System.out.println(dslo.getID()+" "+dslo.getDataSetFileName()+" "+dslo.getOID());
-		}
-		System.out.println(list.size()+" items found.");
-		System.out.println();
-		
-		
-		List<JPAGeneralFile> list2= db.getGeneralFilesByUser(1);
-		System.out.println("GeneralFiles for user no. 1: ");
-		for(JPAGeneralFile gf:list2){
-			System.out.println(gf.getID()+" "+gf.getFileName()+" "+gf.getOID());
-		}
-		System.out.println(list2.size()+" items found.");
-		System.out.println();
-		
-		
-		list2= db.getGeneralFilesByUser(2);
-		System.out.println("GeneralFiles for user no. 2: ");
-		for(JPAGeneralFile gf:list2){
-			System.out.println(gf.getID()+" "+gf.getFileName()+" "+gf.getOID());
-		}
-		System.out.println(list2.size()+" items found.");
-		System.out.println();
-		
-		long del_count=db.deleteAllDataSetLargeObjectsByUser(1);
-		System.out.println("Number of deleted DataSets for User no. 1: "+del_count);
-		
-		del_count=db.deleteAllDataSetLargeObjectsByUser(2);
-		System.out.println("Number of deleted DataSets for User no. 2: "+del_count);
-		**/
+		p("------------");
+		p("");
 	}
-
 	
+	public void listDataSetWithExclusion(){
+		List<String> exList=new ArrayList<String>();
+		List<JPADataSetLO> wDslos=DAOs.dataSetDAO.getByDescription("weather.arff");
+		if(wDslos.size()>0){
+			JPADataSetLO wdslo=wDslos.get(0);
+			exList.add(wdslo.getHash());
+		}
+		
+		List<JPADataSetLO> iDslos=DAOs.dataSetDAO.getByDescription("iris.arff");
+		if(iDslos.size()>0){
+			JPADataSetLO idslo=iDslos.get(0);
+			exList.add(idslo.getHash());
+		}
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllExcludingHashes(exList);
+		
+		p("No. of found DataSets: "+dslos.size());
+		System.out.print("Excluded: ");
+		for(String s :exList){
+			System.out.print(s+" ");
+		}
+		System.out.println();
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
+		}
+		p("------------");
+		p("");
+	}
+	
+	public void listResults(){
+		List<JPAResult> results=DAOs.resultDAO.getAll();
+		for(JPAResult res:results){
+			p(res.getId()+". "+res.getAgentName()+"    "+res.getStart());
+		}
+		p("------------");
+		p("");
+	}
+	
+	public void listUserAndRoles(){
+		List<JPARole> roles=DAOs.roleDAO.getAll();
+		p("No. of Roles in the system : "+roles.size());
+		for(JPARole r:roles){
+			p(r.getId()+". "+r.getName()+" : "+r.getDescription());
+		}
+		p("---------------------");
+		p("");
+		
+		List<JPAUser> users=DAOs.userDAO.getAll();
+		p("No. of Users in the system : "+users.size());
+		for(JPAUser r:users){
+			p(r.getId()+". "+r.getLogin()+" : "+r.getStatus()+" - "+r.getEmail()+"   "+r.getCreated().toString());
+		}
+		p("---------------------");
+		p("");
+	}
+	
+	public void listBatches(){
+		List<JPABatch> batches=DAOs.batchDAO.getAll();
+		p("No. of Batches in the system : "+batches.size());
+		for(JPABatch b:batches){
+			p(b.getId()+". "+b.getName()+" : "+b.getCreated()+" - "+b.getFinished());
+		}
+		p("---------------------");
+		p("");
+	}
+	
+	public void listExperiments(){
+		List<JPAExperiment> exps=DAOs.experimentDAO.getAll();
+		p("No. of Experiments "+exps.size());
+		for(JPAExperiment exp:exps){
+			p(exp.getId()+". "+exp.getStatus()+" : "+exp.getStarted()+" - "+exp.getFinished());
+		}
+		
+		p("---------------------");
+		p("");
+	}
+	
+	public void listFileMappings(){
+		List<JPAFilemapping> fms=DAOs.filemappingDAO.getAll();
+		p("No. of FileMappings "+fms.size());
+		for(JPAFilemapping fm:fms){
+			p(fm.getId()+". "+fm.getInternalfilename()+" - "+fm.getExternalfilename());
+		}
+		
+		p("---------------------");
+		p("");
+	}
+	
+	
+	
+	private void p(String s){
+		System.out.println(s);
+	}
 	
 	public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException, UserNotFoundException{
 		DatabaseTest dt=new DatabaseTest();
 		dt.test();
+		System.out.println("End of Database Testing");
 	}
 	
 	

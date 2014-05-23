@@ -34,92 +34,34 @@ import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.utils.Hash;
 import org.pikater.shared.database.utils.JPAMetaDataReader;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
-import org.pikater.shared.utilities.pikaterDatabase.initialisation.JPAMetaDataReader;
+import org.pikater.shared.utilities.pikaterDatabase.tests.DatabaseTest;
 
 public class DatabaseInitialisation {
-
-	public enum PasswordChangeResult{Success,Error};
 	
-	PGConnection connection;
-	EntityManagerFactory emf=null;
-	EntityManager em = null;
+	private static final String dataSetPath="core/datasets";
 	
-	public DatabaseInitialisation(EntityManagerFactory emf,PGConnection connection){
-		this.emf=emf;
-		this.connection=connection;
-	}
-
-	
-	/**
-	 * Initialisation of test-data in DataBase
-	 * @throws IOException 
-	 * @throws SQLException 
-	 * @throws UserNotFoundException 
-	 * @throws ParseException 
-	 */
-	private void itialisationData() throws SQLException, IOException, UserNotFoundException, ParseException{				
+	private void init() throws UserNotFoundException, FileNotFoundException, IOException, SQLException, ParseException{
 		
-		//this.createRolesAndUsers();
-		this.testUser();
+		DatabaseTest dbTest=new DatabaseTest();
 		
-		this.listDataSets();
-		this.listDataSetWithExclusion();
+		this.createRolesAndUsers();
+		dbTest.listUserAndRoles();
 		
-	//	this.createSampleResult();
-	//	this.listResults();
+		this.createSampleResult();
+		dbTest.listResults();
 		
-		//this.createFileMapping();
-		//this.testFileMappings();
-		
-	//	this.listExperiments();
-//		this.listBatches();
-		
-		//this.addWebDatasets();
-		
-		//this.insertFinishedBatch();
-		
-		/**
 		this.createFileMapping();
-		**/
+		dbTest.listFileMappings();
+		
+		this.addWebDatasets();
+		dbTest.listDataSets();
+		
+		this.insertFinishedBatch();
+		dbTest.listBatches();
+		
 	}
 	
-	private void listDataSets(){
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll();
-		p("No. of found DataSets: "+dslos.size());
-		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
-		}
-		p("------------");
-		p("");
-	}
 	
-	private void listDataSetWithExclusion(){
-		List<String> exList=new ArrayList<String>();
-		List<JPADataSetLO> wDslos=DAOs.dataSetDAO.getByDescription("weather.arff");
-		if(wDslos.size()>0){
-			JPADataSetLO wdslo=wDslos.get(0);
-			exList.add(wdslo.getHash());
-		}
-		
-		List<JPADataSetLO> iDslos=DAOs.dataSetDAO.getByDescription("iris.arff");
-		if(iDslos.size()>0){
-			JPADataSetLO idslo=iDslos.get(0);
-			exList.add(idslo.getHash());
-		}
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllExcludingHashes(exList);
-		
-		p("No. of found DataSets: "+dslos.size());
-		System.out.print("Excluded: ");
-		for(String s :exList){
-			System.out.print(s+" ");
-		}
-		System.out.println();
-		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
-		}
-		p("------------");
-		p("");
-	}
 	
 	private void createSampleResult(){
 		JPAResult res=new JPAResult();
@@ -130,17 +72,8 @@ public class DatabaseInitialisation {
 		DAOs.resultDAO.storeEntity(res);
 	}
 	
-	private void listResults(){
-		List<JPAResult> results=DAOs.resultDAO.getAll();
-		for(JPAResult res:results){
-			p(res.getId()+". "+res.getAgentName()+"    "+res.getStart());
-		}
-		p("------------");
-		p("");
-	}
-	
 	private void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
-		File dir=new File("...");
+		File dir=new File(DatabaseInitialisation.dataSetPath);
 		
 		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
 		System.out.println("Target user: "+owner.getLogin());
@@ -178,7 +111,7 @@ public class DatabaseInitialisation {
 			if(datasetI.isFile()){
 				try{
 				System.out.println("--------------------");
-				
+				System.out.println("Updating metadata for : "+datasetI.getAbsolutePath());
 				this.updateMetaDataForHash(datasetI);
 				
 				System.out.println("--------------------");
@@ -193,12 +126,9 @@ public class DatabaseInitialisation {
 		
 	}
 	
-	
 	private void updateMetaDataForHash(File file) throws IOException{
 		
-		String hash;
-
-			hash = Hash.getMD5Hash(file);
+		String hash = Hash.getMD5Hash(file);
 		List<JPADataSetLO> dsloDataSetLO=DAOs.dataSetDAO.getByHash(hash);
 		if(dsloDataSetLO.size()>0){
 			JPADataSetLO dslo=dsloDataSetLO.get(0);
@@ -223,8 +153,6 @@ public class DatabaseInitialisation {
 		}
 	}
 	
-
-
 	private void createRolesAndUsers() throws UserNotFoundException {		
 		
 		JPAUserPriviledge sdsPriv=new JPAUserPriviledge();
@@ -326,41 +254,10 @@ public class DatabaseInitialisation {
 		DAOs.userDAO.storeEntity(u6);
 	}
 	
-	public void testUser(){
-		List<JPARole> roles=DAOs.roleDAO.getAll();
-		p("No. of Roles in the system : "+roles.size());
-		for(JPARole r:roles){
-			p(r.getId()+". "+r.getName()+" : "+r.getDescription());
-		}
-		p("---------------------");
-		p("");
-		
-		List<JPAUser> users=DAOs.userDAO.getAll();
-		p("No. of Users in the system : "+users.size());
-		for(JPAUser r:users){
-			p(r.getId()+". "+r.getLogin()+" : "+r.getStatus()+" - "+r.getEmail()+"   "+r.getCreated().toString());
-		}
-		p("---------------------");
-		p("");
-		
-		
-		
-	}
-	
-	public void listBatches(){
-		List<JPABatch> batches=DAOs.batchDAO.getAll();
-		p("No. of Batches in the system : "+batches.size());
-		for(JPABatch b:batches){
-			p(b.getId()+". "+b.getName()+" : "+b.getCreated()+" - "+b.getFinished());
-		}
-		p("---------------------");
-		p("");
-	}
-	
 	private void createFileMapping() {
 		
-        File dir=new File("...");
-		
+        File dir=new File(DatabaseInitialisation.dataSetPath);
+		System.out.println(dir.getAbsolutePath());
 		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
 		System.out.println("Target user: "+owner.getLogin());
 		
@@ -389,32 +286,6 @@ public class DatabaseInitialisation {
 		
 		
 
-	}
-	
-	private void testFileMappings(){
-		List<JPAFilemapping> fms=DAOs.filemappingDAO.getAll();
-		p("No. of FileMappings "+fms.size());
-		for(JPAFilemapping fm:fms){
-			p(fm.getId()+". "+fm.getInternalfilename()+" - "+fm.getExternalfilename());
-		}
-		
-		p("---------------------");
-		p("");
-	}
-	
-	private void listExperiments(){
-		List<JPAExperiment> exps=DAOs.experimentDAO.getAll();
-		p("No. of Experiments "+exps.size());
-		for(JPAExperiment exp:exps){
-			p(exp.getId()+". "+exp.getStatus()+" : "+exp.getStarted()+" - "+exp.getFinished());
-		}
-		
-		p("---------------------");
-		p("");
-	}
-	
-	private void p(String s){
-		System.out.println(s);
 	}
 	
 	private void insertFinishedBatch() throws ParseException {
@@ -449,15 +320,14 @@ public class DatabaseInitialisation {
 		DAOs.batchDAO.storeEntity(batch);
 	}
 	
+	private void p(String s){
+		System.out.println(s);
+	}
 
 
 	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException, ParseException {
-
-		DatabaseInitialisation data = new DatabaseInitialisation(
-				null,null);
-		data.itialisationData();
-
-		
-		System.out.println("mm");
+		DatabaseInitialisation data = new DatabaseInitialisation();
+		data.init();
+		System.out.println("End of Database Initialisation");
 	}
 }
