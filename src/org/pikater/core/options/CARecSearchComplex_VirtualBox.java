@@ -33,7 +33,7 @@ public class CARecSearchComplex_VirtualBox {
 		
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class.getName());
-		agentInfo.setOntologyClass(CARecSearchComplex.class.toString());
+		agentInfo.setOntologyClass(CARecSearchComplex.class.getName());
 		
 		agentInfo.setName("Complex");
 		agentInfo.setPicture("picture7.jpg");

@@ -22,6 +22,8 @@ import javax.persistence.TemporalType;
 
 import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
+import org.pikater.shared.database.jpa.status.JPAModelStrategy;
+import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
 @Table(name="Experiment")
@@ -35,14 +37,14 @@ public class JPAExperiment extends JPAAbstractEntity{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-	// nejsem si jisty, jaky je ucel tohohle a jestli BINARY(1) v diagramu znamena boolean nebo byte
-    @Column(nullable = false)
-	private byte workflow;
     @Enumerated(EnumType.STRING)
 	private JPAExperimentStatus status;
     @ManyToOne
 	private JPABatch batch;
-	private JPAModel model;
+    @ManyToOne
+	private JPAModel usedModel;
+	@Enumerated(EnumType.STRING)
+	private JPAModelStrategy modelStrategy;
 	@OneToMany(cascade=CascadeType.PERSIST)
 	private List<JPAResult> results;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -55,13 +57,6 @@ public class JPAExperiment extends JPAAbstractEntity{
 
 	public int getId() {
         return id;
-    }
-
-    public byte getWorkflow() {
-        return workflow;
-    }
-    public void setWorkflow(byte workflow) {
-        this.workflow = workflow;
     }
 
 	public JPAExperimentStatus getStatus() {
@@ -92,11 +87,20 @@ public class JPAExperiment extends JPAAbstractEntity{
 		this.batch = batch;
 	}
 
-	public JPAModel getModel() {
-		return model;
+	public JPAModel getUsedModel() {
+		return usedModel;
 	}
-	public void setModel(JPAModel model) {
-		this.model = model;
+
+	public void setUsedModel(JPAModel usedModel) {
+		this.usedModel = usedModel;
+	}
+
+	public JPAModelStrategy getModelStrategy() {
+		return modelStrategy;
+	}
+
+	public void setModelStrategy(JPAModelStrategy modelStrategy) {
+		this.modelStrategy = modelStrategy;
 	}
 
 	public List<JPAResult> getResults() {
@@ -142,11 +146,11 @@ public class JPAExperiment extends JPAAbstractEntity{
 		this.batch=updateValues.getBatch();
 		this.created=updateValues.getCreated();
 		this.finished=updateValues.getFinished();
-		this.model=updateValues.getModel();
+		this.usedModel=updateValues.getUsedModel();
+		this.modelStrategy=updateValues.getModelStrategy();
 		this.results=updateValues.getResults();
 		this.started=updateValues.getStarted();
 		this.status=updateValues.getStatus();
-		this.workflow=updateValues.getWorkflow();
 	}
 
 }

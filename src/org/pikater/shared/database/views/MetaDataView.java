@@ -8,6 +8,7 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.models.MetaDataModel;
+import org.pikater.shared.database.views.models.MetaDataRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,4 +121,27 @@ public class MetaDataView extends View {
 			
 		return models;
 	}
+	
+	public List<MetaDataRow> getMetaDataRowModels(){
+		List<MetaDataRow> models=new ArrayList<MetaDataRow>();
+		
+		models.add(
+				new MetaDataRow(
+						parentDSLO.getGlobalMetaData()
+						)
+				);
+		
+		for(JPAAttributeMetaData attribute:parentDSLO.getAttributeMetaData()){
+			if(attribute instanceof JPAAttributeNumericalMetaData){
+				models.add(new MetaDataRow((JPAAttributeNumericalMetaData)attribute));
+			}else if(attribute instanceof JPAAttributeCategoricalMetaData){
+				models.add(new MetaDataRow((JPAAttributeCategoricalMetaData)attribute));
+			}
+		}
+		
+		
+		return models;
+		
+	}
+	
 }

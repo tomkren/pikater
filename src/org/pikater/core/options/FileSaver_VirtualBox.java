@@ -1,5 +1,6 @@
 package org.pikater.core.options;
 
+import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
@@ -15,7 +16,7 @@ public class FileSaver_VirtualBox  {
 		
 		AgentInfo agentInfo = new AgentInfo();
 		//TODO: some virtual-box provider agent
-		agentInfo.setAgentClass(null);
+		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class.getName());
 		agentInfo.setOntologyClass(FileDataSaver.class.getName());
 	
 		agentInfo.setName("FileSaver");

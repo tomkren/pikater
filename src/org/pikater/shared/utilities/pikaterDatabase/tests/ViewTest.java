@@ -10,6 +10,7 @@ import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.MetaDataView;
 import org.pikater.shared.database.views.ViewColumns;
 import org.pikater.shared.database.views.models.MetaDataModel;
+import org.pikater.shared.database.views.models.MetaDataRow;
 
 public class ViewTest {
 
@@ -22,18 +23,40 @@ public class ViewTest {
 					DAOs.dataSetDAO.getByDescription(dataSetDescription)
 					).getSingleResult();
 			
-			
-			this.stringTest(weather);
-			this.tableTest(weather);
-			this.defaultGlobalTest(weather);
-			this.defaultNumericalTest(weather);
-			this.defaultCategoricalTest(weather);
+			this.rowTest(weather);
+			//this.stringTest(weather);
+			//this.tableTest(weather);
+			///this.defaultGlobalTest(weather);
+			//this.defaultNumericalTest(weather);
+			//this.defaultCategoricalTest(weather);
 			
 		} catch (NoResultException e) {
 			System.err.println("Dataset "+dataSetDescription+" doesn't exist.");
 			e.printStackTrace();
 		}		
 	}
+	
+	public void rowTest(JPADataSetLO result){
+		MetaDataView mdv=new MetaDataView(result);
+		for(MetaDataRow row : mdv.getMetaDataRowModels()){
+			System.out.println(
+					row.getAvarage()+" "+
+					row.getClassEntropy()+" "+
+					row.getDefaultTaskType()+" "+
+					row.getMax()+" "+
+					row.getMedian()+" "+
+					row.getMin()+" "+
+					row.getMode()+" "+
+					row.getNumberOfCategories()+" "+
+					row.getNumberofInstances()+" "+
+					row.getRatioOfMissingValues()+" "+
+					row.getVariance()+" "+
+					row.isReal()+" "+
+					row.isTarget()
+					);
+		}
+	}
+	
 	
 	public void defaultGlobalTest(JPADataSetLO result){
 		MetaDataView mdv=new MetaDataView(result);

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -12,6 +13,8 @@ public class JPAModel extends JPAAbstractEntity{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+	@OneToOne
+	private JPAResult creator;
 	
 	public int getId() {
         return id;
@@ -24,6 +27,12 @@ public class JPAModel extends JPAAbstractEntity{
 	public void setFileHash(String fileHash) {
 		this.fileHash = fileHash;
 	}
+	public JPAResult getCreator() {
+		return creator;
+	}
+	public void setCreator(JPAResult creator) {
+		this.creator = creator;
+	}
 	@Override
 	public String getEntityName() {
 		return "Model";
@@ -32,6 +41,7 @@ public class JPAModel extends JPAAbstractEntity{
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPAModel updateValues=(JPAModel)newValues;
 		this.fileHash=updateValues.getFileHash();
+		this.creator=updateValues.getCreator();
 	}
     
 }
