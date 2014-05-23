@@ -5,4 +5,5 @@ import com.vaadin.shared.communication.ServerRpc;
 public interface KineticComponentServerRpc extends ServerRpc
 {
 	void setSchemaModified(boolean modified);
+	void onLoadCallback(int absoluteX, int absoluteY);
 }

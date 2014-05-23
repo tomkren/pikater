@@ -6,7 +6,7 @@ import com.vaadin.client.communication.RpcProxy;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
-import org.pikater.web.vaadin.gui.server.components.experimenteditor.KineticComponent;
+import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
 
 import com.vaadin.client.communication.StateChangeEvent;
 
@@ -50,8 +50,38 @@ public class KineticComponentConnector extends AbstractComponentConnector
 		});
 	}
 	
-	// --------------------------------------------------------------------
-	// METHODS INHERITED FROM CONNECTOR
+	// ----------------------------------------------------------------------------------------------
+	// METHODS TO PRESERVE THE USER'S KINETIC CONTENT AGAINST VAADIN'S DETACH/VISIBILITY MECHANISMS.
+	
+	/*
+	 * Vaadin will destroy the connector when the server-side component gets detached from DOM (for instance when
+	 * another tab gets selected) or set to invisible. Once attached again, Vaadin will recreate the client widget
+	 * using the shared state.
+	 * Ergo, if we want to preserve the widget's client state (Kinetic environment) without serializing to server,
+	 * we have to:
+	 * 1) serialize it locally, when the connector is unregistered,
+	 * 2) deserialize it again, when the connector is recreated.
+	 * That's what the "init()" and "onUnregister()" methods do.
+	 */
+	
+	@Override
+	protected void init()
+	{
+		super.init();
+		
+		getWidget().loadExperiment(KineticComponentRegistrar.getSavedExperimentFor(getConnectorId()));
+	}
+	
+	@Override
+	public void onUnregister()
+	{
+		super.onUnregister();
+		
+		KineticComponentRegistrar.saveExperimentFor(getConnectorId(), getWidget().getEngine().toIntermediateFormat());
+	}
+	
+	// ----------------------------------------------------------------------------------------------
+	// OTHER IMPORTANT METHODS INHERITED FROM THE CONNECTOR
 
 	/**
 	 * Called second when creating the connector.
