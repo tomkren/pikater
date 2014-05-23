@@ -121,6 +121,8 @@ public class JPAUser extends JPAAbstractEntity{
 		this.priorityMax=updateValues.getPriorityMax();
 		this.role=updateValues.getRole();
 		this.status=updateValues.getStatus();
+		this.created=updateValues.getCreated();
+		this.lastLogin=updateValues.getLastLogin();
 	}
 	
 }
