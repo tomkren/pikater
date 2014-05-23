@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticengine;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -22,13 +23,17 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
+import org.pikater.shared.experiment.universalformat.UniversalGui;
+import org.pikater.shared.experiment.webformat.SchemaDataSource;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.BiDiOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.DeleteSelectedOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
@@ -230,8 +235,7 @@ public final class KineticEngine
 	};
 	
 	/*
-	 * TODO:
-	 * - CellBrowser s krabicemi, D&D
+	 * TODO: 
 	 * - pohybování nevybraných krabiček spojit s UNDO/REDO
 	 * - až bude fungovat cancelBubble a zbavíme se fillRectanglu, bude možný i rovnou snadno rozšířit kreslení baseLine i na boxy
 	 * - bug s algoritmem počítání hran (hrany jdou pres box)
@@ -340,17 +344,85 @@ public final class KineticEngine
 	// *****************************************************************************************************
 	// SERIALIZATION/DESERIALIZATION INTERFACE
 	
-	public String serializeToJSON(EngineComponent component)
+	public SchemaDataSource toIntermediateFormat()
+	{
+		SchemaDataSource result = new SchemaDataSource();
+		
+		// first convert all boxes
+		Map<BoxPrototype, Integer> nativeBoxToResultID = new HashMap<BoxPrototype, Integer>();
+		for(BoxPrototype box : allBoxes)
+		{
+			Integer serializedBoxID = result.addLeafBoxAndReturnID(new UniversalGui(box.getAbsoluteNodePosition()), box.info);
+			nativeBoxToResultID.put(box, serializedBoxID);
+		}
+		
+		// then convert all edges
+		Set<EdgePrototype> serializedEdges = new HashSet<EdgePrototype>(); 
+		for(BoxPrototype box : allBoxes)
+		{
+			for(EdgePrototype edge : box.connectedEdges)
+			{
+				if(!serializedEdges.contains(edge))
+				{
+					result.connect(nativeBoxToResultID.get(edge.getEndPoint(EndPoint.FROM)), nativeBoxToResultID.get(edge.getEndPoint(EndPoint.TO)));
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public void fromIntermediateFormat(SchemaDataSource experiment)
+	{
+		// first convert all boxes
+		Map<Integer, BoxPrototype> guiBoxes = new HashMap<Integer, BoxPrototype>();
+		for(Integer leafBoxID : experiment.leafBoxes.keySet())
+		{
+			BoxPrototype guiBox = getShapeCreator().createBox(NodeRegisterType.MANUAL, experiment.leafBoxes.get(leafBoxID));
+			guiBoxes.put(leafBoxID, guiBox);
+		}
+		
+		// then convert all edges
+		Collection<ExperimentGraphItem> allGraphItems = new ArrayList<ExperimentGraphItem>(guiBoxes.values()); // boxes should to be registered before edges
+		for(Entry<Integer, Set<Integer>> entry : experiment.edges.entrySet())
+		{
+			for(Integer toLeafBoxID : entry.getValue())
+			{
+				BoxPrototype fromBox = guiBoxes.get(entry.getKey());
+				BoxPrototype toBox = guiBoxes.get(toLeafBoxID);
+				allGraphItems.add(getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromBox, toBox));
+			}
+		}
+		
+		// and finally, put everything into the enviroment
+		registerCreated(allGraphItems.toArray(new ExperimentGraphItem[0]));
+	}
+	
+	public String toJSON(EngineComponent component)
 	{
 		return getContainer(component).toJSON();
 	}
 	
-	public String serializeToMyJSON(EngineComponent component, JsArrayString attrsToPrint)
+	/**
+	 * Only use this for debug purposes.
+	 * @param component
+	 * @param attrsToPrint
+	 * @return
+	 */
+	@Deprecated()
+	public String toMyJSON(EngineComponent component, JsArrayString attrsToPrint)
 	{
 		return getContainer(component).toMyJSON(attrsToPrint);
 	}
 	
-	public void deserialize(String dLayerJSON, String edgeListJSON)
+	/**
+	 * Method is currently buggy.
+	 * @param component
+	 * @param attrsToPrint
+	 * @return
+	 */
+	@Deprecated
+	public void fromJSON(String dLayerJSON, String edgeListJSON)
 	{
 		/*
 		 * First reset the current state.
@@ -463,13 +535,28 @@ public final class KineticEngine
 	 */
 	public void resetEnvironment()
 	{
-		// TODO
-		
 		// first reset selection
+		SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
+		selPlugin.deselectAllBut(null, false);
 		
 		// then remove edges
+		for(BoxPrototype box : allBoxes)
+		{
+			for(EdgePrototype edge : box.connectedEdges)
+			{
+				edge.unregisterInKinetic();
+				edge.destroy();
+			}
+		}
 		
-		// and finally, remove boxes
+		// remove boxes
+		for(BoxPrototype box : allBoxes)
+		{
+			box.destroy();
+		}
+		
+		// and finally, request redraw of the stage
+		draw(EngineComponent.STAGE);
 	}
 	
 	public void resize(int newWidth, int newHeight)

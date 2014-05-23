@@ -11,7 +11,7 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	private boolean isSelected;
 	
 	/**
-	 * The engine to register and callback to.
+	 * The engine to register and call back to.
 	 */
 	private final KineticEngine kineticEngine;
 	
@@ -49,6 +49,21 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 		invertSelectionVisually();
 	}
 	
+	/**
+	 * Permanently destroys this item.
+	 */
+	public void destroy()
+	{
+		if(getMasterNode().isRegistered())
+		{
+			destroyInnerNodes();
+		}
+		else
+		{
+			throw new IllegalStateException("Can not destroy an item that is registered in the environment. Unregister first.");
+		}
+	}
+	
 	// ******************************************************************************************
 	// ABSTRACT INTERFACE
 	
@@ -61,6 +76,11 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	 * Unregister (remove) the item from kinetic environment.
 	 */
 	public abstract void unregisterInKinetic();
+	
+	/**
+	 * Method to permanently destroy all inner nodes that make up this item.
+	 */
+	protected abstract void destroyInnerNodes();
 	
 	/**
 	 * Method to change visual style of the child class and update its data structure.

@@ -132,6 +132,13 @@ public class BoxPrototype extends ExperimentGraphItem
 	}
 	
 	@Override
+	protected void destroyInnerNodes()
+	{
+		boxContainer.destroyChildren();
+		boxContainer.destroy();
+	}
+	
+	@Override
 	protected void invertSelectionProgrammatically()
 	{
 		if(isSelected())
@@ -211,6 +218,11 @@ public class BoxPrototype extends ExperimentGraphItem
 	public String getID()
 	{
 		return boxContainer.getID();
+	}
+	
+	public Vector2d getAbsoluteNodePosition()
+	{
+		return boxContainer.getAbsolutePosition();
 	}
 	
 	public Vector2d getAbsolutePointPosition(RectanglePoint point)

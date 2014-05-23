@@ -189,6 +189,14 @@ public class EdgePrototype extends ExperimentGraphItem
 	}
 	
 	@Override
+	protected void destroyInnerNodes()
+	{
+		baseLine.destroy();
+		groupContainer.destroyChildren();
+		groupContainer.destroy();
+	}
+	
+	@Override
 	protected void invertSelectionProgrammatically()
 	{
 		if(isSelected())
