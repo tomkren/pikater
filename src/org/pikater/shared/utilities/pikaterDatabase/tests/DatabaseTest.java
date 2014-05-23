@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -14,6 +15,7 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class DatabaseTest {
 	
@@ -40,10 +42,16 @@ public class DatabaseTest {
 	public void listDataSetWithExclusion(){
 		List<String> exList=new ArrayList<String>();
 		List<JPADataSetLO> wDslos=DAOs.dataSetDAO.getByDescription("weather.arff");
-		if(wDslos.size()>0){
-			JPADataSetLO wdslo=wDslos.get(0);
+		//Example for ResultFormatter
+		ResultFormatter<JPADataSetLO> dsloFormatter=new ResultFormatter<JPADataSetLO>(wDslos);
+		JPADataSetLO wdslo;
+		try {
+			wdslo = dsloFormatter.getSingleResult();
 			exList.add(wdslo.getHash());
+		} catch (NoResultException e) {
+			System.err.println("weather.arff doesn't exist in the database: "+e.getMessage());
 		}
+		
 		
 		List<JPADataSetLO> iDslos=DAOs.dataSetDAO.getByDescription("iris.arff");
 		if(iDslos.size()>0){
