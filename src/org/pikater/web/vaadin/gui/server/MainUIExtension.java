@@ -5,8 +5,8 @@ import java.util.logging.Level;
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.web.WebAppLogger;
 import org.pikater.web.vaadin.gui.PikaterUI;
-import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionClientRpc;
-import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionServerRpc;
+import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionClientRpc;
+import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionServerRpc;
 
 import com.vaadin.server.AbstractExtension;
 

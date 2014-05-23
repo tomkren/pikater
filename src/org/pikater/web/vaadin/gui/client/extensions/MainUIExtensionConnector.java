@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.mainuiextension;
+package org.pikater.web.vaadin.gui.client.extensions;
 
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;

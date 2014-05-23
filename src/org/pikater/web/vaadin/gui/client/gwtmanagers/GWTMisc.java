@@ -48,6 +48,14 @@ public class GWTMisc
 		return name.substring(name.lastIndexOf('.') + 1);
 	}
 	
+	/*
+	// just a backup if it ever needs to be used
+	public static String getImageResource(String relativePathToResources)
+	{
+		return GWT.getModuleBaseURL() + relativePathToResources;
+	}
+	*/
+	
 	public static BoxInfoCollection getBoxDefinitions()
 	{
 		if(boxDefinitions == null)

@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.cellbrowsercellextension;
+package org.pikater.web.vaadin.gui.client.extensions;
 
 import com.vaadin.shared.communication.ClientRpc;
 

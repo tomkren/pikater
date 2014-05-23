@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.experimenteditor;
+package org.pikater.web.vaadin.gui.server.components.kineticcomponent;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
 
@@ -9,14 +9,14 @@ import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.DragAndDropWrapper;
 
-public class WrappedKineticComponent extends DragAndDropWrapper
+public class KineticDnDWrapper extends DragAndDropWrapper
 {
 	private static final long serialVersionUID = 5184871976150233156L;
 
-	public WrappedKineticComponent(final KineticComponent kineticComponent)
+	public KineticDnDWrapper(final KineticComponent kineticComponent)
 	{
 		super(kineticComponent);
-		setStyleName("experiment-editor-kinetic-container");
+		setSizeFull();
 		
 		setDropHandler(new DropHandler()
 		{
@@ -31,16 +31,18 @@ public class WrappedKineticComponent extends DragAndDropWrapper
 			@Override
 			public void drop(DragAndDropEvent event)
 			{
+				// we are about to issue creation of a new box in the schema editor - some prerequisites:
 				WrapperTargetDetails details = (WrapperTargetDetails) event.getTargetDetails();
 				WrapperTransferable transferable = (WrapperTransferable) event.getTransferable();
 				CustomLayout droppedComponent = (CustomLayout) transferable.getDraggedComponent();
 				BoxInfo boxInfo = (BoxInfo) droppedComponent.getData();
 				
-				System.out.println();
-				
-				// TODO: client position is Window relative... we need this component's relative position => send it from KineticComponentWidget when loaded
-				
-				kineticComponent.getClientRPC().createBox(boxInfo, details.getMouseEvent().getClientX(), details.getMouseEvent().getClientY());
+				// issue the creation command to the client:
+				kineticComponent.getClientRPC().createBox(
+						boxInfo,
+						kineticComponent.toRelativeLeft(details.getMouseEvent().getClientX()),
+						kineticComponent.toRelativeTop(details.getMouseEvent().getClientY())
+				);
 			}
 		});
 	}
