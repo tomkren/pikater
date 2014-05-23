@@ -1,0 +1,29 @@
+package org.pikater.web.vaadin.gui.server.components.experimenteditor;
+
+import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
+import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponent;
+
+public class CustomTabSheetTabComponent extends TabSheetTabComponent
+{
+	private static final long serialVersionUID = 2019691593787134700L;
+	
+	private final KineticComponent contentComponent;
+	
+	public CustomTabSheetTabComponent(String caption, KineticComponent contentComponent)
+	{
+		super(caption);
+		
+		this.contentComponent = contentComponent;
+	}
+	
+	@Override
+	public boolean canCloseTab()
+	{
+		return !contentComponent.isContentModified();
+	}
+	
+	public KineticComponent getContentComponent()
+	{
+		return contentComponent;
+	}
+}

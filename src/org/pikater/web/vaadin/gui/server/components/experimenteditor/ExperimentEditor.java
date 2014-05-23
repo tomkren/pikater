@@ -1,138 +1,130 @@
 package org.pikater.web.vaadin.gui.server.components.experimenteditor;
 
 import org.pikater.shared.experiment.webformat.SchemaDataSource;
-import org.pikater.web.vaadin.MyResources;
+import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
+import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticDnDWrapper;
+import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
+import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheet;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
-import com.vaadin.ui.Component;
+import com.vaadin.annotations.StyleSheet;
+import com.vaadin.event.ShortcutListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.event.ShortcutAction.ModifierKey;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TabSheet.CloseHandler;
-import com.vaadin.ui.TabSheet.SelectedTabChangeListener;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 
-public class ExperimentEditor extends VerticalLayout
+@StyleSheet("experimentEditor.css")
+public class ExperimentEditor extends AutoVerticalBorderLayout implements ITabSheetOwner
 {
 	private static final long serialVersionUID = -3411515276069271598L;
 	
 	// -------------------------------------------------------------
 	// INDIVIDUAL GUI COMPONENTS
 	
-	private final ExperimentEditorToolbar toolbar;
+	private final Toolbar toolbar;
 	private final TabSheet experimentTabs;
 	private final BoxCellBrowser boxCellBrowser;
 	
 	// -------------------------------------------------------------
 	// PROGRAMMATIC VARIABLES
 	
+	/*
+	 * TODO: 
+	 * - special toolbox overlay?
+	 * - custom D&D component to mark the "drop place" visually? 
+	 */ 
+	
 	public ExperimentEditor(boolean debugMode)
 	{
 		super();
 		setSizeFull();
-		setSpacing(true);
-		addStyleName("experiment-editor");
+		setStyleName("experiment-editor");
+		setCellSpacing(3);
 		
-		this.toolbar = new ExperimentEditorToolbar(this, debugMode);
-		this.toolbar.addStyleName("displayBorder");
-		this.toolbar.setSizeUndefined();
-		this.experimentTabs = new TabSheet();
-		this.experimentTabs.addStyleName("displayBorder");
+		this.toolbar = new Toolbar(this, debugMode);
+		this.toolbar.setSizeFull();
+		this.toolbar.setStyleName("displayBorder");
+		this.experimentTabs = new TabSheet(this);
 		this.experimentTabs.setSizeFull();
+		this.experimentTabs.setStyleName("displayBorder");
 		this.boxCellBrowser = new BoxCellBrowser();
-		this.boxCellBrowser.addStyleName("displayBorder");
 		this.boxCellBrowser.setSizeUndefined();
+		this.boxCellBrowser.setStyleName("displayBorder");
 		
-		addComponent(this.toolbar);
-		addComponent(this.experimentTabs);
-		addComponent(this.boxCellBrowser);
+		setComponent(Border.NORTH, this.toolbar);
 		
-		setExpandRatio(this.experimentTabs, 1);
+		Panel panel = new Panel(new Label("poliket"));
+		panel.setSizeFull();
+		panel.setStyleName("displayBorder");
+		setComponent(Border.WEST, panel);
 		
-		this.experimentTabs.setCloseHandler(new CloseHandler()
-		{
-			private static final long serialVersionUID = 9202309204180871550L;
-
-			@Override
-			public void onTabClose(TabSheet tabsheet, Component tabContent)
-			{
-				/*
-				if(existsUnsavedContent())
-				{
-					closingEvent.setMessage("Are you sure? Editor content will be lost, if unsaved.");
-				}
-				else
-				{
-					tabsheet.removeComponent(tabContent);
-				}
-				*/
-				tabsheet.removeComponent(tabContent);
-			}
-		});
+		setComponent(Border.CENTER, this.experimentTabs);
 		
-		/*
-		 * IPORTANT: don't alter the call order.
-		 */
-		final Panel dummyPannel = new Panel();
-		this.experimentTabs.addSelectedTabChangeListener(new SelectedTabChangeListener()
-		{
-			private static final long serialVersionUID = -1341095599657850763L;
-
-			@Override
-			public void selectedTabChange(SelectedTabChangeEvent event)
-			{
-				if(experimentTabs.getSelectedTab() == dummyPannel)
-				{
-					addEmptyTab();
-					experimentTabs.setSelectedTab(experimentTabs.getComponentCount() - 2);
-				}
-				else
-				{
-					// TODO: reload toolbar
-				}
-			}
-		});
+		panel = new Panel(new Label("poliket"));
+		panel.setSizeFull();
+		panel.setStyleName("displayBorder");
+		setComponent(Border.EAST, panel);
 		
-		// the following tab is selected when added, which creates a new empty tab after that (see the selected tab change listener above)
-		experimentTabs.addTab(dummyPannel, null, MyResources.img_plusIcon32).setDescription("Add a new tab.");
+		setComponent(Border.SOUTH, this.boxCellBrowser);
+		setRowHeight(Row.CENTER, DimensionMode.MAX);
+		setColumnWidth(Column.CENTER, DimensionMode.MAX);
+		
+		setupKeyboardShortcuts();
 	}
 	
 	// -------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
+	@Override
 	public void addEmptyTab()
 	{
-		addTab("untitled", null);
+		addTab("untitled");
 	}
 	
 	public KineticComponent getActiveKineticComponent()
 	{
-		return ((WrappedKineticComponent) experimentTabs.getSelectedTab()).getWrappedComponent();
+		return ((CustomTabSheetTabComponent) experimentTabs.getSelectedTab()).getContentComponent();
 	}
 	
-	public void loadExperiment(SchemaDataSource experiment)
+	public void loadExperimentIntoNewTab(String tabCaption, SchemaDataSource experiment)
 	{
-		loadExperiment(getActiveKineticComponent(), experiment);
+		if(experiment != null)
+		{
+			addTab(tabCaption);
+			getActiveKineticComponent().getClientRPC().loadExperiment(experiment);
+		}
+		else
+		{
+			throw new NullPointerException("Can not load a 'null' experiment.");
+		}
 	}
 	
 	// -------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	private void addTab(String caption, SchemaDataSource experimentToLoad)
+	private void addTab(String tabCaption)
 	{
-		// define the new kinetic component and create the new tab:
-		KineticComponent newKineticComponent = new KineticComponent(this);
-		WrappedKineticComponent wrappedKineticComponent = new WrappedKineticComponent(newKineticComponent);
-		experimentTabs.addTab(wrappedKineticComponent, caption, null, experimentTabs.getComponentCount() - 1).setClosable(true);
-		
-		// after that, load the given experiment, if any at all
-		loadExperiment(newKineticComponent, experimentToLoad);
+		KineticComponent contentComponent = new KineticComponent(this);
+		experimentTabs.addTab(new CustomTabSheetTabComponent(tabCaption, contentComponent), new KineticDnDWrapper(contentComponent));
 	}
 	
-	private static void loadExperiment(KineticComponent component, SchemaDataSource experiment)
+	private void setupKeyboardShortcuts()
 	{
-		if(experiment != null)
+		addShortcutListener(new ShortcutListener("", KeyCode.W, new int[] { ModifierKey.ALT })
 		{
-			component.getClientRPC().loadExperiment(experiment);
-		}
+			private static final long serialVersionUID = -2663938584703545141L;
+
+			@Override
+			public void handleAction(Object sender, Object target)
+			{
+				Notification.show("Switch hit!");
+			}
+		});
 	}
 }
