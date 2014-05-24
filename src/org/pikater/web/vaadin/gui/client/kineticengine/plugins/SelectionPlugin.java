@@ -13,6 +13,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 @SuppressWarnings("deprecation")
 public class SelectionPlugin implements IEnginePlugin
@@ -49,12 +50,13 @@ public class SelectionPlugin implements IEnginePlugin
 		@Override
 		protected void handleInner(KineticEvent event)
 		{
-			if(GWTKeyboardManager.isShiftKeyDown())
+			if(GWTKeyboardManager.isShiftKeyDown()) // whichever click mode is currently set, don't hesitate when the right modifier key is down
  			{
  				// select or deselect this box only
 	 			invertSelection(false, parentBox);
+	 			handleInnerFinish(event);
  			}
- 			else
+ 			else if(kineticEngine.getClickMode() == KineticComponentClickMode.SELECTION) // it's clear we want to select
  			{
  				if(kineticEngine.getSelectionContainer().getChildren().size() == 1)
  				{
@@ -84,8 +86,14 @@ public class SelectionPlugin implements IEnginePlugin
  						invertSelection(false, parentBox);
  					}
  				}
+ 				handleInnerFinish(event);
  			}
- 			kineticEngine.draw(EngineComponent.STAGE);
+			// else - silently let the event go (it could be processed by some other plugins later)
+		}
+		
+		private void handleInnerFinish(KineticEvent event)
+		{
+			kineticEngine.draw(EngineComponent.STAGE);
  			event.setProcessed();
  			event.stopVerticalPropagation();
 		}
@@ -129,8 +137,8 @@ public class SelectionPlugin implements IEnginePlugin
 	{
 		if(graphItem instanceof BoxPrototype)
 		{
-			BoxPrototype box = (BoxPrototype)graphItem;
-			box.getMasterRectangle().addEventListener(EventType.Basic.CLICK.setName(pluginID), new BoxClickListener(box));
+			BoxPrototype box = (BoxPrototype) graphItem;
+			box.getMasterRectangle().addEventListener(new BoxClickListener(box), EventType.Basic.CLICK.withName(pluginID));
 		}
 		else
 		{

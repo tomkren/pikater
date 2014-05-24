@@ -1,5 +1,10 @@
 package org.pikater.web.vaadin.gui.server.components.experimenteditor;
 
+import org.pikater.shared.experiment.webformat.ExperimentMetadata;
+import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
+import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
@@ -9,13 +14,24 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 
 public class Toolbar extends VerticalLayout
 {
 	private static final long serialVersionUID = 3627484964167144046L;
 	
+	/**
+	 * Constant reference to the callback parent.
+	 */
 	private final ExperimentEditor parentEditor;
+	
+	/*
+	 * References to dynamic inner components.
+	 */
+	
+	private ComboBox clickModeCB;
 	
 	public Toolbar(ExperimentEditor parentEditor, boolean debugMode)
 	{
@@ -29,10 +45,8 @@ public class Toolbar extends VerticalLayout
 		buildToolbar();
 	}
 	
-	/*
-	 * TODO: 
-	 * - toolbar state shared with the kinetic component?
-	 */
+	//---------------------------------------------------------------
+	// INTERFACE BUILDING METHODS
 	
 	private void buildMenuBar(boolean debugMode)
 	{
@@ -49,23 +63,23 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				// TODO Auto-generated method stub
-				/*
-				new TempDeselectOperation(kineticCanvas.getEngine(), new Command()
+				executeForNonNullActiveTab(new ActionForActiveKineticComponent()
 				{
 					@Override
-					public void execute()
+					public void doAction(KineticComponent activeComponent)
 					{
-						// TODO:
-						GWTMisc.alertNotImplemented.execute();
-						
-						server.experimentSchemaSerialized(
-								kineticCanvas.getEngine().serializeToJSON(EngineComponent.LAYER_BOXES),
-								kineticCanvas.getEngine().getEdgeListJSON()
-						);
+						if(activeComponent.isContentModified())
+						{
+							// TODO: dialog and metadata
+							ExperimentMetadata metadata = new ExperimentMetadata("Test");
+							activeComponent.getClientRPC().request_sendExperimentToSave(metadata);
+						}
+						else
+						{
+							Notification.show("The active tab's content is not modified. Nothing to save.", Type.WARNING_MESSAGE);
+						}
 					}
-				});
-				*/
+				}, true);
 			}
 		});
 		experimentMenuItem.addItem("Load into a new tab...", new Command()
@@ -75,32 +89,31 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				// TODO Auto-generated method stub
-
-				// GWTMisc.alertNotImplemented.execute();
-				// kineticState.deserialize(dLayerJSON, edgeListJSON);
-				// setFocus(true);
+				// TODO: dialog and experiment chooser
+				// parentEditor.getActiveKineticComponent().getClientRPC().command_receiveExperimentToLoad(experiment);
+				Notification.show("Not implemented yet.", Type.WARNING_MESSAGE);
 			}
 		});
 		
 		MenuItem settingsMenuItem = menu.addItem("Settings", null);
 		settingsMenuItem.setStyleName("top-level-menu-item");
 		MenuItem shapeSizeMenuItem = settingsMenuItem.addItem("Shape size (%)", null);
-		for(int i = 0; i <= 100; i += 25)
+		for(int percent = 0; percent <= 100; percent += 25)
 		{
 			String caption;
-			if(i == 0)
+			if(percent == 0)
 			{
 				caption = "0% (minimum reasonable size)";
 			}
-			else if(i == 100)
+			else if(percent == 100)
 			{
 				caption = "100% (maximum reasonable size)";
 			}
 			else
 			{
-				caption = String.valueOf(i) + '%';
+				caption = String.valueOf(percent) + '%';
 			}
+			final int finalPercentCopy = percent;
 			shapeSizeMenuItem.addItem(caption, new Command()
 			{
 				private static final long serialVersionUID = 5772970839298315921L;
@@ -108,7 +121,7 @@ public class Toolbar extends VerticalLayout
 				@Override
 				public void menuSelected(MenuItem selectedItem)
 				{
-					// TODO Auto-generated method stub
+					setKineticBoxSize(finalPercentCopy);
 				}
 			});
 		}
@@ -120,7 +133,7 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				// TODO Auto-generated method stub
+				setKineticBoxSize(-1);
 			}
 		});
 		
@@ -133,7 +146,8 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				// TODO Auto-generated method stub
+				// TODO:
+				Notification.show("Not implemented yet.", Type.WARNING_MESSAGE);
 			}
 		});
 		
@@ -148,7 +162,8 @@ public class Toolbar extends VerticalLayout
 				@Override
 				public void menuSelected(MenuItem selectedItem)
 				{
-					// TODO Auto-generated method stub
+					// TODO:
+					Notification.show("Not implemented yet.", Type.WARNING_MESSAGE);
 				}
 			});
 		}
@@ -159,9 +174,14 @@ public class Toolbar extends VerticalLayout
 	private void buildToolbar()
 	{
 		Label clickModeLbl = new Label("Click effect:");
-		ComboBox clickModeCB = new ComboBox();
-		clickModeCB.addItem("Selection");
-		clickModeCB.addItem("Connection");
+		clickModeCB = new ComboBox();
+		for(KineticComponentClickMode clickMode : KineticComponentClickMode.values())
+		{
+			clickModeCB.addItem(clickMode.name());
+		}
+		clickModeCB.setImmediate(true);
+		clickModeCB.setNullSelectionAllowed(false);
+		clickModeCB.setTextInputAllowed(false);
 		clickModeCB.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -5032992287714560567L;
@@ -169,7 +189,14 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void valueChange(ValueChangeEvent event)
 			{
-				// TODO Auto-generated method stub
+				executeForNonNullActiveTab(new ActionForActiveKineticComponent()
+				{
+					@Override
+					public void doAction(KineticComponent activeComponent)
+					{
+						activeComponent.getState().clickMode = KineticComponentClickMode.valueOf((String) clickModeCB.getValue());
+					}
+				}, true);
 			}
 		});
 		
@@ -184,6 +211,54 @@ public class Toolbar extends VerticalLayout
 		addComponent(toolbarLayout);
 	}
 	
+	//---------------------------------------------------------------
+	// PUBLIC METHODS
+	
+	public void onTabSelectionChange(KineticComponent newActiveTabContent)
+	{
+		if(newActiveTabContent != null)
+		{
+			clickModeCB.select(newActiveTabContent.getState().clickMode.name());
+		}
+	}
+	
+	//---------------------------------------------------------------
+	// PRIVATE METHODS
+	
+	private void setKineticBoxSize(int width)
+	{
+		ServerConfigurationInterface.getUniversalClientConnector().command_setBoxSize(width);
+		executeForNonNullActiveTab(new ActionForActiveKineticComponent()
+		{
+			@Override
+			public void doAction(KineticComponent activeComponent)
+			{
+				activeComponent.getClientRPC().request_reloadVisualStyle();
+			}
+		}, false);
+	}
+	
+	private void executeForNonNullActiveTab(ActionForActiveKineticComponent action, boolean displayWarningIfNull)
+	{
+		KineticComponent activeComponent = parentEditor.getActiveKineticComponent();
+		if(activeComponent != null)
+		{
+			action.doAction(activeComponent);
+		}
+		else if(displayWarningIfNull)
+		{
+			Notification.show("No tabs have been created.", Type.WARNING_MESSAGE);
+		}
+	}
+	
+	//---------------------------------------------------------------
+	// PRIVATE TYPES
+	
+	private interface ActionForActiveKineticComponent
+	{
+		void doAction(KineticComponent activeComponent);
+	}
+	
 	/*
 	private void build(boolean debugMode)
 	{
@@ -195,7 +270,6 @@ public class Toolbar extends VerticalLayout
 				@Override
 				public void buttonClick(ClickEvent event)
 				{
-					// TODO Auto-generated method stub
 					// leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_BOXES, GWTMisc.jsonAttrsToSerialize));
 				}
 			});
@@ -207,7 +281,6 @@ public class Toolbar extends VerticalLayout
 				@Override
 				public void buttonClick(ClickEvent event)
 				{
-					// TODO Auto-generated method stub
 					// leftTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_EDGES, GWTMisc.jsonAttrsToSerialize));
 					// leftTextArea.setText(kineticCanvas.getEngine().serializeToJSON(EngineComponent.LAYER_EDGES));
 				}
@@ -220,7 +293,6 @@ public class Toolbar extends VerticalLayout
 				@Override
 				public void buttonClick(ClickEvent event)
 				{
-					// TODO Auto-generated method stub
 					// rightTextArea.setText(kineticCanvas.getEngine().serializeToMyJSON(EngineComponent.LAYER_SELECTION, GWTMisc.jsonAttrsToSerialize));
 				}
 			});
@@ -232,7 +304,6 @@ public class Toolbar extends VerticalLayout
 				@Override
 				public void buttonClick(ClickEvent event)
 				{
-					// TODO Auto-generated method stub
 					// jsonComparisonPanel.show();
 				}
 			});

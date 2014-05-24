@@ -104,6 +104,7 @@ public class TabSheet extends CustomComponent
 		selectedTabComponent = tabComponent;
 		tabComponent.setSelected(true);
 		setSelectedContent(tabToContentContainer.get(tabComponent));
+		owner.onTabSelectionChange();
 	}
 	
 	//---------------------------------------------------------------

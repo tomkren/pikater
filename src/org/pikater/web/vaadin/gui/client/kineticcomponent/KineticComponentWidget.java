@@ -4,7 +4,8 @@ import net.edzard.kinetic.Kinetic;
 import net.edzard.kinetic.Vector2d;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
+import org.pikater.shared.experiment.webformat.ExperimentMetadata;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
@@ -26,7 +27,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.FocusPanel;
 
-public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc
+public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc, KineticComponentServerRpc
 {
 	private static final long serialVersionUID = 946534795907059986L;
 	
@@ -44,7 +45,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 * Backup of the last loaded experiment. Since it is shared in the component's state, we have
 	 * to know when it is changed and when it is not.	
 	 */
-	private SchemaDataSource lastLoadedExperiment;
+	private Experiment lastLoadedExperiment;
 	
 	// ------------------------------------------------------
 	// PROGRAMMATIC FIELDS
@@ -68,7 +69,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		// initialize kinetic managers
 		this.kineticState = new KineticEngine(this, Kinetic.createStage(getKineticEnvParentElement()));
 		this.kineticCreator = new KineticShapeCreator(this.kineticState);
-		this.undoRedoManager = new KineticUndoRedoManager();
+		this.undoRedoManager = new KineticUndoRedoManager(this);
 		
 		// add plugins to the engine
 		// IMPORTANT: don't violate the call order - it is very important for correct functionality since plugins may depend upon others
@@ -93,7 +94,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				getEngine().resize(elementWithKnownSize.getOffsetWidth(), elementWithKnownSize.getOffsetHeight());
 				
 				// send information about absolute position to the server so that it can compute relative mouse position
-				getServerRPC().onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
+				getServerRPC().command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
 		    }
 		});
 		
@@ -163,7 +164,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	// COMMANDS FROM SERVER
 	
 	@Override
-	public void createBox(final BoxInfo info, final int posX, final int posY)
+	public void command_createBox(final BoxInfo info, final int posX, final int posY)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -180,7 +181,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 * resets the environment.
 	 */
 	@Override
-	public void loadExperiment(final SchemaDataSource experiment)
+	public void command_receiveExperimentToLoad(final Experiment experiment)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -192,7 +193,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 					// first reset if necessary
 					if(lastLoadedExperiment != null)
 					{
-						resetKineticEnvironment();
+						command_resetKineticEnvironment();
 					}
 					
 					// and then load the experiment
@@ -201,14 +202,14 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				}
 				else
 				{
-					resetKineticEnvironment();
+					command_resetKineticEnvironment();
 				}
 		    }
 		});
 	}
 	
 	@Override
-	public void resetKineticEnvironment()
+	public void command_resetKineticEnvironment()
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -221,13 +222,60 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		});
 	}
 	
+	@Override
+	public void request_reloadVisualStyle()
+	{
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+		    public void execute()
+			{
+				getEngine().reloadVisualStyle();
+		    }
+		});
+		
+	}
+	
+	@Override
+	public void request_sendExperimentToSave(ExperimentMetadata metadata)
+	{
+		response_sendExperimentToSave(metadata, getEngine().toIntermediateFormat());
+	}
+	
+	// *****************************************************************************************************
+	// COMMANDS FROM CLIENT
+	
+	@Override
+	public void command_setExperimentModified(boolean modified)
+	{
+		getServerRPC().command_setExperimentModified(modified);
+	}
+
+	@Override
+	public void command_onLoadCallback(int absoluteX, int absoluteY)
+	{
+		getServerRPC().command_onLoadCallback(absoluteX, absoluteY);
+	}
+	
+	@Override
+	public void response_reloadVisualStyle()
+	{
+		getServerRPC().response_reloadVisualStyle();
+	}
+	
+	@Override
+	public void response_sendExperimentToSave(ExperimentMetadata metadata, Experiment experiment)
+	{
+		getServerRPC().response_sendExperimentToSave(metadata, experiment);
+		getUndoRedoManager().clear();
+	}
+	
 	// *****************************************************************************************************
 	// OTHER PUBLIC INTERFACE
 	
 	public Element getKineticEnvParentElement()
 	{
 		return getElement();
-		// return kineticContainer.getElement();
 	}
 	
 	public KineticEngine getEngine()
@@ -245,13 +293,16 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		return undoRedoManager;
 	}
 	
-	public KineticComponentServerRpc getServerRPC()
-	{
-		return connector.serverRPC;
-	}
-	
 	public KineticComponentState getSharedState()
 	{
 		return connector.getState();
+	}
+	
+	// *****************************************************************************************************
+	// PRIVATE INTERFACE
+	
+	private KineticComponentServerRpc getServerRPC()
+	{
+		return connector.serverRPC;
 	}
 }

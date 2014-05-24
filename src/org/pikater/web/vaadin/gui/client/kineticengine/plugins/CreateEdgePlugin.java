@@ -12,6 +12,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeR
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 @SuppressWarnings("deprecation")
 public final class CreateEdgePlugin implements IEnginePlugin
@@ -48,7 +49,7 @@ public final class CreateEdgePlugin implements IEnginePlugin
 		@Override
 		protected void handleInner(KineticEvent event)
 		{
-			if(isAnEdgeBeingCreated())
+			if(isAnEdgeBeingCreated()) // whichever clickmode is currently set, finish the operation if started
 			{
 				// KineticJS bug: events can not be fired from named events, so a workaround:
 				fillRectangleEdgeDragMouseDownHandler.handle(event); // finish this create edge operation
@@ -56,19 +57,20 @@ public final class CreateEdgePlugin implements IEnginePlugin
 				event.stopVerticalPropagation();
 				event.setProcessed();
 			}
-			else if(GWTKeyboardManager.isAltKeyDown()) 
+			else if((kineticEngine.getClickMode() == KineticComponentClickMode.CONNECTION)
+					|| GWTKeyboardManager.isAltKeyDown()) // when it's either clear we want to connect or the right modifier key is down 
 			{
 				// start this create edge operation
 				
 				fromEndPoint = parentBox;
 				fromEndPoint.highlightAsNewEndpointCandidate();
 				newEdge = kineticEngine.getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromEndPoint, null);
-				kineticEngine.registerCreated(newEdge);
+				kineticEngine.registerCreated(true, newEdge);
 				newEdge.edgeDrag_toBaseLine(kineticEngine.getMousePosition(), fromEndPoint);
 				
 				kineticEngine.removeFillRectangleHandlers();
-				kineticEngine.getFillRectangle().addEventListener(EventType.Basic.MOUSEMOVE.toNativeEvent(), fillRectangleEdgeDragMouseMoveHandler);
-				kineticEngine.getFillRectangle().addEventListener(EventType.Basic.MOUSEDOWN.toNativeEvent(), fillRectangleEdgeDragMouseDownHandler);
+				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseMoveHandler, EventType.Basic.MOUSEMOVE);
+				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseDownHandler, EventType.Basic.MOUSEDOWN);
 				
 				event.stopVerticalPropagation();
 				event.setProcessed();
@@ -189,9 +191,9 @@ public final class CreateEdgePlugin implements IEnginePlugin
 	{
 		if(graphItem instanceof BoxPrototype)
 		{
-			BoxPrototype box = (BoxPrototype)graphItem;
-			box.getMasterRectangle().addEventListener(EventType.Basic.CLICK.setName(pluginID), new BoxClickListener(box));
-			box.getMasterRectangle().addEventListener(EventType.Basic.MOUSEOVER.setName(pluginID), new BoxMouseOverListener(box));
+			BoxPrototype box = (BoxPrototype) graphItem;
+			box.getMasterRectangle().addEventListener(new BoxClickListener(box), EventType.Basic.CLICK.withName(pluginID));
+			box.getMasterRectangle().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(pluginID));
 		}
 		else
 		{

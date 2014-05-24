@@ -14,7 +14,7 @@ import org.pikater.shared.experiment.universalformat.UniversalGui;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.BoxType;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.HttpContentType;
@@ -47,7 +47,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("pikater")
-@Push(value = PushMode.MANUAL)
+@Push(value = PushMode.AUTOMATIC)
 public class PikaterUI extends UI
 {
 	private static final long serialVersionUID = 1964653532060950402L;
@@ -83,7 +83,7 @@ public class PikaterUI extends UI
 		
 		MainUIExtension mainUIExtension = new MainUIExtension();
 		mainUIExtension.extend(this);
-		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension);
+		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension.getClientRPC());
 		
 		thisUsersUploads = new MyUploads();
 		
@@ -198,7 +198,7 @@ public class PikaterUI extends UI
 		boxDefinitions.addDefinition(boxInfo3);
 		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitions);
 		
-		SchemaDataSource newExperiment = new SchemaDataSource();
+		Experiment newExperiment = new Experiment();
 		Integer b1 = newExperiment.addLeafBoxAndReturnID(guiInfo1, boxInfo1);
 		Integer b2 = newExperiment.addLeafBoxAndReturnID(guiInfo2, boxInfo2);
 		newExperiment.addLeafBoxAndReturnID(guiInfo3, boxInfo3);

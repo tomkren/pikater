@@ -1,8 +1,11 @@
 package org.pikater.web.vaadin.gui.server.components.kineticcomponent;
 
+import org.pikater.shared.experiment.webformat.Experiment;
+import org.pikater.shared.experiment.webformat.ExperimentMetadata;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClientRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
+import org.pikater.web.vaadin.gui.server.components.experimenteditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.components.experimenteditor.ExperimentEditor;
 
 import com.vaadin.annotations.JavaScript;
@@ -18,10 +21,14 @@ public class KineticComponent extends AbstractComponent
 	 */
 	private final ExperimentEditor parentEditor;
 	
+	/**
+	 * Reference to the experiment editor tab linked to this content component.
+	 */
+	private CustomTabSheetTabComponent parentTab;
+	
 	/*
 	 * Dynamic information from the client side.
 	 */
-	private boolean contentModified;
 	private int absoluteLeft;
 	private int absoluteTop;
 	
@@ -32,35 +39,49 @@ public class KineticComponent extends AbstractComponent
 		
 		this.parentEditor = parentEditor;
 		
-		this.contentModified = false;
 		this.absoluteLeft = 0;
 		this.absoluteTop = 0;
 		
-		// first define server RPC
 		registerRpc(new KineticComponentServerRpc()
 		{
 			private static final long serialVersionUID = -2769231541745495584L;
 
 			@Override
-			public void setSchemaModified(boolean modified)
+			public void command_setExperimentModified(boolean modified)
 			{
-				contentModified = modified;
-				
-				// TODO: modify the editor's tabsheet's tab
+				getState().serverThinksThatSchemaIsModified = modified;
+				parentTab.setTabContentModified(modified);
 			}
 
 			@Override
-			public void onLoadCallback(int absoluteX, int absoluteY)
+			public void command_onLoadCallback(int absoluteX, int absoluteY)
 			{
 				KineticComponent.this.absoluteLeft = absoluteX;
 				KineticComponent.this.absoluteTop = absoluteY;
 			}
+
+			@Override
+			public void response_sendExperimentToSave(ExperimentMetadata metadata, Experiment experiment)
+			{
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void response_reloadVisualStyle()
+			{
+				// TODO Auto-generated method stub
+			}
 		});
+	}
+	
+	public void setParentTab(CustomTabSheetTabComponent parentTab)
+	{
+		this.parentTab = parentTab;
 	}
 	
 	public boolean isContentModified()
 	{
-		return contentModified;
+		return getState().serverThinksThatSchemaIsModified;
 	}
 	
 	public int toRelativeLeft(int posX)

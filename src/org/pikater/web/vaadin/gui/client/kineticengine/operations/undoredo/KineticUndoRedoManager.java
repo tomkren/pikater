@@ -2,28 +2,35 @@ package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
 
 import java.util.Stack;
 
+import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
+
 public class KineticUndoRedoManager
 {
+	private final KineticComponentWidget widget;
 	private final Stack<BiDiOperation> undoStack; 
 	private final Stack<BiDiOperation> redoStack;
 	
-	public KineticUndoRedoManager()
+	public KineticUndoRedoManager(KineticComponentWidget widget)
 	{
+		this.widget = widget;
 		this.undoStack = new Stack<BiDiOperation>();
 		this.redoStack = new Stack<BiDiOperation>();
 	}
 	
 	public void clear()
 	{
+		alterStateIf(!undoStack.isEmpty());
+		
 		undoStack.clear();
 		redoStack.clear();
 	}
 	
 	public void push(BiDiOperation operation)
 	{
+		alterStateIf(undoStack.isEmpty());
+		
 		undoStack.push(operation);
 		redoStack.clear();
-		System.out.println("Operation pushed: " + operation.toString());
 	}
 	
 	public void undo()
@@ -33,7 +40,8 @@ public class KineticUndoRedoManager
 			BiDiOperation op = undoStack.pop();
 			redoStack.push(op);
 			op.undo();
-			System.out.println("Operation undid: " + op.toString());
+			
+			alterStateIf(undoStack.isEmpty());
 		}
 	}
 	
@@ -42,29 +50,28 @@ public class KineticUndoRedoManager
 		if(!undoStack.isEmpty())
 		{
 			undoStack.pop().undo();
+			
+			alterStateIf(undoStack.isEmpty());
 		}
 	}
 	
 	public void redo()
 	{
+		alterStateIf(undoStack.isEmpty());
+		
 		if(!redoStack.isEmpty())
 		{
 			BiDiOperation op = redoStack.pop();
 			undoStack.push(op);
 			op.redo();
-			System.out.println("Operation redid: " + op.toString());
 		}
 	}
 	
-	public boolean existsUnsavedContent()
+	private void alterStateIf(boolean condition)
 	{
-		// TODO: what to do about this? it seems to always be true when it matters...
-		
-		return undoStack.size() > 0 || redoStack.size() > 0;
-	}
-	
-	public String toString()
-	{
-		return "Undo: " + undoStack.size() + "; Redo: " + redoStack.size();
+		if(condition)
+		{
+			widget.command_setExperimentModified(!condition);
+		}
 	}
 }

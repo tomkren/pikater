@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.server.MainUIExtension;
 
 import com.vaadin.client.ServerConnector;
@@ -24,14 +24,17 @@ public class MainUIExtensionConnector extends AbstractExtensionConnector
 			private static final long serialVersionUID = 5749987507481194601L;
 			
 			@Override
-			public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
+			public void command_setBoxDefinitions(BoxInfoCollection boxDefinitions)
 			{
-				GWTMisc.setBoxDefinitions(boxDefinitions);
+				GWTKineticSettings.setBoxDefinitions(boxDefinitions);
+			}
+
+			@Override
+			public void command_setBoxSize(int percent)
+			{
+				GWTKineticSettings.setBoxSize(percent);
 			}
 		});
-		
-		// getConnection().
-		// getParent()
 	}
 	
 	@Override

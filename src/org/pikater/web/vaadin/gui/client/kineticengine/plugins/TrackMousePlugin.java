@@ -96,8 +96,8 @@ public final class TrackMousePlugin implements IEnginePlugin
 		if(graphItem instanceof BoxPrototype)
 		{
 			BoxPrototype box = (BoxPrototype)graphItem;
-			box.getMasterRectangle().addEventListener(EventType.Basic.MOUSEOVER.setName(pluginID), new BoxMouseOverListener(box));
-			box.getMasterRectangle().addEventListener(EventType.Basic.MOUSEOUT.setName(pluginID), new BoxMouseOutHandler());
+			box.getMasterRectangle().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(pluginID));
+			box.getMasterRectangle().addEventListener(new BoxMouseOutHandler(), EventType.Basic.MOUSEOUT.withName(pluginID));
 		}
 		else
 		{

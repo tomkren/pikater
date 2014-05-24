@@ -1,5 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
+import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+
 import com.vaadin.shared.AbstractComponentState;
 
 public class KineticComponentState extends AbstractComponentState
@@ -17,4 +19,5 @@ public class KineticComponentState extends AbstractComponentState
 	 */
 	
 	public boolean serverThinksThatSchemaIsModified = false;
+	public KineticComponentClickMode clickMode = KineticComponentClickMode.SELECTION;
 }

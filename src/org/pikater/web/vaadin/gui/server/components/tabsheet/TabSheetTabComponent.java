@@ -59,6 +59,11 @@ public class TabSheetTabComponent extends Panel // something clickable
 		}
 	}
 	
+	protected Label getTabCaption()
+	{
+		return label;
+	}
+	
 	private void invertSelection()
 	{
 		// invert visual looks

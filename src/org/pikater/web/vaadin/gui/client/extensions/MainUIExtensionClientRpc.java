@@ -6,5 +6,6 @@ import com.vaadin.shared.communication.ClientRpc;
 
 public interface MainUIExtensionClientRpc extends ClientRpc
 {
-	void setBoxDefinitions(BoxInfoCollection boxDefinitions);
+	void command_setBoxDefinitions(BoxInfoCollection boxDefinitions);
+	void command_setBoxSize(int percent);
 }

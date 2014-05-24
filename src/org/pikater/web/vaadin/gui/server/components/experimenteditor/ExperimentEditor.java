@@ -1,11 +1,12 @@
 package org.pikater.web.vaadin.gui.server.components.experimenteditor;
 
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticDnDWrapper;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheet;
+import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
@@ -87,17 +88,44 @@ public class ExperimentEditor extends AutoVerticalBorderLayout implements ITabSh
 		addTab("untitled");
 	}
 	
-	public KineticComponent getActiveKineticComponent()
+	@Override
+	public void onTabSelectionChange()
 	{
-		return ((CustomTabSheetTabComponent) experimentTabs.getSelectedTab()).getContentComponent();
+		toolbar.onTabSelectionChange(getActiveKineticComponent());
 	}
 	
-	public void loadExperimentIntoNewTab(String tabCaption, SchemaDataSource experiment)
+	public CustomTabSheetTabComponent getActiveTab()
+	{
+		TabSheetTabComponent tabComponent = experimentTabs.getSelectedTab();
+		if(tabComponent != null)
+		{
+			return (CustomTabSheetTabComponent) tabComponent; 
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public KineticComponent getActiveKineticComponent()
+	{
+		CustomTabSheetTabComponent activeTab = getActiveTab();
+		if(activeTab != null)
+		{
+			return (KineticComponent) getActiveTab().getContentComponent();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public void loadExperimentIntoNewTab(String tabCaption, Experiment experiment)
 	{
 		if(experiment != null)
 		{
 			addTab(tabCaption);
-			getActiveKineticComponent().getClientRPC().loadExperiment(experiment);
+			getActiveKineticComponent().getClientRPC().command_receiveExperimentToLoad(experiment);
 		}
 		else
 		{

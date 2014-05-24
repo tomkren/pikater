@@ -24,7 +24,7 @@ import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
 import org.pikater.shared.experiment.universalformat.UniversalGui;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
@@ -43,6 +43,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.SwapE
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.IEnginePlugin;
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.TrackMousePlugin;
+import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.json.client.JSONArray;
@@ -184,7 +185,7 @@ public final class KineticEngine
 			multiSelectionRectangle.getMasterNode().moveToTop();
 			fillRectangle.moveToTop();
 			
-			fillRectangle.addEventListener(EventType.Basic.MOUSEMOVE.toNativeEvent(), fillRectangleMouseMoveHandler);
+			fillRectangle.addEventListener(fillRectangleMouseMoveHandler, EventType.Basic.MOUSEMOVE);
 			event.stopVerticalPropagation();
 		}
 	};
@@ -226,7 +227,7 @@ public final class KineticEngine
 			// return the dynamic layer state to the original
 			multiSelectionRectangle.getMasterNode().hide();
 			fillRectangle.moveToBottom();
-			fillRectangle.removeEventListener(EventType.Basic.MOUSEMOVE.toNativeEvent());
+			fillRectangle.removeEventListener(EventType.Basic.MOUSEMOVE);
 			
 			// and draw
 			draw(EngineComponent.STAGE);
@@ -325,9 +326,9 @@ public final class KineticEngine
 		this.selectionGroup.setPosition(Vector2d.origin);
 		this.selectionGroup.setDraggable(true);
 		this.layer3_selection.add(selectionGroup);
-		this.selectionGroup.addEventListener(EventType.Basic.DRAGSTART.toNativeEvent(), selectionGroupDragStartHandler);
-		this.selectionGroup.addEventListener(EventType.Basic.DRAGMOVE.toNativeEvent(), selectionGroupDragMoveHandler);
-		this.selectionGroup.addEventListener(EventType.Basic.DRAGEND.toNativeEvent(), selectionGroupDragEndHandler);
+		this.selectionGroup.addEventListener(selectionGroupDragStartHandler, EventType.Basic.DRAGSTART);
+		this.selectionGroup.addEventListener(selectionGroupDragMoveHandler, EventType.Basic.DRAGMOVE);
+		this.selectionGroup.addEventListener(selectionGroupDragEndHandler, EventType.Basic.DRAGEND);
 		
 		/*
 		 * Setup other variables. 
@@ -344,9 +345,9 @@ public final class KineticEngine
 	// *****************************************************************************************************
 	// SERIALIZATION/DESERIALIZATION INTERFACE
 	
-	public SchemaDataSource toIntermediateFormat()
+	public Experiment toIntermediateFormat()
 	{
-		SchemaDataSource result = new SchemaDataSource();
+		Experiment result = new Experiment();
 		
 		// first convert all boxes
 		Map<BoxPrototype, Integer> nativeBoxToResultID = new HashMap<BoxPrototype, Integer>();
@@ -372,7 +373,7 @@ public final class KineticEngine
 		return result;
 	}
 	
-	public void fromIntermediateFormat(SchemaDataSource experiment)
+	public void fromIntermediateFormat(Experiment experiment)
 	{
 		// first convert all boxes
 		Map<Integer, BoxPrototype> guiBoxes = new HashMap<Integer, BoxPrototype>();
@@ -395,10 +396,10 @@ public final class KineticEngine
 		}
 		
 		// and finally, put everything into the enviroment
-		registerCreated(allGraphItems.toArray(new ExperimentGraphItem[0]));
+		registerCreated(false, allGraphItems.toArray(new ExperimentGraphItem[0]));
 	}
 	
-	public String toJSON(EngineComponent component)
+	private String toJSON(EngineComponent component)
 	{
 		return getContainer(component).toJSON();
 	}
@@ -410,7 +411,7 @@ public final class KineticEngine
 	 * @return
 	 */
 	@Deprecated()
-	public String toMyJSON(EngineComponent component, JsArrayString attrsToPrint)
+	private String toMyJSON(EngineComponent component, JsArrayString attrsToPrint)
 	{
 		return getContainer(component).toMyJSON(attrsToPrint);
 	}
@@ -422,7 +423,7 @@ public final class KineticEngine
 	 * @return
 	 */
 	@Deprecated
-	public void fromJSON(String dLayerJSON, String edgeListJSON)
+	private void fromJSON(String dLayerJSON, String edgeListJSON)
 	{
 		/*
 		 * First reset the current state.
@@ -452,7 +453,7 @@ public final class KineticEngine
 		// register the clones in our engine
 		List<ExperimentGraphItem> allItems = new ArrayList<ExperimentGraphItem>(originalIdToBoxWithNewID.values());
 		allItems.addAll(unbindedEdges);
-		registerCreated((ExperimentGraphItem[]) allItems.toArray()); // beware if edges are required to be connected (so far they are not)
+		registerCreated(false, (ExperimentGraphItem[]) allItems.toArray()); // beware if edges are required to be connected (so far they are not)
 		
 		// bind and build
         Map<String, JSONArray> edgeBindings = jsonToEdgeList(edgeListJSON);
@@ -474,7 +475,7 @@ public final class KineticEngine
         draw(EngineComponent.STAGE);
 	}
 	
-	public String getEdgeListJSON()
+	private String getEdgeListJSON()
 	{
 		Map<String, JSONArray> edgeList = new HashMap<String, JSONArray>();
 		for(BoxPrototype box : allBoxes)
@@ -573,10 +574,13 @@ public final class KineticEngine
 	 * Undo/redo related wrapper routines.
 	 */
 	
-	public void registerCreated(final ExperimentGraphItem... graphItems)
+	public void registerCreated(boolean applyChangeToHistory, final ExperimentGraphItem... graphItems) 
 	{
-		ItemRegistrationOperation operation = new ItemRegistrationOperation(this, graphItems); 
-		pushNewOperation(operation);
+		ItemRegistrationOperation operation = new ItemRegistrationOperation(this, graphItems);
+		if(applyChangeToHistory)
+		{
+			pushNewOperation(operation);
+		}
 		operation.firstExecution();
 	}
 	
@@ -680,6 +684,20 @@ public final class KineticEngine
 	 * Miscellaneous public routines.
 	 */
 	
+	public void reloadVisualStyle()
+	{
+		for(BoxPrototype box : allBoxes)
+		{
+			box.reloadVisualStyle();
+		}
+		draw(EngineComponent.STAGE);
+	}
+	
+	public KineticComponentClickMode getClickMode()
+	{
+		return parentWidget.getSharedState().clickMode;
+	}
+	
 	public Container getContainer(EngineComponent component)
 	{
 		switch (component)
@@ -734,16 +752,15 @@ public final class KineticEngine
 	
 	public void removeFillRectangleHandlers()
 	{
-		this.fillRectangle.removeEventListener(EventType.Basic.MOUSEDOWN.toNativeEvent());
-		this.fillRectangle.removeEventListener(EventType.Basic.MOUSEMOVE.toNativeEvent());
-		this.fillRectangle.removeEventListener(EventType.Basic.MOUSEUP.toNativeEvent());
+		this.fillRectangle.removeEventListener(EventType.Basic.MOUSEDOWN, EventType.Basic.MOUSEMOVE, EventType.Basic.MOUSEUP);
 	}
 	
 	public void setFillRectangleHandlers()
 	{
 		removeFillRectangleHandlers();
-		this.fillRectangle.addEventListener(EventType.Basic.MOUSEDOWN.toNativeEvent(), fillRectangleMouseDownHandler);
-		this.fillRectangle.addEventListener(EventType.Basic.MOUSEUP.toNativeEvent(), fillRectangleMouseUpHandler);
+		this.fillRectangle.addEventListener(fillRectangleMouseDownHandler, EventType.Basic.MOUSEDOWN);
+		this.fillRectangle.addEventListener(fillRectangleMouseMoveHandler, EventType.Basic.MOUSEMOVE);
+		this.fillRectangle.addEventListener(fillRectangleMouseUpHandler, EventType.Basic.MOUSEUP);
 	}
 	
 	// *****************************************************************************************************
@@ -752,11 +769,6 @@ public final class KineticEngine
 	private void pushNewOperation(BiDiOperation operation)
 	{
 		parentWidget.getUndoRedoManager().push(operation);
-		
-		if(!parentWidget.getSharedState().serverThinksThatSchemaIsModified)
-		{
-			parentWidget.getServerRPC().setSchemaModified(true); 
-		}
 	}
 	
 	private void setFirstArgHigherZIndex(Node node1, Node node2)

@@ -222,9 +222,9 @@ public final class DragEdgePlugin implements IEnginePlugin
 		else if(graphItem instanceof BoxPrototype)
 		{
 			BoxPrototype box = (BoxPrototype)graphItem;
-			box.getMasterRectangle().addEventListener(EventType.Basic.MOUSEOVER.setName(pluginID), new BoxMouseOverListener(box));
-			box.getMasterRectangle().addEventListener(EventType.Basic.MOUSEOUT.setName(pluginID), new BoxMouseOutListener(box));
-			box.getMasterRectangle().addEventListener(EventType.Basic.MOUSEUP.setName(pluginID), new BoxMouseUpListener());
+			box.getMasterRectangle().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(pluginID));
+			box.getMasterRectangle().addEventListener(new BoxMouseOutListener(box), EventType.Basic.MOUSEOUT.withName(pluginID));
+			box.getMasterRectangle().addEventListener(new BoxMouseUpListener(), EventType.Basic.MOUSEUP.withName(pluginID));
 		}
 		else
 		{
@@ -255,7 +255,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 	
 	private void setEdgeEventHandler(EdgePrototype edge, EndPoint endPoint)
 	{
-		edge.getDragMark(endPoint).addEventListener(EventType.Basic.MOUSEDOWN.setName(pluginID), new DragMarkMouseDownListener(edge, endPoint));
+		edge.getDragMark(endPoint).addEventListener(new DragMarkMouseDownListener(edge, endPoint), EventType.Basic.MOUSEDOWN.withName(pluginID));
 	}
 	
 	private void setEdgeBeingDragged(EdgePrototype edge, EndPoint endPoint)
@@ -264,8 +264,8 @@ public final class DragEdgePlugin implements IEnginePlugin
 		draggedEdgeEndpoint = endPoint;
 		
 		kineticEngine.removeFillRectangleHandlers();
-		kineticEngine.getFillRectangle().addEventListener(EventType.Basic.MOUSEMOVE.toNativeEvent(), fillRectangleEdgeDragMouseMoveHandler);
-		kineticEngine.getFillRectangle().addEventListener(EventType.Basic.MOUSEUP.toNativeEvent(), fillRectangleEdgeDragMouseUpHandler);
+		kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseMoveHandler, EventType.Basic.MOUSEMOVE);
+		kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseUpHandler, EventType.Basic.MOUSEUP);
 	}
 	
 	private boolean isStaticEndpointForThisDrag(BoxPrototype box)

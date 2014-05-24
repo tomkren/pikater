@@ -3,8 +3,6 @@ package org.pikater.web.vaadin.gui.client.kineticengine.plugins;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.jsni.JSNI_SharedConfig;
-
 public abstract class PluginEventListener implements IEventListener
 {
 	@Override
@@ -13,6 +11,7 @@ public abstract class PluginEventListener implements IEventListener
 		if(!event.isProcessed())
 		{
 			handleInner(event);
+			/*
 			if(JSNI_SharedConfig.isDebugModeActivated())
 			{
 				if(event.isProcessed())
@@ -24,10 +23,7 @@ public abstract class PluginEventListener implements IEventListener
 					// TODO: method chain...
 				}
 			}
-		}
-		else if(JSNI_SharedConfig.isDebugModeActivated())
-		{
-			System.out.println(getListenerID() + " suppressed by " + event.getProcessedBy());
+			*/
 		}
 	}
 	

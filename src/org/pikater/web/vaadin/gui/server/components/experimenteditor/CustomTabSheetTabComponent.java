@@ -14,6 +14,7 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 		super(caption);
 		
 		this.contentComponent = contentComponent;
+		this.contentComponent.setParentTab(this);
 	}
 	
 	@Override
@@ -25,5 +26,23 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 	public KineticComponent getContentComponent()
 	{
 		return contentComponent;
+	}
+	
+	public void setTabContentModified(boolean modified)
+	{
+		if(modified)
+		{
+			if(!getTabCaption().getValue().startsWith("* "))
+			{
+				getTabCaption().setValue("* " + getTabCaption().getValue());
+			}
+		}
+		else
+		{
+			if(getTabCaption().getValue().startsWith("* "))
+			{
+				getTabCaption().setValue(getTabCaption().getValue().substring(2));
+			}
+		}
 	}
 }

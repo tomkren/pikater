@@ -5,7 +5,8 @@ import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
+import org.pikater.shared.experiment.webformat.ExperimentMetadata;
 import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
 
 import com.vaadin.client.communication.StateChangeEvent;
@@ -26,26 +27,45 @@ public class KineticComponentConnector extends AbstractComponentConnector
 		 * NOTE: calling the server RPC in the constructor will cause a null pointer exception. Rather use the widget's
 		 * onLoad method for some further initializations if shared state is not suitable. 
 		 */
+		
 		registerRpc(KineticComponentClientRpc.class, new KineticComponentClientRpc()
 		{
 			private static final long serialVersionUID = -263115608289713347L;
-
+			
+			/*
+			 * NOTE: even though references to (for example) kinetic engine are available from this connector's widget,
+			 * always call the widget from the methods here. The widget is meant to encapsulate the kinetic environment
+			 * from the server's point of view. 
+			 */
+			
 			@Override
-			public void createBox(BoxInfo info, int posX, int posY)
+			public void command_createBox(BoxInfo info, int posX, int posY)
 			{
-				getWidget().createBox(info, posX, posY);
+				getWidget().command_createBox(info, posX, posY);
 			}
 
 			@Override
-			public void loadExperiment(SchemaDataSource experiment)
+			public void command_receiveExperimentToLoad(Experiment experiment)
 			{
-				getWidget().loadExperiment(experiment);
+				getWidget().command_receiveExperimentToLoad(experiment);
 			}
 
 			@Override
-			public void resetKineticEnvironment()
+			public void command_resetKineticEnvironment()
 			{
-				getWidget().resetKineticEnvironment();
+				getWidget().command_resetKineticEnvironment();
+			}
+
+			@Override
+			public void request_sendExperimentToSave(ExperimentMetadata metadata)
+			{
+				getWidget().request_sendExperimentToSave(metadata);
+			}
+
+			@Override
+			public void request_reloadVisualStyle()
+			{
+				getWidget().request_reloadVisualStyle();
 			}
 		});
 	}
@@ -54,6 +74,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	// METHODS TO PRESERVE THE USER'S KINETIC CONTENT AGAINST VAADIN'S DETACH/VISIBILITY MECHANISMS.
 	
 	/*
+	 * NOTE:
 	 * Vaadin will destroy the connector when the server-side component gets detached from DOM (for instance when
 	 * another tab gets selected) or set to invisible. Once attached again, Vaadin will recreate the client widget
 	 * using the shared state.
@@ -61,7 +82,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	 * we have to:
 	 * 1) serialize it locally, when the connector is unregistered,
 	 * 2) deserialize it again, when the connector is recreated.
-	 * That's what the "init()" and "onUnregister()" methods do.
+	 * That's what the "onUnregister()" and "init()" methods, respectively, do.
 	 */
 	
 	@Override
@@ -69,7 +90,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	{
 		super.init();
 		
-		getWidget().loadExperiment(KineticComponentRegistrar.getSavedExperimentFor(getConnectorId()));
+		getWidget().command_receiveExperimentToLoad(KineticComponentRegistrar.getSavedExperimentFor(getConnectorId()));
 	}
 	
 	@Override
