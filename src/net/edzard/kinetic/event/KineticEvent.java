@@ -34,8 +34,19 @@ public class KineticEvent extends JavaScriptObject
 	}-*/;
 	
 	/**
-	 * Set this event to be processed. This is useful in horizontal event stacking (e.g. node.on('click.event1 click.event2', some_handler)).
-	 * Stores a special non-standard attribute to this event. This method is not a part of KineticJS.
+	 * <font color="red">RED ALERT: </font> This method is not a part of KineticJS and stores a special non-standard
+	 * attribute to this event.
+	 * </br></br>
+	 * Set this event to be processed - useful in horizontal event stacking.</br>
+	 * For example, if we have a node like:
+	 * <pre>
+	 * {@code
+	 * node.on('click.event1', some_handler1);
+	 * node.on('click.event2', some_handler2);
+	 * }
+	 * </pre>
+	 * then you could programatically set the event to be processed in 'some_handler1' and check in 'some_handler2'
+	 * that it has already been processed to avoid some further unwanted changes by the same event.
 	 */
 	public native final void setProcessed() /*-{
 		this.processed = true;
@@ -50,7 +61,7 @@ public class KineticEvent extends JavaScriptObject
 	}-*/;
 	
 	/**
-	 * Method identical to "setProcessed()", except that some identification of what has processed the event is passed here.
+	 * Method identical to {@link #setProcessed()}, except that some identification of what has processed the event is passed here.
 	 * 
 	 * @param processedBy some identification of what has processed this event
 	 */
@@ -65,8 +76,10 @@ public class KineticEvent extends JavaScriptObject
 	}-*/;
 	
 	/**
+	 * <font color="red">RED ALERT: </font> this is currently bugged (and doesn't work) in KineticJS and is also a pending
+	 * issue for future releases.
+	 * </br></br> 
 	 * Tells Kinetic environment to stop this event from bubbling up in the node hierarchy.
-	 * RED ALERT: this is currently bugged in KineticJS and is also a pending issue for future releases.
 	 */
 	@Deprecated
 	public native final void stopVerticalPropagation() /*-{
