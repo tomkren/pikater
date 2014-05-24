@@ -38,7 +38,7 @@ public class KineticDnDWrapper extends DragAndDropWrapper
 				BoxInfo boxInfo = (BoxInfo) droppedComponent.getData();
 				
 				// issue the creation command to the client:
-				kineticComponent.getClientRPC().createBox(
+				kineticComponent.getClientRPC().command_createBox(
 						boxInfo,
 						kineticComponent.toRelativeLeft(details.getMouseEvent().getClientX()),
 						kineticComponent.toRelativeTop(details.getMouseEvent().getClientY())

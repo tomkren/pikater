@@ -10,7 +10,7 @@ import org.pikater.shared.experiment.universalformat.UniversalGui;
 import org.pikater.shared.experiment.webformat.box.LeafBox;
 import org.pikater.shared.util.SimpleIDGenerator;
 
-public class SchemaDataSource implements Serializable
+public class Experiment implements Serializable
 {
 	private static final long serialVersionUID = -1340889786809747684L;
 
@@ -36,7 +36,7 @@ public class SchemaDataSource implements Serializable
 	/**
 	 * Default constructor keeps GWT and Vaadin happy.
 	 */
-	public SchemaDataSource()
+	public Experiment()
 	{
 		this.idGenerator = new SimpleIDGenerator();
 		this.leafBoxes = new HashMap<Integer, LeafBox>();
