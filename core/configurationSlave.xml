@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <agents>
-        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA" name="RBF1">
-        </agent>
-
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
 

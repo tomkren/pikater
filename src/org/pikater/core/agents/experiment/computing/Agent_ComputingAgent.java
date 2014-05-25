@@ -445,18 +445,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 			 */		
 		private static final long serialVersionUID = 1074564968341084444L;
 		
-		private MessageTemplate CFPproposalMsgTemplate = MessageTemplate.and(
-			MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
-			MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.CFP),
-			MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-			MessageTemplate.MatchOntology(ontology.getName()))));
-
-		private MessageTemplate CFPreqMsgTemplate = MessageTemplate.and(
-			MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
-			MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL),
-			MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-			MessageTemplate.MatchOntology(ontology.getName()))));
-		
 		private MessageTemplate reqMsgTemplate = MessageTemplate.and(
 			MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
 			MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
@@ -500,13 +488,17 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		public void action() {			
 						
 				ContentElement content;
-				try {				
-                                ACLMessage req = receive(reqMsgTemplate);
+				try {
+					ACLMessage req = receive(reqMsgTemplate);
 					if (req != null) {
 						content = getContentManager().extractContent(req);					
 						if (((Action) content).getAction() instanceof GetOptions) {						
 							ACLMessage result_msg = sendOptions(req);
 							send(result_msg);
+							return;
+							
+						} else if (((Action) content).getAction() instanceof Execute) {												
+							send(processExecute(req));
 							return;
 						}
 		
@@ -514,33 +506,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 						send(result_msg);
 						return;
-					}
-                                
-                    ACLMessage CFPproposal = receive(CFPproposalMsgTemplate);
-					if (CFPproposal != null){
-						content = getContentManager().extractContent(CFPproposal);
-						if (((Action) content).getAction() instanceof Execute) {
-							ACLMessage propose = CFPproposal.createReply();
-							propose.setPerformative(ACLMessage.PROPOSE);
-							int size = taskFIFO.size();
-							if (engaged) {size++;}
-							propose.setContent(Integer.toString(size));
-							engaged = true;
-							send(propose);
-							return;
-						}
-					}
-					
-                                ACLMessage CFPreq = receive(CFPreqMsgTemplate);
-					if (CFPreq != null){
-						engaged = false;
-						content = getContentManager().extractContent(CFPreq);
-						if (((Action) content).getAction() instanceof Execute) {												
-							send(processExecute(CFPreq));
-						}
-						
-						// TODO create search agent here
-						return;					
 					}
 				} catch (CodecException ce) {
 					ce.printStackTrace();
@@ -1026,6 +991,9 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 					
 					if (taskFIFO.size() > 0){
 						execution_behaviour.restart();
+					} else {
+						log("CA terminating");
+						terminate();
 					}
 					
 				}
@@ -1109,4 +1077,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
         return dateFormat.format(date);
     }
 
+	protected void terminate() {
+		deregisterWithDF();
+		doDelete();
+	}
 };
