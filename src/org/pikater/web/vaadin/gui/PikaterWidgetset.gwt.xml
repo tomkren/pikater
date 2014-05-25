@@ -6,13 +6,15 @@
 	<inherits name="org.pikater.shared.sharedGWTModule" />
 	<inherits name="net.edzard.kinetic" />
 	<inherits name="org.pikater.web.vaadin.gui.gwtInit" />
+	<inherits name="com.wcs.wcslib.vaadin.widget.multifileupload.MultiFileUploadWidgetSet" />
+    <inherits name="org.vaadin.jouni.dom.DomWidgetset" />
 	
 	<!-- include the Java code from this package that is going to be translated to Javascript -->
 	<source path="client" />
-	<!-- <source path="shared" /> -->
+	<source path="shared" />
 	
 	<!-- include custom styles for the client widgets; defined in the public folder -->
-	<stylesheet src="clientStyles.css"/>
+	<!-- <stylesheet src="globalClientStyles.css"/> -->
 	
     <!--
      Uncomment the following to compile the widgetset for one browser only.
@@ -33,7 +35,5 @@
      information and instructions.
     -->
     <!-- <set-configuration-property name="devModeRedirectEnabled" value="true" /> -->
-
-
-    <inherits name="com.wcs.wcslib.vaadin.widget.multifileupload.MultiFileUploadWidgetSet" />
+    
 </module>

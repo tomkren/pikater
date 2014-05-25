@@ -15,6 +15,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 
 
 public final class Input1 {
@@ -38,7 +39,8 @@ public final class Input1 {
         fileDataSource.setDataProvider(fileDataProvider);
 
 		ComputingAgent comAgent = new ComputingAgent();
-		comAgent.setModelClass(Agent_WekaRBFNetworkCA.class.getName());
+		comAgent.setAgentClass(Agent_WekaRBFNetworkCA.class.getName());
+		comAgent.setModel(new NewModel());
 		comAgent.addOption( Converter.toOption(optionS) );
 		comAgent.addOption( Converter.toOption(optionM) );
 		comAgent.setTrainingData(fileDataSource);

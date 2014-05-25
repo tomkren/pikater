@@ -3,7 +3,7 @@ package org.pikater.web.config;
 import javax.servlet.ServletContext;
 
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-import org.pikater.web.vaadin.gui.server.MainUIExtension;
+import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionClientRpc;
 
 public class ServerConfigurationInterface
 {
@@ -23,7 +23,7 @@ public class ServerConfigurationInterface
 	private static JadeTopologies jadeTopologies = null;
 	private static ServletContext context = null;
 	private static BoxInfoCollection boxDefinitions = null;
-	private static MainUIExtension universalClientConnector = null;
+	private static MainUIExtensionClientRpc universalClientConnector = null;
 	
 	// **************************************************************************************************
 	// PUBLIC INTERFACE
@@ -70,11 +70,11 @@ public class ServerConfigurationInterface
 				}
 				else
 				{
-					getUniversalClientConnector().setBoxDefinitions(boxDefinitions);
+					getUniversalClientConnector().command_setBoxDefinitions(boxDefinitions);
 				}
 				break;
 			case UNIVERSAL_CLIENT_CONNECTOR:
-				universalClientConnector = (MainUIExtension) value;
+				universalClientConnector = (MainUIExtensionClientRpc) value;
 				break;
 			default:
 				throw new IllegalArgumentException();
@@ -101,7 +101,7 @@ public class ServerConfigurationInterface
 		return boxDefinitions;
 	}
 	
-	public static MainUIExtension getUniversalClientConnector()
+	public static MainUIExtensionClientRpc getUniversalClientConnector()
 	{
 		return universalClientConnector;
 	}

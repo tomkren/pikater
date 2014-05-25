@@ -15,7 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.hsqldb.store.ReusableObjectCache;
 import org.postgresql.PGConnection;
+import org.pikater.core.agents.metadata.JPAMetaDataReader;
 import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -32,7 +34,7 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.utils.Hash;
-import org.pikater.shared.database.utils.JPAMetaDataReader;
+import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.tests.DatabaseTest;
 
@@ -44,6 +46,7 @@ public class DatabaseInitialisation {
 		
 		DatabaseTest dbTest=new DatabaseTest();
 		
+		/**
 		this.createRolesAndUsers();
 		dbTest.listUserAndRoles();
 		
@@ -55,7 +58,7 @@ public class DatabaseInitialisation {
 		
 		this.addWebDatasets();
 		dbTest.listDataSets();
-		
+		**/
 		this.insertFinishedBatch();
 		dbTest.listBatches();
 		
@@ -85,10 +88,7 @@ public class DatabaseInitialisation {
 				System.out.println("--------------------");
 				System.out.println("Dataset: "+datasetI.getAbsolutePath());
 				
-				JPADataSetLO newDSLO=new JPADataSetLO();
-				newDSLO.setCreated(new Date());
-				newDSLO.setDescription(datasetI.getName());
-				newDSLO.setOwner(owner);
+				JPADataSetLO newDSLO=new JPADataSetLO(owner,datasetI.getName());
 				//hash a OID will be set using DAO
 				DAOs.dataSetDAO.storeNewDataSet(datasetI, newDSLO);
 				
@@ -104,7 +104,7 @@ public class DatabaseInitialisation {
 		
 		
 		///Update metadata
-		
+		/**
 		
 		File[] datasets2=dir.listFiles();
 		for(File datasetI : datasets2){
@@ -121,7 +121,7 @@ public class DatabaseInitialisation {
 				}
 			}
 		}
-		
+		**/
 		
 		
 	}
@@ -179,78 +179,41 @@ public class DatabaseInitialisation {
 		DAOs.roleDAO.storeEntity(a);
 		
 		
-		JPAUser u0=new JPAUser();
-		u0.setLogin("zombie");
-		u0.setPassword("xxx");
+		JPAUser u0=new JPAUser("zombie","xxx");
 		u0.setEmail("invalid@mail.com");
 		u0.setPriorityMax(-1);
 		u0.setStatus(JPAUserStatus.PASSIVE);
-		u0.setCreated(new Date());
 		u0.setRole(u);
 		DAOs.userDAO.storeEntity(u0);
 		
 		
-		JPAUser u1=new JPAUser();
-		u1.setLogin("stepan");
-		u1.setPassword("123");
+		JPAUser u1=new JPAUser("stepan","123");
 		u1.setEmail("Bc.Stepan.Balcar@gmail.com");
-		u1.setPriorityMax(9);
-		u1.setStatus(JPAUserStatus.ACTIVE);
-		u1.setCreated(new Date());
 		u1.setRole(a);
 		DAOs.userDAO.storeEntity(u1);
 		
 		
-		JPAUser u2=new JPAUser();
-		u2.setLogin("kj");
-		u2.setPassword("123");
+		JPAUser u2=new JPAUser("kj","123");
 		u2.setEmail("kj@gmail.com");
-		u2.setPriorityMax(9);
-		u2.setStatus(JPAUserStatus.ACTIVE);
-		u2.setCreated(new Date());
 		u2.setRole(a);
 		DAOs.userDAO.storeEntity(u2);
 	
 		
-		JPAUser u3=new JPAUser();
-		u3.setLogin("sj");
-		u3.setPassword("123");
+		JPAUser u3=new JPAUser("sj","123");
 		u3.setEmail("sj@gmail.com");
-		u3.setPriorityMax(9);
-		u3.setStatus(JPAUserStatus.ACTIVE);
-		u3.setCreated(new Date());
 		u3.setRole(a);
 		DAOs.userDAO.storeEntity(u3);
 		
-		JPAUser u4=new JPAUser();
-		u4.setLogin("sp");
-		u4.setPassword("123");
+		JPAUser u4=new JPAUser("sp","123");
 		u4.setEmail("sp@gmail.com");
-		u4.setPriorityMax(9);
-		u4.setStatus(JPAUserStatus.ACTIVE);
-		u4.setCreated(new Date());
 		u4.setRole(a);
 		DAOs.userDAO.storeEntity(u4);
 		
-		JPAUser u5=new JPAUser();
-		u5.setLogin("martin");
-		u5.setPassword("123");
-		u5.setEmail("Martin.Pilat@mff.cuni.cz");
-		u5.setPriorityMax(9);
-		u5.setStatus(JPAUserStatus.ACTIVE);
-		u5.setCreated(new Date());
-		u5.setRole(u);
+		JPAUser u5=new JPAUser("martin","123",u,"Martin.Pilat@mff.cuni.cz",9,JPAUserStatus.ACTIVE);
 		DAOs.userDAO.storeEntity(u5);
 	
 		
-		JPAUser u6=new JPAUser();
-		u6.setLogin("klara");
-		u6.setPassword("123");
-		u6.setEmail("peskova@braille.mff.cuni.cz");
-		u6.setPriorityMax(9);
-		u6.setStatus(JPAUserStatus.ACTIVE);
-		u6.setCreated(new Date());
-		u6.setRole(u);
+		JPAUser u6=new JPAUser("klara","123",u,"peskova@braille.mff.cuni.cz",9,JPAUserStatus.ACTIVE);
 		DAOs.userDAO.storeEntity(u6);
 	}
 	
@@ -311,11 +274,10 @@ public class DatabaseInitialisation {
 		experiment.setStatus(JPAExperimentStatus.FINISHED);
 		experiment.addResult(result);
 
-		JPABatch batch = new JPABatch();
-		batch.setName("Stepan's batch of experiments - school project");
-		batch.setPriority(99);
+		JPAUser stepan=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin("stepan")).getSingleResultWithNull();
+		
+		JPABatch batch = new JPABatch(stepan,"Stepan's batch of experiments - school project");
 		batch.addExperiment(experiment);
-		batch.setCreated(new Date());
 
 		DAOs.batchDAO.storeEntity(batch);
 	}

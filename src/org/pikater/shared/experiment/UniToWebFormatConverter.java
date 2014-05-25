@@ -8,11 +8,11 @@ import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
 
 public class UniToWebFormatConverter
 {
-	public static SchemaDataSource convert(UniversalComputationDescription uniFormat, BoxInfoCollection boxInfoProvider) throws ConversionException
+	public static Experiment convert(UniversalComputationDescription uniFormat, BoxInfoCollection boxInfoProvider) throws ConversionException
 	{
 		// first some checks
 		if(uniFormat == null)
@@ -27,7 +27,7 @@ public class UniToWebFormatConverter
 		// and then onto the conversion
 		if(uniFormat.isGUICompatible())
 		{
-			SchemaDataSource webFormat = new SchemaDataSource();
+			Experiment webFormat = new Experiment();
 
 			// first convert all boxes
 			Map<UniversalElement, Integer> uniBoxToWebBoxID = new HashMap<UniversalElement, Integer>();

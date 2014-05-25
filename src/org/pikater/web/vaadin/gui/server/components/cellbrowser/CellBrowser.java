@@ -7,10 +7,12 @@ import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowser
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCellSource;
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.DraggableCellBrowserCell;
 
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 
+@StyleSheet("cellBrowser.css")
 public class CellBrowser extends HorizontalLayout
 {
 	private static final long serialVersionUID = 4542038527458028778L;

@@ -1,4 +1,4 @@
-RBFNetwork:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.functions.RBFNetwork
+RBFNetwork:org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA:className-weka.classifiers.functions.RBFNetwork
 MultilayerPerceptron:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.functions.MultilayerPerceptron
 NaiveBayes:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.bayes.NaiveBayes
 LinearRegression:org.pikater.core.agents.experiment.computing.Agent_WekaCA:className-weka.classifiers.functions.LinearRegression

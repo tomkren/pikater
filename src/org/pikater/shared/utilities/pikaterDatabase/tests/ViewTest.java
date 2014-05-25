@@ -7,9 +7,12 @@ import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.views.DataSetView;
 import org.pikater.shared.database.views.MetaDataView;
 import org.pikater.shared.database.views.ViewColumns;
+import org.pikater.shared.database.views.models.DataSetRowModel;
 import org.pikater.shared.database.views.models.MetaDataModel;
+import org.pikater.shared.database.views.models.MetaDataRow;
 
 public class ViewTest {
 
@@ -19,21 +22,56 @@ public class ViewTest {
 		JPADataSetLO weather;
 		try {
 			weather = new ResultFormatter<JPADataSetLO>(
-					DAOs.dataSetDAO.getByDescription(dataSetDescription)
+					DAOs.dataSetDAO.getByID(2151)
 					).getSingleResult();
-			
-			
-			this.stringTest(weather);
-			this.tableTest(weather);
-			this.defaultGlobalTest(weather);
-			this.defaultNumericalTest(weather);
-			this.defaultCategoricalTest(weather);
+			this.dataSetViewTest();
+			this.rowTest(weather);
+			//this.stringTest(weather);
+			//this.tableTest(weather);
+			///this.defaultGlobalTest(weather);
+			//this.defaultNumericalTest(weather);
+			//this.defaultCategoricalTest(weather);
 			
 		} catch (NoResultException e) {
 			System.err.println("Dataset "+dataSetDescription+" doesn't exist.");
 			e.printStackTrace();
 		}		
 	}
+	
+	public void dataSetViewTest(){
+		DataSetView dsw=new DataSetView();
+		for(DataSetRowModel row:dsw.getAllDatasets()){
+			System.out.println(
+					row.getCreationTime().toString()+" "+
+					row.getUserName()+" "+
+					row.getDescription()+" "+
+					row.getNumberOfInstances()+" "+
+					row.getAttributeCount()
+					);
+		}
+	}
+	
+	public void rowTest(JPADataSetLO result){
+		MetaDataView mdv=new MetaDataView(result);
+		for(MetaDataRow row : mdv.getMetaDataRowModels()){
+			System.out.println(
+					row.getAvarage()+" "+
+					row.getClassEntropy()+" "+
+					row.getDefaultTaskType()+" "+
+					row.getMax()+" "+
+					row.getMedian()+" "+
+					row.getMin()+" "+
+					row.getMode()+" "+
+					row.getNumberOfCategories()+" "+
+					row.getNumberofInstances()+" "+
+					row.getRatioOfMissingValues()+" "+
+					row.getVariance()+" "+
+					row.isReal()+" "+
+					row.isTarget()
+					);
+		}
+	}
+	
 	
 	public void defaultGlobalTest(JPADataSetLO result){
 		MetaDataView mdv=new MetaDataView(result);

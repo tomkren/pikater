@@ -3,10 +3,12 @@ package org.pikater.shared.utilities.pikaterDatabase.tests;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
+import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
@@ -27,6 +29,7 @@ public class DatabaseTest {
 		listBatches();
 		listExperiments();
 		listFileMappings();
+		listAgentInfos();
 	}
 	
 	public void listDataSets(){
@@ -132,6 +135,16 @@ public class DatabaseTest {
 		p("");
 	}
 	
+	public void listAgentInfos(){		
+		List<JPAAgentInfo> ais=DAOs.agentInfoDAO.getAll();
+		p("No. of AgentInfos "+ais.size());
+		for(JPAAgentInfo ai:ais){
+			p(ai.getId()+". "+ai.getAgentClass()+" '"+ai.getCreationTime()+"' - "+ai.getName()+" : "+ai.getDescription());
+		}
+		
+		p("---------------------");
+		p("");
+	}
 	
 	
 	private void p(String s){

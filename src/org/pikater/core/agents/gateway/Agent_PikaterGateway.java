@@ -1,6 +1,7 @@
 package org.pikater.core.agents.gateway;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.pikater.core.ontology.AgentInfoOntology;
@@ -9,6 +10,8 @@ import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.shared.database.jpa.JPAAgentInfo;
+import org.pikater.shared.database.jpa.daos.DAOs;
 
 import jade.content.AgentAction;
 import jade.content.ContentManager;
@@ -104,6 +107,8 @@ public class Agent_PikaterGateway extends GatewayAgent {
     	
     	AgentInfo agentInfo = (AgentInfo) action.getAction();
     	System.out.println("Agent " + getName() + ": recieved AgentInfo from " + agentInfo.getAgentClass() );
+    	
+    	DAOs.agentInfoDAO.storeAgentInfoOntology(agentInfo, getName());
 		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);

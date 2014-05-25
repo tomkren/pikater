@@ -23,6 +23,7 @@ import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.GlobalEngineConfig;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
@@ -31,11 +32,6 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 @SuppressWarnings("deprecation")
 public class BoxPrototype extends ExperimentGraphItem
 {
-	// **********************************************************************************************
-	// "CONFIGURATION" AND TYPES
-	
-	private static final Vector2d defaultSize = new Vector2d(200, 100);
-	
 	// **********************************************************************************************
 	// PROGRAMMATIC VARIABLES
 	
@@ -69,7 +65,7 @@ public class BoxPrototype extends ExperimentGraphItem
 		this.connectedEdges = new HashSet<EdgePrototype>();
 		
 		// setup master rectangle
-		this.masterShape = Kinetic.createRectangle(new Box2d(Vector2d.origin, defaultSize));
+		this.masterShape = Kinetic.createRectangle(new Box2d(Vector2d.origin, GWTKineticSettings.getCurrentBoxSize()));
 		this.masterShape.setDraggable(false);
 		this.masterShape.setName(GlobalEngineConfig.name_box_masterRectangle); // the master shape that defines the bounds of the whole "box"
 		
@@ -87,7 +83,7 @@ public class BoxPrototype extends ExperimentGraphItem
 		this.boxContainer.add(textLabel);
 	    
 	    // and finally, set event handlers
-	    this.boxContainer.addEventListener(EventType.Basic.DRAGSTART.toNativeEvent(), new IEventListener()
+	    this.boxContainer.addEventListener(new IEventListener()
 		{
 			@Override
 			public void handle(KineticEvent event)
@@ -95,8 +91,8 @@ public class BoxPrototype extends ExperimentGraphItem
 				getKineticEngine().fromEdgesToBaseLines(connectedEdges, BoxPrototype.this); // draws changes by default
 				event.stopVerticalPropagation();
 			}
-		});
-	    this.boxContainer.addEventListener(EventType.Basic.DRAGMOVE.toNativeEvent(), new IEventListener()
+		}, EventType.Basic.DRAGSTART);
+	    this.boxContainer.addEventListener(new IEventListener()
 		{
 			@Override
 			public void handle(KineticEvent event)
@@ -104,8 +100,8 @@ public class BoxPrototype extends ExperimentGraphItem
 				getKineticEngine().updateBaseLines(connectedEdges, BoxPrototype.this); // draws changes by default
 				event.stopVerticalPropagation();
 			}
-		});
-	    this.boxContainer.addEventListener(EventType.Basic.DRAGEND.toNativeEvent(), new IEventListener()
+		}, EventType.Basic.DRAGMOVE);
+	    this.boxContainer.addEventListener(new IEventListener()
 		{
 			@Override
 			public void handle(KineticEvent event)
@@ -113,7 +109,7 @@ public class BoxPrototype extends ExperimentGraphItem
 				getKineticEngine().fromBaseLinesToEdges(connectedEdges); // draws changes by default
 				event.stopVerticalPropagation();
 			}
-		});
+		}, EventType.Basic.DRAGEND);
 	}
 	
 	// **********************************************************************************************
@@ -129,6 +125,13 @@ public class BoxPrototype extends ExperimentGraphItem
 	public void unregisterInKinetic()
 	{
 		boxContainer.remove();
+	}
+	
+	@Override
+	protected void destroyInnerNodes()
+	{
+		boxContainer.destroyChildren();
+		boxContainer.destroy();
 	}
 	
 	@Override
@@ -213,6 +216,11 @@ public class BoxPrototype extends ExperimentGraphItem
 		return boxContainer.getID();
 	}
 	
+	public Vector2d getAbsoluteNodePosition()
+	{
+		return boxContainer.getAbsolutePosition();
+	}
+	
 	public Vector2d getAbsolutePointPosition(RectanglePoint point)
 	{
 		return masterShape.getAbsolutePointPosition(point);
@@ -231,6 +239,11 @@ public class BoxPrototype extends ExperimentGraphItem
 	public boolean intersects(Vector2d selectionAbsPos, Vector2d selectionSize)
 	{
 		return masterShape.intersects(selectionAbsPos, selectionSize);
+	}
+	
+	public void reloadVisualStyle()
+	{
+		masterShape.setSize(GWTKineticSettings.getCurrentBoxSize());
 	}
 	
 	public void registerEdge(EdgePrototype edge)

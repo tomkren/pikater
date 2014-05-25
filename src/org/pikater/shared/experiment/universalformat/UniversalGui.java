@@ -15,7 +15,7 @@ public class UniversalGui implements Serializable
 	protected UniversalGui()
 	{
 	}
-
+	
 	public UniversalGui(int x, int y)
 	{
 		this.x = x;

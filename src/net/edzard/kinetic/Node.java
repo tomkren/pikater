@@ -1,9 +1,7 @@
 package net.edzard.kinetic;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.edzard.kinetic.event.IEventListener;
+import net.edzard.kinetic.event.NamedEventType;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
@@ -506,35 +504,26 @@ public abstract class Node extends JavaScriptObject {
 	}-*/;
 
 	/**
-	 * Register an event listener for a single event. 
-	 * @param type A single event type to listen for.
-	 * @param handler The handler.
+	 * Register an event listener for arbitrary many basic or named events. 
+	 * @param type all the events to register the handler for
+	 * @param handler the handler
 	 */
-	public final void addEventListener(String eventString, IEventListener handler) {
-		addEventListener(Arrays.asList(eventString), handler);
-	}
-	
-	/**
-	 * Register an event listener for a multitude of events.
-	 * @param type List of events to listen for
-	 * @param handler The handler.
-	 */
-	public final void addEventListener(List<String> eventStrings, IEventListener handler)
+	public final void addEventListener(IEventListener handler, NamedEventType... events)
 	{
-		addEventListeners(eventListToString(eventStrings), handler);
+		addEventListeners(eventListToString(events), handler);
 	}
 	
 	/**
-	 * Convert a list of event types to a single string, as defined by the KineticJS standard.
+	 * Convert an array of event types to a single string, as defined by the KineticJS standard.
 	 * @param eventTypes The event types
 	 * @return A string of the event types
 	 */
-	private final static String eventListToString(List<String> eventStrings)
+	private final static String eventListToString(NamedEventType... events)
 	{
 		final StringBuffer sb = new StringBuffer();
-		for (String eventString : eventStrings)
+		for (NamedEventType event : events)
 		{
-			sb.append(eventString).append(" ");
+			sb.append(event.toString()).append(" ");
 		}
 		String result = sb.toString().trim();
 		return result;
@@ -572,22 +561,13 @@ public abstract class Node extends JavaScriptObject {
 	}-*/;
 	
 	/**
-	 * Remove an event listener from the node.
-	 * @param type The event Type to stop listening to
-	 */
-	public final void removeEventListener(String eventString)
-	{
-		removeEventListener(Arrays.asList(eventString));
-	}
-
-	/**
-	 * Remove an event listener from the node.
+	 * Remove an event listener from the node for designated events (either basic or named).
 	 * @param eventTypes A number of event types to stop listening to
 	 */
 	// Might be buggy in Kineticjs 	
-	public final void removeEventListener(List<String> eventStrings)
+	public final void removeEventListener(NamedEventType... events)
 	{
-		removeEventListeners(eventListToString(eventStrings));
+		removeEventListeners(eventListToString(events));
 	}
 	
 	/**

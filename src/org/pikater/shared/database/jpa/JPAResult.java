@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,8 +54,9 @@ public class JPAResult extends JPAAbstractEntity{
 	private String note;
     @ManyToOne
     private JPAExperiment experiment;
-
-
+    @OneToOne
+    private JPAModel createdModel;
+    
 	public int getId() {
         return id;
     }
@@ -174,6 +176,12 @@ public class JPAResult extends JPAAbstractEntity{
     	
     }
 
+	public JPAModel getCreatedModel() {
+		return createdModel;
+	}
+	public void setCreatedModel(JPAModel createdModel) {
+		this.createdModel = createdModel;
+	}
 	@Override
 	public String getEntityName() {
 		return "Result";
@@ -196,5 +204,6 @@ public class JPAResult extends JPAAbstractEntity{
     	this.rootRelativeSquaredError=updateValues.getRootRelativeSquaredError();
     	this.serializedFileName=updateValues.getSerializedFileName();
     	this.start=updateValues.getStart();
+    	this.createdModel=updateValues.getCreatedModel();
 	}
 }

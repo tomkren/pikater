@@ -34,7 +34,8 @@
             </org.pikater.core.ontology.subtrees.option.Option>
           </options>
           <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
-            <modelClass>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</modelClass>
+            <agentClass>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentClass>
+            <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
             <options>
               <org.pikater.core.ontology.subtrees.option.Option>
                 <__mutable>false</__mutable>

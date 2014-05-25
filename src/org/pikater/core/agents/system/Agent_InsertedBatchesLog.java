@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system;
 
 
+import jade.content.AgentAction;
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -22,18 +23,30 @@ import java.util.Date;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
+import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 
 public class Agent_InsertedBatchesLog extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7226837600070711675L;
 
+	@Override
+	public java.util.List<Ontology> getOntologies() {
+		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		ontologies.add(MetadataOntology.getInstance());		
+		ontologies.add(BatchOntology.getInstance());
+		ontologies.add(DataOntology.getInstance());
+		return ontologies;
+	}
 
 	@Override
 	protected void setup() {
@@ -43,16 +56,89 @@ public class Agent_InsertedBatchesLog extends PikaterAgent {
 		initDefault();
 		registerWithDF(AgentNames.INSERTED_BATCHES_LOG);
 
-		this.getContentManager().registerLanguage(getCodec());
-		this.getContentManager().registerOntology(BatchOntology.getInstance());
-		this.getContentManager().registerOntology(MessagesOntology.getInstance());
-
 		RecieveExperiment recieveExp =
 			new RecieveExperiment(this, getCodec());
 		addBehaviour(recieveExp);
+		
+		
+		
+		
+		     
+        
+        try {
+        	AID dataManager = new AID(AgentNames.DATA_MANAGER, false);
+    		Ontology ontology = DataOntology.getInstance();
+    		SaveDataset sd = new SaveDataset();
+            sd.setUserLogin("stepan");
+            sd.setSourceFile("core/klaraguiagent/inputdataset/weather.arff");
+            sd.setDescription("Favourite Weather");
+            ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+            request.addReceiver(dataManager);
+            request.setLanguage(getCodec().getName());
+            request.setOntology(ontology.getName());
+            getContentManager().fillContent(request, new Action(dataManager, sd));
+           
+            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
+            if (reply == null)
+                logError("Reply not received.");
+            else
+                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+        } catch (CodecException | OntologyException e) {
+            logError("Ontology/codec error occurred: "+e.getMessage());
+            e.printStackTrace();
+        } catch (FIPAException e) {
+            logError("FIPA error occurred: "+e.getMessage());
+            e.printStackTrace();
+        }
+		
+		
+		
+		AID receiver = new AID(AgentNames.FREDDIE, false);
+
+        NewDataset nds = new NewDataset();
+        
+        //nds.setInternalFileName("28c7b9febbecff6ce207bcde29fc0eb8");
+        nds.setDataSetID(2301);
+        
+        try {
+            ACLMessage request = makeActionRequest(receiver, nds);
+           
+            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
+            if (reply == null)
+                logError("Reply not received.");
+            else
+                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+        } catch (CodecException | OntologyException e) {
+            logError("Ontology/codec error occurred: "+e.getMessage());
+            e.printStackTrace();
+        } catch (FIPAException e) {
+            logError("FIPA error occurred: "+e.getMessage());
+            e.printStackTrace();
+        }
+        
+
+
+		
 
 	}
+	
 
+
+/** Naplni pozadavek na konkretni akci pro jednoho ciloveho agenta */
+    private ACLMessage makeActionRequest(AID target, AgentAction action) throws CodecException, OntologyException {
+    	Ontology ontology = MetadataOntology.getInstance();
+    	
+        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+        msg.addReceiver(target);
+        msg.setLanguage(getCodec().getName());
+        msg.setOntology(ontology.getName());
+        getContentManager().fillContent(msg, new Action(target, action));
+        return msg;
+    }
+	
+	
+	
+	
 	public int sendBatchToSave(Batch batch) {
 
 		SaveBatch saveBatch = new SaveBatch();

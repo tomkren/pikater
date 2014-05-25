@@ -1,9 +1,11 @@
 package org.pikater.core.agents.system;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.Random;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -20,12 +22,17 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.proto.AchieveREInitiator;
 import jade.proto.ContractNetInitiator;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.configuration.Argument;
+import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.task.Execute;
 
@@ -37,15 +44,20 @@ import org.pikater.core.ontology.subtrees.task.Execute;
  * To change this template use File | Settings | File Templates.
  */
 public class Agent_Planner extends PikaterAgent {
-
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 820846175393846627L;
 
 	protected LinkedList<ACLMessage> requestsFIFO = new LinkedList<ACLMessage>();
     protected int nResponders;
 
+    @Override
+	public java.util.List<Ontology> getOntologies() {
+		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(AgentManagementOntology.getInstance());
+		return ontologies;
+	}
+
+    @Deprecated
     private AID[] getAllComputingAgents(){
         AID[] computingAgents = null;
 
@@ -76,77 +88,91 @@ public class Agent_Planner extends PikaterAgent {
     }
 
 
-    protected class RequestServer extends CyclicBehaviour {
-
-    	/**
-		 * 
-		 */
+	protected class RequestServer extends CyclicBehaviour {
 		private static final long serialVersionUID = -8439191651609121039L;
 
 		Ontology ontology = MessagesOntology.getInstance();
-    	
-        private MessageTemplate reqMsgTemplate = MessageTemplate.and(
-                MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                        MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-                                MessageTemplate.MatchOntology(ontology.getName()))));
 
-        public RequestServer(PikaterAgent agent) {
-            super(agent);
-        }
+		private MessageTemplate reqMsgTemplate = MessageTemplate.and(
+				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+				MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+						MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()), MessageTemplate.MatchOntology(ontology.getName()))));
 
-        @Override
-        public void action() {
+		public RequestServer(PikaterAgent agent) {
+			super(agent);
+		}
 
-            try {
-                ACLMessage req = receive(reqMsgTemplate);
-                if (req != null) {
-                    ContentElement content = getContentManager().extractContent(req);
-                    if (((Action) content).getAction() instanceof Execute) {
-                        // find computing agents
-                        AID[] receivers = getAllComputingAgents();
-                        // Fill the CFP message
-                        ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-                        for (int i = 0; i < receivers.length; ++i) {
-                            if (!receivers[i].getLocalName().equals("DurationServiceRegression")){
-                                cfp.addReceiver(receivers[i]);
-                            }
-                        }
-                        cfp.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-                        cfp.setLanguage(codec.getName());
-                        cfp.setOntology(ontology.getName());
+		@Override
+		public void action() {
+			try {
+				ACLMessage req = receive(reqMsgTemplate);
+				if (req != null) {
+					ContentElement content = getContentManager().extractContent(req);
+					if (((Action) content).getAction() instanceof Execute) {
+						// create agent
+						// TODO pass the right type somewhere
+						String CAtype = "RBFNetwork";
 
-                        // We want to receive a reply in 10 secs
-                        cfp.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+						// TODO choose a slave node
+						ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER);
 
-                        // add content
-                        Execute ex = (Execute)((Action) content).getAction();
-                        Action a = new Action();
-                        a.setAction(ex);
-                        a.setActor(myAgent.getAID());
+						log("about to create CA");
+						AID ca = comm.createAgent(Agent_Planner.this, CAtype, CAtype + Math.abs((new Random()).nextInt()), new ArrayList<Argument>());
+						log("CA created");
 
-                        getContentManager().fillContent(cfp, a);
-                        addBehaviour(new askComputingAgents(myAgent, cfp, req));
-                        return;
-                    }
+						ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+						msg.addReceiver(ca);
+						msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+						msg.setLanguage(getCodec().getName());
+						msg.setOntology(MessagesOntology.getInstance().getName());
+						Execute ex = (Execute) ((Action) content).getAction();
+						Action a = new Action(myAgent.getAID(), ex);
+						getContentManager().fillContent(msg, a);
 
-                    ACLMessage result_msg = req.createReply();
-                    result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-                    send(result_msg);
-                    return;
-                }
-            } catch (Codec.CodecException ce) {
-                ce.printStackTrace();
-            } catch (OntologyException oe) {
-                oe.printStackTrace();
-            }
-        }
-    }
+						addBehaviour(new doExecute(Agent_Planner.this, msg));
+						return;
+					}
 
-    protected class askComputingAgents extends ContractNetInitiator {
-        /**
-		 * 
-		 */
+					ACLMessage result_msg = req.createReply();
+					result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
+					send(result_msg);
+					return;
+				}
+			} catch (Codec.CodecException ce) {
+				ce.printStackTrace();
+			} catch (OntologyException oe) {
+				oe.printStackTrace();
+			}
+		}
+	}
+	
+	/** Assigns a task to a newly created computing agent */
+	protected class doExecute extends AchieveREInitiator {
+		private static final long serialVersionUID = 1572211801881987607L;
+
+		public doExecute(Agent a, ACLMessage msg) {
+			super(a, msg);
+		}
+
+		@Override
+		protected void handleInform(ACLMessage inform) {
+			log("Agent "+inform.getSender().getName()+" successfully performed the requested action");
+		}
+
+		@Override
+		protected void handleRefuse(ACLMessage refuse) {
+			logError("Execute was refused");
+		}
+
+		@Override
+		protected void handleFailure(ACLMessage failure) {
+			logError("Agent "+failure.getSender().getName()+" failed to perform the requested action: "+failure.getContent());
+		}
+		
+	}
+	
+	@Deprecated
+	protected class askComputingAgents extends ContractNetInitiator {
 		private static final long serialVersionUID = -7890655626575943947L;
 
 		ACLMessage req;

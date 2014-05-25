@@ -28,7 +28,7 @@
               <value>pikater</value>
         </constructor-arg>
         <constructor-arg index="2">  <!-- password -->
-              <value>a</value>
+              <value>SrapRoPy</value>
         </constructor-arg>
     </bean>
 <!--

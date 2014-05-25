@@ -27,7 +27,7 @@ public class SearchOnly {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
-        ca.setModelClass(Agent_WekaRBFNetworkCA.class.getName());
+        ca.setAgentClass(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
         List<Option> options = new ArrayList<Option>();

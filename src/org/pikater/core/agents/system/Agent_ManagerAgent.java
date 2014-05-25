@@ -163,7 +163,10 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		return nameToGenerate;
 	}
 
-	private String generateName(String name) {
+    private String generateName(String name) {
+        if (nodeName != null && !nodeName.isEmpty()) {
+            name = name + "-" + nodeName;
+        }
         PlatformController container = getContainerController();
         try {
             AgentController agentWithTheSameName= container.getAgent(name);

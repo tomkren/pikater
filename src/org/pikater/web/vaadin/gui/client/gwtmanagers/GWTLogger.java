@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.gwtmanagers;
 
-import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionServerRpc;
+import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionServerRpc;
 
 public class GWTLogger
 {

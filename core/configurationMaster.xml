@@ -4,11 +4,6 @@
         <agent type="org.pikater.core.agents.system.Agent_Planner" name="Planner">
         </agent>
 
-        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA" name="RBF1">
-        </agent>
-        <agent type="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA" name="RBF2">
-        </agent>
-
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
 

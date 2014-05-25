@@ -14,7 +14,7 @@ import org.pikater.shared.experiment.universalformat.UniversalGui;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.BoxType;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.HttpContentType;
@@ -30,24 +30,24 @@ import org.pikater.web.vaadin.gui.server.components.upload.IUploadedFileHandler;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploads;
 import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
 
+import com.porotype.iconfont.FontAwesome;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Notification.Type;
 
 @Theme("pikater")
-@com.vaadin.annotations.JavaScript(value = "public/kinetic-v4.7.3-dev.js")
-@Push(value = PushMode.MANUAL)
+@Push(value = PushMode.AUTOMATIC)
 public class PikaterUI extends UI
 {
 	private static final long serialVersionUID = 1964653532060950402L;
@@ -74,13 +74,16 @@ public class PikaterUI extends UI
 	@Override
 	protected void init(VaadinRequest request)
 	{
+		FontAwesome.load();
+		getPage().setTitle("Pikatorium");
+		
 		/*
 		 * NOTE: do not remove or replace this code. 
 		 */
 		
 		MainUIExtension mainUIExtension = new MainUIExtension();
 		mainUIExtension.extend(this);
-		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension);
+		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension.getClientRPC());
 		
 		thisUsersUploads = new MyUploads();
 		
@@ -130,6 +133,8 @@ public class PikaterUI extends UI
 					{
 						setContent(new WelcomeTourWizard(new Button.ClickListener()
 						{
+							private static final long serialVersionUID = -8250998657726465300L;
+
 							@Override
 							public void buttonClick(ClickEvent event)
 							{
@@ -193,19 +198,14 @@ public class PikaterUI extends UI
 		boxDefinitions.addDefinition(boxInfo3);
 		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitions);
 		
-		SchemaDataSource newExperiment = new SchemaDataSource();
+		Experiment newExperiment = new Experiment();
 		Integer b1 = newExperiment.addLeafBoxAndReturnID(guiInfo1, boxInfo1);
 		Integer b2 = newExperiment.addLeafBoxAndReturnID(guiInfo2, boxInfo2);
 		newExperiment.addLeafBoxAndReturnID(guiInfo3, boxInfo3);
 		newExperiment.connect(b1, b2);
 		
-		VerticalLayout vLayout = new VerticalLayout();
-		setContent(vLayout);
-		
 		ExperimentEditor editor = new ExperimentEditor(!getSession().getConfiguration().isProductionMode());
-		editor.setWidth("1200px");
-		editor.setHeight("900px");
-		vLayout.addComponent(editor);
+		setContent(editor);
 		
 		// editor.loadExperiment(newExperiment);
 	}
@@ -258,6 +258,8 @@ public class PikaterUI extends UI
 		VerticalLayout vLayout = new VerticalLayout();
 		Button btn = new Button("Test", new Button.ClickListener()
 		{
+			private static final long serialVersionUID = -3016596327398677231L;
+
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
@@ -323,7 +325,9 @@ public class PikaterUI extends UI
 		Button logout = new Button("Logout");
 	    logout.addClickListener(new Button.ClickListener()
 	    {
-	        @Override
+			private static final long serialVersionUID = 6957710062047165748L;
+
+			@Override
 	        public void buttonClick(ClickEvent event)
 	        {
 	            // Redirect from the page

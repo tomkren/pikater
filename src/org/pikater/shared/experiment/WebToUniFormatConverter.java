@@ -1,11 +1,11 @@
 package org.pikater.shared.experiment;
 
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.webformat.SchemaDataSource;
+import org.pikater.shared.experiment.webformat.Experiment;
 
 public class WebToUniFormatConverter
 {
-	public static UniversalComputationDescription convert(SchemaDataSource webFormat) throws ConversionException
+	public static UniversalComputationDescription convert(Experiment webFormat) throws ConversionException
 	{
 		// TODO:
 		return null;

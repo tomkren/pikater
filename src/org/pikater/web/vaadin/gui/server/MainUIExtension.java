@@ -2,11 +2,10 @@ package org.pikater.web.vaadin.gui.server;
 
 import java.util.logging.Level;
 
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.web.WebAppLogger;
 import org.pikater.web.vaadin.gui.PikaterUI;
-import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionClientRpc;
-import org.pikater.web.vaadin.gui.client.mainuiextension.MainUIExtensionServerRpc;
+import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionClientRpc;
+import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionServerRpc;
 
 import com.vaadin.server.AbstractExtension;
 
@@ -18,11 +17,8 @@ public class MainUIExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;
 	
-	private BoxInfoCollection boxDefinitions;
-	
 	public MainUIExtension()
 	{
-		this.boxDefinitions = null;
 		registerRpc(new MainUIExtensionServerRpc()
 		{
 			private static final long serialVersionUID = -5824200287684658506L;
@@ -56,14 +52,8 @@ public class MainUIExtension extends AbstractExtension
         super.extend(mainUI);
     }
 	
-	public BoxInfoCollection getBoxDefinitions()
+	public MainUIExtensionClientRpc getClientRPC()
 	{
-		return boxDefinitions;
-	}
-	
-	public void setBoxDefinitions(BoxInfoCollection boxDefinitions)
-	{
-		this.boxDefinitions = boxDefinitions;
-		getRpcProxy(MainUIExtensionClientRpc.class).setBoxDefinitions(boxDefinitions);
+		return getRpcProxy(MainUIExtensionClientRpc.class); 
 	}
 }

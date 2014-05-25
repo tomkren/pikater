@@ -6,8 +6,6 @@ import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
-import com.google.gwt.core.client.JavaScriptException;
-import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.user.client.Event;
 
 public class AppEntryPoint implements EntryPoint
@@ -37,16 +35,19 @@ public class AppEntryPoint implements EntryPoint
 			@Override
 			public void onUncaughtException(Throwable e)
 			{
+				GWTLogger.logThrowable("Uncaught exception from client:", e);
+				
+				/*
 				if((e instanceof UmbrellaException) || (e instanceof JavaScriptException))
 				{
 					// native exceptions usually contain no useful information => send a generic "warning" instead:
-					GWTLogger.logThrowable("Uncaught exception from the client", e);
-					// GWTLogger.logUncaughtNativeClientException();
+					GWTLogger.logUncaughtNativeClientException();
 				}
 				else
 				{
-					GWTLogger.logThrowable("Uncaught exception from the client", e);
+					GWTLogger.logThrowable("Uncaught exception from client:", e);
 				}
+				*/
 			}
 		});
 	}

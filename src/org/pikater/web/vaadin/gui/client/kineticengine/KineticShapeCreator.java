@@ -53,7 +53,7 @@ public class KineticShapeCreator
 		BoxPrototype result = new BoxPrototype(kineticEngine, GlobalEngineConfig.getBoxIDFromNumber(nextBoxID++), info, position);
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(result);
+			kineticEngine.registerCreated(true, result);
 		}
 	    return result;
 	}
@@ -72,7 +72,7 @@ public class KineticShapeCreator
 		EdgePrototype result = new EdgePrototype(kineticEngine, container, baseLine);
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(result);
+			kineticEngine.registerCreated(true, result);
 		}
 		return result;
 	}
@@ -91,7 +91,7 @@ public class KineticShapeCreator
 		}
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(result);
+			kineticEngine.registerCreated(true, result);
 		}
 		return result;
 	}
