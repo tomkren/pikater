@@ -57,6 +57,26 @@ public class JPABatch extends JPAAbstractEntity{
 	private Date created;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date finished;
+	
+	/**
+	 * Constructor for JPA compatibility
+	 */
+	public JPABatch(){}
+	
+	/**
+	 * Constructor for batch with default parameters and specified name
+	 * @param owner The owner's JPAUser object
+	 * @param name The batch's name
+	 */
+	public JPABatch(JPAUser owner,String name){
+		this.created=new Date();
+		this.status=JPABatchStatus.CREATED;
+		//probably this is for testing purposes only 
+		this.priority=owner.getPriorityMax();
+		this.totalPriority=99;
+		this.name=name;
+		this.owner=owner;
+	}
 
 	public void setName(String name){
 		this.name=name;

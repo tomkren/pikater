@@ -50,6 +50,41 @@ public class JPAUser extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
 	
+	/** Constructor for JPA Compatibility **/
+	public JPAUser(){}
+	
+	/**
+	 * Basic constructor for the JPAUser Entity. The status of the created user
+	 * is ACTIVE, but in case of necessity it can be set to PASSIVE before the first persistance.
+	 * The user tasks' maximal priority is set to 9.
+	 * @param login The login for the user
+	 */
+	public JPAUser(String login,String password){
+		this.login=login;
+		this.password=password;
+		this.created=new Date();
+		this.priorityMax=9;
+		this.status=JPAUserStatus.ACTIVE;
+	}
+	
+	/**
+	 * Constructor for the JPAUser Entity, where all fields can be set.
+	 * @param login The login of the user.
+	 * @param password The password of the user.
+	 * @param role The role of the user.
+	 * @param email The e-mail address of the user.
+	 * @param maxPriority The maximal priority of user's tasks.
+	 * @param status The user's account status.
+	 */
+	public JPAUser(String login,String password,JPARole role,String email,int maxPriority,JPAUserStatus status)
+	{
+		this(login,password);
+		this.role=role;
+		this.email=email;
+		this.priorityMax=maxPriority;
+		this.status=status;
+	}
+	
 	public int getId() {
         return id;
     }

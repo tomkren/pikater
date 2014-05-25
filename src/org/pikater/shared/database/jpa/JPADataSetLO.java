@@ -1,5 +1,6 @@
 package org.pikater.shared.database.jpa;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.pikater.shared.database.jpa.daos.DataSetDAO;
 
 
 @Entity	
@@ -48,6 +51,32 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 	private long size;
+	
+	/**Constructor for JPA compatibility**/
+	public JPADataSetLO(){}
+	
+	/**
+	 * Cretes a new JPA Entity insance of dataset.
+	 * To store the entity please use {@link DataSetDAO}.storeNewDataSet(File dataset,JPADataSetLO initialData) function
+	 * which will automatically compute the Hash for the given DataSet and if necessary stores the File to Database.
+	 * @param owner JPAUser owner of the DataSet
+	 */
+	public JPADataSetLO(JPAUser owner){
+		this.setOwner(owner);
+		this.setCreated(new Date());
+	}
+	/**
+	 * Cretes a new JPA Entity insance of dataset.
+	 * To store the entity please use {@link DataSetDAO}.storeNewDataSet(File dataset,JPADataSetLO initialData) function
+	 * which will automatically compute the Hash for the given DataSet and if necessary stores the File to Database
+	 * @param owner JPAUser owner of the DataSet
+	 * @param description Some Description of the Dataset
+	 */
+	public JPADataSetLO(JPAUser owner,String description){
+		this(owner);
+		this.setDescription(description);
+	}
+	
 	
 	public String getHash() {
 		return hash;

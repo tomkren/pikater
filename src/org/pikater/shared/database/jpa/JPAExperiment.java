@@ -1,6 +1,8 @@
 package org.pikater.shared.database.jpa;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,6 +56,34 @@ public class JPAExperiment extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar finished;
 
+	/**
+	 * Constructor for JPA Compatibility
+	 */
+	public JPAExperiment(){}
+	
+	/**
+	 * Constructor for new Experiment for the given Batch, but with no
+	 * model defined
+	 * @param parentBatch The batch, where the Experiment belongs
+	 */
+	public JPAExperiment(JPABatch parentBatch){
+		this.setBatch(parentBatch);
+		this.created=GregorianCalendar.getInstance();
+		this.modelStrategy=JPAModelStrategy.CREATION;
+	}
+	
+	/**
+	 * Constructor for new Experiment for the given Batch and Model, that is
+	 * used for the Experiment
+	 * @param parentBatch The batch, where the experiment belongs
+	 * @param model The model used for the experiment
+	 */
+	public JPAExperiment(JPABatch parentBatch,JPAModel model){
+		this.setBatch(parentBatch);
+		this.created=GregorianCalendar.getInstance();
+		this.modelStrategy=JPAModelStrategy.EXISTING;
+		this.usedModel=model;
+	}
 
 	public int getId() {
         return id;
