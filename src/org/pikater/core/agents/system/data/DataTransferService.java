@@ -25,7 +25,7 @@ public class DataTransferService extends FIPAService {
 			Files.copy(socket.getInputStream(), temp, StandardCopyOption.REPLACE_EXISTING);
 			Files.move(temp, Paths.get(Agent_DataManager.dataFilesPath + hash), StandardCopyOption.ATOMIC_MOVE);
 
-			System.out.println("Data loaded");
+			//System.out.println("Data loaded");
 		}
 	}
 	
@@ -40,7 +40,7 @@ public class DataTransferService extends FIPAService {
 				return;
 			}
 
-			System.out.println("Sending data to "+socket.getRemoteSocketAddress());
+			//System.out.println("Sending data to "+socket.getRemoteSocketAddress());
 
 			Files.copy(Paths.get(Agent_DataManager.dataFilesPath + hash), socket.getOutputStream());
 
