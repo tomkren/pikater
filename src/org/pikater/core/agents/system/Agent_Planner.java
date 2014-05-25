@@ -163,6 +163,11 @@ public class Agent_Planner extends PikaterAgent {
 		protected void handleRefuse(ACLMessage refuse) {
 			logError("Execute was refused");
 		}
+
+		@Override
+		protected void handleFailure(ACLMessage failure) {
+			logError("Agent "+failure.getSender().getName()+" failed to perform the requested action: "+failure.getContent());
+		}
 		
 	}
 	
