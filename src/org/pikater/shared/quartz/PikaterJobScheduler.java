@@ -7,6 +7,8 @@ import java.util.Properties;
 
 import org.pikater.shared.PropertiesHandler;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.quartz.jobs.IPikaterJob;
+import org.pikater.shared.quartz.jobs.TestJob;
 import org.quartz.JobBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -80,7 +82,6 @@ public class PikaterJobScheduler extends PropertiesHandler
 			try
 			{
 				scheduler.shutdown();
-				return true;
 	        }
 			catch (SchedulerException se)
 			{
@@ -92,10 +93,7 @@ public class PikaterJobScheduler extends PropertiesHandler
 				scheduler = null;
 			}
 		}
-		else
-		{
-			throw new NullPointerException("Can not destroy a scheduler that has not been initialized. Call the 'init' method prior to this one.");
-		}
+		return true;
 	}
 	
 	private static void defineCronJob(Class<? extends IPikaterJob> jobClass)

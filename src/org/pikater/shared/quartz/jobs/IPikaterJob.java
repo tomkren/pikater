@@ -1,4 +1,4 @@
-package org.pikater.shared.quartz;
+package org.pikater.shared.quartz.jobs;
 
 import org.quartz.Job;
 import org.quartz.JobBuilder;

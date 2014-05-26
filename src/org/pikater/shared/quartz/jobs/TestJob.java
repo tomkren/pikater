@@ -1,4 +1,4 @@
-package org.pikater.shared.quartz;
+package org.pikater.shared.quartz.jobs;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
