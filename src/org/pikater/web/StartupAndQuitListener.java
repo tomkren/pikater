@@ -1,10 +1,15 @@
 package org.pikater.web;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.pikater.shared.AppHelper;
+import org.pikater.shared.logging.GeneralPikaterLogger;
+import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.vaadin.MyResources;
 import org.pikater.web.config.JadeTopologies;
 import org.pikater.web.config.ServerConfiguration;
@@ -34,28 +39,54 @@ public class StartupAndQuitListener implements ServletContextListener
 	 	}
 	 	*/
 		
-		// initialize the server data store - this is an absolute prerequisite
+		/*
+		 * GENERAL NOTE: don't alter the code order. There may be some dependencies.
+		 */
+		
+		// this must be first
 		ServerConfigurationInterface.setField(ServerConfItem.CONTEXT, event.getServletContext());
+		AppHelper.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
+		
+		// set the application-wide logger - this must be second
+		PikaterLogger.setLogger(new GeneralPikaterLogger()
+		{
+			private final Logger innerLogger = Logger.getAnonymousLogger(); 
+			
+			@Override
+			public void logThrowable(String problemDescription, Throwable t)
+			{
+				innerLogger.log(Level.SEVERE, "exception occured: " + problemDescription + "\n" + throwableToStackTrace(t));
+			}
+			
+			@Override
+			public void log(Level logLevel, String message)
+			{
+				innerLogger.log(logLevel, message);
+			}
+		});
 		
 		// set parsed topologies to the application wide variable
 		ServerConfigurationInterface.setField(ServerConfItem.JADE_TOPOLOGIES, new JadeTopologies());
 		
 		// *****************************************************************************************************
-		WebAppLogger.log(Level.INFO, "***** Reading basic application configuration files. *****");
+		PikaterLogger.log(Level.INFO, "***** Reading basic application configuration files. *****");
 		
-		ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(MyResources.prop_appConf));
+		ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(MyResources.prop_appConf.getSourceFile()));
 		if(!ServerConfigurationInterface.getConfig().isValid())
 		{
-			WebAppLogger.log(Level.SEVERE, "Erros were encountered while parsing the application configuratio. All client "
+			PikaterLogger.log(Level.SEVERE, "Erros were encountered while parsing the application configuratio. All client "
 					+ "requests will result in 'Service temporarily unavailable'.");
 		}
 		else
 	    {
-	    	WebAppLogger.log(Level.INFO, "Application settings were successfully read and parsed.");
+			PikaterLogger.log(Level.INFO, "Application settings were successfully read and parsed.");
 	    }
 		
-		WebAppLogger.log(Level.INFO, "***** Finished reading .properties files. *****");
+		PikaterLogger.log(Level.INFO, "***** Finished reading .properties files. *****");
 		// *****************************************************************************************************
+		
+		// initialize and start the cron job scheduler
+		// PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
 	}
 	
 	/**
@@ -64,6 +95,6 @@ public class StartupAndQuitListener implements ServletContextListener
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0)
 	{
-		// no need to do anything
+		PikaterJobScheduler.shutdown();
 	}
 }

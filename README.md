@@ -71,4 +71,6 @@ Jeden vypocetni server:
 ###Web server
 * <a href="https://vaadin.com/book/-/page/preface.html">Book of Vaadin 7</a>
 * <a href="http://tomcat.apache.org/tomcat-7.0-doc/servletapi/">Servlet 3.0 documentation</a>
+* <a href="http://www.quartz-scheduler.org/documentation">Java Quartz Scheduler (cron jobs) documentation</a>
+* <a href="http://www.quartz-scheduler.org/documentation/quartz-2.2.x/configuration">Java Quartz Scheduler configuration reference</a>
 * <a href="http://tomcat.apache.org/tomcat-7.0-doc/logging.html">Logging in Apache Tomcat</a>
