@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
-import org.pikater.web.WebAppLogger;
+import org.pikater.shared.logging.PikaterLogger;
 
 import com.vaadin.server.FileResource;
 
@@ -29,7 +29,7 @@ public class StaticDownloadServlet extends HttpServlet
 		FileResource resource = new FileResource(new File("/Users/Smolodon/Downloads/Daisy (2006) JK HK.avi"));
 		if(resource.getSourceFile().length() > Integer.MAX_VALUE) // "HttpServletResponse.setContentLength()" only accepts int type
 		{
-			WebAppLogger.log(Level.SEVERE, String.format("The file '%s' was not served because it is too large (larger than MAX_INT).", resource.getFilename()));
+			PikaterLogger.log(Level.SEVERE, String.format("The file '%s' was not served because it is too large (larger than MAX_INT).", resource.getFilename()));
 			resp.sendError(HttpStatus.SC_BAD_REQUEST, "The requested file was too large to serve.");
 		}
 		else
@@ -54,7 +54,7 @@ public class StaticDownloadServlet extends HttpServlet
 	        }
 	        catch (IOException e)
 	        {
-	        	WebAppLogger.logThrowable(
+	        	PikaterLogger.logThrowable(
 	        			String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", resource.getFilename()), e);
 	        }
 	        finally

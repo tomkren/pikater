@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
-import org.pikater.web.WebAppLogger;
+import org.pikater.shared.logging.PikaterLogger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
@@ -57,7 +57,7 @@ public class XStreamHelper
 		}
 		catch (XStreamException e)
 		{
-			WebAppLogger.logThrowable(String.format("Could not deserialize the following XML to the '%s' class.", clazz.getSimpleName()), e);
+			PikaterLogger.logThrowable(String.format("Could not deserialize the following XML to the '%s' class.", clazz.getSimpleName()), e);
 			return null;
 		}
 	}

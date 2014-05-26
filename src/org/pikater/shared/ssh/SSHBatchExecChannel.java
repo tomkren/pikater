@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import org.pikater.web.WebAppLogger;
+import org.pikater.shared.logging.PikaterLogger;
 
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSchException;
@@ -101,7 +101,7 @@ public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandE
 			}
 			catch (IOException e)
 			{
-				WebAppLogger.logThrowable("An error occured while closing the channel's related streams.", e);
+				PikaterLogger.logThrowable("An error occured while closing the channel's related streams.", e);
 			}
 		}
 		shellChannel = null;

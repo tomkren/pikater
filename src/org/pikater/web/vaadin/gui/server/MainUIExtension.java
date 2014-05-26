@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server;
 
 import java.util.logging.Level;
 
-import org.pikater.web.WebAppLogger;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.vaadin.gui.PikaterUI;
 import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionServerRpc;
@@ -26,19 +26,19 @@ public class MainUIExtension extends AbstractExtension
 			@Override
 			public void logWarning(String message)
 			{
-				WebAppLogger.log(Level.WARNING, message);
+				PikaterLogger.log(Level.WARNING, message);
 			}
 
 			@Override
 			public void logThrowable(String message, String throwableStackTrace)
 			{
-				WebAppLogger.log(Level.SEVERE, String.format("%s\n%s", message, throwableStackTrace));
+				PikaterLogger.log(Level.SEVERE, String.format("%s\n%s", message, throwableStackTrace));
 			}
 
 			@Override
 			public void logUncaughtNativeClientException()
 			{
-				WebAppLogger.log(Level.SEVERE, "An uncaught native client exception has been thrown. Best to launch a thorough debug.");
+				PikaterLogger.log(Level.SEVERE, "An uncaught native client exception has been thrown. Best to launch a thorough debug.");
 			}
 		});
 	}
