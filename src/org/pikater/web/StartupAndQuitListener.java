@@ -86,7 +86,10 @@ public class StartupAndQuitListener implements ServletContextListener
 		// *****************************************************************************************************
 		
 		// initialize and start the cron job scheduler
-		// PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
+		if(!PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
+		{
+			throw new IllegalStateException("Application won't serve until the above errors are fixed.");
+		}
 	}
 	
 	/**

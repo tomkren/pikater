@@ -7,8 +7,6 @@ import java.util.Properties;
 
 import org.pikater.shared.PropertiesHandler;
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.config.ServerConfigurationInterface;
-import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.quartz.JobBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -66,7 +64,6 @@ public class PikaterJobScheduler extends PropertiesHandler
 			}
 			catch (SchedulerException se)
 			{
-				ServerConfigurationInterface.setField(ServerConfItem.ERRORS_DETECTED_DURING_STARTUP, true);
 				PikaterLogger.logThrowable("Could not initialized the application's cron job scheduler.", se);
 				return false;
 			}
