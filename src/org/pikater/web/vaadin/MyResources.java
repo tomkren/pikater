@@ -3,7 +3,6 @@ package org.pikater.web.vaadin;
 import java.io.File;
 
 import org.pikater.shared.AppHelper;
-import org.pikater.web.WebAppHelper;
 
 import com.vaadin.server.FileResource;
 import com.vaadin.server.ThemeResource;
@@ -28,19 +27,15 @@ public class MyResources
 	// THEME RESOURCE DEFINITIONS:
 	
 	public static final String relPath_IMG_nextIcon16 = "images/Arrow-Next-icon-16x16.png";
-	public static final String relPath_IMG_nextIcon20 = "images/Arrow-Next-icon-20x20.png";
-	public static final String relPath_IMG_addIcon24 = "images/add-icon-24x24.png";
 	public static final String relPath_IMG_plusIcon16 = "images/Plus-icon-16x16.png";
 	public static final String relPath_IMG_closeIcon16 = "images/close-icon-16x16.png";
 	
 	// ----------------------------------------------------------------
 	// RESOURCE FIELDS:
 	
-	public static final FileResource prop_appConf = new FileResource(new File(AppHelper.joinPathComponents(WebAppHelper.webInfConfPath, "appServer.properties")));
+	public static final FileResource prop_appConf = new FileResource(new File(AppHelper.joinPathComponents(AppHelper.getAbsoluteWEBINFCONFPath(), "appServer.properties")));
 	
 	public static final ThemeResource img_nextIcon16 = new ThemeResource(relPath_IMG_nextIcon16);
-	public static final ThemeResource img_nextIcon20 = new ThemeResource(relPath_IMG_nextIcon20);
-	public static final ThemeResource img_addIcon24 = new ThemeResource(relPath_IMG_addIcon24);
 	public static final ThemeResource img_plusIcon16 = new ThemeResource(relPath_IMG_plusIcon16);
 	public static final ThemeResource img_closeIcon16 = new ThemeResource(relPath_IMG_closeIcon16);
 	

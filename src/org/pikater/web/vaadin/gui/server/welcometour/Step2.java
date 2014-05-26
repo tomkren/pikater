@@ -9,8 +9,7 @@ import java.util.logging.Level;
 import org.pikater.shared.AppHelper;
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.XStreamHelper;
-import org.pikater.web.WebAppHelper;
-import org.pikater.web.WebAppLogger;
+import org.pikater.shared.logging.PikaterLogger;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
@@ -25,10 +24,11 @@ public class Step2 extends WelcomeTourWizardStep
 	{
 		super(parentWizard);
 		
-		File webInfConfDirectory = new File(WebAppHelper.webInfConfPath);
+		File webInfConfDirectory = new File(AppHelper.getAbsoluteWEBINFCONFPath());
 		if(!webInfConfDirectory.isDirectory())
 		{
-			WebAppLogger.log(Level.SEVERE, String.format("The following path leads to a resource that is not a directory even though it should be:\n '%s'", WebAppHelper.webInfConfPath));
+			PikaterLogger.log(Level.SEVERE, String.format("The following path leads to a resource that is not a directory even though it should be:\n '%s'", 
+					AppHelper.getAbsoluteWEBINFCONFPath()));
 			
 			content = createErrorLabel("There was an internal error in the application and it can not proceed. Please, refer to the server logs or contact the administrator.");
 			ui = null;
@@ -61,7 +61,7 @@ public class Step2 extends WelcomeTourWizardStep
 						// parse the model
 						model = XStreamHelper.deserializeFromPath(
 								TopologyModel.class,
-								AppHelper.joinPathComponents(WebAppHelper.webInfConfPath, topologyFile.getName()),
+								AppHelper.joinPathComponents(AppHelper.getAbsoluteWEBINFCONFPath(), topologyFile.getName()),
 								XStreamHelper.getSerializerWithProcessedAnnotations(TopologyModel.class)
 						);
 						if(model == null)
@@ -79,7 +79,7 @@ public class Step2 extends WelcomeTourWizardStep
 					}
 					catch (Throwable t)
 					{
-						WebAppLogger.logThrowable(String.format("A problem was encountered while parsing topology '%s': ", topologyFile.getName()) + t.getMessage(), t);
+						PikaterLogger.logThrowable(String.format("A problem was encountered while parsing topology '%s': ", topologyFile.getName()) + t.getMessage(), t);
 						omittedModels.add(topologyFile.getName());
 					}
 				}

@@ -7,27 +7,49 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
 
-import org.pikater.web.WebAppLogger;
+import org.pikater.shared.logging.PikaterLogger;
 import org.reflections.Reflections;
 
 public class AppHelper
 {
-	public static final String baseAppPath = System.getProperty("user.dir");
-	public static final String srcPath = joinPathComponents(baseAppPath, "src");
-	public static final String corePath = joinPathComponents(baseAppPath, "core");
+	//----------------------------------------------------------------------------------------------------------------
+	// APPLICATION PATHS RELATED STUFF - if you're going to use this, first set this field when the application starts
 	
-	public static String readTextFile(String path)
+	private static String baseAbsAppPath = null;
+	
+	public static void setAbsoluteBaseAppPath(String baseAbsAppPath)
 	{
-		try
-		{
-			byte[] encoded = Files.readAllBytes(Paths.get(path));
-			return Charset.defaultCharset().decode(ByteBuffer.wrap(encoded)).toString();
-		}
-		catch (IOException e)
-		{
-			WebAppLogger.logThrowable(String.format("Could not deserialize the '%s' file because of the below IO error:", path), e);
-			return null;
-		}
+		AppHelper.baseAbsAppPath = baseAbsAppPath;
+	}
+	
+	public static String getAbsoluteBaseAppPath()
+	{
+		return baseAbsAppPath;
+	}
+	
+	public static String getAbsoluteSRCPath()
+	{
+		return joinPathComponents(getAbsoluteBaseAppPath(), "src");
+	}
+	
+	public static String getAbsoluteCorePath()
+	{
+		return joinPathComponents(getAbsoluteBaseAppPath(), "core");
+	}
+	
+	public static String getAbsoluteWEBINFPath()
+	{
+		return joinPathComponents(getAbsoluteBaseAppPath(), "WEB-INF");
+	}
+	
+	public static String getAbsoluteWEBINFCLASSESPath()
+	{
+		return joinPathComponents(getAbsoluteWEBINFPath(), "classes");
+	}
+	
+	public static String getAbsoluteWEBINFCONFPath()
+	{
+		return joinPathComponents(getAbsoluteWEBINFPath(), "conf");
 	}
 	
 	/**
@@ -52,9 +74,27 @@ public class AppHelper
 		return result.toString();
 	}
 	
-	public static String getPath(Class<?> clazz)
+	public static String getAbsolutePath(String basePath, Class<?> clazz)
 	{
-		return srcPath + clazz.getPackage().getName().replace(".", "/") + System.getProperty("file.separator");
+		return joinPathComponents(basePath, clazz.getPackage().getName().replace(".", System.getProperty("file.separator")))
+				+ System.getProperty("file.separator"); 
+	}
+	
+	//----------------------------------------------------------------------------------------------------------------
+	// OTHER PUBLIC ROUTINES
+	
+	public static String readTextFile(String path)
+	{
+		try
+		{
+			byte[] encoded = Files.readAllBytes(Paths.get(path));
+			return Charset.defaultCharset().decode(ByteBuffer.wrap(encoded)).toString();
+		}
+		catch (IOException e)
+		{
+			PikaterLogger.logThrowable(String.format("Could not deserialize the '%s' file because of the below IO error:", path), e);
+			return null;
+		}
 	}
 	
 	public static <T> Set<Class<? extends T>> getSubtypesFromSamePackage(Class<T> clazz)

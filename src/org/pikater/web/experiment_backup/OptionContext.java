@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import org.pikater.core.options.RBFNetwork_CABox;
-import org.pikater.shared.AppHelper;
 
 public class OptionContext
 {
 	// -----------------------------------------------
 	// PRIVATE FIELDS
 		
-	private static final String thisPath = AppHelper.getPath(OptionContext.class);
+	private static final String thisPath = null; // AppHelper.getAbsolutePath(OptionContext.class);
 	
 	/**
 	 * The directory where all the serialized XML files are.

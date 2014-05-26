@@ -1,8 +1,7 @@
-package org.pikater.web.config;
+package org.pikater.web;
 
 import java.io.IOException;
 
-import org.pikater.web.WebAppHelper;
 import org.pikater.shared.AppHelper;
 import org.pikater.shared.RemoteServerInfo;
 import org.pikater.shared.TopologyModel;
@@ -39,6 +38,6 @@ public final class TopologyGenerator
 		);
 		
 		XStream serializer = XStreamHelper.getSerializerWithProcessedAnnotations(TopologyModel.class);
-		XStreamHelper.serializeToFile(AppHelper.joinPathComponents(WebAppHelper.webInfConfPath, "jadeTopology1.xml"), model, serializer);
+		XStreamHelper.serializeToFile(AppHelper.joinPathComponents(AppHelper.getAbsoluteWEBINFCONFPath(), "jadeTopology1.xml"), model, serializer);
 	}
 }

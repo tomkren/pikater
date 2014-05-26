@@ -1,10 +1,9 @@
 package org.pikater.web.config;
 
+import java.io.File;
 import java.util.Properties;
 
-import org.pikater.web.resources.PropertiesHandler;
-
-import com.vaadin.server.FileResource;
+import org.pikater.shared.PropertiesHandler;
 
 public class ServerConfiguration extends PropertiesHandler
 {
@@ -23,14 +22,14 @@ public class ServerConfiguration extends PropertiesHandler
 	public final String forceUseTopologies;
 	public final String forceLeaveTopologies;
 	
-	public ServerConfiguration(FileResource resource)
+	public ServerConfiguration(File resource)
 	{
 		Properties prop = openProperties(resource);
 		if(prop != null)
 		{
-			defaultAdminAccountAllowed = new Boolean(getProperty(resource.getFilename(), prop, property_allowDefaultAdminAccount));
-			forceUseTopologies = getProperty(resource.getFilename(), prop, property_forceUseTopologies);
-			forceLeaveTopologies = getProperty(resource.getFilename(), prop, property_forceLeaveTopologies);
+			defaultAdminAccountAllowed = new Boolean(getProperty(prop, property_allowDefaultAdminAccount));
+			forceUseTopologies = getProperty(prop, property_forceUseTopologies);
+			forceLeaveTopologies = getProperty(prop, property_forceLeaveTopologies);
 		}
 		else
 		{
