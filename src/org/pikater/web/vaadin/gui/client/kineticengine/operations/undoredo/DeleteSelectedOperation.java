@@ -38,8 +38,9 @@ public class DeleteSelectedOperation extends BiDiOperation
 		{
 			for(EdgePrototype edge : box.connectedEdges)
 			{
-				if(!edge.getMasterNode().isRegistered())
+				if(!edge.getMasterNode().isRegistered()) // only add each edge once (it has 2 endpoints)
 				{
+					edge.registerEdgeInEndpoints();
 					edge.registerInKinetic();
 				}
 			}
@@ -62,8 +63,9 @@ public class DeleteSelectedOperation extends BiDiOperation
 		{
 			for(EdgePrototype edge : box.connectedEdges)
 			{
-				if(edge.getMasterNode().isRegistered())
+				if(edge.getMasterNode().isRegistered()) // only remove each edge once (it has 2 endpoints)
 				{
+					edge.unregisterEdgeInEndpoints();
 					edge.unregisterInKinetic();
 				}
 			}

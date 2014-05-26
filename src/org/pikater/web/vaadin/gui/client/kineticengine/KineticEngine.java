@@ -353,7 +353,8 @@ public final class KineticEngine
 		Map<BoxPrototype, Integer> nativeBoxToResultID = new HashMap<BoxPrototype, Integer>();
 		for(BoxPrototype box : allBoxes)
 		{
-			Integer serializedBoxID = result.addLeafBoxAndReturnID(new UniversalGui((int)box.getAbsoluteNodePosition().x, (int)box.getAbsoluteNodePosition().y), box.info);
+			Vector2d position = box.getAbsoluteNodePosition();
+			Integer serializedBoxID = result.addLeafBoxAndReturnID(new UniversalGui((int) position.x, (int) position.y), box.info);
 			nativeBoxToResultID.put(box, serializedBoxID);
 		}
 		

@@ -137,13 +137,13 @@ public class EdgePrototype extends ExperimentGraphItem
 		this.fromBoxDragMark.setFill(Colour.paleturquoise);
 		this.fromBoxDragMark.setDraggable(false);
 		this.fromBoxDragMark.setName(GlobalEngineConfig.name_edge_fromDrag);
-		this.fromBoxDragMark.hide();
+		// this.fromBoxDragMark.hide();
 		
 		this.toBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, dragMarkSize));
 		this.toBoxDragMark.setFill(Colour.paleturquoise);
 		this.toBoxDragMark.setDraggable(false);
 		this.toBoxDragMark.setName(GlobalEngineConfig.name_edge_toDrag);
-		this.toBoxDragMark.hide();
+		// this.toBoxDragMark.hide();
 		
 		this.groupContainer.add(this.arrow);
 		this.groupContainer.add(this.fromBoxDragMark);
@@ -283,7 +283,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	}
 	
 	// **********************************************************************************************
-	// PUBLIC INTERFACE
+	// JUST SOME GETTERS AND UNIMPORTANT PUBLIC ROUTINES
 	
 	public static List<EdgePrototype> getInstancesFrom(KineticShapeCreator shapeCreator, Layer dynamicLayer)
 	{
@@ -303,42 +303,6 @@ public class EdgePrototype extends ExperimentGraphItem
 			result.add(shapeCreator.createEdge(NodeRegisterType.MANUAL, container, baseLine));
 		}
 		return result;
-	}
-	
-	public void connectFromBox(BoxPrototype box)
-	{
-		if(this.fromBox != null)
-		{
-			this.fromBox.unregisterEdge(this);
-		}
-		this.fromBox = box;
-		if(box != null)
-		{
-			this.fromBox.registerEdge(this);
-			if(this.toBox != null)
-			{
-				this.fromBoxDragMark.show();
-				this.toBoxDragMark.show();
-			}
-		}
-	}
-	
-	public void connectToBox(BoxPrototype box)
-	{
-		if(this.toBox != null)
-		{
-			this.toBox.unregisterEdge(this);
-		}
-		this.toBox = box;
-		if(box != null)
-		{
-			this.toBox.registerEdge(this);
-			if(this.fromBox != null)
-			{
-				this.fromBoxDragMark.show();
-				this.toBoxDragMark.show();
-			}
-		}
 	}
 	
 	public BoxPrototype getEndPoint(EndPoint endPoint)
@@ -403,6 +367,53 @@ public class EdgePrototype extends ExperimentGraphItem
 	{
 		assert(isExactlyOneEndSelected());
 		return fromBox.isSelected() ? toBox : fromBox;
+	}
+	
+	// **********************************************************************************************
+	// OTHER IMPORTANT PUBLIC METHODS
+	
+	/**
+	 * When using this method, keep in mind that eventually {@link #registerEdgeInEndpoints} need to be
+	 * called to keep consistency.
+	 */
+	public void connectFromBox(BoxPrototype box)
+	{
+		if(this.fromBox != null)
+		{
+			this.fromBox.unregisterEdge(this);
+		}
+		this.fromBox = box;
+	}
+	
+	/**
+	 * When using this method, keep in mind that eventually {@link #registerEdgeInEndpoints} need to be
+	 * called to keep consistency.
+	 */
+	public void connectToBox(BoxPrototype box)
+	{
+		if(this.toBox != null)
+		{
+			this.toBox.unregisterEdge(this);
+		}
+		this.toBox = box;
+	}
+
+	/**
+	 * Only call this method after both endpoints have been correctly set with the
+	 * {@link #connectFromBox} and {@link #connectToBox} methods.
+	 */
+	public void registerEdgeInEndpoints()
+	{
+		assert((fromBox != null) && (toBox != null));
+		this.fromBox.registerEdge(this);
+		this.toBox.registerEdge(this);
+	}
+	
+	public void unregisterEdgeInEndpoints()
+	{
+		assert((fromBox != null) && (toBox != null));
+		this.fromBox.unregisterEdge(this);
+		this.toBox.unregisterEdge(this);
 	}
 	
 	public void updateEdge()
@@ -487,7 +498,7 @@ public class EdgePrototype extends ExperimentGraphItem
 		baseLine.show();
 	}
 	
-	public void toEdge_onFinish(boolean updateEdge)
+	private void toEdge_onFinish(boolean updateEdge)
 	{
 		// IMPORTANT: don't violate the call order
 		
@@ -499,6 +510,7 @@ public class EdgePrototype extends ExperimentGraphItem
 		{
 			updateEdge();
 		}
+		registerEdgeInEndpoints();
 		
 		// and switch visible components
 		baseLine.hide();
