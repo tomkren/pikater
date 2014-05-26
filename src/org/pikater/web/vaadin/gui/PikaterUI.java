@@ -92,6 +92,8 @@ public class PikaterUI extends UI
 		 * TODO: BoxInfo reference should be a reversible IDs... since box definitions have no decent IDs, we have to make
 		 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
 		 * case we will have to manually check for newer versions when validating the experiments.
+		 * TODO: cellBrowserDnD drags the label component instead of the custom inner layout sometimes and class cast issues occur...
+		 * TODO: adding datasets: ARFF, CSV, XLS
 		 */ 
 		
 		/*

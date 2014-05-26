@@ -21,7 +21,7 @@ public class DraggableCellBrowserCell extends DragAndDropWrapper
 	
 	public void enableDnD()
 	{
-		setDragStartMode(DragStartMode.COMPONENT);
+		setDragStartMode(DragStartMode.WRAPPER);
 	}
 	
 	public void disableDnD()

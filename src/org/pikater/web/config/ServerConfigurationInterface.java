@@ -19,9 +19,9 @@ public class ServerConfigurationInterface
 	/**
 	 * Unique keys to use for the attributes to store.
 	 */
+	private static ServletContext context = null;
 	private static ServerConfiguration config = null;
 	private static JadeTopologies jadeTopologies = null;
-	private static ServletContext context = null;
 	private static BoxInfoCollection boxDefinitions = null;
 	private static MainUIExtensionClientRpc universalClientConnector = null;
 	
@@ -106,7 +106,7 @@ public class ServerConfigurationInterface
 		return universalClientConnector;
 	}
 
-	public static boolean isEverythingOK()
+	public static boolean isApplicationReadyToServe()
 	{
 		return (getContext() != null) && 
 				(getConfig() != null) && getConfig().isValid() && 

@@ -37,8 +37,10 @@ public class BoxPrototype extends ExperimentGraphItem
 	
 	/**
 	 * Edges leading from and to this box and iterator over these 2 sets.
+	 * The Set interface is counted upon in {@link #registerEdge} and {@link #unregisterEdge}
+	 * methods so don't change it lightly.
 	 */
-	public final Set<EdgePrototype> connectedEdges;
+	public final Set<EdgePrototype> connectedEdges; 
 	
 	// **********************************************************************************************
 	// INNER KINETIC COMPONENTS
