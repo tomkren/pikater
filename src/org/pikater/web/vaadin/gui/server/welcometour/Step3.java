@@ -27,7 +27,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
@@ -42,11 +41,10 @@ public class Step3 extends WelcomeTourWizardStep
 	/**
 	 * Individual low-level GUI components.
 	 */
-	private final TabSheet tabPanel;
-	private final Tab tab_console;
+	private final TabSheet tabSheet;
 	private final Table connectionTable;
 	private Component lastConsoleComponentUsed;
-	private final Label default_Component;
+	private final Label defaultComponent;
 	
 	/**
 	 * Various other variables.
@@ -83,6 +81,7 @@ public class Step3 extends WelcomeTourWizardStep
 						Notification.show("Pikater could not be launched on some of the servers. You can use the console to find out what went wrong.", 
 								Type.ERROR_MESSAGE);
 					}
+					tabSheet.getTab(defaultComponent).setEnabled(true);
 				}
 				else
 				{
@@ -124,7 +123,7 @@ public class Step3 extends WelcomeTourWizardStep
 		/*
 		 * Setup the GUI.
 		 * Let's stick with a single table for now but eventually:
-		 * TODO - vertical TabPanel by topology - content would be all the servers in the topology, with the same table headers as now 
+		 * TODO - Accordion by topology - content would be all the servers in the topology, with the same table headers as now 
 		 */
 		
 		this.connectionTable = new Table();
@@ -146,16 +145,12 @@ public class Step3 extends WelcomeTourWizardStep
 					Component newComponent = serverIDToLauncherMapping.get(connectionTable.getValue()).getOutputConsoleComponent();
 					if(newComponent == null)
 					{
-						newComponent = default_Component;
-					}
-					else
-					{
-						newComponent.setHeight("100%");
+						newComponent = defaultComponent;
 					}
 					
-					tabPanel.replaceComponent(lastConsoleComponentUsed, newComponent);
+					tabSheet.replaceComponent(lastConsoleComponentUsed, newComponent);
 					lastConsoleComponentUsed = newComponent;
-					tabPanel.setSelectedTab(tab_console); // TODO: doesn't trigger the inner "selected tab changed event"
+					tabSheet.setSelectedTab(1);
 				}
 			}
 		});
@@ -171,17 +166,16 @@ public class Step3 extends WelcomeTourWizardStep
 		vLayout.setComponentAlignment(hLayout, Alignment.BOTTOM_LEFT);
 		vLayout.setExpandRatio(connectionTable, 1);
 		
-		this.default_Component = new Label();
-		this.lastConsoleComponentUsed = this.default_Component;
+		this.defaultComponent = new Label();
+		this.lastConsoleComponentUsed = this.defaultComponent;
 		
-		this.tabPanel = new TabSheet();
-		this.tabPanel.addTab(vLayout, "Overview of connections");
-		this.tabPanel.addTab(default_Component, "Console for selected connection");
-		this.tab_console = this.tabPanel.getTab(lastConsoleComponentUsed);
-		// this.tab_console.setEnabled(false);
-		this.tabPanel.setHeight("550px");
+		this.tabSheet = new TabSheet();
+		this.tabSheet.addTab(vLayout, "Overview of connections");
+		this.tabSheet.addTab(defaultComponent, "Console for selected connection");
+		this.tabSheet.getTab(defaultComponent).setEnabled(false);
+		this.tabSheet.setHeight("550px");
 		
-		this.content = tabPanel;
+		this.content = tabSheet;
 	}
 	
 	@Override

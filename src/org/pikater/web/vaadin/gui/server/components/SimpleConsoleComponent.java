@@ -41,6 +41,7 @@ public class SimpleConsoleComponent extends VerticalLayout
 	public SimpleConsoleComponent(final SSHSession session)
 	{
 		super();
+		setSizeFull();
 
 		// first setup GUI
 		this.inputField = new TextField();
