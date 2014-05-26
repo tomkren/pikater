@@ -3,8 +3,6 @@ package org.pikater.core.ontology.subtrees.newOption;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.value.IValue;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
 
 public class Value implements IRestriction {
 
@@ -18,14 +16,20 @@ public class Value implements IRestriction {
 	private IValue value;
 	private IValue defaultValue;
 
-	private RangeRestriction rangeRestriction;
-	private SetRestriction setRestriction;
-
 
 	public Value() {}
 	public Value(IValue value) {
-		this.type = new Type(value.getClass());
 		this.value = value;
+		this.type = new Type(value.getClass());
+	}
+	public Value(IValue value, Type type) {
+		this.value = value;
+		this.type = type;
+	}
+	public Value(IValue value, IValue defaultValue, Type type) {
+		this.value = value;
+		this.defaultValue = defaultValue;
+		this.type = type;
 	}
 
 	public Type getType() {
@@ -49,20 +53,6 @@ public class Value implements IRestriction {
 		this.defaultValue = defaultValue;
 	}
 
-	public RangeRestriction getRangeRestriction() {
-		return rangeRestriction;
-	}
-	public void setRangeRestriction(RangeRestriction rangeRestriction) {
-		this.rangeRestriction = rangeRestriction;
-	}
-
-	public SetRestriction getSetRestriction() {
-		return setRestriction;
-	}
-	public void setSetRestriction(SetRestriction setRestriction) {
-		this.setRestriction = setRestriction;
-	}
-
 	@Override
 	public Type getClassName() {
 		return this.type;
@@ -81,13 +71,9 @@ public class Value implements IRestriction {
 			defaultValueOk = type.equals( new Type(defaultValue.getClass()) );
 		}
 
-		boolean rangeOk = rangeRestriction.isValid();
+		boolean typeOk = type.isValid();
 
-		boolean setOk = setRestriction.isValid() &&
-				setRestriction.contains(value);
-
-
-		return valueOk && defaultValueOk && rangeOk && setOk;
+		return valueOk && defaultValueOk && typeOk;
 	}
 
 }

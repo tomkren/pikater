@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleValuesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.value.IValue;
 
 public class NewOption {
@@ -20,6 +21,11 @@ public class NewOption {
 	public NewOption(IValue value, String name) {
 		
 		this.addValue(new Value(value));
+		this.setName(name);
+	}
+	public NewOption(IValue defaultValue, Type type, String name) {
+		
+		this.addValue( new Value(null, defaultValue, type) );
 		this.setName(name);
 	}
 	public NewOption(List<IValue> values, String name) {

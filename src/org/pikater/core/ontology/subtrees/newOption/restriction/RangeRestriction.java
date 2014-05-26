@@ -14,7 +14,12 @@ public class RangeRestriction implements IRestriction {
 	private IValue minValeu;
 	private IValue maxValeu;
 	
-	
+	public RangeRestriction() {}
+	public RangeRestriction(IValue minValeu, IValue maxValeu) {
+		this.minValeu = minValeu;
+		this.maxValeu = maxValeu;
+	}
+
 	public IValue getMinValeu() {
 		return minValeu;
 	}

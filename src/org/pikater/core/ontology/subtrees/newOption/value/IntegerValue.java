@@ -9,6 +9,11 @@ public class IntegerValue implements IValue {
 
 	private int value;
 
+	public IntegerValue() {}
+	public IntegerValue(int value) {
+		this.value = value;
+	}
+
 	public int getValue() {
 		return value;
 	}

@@ -15,6 +15,11 @@ public class PossibleValuesRestriction implements IRestriction {
 	private List<List<Type>> possibleTypes;
 	
 	
+	public PossibleValuesRestriction() {}
+	public PossibleValuesRestriction(List<List<Type>> possibleTypes) {
+		this.possibleTypes = possibleTypes;
+	}
+
 	public List<List<Type>> getPossibleTypes() {
 		return possibleTypes;
 	}
