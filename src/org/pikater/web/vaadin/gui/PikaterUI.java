@@ -100,11 +100,11 @@ public class PikaterUI extends UI
 		 * Which application scenario should be loaded when the webpages are accessed?
 		 */
 		
-		// primary_displayWelcomeWizard();
+		primary_displayWelcomeWizard();
 		
 		// test_multiFileUpload();
 		// test_console();
-		test_editor();
+		// test_editor();
 		// test_simpleButton();
 		// test_JSCH();
 	}
@@ -140,6 +140,13 @@ public class PikaterUI extends UI
 							@Override
 							public void buttonClick(ClickEvent event)
 							{
+								// initialize and start the cron job scheduler
+								/*
+								if(!PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
+								{
+									throw new IllegalStateException("Application won't serve until the above errors are fixed.");
+								}
+								*/
 								display_defaultPage();
 							}
 						}));

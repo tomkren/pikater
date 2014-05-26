@@ -84,12 +84,6 @@ public class StartupAndQuitListener implements ServletContextListener
 		
 		PikaterLogger.log(Level.INFO, "***** Finished reading .properties files. *****");
 		// *****************************************************************************************************
-		
-		// initialize and start the cron job scheduler
-		if(!PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
-		{
-			throw new IllegalStateException("Application won't serve until the above errors are fixed.");
-		}
 	}
 	
 	/**
