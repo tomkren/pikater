@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.experimenteditor;
+package org.pikater.web.vaadin.gui.server.webui.experimenteditor;
 
 import java.util.ArrayList;
 import java.util.Collection;

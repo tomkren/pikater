@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.web.vaadin.gui.MainUIExtension;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
-import org.pikater.web.vaadin.gui.server.MainUIExtension;
 
 import com.vaadin.client.ServerConnector;
 import com.vaadin.client.communication.RpcProxy;

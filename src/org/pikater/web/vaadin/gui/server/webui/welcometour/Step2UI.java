@@ -1,11 +1,11 @@
-package org.pikater.web.vaadin.gui.server.welcometour;
+package org.pikater.web.vaadin.gui.server.webui.welcometour;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.web.vaadin.gui.server.MyDialogs;
-import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
+import org.pikater.web.vaadin.gui.server.webui.MyDialogs;
+import org.pikater.web.vaadin.gui.server.webui.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;

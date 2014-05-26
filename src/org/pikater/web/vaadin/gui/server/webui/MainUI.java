@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui;
+package org.pikater.web.vaadin.gui.server.webui;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -22,13 +22,12 @@ import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
-import org.pikater.web.vaadin.gui.server.MainUIExtension;
-import org.pikater.web.vaadin.gui.server.MyDialogs;
+import org.pikater.web.vaadin.gui.IUploadedFileHandler;
+import org.pikater.web.vaadin.gui.MainUIExtension;
+import org.pikater.web.vaadin.gui.MyUploads;
 import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.experimenteditor.ExperimentEditor;
-import org.pikater.web.vaadin.gui.server.components.upload.IUploadedFileHandler;
-import org.pikater.web.vaadin.gui.server.components.upload.MyUploads;
-import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
+import org.pikater.web.vaadin.gui.server.webui.experimenteditor.ExperimentEditor;
+import org.pikater.web.vaadin.gui.server.webui.welcometour.WelcomeTourWizard;
 
 import com.porotype.iconfont.FontAwesome;
 import com.vaadin.annotations.Push;
@@ -48,7 +47,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
-public class PikaterUI extends UI
+public class MainUI extends UI
 {
 	private static final long serialVersionUID = 1964653532060950402L;
 	
@@ -60,7 +59,7 @@ public class PikaterUI extends UI
 	 * which might be important if you are migrating an older application. 
 	 */
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = PikaterUI.class, widgetset = "org.pikater.web.vaadin.gui.PikaterWidgetset")
+	@VaadinServletConfiguration(productionMode = false, ui = MainUI.class, widgetset = "org.pikater.web.vaadin.gui.PikaterWidgetset")
 	public static class Servlet extends CustomConfiguredUIServlet
 	{
 		private static final long serialVersionUID = -3494370492799211606L;

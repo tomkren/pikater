@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.web.vaadin.MyResources;
-import org.pikater.web.vaadin.gui.server.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.IconButton;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.webui.MyDialogs;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;

@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.experimenteditor;
+package org.pikater.web.vaadin.gui.server.webui.experimenteditor;
 
 import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponent;

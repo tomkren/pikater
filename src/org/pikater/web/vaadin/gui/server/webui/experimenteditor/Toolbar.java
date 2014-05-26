@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.experimenteditor;
+package org.pikater.web.vaadin.gui.server.webui.experimenteditor;
 
 import org.pikater.shared.experiment.webformat.ExperimentMetadata;
 import org.pikater.web.config.ServerConfigurationInterface;

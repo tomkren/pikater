@@ -1,11 +1,11 @@
-package org.pikater.web.vaadin.gui.server;
+package org.pikater.web.vaadin.gui;
 
 import java.util.logging.Level;
 
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.vaadin.gui.PikaterUI;
 import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionServerRpc;
+import org.pikater.web.vaadin.gui.server.webui.MainUI;
 
 import com.vaadin.server.AbstractExtension;
 
@@ -47,7 +47,7 @@ public class MainUIExtension extends AbstractExtension
 	 * Exposing the inherited API.
 	 * @param mainUI
 	 */
-	public void extend(PikaterUI mainUI)
+	public void extend(MainUI mainUI)
     {
         super.extend(mainUI);
     }

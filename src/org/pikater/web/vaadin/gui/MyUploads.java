@@ -1,9 +1,11 @@
-package org.pikater.web.vaadin.gui.server.components.upload;
+package org.pikater.web.vaadin.gui;
 
 import java.io.Serializable;
 import java.util.List;
 
 import org.pikater.web.HttpContentType;
+import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
+import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 
 /**
  * A class wrapping multi-file upload functionality. A single instance is meant to be used in each vaadin session - when

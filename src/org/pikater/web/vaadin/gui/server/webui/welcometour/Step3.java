@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.welcometour;
+package org.pikater.web.vaadin.gui.server.webui.welcometour;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,8 +14,8 @@ import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.pikater.PikaterSSHLauncher;
-import org.pikater.web.vaadin.gui.server.welcometour.Step3TableContainer;
-import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
+import org.pikater.web.vaadin.gui.server.webui.welcometour.Step3TableContainer;
+import org.pikater.web.vaadin.gui.server.webui.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.Alignment;

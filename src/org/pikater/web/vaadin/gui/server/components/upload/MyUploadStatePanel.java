@@ -1,5 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.upload;
 
+import org.pikater.web.vaadin.gui.UploadState;
+
 import com.vaadin.server.StreamVariable;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
 import com.vaadin.server.StreamVariable.StreamingErrorEvent;

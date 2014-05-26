@@ -1,18 +1,20 @@
-package org.pikater.web.vaadin.gui.server.welcometour;
+package org.pikater.web.vaadin.gui.server.webui.welcometour;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
-import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
+import org.pikater.web.vaadin.gui.server.webui.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 
 @SuppressWarnings("serial")
-public class Step3TableContainer implements Container
+public class Step2TableContainer implements Container
 {
 	private static final Collection<Header> headers = new ArrayList<Header>()
 	{
@@ -20,33 +22,60 @@ public class Step3TableContainer implements Container
 			add(Header.SERVERTYPE); // read-only
 			add(Header.HOSTNAME);
 			add(Header.USERNAME);
-			add(Header.INCLUDE);
-			add(Header.STATUS); // read-only
+			add(Header.PASSWORD);
+			add(Header.DIRECTORY);
 		}
 	};
-	
-	private final Map<Integer, RemoteServerInfoItemInner> remoteServers;
-	
-	public Step3TableContainer(Collection<RemoteServerInfoItem> wrappedModels)
-	{
-		/*
-		 * IMPORTANT: note that only inner information (username, ...) will be updated when setting up the application. Not the
-		 * list of remote masters and slaves - it is final, so we can safely construct items in the constructor and don't
-		 * mind whether some of them are added/removed later.
-		 */
 		
-		this.remoteServers = new HashMap<Integer, RemoteServerInfoItemInner>();
+	private String filterOnlyMachinesFromThisTopology;
+	private boolean filterFilled;
+	private final Map<Integer, RemoteServerInfoItemInner> data;
+	
+	public Step2TableContainer(Collection<RemoteServerInfoItem> allServers)
+	{
+		this.filterOnlyMachinesFromThisTopology = null;
+		this.filterFilled = Step2UI.filterFilledDefaultValue;
+		
 		int id = 1;
-		for(RemoteServerInfoItem wrappedModel : wrappedModels)
+		this.data = new HashMap<Integer, RemoteServerInfoItemInner>();
+		for(RemoteServerInfoItem serverProperties : allServers)
 		{
-			this.remoteServers.put(id, new RemoteServerInfoItemInner(wrappedModel));
+			data.put(id, new RemoteServerInfoItemInner(serverProperties));
 			id++;
 		}
 	}
 	
-	public RemoteServerInfoItem getInfoInstanceByID(Object id)
+	public void setFilterOnlyMachinesFromModel(String topologyName)
 	{
-		return getItem(id).serverInfoProperties;
+		filterOnlyMachinesFromThisTopology = topologyName;
+	}
+	
+	public void setFilterFilled(boolean enabled)
+	{
+		filterFilled = enabled;
+	}
+	
+	public void setDisplayPasswordsInPlainText(boolean enabled)
+	{
+		for(Integer id : data.keySet())
+		{
+			getItem(id).serverInfoProperties.setDisplayPasswordsInPlainText(enabled);
+		}
+	}
+	
+	public void batchSetValues(Set<Integer> ids, Header header, String newValue)
+	{
+		if(header.supportsBatchSet())
+		{
+			for(Integer itemID : ids)
+			{
+				getItem(itemID).serverInfoProperties.setValueForProperty(header, newValue);
+			}
+		}
+		else
+		{
+			throw new UnsupportedOperationException();
+		}
 	}
 	
 	@Override
@@ -64,7 +93,36 @@ public class Step3TableContainer implements Container
 	@Override
 	public Collection<?> getItemIds()
 	{
-		return remoteServers.keySet();
+		Collection<Integer> result = new ArrayList<Integer>();
+		if(filterOnlyMachinesFromThisTopology != null)
+		{
+			for(Entry<Integer, RemoteServerInfoItemInner> entry : data.entrySet())
+			{
+				if(entry.getValue().serverInfoProperties.getProperty(Header.TOPOLOGYNAME).getValue() == filterOnlyMachinesFromThisTopology)
+				{
+					result.add(entry.getKey());
+				}
+			}
+		}
+		else
+		{
+			result.addAll(data.keySet());
+		}
+		
+		if(filterFilled)
+		{
+			Collection<Integer> toRemove = new ArrayList<Integer>();
+			for(Integer idToCheck : result)
+			{
+				if(!data.get(idToCheck).serverInfoProperties.isHostnameUsernameOrPasswordMissing()) // nothing is missing
+				{
+					toRemove.add(idToCheck);
+				}
+			}
+			result.removeAll(toRemove);
+		}
+		
+		return result;
 	}
 	
 	@Override
@@ -76,13 +134,13 @@ public class Step3TableContainer implements Container
 	@Override
 	public boolean containsId(Object itemId)
 	{
-		return remoteServers.containsKey(itemId);
+		return data.containsKey(itemId);
 	}
 	
 	@Override
 	public RemoteServerInfoItemInner getItem(Object itemId)
 	{
-		return remoteServers.get(itemId);
+		return data.get(itemId);
 	}
 
 	@Override
@@ -145,7 +203,7 @@ public class Step3TableContainer implements Container
 		@Override
 		public Collection<?> getItemPropertyIds()
 		{
-			return headers;
+			return Step2TableContainer.headers;
 		}
 		
 		@Override

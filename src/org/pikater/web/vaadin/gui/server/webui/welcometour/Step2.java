@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.welcometour;
+package org.pikater.web.vaadin.gui.server.webui.welcometour;
 
 import java.io.File;
 import java.io.FilenameFilter;

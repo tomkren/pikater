@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.upload;
+package org.pikater.web.vaadin.gui;
 
 import java.io.InputStream;
 

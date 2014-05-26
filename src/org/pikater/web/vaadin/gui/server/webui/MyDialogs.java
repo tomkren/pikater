@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server;
+package org.pikater.web.vaadin.gui.server.webui;
 
 import org.vaadin.dialogs.ConfirmDialog;
 

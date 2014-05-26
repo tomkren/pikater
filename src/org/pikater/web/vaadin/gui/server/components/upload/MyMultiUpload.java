@@ -1,5 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.upload;
 
+import org.pikater.web.vaadin.gui.UploadState;
+
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.MultiFileUpload;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
