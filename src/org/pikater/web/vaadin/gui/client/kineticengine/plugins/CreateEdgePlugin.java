@@ -57,11 +57,10 @@ public final class CreateEdgePlugin implements IEnginePlugin
 				event.stopVerticalPropagation();
 				event.setProcessed();
 			}
-			else if((kineticEngine.getClickMode() == KineticComponentClickMode.CONNECTION)
+			else if((kineticEngine.getClickMode() == KineticComponentClickMode.CONNECTION) 
 					|| GWTKeyboardManager.isAltKeyDown()) // when it's either clear we want to connect or the right modifier key is down 
 			{
 				// start this create edge operation
-				
 				fromEndPoint = parentBox;
 				fromEndPoint.highlightAsNewEndpointCandidate();
 				newEdge = kineticEngine.getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromEndPoint, null);

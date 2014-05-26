@@ -7,6 +7,7 @@ import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServer
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.experimenteditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.components.experimenteditor.ExperimentEditor;
+import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractComponent;
@@ -70,6 +71,12 @@ public class KineticComponent extends AbstractComponent
 			public void response_reloadVisualStyle()
 			{
 				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void command_alterClickModeNotification(KineticComponentClickMode newClickMode)
+			{
+				KineticComponent.this.parentEditor.getToolbar().onClickModeAlteredOnClient(newClickMode);
 			}
 		});
 	}

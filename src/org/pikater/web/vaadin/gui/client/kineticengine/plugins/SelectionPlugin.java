@@ -54,7 +54,7 @@ public class SelectionPlugin implements IEnginePlugin
  			{
  				// select or deselect this box only
 	 			invertSelection(false, parentBox);
-	 			handleInnerFinish(event);
+	 			onFinish(event);
  			}
  			else if(kineticEngine.getClickMode() == KineticComponentClickMode.SELECTION) // it's clear we want to select
  			{
@@ -86,18 +86,18 @@ public class SelectionPlugin implements IEnginePlugin
  						invertSelection(false, parentBox);
  					}
  				}
- 				handleInnerFinish(event);
+ 				onFinish(event);
  			}
-			// else - silently let the event go (it could be processed by some other plugins later)
+			// else - silently let the event go (it could be processed by some other plugin later)
 		}
 		
-		private void handleInnerFinish(KineticEvent event)
+		private void onFinish(KineticEvent event)
 		{
 			kineticEngine.draw(EngineComponent.STAGE);
  			event.setProcessed();
  			event.stopVerticalPropagation();
 		}
-
+		
 		@Override
 		protected String getListenerID()
 		{

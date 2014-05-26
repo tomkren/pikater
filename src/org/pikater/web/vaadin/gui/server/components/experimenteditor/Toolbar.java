@@ -30,7 +30,6 @@ public class Toolbar extends VerticalLayout
 	/*
 	 * References to dynamic inner components.
 	 */
-	
 	private ComboBox clickModeCB;
 	
 	public Toolbar(ExperimentEditor parentEditor, boolean debugMode)
@@ -220,6 +219,11 @@ public class Toolbar extends VerticalLayout
 		{
 			clickModeCB.select(newActiveTabContent.getState().clickMode.name());
 		}
+	}
+	
+	public void onClickModeAlteredOnClient(KineticComponentClickMode newClickMode)
+	{
+		clickModeCB.select(newClickMode.name());
 	}
 	
 	//---------------------------------------------------------------

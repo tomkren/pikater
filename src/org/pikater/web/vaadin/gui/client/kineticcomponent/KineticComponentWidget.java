@@ -7,7 +7,6 @@ import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.Experiment;
 import org.pikater.shared.experiment.webformat.ExperimentMetadata;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
@@ -16,6 +15,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.plugins.CreateEdgePlugin;
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.DragEdgePlugin;
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
 import org.pikater.web.vaadin.gui.client.kineticengine.plugins.TrackMousePlugin;
+import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -128,8 +128,18 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 							undoRedoManager.redo();
 						}
 						break;
+					case 87: // W
+						if(GWTKeyboardManager.isAltKeyDown())
+						{
+							// first alter the click mode
+							KineticComponentClickMode newClickMode = getSharedState().clickMode.getOther();
+							getSharedState().clickMode = newClickMode;
+							// and send notification to the server
+							command_alterClickModeNotification(newClickMode);
+						}
+						break;
 					default:
-						GWTLogger.logWarning("KeyCode down: " + event.getNativeEvent().getKeyCode());
+						// GWTLogger.logWarning("KeyCode down: " + event.getNativeEvent().getKeyCode());
 						break;
 				}
 				event.stopPropagation();
@@ -243,7 +253,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	// *****************************************************************************************************
-	// COMMANDS FROM CLIENT
+	// COMMANDS TO SERVER
 	
 	@Override
 	public void command_setExperimentModified(boolean modified)
@@ -268,6 +278,12 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	{
 		getServerRPC().response_sendExperimentToSave(metadata, experiment);
 		getUndoRedoManager().clear();
+	}
+	
+	@Override
+	public void command_alterClickModeNotification(KineticComponentClickMode newClickMode)
+	{
+		getServerRPC().command_alterClickModeNotification(newClickMode);
 	}
 	
 	// *****************************************************************************************************

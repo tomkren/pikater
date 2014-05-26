@@ -13,11 +13,7 @@ import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
 import com.vaadin.annotations.StyleSheet;
-import com.vaadin.event.ShortcutListener;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 
 @StyleSheet("experimentEditor.css")
@@ -75,8 +71,6 @@ public class ExperimentEditor extends AutoVerticalBorderLayout implements ITabSh
 		setComponent(Border.SOUTH, this.boxCellBrowser);
 		setRowHeight(Row.CENTER, DimensionMode.MAX);
 		setColumnWidth(Column.CENTER, DimensionMode.MAX);
-		
-		setupKeyboardShortcuts();
 	}
 	
 	// -------------------------------------------------------------
@@ -92,6 +86,11 @@ public class ExperimentEditor extends AutoVerticalBorderLayout implements ITabSh
 	public void onTabSelectionChange()
 	{
 		toolbar.onTabSelectionChange(getActiveKineticComponent());
+	}
+	
+	public Toolbar getToolbar()
+	{
+		return toolbar;
 	}
 	
 	public CustomTabSheetTabComponent getActiveTab()
@@ -140,19 +139,5 @@ public class ExperimentEditor extends AutoVerticalBorderLayout implements ITabSh
 	{
 		KineticComponent contentComponent = new KineticComponent(this);
 		experimentTabs.addTab(new CustomTabSheetTabComponent(tabCaption, contentComponent), new KineticDnDWrapper(contentComponent));
-	}
-	
-	private void setupKeyboardShortcuts()
-	{
-		addShortcutListener(new ShortcutListener("", KeyCode.W, new int[] { ModifierKey.ALT })
-		{
-			private static final long serialVersionUID = -2663938584703545141L;
-
-			@Override
-			public void handleAction(Object sender, Object target)
-			{
-				Notification.show("Switch hit!");
-			}
-		});
 	}
 }
