@@ -1,7 +1,12 @@
 package org.pikater.core.agents.system;
 
+import java.util.List;
+
+import jade.content.Concept;
 import jade.content.ContentElement;
+import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
@@ -12,17 +17,18 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.NotUnderstoodException;
+import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
+import jade.proto.AchieveREResponder;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
-// import jade.util.leap.ArrayList;
-import jade.util.leap.Iterator;
-import jade.util.leap.List;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,17 +47,28 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
+import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.ontology.actions.BatchOntology;
+import org.pikater.core.ontology.actions.ExperimentOntology;
+import org.pikater.core.ontology.actions.FilenameTranslationOntology;
+import org.pikater.core.ontology.actions.MessagesOntology;
+import org.pikater.core.ontology.batch.ExecuteBatch;
+import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.ExecuteParameters;
+import org.pikater.core.ontology.messages.Problem;
 import org.pikater.core.ontology.messages.Results;
 import org.pikater.core.ontology.messages.Task;
 import org.pikater.core.ontology.messages.TaskOutput;
@@ -67,6 +84,8 @@ public class Agent_Manager extends PikaterAgent {
 
 	private static final long serialVersionUID = -5140758757320827589L;
 	
+	private Ontology ontology = MessagesOntology.getInstance();
+	
 	private final String NO_XML_OUTPUT ="no_xml_output";
 	private boolean no_xml_output = true;
 	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
@@ -78,6 +97,19 @@ public class Agent_Manager extends PikaterAgent {
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
 	}
+	
+	@Override
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(BatchOntology.getInstance());
+		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(FilenameTranslationOntology.getInstance());
+		
+		return ontologies;
+	}
+	
 	
 	protected void setup() {
 
@@ -101,25 +133,148 @@ public class Agent_Manager extends PikaterAgent {
 						MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE),
 								MessageTemplate.MatchPerformative(ACLMessage.CANCEL));
 		
+        addBehaviour(new ParserBehaviour(this, getCodec(), ontology));
+		
+		
 		addBehaviour (new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
 		
 		addBehaviour (new RequestServer(this));
 		
 	} // end setup
-	
-
-	protected void fillQueues(int graphId, int nodeId, ArrayList<TaskOutput> output){
-		ComputationNode computationNode = getGraph(graphId).getNode(nodeId);
 		
-		java.util.Iterator<TaskOutput> itr = output.iterator();
-		while (itr.hasNext()) {
-			TaskOutput to = (TaskOutput) itr.next();
-			DataSourceEdge dse = new DataSourceEdge();
-			dse.setDataSourceId(to.getName());								
-			computationNode.addToOutputAndProcess(dse, to.getType());			 			
-		}			
+	
+	public String getHashOfFile(String nameOfFile) {
+		
+		TranslateFilename translate = new TranslateFilename();
+		translate.setExternalFilename(nameOfFile);
+		translate.setUserID(1);
 
-	}	
+		// create a request message with SendProblem content
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(this.getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+		msg.setLanguage(codec.getName());
+		msg.setOntology(FilenameTranslationOntology.getInstance().getName());
+		// We want to receive a reply in 30 secs
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
+
+		Action a = new Action();
+		a.setAction(translate);
+		a.setActor(this.getAID());
+
+		try {
+			// Let JADE convert from Java objects to string
+			this.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			ce.printStackTrace();
+		} catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+
+
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(this, msg);
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ContentElement content = null;
+		String fileHash = null;
+
+		try {
+			content = getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (CodecException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (OntologyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			fileHash = (String) result.getValue();
+		}
+		
+		return fileHash;
+	}
+}
+
+
+class ParserBehaviour extends AchieveREResponder {
+
+	private static final long serialVersionUID = 4754473043512463873L;
+	
+	private Agent_Manager agent;
+	private Codec codec = null;
+	private Ontology ontology = null;
+
+    public ParserBehaviour(
+    		Agent_Manager agent_Manager, Codec codec, Ontology ontology) {
+    	super(agent_Manager, MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+    	
+		this.agent = agent_Manager;
+		this.codec = codec;
+		this.ontology = ontology;
+    }
+    
+    @Override
+    protected ACLMessage handleRequest(final ACLMessage request) throws NotUnderstoodException, RefuseException {
+   
+    	Concept object = null;
+ 
+    	try {
+        	//Serializable object = request.getContentObject();
+            object = ((Action)(agent.getContentManager().extractContent(request))).getAction();
+        } catch (UngroundedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CodecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+            
+  
+        ACLMessage reply = request.createReply();
+        
+    	if (object instanceof ExecuteBatch) {
+    		
+    		ExecuteBatch executeExperiment =
+    				(ExecuteBatch) object;
+    		ComputationDescription comDescription =
+					executeExperiment.getDescription();
+    		
+    		Parser parser = new Parser(this.agent);
+    		parser.parseRoots(comDescription);
+    		
+    		ComputationGraph computationGraph = parser.getComputationGraph();
+
+    		computationGraph.startComputation();
+
+    		// Problem parsed - reply OK
+            reply.setPerformative(ACLMessage.INFORM);
+            reply.setLanguage(codec.getName());
+            reply.setOntology(ontology.getName());
+            reply.setContent("OK");
+        }
+   
+        return reply;
+
+    }
+	
 	
 	private ComputationGraph getGraph(int id){
 		// TODO: napsat
@@ -144,7 +299,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	private void ProcessNextQueryFromSearch(ACLMessage query, List options){
         ACLMessage req = createRequestFromSearchQuery(query, options);
-        addBehaviour(new ExecuteTask(this, req, query));
+        addBehaviour(new ExecuteTaskBehaviour(this, req, query, null));
 
 	} // end ProcessNextQueryFromSearch
 	
@@ -743,7 +898,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	//Create schema of solutions from options (Convert options->schema)
 	private List convertOptionsToSchema(List options){
-		List new_schema = new ArrayList();
+		ArrayList new_schema = new ArrayList();
 		if(options==null)
 			return new_schema;
 		Iterator itr = options.iterator();

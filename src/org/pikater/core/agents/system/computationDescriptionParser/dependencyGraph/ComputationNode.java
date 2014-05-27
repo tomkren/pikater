@@ -60,7 +60,7 @@ public class ComputationNode {
 
     public void addOutput(String outputName)
     {
-        outputs.putIfAbsent(outputName,new ArrayList<>() );
+        outputs.putIfAbsent(outputName, new ArrayList<ComputationOutputBuffer<EdgeValue>>() );
     }
 
     public void addBufferToOutput(String outputName,ComputationOutputBuffer buffer)
