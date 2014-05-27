@@ -2,6 +2,9 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 
 import java.util.HashMap;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 /**
  * User: Kuba
  * Date: 11.5.2014
@@ -10,6 +13,17 @@ import java.util.HashMap;
 public class ComputationGraph {
     private HashMap<Integer,ComputationNode> nodes=new HashMap<>();
 
+    private int id;
+    
+    public ComputationGraph()
+    {
+        String initBeansName = "Beans.xml";
+        ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
+        GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
+        id=generator.getAndAllocateGUID();
+    }
+    
+    
     public HashMap<Integer, ComputationNode> getNodes() {
         return nodes;
     }
@@ -31,5 +45,13 @@ public class ComputationGraph {
                    node.startComputation();
                }
            }
+    }
+        
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

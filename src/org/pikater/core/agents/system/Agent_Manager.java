@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.ArrayList;
 
@@ -41,20 +42,25 @@ import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
-import org.pikater.core.ontology.messages.BoolSItem;
 import org.pikater.core.ontology.messages.Eval;
 import org.pikater.core.ontology.messages.Evaluation;
 import org.pikater.core.ontology.messages.Execute;
 import org.pikater.core.ontology.messages.ExecuteParameters;
-import org.pikater.core.ontology.messages.FloatSItem;
-import org.pikater.core.ontology.messages.IntSItem;
 import org.pikater.core.ontology.messages.Results;
-import org.pikater.core.ontology.messages.SearchSolution;
-import org.pikater.core.ontology.messages.SetSItem;
 import org.pikater.core.ontology.messages.Task;
+import org.pikater.core.ontology.messages.TaskOutput;
 import org.pikater.core.ontology.messages.option.Option;
+import org.pikater.core.ontology.metadata.Metadata;
+import org.pikater.core.ontology.search.searchItems.BoolSItem;
+import org.pikater.core.ontology.search.searchItems.FloatSItem;
+import org.pikater.core.ontology.search.searchItems.IntSItem;
+import org.pikater.core.ontology.search.searchItems.SetSItem;
 
 
 public class Agent_Manager extends PikaterAgent {
@@ -63,7 +69,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	private final String NO_XML_OUTPUT ="no_xml_output";
 	private boolean no_xml_output = true;
-	private Set<Subscription> subscriptions = new HashSet<Subscription>();
+	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
 	private int problem_i = 0;
 	protected HashMap<Integer, ComputationCollectionItem> computationCollection = 
 			new HashMap<Integer, ComputationCollectionItem>();
@@ -101,181 +107,27 @@ public class Agent_Manager extends PikaterAgent {
 		
 	} // end setup
 	
-	
-	public class ExecuteTask extends AchieveREInitiator{
 
-		private static final long serialVersionUID = -2044738642107219180L;
-
-		private ACLMessage msg; // original message sent by whoever wants to
-		 						// compute the task (either search agent or 
-								// gui agent);
-								// to be able to send a reply
+	protected void fillQueues(int graphId, int nodeId, ArrayList<TaskOutput> output){
+		ComputationNode computationNode = getGraph(graphId).getNode(nodeId);
 		
-		public ExecuteTask(Agent_Manager a, ACLMessage req, ACLMessage msg) {
-			super(a, req);
-			this.msg = msg;
-		}
-
-		protected void handleRefuse(ACLMessage refuse) {
-	        log("Agent "+refuse.getSender().getName()+" refused.", 1);
-		}
-		
-		protected void handleFailure(ACLMessage failure) {
-			if (failure.getSender().equals(myAgent.getAMS())) {
-	            log("Responder does not exist", 1);
-			}
-			else {
-	            log("Agent "+failure.getSender().getName()+" failed.", 1);	            
-			}
-		}
-		
-		protected void handleInform(ACLMessage inform) {
-			log("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
-			
-			// when all tasks' results are sent, send reply-inform to gui agent
-			if (isLastTask()){			
-				log("Agent: " + getLocalName() + ": all results sent.");				
-
-				ACLMessage msgOut = msg.createReply();
-				msgOut.setPerformative(ACLMessage.INFORM);
-				msgOut.setContent("Finished");
-
-				send(msgOut);
-				
-				
-				/* TODO: prepare results, send them to GUI?, save to xml
-				 * prepareTaskResults(ACLMessage resultmsg, String problemID)
-				 *   - asi jenom pro searche?
-				 * save resutls to xml file
-				 
-				 if (!no_xml_output){
-					writeXMLResults(results);
-				}
-				*/				
-			}						
-			
-			ContentElement content;
-			try {
-				content = getContentManager().extractContent(inform);
-				if (content instanceof Result) {
-					// get the original task from msg
-					Result result = (Result) content;					
-					List tasks = (List)result.getValue();
-					Task t = (Task) tasks.get(0); // there is only one task in Result																					
-
-					// save results to the database
-					if (t.getSave_results()){						
-						DataManagerService.saveResult(myAgent, t);
-					}
-										
-					// send evaluation to search agent
-					if (msg.getPerformative() == ACLMessage.QUERY_REF){
-						// the original message was a query (sender of the task 
-						// was s search agent)
-					
-						ACLMessage reply = msg.createReply();
-						reply.setPerformative(ACLMessage.INFORM);
-
-						ContentElement query_content = getContentManager().extractContent(msg);
-						
-						Result reply_result = new Result((Action) query_content, t.getResult());
-						getContentManager().fillContent(reply, reply_result);
-						
-						send(reply);								
-					}										
-				}
-
-			} catch (UngroundedException e) {
-				e.printStackTrace();
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
-				e.printStackTrace();
-			}
-			
-			// send subscription to the original agent after each received task
-			sendSubscription(inform);
-		}		
-		
-		
-		private void sendSubscription(ACLMessage result) {			
-			// Prepare the subscription message to the request originator
-			ACLMessage msgOut = msg.createReply();
-			msgOut.setPerformative(result.getPerformative());
-			
-			// copy content of inform message to a subscription
-			try {
-				getContentManager().fillContent(msgOut, getContentManager().extractContent(result));
-			} catch (UngroundedException e) {
-				e.printStackTrace();
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
-				e.printStackTrace();
-			}
-
-			// go through every subscription
-			java.util.Iterator<Subscription> it = subscriptions.iterator();
-			while (it.hasNext()) {
-				Subscription subscription = (Subscription) it.next();
-
-				if (subscription.getMessage().getConversationId().equals(
-						"subscription" + msg.getConversationId())) {
-					subscription.notify(msgOut);
-				}
-			}
-			
-		} // end sendSubscription
-		
-		
-		private boolean isLastTask(){			
-			// TODO - return true if there is not anything to compute in the graph
-			
-			return false;
-		}
-	
-	} // end of ExecuteTask ("send request to planner agent") bahavior
-	
-	
-	public class StartGettingParametersFromSearch extends AchieveREInitiator {
-
-		private static final long serialVersionUID = 7028866964341806289L;
-
-		
-		public StartGettingParametersFromSearch(PikaterAgent a, ACLMessage msg) {
-			super(a, msg);
-	        log("StartGettingParametersFromSearch behavior created.", 2);
-		}
-
-		
-		protected void handleInform(ACLMessage inform) {
-	        log("Agent " + inform.getSender().getName()
-					+ ": sending of Options have been finished.", 2);
-			// TODO do something -> send info to GUI agent
-			/* tady, nebo jinde?
-			 * prepare results, send them to GUI?, save to xml
-			 * prepareTaskResults(ACLMessage resultmsg, String problemID)
-			 *   - asi jenom pro searche?
-			 * save resutls to xml file
-			 
-			 if (!no_xml_output){
-				writeXMLResults(results);
-			}
-			*/	        
-			// sending of Options have been finished
-		}
-				
-		protected void handleRefuse(ACLMessage refuse) {
-	        log("Agent " + refuse.getSender().getName()
-					+ " refused to perform the requested action.", 1);
-		}
-
-		protected void handleFailure(ACLMessage failure) {
-	        log("Agent "+ failure.getSender().getName()
-					+ ": failure while performing the requested action", 1);
+		java.util.Iterator<TaskOutput> itr = output.iterator();
+		while (itr.hasNext()) {
+			TaskOutput to = (TaskOutput) itr.next();
+			DataSourceEdge dse = new DataSourceEdge();
+			dse.setDataSourceId(to.getName());								
+			computationNode.addToOutputAndProcess(dse, to.getType());			 			
 		}			
+
+	}	
+	
+	private ComputationGraph getGraph(int id){
+		// TODO: napsat
+		ComputationGraph cg = null;
+		return cg;
 	}
 	
+		
 		
 	public class subscriptionManager implements SubscriptionManager {
 		public boolean register(Subscription s) {
@@ -339,6 +191,37 @@ public class Agent_Manager extends PikaterAgent {
 		return request;
 	}
 	
+	
+	protected void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
+		// Prepare the subscription message to the request originator
+		ACLMessage msgOut = originalMessage.createReply();
+		msgOut.setPerformative(result.getPerformative());
+		
+		// copy content of inform message to a subscription
+		try {
+			getContentManager().fillContent(msgOut, getContentManager().extractContent(result));
+		} catch (UngroundedException e) {
+			e.printStackTrace();
+		} catch (CodecException e) {
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			e.printStackTrace();
+		}
+
+		// go through every subscription
+		java.util.Iterator<Subscription> it = subscriptions.iterator();
+		while (it.hasNext()) {
+			Subscription subscription = (Subscription) it.next();
+
+			if (subscription.getMessage().getConversationId().equals(
+					"subscription" + originalMessage.getConversationId())) {
+				subscription.notify(msgOut);
+			}
+		}
+		
+	} // end sendSubscription
+	
+
 	
 	protected class RequestServer extends CyclicBehaviour {
 

@@ -1,153 +1,108 @@
 package org.pikater.core.ontology.messages;
 
+import java.util.ArrayList;
+
 import jade.content.Concept;
 
-public class Task implements Concept, Cloneable {
-	/**
-	 * 
-	 */
+public class Task implements Concept {
+
 	private static final long serialVersionUID = -8242598855481511427L;
-	private Id _id;
-	private Id _problem_id;
-	private Evaluation _result;
-	private Agent _agent;
-	private Data _data;
+
+	public enum InOutType {TRAIN, TEST, ERRORS, VALIDATION, AGENT};
 	
-	private String _save_mode = null;  // if not null -> save the agent
+	// administrative:
+	private int graphId;
+	private int nodeId;
+	
+	private ArrayList<TaskOutput> output; // list of outputs
+
+	// setting the task:
+	private Agent agent;
+	private Data data;	
+	private EvaluationMethod evaluation_method; // e.g. cross validation
+
+	// further settings
+	private String save_mode = null;  // if not null -> save the agent
 								//    message (agent is sent in the message with the results)
-								//    file (agent is stored in the file by agentManager) --> TODO database
-
-	private String _get_results;
-	private String _gui_agent;
-	private boolean _save_results;
+								//    file (agent is stored in the file by agentManager)
+	private boolean save_results;
 	
-	private int userID;
-	private String start;
-	private String finish;
+	
+	// results are filled in after they are computed
+	private Evaluation result;	 
 
-	private String _problem_name;
-	private String _note;
-	private EvaluationMethod _evaluation_method; // e.g. cross validation
+	private String note;
 
-	public void setAgent(Agent agent) {
-		_agent=agent;
+	
+	public int getGraphId() {
+		return graphId;
+	}
+	public void setGraphId(int graphId) {
+		this.graphId = graphId;
 	}
 	public Agent getAgent() {
-		return _agent;
+		return agent;
 	}
-	public void setData(Data data) {
-		_data=data;
+	public void setAgent(Agent agent) {
+		this.agent = agent;
 	}
 	public Data getData() {
-		return _data;
+		return data;
 	}
-	public void setId(Id id) {
-		_id=id;
+	public void setData(Data data) {
+		this.data = data;
 	}
-	public Id getId() {
-		return _id;
+	public EvaluationMethod getEvaluation_method() {
+		return evaluation_method;
 	}
-	public void setProblem_id(Id problem_id) {
-		_problem_id=problem_id;
+	public void setEvaluation_method(EvaluationMethod evaluation_method) {
+		this.evaluation_method = evaluation_method;
 	}
-	public Id getProblem_id() {
-		return _problem_id;
+	public String getSave_mode() {
+		return save_mode;
 	}
-	public void setResult(Evaluation result) {
-		_result = result;
+	public void setSave_mode(String save_mode) {
+		this.save_mode = save_mode;
+	}
+	public boolean isSave_results() {
+		return save_results;
+	}
+	public void setSave_results(boolean save_results) {
+		this.save_results = save_results;
 	}
 	public Evaluation getResult() {
-		return _result;
-	}	
-
-	public void setUserID(int userID) {
-		this.userID = userID;
+		return result;
 	}
-
-	public int getUserID() {
-		return userID;
+	public void setResult(Evaluation result) {
+		this.result = result;
 	}
-
-	public void setSave_mode(String _save_mode) {
-		this._save_mode = _save_mode;
-	}
-
-	public String getSave_mode() {
-		return _save_mode;
-	}
-	public void setGet_results(String _get_results) {
-		this._get_results = _get_results;
-	}
-	public String getGet_results() {
-		return _get_results;
-	}
-	public void setGui_agent(String _gui_agent) {
-		this._gui_agent = _gui_agent;
-	}
-	public String getGui_agent() {
-		return _gui_agent;
-	}
-	public void setSave_results(boolean _save_results) {
-		this._save_results = _save_results;
-	}
-	public boolean getSave_results() {
-		return _save_results;
-	}
-	public void setStart(String start) {
-		this.start = start;
-	}
-	public String getStart() {
-		return start;
-	}
-	public void setFinish(String finish) {
-		this.finish = finish;
-	}
-	public String getFinish() {
-		return finish;
-	}
-	
-	public void setProblem_name(String _problem_name) {
-		this._problem_name = _problem_name;
-	}
-
-	public String getProblem_name() {
-		return _problem_name;
-	}
-
-	public void setNote(String _note) {
-		this._note = _note;
-	}
-
 	public String getNote() {
-		return _note;
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public int getNodeId() {
+		return nodeId;
+	}
+	public void setNodeId(int nodeId) {
+		this.nodeId = nodeId;
+	}
+	public ArrayList<TaskOutput> getOutput() {
+		return output;
+	}
+	public void setOutput(ArrayList<TaskOutput> output) {
+		this.output = output;
 	}
 	
-	public void setEvaluation_method(EvaluationMethod _evaluation_method) {
-		this._evaluation_method = _evaluation_method;
-	}
 	
-	public EvaluationMethod getEvaluation_method() {
-		return _evaluation_method;
+	public Object getOutputByName(InOutType name) {
+		for (TaskOutput to: this.output){
+			if (to.getName().equals(name)){
+				return to.getValue();
+			}
+		}
+		return null;
 	}
-	
-    public Object clone() {
-        
-        Task task = new Task();
-    	task.setId(this._id);
-    	task.setProblem_id(this._problem_id);
-    	task.setResult(this._result);
-    	task.setAgent(this._agent);
-    	task.setData(this._data);    	
-    	task.setSave_mode(this._save_mode);
-    	task.setGet_results(this._get_results);
-    	task.setGui_agent(this._gui_agent);
-    	task.setSave_results(this._save_results);
-    	task.setUserID(this.userID);
-    	task.setStart(this.start);
-    	task.setFinish(this.finish);
-    	task.setEvaluation_method(this._evaluation_method);
-
-        return task;
-    }
-
+		
 }
