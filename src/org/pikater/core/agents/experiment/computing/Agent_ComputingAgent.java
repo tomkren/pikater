@@ -1081,7 +1081,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	private String saveAgentToFile() throws IOException, CodecException,
 			OntologyException, FIPAException {
 
-		org.pikater.core.ontology.messages.SaveAgent saveAgent = new org.pikater.core.ontology.messages.SaveAgent();
+		org.pikater.core.ontology.management.SaveAgent saveAgent = new org.pikater.core.ontology.management.SaveAgent();
 
 		saveAgent.setAgent(getAgentWithFilledObject());
 

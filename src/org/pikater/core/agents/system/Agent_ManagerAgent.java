@@ -21,9 +21,9 @@ import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.CreateAgent;
-import org.pikater.core.ontology.messages.LoadAgent;
-import org.pikater.core.ontology.messages.SaveAgent;
+import org.pikater.core.ontology.management.CreateAgent;
+import org.pikater.core.ontology.management.LoadAgent;
+import org.pikater.core.ontology.management.SaveAgent;
 
 import java.io.File;
 import java.util.HashMap;

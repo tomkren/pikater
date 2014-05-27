@@ -14,10 +14,10 @@ import jade.wrapper.ControllerException;
 
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.CreateAgent;
+import org.pikater.core.ontology.management.CreateAgent;
+import org.pikater.core.ontology.management.LoadAgent;
+import org.pikater.core.ontology.management.SaveAgent;
 import org.pikater.core.ontology.messages.Execute;
-import org.pikater.core.ontology.messages.LoadAgent;
-import org.pikater.core.ontology.messages.SaveAgent;
 
 import java.io.*;
 import java.sql.Timestamp;

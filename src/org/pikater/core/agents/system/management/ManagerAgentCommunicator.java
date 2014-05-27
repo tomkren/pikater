@@ -12,7 +12,7 @@ import jade.util.leap.List;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.messages.CreateAgent;
+import org.pikater.core.ontology.management.CreateAgent;
 
 /**
  * Created with IntelliJ IDEA.

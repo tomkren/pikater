@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.messages;
+package org.pikater.core.ontology.management;
 
 import jade.content.AgentAction;
 import jade.util.leap.List;

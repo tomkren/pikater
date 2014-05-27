@@ -34,6 +34,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.actions.MetadataOntology;
+import org.pikater.core.ontology.management.CreateAgent;
 import org.pikater.core.ontology.messages.*;
 import org.pikater.core.ontology.messages.option.Interval;
 import org.pikater.core.ontology.messages.option.Option;
@@ -1588,7 +1589,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 
 	protected void loadAgent(String _filename, Execute action, byte[] object)
 			throws FIPAException {
-		org.pikater.core.ontology.messages.LoadAgent _loadAgent = new org.pikater.core.ontology.messages.LoadAgent();
+		org.pikater.core.ontology.management.LoadAgent _loadAgent = new org.pikater.core.ontology.management.LoadAgent();
 
 		_loadAgent.setFilename(_filename);
 		_loadAgent.setFirst_action(action);
