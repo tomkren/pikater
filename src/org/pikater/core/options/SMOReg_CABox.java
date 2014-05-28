@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRes
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IValue;
@@ -27,8 +28,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeS = new Type(FloatValue.class);
 		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeS )) );
+		restrictionS.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new FloatValue(1e-3f),
@@ -43,8 +44,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeC = new Type(IntegerValue.class);
 		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
-		restrictionC.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeC )) );
+		restrictionC.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new IntegerValue(1),
@@ -60,8 +61,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeE = new Type(IntegerValue.class);
 		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
-		restrictionE.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeE )) );
+		restrictionE.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new IntegerValue(1),
@@ -77,8 +78,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeG = new Type(FloatValue.class);
 		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
-		restrictionG.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeG )) );
+		restrictionG.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeG )) ));
 		
 		NewOption optionG = new NewOption(
 				new FloatValue(0.01f),
@@ -97,8 +98,8 @@ public class SMOReg_CABox  {
 						new ArrayList<IValue>(
 								Arrays.asList( new IntegerValue(0), new IntegerValue(1), new IntegerValue(2) )) ));
 		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeN )) );
+		restrictionN.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(1),
@@ -113,8 +114,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeF = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionF = new PossibleTypesRestriction();
-		restrictionF.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeF )) );
+		restrictionF.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeF )) ));
 		
 		NewOption optionF = new NewOption(
 				new BooleanValue(false),
@@ -129,8 +130,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeO = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionO = new PossibleTypesRestriction();
-		restrictionO.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeO )) );
+		restrictionO.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeO )) ));
 		
 		NewOption optionO = new NewOption(
 				new BooleanValue(false),
@@ -145,8 +146,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeR = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
-		restrictionR.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeR )) );
+		restrictionR.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new BooleanValue(false),
@@ -165,8 +166,8 @@ public class SMOReg_CABox  {
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
 		PossibleTypesRestriction restrictionA = new PossibleTypesRestriction();
-		restrictionA.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeA )) );
+		restrictionA.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeA )) ));
 		
 		NewOption optionA = new NewOption(
 				new IntegerValue(250007),
@@ -182,8 +183,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeP = new Type(FloatValue.class);
 		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
-		restrictionP.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeP )) );
+		restrictionP.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeP )) ));
 		
 		NewOption optionP = new NewOption(
 				new FloatValue(1.0e-12f),
@@ -199,8 +200,8 @@ public class SMOReg_CABox  {
 		**/
 		Type typeT = new Type(FloatValue.class);
 		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
-		restrictionT.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeT )) );
+		restrictionT.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeT )) ));
 		
 		NewOption optionT = new NewOption(
 				new FloatValue(1.0e-3f),

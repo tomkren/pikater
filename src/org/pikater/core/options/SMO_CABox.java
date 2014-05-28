@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRes
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IValue;
@@ -29,8 +30,8 @@ public class SMO_CABox {
 				new RangeRestriction(
 						new FloatValue(0.0001f), new FloatValue(5.0f) ));
 		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
-		restrictionC.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeC )) );
+		restrictionC.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new FloatValue(1.0f),
@@ -49,8 +50,8 @@ public class SMO_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
 		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
-		restrictionE.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeE )) );
+		restrictionE.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new IntegerValue(1),
@@ -69,8 +70,8 @@ public class SMO_CABox {
 				new RangeRestriction(
 						new FloatValue(0.0001f), new FloatValue(4.0f) ));
 		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
-		restrictionG.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeG )) );
+		restrictionG.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeG )) ));
 		
 		NewOption optionG = new NewOption(
 				new FloatValue(0.01f),
@@ -90,8 +91,8 @@ public class SMO_CABox {
 						new ArrayList<IValue>(
 								Arrays.asList( new IntegerValue(0), new IntegerValue(1), new IntegerValue(2) ) )));
 		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeN )) );
+		restrictionN.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(1),
@@ -107,8 +108,8 @@ public class SMO_CABox {
 		**/
 		Type typeF = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionF = new PossibleTypesRestriction();
-		restrictionF.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeF )) );
+		restrictionF.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeF )) ));
 		
 		NewOption optionF = new NewOption(
 				new BooleanValue(false),
@@ -124,8 +125,8 @@ public class SMO_CABox {
 		**/
 		Type typeO = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionO = new PossibleTypesRestriction();
-		restrictionO.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeO )) );
+		restrictionO.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeO )) ));
 		
 		NewOption optionO = new NewOption(
 				new BooleanValue(false),
@@ -141,8 +142,8 @@ public class SMO_CABox {
 		**/
 		Type typeR = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
-		restrictionR.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeR )) );
+		restrictionR.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new BooleanValue(false),
@@ -161,8 +162,8 @@ public class SMO_CABox {
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
 		PossibleTypesRestriction restrictionA = new PossibleTypesRestriction();
-		restrictionA.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeA )) );
+		restrictionA.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeA )) ));
 		
 		NewOption optionA = new NewOption(
 				new IntegerValue(250007),
@@ -178,8 +179,8 @@ public class SMO_CABox {
 		**/
 		Type typeL = new Type(FloatValue.class);
 		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
-		restrictionL.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeL )) );
+		restrictionL.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeL )) ));
 		
 		NewOption optionL = new NewOption(
 				new FloatValue(1.0e-3f),
@@ -195,8 +196,8 @@ public class SMO_CABox {
 		**/
 		Type typeP = new Type(FloatValue.class);
 		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
-		restrictionP.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeP )) );
+		restrictionP.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeP )) ));
 		
 		NewOption optionP = new NewOption(
 				new FloatValue(1.0e-12f),
@@ -212,8 +213,8 @@ public class SMO_CABox {
 		**/
 		Type typeM = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeM )) );
+		restrictionM.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new BooleanValue(false),
@@ -229,8 +230,8 @@ public class SMO_CABox {
 		**/
 		Type typeV = new Type(IntegerValue.class);
 		PossibleTypesRestriction restrictionV = new PossibleTypesRestriction();
-		restrictionV.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeV )) );
+		restrictionV.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeV )) ));
 		
 		NewOption optionV = new NewOption(
 				new IntegerValue(-1),
@@ -249,8 +250,8 @@ public class SMO_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
 		PossibleTypesRestriction restrictionW = new PossibleTypesRestriction();
-		restrictionW.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeW )) );
+		restrictionW.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeW )) ));
 		
 		NewOption optionW = new NewOption(
 				new IntegerValue(-1),

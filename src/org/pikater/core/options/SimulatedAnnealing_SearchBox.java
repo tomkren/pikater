@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
@@ -22,8 +23,8 @@ public class SimulatedAnnealing_SearchBox {
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(1.0) ));
 		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
-		restrictionE.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeE )) );
+		restrictionE.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new DoubleValue(0.1),
@@ -38,8 +39,8 @@ public class SimulatedAnnealing_SearchBox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000)) );
 		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeM )) );
+		restrictionM.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(50),
@@ -54,8 +55,8 @@ public class SimulatedAnnealing_SearchBox {
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(100.0) ));
 		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
-		restrictionT.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeT )) );
+		restrictionT.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeT )) ));
 		
 		NewOption optionT = new NewOption(
 				new DoubleValue(1.0),
@@ -70,8 +71,8 @@ public class SimulatedAnnealing_SearchBox {
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(1.0) ));
 		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeS )) );
+		restrictionS.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new DoubleValue(0.5),

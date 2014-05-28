@@ -12,6 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRes
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IValue;
@@ -24,8 +25,8 @@ public class J48_CABox {
 		
 		Type typeU = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionU = new PossibleTypesRestriction();
-		restrictionU.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeU )) );
+		restrictionU.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeU )) ));
 		
 		NewOption optionU = new NewOption(
 				new BooleanValue(false),
@@ -49,8 +50,8 @@ public class J48_CABox {
 		Type typeC = new Type(FloatValue.class);
 		typeC.setSetRestriction(new SetRestriction(valuesC));
 		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
-		restrictionC.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeC )) );
+		restrictionC.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new FloatValue(0.25f),
@@ -65,8 +66,8 @@ public class J48_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10) ));
 		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeM )) );
+		restrictionM.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(2),
@@ -78,8 +79,8 @@ public class J48_CABox {
 				
 		Type typeR = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
-		restrictionR.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeR )) );
+		restrictionR.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new BooleanValue(false),
@@ -94,8 +95,8 @@ public class J48_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10) ));
 		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeN )) );
+		restrictionN.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(3),
@@ -107,8 +108,8 @@ public class J48_CABox {
 		
 		Type typeB = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
-		restrictionB.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeB )) );
+		restrictionB.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeB )) ));
 		
 		NewOption optionB = new NewOption(
 				new BooleanValue(false),
@@ -120,8 +121,8 @@ public class J48_CABox {
 
 		Type typeS = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeS )) );
+		restrictionS.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new BooleanValue(false),
@@ -133,8 +134,8 @@ public class J48_CABox {
 		
 		Type typeA = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionA = new PossibleTypesRestriction();
-		restrictionA.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeA )) );
+		restrictionA.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeA )) ));
 		
 		NewOption optionA = new NewOption(
 				new BooleanValue(false),
@@ -149,8 +150,8 @@ public class J48_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
 		PossibleTypesRestriction restrictionQ = new PossibleTypesRestriction();
-		restrictionQ.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeQ )) );
+		restrictionQ.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeQ )) ));
 		
 		NewOption optionQ = new NewOption(
 				new IntegerValue(3),

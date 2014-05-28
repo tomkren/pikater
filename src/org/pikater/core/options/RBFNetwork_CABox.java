@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
@@ -26,8 +27,8 @@ public class RBFNetwork_CABox {
 				new RangeRestriction(
 						new IntegerValue(2), new IntegerValue(1000) ));
 		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
-		restrictionB.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeB )) );
+		restrictionB.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeB )) ));
 		
 		NewOption optionB = new NewOption(
 				new IntegerValue(2),
@@ -46,8 +47,8 @@ public class RBFNetwork_CABox {
 				new RangeRestriction(
 						new FloatValue(0.01f), new FloatValue(2.0f) ));
 		PossibleTypesRestriction restrictionW = new PossibleTypesRestriction();
-		restrictionW.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeW )) );
+		restrictionW.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeW )) ));
 		
 		NewOption optionW = new NewOption(
 				new FloatValue(0.25f),
@@ -66,8 +67,8 @@ public class RBFNetwork_CABox {
 				new RangeRestriction(
 						new FloatValue(0.000000001f), new FloatValue(10.0f) ));
 		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
-		restrictionR.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeR )) );
+		restrictionR.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new FloatValue(1.0e-8f),
@@ -87,8 +88,8 @@ public class RBFNetwork_CABox {
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
 		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeS )) );
+		restrictionS.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new IntegerValue(0),
@@ -107,8 +108,8 @@ public class RBFNetwork_CABox {
 				new RangeRestriction(
 						new IntegerValue(-1), new IntegerValue(50) ));
 		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeM )) );
+		restrictionM.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(-1),

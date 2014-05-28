@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class ChooseXValue_SearchBox {
@@ -21,8 +22,8 @@ public class ChooseXValue_SearchBox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(2000) ));
 		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeN )) );
+		restrictionN.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(5),

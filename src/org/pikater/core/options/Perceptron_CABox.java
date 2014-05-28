@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
@@ -31,8 +28,8 @@ public class Perceptron_CABox {
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
 		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
-		restrictionL.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeL )) );
+		restrictionL.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeL )) ));
 		
 		NewOption optionL = new NewOption(
 				new FloatValue(0.3f),
@@ -51,8 +48,8 @@ public class Perceptron_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
 		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeN )) );
+		restrictionN.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(1),
@@ -72,8 +69,8 @@ public class Perceptron_CABox {
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
 		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeS )) );
+		restrictionS.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new IntegerValue(0),
@@ -90,8 +87,8 @@ public class Perceptron_CABox {
 		**/
 		Type typeC = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
-		restrictionC.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeC )) );
+		restrictionC.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new BooleanValue(false),

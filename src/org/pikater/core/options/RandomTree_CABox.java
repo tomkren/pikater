@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class RandomTree_CABox {
@@ -25,8 +26,8 @@ public class RandomTree_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(50) ));
 		PossibleTypesRestriction restrictionK = new PossibleTypesRestriction();
-		restrictionK.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeK )) );
+		restrictionK.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeK )) ));
 		
 		NewOption optionK = new NewOption(
 				new IntegerValue(1),
@@ -45,8 +46,8 @@ public class RandomTree_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
 		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeM )) );
+		restrictionM.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(0),
@@ -65,8 +66,8 @@ public class RandomTree_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
 		PossibleTypesRestriction restrictionQ = new PossibleTypesRestriction();
-		restrictionQ.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeQ )) );
+		restrictionQ.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeQ )) ));
 		
 		NewOption optionQ = new NewOption(
 				new IntegerValue(0),

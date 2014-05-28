@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
@@ -23,8 +24,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
 		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
-		restrictionE.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeE )) );
+		restrictionE.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new FloatValue(0.1f),
@@ -39,8 +40,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
 		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeM )) );
+		restrictionM.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new FloatValue(0.1f),
@@ -55,8 +56,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
 		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
-		restrictionT.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeT )) );
+		restrictionT.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeT )) ));
 		
 		NewOption optionT = new NewOption(
 				new FloatValue(0.2f),
@@ -72,8 +73,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
 		PossibleTypesRestriction restrictionX = new PossibleTypesRestriction();
-		restrictionX.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeX )) );
+		restrictionX.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeX )) ));
 		
 		NewOption optionX = new NewOption(
 				new FloatValue(0.5f),
@@ -89,8 +90,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
 		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
-		restrictionP.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeP )) );
+		restrictionP.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeP )) ));
 		
 		NewOption optionP = new NewOption(
 				new IntegerValue(10),
@@ -105,8 +106,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
 		PossibleTypesRestriction restrictionI = new PossibleTypesRestriction();
-		restrictionI.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeI )) );
+		restrictionI.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeI )) ));
 		
 		NewOption optionI = new NewOption(
 				new IntegerValue(10),
@@ -121,8 +122,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
 		PossibleTypesRestriction restrictionF = new PossibleTypesRestriction();
-		restrictionF.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeF )) );
+		restrictionF.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeF )) ));
 		
 		NewOption optionF = new NewOption(
 				new FloatValue(0.2f),
@@ -138,8 +139,8 @@ public class EASearch_SearchBox {
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
 		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
-		restrictionL.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeL )) );
+		restrictionL.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeL )) ));
 		
 		NewOption optionL = new NewOption(
 				new FloatValue(0.1f),

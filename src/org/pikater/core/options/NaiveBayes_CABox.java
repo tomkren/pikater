@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 
 public class NaiveBayes_CABox {
@@ -21,8 +22,8 @@ public class NaiveBayes_CABox {
 		**/
 		Type typeK = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionK = new PossibleTypesRestriction();
-		restrictionK.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeK )) );
+		restrictionK.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeK )) ));
 		
 		NewOption optionK = new NewOption(
 				new BooleanValue(false),
@@ -38,8 +39,8 @@ public class NaiveBayes_CABox {
 		**/
 		Type typeD = new Type(BooleanValue.class);
 		PossibleTypesRestriction restrictionD = new PossibleTypesRestriction();
-		restrictionD.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeD )) );
+		restrictionD.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeD )) ));
 		
 		NewOption optionD = new NewOption(
 				new BooleanValue(false),

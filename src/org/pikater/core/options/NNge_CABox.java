@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class NNge_CABox {
@@ -25,8 +26,8 @@ public class NNge_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
 		PossibleTypesRestriction restrictionI = new PossibleTypesRestriction();
-		restrictionI.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeI )) );
+		restrictionI.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeI )) ));
 		
 		NewOption optionI = new NewOption(
 				new IntegerValue(5),
@@ -44,8 +45,8 @@ public class NNge_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(50) ));
 		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
-		restrictionG.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeG )) );
+		restrictionG.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeG )) ));
 		
 		NewOption optionG = new NewOption(
 				new IntegerValue(5),

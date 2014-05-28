@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 
 public class FileInput_VirtualBox {
@@ -19,8 +20,8 @@ public class FileInput_VirtualBox {
 
 		Type typeIN = new Type(StringValue.class);
 		PossibleTypesRestriction restrictionIN = new PossibleTypesRestriction();
-		restrictionIN.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeIN )) );
+		restrictionIN.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeIN )) ));
 		
 		NewOption optionIN = new NewOption(
 				new StringValue("inputFile.ARFF"),

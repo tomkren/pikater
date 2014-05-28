@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class OneR_CABox {
@@ -26,8 +27,8 @@ public class OneR_CABox {
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
 		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
-		restrictionB.addPossibleValues(
-				new ArrayList<Type>(Arrays.asList( typeB )) );
+		restrictionB.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeB )) ));
 		
 		NewOption optionB = new NewOption(
 				new IntegerValue(6),
