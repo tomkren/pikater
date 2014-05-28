@@ -27,13 +27,13 @@ public class PossibleTypesRestriction implements IRestriction {
 	public void setPossibleTypes(List<Types> possibleTypes) {
 		this.possibleTypes = possibleTypes;
 	}
-	public void addPossibleValues(List<Type> possibleTypes) {
+	public void addPossibleValues(Types types) {
 
 		if (this.possibleTypes == null) {
 			this.possibleTypes = new ArrayList<Types>();
 		}
 
-		this.possibleTypes.add(new Types(possibleTypes));
+		this.possibleTypes.add(types);
 	}
 	public void addPossibleValues(Type type, int minCount, int maxCount) {
 		
@@ -51,7 +51,7 @@ public class PossibleTypesRestriction implements IRestriction {
 			for (int typeIndex = 1; typeIndex <= typeCountI; typeIndex++) {
 				typeList.add(type);
 			}
-			addPossibleValues(typeList);
+			addPossibleValues(new Types(typeList) );
 			
 		}
 	}
