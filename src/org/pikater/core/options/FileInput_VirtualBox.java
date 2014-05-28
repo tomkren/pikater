@@ -27,8 +27,8 @@ public class FileInput_VirtualBox {
 
 		AgentInfo agentInfo = new AgentInfo();
 		// TODO: some virtual-box provider agent
-		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class.getName());
-		agentInfo.setOntologyClass(FileDataProvider.class.getName());
+		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class);
+		agentInfo.setOntologyClass(FileDataProvider.class);
 	
 		agentInfo.setName("FileInput");
 		agentInfo.setPicture("picture0.jpg");

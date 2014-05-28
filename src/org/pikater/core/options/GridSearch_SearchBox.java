@@ -46,8 +46,8 @@ public class GridSearch_SearchBox {
 				new OptionList() );
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Search.class.getName()); // some virtual-box provider agent
-		agentInfo.setOntologyClass(Agent_GridSearch.class.getName());
+		agentInfo.setAgentClass(Search.class); // some virtual-box provider agent
+		agentInfo.setOntologyClass(Agent_GridSearch.class);
 	
 		agentInfo.setName("GridSearch");
 		agentInfo.setPicture("picture3.jpg");

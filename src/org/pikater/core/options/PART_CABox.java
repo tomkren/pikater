@@ -113,8 +113,8 @@ public class PART_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaPARTCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaPARTCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("PART");
 		agentInfo.setPicture("picture3.jpg");

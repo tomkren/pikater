@@ -23,7 +23,7 @@ public class ChooseXValue_SearchBox {
 
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.setAgentClass(null); // some virtual-box provider agent
-		agentInfo.setOntologyClass(Search.class.getName());
+		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("Choose X Values Agent");
 		agentInfo.setPicture("picture0.jpg");

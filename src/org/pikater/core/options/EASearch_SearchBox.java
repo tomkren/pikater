@@ -86,8 +86,8 @@ public class EASearch_SearchBox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_EASearch.class.getName());
-		agentInfo.setOntologyClass(Search.class.getName());
+		agentInfo.setAgentClass(Agent_EASearch.class);
+		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("EASearch");
 		agentInfo.setPicture("picture3.jpg");

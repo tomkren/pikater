@@ -82,8 +82,8 @@ public class RBFNetwork_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaRBFNetworkCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaRBFNetworkCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 
 		agentInfo.setName("RBFNetwork");
 		agentInfo.setPicture("picture3.jpg");

@@ -89,8 +89,8 @@ public class J48_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaJ48.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaJ48.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("J48");
 		agentInfo.setPicture("picture3.jpg");

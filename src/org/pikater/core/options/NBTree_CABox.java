@@ -9,8 +9,8 @@ public class NBTree_CABox {
 	public static AgentInfo get() {
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaNBTreeCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaNBTreeCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("NBTree");
 		agentInfo.setPicture("picture3.jpg");

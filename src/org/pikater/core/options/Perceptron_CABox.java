@@ -69,8 +69,8 @@ public class Perceptron_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaPerceptronCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaPerceptronCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("Perceptron");
 		agentInfo.setPicture("picture3.jpg");

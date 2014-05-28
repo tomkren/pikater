@@ -29,8 +29,8 @@ public class OneR_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaOneRCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaOneRCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("OneR");
 		agentInfo.setPicture("picture3.jpg");

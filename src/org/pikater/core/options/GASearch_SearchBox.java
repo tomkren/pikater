@@ -77,7 +77,7 @@ public class GASearch_SearchBox {
 		
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.setAgentClass(null); // some virtual-box provider agent
-		agentInfo.setOntologyClass(Agent_GASearch.class.getName());
+		agentInfo.setOntologyClass(Agent_GASearch.class);
 	
 		agentInfo.setName("GASearch");
 		agentInfo.setPicture("picture3.jpg");

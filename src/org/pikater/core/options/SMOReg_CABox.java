@@ -125,8 +125,8 @@ public class SMOReg_CABox  {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaSMOregCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaSMOregCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("SMO Reg");
 		agentInfo.setPicture("picture3.jpg");

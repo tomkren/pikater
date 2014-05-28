@@ -7,10 +7,7 @@ import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,8 +19,8 @@ public class AgentInfo implements Concept {
 	 */
 	private static final long serialVersionUID = 5587052921037796722L;
 
-	private String agentClass;
-	private String ontologyClass;
+	private String agentClassName;
+	private String ontologyClassName;
 	
 	private String name;
 	private String picture;
@@ -34,18 +31,24 @@ public class AgentInfo implements Concept {
 	private List<Slot> inputSlots;
 	private List<Slot> outputSlots;
 
-	public String getAgentClass() {
-		return agentClass;
+	public String getAgentClassName() {
+		return agentClassName;
 	}
-	public void setAgentClass(String agentClass) {
-		this.agentClass = agentClass;
+	public void setAgentClassName(String agentClassName) {
+		this.agentClassName = agentClassName;
+	}
+	public void setAgentClass(Class<?> agentClass) {
+		this.agentClassName = agentClass.getName();
 	}
 
-	public String getOntologyClass() {
-		return ontologyClass;
+	public String getOntologyClassName() {
+		return ontologyClassName;
 	}
-	public void setOntologyClass(String ontologyClass) {
-		this.ontologyClass = ontologyClass;
+	public void setOntologyClassName(String ontologyClassName) {
+		this.ontologyClassName = ontologyClassName;
+	}
+	public void setOntologyClass(Class<?> ontologyClass) {
+		this.ontologyClassName = ontologyClass.getName();
 	}
 
 	public String getName() {

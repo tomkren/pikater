@@ -33,8 +33,8 @@ public class RandomSearch_SearchBox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_RandomSearch.class.getName());
-		agentInfo.setOntologyClass(Search.class.getName());
+		agentInfo.setAgentClass(Agent_RandomSearch.class);
+		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("Random-Searcher");
 		agentInfo.setPicture("picture1.jpg");

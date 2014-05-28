@@ -53,8 +53,8 @@ public class SimulatedAnnealing_SearchBox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_SimulatedAnnealing.class.toString());
-		agentInfo.setOntologyClass(Search.class.getName());
+		agentInfo.setAgentClass(Agent_SimulatedAnnealing.class);
+		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("SimulatedAnnealing-Searcher");
 		agentInfo.setPicture("picture2.jpg");

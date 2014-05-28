@@ -36,7 +36,7 @@ public class CoreToWebBoxDefinitionsConverter
 		BoxInfoCollection boxInfoColl = new BoxInfoCollection();
 		for (AgentInfo box : boxDefinitionsFromCore)
 		{
-			boxInfoColl.addDefinition(coreBoxToWebBox(box, ontologyToBoxTypeMapping.get(box.getOntologyClass())));
+			boxInfoColl.addDefinition(coreBoxToWebBox(box, ontologyToBoxTypeMapping.get(box.getOntologyClassName())));
 		}
 		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxInfoColl);
 	}
@@ -44,7 +44,7 @@ public class CoreToWebBoxDefinitionsConverter
 	@SuppressWarnings("unchecked")
 	private static BoxInfo coreBoxToWebBox(AgentInfo coreBox, BoxType type)
 	{
-		BoxInfo box = new BoxInfo(coreBox.getOntologyClass(), coreBox.getAgentClass(), coreBox.getName(), type, coreBox.getPicture(), coreBox.getDescription());
+		BoxInfo box = new BoxInfo(coreBox.getOntologyClassName(), coreBox.getAgentClassName(), coreBox.getName(), type, coreBox.getPicture(), coreBox.getDescription());
 		
 		for(Option option : (Collection<Option>) coreBox.getOptions())
 		{

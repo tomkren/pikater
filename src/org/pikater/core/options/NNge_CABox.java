@@ -40,8 +40,8 @@ public class NNge_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaNNgeCA.class.getName()); // some virtual-box provider agent
-		agentInfo.setOntologyClass(FileDataProvider.class.getName());
+		agentInfo.setAgentClass(Agent_WekaNNgeCA.class); // some virtual-box provider agent
+		agentInfo.setOntologyClass(FileDataProvider.class);
 	
 		agentInfo.setName("NNge");
 		agentInfo.setPicture("picture3.jpg");

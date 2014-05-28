@@ -192,8 +192,8 @@ public class MultiLayerPerceptron_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(ComputingAgent.class.getName());
-		agentInfo.setOntologyClass(Agent_WekaPerceptronCA.class.getName());
+		agentInfo.setAgentClass(ComputingAgent.class);
+		agentInfo.setOntologyClass(Agent_WekaPerceptronCA.class);
 	
 		agentInfo.setName("MultiLayerPerceptron");
 		agentInfo.setPicture("picture3.jpg");

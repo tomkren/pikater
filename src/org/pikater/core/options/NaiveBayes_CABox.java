@@ -32,8 +32,8 @@ public class NaiveBayes_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaNaiveBayesCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_WekaNaiveBayesCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("NaiveBayes");
 		agentInfo.setPicture("picture5.jpg");
