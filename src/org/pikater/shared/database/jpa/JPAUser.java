@@ -50,6 +50,8 @@ public class JPAUser extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
 	
+	// TODO: eventually swap "private String password;" for "private String passwordHash;"
+	
 	/** Constructor for JPA Compatibility **/
 	public JPAUser(){}
 	
