@@ -34,7 +34,27 @@ public class PossibleValuesRestriction implements IRestriction {
 
 		this.possibleTypes.add(possibleTypes);
 	}
+	public void addPossibleValues(Type type, int minCount, int maxCount) {
+		
+		if (type == null) {
+			throw new IllegalArgumentException("Argument type is null");
+		}
 
+		if (minCount < 0 || maxCount <= 0 || minCount > maxCount) {
+			throw new IllegalArgumentException("Arguments minCount and maxCount represents incorrect interval");
+		}
+		
+		for (int typeCountI = minCount; typeCountI <= maxCount; typeCountI++) {
+			
+			List<Type> typeList = new ArrayList<Type>();
+			for (int typeIndex = 1; typeIndex <= typeCountI; typeIndex++) {
+				typeList.add(type);
+			}
+			addPossibleValues(typeList);
+			
+		}
+	}
+	
 	@Override
 	public Type getClassName() {
 
