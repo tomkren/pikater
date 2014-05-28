@@ -4,7 +4,10 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.IValue;
 
 
 public class AgentInfoOntology extends BeanOntology {
@@ -17,11 +20,19 @@ public class AgentInfoOntology extends BeanOntology {
 	private AgentInfoOntology() {
         super("AgentInfoOntology");
 
-        String optionPackage = Option.class.getPackage().getName();
+        String optionPackage = NewOption.class.getPackage().getName();
+        String restrictionPackage = IRestriction.class.getPackage().getName();
+        String typePackage = Type.class.getPackage().getName();
+        String valuePackage = IValue.class.getPackage().getName();
+        
         String agentInfoPackage = AgentInfo.class.getPackage().getName();
         
         try {
             add(optionPackage);
+            add(restrictionPackage);
+            add(typePackage);
+            add(valuePackage);
+            
             add(agentInfoPackage);
 
         } catch (Exception e) {

@@ -11,7 +11,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.shared.experiment.webformat.BoxType;
@@ -46,7 +46,7 @@ public class CoreToWebBoxDefinitionsConverter
 	{
 		BoxInfo box = new BoxInfo(coreBox.getOntologyClassName(), coreBox.getAgentClassName(), coreBox.getName(), type, coreBox.getPicture(), coreBox.getDescription());
 		
-		for(Option option : (Collection<Option>) coreBox.getOptions())
+		for(NewOption option : (Collection<NewOption>) coreBox.getOptions())
 		{
 			// TODO:
 		}

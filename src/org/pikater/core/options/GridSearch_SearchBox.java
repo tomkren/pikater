@@ -1,61 +1,82 @@
 package org.pikater.core.options;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.pikater.core.agents.experiment.search.Agent_GridSearch;
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 
 public class GridSearch_SearchBox {
 	
 	public static AgentInfo get() {
 		
-		OptionDefault optionB = new OptionDefault();
-		optionB.setName("B");
+		Type typeB = new Type(IntegerValue.class);
+		typeB.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(100000) ));
+		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
+		restrictionB.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeB )) );
+		
+		NewOption optionB = new NewOption(
+				new IntegerValue(10),
+				new Type(IntegerValue.class),
+				"B" );
 		optionB.setDescription("Maximum block size");
-		optionB.setValue(
-				new OptionValue(new Integer(10)) );
-		optionB.setInterval(
-				new OptionInterval(new Integer(1), new Integer(100000)) );
-		optionB.setList(
-				new OptionList() );
-		
-		
-		OptionDefault optionN = new OptionDefault();
-		optionN.setName("N");
-		optionN.setDescription("Default number of tries");
-		optionN.setValue(
-				new OptionValue(new Integer(10)) );
-		optionN.setInterval(
-				new OptionInterval(new Integer(1), new Integer(100000)) );
-		optionN.setList(
-				new OptionList() );
-		
-		
-		OptionDefault optionZ = new OptionDefault();
-		optionZ.setName("Z");
-		optionZ.setDescription("Zero for logarithmic steps");
-		optionZ.setValue(
-				new OptionValue(new Float(0.000000001f)) );
-		optionZ.setInterval(
-				new OptionInterval(new Float(0.0f), new Float(1000.0f)) );
-		optionZ.setList(
-				new OptionList() );
+		optionB.setPossibleTypesRestriction(restrictionB);
 
+		
+		Type typeN = new Type(IntegerValue.class);
+		typeN.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(100000) ));
+		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		restrictionN.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeN )) );
+		
+		NewOption optionN = new NewOption(
+				new IntegerValue(10),
+				new Type(IntegerValue.class),
+				"N" );
+		optionN.setDescription("Default number of tries");
+		optionN.setPossibleTypesRestriction(restrictionN);
+		
+		
+		Type typeZ = new Type(FloatValue.class);
+		typeZ.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.0f), new FloatValue(1000.0f) ));
+		PossibleTypesRestriction restrictionZ = new PossibleTypesRestriction();
+		restrictionZ.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeZ )) );
+		
+		NewOption optionZ = new NewOption(
+				new FloatValue(10),
+				new Type(FloatValue.class),
+				"Z" );
+		optionZ.setDescription("Zero for logarithmic steps");
+		optionZ.setPossibleTypesRestriction(restrictionZ);
+				
+		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Search.class); // some virtual-box provider agent
+		agentInfo.setAgentClass(Search.class);
 		agentInfo.setOntologyClass(Agent_GridSearch.class);
 	
 		agentInfo.setName("GridSearch");
 		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("GridSearch Description");
 		
-		agentInfo.addOption(optionB.toOption());
-		agentInfo.addOption(optionN.toOption());
-		agentInfo.addOption(optionZ.toOption());
+		agentInfo.addOption(optionB);
+		agentInfo.addOption(optionN);
+		agentInfo.addOption(optionZ);
 
 		//Slot Definition
 		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());

@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaSMOregCA;
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class SMOReg_CABox  {
 	
@@ -20,109 +25,191 @@ public class SMOReg_CABox  {
 		# The amount up to which deviation are tolerated (epsilon). (default 1e-3)
 		# Watch out, the value of epsilon is used with the (normalized/standardize) data
 		**/
-		OptionDefault optionS = new OptionDefault();
-		optionS.setName("S");
+		Type typeS = new Type(FloatValue.class);
+		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		restrictionS.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeS )) );
+		
+		NewOption optionS = new NewOption(
+				new FloatValue(1e-3f),
+				new Type(FloatValue.class),
+				"S" );
 		optionS.setDescription("The amount up to which deviation are tolerated (epsilon)");
-		optionS.setValue( new OptionValue(new Float(1e-3f)) );
+		optionS.setPossibleTypesRestriction(restrictionS);
 		
 		/**
 		# -C num
 		# The complexity constant C. (default 1)
 		**/
-		OptionDefault optionC = new OptionDefault();
-		optionC.setName("C");
+		Type typeC = new Type(IntegerValue.class);
+		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
+		restrictionC.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeC )) );
+		
+		NewOption optionC = new NewOption(
+				new IntegerValue(1),
+				new Type(IntegerValue.class),
+				"C" );
 		optionC.setDescription("The complexity constant");
-		optionC.setValue( new OptionValue(new Integer(1)) );
+		optionC.setPossibleTypesRestriction(restrictionC);
+		
 
 		/**
 		# -E num
 		# The exponent for the polynomial kernel. (default 1)
 		**/
-		OptionDefault optionE = new OptionDefault();
-		optionE.setName("E");
+		Type typeE = new Type(IntegerValue.class);
+		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		restrictionE.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeE )) );
+		
+		NewOption optionE = new NewOption(
+				new IntegerValue(1),
+				new Type(IntegerValue.class),
+				"E" );
 		optionE.setDescription("The exponent for the polynomial kernel");
-		optionE.setValue( new OptionValue(new Integer(1)) );
+		optionE.setPossibleTypesRestriction(restrictionE);
+		
 		
 		/**
 		# -G num
 		# Gamma for the RBF kernel. (default 0.01)
 		**/
-		OptionDefault optionG = new OptionDefault();
-		optionG.setName("G");
+		Type typeG = new Type(FloatValue.class);
+		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
+		restrictionG.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeG )) );
+		
+		NewOption optionG = new NewOption(
+				new FloatValue(0.01f),
+				new Type(FloatValue.class),
+				"G" );
 		optionG.setDescription("Gamma for the RBF kernel");
-		optionG.setValue( new OptionValue(new Float(0.01f)) );
+		optionG.setPossibleTypesRestriction(restrictionG);
 		
 		/**
 		# Whether to 0=normalize/1=standardize/2=neither. (default 0=normalize)
 		$ N int 1 1 s 0, 1, 2
 		**/
-		OptionDefault optionN = new OptionDefault();
-		optionN.setName("N");
+		Type typeN = new Type(IntegerValue.class);
+		typeN.setSetRestriction(
+				new SetRestriction(
+						new ArrayList<IValue>(
+								Arrays.asList( new IntegerValue(0), new IntegerValue(1), new IntegerValue(2) )) ));
+		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		restrictionN.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeN )) );
+		
+		NewOption optionN = new NewOption(
+				new IntegerValue(1),
+				new Type(IntegerValue.class),
+				"N" );
 		optionN.setDescription("Random number seed for cross-validation");
-		optionN.setValue( new OptionValue(new Integer(1)) );
-		OptionList listN = new OptionList();
-		listN.setList(
-				new ArrayList<Object>(Arrays.asList(new Integer[] {0,1,2}))
-		);
-		optionN.setList(listN);
+		optionN.setPossibleTypesRestriction(restrictionN);
 		
 		/**
 		# Feature-space normalization (only for non-linear polynomial kernels).
 		$ F boolean
 		**/
-		OptionDefault optionF = new OptionDefault();
-		optionF.setName("F");
+		Type typeF = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionF = new PossibleTypesRestriction();
+		restrictionF.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeF )) );
+		
+		NewOption optionF = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"F" );
 		optionF.setDescription("Feature-space normalization (only for non-linear polynomial kernels)");
-		optionF.setValue( new OptionValue(new Boolean(false)) );
+		optionF.setPossibleTypesRestriction(restrictionF);
 		
 		/**
 		# Use lower-order terms (only for non-linear polynomial kernels).
 		$ O boolean
 		**/
-		OptionDefault optionO = new OptionDefault();
-		optionO.setName("O");
+		Type typeO = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionO = new PossibleTypesRestriction();
+		restrictionO.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeO )) );
+		
+		NewOption optionO = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"O" );
 		optionO.setDescription("Use lower-order terms (only for non-linear polynomial kernels)");
-		optionO.setValue( new OptionValue(new Boolean(false)) );
-
+		optionO.setPossibleTypesRestriction(restrictionO);
 		
 		/**
 		# Use RBF kernel (default poly).
 		$ R boolean
 		**/
-		OptionDefault optionR = new OptionDefault();
-		optionR.setName("R");
+		Type typeR = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
+		restrictionR.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeR )) );
+		
+		NewOption optionR = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"R" );
 		optionR.setDescription("Use RBF kernel (default poly)");
-		optionR.setValue( new OptionValue(new Boolean(false)) );
+		optionR.setPossibleTypesRestriction(restrictionR);
+		
 		
 		/**
 		# Sets the size of the kernel cache. Should be a prime number. (default 250007, use 0 for full cache)
 		$ A int 1 1 r 0 MAXINT
 		**/
-		OptionDefault optionA = new OptionDefault();
-		optionA.setName("A");
+		Type typeA = new Type(IntegerValue.class);
+		typeA.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
+		PossibleTypesRestriction restrictionA = new PossibleTypesRestriction();
+		restrictionA.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeA )) );
+		
+		NewOption optionA = new NewOption(
+				new IntegerValue(250007),
+				new Type(IntegerValue.class),
+				"A" );
 		optionA.setDescription("Sets the size of the kernel cache. Should be a prime number");
-		optionA.setValue( new OptionValue(new Integer(250007)) );
-		optionA.setInterval(
-				new OptionInterval(new Integer(0), new Integer(Integer.MAX_VALUE)) );
+		optionA.setPossibleTypesRestriction(restrictionA);
+		
 		
 		/**
 		# -P num
 		# Sets the epsilon for round-off error. (default 1.0e-12)
 		**/
-		OptionDefault optionP = new OptionDefault();
-		optionP.setName("P");
+		Type typeP = new Type(FloatValue.class);
+		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
+		restrictionP.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeP )) );
+		
+		NewOption optionP = new NewOption(
+				new FloatValue(1.0e-12f),
+				new Type(FloatValue.class),
+				"P" );
 		optionP.setDescription("Sets the epsilon for round-off error");
-		optionP.setValue( new OptionValue(new Float(1.0e-12f)) );
+		optionP.setPossibleTypesRestriction(restrictionP);
+		
 		
 		/**
 		# -T num
 		# Sets the tolerance parameter. (default 1.0e-3)
 		**/
-		OptionDefault optionT = new OptionDefault();
-		optionT.setName("T");
+		Type typeT = new Type(FloatValue.class);
+		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
+		restrictionT.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeT )) );
+		
+		NewOption optionT = new NewOption(
+				new FloatValue(1.0e-3f),
+				new Type(FloatValue.class),
+				"T" );
 		optionT.setDescription("Sets the epsilon for round-off error");
-		optionT.setValue( new OptionValue(new Float(1.0e-3f)) );
+		optionT.setPossibleTypesRestriction(restrictionT);
 
+		
 
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.setAgentClass(Agent_WekaSMOregCA.class);
@@ -132,17 +219,17 @@ public class SMOReg_CABox  {
 		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("SMOReg Method");
 
-		agentInfo.addOption(optionS.toOption());
-		agentInfo.addOption(optionC.toOption());
-		agentInfo.addOption(optionE.toOption());
-		agentInfo.addOption(optionG.toOption());
-		agentInfo.addOption(optionN.toOption());
-		agentInfo.addOption(optionF.toOption());
-		agentInfo.addOption(optionO.toOption());
-		agentInfo.addOption(optionR.toOption());
-		agentInfo.addOption(optionA.toOption());
-		agentInfo.addOption(optionP.toOption());
-		agentInfo.addOption(optionT.toOption());
+		agentInfo.addOption(optionS);
+		agentInfo.addOption(optionC);
+		agentInfo.addOption(optionE);
+		agentInfo.addOption(optionG);
+		agentInfo.addOption(optionN);
+		agentInfo.addOption(optionF);
+		agentInfo.addOption(optionO);
+		agentInfo.addOption(optionR);
+		agentInfo.addOption(optionA);
+		agentInfo.addOption(optionP);
+		agentInfo.addOption(optionT);
 
 		// Slots Definition
 		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());

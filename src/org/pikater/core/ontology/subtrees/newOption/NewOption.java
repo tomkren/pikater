@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.newOption;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleValuesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.value.IValue;
 
@@ -14,7 +14,7 @@ public class NewOption {
 	
 	private List<Value> values;
 	
-	private PossibleValuesRestriction possibleValuesRestriction;
+	private PossibleTypesRestriction possibleTypesRestriction;
 	
 	
 	public NewOption() {}
@@ -70,12 +70,12 @@ public class NewOption {
 		values.add(value);
 	}
 
-	public PossibleValuesRestriction getPossibleValuesRestriction() {
-		return possibleValuesRestriction;
+	public PossibleTypesRestriction getPossibleTypesRestriction() {
+		return possibleTypesRestriction;
 	}
-	public void setPossibleValuesRestriction(
-			PossibleValuesRestriction possibleValuesRestriction) {
-		this.possibleValuesRestriction = possibleValuesRestriction;
+	public void setPossibleTypesRestriction(
+			PossibleTypesRestriction possibleTypesRestriction) {
+		this.possibleTypesRestriction = possibleTypesRestriction;
 	}
 	public boolean isValid() {
 

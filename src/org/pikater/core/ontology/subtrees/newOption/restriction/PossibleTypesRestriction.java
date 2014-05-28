@@ -4,35 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
 
-public class PossibleValuesRestriction implements IRestriction {
+public class PossibleTypesRestriction implements IRestriction {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -747009547261321953L;
 	
-	private List<List<Type>> possibleTypes;
+	private List<Types> possibleTypes;
 	
 	
-	public PossibleValuesRestriction() {}
-	public PossibleValuesRestriction(List<List<Type>> possibleTypes) {
+	public PossibleTypesRestriction() {}
+	public PossibleTypesRestriction(List<Types> possibleTypes) {
 		this.possibleTypes = possibleTypes;
 	}
 
-	public List<List<Type>> getPossibleTypes() {
+	public List<Types> getPossibleTypes() {
 		return possibleTypes;
 	}
-	public void setPossibleTypes(List<List<Type>> possibleTypes) {
+	public void setPossibleTypes(List<Types> possibleTypes) {
 		this.possibleTypes = possibleTypes;
 	}
 	public void addPossibleValues(List<Type> possibleTypes) {
 
 		if (this.possibleTypes == null) {
-			this.possibleTypes = new ArrayList<List<Type>>();
+			this.possibleTypes = new ArrayList<Types>();
 		}
 
-		this.possibleTypes.add(possibleTypes);
+		this.possibleTypes.add(new Types(possibleTypes));
 	}
 	public void addPossibleValues(Type type, int minCount, int maxCount) {
 		
@@ -62,9 +63,9 @@ public class PossibleValuesRestriction implements IRestriction {
 			return null;
 		}
 
-		Type type0 = possibleTypes.get(0).get(0);
-		for (List<Type> typesI : possibleTypes) {
-			for (Type typeJ : typesI) {
+		Type type0 = possibleTypes.get(0).getTypes().get(0);
+		for (Types typesI : possibleTypes) {
+			for (Type typeJ : typesI.getTypes()) {
 
 				if (typeJ.equals(type0)) {
 					return null;

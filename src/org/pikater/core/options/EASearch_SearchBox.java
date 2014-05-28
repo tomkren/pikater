@@ -1,89 +1,154 @@
 package org.pikater.core.options;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.pikater.core.agents.experiment.search.Agent_EASearch;
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 
 public class EASearch_SearchBox {
 
 	public static AgentInfo get() {
 
-		OptionValue valueE = new OptionValue(new Float(0.1f));
-		OptionInterval intervalE = new OptionInterval(new Float(0.0f), new Float(1.0f));
-		OptionList listE = new OptionList();
+		Type typeE = new Type(FloatValue.class);
+		typeE.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.0f), new FloatValue(1.0f) ));
+		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		restrictionE.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeE )) );
 		
-		OptionDefault optionE = new OptionDefault(valueE, intervalE, listE);
-		optionE.setName("E");
+		NewOption optionE = new NewOption(
+				new FloatValue(0.1f),
+				new Type(FloatValue.class),
+				"E" );
 		optionE.setDescription("Minimum error rate");
+		optionE.setPossibleTypesRestriction(restrictionE);
 
+//TODO: chyba
+		Type typeM = new Type(FloatValue.class);
+		typeM.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(1000) ));
+		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		restrictionM.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeM )) );
 		
-		OptionValue valueM = new OptionValue(new Integer(10));
-		OptionInterval intervalM = new OptionInterval(new Integer(1), new Integer(1000));
-		OptionList listM = new OptionList();
-		
-		OptionDefault optionM = new OptionDefault(valueM, intervalM, listM);
-		optionM.setName("M");
+		NewOption optionM = new NewOption(
+				new FloatValue(0.1f),
+				new Type(FloatValue.class),
+				"M" );
 		optionM.setDescription("Maximal number of generations");
+		optionM.setPossibleTypesRestriction(restrictionM);
+
+
+		Type typeT = new Type(FloatValue.class);
+		typeT.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.0f), new FloatValue(1.0f) ));
+		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
+		restrictionT.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeT )) );
 		
-		
-		OptionValue valueT = new OptionValue(new Float(0.2f));
-		OptionInterval intervalT = new OptionInterval(new Float(0.0f), new Float(1.0f));
-		OptionList listT = new OptionList();
-		
-		OptionDefault optionT = new OptionDefault(valueT, intervalT, listT);
-		optionT.setName("T");
+		NewOption optionT = new NewOption(
+				new FloatValue(0.2f),
+				new Type(FloatValue.class),
+				"T" );
 		optionT.setDescription("Mutation rate");
+		optionT.setPossibleTypesRestriction(restrictionT);
+
 
 		
-		OptionValue valueX = new OptionValue(new Float(0.5f));
-		OptionInterval intervalX = new OptionInterval(new Float(0.0f), new Float(1.0f));
-		OptionList listX = new OptionList();
+		Type typeX = new Type(FloatValue.class);
+		typeX.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.0f), new FloatValue(1.0f) ));
+		PossibleTypesRestriction restrictionX = new PossibleTypesRestriction();
+		restrictionX.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeX )) );
 		
-		OptionDefault optionX = new OptionDefault(valueX, intervalX, listX);
-		optionX.setName("X");
+		NewOption optionX = new NewOption(
+				new FloatValue(0.5f),
+				new Type(FloatValue.class),
+				"X" );
 		optionX.setDescription("Crossover probability");
+		optionX.setPossibleTypesRestriction(restrictionX);
 
-	
-		OptionValue valueP = new OptionValue(new Integer(10));
-		OptionInterval intervalP = new OptionInterval(new Integer(1), new Integer(100));
-		OptionList listP = new OptionList();
 		
-		OptionDefault optionP = new OptionDefault(valueP, intervalP, listP);
-		optionP.setName("P");
+		
+		Type typeP = new Type(IntegerValue.class);
+		typeP.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(100) ));
+		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
+		restrictionP.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeP )) );
+		
+		NewOption optionP = new NewOption(
+				new IntegerValue(10),
+				new Type(IntegerValue.class),
+				"P" );
 		optionP.setDescription("Population size");
-
-
-		OptionValue valueI = new OptionValue(new Integer(10));
-		OptionInterval intervalI = new OptionInterval(new Integer(1), new Integer(100));
-		OptionList listI = new OptionList();
+		optionP.setPossibleTypesRestriction(restrictionP);
 		
-		OptionDefault optionI = new OptionDefault(valueI, intervalI, listI);
-		optionI.setName("I");
+
+		Type typeI = new Type(IntegerValue.class);
+		typeI.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(100) ));
+		PossibleTypesRestriction restrictionI = new PossibleTypesRestriction();
+		restrictionI.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeI )) );
+		
+		NewOption optionI = new NewOption(
+				new IntegerValue(10),
+				new Type(IntegerValue.class),
+				"I" );
 		optionI.setDescription("Maximum number of option evaluations");
+		optionI.setPossibleTypesRestriction(restrictionI);
 
 
-		OptionValue valueF = new OptionValue(new Float(0.2f));
-		OptionInterval intervalF = new OptionInterval(new Float(0.0f), new Float(1.0f));
-		OptionList listF = new OptionList();
+		Type typeF = new Type(FloatValue.class);
+		typeF.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.0f), new FloatValue(1.0f) ));
+		PossibleTypesRestriction restrictionF = new PossibleTypesRestriction();
+		restrictionF.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeF )) );
 		
-		OptionDefault optionF = new OptionDefault(valueF, intervalF, listF);
-		optionF.setName("F");
+		NewOption optionF = new NewOption(
+				new FloatValue(0.2f),
+				new Type(FloatValue.class),
+				"F" );
 		optionF.setDescription("Mutation rate per field in individual");
+		optionF.setPossibleTypesRestriction(restrictionF);
 
 
-		OptionValue valueL = new OptionValue(new Float(0.1f));
-		OptionInterval intervalL = new OptionInterval(new Float(0.0f), new Float(1.0f));
-		OptionList listL = new OptionList();
+
+		Type typeL = new Type(FloatValue.class);
+		typeL.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.0f), new FloatValue(1.0f) ));
+		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
+		restrictionL.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeL )) );
 		
-		OptionDefault optionL = new OptionDefault(valueL, intervalL, listL);
-		optionL.setName("L");
+		NewOption optionL = new NewOption(
+				new FloatValue(0.1f),
+				new Type(FloatValue.class),
+				"L" );
 		optionL.setDescription("The percentage of elite individuals");
+		optionL.setPossibleTypesRestriction(restrictionL);
 
+		
 
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.setAgentClass(Agent_EASearch.class);
@@ -93,14 +158,14 @@ public class EASearch_SearchBox {
 		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Searcher using Evolution algorithm");
 
-		agentInfo.addOption(optionE.toOption());
-		agentInfo.addOption(optionM.toOption());
-		agentInfo.addOption(optionT.toOption());
-		agentInfo.addOption(optionX.toOption());
-		agentInfo.addOption(optionP.toOption());
-		agentInfo.addOption(optionI.toOption());
-		agentInfo.addOption(optionF.toOption());
-		agentInfo.addOption(optionL.toOption());
+		agentInfo.addOption(optionE);
+		agentInfo.addOption(optionM);
+		agentInfo.addOption(optionT);
+		agentInfo.addOption(optionX);
+		agentInfo.addOption(optionP);
+		agentInfo.addOption(optionI);
+		agentInfo.addOption(optionF);
+		agentInfo.addOption(optionL);
 
 		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
 		

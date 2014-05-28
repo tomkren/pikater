@@ -1,16 +1,24 @@
 package org.pikater.core.options;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 
 
 public class MultiLayerPerceptron_CABox {
@@ -26,45 +34,62 @@ public class MultiLayerPerceptron_CABox {
 		# learning rate, default 0.3; 1 arguments
 		$ L float 1 1 r 0.001 1
 		**/
-		OptionDefault optionL = new OptionDefault();
-		optionL.setName("L");
-		optionL.setDescription("Learning rate");
-		optionL.setValue(
-				new OptionValue(new Float(0.3f)) );
-		optionL.setInterval(
-				new OptionInterval(new Float(0.001f), new Float(1.0f)) );
-		optionL.setList(
-				new OptionList() );
+		Type typeL = new Type(FloatValue.class);
+		typeL.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.001f), new FloatValue(1.0f) ));
+		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
+		restrictionL.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeL )) );
 		
+		
+		NewOption optionL = new NewOption(
+				new FloatValue(0.3f),
+				new Type(FloatValue.class),
+				"L" );
+		optionL.setDescription("Learning rate");
+		optionL.setPossibleTypesRestriction(restrictionL);
+
 		
 		/**
 		# Momentum Rate for the backpropagation algorithm., Default = 0.2
 		$ M float 1 1 r 0 0.9
 		**/
-		OptionDefault optionM = new OptionDefault();
-		optionM.setName("M");
-		optionM.setDescription("Momentum Rate for the backpropagation algorithm");
-		optionM.setValue(
-				new OptionValue(new Float(0.2f)) );
-		optionL.setInterval(
-				new OptionInterval(new Float(0.0f), new Float(0.9f)) );
-		optionL.setList(
-				new OptionList() );
+		Type typeM = new Type(FloatValue.class);
+		typeM.setRangeRestriction(
+				new RangeRestriction(
+						new FloatValue(0.0f), new FloatValue(0.9f) ));
+		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		restrictionM.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeM )) );
 		
+		NewOption optionM = new NewOption(
+				new FloatValue(0.2f),
+				new Type(FloatValue.class),
+				"M" );
+		optionM.setDescription("Momentum Rate for the backpropagation algorithm");
+		optionM.setPossibleTypesRestriction(restrictionM);
+
 		
 		/**
 		#  Number of epochs to train through.
 		$ N int 1 1 r 1 10000
 		**/
-		OptionDefault optionN = new OptionDefault();
-		optionN.setName("N");
+		Type typeN = new Type(FloatValue.class);
+		typeN.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(10000) ));
+		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		restrictionN.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeN )) );
+		
+		NewOption optionN = new NewOption(
+				new IntegerValue(1),
+				new Type(IntegerValue.class),
+				"N" );
 		optionN.setDescription("Number of epochs to train through");
-		optionN.setValue(
-				new OptionValue(new Integer(1)) );
-		optionN.setInterval(
-				new OptionInterval(new Integer(1), new Integer(10000)) );
-		optionN.setList(
-				new OptionList() );
+		optionN.setPossibleTypesRestriction(restrictionN);
+
 		
 		/**
 		#  Percentage size of validation set to use to terminate
@@ -72,30 +97,42 @@ public class MultiLayerPerceptron_CABox {
 		#  (Value should be between 0 - 100, Default = 0).
 		$ V int 1 1 r 0 100
 		**/
-		OptionDefault optionV = new OptionDefault();
-		optionV.setName("V");
+		Type typeV = new Type(IntegerValue.class);
+		typeV.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(0), new IntegerValue(100) ));
+		PossibleTypesRestriction restrictionV = new PossibleTypesRestriction();
+		restrictionV.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeV )) );
+		
+		NewOption optionV = new NewOption(
+				new IntegerValue(0),
+				new Type(IntegerValue.class),
+				"N" );
 		optionV.setDescription("Percentage size of validation");
-		optionV.setValue(
-				new OptionValue(new Integer(0)) );
-		optionV.setInterval(
-				new OptionInterval(new Integer(0), new Integer(100)) );
-		optionV.setList(
-				new OptionList() );
+		optionV.setPossibleTypesRestriction(restrictionV);
+
 		
 		/**
 		#  The value used to seed the random number generator
 		#  (Value should be >= 0 and and a long, Default = 0).
 		$ S int 1 1 r 0 MAXINT
 		**/
-		OptionDefault optionS = new OptionDefault();
-		optionS.setName("S");
+		Type typeS = new Type(IntegerValue.class);
+		typeS.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
+		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		restrictionV.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeS )) );
+		
+		NewOption optionS = new NewOption(
+				new IntegerValue(0),
+				new Type(IntegerValue.class),
+				"S" );
 		optionS.setDescription("Seed the random number generator");
-		optionS.setValue(
-				new OptionValue(new Integer(0)) );
-		optionS.setInterval(
-				new OptionInterval(new Integer(0), new Integer(Integer.MAX_VALUE)) );
-		optionS.setList(
-				new OptionList() );
+		optionS.setPossibleTypesRestriction(restrictionS);
+		
 		
 		/**
 		#  The consequetive number of errors allowed for validation
@@ -103,47 +140,73 @@ public class MultiLayerPerceptron_CABox {
 		#  (Value should be > 0, Default = 20).
 		$ E int 1 1 r 0 50
 		**/
-		OptionDefault optionE = new OptionDefault();
-		optionE.setName("E");
+		Type typeE = new Type(IntegerValue.class);
+		typeE.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(0), new IntegerValue(50) ));
+		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		restrictionE.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeE )) );
+		
+		NewOption optionE = new NewOption(
+				new IntegerValue(20),
+				new Type(IntegerValue.class),
+				"E" );
 		optionE.setDescription("The consequetive number of errors allowed for validation");
-		optionE.setValue(
-				new OptionValue(new Integer(20)) );
-		optionE.setInterval(
-				new OptionInterval(new Integer(0), new Integer(50)) );
-		optionE.setList(
-				new OptionList() );
+		optionE.setPossibleTypesRestriction(restrictionE);
+
 		
 		/**
 		# Learning rate decay will occur; 0 arguments
 		$ D boolean
 		**/
-		OptionDefault optionD = new OptionDefault();
-		optionD.setName("D");
+		Type typeD = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionD = new PossibleTypesRestriction();
+		restrictionD.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeD )) );
+		
+		NewOption optionD = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"D" );
 		optionD.setDescription("Learning rate");
-		optionD.setValue(
-				new OptionValue(new Boolean(false)) );
+		optionD.setPossibleTypesRestriction(restrictionD);
+
 		
 		/**
 		# Normalizing the attributes will NOT be done.
 		$ I boolean
 		**/
-		OptionDefault optionI = new OptionDefault();
-		optionI.setName("I");
+		Type typeI = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionI = new PossibleTypesRestriction();
+		restrictionI.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeI )) );
+		
+		NewOption optionI = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"I" );
 		optionI.setDescription("Normalizing the attributes will NOT be done");
-		optionI.setValue(
-				new OptionValue(new Boolean(false)) );
-
+		optionI.setPossibleTypesRestriction(restrictionI);
+		
 		
 		/**
 		#  GUI will be opened.
 		#  (Use this to bring up a GUI).
 		$ G boolean
 		**/
-		OptionDefault optionG = new OptionDefault();
-		optionG.setName("G");
+		Type typeG = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
+		restrictionG.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeG )) );
+		
+		NewOption optionG = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"G" );
 		optionG.setDescription("GUI will be opened");
-		optionG.setValue(
-				new OptionValue(new Boolean(false)) );
+		optionG.setPossibleTypesRestriction(restrictionG);
+		
 		
 		/**
 		# The hidden layers to be created for the network.
@@ -152,38 +215,67 @@ public class MultiLayerPerceptron_CABox {
 		# type list - length (2 numbers), range (2 numbers)  ... max
 		$ H mixed 1 3 s 2, 3, 4, 5, 6, 7, 8, 9, 10, i, o
 		**/		
+		Type typeHn = new Type(IntegerValue.class);
+		typeHn.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(2), new IntegerValue(10) ));
+		List<IValue> list =  new ArrayList<IValue>();
+		list.add( new StringValue("a") );
+		list.add( new StringValue("i") );
+		list.add( new StringValue("o") );
+		list.add( new StringValue("t") );
 		
-		OptionDefault optionH = new OptionDefault();
-		optionH.setName("H");
+		final Type typeHs = new Type(StringValue.class);
+		typeHs.setSetRestriction(
+				new SetRestriction(list) );
+				
+		PossibleTypesRestriction restrictionH = new PossibleTypesRestriction();
+		restrictionH.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeHn )) );
+		
+		NewOption optionH = new NewOption(
+				new IntegerValue(2),
+				new Type(IntegerValue.class),
+				"E" );
 		optionH.setDescription("The hidden layers to be created for the network");
-		optionH.setValue( null );
-		optionH.setInterval( null );
-		OptionList listH = new OptionList();
-		listH.setList(Arrays.asList(new Object[] {2, 3, 4, 5, 6, 7, 8, 9, 10, "i", "o"}));
-		optionH.setList(
-				listH );
+		optionH.setPossibleTypesRestriction(restrictionH);
+		
 		
 		/**
 		#  A NominalToBinary filter will NOT automatically be used.
 		#  (Set this to not use a NominalToBinary filter).
 		$ B boolean
-        ***/
-		OptionDefault optionB = new OptionDefault();
-		optionB.setName("B");
+        ***/		
+		Type typeB = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
+		restrictionB.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeB )) );
+		
+		NewOption optionB = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"B" );
 		optionB.setDescription("A NominalToBinary filter will NOT automatically be used");
-		optionB.setValue(
-				new OptionValue(new Boolean(false)) );
+		optionB.setPossibleTypesRestriction(restrictionB);
+	
+		
 		
 		/**
 		#  Normalizing a numeric class will NOT be done.
 		#  (Set this to not normalize the class if it's numeric).
 		$ C boolean
-		**/		
-		OptionDefault optionC = new OptionDefault();
-		optionC.setName("C");
+		**/
+		Type typeC = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
+		restrictionC.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeC )) );
+		
+		NewOption optionC = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"C" );
 		optionC.setDescription("Normalizing a numeric class will NOT be done");
-		optionC.setValue(
-				new OptionValue(new Boolean(false)) );
+		optionC.setPossibleTypesRestriction(restrictionC);
 
 
 		Slot outputSlot = new Slot();
@@ -199,18 +291,18 @@ public class MultiLayerPerceptron_CABox {
 		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Multi-layer perceptron method");
 
-		agentInfo.addOption(optionC.toOption());
-		agentInfo.addOption(optionB.toOption());
-		agentInfo.addOption(optionG.toOption());
-		agentInfo.addOption(optionI.toOption());
-		agentInfo.addOption(optionD.toOption());
-		agentInfo.addOption(optionE.toOption());
-		agentInfo.addOption(optionS.toOption());
-		agentInfo.addOption(optionV.toOption());
-		agentInfo.addOption(optionN.toOption());
-		agentInfo.addOption(optionM.toOption());
-		agentInfo.addOption(optionL.toOption());
-		agentInfo.addOption(optionH.toOption());
+		agentInfo.addOption(optionC);
+		agentInfo.addOption(optionB);
+		agentInfo.addOption(optionG);
+		agentInfo.addOption(optionI);
+		agentInfo.addOption(optionD);
+		agentInfo.addOption(optionE);
+		agentInfo.addOption(optionS);
+		agentInfo.addOption(optionV);
+		agentInfo.addOption(optionN);
+		agentInfo.addOption(optionM);
+		agentInfo.addOption(optionL);
+		agentInfo.addOption(optionH);
 
 
 		// Slots Definition

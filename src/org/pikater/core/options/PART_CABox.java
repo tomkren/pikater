@@ -2,14 +2,21 @@ package org.pikater.core.options;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaPARTCA;
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
 
 public class PART_CABox {
 	
@@ -19,97 +26,145 @@ public class PART_CABox {
 		# Set confidence threshold for pruning. (Default: 0.25)
 		# $ C float 1 1 r 0.0001 0.4 
 		$ C float 1 1 s null, 0.0001, 0.1, 0.2, 0.25, 0.3, 0.4, 0.5
-		**/		
-		OptionDefault optionC = new OptionDefault();
-		optionC.setName("C");
+		**/
+		List<IValue> list = new ArrayList<IValue>(
+				Arrays.asList(
+						new NullValue(), new FloatValue(0.0001f),
+						new FloatValue(0.1f), new FloatValue(0.2f),
+						new FloatValue(0.25f), new FloatValue(0.3f),
+						new FloatValue(0.4f), new FloatValue(0.5f)
+				));
+		Type typeC = new Type(FloatValue.class);
+		typeC.setSetRestriction(
+				new SetRestriction( list ) );
+		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
+		restrictionC.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeC )) );
+		
+		NewOption optionC = new NewOption(
+				new FloatValue(0.25f),
+				new Type(FloatValue.class),
+				"C" );
 		optionC.setDescription("Set the number of folder to use in the computing of the mutual information");
-		optionC.setValue(
-				new OptionValue(new Float(0.25f)) );
-		optionC.setInterval(
-				null );
-		OptionList listC = new OptionList();
-		listC.setList(
-				new ArrayList<Object>(
-						Arrays.asList(new Float[] {null,0.0001f,0.1f,0.2f,0.25f,0.3f,0.4f,0.5f})
-						) );
-		optionC.setList( listC );
+		optionC.setPossibleTypesRestriction(restrictionC);
+		
 		
 		/**
 		# Set minimum number of instances per leaf. (Default: 2)
 		$ M int 1 1 r 1 10
 		**/
-		OptionDefault optionM = new OptionDefault();
-		optionM.setName("M");
+		Type typeM = new Type(IntegerValue.class);
+		typeM.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(10) ));
+		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		restrictionM.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeM )) );
+		
+		NewOption optionM = new NewOption(
+				new IntegerValue(2),
+				new Type(IntegerValue.class),
+				"M" );
 		optionM.setDescription("Set minimum number of instances per leaf");
-		optionM.setValue(
-				new OptionValue(new Integer(2)) );
-		optionM.setInterval(
-				new OptionInterval(new Integer(1), new Integer(10)) );
-		optionM.setList( new OptionList() );
+		optionM.setPossibleTypesRestriction(restrictionM);
 		
 		
 		/**
 		# Use reduced error pruning.
 		$ R boolean
-		**/		
-		OptionDefault optionR = new OptionDefault();
-		optionR.setName("R");
+		**/
+		Type typeR = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
+		restrictionR.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeR )) );
+		
+		NewOption optionR = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"R" );
 		optionR.setDescription("Use reduced error pruning");
-		optionR.setValue(
-				new OptionValue(new Boolean(false)) );
+		optionR.setPossibleTypesRestriction(restrictionR);
 
 
+		
 		/**
 		# Set number of folds for reduced error pruning. One fold is used as the pruning set. (Default: 3)
 		$ N int 1 1 s null, 1, 2, 3, 4, 5
 		**/
-		OptionDefault optionN = new OptionDefault();
-		optionN.setName("N");
+		List<IValue> listN = new ArrayList<IValue>(
+				Arrays.asList(
+						new NullValue(), new IntegerValue(1),
+						new IntegerValue(2), new IntegerValue(3),
+						new IntegerValue(4), new IntegerValue(5)
+				));
+		Type typeN = new Type(FloatValue.class);
+		typeN.setSetRestriction(
+				new SetRestriction( listN ) );
+		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		restrictionN.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeN )) );
+		
+		NewOption optionN = new NewOption(
+				new IntegerValue(3),
+				new Type(IntegerValue.class),
+				"N" );
 		optionN.setDescription("Set the number of folder to use in the computing of the mutual information");
-		optionN.setValue(
-				new OptionValue(new Integer(3)) );
-		OptionList listN = new OptionList();
-		listN.setList(
-				new ArrayList<Object>(
-						Arrays.asList(new Integer[] {null,1,2,3,4,5})
-						) );
-		optionC.setList( listN );
+		optionN.setPossibleTypesRestriction(restrictionN);
 
 
 		/**
 		# Use binary splits for nominal attributes.
 		$ B boolean
 		**/
-		OptionDefault optionB = new OptionDefault();
-		optionB.setName("B");
+		Type typeB = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
+		restrictionB.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeB )) );
+		
+		NewOption optionB = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"B" );
 		optionB.setDescription("Use reduced error pruning");
-		optionB.setValue(
-				new OptionValue(new Boolean(false)) );
+		optionB.setPossibleTypesRestriction(restrictionB);
 
 
 		/**
 		# Generate unpruned decision list.
 		$ U boolean
 		**/
-		OptionDefault optionU = new OptionDefault();
-		optionU.setName("U");
+		Type typeU = new Type(BooleanValue.class);
+		PossibleTypesRestriction restrictionU = new PossibleTypesRestriction();
+		restrictionU.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeU )) );
+		
+		NewOption optionU = new NewOption(
+				new BooleanValue(false),
+				new Type(BooleanValue.class),
+				"U" );
 		optionU.setDescription("Generate unpruned decision list");
-		optionU.setValue(
-				new OptionValue(new Boolean(false)) );
-
-
+		optionU.setPossibleTypesRestriction(restrictionU);
+		
+		
 		/**
 		# The seed for reduced-error pruning.
 		$ Q int 1 1 r 1 MAXINT
-		**/		
-		OptionDefault optionQ = new OptionDefault();
-		optionQ.setName("Q");
+		**/
+		Type typeQ = new Type(IntegerValue.class);
+		typeQ.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
+		PossibleTypesRestriction restrictionQ = new PossibleTypesRestriction();
+		restrictionQ.addPossibleValues(
+				new ArrayList<Type>(Arrays.asList( typeQ )) );
+		
+		NewOption optionQ = new NewOption(
+				new IntegerValue(1),
+				new Type(IntegerValue.class),
+				"Q" );
 		optionQ.setDescription("The seed for reduced-error pruning");
-		optionQ.setValue(
-				new OptionValue(new Integer(1)) );
-		optionQ.setInterval(
-				new OptionInterval(new Integer(1), new Integer(Integer.MAX_VALUE)) );
-		optionQ.setList( new OptionList() );
+		optionQ.setPossibleTypesRestriction(restrictionQ);
+		
 		
 
 		AgentInfo agentInfo = new AgentInfo();
@@ -120,13 +175,13 @@ public class PART_CABox {
 		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("PART Method");
 
-		agentInfo.addOption(optionC.toOption());
-		agentInfo.addOption(optionM.toOption());
-		agentInfo.addOption(optionR.toOption());
-		agentInfo.addOption(optionN.toOption());
-		agentInfo.addOption(optionB.toOption());
-		agentInfo.addOption(optionU.toOption());
-		agentInfo.addOption(optionQ.toOption());
+		agentInfo.addOption(optionC);
+		agentInfo.addOption(optionM);
+		agentInfo.addOption(optionR);
+		agentInfo.addOption(optionN);
+		agentInfo.addOption(optionB);
+		agentInfo.addOption(optionU);
+		agentInfo.addOption(optionQ);
 
 		// Slots Definition
 		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
