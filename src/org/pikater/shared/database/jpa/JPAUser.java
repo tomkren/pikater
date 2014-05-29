@@ -51,26 +51,25 @@ public class JPAUser extends JPAAbstractEntity{
 	private Date lastLogin;
 	
 	// TODO: eventually swap "private String password;" for "private String passwordHash;"
+	// TODO: default (zero-arg) constructors should be invisible from outside? (private or protected)
 	
-	/** Constructor for JPA Compatibility **/
+	/** Constructor for JPA Compatibility. */
 	public JPAUser(){}
 	
 	/**
-	 * Basic constructor for the JPAUser Entity. The status of the created user
-	 * is ACTIVE, but in case of necessity it can be set to PASSIVE before the first persistance.
-	 * The user tasks' maximal priority is set to 9.
-	 * @param login The login for the user
+	 * Creates a new user with active status (no administrator acceptance is needed) and default max priority.
+	 * @param login
+	 * @param password
+	 * @param email
+	 * @param role
 	 */
-	public JPAUser(String login,String password){
-		this.login=login;
-		this.password=password;
-		this.created=new Date();
-		this.priorityMax=9;
-		this.status=JPAUserStatus.ACTIVE;
+	public JPAUser(String login, String password, String email, JPARole role)
+	{
+		this(login, password, role, email, 9, JPAUserStatus.ACTIVE);
 	}
 	
 	/**
-	 * Constructor for the JPAUser Entity, where all fields can be set.
+	 * Complete constructor - for internal use only.
 	 * @param login The login of the user.
 	 * @param password The password of the user.
 	 * @param role The role of the user.
@@ -78,13 +77,15 @@ public class JPAUser extends JPAAbstractEntity{
 	 * @param maxPriority The maximal priority of user's tasks.
 	 * @param status The user's account status.
 	 */
-	public JPAUser(String login,String password,JPARole role,String email,int maxPriority,JPAUserStatus status)
+	protected JPAUser(String login, String password, JPARole role, String email, int maxPriority, JPAUserStatus status)
 	{
-		this(login,password);
-		this.role=role;
-		this.email=email;
+		this.login=login;
+		this.password=password;
 		this.priorityMax=maxPriority;
+		this.email=email;
+		this.role=role;
 		this.status=status;
+		this.created = new Date();
 	}
 	
 	public int getId() {

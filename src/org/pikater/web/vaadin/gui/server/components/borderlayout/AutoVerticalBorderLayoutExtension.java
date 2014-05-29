@@ -14,6 +14,7 @@ public class AutoVerticalBorderLayoutExtension extends AbstractExtension
 	{
 		registerRpc(new AutoVerticalBorderLayoutExtensionServerRpc()
 		{
+			private static final long serialVersionUID = -2652556748569844059L;
 		});
 	}
 	

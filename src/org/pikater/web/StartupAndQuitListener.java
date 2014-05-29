@@ -43,6 +43,8 @@ public class StartupAndQuitListener implements ServletContextListener
 		 * GENERAL NOTE: don't alter the code order. There may be some dependencies.
 		 */
 		
+		// TODO: first check connection to database
+		
 		// this must be first
 		ServerConfigurationInterface.setField(ServerConfItem.CONTEXT, event.getServletContext());
 		AppHelper.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));

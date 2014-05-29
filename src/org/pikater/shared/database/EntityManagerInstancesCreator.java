@@ -19,7 +19,7 @@ public class EntityManagerInstancesCreator
 	
 	// TODO: use static JVM-wide logger with a nice interface instead?
 	/**
-	 * @see org.pikater.web.WebAppLogger
+	 * @see org.pikater.shared.logging.PikaterLogger
 	 */
 	private static Logger logger=PikaterLogger.getLogger(
 		    Thread.currentThread().getStackTrace()[0].getClassName() );

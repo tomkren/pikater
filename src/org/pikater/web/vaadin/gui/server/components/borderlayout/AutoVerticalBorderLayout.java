@@ -31,7 +31,6 @@ public class AutoVerticalBorderLayout extends CustomComponent implements AutoVer
 		this.extension.extend(innerLayout);
 		
 		setCompositionRoot(this.innerLayout);
-		setSizeFull();
 	}
 	
 	public void setComponent(Border border, AbstractComponent component)

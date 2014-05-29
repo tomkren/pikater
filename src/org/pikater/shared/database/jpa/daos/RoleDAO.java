@@ -31,6 +31,11 @@ public class RoleDAO extends AbstractDAO {
 		return getByTypedNamedQuery("Role.getByName", "name", name);
 	}
 	
+	public JPARole getAdminRole()
+	{
+		return getByName("admin").get(0);
+	}
+	
 	private List<JPARole> getByTypedNamedQuery(String queryName,String paramName,Object param){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
