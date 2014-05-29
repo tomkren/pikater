@@ -1,8 +1,12 @@
 package org.pikater.web.vaadin.gui.server.webui;
 
-import org.vaadin.dialogs.ConfirmDialog;
+import org.pikater.shared.FieldVerifier;
+import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel;
 
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -10,6 +14,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -21,22 +26,9 @@ import com.vaadin.ui.Button.ClickEvent;
 public class MyDialogs
 {
 	// -------------------------------------------------------------------------
-	// GENERAL DIALOGS
+	// PRIVATE INTERFACE
 	
-	public static ConfirmDialog createSimpleConfirmDialog(UI parentUI, String message, Button.ClickListener okAction)
-	{
-		ConfirmDialog result = ConfirmDialog.getFactory().create(null, message, "OK", "Cancel");
-		setDialogProperties(result);
-		if(okAction != null)
-		{
-			result.getOkButton().addClickListener(okAction);
-		}
-		result.show(parentUI, null, true);
-		parentUI.setFocusedComponent(result);
-		return result;
-	}
-	
-	public static Window createComponentConfirmDialog(UI parentUI, String caption, Component subContent, final OnOkClicked okAction)
+	private static Window createConfirmDialog(UI parentUI, String caption, Component subContent, final OnOkClicked okAction)
 	{
 		// define underlying components
         Label spacer = new Label("");
@@ -71,6 +63,7 @@ public class MyDialogs
         // wrap the content component
         VerticalLayout content = new VerticalLayout();
         content.setSpacing(true);
+        content.setStyleName("pikaterDialogContent");
         content.addComponent(subContent);
         content.addComponent(buttons);
 
@@ -78,7 +71,6 @@ public class MyDialogs
         final Window result = new Window(caption, content);
         content.setSizeUndefined();
         setDialogProperties(result);
-        result.setSizeFull();
         result.setSizeUndefined();
         cancel.addClickListener(new Button.ClickListener()
 		{
@@ -94,6 +86,23 @@ public class MyDialogs
         return result;
 	}
 	
+	private static void setDialogProperties(Window window)
+	{
+		window.setClosable(true);
+		window.setDraggable(false);
+		window.setModal(true);
+		window.setResizable(false);
+		window.setCloseShortcut(KeyCodes.KEY_ESCAPE, null);
+	}
+	
+	// -------------------------------------------------------------------------
+	// SPECIFIC DIALOGS
+	
+	public static Window createSimpleConfirmDialog(UI parentUI, String message, OnOkClicked okAction)
+	{
+		return createConfirmDialog(parentUI, "Confirm action", new Label(message), okAction);
+	}
+	
 	public static Window createTextPromptDialog(UI parentUI, String caption, String oldValue, final ITextPromptDialogResult newValueHandler) 
 	{
 		final TextField tf = new TextField("The new value:");
@@ -101,7 +110,7 @@ public class MyDialogs
 		{
 			tf.setValue(oldValue);
 		}
-		return createComponentConfirmDialog(parentUI, caption, tf, new OnOkClicked()
+		return createConfirmDialog(parentUI, caption, tf, new OnOkClicked()
 		{
 			@Override
 			public boolean handleOkEvent()
@@ -111,22 +120,61 @@ public class MyDialogs
 		});
 	}
 	
-	// -------------------------------------------------------------------------
-	// SPECIFIC DIALOGS
-	
-	public static Window createLoginDialog(UI parentUI, final ILoginDialogResult resultHandler)
+	public static Window createLoginDialog(final UI parentUI, final ILoginDialogResult resultHandler)
 	{
 		FormLayout form = new FormLayout();
-		final TextField login = new TextField("Login:");
-		final PasswordField password = new PasswordField("Password:");
+		final TextField login = new TextField("Login:", "sj");
+		final PasswordField password = new PasswordField("Password:", "123");
 		form.addComponent(login);
 		form.addComponent(password);
-		return createComponentConfirmDialog(parentUI, "Please, authenticate yourself", form, new OnOkClicked()
+		form.addComponent(new LinkLabel("Create account", new ClickListener()
+		{
+			@Override
+			public void click(com.vaadin.event.MouseEvents.ClickEvent event)
+			{
+				createRegisterDialog(parentUI);
+			}
+		}));
+		return createConfirmDialog(parentUI, "Please, authenticate yourself", form, new OnOkClicked()
 		{
 			@Override
 			public boolean handleOkEvent()
 			{
 				return resultHandler.handleResult(login.getValue(), password.getValue());
+			}
+		});
+	}
+	
+	public static Window createRegisterDialog(UI parentUI)
+	{
+		FormLayout form = new FormLayout();
+		final TextField login = new TextField("Login:");
+		final PasswordField password = new PasswordField("Password:");
+		final TextField email = new TextField("Email:");
+		form.addComponent(login);
+		form.addComponent(password);
+		form.addComponent(email);
+		return createConfirmDialog(parentUI, "Create a new account", form, new OnOkClicked()
+		{
+			@Override
+			public boolean handleOkEvent()
+			{
+				if(FieldVerifier.isValidEmail(email.getValue()))
+				{
+					DAOs.userDAO.storeEntity(new JPAUser(
+							login.getValue(),
+							password.getValue(),
+							email.getValue(),
+							DAOs.roleDAO.getAdminRole()
+					));
+					return true;
+				}
+				else
+				{
+					Notification.show("Email is not valid. It has to be specified, in the form 'a@b.c' where 'a' has "
+							+ "64 characters at most and b and c have at most 254 characters altogether.");
+					return false;
+				}
 			}
 		});
 	}
@@ -159,17 +207,5 @@ public class MyDialogs
 		 * @return true if the dialog is no longer needed and it should close
 		 */
 		boolean handleResult(String login, String password);
-	}
-	
-	// -------------------------------------------------------------------------
-	// PRIVATE INTERFACE
-	
-	private static void setDialogProperties(Window window)
-	{
-		window.setClosable(true);
-		window.setDraggable(false);
-		window.setModal(true);
-		window.setResizable(false);
-		window.setCloseShortcut(KeyCodes.KEY_ESCAPE, null);
 	}
 }
