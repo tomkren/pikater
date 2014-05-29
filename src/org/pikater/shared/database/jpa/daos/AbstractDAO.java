@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 
@@ -16,11 +17,12 @@ public abstract class AbstractDAO
 	protected static Logger logger=PikaterLogger.getLogger(
 		    Thread.currentThread().getStackTrace()[0].getClassName() );
 
-	public abstract String getEntityName();	
+	public abstract String getEntityName();
 	public abstract <R extends JPAAbstractEntity> List<R> getAll();
-	public abstract <R> List<R> getByID(int ID);
+	public abstract <R extends JPAAbstractEntity> R getByID(int ID);
+	public abstract <R extends JPAAbstractEntity> R getByIDWithException(int ID)  throws NoResultException;
 	public boolean existsByID(int ID){
-		return getByID(ID).size()>0;
+		return getByID(ID)!=null;
 	}
 	
 	public void updateEntity(JPAAbstractEntity changedEntity){

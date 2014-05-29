@@ -78,11 +78,11 @@ public class MetaDataModel extends AbstractModel {
 			switch(col){
 				case META_DATA_TYPE:
 					if(globMD!=null)
-						row.add(globMD.getEntityName());
+						row.add(globMD.EntityName);
 					else if (attrCatMD!=null)
-						row.add(attrCatMD.getEntityName());
+						row.add(attrCatMD.EntityName);
 					else if (attrNumMD!=null)
-						row.add(attrNumMD.getEntityName());
+						row.add(attrNumMD.EntityName);
 					else
 						row.add(nonDef);
 					

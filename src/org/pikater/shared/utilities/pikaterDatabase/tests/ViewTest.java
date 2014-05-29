@@ -21,9 +21,7 @@ public class ViewTest {
 		
 		JPADataSetLO weather;
 		try {
-			weather = new ResultFormatter<JPADataSetLO>(
-					DAOs.dataSetDAO.getByID(2151)
-					).getSingleResult();
+			weather = DAOs.dataSetDAO.getByIDWithException(2151);
 			this.dataSetViewTest();
 			this.rowTest(weather);
 			//this.stringTest(weather);

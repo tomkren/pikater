@@ -7,11 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="Root")
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class JPAAbstractEntity {
+	@Transient
+	public static final String EntityName = "AbstractEntity";
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -19,10 +22,6 @@ public abstract class JPAAbstractEntity {
 	public int getId() {
         return id;
     }
-
-	public String getEntityName(){
-		return "AbstractEntity";
-	}
 	
 	public abstract void updateValues(JPAAbstractEntity newValues) throws Exception;
 	

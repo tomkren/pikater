@@ -5,17 +5,20 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class ResultDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPAResult()).getEntityName();
+		return JPAResult.EntityName;
 	}
 
 	@Override
@@ -27,8 +30,18 @@ public class ResultDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPAResult> getByID(int ID) {
-		return getByTypedNamedQuery("Result.getByID", "id", ID);
+	public JPAResult getByID(int ID) {
+		return new ResultFormatter<JPAResult>(
+				getByTypedNamedQuery("Result.getByID", "id", ID)
+				).getSingleResultWithNull();
+	}
+	
+	@Override
+	public JPAResult getByIDWithException(int ID)
+			throws NoResultException {
+		return new ResultFormatter<JPAResult>(
+				getByTypedNamedQuery("Result.getByID", "id", ID)
+				).getSingleResult();
 	}
 	
 	public List<JPAResult> getByAgentName(String agentName) {
@@ -54,7 +67,5 @@ public class ResultDAO extends AbstractDAO {
 		}finally{
 			em.close();
 		}
-	}
-
-	
+	}	
 }

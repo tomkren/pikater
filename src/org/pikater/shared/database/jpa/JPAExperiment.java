@@ -1,13 +1,11 @@
 package org.pikater.shared.database.jpa;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,11 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAModelStrategy;
-import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
 @Table(name="Experiment")
@@ -166,10 +164,9 @@ public class JPAExperiment extends JPAAbstractEntity{
 		this.finished = finished;
 	}
 
-	@Override
-	public String getEntityName() {
-		return "Experiment";
-	}
+	@Transient
+	public static final String EntityName = "Experiment";
+	
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPAExperiment updateValues=(JPAExperiment)newValues;

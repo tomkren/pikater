@@ -5,16 +5,19 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class UserDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPAUser()).getEntityName();
+		return JPAUser.EntityName;
 	}
 
 	@Override
@@ -26,8 +29,18 @@ public class UserDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPAUser> getByID(int ID) {
-		return getByTypedNamedQuery("User.getByID", "id", ID);
+	public JPAUser getByID(int ID) {
+		return new ResultFormatter<JPAUser>(
+				getByTypedNamedQuery("User.getByID", "id", ID)
+				).getSingleResultWithNull();
+	}
+	
+	@Override
+	public JPAUser getByIDWithException(int ID)
+			throws NoResultException {
+		return new ResultFormatter<JPAUser>(
+				getByTypedNamedQuery("User.getByID", "id", ID)
+				).getSingleResult();
 	}
 	
 	public List<JPAUser> getByStatus(JPAUserStatus status) {

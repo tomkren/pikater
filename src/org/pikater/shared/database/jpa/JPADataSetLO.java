@@ -1,6 +1,5 @@
 package org.pikater.shared.database.jpa;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
 
@@ -126,10 +126,8 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	public void setSize(long size) {
 		this.size = size;
 	}
-	@Override
-	public String getEntityName() {
-		return "DataSetLO";
-	}
+	@Transient
+	public static final String EntityName = "DataSetLO";
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) {
 		JPADataSetLO updateValues=(JPADataSetLO)newValues;

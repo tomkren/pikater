@@ -12,17 +12,19 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.Hash;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class DataSetDAO extends AbstractDAO{
 
 	@Override
 	public String getEntityName() {
-		return (new JPADataSetLO()).getEntityName();
+		return JPADataSetLO.EntityName;
 	}
 
 	@Override
@@ -50,9 +52,19 @@ public class DataSetDAO extends AbstractDAO{
 	}
 
 	@Override
-	public List<JPADataSetLO> getByID(int ID) {
-		return getByTypedNamedQuery("DataSetLO.getByID", "id", ID);
+	public JPADataSetLO getByID(int ID) {
+		return new ResultFormatter<JPADataSetLO>(
+				getByTypedNamedQuery("DataSetLO.getByID", "id", ID)
+				).getSingleResultWithNull();
 	}
+	
+	@Override
+	public JPADataSetLO getByIDWithException(int ID) throws NoResultException {
+		return new ResultFormatter<JPADataSetLO>(
+				getByTypedNamedQuery("DataSetLO.getByID", "id", ID)
+				).getSingleResult();
+	}
+	
 	
 	public List<JPADataSetLO> getByOwner(JPAUser user) {
 		return getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user);

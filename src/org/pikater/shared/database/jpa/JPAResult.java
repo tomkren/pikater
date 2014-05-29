@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="Result")
@@ -182,10 +183,8 @@ public class JPAResult extends JPAAbstractEntity{
 	public void setCreatedModel(JPAModel createdModel) {
 		this.createdModel = createdModel;
 	}
-	@Override
-	public String getEntityName() {
-		return "Result";
-	}
+	@Transient
+	public static final String EntityName = "Result";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) {

@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="Model")
@@ -33,10 +34,9 @@ public class JPAModel extends JPAAbstractEntity{
 	public void setCreator(JPAResult creator) {
 		this.creator = creator;
 	}
-	@Override
-	public String getEntityName() {
-		return "Model";
-	}
+	@Transient
+	public static final String EntityName = "Model";
+	
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPAModel updateValues=(JPAModel)newValues;

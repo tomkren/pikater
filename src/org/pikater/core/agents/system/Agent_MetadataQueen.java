@@ -102,7 +102,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
         int dataSetID=nd.getDataSetID();
         
         try {
-			JPADataSetLO dslo= new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByID(dataSetID)).getSingleResult();
+			JPADataSetLO dslo= DAOs.dataSetDAO.getByIDWithException(dataSetID);
 			PostgreLargeObjectReader plor = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
 			
 			File file=new File("core/freddie/"+dslo.getHash());
@@ -126,8 +126,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
 		
-			return reply;
-			
+			return reply;	
 		} catch (NoResultException e) {
 			logError("DataSet with ID "+dataSetID+" not found  in the database");
 			e.printStackTrace();

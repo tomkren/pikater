@@ -5,15 +5,15 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.jpa.JPARole;
-import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class UserPriviledgeDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPAUserPriviledge()).getEntityName();
+		return JPAUserPriviledge.EntityName;
 	}
 
 	@Override
@@ -25,12 +25,24 @@ public class UserPriviledgeDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPAUserPriviledge> getByID(int ID) {
-		return getByTypedNamedQuery("UserPriviledge.getByID", "id", ID);
+	public JPAUserPriviledge getByID(int ID) {
+		return new ResultFormatter<JPAUserPriviledge>(
+				getByTypedNamedQuery("UserPriviledge.getByID", "id", ID)
+				).getSingleResultWithNull();
 	}
 	
-	public List<JPAUserPriviledge> getByName(String name) {
-		return getByTypedNamedQuery("UserPriviledge.getByName", "name", name);
+	@Override
+	public JPAUserPriviledge getByIDWithException(int ID)
+			throws NoResultException {
+		return new ResultFormatter<JPAUserPriviledge>(
+				getByTypedNamedQuery("UserPriviledge.getByID", "id", ID)
+				).getSingleResult();
+	}
+	
+	public JPAUserPriviledge getByName(String name) {
+		return new ResultFormatter<JPAUserPriviledge>(
+				getByTypedNamedQuery("UserPriviledge.getByName", "name", name)
+			   ).getSingleResultWithNull();
 	}
 	
 	private List<JPAUserPriviledge> getByTypedNamedQuery(String queryName,String paramName,Object param){
@@ -45,6 +57,5 @@ public class UserPriviledgeDAO extends AbstractDAO {
 			em.close();
 		}
 	}
-
 	
 }

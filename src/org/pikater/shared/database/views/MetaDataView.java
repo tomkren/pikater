@@ -30,9 +30,7 @@ public class MetaDataView extends View {
 	}
 	
 	public MetaDataView(int dataSetID) throws NoResultException{
-		this.parentDSLO=new ResultFormatter<JPADataSetLO>(
-				   				DAOs.dataSetDAO.getByID(dataSetID)
-								).getSingleResult();
+		this.parentDSLO=DAOs.dataSetDAO.getByIDWithException(dataSetID);
 	}
 	
 	private static void init(){

@@ -7,13 +7,16 @@ import javax.persistence.EntityManager;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class AgentInfoDAO extends AbstractDAO{
 
 	@Override
 	public String getEntityName() {
-		return (new JPAAgentInfo()).getEntityName();
+		return JPAAgentInfo.EntityName;
 	}
 
 	@Override
@@ -25,9 +28,19 @@ public class AgentInfoDAO extends AbstractDAO{
 	}
 	
 	@Override
-	public List<JPAAgentInfo> getByID(int ID) {
-		return getByTypedNamedQuery("AgentInfo.getByID", "id", ID);
+	public JPAAgentInfo getByID(int ID) {
+		return new ResultFormatter<JPAAgentInfo>(
+				getByTypedNamedQuery("AgentInfo.getByID", "id", ID)
+				).getSingleResultWithNull();
 	}
+	
+	@Override
+	public JPAAgentInfo getByIDWithException(int ID) throws NoResultException {
+		return new ResultFormatter<JPAAgentInfo>(
+				getByTypedNamedQuery("AgentInfo.getByID", "id", ID)
+				).getSingleResult();
+	}
+
 	
 	public List<JPAAgentInfo> getByName(String name) {
 		return getByTypedNamedQuery("AgentInfo.getByName", "name", name);
@@ -79,5 +92,4 @@ public class AgentInfoDAO extends AbstractDAO{
 			em.close();
 		}
 	}
-
 }

@@ -21,6 +21,8 @@ import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.security.PikaterPriviledge;
+import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.utils.Hash;
@@ -35,10 +37,10 @@ public class DatabaseInitialisation {
 		
 		DatabaseTest dbTest=new DatabaseTest();
 		
-		/**
+		
 		this.createRolesAndUsers();
 		dbTest.listUserAndRoles();
-		
+		/**
 		this.createSampleResult();
 		dbTest.listResults();
 		
@@ -47,9 +49,10 @@ public class DatabaseInitialisation {
 		
 		this.addWebDatasets();
 		dbTest.listDataSets();
-		**/
+		
 		this.insertFinishedBatch();
 		dbTest.listBatches();
+		**/
 		
 	}
 	
@@ -143,26 +146,20 @@ public class DatabaseInitialisation {
 	}
 	
 	private void createRolesAndUsers() throws UserNotFoundException {		
+		for(PikaterPriviledge priv : PikaterPriviledge.values()){
+			DAOs.userPrivDAO.storeEntity(
+					  new JPAUserPriviledge(priv.name(), priv)
+					);
+		}
 		
-		JPAUserPriviledge sdsPriv=new JPAUserPriviledge();
-		sdsPriv.setName("SaveDataSet");
-		DAOs.userPrivDAO.storeEntity(sdsPriv);
-
+		JPAUserPriviledge sdsPriv = DAOs.userPrivDAO.getByName(PikaterPriviledge.SAVE_DATA_SET.name());
+		JPAUserPriviledge sbPriv = DAOs.userPrivDAO.getByName(PikaterPriviledge.SAVE_BOX.name());
 		
-		JPAUserPriviledge sbPriv=new JPAUserPriviledge();
-		sbPriv.setName("SaveBox");
-		DAOs.userPrivDAO.storeEntity(sbPriv);
-		
-		JPARole u=new JPARole();
-		u.setName("user");
-		u.setDescription("Standard User Role");
+		JPARole u= new JPARole(PikaterRole.USER.name(),PikaterRole.USER);
 		u.addPriviledge(sdsPriv);
 		DAOs.roleDAO.storeEntity(u);
 		
-		
-		JPARole a=new JPARole();
-		a.setName("admin");
-		a.setDescription("Admin Role");
+		JPARole a= new JPARole(PikaterRole.ADMIN.name(),PikaterRole.ADMIN);
 		a.addPriviledge(sdsPriv);
 		a.addPriviledge(sbPriv);
 		DAOs.roleDAO.storeEntity(a);
@@ -196,6 +193,8 @@ public class DatabaseInitialisation {
 		
 		JPAUser u6=new JPAUser("klara", "123", "peskova@braille.mff.cuni.cz", u);
 		DAOs.userDAO.storeEntity(u6);
+		
+		
 	}
 	
 	private void createFileMapping() {

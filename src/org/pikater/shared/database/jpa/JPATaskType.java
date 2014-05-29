@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="TaskType")
@@ -42,10 +43,8 @@ public class JPATaskType extends JPAAbstractEntity{
 		this.name = name;
 	}
 
-	@Override
-	public String getEntityName() {
-		return "TaskType";
-	}
+	@Transient
+	public static final String EntityName = "TaskType";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

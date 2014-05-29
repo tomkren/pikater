@@ -323,7 +323,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Experiment experiment = saveExperiment.getExperiment();
 		
 		int batchID = experiment.getBatchID();
-		JPABatch batch=DAOs.batchDAO.getByID(batchID).get(0);
+		JPABatch batch=DAOs.batchDAO.getByID(batchID);
 		
 		JPAExperiment jpaExperiment = new JPAExperiment();
 		jpaExperiment.setBatch(batch);
@@ -480,7 +480,7 @@ public class Agent_DataManager extends PikaterAgent {
 				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
 			}else{
 				JPAFilemapping fm=new JPAFilemapping();
-				fm.setUser(DAOs.userDAO.getByID(im.getUserID()).get(0));
+				fm.setUser(DAOs.userDAO.getByID(im.getUserID()));
 				fm.setInternalfilename(internalFilename);
 				fm.setExternalfilename(im.getExternalFilename());
 				
@@ -510,7 +510,7 @@ public class Agent_DataManager extends PikaterAgent {
 				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
 			}else{
 				JPAFilemapping fm=new JPAFilemapping();
-				fm.setUser(DAOs.userDAO.getByID(im.getUserID()).get(0));
+				fm.setUser(DAOs.userDAO.getByID(im.getUserID()));
 				fm.setInternalfilename(internalFilename);
 				fm.setExternalfilename(im.getExternalFilename());
 				
@@ -713,9 +713,7 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		JPADataSetLO dslo;
 		try {
-			dslo = new ResultFormatter<JPADataSetLO>(
-					DAOs.dataSetDAO.getByID(dataSetID)
-					).getSingleResult();
+			dslo = DAOs.dataSetDAO.getByIDWithException(dataSetID);
 			
 			
 			String currentHash=dslo.getHash();

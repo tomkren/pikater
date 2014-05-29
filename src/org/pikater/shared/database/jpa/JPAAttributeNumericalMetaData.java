@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="AttributeNumericalMetaData")
@@ -75,10 +76,8 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 	public void setAvarage(double avarage) {
 		this.avarage = avarage;
 	}
-	@Override
-	public String getEntityName() {
-		return "AttributeNumericalMetaData";
-	}
+	@Transient
+	public final String EntityName = "AttributeNumericalMetaData";
 	
 	
 }

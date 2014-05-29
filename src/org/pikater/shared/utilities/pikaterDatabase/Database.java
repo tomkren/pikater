@@ -52,9 +52,10 @@ public class Database {
 		this.connection = connection;
 	}
 
+	
 	public void saveBatch (int userId, JPABatch batch, String batchXml) {
 
-		JPAUser user=DAOs.userDAO.getByID(userId).get(0);
+		JPAUser user=DAOs.userDAO.getByID(userId);
 
 		int totalPriority = 10*user.getPriorityMax() + batch.getPriority();
 
@@ -137,9 +138,10 @@ public class Database {
 	 */
 	private void loadTestData() throws SQLException, IOException, UserNotFoundException {
 
+		/**
 		this.addRole("user", "Standard user role");
 		this.addRole("admin", "Standard administrator role");
-
+**/
 		try {
 			this.deleteUserByLogin("bs");
 		} catch (UserNotFoundException e) {
@@ -165,13 +167,13 @@ public class Database {
 		} catch (UserNotFoundException e) {
 			System.err.println(e.getMessage());
 		}
-
+/**
 		this.addUser("bs", "123", "nassoftwerak@gmail.com", 6);
 		this.addUser("kj", "123", "nassoftwerak@gmail.com", 6);
 		this.addUser("sj", "123", "nassoftwerak@gmail.com", 6);
 		this.addUser("sp", "123", "nassoftwerak@gmail.com", 6);
 		this.addUser("johndoe", "123", "nassoftwerak@gmail.com", 3);
-
+**/
 		this.setRoleForUser("bs", "admin");
 		this.setRoleForUser("kj", "admin");
 		this.setRoleForUser("sj", "admin");
@@ -296,11 +298,13 @@ public class Database {
 		persist(userPriviledge);
 	}
 	
+	/**
 	public void addUserPriviledge(String name){
 		JPAUserPriviledge up=new JPAUserPriviledge();
 		up.setName(name);
 		this.addUserPriviledge(up);
 	}
+	**/
 	
 	public JPAUserPriviledge getUserPriviledge(String name){
 		try {
@@ -334,12 +338,14 @@ public class Database {
 	 * @param description
 	 *            The description of the new role
 	 */
+	/**
 	public void addRole(String name, String description) {
 		JPARole newRole = new JPARole();
 		newRole.setName(name);
 		newRole.setDescription(description);
 		addRole(newRole);
 	}
+	**/
 	
 	
 	public void addPriviledgeForRole(String roleName,String priviledgeName){		
@@ -436,6 +442,7 @@ public class Database {
 	 * @param email
 	 *            The new user's e-mail
 	 */
+	/**
 	public void addUser(String login, String password, String email, String roleName) {
 		JPAUser newUser = new JPAUser();
 		newUser.setLogin(login);
@@ -444,6 +451,7 @@ public class Database {
 		newUser.setRole(getRoleByName(roleName));
 		this.addUser(newUser);
 	}
+	**/
 
 	/**
 	 * Based on the given parameters creates a new user object and stores it to
@@ -458,6 +466,7 @@ public class Database {
 	 * @param maxPriority
 	 *            The new user's maximal priority
 	 */
+	/**
 	public void addUser(String login, String password, String email, int maxPriority) {
 		JPAUser newUser = new JPAUser();
 		newUser.setLogin(login);
@@ -466,7 +475,7 @@ public class Database {
 		newUser.setPriorityMax(maxPriority);
 		this.addUser(newUser);
 	}
-
+**/
 	/**
 	 * Returns the list of all users stored in the database.
 	 * 

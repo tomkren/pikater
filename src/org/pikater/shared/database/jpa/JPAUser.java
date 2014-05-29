@@ -17,7 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
+import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
@@ -54,7 +56,7 @@ public class JPAUser extends JPAAbstractEntity{
 	// TODO: default (zero-arg) constructors should be invisible from outside? (private or protected)
 	
 	/** Constructor for JPA Compatibility. */
-	public JPAUser(){}
+	protected JPAUser(){}
 	
 	/**
 	 * Creates a new user with active status (no administrator acceptance is needed) and default max priority.
@@ -145,10 +147,18 @@ public class JPAUser extends JPAAbstractEntity{
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
-	@Override
-	public String getEntityName() {
-		return "User";
+	public boolean isAdmin(){
+		return this.role.isAdmin();
 	}
+	public boolean isUser(){
+		return this.role.isUser();
+	}
+	public boolean hasPrivilege(PikaterPriviledge priviledge){
+		return this.role.hasPriviledge(priviledge);
+	}
+	@Transient
+	public static final String EntityName = "User";
+	
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPAUser updateValues=(JPAUser)newValues;
