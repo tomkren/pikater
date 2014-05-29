@@ -337,7 +337,7 @@ public class Database {
 	public void addRole(String name, String description) {
 		JPARole newRole = new JPARole();
 		newRole.setName(name);
-		newRole.setDescription(description);
+		newRole.setRole(description);
 		addRole(newRole);
 	}
 	

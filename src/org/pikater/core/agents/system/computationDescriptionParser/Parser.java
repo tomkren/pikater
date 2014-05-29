@@ -1,483 +1,271 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
-import jade.util.leap.ArrayList;
+import jade.content.Concept;
+import org.pikater.core.agents.system.Agent_ComputationDescriptionParser;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.option.Option;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import org.pikater.core.agents.system.Agent_ComputationDescriptionParser;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemItem;
-import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
-import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
-import org.pikater.core.ontology.subtrees.batchDescription.IComputationElement;
-import org.pikater.core.ontology.subtrees.batchDescription.IComputingAgent;
-import org.pikater.core.ontology.subtrees.batchDescription.IDataProvider;
-import org.pikater.core.ontology.subtrees.batchDescription.IDataSaver;
-import org.pikater.core.ontology.subtrees.batchDescription.IErrorProvider;
-import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
-import org.pikater.core.ontology.subtrees.batchDescription.Search;
-import org.pikater.core.ontology.subtrees.data.Data;
-import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
-import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-
 public class Parser {
-	
-	private ProblemGraph graph = null;
-	private Agent_ComputationDescriptionParser agent = null;
 
-	public Parser(Agent_ComputationDescriptionParser agent_) {
-		this.agent = agent_;
-		this.graph = new ProblemGraph();
-	}
+    private ProblemGraph graph = null;
+    private ComputationGraph computationGraph=new ComputationGraph();
+    private HashMap<Concept,ComputationNode> alreadyProcessed=new HashMap<>();
+    private Agent_ComputationDescriptionParser agent = null;
 
-	public ProblemGraph getProblemGraph() {
-		return this.graph;
-	}
-	
-	public ProblemItem process(IComputationElement element) {
-
-		agent.log("Ontology Parser - IComputationElement");
-
-		IDataSaver dataSaver = (IDataSaver) element;
-		return process(dataSaver);
-	}
-	
-	public ProblemItem process(IDataSaver dataSaver) {
-
-		agent.log("Ontology Parser - IVisualizer");
-
-		if (dataSaver instanceof FileDataSaver) {
-
-			agent.log("Ontology Matched - FileDataSaver");
-			
-			FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
-			DataSourceDescription dataSource = fileDataSaver.getDataSource();
-			
-			return this.process(dataSource);
-			
-		} else {
-
-			agent.logError("Ontology Parser - Error unknown IDataSaver");
-			return null;
-		}
-
-    }
-	
-    public ProblemItem process (IDataProvider dataProvider) {
-
-    	agent.log("Ontology Parser - IDataProvider");
-
-    	if (dataProvider instanceof FileDataProvider) {
-
-    		agent.log("Ontology Matched - FileDataProvider");
-			
-			FileDataProvider fileData =
-					(FileDataProvider) dataProvider;
-			
-			return this.process (fileData);
-
-    	
-    	} else if (dataProvider instanceof CARecSearchComplex) {
-
-    		agent.log("Ontology Matched - CARecSearchComplex");
-
-			CARecSearchComplex comlex =
-					(CARecSearchComplex) dataProvider;
-
-			return this.process (comlex);
-
-		} else if (dataProvider instanceof ComputingAgent) {
-
-			agent.log("Ontology Matched - ComputingAgent");
-
-			ComputingAgent computingAgent =
-					(ComputingAgent) dataProvider;
-
-			// Small hack - this parser is able to parse only CARecSearchComplex
-			CARecSearchComplex complex =
-					new CARecSearchComplex();
-			complex.setComputingAgent(computingAgent);
-
-			return this.process(complex);
-
-		} else if (dataProvider instanceof DataProcessing) {
-
-			agent.log("Ontology Matched - DataProcessing");
-			
-			DataProcessing postprocessing =
-					(DataProcessing) dataProvider;
-			
-			//TODO:  process(postprocessing);
-			return null;
-
-		} else {
-
-			agent.log("Ontology Matched - Error unknown IDataProvider");
-
-			return null;
-		}
-
+    public Parser(Agent_ComputationDescriptionParser agent_) {
+        this.agent = agent_;
+        this.graph = new ProblemGraph();
     }
 
-    public void process (IErrorProvider errorProvider) {
-
-    	agent.log("Ontology Parser - IErrorProvider");
-
-		if (errorProvider instanceof ComputingAgent) {
-
-			agent.log("Ontology Matched - ComputingAgent");
-
-			ComputingAgent computingAgent =
-					(ComputingAgent) errorProvider;
-
-			// Small hack - this parser is able to parse only CARecSearchComplex
-			CARecSearchComplex complex =
-					new CARecSearchComplex();
-			complex.setComputingAgent(computingAgent);
-			
-			this.process(complex);
-
-		} else {
-
-			agent.log("Ontology Matched - Error unknown IErrorProvider");
-		}
-		
-    }
-    public ProblemItem process (IComputingAgent iAgent) {
-
-    	agent.log("Ontology Parser - IComputingAgent");
-
-		if (iAgent instanceof CARecSearchComplex) {
-
-			agent.log("Ontology Matched - CARecSearchComplex");
-
-			CARecSearchComplex complex =
-					(CARecSearchComplex) iAgent;
-
-			return this.process(complex);
-
-		} else if (iAgent instanceof ComputingAgent) {
-
-			agent.log("Ontology Matched - ComputingAgent");
-
-			ComputingAgent computingAgent =
-					(ComputingAgent) iAgent;
-
-			// Small hack - this parser is able to parse only CARecSearchComplex
-			CARecSearchComplex complex =
-					new CARecSearchComplex();
-			complex.setComputingAgent(computingAgent);
-			
-			return this.process(complex);
-
-		} else {
-
-			agent.logError("Ontology Matched - Error unknown IComputingAgent");
-			return null;
-		}
-
-	}
-    
-	public void process(ComputationDescription comDescription) {
-
-		agent.log("Ontology Parser - ComputationDescription");
-		
-		List<FileDataSaver> elements =
-				comDescription.getRootElements();
-
-		// TODO: Vyresit aby se sdilene podulohy rootElementu pocitely pouze jednou
-		for (int i = 0; i < elements.size(); i++) {
-
-			IComputationElement fileSaverI = (IComputationElement) elements.get(i);
-			ProblemItem problem = this.process(fileSaverI);
-			this.graph.addRootProblem(problem);
-		}
-
-	}
-	
-    public ProblemItem process (DataSourceDescription dataSource) {
-
-    	agent.log("Ontology Parser - DataSourceDescription");
-
-    	if (dataSource == null) {
-    		return null;
-    	}
- 
-    	IDataProvider dataProvider = dataSource.getDataProvider();
-    	
-    	return this.process(dataProvider);
+    public ProblemGraph getProblemGraph() {
+        return this.graph;
     }
 
-    public ProblemItem process (FileDataProvider file) {
-
-    	agent.log("Ontology Parser - FileDataProvider");
-
-    	ProblemItem problem = new ProblemItem();
-    	problem.setOutputFile(file.getFileURI());
- 
-    	return problem;
-    }
-    
-    public ProblemItem process (CARecSearchComplex complex) {
-
-    	agent.log("Ontology Parser - CARecSearchComplex");
-
-    	// TODO: Generate ID of this problem
-    	int problemID = 123; //this.graph.getNumOfProblems();
-
-
-    	// Option parsing
-		String evaluationMethod = null;
-		String output = null;
-
-		Option optionF = null;
-
-		List<Option> options = complex.getOptions();
-		for (int i = 0; i < options.size(); i++) {
-
-			Option optionI = (Option) options.get(i);
-
-			if (optionI.getName().equals("evaluation_method")) {
-				evaluationMethod = optionI.getValue();
-
-			} else if (optionI.getName().equals("output")) {
-				output = optionI.getValue();
-
-			} else if (optionI.getName().equals("F")) {
-				optionF = optionI;
-			}
-		}
-
-    	IComputingAgent iComputingAgent = complex.getComputingAgent();
-    	ComputingAgent computingAgentO = (ComputingAgent) iComputingAgent;
-    	org.pikater.core.ontology.subtrees.management.Agent computingAgent = 
-    			processAgent(computingAgentO, problemID);
-
-    	Search searchAgentO = complex.getSearch();
-    	org.pikater.core.ontology.subtrees.management.Agent searchAgent =
-    			processSearch(searchAgentO);
-
-    	Recommend recommenderO = complex.getRecommender();
-    	org.pikater.core.ontology.subtrees.management.Agent recommendeAgent =
-    			processRecommender(recommenderO);
-
-    	Data data = processData(computingAgentO, output);
-    	
-
-    	
-    	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-		Date date = new Date();
-		String startDate = dateFormat.format(date);
-
-		ArrayList agents = new ArrayList();
-		agents.add(computingAgent);
-
-		ArrayList datas = new ArrayList();
-		datas.add(data);
-
-		java.util.List<Option> optionsMethod = new java.util.ArrayList<Option>();
-		if (optionF != null) {
-			optionsMethod.add(optionF);
-		}
-		
-		EvaluationMethod evaluation_method = new EvaluationMethod();
-		evaluation_method.setName(evaluationMethod);
-		evaluation_method.setOptions(optionsMethod);
-
-
-		Problem problem = new Problem();
-		problem.setGui_id(String.valueOf(problemID));
-		problem.setStatus("new");			
-		problem.setAgents(agents);
-		problem.setData(datas);				
-		problem.setTimeout(30000);
-		problem.setStart(startDate);
-		problem.setGet_results("after_each_computation");
-		problem.setSave_results(true);
-		problem.setGui_agent("UI");
-		problem.setName("test");
-		problem.setMethod(searchAgent);
-		problem.setRecommender(recommendeAgent);
-		problem.setEvaluation_method(evaluation_method);
-
-
-
-		// Return sons which are dependent on this Problem
-		java.util.ArrayList<ProblemItem> dependentSons =
-				getDependentSons(computingAgentO);
-		
-    	ProblemItem item = new ProblemItem();
-    	item.setProblem(problem);
-    	item.setDependentSons(dependentSons);
-    	item.setStatus(ProblemItem.ProblemStatus.IS_WAITING);
-
-    	return item;
-	}
-    
-    public org.pikater.core.ontology.subtrees.management.Agent processSearch (Search search) {
- 
-    	agent.log("Ontology Parser - Search");
-    	
-    	// Option parsing
-		Option searchMethodOprion = null;
-		Option optionN = null;
-
-		if (search != null) {
-			for (Option optionI : search.getOptions()) {
-				
-				if (optionI.getName().equals("search_method")) {
-					searchMethodOprion = optionI;
-				}
-				if (optionI.getName().equals("N")) {
-					optionN = optionI;
-				}
-			}
-		}
-		
-		String searchMethod =  null;
-
-		if (searchMethodOprion == null) {
-			searchMethod = "ChooseXValues";
-		} else {
-			searchMethod = searchMethodOprion.getValue();
-		}
-
-		java.util.ArrayList<Option> optionsSearchMethod = new java.util.ArrayList<Option>();
-		if (optionN != null) {
-			optionsSearchMethod.add(optionN);
-		}		
-		org.pikater.core.ontology.subtrees.management.Agent searchAgent = new org.pikater.core.ontology.subtrees.management.Agent();
-		searchAgent.setName(searchMethod);
-		searchAgent.setType(searchMethod);
-		searchAgent.setOptions(optionsSearchMethod);
-		
-		return searchAgent;
-    }
-    
-    public org.pikater.core.ontology.subtrees.management.Agent processRecommender (Recommend recommender) {
-
-    	agent.log("Ontology Parser - Recommender");
-
-    	if (recommender == null) {
-    		return null;
-    	}
-
-    	String recommenderClass =
-    			recommender.getRecommenderClass();
-    	
-    	java.util.List<Option> options = recommender.getOptions();
-    	
-		org.pikater.core.ontology.subtrees.management.Agent method =
-				new org.pikater.core.ontology.subtrees.management.Agent();
-		method.setName(recommenderClass);
-		method.setType(recommenderClass);
-		method.setOptions(options);
-		
-		return method;
-    }
-    
-    
-    public Data processData(ComputingAgent computingAgent, String output) {
-
-    	DataSourceDescription trainingDataSource =
-    			computingAgent.getTrainingData();
-    	DataSourceDescription testingDataSource =
-    			computingAgent.getTestingData();
-    	DataSourceDescription validationDataSource =
-    			computingAgent.getValidationData();
-
-
-    	int problemID = this.graph.getNumOfProblems();
-    	String trainDataFileName = null;
-    	String testingDataFileName = null;
-    	String validationDataFileName = null;
-
-
-    	ProblemItem trainingProblem = process(trainingDataSource);
-    	if (trainingProblem != null) {
-    		trainDataFileName = trainingProblem.getOutputFile();
-    	}
-    	ProblemItem testingProblem = process(testingDataSource);
-    	if (testingProblem != null) {
-    		testingDataFileName = testingProblem.getOutputFile(); 
-    	}
-    	ProblemItem validationProblem = process(validationDataSource);
-    	if (validationProblem != null) {
-    		validationDataFileName = validationProblem.getOutputFile();
-    	}
-
-    	String trainDataFileHash = agent.getHashOfFile(trainDataFileName);
-    	String testingDataFileHash = agent.getHashOfFile(testingDataFileName);
-    	String validationDataFileHash = agent.getHashOfFile(validationDataFileName);
-    	
-    	
-		Data data = new Data();
-		data.setTrainFileName(trainDataFileHash);
-		data.setExternal_train_file_name(trainDataFileName);
-		data.setTestFileName(testingDataFileHash);
-		data.setExternal_test_file_name(testingDataFileName);
-		data.setOutput(output);
-		data.setMode("train_test");
-		data.setGui_id(problemID);
-		
-		return data;
+    public void parseRoot(IDataSaver dataSaver) {
+        agent.log("Ontology Parser - IDataSaver");
+        //Ontology root is Leaf in Computation
+        parseSaver(dataSaver);
     }
 
-    public org.pikater.core.ontology.subtrees.management.Agent processAgent (ComputingAgent computingAgent, int problemID) {
+    private void parseSaver(IDataSaver dataSaver) {
+        if (dataSaver instanceof FileDataSaver) {
+            agent.log("Ontology Matched - FileDataSaver");
 
-    	agent.log("Ontology Parser - ComputingAgent");
-
-		String agentClass = computingAgent.getAgentClass();
-		agent.log("AgentClass:  " + agentClass);
-
-				
-		java.util.List<Option> optionsCompAgent = computingAgent.getOptions();
-
-		org.pikater.core.ontology.subtrees.management.Agent compAgentO = new org.pikater.core.ontology.subtrees.management.Agent();
-		compAgentO.setType(computingAgent.getAgentClass());
-		compAgentO.setGui_id(String.valueOf(problemID));
-		compAgentO.setOptions(optionsCompAgent);
-
-		return compAgentO;
-	}
-
-    public java.util.ArrayList<ProblemItem> getDependentSons(ComputingAgent compAgent) {
-    	
-    	if (compAgent == null) {
-    		return null;
-    	}
-
-    	DataSourceDescription trainingData = compAgent.getTrainingData();
-    	DataSourceDescription testingData = compAgent.getTestingData();
-    	DataSourceDescription validationData = compAgent.getValidationData();
-    	
-    	ProblemItem trainingItem = process(trainingData);
-    	ProblemItem testingItem = process(testingData);
-    	ProblemItem validationItem = process(validationData);
-    	
-    	java.util.ArrayList<ProblemItem> dependentSons =
-    			new java.util.ArrayList<ProblemItem>();
-    	
-    	if (trainingItem != null) {
-    		dependentSons.add(trainingItem);
-    	}
-    	if (testingItem != null) {
-    		dependentSons.add(testingItem);
-    	}
-    	if (validationItem != null) {
-    		dependentSons.add(validationItem);
-    	}
-    	
-    	return dependentSons;
+            FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
+            DataSourceDescription dataSource = fileDataSaver.getDataSource();
+            ComputationNode saverNode=new ComputationNode();
+            computationGraph.addNode(saverNode);
+            alreadyProcessed.put(dataSaver,saverNode);
+            parseDataSourceDescription(dataSource, saverNode, "file");
+        } else {
+            agent.logError("Ontology Parser - Error unknown IDataSaver");
+        }
     }
-    
+
+    private void parseDataSourceDescription(DataSourceDescription dataSource, ComputationNode child, String connectionName) {
+        agent.log("Ontology Parser - DataSourceDescription");
+
+        IDataProvider dataProvider = dataSource.getDataProvider();
+        this.parseDataProvider(dataProvider, child, connectionName);
+    }
+
+    public void parseDataProvider(IDataProvider dataProvider, ComputationNode child, String connectionName) {
+        agent.log("Ontology Parser - IDataProvider");
+        ComputationNode parent;
+        if (dataProvider instanceof FileDataProvider) {
+            agent.log("Ontology Matched - FileDataProvider");
+
+            FileDataProvider fileData = (FileDataProvider) dataProvider;
+            this.parseFileDataProvider(fileData, child, connectionName);
+            return;
+        }  else if (dataProvider instanceof ComputingAgent) {
+            agent.log("Ontology Matched - ComputingAgent");
+
+            ComputingAgent computingAgent = (ComputingAgent) dataProvider;
+            parent=parseComputing(computingAgent);
+        }
+        else if (dataProvider instanceof CARecSearchComplex)
+        {
+            agent.log("Ontology Matched - CARecSearchComplex");
+
+            CARecSearchComplex complex = (CARecSearchComplex) dataProvider;
+            parent=parseComplex(complex,false);
+        }
+        else if (dataProvider instanceof DataProcessing) {
+            agent.log("Ontology Matched - DataProcessing");
+
+            //TODO:  parseSaver(postprocessing) DataProcessing postprocessing = (DataProcessing) dataProvider;;
+            return;
+        } else {
+            agent.log("Ontology Matched - Error unknown IDataProvider");
+            return;
+        }
+        //handle parent - set him as file receiver
+        ComputationOutputBuffer<EdgeValue> fileBuffer=new StandardBuffer<>();
+        parent.addBufferToOutput(connectionName,fileBuffer);
+        child.addInput(connectionName,fileBuffer);
+    }
+
+    public void parseErrors(ErrorDescription errorDescription, ComputationNode child) {
+        agent.log("Ontology Parser - IErrorProvider");
+        IErrorProvider errorProvider=errorDescription.getProvider();
+
+        ComputationNode errorNode;
+        if (alreadyProcessed.containsKey(errorProvider))
+        {
+            errorNode=alreadyProcessed.get(errorProvider);
+        }
+        else  {
+
+            agent.log("Error provider was not parsed at the moment parseErrors was called");
+            return;
+        }
+        StandardBuffer<ErrorEdge> buffer=new StandardBuffer<>();
+        errorNode.addBufferToOutput(errorDescription.getType(),buffer);
+        child.addInput(errorDescription.getType(),buffer);
+
+    }
+
+    //This is the root of all parsing
+    public void parseRoots(ComputationDescription comDescription) {
+        agent.log("Ontology Parser - ComputationDescription");
+
+        List<FileDataSaver> elements = comDescription.getRootElements();
+        elements.forEach(this::parseRoot);
+    }
+
+    //Processes a node that is in the beginning of computation - reads file
+    public void parseFileDataProvider(FileDataProvider file, ComputationNode child, String connectionName) {
+        agent.log("Ontology Parser - FileDataProvider");
+        if (!alreadyProcessed.containsKey(file))
+        {
+            alreadyProcessed.put(file, null);
+            DataSourceEdge fileEdge=new DataSourceEdge();
+            fileEdge.setFile(true);
+            fileEdge.setDataSourceId(file.getFileURI());
+            ComputationOutputBuffer<EdgeValue> buffer=new NeverEndingBuffer<>(fileEdge);
+            child.addInput(connectionName,buffer);
+        }
+    }
+
+    public ComputationNode parseComputing(IComputingAgent computingAgent)
+    {
+        agent.log("Ontology Parser - Computing Agent Simple");
+
+        if (!alreadyProcessed.containsKey(computingAgent))
+        {
+            alreadyProcessed.put(computingAgent, new ModelComputationNode());
+
+        }
+        ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent);
+        computationGraph.addNode(computingNode);
+        addOptionsToInputs(computingNode,new ArrayList<>());
+
+        ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
+        computingNode.setModelClass(computingAgentO.getAgentClass());
+        fillDataSources(computingAgentO,computingNode);
+
+        return computingNode;
+    }
+
+    public ComputationNode parseComplex(CARecSearchComplex complex, boolean returnSearch ) {
+        agent.log("Ontology Parser - CARecSearchComplex");
+
+        ComputationNode computingNode;
+        IComputingAgent iComputingAgent = complex.getComputingAgent();
+        if (iComputingAgent instanceof CARecSearchComplex)
+        {
+            computingNode=parseComplex((CARecSearchComplex)iComputingAgent,true);
+        }
+        else
+        {
+            if (!alreadyProcessed.containsKey(complex))
+            {
+                alreadyProcessed.put(complex, new ModelComputationNode());
+
+            }
+            computingNode = alreadyProcessed.get(complex);
+            computationGraph.addNode(computingNode);
+        }
+        addOptionsToInputs(computingNode,complex.getOptions());
+
+        Recommend recommenderO = complex.getRecommender();
+        if (recommenderO!=null)
+        {
+            parseRecommender(recommenderO, computingNode);
+        }
+        if ( iComputingAgent instanceof ComputingAgent) {
+            fillDataSources((ComputingAgent) iComputingAgent, computingNode);
+        }
+
+        Search searchAgentO = complex.getSearch();
+        if (searchAgentO!=null)
+        {
+            SearchComputationNode searchComputationNode=parseSearch(searchAgentO, computingNode, complex.getErrors());
+            if (returnSearch)
+            {
+                return searchComputationNode;
+            }
+        }
+        return computingNode;
+    }
+
+    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors) {
+        agent.log("Ontology Parser - Search");
+
+        if (!alreadyProcessed.containsKey(search))
+        {
+            alreadyProcessed.put(search, new SearchComputationNode());
+
+        }
+        SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search);
+        StandardBuffer searchBuffer=new StandardBuffer();
+        searchNode.addBufferToOutput("searchedoptions",searchBuffer);
+        child.addInput("searchedoptions",searchBuffer);
+        computationGraph.addNode(searchNode);
+        alreadyProcessed.put(search,searchNode);
+        addOptionsToInputs(searchNode, search.getOptions());
+        for (ErrorDescription error:errors)
+        {
+            parseErrors(error,searchNode);
+        }
+
+        return searchNode;
+    }
+
+    public void parseRecommender(Recommend recommender, ComputationNode child) {
+        agent.log("Ontology Parser - Recommender");
+
+        RecommenderComputationNode recNode=new RecommenderComputationNode();
+        StandardBuffer recBuffer=new StandardBuffer();
+        recNode.addBufferToOutput("recommender",recBuffer);
+        child.addInput("recommender",recBuffer);
+        computationGraph.addNode(recNode);
+        alreadyProcessed.put(recommender,recNode);
+        List<Option> options = recommender.getOptions();
+
+        addOptionsToInputs(recNode, options);
+        recNode.setRecommenderClass(recommender.getRecommenderClass());
+    }
+
+    private void fillDataSources(ComputingAgent compAgent,ComputationNode node) {
+        DataSourceDescription trainingData = compAgent.getTrainingData();
+        DataSourceDescription testingData = compAgent.getTestingData();
+        DataSourceDescription validationData = compAgent.getValidationData();
+
+        if (trainingData!=null) {
+            parseDataSourceDescription(trainingData, node, "training");
+        }
+        if (testingData!=null) {
+            parseDataSourceDescription(testingData, node, "testing");
+        }
+        if (validationData!=null) {
+            parseDataSourceDescription(validationData, node, "validation");
+        }
+    }
+
+    public ComputationGraph getComputationGraph() {
+        return computationGraph;
+    }
+
+    public void setComputationGraph(ComputationGraph computationGraph) {
+        this.computationGraph = computationGraph;
+    }
+
+    private void addOptionsToInputs(ComputationNode node,List<Option> options)
+    {
+        OptionEdge option=new OptionEdge();
+        option.setOptions(options);
+        OneShotBuffer optionBuffer=new OneShotBuffer(option);
+        node.addInput("options",optionBuffer);
+    }
 }

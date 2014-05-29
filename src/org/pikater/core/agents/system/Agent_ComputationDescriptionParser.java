@@ -191,7 +191,7 @@ class ComputingManagerBehaviour extends AchieveREResponder {
 					executeExperiment.getDescription();
     		
     		Parser parser = new Parser(this.agent);
-    		parser.process(comDescription);
+    		parser.parseRoots(comDescription);
     		
     		// This will be graph - now only one problem
     		ProblemGraph dependencyGraph = parser.getProblemGraph();

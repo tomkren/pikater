@@ -6,7 +6,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
  * Time: 11:39
  */
 public class IncrementalGUIDGenerator implements GUIDGenerator {
-    Integer lastGuid=0;
+    public static Integer lastGuid=0;
 
     @Override
     public Integer getAndAllocateGUID() {

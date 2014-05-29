@@ -7,25 +7,15 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import org.hsqldb.store.ReusableObjectCache;
-import org.postgresql.PGConnection;
 import org.pikater.core.agents.metadata.JPAMetaDataReader;
-import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
-import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAFilemapping;
-import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -35,7 +25,6 @@ import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.utils.Hash;
 import org.pikater.shared.database.utils.ResultFormatter;
-import org.pikater.shared.database.PostgreSQLConnectionProvider;
 import org.pikater.shared.utilities.pikaterDatabase.tests.DatabaseTest;
 
 public class DatabaseInitialisation {
@@ -166,14 +155,14 @@ public class DatabaseInitialisation {
 		
 		JPARole u=new JPARole();
 		u.setName("user");
-		u.setDescription("Standard User Role");
+		u.setRole("Standard User Role");
 		u.addPriviledge(sdsPriv);
 		DAOs.roleDAO.storeEntity(u);
 		
 		
 		JPARole a=new JPARole();
 		a.setName("admin");
-		a.setDescription("Admin Role");
+		a.setRole("Admin Role");
 		a.addPriviledge(sdsPriv);
 		a.addPriviledge(sbPriv);
 		DAOs.roleDAO.storeEntity(a);

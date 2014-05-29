@@ -33,7 +33,7 @@ public class JPARole extends JPAAbstractEntity{
 	private final List<JPAUser> usersWithThisRole=new LinkedList<JPAUser>();
 	@Column(unique=true)
 	private String name;
-	private String description;
+	private String role;
 	@OneToMany
 	private final List<JPAUserPriviledge> priviledges = new ArrayList<JPAUserPriviledge>(); 
 	
@@ -43,11 +43,11 @@ public class JPARole extends JPAAbstractEntity{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDescription() {
-		return description;
+	public String getRole() {
+		return role;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setRole(String description) {
+		this.role = description;
 	}
 	public List<JPAUser> getUsersWithThisRole() {
 		return usersWithThisRole;
@@ -64,7 +64,7 @@ public class JPARole extends JPAAbstractEntity{
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPARole updatedValues=(JPARole)newValues;
-		this.description=updatedValues.getDescription();
+		this.role =updatedValues.getRole();
 		this.name=updatedValues.getName();
 	}
 }

@@ -15,10 +15,10 @@ import java.util.Map;
  * Time: 12:35
  */
 public class ComputationNode {
-    private boolean idle;
+    private boolean idle=true;
     private int id;
     private Map<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs = new HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>>();
-    private Map<String, ComputationOutputBuffer> inputs = new HashMap<String, ComputationOutputBuffer>();
+    private Map<String, ComputationOutputBuffer> inputs = new HashMap<>();
     private StartComputationBehavior startBehavior;
 
     public ComputationNode()
@@ -54,18 +54,19 @@ public class ComputationNode {
     public void addInput(String inputName, ComputationOutputBuffer buffer)
     {
         inputs.put(inputName,buffer);
+        buffer.setTarget(this);
     }
 
     public void addOutput(String outputName)
     {
-    	ArrayList<ComputationOutputBuffer<EdgeValue>> emptyList = new ArrayList<ComputationOutputBuffer<EdgeValue>>();
-        outputs.put(outputName, emptyList);
+    	outputs.putIfAbsent(outputName, new ArrayList<>());
     }
 
     public void addBufferToOutput(String outputName,ComputationOutputBuffer buffer)
     {
         addOutput(outputName);
         outputs.get(outputName).add(buffer);
+        buffer.setSource(this);
     }
 
     public void addToOutputAndProcess(EdgeValue o, String outputName)

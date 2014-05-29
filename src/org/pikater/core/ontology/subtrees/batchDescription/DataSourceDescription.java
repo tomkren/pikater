@@ -16,6 +16,19 @@ public class DataSourceDescription implements Concept {
 	private String dataType;
     private IDataProvider dataProvider;
 
+    public DataSourceDescription()
+    {
+
+    }
+
+    public DataSourceDescription(String fileName)
+    {
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI(fileName);
+
+        this.setDataProvider(fileDataProvider);
+    }
+
     public IDataProvider getDataProvider() {
         return dataProvider;
     }
