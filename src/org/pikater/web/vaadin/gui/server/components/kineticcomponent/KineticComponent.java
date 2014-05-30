@@ -5,8 +5,8 @@ import org.pikater.shared.experiment.webformat.ExperimentMetadata;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClientRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
-import org.pikater.web.vaadin.gui.server.webui.experimenteditor.CustomTabSheetTabComponent;
-import org.pikater.web.vaadin.gui.server.webui.experimenteditor.ExperimentEditor;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.user.experimenteditor.CustomTabSheetTabComponent;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.user.experimenteditor.ExperimentEditor;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.vaadin.annotations.JavaScript;

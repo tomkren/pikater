@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.webui.experimenteditor;
+package org.pikater.web.vaadin.gui.server.webui.indexpage.content.user.experimenteditor;
 
 import org.pikater.shared.experiment.webformat.Experiment;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;

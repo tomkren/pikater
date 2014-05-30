@@ -21,7 +21,7 @@ import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.server.components.upload.IUploadedFileHandler;
 import org.pikater.web.vaadin.gui.server.components.upload.UserUploadManager;
-import org.pikater.web.vaadin.gui.server.webui.experimenteditor.ExperimentEditor;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.user.experimenteditor.ExperimentEditor;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
