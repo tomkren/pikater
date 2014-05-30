@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.web.config.ServerConfigurationInterface;
 
 import com.vaadin.server.VaadinSession;
@@ -31,7 +32,7 @@ public class AuthHandler
 			List<JPAUser> usersWithProvidedLogin = DAOs.userDAO.getByLogin(login);
 			for(JPAUser user : usersWithProvidedLogin)
 			{
-				if(user.getPassword().equals(password)) // password match
+				if(user.getPassword().equals(password)) // passwords match
 				{
 					login(session, user.getId()); // actually authenticate in this UI
 					return true;
@@ -56,7 +57,7 @@ public class AuthHandler
 	
 	public static JPAUser getUserEntity(VaadinSession session)
 	{
-		return DAOs.userDAO.getByIDWithException(getUserID(session));
+		return DAOs.userDAO.getByID(getUserID(session), EmptyResultAction.LOG_NULL);
 	}
 	
 	public static boolean isUserAuthenticated(VaadinSession session)

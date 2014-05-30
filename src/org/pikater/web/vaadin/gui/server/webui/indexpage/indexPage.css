@@ -25,3 +25,8 @@
 .contentArea
 {
 }
+
+.v-panel-content-contentArea
+{
+	padding: 15px;
+}

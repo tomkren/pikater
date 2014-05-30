@@ -16,6 +16,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -107,6 +108,7 @@ public class MyDialogs
 	public static Window createTextPromptDialog(UI parentUI, String caption, String oldValue, final ITextPromptDialogResult newValueHandler) 
 	{
 		final TextField tf = new TextField("The new value:");
+		tf.setRequired(true);
 		if(oldValue != null)
 		{
 			tf.setValue(oldValue);
@@ -125,7 +127,9 @@ public class MyDialogs
 	{
 		FormLayout form = new FormLayout();
 		final TextField login = new TextField("Login:", "sj");
+		login.setRequired(true);
 		final PasswordField password = new PasswordField("Password:", "123");
+		password.setRequired(true);
 		form.addComponent(login);
 		form.addComponent(password);
 		form.addComponent(new LinkLabel("Create account", new ClickListener()
@@ -152,6 +156,9 @@ public class MyDialogs
 		final TextField login = new TextField("Login:");
 		final PasswordField password = new PasswordField("Password:");
 		final TextField email = new TextField("Email:");
+		login.setRequired(true);
+		password.setRequired(true);
+		email.setRequired(true);
 		form.addComponent(login);
 		form.addComponent(password);
 		form.addComponent(email);
@@ -172,10 +179,47 @@ public class MyDialogs
 				}
 				else
 				{
-					Notification.show("Email is not valid. It has to be specified, in the form 'a@b.c' where 'a' has "
-							+ "64 characters at most and b and c have at most 254 characters altogether.");
+					Notification.show(FieldVerifier.getNotValidEmailMessage());
 					return false;
 				}
+			}
+		});
+	}
+	
+	public static Window createPasswordChangeDialog(final UI parentUI, final String currentPassword, final ITextPromptDialogResult resultHandler)
+	{
+		FormLayout form = new FormLayout();
+		final PasswordField pf_currentPassword = new PasswordField("Current password:");
+		final PasswordField pf_newPassword = new PasswordField("New password:");
+		final PasswordField pf_newPasswordAgain = new PasswordField("New password again:");
+		pf_currentPassword.setRequired(true);
+		pf_newPassword.setRequired(true);
+		pf_newPasswordAgain.setRequired(true);
+		form.addComponent(pf_currentPassword);
+		form.addComponent(pf_newPassword);
+		form.addComponent(pf_newPasswordAgain);
+		return createConfirmDialog(parentUI, "Provide a new password", form, new OnOkClicked()
+		{
+			@Override
+			public boolean handleOkEvent()
+			{
+				if(pf_currentPassword.getValue().equals(currentPassword))
+				{
+					if(pf_newPassword.getValue().equals(pf_newPasswordAgain.getValue()))
+					{
+						resultHandler.handleResult(pf_newPassword.getValue());
+						return true;
+					}
+					else
+					{
+						Notification.show("New passwords don't match", Type.WARNING_MESSAGE);
+					}
+				}
+				else
+				{
+					Notification.show("Current password is not correct.", Type.WARNING_MESSAGE);
+				}
+				return false;
 			}
 		});
 	}

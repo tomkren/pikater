@@ -103,7 +103,7 @@ public class ServerConfigurationInterface
 	
 	public static Boolean avoidUsingDBForNow()
 	{
-		return true;
+		return false;
 	}
 	
 	public static MainUIExtensionClientRpc getUniversalClientConnector()

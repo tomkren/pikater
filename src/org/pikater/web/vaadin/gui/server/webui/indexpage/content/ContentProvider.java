@@ -1,17 +1,36 @@
 package org.pikater.web.vaadin.gui.server.webui.indexpage.content;
 
-import org.pikater.web.vaadin.gui.server.webui.indexpage.content.admin.UsersView;
-
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Label;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.user.ProfileView;
 
 public class ContentProvider
 {
 	public interface IWebFeature
 	{
 		String toMenuCaptiong();
-		AbstractComponent toComponent();
+		IContentComponent toComponent();
+	}
+	
+	public interface IContentComponent
+	{
+		boolean hasUnsavedProgress();
+		String getCloseDialogMessage();
+	}
+	
+	public enum DefaultFeature implements IWebFeature
+	{
+		DEFAULT;
+
+		@Override
+		public String toMenuCaptiong()
+		{
+			return null;
+		}
+
+		@Override
+		public IContentComponent toComponent()
+		{
+			return new DefaultContent();
+		}
 	}
 	
 	public enum AdminFeature implements IWebFeature
@@ -40,20 +59,19 @@ public class ContentProvider
 		}
 
 		@Override
-		public AbstractComponent toComponent()
+		public IContentComponent toComponent()
 		{
 			switch(this)
 			{
-				case VIEW_USERS:
-					return new UsersView();
 				default:
-					return new Label("<font color=\"red\">Unimplemented yet.</font>", ContentMode.HTML);
+					return new UnimplementedContent();
 			}
 		}
 	}
 	
 	public enum UserFeature implements IWebFeature
 	{
+		VIEW_PROFILE,
 		VIEW_DATASETS,
 		VIEW_METHODS,
 		EXPERIMENT_EDITOR,
@@ -64,26 +82,30 @@ public class ContentProvider
 		{
 			switch(this)
 			{
+				case VIEW_PROFILE:
+					return "View & edit profile";
 				case EXPERIMENT_EDITOR:
 					return "Experiment editor";
 				case VIEW_DATASETS:
-					return "Browse datasets";
+					return "Available datasets";
 				case VIEW_EXPERIMENT_RESULTS:
 					return "Experiment results";
 				case VIEW_METHODS:
-					return "Browse methods";
+					return "Available methods";
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
 		}
 
 		@Override
-		public AbstractComponent toComponent()
+		public IContentComponent toComponent()
 		{
 			switch(this)
 			{
+				case VIEW_PROFILE:
+					return new ProfileView();
 				default:
-					return new Label("<font color=\"red\">Unimplemented yet.</font>", ContentMode.HTML);
+					return new UnimplementedContent();
 			}
 		}
 	}

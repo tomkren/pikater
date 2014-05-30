@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.webui.indexpage;
 
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.DefaultFeature;
 import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.IWebFeature;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
@@ -18,6 +19,8 @@ public class IndexPage extends AutoVerticalBorderLayout
 	private final ContentArea contentArea;
 	
 	/*
+	 * TODO: add a close handler to this UI and ask the content component if it has unsaved progress...
+	 * 
 	 * TODO: box definition changes will take an application restart... only make the RPC method a one-time push?
 	 * TODO: BoxInfo reference should be a reversible IDs... since box definitions have no decent IDs, we have to make
 	 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
@@ -36,7 +39,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setBorderSpacing(0);
 		setCellPadding(0);
 		setCellSpacing(0);
-		setComponent(Border.NORTH, new BannerArea());
+		setComponent(Border.NORTH, new BannerArea(this));
 		setComponent(Border.WEST, new LeftMenu(this));
 		setComponent(Border.CENTER, contentArea); 
 		setComponentVisible(Border.EAST, false);
@@ -45,18 +48,25 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setRowVisible(Row.SOUTH, false);
 		setRowHeight(Row.CENTER, DimensionMode.MAX);
 		
-		// setContentAreaComponent(TestContent.testMultiFileUpload());
-		// setContentAreaComponent(TestContent.testJSCH());
-		// setContentAreaComponent(TestContent.testEditor(!getSession().getConfiguration().isProductionMode()));
+		setContentAreaComponent(DefaultFeature.DEFAULT);
+		// setTestContentAreaComponent(TestContent.testMultiFileUpload());
+		// setTestContentAreaComponent(TestContent.testJSCH());
+		// setTestContentAreaComponent(TestContent.testEditor(!getSession().getConfiguration().isProductionMode()));
 	}
 	
 	public void setContentAreaComponent(IWebFeature feature)
 	{
-		setContentAreaComponent(feature.toComponent());
+		this.contentArea.setContent(feature);
 	}
 	
-	private void setContentAreaComponent(AbstractComponent component)
+	/**
+	 * <font color="red">RED ALERT:</font> use this really wisely because it forcibly override the content
+	 * without any add-on features that {@link #setContentAreaComponent} provides.
+	 * @param component
+	 */
+	@SuppressWarnings("unused")
+	private void setTestContentAreaComponent(AbstractComponent component)
 	{
 		this.contentArea.setContent(component);
-	} 
+	}
 }

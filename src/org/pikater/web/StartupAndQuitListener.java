@@ -52,7 +52,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		// set the application-wide logger - this must be second
 		PikaterLogger.setLogger(new GeneralPikaterLogger()
 		{
-			private final Logger innerLogger = Logger.getAnonymousLogger(); 
+			private final Logger innerLogger = Logger.getAnonymousLogger();
 			
 			@Override
 			public void logThrowable(String problemDescription, Throwable t)

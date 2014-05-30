@@ -5,6 +5,7 @@ import org.pikater.web.vaadin.MyResources;
 import org.pikater.web.vaadin.gui.server.AuthHandler;
 import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel;
 import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel.LinkLabelColorConf;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.UserFeature;
 
 import com.vaadin.event.MouseEvents;
 import com.vaadin.event.MouseEvents.ClickEvent; 
@@ -21,7 +22,7 @@ public class BannerArea extends HorizontalLayout
 	
 	private final LinkLabel link_loggedInAs;
 
-	public BannerArea()
+	public BannerArea(final IndexPage parentPage)
 	{
 		super();
 		setStyleName("bannerArea");
@@ -36,7 +37,7 @@ public class BannerArea extends HorizontalLayout
 			@Override
 			public void click(ClickEvent event)
 			{
-				// TODO: display user account info
+				parentPage.setContentAreaComponent(UserFeature.VIEW_PROFILE);
 			}
 		});
 		
@@ -56,7 +57,8 @@ public class BannerArea extends HorizontalLayout
 			@Override
 			public void buttonClick(com.vaadin.ui.Button.ClickEvent event)
 			{
-				// TODO:
+				AuthHandler.logout(getSession());
+				getUI().getPage().reload();
 			}
 		}); 
 		

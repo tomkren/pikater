@@ -59,8 +59,8 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
     public void sessionDestroy(SessionDestroyEvent event)
     {
     	/*
-    	 * Manually log user out, if authenticated with this session (so that any eventual background threads
-    	 * can correctly use the updated state), and detach the session from {@link NoSessionStore} since it is
+    	 * Manually log user out (if authenticated with this session) so that any eventual background threads
+    	 * can correctly use the updated state. Also detach the session from {@link NoSessionStore} since it is
     	 * Vaadin independent.
     	 */
     	
