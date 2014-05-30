@@ -3,6 +3,7 @@ package org.pikater.web.vaadin.gui.server.webui;
 import org.pikater.shared.FieldVerifier;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel;
 
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -165,7 +166,7 @@ public class MyDialogs
 							login.getValue(),
 							password.getValue(),
 							email.getValue(),
-							DAOs.roleDAO.getAdminRole()
+							DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN)
 					));
 					return true;
 				}

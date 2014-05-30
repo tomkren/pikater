@@ -1,0 +1,27 @@
+@CHARSET "US-ASCII";
+
+.bannerArea
+{
+	background-color: black;
+	color: white;
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+
+.bannerArea .v-label, .bannerArea .gwt-Label
+{
+	font-size: 14px;
+}
+
+.bannerArea-image
+{
+}
+
+.bannerArea-authinfo
+{
+	margin-right: 10px;
+}
+
+.contentArea
+{
+}

@@ -1,32 +1,14 @@
 package org.pikater.web.vaadin.gui.server.webui;
 
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.servlet.annotation.WebServlet;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.pikater.shared.experiment.universalformat.UniversalGui;
-import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-import org.pikater.shared.experiment.webformat.BoxType;
-import org.pikater.shared.experiment.webformat.Experiment;
-import org.pikater.shared.ssh.SSHSession;
-import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
-import org.pikater.web.HttpContentType;
-import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
+import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
-import org.pikater.web.vaadin.gui.IUploadedFileHandler;
 import org.pikater.web.vaadin.gui.MainUIExtension;
-import org.pikater.web.vaadin.gui.MyUploads;
-import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.webui.experimenteditor.ExperimentEditor;
+import org.pikater.web.vaadin.gui.server.AuthHandler;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.IndexPage;
 import org.pikater.web.vaadin.gui.server.webui.welcometour.WelcomeTourWizard;
 
 import com.porotype.iconfont.FontAwesome;
@@ -37,17 +19,13 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.JavaScript;
-import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
-public class MainUI extends UI
+public class MainUI extends CustomConfiguredUI
 {
 	private static final long serialVersionUID = 1964653532060950402L;
 	
@@ -65,285 +43,177 @@ public class MainUI extends UI
 		private static final long serialVersionUID = -3494370492799211606L;
 	}
 	
-	/*
-	 * UIs are already session-bound, so we can safely do the following, as long as the field is serializable:
-	 */
-	private MyUploads thisUsersUploads;
-
 	@Override
 	protected void init(VaadinRequest request)
 	{
-		FontAwesome.load();
-		getPage().setTitle("Pikatorium");
-		
 		/*
 		 * NOTE: do not remove or replace this code. 
 		 */
 		
-		MainUIExtension mainUIExtension = new MainUIExtension();
+		super.init(request);
+		getPage().setTitle("Pikatorium");
+		FontAwesome.load();
+		MainUIExtension mainUIExtension = new MainUIExtension(); // TODO: this might eventually be a field
 		mainUIExtension.extend(this);
 		ServerConfigurationInterface.setField(ServerConfItem.UNIVERSAL_CLIENT_CONNECTOR, mainUIExtension.getClientRPC());
 		
-		thisUsersUploads = new MyUploads();
-		
-		/*
-		 * TODO: box definition changes will take an application restart... only make the RPC method a one-time push?
-		 * TODO: BoxInfo reference should be a reversible IDs... since box definitions have no decent IDs, we have to make
-		 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
-		 * case we will have to manually check for newer versions when validating the experiments.
-		 * TODO: cellBrowserDnD drags the label component instead of the custom inner layout sometimes and class cast issues occur...
-		 * TODO: adding datasets: ARFF, CSV, XLS
-		 */ 
-		
-		/*
-		 * Which application scenario should be loaded when the webpages are accessed?
-		 */
-		
-		primary_displayWelcomeWizard();
-		
-		// test_multiFileUpload();
-		// test_console();
-		// test_editor();
-		// test_simpleButton();
-		// test_JSCH();
-	}
-	
-	// -------------------------------------------------------------------
-	// PRIMARY GUI INITIALIZATONS
-	
-	private void primary_displayWelcomeWizard()
-	{
-		/*
-		 * This is necessary as a precaution to the user entering invalid auth info. If no content is supplied,
-		 * the login dialog disappears after the "init()" method finishes. 
-		 */
-		setContent(new Label());
-		
-		// TODO: try to connect to the database
-		
-		MyDialogs.createLoginDialog(this, new MyDialogs.ILoginDialogResult()
+		if(!ServerConfigurationInterface.isApplicationReadyToServe()) // application has not yet been setup and pikater has not yet been launched
 		{
-			@Override
-			public boolean handleResult(String login, String password)
+			// force the user to authenticate so that he can setup and launch pikater on remote machines
+			forceUserToAuthenticate(new MyDialogs.ILoginDialogResult()
 			{
-				// first check the default admin account
-				ServerConfiguration conf = ServerConfigurationInterface.getConfig(); 
-				if(conf.defaultAdminAccountAllowed)
+				@Override
+				public boolean handleResult(String login, String password) // authentication info is provided in the args
 				{
-					if(login.equals("pikater") && password.equals("pikater")) // check whether the given auth info matches the default account
+					/*
+					 * First check whether the default admin account is allowed and was provided by the user.
+					 */
+
+					if(ServerConfigurationInterface.getConfig().defaultAdminAccountAllowed)
 					{
-						setContent(new WelcomeTourWizard(new Button.ClickListener()
+						if(login.equals("pikater") && password.equals("pikater")) // check whether the given auth info matches the default account
 						{
-							private static final long serialVersionUID = -8250998657726465300L;
+							displayApplicationSetupWizard();
+							return true; // necessary for the login dialog to close
+						}
+					}
 
-							@Override
-							public void buttonClick(ClickEvent event)
-							{
-								// initialize and start the cron job scheduler
-								/*
-								if(!PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
-								{
-									throw new IllegalStateException("Application won't serve until the above errors are fixed.");
-								}
-								*/
-								display_defaultPage();
-							}
-						}));
-						return true;
-					}
-				}
-				
-				// TODO: and then check the database accounts
-				
-				Notification.show("Invalid auth info.", Type.HUMANIZED_MESSAGE);
-				return false;
-			}
-		});
-	}
-	
-	private void display_defaultPage()
-	{
-		// TODO: construct a proper index page
-		setContent(new Label("Yay. You've just killed the wizard!"));
-	}
-	
-	// -------------------------------------------------------------------
-	// TEST GUI INITIALIZATONS
-	
-	private void test_multiFileUpload()
-	{
-		VerticalLayout vLayout = new VerticalLayout();
-		setContent(vLayout);
-		
-		vLayout.addComponent(thisUsersUploads.getNewComponent(
-				Arrays.asList(HttpContentType.APPLICATION_JAR),
-				new IUploadedFileHandler()
-				{
-					@Override
-					public void handleFile(InputStream streamToLocalFile, String fileName, String mimeType, long sizeInBytes)
-					{
-						// TODO: upload the file to DB
-					}
-				}
-		));
-	}
+					/* 
+					 * If authentication using the default admin account failed, try to authenticate using the database.
+					 * Note: database connection is assumed to have been checked in {@link StartupAndQuitListener}. 
+					 */
 
-	private void test_editor()
-	{
-		// TODO: use the server interface to get box definitions
-		
-		BoxInfo boxInfo1 = new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", "");
-		BoxInfo boxInfo2 = new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", "");
-		BoxInfo boxInfo3 = new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", "");
-		
-		UniversalGui guiInfo1 = new UniversalGui(10, 10);
-		UniversalGui guiInfo2 = new UniversalGui(500, 10);
-		UniversalGui guiInfo3 = new UniversalGui(400, 300);
-		
-		BoxInfoCollection boxDefinitions = new BoxInfoCollection();
-		boxDefinitions.addDefinition(boxInfo1);
-		boxDefinitions.addDefinition(boxInfo2);
-		boxDefinitions.addDefinition(boxInfo3);
-		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitions);
-		
-		Experiment newExperiment = new Experiment();
-		Integer b1 = newExperiment.addLeafBoxAndReturnID(guiInfo1, boxInfo1);
-		Integer b2 = newExperiment.addLeafBoxAndReturnID(guiInfo2, boxInfo2);
-		newExperiment.addLeafBoxAndReturnID(guiInfo3, boxInfo3);
-		newExperiment.connect(b1, b2);
-		
-		ExperimentEditor editor = new ExperimentEditor(!getSession().getConfiguration().isProductionMode());
-		setContent(editor);
-		
-		// editor.loadExperiment(newExperiment);
-	}
-	
-	@SuppressWarnings("unused")
-	private void test_JSCH()
-	{
-		VerticalLayout vLayout = new VerticalLayout();
-		setContent(vLayout);
-		
-		SimpleConsoleComponent consoleComponent = new SimpleConsoleComponent(new SSHSession(
-				"nassoftwerak.ms.mff.cuni.cz",
-				"e2:dc:09:34:e5:94:11:7f:fd:ee:00:09:b8:1e:f5:d4",
-				"softwerak",
-				"SrapRoPy",
-				new ISSHSessionNotificationHandler()
-				{
-					@Override
-					public void notifySessionClosed()
+					return authenticateUser(login, password, new IAuthenticationSuccessful()
 					{
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void notifyChannelClosed(int exitStatus)
-					{
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void handleError(String description, Throwable t)
-					{
-						// TODO Auto-generated method stub
-						
-					}
-				})
-		);
-		vLayout.addComponent(consoleComponent);
-		
-		// has to be called after the component is attached to the UI
-		consoleComponent.setWidth("600px");
-		consoleComponent.setHeight("400px");
-	}
-	
-	@SuppressWarnings("unused")
-	private void test_simpleButton()
-	{
-		VerticalLayout vLayout = new VerticalLayout();
-		Button btn = new Button("Test", new Button.ClickListener()
+						@Override
+						public void onSuccessfulAuth()
+						{
+							displayApplicationSetupWizard();
+						}
+					});
+				}
+			});
+		}
+		else
 		{
-			private static final long serialVersionUID = -3016596327398677231L;
+			displayIndexPageWhenAuthenticated();
+		}
+	}
+	
+	//-------------------------------------------------------------------
+	// UI BUILDING METHODS
+	
+	/**
+	 * Make the user launch the application first (to be usable at all) and then display index page to him if authenticated for that.
+	 */
+	private void displayApplicationSetupWizard()
+	{
+		setContent(new WelcomeTourWizard(new Button.ClickListener()
+		{
+			private static final long serialVersionUID = -8250998657726465300L;
 
+			/**
+			 * Event fired the "finish" button is clicked in the wizard. All required checks are done
+			 * in the wizard itself, so this method should only:
+			 * <ul>
+			 * <li> Further initialize the application.
+			 * <li> Update the user interface accordingly (so that the authenticated admin may be redirected
+			 * to the default page).
+			 * </ul>
+			 */
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				// getUI().getPage().setLocation("/NewPikater/static/hokus_pokus.txt"); // ./WEB-INF/static/hokus_pokus.txt
-				getUI().getPage().setLocation("/Pikater/staticDownload"); // servlet mapped to /staticDownload
+				/*
+				 * Further initializations. 
+				 */
+				
+				// initialize and start the cron job scheduler
+				/*
+				if(!PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
+				{
+					throw new IllegalStateException("Application won't serve until the above errors are fixed.");
+				}
+				*/
+				
+				displayIndexPageWhenAuthenticated();
 			}
-		});
-		vLayout.addComponent(btn);
-		setContent(vLayout);
+		}));
 	}
 	
-	// -------------------------------------------------------------------
-	// JAVASCRIPT TESTING
-	
-	@SuppressWarnings("unused")
-	private void something1()
+	/**
+	 * Display index page if authenticated or make the user authenticate first and then display it.
+	 */
+	private void displayIndexPageWhenAuthenticated()
 	{
-		JavaScript.getCurrent().addFunction("pikater_setAppMode", new JavaScriptFunction()
+		if(AuthHandler.isUserAuthenticated(getSession()))
 		{
-			private static final long serialVersionUID = 4291049321598205127L;
-
-			@Override
-			public void call(JSONArray arguments) throws JSONException
-			{
-				// this is called on the server when the function is called on the client
-				System.out.println(arguments.length());
-				System.out.println(arguments.getBoolean(0));
-			}
-		});
-		JavaScript.getCurrent().execute("window.pikater_setAppMode(true)"); // calls the function on the client
-	}
-	
-	@SuppressWarnings("unused")
-	private void something2()
-	{
-		// just an example
-		JavaScript.getCurrent().execute("window.ns_pikater.setAppMode(\"DEBUG\");"); // calls the function on the client
-	}
-	
-	// -------------------------------------------------------------------
-	// TIPS AND TRICKS
-	
-	private void smth()
-	{
-	    // The background thread that updates clock times once every second.
-        new Timer().scheduleAtFixedRate(new TimerTask()
+			displayIndexPage();
+		}
+		else
 		{
-			@Override
-			public void run()
+			forceUserToAuthenticate(new MyDialogs.ILoginDialogResult()
 			{
-				// TODO Auto-generated method stub
-			}
-		}, new Date(), 1000);
+				@Override
+				public boolean handleResult(String login, String password)
+				{
+					return authenticateUser(login, password, new IAuthenticationSuccessful()
+					{
+						@Override
+						public void onSuccessfulAuth()
+						{
+							displayIndexPage();
+						}
+					});
+				}
+			});
+		}
 	}
 	
-	// -------------------------------------------------------------------
-	// PRIVATE INTERFACE
-	
-	@SuppressWarnings("unused")
-	@Deprecated
-	private void logout()
+	/**
+	 * The final method to be called in the UI bulding chain. Always being displayed if user is authenticated.
+	 */
+	private void displayIndexPage()
 	{
-		Button logout = new Button("Logout");
-	    logout.addClickListener(new Button.ClickListener()
-	    {
-			private static final long serialVersionUID = 6957710062047165748L;
-
-			@Override
-	        public void buttonClick(ClickEvent event)
-	        {
-	            // Redirect from the page
-	            getUI().getPage().setLocation("/myapp/logoutpage.html");
-	            
-	            // Close the VaadinSession
-	            getSession().close();
-	        }
-	    });
+		// return new IndexPage for each UI unless you want all browser tabs to be synchronized and display the same content
+		setContent(new IndexPage());
+	}
+	
+	//-------------------------------------------------------------------
+	// HELPER METHODS
+	
+	/**
+	 * Display a login dialog and do the provided action when the user clicks the "ok" button.
+	 * @param authHandler the action
+	 */
+	private void forceUserToAuthenticate(MyDialogs.ILoginDialogResult authHandler)
+	{
+		/*
+		 * This is necessary as a precaution to the user entering invalid auth info. If no content
+		 * component is supplied to the UI, the login dialog disappears after the "init()" method finishes.
+		 */
+		setContent(new Label());
+		
+		// display the login dialog
+		MyDialogs.createLoginDialog(this, authHandler);
+	}
+	
+	private boolean authenticateUser(String login, String password, IAuthenticationSuccessful action)
+	{
+		if(AuthHandler.authenticateUser(getSession(), login, password)) // authentication succeeded
+		{
+			action.onSuccessfulAuth();
+			return true;
+		}
+		else // and finally, if authentication failed
+		{
+			Notification.show("Invalid auth info.", Type.WARNING_MESSAGE);
+			return false;
+		}
+	}
+	
+	private interface IAuthenticationSuccessful
+	{
+		void onSuccessfulAuth();
 	}
 }

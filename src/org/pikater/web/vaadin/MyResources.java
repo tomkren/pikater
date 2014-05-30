@@ -22,10 +22,14 @@ public class MyResources
 	// com.vaadin.server.FileDownloader
 	// com.vaadin.server.ExternalResource
 	// com.vaadin.server.StreamResource
+	// Link - a link to internal or external resource - can open a new window
 	
 	// ----------------------------------------------------------------
 	// THEME RESOURCE DEFINITIONS:
 	
+	public static final String relPath_IMG_banner = "images/banner.png";
+	public static final String relPath_IMG_checkIcon16 = "images/check-16x16.png";
+	public static final String relPath_IMG_clearIcon16 = "images/clear-16x16.png";
 	public static final String relPath_IMG_nextIcon16 = "images/Arrow-Next-icon-16x16.png";
 	public static final String relPath_IMG_plusIcon16 = "images/Plus-icon-16x16.png";
 	public static final String relPath_IMG_closeIcon16 = "images/close-icon-16x16.png";
@@ -35,6 +39,9 @@ public class MyResources
 	
 	public static final FileResource prop_appConf = new FileResource(new File(AppHelper.joinPathComponents(AppHelper.getAbsoluteWEBINFCONFPath(), "appServer.properties")));
 	
+	public static final ThemeResource img_banner = new ThemeResource(relPath_IMG_banner);
+	public static final ThemeResource img_checkIcon16 = new ThemeResource(relPath_IMG_checkIcon16);
+	public static final ThemeResource img_clearIcon16 = new ThemeResource(relPath_IMG_clearIcon16);
 	public static final ThemeResource img_nextIcon16 = new ThemeResource(relPath_IMG_nextIcon16);
 	public static final ThemeResource img_plusIcon16 = new ThemeResource(relPath_IMG_plusIcon16);
 	public static final ThemeResource img_closeIcon16 = new ThemeResource(relPath_IMG_closeIcon16);
