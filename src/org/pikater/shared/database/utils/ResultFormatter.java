@@ -5,8 +5,8 @@ import java.util.List;
 import org.pikater.shared.database.exceptions.NoResultException;
 
 public class ResultFormatter<T> {
-	
-	private List<T> resList;
+
+	private final List<T> resList;
 	
 	/**
 	 * Creates an instance of ResultFormatter for the given list of results

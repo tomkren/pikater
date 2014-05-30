@@ -5,12 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.exceptions.NoResultException;
-import org.pikater.shared.database.jpa.JPAAbstractEntity;
-import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
-import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.ResultFormatter;
 
 public class TaskTypeDAO extends AbstractDAO {
@@ -29,18 +25,11 @@ public class TaskTypeDAO extends AbstractDAO {
 	}
 
 	@Override
-	public JPATaskType getByID(int ID) {
-		return new ResultFormatter<JPATaskType>(
-				getByTypedNamedQuery("TaskType.getByID", "id", ID)
+	public JPATaskType getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPATaskType>(
+				getByTypedNamedQuery("TaskType.getByID", "id", ID),
+				era
 				).getSingleResultWithNull();
-	}
-	
-	@Override
-	public JPATaskType getByIDWithException(int ID)
-			throws NoResultException {
-		return new ResultFormatter<JPATaskType>(
-				getByTypedNamedQuery("TaskType.getByID", "id", ID)
-				).getSingleResult();
 	}
 	
 	public JPATaskType createOrGetByName(String name) {

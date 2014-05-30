@@ -9,6 +9,7 @@ import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.ResultFormatter;
 
 public class FileMappingDAO extends AbstractDAO {
@@ -27,18 +28,11 @@ public class FileMappingDAO extends AbstractDAO {
 	}
 
 	@Override
-	public JPAFilemapping getByID(int ID) {
-		return new ResultFormatter<JPAFilemapping>(
-				getByTypedNamedQuery("FileMapping.getByID", "id", ID)
+	public JPAFilemapping getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPAFilemapping>(
+				getByTypedNamedQuery("FileMapping.getByID", "id", ID),
+				era
 				).getSingleResultWithNull();
-	}
-	
-	@Override
-	public JPAFilemapping getByIDWithException(int ID)
-			throws NoResultException {
-		return new ResultFormatter<JPAFilemapping>(
-				getByTypedNamedQuery("FileMapping.getByID", "id", ID)
-				).getSingleResult();
 	}
 	
 	public List<JPAFilemapping> getByInternalFilename(String internalFilename) {

@@ -5,9 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.exceptions.NoResultException;
-import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.ResultFormatter;
 
 public class GlobalMetaDataDAO extends AbstractDAO {
@@ -26,18 +25,11 @@ public class GlobalMetaDataDAO extends AbstractDAO {
 	}
 
 	@Override
-	public JPAGlobalMetaData getByID(int ID) {
-		return new ResultFormatter<JPAGlobalMetaData>(
-				getByTypedNamedQuery("GlobalMetaData.getByID", "id", ID)
+	public JPAGlobalMetaData getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPAGlobalMetaData>(
+				getByTypedNamedQuery("GlobalMetaData.getByID", "id", ID),
+				era
 				).getSingleResultWithNull();
-	}
-	
-	@Override
-	public JPAGlobalMetaData getByIDWithException(int ID)
-			throws NoResultException {
-		return new ResultFormatter<JPAGlobalMetaData>(
-				getByTypedNamedQuery("GlobalMetaData.getByID", "id", ID)
-				).getSingleResult();
 	}
 	
 	private List<JPAGlobalMetaData> getByTypedNamedQuery(String queryName,String paramName,Object param){

@@ -10,19 +10,43 @@ import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 
-
-
 public abstract class AbstractDAO
 {
 	protected static Logger logger=PikaterLogger.getLogger(
 		    Thread.currentThread().getStackTrace()[0].getClassName() );
+	
+	public enum EmptyResultAction
+	{
+		/**
+		 * Log error if no result is found and return null.
+		 */
+		LOG_NULL,
+		
+		/**
+		 * Don't log an error if no result is found and return null.
+		 */
+		NULL,
+		
+		/**
+		 * Silently throw a runtime error to handle in the calling code if no result is found.
+		 */
+		THROW;
+		
+		public static EmptyResultAction getDefault()
+		{
+			return LOG_NULL;
+		}
+	}
 
 	public abstract String getEntityName();
 	public abstract <R extends JPAAbstractEntity> List<R> getAll();
-	public abstract <R extends JPAAbstractEntity> R getByID(int ID);
-	public abstract <R extends JPAAbstractEntity> R getByIDWithException(int ID)  throws NoResultException;
+	public abstract <R extends JPAAbstractEntity> R getByID(int ID, EmptyResultAction era);
+	public <R extends JPAAbstractEntity> R getByID(int ID)
+	{
+		return getByID(ID, EmptyResultAction.LOG_NULL);
+	}
 	public boolean existsByID(int ID){
-		return getByID(ID)!=null;
+		return getByID(ID, EmptyResultAction.NULL)!=null;
 	}
 	
 	public void updateEntity(JPAAbstractEntity changedEntity){

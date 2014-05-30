@@ -6,6 +6,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.models.MetaDataModel;
 import org.pikater.shared.database.views.models.MetaDataRow;
@@ -30,7 +31,7 @@ public class MetaDataView extends View {
 	}
 	
 	public MetaDataView(int dataSetID) throws NoResultException{
-		this.parentDSLO=DAOs.dataSetDAO.getByIDWithException(dataSetID);
+		this.parentDSLO=DAOs.dataSetDAO.getByID(dataSetID, EmptyResultAction.THROW);
 	}
 	
 	private static void init(){

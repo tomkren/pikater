@@ -6,6 +6,7 @@ import java.util.List;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.DataSetView;
 import org.pikater.shared.database.views.MetaDataView;
@@ -21,7 +22,7 @@ public class ViewTest {
 		
 		JPADataSetLO weather;
 		try {
-			weather = DAOs.dataSetDAO.getByIDWithException(2151);
+			weather = DAOs.dataSetDAO.getByID(2151, EmptyResultAction.THROW);
 			this.dataSetViewTest();
 			this.rowTest(weather);
 			//this.stringTest(weather);
