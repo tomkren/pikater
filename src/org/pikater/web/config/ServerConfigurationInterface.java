@@ -101,6 +101,11 @@ public class ServerConfigurationInterface
 		return boxDefinitions;
 	}
 	
+	public static Boolean avoidUsingDBForNow()
+	{
+		return true;
+	}
+	
 	public static MainUIExtensionClientRpc getUniversalClientConnector()
 	{
 		return universalClientConnector;
@@ -108,8 +113,11 @@ public class ServerConfigurationInterface
 
 	public static boolean isApplicationReadyToServe()
 	{
+		/* TODO:
 		return (getContext() != null) && 
 				(getConfig() != null) && getConfig().isValid() && 
-				(getJadeTopologies() != null) && (getJadeTopologies().getConnectedTopologies().size() > 1); 
+				(getJadeTopologies() != null) && (getJadeTopologies().getConnectedTopologies().size() > 1);
+				*/
+		return true;
 	}
 }
