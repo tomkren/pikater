@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
+import org.pikater.web.vaadin.gui.server.AuthHandler;
+
 import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.RequestHandler;
 import com.vaadin.server.ServiceException;
@@ -14,17 +16,17 @@ import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;
 
-@SuppressWarnings("serial")
 public class CustomConfiguredUIServlet extends VaadinServlet implements SessionInitListener, SessionDestroyListener
 {
-    @Override
+	private static final long serialVersionUID = -8268135994612358127L;
+
+	@Override
     protected void servletInitialized() throws ServletException
     {
         super.servletInitialized(); // this should always be called first
         
-        // Uncomment this if session listening is desirable: 
-        // getService().addSessionInitListener(this);
-        // getService().addSessionDestroyListener(this);
+        getService().addSessionInitListener(this);
+        getService().addSessionDestroyListener(this);
     }
     
     @Override
@@ -32,12 +34,14 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
     {
         VaadinServletService vaadinServletService = new VaadinServletService(this, deploymentConfiguration)
         {
-        	@Override
+			private static final long serialVersionUID = 8833521650509773424L;
+
+			@Override
             protected List<RequestHandler> createRequestHandlers() throws ServiceException
             {
         		// specify request handlers in the order they will be called (LIFO) on incoming requests:
                 List<RequestHandler> requestHandlerList = super.createRequestHandlers();
-                requestHandlerList.add(new CheckConfigurationRequestHandler());
+                // requestHandlerList.add(new CheckConfigurationRequestHandler());
                 return requestHandlerList;
             }
         };
@@ -48,12 +52,21 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
     @Override
     public void sessionInit(SessionInitEvent event) throws ServiceException
     {
-        // Do session start stuff here
+        // no need to do anything
     }
     
     @Override
     public void sessionDestroy(SessionDestroyEvent event)
     {
-        // Do session end stuff here
+    	/*
+    	 * Manually log user out, if authenticated with this session (so that any eventual background threads
+    	 * can correctly use the updated state), and detach the session from {@link NoSessionStore} since it is
+    	 * Vaadin independent.
+    	 */
+    	
+    	if(AuthHandler.isUserAuthenticated(event.getSession()))
+    	{
+    		AuthHandler.logout(event.getSession()); // also detaches the session from {@link NoSessionStore}
+    	}
     }
 }
