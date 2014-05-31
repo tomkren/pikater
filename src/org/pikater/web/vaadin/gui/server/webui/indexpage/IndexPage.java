@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.webui.indexpage;
 
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.DefaultFeature;
-import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.IWebFeature;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.IWebFeatureSet;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
@@ -48,13 +48,13 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setRowVisible(Row.SOUTH, false);
 		setRowHeight(Row.CENTER, DimensionMode.MAX);
 		
-		setContentAreaComponent(DefaultFeature.DEFAULT);
+		setContentAreaComponent(DefaultFeature.WELCOME);
 		// setTestContentAreaComponent(TestContent.testMultiFileUpload());
 		// setTestContentAreaComponent(TestContent.testJSCH());
 		// setTestContentAreaComponent(TestContent.testEditor(!getSession().getConfiguration().isProductionMode()));
 	}
 	
-	public void setContentAreaComponent(IWebFeature feature)
+	public void setContentAreaComponent(IWebFeatureSet feature)
 	{
 		this.contentArea.setContent(feature);
 	}

@@ -46,8 +46,8 @@ public class AuthHandler
 	{
 		if(session == null)
 		{
-			throw new NullPointerException("Session is null. Did you use the 'getSession()' method from a constructor? "
-					+ "Don't forget that session is available only since the method 'attach' is called on your component.");
+			throw new NullPointerException("Session is null. Did you use the 'getSession()' method? If so, make sure you"
+					+ "use it from the 'AbstractComponent.attach' method or just use 'VaadinSession.getCurrent()' instead.");
 		}
 		else
 		{

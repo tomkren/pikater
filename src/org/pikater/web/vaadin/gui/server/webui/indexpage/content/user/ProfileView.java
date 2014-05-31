@@ -11,6 +11,8 @@ import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Notification;
@@ -31,11 +33,15 @@ public class ProfileView extends FormLayout implements IContentComponent
 	private final TextField tf_email;
 	private final Button btn_saveChanges;
 	
+	private boolean passwordChanged;
+	private boolean emailChanged;
+	
 	public ProfileView()
 	{
 		super();
 		
 		tf_login = new TextField("Login:");
+		
 		btn_changePassword = new Button("Change password", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = 53892736347329152L;
@@ -43,24 +49,49 @@ public class ProfileView extends FormLayout implements IContentComponent
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				String currentPassword = ServerConfigurationInterface.avoidUsingDBForNow() ? getDummyPassword() : AuthHandler.getUserEntity(getSession()).getPassword();
-				MyDialogs.createPasswordChangeDialog(getUI(), currentPassword, new ITextPromptDialogResult()
+				MyDialogs.createPasswordChangeDialog(getUI(), getPasswordBackup(), new ITextPromptDialogResult()
 				{
 					@Override
 					public boolean handleResult(String newPassword)
 					{
 						// all required checks were passed
-						setPasswordIntoTheField(newPassword); // register the change
-						btn_saveChanges.setEnabled(true);
+						setPasswordBackup(newPassword); // register the change
+						passwordChanged = true;
+						updateSaveChangesBtnStatus();
 						return true;
 					}
 				});
 			}
 		});
+		
 		tf_email = new TextField("Email:");
-		tf_email.addValidator(new EmailValidator("Invalid email address."));
+		tf_email.addValidator(new EmailValidator("Invalid email address.")
+		{
+			/*
+			 * Since there is no validation listener or callback on the field components,
+			 * we have to wrap the built-in email validator and enable the 'btn_saveChanges' as needed. 
+			 */
+			
+			private static final long serialVersionUID = 4089601013465687331L;
+
+			@Override
+			public void validate(Object value) throws InvalidValueException
+			{
+				try
+				{
+					super.validate(value);
+					emailChanged = !getEmailBackup().equals((String) value);
+					updateSaveChangesBtnStatus();
+				}
+				catch (InvalidValueException e)
+				{
+					btn_saveChanges.setEnabled(false);
+					throw e;
+				}
+			}
+		});
 		tf_email.setValidationVisible(true);
-		tf_email.setTextChangeTimeout(1000); // 1 second
+		tf_email.setTextChangeTimeout(1); // 1 millisecond, so immediately
 		tf_email.addTextChangeListener(new FieldEvents.TextChangeListener()
 		{
 			private static final long serialVersionUID = 1895549466379801259L;
@@ -71,6 +102,7 @@ public class ProfileView extends FormLayout implements IContentComponent
 				tf_email.setValue(event.getText()); // necessary for auto-validation to work
 			}
 		});
+		
 		btn_saveChanges = new Button("Save changes", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = 8079462098771877855L;
@@ -78,10 +110,23 @@ public class ProfileView extends FormLayout implements IContentComponent
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				updateChanges();
+				// update changes
+				
+				if(!ServerConfigurationInterface.avoidUsingDBForNow())
+				{
+					JPAUser user = AuthHandler.getUserEntity(VaadinSession.getCurrent());
+					user.setEmail(tf_email.getValue());
+					user.setPassword(getPasswordBackup());
+					DAOs.userDAO.updateEntity(user);
+				}
+				resetChangeState();
+				updateSaveChangesBtnStatus();
+				
+				Notification.show("Changes were successfully saved.", Type.HUMANIZED_MESSAGE);
 			}
 		});
-		btn_saveChanges.setEnabled(false);
+		
+		resetChangeState();
 		
 		addComponent(tf_login);
 		addComponent(btn_changePassword);
@@ -90,25 +135,16 @@ public class ProfileView extends FormLayout implements IContentComponent
 	}
 	
 	@Override
-	public void attach()
+	public void enter(ViewChangeEvent event)
 	{
-		super.attach();
+		resetChangeState();
 		
-		if(ServerConfigurationInterface.avoidUsingDBForNow())
-		{
-			tf_login.setValue(getDummyLogin());
-			setPasswordIntoTheField(getDummyPassword());
-			tf_email.setValue(getDummyEmail());
-		}
-		else
-		{
-			JPAUser user = AuthHandler.getUserEntity(getSession());
-			tf_login.setValue(user.getLogin());
-			setPasswordIntoTheField(user.getPassword());
-			tf_email.setValue(user.getEmail());
-		}
-		
-		tf_login.setReadOnly(true);
+		JPAUser user = ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : AuthHandler.getUserEntity(VaadinSession.getCurrent());
+		setLogin(user.getLogin());
+		setPasswordBackup(user.getPassword());
+		setEmailBackup(user.getEmail()); // backup for future comparing to new values
+		tf_email.setValue(user.getEmail());
+		updateSaveChangesBtnStatus();
 	}
 	
 	@Override
@@ -123,42 +159,44 @@ public class ProfileView extends FormLayout implements IContentComponent
 		return "Changes were not stored yet. Discard them and continue?";
 	}
 	
-	private void updateChanges()
+	//--------------------------------------------------
+	// PRIVATE INTERFACE
+	
+	private void setLogin(String login)
 	{
-		if(!ServerConfigurationInterface.avoidUsingDBForNow())
-		{
-			JPAUser user = AuthHandler.getUserEntity(getSession());
-			user.setEmail(tf_email.getValue());
-			user.setPassword(getPasswordFromTheField());
-			DAOs.userDAO.updateEntity(user);
-		}
-		
-		btn_saveChanges.setEnabled(false);
-		Notification.show("Changes were successfully saved.", Type.HUMANIZED_MESSAGE);
+		tf_login.setReadOnly(false);
+		tf_login.setValue(login);
+		tf_login.setReadOnly(true);
 	}
 	
-	private void setPasswordIntoTheField(String password)
-	{
-		btn_changePassword.setData(password);
-	}
-	
-	private String getPasswordFromTheField()
+	private String getPasswordBackup()
 	{
 		return (String) btn_changePassword.getData();
 	}
 	
-	private String getDummyLogin()
+	private void setPasswordBackup(String password)
 	{
-		return "dummy_user";
+		btn_changePassword.setData(password);
 	}
 	
-	private String getDummyPassword()
+	private String getEmailBackup()
 	{
-		return "dummy_password";
+		return (String) tf_email.getData();
 	}
 	
-	private String getDummyEmail()
+	private void setEmailBackup(String email)
 	{
-		return "dummy_user@mail.com";
+		tf_email.setData(email);
+	}
+	
+	private void updateSaveChangesBtnStatus()
+	{
+		btn_saveChanges.setEnabled(passwordChanged || emailChanged);
+	}
+	
+	private void resetChangeState()
+	{
+		passwordChanged = false;
+		emailChanged = false;
 	}
 }

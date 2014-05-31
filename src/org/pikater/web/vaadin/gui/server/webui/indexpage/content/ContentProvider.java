@@ -1,39 +1,57 @@
 package org.pikater.web.vaadin.gui.server.webui.indexpage.content;
 
+import org.pikater.web.vaadin.gui.server.AuthHandler;
 import org.pikater.web.vaadin.gui.server.webui.indexpage.content.user.ProfileView;
+
+import com.vaadin.navigator.View;
+import com.vaadin.server.VaadinSession;
 
 public class ContentProvider
 {
-	public interface IWebFeature
+	public interface IWebFeatureSet
 	{
-		String toMenuCaptiong();
+		boolean accessAllowed(VaadinSession session);
+		String toMenuCaption();
+		String toNavigatorName();
 		IContentComponent toComponent();
 	}
 	
-	public interface IContentComponent
+	public interface IContentComponent extends View
 	{
 		boolean hasUnsavedProgress();
 		String getCloseDialogMessage();
 	}
 	
-	public enum DefaultFeature implements IWebFeature
+	public enum DefaultFeature implements IWebFeatureSet
 	{
-		DEFAULT;
+		WELCOME;
+		
+		@Override
+		public boolean accessAllowed(VaadinSession session)
+		{
+			return true; // this feature set is for everyone
+		}
 
 		@Override
-		public String toMenuCaptiong()
+		public String toMenuCaption()
 		{
 			return null;
+		}
+		
+		@Override
+		public String toNavigatorName()
+		{
+			return "welcome";
 		}
 
 		@Override
 		public IContentComponent toComponent()
 		{
-			return new DefaultContent();
+			return new WelcomeContent();
 		}
 	}
 	
-	public enum AdminFeature implements IWebFeature
+	public enum AdminFeature implements IWebFeatureSet
 	{
 		VIEW_USERS,
 		VIEW_SCHEDULED_EXPERIMENTS,
@@ -41,7 +59,13 @@ public class ContentProvider
 		VIEW_SYSTEM_STATUS;
 		
 		@Override
-		public String toMenuCaptiong()
+		public boolean accessAllowed(VaadinSession session)
+		{
+			return AuthHandler.getUserEntity(session).isAdmin(); // only allowed for admins
+		}
+		
+		@Override
+		public String toMenuCaption()
 		{
 			switch(this)
 			{
@@ -53,6 +77,24 @@ public class ContentProvider
 					return "System status";
 				case VIEW_USERS:
 					return "Users";
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
+		}
+		
+		@Override
+		public String toNavigatorName()
+		{
+			switch(this)
+			{
+				case VIEW_DATASETS_METHODS:
+					return "admin-ToApprove";
+				case VIEW_SCHEDULED_EXPERIMENTS:
+					return "adminDisplaySchedule";
+				case VIEW_SYSTEM_STATUS:
+					return "adminSystemStatus";
+				case VIEW_USERS:
+					return "adminDisplayUsers";
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
@@ -69,7 +111,7 @@ public class ContentProvider
 		}
 	}
 	
-	public enum UserFeature implements IWebFeature
+	public enum UserFeature implements IWebFeatureSet
 	{
 		VIEW_PROFILE,
 		VIEW_DATASETS,
@@ -78,7 +120,13 @@ public class ContentProvider
 		VIEW_EXPERIMENT_RESULTS;
 		
 		@Override
-		public String toMenuCaptiong()
+		public boolean accessAllowed(VaadinSession session)
+		{
+			return AuthHandler.isUserAuthenticated(session); // only allowed for authenticated users
+		}
+		
+		@Override
+		public String toMenuCaption()
 		{
 			switch(this)
 			{
@@ -92,6 +140,26 @@ public class ContentProvider
 					return "Experiment results";
 				case VIEW_METHODS:
 					return "Available methods";
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
+		}
+		
+		@Override
+		public String toNavigatorName()
+		{
+			switch(this)
+			{
+				case VIEW_PROFILE:
+					return "userProfile";
+				case EXPERIMENT_EDITOR:
+					return "experimentEditor";
+				case VIEW_DATASETS:
+					return "displayDatasets";
+				case VIEW_EXPERIMENT_RESULTS:
+					return "displayResults";
+				case VIEW_METHODS:
+					return "displayMethods";
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}

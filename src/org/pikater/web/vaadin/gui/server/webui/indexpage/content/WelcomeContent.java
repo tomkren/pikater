@@ -8,36 +8,36 @@ import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.AuthHandler;
 import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.IContentComponent;
 
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
 
-public class DefaultContent extends Label implements IContentComponent
+public class WelcomeContent extends Label implements IContentComponent
 {
 	private static final long serialVersionUID = 9077723300509194087L;
 
-	public DefaultContent()
+	public WelcomeContent()
 	{
 		super("", ContentMode.HTML);
 	}
 	
 	@Override
-	public void attach()
+	public void enter(ViewChangeEvent event)
 	{
-		super.attach();
-		
 		if(ServerConfigurationInterface.avoidUsingDBForNow())
 		{
 			setValue("Welcome to Pikatorium.");
 		}
 		else
 		{
-			JPAUser user = AuthHandler.getUserEntity(getSession());
+			JPAUser user = AuthHandler.getUserEntity(VaadinSession.getCurrent());
 			setValue(String.format("Welcome to Pikatorium.</br>Your last visit was: %s", user.getLastLogin()));
 			user.setLastLogin(new Date());
 			DAOs.userDAO.updateEntity(user);
 		}
 	}
-
+	
 	@Override
 	public boolean hasUnsavedProgress()
 	{

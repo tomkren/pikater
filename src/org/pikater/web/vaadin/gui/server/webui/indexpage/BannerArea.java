@@ -9,6 +9,7 @@ import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider
 
 import com.vaadin.event.MouseEvents;
 import com.vaadin.event.MouseEvents.ClickEvent; 
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -57,7 +58,7 @@ public class BannerArea extends HorizontalLayout
 			@Override
 			public void buttonClick(com.vaadin.ui.Button.ClickEvent event)
 			{
-				AuthHandler.logout(getSession());
+				AuthHandler.logout(VaadinSession.getCurrent());
 				getUI().getPage().reload();
 			}
 		}); 

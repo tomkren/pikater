@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.server.webui.indexpage;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.AuthHandler;
 import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.AdminFeature;
-import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.IWebFeature;
+import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.IWebFeatureSet;
 import org.pikater.web.vaadin.gui.server.webui.indexpage.content.ContentProvider.UserFeature;
 
 import com.vaadin.ui.MenuBar;
@@ -67,9 +67,9 @@ public class LeftMenu extends MenuBar
 		}
 	}
 	
-	private void buildMenuItem(MenuItem parentMenuItem, final IWebFeature feature)
+	private void buildMenuItem(MenuItem parentMenuItem, final IWebFeatureSet feature)
 	{
-		parentMenuItem.addItem(feature.toMenuCaptiong(), new Command()
+		parentMenuItem.addItem(feature.toMenuCaption(), new Command()
 		{
 			private static final long serialVersionUID = -2161709698587068923L;
 
