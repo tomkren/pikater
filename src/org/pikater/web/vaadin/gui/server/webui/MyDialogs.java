@@ -179,7 +179,7 @@ public class MyDialogs
 				}
 				else
 				{
-					Notification.show(FieldVerifier.getNotValidEmailMessage());
+					Notification.show("Email not valid.", Type.WARNING_MESSAGE);
 					return false;
 				}
 			}
