@@ -90,6 +90,15 @@ public class JPAUser extends JPAAbstractEntity{
 		this.created = new Date();
 	}
 	
+	/**
+	 * Used in web for offline development when the database is not reachable or usable for some reason.
+	 * @return
+	 */
+	public static JPAUser getDummy()
+	{
+		return new JPAUser("dummy_user", "dummy_password", null, "dummy_user@mail.com", 9, JPAUserStatus.ACTIVE);
+	}
+	
 	public int getId() {
         return id;
     }
