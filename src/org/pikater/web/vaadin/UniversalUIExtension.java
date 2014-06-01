@@ -1,25 +1,21 @@
-package org.pikater.web.vaadin.gui;
+package org.pikater.web.vaadin;
 
 import java.util.logging.Level;
 
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionClientRpc;
-import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionServerRpc;
-import org.pikater.web.vaadin.gui.server.webui.MainUI;
+import org.pikater.web.vaadin.gui.client.extensions.UniversalUIExtensionClientRpc;
+import org.pikater.web.vaadin.gui.client.extensions.UniversalUIExtensionServerRpc;
 
 import com.vaadin.server.AbstractExtension;
+import com.vaadin.ui.UI;
 
-/**
- * Instances of this class act as a mediator between client and server in
- * the sense that custom messages and data structures are sent over it.
- */
-public class MainUIExtension extends AbstractExtension
+public class UniversalUIExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;
 	
-	public MainUIExtension()
+	public UniversalUIExtension()
 	{
-		registerRpc(new MainUIExtensionServerRpc()
+		registerRpc(new UniversalUIExtensionServerRpc()
 		{
 			private static final long serialVersionUID = -5824200287684658506L;
 			
@@ -47,13 +43,13 @@ public class MainUIExtension extends AbstractExtension
 	 * Exposing the inherited API.
 	 * @param mainUI
 	 */
-	public void extend(MainUI mainUI)
+	public void extend(UI anyUI)
     {
-        super.extend(mainUI);
+        super.extend(anyUI);
     }
 	
-	public MainUIExtensionClientRpc getClientRPC()
+	public UniversalUIExtensionClientRpc getClientRPC()
 	{
-		return getRpcProxy(MainUIExtensionClientRpc.class); 
+		return getRpcProxy(UniversalUIExtensionClientRpc.class); 
 	}
 }

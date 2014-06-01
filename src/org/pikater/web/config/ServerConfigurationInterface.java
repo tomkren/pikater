@@ -3,7 +3,6 @@ package org.pikater.web.config;
 import javax.servlet.ServletContext;
 
 import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionClientRpc;
 
 public class ServerConfigurationInterface
 {
@@ -13,7 +12,6 @@ public class ServerConfigurationInterface
 		CONFIG,
 		JADE_TOPOLOGIES,
 		BOX_DEFINITIONS,
-		UNIVERSAL_CLIENT_CONNECTOR
 	};
 	
 	/**
@@ -22,8 +20,9 @@ public class ServerConfigurationInterface
 	private static ServletContext context = null;
 	private static ServerConfiguration config = null;
 	private static JadeTopologies jadeTopologies = null;
-	private static BoxInfoCollection boxDefinitions = null;
-	private static MainUIExtensionClientRpc universalClientConnector = null;
+	private static BoxInfoCollection latestBoxDefinitions = null;
+	
+	// TODO: merge this with NoSessionStore eventually?
 	
 	// **************************************************************************************************
 	// PUBLIC INTERFACE
@@ -63,18 +62,7 @@ public class ServerConfigurationInterface
 				}
 				break;
 			case BOX_DEFINITIONS:
-				boxDefinitions = (BoxInfoCollection) value;
-				if(getUniversalClientConnector() == null)
-				{
-					throw new NullPointerException("Can not delegate the newly set box definitions to the client because universal client connector is null.");
-				}
-				else
-				{
-					getUniversalClientConnector().command_setBoxDefinitions(boxDefinitions);
-				}
-				break;
-			case UNIVERSAL_CLIENT_CONNECTOR:
-				universalClientConnector = (MainUIExtensionClientRpc) value;
+				latestBoxDefinitions = (BoxInfoCollection) value;
 				break;
 			default:
 				throw new IllegalArgumentException();
@@ -96,9 +84,9 @@ public class ServerConfigurationInterface
 		return jadeTopologies;
 	}
 	
-	public static BoxInfoCollection getBoxDefinitions()
+	public static BoxInfoCollection getLatestBoxDefinitions()
 	{
-		return boxDefinitions;
+		return latestBoxDefinitions;
 	}
 	
 	public static Boolean avoidUsingDBForNow()
@@ -106,11 +94,6 @@ public class ServerConfigurationInterface
 		return false;
 	}
 	
-	public static MainUIExtensionClientRpc getUniversalClientConnector()
-	{
-		return universalClientConnector;
-	}
-
 	public static boolean isApplicationReadyToServe()
 	{
 		/* TODO:
