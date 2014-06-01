@@ -11,14 +11,14 @@ public class MyUploadStatePanel extends UploadStatePanel
 {
 	private static final long serialVersionUID = 2373915541113299145L;
 	
-	private UserUploadManager uploadManager;
+	private UserUploadsManager uploadManager;
 
 	public MyUploadStatePanel(MyUploadStateWindow window)
     {
         super(window);
     }
 	
-	public void setUploadStateInstance(UserUploadManager uploadManager)
+	public void setUploadStateInstance(UserUploadsManager uploadManager)
 	{
 		this.uploadManager = uploadManager;
 	}

@@ -8,14 +8,14 @@ public class MyMultiUpload extends MultiFileUpload
 {
 	private static final long serialVersionUID = 1274280572318620L;
 	
-	public MyMultiUpload(MyUploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UserUploadManager uploadManager)
+	public MyMultiUpload(MyUploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UserUploadsManager uploadManager)
     {
         super(handler, uploadStateWindow);
         
         ((MyUploadStatePanel) getUploadStatePanel()).setUploadStateInstance(uploadManager);
     }
 
-    public MyMultiUpload(MyUploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UserUploadManager uploadManager, boolean multiple)
+    public MyMultiUpload(MyUploadStateWindow uploadStateWindow, UploadFinishedHandler handler, UserUploadsManager uploadManager, boolean multiple)
     {
         super(handler, uploadStateWindow, multiple);
         
