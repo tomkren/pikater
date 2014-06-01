@@ -13,9 +13,9 @@ import org.reflections.Reflections;
 public class AppHelper
 {
 	//----------------------------------------------------------------------------------------------------------------
-	// APPLICATION PATHS RELATED STUFF - if you're going to use this, first set this field when the application starts
+	// APPLICATION PATHS RELATED STUFF
 	
-	private static String baseAbsAppPath = null;
+	private static String baseAbsAppPath = null; // if you're going to use this, first set this field when the application starts
 	
 	public static void setAbsoluteBaseAppPath(String baseAbsAppPath)
 	{

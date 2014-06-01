@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import org.pikater.shared.AppHelper;
 import org.pikater.shared.logging.GeneralPikaterLogger;
@@ -16,6 +17,7 @@ import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 
+@WebListener
 public class StartupAndQuitListener implements ServletContextListener
 {
 	/**

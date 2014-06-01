@@ -1,5 +1,7 @@
 package org.pikater.shared.database;
 
+import java.net.UnknownHostException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,7 +19,6 @@ public class EntityManagerInstancesCreator
 	 */
 	public static EntityManagerFactory primaryFactory;
 	
-	// TODO: use static JVM-wide logger with a nice interface instead?
 	/**
 	 * @see org.pikater.shared.logging.PikaterLogger
 	 */
@@ -32,6 +33,7 @@ public class EntityManagerInstancesCreator
 		}
 		catch(Throwable t)
 		{
+			// TODO: use static JVM-wide logger with a nice interface instead?
 			logger.log(Level.ERROR, "Failed to initialize EntityManagerFactory: ", t);
 		}
 	}
@@ -44,4 +46,16 @@ public class EntityManagerInstancesCreator
 	{
 		return primaryFactory.createEntityManager();
     }
+	
+	/**
+	 * Makes a default database call from information provided in the "persistence.xml" file.
+	 * @throws UnknownHostException If the database address provided in "persistence.xml" could not be resolved.
+	 * 		Check internet connection on both machines, firewall settings, etc...</br>
+	 * 		IMPORTANT NOTE: this behaviour might be specific to PostGre.
+	 * @TODO: exception thrown when invalid auth info is provided in "persistence.xml"?
+	 */
+	public static void testDatabaseConnectionWorkingProperly() throws UnknownHostException
+	{
+		getEntityManagerInstance();		
+	}
 }
