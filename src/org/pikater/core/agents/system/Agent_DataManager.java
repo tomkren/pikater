@@ -28,6 +28,7 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
@@ -159,15 +160,6 @@ public class Agent_DataManager extends PikaterAgent {
 				logError("Error creating directory: " + dataFilesPath);
 			}
 		}
-
-		/**
-		try {
-			db.close();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		**/
 
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 
@@ -480,7 +472,7 @@ public class Agent_DataManager extends PikaterAgent {
 				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
 			}else{
 				JPAFilemapping fm=new JPAFilemapping();
-				fm.setUser(DAOs.userDAO.getByID(im.getUserID()));
+				fm.setUser(DAOs.userDAO.getByID(im.getUserID(),EmptyResultAction.LOG_NULL));
 				fm.setInternalfilename(internalFilename);
 				fm.setExternalfilename(im.getExternalFilename());
 				
@@ -510,7 +502,7 @@ public class Agent_DataManager extends PikaterAgent {
 				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
 			}else{
 				JPAFilemapping fm=new JPAFilemapping();
-				fm.setUser(DAOs.userDAO.getByID(im.getUserID()));
+				fm.setUser(DAOs.userDAO.getByID(im.getUserID(),EmptyResultAction.LOG_NULL));
 				fm.setInternalfilename(internalFilename);
 				fm.setExternalfilename(im.getExternalFilename());
 				
@@ -713,13 +705,13 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		JPADataSetLO dslo;
 		try {
-			dslo = DAOs.dataSetDAO.getByIDWithException(dataSetID);
+			dslo = DAOs.dataSetDAO.getByID(dataSetID,EmptyResultAction.THROW);
 			
 			
 			String currentHash=dslo.getHash();
 			
 			java.util.List<JPADataSetLO> equalDataSets=DAOs.dataSetDAO.getByHash(currentHash);
-			
+			log("Hash of new dataset: "+currentHash);
 			//we search for a dataset entry with the same hash and with already generated metadata
 			JPADataSetLO dsloWithMetaData=null;
 			for(JPADataSetLO candidate : equalDataSets){
@@ -775,8 +767,8 @@ public class Agent_DataManager extends PikaterAgent {
 			fm.setInternalfilename(newDSLO.getHash());
 			fm.setUser(user);
 			DAOs.filemappingDAO.storeEntity(fm);
-			
-			
+			reply.setContentObject((new Integer(newDSLO.getId())));
+			log("Saved Dataset with ID: "+newDSLO.getId());
 		} catch (NoResultException e) {
 			logError("No user found with login: "+sd.getUserLogin());
 			reply.setPerformative(ACLMessage.FAILURE);

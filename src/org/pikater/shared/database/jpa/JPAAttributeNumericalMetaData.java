@@ -13,9 +13,7 @@ import javax.persistence.Transient;
 @Table(name="AttributeNumericalMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
 	private boolean isReal;
 	private double min;
 	private double max;
@@ -25,12 +23,6 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 	private double variance;
 	private double avarage;
 
-	public int getId() {
-		return id;
-	}
-	public boolean isReal() {
-		return isReal;
-	}
 	public void setReal(boolean isReal) {
 		this.isReal = isReal;
 	}
