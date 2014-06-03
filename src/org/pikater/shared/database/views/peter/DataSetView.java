@@ -1,11 +1,11 @@
-package org.pikater.shared.database.views;
+package org.pikater.shared.database.views.peter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.views.models.DataSetRowModel;
+import org.pikater.shared.database.views.peter.models.DataSetRowModel;
 
 public class DataSetView extends View {
 	public List<DataSetRowModel> getAllDatasets(){

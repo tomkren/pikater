@@ -1,4 +1,4 @@
-package org.pikater.shared.database.views.models;
+package org.pikater.shared.database.views.peter.models;
 
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;

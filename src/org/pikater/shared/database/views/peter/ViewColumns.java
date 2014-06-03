@@ -1,4 +1,4 @@
-package org.pikater.shared.database.views;
+package org.pikater.shared.database.views.peter;
 
 public enum ViewColumns {	
 	META_DATA_TYPE("Type"),

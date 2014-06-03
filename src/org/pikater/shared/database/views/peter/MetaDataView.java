@@ -1,4 +1,4 @@
-package org.pikater.shared.database.views;
+package org.pikater.shared.database.views.peter;
 
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
@@ -8,8 +8,8 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.utils.ResultFormatter;
-import org.pikater.shared.database.views.models.MetaDataModel;
-import org.pikater.shared.database.views.models.MetaDataRow;
+import org.pikater.shared.database.views.peter.models.MetaDataModel;
+import org.pikater.shared.database.views.peter.models.MetaDataRow;
 
 import java.util.ArrayList;
 import java.util.List;

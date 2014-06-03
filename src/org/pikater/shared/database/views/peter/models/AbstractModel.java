@@ -1,8 +1,8 @@
-package org.pikater.shared.database.views.models;
+package org.pikater.shared.database.views.peter.models;
 
 import java.util.List;
 
-import org.pikater.shared.database.views.ViewColumns;
+import org.pikater.shared.database.views.peter.ViewColumns;
 
 public abstract class AbstractModel {
 	protected String delim=" ";

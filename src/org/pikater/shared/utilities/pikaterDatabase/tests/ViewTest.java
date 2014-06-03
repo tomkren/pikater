@@ -8,12 +8,12 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.utils.ResultFormatter;
-import org.pikater.shared.database.views.DataSetView;
-import org.pikater.shared.database.views.MetaDataView;
-import org.pikater.shared.database.views.ViewColumns;
-import org.pikater.shared.database.views.models.DataSetRowModel;
-import org.pikater.shared.database.views.models.MetaDataModel;
-import org.pikater.shared.database.views.models.MetaDataRow;
+import org.pikater.shared.database.views.peter.DataSetView;
+import org.pikater.shared.database.views.peter.MetaDataView;
+import org.pikater.shared.database.views.peter.ViewColumns;
+import org.pikater.shared.database.views.peter.models.DataSetRowModel;
+import org.pikater.shared.database.views.peter.models.MetaDataModel;
+import org.pikater.shared.database.views.peter.models.MetaDataRow;
 
 public class ViewTest {
 

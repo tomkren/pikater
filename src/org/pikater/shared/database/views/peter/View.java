@@ -1,4 +1,4 @@
-package org.pikater.shared.database.views;
+package org.pikater.shared.database.views.peter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,11 @@
-package org.pikater.shared.database.views.models;
+package org.pikater.shared.database.views.peter.models;
 
 
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
-import org.pikater.shared.database.views.MetaDataView;
-import org.pikater.shared.database.views.ViewColumns;
+import org.pikater.shared.database.views.peter.MetaDataView;
+import org.pikater.shared.database.views.peter.ViewColumns;
 
 import java.util.ArrayList;
 import java.util.List;
