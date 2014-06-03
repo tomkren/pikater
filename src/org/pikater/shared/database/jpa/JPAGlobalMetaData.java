@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -28,6 +29,7 @@ public class JPAGlobalMetaData extends JPAAbstractEntity{
 	private JPATaskType defaultTaskType;
 	private int numberofInstances;
 	
+
 	public JPAGlobalMetaData(){
 		super();
 	}

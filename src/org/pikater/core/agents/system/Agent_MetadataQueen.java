@@ -36,6 +36,7 @@ import org.pikater.core.ontology.subtrees.metadata.attributes.RealAttributeMetad
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.ResultFormatter;
@@ -102,7 +103,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
         int dataSetID=nd.getDataSetID();
         
         try {
-			JPADataSetLO dslo= DAOs.dataSetDAO.getByIDWithException(dataSetID);
+			JPADataSetLO dslo= DAOs.dataSetDAO.getByID(dataSetID, EmptyResultAction.THROW);
 			PostgreLargeObjectReader plor = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
 			
 			File file=new File("core/freddie/"+dslo.getHash());

@@ -23,7 +23,7 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
     }
 	private double ratioOfMissingValues;
 	private boolean isTarget;
-
+	
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;
 	}

@@ -4,10 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -43,10 +48,12 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	private long OID;
 	private JPAUser owner;
 	private String description;
-	@OneToOne(cascade=CascadeType.MERGE)
-	private JPAGlobalMetaData globalMetaData;
-	@OneToMany(cascade=CascadeType.MERGE)
-	private List<JPAAttributeMetaData> attributeMetaData;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(nullable=true)
+	private JPAGlobalMetaData globalMetaData=null;
+	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@JoinColumn(nullable=true)
+	private List<JPAAttributeMetaData> attributeMetaData=null;
 	private String hash;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
