@@ -1,6 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.UsersView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.DatasetsAndMethodsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.ProfileView;
 
 import com.vaadin.navigator.View;
@@ -118,6 +120,8 @@ public class ContentProvider
 		{
 			switch(this)
 			{
+				case VIEW_USERS:
+					return new UsersView();
 				default:
 					return new UnimplementedContent();
 			}
@@ -171,14 +175,14 @@ public class ContentProvider
 			{
 				case VIEW_PROFILE:
 					return "userProfile";
+				case VIEW_DATASETS:
+				case VIEW_METHODS:
+					return "displayDataSetsAndMethods";
 				case EXPERIMENT_EDITOR:
 					return null; // always opened in a new tab or window (UI), so history support is not needed
-				case VIEW_DATASETS:
-					return "displayDatasets";
 				case VIEW_EXPERIMENT_RESULTS:
 					return "displayResults";
-				case VIEW_METHODS:
-					return "displayMethods";
+				
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
@@ -191,6 +195,9 @@ public class ContentProvider
 			{
 				case VIEW_PROFILE:
 					return new ProfileView();
+				case VIEW_DATASETS:
+				case VIEW_METHODS:
+					return new DatasetsAndMethodsView();
 				default:
 					return new UnimplementedContent();
 			}
