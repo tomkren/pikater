@@ -1,8 +1,8 @@
 package org.pikater.web.pikater;
 
 import org.pikater.web.ExecSequence;
-import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent.MessageStyle;
+import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent.MessageStyle;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 import org.pikater.shared.FieldVerifier;

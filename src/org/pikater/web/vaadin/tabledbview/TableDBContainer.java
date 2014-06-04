@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.tabledbview;
+package org.pikater.web.vaadin.tabledbview;
 
 import java.util.ArrayList;
 import java.util.Arrays;

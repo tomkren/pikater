@@ -1,9 +1,11 @@
-package org.pikater.web.vaadin.gui.server.components.upload;
+package org.pikater.web.vaadin;
 
 import java.io.Serializable;
 import java.util.List;
 
 import org.pikater.web.HttpContentType;
+import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
+import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 import org.pikater.web.vaadin.gui.server.components.upload.uploadedfilehandler.IUploadedFileHandler;
 
 import com.vaadin.shared.communication.PushMode;
@@ -14,7 +16,7 @@ import com.vaadin.ui.UI;
  * is exclusively mapped to a particular session. This allows easy integration and nice usage of
  * the MultiFileUpload add-on.
  */
-public class UserUploadsManager implements Serializable
+public class ManageUserUploads implements Serializable
 {
 	private static final long serialVersionUID = 1643776529186934301L;
 	
@@ -53,7 +55,7 @@ public class UserUploadsManager implements Serializable
 	// -----------------------------------------------
 	// CONSTRUCTOR
 	
-	public UserUploadsManager()
+	public ManageUserUploads()
 	{
 		this.stateWindow = new MyUploadStateWindow();
 		this.stateWindow.setWindowPosition(MyUploadStateWindow.WindowPosition.BOTTOM_RIGHT);

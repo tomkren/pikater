@@ -53,7 +53,6 @@ public class JPAUser extends JPAAbstractEntity{
 	private Date lastLogin;
 	
 	// TODO: eventually swap "private String password;" for "private String passwordHash;"
-	// TODO: default (zero-arg) constructors should be invisible from outside? (private or protected)
 	
 	/** Constructor for JPA Compatibility. */
 	protected JPAUser(){}

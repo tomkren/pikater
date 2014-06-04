@@ -3,7 +3,7 @@ package org.pikater.web;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
 
 public class ExecSequence
 {

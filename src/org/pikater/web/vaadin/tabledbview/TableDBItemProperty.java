@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.tabledbview;
+package org.pikater.web.vaadin.tabledbview;
 
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;

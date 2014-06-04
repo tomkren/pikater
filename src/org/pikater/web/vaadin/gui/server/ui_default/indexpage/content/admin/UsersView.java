@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
 import org.pikater.shared.database.views.jirka.users.UsersTableView;
-import org.pikater.web.vaadin.gui.server.tabledbview.TableDBContainer;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.pikater.web.vaadin.tabledbview.TableDBContainer;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Table;

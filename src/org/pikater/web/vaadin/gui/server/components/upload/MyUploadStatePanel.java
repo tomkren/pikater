@@ -1,5 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.upload;
 
+import org.pikater.web.vaadin.ManageUserUploads;
+
 import com.vaadin.server.StreamVariable;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
 import com.vaadin.server.StreamVariable.StreamingErrorEvent;
@@ -11,14 +13,14 @@ public class MyUploadStatePanel extends UploadStatePanel
 {
 	private static final long serialVersionUID = 2373915541113299145L;
 	
-	private UserUploadsManager uploadManager;
+	private ManageUserUploads uploadManager;
 
 	public MyUploadStatePanel(MyUploadStateWindow window)
     {
         super(window);
     }
 	
-	public void setUploadStateInstance(UserUploadsManager uploadManager)
+	public void setUploadStateInstance(ManageUserUploads uploadManager)
 	{
 		this.uploadManager = uploadManager;
 	}

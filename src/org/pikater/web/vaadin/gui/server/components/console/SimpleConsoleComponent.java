@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components;
+package org.pikater.web.vaadin.gui.server.components.console;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,6 +12,7 @@ import org.pikater.shared.ssh.SSHSession;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.jcraft.jsch.JSchException;
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -20,9 +21,11 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@SuppressWarnings("serial")
+@StyleSheet("simpleConsoleComponent.css")
 public class SimpleConsoleComponent extends VerticalLayout
 {
+	private static final long serialVersionUID = 9141220076403095003L;
+
 	public enum MessageStyle
 	{
 		CASUAL,
@@ -49,6 +52,8 @@ public class SimpleConsoleComponent extends VerticalLayout
 		this.inputField.addStyleName("consoleComponentInputField"); // adds a min and max height
 		this.inputField.addShortcutListener(new ShortcutListener("", KeyCodes.KEY_ENTER, null)
 		{
+			private static final long serialVersionUID = 3588193311013333196L;
+
 			@Override
 			public void handleAction(Object sender, Object target)
 			{

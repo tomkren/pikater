@@ -25,13 +25,13 @@ public class IndexPage extends AutoVerticalBorderLayout
 	 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
 	 * case we will have to manually check for newer versions when validating the experiments.
 	 * TODO: cellBrowserDnD drags the label component instead of the custom inner layout sometimes and class cast issues occur...
-	 * TODO: adding datasets: ARFF, CSV, XLS
 	 */
 	
 	public IndexPage()
 	{
 		super();
-		setSizeFull();
+		setStyleName("topLevelElement");
+		// setSizeFull();
 		
 		this.contentArea = new ContentArea();
 		
@@ -59,7 +59,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 		{
 			/*
 			 * TODO: if already exists... set focus to the right tab? Unfortunately, GWT (or JS)
-			 * don't support that because of security reasons.
+			 * doesn't support that because of security reasons.
 			 */
 			
 			String urlToOpen = CustomConfiguredUI.getBaseAppURLFromLastRequest() + ExpEditorUIServlet.mainURLPattern; 

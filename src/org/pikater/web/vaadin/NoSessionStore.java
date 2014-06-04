@@ -3,8 +3,6 @@ package org.pikater.web.vaadin;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.web.vaadin.gui.server.components.upload.UserUploadsManager;
-
 import com.vaadin.server.VaadinSession;
 
 /**
@@ -22,7 +20,7 @@ public class NoSessionStore
 	}
 	
 	/**
-	 * Binds the given userID to a unique instance of {@link UserUploadsManager}. If an instance already exists
+	 * Binds the given userID to a unique instance of {@link ManageUserUploads}. If an instance already exists
 	 * for the given userID, does nothing.
 	 * @param userID 
 	 */

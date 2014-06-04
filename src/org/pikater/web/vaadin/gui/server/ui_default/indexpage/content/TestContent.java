@@ -11,8 +11,8 @@ import org.json.JSONException;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.HttpContentType;
-import org.pikater.web.vaadin.gui.server.components.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.upload.UserUploadsManager;
+import org.pikater.web.vaadin.ManageUserUploads;
+import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.server.components.upload.uploadedfilehandler.IUploadedFileHandler;
 
 import com.vaadin.ui.AbstractComponent;
@@ -28,7 +28,7 @@ public class TestContent
 		
 	public static AbstractComponent testMultiFileUpload()
 	{
-		return new UserUploadsManager().getNewComponent(
+		return new ManageUserUploads().getNewComponent(
 				Arrays.asList(HttpContentType.APPLICATION_JAR),
 				new IUploadedFileHandler()
 				{
