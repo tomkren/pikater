@@ -4,8 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.pikater.shared.util.SimpleIDGenerator;
-import org.pikater.web.vaadin.gui.server.MyDialogs;
-import org.pikater.web.vaadin.gui.server.MyDialogs.OnOkClicked;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.AdminFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
@@ -18,8 +17,6 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
@@ -61,10 +58,10 @@ public class ContentArea extends CustomComponent
 					IContentComponent currentView = (IContentComponent) event.getOldView();
 					if(currentView.hasUnsavedProgress())
 					{
-						MyDialogs.createSimpleConfirmDialog(getUI(), currentView.getCloseDialogMessage(), new OnOkClicked()
+						MyDialogs.confirm("Navigate away?", currentView.getCloseDialogMessage(), new MyDialogs.DialogResultHandler()
 						{
 							@Override
-							public boolean handleOkEvent()
+							public boolean handleResult()
 							{
 								result = true;
 								return true; // close the dialog
@@ -137,7 +134,7 @@ public class ContentArea extends CustomComponent
 		}
 		else
 		{
-			Notification.show("Access denied. Contact the administrators.", Type.ERROR_MESSAGE);
+			MyDialogs.error("Access denied", "Contact the administrators.");
 		}
 	}
 	

@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.web.vaadin.gui.server.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Property;
@@ -16,8 +17,6 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
@@ -165,13 +164,13 @@ public class Step2UI extends VerticalLayout
 		if((selectedRowIDs != null) && !selectedRowIDs.isEmpty())
 		{
 			// prompt for the new value
-			MyDialogs.createTextPromptDialog(getUI(), "Specify a new value", null, new MyDialogs.ITextPromptDialogResult()
+			MyDialogs.textPrompt("Specify a new value", column.name(), new MyDialogs.DialogResultHandler()
 			{
 				@Override
-				public boolean handleResult(String stringPromptResult)
+				public boolean handleResult()
 				{
 					// and use the new value
-					tableDataSource.batchSetValues(selectedRowIDs, column, stringPromptResult);
+					tableDataSource.batchSetValues(selectedRowIDs, column, (String) getArg(0));
 					refresh();
 					return true;
 				}
@@ -179,7 +178,7 @@ public class Step2UI extends VerticalLayout
 		}
 		else
 		{
-			Notification.show("No table rows are selected", Type.WARNING_MESSAGE);
+			MyNotifications.showWarning("Can not perform operation", "No table rows are selected");
 		}
 	}
 }

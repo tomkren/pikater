@@ -14,6 +14,8 @@ import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.pikater.PikaterSSHLauncher;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.welcometour.Step3TableContainer;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
@@ -23,9 +25,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
@@ -78,14 +78,13 @@ public class Step3 extends WelcomeTourWizardStep
 					if(!isPikaterLaunchedWithNoErrors(connectedNotLaunchedMasterServerIDs) 
 							|| !isPikaterLaunchedWithNoErrors(connectedNotLaunchedSlaveServerIDs)) // updates GUI accordingly 
 					{
-						Notification.show("Pikater could not be launched on some of the servers. You can use the console to find out what went wrong.", 
-								Type.ERROR_MESSAGE);
+						MyDialogs.error(null, "Pikater could not be launched on some of the servers. Use the console to find out what went wrong.");
 					}
 					tabSheet.getTab(defaultComponent).setEnabled(true);
 				}
 				else
 				{
-					Notification.show("All connect masters have pikater launched. Connect some others and try again.", Type.WARNING_MESSAGE);
+					MyNotifications.showInfo("All servers already launched", "Connect to other servers and launch piktaer on them.");
 				}
 			}
 		});
@@ -100,8 +99,7 @@ public class Step3 extends WelcomeTourWizardStep
 					// first check that all the included servers are reachable
 					if(!areServersReachable(includedNotConnectedServerIDs, false)) // updates GUI accordingly
 					{
-						Notification.show("Some of the servers are unreachable. Exclude them or double check / repair their availability and connection information.", 
-								Type.ERROR_MESSAGE);
+						MyDialogs.error(null, "Pikater could not be launched on some of the servers. Use the console to find out what went wrong.");
 					}
 					if(!getConnectedServerIDs().isEmpty())
 					{
@@ -110,7 +108,7 @@ public class Step3 extends WelcomeTourWizardStep
 				}
 				else
 				{
-					Notification.show("All included servers are connected. Include some others and try again.", Type.WARNING_MESSAGE);
+					MyNotifications.showInfo("All selected servers are connected", "Select some others and try again.");
 				}
 			}
 		});
@@ -227,8 +225,8 @@ public class Step3 extends WelcomeTourWizardStep
 		}
 		else
 		{
-			Notification.show("Can not finish because the goal was not met: pikater launched on at least 1 master and "
-					+ "connection to at least 1 slave of a single topology is needed to continue.", Type.ERROR_MESSAGE);
+			MyDialogs.error("Can not finish", "At least 1 master need to have pikater launched and "
+					+ "connection to at least 1 slave (both the same topology) are needed to continue.");
 			return false;
 		}
 	}

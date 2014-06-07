@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.web.vaadin.MyResources;
-import org.pikater.web.vaadin.gui.server.MyDialogs;
-import org.pikater.web.vaadin.gui.server.MyDialogs.OnOkClicked;
 import org.pikater.web.vaadin.gui.server.components.IconButton;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
@@ -161,14 +160,14 @@ public class TabSheet extends CustomComponent
 				}
 				else // if not, give the user a chance to cancel the action
 				{
-					MyDialogs.createSimpleConfirmDialog(getUI(), "Really close this tab? The content will be lost, if unsaved.", new OnOkClicked()
+					MyDialogs.confirm("Really close this tab?", "The content will be lost, if unsaved.", new MyDialogs.DialogResultHandler()
 					{
 						/*
 						 * If the user confirms, do the following: 
 						 */
 						
 						@Override
-						public boolean handleOkEvent()
+						public boolean handleResult()
 						{
 							closeTab();
 							return true;
