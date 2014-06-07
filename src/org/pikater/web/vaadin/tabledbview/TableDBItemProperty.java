@@ -21,7 +21,7 @@ public class TableDBItemProperty<T extends Object> implements Property<T>
 		
 		// compatibility check
 		Class<?> valueTypeClass = getValue().getClass();
-		Class<?> viewBindingTypeClass = getType().getClass();
+		Class<?> viewBindingTypeClass = getType();
 		if(!valueTypeClass.equals(viewBindingTypeClass))
 		{
 			throw new ClassCastException(

@@ -1,5 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 
+import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.UsersView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.DatasetsAndMethodsView;
@@ -159,7 +160,14 @@ public class ContentProvider
 		@Override
 		public boolean accessAllowed(VaadinSession session)
 		{
-			return ManageAuth.isUserAuthenticated(session); // only allowed for authenticated users
+			if(ServerConfigurationInterface.avoidUsingDBForNow())
+			{
+				return true;
+			}
+			else
+			{
+				return ManageAuth.isUserAuthenticated(session); // only allowed for authenticated users
+			}
 		}
 		
 		@Override

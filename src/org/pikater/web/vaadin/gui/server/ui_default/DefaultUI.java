@@ -9,10 +9,12 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.IndexPage;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 
+@Title("Pikatorium")
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
 public class DefaultUI extends CustomConfiguredUI
@@ -42,8 +44,10 @@ public class DefaultUI extends CustomConfiguredUI
 	protected void init(VaadinRequest request)
 	{
 		/*
-		 * Don't forget to call this. Also note, that you shouldn't update the UI until
-		 * you receive the {@link #displayChildContent()} call.
+		 * Don't forget to call this.
+		 * Also note, that you shouldn't update the UI in child classes of
+		 * {@link CustomConfiguredUI}. You only provide the content component
+		 * when you're asked to in the {@link #getChildContent()} method.
 		 */
 		super.init(request);
 	}
@@ -71,9 +75,6 @@ public class DefaultUI extends CustomConfiguredUI
 		}
 	}
 	
-	/**
-	 * The final method to be called in the UI bulding chain. Always being displayed if user is authenticated.
-	 */
 	private void displayIndexPage()
 	{
 		// return new IndexPage for each UI unless you want all browser tabs to be synchronized and display the same content

@@ -15,12 +15,14 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 
 @Theme("pikater")
 @Push(value = PushMode.MANUAL)
+@Title("Experiments")
 public class ExpEditorUI extends CustomConfiguredUI
 {
 	private static final long serialVersionUID = -797960197800185978L;
