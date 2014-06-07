@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
 import org.pikater.shared.experiment.webformat.ExperimentMetadata;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
@@ -13,8 +14,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 
 public class Toolbar extends VerticalLayout
@@ -74,7 +73,7 @@ public class Toolbar extends VerticalLayout
 						}
 						else
 						{
-							Notification.show("The active tab's content is not modified. Nothing to save.", Type.WARNING_MESSAGE);
+							MyNotifications.showWarning("Nothing to save", "The active tab's content is not modified");
 						}
 					}
 				}, true);
@@ -89,7 +88,7 @@ public class Toolbar extends VerticalLayout
 			{
 				// TODO: dialog and experiment chooser
 				// parentEditor.getActiveKineticComponent().getClientRPC().command_receiveExperimentToLoad(experiment);
-				Notification.show("Not implemented yet.", Type.WARNING_MESSAGE);
+				MyNotifications.showWarning(null, "Not implemented yet.");
 			}
 		});
 		
@@ -145,7 +144,7 @@ public class Toolbar extends VerticalLayout
 			public void menuSelected(MenuItem selectedItem)
 			{
 				// TODO:
-				Notification.show("Not implemented yet.", Type.WARNING_MESSAGE);
+				MyNotifications.showWarning(null, "Not implemented yet.");
 			}
 		});
 		
@@ -161,7 +160,7 @@ public class Toolbar extends VerticalLayout
 				public void menuSelected(MenuItem selectedItem)
 				{
 					// TODO:
-					Notification.show("Not implemented yet.", Type.WARNING_MESSAGE);
+					MyNotifications.showWarning(null, "Not implemented yet.");
 				}
 			});
 		}
@@ -250,7 +249,7 @@ public class Toolbar extends VerticalLayout
 		}
 		else if(displayWarningIfNull)
 		{
-			Notification.show("No tabs have been created.", Type.WARNING_MESSAGE);
+			MyNotifications.showWarning(null, "No tabs have been created.");
 		}
 	}
 	
