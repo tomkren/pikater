@@ -53,7 +53,7 @@ public class MetaDataRow {
 	}
 	public String isReal() {
 		if(numerical!=null){
-			return ""+numerical.isReal();
+			return ""+numerical.getIsReal();
 		}else{
 			return MetaDataRow.nonDef;
 		}

@@ -1,9 +1,6 @@
 package org.pikater.shared.database.jpa;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
@@ -25,6 +22,9 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 
 	public void setReal(boolean isReal) {
 		this.isReal = isReal;
+	}
+	public boolean getIsReal() {
+		return this.isReal;
 	}
 	public double getMin() {
 		return min;
