@@ -56,7 +56,7 @@ class ParserBehaviour extends AchieveREResponder {
             
   
         ACLMessage reply = request.createReply();
-        
+
     	if (object instanceof ExecuteBatch) {
     		
     		ExecuteBatch executeExperiment =
@@ -70,13 +70,6 @@ class ParserBehaviour extends AchieveREResponder {
     		ComputationGraph computationGraph = parser.getComputationGraph();
 
     		computationGraph.startComputation();
-
-    		// Problem parsed - reply OK
-            reply.setPerformative(ACLMessage.INFORM);
-            reply.setLanguage(codec.getName());
-            reply.setOntology(ontology.getName());
-            reply.setContent("OK");
-            //this.myAgent.send(reply);
         }
    
         return reply;

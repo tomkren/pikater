@@ -15,7 +15,7 @@ import java.util.Map;
  * Time: 12:35
  */
 public class ComputationNode {
-    private boolean idle;
+    private boolean idle=true;
     private int id;
     private Map<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs = new HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>>();
     private Map<String, ComputationOutputBuffer> inputs = new HashMap<>();
@@ -23,10 +23,13 @@ public class ComputationNode {
 
     public ComputationNode()
     {
-        String initBeansName = "Beans.xml";
-        ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
-        GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
-        id=generator.getAndAllocateGUID();
+       initDefault();
+    }
+
+    public ComputationNode(StartComputationStrategy executeStrategy)
+    {
+        initDefault();
+        startBehavior=executeStrategy;
     }
 
     public Map<String,ComputationOutputBuffer> getInputs()
@@ -86,6 +89,7 @@ public class ComputationNode {
 
     public void startComputation()
     {
+        idle=false;
         startBehavior.execute(this);
     }
 
@@ -112,5 +116,13 @@ public class ComputationNode {
 
     public void setStartBehavior(StartComputationStrategy startBehavior) {
         this.startBehavior = startBehavior;
+    }
+
+    private void initDefault()
+    {
+        String initBeansName = "Beans.xml";
+        ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
+        GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
+        id=generator.getAndAllocateGUID();
     }
 }
