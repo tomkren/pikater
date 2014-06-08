@@ -7,7 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="GlobalMetaData")
@@ -27,6 +29,7 @@ public class JPAGlobalMetaData extends JPAAbstractEntity{
 	private JPATaskType defaultTaskType;
 	private int numberofInstances;
 	
+
 	public JPAGlobalMetaData(){
 		super();
 	}
@@ -48,10 +51,8 @@ public class JPAGlobalMetaData extends JPAAbstractEntity{
 	public void setNumberofInstances(int numberofInstances) {
 		this.numberofInstances = numberofInstances;
 	}
-	@Override
-	public String getEntityName() {
-		return "GlobalMetaData";
-	}
+	@Transient
+	public static final String EntityName = "GlobalMetaData";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import org.pikater.shared.AppHelper;
 import org.pikater.shared.logging.GeneralPikaterLogger;
@@ -16,6 +17,7 @@ import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 
+@WebListener
 public class StartupAndQuitListener implements ServletContextListener
 {
 	/**
@@ -43,6 +45,8 @@ public class StartupAndQuitListener implements ServletContextListener
 		 * GENERAL NOTE: don't alter the code order. There may be some dependencies.
 		 */
 		
+		// TODO: first check connection to database
+		
 		// this must be first
 		ServerConfigurationInterface.setField(ServerConfItem.CONTEXT, event.getServletContext());
 		AppHelper.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
@@ -50,7 +54,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		// set the application-wide logger - this must be second
 		PikaterLogger.setLogger(new GeneralPikaterLogger()
 		{
-			private final Logger innerLogger = Logger.getAnonymousLogger(); 
+			private final Logger innerLogger = Logger.getAnonymousLogger();
 			
 			@Override
 			public void logThrowable(String problemDescription, Throwable t)

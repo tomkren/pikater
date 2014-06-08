@@ -7,7 +7,8 @@
 	<inherits name="net.edzard.kinetic" />
 	<inherits name="org.pikater.web.vaadin.gui.gwtInit" />
 	<inherits name="com.wcs.wcslib.vaadin.widget.multifileupload.MultiFileUploadWidgetSet" />
-    <inherits name="org.vaadin.jouni.dom.DomWidgetset" />
+    <inherits name="org.vaadin.alump.fancylayouts.gwt.FancyLayoutsWidgetset" />
+    <inherits name="de.steinwedel.messagebox.WidgetSet" />
 	
 	<!-- include the Java code from this package that is going to be translated to Javascript -->
 	<source path="client" />

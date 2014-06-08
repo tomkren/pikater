@@ -1,16 +1,14 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,30 +20,36 @@ public class AgentInfo implements Concept {
 	 */
 	private static final long serialVersionUID = 5587052921037796722L;
 
-	private String agentClass;
-	private String ontologyClass;
+	private String agentClassName;
+	private String ontologyClassName;
 	
 	private String name;
 	private String picture;
 	private String description;
 
-	private List<Option> options;
+	private List<NewOption> options;
 	
 	private List<Slot> inputSlots;
 	private List<Slot> outputSlots;
 
-	public String getAgentClass() {
-		return agentClass;
+	public String getAgentClassName() {
+		return agentClassName;
 	}
-	public void setAgentClass(String agentClass) {
-		this.agentClass = agentClass;
+	public void setAgentClassName(String agentClassName) {
+		this.agentClassName = agentClassName;
+	}
+	public void setAgentClass(Class<?> agentClass) {
+		this.agentClassName = agentClass.getName();
 	}
 
-	public String getOntologyClass() {
-		return ontologyClass;
+	public String getOntologyClassName() {
+		return ontologyClassName;
 	}
-	public void setOntologyClass(String ontologyClass) {
-		this.ontologyClass = ontologyClass;
+	public void setOntologyClassName(String ontologyClassName) {
+		this.ontologyClassName = ontologyClassName;
+	}
+	public void setOntologyClass(Class<?> ontologyClass) {
+		this.ontologyClassName = ontologyClass.getName();
 	}
 
 	public String getName() {
@@ -69,15 +73,15 @@ public class AgentInfo implements Concept {
 		this.description = description;
 	}
 
-	public List<Option> getOptions() {
+	public List<NewOption> getOptions() {
 		return options;
 	}
-	public void setOptions(List<Option> options) {
+	public void setOptions(List<NewOption> options) {
 		this.options = options;
 	}
-	public void addOption(Option option) {
+	public void addOption(NewOption option) {
 		if (this.options == null) {
-			this.options = new ArrayList<Option>();
+			this.options = new ArrayList<NewOption>();
 		}
 		this.options.add(option);
 	}

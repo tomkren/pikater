@@ -6,7 +6,7 @@ import java.util.Map;
 import org.pikater.web.vaadin.MyResources;
 import org.pikater.web.vaadin.gui.server.components.IconButton;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
-import org.pikater.web.vaadin.gui.server.webui.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
@@ -14,11 +14,9 @@ import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Button.ClickEvent;
 
 @StyleSheet("tabSheet.css")
 public class TabSheet extends CustomComponent
@@ -51,6 +49,7 @@ public class TabSheet extends CustomComponent
 		
 		// basic layout setup - this layout will not be changed in any way during its lifetime so no need to store it in a field
 		this.innerLayout = new AutoVerticalBorderLayout();
+		this.innerLayout.setSizeFull();
 		this.innerLayout.setStyleName("custom-tabsheet");
 		this.innerLayout.setBorderSpacing(0);
 		this.innerLayout.setRowVisible(Row.CENTER, false);
@@ -155,45 +154,51 @@ public class TabSheet extends CustomComponent
 			@Override
 			public void click(com.vaadin.event.MouseEvents.ClickEvent event)
 			{
-				// ask whether we can close this tab
-				if(!tabComponent.canCloseTab())
+				if(tabComponent.canCloseTab()) // ask whether we can close this tab
 				{
-					// if not, give the user a chance to cancel the action
-					MyDialogs.createSimpleConfirmDialog(getUI(), "Really close this tab? The content will be lost, if unsaved.", new Button.ClickListener()
+					closeTab();
+				}
+				else // if not, give the user a chance to cancel the action
+				{
+					MyDialogs.confirm("Really close this tab?", "The content will be lost, if unsaved.", new MyDialogs.DialogResultHandler()
 					{
-						private static final long serialVersionUID = 4933396059206744253L;
-
 						/*
 						 * If the user confirms, do the following: 
 						 */
 						
 						@Override
-						public void buttonClick(ClickEvent event)
+						public boolean handleResult()
 						{
-							// first handle the case if we remove the selected tab
-							if(selectedTabComponent == tabComponent)
-							{
-								int currentPosition = tabBar.getComponentIndex(selectedTabComponent);
-								if(currentPosition > 0)
-								{
-									setSelectedTab((TabSheetTabComponent) tabBar.getComponent(currentPosition - 1));
-								}
-								else if (currentPosition < tabBar.getComponentCount() - 2) // not the last tab
-								{
-									setSelectedTab((TabSheetTabComponent) tabBar.getComponent(currentPosition + 1));
-								}
-								else // no tabs to select anymore
-								{
-									setSelectedContent(null);
-								}
-							}
-							
-							// and then remove everything related to this tab
-							tabToContentContainer.remove(tabComponent);
-							tabBar.removeComponent(tabComponent);
+							closeTab();
+							return true;
 						}
 					});
 				}
+			}
+			
+			private void closeTab()
+			{
+				// first handle the case if we remove the selected tab
+				if(selectedTabComponent == tabComponent)
+				{
+					int currentPosition = tabBar.getComponentIndex(selectedTabComponent);
+					if(currentPosition > 0)
+					{
+						setSelectedTab((TabSheetTabComponent) tabBar.getComponent(currentPosition - 1));
+					}
+					else if (currentPosition < tabBar.getComponentCount() - 2) // not the last tab
+					{
+						setSelectedTab((TabSheetTabComponent) tabBar.getComponent(currentPosition + 1));
+					}
+					else // no tabs to select anymore
+					{
+						setSelectedContent(null);
+					}
+				}
+				
+				// and then remove everything related to this tab
+				tabToContentContainer.remove(tabComponent);
+				tabBar.removeComponent(tabComponent);
 			}
 		});
 		tabComponent.setStyleName("custom-tabsheet-tabs-tab");

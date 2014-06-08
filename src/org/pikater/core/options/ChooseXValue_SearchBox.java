@@ -1,35 +1,46 @@
 package org.pikater.core.options;
 
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.pikater.core.agents.experiment.search.Agent_ChooseXValues;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class ChooseXValue_SearchBox {
 	
 	public static AgentInfo get() {
 
-		OptionDefault optionN = new OptionDefault();
-		optionN.setName("N");
+		final Type typeN = new Type(IntegerValue.class);
+		typeN.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(2000) ));
+		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		restrictionN.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeN )) ));
+		
+		NewOption optionN = new NewOption(
+				new IntegerValue(5),
+				new Type(IntegerValue.class),
+				"N" );
 		optionN.setDescription("Number of values to try for each option");
-		optionN.setValue(
-				new OptionValue(new Integer(5)) );
-		optionN.setInterval(
-				new OptionInterval(new Integer(1), new Integer(2000)) );
-		optionN.setList(
-				new OptionList() );
-
+		optionN.setPossibleTypesRestriction(restrictionN);
+		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(null); // some virtual-box provider agent
-		agentInfo.setOntologyClass(Search.class.getName());
+		agentInfo.setAgentClass(Agent_ChooseXValues.class);
+		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("Choose X Values Agent");
 		agentInfo.setPicture("picture0.jpg");
 		agentInfo.setDescription("Search which Choose X Values");
 
-		agentInfo.addOption(optionN.toOption());
+		agentInfo.addOption(optionN);
 		
 		// Slot Definition
 		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());

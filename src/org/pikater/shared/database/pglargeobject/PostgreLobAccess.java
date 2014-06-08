@@ -24,10 +24,14 @@ public class PostgreLobAccess {
 					new PostgreSQLConnectionProvider(
 							"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
 							"pikater",
-							"SrapRoPy").getConnection());
+							"a").getConnection());
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static boolean isDatabaseConnected(){
+		return con!=null;
 	}
 	
 	public static PostgreLargeObjectReader getPostgreLargeObjectReader(long oid){

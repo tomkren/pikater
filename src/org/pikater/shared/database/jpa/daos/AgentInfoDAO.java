@@ -8,12 +8,13 @@ import javax.persistence.EntityManager;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
 
 public class AgentInfoDAO extends AbstractDAO{
 
 	@Override
 	public String getEntityName() {
-		return (new JPAAgentInfo()).getEntityName();
+		return JPAAgentInfo.EntityName;
 	}
 
 	@Override
@@ -25,8 +26,11 @@ public class AgentInfoDAO extends AbstractDAO{
 	}
 	
 	@Override
-	public List<JPAAgentInfo> getByID(int ID) {
-		return getByTypedNamedQuery("AgentInfo.getByID", "id", ID);
+	public JPAAgentInfo getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPAAgentInfo>(
+				getByTypedNamedQuery("AgentInfo.getByID", "id", ID),
+				era
+				).getSingleResultWithNull();
 	}
 	
 	public List<JPAAgentInfo> getByName(String name) {
@@ -56,8 +60,8 @@ public class AgentInfoDAO extends AbstractDAO{
 	
 	public void storeAgentInfoOntology(AgentInfo agentInfoOntology,String senderAgentName){
 		JPAAgentInfo nai=new JPAAgentInfo();
-		nai.setAgentClass(agentInfoOntology.getAgentClass());
-		nai.setOntologyClass(agentInfoOntology.getOntologyClass());
+		nai.setAgentClass(agentInfoOntology.getAgentClassName());
+		nai.setOntologyClass(agentInfoOntology.getOntologyClassName());
 		nai.setDescription("AgentInfo from PikaterGateWay");
 		nai.setInformationXML(agentInfoOntology.exportXML());
 		nai.setName(senderAgentName);
@@ -79,5 +83,4 @@ public class AgentInfoDAO extends AbstractDAO{
 			em.close();
 		}
 	}
-
 }

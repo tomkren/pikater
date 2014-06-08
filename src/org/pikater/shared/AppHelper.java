@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.pikater.shared.logging.PikaterLogger;
@@ -13,9 +15,9 @@ import org.reflections.Reflections;
 public class AppHelper
 {
 	//----------------------------------------------------------------------------------------------------------------
-	// APPLICATION PATHS RELATED STUFF - if you're going to use this, first set this field when the application starts
+	// APPLICATION PATHS RELATED STUFF
 	
-	private static String baseAbsAppPath = null;
+	private static String baseAbsAppPath = null; // if you're going to use this, first set this field when the application starts
 	
 	public static void setAbsoluteBaseAppPath(String baseAbsAppPath)
 	{
@@ -107,5 +109,25 @@ public class AppHelper
 	{
 		Reflections reflections = new Reflections(pkg.getName());
 		return reflections.getSubTypesOf(Object.class);
+	}
+	
+	public static Set<String> enumSetToStringSet(EnumSet<?> enumSet)
+	{
+		Set<String> result = new HashSet<String>();
+		for(Enum<?> enumValue : enumSet)
+		{
+			result.add(enumValue.name());
+		}
+		return result;
+	}
+	
+	public static Set<String> rangeToStringSet(int fromIncl, int toIncl)
+	{
+		Set<String> result = new HashSet<String>();
+		for(int i = fromIncl; i <= toIncl; i++)
+		{
+			result.add(String.valueOf(i));
+		}
+		return result;
 	}
 }

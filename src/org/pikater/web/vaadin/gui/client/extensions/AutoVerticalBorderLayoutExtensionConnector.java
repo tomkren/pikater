@@ -9,7 +9,8 @@ import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ServerConnector;
@@ -108,7 +109,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					@Override
 				    public void execute()
 					{
-						getElementByRow(row).getStyle().setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+						setVisibility(getElementByRow(row).getStyle(), visible);
 					}
 				});
 			}
@@ -121,7 +122,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					@Override
 				    public void execute()
 					{
-						getElementByColumn(column).getStyle().setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+						setVisibility(getElementByColumn(column).getStyle(), visible);
 					}
 				});
 			}
@@ -134,7 +135,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					@Override
 				    public void execute()
 					{
-						getElementByBorder(border).getStyle().setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+						setVisibility(getElementByBorder(border).getStyle(), visible);
 					}
 				});
 			}
@@ -276,5 +277,11 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 			default:
 				throw new IllegalStateException("Unknown border: '" + border.name() + "'");
 		}
+	}
+	
+	private void setVisibility(Style style, boolean visible)
+	{
+		style.setDisplay(visible ? Display.INLINE_BLOCK : Display.NONE);
+		// style.setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
 	}
 }

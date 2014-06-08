@@ -7,15 +7,14 @@ import javax.persistence.EntityManager;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
-import org.pikater.shared.database.jpa.JPARole;
-import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class ResultDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPAResult()).getEntityName();
+		return JPAResult.EntityName;
 	}
 
 	@Override
@@ -27,8 +26,11 @@ public class ResultDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPAResult> getByID(int ID) {
-		return getByTypedNamedQuery("Result.getByID", "id", ID);
+	public JPAResult getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPAResult>(
+				getByTypedNamedQuery("Result.getByID", "id", ID),
+				era
+				).getSingleResultWithNull();
 	}
 	
 	public List<JPAResult> getByAgentName(String agentName) {
@@ -54,7 +56,5 @@ public class ResultDAO extends AbstractDAO {
 		}finally{
 			em.close();
 		}
-	}
-
-	
+	}	
 }

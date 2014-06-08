@@ -5,16 +5,17 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class ExperimentDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPAExperiment()).getEntityName();
+		return JPAExperiment.EntityName;
 	}
 
 	@Override
@@ -26,8 +27,11 @@ public class ExperimentDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPAExperiment> getByID(int ID) {
-		return getByTypedNamedQuery("Experiment.getByID", "id", ID);
+	public JPAExperiment getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPAExperiment>(
+				getByTypedNamedQuery("Experiment.getByID", "id", ID),
+				era
+				).getSingleResultWithNull();
 	}
 	
 	public List<JPAExperiment> getByBatch(JPABatch batch) {
@@ -66,6 +70,5 @@ public class ExperimentDAO extends AbstractDAO {
 			em.close();
 		}
 	}
-
 	
 }

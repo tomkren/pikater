@@ -5,16 +5,15 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPATaskType;
-import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class TaskTypeDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPATaskType()).getEntityName();
+		return JPATaskType.EntityName;
 	}
 
 	@Override
@@ -26,8 +25,11 @@ public class TaskTypeDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPATaskType> getByID(int ID) {
-		return getByTypedNamedQuery("TaskType.getByID", "id", ID);
+	public JPATaskType getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPATaskType>(
+				getByTypedNamedQuery("TaskType.getByID", "id", ID),
+				era
+				).getSingleResultWithNull();
 	}
 	
 	public JPATaskType createOrGetByName(String name) {
@@ -68,7 +70,5 @@ public class TaskTypeDAO extends AbstractDAO {
 		}finally{
 			em.close();
 		}
-	}
-
-	
+	}	
 }

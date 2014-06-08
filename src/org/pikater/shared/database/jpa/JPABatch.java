@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
@@ -166,10 +167,9 @@ public class JPABatch extends JPAAbstractEntity{
 		}
 	}
 
-	@Override
-	public String getEntityName() {
-		return "Batch";
-	}
+	@Transient
+	public static final String EntityName = "Batch";
+	
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPABatch updateValues=(JPABatch)newValues;

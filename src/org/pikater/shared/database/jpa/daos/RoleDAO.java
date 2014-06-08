@@ -6,12 +6,15 @@ import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPARole;
+import org.pikater.shared.database.jpa.security.PikaterRole;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class RoleDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPARole()).getEntityName();
+		return JPARole.EntityName;
 	}
 
 	@Override
@@ -23,13 +26,27 @@ public class RoleDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPARole> getByID(int ID) {
-		return getByTypedNamedQuery("Role.getByID", "id", ID);
+	public JPARole getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPARole>(
+				getByTypedNamedQuery("Role.getByID", "id", ID),
+				era
+				).getSingleResultWithNull();
 	}
 	
-	public List<JPARole> getByName(String name) {
-		return getByTypedNamedQuery("Role.getByName", "name", name);
+	public JPARole getByPikaterRole(PikaterRole role){
+		return new CustomActionResultFormatter<JPARole>(
+				getByTypedNamedQuery("Role.getByPikaterRole", "pRole", role),
+				EmptyResultAction.NULL
+				).getSingleResultWithNull();
 	}
+	
+	public JPARole getByName(String name) {
+		return new CustomActionResultFormatter<JPARole>(
+				getByTypedNamedQuery("Role.getByName", "name", name),
+				EmptyResultAction.getDefault()
+				).getSingleResultWithNull();
+	}
+	
 	
 	private List<JPARole> getByTypedNamedQuery(String queryName,String paramName,Object param){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
@@ -43,6 +60,5 @@ public class RoleDAO extends AbstractDAO {
 			em.close();
 		}
 	}
-
 	
 }

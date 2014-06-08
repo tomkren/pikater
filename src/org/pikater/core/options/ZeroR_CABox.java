@@ -9,8 +9,8 @@ public class ZeroR_CABox {
 	public static AgentInfo get() {
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_ZeroRCA.class.getName());
-		agentInfo.setOntologyClass(ComputingAgent.class.getName());
+		agentInfo.setAgentClass(Agent_ZeroRCA.class);
+		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("ZeroR");
 		agentInfo.setPicture("picture3.jpg");

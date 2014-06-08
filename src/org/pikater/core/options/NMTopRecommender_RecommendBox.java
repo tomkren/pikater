@@ -9,8 +9,8 @@ public class NMTopRecommender_RecommendBox {
 	public static AgentInfo get() {
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_NMTopRecommender.class.getName());
-		agentInfo.setOntologyClass(Recommend.class.getName());
+		agentInfo.setAgentClass(Agent_NMTopRecommender.class);
+		agentInfo.setOntologyClass(Recommend.class);
 	
 		agentInfo.setName("NMTop Recommend");
 		agentInfo.setPicture("picture0.jpg");

@@ -1,20 +1,16 @@
 package org.pikater.shared.database.jpa;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="AttributeNumericalMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
 	private boolean isReal;
 	private double min;
 	private double max;
@@ -24,14 +20,11 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 	private double variance;
 	private double avarage;
 
-	public int getId() {
-		return id;
-	}
-	public boolean isReal() {
-		return isReal;
-	}
 	public void setReal(boolean isReal) {
 		this.isReal = isReal;
+	}
+	public boolean getIsReal() {
+		return this.isReal;
 	}
 	public double getMin() {
 		return min;
@@ -75,10 +68,8 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 	public void setAvarage(double avarage) {
 		this.avarage = avarage;
 	}
-	@Override
-	public String getEntityName() {
-		return "AttributeNumericalMetaData";
-	}
+	@Transient
+	public final String EntityName = "AttributeNumericalMetaData";
 	
 	
 }

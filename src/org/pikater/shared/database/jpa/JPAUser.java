@@ -17,7 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
+import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
@@ -50,25 +52,25 @@ public class JPAUser extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
 	
-	/** Constructor for JPA Compatibility **/
-	public JPAUser(){}
+	// TODO: eventually swap "private String password;" for "private String passwordHash;"
+	
+	/** Constructor for JPA Compatibility. */
+	protected JPAUser(){}
 	
 	/**
-	 * Basic constructor for the JPAUser Entity. The status of the created user
-	 * is ACTIVE, but in case of necessity it can be set to PASSIVE before the first persistance.
-	 * The user tasks' maximal priority is set to 9.
-	 * @param login The login for the user
+	 * Creates a new user with active status (no administrator acceptance is needed) and default max priority.
+	 * @param login
+	 * @param password
+	 * @param email
+	 * @param role
 	 */
-	public JPAUser(String login,String password){
-		this.login=login;
-		this.password=password;
-		this.created=new Date();
-		this.priorityMax=9;
-		this.status=JPAUserStatus.ACTIVE;
+	public JPAUser(String login, String password, String email, JPARole role)
+	{
+		this(login, password, role, email, 9, JPAUserStatus.ACTIVE);
 	}
 	
 	/**
-	 * Constructor for the JPAUser Entity, where all fields can be set.
+	 * Complete constructor - for internal use only.
 	 * @param login The login of the user.
 	 * @param password The password of the user.
 	 * @param role The role of the user.
@@ -76,13 +78,24 @@ public class JPAUser extends JPAAbstractEntity{
 	 * @param maxPriority The maximal priority of user's tasks.
 	 * @param status The user's account status.
 	 */
-	public JPAUser(String login,String password,JPARole role,String email,int maxPriority,JPAUserStatus status)
+	protected JPAUser(String login, String password, JPARole role, String email, int maxPriority, JPAUserStatus status)
 	{
-		this(login,password);
-		this.role=role;
-		this.email=email;
+		this.login=login;
+		this.password=password;
 		this.priorityMax=maxPriority;
+		this.email=email;
+		this.role=role;
 		this.status=status;
+		this.created = new Date();
+	}
+	
+	/**
+	 * Used in web for offline development when the database is not reachable or usable for some reason.
+	 * @return
+	 */
+	public static JPAUser getDummy()
+	{
+		return new JPAUser("dummy_user", "dummy_password", null, "dummy_user@mail.com", 9, JPAUserStatus.ACTIVE);
 	}
 	
 	public int getId() {
@@ -142,10 +155,18 @@ public class JPAUser extends JPAAbstractEntity{
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
-	@Override
-	public String getEntityName() {
-		return "User";
+	public boolean isAdmin(){
+		return this.role.isAdmin();
 	}
+	public boolean isUser(){
+		return this.role.isUser();
+	}
+	public boolean hasPrivilege(PikaterPriviledge priviledge){
+		return this.role.hasPriviledge(priviledge);
+	}
+	@Transient
+	public static final String EntityName = "User";
+	
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPAUser updateValues=(JPAUser)newValues;

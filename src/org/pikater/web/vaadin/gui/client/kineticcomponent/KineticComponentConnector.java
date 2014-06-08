@@ -7,7 +7,7 @@ import com.vaadin.client.communication.RpcProxy;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.Experiment;
 import org.pikater.shared.experiment.webformat.ExperimentMetadata;
-import org.pikater.web.vaadin.gui.server.components.kineticcomponent.KineticComponent;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 import com.vaadin.client.communication.StateChangeEvent;
 

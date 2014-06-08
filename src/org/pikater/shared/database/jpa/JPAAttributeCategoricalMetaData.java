@@ -7,18 +7,19 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="AttributeCategoricalMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData{
-	@Id
+	/**@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 	
 	public int getId() {
         return id;
-    }
+    }**/
 	private int numberOfCategories;
 	public int getNumberOfCategories() {
 		return numberOfCategories;
@@ -26,9 +27,7 @@ public class JPAAttributeCategoricalMetaData extends JPAAttributeMetaData{
 	public void setNumberOfCategories(int numberOfCategories) {
 		this.numberOfCategories = numberOfCategories;
 	}
-	@Override
-	public String getEntityName() {
-		return "AttributeCategoricalMetaData";
-	}
+	@Transient
+	public static final String EntityName = "AttributeCategoricalMetaData";
 	
 }

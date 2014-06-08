@@ -12,18 +12,20 @@
   /* Insert your theme rules here */
   /********************************/
   
-  /* Console component */
-  .consoleComponentInputField
+  /* Layout styles */
+  .topLevelElement
   {
-  	min-height: 25px;
-  	max-height: 25px;
+  	width: 1200px;
+  	margin-left: auto;
+  	margin-right: auto;
   }
-  .consoleComponentOutput
+  
+  .pikaterDialogContent
   {
-  	word-wrap: break-word;
-  	background-color: white;
-    border-radius: 3px 3px 3px 3px;
-  	font-family: "Courier New", Courier, monospace;
+  	padding-top: 5px;
+  	padding-bottom: 5px;
+  	padding-left: 15px;
+  	padding-right: 15px;
   }
   
   /* Icon button */

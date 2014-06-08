@@ -15,9 +15,8 @@ public class FileSaver_VirtualBox  {
 		inputSlot.setDataType(SlotTypes.DATA_TYPE);
 		
 		AgentInfo agentInfo = new AgentInfo();
-		//TODO: some virtual-box provider agent
-		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class.getName());
-		agentInfo.setOntologyClass(FileDataSaver.class.getName());
+		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class);
+		agentInfo.setOntologyClass(FileDataSaver.class);
 	
 		agentInfo.setName("FileSaver");
 		agentInfo.setPicture("picture0.jpg");

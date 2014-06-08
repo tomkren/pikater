@@ -1,69 +1,99 @@
 package org.pikater.core.options;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.pikater.core.agents.experiment.search.Agent_SimulatedAnnealing;
-import org.pikater.core.dataStructures.options.OptionDefault;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionList;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
+import org.pikater.core.ontology.subtrees.newOption.value.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class SimulatedAnnealing_SearchBox {
 
 	public static AgentInfo get() {
 
-		OptionDefault optionE = new OptionDefault();
-		optionE.setName("E");
+		Type typeE = new Type(DoubleValue.class);
+		typeE.setRangeRestriction(
+				new RangeRestriction(
+						new DoubleValue(0.0), new DoubleValue(1.0) ));
+		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		restrictionE.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeE )) ));
+		
+		NewOption optionE = new NewOption(
+				new DoubleValue(0.1),
+				new Type(DoubleValue.class),
+				"E" );
 		optionE.setDescription("Set minimum number of instances per leaf");
-		optionE.setValue(
-				new OptionValue(new Double(0.1)) );
-		optionE.setInterval(
-				new OptionInterval(new Double(0.0), new Double(1.0)) );
-		optionE.setList( new OptionList() );
+		optionE.setPossibleTypesRestriction(restrictionE);
 		
-
-		OptionDefault optionM = new OptionDefault();
-		optionM.setName("M");
+		
+		Type typeM = new Type(IntegerValue.class);
+		typeM.setRangeRestriction(
+				new RangeRestriction(
+						new IntegerValue(1), new IntegerValue(1000)) );
+		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		restrictionM.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		
+		NewOption optionM = new NewOption(
+				new IntegerValue(50),
+				new Type(IntegerValue.class),
+				"M" );
 		optionM.setDescription("M");
-		optionM.setValue(
-				new OptionValue(new Integer(50)) );
-		optionM.setInterval(
-				new OptionInterval(new Integer(1), new Integer(1000)) );
-		optionM.setList( new OptionList() );
+		optionM.setPossibleTypesRestriction(restrictionM);
 		
 
-		OptionDefault optionT = new OptionDefault();
-		optionT.setName("T");
+		Type typeT = new Type(DoubleValue.class);
+		typeT.setRangeRestriction(
+				new RangeRestriction(
+						new DoubleValue(0.0), new DoubleValue(100.0) ));
+		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
+		restrictionT.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeT )) ));
+		
+		NewOption optionT = new NewOption(
+				new DoubleValue(1.0),
+				new Type(DoubleValue.class),
+				"T" );
 		optionT.setDescription("T");
-		optionT.setValue(
-				new OptionValue(new Double(1.0)) );
-		optionT.setInterval(
-				new OptionInterval(new Double(0.0), new Double(100.0)) );
-		optionT.setList( new OptionList() );
-
+		optionT.setPossibleTypesRestriction(restrictionT);
 		
-		OptionDefault optionS = new OptionDefault();
-		optionS.setName("S");
-		optionS.setDescription("S");
-		optionS.setValue(
-				new OptionValue(new Double(0.5)) );
-		optionS.setInterval(
-				new OptionInterval(new Double(0.0), new Double(1.0)) );
-		optionS.setList( new OptionList() );
 		
-
+		Type typeS = new Type(DoubleValue.class);
+		typeS.setRangeRestriction(
+				new RangeRestriction(
+						new DoubleValue(0.0), new DoubleValue(1.0) ));
+		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		restrictionS.addPossibleValues( new Types(
+				new ArrayList<Type>(Arrays.asList( typeS )) ));
+		
+		NewOption optionS = new NewOption(
+				new DoubleValue(0.5),
+				new Type(DoubleValue.class),
+				"S" );
+		optionS.setDescription("T");
+		optionS.setPossibleTypesRestriction(restrictionS);
+		
+		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_SimulatedAnnealing.class.toString());
-		agentInfo.setOntologyClass(Search.class.getName());
+		agentInfo.setAgentClass(Agent_SimulatedAnnealing.class);
+		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("SimulatedAnnealing-Searcher");
 		agentInfo.setPicture("picture2.jpg");
 		agentInfo.setDescription("Searches defined parameters and provides them in output slots. Simulated annealing is used for searching.");
 
-		agentInfo.addOption(optionE.toOption());
-		agentInfo.addOption(optionM.toOption());
-		agentInfo.addOption(optionT.toOption());
-		agentInfo.addOption(optionS.toOption());
+		agentInfo.addOption(optionE);
+		agentInfo.addOption(optionM);
+		agentInfo.addOption(optionT);
+		agentInfo.addOption(optionS);
 
 		// Slot Definition
 		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());		

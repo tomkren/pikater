@@ -6,13 +6,14 @@ import java.util.List;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.utils.ResultFormatter;
-import org.pikater.shared.database.views.DataSetView;
-import org.pikater.shared.database.views.MetaDataView;
-import org.pikater.shared.database.views.ViewColumns;
-import org.pikater.shared.database.views.models.DataSetRowModel;
-import org.pikater.shared.database.views.models.MetaDataModel;
-import org.pikater.shared.database.views.models.MetaDataRow;
+import org.pikater.shared.database.views.peter.DataSetView;
+import org.pikater.shared.database.views.peter.MetaDataView;
+import org.pikater.shared.database.views.peter.ViewColumns;
+import org.pikater.shared.database.views.peter.models.DataSetRowModel;
+import org.pikater.shared.database.views.peter.models.MetaDataModel;
+import org.pikater.shared.database.views.peter.models.MetaDataRow;
 
 public class ViewTest {
 
@@ -21,9 +22,7 @@ public class ViewTest {
 		
 		JPADataSetLO weather;
 		try {
-			weather = new ResultFormatter<JPADataSetLO>(
-					DAOs.dataSetDAO.getByID(2151)
-					).getSingleResult();
+			weather = DAOs.dataSetDAO.getByID(2151, EmptyResultAction.THROW);
 			this.dataSetViewTest();
 			this.rowTest(weather);
 			//this.stringTest(weather);

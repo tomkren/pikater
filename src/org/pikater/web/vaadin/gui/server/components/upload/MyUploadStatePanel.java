@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.upload;
 
-import org.pikater.web.vaadin.gui.UploadState;
+import org.pikater.web.vaadin.ManageUserUploads;
 
 import com.vaadin.server.StreamVariable;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
@@ -13,16 +13,16 @@ public class MyUploadStatePanel extends UploadStatePanel
 {
 	private static final long serialVersionUID = 2373915541113299145L;
 	
-	private UploadState uploadState;
+	private ManageUserUploads uploadManager;
 
 	public MyUploadStatePanel(MyUploadStateWindow window)
     {
         super(window);
     }
 	
-	public void setUploadStateInstance(UploadState uploadState)
+	public void setUploadStateInstance(ManageUserUploads uploadManager)
 	{
-		this.uploadState = uploadState;
+		this.uploadManager = uploadManager;
 	}
 	
 	@Override
@@ -34,21 +34,22 @@ public class MyUploadStatePanel extends UploadStatePanel
 	@Override
 	public void streamingStarted(StreamingStartEvent event)
 	{
-		this.uploadState.onStreamingStart();
+		// TODO: check whether maximum number of uploads has been reached and if so, wait until a slot is open 
+		this.uploadManager.onStreamingStart();
 		super.streamingStarted(event);
 	}
 	
 	@Override
 	public void streamingFailed(StreamingErrorEvent event)
 	{
-		this.uploadState.onStreamingEnd();
+		this.uploadManager.onStreamingEnd();
 		super.streamingFailed(event);
 	}
 	
 	@Override
 	public void streamingFinished(StreamingEndEvent event)
 	{
-		this.uploadState.onStreamingEnd();
+		this.uploadManager.onStreamingEnd();
 		super.streamingFinished(event);
 	}
 

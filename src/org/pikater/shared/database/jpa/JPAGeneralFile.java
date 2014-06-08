@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="GeneralFile")
@@ -54,10 +55,8 @@ public class JPAGeneralFile extends JPAAbstractEntity{
 	public void setUser(JPAUser user) {
 		this.user = user;
 	}
-	@Override
-	public String getEntityName() {
-		return "GeneralFile";
-	}
+	@Transient
+	public static final String EntityName = "GeneralFile";
 
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {

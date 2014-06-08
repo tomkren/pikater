@@ -6,19 +6,15 @@ import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.database.jpa.JPAResult;
-import org.pikater.shared.database.jpa.JPARole;
-import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
-import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
+import org.pikater.shared.database.utils.ResultFormatter;
 
 public class BatchDAO extends AbstractDAO {
 
 	@Override
 	public String getEntityName() {
-		return (new JPABatch()).getEntityName();
+		return JPABatch.EntityName;
 	}
 
 	@Override
@@ -30,8 +26,11 @@ public class BatchDAO extends AbstractDAO {
 	}
 
 	@Override
-	public List<JPABatch> getByID(int ID) {
-		return getByTypedNamedQuery("Batch.getByID", "id", ID);
+	public JPABatch getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPABatch>(
+				getByTypedNamedQuery("Batch.getByID", "id", ID),
+				era
+				).getSingleResultWithNull();
 	}
 	
 	public List<JPABatch> getByStatus(JPABatchStatus status) {

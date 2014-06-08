@@ -1,14 +1,19 @@
 package org.pikater.web.vaadin.gui.client.gwtmanagers;
 
-import org.pikater.web.vaadin.gui.client.extensions.MainUIExtensionServerRpc;
+import org.pikater.web.vaadin.gui.client.extensions.UniversalUIExtensionServerRpc;
 
 public class GWTLogger
 {
-	private static MainUIExtensionServerRpc serverRPC = null;
+	private static UniversalUIExtensionServerRpc serverRPC = null;
 	
-	public static void setRemoteLogger(MainUIExtensionServerRpc serverRPC)
+	public static void setRemoteLogger(UniversalUIExtensionServerRpc serverRPC)
 	{
 		GWTLogger.serverRPC = serverRPC;
+	}
+	
+	public static boolean isLoggerSet()
+	{
+		return serverRPC != null;
 	}
 	
 	// ----------------------------------------------------------

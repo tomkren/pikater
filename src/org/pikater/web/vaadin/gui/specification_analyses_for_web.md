@@ -11,7 +11,8 @@ ADMIN FEATURES:
 * schvalování nových agentů a dat. množin (nebude-li mít uživatel oprávnění)
 
 USER FEATURES:
-* registrace, autentizace
+* registrace
+* zobrazení a úprava profilu
 * datové množiny (+ metadata k nim)
 	- zobrazení
 	- smazání? - asi jen skrytí uživateli
@@ -25,10 +26,10 @@ USER FEATURES:
 	- zobrazení
 	- export do CSV
 	- smazání (skrytí uživateli, v systému zůstane)
+	- natrénované modely
+		- zobrazení
+		- označení pro trvalé uložení
 * krabice
 	- uložit modely? (u metod, u searcherů pouze nejlepší)
 	- možnost znovupoužití modelu
-* natrénované modely
-	- zobrazení
-	- označení pro trvalé uložení
 * vizualizace...
