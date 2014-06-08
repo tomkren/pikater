@@ -194,7 +194,7 @@ class RecieveExperiment extends CyclicBehaviour {
             int batchId = agent.sendBatchToSave(batch);
             agent.log("BatchId: " + batchId);
 
-            AID receiver = new AID(AgentNames.COMPUTATION_DESCRIPTION_PARSER, false);		
+            AID receiver = new AID(AgentNames.MANAGER, false);		
 
             Ontology ontology = BatchOntology.getInstance();
             

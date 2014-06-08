@@ -31,9 +31,6 @@
             </arguments>
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_ComputationDescriptionParser" name="ComputationDescriptionParser">
-        </agent>
-
         <agent type="org.pikater.core.agents.system.Agent_InsertedBatchesLog" name="InsertedBatchesLog">
         </agent>
 
