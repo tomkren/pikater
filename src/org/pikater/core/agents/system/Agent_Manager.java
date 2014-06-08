@@ -69,9 +69,9 @@ public class Agent_Manager extends PikaterAgent {
 	protected void setup() {
 
     	initDefault();
-    
-    	registerWithDF("manager");
-    			
+
+    	registerWithDF(AgentNames.MANAGER);
+
 		if (containsArgument(NO_XML_OUTPUT)) {
 			if (isArgumentValueTrue(NO_XML_OUTPUT)){
 				no_xml_output = true;
@@ -79,9 +79,9 @@ public class Agent_Manager extends PikaterAgent {
 			else{
 				no_xml_output = false;
 			}
-		}			
-		
-		doWait(3000);	
+		}
+
+		doWait(3000);
 				
 		MessageTemplate subscriptionTemplate = 
 						MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE),
@@ -274,9 +274,9 @@ public class Agent_Manager extends PikaterAgent {
 		
 	} // end getAgentByType
 	
-	
+
 	public AID createAgent(String type, String name, List<Option> options) {
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator("agentManager");
+        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
         AID aid=communicator.createAgent((PikaterAgent)this,type,name,null);//todo
 		return aid;		
 	}
