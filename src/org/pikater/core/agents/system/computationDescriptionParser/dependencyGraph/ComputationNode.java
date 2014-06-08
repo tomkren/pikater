@@ -2,6 +2,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
+import org.pikater.shared.logging.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * Time: 12:35
  */
 public class ComputationNode {
-    private boolean idle=true;
+    private boolean idle;
     private int id;
     private Map<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs = new HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>>();
     private Map<String, ComputationOutputBuffer> inputs = new HashMap<>();
@@ -51,22 +52,20 @@ public class ComputationNode {
         return true;
     }
 
-    public void addInput(String inputName, ComputationOutputBuffer buffer)
+    public void addInput(String inputName,ComputationOutputBuffer buffer)
     {
-        inputs.put(inputName,buffer);
-        buffer.setTarget(this);
+        inputs.putIfAbsent(inputName,buffer);
     }
 
     public void addOutput(String outputName)
     {
-    	outputs.putIfAbsent(outputName, new ArrayList<>());
+        outputs.putIfAbsent(outputName,new ArrayList<>() );
     }
 
     public void addBufferToOutput(String outputName,ComputationOutputBuffer buffer)
     {
         addOutput(outputName);
         outputs.get(outputName).add(buffer);
-        buffer.setSource(this);
     }
 
     public void addToOutputAndProcess(EdgeValue o, String outputName)

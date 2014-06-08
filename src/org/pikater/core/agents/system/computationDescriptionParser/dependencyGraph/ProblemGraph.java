@@ -3,7 +3,8 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 import java.util.ArrayList;
 
 public class ProblemGraph {
-
+	protected Integer id;
+	
 	/*
 	 * Top layer of problem tree
 	 */
