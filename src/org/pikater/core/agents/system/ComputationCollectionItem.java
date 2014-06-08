@@ -2,16 +2,22 @@ package org.pikater.core.agents.system;
 
 import jade.lang.acl.ACLMessage;
 
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
 
 public class ComputationCollectionItem {
-	private ProblemGraph problemGraph;
+	private ComputationGraph problemGraph;
 	private ACLMessage message;
-	
-	public ProblemGraph getProblemGraph() {
+
+    public ComputationCollectionItem(ComputationGraph problemGraph, ACLMessage message) {
+        this.problemGraph=problemGraph;
+        this.message=message;
+    }
+
+    public ComputationGraph getProblemGraph() {
 		return problemGraph;
 	}
-	public void setProblemGraph(ProblemGraph problemGraph) {
+	public void setProblemGraph(ComputationGraph problemGraph) {
 		this.problemGraph = problemGraph;
 	}
 	

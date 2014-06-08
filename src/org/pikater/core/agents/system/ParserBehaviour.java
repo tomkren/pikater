@@ -68,8 +68,10 @@ class ParserBehaviour extends AchieveREResponder {
     		parser.parseRoots(comDescription);
     		
     		ComputationGraph computationGraph = parser.getComputationGraph();
-
+            ComputationCollectionItem item=new ComputationCollectionItem(computationGraph,request);
+            agent.computationCollection.put(1,item);
     		computationGraph.startComputation();
+
         }
    
         return reply;

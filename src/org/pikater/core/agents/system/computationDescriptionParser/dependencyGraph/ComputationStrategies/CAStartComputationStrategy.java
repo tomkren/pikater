@@ -13,6 +13,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.option.Option;
@@ -39,11 +40,12 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 			int graphId, ComputationNode computationNode){
 		myAgent = manager;
 		this.computationId = computationId;
-		this.computationNode = computationNode;
+        this.graphId = graphId;
+        this.computationNode = computationNode;
 	}
 	
 	public void execute(ComputationNode computation){    	
-		ACLMessage originalRequest = myAgent.getComputation(computationId).getMessage();						
+		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
 		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, this));    	
     }		
 	
@@ -117,20 +119,19 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
 				
 		Agent agent = new Agent();
-		agent.setType((String)inputs.get("modelType").getNext());
-		
-		Options options = (Options)inputs.get("options").getNext();
+        OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
+        Options options = new Options(optionEdge.getOptions());
 	    // TODO zbavit se Options -> list instead
-		
-		if (inputs.get("searchSolutution") != null){
-			SearchSolution ss = (SearchSolution)inputs.get("searchSolutution").getNext();
+        agent.setType((String)inputs.get("modelType").getNext());
+		if (inputs.get("searchSolution") != null){
+			SearchSolution ss = (SearchSolution)inputs.get("searchSolution").getNext();
 			options =  fillOptionsWithSolution(options.getList(), ss);
 		}
 		agent.setOptions(options.getList());			
 		
 		Data data = new Data();
-		data.setExternal_train_file_name((String)inputs.get("train").getNext());
-		data.setExternal_test_file_name((String)inputs.get("test").getNext());				
+		data.setExternal_train_file_name(((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId());
+		data.setExternal_test_file_name(((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId());
 		
 		Task task = new Task();
 		task.setNodeId(computationNode.getId());
