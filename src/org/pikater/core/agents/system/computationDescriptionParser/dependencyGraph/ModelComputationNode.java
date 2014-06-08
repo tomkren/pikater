@@ -8,6 +8,14 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 public class ModelComputationNode extends ComputationNode {
     private String modelClass;
 
+    public ModelComputationNode() {
+        super();
+    }
+
+    public ModelComputationNode(StartComputationStrategy executeStrategy) {
+        super(executeStrategy);
+    }
+
     public String getModelClass() {
         return modelClass;
     }

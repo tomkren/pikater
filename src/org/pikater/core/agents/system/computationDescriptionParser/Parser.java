@@ -3,6 +3,7 @@ package org.pikater.core.agents.system.computationDescriptionParser;
 import jade.content.Concept;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
@@ -42,7 +43,7 @@ public class Parser {
 
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
-            ComputationNode saverNode=new ComputationNode();
+            ComputationNode saverNode=new ComputationNode(new DummyComputationStrategy());
             computationGraph.addNode(saverNode);
             alreadyProcessed.put(dataSaver,saverNode);
             parseDataSourceDescription(dataSource, saverNode, "file");
@@ -145,7 +146,10 @@ public class Parser {
 
         if (!alreadyProcessed.containsKey(computingAgent))
         {
-            alreadyProcessed.put(computingAgent, new ModelComputationNode());
+            ModelComputationNode node= new ModelComputationNode();
+            CAStartComputationStrategy strategy=new CAStartComputationStrategy(agent,node.getId(),1,node);
+            node.setStartBehavior(strategy);
+            alreadyProcessed.put(computingAgent,node);
 
         }
         ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent);
@@ -172,7 +176,10 @@ public class Parser {
         {
             if (!alreadyProcessed.containsKey(complex))
             {
-                alreadyProcessed.put(complex, new ModelComputationNode());
+                ModelComputationNode node= new ModelComputationNode();
+                CAStartComputationStrategy strategy=new CAStartComputationStrategy(agent,node.getId(),1,node);
+                node.setStartBehavior(strategy);
+                alreadyProcessed.put(complex, node);
 
             }
             computingNode = alreadyProcessed.get(complex);
