@@ -13,6 +13,7 @@ import jade.util.leap.List;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.actions.MessagesOntology;
 import org.pikater.core.ontology.management.CreateAgent;
+import org.pikater.core.ontology.messages.option.Option;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +29,7 @@ public class ManagerAgentCommunicator {
         _initAgentAID = initAgentAID;
     }
 
-    public AID createAgent(PikaterAgent agent, String type, String name, List options) {
+    public AID createAgent(PikaterAgent agent, String type, String name, java.util.List<Option> options) {
     	Ontology ontology = MessagesOntology.getInstance();
     	
         ACLMessage msg_ca = new ACLMessage(ACLMessage.REQUEST);

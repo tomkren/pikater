@@ -27,7 +27,7 @@
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater" />
       <property name="javax.persistence.jdbc.user" value="pikater" />
-      <property name="javax.persistence.jdbc.password" value="a" />
+      <property name="javax.persistence.jdbc.password" value="SrapRoPy" />
       <property name="eclipselink.ddl-generation" value="create-tables" />
       <property name="eclipselink.ddl-generation.output-mode" value="database" />
 
