@@ -18,7 +18,7 @@ public class ComputationNode {
     private boolean idle;
     private int id;
     private Map<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs = new HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>>();
-    private Map<String, ComputationOutputBuffer> inputs = new HashMap<>();
+    private Map<String, ComputationOutputBuffer> inputs = new HashMap<String, ComputationOutputBuffer>();
     private StartComputationStrategy startBehavior;
 
     public ComputationNode()
@@ -52,13 +52,18 @@ public class ComputationNode {
     }
 
     public void addInput(String inputName,ComputationOutputBuffer buffer)
-    {
-        inputs.putIfAbsent(inputName,buffer);
+    {        
+        if (! inputs.containsKey(inputName) ) {
+        	inputs.put(inputName,buffer);
+        }
     }
 
     public void addOutput(String outputName)
-    {
-        outputs.putIfAbsent(outputName,new ArrayList<>() );
+    {   
+        if (! outputs.containsKey(outputName) ) {
+        	outputs.put(outputName, new ArrayList<ComputationOutputBuffer<EdgeValue>>());
+        }
+
     }
 
     public void addBufferToOutput(String outputName,ComputationOutputBuffer buffer)
