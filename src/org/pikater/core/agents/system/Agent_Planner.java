@@ -115,7 +115,7 @@ public class Agent_Planner extends PikaterAgent {
 						String CAtype = "RBFNetwork";
 
 						// TODO choose a slave node
-						ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER);
+						ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
 
 						log("about to create CA");
 						AID ca = comm.createAgent(Agent_Planner.this, CAtype, CAtype + Math.abs((new Random()).nextInt()), new Arguments());

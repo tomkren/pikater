@@ -73,7 +73,7 @@ public class Agent_Duration extends PikaterAgent {
     	        
         // create linear regression agent
         // send message to AgentManager to create an agent
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER);
+        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
         aid=communicator.createAgent(this,"LinearRegression","DurationServiceRegression",null);
         		
 		// compute one LR (as the first one is usually longer) 

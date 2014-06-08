@@ -121,7 +121,9 @@ public class Parser {
         agent.log("Ontology Parser - ComputationDescription");
 
         List<FileDataSaver> elements = comDescription.getRootElements();
-        elements.forEach(this::parseRoot);
+        for (FileDataSaver fileSaverI : elements) {
+        	this.parseRoot(fileSaverI);
+        }
     }
 
     //Processes a node that is in the beginning of computation - reads file
@@ -133,7 +135,7 @@ public class Parser {
             DataSourceEdge fileEdge=new DataSourceEdge();
             fileEdge.setFile(true);
             fileEdge.setDataSourceId(file.getFileURI());
-            ComputationOutputBuffer<EdgeValue> buffer=new NeverEndingBuffer<>(fileEdge);
+            ComputationOutputBuffer<EdgeValue> buffer=new NeverEndingBuffer<EdgeValue>(fileEdge);
             child.addInput(connectionName,buffer);
         }
     }
@@ -152,7 +154,7 @@ public class Parser {
         }
         ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent);
         computationGraph.addNode(computingNode);
-        addOptionsToInputs(computingNode,new ArrayList<>());
+        addOptionsToInputs(computingNode,new ArrayList<Option>());
 
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
         computingNode.setModelClass(computingAgentO.getAgentClass());
