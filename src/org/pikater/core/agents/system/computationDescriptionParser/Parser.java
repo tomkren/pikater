@@ -1,7 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
 import jade.content.Concept;
-import org.pikater.core.agents.system.Agent_ComputationDescriptionParser;
+import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
@@ -19,9 +19,9 @@ public class Parser {
     private ProblemGraph graph = null;
     private ComputationGraph computationGraph=new ComputationGraph();
     private HashMap<Concept,ComputationNode> alreadyProcessed=new HashMap<>();
-    private Agent_ComputationDescriptionParser agent = null;
+    private Agent_Manager agent = null;
 
-    public Parser(Agent_ComputationDescriptionParser agent_) {
+    public Parser(Agent_Manager agent_) {
         this.agent = agent_;
         this.graph = new ProblemGraph();
     }

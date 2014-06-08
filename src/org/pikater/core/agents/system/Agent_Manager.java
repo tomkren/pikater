@@ -26,7 +26,9 @@ import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.task.Execute;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,7 +45,7 @@ public class Agent_Manager extends PikaterAgent {
 	private boolean no_xml_output = true;
 	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
 	private int problem_i = 0;
-	protected HashMap<Integer, ComputationCollectionItem> computationCollection = 
+	protected HashMap<Integer, ComputationCollectionItem> computationCollection =
 			new HashMap<Integer, ComputationCollectionItem>();
 	
 	
@@ -206,7 +208,7 @@ public class Agent_Manager extends PikaterAgent {
 	} // end sendSubscription
 	
 	
-	public ACLMessage execute2Message(Execute execute) {		
+	public ACLMessage execute2Message(Execute execute) {
 		// create ACLMessage from Execute ontology action
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
@@ -275,7 +277,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	public AID createAgent(String type, String name, List<Option> options) {
         ManagerAgentCommunicator communicator=new ManagerAgentCommunicator("agentManager");
-        AID aid=communicator.createAgent((PikaterAgent)this,type,name,options);
+        AID aid=communicator.createAgent((PikaterAgent)this,type,name,null);//todo
 		return aid;		
 	}
 	

@@ -1,6 +1,7 @@
 package org.pikater.shared.database.views.jirka.users;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import org.pikater.shared.AppHelper;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -59,16 +60,19 @@ public class UsersTableRow extends AbstractTableRowDBView
 			 * And then the editable ones.
 			 */
 			case ACCOUNT_STATUS:
-				return new RepresentativeDBViewValue(AppHelper.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name(), false)
-				{
-					@Override
-					protected void commitValue()
-					{
-						RepresentativeDBViewValue valueWrapper = (RepresentativeDBViewValue) getValueWrapper(column);
-						user.setStatus(JPAUserStatus.valueOf(valueWrapper.getValue()));
-						commitRow();
-					}
-				};
+                //TODO
+//                EnumSet<String> enum=EnumSet.allOf(JPAUserStatus.class);
+//                Set<String> values=AppHelper.enumSetToStringSet(enum);
+//				return new RepresentativeDBViewValue(values, user.getStatus().name(), false)
+//				{
+//					@Override
+//					protected void commitValue()
+//					{
+//						RepresentativeDBViewValue valueWrapper = (RepresentativeDBViewValue) getValueWrapper(column);
+//						user.setStatus(JPAUserStatus.valueOf(valueWrapper.getValue()));
+//						commitRow();
+//					}
+//				};
 			case MAXIMUM_PRIORITY:
 				return new RepresentativeDBViewValue(AppHelper.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()), false)
 				{

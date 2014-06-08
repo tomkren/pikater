@@ -1,5 +1,7 @@
 package org.pikater.core.agents.configuration;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,7 +14,17 @@ public class Arguments {
         this.arguments = arguments;
     }
 
+    public Arguments()
+    {
+        arguments=new HashMap<>();
+    }
+
     protected Map<String,Argument> arguments;
+
+    public Collection<Argument> getArguments()
+    {
+        return arguments.values();
+    }
 
     public String getArgumentValue(String argName)
     {
@@ -32,5 +44,9 @@ public class Arguments {
         }
         String argValue= getArgumentValue(argName);
         return argValue.equals("1") || argValue.equalsIgnoreCase("true");
+    }
+
+    public int size() {
+        return arguments.size();
     }
 }

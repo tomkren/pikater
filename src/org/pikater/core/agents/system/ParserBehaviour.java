@@ -15,8 +15,8 @@ import jade.proto.AchieveREResponder;
 
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
-import org.pikater.core.ontology.batch.ExecuteBatch;
-import org.pikater.core.ontology.description.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
 class ParserBehaviour extends AchieveREResponder {
 	

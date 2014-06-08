@@ -348,7 +348,6 @@ public class Agent_Duration extends PikaterAgent {
 		Task t = new Task();
 		Id _id = new Id();
 		_id.setIdentificator(Integer.toString(id));
-		t.setId(_id);
 		id++;
 		
 		t.setAgent(ag);

@@ -22,6 +22,7 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 
 import org.pikater.core.agents.configuration.Argument;
+import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
@@ -300,7 +301,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	} // end getAgentsByType
 
 	
-	public AID createAgent(String type, String name, java.util.List<Argument> arguments) {
+	public AID createAgent(String type, String name, Arguments arguments) {
         ManagerAgentCommunicator communicator=new ManagerAgentCommunicator("agentManager");
         AID aid=communicator.createAgent(this,type,name,arguments);
         return aid;

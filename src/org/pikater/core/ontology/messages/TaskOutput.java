@@ -1,10 +1,7 @@
 package org.pikater.core.ontology.messages;
 
-import java.util.ArrayList;
-
-import org.pikater.core.ontology.messages.Task.InOutType;
-
 import jade.content.Concept;
+import org.pikater.core.ontology.subtrees.task.Task.InOutType;
 
 public class TaskOutput implements Concept{
 	

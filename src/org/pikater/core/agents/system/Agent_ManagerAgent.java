@@ -13,6 +13,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
+import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.management.AgentTypeDefinition;
 import org.pikater.core.agents.system.management.AgentTypesProvider;
 import org.pikater.core.agents.system.management.ManagerAgentRequestResponder;
@@ -117,7 +118,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		});
 	}
     
-	public String createAgent(String type, String name, List<Argument> args){
+	public String createAgent(String type, String name, Arguments args){
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
@@ -130,9 +131,11 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		
 		if (args != null){
             args2=new Argument[args.size()];
-            for (int i=0;i<args.size();i++)
+            int i=0;
+            for (Argument arg:args.getArguments())
             {
-                args2[i]=(Argument)args.get(i);
+                args2[i]=arg;
+                i++;
             }
 		}
 

@@ -31,6 +31,7 @@ import jade.proto.ContractNetInitiator;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.configuration.Argument;
+import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MessagesOntology;
@@ -117,7 +118,7 @@ public class Agent_Planner extends PikaterAgent {
 						ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER);
 
 						log("about to create CA");
-						AID ca = comm.createAgent(Agent_Planner.this, CAtype, CAtype + Math.abs((new Random()).nextInt()), new ArrayList<Argument>());
+						AID ca = comm.createAgent(Agent_Planner.this, CAtype, CAtype + Math.abs((new Random()).nextInt()), new Arguments());
 						log("CA created");
 
 						ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);

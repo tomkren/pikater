@@ -1,7 +1,5 @@
 package org.pikater.core.agents.system;
 
-import java.util.ArrayList;
-
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -9,15 +7,13 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
-import jade.proto.SubscriptionResponder.Subscription;
 import jade.util.leap.List;
-
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.messages.Eval;
-import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.TaskOutput;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Task;
+
+import java.util.ArrayList;
 
 public class ExecuteTaskBehaviour extends AchieveREInitiator{
 
@@ -83,7 +79,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				// get the original task from msg
 				Result result = (Result) content;					
 				List tasks = (List)result.getValue();
-				Task t = (Task) tasks.get(0); // there is only one task in Result																					
+				Task t = (Task) tasks.get(0); // there is only one task in Result
 
 				// save results to the database										
 				if (t.isSave_results()){
