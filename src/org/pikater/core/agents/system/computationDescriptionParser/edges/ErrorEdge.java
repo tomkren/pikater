@@ -1,8 +1,8 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
-import java.util.ArrayList;
+import org.pikater.core.ontology.subtrees.task.Eval;
 
-import org.pikater.core.ontology.messages.Eval;
+import java.util.ArrayList;
 
 /**
  * User: Kuba

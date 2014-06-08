@@ -1,10 +1,6 @@
 package org.pikater.core.agents.system;
 
-import java.util.List;
-
-import jade.content.Concept;
 import jade.content.ContentElement;
-import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -12,72 +8,29 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
-import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
-import jade.domain.FIPAAgentManagement.RefuseException;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.proto.AchieveREInitiator;
-import jade.proto.AchieveREResponder;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.ArrayList;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
-import org.pikater.core.agents.system.computationDescriptionParser.Parser;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
-import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
-import org.pikater.core.ontology.actions.BatchOntology;
-import org.pikater.core.ontology.actions.ExperimentOntology;
-import org.pikater.core.ontology.actions.FilenameTranslationOntology;
-import org.pikater.core.ontology.actions.MessagesOntology;
-import org.pikater.core.ontology.batch.ExecuteBatch;
-import org.pikater.core.ontology.description.ComputationDescription;
-import org.pikater.core.ontology.fileNameTranslate.TranslateFilename;
-import org.pikater.core.ontology.messages.Eval;
-import org.pikater.core.ontology.messages.Evaluation;
-import org.pikater.core.ontology.messages.Execute;
-import org.pikater.core.ontology.messages.ExecuteParameters;
-import org.pikater.core.ontology.messages.Problem;
-import org.pikater.core.ontology.messages.Results;
-import org.pikater.core.ontology.messages.Task;
-import org.pikater.core.ontology.messages.TaskOutput;
-import org.pikater.core.ontology.messages.option.Option;
-import org.pikater.core.ontology.metadata.Metadata;
-import org.pikater.core.ontology.search.searchItems.BoolSItem;
-import org.pikater.core.ontology.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.search.searchItems.IntSItem;
-import org.pikater.core.ontology.search.searchItems.SetSItem;
+import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.ExperimentOntology;
+import org.pikater.core.ontology.FilenameTranslationOntology;
+import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.subtrees.option.Option;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class Agent_Manager extends PikaterAgent {

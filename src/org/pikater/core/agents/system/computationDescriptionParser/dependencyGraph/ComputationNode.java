@@ -2,7 +2,6 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
-import org.pikater.shared.logging.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -20,7 +19,7 @@ public class ComputationNode {
     private int id;
     private Map<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs = new HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>>();
     private Map<String, ComputationOutputBuffer> inputs = new HashMap<>();
-    private StartComputationBehavior startBehavior;
+    private StartComputationStrategy startBehavior;
 
     public ComputationNode()
     {
@@ -107,11 +106,11 @@ public class ComputationNode {
         this.id = id;
     }
 
-    public StartComputationBehavior getStartBehavior() {
+    public StartComputationStrategy getStartBehavior() {
         return startBehavior;
     }
 
-    public void setStartBehavior(StartComputationBehavior startBehavior) {
+    public void setStartBehavior(StartComputationStrategy startBehavior) {
         this.startBehavior = startBehavior;
     }
 }
