@@ -35,7 +35,7 @@ import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 public class Agent_GUIKlara extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
-	private static final boolean DEBUG_MODE = false;
+	private static final boolean DEBUG_MODE = true;
 	private BufferedReader bufferedConsole=null;
 
 	public static String filePath = "core"
