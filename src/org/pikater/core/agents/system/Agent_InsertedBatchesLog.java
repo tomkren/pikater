@@ -194,7 +194,7 @@ class RecieveExperiment extends CyclicBehaviour {
             int batchId = agent.sendBatchToSave(batch);
             agent.log("BatchId: " + batchId);
 
-            AID receiver = new AID(AgentNames.MANAGER, false);		
+            AID receiver = new AID(AgentNames.MAN, false);		
 
             Ontology ontology = BatchOntology.getInstance();
             
@@ -206,7 +206,7 @@ class RecieveExperiment extends CyclicBehaviour {
     			agent.getContentManager().fillContent(msg, new Action(receiver, exeExperiment));
     			
     			ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg, 10000);
-    			System.out.println("Reply: " + replyOK.getContent());
+    			//System.out.println("Reply: " + replyOK.getContent());
     			
     		} catch (CodecException e) {
     			// TODO Auto-generated catch block

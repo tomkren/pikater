@@ -76,6 +76,7 @@ class ParserBehaviour extends AchieveREResponder {
             reply.setLanguage(codec.getName());
             reply.setOntology(ontology.getName());
             reply.setContent("OK");
+            //this.myAgent.send(reply);
         }
    
         return reply;
