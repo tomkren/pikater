@@ -36,7 +36,7 @@ public final class Input1 {
 
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
-		comAgent.setAgentClass(Agent_WekaRBFNetworkCA.class.getName());
+		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent.addOption( Converter.toOption(optionS) );
 		comAgent.addOption( Converter.toOption(optionM) );
 		comAgent.setTrainingData(fileDataSource);

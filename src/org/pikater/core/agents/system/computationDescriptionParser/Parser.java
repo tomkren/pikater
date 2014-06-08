@@ -157,7 +157,7 @@ public class Parser {
         addOptionsToInputs(computingNode,new ArrayList<Option>());
 
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
-        computingNode.setModelClass(computingAgentO.getAgentClass());
+        computingNode.setModelClass(computingAgentO.getAgentType());
         fillDataSources(computingAgentO,computingNode);
 
         return computingNode;

@@ -18,7 +18,7 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 
 	private static final long serialVersionUID = 2127755171666013125L;
 
-	private String agentClass;
+	private String agentType;
 	private IModel model;
     private List<Option> options;
 
@@ -26,11 +26,11 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
     private DataSourceDescription testingData;
     private DataSourceDescription validationData;
 
-    public String getAgentClass() {
-		return agentClass;
+    public String getAgentType() {
+		return agentType;
 	}
-	public void setAgentClass(String agentClass) {
-		this.agentClass = agentClass;
+	public void setAgentType(String agentType) {
+		this.agentType = agentType;
 	}
 
 	public IModel getModel() {

@@ -2,6 +2,7 @@ package xmlGenerator;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
@@ -33,7 +34,7 @@ public final class Input2 {
 
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
-		comAgent.setAgentClass(Agent_WekaRBFNetworkCA.class.getName());
+		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent.addOption( Converter.toOption(optionS) );
 		comAgent.addOption( Converter.toOption(optionB) );
 		comAgent.setTrainingData(fileDataSource);
@@ -76,7 +77,7 @@ public final class Input2 {
         ErrorDescription errorDescription=new ErrorDescription();
         errorDescription.setType("RMSE");
         errorDescription.setProvider(comAgent);
-        complex.setErrors(new ArrayList<ErrorDescription>(){{add(errorDescription);}});
+        complex.setErrors(new ArrayList<ErrorDescription>(Arrays.asList( errorDescription)) );
 
         // set DataSource
         // Note that the data provider is complex.

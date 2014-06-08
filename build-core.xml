@@ -7,6 +7,9 @@
             <exclude name="org/pikater/web/"/>
             <exclude name="net/"/>
             <exclude name="org/pikater/shared/ssh/"/>
+            <exclude name="org/pikater/shared/quartz/"/>
+            <exclude name="org/pikater/shared/utilities/pikaterDatabase/tests/DatasetConverterTest.java"/>
+            <exclude name="org/pikater/shared/database/utils/DataSetConverter.java"/>
             <exclude name="org/pikater/shared/AppHelper.java"/>
             <exclude name="org/pikater/shared/XStreamHelper.java"/>
             <classpath refid="pikater.classpath"/>

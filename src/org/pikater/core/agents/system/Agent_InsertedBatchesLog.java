@@ -1,7 +1,6 @@
 package org.pikater.core.agents.system;
 
 
-import jade.content.AgentAction;
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -206,7 +205,7 @@ class RecieveExperiment extends CyclicBehaviour {
     			agent.getContentManager().fillContent(msg, new Action(receiver, exeExperiment));
     			
     			ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg, 10000);
-    			//System.out.println("Reply: " + replyOK.getContent());
+    			System.out.println("Reply: " + replyOK.getContent());
     			
     		} catch (CodecException e) {
     			// TODO Auto-generated catch block
