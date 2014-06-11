@@ -43,7 +43,6 @@ public class OneR_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("OneR");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("One R Method");
 
 		agentInfo.addOption(optionB);

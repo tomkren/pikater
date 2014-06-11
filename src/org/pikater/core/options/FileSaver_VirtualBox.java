@@ -19,7 +19,6 @@ public class FileSaver_VirtualBox  {
 		agentInfo.setOntologyClass(FileDataSaver.class);
 	
 		agentInfo.setName("FileSaver");
-		agentInfo.setPicture("picture0.jpg");
 		agentInfo.setDescription("This box save data to Pikater database");
 
 		agentInfo.addInputSlot(inputSlot);

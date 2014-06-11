@@ -120,7 +120,6 @@ public class GASearch_SearchBox {
 		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("GASearch");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Searcher using Genetic algorithm");
 
 		agentInfo.addOption(optionE);

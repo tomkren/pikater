@@ -41,7 +41,6 @@ public class FileInput_VirtualBox {
 		agentInfo.setOntologyClass(FileDataProvider.class);
 	
 		agentInfo.setName("FileInput");
-		agentInfo.setPicture("picture0.jpg");
 		agentInfo.setDescription("This box provides a data source to other boxes.");
 
 		agentInfo.addOption(optionIN);

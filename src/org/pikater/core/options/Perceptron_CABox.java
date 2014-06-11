@@ -104,7 +104,6 @@ public class Perceptron_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("Perceptron");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Perceptron Method");
 
 		agentInfo.addOption(optionL);

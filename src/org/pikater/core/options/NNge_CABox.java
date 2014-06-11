@@ -61,7 +61,6 @@ public class NNge_CABox {
 		agentInfo.setOntologyClass(FileDataProvider.class);
 	
 		agentInfo.setName("NNge");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("NNge Method");
 
 		agentInfo.addOption(optionI);

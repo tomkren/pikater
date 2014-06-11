@@ -36,7 +36,6 @@ public class CARecSearchComplex_VirtualBox {
 		agentInfo.setOntologyClass(CARecSearchComplex.class);
 		
 		agentInfo.setName("Complex");
-		agentInfo.setPicture("picture7.jpg");
 		agentInfo.setDescription("Complex Box");
 		
 		agentInfo.addInputSlot(inputAgentSlot);

@@ -217,7 +217,6 @@ public class SMOReg_CABox  {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("SMO Reg");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("SMOReg Method");
 
 		agentInfo.addOption(optionS);

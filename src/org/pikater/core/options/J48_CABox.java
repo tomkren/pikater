@@ -166,7 +166,6 @@ public class J48_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("J48");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("J48 method description");
 
 		agentInfo.addOption(optionU);

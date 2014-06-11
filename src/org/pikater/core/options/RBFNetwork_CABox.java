@@ -125,7 +125,6 @@ public class RBFNetwork_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 
 		agentInfo.setName("RBFNetwork");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("RBFNetwork Method");
 
 		agentInfo.addOption(optionB);

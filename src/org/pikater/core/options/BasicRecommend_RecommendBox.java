@@ -19,7 +19,6 @@ public class BasicRecommend_RecommendBox {
 		agentInfo.setOntologyClass(Recommend.class);
 	
 		agentInfo.setName("Basic Recommend");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Basic Recommend");
 
 		agentInfo.setOutputSlots(AAA_SlotHelper.getRecommendOutputSlots());

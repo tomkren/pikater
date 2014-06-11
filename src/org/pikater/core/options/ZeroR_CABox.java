@@ -13,7 +13,6 @@ public class ZeroR_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("ZeroR");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Zero R Method");
 
 		// Slots Definition
