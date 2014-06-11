@@ -171,7 +171,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 				{
 					// IMPORTANT: don't violate the call order
 					SelectionPlugin selectionPlugin = (SelectionPlugin) kineticEngine.getPlugin(SelectionPlugin.pluginID);
-					selectionPlugin.onEdgeDragOperation(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
+					selectionPlugin.onEdgeDragOperationFinished(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
 					
 					kineticEngine.swapEdgeEndpoint(); // changes the endpoint, updates the edge but doesn't draw
 				}

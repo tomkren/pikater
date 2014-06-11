@@ -2,12 +2,11 @@ package org.pikater.web.vaadin.gui.client.kineticengine;
 
 import net.edzard.kinetic.Group;
 import net.edzard.kinetic.Line;
-import net.edzard.kinetic.Vector2d;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.box.LeafBox;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
 
 public class KineticShapeCreator
 {
@@ -26,34 +25,20 @@ public class KineticShapeCreator
 	 */
 	private final KineticEngine kineticEngine;
 	
-	/**
-	 * ID generation variables
-	 */
-	private int nextBoxID;
-
-	public KineticShapeCreator(KineticEngine kineticStateWrapper)
+	public KineticShapeCreator(KineticEngine kineticEngine)
 	{
-		this.kineticEngine = kineticStateWrapper;
-		this.nextBoxID = 0;
-	}
-	
-	/**
-	 * Creates a fully initialized box, if registered automatically. Only use this method when importing experiments serialized from the server.
-	 */
-	public BoxPrototype createBox(NodeRegisterType nrt, LeafBox origin)
-	{
-		return createBox(nrt, origin.boxInfo, new Vector2d(origin.guiInfo.x, origin.guiInfo.y));
+		this.kineticEngine = kineticEngine;
 	}
 	
 	/**
 	 * Creates a fully initialized box, if registered automatically. Only use this method when creating boxes in the GUI.
 	 */
-	public BoxPrototype createBox(NodeRegisterType nrt, BoxInfo info, Vector2d position)
+	public BoxPrototype createBox(NodeRegisterType nrt, BoxInfo info)
 	{
-		BoxPrototype result = new BoxPrototype(kineticEngine, GlobalEngineConfig.getBoxIDFromNumber(nextBoxID++), info, position);
+		BoxPrototype result = new BoxPrototype(kineticEngine, info);
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(true, result);
+			kineticEngine.registerCreated(true, new BoxPrototype[] { result }, null);
 		}
 	    return result;
 	}
@@ -72,7 +57,7 @@ public class KineticShapeCreator
 		EdgePrototype result = new EdgePrototype(kineticEngine, container, baseLine);
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(true, result);
+			kineticEngine.registerCreated(true, null, new EdgePrototype[] { result });
 		}
 		return result;
 	}
@@ -83,24 +68,16 @@ public class KineticShapeCreator
 	public EdgePrototype createEdge(NodeRegisterType nrt, BoxPrototype fromBox, BoxPrototype toBox)
 	{
 		EdgePrototype result = new EdgePrototype(kineticEngine);
-		result.connectFromBox(fromBox);
-		result.connectToBox(toBox);
+		result.setEndpoint(EndPoint.FROM, fromBox);
+		result.setEndpoint(EndPoint.TO, toBox);
 		if((fromBox != null) && (toBox != null))
 		{
 			result.updateEdge();
 		}
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(true, result);
+			kineticEngine.registerCreated(true, null, new EdgePrototype[] { result });
 		}
 		return result;
-	}
-	
-	/**
-	 * Should be called before deserializing a stage.
-	 */
-	public void reset()
-	{
-		this.nextBoxID = 0;
 	}
 }

@@ -12,6 +12,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeR
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 @SuppressWarnings("deprecation")
@@ -57,14 +58,14 @@ public final class CreateEdgePlugin implements IEnginePlugin
 				event.stopVerticalPropagation();
 				event.setProcessed();
 			}
-			else if((kineticEngine.getClickMode() == KineticComponentClickMode.CONNECTION) 
+			else if((kineticEngine.getContext().getClickMode() == KineticComponentClickMode.CONNECTION) 
 					|| GWTKeyboardManager.isAltKeyDown()) // when it's either clear we want to connect or the right modifier key is down 
 			{
 				// start this create edge operation
 				fromEndPoint = parentBox;
 				fromEndPoint.highlightAsNewEndpointCandidate();
-				newEdge = kineticEngine.getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromEndPoint, null);
-				kineticEngine.registerCreated(true, newEdge);
+				newEdge = kineticEngine.getContext().getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromEndPoint, null);
+				kineticEngine.registerCreated(true, null, new EdgePrototype[] { newEdge });
 				newEdge.edgeDrag_toBaseLine(kineticEngine.getMousePosition(), fromEndPoint);
 				
 				kineticEngine.removeFillRectangleHandlers();
@@ -135,7 +136,7 @@ public final class CreateEdgePlugin implements IEnginePlugin
 				newEndpoint.cancelHighlightAsNewEndpointCandidate();
 				if((newEndpoint != fromEndPoint) && fromEndPoint.isNotConnectedTo(newEndpoint))
 				{
-					newEdge.connectToBox(newEndpoint);
+					newEdge.setEndpoint(EndPoint.TO, newEndpoint);
 					newEdge.edgeDrag_toEdge(true); // switches the edge's internal state and updates it, doesn't draw anything
 					
 					SelectionPlugin selectionPlugin = (SelectionPlugin) kineticEngine.getPlugin(SelectionPlugin.pluginID);
@@ -143,12 +144,12 @@ public final class CreateEdgePlugin implements IEnginePlugin
 				}
 				else
 				{
-					kineticEngine.getUndoRedoManager().undoAndDiscard();
+					kineticEngine.getContext().getUndoRedoManager().undoAndDiscard();
 				}
 			}
 			else
 			{
-				kineticEngine.getUndoRedoManager().undoAndDiscard();
+				kineticEngine.getContext().getUndoRedoManager().undoAndDiscard();
 			}
 			fromEndPoint.cancelHighlightAsNewEndpointCandidate();
 			fromEndPoint = null;

@@ -6,6 +6,7 @@ import net.edzard.kinetic.Vector2d;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
+import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
 
 public class MoveBoxesOperation extends BiDiOperation
 {
@@ -26,10 +27,11 @@ public class MoveBoxesOperation extends BiDiOperation
 	public void firstExecution()
 	{
 		// Note: this is already after the drag itself
+		SelectionPlugin selectionPlugin = (SelectionPlugin) kineticEngine.getPlugin(SelectionPlugin.pluginID);
 		
-		delta = kineticEngine.getSelectionContainer().getPosition();
+		delta = selectionPlugin.getSelectionContainer().getPosition();
 		setNewSelectionPositions();
-		kineticEngine.getSelectionContainer().setPosition(Vector2d.origin);
+		selectionPlugin.getSelectionContainer().setPosition(Vector2d.origin);
 	}
 	
 	@Override

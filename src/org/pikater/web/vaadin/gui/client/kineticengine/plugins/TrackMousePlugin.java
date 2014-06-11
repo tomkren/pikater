@@ -40,7 +40,7 @@ public final class TrackMousePlugin implements IEnginePlugin
 		protected void handleInner(KineticEvent event)
 		{
 			setCurrentlyHoveredBox(parentBox);
-			GWTCursorManager.setCursorType(kineticEngine.getParentDOMElement(), MyCursor.POINTER);
+			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.POINTER);
 		}
 
 		@Override
@@ -55,7 +55,7 @@ public final class TrackMousePlugin implements IEnginePlugin
 		protected void handleInner(KineticEvent event)
 		{
 			unsetCurrentlyHoveredBox();
-			GWTCursorManager.setCursorType(kineticEngine.getParentDOMElement(), MyCursor.AUTO);
+			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.AUTO);
 		}
 
 		@Override

@@ -171,7 +171,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	// INHERITED INTERFACE
 	
 	@Override
-	public void registerInKinetic()
+	protected void registerInKinetic()
 	{
 		Layer layer = getKineticEngine().getContainer(EngineComponent.LAYER_EDGES).cast();
 		layer.add(groupContainer);
@@ -182,7 +182,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	}
 	
 	@Override
-	public void unregisterInKinetic()
+	protected void unregisterInKinetic()
 	{
 		groupContainer.remove();
 		baseLine.remove();
@@ -331,9 +331,9 @@ public class EdgePrototype extends ExperimentGraphItem
 		}
 	}
 	
-	public boolean isFromEndpoint(BoxPrototype box)
+	public boolean isExactlyOneEndSelected()
 	{
-		return fromBox == box;
+		return fromBox.isSelected() ^ toBox.isSelected(); // exclusive or (aka "xor")
 	}
 	
 	public boolean areBothEndsSelected()
@@ -341,9 +341,9 @@ public class EdgePrototype extends ExperimentGraphItem
 		return fromBox.isSelected() && toBox.isSelected();
 	}
 	
-	public boolean isExactlyOneEndSelected()
+	public boolean areBothEndsDefined()
 	{
-		return fromBox.isSelected() ^ toBox.isSelected(); // exclusive or (xor)
+		return (fromBox != null) && (toBox != null);
 	}
 	
 	public int getSelectedEndpointsCount()
@@ -353,8 +353,22 @@ public class EdgePrototype extends ExperimentGraphItem
 	
 	public BoxPrototype getOtherEndpoint(BoxPrototype oneEndpoint)
 	{
-		assert((oneEndpoint == fromBox) || (oneEndpoint == toBox));
-		return oneEndpoint == fromBox ? toBox : fromBox;
+		if((oneEndpoint == null) && (fromBox == null) && (toBox == null))
+		{
+			throw new NullPointerException("The given argument and both endpoints are null. No idea what to return.");
+		}
+		if(oneEndpoint == fromBox)
+		{
+			return toBox;
+		}
+		else if(oneEndpoint == toBox)
+		{
+			return fromBox;
+		}
+		else
+		{
+			throw new IllegalArgumentException("The given argument didn't match any of the endpoints.");
+		}
 	}
 	
 	public BoxPrototype getSelectedEndpoint()
@@ -373,49 +387,53 @@ public class EdgePrototype extends ExperimentGraphItem
 	// OTHER IMPORTANT PUBLIC METHODS
 	
 	/**
-	 * When using this method, keep in mind that eventually {@link #registerEdgeInEndpoints} need to be
-	 * called to keep consistency.
+	 * When using this method, keep in mind that eventually {@link #setEdgeRegisteredInEndpoints(boolean registered)}
+	 * needs to be called to keep consistency.
 	 */
-	public void connectFromBox(BoxPrototype box)
+	public void setEndpoint(EndPoint endPoint, BoxPrototype box)
 	{
-		if(this.fromBox != null)
+		switch(endPoint)
 		{
-			this.fromBox.unregisterEdge(this);
+			case FROM:
+				if(fromBox != null)
+				{
+					fromBox.setEdgeRegistered(this, false);
+				}
+				fromBox = box;
+				break;
+			case TO:
+				if(toBox != null)
+				{
+					toBox.setEdgeRegistered(this, false);
+				}
+				this.toBox = box;
+				break;
+			default:
+				throw new IllegalStateException("Unknown state: " + endPoint.name());
 		}
-		this.fromBox = box;
 	}
 	
-	/**
-	 * When using this method, keep in mind that eventually {@link #registerEdgeInEndpoints} need to be
-	 * called to keep consistency.
-	 */
-	public void connectToBox(BoxPrototype box)
-	{
-		if(this.toBox != null)
-		{
-			this.toBox.unregisterEdge(this);
-		}
-		this.toBox = box;
-	}
-
 	/**
 	 * Only call this method after both endpoints have been correctly set with the
-	 * {@link #connectFromBox} and {@link #connectToBox} methods.
+	 * {@link #setEndpoint(EndPoint endPoint, BoxPrototype box)} method.
 	 */
-	public void registerEdgeInEndpoints()
+	public void setEdgeRegisteredInEndpoints(boolean registered)
 	{
-		assert((fromBox != null) && (toBox != null));
-		this.fromBox.registerEdge(this);
-		this.toBox.registerEdge(this);
+		if(!areBothEndsDefined())
+		{
+			throw new IllegalStateException("One of the endpoint boxes has not been set for this edge.");
+		}
+		else
+		{
+			this.fromBox.setEdgeRegistered(this, registered);
+			this.toBox.setEdgeRegistered(this, registered);
+		}
 	}
 	
-	public void unregisterEdgeInEndpoints()
-	{
-		assert((fromBox != null) && (toBox != null));
-		this.fromBox.unregisterEdge(this);
-		this.toBox.unregisterEdge(this);
-	}
-	
+	/**
+	 * Recomputes the arrow path. If changes are to be visible in the kinetic environment, the 
+	 * {@link KineticEngine#draw(EngineComponent component)} needs to be called.
+	 */
 	public void updateEdge()
 	{
 		// compute new endpoints
@@ -510,7 +528,7 @@ public class EdgePrototype extends ExperimentGraphItem
 		{
 			updateEdge();
 		}
-		registerEdgeInEndpoints();
+		setEdgeRegisteredInEndpoints(true);
 		
 		// and switch visible components
 		baseLine.hide();

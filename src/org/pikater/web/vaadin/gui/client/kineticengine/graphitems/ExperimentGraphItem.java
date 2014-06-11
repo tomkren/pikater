@@ -39,14 +39,53 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	}
 	
 	/**
-	 * Mandatory method to be called when selecting/deselecting an item.
+	 * Mandatory method to be called when selecting/deselecting an item, however it only
+	 * changes the visual style and inner item's state. To achieve full selection/deselection,
+	 * selection plugin must also be used.
 	 */
 	public void invertSelection()
 	{
-		// IMPORTANT: don't violate the call order. Untrivial code editing prone to errors would have to follow.
+		// IMPORTANT: don't violate the call order. Not trivial code editing prone to errors would have to follow.
+		
+		// TODO: outsource the selection state to selection plugin?
+		
 		isSelected = !isSelected;
 		invertSelectionProgrammatically();
 		invertSelectionVisually();
+	}
+	
+	public void setVisibleInKinetic(boolean visible)
+	{
+		if(visible)
+		{
+			if(getMasterNode().isRegistered())
+			{
+				throw new IllegalStateException("Item is already registered.");
+			}
+			else if(isSelected())
+			{
+				throw new IllegalStateException("Can not register a selected box.");
+			}
+			else
+			{
+				registerInKinetic();
+			}
+		}
+		else
+		{
+			if(!getMasterNode().isRegistered())
+			{
+				throw new IllegalStateException("Can not remove an item that has not been registered.");
+			}
+			else if(isSelected())
+			{
+				throw new IllegalStateException("Can not remove a selected item.");
+			}
+			else
+			{
+				unregisterInKinetic();
+			}
+		}
 	}
 	
 	/**
@@ -68,17 +107,28 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	// ABSTRACT INTERFACE
 	
 	/**
-	 * Register the item in kinetic's environment. Access the environment using the "getKinetic()" method.
+	 * Register the item in kinetic's environment. The item is guaranteed not to be selected
+	 * or registered.
+	 * </br></br>
+	 * TIPS:
+	 * <ul>
+	 * <li> Access the environment using the {@link #getKineticEngine()} method.
+	 * <li> Use the {@link KineticEngine#getContainer(EngineComponent engineComponent)} method
+	 * to access the right kinetic container.
+	 * <li> Register the item with the {@link net.edzard.kinetic.Container#add()} method.
+	 * </ul> 
 	 */
-	public abstract void registerInKinetic();
+	protected abstract void registerInKinetic();
 	
 	/**
-	 * Unregister (remove) the item from kinetic environment.
+	 * Unregister (remove) the item from kinetic's environment. The item is guaranteed to be
+	 * registered and not to be selected.
 	 */
-	public abstract void unregisterInKinetic();
+	protected abstract void unregisterInKinetic();
 	
 	/**
-	 * Method to permanently destroy all inner nodes that make up this item.
+	 * Method to permanently destroy all inner nodes that make up this item. This method
+	 * needs to do nothing else than what it states.
 	 */
 	protected abstract void destroyInnerNodes();
 	
@@ -88,7 +138,8 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	protected abstract void invertSelectionVisually();
 	
 	/**
-	 * Method for any additional programmatic changes, if needed.
+	 * Method for any additional programmatic changes (exclusive to this item), if any
+	 * are needed.
 	 */
 	protected abstract void invertSelectionProgrammatically();
 	

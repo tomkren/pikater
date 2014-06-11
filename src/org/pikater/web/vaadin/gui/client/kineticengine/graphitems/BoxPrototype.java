@@ -37,7 +37,7 @@ public class BoxPrototype extends ExperimentGraphItem
 	
 	/**
 	 * Edges leading from and to this box and iterator over these 2 sets.
-	 * The Set interface is counted upon in {@link #registerEdge} and {@link #unregisterEdge}
+	 * The Set interface is counted upon in {@link #registerEdge()} and {@link #unregisterEdge()}
 	 * methods so don't change it lightly.
 	 */
 	public final Set<EdgePrototype> connectedEdges; 
@@ -55,14 +55,15 @@ public class BoxPrototype extends ExperimentGraphItem
 	// **********************************************************************************************
 	// EXTERNAL REFERENCES
 	
-	public final BoxInfo info;
+	private final BoxInfo info;
 	
 	/**
 	 * Regular constructor.
 	 */
-	public BoxPrototype(KineticEngine kineticEngine, String ID, BoxInfo info, Vector2d position)
+	public BoxPrototype(KineticEngine kineticEngine, BoxInfo info)
 	{
 		super(kineticEngine);
+		
 		this.info = info;
 		this.connectedEdges = new HashSet<EdgePrototype>();
 		
@@ -72,14 +73,14 @@ public class BoxPrototype extends ExperimentGraphItem
 		this.masterShape.setName(GlobalEngineConfig.name_box_masterRectangle); // the master shape that defines the bounds of the whole "box"
 		
 		// setup text label
-	    this.textLabel = Kinetic.createText(Vector2d.origin, info.name);
+	    this.textLabel = Kinetic.createText(Vector2d.origin, info.displayName);
 	    this.textLabel.setName(GlobalEngineConfig.name_box_textLabel);
 	    this.textLabel.setListening(false);
 	    
 	    this.boxContainer = Kinetic.createGroup();
-		this.boxContainer.setPosition(position);
+		this.boxContainer.setPosition(new Vector2d(info.initialX, info.initialY));
 		this.boxContainer.setName(GlobalEngineConfig.name_box_container);
-		this.boxContainer.setID(ID);
+		this.boxContainer.setID(info.boxID);
 		
 		this.boxContainer.add(masterShape);
 		this.boxContainer.add(textLabel);
@@ -118,13 +119,13 @@ public class BoxPrototype extends ExperimentGraphItem
 	// INHERITED INTERFACE
 	
 	@Override
-	public void registerInKinetic()
+	protected void registerInKinetic()
 	{
 		getKineticEngine().getContainer(EngineComponent.LAYER_BOXES).add(boxContainer);
 	}
 	
 	@Override
-	public void unregisterInKinetic()
+	protected void unregisterInKinetic()
 	{
 		boxContainer.remove();
 	}
@@ -213,9 +214,9 @@ public class BoxPrototype extends ExperimentGraphItem
 		return result;
 	}
 	
-	public String getID()
+	public BoxInfo getInfo()
 	{
-		return boxContainer.getID();
+		return info;
 	}
 	
 	public Vector2d getAbsoluteNodePosition()
@@ -248,13 +249,15 @@ public class BoxPrototype extends ExperimentGraphItem
 		masterShape.setSize(GWTKineticSettings.getCurrentBoxSize());
 	}
 	
-	public void registerEdge(EdgePrototype edge)
+	public void setEdgeRegistered(EdgePrototype edge, boolean registered)
 	{
-		connectedEdges.add(edge);
-	}
-	
-	public void unregisterEdge(EdgePrototype edge)
-	{
-		connectedEdges.remove(edge);
+		if(registered)
+		{
+			connectedEdges.add(edge);
+		}
+		else
+		{
+			connectedEdges.remove(edge);
+		}
 	}
 }

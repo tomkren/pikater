@@ -16,12 +16,18 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 	public SwapEdgeEndPointOperation(KineticEngine kineticEngine)
 	{
 		super(kineticEngine);
+		
 		DragEdgePlugin edgeDragOperation = (DragEdgePlugin) kineticEngine.getPlugin(DragEdgePlugin.pluginID);
 		this.edge = edgeDragOperation.getDraggedEdge();
 		this.endPointType = edgeDragOperation.getEndPointBeingChanged();
 		this.originalEndpoint = this.edge.getEndPoint(this.endPointType);
 		this.newEndpoint = kineticEngine.getHoveredBox();
-		assert(this.newEndpoint != null);
+		
+		if(this.newEndpoint == null)
+		{
+			throw new NullPointerException("Can not perform this operation because no hovered box was found. Did you"
+					+ "somehow break the track mouse plugin's functions?");
+		}
 	}
 
 	@Override
@@ -55,17 +61,7 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 	
 	private void setEdgeEndPoint(BoxPrototype box)
 	{
-		switch (endPointType)
-		{
-			case FROM:
-				edge.connectFromBox(box);
-				break;
-			case TO:
-				edge.connectToBox(box);
-				break;
-			default:
-				throw new IllegalStateException();
-		}
+		edge.setEndpoint(endPointType, box);
 		edge.updateEdge();
 	}
 	

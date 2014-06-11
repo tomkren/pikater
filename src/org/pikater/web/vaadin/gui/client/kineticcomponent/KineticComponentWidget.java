@@ -1,20 +1,15 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
 import net.edzard.kinetic.Kinetic;
-import net.edzard.kinetic.Vector2d;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.Experiment;
-import org.pikater.shared.experiment.webformat.ExperimentMetadata;
+import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.KineticUndoRedoManager;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.CreateEdgePlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.DragEdgePlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.TrackMousePlugin;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.google.gwt.core.client.Scheduler;
@@ -27,7 +22,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.FocusPanel;
 
-public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc, KineticComponentServerRpc
+public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc, KineticComponentServerRpc, IKineticEngineContext
 {
 	private static final long serialVersionUID = 946534795907059986L;
 	
@@ -45,7 +40,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 * Backup of the last loaded experiment. Since it is shared in the component's state, we have
 	 * to know when it is changed and when it is not.	
 	 */
-	private Experiment lastLoadedExperiment;
+	private ExperimentGraph lastLoadedExperiment;
 	
 	// ------------------------------------------------------
 	// PROGRAMMATIC FIELDS
@@ -67,16 +62,9 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		 */
 		
 		// initialize kinetic managers
-		this.kineticState = new KineticEngine(this, Kinetic.createStage(getKineticEnvParentElement()));
+		this.kineticState = new KineticEngine(this, Kinetic.createStage(getStageDOMElement()));
 		this.kineticCreator = new KineticShapeCreator(this.kineticState);
 		this.undoRedoManager = new KineticUndoRedoManager(this);
-		
-		// add plugins to the engine
-		// IMPORTANT: don't violate the call order - it is very important for correct functionality since plugins may depend upon others
-		this.kineticState.addPlugin(new TrackMousePlugin(this.kineticState));
-		this.kineticState.addPlugin(new DragEdgePlugin(this.kineticState));
-		this.kineticState.addPlugin(new CreateEdgePlugin(kineticState));
-		this.kineticState.addPlugin(new SelectionPlugin(kineticState));
 		
 		// when the GWT event loop finishes and the component is fully read and its information published
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
@@ -131,11 +119,8 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 					case 87: // W
 						if(GWTKeyboardManager.isAltKeyDown())
 						{
-							// first alter the click mode
-							KineticComponentClickMode newClickMode = getSharedState().clickMode.getOther();
-							getSharedState().clickMode = newClickMode;
-							// and send notification to the server
-							command_alterClickModeNotification(newClickMode);
+							// the click mode will really be changed on the server...
+							command_alterClickMode(getClickMode().getOther());
 						}
 						break;
 					default:
@@ -174,14 +159,14 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	// COMMANDS FROM SERVER
 	
 	@Override
-	public void command_createBox(final BoxInfo info, final int posX, final int posY)
+	public void command_createBox(final BoxInfo info)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
 		    public void execute()
 			{
-				getShapeCreator().createBox(NodeRegisterType.AUTOMATIC, info, new Vector2d(posX, posY));
+				getShapeCreator().createBox(NodeRegisterType.AUTOMATIC, info);
 		    }
 		});
 	}
@@ -191,7 +176,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 * resets the environment.
 	 */
 	@Override
-	public void command_receiveExperimentToLoad(final Experiment experiment)
+	public void command_receiveExperimentToLoad(final ExperimentGraph experiment)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -226,7 +211,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			@Override
 		    public void execute()
 			{
-				getEngine().resetEnvironment();
+				getEngine().destroyGraphAndClearStage();
 				getUndoRedoManager().clear();
 		    }
 		});
@@ -243,17 +228,16 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				getEngine().reloadVisualStyle();
 		    }
 		});
-		
 	}
 	
 	@Override
-	public void request_sendExperimentToSave(ExperimentMetadata metadata)
+	public void request_sendExperimentToSave()
 	{
-		response_sendExperimentToSave(metadata, getEngine().toIntermediateFormat());
+		response_sendExperimentToSave(getEngine().toIntermediateFormat());
 	}
 	
 	// *****************************************************************************************************
-	// COMMANDS TO SERVER
+	// COMMANDS TO SERVER - SIMPLE FORWARDING
 	
 	@Override
 	public void command_setExperimentModified(boolean modified)
@@ -268,50 +252,69 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
+	public void command_alterClickMode(KineticComponentClickMode newClickMode)
+	{
+		getServerRPC().command_alterClickMode(newClickMode);
+	}
+	
+	@Override
+	public void command_openOptionsManager(Integer[] selectedBoxesAgentIDs)
+	{
+		getServerRPC().command_openOptionsManager(selectedBoxesAgentIDs);
+	}
+	
+	@Override
 	public void response_reloadVisualStyle()
 	{
 		getServerRPC().response_reloadVisualStyle();
 	}
 	
 	@Override
-	public void response_sendExperimentToSave(ExperimentMetadata metadata, Experiment experiment)
+	public void response_sendExperimentToSave(ExperimentGraph experiment)
 	{
-		getServerRPC().response_sendExperimentToSave(metadata, experiment);
+		getServerRPC().response_sendExperimentToSave(experiment);
 		getUndoRedoManager().clear();
 	}
 	
-	@Override
-	public void command_alterClickModeNotification(KineticComponentClickMode newClickMode)
-	{
-		getServerRPC().command_alterClickModeNotification(newClickMode);
-	}
-	
 	// *****************************************************************************************************
-	// OTHER PUBLIC INTERFACE
+	// KINETIC CONTEXT INTERFACE
 	
-	public Element getKineticEnvParentElement()
+	@Override
+	public Element getStageDOMElement()
 	{
 		return getElement();
 	}
-	
-	public KineticEngine getEngine()
-	{
-		return kineticState;
-	}
-	
+
+	@Override
 	public KineticShapeCreator getShapeCreator()
 	{
 		return kineticCreator;
 	}
 	
+	@Override
 	public KineticUndoRedoManager getUndoRedoManager()
 	{
 		return undoRedoManager;
 	}
 	
-	public KineticComponentState getSharedState()
+	@Override
+	public KineticComponentClickMode getClickMode()
 	{
-		return connector.getState();
+		return connector.getState().clickMode;
+	}
+	
+	@Override
+	public boolean openOptionsManagerOnSelectionChange()
+	{
+		return connector.getState().openOptionsOnSelection;
+	}
+	
+	// *****************************************************************************************************
+	// OTHER PUBLIC INTERFACE
+	
+	public KineticEngine getEngine()
+	{
+		return kineticState;
 	}
 	
 	// *****************************************************************************************************
