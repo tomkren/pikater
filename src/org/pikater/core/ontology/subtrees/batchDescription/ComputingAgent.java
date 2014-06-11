@@ -86,14 +86,14 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 	    		trainingData.exportUniversalConnector(uModel);
 	    universalTrainingData.setInputDataType("trainingData");
 
-		UniversalOntology element = new UniversalOntology();
-		element.setType(this.getClass());
-		element.setOptions(options);
-		element.addInputSlot(universalTrainingData);
+		UniversalOntology ontologyInfo = new UniversalOntology();
+		ontologyInfo.setType(this.getClass());
+		ontologyInfo.setOptions(options);
+		ontologyInfo.addInputSlot(universalTrainingData);
 		
-		UniversalElement wrapper =
-				new UniversalElement(uModel);
-		wrapper.setElement(element);
+		UniversalElement wrapper = new UniversalElement();
+		wrapper.setOntologyInfo(ontologyInfo);
+		uModel.addElement(wrapper);
 		
 		return wrapper;
 	}

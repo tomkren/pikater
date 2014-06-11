@@ -73,10 +73,10 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 	UniversalElement exportUniversalElement(
 			UniversalComputationDescription uModel) {
 
-		UniversalOntology element = new UniversalOntology();
-		element.setType(this.getClass());
-		element.setOptions(options);
-		element.setErrors(errors);
+		UniversalOntology ontologyInfo = new UniversalOntology();
+		ontologyInfo.setType(this.getClass());
+		ontologyInfo.setOptions(options);
+		ontologyInfo.setErrors(errors);
 
 		if (computingAgent != null) {
 
@@ -85,9 +85,9 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 
 			UniversalConnector universalComputingAgent = new UniversalConnector();
 			universalComputingAgent.setInputDataType("computingAgent");
-			universalComputingAgent.setUniversalDataProvider(computingAgentInputSlot);
+			universalComputingAgent.setFromElement(computingAgentInputSlot);
 			
-			element.addInputSlot(universalComputingAgent);
+			ontologyInfo.addInputSlot(universalComputingAgent);
 		}
 		if (search != null) {
 			
@@ -96,9 +96,9 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 					
 			UniversalConnector universalSearch = new UniversalConnector();
 			universalSearch.setInputDataType("search");
-			universalSearch.setUniversalDataProvider(searchInputSlot);
+			universalSearch.setFromElement(searchInputSlot);
 			
-			element.addInputSlot(universalSearch);
+			ontologyInfo.addInputSlot(universalSearch);
 		}
 
 		if (recommender != null) {
@@ -108,15 +108,15 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 
 			UniversalConnector universalRecommend = new UniversalConnector();
 			universalRecommend.setInputDataType("recommend");
-			universalRecommend.setUniversalDataProvider(recommenderInputSlot);
+			universalRecommend.setFromElement(recommenderInputSlot);
 
-			element.addInputSlot(universalRecommend);
+			ontologyInfo.addInputSlot(universalRecommend);
 		}
 		
 		
-		UniversalElement wrapper =
-				new UniversalElement(uModel);
-		wrapper.setElement(element);
+		UniversalElement wrapper = new UniversalElement();
+		wrapper.setOntologyInfo(ontologyInfo);
+		uModel.addElement(wrapper);
 		
 		return wrapper;
 	}

@@ -36,13 +36,13 @@ public class FileDataProvider extends AbstractDataProcessing implements IDataPro
 		List<Option> options = new ArrayList<Option>();
 		options.add(fileURIOption);
 		
-		UniversalOntology element = new UniversalOntology();
-		element.setType(this.getClass());
-		element.setOptions(options);
+		UniversalOntology ontologyInfo = new UniversalOntology();
+		ontologyInfo.setType(this.getClass());
+		ontologyInfo.setOptions(options);
 
-		UniversalElement wrapper =
-				new UniversalElement(uModel);
-		wrapper.setElement(element);
+		UniversalElement wrapper = new UniversalElement();
+		wrapper.setOntologyInfo(ontologyInfo);
+		uModel.addElement(wrapper);
 		
 		return wrapper;
 	}

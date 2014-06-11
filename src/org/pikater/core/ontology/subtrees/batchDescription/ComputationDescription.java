@@ -57,7 +57,7 @@ public class ComputationDescription implements Concept {
 		if (getGlobalOptions() != null) {
 			for (int i = 0; i < getGlobalOptions().size(); i++) {
 				Option optionI = (Option) getGlobalOptions().get(i);
-				uModel.addGlobalOption( optionI );
+				uModel.addGlobalOptions( optionI );
 			}
 		}
 

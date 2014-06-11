@@ -63,9 +63,9 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
 	UniversalElement exportUniversalElement(
 			UniversalComputationDescription uModel) {
 
-		UniversalOntology element = new UniversalOntology();
-		element.setType(this.getClass());
-		element.setOptions(options);
+		UniversalOntology ontologyInfo = new UniversalOntology();
+		ontologyInfo.setType(this.getClass());
+		ontologyInfo.setOptions(options);
 
 		for (int i = 0; i < dataSources.size(); i++) {
 
@@ -73,11 +73,12 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
 					(DataSourceDescription) dataSources.get(i);
 			UniversalConnector uc = dI.exportUniversalConnector(uModel);
 
-			element.addInputSlot(uc);
+			ontologyInfo.addInputSlot(uc);
 		}
 
-		UniversalElement wrapper = new UniversalElement(uModel);
-		wrapper.setElement(element);
+		UniversalElement wrapper = new UniversalElement();
+		wrapper.setOntologyInfo(ontologyInfo);
+		uModel.addElement(wrapper);
 		
 		return wrapper;
 	}

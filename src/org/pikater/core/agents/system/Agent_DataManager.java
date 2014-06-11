@@ -32,7 +32,6 @@ import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
-import org.pikater.shared.database.utils.Hash;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.ConnectionProvider;
 import org.pikater.shared.utilities.logging.PikaterLogger;
@@ -65,7 +64,6 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
@@ -268,7 +266,7 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		userId=user.getId();
 		
-        String batchXml = uDescription.exportXML();		
+        String batchXml = uDescription.toXML();		
         
         int totalPriority = 10*user.getPriorityMax() + batch.getPriority();
 
