@@ -9,6 +9,7 @@ import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.web.vaadin.gui.server.components.forms.ChangePasswordForm;
 import org.pikater.web.vaadin.gui.server.components.forms.CreateAccountForm;
 import org.pikater.web.vaadin.gui.server.components.forms.LoginForm;
+import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -197,6 +198,33 @@ public class MyDialogs
 				Icon.NONE,
 				"Change password",
 				cpForm,
+				listener,
+				ButtonId.OK, ButtonId.CANCEL
+		);
+		listener.setParentBox(mb); // don't forget this!
+		setupMessageBox(mb, ButtonId.OK, false, true);
+	}
+	
+	public static void saveExperimentDialog(final DialogResultHandler resultHandler)
+	{
+		final SaveExperimentForm seForm = new SaveExperimentForm();
+		MyMessageBoxListener listener = new MyMessageBoxListener(resultHandler)
+		{
+			@Override
+			protected boolean handleOK()
+			{
+				getResultHandler().addArg(seForm.getExperimentName());
+				getResultHandler().addArg(seForm.getPriorityAssignedByUser());
+				getResultHandler().addArg(seForm.getComputationEstimateInHours());
+				getResultHandler().addArg(seForm.getSendEmailWhenFinished());
+				getResultHandler().addArg(seForm.getExperimentNote());
+				return super.handleOK();
+			}
+		};
+		MessageBox mb = MessageBox.showCustomized(
+				Icon.NONE,
+				"Save experiment from active tab",
+				seForm,
 				listener,
 				ButtonId.OK, ButtonId.CANCEL
 		);
