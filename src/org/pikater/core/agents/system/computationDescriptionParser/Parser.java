@@ -154,10 +154,15 @@ public class Parser {
         }
         ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent);
         computationGraph.addNode(computingNode);
-        addOptionsToInputs(computingNode,new ArrayList<Option>());
 
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
         computingNode.setModelClass(computingAgentO.getAgentType());
+        ArrayList<Option> options=new ArrayList<Option>();
+        for (Option o:computingAgentO.getOptions())
+        {
+            options.add(o);
+        }
+        addOptionsToInputs(computingNode,options);
         fillDataSources(computingAgentO,computingNode);
 
         return computingNode;

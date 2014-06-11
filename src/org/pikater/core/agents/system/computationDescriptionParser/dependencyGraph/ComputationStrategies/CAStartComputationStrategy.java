@@ -10,6 +10,7 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.ExecuteTaskBehaviour;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
@@ -34,10 +35,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
 	int computationId; 
 	int graphId;
-	ComputationNode computationNode;
+	ModelComputationNode computationNode;
 	
 	public CAStartComputationStrategy (Agent_Manager manager, int computationId, 
-			int graphId, ComputationNode computationNode){
+			int graphId, ModelComputationNode computationNode){
 		myAgent = manager;
 		this.computationId = computationId;
         this.graphId = graphId;
@@ -122,7 +123,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
         OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
         Options options = new Options(optionEdge.getOptions());
 	    // TODO zbavit se Options -> list instead
-        agent.setType((String)inputs.get("modelType").getNext());
+        agent.setType(computationNode.getModelClass());
 		if (inputs.get("searchSolution") != null){
 			SearchSolution ss = (SearchSolution)inputs.get("searchSolution").getNext();
 			options =  fillOptionsWithSolution(options.getList(), ss);
@@ -138,9 +139,16 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		task.setGraphId(graphId);
 		task.setAgent(agent);
 		task.setData(data);
-		task.setEvaluation_method((EvaluationMethod)inputs.get("evaluation_method").getNext());
+        Option eval=options.getOption("evaluation_method");
+        if (eval!=null)
+        {
+            EvaluationMethod evaluation_method = new EvaluationMethod();
+            evaluation_method.setName(eval.getValue());
+            task.setEvaluation_method(evaluation_method);
+        }
+
 
 		return task;
 	}
-	
+
 }

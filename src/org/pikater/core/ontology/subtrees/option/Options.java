@@ -23,4 +23,13 @@ public class Options implements Concept{
 	}
 	public Options(){
 	}
+
+    public Option getOption(String optionName)
+    {
+        for (Option option:list) {
+            if (option.getName().equals(optionName))
+                return option;
+        }
+        return null;
+    }
 }

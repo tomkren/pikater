@@ -32,15 +32,21 @@ public final class Input1 {
 
         StepanuvOption optionM = new StepanuvOption();
         optionM.setName("M");
-        optionM.setOption( new OptionValue(-1) );
+        optionM.setOption( new OptionValue(-2) );
+
+        StepanuvOption optionEM = new StepanuvOption();
+        optionEM.setName("evaluation_method");
+        optionEM.setOption( new OptionValue("CrossValidation") );
 
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent.addOption( Converter.toOption(optionS) );
 		comAgent.addOption( Converter.toOption(optionM) );
+        comAgent.addOption( Converter.toOption(optionEM) );
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
+
 
         //Labeled data labeled by our CA are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();
