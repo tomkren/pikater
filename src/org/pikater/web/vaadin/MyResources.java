@@ -48,6 +48,7 @@ public class MyResources
 	public static final String relPath_IMG_nextIcon16 = "images/Arrow-Next-icon-16x16.png";
 	public static final String relPath_IMG_plusIcon16 = "images/Plus-icon-16x16.png";
 	public static final String relPath_IMG_closeIcon16 = "images/close-icon-16x16.png";
+	public static final String relPath_IMG_minimizeIcon16 = "images/minimize-icon-16x16.png";
 	
 	// ----------------------------------------------------------------
 	// RESOURCE FIELDS:
@@ -75,6 +76,7 @@ public class MyResources
 	public static final ThemeResource img_nextIcon16 = new ThemeResource(relPath_IMG_nextIcon16);
 	public static final ThemeResource img_plusIcon16 = new ThemeResource(relPath_IMG_plusIcon16);
 	public static final ThemeResource img_closeIcon16 = new ThemeResource(relPath_IMG_closeIcon16);
+	public static final ThemeResource img_minimizeIcon16 = new ThemeResource(relPath_IMG_minimizeIcon16);
 	
 	// ----------------------------------------------------------------
 	// PUBLIC METHODS:
