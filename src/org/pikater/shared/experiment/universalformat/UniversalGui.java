@@ -1,20 +1,9 @@
 package org.pikater.shared.experiment.universalformat;
 
-import java.io.Serializable;
-
-public class UniversalGui implements Serializable
+public class UniversalGui
 {
-	private static final long serialVersionUID = 602561730450272920L;
-	
-	public int x;
-	public int y;
-	
-	/**
-	 * Keeps GWT and Vaadin happy.
-	 */
-	protected UniversalGui()
-	{
-	}
+	public final int x;
+	public final int y;
 	
 	public UniversalGui(int x, int y)
 	{

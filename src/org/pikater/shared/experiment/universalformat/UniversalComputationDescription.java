@@ -1,134 +1,121 @@
 package org.pikater.shared.experiment.universalformat;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.option.Option;
-
-import com.thoughtworks.xstream.XStream;
+import org.pikater.shared.XStreamHelper;
 
 public class UniversalComputationDescription
 {
-
-	private ArrayList<Option> globalOptions;
-
 	/**
-	 * Contains all ontology elements.
+	 * Top-level options for this computation.
 	 */
-	private ArrayList<UniversalElement> elements;
-
+	private final Set<Option> globalOptions;
+	
 	/**
 	 * Tree of ComputingDescription. Ontology elements wrapped in
 	 * UniversalElement ArrayList. Contains only FileDataSavers.
 	 */
-	private ArrayList<UniversalElement> rootElements;
+	private final Set<UniversalElement> rootElements;
 
 	/**
-	 * Tree of Gui wrapperBoxes. Null if all UniversalElements doesn't contains
-	 * any UniversalGui object.
+	 * Contains all elements added to this computation.
 	 */
-	private UniversalGuiWrapper guiWrappers;
+	private final Set<UniversalElement> allElements;
 
 	/**
-	 * Global options of experiment.
+	 * Default wrapper for top-level elements. All elements and wrappers either have this
+	 * wrapper as a parent or another. 
 	 */
-	public ArrayList<Option> getGlobalOptions()
+	private final UniversalGuiWrapper defaultWrapper;
+	
+	public UniversalComputationDescription()
 	{
-		if (this.globalOptions == null)
-		{
-			return new ArrayList<Option>();
-		}
+		this.globalOptions = new HashSet<Option>();
+		this.rootElements = new HashSet<UniversalElement>();
+		this.allElements = new HashSet<UniversalElement>();
+		this.defaultWrapper = new UniversalGuiWrapper(null);
+	}
+	
+	// ----------------------------------------------------------
+	// SOME BASIC INTERFACE
+
+	public Set<Option> getGlobalOptions()
+	{
 		return globalOptions;
 	}
 
-	public void addGlobalOptions(ArrayList<Option> globalOptions)
+	public void addGlobalOptions(Option... options)
 	{
-		if (this.globalOptions == null)
-		{
-			this.globalOptions = new ArrayList<Option>();
-		}
-		this.globalOptions.addAll(globalOptions);
+		this.globalOptions.addAll(Arrays.asList(options));
 	}
-
-	public void addGlobalOption(Option globalOption)
-	{
-		if (this.globalOptions == null)
-		{
-			this.globalOptions = new ArrayList<Option>();
-		}
-		this.globalOptions.add(globalOption);
-	}
-
-	/**
-	 * UniversalElements containing FileDataSavers ontology + guiInfo
-	 */
-	public ArrayList<UniversalElement> getRootElements()
+	
+	public Set<UniversalElement> getRootElements()
 	{
 		return rootElements;
 	}
 	
-	public ArrayList<UniversalElement> getElements()
+	public Set<UniversalElement> getAllElements()
 	{
-		return elements;
+		return allElements;
 	}
 
-	/**
-	 * Add UniversalElement
-	 */
-	void addElement(UniversalElement element)
+	public void addElement(UniversalElement element)
 	{
-		if (element.getElement() == null)
+		if(!element.isOntologyDefined())
 		{
-			throw new IllegalArgumentException(
-					"UniversalElement doesn't contain element");
+			throw new IllegalArgumentException("The given element didn't have ontology defined.");
 		}
-
-		if (this.elements == null)
+		else
 		{
-			this.elements = new ArrayList<UniversalElement>();
-		}
-		this.elements.add(element);
-
-		if (element.getElement().getType() == FileDataSaver.class)
-		{
-			if (this.rootElements == null)
+			allElements.add(element);
+			if (element.getOntologyInfo().getType() == FileDataSaver.class)
 			{
-				this.rootElements = new ArrayList<UniversalElement>();
+				rootElements.add(element);
 			}
-			this.rootElements.add(element);
-		}
-
-		if (element.getGui() == null)
-		{
-
-			if (guiWrappers == null)
+			// TODO: change data structures when wrappers are really needed
+			/*
+			if (element.getParentWrapper() == null)
 			{
-				this.guiWrappers = new UniversalGuiWrapper();
+				defaultWrapper.addElements(element);
 			}
-			this.guiWrappers.addGuiWrapper(guiWrappers);
+			*/
 		}
 	}
+	
+	/**
+	 * Can this experiment be shown in the experiment editor? In other words,
+	 * can it be converted to the web format?
+	 */
+	public boolean isGUICompatible()
+	{
+		for (UniversalElement elementI : this.rootElements)
+		{
+			if (elementI.getGUIInfo() == null)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	// ----------------------------------------------------------
+	// MANIPULATION WITH WRAPPERS
 
 	/**
-	 * Creates a new UniversalGuiWrapper and moves all the listed UniversalGuiWrappers and UniversalElements inside it.
-	 * REQUIREMENT: Input wrappers and elements must have identical direct parent (UniversalGuiWrapper).
+	 * Creates a new {@link UniversalGuiWrapper} and moves all the listed arguments inside it.
+	 * REQUIREMENT: argument wrappers and elements must have identical direct parent ({@link UniversalGuiWrapper}).
 	 */
-	public void insertIntoGuiWrapper(ArrayList<UniversalGuiWrapper> guiWrappers, ArrayList<UniversalElement> elements)
+	/*
+	public void insertIntoGuiWrapper(ArrayList<UniversalGuiWrapper> wrappers, ArrayList<UniversalElement> elements)
 	{
-		// TODO: some states don't seem to be handled properly which could produce bugs.
-		
-		if (guiWrappers == null && elements == null)
+		if (((wrappers == null) || wrappers.isEmpty()) && ((elements == null) || elements.isEmpty()))
 		{
-			throw new IllegalArgumentException(
-					"Both lists are null (guiWrappers and elements)");
-		}
-
-		if (guiWrappers.isEmpty() && elements.isEmpty())
-		{
-			throw new IllegalArgumentException(
-					"Both lists are empty (guiWrappers and elements)");
+			throw new IllegalArgumentException("No wrappers or elements to construct the new wrapper from were received.");
 		}
 
 		UniversalGuiWrapper parent = null;
@@ -166,66 +153,79 @@ public class UniversalComputationDescription
 
 		UniversalGuiWrapper newWrapper = new UniversalGuiWrapper();
 		newWrapper.addElements(elements);
-		newWrapper.addGuiWrappers(guiWrappers);
+		newWrapper.addWrappers(guiWrappers);
 
 		parent.replaceByWrapper(newWrapper);
 	}
 
-	private UniversalGuiWrapper getParentWrapperOf(UniversalGuiWrapper wrapper)
+    public void replaceByWrapper(UniversalGuiWrapper wrapper)
+    {
+    	childElements.removeAll(wrapper.getChildWrappers());
+    	childWrappers.removeAll(wrapper.getChildWrappers());
+    	childWrappers.add(wrapper);
+    }
+	
+    // this has be implemented in a completely different way
+    public UniversalGuiWrapper getParentWrapper(UniversalElement element) {
+
+    	if (this.elements.contains(element)) {
+    		return this;
+    	} else {
+
+    		for (UniversalGuiWrapper wrapperI : guiWrappers) {
+    			UniversalGuiWrapper result =
+    					wrapperI.getParentWrapper(element);
+    			if ( result != null ) {
+    				return result;
+    			}
+    		}
+    		return null;
+    	}
+    }
+	*/
+	
+	public static UniversalComputationDescription getDummy()
 	{
-		return this.guiWrappers.getParentWrapper(wrapper);
+		UniversalComputationDescription result = new UniversalComputationDescription();
+		
+		UniversalOntology ontologyInfo1 = new UniversalOntology();
+		UniversalElement element1 = new UniversalElement();
+		element1.setGUIInfo(new UniversalGui(10, 10));
+		element1.setOntologyInfo(ontologyInfo1);
+		
+		UniversalOntology ontologyInfo2 = new UniversalOntology();
+		UniversalElement element2 = new UniversalElement();
+		element2.setGUIInfo(new UniversalGui(500, 10));
+		element2.setOntologyInfo(ontologyInfo2);
+		
+		UniversalOntology ontologyInfo3 = new UniversalOntology();
+		UniversalElement element3 = new UniversalElement();
+		element3.setGUIInfo(new UniversalGui(400, 300));
+		element3.setOntologyInfo(ontologyInfo3);
+		
+		result.addElement(element1);
+		result.addElement(element2);
+		result.addElement(element3);
+		
+		return result;
 	}
-
-	private UniversalGuiWrapper getParentWrapperOf(UniversalElement element)
+	
+	public String toXML()
 	{
-		return this.guiWrappers.getParentWrapper(element);
+		return XStreamHelper.serializeToXML(this, 
+        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
 	}
-
-	/**
-	 * Decides if this Experiment can be shown in Gui.
-	 */
-	public boolean isGUICompatible()
+	
+	public static UniversalComputationDescription fromXML(String xml)
 	{
-		if (this.rootElements == null)
-		{
-			return false;
-		}
-
-		for (UniversalElement elementI : this.rootElements)
-		{
-			if (elementI.getGui() == null)
-			{
-				return false;
-			}
-		}
-		return true;
+		return XStreamHelper.deserializeFromXML(UniversalComputationDescription.class, xml, 
+        		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
 	}
-
-	/**
-	 * Export to XML
-	 */
-	public String exportXML()
-	{
-		XStream xstream = new XStream();
-		return xstream.toXML(this);
-	}
-
-	/**
-	 * Import to XML
-	 */
-	public static UniversalComputationDescription importXML(String xml)
-	{
-		XStream xstream = new XStream();
-		return (UniversalComputationDescription) xstream.fromXML(xml);
-	}
-
+	
 	public static void main(String[] args)
 	{
-		ComputationDescription description = SearchOnly.createDescription();
-
-		UniversalComputationDescription uDescription = description.ExportUniversalComputationDescription();
-
-		String xml = uDescription.exportXML();
-		System.out.println(xml);
+		UniversalComputationDescription uDescription = SearchOnly.createDescription().ExportUniversalComputationDescription();
+		System.out.println(XStreamHelper.serializeToXML(uDescription, 
+				XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class)));
 	}
 }

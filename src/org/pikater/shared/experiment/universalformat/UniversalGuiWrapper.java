@@ -1,105 +1,65 @@
 package org.pikater.shared.experiment.universalformat;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-public class UniversalGuiWrapper {
+public class UniversalGuiWrapper
+{
+	private UniversalGuiWrapper parentWrapper; 
+	private final Set<UniversalGuiWrapper> childWrappers;
+	private final Set<UniversalElement> childElements;
 
-	private ArrayList<UniversalGuiWrapper> guiWrappers;
-
-	private ArrayList<UniversalElement> elements;
-
-	UniversalGuiWrapper() {}
-
-	/**
-	 *  Create and save new GuiWrapper
-	 */
-    void replaceByWrapper(UniversalGuiWrapper wrapper) {
-    	
-    	this.elements.removeAll( wrapper.getElements() );
-    	this.guiWrappers.removeAll( wrapper.getGuiWrappers() );
-    	
-    	this.guiWrappers.add(wrapper);
-    }
-
-	ArrayList<UniversalGuiWrapper> getGuiWrappers() {
-		return this.guiWrappers;
-	}
-	ArrayList<UniversalElement> getElements() {
-		return this.elements;
+	public UniversalGuiWrapper(UniversalGuiWrapper parentWrapper)
+	{
+		this.parentWrapper = parentWrapper;
+		this.childWrappers = new HashSet<UniversalGuiWrapper>();
+		this.childElements = new HashSet<UniversalElement>();
 	}
 
-    void addElements(ArrayList<UniversalElement> elements) {
-    	if (elements == null) {
+	public Collection<UniversalGuiWrapper> getChildWrappers()
+	{
+		return childWrappers;
+	}
+	
+	public Collection<UniversalElement> getChildElements()
+	{
+		return childElements;
+	}
+
+    public void addElements(UniversalElement... elements)
+    {
+    	if (elements == null)
+    	{
     		return;
     	}
 
-    	for (UniversalElement elementI : elements) {
-    		addElement(elementI);
+    	for (UniversalElement elementI : elements)
+    	{
+    		this.childElements.add(elementI);
     	}
     }
-    void addGuiWrappers(ArrayList<UniversalGuiWrapper> wrappers) {
-    	if (wrappers == null) {
+    
+    public void addWrappers(UniversalGuiWrapper... wrappers)
+    {
+    	if (wrappers == null)
+    	{
     		return;
     	}
 
-    	for (UniversalGuiWrapper wrapperI : wrappers) {
-    		this.addGuiWrapper(wrapperI);
+    	for (UniversalGuiWrapper wrapperI : wrappers)
+    	{
+    		childWrappers.add(wrapperI);
     	}
     }
-    void addElement(UniversalElement element) {
-
-    	if (this.elements == null ) {
-    		this.elements = new ArrayList<UniversalElement>();
-    	}
-    	this.elements.add(element);
+    
+    public UniversalGuiWrapper getParentWrapper()
+    {
+    	return parentWrapper;
     }
-
-    void addGuiWrapper(UniversalGuiWrapper wrapper) {
-    	
-    	if (this.guiWrappers == null ) {
-    		this.guiWrappers = new ArrayList<UniversalGuiWrapper>();
-    	}
-    	this.guiWrappers.add(wrapper);
+    
+    public void setParentWrapper(UniversalGuiWrapper parentWrapper)
+    {
+    	this.parentWrapper = parentWrapper;
     }
-
-    /**
-     * Return parentWrapper of wrapper in parameter
-     */
-    UniversalGuiWrapper getParentWrapper(UniversalGuiWrapper wrapper) {
-
-    	if (this.guiWrappers.contains(wrapper)) {
-    		return this;
-    	} else {
-
-    		for (UniversalGuiWrapper wrapperI : this.guiWrappers) {
-    			UniversalGuiWrapper result =
-    					wrapperI.getParentWrapper(wrapper);
-    			if ( result != null ) {
-    				return result;
-    			}
-    		}
-    		return null;
-    	}
-    }
- 
-    /**
-     * Return parentWrapper of element in parameter
-     */
-    UniversalGuiWrapper getParentWrapper(UniversalElement element) {
-
-    	if (this.elements.contains(element)) {
-    		return this;
-    	} else {
-
-    		for (UniversalGuiWrapper wrapperI : guiWrappers) {
-    			UniversalGuiWrapper result =
-    					wrapperI.getParentWrapper(element);
-    			if ( result != null ) {
-    				return result;
-    			}
-    		}
-    		return null;
-    	}
-    }
-
 }

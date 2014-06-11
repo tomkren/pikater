@@ -2,46 +2,39 @@ package org.pikater.shared.experiment.universalformat;
 
 public class UniversalElement
 {
-	private UniversalComputationDescription uModel;
-	private UniversalOntology element;
-	private UniversalGui gui;
-
-	@SuppressWarnings("all")
-	private UniversalElement()
+	private UniversalOntology ontologyInfo;
+	private UniversalGui guiInfo;
+	
+	public UniversalOntology getOntologyInfo()
 	{
-	}
-
-	public UniversalElement(UniversalComputationDescription description)
-	{
-		this.uModel = description;
-	}
-
-	public UniversalOntology getElement()
-	{
-		return element;
+		return ontologyInfo;
 	}
 	
-	public void setElement(UniversalOntology element) 
+	public boolean isOntologyDefined()
 	{
-		if (element == null)
-		{
-			throw new NullPointerException("Argument can not be null");
-		}
-		this.element = element;
-		this.uModel.addElement(this); // TODO: bug if called multiple times?
-	}
-
-	public UniversalGui getGui()
-	{
-		return gui;
+		return ontologyInfo != null;
 	}
 	
-	public void setGui(UniversalGui gui)
+	public void setOntologyInfo(UniversalOntology ontologyInfo) 
 	{
-		if (this.gui != null && gui == null)
+		if (ontologyInfo == null)
 		{
-			throw new NullPointerException("UniversalGui can not be changed to null");
+			throw new NullPointerException("Argument can not be null.");
 		}
-		this.gui = gui;
+		this.ontologyInfo = ontologyInfo;
+	}
+
+	public UniversalGui getGUIInfo()
+	{
+		return guiInfo;
+	}
+	
+	public void setGUIInfo(UniversalGui guiInfo)
+	{
+		if(guiInfo == null)
+		{
+			throw new NullPointerException("Argument can not be null.");
+		}
+		this.guiInfo = guiInfo;
 	}
 }
