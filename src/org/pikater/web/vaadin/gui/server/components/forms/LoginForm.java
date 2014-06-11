@@ -1,6 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
-import org.pikater.web.vaadin.gui.server.components.forms.fields.LoginField;
+import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormTextField;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldGenerator;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.PasswordField;
 
 import com.vaadin.ui.Button.ClickListener;
@@ -9,15 +11,15 @@ public class LoginForm extends CustomFormLayout
 {
 	private static final long serialVersionUID = -2356468027629344476L;
 	
-	private final LoginField loginField;
+	private final FormTextField loginField;
 	private final PasswordField passwordField;
 	
 	public LoginForm()
 	{
 		super(null);
 		
-		this.loginField = new LoginField("sj", true, false);
-		this.passwordField = new PasswordField("123", true, false);
+		this.loginField = FormFieldGenerator.getLoginField("sj", true, false);
+		this.passwordField = new PasswordField("Password:", "123", true, false);
 		
 		addField(this.loginField, "login");
 		addField(this.passwordField, "password");

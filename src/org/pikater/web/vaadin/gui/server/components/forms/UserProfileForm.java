@@ -3,8 +3,9 @@ package org.pikater.web.vaadin.gui.server.components.forms;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.web.config.ServerConfigurationInterface;
-import org.pikater.web.vaadin.gui.server.components.forms.fields.EmailField;
-import org.pikater.web.vaadin.gui.server.components.forms.fields.LoginField;
+import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormTextField;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldGenerator;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.PasswordField;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
@@ -19,9 +20,9 @@ public class UserProfileForm extends CustomFormLayout
 
 	private JPAUser currentUser;
 	
-	private final LoginField loginField;
+	private final FormTextField loginField;
 	private final PasswordField passwordField; 
-	private final EmailField emailField;
+	private final FormTextField emailField;
 	
 	private final Button btn_changePassword;
 	
@@ -31,9 +32,9 @@ public class UserProfileForm extends CustomFormLayout
 		
 		this.currentUser = null;
 		
-		this.loginField = new LoginField(null, false, true); // not required since completely read-only
-		this.passwordField = new PasswordField(null, true, true);
-		this.emailField = new EmailField(null, true, false);
+		this.loginField = FormFieldGenerator.getLoginField(null, false, true); // not required since completely read-only
+		this.passwordField = new PasswordField("Password:", null, true, true);
+		this.emailField = FormFieldGenerator.getEmailField(null, true, false);
 		
 		addField(loginField, "login");
 		addField(passwordField, "password");

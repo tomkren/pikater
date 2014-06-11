@@ -1,13 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.forms.fields;
 
-public class PasswordField extends AbstractFormField
+public class PasswordField extends FormTextField
 {
 	private static final long serialVersionUID = -1242674623972921275L;
-	
-	public PasswordField(String value, boolean required, boolean readOnly)
-	{
-		this("Password:", value, required, readOnly);
-	}
 	
 	public PasswordField(String caption, String value, boolean required, boolean readOnly)
 	{

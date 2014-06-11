@@ -1,12 +1,14 @@
-package org.pikater.web.vaadin.gui.server.components.forms;
+package org.pikater.web.vaadin.gui.server.components.forms.abstractform;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.pikater.web.vaadin.gui.server.components.forms.fields.AbstractFormField;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormTextField;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.IFormField;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -22,7 +24,7 @@ public abstract class CustomFormLayout extends VerticalLayout
 	private final FormLayout fLayout;
 	private final HorizontalLayout buttonInterface;
 	private final Button btn_actionBtn;
-	private final Map<AbstractFormField, String> fieldInfo;
+	private final Map<IFormField<Object>, String> fieldInfo;
 	
 	public CustomFormLayout(String actionButtonCaption)
 	{
@@ -61,14 +63,23 @@ public abstract class CustomFormLayout extends VerticalLayout
 		}
 		addComponent(this.buttonInterface);
 		
-		this.fieldInfo = new HashMap<AbstractFormField, String>();
+		this.fieldInfo = new HashMap<IFormField<Object>, String>();
 	}
 	
-	protected void addField(AbstractFormField field, String notificationDescription)
+	@SuppressWarnings("unchecked")
+	protected void addField(IFormField<?> field, String notificationDescription)
 	{
-		fieldInfo.put(field, notificationDescription);
-		fLayout.addComponent(field);
-		field.setOwnerForm(this);
+		fieldInfo.put((IFormField<Object>) field, notificationDescription);
+		
+		if(field instanceof AbstractField<?>)
+		{
+			fLayout.addComponent((AbstractField<Object>) field);
+			field.setOwnerForm(this);
+		}
+		else
+		{
+			throw new IllegalArgumentException("The 'field' argument is not a proper Vaadin field (AbstractField<T>).");
+		}
 	}
 	
 	protected void addCustomButton(Button btn)
@@ -76,7 +87,7 @@ public abstract class CustomFormLayout extends VerticalLayout
 		buttonInterface.addComponent(btn);
 	}
 	
-	public synchronized void updateFieldStatus(AbstractFormField field, boolean validatedAndUpdated)
+	public synchronized void updateFieldStatus(FormTextField field, boolean validatedAndUpdated)
 	{
 		// fieldStatus.put(field, validatedAndUpdated); // replaces the original value
 		
@@ -107,7 +118,7 @@ public abstract class CustomFormLayout extends VerticalLayout
 		Iterator<Component> fieldIterator = fLayout.iterator();
 		while(fieldIterator.hasNext())
 		{
-			AbstractFormField field = (AbstractFormField) fieldIterator.next();
+			FormTextField field = (FormTextField) fieldIterator.next();
 			if(checkValid) 
 			{
 				if(field.isRequired() && field.getValue().isEmpty())

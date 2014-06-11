@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.PasswordField;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 

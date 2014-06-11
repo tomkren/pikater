@@ -1,18 +1,18 @@
 package org.pikater.web.vaadin.gui.server.components.forms.fields;
 
-import org.pikater.web.vaadin.gui.server.components.forms.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
 
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.ui.TextField;
 
-public abstract class AbstractFormField extends TextField
+public class FormTextField extends TextField implements IFormField<String>
 {
 	private static final long serialVersionUID = 2547606599715321365L;
 	
 	private CustomFormLayout ownerForm;
 
-	public AbstractFormField(String caption, String inputPrompt, String value, boolean required, boolean readOnly)
+	public FormTextField(String caption, String inputPrompt, String value, boolean required, boolean readOnly)
 	{
 		super(caption);
 		
@@ -50,31 +50,37 @@ public abstract class AbstractFormField extends TextField
 		addValidator(new TrueValidator());
 	}
 	
-	protected CustomFormLayout getOwnerForm()
+	@Override
+	public CustomFormLayout getOwnerForm()
 	{
 		return ownerForm;
 	}
 	
+	@Override
 	public void setOwnerForm(CustomFormLayout ownerForm)
 	{
 		this.ownerForm = ownerForm;
 	}
 	
+	@Override
 	public String getValueBackup()
 	{
 		return (String) getData();
 	}
 	
+	@Override
 	public void setValueBackup(String value)
 	{
 		setData(value);
 	}
 	
+	@Override
 	public boolean isUpdated()
 	{
 		return !getValueBackup().equals(getValue());
 	}
 	
+	@Override
 	public void setValueAndIgnoreReadOnly(String value)
 	{
 		boolean readOnly = isReadOnly();
