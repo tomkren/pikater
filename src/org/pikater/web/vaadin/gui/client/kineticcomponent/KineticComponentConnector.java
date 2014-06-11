@@ -5,8 +5,7 @@ import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.Experiment;
-import org.pikater.shared.experiment.webformat.ExperimentMetadata;
+import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 import com.vaadin.client.communication.StateChangeEvent;
@@ -39,13 +38,13 @@ public class KineticComponentConnector extends AbstractComponentConnector
 			 */
 			
 			@Override
-			public void command_createBox(BoxInfo info, int posX, int posY)
+			public void command_createBox(BoxInfo info)
 			{
-				getWidget().command_createBox(info, posX, posY);
+				getWidget().command_createBox(info);
 			}
 
 			@Override
-			public void command_receiveExperimentToLoad(Experiment experiment)
+			public void command_receiveExperimentToLoad(ExperimentGraph experiment)
 			{
 				getWidget().command_receiveExperimentToLoad(experiment);
 			}
@@ -57,9 +56,9 @@ public class KineticComponentConnector extends AbstractComponentConnector
 			}
 
 			@Override
-			public void request_sendExperimentToSave(ExperimentMetadata metadata)
+			public void request_sendExperimentToSave()
 			{
-				getWidget().request_sendExperimentToSave(metadata);
+				getWidget().request_sendExperimentToSave();
 			}
 
 			@Override

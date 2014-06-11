@@ -3,18 +3,18 @@ package org.pikater.web.vaadin.gui.client.kineticcomponent;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.shared.experiment.webformat.Experiment;
+import org.pikater.shared.experiment.webformat.ExperimentGraph;
 
 public class KineticComponentRegistrar
 {
-	private static final Map<String, Experiment> connectorIDtoWidget = new HashMap<String, Experiment>();
+	private static final Map<String, ExperimentGraph> connectorIDtoWidget = new HashMap<String, ExperimentGraph>();
 	
-	public static void saveExperimentFor(String connectorID, Experiment experiment)
+	public static void saveExperimentFor(String connectorID, ExperimentGraph experiment)
 	{
 		connectorIDtoWidget.put(connectorID, experiment);
 	}
 	
-	public static Experiment getSavedExperimentFor(String connectorID)
+	public static ExperimentGraph getSavedExperimentFor(String connectorID)
 	{
 		return connectorIDtoWidget.get(connectorID); 
 	}

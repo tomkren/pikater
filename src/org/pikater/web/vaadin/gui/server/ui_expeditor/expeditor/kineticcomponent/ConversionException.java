@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent;
 
 public class ConversionException extends Exception
 {
