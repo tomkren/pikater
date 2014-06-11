@@ -2,11 +2,10 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.pikater.shared.experiment.universalformat.UniversalGui;
-import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.webformat.BoxType;
-import org.pikater.shared.experiment.webformat.Experiment;
+import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUI;
@@ -21,7 +20,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 
 @Theme("pikater")
-@Push(value = PushMode.MANUAL)
+@Push(value = PushMode.AUTOMATIC)
 @Title("Experiments")
 public class ExpEditorUI extends CustomConfiguredUI
 {
@@ -43,35 +42,73 @@ public class ExpEditorUI extends CustomConfiguredUI
 	protected void init(VaadinRequest request)
 	{
 		/*
-		 * Don't forget to call this. Also note, that you shouldn't update the UI until
-		 * you receive the {@link #displayChildContent()} call.
+		 * Don't forget to call this.
+		 * IMPORTANT:
+		 * 1) You shouldn't update the UI in this method. You only provide the content component
+		 * when you're asked to in the {@link #displayChildContent()} method.
+		 * 2) When {@link #displayChildContent()} is called, this method is still not finished.
+		 * You shouldn't have any initializing code after the super.init() all.
 		 */
 		super.init(request);
-		
-		/*
-		 * TODO: eventually delete the following:
-		 */
-		
-		BoxInfo boxInfo1 = new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", "");
-		BoxInfo boxInfo2 = new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", "");
-		BoxInfo boxInfo3 = new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", "");
-		
-		BoxInfoCollection boxDefinitions = new BoxInfoCollection();
-		boxDefinitions.addDefinition(boxInfo1);
-		boxDefinitions.addDefinition(boxInfo2);
-		boxDefinitions.addDefinition(boxInfo3);
-		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, boxDefinitions);
 	}
 	
 	@Override
 	protected void displayChildContent()
 	{
 		/*
+		 * TODO: eventually delete the following:
+		 */
+		
+		AgentInfoCollection agentInfos = new AgentInfoCollection();
+		for(BoxType type : BoxType.values())
+		{
+			if(type.toOntology() != null)
+			{
+				AgentInfo agentInfo = new AgentInfo();
+				agentInfo.setOntologyClassName(type.toOntology());
+				agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
+				
+				String name = null;
+				switch(type)
+				{
+					case COMPUTING:
+						name = "Vepřová kýta";
+						break;
+					case INPUT:
+						name = "Brambory";
+						break;
+					case METHOD:
+						name = "Chleba";
+						break;
+					case RECOMMENDER:
+						name = "Klobása";
+						break;
+					case SEARCHER:
+						name = "Cibule";
+						break;
+					case VISUALIZER:
+						name = "Bobkovej list";
+						break;
+					case WRAPPER:
+						name = "Protlak";
+						break;
+					default:
+						break;
+					
+				}
+				agentInfo.setName(name);
+				
+				agentInfos.addDefinition(agentInfo);
+			}
+		}
+		ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, agentInfos);
+		
+		/*
 		 * First check whether launched pikater has already gathered and sent over information
 		 * of all available experiment related agents.
 		 */
 		
-		if(ServerConfigurationInterface.getLatestBoxDefinitions() == null)
+		if(ServerConfigurationInterface.getKnownAgents() == null)
 		{
 			// if not, let the user select an option to wait until box definitions are available 
 			
@@ -87,16 +124,6 @@ public class ExpEditorUI extends CustomConfiguredUI
 	
 	protected static void loadSampleExperiment(ExpEditor editor)
 	{
-		UniversalGui guiInfo1 = new UniversalGui(10, 10);
-		UniversalGui guiInfo2 = new UniversalGui(500, 10);
-		UniversalGui guiInfo3 = new UniversalGui(400, 300);
-		
-		Experiment newExperiment = new Experiment();
-		Integer b1 = newExperiment.addLeafBoxAndReturnID(guiInfo1, new BoxInfo("Bla1", "bla", "Bla1", BoxType.INPUT, "", ""));
-		Integer b2 = newExperiment.addLeafBoxAndReturnID(guiInfo2, new BoxInfo("Bla2", "bla", "Bla2", BoxType.RECOMMENDER, "", ""));
-		newExperiment.addLeafBoxAndReturnID(guiInfo3, new BoxInfo("Bla3", "bla", "Bla3", BoxType.VISUALIZER, "", ""));
-		newExperiment.connect(b1, b2);
-		
-		editor.loadExperimentIntoNewTab("test experiment", newExperiment);
+		editor.loadExperimentIntoNewTab("test experiment", UniversalComputationDescription.getDummy());
 	}
 }

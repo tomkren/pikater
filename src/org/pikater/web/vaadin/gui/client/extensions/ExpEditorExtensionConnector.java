@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditorExtension;
 
@@ -20,12 +19,6 @@ public class ExpEditorExtensionConnector extends AbstractExtensionConnector
 		registerRpc(ExpEditorExtensionClientRpc.class, new ExpEditorExtensionClientRpc()
 		{
 			private static final long serialVersionUID = 560120982576334694L;
-
-			@Override
-			public void command_setBoxDefinitions(BoxInfoCollection boxDefinitions)
-			{
-				GWTKineticSettings.setBoxDefinitions(boxDefinitions);
-			}
 
 			@Override
 			public void command_setBoxSize(int percent)

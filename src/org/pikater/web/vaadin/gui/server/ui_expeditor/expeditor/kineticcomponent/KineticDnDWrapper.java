@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent;
 
-import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
@@ -35,14 +35,10 @@ public class KineticDnDWrapper extends DragAndDropWrapper
 				WrapperTargetDetails details = (WrapperTargetDetails) event.getTargetDetails();
 				WrapperTransferable transferable = (WrapperTransferable) event.getTransferable();
 				CustomLayout droppedComponent = (CustomLayout) transferable.getDraggedComponent();
-				BoxInfo boxInfo = (BoxInfo) droppedComponent.getData();
+				AgentInfo agentInfo = (AgentInfo) droppedComponent.getData();
 				
 				// issue the creation command to the client:
-				kineticComponent.getClientRPC().command_createBox(
-						boxInfo,
-						kineticComponent.toRelativeLeft(details.getMouseEvent().getClientX()),
-						kineticComponent.toRelativeTop(details.getMouseEvent().getClientY())
-				);
+				kineticComponent.command_createBox(agentInfo, details.getMouseEvent().getClientX(), details.getMouseEvent().getClientY());
 			}
 		});
 	}

@@ -281,7 +281,13 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 	
 	private void setVisibility(Style style, boolean visible)
 	{
-		style.setDisplay(visible ? Display.INLINE_BLOCK : Display.NONE);
-		// style.setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+		if(visible)
+		{
+			style.clearProperty("display");
+		}
+		else
+		{
+			style.setDisplay(Display.NONE);
+		}
 	}
 }

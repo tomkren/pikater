@@ -1,15 +1,15 @@
 package org.pikater.web.experiment_backup.validity;
 
-import org.pikater.shared.experiment.webformat.Experiment;
+import org.pikater.shared.experiment.webformat.ExperimentGraph;
 
 public abstract class CommonState
 {
 	/**
 	 * The original instance to check for validity.
 	 */
-	protected final Experiment source;
+	protected final ExperimentGraph source;
 	
-	public CommonState(Experiment source)
+	public CommonState(ExperimentGraph source)
 	{
 		this.source = source;
 	}
