@@ -2,8 +2,6 @@ package org.pikater.web.config;
 
 import javax.servlet.ServletContext;
 
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-
 public class ServerConfigurationInterface
 {
 	public enum ServerConfItem
@@ -20,7 +18,7 @@ public class ServerConfigurationInterface
 	private static ServletContext context = null;
 	private static ServerConfiguration config = null;
 	private static JadeTopologies jadeTopologies = null;
-	private static BoxInfoCollection latestBoxDefinitions = null;
+	private static AgentInfoCollection knownAgents = null;
 	
 	// TODO: merge this with NoSessionStore eventually?
 	
@@ -62,7 +60,7 @@ public class ServerConfigurationInterface
 				}
 				break;
 			case BOX_DEFINITIONS:
-				latestBoxDefinitions = (BoxInfoCollection) value;
+				knownAgents = (AgentInfoCollection) value;
 				break;
 			default:
 				throw new IllegalArgumentException();
@@ -84,9 +82,9 @@ public class ServerConfigurationInterface
 		return jadeTopologies;
 	}
 	
-	public static BoxInfoCollection getLatestBoxDefinitions()
+	public static AgentInfoCollection getKnownAgents()
 	{
-		return latestBoxDefinitions;
+		return knownAgents;
 	}
 	
 	public static Boolean avoidUsingDBForNow()

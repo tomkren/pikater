@@ -6,29 +6,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.pikater.shared.experiment.universalformat.UniversalGui;
-import org.pikater.shared.experiment.webformat.box.LeafBox;
-import org.pikater.shared.util.SimpleIDGenerator;
-
-public class Experiment implements Serializable
+public class ExperimentGraph implements Serializable
 {
 	private static final long serialVersionUID = -1340889786809747684L;
 
 	/**
-	 * Used to generate unique Integer ID keys for all boxes. Generated IDs will be used as references in other variables
-	 * to improve efficiency when serializing an instance of this class from server to client.
-	 */
-	private transient SimpleIDGenerator idGenerator;
-	
-	/**
 	 * The 1:1 map containing all the boxes.
 	 */
-	public Map<Integer, LeafBox> leafBoxes;
+	public Map<String, BoxInfo> leafBoxes;
 	
 	/**
 	 * Collection of oriented edges between boxes, sorted by the "from end point".
 	 */
-	public Map<Integer, Set<Integer>> edges;
+	public Map<String, Set<String>> edges;
 	
 	// ------------------------------------------------------------------
 	// CONSTRUCTOR
@@ -36,24 +26,19 @@ public class Experiment implements Serializable
 	/**
 	 * Default constructor keeps GWT and Vaadin happy.
 	 */
-	public Experiment()
+	public ExperimentGraph()
 	{
-		this.idGenerator = new SimpleIDGenerator();
-		this.leafBoxes = new HashMap<Integer, LeafBox>();
-		this.edges = new HashMap<Integer, Set<Integer>>();
+		this.leafBoxes = new HashMap<String, BoxInfo>();
+		this.edges = new HashMap<String, Set<String>>();
 	}
 	
 	// ------------------------------------------------------------------
-	// PUBLIC GETTERS
+	// PUBLIC INTERFACE
 	
-	// ------------------------------------------------------------------
-	// OTHER PUBLIC INTERFACE
-	
-	public Integer addLeafBoxAndReturnID(UniversalGui guiInfo, BoxInfo info)
+	public String addLeafBoxAndReturnID(BoxInfo info)
 	{
-		LeafBox newBox = new LeafBox(idGenerator.getAndIncrement(), guiInfo, info);
-		leafBoxes.put(newBox.id, newBox);
-		return newBox.id;
+		leafBoxes.put(info.boxID, info);
+		return info.boxID;
 	}
 	
 	/*
@@ -67,12 +52,12 @@ public class Experiment implements Serializable
 	}
 	*/
 	
-	public void connect(Integer fromBoxKey, Integer toBoxKey)
+	public void connect(String fromBoxKey, String toBoxKey)
 	{
 		interboxConnectionAction(fromBoxKey, toBoxKey, true);
 	}
 	
-	public void disconnect(Integer fromBoxKey, Integer toBoxKey)
+	public void disconnect(String fromBoxKey, String toBoxKey)
 	{
 		interboxConnectionAction(fromBoxKey, toBoxKey, false);
 	}
@@ -80,7 +65,7 @@ public class Experiment implements Serializable
 	// ------------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	private void interboxConnectionAction(Integer fromBoxKey, Integer toBoxKey, boolean connect)
+	private void interboxConnectionAction(String fromBoxKey, String toBoxKey, boolean connect)
 	{
 		/*
 		 * Let this method have a transaction-like manner and only alter the data when
@@ -120,7 +105,7 @@ public class Experiment implements Serializable
 			// add edge
 			if(!edges.containsKey(fromBoxKey))
 			{
-				edges.put(fromBoxKey, new HashSet<Integer>());
+				edges.put(fromBoxKey, new HashSet<String>());
 			}
 			edges.get(fromBoxKey).add(toBoxKey);
 		}
