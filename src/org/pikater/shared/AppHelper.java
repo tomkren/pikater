@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -85,17 +86,29 @@ public class AppHelper
 	//----------------------------------------------------------------------------------------------------------------
 	// OTHER PUBLIC ROUTINES
 	
-	public static String readTextFile(String path)
+	public static String readTextFile(String filePath)
 	{
 		try
 		{
-			byte[] encoded = Files.readAllBytes(Paths.get(path));
+			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
 			return Charset.defaultCharset().decode(ByteBuffer.wrap(encoded)).toString();
 		}
 		catch (IOException e)
 		{
-			PikaterLogger.logThrowable(String.format("Could not deserialize the '%s' file because of the below IO error:", path), e);
+			PikaterLogger.logThrowable(String.format("Could not read the '%s' file because of the below IO error:", filePath), e);
 			return null;
+		}
+	}
+	
+	public static void writeToFile(String filePath, String content, Charset charset)
+	{
+		try
+		{
+			Files.write(Paths.get(filePath), content.getBytes(charset), StandardOpenOption.CREATE_NEW);
+		}
+		catch (IOException e)
+		{
+			PikaterLogger.logThrowable(String.format("Could not write given content to file '%s' because of the below IO error:", filePath), e);
 		}
 	}
 	
