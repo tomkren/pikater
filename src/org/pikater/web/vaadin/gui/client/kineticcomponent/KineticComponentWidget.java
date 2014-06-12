@@ -258,7 +258,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public void command_openOptionsManager(Integer[] selectedBoxesAgentIDs)
+	public void command_openOptionsManager(String[] selectedBoxesAgentIDs)
 	{
 		getServerRPC().command_openOptionsManager(selectedBoxesAgentIDs);
 	}

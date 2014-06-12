@@ -203,6 +203,6 @@ public class ItemRegistrationPlugin implements IEnginePlugin
 	
 	public BoxPrototype[] getRegisteredBoxes()
 	{
-		return (BoxPrototype[]) allRegisteredBoxes.toArray(); 
+		return allRegisteredBoxes.toArray(new BoxPrototype[0]);
 	}
 }

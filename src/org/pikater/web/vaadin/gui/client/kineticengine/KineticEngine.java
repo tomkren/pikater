@@ -23,6 +23,7 @@ import net.edzard.kinetic.event.KineticEvent;
 
 import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
+import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
@@ -115,9 +116,9 @@ public final class KineticEngine
 	private final SelectionPlugin selectionPlugin;
 	
 	/**
-	 * The wrapper managing integration and communication between GWT and this engine.
+	 * The wrapper class providing contextual information and server communication.
 	 */
-	private final IKineticEngineContext context;
+	private final KineticComponentWidget context;
 	
 	/**
 	 * All the event handlers of the engine.
@@ -209,7 +210,7 @@ public final class KineticEngine
 	 * - Events are fired in the order they were added, whether named or not.
 	 * - Events can not be simulated from named events... bug?
 	 */
-	public KineticEngine(IKineticEngineContext context, final Stage stage) 
+	public KineticEngine(KineticComponentWidget context, final Stage stage) 
 	{
 		/*
 		 * First setup the basic Kinetic variables.
@@ -287,7 +288,7 @@ public final class KineticEngine
 		addPlugin(new DragEdgePlugin(this));
 		addPlugin(new CreateEdgePlugin(this));
 		this.itemRegistrationPlugin = (ItemRegistrationPlugin) getPlugin(ItemRegistrationPlugin.pluginID);
-		this.selectionPlugin = (SelectionPlugin) getPlugin(ItemRegistrationPlugin.pluginID);
+		this.selectionPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
 		
 		this.context = context;
 		
@@ -590,14 +591,18 @@ public final class KineticEngine
 	public void addPlugin(IEnginePlugin plugin)
 	{
 		plugins.put(plugin.getPluginID(), plugin);
-		for(String graphItemName : plugin.getItemsToAttachTo())
+		String[] itemsToAttachTo = plugin.getItemsToAttachTo();
+		if(itemsToAttachTo != null)
 		{
-			if(!pluginsForGraphItem.containsKey(graphItemName))
+			for(String graphItemName : itemsToAttachTo) 
 			{
-				// LinkedHashSet retains the insertion order which is very important here
-				pluginsForGraphItem.put(graphItemName, new LinkedHashSet<IEnginePlugin>());
+				if(!pluginsForGraphItem.containsKey(graphItemName))
+				{
+					// LinkedHashSet retains the insertion order which is very important here
+					pluginsForGraphItem.put(graphItemName, new LinkedHashSet<IEnginePlugin>());
+				}
+				pluginsForGraphItem.get(graphItemName).add(plugin);
 			}
-			pluginsForGraphItem.get(graphItemName).add(plugin);
 		}
 	}
 	
@@ -632,7 +637,7 @@ public final class KineticEngine
 		draw(EngineComponent.STAGE);
 	}
 	
-	public IKineticEngineContext getContext()
+	public KineticComponentWidget getContext()
 	{
 		return context;
 	}

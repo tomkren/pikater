@@ -268,11 +268,11 @@ public class SelectionPlugin implements IEnginePlugin
 		}
 		if(aBoxInverted && notifyServer && kineticEngine.getContext().openOptionsManagerOnSelectionChange())
 		{
-			Integer[] selectedBoxesIDs = new Integer[selectedBoxes.size()];
+			String[] selectedBoxesIDs = new String[selectedBoxes.size()];
 			int index = 0;
 			for(BoxPrototype box : selectedBoxes)
 			{
-				selectedBoxesIDs[index] = box.getInfo().agentInfoID;
+				selectedBoxesIDs[index] = box.getInfo().boxID;
 				index++;
 			}
 			kineticEngine.getContext().command_openOptionsManager(selectedBoxesIDs);

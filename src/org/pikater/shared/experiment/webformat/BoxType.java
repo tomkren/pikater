@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 public enum BoxType
 {
@@ -16,8 +17,8 @@ public enum BoxType
 	COMPUTING(ComputingAgent.class, null),
 	RECOMMENDER(Recommend.class, null),
 	METHOD(Method.class, null),
-	VISUALIZER(null, null), // TODO: change this properly
-	WRAPPER(null, null);
+	VISUALIZER(ExpEditor.class, null), // TODO: change this properly
+	WRAPPER(BoxType.class, null); // wrappers are never going to have their own ontologies anyway
 	
 	private final Class<?> mappedOntologyClass;
 	private final String pictureURL;
