@@ -7,24 +7,21 @@ import org.pikater.core.ontology.subtrees.batchDescription.IModel;
 import org.pikater.core.ontology.subtrees.batchDescription.Model;
 import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 import org.pikater.core.ontology.subtrees.data.Data;
-import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 
-public class ExperimentOntology extends BeanOntology {
+public class TaskOntology extends BeanOntology {
 
 	private static final long serialVersionUID = 4471377586541937606L;
 
-	private ExperimentOntology() {
-        super("ExperimentOntology");
-
-        String experimentPackage = Experiment.class.getPackage().getName();
+	private TaskOntology() {
+        super("TaskOntology");
 
         String taskPackage = Task.class.getPackage().getName();
         String dataPackage = Data.class.getPackage().getName();
                 
         try {
-            add(experimentPackage);
+
             add(taskPackage);
             add(dataPackage);
             add(IModel.class);
@@ -36,7 +33,7 @@ public class ExperimentOntology extends BeanOntology {
         }
     }
 
-    static ExperimentOntology theInstance = new ExperimentOntology();
+    static TaskOntology theInstance = new TaskOntology();
 
     public static Ontology getInstance() {
         return theInstance;

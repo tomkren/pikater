@@ -31,7 +31,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.AgentManagementOntology;
-import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.task.Execute;
 
 /**
@@ -50,7 +50,7 @@ public class Agent_Planner extends PikaterAgent {
     @Override
 	public java.util.List<Ontology> getOntologies() {
 		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		return ontologies;
 	}
@@ -89,12 +89,13 @@ public class Agent_Planner extends PikaterAgent {
 	protected class RequestServer extends CyclicBehaviour {
 		private static final long serialVersionUID = -8439191651609121039L;
 
-		Ontology ontology = AgentManagementOntology.getInstance();
+		Ontology ontology = TaskOntology.getInstance();
 
 		private MessageTemplate reqMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
 				MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-						MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()), MessageTemplate.MatchOntology(ontology.getName()))));
+						MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+								MessageTemplate.MatchOntology(ontology.getName()))));
 
 		public RequestServer(PikaterAgent agent) {
 			super(agent);
@@ -122,7 +123,7 @@ public class Agent_Planner extends PikaterAgent {
 						msg.addReceiver(ca);
 						msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 						msg.setLanguage(getCodec().getName());
-						msg.setOntology(MessagesOntology.getInstance().getName());
+						msg.setOntology(TaskOntology.getInstance().getName());
 						Execute ex = (Execute) ((Action) content).getAction();
 						Action a = new Action(myAgent.getAID(), ex);
 						getContentManager().fillContent(msg, a);

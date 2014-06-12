@@ -19,6 +19,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
+
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
@@ -26,6 +27,7 @@ import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.Execute;
@@ -60,6 +62,7 @@ public class Agent_Manager extends PikaterAgent {
 		ontologies.add(MessagesOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
 		
 		return ontologies;
@@ -213,7 +216,7 @@ public class Agent_Manager extends PikaterAgent {
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setLanguage(codec.getName());
-		request.setOntology(ontology.getName());
+		request.setOntology(TaskOntology.getInstance().getName());
 		request.addReceiver(getAgentByType(AgentNames.PLANNER));
 		
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);

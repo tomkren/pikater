@@ -201,7 +201,7 @@ class RecieveBatch extends CyclicBehaviour {
             try {
     			agent.getContentManager().fillContent(msg, new Action(receiver, exeExperiment));
     			agent.send(msg);
-    			//ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg, 10000000);
+    			//ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg); //, 1000);
     		    //System.out.println("Reply: " + replyOK.getContent());
     			
     		} catch (CodecException e) {

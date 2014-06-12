@@ -42,7 +42,8 @@ import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.ExperimentOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
@@ -64,7 +65,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	private static final long serialVersionUID = -7927583436579620995L;
 
 	protected Codec codec = new SLCodec();
-	private Ontology ontology = MessagesOntology.getInstance();
+	private Ontology ontology = ExperimentOntology.getInstance();
 
 	public enum states {
 		NEW, TRAINED
@@ -127,7 +128,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 
 		return ontologies;
@@ -449,7 +450,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 			MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
 			MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 			MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-			MessageTemplate.MatchOntology(ontology.getName()))));
+			MessageTemplate.MatchOntology(TaskOntology.getInstance().getName()))));
 		
 		public RequestServer(Agent agent) {
 			super(agent);
@@ -1054,8 +1055,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		saveAgent.setAgent(getAgentWithFilledObject());
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID("agentManager", false));
-		request.setOntology(MessagesOntology.getInstance().getName());
+		request.addReceiver(new AID(AgentNames.MANAGER_AGENT, false));
+		request.setOntology(TaskOntology.getInstance().getName());
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
