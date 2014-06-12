@@ -1,7 +1,6 @@
 package org.pikater.core.agents.system;
 
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -22,7 +21,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
@@ -30,7 +28,6 @@ import jade.proto.ContractNetInitiator;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -92,7 +89,7 @@ public class Agent_Planner extends PikaterAgent {
 	protected class RequestServer extends CyclicBehaviour {
 		private static final long serialVersionUID = -8439191651609121039L;
 
-		Ontology ontology = MessagesOntology.getInstance();
+		Ontology ontology = AgentManagementOntology.getInstance();
 
 		private MessageTemplate reqMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),

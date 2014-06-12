@@ -56,6 +56,8 @@ class ParserBehaviour extends AchieveREResponder {
             
 
         ACLMessage reply = request.createReply();
+        reply.setPerformative(ACLMessage.CONFIRM);
+        reply.setContent("OK");
 
     	if (object instanceof ExecuteBatch) {
     		

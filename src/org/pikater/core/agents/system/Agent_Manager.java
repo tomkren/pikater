@@ -214,7 +214,7 @@ public class Agent_Manager extends PikaterAgent {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setLanguage(codec.getName());
 		request.setOntology(ontology.getName());
-		request.addReceiver(getAgentByType("Planner"));
+		request.addReceiver(getAgentByType(AgentNames.PLANNER));
 		
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 	
