@@ -26,10 +26,13 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
+import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
+import org.pikater.core.ontology.subtrees.model.Model;
+import org.pikater.core.ontology.subtrees.model.SaveModel;
 
 
 public class Agent_GUIKlara extends PikaterAgent {
@@ -50,6 +53,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
+		
+		//for test purposes
+		ontologies.add(ModelOntology.getInstance());
 		
 		return ontologies;
 	}
@@ -153,6 +159,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 						" Help             --help\n" +
 						" Shutdown         --shutdown\n" +
 						" Add dataset      --add-dataset [username] [description] <path>\n" +
+						" For test purposes --test "+
 						" Run Experiment   --run <file.xml>\n"
 						);
 			
@@ -160,7 +167,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 				break;
 	
 			} else if (input.startsWith("--run")) {
-			
+			} else if (input.startsWith("--test")) {
+				testModelSave();
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
 			} else {
@@ -171,6 +179,38 @@ public class Agent_GUIKlara extends PikaterAgent {
 			}
 		}
 
+	}
+
+	private void testModelSave() {
+		try {
+        	AID dataManager = new AID(AgentNames.DATA_MANAGER, false);
+    		Ontology ontology = ModelOntology.getInstance();
+    		
+    		SaveModel sm=new SaveModel();
+    		
+    		sm.setModel(new Model(1356,this.getClass().getName(),"Hello, World!"));
+    		
+            ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+            request.addReceiver(dataManager);
+            request.setLanguage(getCodec().getName());
+            request.setOntology(ontology.getName());
+            getContentManager().fillContent(request, new Action(dataManager, sm));
+           
+            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
+            if (reply == null){
+                logError("Reply not received.");
+            }
+            else{
+                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+            }
+        } catch (CodecException | OntologyException e) {
+            logError("Ontology/codec error occurred: "+e.getMessage());
+            e.printStackTrace();
+        } catch (FIPAException e) {
+            logError("FIPA error occurred: "+e.getMessage());
+            e.printStackTrace();
+        }
+		
 	}
 
 	private void runFile(String fileName) throws FileNotFoundException {
