@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.DecimalFormat;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -142,5 +143,13 @@ public class AppHelper
 			result.add(String.valueOf(i));
 		}
 		return result;
+	}
+	
+	//Source: http://stackoverflow.com/questions/3263892/format-file-size-as-mb-gb-etc
+	public static String formatFileSize(long size){
+		if(size <= 0) return "0";
+		final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
+		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
 }
