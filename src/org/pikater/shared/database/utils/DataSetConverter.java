@@ -3,168 +3,143 @@ package org.pikater.shared.database.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.io.PrintStream;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class DataSetConverter {
 	
-	public enum DocType{
-		Table,
-		Native
-	}
+	public static final char DEFAULT_DELIMINITER=',';
+	public static char DELIMINITER=DataSetConverter.DEFAULT_DELIMINITER;
 	
-	DocType docType;
-	File inputFile;
-	
-	
-	public DataSetConverter(File inputFile) throws Exception{
-		this.inputFile=inputFile;
-		init();
-	}
-	
-	private void init() throws Exception{
-		if(
-				inputFile.getAbsolutePath().toLowerCase().endsWith("xls")||
-				inputFile.getAbsolutePath().toLowerCase().endsWith("xlsx")||
-				inputFile.getAbsolutePath().toLowerCase().endsWith("ods")
-		  )
-		{
-			this.docType=DocType.Table;
-		}else{
-			this.docType=DocType.Native;
-			this.initNative();
-		}
-	}
-	
-	
-	BufferedReader br=null;
-	
-	boolean inDataSection=false;
-	
-	private void initNative() throws Exception{
-		try {
-			br=new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-			String s=br.readLine();
-			s=s.toLowerCase();
-			if((s!=null)&&s.startsWith("@relation")){
-				relationName=s.split(" ")[1];
-				
-				while((s=br.readLine())!=null){
-					s=s.toLowerCase();
-					if(s.startsWith("@attribute")){
-						
-						Attribute attr=new Attribute();
-						attr.attrName=s.split(" ")[1];
-						attr.attrProperties=s.split(" ")[2];
-						//System.out.println("Attribute: "+attr.attrName+"   "+attr.attrProperties);
-						attributeList.add(attr);
-					}else if(s.startsWith("@data")){
-						inDataSection=true;
-						return;
-					}else if(s.equals("")){
-						
-					}else{
-						throw new Exception();
-					}
-					
-				}
-			}
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public void saveToXLS(File outputFile) throws Exception {
-		try {			
-			Workbook wb=new HSSFWorkbook();
-			Sheet s= wb.createSheet();
-			Row r= null;
-			Cell c = null;
-			
-			//The first cell of the first row contains the relation name 
-			int rowNum=0;
-			r=s.createRow(rowNum);
-			c=r.createCell(0);
-			c.setCellValue(this.getRelationName());
-			
-			//Copy attribute names to the second row
-			rowNum=1;
-			r=s.createRow(rowNum);
-			int cellNum=0;
-			for(Attribute attr : this.getAttributeList()){
-				Cell attrNameCell=r.createCell(cellNum);
-				attrNameCell.setCellValue(attr.attrName);
-				cellNum++;
-		    }
-			//Copy the attribute properties to the second row
-			cellNum=0;
-			rowNum=2;
-			r=s.createRow(rowNum);
-			for(Attribute attr : this.getAttributeList()){
-				Cell attrPropertiesCell=r.createCell(cellNum);
-				attrPropertiesCell.setCellValue(attr.attrProperties);
-				cellNum++;
-			}
-			//Now copying the data items
-			String rowS=null;
-			boolean emptyLineVisited=false;
-			while((rowS=br.readLine())!=null){
-				if(!rowS.equals("")){
-					if(emptyLineVisited) throw new Exception();
-					rowS=rowS.toLowerCase();
-					String[] rowContent=rowS.trim().split(",");
-					
-					rowNum++;
-					r=s.createRow(rowNum);
-					cellNum=0;
-					
-					for(String item:rowContent){
-						c=r.createCell(cellNum);
-						cellNum++;
-						c.setCellValue(item);
-					}
-				}else{
-					emptyLineVisited=true;
-				}
-			}
-			
-			FileOutputStream out=new FileOutputStream(outputFile);
-			wb.write(out);
-			out.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally{
-		}
-		
-	}
-	
-	private String relationName;
-	
-	private String getRelationName(){
-		return relationName;
-	}
-	
-	private List<Attribute> attributeList=new java.util.ArrayList<Attribute>();
-	
-	private List<Attribute> getAttributeList(){
-		return attributeList;
-	}
+	private static void workbookToArff(String header,Workbook workbook,PrintStream out) throws Exception{
+		//Parsing the first sheet or throw an exception
+		if(workbook.getNumberOfSheets()==0)
+			throw new Exception("No sheets available in the document ");
 
-	class Attribute{
-		public String attrName;
-		public String attrProperties;
+		//Parsing the first sheet
+		Sheet sheet=workbook.getSheetAt(0);
+
+		int startrow=sheet.getFirstRowNum();
+		if(startrow!=0)
+			throw new Exception("The data values must start at the first row");
+
+		int lastrow=sheet.getLastRowNum();
+		
+		if(header!=null){
+			out.println(header);
+		}
+
+		out.println("@data");
+		
+		int columnnum=-3;
+		
+		for(int rownum=startrow;rownum<=lastrow;rownum++){
+
+			Row row=sheet.getRow(rownum);
+
+			int firstcell=row.getFirstCellNum();
+			if(firstcell!=0)
+				throw new Exception("Data must start with the first column");
+
+			int lastcell=row.getLastCellNum();
+			//TODO: somehow nicely check if the column number is the same in all rows
+			int diff=lastcell-firstcell;
+			if(columnnum==-3)
+				columnnum=diff;
+			else
+				if(columnnum!=diff) throw new Exception("The sheet must contain the same number of columns in every row");
+
+			for(int col=firstcell;col<lastcell;col++){
+				Cell cell=row.getCell(col);
+				if(cell!=null){
+					out.print(cell.toString());
+				}
+				if(col==lastcell-1){
+					out.println();
+				}else{
+					out.print(DataSetConverter.DELIMINITER);
+				}
+			}
+		}
 	}
 	
+	public static void xlsxToArff(String header, File inputXLSXFile,File outputFile) throws Exception{
+		XSSFWorkbook input=new XSSFWorkbook(new FileInputStream(inputXLSXFile));
+		DataSetConverter.workbookToArff(header, input, new PrintStream(outputFile));	
+	}
+	
+	public static void xlsxToArff(File headerFile, File inputXLSXFile,File outputFile) throws Exception{
+		XSSFWorkbook input=new XSSFWorkbook(new FileInputStream(inputXLSXFile));
+		DataSetConverter.workbookToArff(DataSetConverter.readFileToEnd(headerFile), input, new PrintStream(outputFile));	
+	}
+	
+	public static void xlsxToArff(String header, File inputXLSXFile,PrintStream out) throws Exception{
+		XSSFWorkbook input=new XSSFWorkbook(new FileInputStream(inputXLSXFile));
+		DataSetConverter.workbookToArff(header, input, out);	
+	}
+	
+	public static void xlsxToArff(File headerFile, File inputXLSXFile,PrintStream out) throws Exception{
+		XSSFWorkbook input=new XSSFWorkbook(new FileInputStream(inputXLSXFile));
+		DataSetConverter.workbookToArff(DataSetConverter.readFileToEnd(headerFile), input, out);	
+	}
+	
+	public static void xlsToArff(String header, File inputXLSFile,File outputFile) throws Exception{
+		HSSFWorkbook input=new HSSFWorkbook(new FileInputStream(inputXLSFile));
+		DataSetConverter.workbookToArff(header, input, new PrintStream(outputFile));	
+	}
+	
+	public static void xlsToArff(File headerFile, File inputXLSFile,File outputFile) throws Exception{
+		HSSFWorkbook input=new HSSFWorkbook(new FileInputStream(inputXLSFile));
+		DataSetConverter.workbookToArff(DataSetConverter.readFileToEnd(headerFile), input, new PrintStream(outputFile));	
+	}
+	
+	public static void xlsToArff(String header, File inputXLSFile,PrintStream out) throws Exception{
+		HSSFWorkbook input=new HSSFWorkbook(new FileInputStream(inputXLSFile));
+		DataSetConverter.workbookToArff(header, input, out);	
+	}
+	
+	public static void xlsToArff(File headerFile, File inputXLSFile,PrintStream out) throws Exception{
+		HSSFWorkbook input=new HSSFWorkbook(new FileInputStream(inputXLSFile));
+		DataSetConverter.workbookToArff(DataSetConverter.readFileToEnd(headerFile), input, out);	
+	}
+	
+	public static void xlsToArff(File inputXLSFile,File outputFile) throws Exception{
+		DataSetConverter.xlsToArff((String)null, inputXLSFile, outputFile);
+	}
+	
+	public static void xlsToArff(File inputXLSFile,PrintStream out) throws Exception{
+		DataSetConverter.xlsToArff((String)null, inputXLSFile, out);
+	}
+	
+	public static void xlsxToArff(File inputXLSXFile,File outputFile) throws Exception{
+		DataSetConverter.xlsxToArff((String)null, inputXLSXFile, outputFile);
+	}
+	
+	public static void xlsxToArff(File inputXLSXFile,PrintStream out) throws Exception{
+		DataSetConverter.xlsxToArff((String)null, inputXLSXFile, out);
+	}
+	
+	private static String readFileToEnd(File textFile) throws IOException{
+		BufferedReader br=null;
+		try{
+			br=new BufferedReader(new InputStreamReader(new FileInputStream(textFile)));
+			StringBuffer sb=new StringBuffer();
+			String line=null;
+			while((line=br.readLine())!=null){
+				sb.append(line);
+				sb.append(System.lineSeparator());
+			}
+			return sb.toString();
+		}finally{
+			if(br!=null)br.close();
+		}
+	}
 }
