@@ -23,6 +23,7 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
     }
 	private double ratioOfMissingValues;
 	private boolean isTarget;
+	private String name;
 	
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;
@@ -39,6 +40,14 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 		this.isTarget = isTarget;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws NotUpdatableEntityException{
 		throw new NotUpdatableEntityException();
