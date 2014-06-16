@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.plugins;
+package org.pikater.web.vaadin.gui.client.kineticengine.modules;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,12 +21,14 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 @SuppressWarnings("deprecation")
-public class SelectionPlugin implements IEnginePlugin
+public class SelectionModule implements IEngineModule
 {
-	public static String pluginID;
+	public static String moduleID;
 	
 	/**
 	 * The engine instance to work with.
@@ -52,13 +54,11 @@ public class SelectionPlugin implements IEnginePlugin
 	/**
 	 * The special event handlers/listeners to attach to graph items.
 	 */
-	private final class BoxClickListener extends PluginEventListener
+	private final class BoxClickListener extends BoxListener
  	{
-		private final BoxPrototype parentBox;
-		
  		public BoxClickListener(BoxPrototype parentBox)
 		{
-			this.parentBox = parentBox;
+ 			super(parentBox);
 		}
 
 		@Override
@@ -95,15 +95,10 @@ public class SelectionPlugin implements IEnginePlugin
 		
 		private void onFinish(KineticEvent event)
 		{
-			kineticEngine.draw(EngineComponent.STAGE);
+			event.stopVerticalPropagation();
  			event.setProcessed();
- 			event.stopVerticalPropagation();
-		}
-		
-		@Override
-		protected String getListenerID()
-		{
-			return GWTMisc.getSimpleName(this.getClass());
+ 			
+ 			kineticEngine.draw(EngineComponent.STAGE);
 		}
  	};
 	
@@ -111,9 +106,9 @@ public class SelectionPlugin implements IEnginePlugin
 	 * Constructor.
 	 * @param kineticEngine
 	 */
-	public SelectionPlugin(KineticEngine kineticEngine)
+	public SelectionModule(KineticEngine kineticEngine)
 	{
-		pluginID = GWTMisc.getSimpleName(this.getClass());
+		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.selectedBoxes = new HashSet<BoxPrototype>();
 		this.edgesInBetween = new HashSet<EdgePrototype>();
@@ -131,9 +126,9 @@ public class SelectionPlugin implements IEnginePlugin
 	// INHERITED INTERFACE
 
 	@Override
-	public String getPluginID()
+	public String getModuleID()
 	{
-		return pluginID;
+		return moduleID;
 	}
 
 	@Override
@@ -148,7 +143,7 @@ public class SelectionPlugin implements IEnginePlugin
 		if(graphItem instanceof BoxPrototype)
 		{
 			BoxPrototype box = (BoxPrototype) graphItem;
-			box.getMasterRectangle().addEventListener(new BoxClickListener(box), EventType.Basic.CLICK.withName(pluginID));
+			box.getMasterNode().addEventListener(new BoxClickListener(box), EventType.Basic.CLICK.withName(moduleID));
 		}
 		else
 		{
@@ -349,12 +344,12 @@ public class SelectionPlugin implements IEnginePlugin
 	
 	public Node[] getSelectedKineticNodes()
 	{
-		return (Node[]) getSelectionContainer().getChildren().toArray();
+		return getSelectionContainer().getChildren().toArray(new Node[0]);
 	}
 	
 	public BoxPrototype[] getSelectedBoxes()
 	{
-		return (BoxPrototype[]) selectedBoxes.toArray();
+		return selectedBoxes.toArray(new BoxPrototype[0]);
 	}
 	
 	public Set<EdgePrototype> getEdgesInBetween()

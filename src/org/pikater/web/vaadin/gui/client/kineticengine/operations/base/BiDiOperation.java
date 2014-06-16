@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
+package org.pikater.web.vaadin.gui.client.kineticengine.operations.base;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 

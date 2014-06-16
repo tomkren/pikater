@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.forms.fields;
+package org.pikater.web.vaadin.gui.server.components.forms.base;
 
 import com.vaadin.data.Validator;
 

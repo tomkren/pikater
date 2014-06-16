@@ -4,7 +4,8 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.DragEdgePlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
 public class SwapEdgeEndPointOperation extends BiDiOperation
 {
@@ -17,7 +18,7 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 	{
 		super(kineticEngine);
 		
-		DragEdgePlugin edgeDragOperation = (DragEdgePlugin) kineticEngine.getPlugin(DragEdgePlugin.pluginID);
+		DragEdgeModule edgeDragOperation = (DragEdgeModule) kineticEngine.getModule(DragEdgeModule.moduleID);
 		this.edge = edgeDragOperation.getDraggedEdge();
 		this.endPointType = edgeDragOperation.getEndPointBeingChanged();
 		this.originalEndpoint = this.edge.getEndPoint(this.endPointType);

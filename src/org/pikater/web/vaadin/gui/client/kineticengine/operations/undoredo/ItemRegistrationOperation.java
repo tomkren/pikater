@@ -3,8 +3,9 @@ package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.ItemRegistrationPlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.ItemRegistrationPlugin.RegistrationOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule.RegistrationOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
 /**
  * Operation handling only the first item registration / deregistration. Item
@@ -14,7 +15,7 @@ public final class ItemRegistrationOperation extends BiDiOperation
 {
 	private final BoxPrototype[] boxes;
 	private final EdgePrototype[] edges;
-	private final ItemRegistrationPlugin itemRegistrationPlugin;
+	private final ItemRegistrationModule itemRegistrationModule;
 	
 	public ItemRegistrationOperation(KineticEngine kineticState, BoxPrototype[] boxes, EdgePrototype[] edges)
 	{
@@ -22,7 +23,7 @@ public final class ItemRegistrationOperation extends BiDiOperation
 		
 		this.boxes = boxes == null ? new BoxPrototype[0] : boxes;
 		this.edges = edges == null ? new EdgePrototype[0] : edges;
-		this.itemRegistrationPlugin = (ItemRegistrationPlugin) kineticState.getPlugin(ItemRegistrationPlugin.pluginID);
+		this.itemRegistrationModule = (ItemRegistrationModule) kineticState.getModule(ItemRegistrationModule.moduleID);
 	}
 	
 	@Override
@@ -30,11 +31,11 @@ public final class ItemRegistrationOperation extends BiDiOperation
 	{
 		for(BoxPrototype box : boxes)
 		{
-			kineticEngine.attachPluginHandlersTo(box);
+			kineticEngine.attachModuleHandlersTo(box);
 		}
 		for(EdgePrototype edge : edges)
 		{
-			kineticEngine.attachPluginHandlersTo(edge);
+			kineticEngine.attachModuleHandlersTo(edge);
 		}
 		redo();
 	}
@@ -42,15 +43,15 @@ public final class ItemRegistrationOperation extends BiDiOperation
 	@Override
 	public void undo()
 	{
-		itemRegistrationPlugin.doOperation(RegistrationOperation.UNREGISTER, false, boxes);
-		itemRegistrationPlugin.doOperation(RegistrationOperation.UNREGISTER, true, edges);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, boxes);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, edges);
 	}
 
 	@Override
 	public void redo()
 	{
-		itemRegistrationPlugin.doOperation(RegistrationOperation.REGISTER, false, boxes);
-		itemRegistrationPlugin.doOperation(RegistrationOperation.REGISTER, true, edges);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, boxes);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, edges);
 	}
 
 	@Override

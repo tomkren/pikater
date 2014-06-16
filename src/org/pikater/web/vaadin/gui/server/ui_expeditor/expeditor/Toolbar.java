@@ -250,6 +250,11 @@ public class Toolbar extends VerticalLayout
 		if(newActiveTabContent != null)
 		{
 			clickModeCB.select(newActiveTabContent.getState().clickMode.name());
+			clickModeCB.setEnabled(true);
+		}
+		else
+		{
+			clickModeCB.setEnabled(false);
 		}
 	}
 	

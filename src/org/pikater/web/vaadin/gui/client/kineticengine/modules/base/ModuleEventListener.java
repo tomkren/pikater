@@ -1,9 +1,11 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.plugins;
+package org.pikater.web.vaadin.gui.client.kineticengine.modules.base;
+
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-public abstract class PluginEventListener implements IEventListener
+public abstract class ModuleEventListener implements IEventListener
 {
 	@Override
 	public void handle(KineticEvent event)
@@ -28,5 +30,9 @@ public abstract class PluginEventListener implements IEventListener
 	}
 	
 	protected abstract void handleInner(KineticEvent event);
-	protected abstract String getListenerID();
+	
+	protected static String getListenerID(ModuleEventListener listener)
+	{
+		return GWTMisc.getSimpleName(listener.getClass());
+	}
 }

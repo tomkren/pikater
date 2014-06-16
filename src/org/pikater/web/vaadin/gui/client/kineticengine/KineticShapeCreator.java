@@ -1,8 +1,5 @@
 package org.pikater.web.vaadin.gui.client.kineticengine;
 
-import net.edzard.kinetic.Group;
-import net.edzard.kinetic.Line;
-
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
@@ -36,6 +33,8 @@ public class KineticShapeCreator
 	public BoxPrototype createBox(NodeRegisterType nrt, BoxInfo info)
 	{
 		BoxPrototype result = new BoxPrototype(kineticEngine, info);
+		result.applyUserSettings();
+		result.reloadVisualStyles(false);
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
 			kineticEngine.registerCreated(true, new BoxPrototype[] { result }, null);
@@ -44,30 +43,13 @@ public class KineticShapeCreator
 	}
 	
 	/**
-	 * Creates a partially initialized edge. The following methods have to be called later to make it fully initialized: <br>
-	 * <ul>
-	 * <li>connectFromBox</li>
-	 * <li>connectToBox</li>
-	 * <li>updateEdge</li>
-	 * </ul>
-	 * In addition, the edge has to be registered, if not done so automatically by this method.
-	 */
-	public EdgePrototype createEdge(NodeRegisterType nrt, Group container, Line baseLine)
-	{
-		EdgePrototype result = new EdgePrototype(kineticEngine, container, baseLine);
-		if(nrt == NodeRegisterType.AUTOMATIC)
-		{
-			kineticEngine.registerCreated(true, null, new EdgePrototype[] { result });
-		}
-		return result;
-	}
-	
-	/**
 	 * Creates a fully initialized edge, if registered automatically and both endpoints are not null (they can be).
 	 */
 	public EdgePrototype createEdge(NodeRegisterType nrt, BoxPrototype fromBox, BoxPrototype toBox)
 	{
 		EdgePrototype result = new EdgePrototype(kineticEngine);
+		result.applyUserSettings();
+		result.reloadVisualStyles(false);
 		result.setEndpoint(EndPoint.FROM, fromBox);
 		result.setEndpoint(EndPoint.TO, toBox);
 		if((fromBox != null) && (toBox != null))

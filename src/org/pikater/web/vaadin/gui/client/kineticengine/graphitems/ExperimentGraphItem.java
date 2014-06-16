@@ -1,25 +1,74 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.graphitems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 
 public abstract class ExperimentGraphItem implements IShapeWrapper
 {
 	/**
+	 * The engine to register and call back to.
+	 */
+	private final KineticEngine kineticEngine;
+	
+	/**
 	 * Indicator whether this item is currently selected in the editor.
 	 */
 	private boolean isSelected;
 	
 	/**
-	 * The engine to register and call back to.
+	 * The list to update the looks of your graph items from. Styles are applied
+	 * in the order they were added to this list, so the later the more priority.
 	 */
-	private final KineticEngine kineticEngine;
+	private final List<VisualStyle> appliedVisualStyles;
+	
+	public enum VisualStyle
+	{
+		SELECTED,
+		NOT_SELECTED,
+		HIGHLIGHTED,
+		NOT_HIGHLIGHTED;
+		
+		public VisualStyle getComplementStyle()
+		{
+			switch(this)
+			{
+				case HIGHLIGHTED:
+					return NOT_HIGHLIGHTED;
+				case NOT_HIGHLIGHTED:
+					return HIGHLIGHTED;
+				case NOT_SELECTED:
+					return SELECTED;
+				case SELECTED:
+					return NOT_SELECTED;
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
+		}
+		
+		public static List<VisualStyle> getDefault()
+		{
+			List<VisualStyle> result = new ArrayList<ExperimentGraphItem.VisualStyle>();
+			result.add(NOT_SELECTED);
+			result.add(NOT_HIGHLIGHTED);
+			return result;
+		}
+	}
+	
+	// ******************************************************************************************
+	// CONSTRUCTOR
 	
 	public ExperimentGraphItem(KineticEngine kineticEngine)
 	{
 		this.isSelected = false;
 		this.kineticEngine = kineticEngine;
+		this.appliedVisualStyles = VisualStyle.getDefault();
 	}
+	
+	// ******************************************************************************************
+	// PROTECTED INTERFACE
 	
 	protected KineticEngine getKineticEngine()
 	{
@@ -28,6 +77,27 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	
 	// ******************************************************************************************
 	// PUBLIC INTERFACE
+	
+	public void setVisualStyle(VisualStyle style)
+	{
+		if(appliedVisualStyles.add(style))
+		{
+			appliedVisualStyles.remove(style.getComplementStyle());
+			reloadVisualStyles(false);
+		}
+	}
+	
+	public void reloadVisualStyles(boolean alsoDraw)
+	{
+		for(VisualStyle style : appliedVisualStyles)
+		{
+			applyVisualStyle(style);
+		}
+		if(alsoDraw)
+		{
+			kineticEngine.getContainer(getComponentToDraw()).draw();
+		}
+	}
 	
 	/**
 	 * Gets the selection state.
@@ -51,7 +121,7 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 		
 		isSelected = !isSelected;
 		invertSelectionProgrammatically();
-		invertSelectionVisually();
+		setVisualStyle(isSelected ? VisualStyle.SELECTED : VisualStyle.NOT_SELECTED);
 	}
 	
 	public void setVisibleInKinetic(boolean visible)
@@ -68,7 +138,7 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 			}
 			else
 			{
-				registerInKinetic();
+				setRegisteredInKinetic(true);
 			}
 		}
 		else
@@ -83,7 +153,7 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 			}
 			else
 			{
-				unregisterInKinetic();
+				setRegisteredInKinetic(false);
 			}
 		}
 	}
@@ -107,8 +177,18 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	// ABSTRACT INTERFACE
 	
 	/**
-	 * Register the item in kinetic's environment. The item is guaranteed not to be selected
-	 * or registered.
+	 * Used when a global setting (common for all instance of an item) changes.
+	 */
+	public abstract void applyUserSettings();
+	
+	/**
+	 * Method called to change the visual style of inner components and accept some changes.
+	 */
+	protected abstract void applyVisualStyle(VisualStyle style);
+	
+	/**
+	 * If to be registered, the item is guaranteed not to be selected or registered. Otherwise,
+	 * it is guaranteed to be registered and not to be selected.
 	 * </br></br>
 	 * TIPS:
 	 * <ul>
@@ -118,24 +198,13 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	 * <li> Register the item with the {@link net.edzard.kinetic.Container#add()} method.
 	 * </ul> 
 	 */
-	protected abstract void registerInKinetic();
-	
-	/**
-	 * Unregister (remove) the item from kinetic's environment. The item is guaranteed to be
-	 * registered and not to be selected.
-	 */
-	protected abstract void unregisterInKinetic();
+	protected abstract void setRegisteredInKinetic(boolean registered);
 	
 	/**
 	 * Method to permanently destroy all inner nodes that make up this item. This method
 	 * needs to do nothing else than what it states.
 	 */
 	protected abstract void destroyInnerNodes();
-	
-	/**
-	 * Method to change visual style of the child class and update its data structure.
-	 */
-	protected abstract void invertSelectionVisually();
 	
 	/**
 	 * Method for any additional programmatic changes (exclusive to this item), if any

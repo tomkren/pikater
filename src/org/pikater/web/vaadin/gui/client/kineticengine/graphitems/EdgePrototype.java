@@ -9,6 +9,7 @@ import net.edzard.kinetic.Group;
 import net.edzard.kinetic.Kinetic;
 import net.edzard.kinetic.Layer;
 import net.edzard.kinetic.Line;
+import net.edzard.kinetic.Line.LineCap;
 import net.edzard.kinetic.Node;
 import net.edzard.kinetic.Path;
 import net.edzard.kinetic.PathSVG;
@@ -21,14 +22,37 @@ import org.pikater.web.vaadin.gui.client.kineticengine.GlobalEngineConfig;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 
 import com.google.gwt.core.client.JsArray;
 
 public class EdgePrototype extends ExperimentGraphItem
 {
 	// **********************************************************************************************
-	// "CONFIGURATION" AND TYPES
+	// INNER KINETIC COMPONENTS
+	
+	/**
+	 * The group to contain the edge and the drag marks, not the baseline though.
+	 */
+	private final Group groupContainer;
+	
+	/**
+	 * The main shape representing this edge.
+	 */
+	private final PathSVG arrow;
+	
+	/**
+	 * The small squares to trigger "edge dragging".
+	 */
+	private final Rectangle fromBoxDragMark;
+	private final Rectangle toBoxDragMark;
+	
+	/**
+	 * The line to be shown instead of this edge when an endpoint box is dragged or this edge is being connected (dragged) to a different endpoint.
+	 */
+	private final Line baseLine;
+		
+	// **********************************************************************************************
+	// SOME VISUAL STYLE PARAMETERS
 	
 	/**
 	 * Parameters defining the looks of the arrowhead (how "sharp" it is).
@@ -43,6 +67,9 @@ public class EdgePrototype extends ExperimentGraphItem
 	private static final int dragMarkDimensionInPixels = 12;
 	private static final Vector2d dragMarkSize = new Vector2d(dragMarkDimensionInPixels, dragMarkDimensionInPixels);
 	private static final Vector2d dragMarkHalfSize = new Vector2d(dragMarkDimensionInPixels >> 1, dragMarkDimensionInPixels >> 1);
+	
+	// **********************************************************************************************
+	// PROGRAMMATIC VARIABLES AND TYPES
 	
 	private static enum InternalState
 	{
@@ -69,9 +96,6 @@ public class EdgePrototype extends ExperimentGraphItem
 		}
 	}
 	
-	// **********************************************************************************************
-	// PROGRAMMATIC VARIABLES
-	
 	/**
 	 * Boxes that this edge connects.
 	 */
@@ -83,30 +107,6 @@ public class EdgePrototype extends ExperimentGraphItem
 	 */
 	private InternalState internalState;
 	
-	// **********************************************************************************************
-	// INNER KINETIC COMPONENTS
-	
-	/**
-	 * The main shape representing this edge.
-	 */
-	private final PathSVG arrow;
-	
-	/**
-	 * The group to contain the edge and the drag marks, not the baseline though.
-	 */
-	private final Group groupContainer;
-	
-	/**
-	 * The small squares to trigger "edge dragging".
-	 */
-	private final Rectangle fromBoxDragMark;
-	private final Rectangle toBoxDragMark;
-	
-	/**
-	 * The line to be shown instead of this edge when an endpoint box is dragged or this edge is being connected (dragged) to a different endpoint.
-	 */
-	private final Line baseLine;
-	
 	/**
 	 * Regular constructor.
 	 */
@@ -114,78 +114,91 @@ public class EdgePrototype extends ExperimentGraphItem
 	{
 		super(kineticEngine);
 		
+		// first programmatic fields
 		this.fromBox = null;
 		this.toBox = null;
-		
 		this.internalState = InternalState.EDGE;
 		
+		// setup the edge if not connected
 		this.baseLine = Kinetic.createLine(Vector2d.origin, Vector2d.origin);
-		this.baseLine.setStroke(Colour.aqua);
 		this.baseLine.setListening(false);
-		this.baseLine.setName(GlobalEngineConfig.name_edge_baseLine);
+		this.baseLine.setStroke(Colour.red);
+		this.baseLine.setStrokeWidth(2);
+		this.baseLine.setLineStyle(LineStyle.DASHED);
+		this.baseLine.setLineCap(LineCap.ROUND);
 		
+		// setup the edge if connected, part 1
+		this.arrow = Kinetic.createPathSVG(Vector2d.origin, "");
+		this.arrow.setListening(false);
+		this.arrow.setStrokeWidth(3.0);
+		
+		// setup the edge if connected, part 2
+		this.fromBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, dragMarkSize));
+		this.fromBoxDragMark.setDraggable(false);
+		this.fromBoxDragMark.setFill(Colour.darkorchid);
+		
+		// setup the edge if connected, part 3
+		this.toBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, dragMarkSize));
+		this.toBoxDragMark.setDraggable(false);
+		this.toBoxDragMark.setFill(Colour.darkorchid);
+		
+		// create the group, bind it all together
 		this.groupContainer = Kinetic.createGroup();
 		this.groupContainer.setDraggable(false);
-		this.groupContainer.setName(GlobalEngineConfig.name_edge_container);
-		
-		this.arrow = Kinetic.createPathSVG(Vector2d.origin, "");
-		this.arrow.setStrokeWidth(3.0);
-		this.arrow.setListening(false);
-		this.arrow.setName(GlobalEngineConfig.name_edge_arrrow);
-		
-		this.fromBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, dragMarkSize));
-		this.fromBoxDragMark.setFill(Colour.paleturquoise);
-		this.fromBoxDragMark.setDraggable(false);
-		this.fromBoxDragMark.setName(GlobalEngineConfig.name_edge_fromDrag);
-		// this.fromBoxDragMark.hide();
-		
-		this.toBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, dragMarkSize));
-		this.toBoxDragMark.setFill(Colour.paleturquoise);
-		this.toBoxDragMark.setDraggable(false);
-		this.toBoxDragMark.setName(GlobalEngineConfig.name_edge_toDrag);
-		// this.toBoxDragMark.hide();
-		
 		this.groupContainer.add(this.arrow);
 		this.groupContainer.add(this.fromBoxDragMark);
 		this.groupContainer.add(this.toBoxDragMark);
-	}
-	
-	public EdgePrototype(KineticEngine kineticEngine, Group groupContainer, Line baseLine)
-	{
-		super(kineticEngine);
-		
-		this.fromBox = null;
-		this.toBox = null;
-		
-		this.internalState = InternalState.EDGE;
-		
-		this.baseLine = baseLine;
-		
-		this.groupContainer = groupContainer;
-		this.arrow = groupContainer.find("." + GlobalEngineConfig.name_edge_arrrow).get(0).cast();
-		this.fromBoxDragMark = groupContainer.find("." + GlobalEngineConfig.name_edge_fromDrag).get(0).cast();
-		this.toBoxDragMark = groupContainer.find("." + GlobalEngineConfig.name_edge_toDrag).get(0).cast();
 	}
 	
 	// **********************************************************************************************
 	// INHERITED INTERFACE
 	
 	@Override
-	protected void registerInKinetic()
+	public void applyUserSettings()
 	{
-		Layer layer = getKineticEngine().getContainer(EngineComponent.LAYER_EDGES).cast();
-		layer.add(groupContainer);
-		layer.add(baseLine);
-		
-		assert(internalState == InternalState.EDGE);
-		baseLine.hide();
 	}
-	
+
 	@Override
-	protected void unregisterInKinetic()
+	protected void applyVisualStyle(VisualStyle style)
 	{
-		groupContainer.remove();
-		baseLine.remove();
+		switch(style)
+		{
+			case SELECTED:
+				arrow.setStroke(Colour.gold);
+				break;
+			case NOT_SELECTED:
+				arrow.setStroke(Colour.black);
+				break;
+				
+			case HIGHLIGHTED:
+				arrow.setStroke(Colour.red);
+				break;
+			case NOT_HIGHLIGHTED:
+				arrow.setStroke(Colour.black);
+				break;
+			
+			default:
+				throw new IllegalStateException("Unknown state: " + style.name());
+		}
+	}
+
+	@Override
+	protected void setRegisteredInKinetic(boolean registered)
+	{
+		if(registered)
+		{
+			Layer layer = getKineticEngine().getContainer(EngineComponent.LAYER_EDGES).cast();
+			layer.add(groupContainer);
+			layer.add(baseLine);
+			
+			assert(internalState == InternalState.EDGE);
+			baseLine.hide();
+		}
+		else
+		{
+			groupContainer.remove();
+			baseLine.remove();
+		}
 	}
 	
 	@Override
@@ -206,19 +219,6 @@ public class EdgePrototype extends ExperimentGraphItem
 		else
 		{
 			groupContainer.moveTo(getKineticEngine().getContainer(EngineComponent.LAYER_EDGES)); // deselect
-		}
-	}
-	
-	@Override
-	protected void invertSelectionVisually()
-	{
-		if(isSelected())
-		{
-			arrow.setStroke(Colour.coral); // select
-		}
-		else
-		{
-			arrow.setStroke(Colour.black); // deselect
 		}
 	}
 	
@@ -298,9 +298,11 @@ public class EdgePrototype extends ExperimentGraphItem
 		List<EdgePrototype> result = new ArrayList<EdgePrototype>();
 		for(int i = 0; i < containers.length(); i++)
 		{
+			/*
 			Group container = containers.get(i).cast();
 			Line baseLine = baseLines.get(i).cast();
 			result.add(shapeCreator.createEdge(NodeRegisterType.MANUAL, container, baseLine));
+			*/
 		}
 		return result;
 	}

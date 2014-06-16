@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.plugins;
+package org.pikater.web.vaadin.gui.client.kineticengine.modules;
 
 import net.edzard.kinetic.Rectangle.RectanglePoint;
 import net.edzard.kinetic.event.EventType;
@@ -12,11 +12,15 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem.VisualStyle;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventListener;
 
 @SuppressWarnings("deprecation")
-public final class DragEdgePlugin implements IEnginePlugin
+public final class DragEdgeModule implements IEngineModule
 {
-	public static String pluginID;
+	public static String moduleID;
 	
 	/**
 	 * The engine instance to work with.
@@ -36,7 +40,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 	/**
 	 * The special event handlers/listeners to attach to graph items.
 	 */
-	private class DragMarkMouseDownListener extends PluginEventListener
+	private class DragMarkMouseDownListener extends ModuleEventListener
 	{
 		private final EdgePrototype edgeBeingDragged;
 		private final EndPoint draggedEdgeEndpoint;
@@ -59,20 +63,12 @@ public final class DragEdgePlugin implements IEnginePlugin
 			event.setProcessed();
 			event.stopVerticalPropagation();
 		}
-
-		@Override
-		protected String getListenerID()
-		{
-			return GWTMisc.getSimpleName(this.getClass());
-		}
 	}
-	private class BoxMouseOverListener extends PluginEventListener
+	private class BoxMouseEnterListener extends BoxListener
 	{
-		private final BoxPrototype parentBox;
-		
-		public BoxMouseOverListener(BoxPrototype parentBox)
+		public BoxMouseEnterListener(BoxPrototype parentBox)
 		{
-			this.parentBox = parentBox;
+			super(parentBox);
 		}
 
 		@Override
@@ -80,27 +76,19 @@ public final class DragEdgePlugin implements IEnginePlugin
 		{
 			if(isAnEdgeBeingDragged() && !isStaticEndpointForThisDrag(parentBox))
 			{
-				parentBox.highlightAsNewEndpointCandidate();
+				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED);
 				kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.setProcessed();
 				event.stopVerticalPropagation();
 			}
 		}
-
-		@Override
-		protected String getListenerID()
-		{
-			return GWTMisc.getSimpleName(this.getClass());
-		}
 	}
-	private class BoxMouseOutListener extends PluginEventListener
+	private class BoxMouseLeaveListener extends BoxListener
 	{
-		private final BoxPrototype parentBox;
-		
-		public BoxMouseOutListener(BoxPrototype parentBox)
+		public BoxMouseLeaveListener(BoxPrototype parentBox)
 		{
-			this.parentBox = parentBox;
+			super(parentBox);
 		}
 
 		@Override
@@ -108,21 +96,15 @@ public final class DragEdgePlugin implements IEnginePlugin
 		{
 			if(isAnEdgeBeingDragged())
 			{
-				parentBox.cancelHighlightAsNewEndpointCandidate();
+				parentBox.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
 				kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.setProcessed();
 				event.stopVerticalPropagation();
 			}
 		}
-
-		@Override
-		protected String getListenerID()
-		{
-			return GWTMisc.getSimpleName(this.getClass());
-		}
 	}
-	private class BoxMouseUpListener extends PluginEventListener
+	private class BoxMouseUpListener extends ModuleEventListener
 	{
 		@Override
 		protected void handleInner(KineticEvent event)
@@ -134,12 +116,6 @@ public final class DragEdgePlugin implements IEnginePlugin
 				event.setProcessed();
 			}
 			// event.stopPropagation(); // SERIOUSLY... don't set this up everytime. It can have devastating effects like preventing the Click event.
-		}
-
-		@Override
-		protected String getListenerID()
-		{
-			return GWTMisc.getSimpleName(this.getClass());
 		}
 	};
 	
@@ -165,12 +141,12 @@ public final class DragEdgePlugin implements IEnginePlugin
 			BoxPrototype newEndpoint = kineticEngine.getHoveredBox();
 			if(newEndpoint != null)
 			{
-				newEndpoint.cancelHighlightAsNewEndpointCandidate();
+				newEndpoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
 				BoxPrototype originalEndpoint = draggedEdge.getEndPoint(draggedEdgeEndpoint); 
 				if(newEndpoint != originalEndpoint) // now we know for sure we are going to change the endpoint
 				{
 					// IMPORTANT: don't violate the call order
-					SelectionPlugin selectionPlugin = (SelectionPlugin) kineticEngine.getPlugin(SelectionPlugin.pluginID);
+					SelectionModule selectionPlugin = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
 					selectionPlugin.onEdgeDragOperationFinished(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
 					
 					kineticEngine.swapEdgeEndpoint(); // changes the endpoint, updates the edge but doesn't draw
@@ -185,9 +161,9 @@ public final class DragEdgePlugin implements IEnginePlugin
 	 * Constructor.
 	 * @param kineticEngine
 	 */
-	public DragEdgePlugin(KineticEngine kineticEngine)
+	public DragEdgeModule(KineticEngine kineticEngine)
 	{
-		pluginID = GWTMisc.getSimpleName(this.getClass());
+		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.draggedEdge = null;
 	}
@@ -196,9 +172,9 @@ public final class DragEdgePlugin implements IEnginePlugin
 	// INHERITED INTERFACE
 	
 	@Override
-	public String getPluginID()
+	public String getModuleID()
 	{
-		return pluginID;
+		return moduleID;
 	}
 	
 	@Override
@@ -222,9 +198,9 @@ public final class DragEdgePlugin implements IEnginePlugin
 		else if(graphItem instanceof BoxPrototype)
 		{
 			BoxPrototype box = (BoxPrototype)graphItem;
-			box.getMasterRectangle().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(pluginID));
-			box.getMasterRectangle().addEventListener(new BoxMouseOutListener(box), EventType.Basic.MOUSEOUT.withName(pluginID));
-			box.getMasterRectangle().addEventListener(new BoxMouseUpListener(), EventType.Basic.MOUSEUP.withName(pluginID));
+			box.getMasterNode().addEventListener(new BoxMouseEnterListener(box), EventType.Basic.MOUSEENTER.withName(moduleID));
+			box.getMasterNode().addEventListener(new BoxMouseLeaveListener(box), EventType.Basic.MOUSELEAVE.withName(moduleID));
+			box.getMasterNode().addEventListener(new BoxMouseUpListener(), EventType.Basic.MOUSEUP.withName(moduleID));
 		}
 		else
 		{
@@ -255,7 +231,7 @@ public final class DragEdgePlugin implements IEnginePlugin
 	
 	private void setEdgeEventHandler(EdgePrototype edge, EndPoint endPoint)
 	{
-		edge.getDragMark(endPoint).addEventListener(new DragMarkMouseDownListener(edge, endPoint), EventType.Basic.MOUSEDOWN.withName(pluginID));
+		edge.getDragMark(endPoint).addEventListener(new DragMarkMouseDownListener(edge, endPoint), EventType.Basic.MOUSEDOWN.withName(moduleID));
 	}
 	
 	private void setEdgeBeingDragged(EdgePrototype edge, EndPoint endPoint)

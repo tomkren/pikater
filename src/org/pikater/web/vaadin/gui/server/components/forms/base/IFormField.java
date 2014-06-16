@@ -1,6 +1,5 @@
-package org.pikater.web.vaadin.gui.server.components.forms.fields;
+package org.pikater.web.vaadin.gui.server.components.forms.base;
 
-import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
 
 public interface IFormField<T>
 {

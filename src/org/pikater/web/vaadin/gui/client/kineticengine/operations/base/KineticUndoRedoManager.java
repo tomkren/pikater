@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
+package org.pikater.web.vaadin.gui.client.kineticengine.operations.base;
 
 import java.util.Stack;
 
@@ -15,6 +15,24 @@ public class KineticUndoRedoManager
 		this.widget = widget;
 		this.undoStack = new Stack<BiDiOperation>();
 		this.redoStack = new Stack<BiDiOperation>();
+	}
+	
+	public void loadHistory(KineticUndoRedoManager history)
+	{
+		if(history != null)
+		{
+			if(!undoStack.isEmpty() || !redoStack.isEmpty())
+			{
+				throw new IllegalStateException("Can not load history if there is already an alternative newer version.");
+			}
+			else
+			{
+				this.undoStack.addAll(history.undoStack);
+				this.redoStack.addAll(history.redoStack);
+				
+				alterStateIf(!undoStack.isEmpty());
+			}
+		}
 	}
 	
 	public void clear()

@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.plugins;
+package org.pikater.web.vaadin.gui.client.kineticengine.modules;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,11 +9,12 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin.SelectionOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.SelectionOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 
-public class ItemRegistrationPlugin implements IEnginePlugin
+public class ItemRegistrationModule implements IEngineModule
 {
-	public static String pluginID;
+	public static String moduleID;
 	
 	/**
 	 * The engine instance to work with.
@@ -23,7 +24,7 @@ public class ItemRegistrationPlugin implements IEnginePlugin
 	/**
 	 * Selection plugin is needed for manual deselection.
 	 */
-	private final SelectionPlugin selectionPlugin;
+	private final SelectionModule selectionModule;
 	
 	/**
 	 * A self-explanatory variable.
@@ -34,11 +35,11 @@ public class ItemRegistrationPlugin implements IEnginePlugin
 	 * Constructor.
 	 * @param kineticEngine
 	 */
-	public ItemRegistrationPlugin(KineticEngine engine)
+	public ItemRegistrationModule(KineticEngine engine)
 	{
-		pluginID = GWTMisc.getSimpleName(this.getClass());
+		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = engine;
-		this.selectionPlugin = (SelectionPlugin) engine.getPlugin(SelectionPlugin.pluginID);
+		this.selectionModule = (SelectionModule) engine.getModule(SelectionModule.moduleID);
 		this.allRegisteredBoxes = new HashSet<BoxPrototype>();
 	}
 	
@@ -46,9 +47,9 @@ public class ItemRegistrationPlugin implements IEnginePlugin
 	// INHERITED INTERFACE
 	
 	@Override
-	public String getPluginID()
+	public String getModuleID()
 	{
-		return pluginID;
+		return moduleID;
 	}
 
 	@Override
@@ -99,7 +100,7 @@ public class ItemRegistrationPlugin implements IEnginePlugin
 		// first deselect provided boxes, if necessary
 		if(opKind == RegistrationOperation.UNREGISTER)
 		{
-			selectionPlugin.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, boxes);
+			selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, boxes);
 		}
 		
 		// then do the action
@@ -173,7 +174,7 @@ public class ItemRegistrationPlugin implements IEnginePlugin
 		/*
 		 * First deselect everything - selection plugin will not merge selections should this operation be unmade.
 		 */
-		selectionPlugin.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, getRegisteredBoxes());
+		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, getRegisteredBoxes());
 		
 		// then destroy edges
 		for(BoxPrototype box : allRegisteredBoxes)

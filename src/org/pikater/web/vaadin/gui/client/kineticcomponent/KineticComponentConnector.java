@@ -89,7 +89,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	{
 		super.init();
 		
-		getWidget().command_receiveExperimentToLoad(KineticComponentRegistrar.getSavedExperimentFor(getConnectorId()));
+		getWidget().initState(KineticStateRegistrar.getSavedState(getConnectorId()));
 	}
 	
 	@Override
@@ -97,7 +97,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	{
 		super.onUnregister();
 		
-		KineticComponentRegistrar.saveExperimentFor(getConnectorId(), getWidget().getEngine().toIntermediateFormat());
+		KineticStateRegistrar.saveState(getConnectorId(), getWidget().getState());
 	}
 	
 	// ----------------------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheet;
@@ -8,9 +9,11 @@ import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponen
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticDnDWrapper;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxBrowserToolbox;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
 import com.vaadin.annotations.StyleSheet;
@@ -82,12 +85,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	// INDIVIDUAL GUI COMPONENTS
 	
 	private final Toolbar toolbar; // NORTH
-	private final Toolbox toolbox_boxBrowser; // WEST
+	private final BoxBrowserToolbox toolbox_boxBrowser; // WEST
 	private final TabSheet experimentTabs; // CENTER
 	private final Toolbox toolbox_boxOptions; // EAST
 	private final Toolbox toolbox_util; // SOUTH
-	
-	// private final BoxCellBrowser boxCellBrowser;
 	
 	// -------------------------------------------------------------
 	// PROGRAMMATIC VARIABLES
@@ -96,8 +97,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	
 	/*
 	 * TODO: 
-	 * - kinetic canvas's size scales in regard to open toolboxes
-	 * - custom D&D component to mark the "drop place" visually?
+	 * - custom D&D component to mark the "drop place" visually? 
 	 */
 	
 	public ExpEditor(boolean debugMode)
@@ -114,7 +114,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setComponent(Border.NORTH, this.toolbar);
 		
 		// WEST COMPONENT INIT
-		this.toolbox_boxBrowser = new Toolbox(ExpEditorToolbox.METHOD_BROWSER.toDisplayName(), new Label("poliket"), new MouseEvents.ClickListener()
+		this.toolbox_boxBrowser = new BoxBrowserToolbox(ExpEditorToolbox.METHOD_BROWSER.toDisplayName(), new MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = 812989325500737028L;
 
@@ -124,8 +124,9 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 				minimizeToolbox(ExpEditorToolbox.METHOD_BROWSER);
 			}
 		});
-		this.toolbox_boxBrowser.setStyleName("displayBorder");
+		this.toolbox_boxBrowser.setStyleName("boxBrowserToolbox");
 		setComponent(Border.WEST, this.toolbox_boxBrowser);
+		addColumnStyleName(Column.WEST, "boxBrowserToolboxSize");
 		
 		// CENTER COMPONENT INIT
 		this.experimentTabs = new TabSheet(this);
@@ -161,15 +162,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		this.toolbox_util.setStyleName("displayBorder");
 		setComponent(Border.SOUTH, this.toolbox_util);
 		
-		/*
-		this.boxCellBrowser = new BoxCellBrowser();
-		this.boxCellBrowser.setSizeUndefined();
-		this.boxCellBrowser.setStyleName("displayBorder");
-		setComponent(Border.SOUTH, this.boxCellBrowser);
-		*/
-		
 		setRowHeight(Row.CENTER, DimensionMode.MAX);
-		setColumnWidth(Column.CENTER, DimensionMode.MAX);
+		setColumnWidth(Column.CENTER, 100, DimensionUnit.PCT);
+		setToolboxVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER, false);
+		setToolboxVisible(ExpEditorToolbox.UTILITIES, false);
 		
 		for(final ExpEditorToolbox toolbox : ExpEditorToolbox.values())
 		{
@@ -187,6 +183,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		
 		this.extension = new ExpEditorExtension();
 		this.extension.extend(this);
+		this.extension.getClientRPC().command_loadBoxPictures(BoxType.getAllPictureURLs());
 	}
 	
 	@Override

@@ -1,10 +1,10 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.plugins;
+package org.pikater.web.vaadin.gui.client.kineticengine.modules.base;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
 
-public interface IEnginePlugin
+public interface IEngineModule
 {
-	public String getPluginID();
+	public String getModuleID();
 	public String[] getItemsToAttachTo();
 	public void attachEventListeners(ExperimentGraphItem graphItem);
 }

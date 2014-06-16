@@ -1,11 +1,10 @@
-package org.pikater.web.vaadin.gui.server.components.forms.abstractform;
+package org.pikater.web.vaadin.gui.server.components.forms.base;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormTextField;
-import org.pikater.web.vaadin.gui.server.components.forms.fields.IFormField;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 import com.vaadin.ui.AbstractField;

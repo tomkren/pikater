@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.plugins;
+package org.pikater.web.vaadin.gui.client.kineticengine.modules;
 
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.KineticEvent;
@@ -9,10 +9,13 @@ import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventListener;
 
-public final class TrackMousePlugin implements IEnginePlugin
+public final class TrackMouseModule implements IEngineModule
 {
-	public static String pluginID;
+	public static String moduleID;
 	
 	/**
 	 * The engine instance to work with.
@@ -27,13 +30,11 @@ public final class TrackMousePlugin implements IEnginePlugin
 	/**
 	 * The special event handlers/listeners to attach to boxes.
 	 */
-	private class BoxMouseOverListener extends PluginEventListener
+	private class BoxMouseOverListener extends BoxListener
 	{
-		private final BoxPrototype parentBox;
-		
 		public BoxMouseOverListener(BoxPrototype parentBox)
 		{
-			this.parentBox = parentBox;
+			super(parentBox);
 		}
 
 		@Override
@@ -42,14 +43,8 @@ public final class TrackMousePlugin implements IEnginePlugin
 			setCurrentlyHoveredBox(parentBox);
 			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.POINTER);
 		}
-
-		@Override
-		protected String getListenerID()
-		{
-			return GWTMisc.getSimpleName(this.getClass());
-		}
 	}
-	private class BoxMouseOutHandler extends PluginEventListener
+	private class BoxMouseOutHandler extends ModuleEventListener
 	{
 		@Override
 		protected void handleInner(KineticEvent event)
@@ -57,20 +52,14 @@ public final class TrackMousePlugin implements IEnginePlugin
 			unsetCurrentlyHoveredBox();
 			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.AUTO);
 		}
-
-		@Override
-		protected String getListenerID()
-		{
-			return GWTMisc.getSimpleName(this.getClass());
-		}
 	};
 
 	/**
 	 * Constructor.
 	 */
-	public TrackMousePlugin(KineticEngine kineticEngine)
+	public TrackMouseModule(KineticEngine kineticEngine)
 	{
-		pluginID = GWTMisc.getSimpleName(this.getClass());
+		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.currentlyHoveredBox = null;
 	}
@@ -79,9 +68,9 @@ public final class TrackMousePlugin implements IEnginePlugin
 	// INHERITED INTERFACE
 	
 	@Override
-	public String getPluginID()
+	public String getModuleID()
 	{
-		return pluginID;
+		return moduleID;
 	}
 	
 	@Override
@@ -96,8 +85,8 @@ public final class TrackMousePlugin implements IEnginePlugin
 		if(graphItem instanceof BoxPrototype)
 		{
 			BoxPrototype box = (BoxPrototype)graphItem;
-			box.getMasterRectangle().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(pluginID));
-			box.getMasterRectangle().addEventListener(new BoxMouseOutHandler(), EventType.Basic.MOUSEOUT.withName(pluginID));
+			box.getMasterNode().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(moduleID));
+			box.getMasterNode().addEventListener(new BoxMouseOutHandler(), EventType.Basic.MOUSEOUT.withName(moduleID));
 		}
 		else
 		{

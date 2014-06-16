@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormCheckField;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldGenerator;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormTextArea;
