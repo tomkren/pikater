@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system;
+package org.pikater.core.agents.system.manager;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
@@ -8,6 +8,8 @@ import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 import jade.util.leap.List;
+
+import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Eval;

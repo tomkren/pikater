@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system;
+package org.pikater.core.agents.system.manager;
 
 import jade.lang.acl.ACLMessage;
 

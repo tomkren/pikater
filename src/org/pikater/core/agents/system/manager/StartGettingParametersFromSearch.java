@@ -1,8 +1,9 @@
-package org.pikater.core.agents.system;
+package org.pikater.core.agents.system.manager;
 
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
+import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
 
 public class StartGettingParametersFromSearch extends AchieveREInitiator {

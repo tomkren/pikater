@@ -1,4 +1,4 @@
-package org.pikater.core.agents.metadata;
+package org.pikater.core.agents.system.metadata.reader;
 
 import java.io.BufferedReader;
 import java.io.File;

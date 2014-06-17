@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system;
+package org.pikater.core.agents.system.manager;
 
 import jade.content.Concept;
 import jade.content.lang.Codec;
@@ -13,12 +13,13 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
+import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
-class ParserBehaviour extends AchieveREResponder {
+public class ParserBehaviour extends AchieveREResponder {
 	
 	private static final long serialVersionUID = 4754473043512463873L;
 	

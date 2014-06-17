@@ -23,6 +23,8 @@ import jade.proto.SubscriptionResponder.SubscriptionManager;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.manager.ComputationCollectionItem;
+import org.pikater.core.agents.system.manager.ParserBehaviour;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
@@ -47,7 +49,7 @@ public class Agent_Manager extends PikaterAgent {
 	private boolean no_xml_output = true;
 	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
 	private int problem_i = 0;
-	protected HashMap<Integer, ComputationCollectionItem> computationCollection =
+	public HashMap<Integer, ComputationCollectionItem> computationCollection =
 			new HashMap<Integer, ComputationCollectionItem>();
 	
 	
@@ -181,7 +183,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	
 	
-	protected void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
+	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
 		// Prepare the subscription message to the request originator
 		ACLMessage msgOut = originalMessage.createReply();
 		msgOut.setPerformative(result.getPerformative());

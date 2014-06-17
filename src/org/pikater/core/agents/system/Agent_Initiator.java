@@ -9,6 +9,7 @@ import org.pikater.core.agents.configuration.AgentConfiguration;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Configuration;
 import org.pikater.core.agents.configuration.XmlConfigurationProvider;
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 
 import java.text.SimpleDateFormat;
@@ -25,9 +26,9 @@ public class Agent_Initiator extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-		registerWithDF();
+        registerWithDF(AgentNames.INITIATOR);
 
-		System.out.println("Configuration: " + fileName);
+		log("Agent " + getName() + " configuration " + fileName);
 
 		// read agents from configuration
 		try {
@@ -71,8 +72,6 @@ public class Agent_Initiator extends PikaterAgent {
 		if (nodeName != null && !nodeName.isEmpty()) {
 			name = name + "-" + nodeName;
 		}
-		//if (args.length > 0)
-		//	System.out.println(type + " " + name + " " + args[0]);
 
 		try {
 			AgentController agent = container.createNewAgent(name, type, args);
