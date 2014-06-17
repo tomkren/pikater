@@ -4,6 +4,7 @@ import org.pikater.web.vaadin.gui.client.extensions.AutoVerticalBorderLayoutExte
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
 import com.vaadin.annotations.StyleSheet;
@@ -63,11 +64,23 @@ public class AutoVerticalBorderLayout extends CustomComponent implements AutoVer
 	{
 		extension.getClientRPC().setRowHeight(row, dimMode);
 	}
+	
+	@Override
+	public void setColumnWidth(final Column designatedColumn, double value, DimensionUnit unit)
+	{
+		extension.getClientRPC().setColumnWidth(designatedColumn, value, unit);
+	}
+	
+	@Override
+	public void addColumnStyleName(Column column, String styleName)
+	{
+		extension.getClientRPC().addColumnStyleName(column, styleName);
+	}
 
 	@Override
-	public void setColumnWidth(Column row, DimensionMode dimMode)
+	public void removeColumnStyleName(Column column, String styleName)
 	{
-		extension.getClientRPC().setColumnWidth(row, dimMode);
+		extension.getClientRPC().removeColumnStyleName(column, styleName);
 	}
 
 	@Override

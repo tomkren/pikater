@@ -56,13 +56,18 @@ public class JPAMetaDataReader {
 			for (int i=md.getAttributeMetadataList().size()-1;i>=0;i--)
 	        {
 	            AttributeMetadata att= (AttributeMetadata)md.getAttributeMetadataList().get(i);
-	            
+	            String attName=att.getName();
+	            System.out.println("MetadataQueen sent attribute with name: "+attName);
+	            if(attName==null){
+	            	attName="attr_"+i;
+	            }
 	            if(att instanceof CategoricalAttributeMetadata){
 	            	int numberOfCategories=((CategoricalAttributeMetadata)att).getNumberOfCategories();
 	            	JPAAttributeCategoricalMetaData attrCat=new JPAAttributeCategoricalMetaData();
 	            	attrCat.setNumberOfCategories(numberOfCategories);
 	            	attrCat.setRatioOfMissingValues(att.getRatioOfMissingValues());
 	            	attrCat.setTarget(att.isIsTarget());
+	            	attrCat.setName(attName);
 	            	attrs.add(attrCat);
 	            }else if(att instanceof RealAttributeMetadata){
 	            	RealAttributeMetadata ram= ((RealAttributeMetadata)att);
@@ -80,6 +85,7 @@ public class JPAMetaDataReader {
 	            	numericalAttributeMetaData.setVariance(ram.getStandardDeviation());
 	            	numericalAttributeMetaData.setTarget(att.isIsTarget());
 	            	numericalAttributeMetaData.setRatioOfMissingValues(att.getRatioOfMissingValues());
+	            	numericalAttributeMetaData.setName(attName);
 	            	attrs.add(numericalAttributeMetaData);
 	            }else if(att instanceof IntegerAttributeMetadata){
 	            	IntegerAttributeMetadata ram= ((IntegerAttributeMetadata)att);
@@ -98,6 +104,7 @@ public class JPAMetaDataReader {
 	            	
 	            	numericalAttributeMetaData.setTarget(att.isIsTarget());
 	            	numericalAttributeMetaData.setRatioOfMissingValues(att.getRatioOfMissingValues());
+	            	numericalAttributeMetaData.setName(attName);
 	            	attrs.add(numericalAttributeMetaData);
 	            }else{
 	            	System.out.println(att.toString());

@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-public class NewModel implements IModel {
+public class NewModel implements IModelDescription {
 
 	/**
 	 * 

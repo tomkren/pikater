@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
-import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormTextField;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldGenerator;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.PasswordField;

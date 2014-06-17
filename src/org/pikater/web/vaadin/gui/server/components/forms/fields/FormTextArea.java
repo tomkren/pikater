@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.forms.fields;
 
-import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.base.IFormField;
 
 import com.vaadin.ui.TextArea;
 

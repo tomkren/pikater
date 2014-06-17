@@ -11,6 +11,7 @@ import com.google.gwt.core.client.JsArray;
 import net.edzard.kinetic.Box2d;
 import net.edzard.kinetic.Colour;
 import net.edzard.kinetic.Group;
+import net.edzard.kinetic.Image;
 import net.edzard.kinetic.Kinetic;
 import net.edzard.kinetic.Layer;
 import net.edzard.kinetic.Node;
@@ -18,6 +19,7 @@ import net.edzard.kinetic.Rectangle;
 import net.edzard.kinetic.Text;
 import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.Rectangle.RectanglePoint;
+import net.edzard.kinetic.Text.FontStyle;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
@@ -33,28 +35,46 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 public class BoxPrototype extends ExperimentGraphItem
 {
 	// **********************************************************************************************
-	// PROGRAMMATIC VARIABLES
+	// INNER KINETIC COMPONENTS
 	
+	/**
+	 * The group to hold all other shapes together.
+	 */
+	private final Group container;
+	
+	/**
+	 * The outward shape that depicts the bounds of the box. 
+	 */
+	private final Rectangle rectangle;
+	
+	/**
+	 * This box's icon corresponding to its type. 
+	 */
+	private final Image icon;
+	
+	/**
+	 * This box's title corresponding to its type.  
+	 */
+	private final Text title;
+	
+	/**
+	 * The box's name ("instance" of box type). 
+	 */
+	private final Text name;
+	
+	// **********************************************************************************************
+	// PROGRAMMATIC VARIABLES
+
 	/**
 	 * Edges leading from and to this box and iterator over these 2 sets.
 	 * The Set interface is counted upon in {@link #registerEdge()} and {@link #unregisterEdge()}
 	 * methods so don't change it lightly.
 	 */
-	public final Set<EdgePrototype> connectedEdges; 
-	
-	// **********************************************************************************************
-	// INNER KINETIC COMPONENTS
+	public final Set<EdgePrototype> connectedEdges;
 	
 	/**
-	 * The box's inner components.
+	 * Reference to an external box information received from the server.
 	 */
-	private final Group boxContainer;
-	private final Rectangle masterShape;
-	private final Text textLabel;
-	
-	// **********************************************************************************************
-	// EXTERNAL REFERENCES
-	
 	private final BoxInfo info;
 	
 	/**
@@ -64,29 +84,45 @@ public class BoxPrototype extends ExperimentGraphItem
 	{
 		super(kineticEngine);
 		
+		// first programmatic fields
 		this.info = info;
 		this.connectedEdges = new HashSet<EdgePrototype>();
 		
 		// setup master rectangle
-		this.masterShape = Kinetic.createRectangle(new Box2d(Vector2d.origin, GWTKineticSettings.getCurrentBoxSize()));
-		this.masterShape.setDraggable(false);
-		this.masterShape.setName(GlobalEngineConfig.name_box_masterRectangle); // the master shape that defines the bounds of the whole "box"
+		rectangle = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
+		rectangle.setDraggable(false);
+		rectangle.setCornerRadius(15);
 		
-		// setup text label
-	    this.textLabel = Kinetic.createText(Vector2d.origin, info.displayName);
-	    this.textLabel.setName(GlobalEngineConfig.name_box_textLabel);
-	    this.textLabel.setListening(false);
-	    
-	    this.boxContainer = Kinetic.createGroup();
-		this.boxContainer.setPosition(new Vector2d(info.initialX, info.initialY));
-		this.boxContainer.setName(GlobalEngineConfig.name_box_container);
-		this.boxContainer.setID(info.boxID);
+		final double componentSpace = 13; // in pixels
 		
-		this.boxContainer.add(masterShape);
-		this.boxContainer.add(textLabel);
-	    
-	    // and finally, set event handlers
-	    this.boxContainer.addEventListener(new IEventListener()
+		// setup the box's icon
+		icon = Kinetic.createImage(new Vector2d(componentSpace, componentSpace), new com.google.gwt.user.client.ui.Image(info.pictureURL));
+		icon.setDraggable(false);
+		icon.setStroke(Colour.black);
+		icon.setStrokeWidth(2);
+		
+		double textOffset_left = componentSpace + icon.getWidth() + componentSpace / 2;
+		
+		// box type text label
+		title = Kinetic.createText(new Vector2d(textOffset_left, componentSpace), info.boxTypeName);
+		title.setDraggable(false);
+		title.setFontStyle(FontStyle.BOLD);
+		
+		// box display name label
+		name = Kinetic.createText(new Vector2d(textOffset_left, componentSpace + icon.getHeight() / 2), info.displayName);
+		name.setDraggable(false);
+		name.setFontStyle(FontStyle.ITALIC);
+		
+		// create the group, bind it all together
+	    this.container = Kinetic.createGroup(new Vector2d(info.initialX, info.initialY), 0);
+		this.container.setID(info.boxID);
+		this.container.add(rectangle);
+		this.container.add(icon);
+		this.container.add(title);
+		this.container.add(name);
+		
+	    // set event handlers
+	    this.container.addEventListener(new IEventListener()
 		{
 			@Override
 			public void handle(KineticEvent event)
@@ -95,7 +131,7 @@ public class BoxPrototype extends ExperimentGraphItem
 				event.stopVerticalPropagation();
 			}
 		}, EventType.Basic.DRAGSTART);
-	    this.boxContainer.addEventListener(new IEventListener()
+	    this.container.addEventListener(new IEventListener()
 		{
 			@Override
 			public void handle(KineticEvent event)
@@ -104,7 +140,7 @@ public class BoxPrototype extends ExperimentGraphItem
 				event.stopVerticalPropagation();
 			}
 		}, EventType.Basic.DRAGMOVE);
-	    this.boxContainer.addEventListener(new IEventListener()
+	    this.container.addEventListener(new IEventListener()
 		{
 			@Override
 			public void handle(KineticEvent event)
@@ -119,22 +155,69 @@ public class BoxPrototype extends ExperimentGraphItem
 	// INHERITED INTERFACE
 	
 	@Override
-	protected void registerInKinetic()
+	public void applyUserSettings()
 	{
-		getKineticEngine().getContainer(EngineComponent.LAYER_BOXES).add(boxContainer);
+		/*
+		 * Set sizes.
+		 */
+		
+		final Vector2d boxSize = GWTKineticSettings.getCurrentBoxSize();
+		final Vector2d textSize = new Vector2d(boxSize.x - title.getPosition().x - 10, icon.getHeight());
+		
+		rectangle.setSize(boxSize);
+		// icon already has size set from the constructor
+		title.setSize(textSize);
+		name.setSize(textSize);
 	}
 	
 	@Override
-	protected void unregisterInKinetic()
+	protected void applyVisualStyle(VisualStyle style)
 	{
-		boxContainer.remove();
+		switch(style)
+		{
+			case SELECTED:
+				container.setDraggable(false);
+				rectangle.setStroke(Colour.gold);
+				rectangle.setStrokeWidth(3);
+				break;
+			case NOT_SELECTED:
+				container.setDraggable(true);
+				rectangle.setStroke(Colour.black);
+				rectangle.setStrokeWidth(2);
+				break;
+				
+			case HIGHLIGHTED:
+				rectangle.setStroke(Colour.red);
+				rectangle.setStrokeWidth(3);
+				break;
+			case NOT_HIGHLIGHTED:
+				rectangle.setStroke(Colour.black);
+				rectangle.setStrokeWidth(2);
+				break;
+
+			default:
+				throw new IllegalStateException("Unknown state: " + style.name());
+		}
 	}
 	
+	@Override
+	protected void setRegisteredInKinetic(boolean registered)
+	{
+		if(registered)
+		{
+			getKineticEngine().getContainer(EngineComponent.LAYER_BOXES).add(container);
+		}
+		else
+		{
+			container.remove();
+		}
+	}
+
 	@Override
 	protected void destroyInnerNodes()
 	{
-		boxContainer.destroyChildren();
-		boxContainer.destroy();
+		container.destroyChildren();
+		container.destroy();
 	}
 	
 	@Override
@@ -142,26 +225,11 @@ public class BoxPrototype extends ExperimentGraphItem
 	{
 		if(isSelected())
 		{
-			boxContainer.moveTo(getKineticEngine().getSelectionContainer()); // select
-			this.boxContainer.setDraggable(false);
+			container.moveTo(getKineticEngine().getSelectionContainer()); // select
 		}
 		else
 		{
-			boxContainer.moveTo(getKineticEngine().getContainer(EngineComponent.LAYER_BOXES)); // deselect
-			this.boxContainer.setDraggable(true);
-		}
-	}
-	
-	@Override
-	protected void invertSelectionVisually()
-	{
-		if(isSelected())
-		{
-			masterShape.setFill(Colour.blue); // select
-		}
-		else
-		{
-			masterShape.setFill(Colour.white); // deselect
+			container.moveTo(getKineticEngine().getContainer(EngineComponent.LAYER_BOXES)); // deselect
 		}
 	}
 	
@@ -174,20 +242,7 @@ public class BoxPrototype extends ExperimentGraphItem
 	@Override
 	public Node getMasterNode()
 	{
-		return boxContainer;
-	}
-	
-	// **********************************************************************************************
-	// EDGE DRAGGING INTERFACE
-	
-	public void highlightAsNewEndpointCandidate()
-	{
-		masterShape.setFill(Colour.yellow);
-	}
-	
-	public void cancelHighlightAsNewEndpointCandidate()
-	{
-		invertSelectionVisually();
+		return container;
 	}
 	
 	// **********************************************************************************************
@@ -221,17 +276,12 @@ public class BoxPrototype extends ExperimentGraphItem
 	
 	public Vector2d getAbsoluteNodePosition()
 	{
-		return boxContainer.getAbsolutePosition();
+		return container.getAbsolutePosition();
 	}
 	
 	public Vector2d getAbsolutePointPosition(RectanglePoint point)
 	{
-		return masterShape.getAbsolutePointPosition(point);
-	}
-	
-	public Rectangle getMasterRectangle()
-	{
-		return masterShape;
+		return rectangle.getAbsolutePointPosition(point);
 	}
 	
 	public boolean isNotConnectedTo(BoxPrototype otherBox)
@@ -241,12 +291,7 @@ public class BoxPrototype extends ExperimentGraphItem
 	
 	public boolean intersects(Vector2d selectionAbsPos, Vector2d selectionSize)
 	{
-		return masterShape.intersects(selectionAbsPos, selectionSize);
-	}
-	
-	public void reloadVisualStyle()
-	{
-		masterShape.setSize(GWTKineticSettings.getCurrentBoxSize());
+		return rectangle.intersects(selectionAbsPos, selectionSize);
 	}
 	
 	public void setEdgeRegistered(EdgePrototype edge, boolean registered)

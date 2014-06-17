@@ -26,6 +26,7 @@ import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
+import org.pikater.shared.database.jpa.JPAModel;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
@@ -45,6 +46,7 @@ import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
+import org.pikater.core.ontology.ModelOntology;
 import org.postgresql.PGConnection;
 
 import java.io.File;
@@ -89,6 +91,9 @@ import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
+import org.pikater.core.ontology.subtrees.model.GetModel;
+import org.pikater.core.ontology.subtrees.model.Model;
+import org.pikater.core.ontology.subtrees.model.SaveModel;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.result.SavedResult;
@@ -125,6 +130,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
+		ontologies.add(ModelOntology.getInstance());
 		
 		return ontologies;
 	}
@@ -203,9 +209,14 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof GetFileInfo) {
 						return respondToGetFileInfo(request, a);
 					}
+					///SaVEMODEL NATRENOVANY AGENT
+					///ONTOLOGIE K TOMU
+					///ONTOLOGIE NA SMAZANI NA ZAKLADE NEJAKYCH PODMINKE NAPR . PO 2 MESICICH
+					/// SMAZANI 
+					/**
 					if (a.getAction() instanceof UpdateMetadata) {
 						return replyToUpdateMetadata(request, a);
-					}
+					}**/
 					if (a.getAction() instanceof GetFiles) {
 						return respondToGetFiles(request, a);
 					}
@@ -215,15 +226,29 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof DeleteTempFiles) {
 						return respondToDeleteTempFiles(request);
 					}
+					/**
 					if (a.getAction() instanceof ShutdownDatabase) {
 						return respondToShutdownDatabase(request);
-					}
+					}**/
 					if (a.getAction() instanceof GetFile) {
 						return respondToGetFile(request, a);
 					}
 					if (a.getAction() instanceof PrepareFileUpload) {
 						return respondToPrepareFileUpload(request, a);
 					}
+					
+					/**
+					 * Model actions
+					 */
+					if (a.getAction() instanceof SaveModel ) {
+						return respondToSaveModel(request, a);
+					}
+					if (a.getAction() instanceof GetModel) {
+						return respondToGetModel(request, a);
+					}
+					/**
+					 * end of model actions
+					 */
 				} catch (OntologyException e) {
 					e.printStackTrace();
 					logError("Problem extracting content: " + e.getMessage());
@@ -247,6 +272,57 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
+	
+	private ACLMessage respondToSaveModel(ACLMessage request, Action a) {
+		SaveModel sm=(SaveModel)a.getAction();
+		ACLMessage reply = request.createReply();
+
+		JPAResult creatorResult = DAOs.resultDAO.getByID(sm.getModel().getResultID(), EmptyResultAction.LOG_NULL);
+		if(creatorResult!=null){
+			JPAModel model=new JPAModel();
+			model.setAgentClassName(sm.getModel().getAgentClassName());
+			model.setCreated(new Date());
+			model.setCreatorResult(creatorResult);
+			model.setSerializedAgent(sm.getModel().getSerializedAgent());
+			DAOs.modelDAO.storeEntity(model);
+			creatorResult.setCreatedModel(model);
+			System.out.println("Saved Model ID: "+model.getId());
+			DAOs.resultDAO.updateEntity(creatorResult);
+			reply.setPerformative(ACLMessage.INFORM);
+		}else{
+			logError("No result found in the database for the given result ID in the model description");
+			reply.setPerformative(ACLMessage.FAILURE);	
+		}	
+
+		return reply;
+	}
+
+	private ACLMessage respondToGetModel(ACLMessage request, Action a) {
+		GetModel gm=(GetModel)a.getAction();
+		
+		JPAModel savedModel=DAOs.modelDAO.getByID(gm.getModelID());
+		ACLMessage reply = request.createReply();
+		if(savedModel==null){
+			reply.setPerformative(ACLMessage.FAILURE);
+		}else{
+			Model retrModel=new Model();
+			retrModel.setAgentClassName(savedModel.getAgentClassName());
+			retrModel.setResultID(savedModel.getCreatorResult().getId());
+			retrModel.setSerializedAgent(savedModel.getSerializedAgent());
+			reply.setPerformative(ACLMessage.INFORM);
+
+			Result result = new Result(a, retrModel);
+			try {
+				getContentManager().fillContent(reply, result);
+			} catch (CodecException e) {
+				logError(e.getMessage());
+			} catch (OntologyException e) {
+				logError(e.getMessage());
+			}
+		}
+		return reply;
+	}
+	
 	private ACLMessage respondToSaveBatch(ACLMessage request, Action a) {
 		
 		log("RespondToSaveBatch");

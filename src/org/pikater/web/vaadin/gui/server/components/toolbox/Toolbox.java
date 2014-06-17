@@ -5,21 +5,28 @@ import org.pikater.web.vaadin.MyResources;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 @StyleSheet("toolbox.css")
-public class Toolbox extends CustomComponent
+public class Toolbox extends VerticalLayout
 {
 	private static final long serialVersionUID = 5925115342286749639L;
+	
+	private Component currentContent;
+	
+	public Toolbox(String caption, MouseEvents.ClickListener minimizeAction)
+	{
+		this(caption, new Label(), minimizeAction);
+	}
 	
 	public Toolbox(String caption, Component content, MouseEvents.ClickListener minimizeAction)
 	{
 		super();
-		setSizeFull();
+		setSizeUndefined();
+		setSpacing(false);
 		
 		Image bar_minimizeIcon = new Image(null, MyResources.img_minimizeIcon16);
 		bar_minimizeIcon.setStyleName("toolbox-bar-buttons-min");
@@ -32,13 +39,16 @@ public class Toolbox extends CustomComponent
 		bar.addComponent(bar_label, "caption");
 		bar.addComponent(bar_minimizeIcon, "buttons");
 		
-		VerticalLayout mainLayout = new VerticalLayout();
-		mainLayout.setSizeFull();
-		mainLayout.setSpacing(false);
-		mainLayout.addComponent(bar);
-		// mainLayout.addComponent(content);
-		// mainLayout.setExpandRatio(content, 1);
-		
-		setCompositionRoot(mainLayout);
+		addComponent(bar);
+		addComponent(content);
+		setExpandRatio(content, 1);
+		currentContent = content;
+	}
+	
+	public void setToolboxContent(Component newContent)
+	{
+		replaceComponent(currentContent, newContent);
+		setExpandRatio(newContent, 1);
+		currentContent = newContent;
 	}
 }

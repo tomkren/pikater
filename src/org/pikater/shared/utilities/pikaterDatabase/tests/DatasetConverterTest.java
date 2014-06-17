@@ -5,14 +5,10 @@ import java.io.File;
 import org.pikater.shared.database.utils.DataSetConverter;
 
 public class DatasetConverterTest {
-	public static void main(String[] args){
-		
-		try {
-			DataSetConverter dsc=new DataSetConverter(new File("core/datasets/adult.arff"));
-			dsc.saveToXLS(new File("core/datasets/adul.xls"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static void main(String[] args) throws Exception{
+		DataSetConverter.xlsxToArff(
+				new File("core/converter_test/header.txt"),
+				new File("core/converter_test/adult.xlsx"),
+				System.err);
 	}
 }

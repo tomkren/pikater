@@ -9,10 +9,10 @@ public class GWTKineticSettings
 	//----------------------------------------------------------------------------
 	// BOX SIZE
 	
-	private static final double minWidth = 100;
-	private static final double maxWidth = 200;
+	private static final double minWidth = 125;
+	private static final double maxWidth = 225;
 	private static final double difference = maxWidth - minWidth;
-	private static Vector2d currentSize = getSizeFromWidth(maxWidth); // default
+	private static Vector2d currentSize = getSizeFromWidth(175); // default
 	
 	public static Vector2d getCurrentBoxSize()
 	{

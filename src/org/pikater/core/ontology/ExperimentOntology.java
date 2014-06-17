@@ -3,8 +3,8 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
-import org.pikater.core.ontology.subtrees.batchDescription.IModel;
-import org.pikater.core.ontology.subtrees.batchDescription.Model;
+import org.pikater.core.ontology.subtrees.batchDescription.IModelDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
@@ -27,8 +27,8 @@ public class ExperimentOntology extends BeanOntology {
             add(experimentPackage);
             add(taskPackage);
             add(dataPackage);
-            add(IModel.class);
-            add(Model.class);
+            add(IModelDescription.class);
+            add(ModelDescription.class);
             add(NewModel.class);
 
         } catch (Exception e) {
