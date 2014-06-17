@@ -176,12 +176,16 @@ public class Agent_DataManager extends PikaterAgent {
 				try {
 					Action a = (Action) getContentManager().extractContent(request);
 
-					if (a.getAction() instanceof ImportFile) {
-						return respondToImportFile(request, a);
-					}
+					/**
+					 * LogicalNameTraslate actions
+					 */
 					if (a.getAction() instanceof TranslateFilename) {
 						return respondToTranslateFilename(request, a);
 					}
+
+					/**
+					 * Batch actions
+					 */
 					if (a.getAction() instanceof SaveBatch) {
 						return respondToSaveBatch(request, a);
 					}
@@ -191,11 +195,22 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof SaveResults) {
 						return respondToSaveResults(request, a);
 					}
-					if (a.getAction() instanceof SaveMetadata) {
-						return respondToSaveMetadataMessage(request, a);
+					if (a.getAction() instanceof LoadResults) {
+						return respondToLoadResults(request, a);
 					}
+
+					/**
+					 * Dataset actions
+					 */
 					if (a.getAction() instanceof SaveDataset) {
 						return respondToSaveDatasetMessage(request, a);
+					}
+					
+					/**
+					 * Metadata actions
+					 */
+					if (a.getAction() instanceof SaveMetadata) {
+						return respondToSaveMetadataMessage(request, a);
 					}
 					if (a.getAction() instanceof GetMetadata) {
 						return replyToGetMetadata(request, a);
@@ -206,37 +221,11 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof GetTheBestAgent) {
 						return respondToGetTheBestAgent(request, a);
 					}
-					if (a.getAction() instanceof GetFileInfo) {
-						return respondToGetFileInfo(request, a);
-					}
+					
 					///SaVEMODEL NATRENOVANY AGENT
 					///ONTOLOGIE K TOMU
 					///ONTOLOGIE NA SMAZANI NA ZAKLADE NEJAKYCH PODMINKE NAPR . PO 2 MESICICH
 					/// SMAZANI 
-					/**
-					if (a.getAction() instanceof UpdateMetadata) {
-						return replyToUpdateMetadata(request, a);
-					}**/
-					if (a.getAction() instanceof GetFiles) {
-						return respondToGetFiles(request, a);
-					}
-					if (a.getAction() instanceof LoadResults) {
-						return respondToLoadResults(request, a);
-					}
-					if (a.getAction() instanceof DeleteTempFiles) {
-						return respondToDeleteTempFiles(request);
-					}
-					/**
-					if (a.getAction() instanceof ShutdownDatabase) {
-						return respondToShutdownDatabase(request);
-					}**/
-					if (a.getAction() instanceof GetFile) {
-						return respondToGetFile(request, a);
-					}
-					if (a.getAction() instanceof PrepareFileUpload) {
-						return respondToPrepareFileUpload(request, a);
-					}
-					
 					/**
 					 * Model actions
 					 */
@@ -246,9 +235,29 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof GetModel) {
 						return respondToGetModel(request, a);
 					}
+					
 					/**
-					 * end of model actions
+					 * Files actions
 					 */
+					if (a.getAction() instanceof ImportFile) {
+						return respondToImportFile(request, a);
+					}
+					if (a.getAction() instanceof GetFileInfo) {
+						return respondToGetFileInfo(request, a);
+					}
+					if (a.getAction() instanceof GetFiles) {
+						return respondToGetFiles(request, a);
+					}
+					if (a.getAction() instanceof DeleteTempFiles) {
+						return respondToDeleteTempFiles(request);
+					}
+					if (a.getAction() instanceof GetFile) {
+						return respondToGetFile(request, a);
+					}
+					if (a.getAction() instanceof PrepareFileUpload) {
+						return respondToPrepareFileUpload(request, a);
+					}
+
 				} catch (OntologyException e) {
 					e.printStackTrace();
 					logError("Problem extracting content: " + e.getMessage());
@@ -1047,15 +1056,6 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToShutdownDatabase(ACLMessage request) throws SQLException, ClassNotFoundException {
-		
-		PikaterLogger.getLogger(Agent_DataManager.class).warn("Database SHUTDOWN initiated in DataManager");
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		return reply;
-	}
-
 	private ACLMessage respondToDeleteTempFiles(ACLMessage request) {
 		String path = Agent_DataManager.dataFilesPath +
 				"temp" + System.getProperty("file.separator");
@@ -1178,54 +1178,6 @@ public class Agent_DataManager extends PikaterAgent {
 
 		Result _result = new Result(a.getAction(), m);
 		getContentManager().fillContent(reply, _result);
-
-		db.close();
-		return reply;
-	}
-
-	private ACLMessage replyToUpdateMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
-		UpdateMetadata updateMetadata = (UpdateMetadata) a.getAction();
-		Metadata metadata = updateMetadata.getMetadata();
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-		
-		/**
-		JPAGlobalMetaData newValues=new JPAGlobalMetaData();
-		newValues.setDefaultTaskType(DAOs.taskTypeDAO.createOrGetByName(metadata.getDefault_task()));
-		newValues.setNumberofInstances(metadata.getNumber_of_instances());
-		
-		java.util.List<JPADataSetLO> dslos=DAOs.dataSetDAO.getByHash(metadata.getInternal_name());
-		
-		if(dslos.size()>0){
-			
-			
-			
-			JPAGlobalMetaData globMD=dslos.get(0).getGlobalMetaData();
-			if(globMD==null){
-				glo
-			}
-		}
-		**/
-
-		String query = "UPDATE metadata SET ";
-		query += "numberOfInstances=" + metadata.getNumberOfInstances() + ", ";
-		query += "numberOfAttributes=" + metadata.getNumberOfAttributes() + ", ";
-		query += "missingValues=" + metadata.getMissingValues() + "";
-		if (metadata.getAttributeType() != null) {
-			query += ", attributeType=\'" + metadata.getAttributeType() + "\' ";
-		}
-		if (metadata.getDefaultTask() != null) {
-			query += ", defaultTask=\'" + metadata.getDefaultTask() + "\' ";
-		}
-		query += " WHERE internalFilename =\'" + metadata.getInternalName() + "\'";
-
-		log("Executing query: " + query);
-
-		stmt.executeUpdate(query);
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
 
 		db.close();
 		return reply;
