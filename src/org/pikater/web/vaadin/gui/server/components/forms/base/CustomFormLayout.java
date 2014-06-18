@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.pikater.web.vaadin.gui.server.components.forms.fields.FormTextField;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -23,9 +25,9 @@ public abstract class CustomFormLayout extends VerticalLayout
 	private final FormLayout fLayout;
 	private final HorizontalLayout buttonInterface;
 	private final Button btn_actionBtn;
-	private final Map<IFormField<Object>, String> fieldInfo;
+	private final Map<AbstractField<? extends Object>, FieldInfo> fieldInfo;
 	
-	public CustomFormLayout(String actionButtonCaption)
+	public CustomFormLayout(String submitButtonCaption)
 	{
 		super();
 		setSizeUndefined();
@@ -38,10 +40,10 @@ public abstract class CustomFormLayout extends VerticalLayout
 		this.buttonInterface.setSizeUndefined();
 		this.buttonInterface.setSpacing(true);
 		
-		final ClickListener listener = getActionButtonListener();
-		if(listener != null)
+		final IOnSubmit submitAction = getSubmitAction();
+		if(submitAction != null)
 		{
-			this.btn_actionBtn = new Button(actionButtonCaption);
+			this.btn_actionBtn = new Button(submitButtonCaption);
 			this.btn_actionBtn.setEnabled(false);
 			this.btn_actionBtn.addClickListener(new Button.ClickListener()
 			{
@@ -50,8 +52,29 @@ public abstract class CustomFormLayout extends VerticalLayout
 				@Override
 				public void buttonClick(ClickEvent event)
 				{
+					// try to submit the form
+					try
+					{
+						if(!submitAction.onSubmit())
+						{
+							return;
+						}
+					}
+					catch (Throwable e)
+					{
+						PikaterLogger.logThrowable("Could not submit form because of the error below.", e);
+						MyNotifications.showError("Internal error", "Form could not be submitted. Please contact the administrators.");
+						return;
+					}
+					
+					// if successful, set new values to fields to that the "isUpdated()" method now returns false
+					for(AbstractField<? extends Object> field : fieldInfo.keySet())
+					{
+						setCommitted(field);
+					}
+					
+					// mark the form as submitted and updated
 					btn_actionBtn.setEnabled(false); // set this form updated
-					listener.buttonClick(event);
 				}
 			});
 			this.buttonInterface.addComponent(this.btn_actionBtn);
@@ -62,41 +85,16 @@ public abstract class CustomFormLayout extends VerticalLayout
 		}
 		addComponent(this.buttonInterface);
 		
-		this.fieldInfo = new HashMap<IFormField<Object>, String>();
+		this.fieldInfo = new HashMap<AbstractField<?>, FieldInfo>();
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected void addField(IFormField<?> field, String notificationDescription)
-	{
-		fieldInfo.put((IFormField<Object>) field, notificationDescription);
-		
-		if(field instanceof AbstractField<?>)
-		{
-			fLayout.addComponent((AbstractField<Object>) field);
-			field.setOwnerForm(this);
-		}
-		else
-		{
-			throw new IllegalArgumentException("The 'field' argument is not a proper Vaadin field (AbstractField<T>).");
-		}
-	}
+	// --------------------------------------------------------------
+	// PUBLIC INTERFACE
 	
-	protected void addCustomButton(Button btn)
-	{
-		buttonInterface.addComponent(btn);
-	}
-	
-	public synchronized void updateFieldStatus(FormTextField field, boolean validatedAndUpdated)
-	{
-		// fieldStatus.put(field, validatedAndUpdated); // replaces the original value
-		
-		// first let's see how well this is going to perform in a brute force manner:
-		if(btn_actionBtn != null)
-		{
-			btn_actionBtn.setEnabled(isFormValidAndUpdated());
-		}
-	}
-	
+	/**
+	 * At least one field's value is updated.
+	 * @return
+	 */
 	public boolean isFormUpdated()
 	{
 		return isForm(false, true);
@@ -111,33 +109,142 @@ public abstract class CustomFormLayout extends VerticalLayout
 		return isForm(true, true);
 	}
 	
+	// --------------------------------------------------------------
+	// PROTECTED TYPES AND INTERFACE
+	
+	/**
+	 * Only add fields with this method after all initializations have been made. The moment you
+	 * add a field, value change events start affecting the form.
+	 * @param notificationDescription
+	 * @param field
+	 */
+	protected void addField(String notificationDescription, AbstractField<? extends Object> field) 
+	{
+		fieldInfo.put(field, new FieldInfo(notificationDescription));
+		field.addValueChangeListener(new Property.ValueChangeListener()
+		{
+			private static final long serialVersionUID = -5059574562934358334L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event)
+			{
+				updateActionButton();
+			}
+		});
+		fLayout.addComponent(field);
+	}
+	
+	protected void addCustomButton(Button btn)
+	{
+		buttonInterface.addComponent(btn);
+	}
+	
+	protected static <T extends Object> void setValueAndIgnoreReadOnly(AbstractField<T> field, T value)
+	{
+		boolean readOnly = field.isReadOnly();
+		field.setReadOnly(false);
+		field.setValue(value);
+		field.setReadOnly(readOnly);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected static <T extends Object> T getValueBackup(AbstractField<T> field)
+	{
+		return (T) field.getData();
+	}
+	
+	protected static <T extends Object> void setValueBackup(AbstractField<T> field, T value)
+	{
+		field.setData(value);
+	}
+	
+	protected static <T extends Object> boolean isUpdated(AbstractField<T> field)
+	{
+		return !field.getValue().equals(getValueBackup(field)); // value backup may be null and should be last
+	}
+	
+	protected static <T extends Object> void setCommitted(AbstractField<T> field)
+	{
+		setValueBackup(field, field.getValue());
+	}
+	
+	protected interface IOnSubmit
+	{
+		/**
+		 * An action to be called when the form is "submitted". You need not worry
+		 * about anything form related in this listener. If successful, the
+		 * {@link FormFieldWrapper#setComitted()} method will be called on all fields.
+		 * If, for some reason, the action can not be performed, just return false
+		 * and display some kind of a notification.
+		 * @return true, if the operation was successful
+		 */
+		boolean onSubmit();
+	}
+
+	/*
+	protected class OnSubmitResult
+	{
+		public final boolean successful;
+	}
+	*/
+	
+	// --------------------------------------------------------------
+	// ABSTRACT INTERFACE 
+	
+	public abstract IOnSubmit getSubmitAction();
+	
+	// --------------------------------------------------------------
+	// PRIVATE TYPES AND INTERFACE
+	
+	private static class FieldInfo
+	{
+		public final String notificationDescription;
+		
+		public FieldInfo(String notificationDescription)
+		{
+			this.notificationDescription = notificationDescription;
+		}
+	}
+	
+	private synchronized void updateActionButton()
+	{
+		// brute-force...
+		if(btn_actionBtn != null)
+		{
+			btn_actionBtn.setEnabled(isFormValidAndUpdated());
+		}
+	}
+	
 	private boolean isForm(boolean checkValid, boolean checkUpdated)
 	{
 		boolean atLeastOneUpdated = !checkUpdated;
 		Iterator<Component> fieldIterator = fLayout.iterator();
 		while(fieldIterator.hasNext())
 		{
-			FormTextField field = (FormTextField) fieldIterator.next();
+			AbstractField<?> field = (AbstractField<?>) fieldIterator.next();
 			if(checkValid) 
 			{
-				if(field.isRequired() && field.getValue().isEmpty())
+				if(field instanceof AbstractTextField)
 				{
-					MyNotifications.showError(null, String.format("The '%s' field is required to be set.", fieldInfo.get(field)));
-					return false;
+					AbstractTextField textField = (AbstractTextField) field;
+					if(textField.isRequired() && textField.getValue().isEmpty())
+					{
+						MyNotifications.showError(null, String.format("The '%s' field is required to be set.", fieldInfo.get(field).notificationDescription));
+						return false;
+					}
 				}
-				else if(!field.isValid())
+				
+				if(!field.isValid())
 				{
 					// custom error message is assumed to be shown at the field
 					return false;
 				}
 			}
-			if(field.isUpdated())
+			if(isUpdated(field))
 			{
 				atLeastOneUpdated = true;
 			}
 		}
 		return atLeastOneUpdated;
 	}
-	
-	public abstract ClickListener getActionButtonListener();
 }
