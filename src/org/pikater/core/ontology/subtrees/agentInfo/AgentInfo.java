@@ -1,13 +1,11 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 
 import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -102,22 +100,28 @@ public class AgentInfo implements Concept {
 		}
 		this.outputSlots.add(outputSlot);
 	}
+	
+	public boolean equals(AgentInfo agentInfo) {
+		
+		return this.getName().equals(agentInfo.getName());
+	}
+	
 	public String exportXML() {
 		XStream xstream = new XStream();
 		return xstream.toXML(this);
 	}
 
-	public static ComputationDescription importXML(String xmlContent) throws FileNotFoundException {
+	public static AgentInfo importXML(String xmlContent) {
 		XStream xstream = new XStream();
 
 		Scanner scanner = new Scanner(xmlContent);
 		String xml = scanner.useDelimiter("\\Z").next();
 		scanner.close();
 		
-		ComputationDescription computDes =
-				(ComputationDescription)xstream.fromXML(xml);
+		AgentInfo agentInfo =
+				(AgentInfo)xstream.fromXML(xml);
 		
-		return computDes;
+		return agentInfo;
 	}
 	
 	

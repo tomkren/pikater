@@ -128,7 +128,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		log("Agent " + getName() + ": recieved AgentInfo from "
 				+ agentInfo.getAgentClassName());
 
-		DAOs.agentInfoDAO.storeAgentInfoOntology(agentInfo, getName());
+		DAOs.agentInfoDAO.storeAgentInfoOntology(agentInfo);
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);

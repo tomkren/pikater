@@ -18,6 +18,7 @@ import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
@@ -67,12 +68,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
-import org.pikater.core.ontology.subtrees.database.ShutdownDatabase;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
@@ -90,7 +94,6 @@ import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
-import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
 import org.pikater.core.ontology.subtrees.model.GetModel;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.model.SaveModel;
@@ -181,6 +184,16 @@ public class Agent_DataManager extends PikaterAgent {
 					 */
 					if (a.getAction() instanceof TranslateFilename) {
 						return respondToTranslateFilename(request, a);
+					}
+
+					/**
+					 * AgentInfo actions
+					 */
+					if (a.getAction() instanceof SaveAgentInfo) {
+						return respondToSaveAgentInfo(request, a);
+					}
+					if (a.getAction() instanceof GetAgentInfos) {
+						return respondToGetAgentInfos(request, a);
 					}
 
 					/**
@@ -282,7 +295,116 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	
+	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+		TranslateFilename tf = (TranslateFilename) a.getAction();
+		
+		log(new Date()+" RespondToTranslateFilename External File Name "+tf.getExternalFilename());
+		log(new Date()+" RespondToTranslateFilename Internal File Name "+tf.getInternalFilename());
+		log(new Date()+" RespondToTranslateFilename User ID "+tf.getUserID());
+		
+		JPAUser user=DAOs.userDAO.getByLogin("stepan").get(0);
+		logError(new Date()+" Using default user...");
+		
+		
+		java.util.List<JPAFilemapping> files=null;
+		
+		
+		String internalFilename = "error";
+		
+		if (tf.getInternalFilename() == null) {
+			//files=DAOs.filemappingDAO.getByUserIDandExternalFilename(tf.getUserID(), tf.getExternalFilename());
+			files=DAOs.filemappingDAO.getByUserIDandExternalFilename(user.getId(), tf.getExternalFilename());
+			if(files.size()>0){
+				internalFilename=files.get(0).getInternalfilename();
+			} else {
+				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
+
+				String tempFileName = pathPrefix + tf.getExternalFilename();
+				if (new File(tempFileName).exists())
+					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
+			}
+			
+		} else {
+			//files=DAOs.filemappingDAO.getByUserIDandInternalFilename(tf.getUserID(), tf.getInternalFilename());
+			files=DAOs.filemappingDAO.getByUserIDandInternalFilename(user.getId(), tf.getInternalFilename());
+			if(files.size()>0){
+				internalFilename=files.get(0).getExternalfilename();
+			} else {
+				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
+
+				String tempFileName = pathPrefix + tf.getExternalFilename();
+				if (new File(tempFileName).exists())
+					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
+			}
+		}
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
+		Result r = new Result(tf, internalFilename);
+		getContentManager().fillContent(reply, r);
+
+		return reply;
+	}
+
+	protected ACLMessage respondToGetAgentInfos(ACLMessage request, Action a) {
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
+		java.util.List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
+		
+		AgentInfos agentInfos = new AgentInfos();
+		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
+			
+			AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());		
+			agentInfos.addAgentInfo(agentInfoI);
+		}
+
+		Result result = new Result(a, agentInfos);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage());
+		} catch (OntologyException e) {
+			logError(e.getMessage());
+		}
+			
+		return reply;
+
+	}
+
+	protected ACLMessage respondToSaveAgentInfo(ACLMessage request, Action a) {
+		
+		log("RespondToSaveAgentInfo");
+
+		SaveAgentInfo saveAgentInfo = (SaveAgentInfo) a.getAction();
+		AgentInfo newAgentInfo = saveAgentInfo.getAgentInfo();
+
+		ACLMessage reply = request.createReply();
+		
+		java.util.List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
+		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
+			
+			AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());		
+			if (agentInfoI.equals(newAgentInfo)) {
+				reply.setPerformative(ACLMessage.FAILURE);
+				reply.setContent("AgentInfo has been  already stored in the database");
+				return reply;
+			}
+		}
+
+		DAOs.agentInfoDAO.storeAgentInfoOntology(newAgentInfo);
+		
+
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK");
+
+		return reply;
+	}
+
 	private ACLMessage respondToSaveModel(ACLMessage request, Action a) {
+
 		SaveModel sm=(SaveModel)a.getAction();
 		ACLMessage reply = request.createReply();
 
@@ -609,58 +731,6 @@ public class Agent_DataManager extends PikaterAgent {
 			db.close();
 			return reply;
 		}
-	}
-
-	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		TranslateFilename tf = (TranslateFilename) a.getAction();
-		
-		log(new Date()+" RespondToTranslateFilename External File Name "+tf.getExternalFilename());
-		log(new Date()+" RespondToTranslateFilename Internal File Name "+tf.getInternalFilename());
-		log(new Date()+" RespondToTranslateFilename User ID "+tf.getUserID());
-		
-		JPAUser user=DAOs.userDAO.getByLogin("stepan").get(0);
-		logError(new Date()+" Using default user...");
-		
-		
-		java.util.List<JPAFilemapping> files=null;
-		
-		
-		String internalFilename = "error";
-		
-		if (tf.getInternalFilename() == null) {
-			//files=DAOs.filemappingDAO.getByUserIDandExternalFilename(tf.getUserID(), tf.getExternalFilename());
-			files=DAOs.filemappingDAO.getByUserIDandExternalFilename(user.getId(), tf.getExternalFilename());
-			if(files.size()>0){
-				internalFilename=files.get(0).getInternalfilename();
-			} else {
-				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
-
-				String tempFileName = pathPrefix + tf.getExternalFilename();
-				if (new File(tempFileName).exists())
-					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
-			}
-			
-		} else {
-			//files=DAOs.filemappingDAO.getByUserIDandInternalFilename(tf.getUserID(), tf.getInternalFilename());
-			files=DAOs.filemappingDAO.getByUserIDandInternalFilename(user.getId(), tf.getInternalFilename());
-			if(files.size()>0){
-				internalFilename=files.get(0).getExternalfilename();
-			} else {
-				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
-
-				String tempFileName = pathPrefix + tf.getExternalFilename();
-				if (new File(tempFileName).exists())
-					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
-			}
-		}
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		
-		Result r = new Result(tf, internalFilename);
-		getContentManager().fillContent(reply, r);
-
-		return reply;
 	}
 
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
