@@ -12,11 +12,16 @@ public interface AutoVerticalBorderLayoutExtensionClientRpc extends ClientRpc
 {
 	void setRowHeight(Row row, DimensionMode dimMode);
 	void setColumnWidth(final Column designatedColumn, double value, DimensionUnit unit);
+	
+	void addRowStyleName(Row row, String styleName);
+	void removeRowStyleName(Row row, String styleName); 
 	void addColumnStyleName(Column column, String styleName);
 	void removeColumnStyleName(Column column, String styleName);
+	
 	void setRowVisible(Row row, boolean visible);
 	void setColumnVisible(Column column, boolean visible);
 	void setComponentVisible(Border border, boolean visible);
+	
 	void setBorderSpacing(int pixels);
 	void setCellSpacing(int pixels);
 	void setCellPadding(int pixels);

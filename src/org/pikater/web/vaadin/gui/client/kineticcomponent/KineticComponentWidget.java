@@ -260,12 +260,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public void response_reloadVisualStyle()
-	{
-		getServerRPC().response_reloadVisualStyle();
-	}
-	
-	@Override
 	public void response_sendExperimentToSave(ExperimentGraph experiment)
 	{
 		getServerRPC().response_sendExperimentToSave(experiment);

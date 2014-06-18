@@ -1,5 +1,13 @@
 @CHARSET "US-ASCII";
 
+.topLevelElement
+{
+  	width: 1000px;
+  	height: 100%;
+  	margin-left: auto;
+  	margin-right: auto;
+}
+
 .bannerArea
 {
 	background-color: black;
@@ -24,6 +32,7 @@
 
 .contentArea
 {
+	height: 100%;
 }
 
 .v-panel-content-contentArea

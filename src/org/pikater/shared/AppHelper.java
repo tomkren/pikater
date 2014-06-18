@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.pikater.shared.logging.PikaterLogger;
@@ -137,7 +138,7 @@ public class AppHelper
 	
 	public static Set<String> rangeToStringSet(int fromIncl, int toIncl)
 	{
-		Set<String> result = new HashSet<String>();
+		Set<String> result = new LinkedHashSet<String>(); // LinkedHashSet preserves insertion order
 		for(int i = fromIncl; i <= toIncl; i++)
 		{
 			result.add(String.valueOf(i));

@@ -90,6 +90,32 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					}
 				});
 			}
+			
+			@Override
+			public void addRowStyleName(final Row row, final String styleName)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						getElementByRow(row).addClassName(styleName);
+					}
+				});
+			}
+
+			@Override
+			public void removeRowStyleName(final Row row, final String styleName)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						getElementByRow(row).removeClassName(styleName);
+					}
+				});
+			}
 
 			@Override
 			public void addColumnStyleName(final Column column, final String styleName)

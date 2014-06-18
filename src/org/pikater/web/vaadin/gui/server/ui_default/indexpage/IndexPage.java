@@ -32,7 +32,6 @@ public class IndexPage extends AutoVerticalBorderLayout
 	{
 		super();
 		setStyleName("topLevelElement");
-		// setSizeFull();
 		
 		this.contentArea = new ContentArea();
 		
@@ -68,7 +67,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 		}
 		else
 		{
-			this.contentArea.setContent(feature);
+			this.contentArea.setContentView(feature);
 		}
 	}
 	

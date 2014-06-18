@@ -12,6 +12,5 @@ public interface KineticComponentServerRpc extends ServerRpc
 	void command_alterClickMode(KineticComponentClickMode newClickMode);
 	void command_openOptionsManager(String[] selectedBoxesAgentIDs);
 	
-	void response_reloadVisualStyle();
 	void response_sendExperimentToSave(ExperimentGraph experiment);
 }
