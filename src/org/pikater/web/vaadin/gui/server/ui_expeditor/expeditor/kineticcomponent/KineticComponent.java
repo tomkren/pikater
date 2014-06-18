@@ -22,6 +22,8 @@ import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.vaadin.annotations.JavaScript;
@@ -60,8 +62,8 @@ public class KineticComponent extends AbstractComponent
 	private final SimpleIDGenerator boxIDGenerator;
 	
 	/**
-	 * The dynamic mapping between boxes and agent information. Agent information is not sent
-	 * to the client - only a portion of it, wrapped in BoxInfo instance.
+	 * The dynamic mapping between boxes and agent information. Only a portion of agent information
+	 * is sent to the client (+ some added value), wrapped in BoxInfo instance.
 	 * This field is the base for all format conversions and some other commands.
 	 */
 	private final Map<String, AgentInfo> boxIDToAgentInfo;
@@ -80,7 +82,7 @@ public class KineticComponent extends AbstractComponent
 	//---------------------------------------------------------------
 	// CONSTRUCTOR
 	
-	public KineticComponent(ExpEditor parentEditor)
+	public KineticComponent(final ExpEditor parentEditor)
 	{
 		super();
 		setSizeFull();
@@ -128,15 +130,29 @@ public class KineticComponent extends AbstractComponent
 			}
 
 			@Override
-			public void command_openOptionsManager(String[] selectedBoxesAgentIDs)
+			public void command_openOptionsManager(String[] selectedBoxesIDs)
 			{
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void response_reloadVisualStyle()
-			{
-				// TODO Auto-generated method stub
+				// convert to agent information array
+				AgentInfo[] selectedBoxesInformation = new AgentInfo[selectedBoxesIDs.length];
+				for(int i = 0; i < selectedBoxesIDs.length; i++)
+				{
+					if(boxIDToAgentInfo.containsKey(selectedBoxesIDs[i]))
+					{
+						selectedBoxesInformation[i] = boxIDToAgentInfo.get(selectedBoxesIDs[i]);
+					}
+					else
+					{
+						throw new IllegalStateException(String.format("Kinetic state out of sync. "
+								+ "No agent info was found for box ID '%s'.", selectedBoxesIDs[i]));
+					}
+				}
+				
+				// give the information to the box options toolbox to display
+				BoxOptionsToolbox toolbox = (BoxOptionsToolbox) parentEditor.getToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+				toolbox.setContentFrom(selectedBoxesInformation);
+				
+				// and display the toolbox
+				parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
 			}
 
 			@Override
@@ -160,7 +176,7 @@ public class KineticComponent extends AbstractComponent
 	//---------------------------------------------------------------
 	// CLIENT RPC RELATED INTERFACE
 	
-	public void command_createBox(AgentInfo info, int absX, int absY)
+	public void createBox(AgentInfo info, int absX, int absY)
 	{
 		getClientRPC().command_createBox(createBoxInfo(info, absX - absoluteLeft, absY - absoluteTop));
 	}
@@ -172,13 +188,11 @@ public class KineticComponent extends AbstractComponent
 	
 	public void importExperiment(UniversalComputationDescription uniFormat)
 	{
+		resetEnvironment();
+		
 		try
 		{
-			ExperimentGraph webFormat = uniToWeb(uniFormat);
-			
-			// if no conversion problems:
-			resetEnvironment();
-			getClientRPC().command_receiveExperimentToLoad(webFormat);
+			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
 		}
 		catch (ConversionException e)
 		{
