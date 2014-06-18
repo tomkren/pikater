@@ -6,28 +6,34 @@ import java.util.Map;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 
-public class TableDBItem implements Item
+public class DBTableItem implements Item, ICommitable
 {
 	private static final long serialVersionUID = -8884535836440270245L;
 	
-	private final TableDBContainer container;
-	private final Map<IColumn, TableDBItemProperty<? extends Object>> columnToValue;
+	private final DBTableContainer container;
+	private final AbstractTableRowDBView rowView;
+	private final Map<IColumn, Property<? extends Object>> columnToValue;
 	
-	@SuppressWarnings("unchecked")
-	public TableDBItem(TableDBContainer container, AbstractTableRowDBView rowView)
+	public DBTableItem(DBTableContainer container, AbstractTableRowDBView rowView)
 	{
 		this.container = container;
+		this.rowView = rowView;
 		
-		this.columnToValue = new HashMap<IColumn, TableDBItemProperty<? extends Object>>();
+		this.columnToValue = new HashMap<IColumn, Property<? extends Object>>();
 		for(IColumn column : getItemPropertyIds())
 		{
-			this.columnToValue.put(column, new TableDBItemProperty<Object>(container, column, (AbstractDBViewValue<Object>) rowView.getValueWrapper(column)));
+			this.columnToValue.put(column, DBTableContainer.getProperty(container, column, rowView.getValueWrapper(column)));
 		}
+	}
+	
+	@Override
+	public void commitToDB()
+	{
+		rowView.commitRow();
 	}
 	
 	@Override
@@ -41,7 +47,7 @@ public class TableDBItem implements Item
 	}
 	
 	@Override
-	public TableDBItemProperty<? extends Object> getItemProperty(Object id)
+	public Property<? extends Object> getItemProperty(Object id)
 	{
 		return columnToValue.get(id);
 	}

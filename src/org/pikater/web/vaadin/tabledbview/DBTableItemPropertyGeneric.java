@@ -5,15 +5,15 @@ import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBVie
 
 import com.vaadin.data.Property;
 
-public class TableDBItemProperty<T extends Object> implements Property<T>
+public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 {
 	private static final long serialVersionUID = -2142093421893500620L;
 	
-	private final TableDBContainer container;
+	private final DBTableContainer container;
 	private final IColumn column;
 	private final AbstractDBViewValue<T> valueWrapper;
 	
-	public TableDBItemProperty(TableDBContainer container, IColumn column, AbstractDBViewValue<T> valueWrapper)
+	public DBTableItemPropertyGeneric(DBTableContainer container, IColumn column, AbstractDBViewValue<T> valueWrapper)
 	{
 		this.container = container;
 		this.column = column;
@@ -44,6 +44,10 @@ public class TableDBItemProperty<T extends Object> implements Property<T>
 	public void setValue(T newValue) throws com.vaadin.data.Property.ReadOnlyException
 	{
 		valueWrapper.setValue(newValue);
+		if(container.getContext().getParentTable().isImmediate())
+		{
+			valueWrapper.commit();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -62,6 +66,6 @@ public class TableDBItemProperty<T extends Object> implements Property<T>
 	@Override
 	public void setReadOnly(boolean newStatus)
 	{
-		// TODO: temporary value change may be sometimes needed?
+		// TODO: temporary value change may be needed sometimes?
 	}
 }

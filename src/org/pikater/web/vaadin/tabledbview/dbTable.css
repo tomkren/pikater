@@ -1,0 +1,10 @@
+@CHARSET "US-ASCII";
+
+.dbTable
+{
+}
+
+.dbTable .v-table-cell-content
+{
+	vertical-align: middle;
+}
