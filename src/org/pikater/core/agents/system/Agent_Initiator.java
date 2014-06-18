@@ -39,8 +39,8 @@ public class Agent_Initiator extends PikaterAgent {
 			for (AgentConfiguration agentConfiguration : agentConfigurations) {
 				// Preimplemented jade agents do not count with named arguments,
 				// convert to string if necessary
-				Object[] arguments = ProcessArgs(agentConfiguration.getArguments().toArray());
-				Boolean creationSuccessful = this.CreateAgent(agentConfiguration.getAgentType(), agentConfiguration.getAgentName(), arguments);
+				Object[] arguments = processArgs(agentConfiguration.getArguments().toArray());
+				Boolean creationSuccessful = this.createAgent(agentConfiguration.getAgentType(), agentConfiguration.getAgentName(), arguments);
 				if (!creationSuccessful) {
 					logError("Creation of agent " + agentConfiguration.getAgentName() + " failed.");
 				}
@@ -65,7 +65,7 @@ public class Agent_Initiator extends PikaterAgent {
 		});
 	}
 
-	public Boolean CreateAgent(String type, String name, Object[] args) {
+	public Boolean createAgent(String type, String name, Object[] args) {
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
@@ -86,7 +86,7 @@ public class Agent_Initiator extends PikaterAgent {
 		return true;
 	}
 
-	public Object[] ProcessArgs(Object[] args) {
+	public Object[] processArgs(Object[] args) {
 		Object[] toReturn = new Object[args.length];
 		for (int i = 0; i < args.length; i++) {
 			Argument arg = (Argument) args[i];

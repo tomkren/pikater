@@ -288,12 +288,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		addBehaviour(execution_behaviour = new ProcessAction(this));
 		
 
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		sendAgentInfo(getAgentInfo());
 
 	} // end setup

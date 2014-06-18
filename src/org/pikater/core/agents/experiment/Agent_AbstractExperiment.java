@@ -36,7 +36,7 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 			getContentManager().fillContent(msg, new Action(receiver, agentInfo));
 			
 			ACLMessage replyOK = FIPAService.doFipaRequestClient(this, msg, 10000);
-			log("Reply: " + replyOK.getContent());
+			log("Reply: OK");// + replyOK.getContent());
 			
 		} catch (CodecException e) {
 			// TODO Auto-generated catch block

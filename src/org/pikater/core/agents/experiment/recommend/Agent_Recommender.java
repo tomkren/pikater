@@ -21,7 +21,6 @@ import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 
-import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -34,7 +33,6 @@ import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
-import org.pikater.core.ontology.subtrees.oldPikaterMessages.*;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
@@ -87,12 +85,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		addBehaviour(new receiveRequest(this, mt));
 
 
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		sendAgentInfo(getAgentInfo());
 
     }  // end setup()

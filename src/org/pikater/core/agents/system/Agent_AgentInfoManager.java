@@ -2,15 +2,21 @@ package org.pikater.core.agents.system;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
+import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
+import org.pikater.core.agents.experiment.computing.Agent_WekaAbstractCA;
+import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
+import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
-import org.pikater.core.ontology.subtrees.file.TranslateFilename;
+import org.reflections.Reflections;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -24,6 +30,10 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
+import jade.wrapper.AgentController;
+import jade.wrapper.ControllerException;
+import jade.wrapper.PlatformController;
+import jade.wrapper.StaleProxyException;
 
 public class Agent_AgentInfoManager extends PikaterAgent {
 
@@ -97,7 +107,91 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			}
 
 		});
+		
+
+		//initializationAgentInfo();
+
 	}
+
+	
+	private void initializationAgentInfo() {
+		
+		List<AgentController> controlers = new ArrayList<AgentController>();
+
+		for (Class<? extends Agent_AbstractExperiment> agentClassI : getAllExperimmentAgentClasses()) {
+			try {
+				PlatformController container = getContainerController();
+				AgentController agentControllerI = container.createNewAgent(
+						agentClassI.getSimpleName(), agentClassI.getName(), null);
+				agentControllerI.start();
+				
+				controlers.add(agentControllerI);
+			} catch (ControllerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			for (int i = 0; i < 100; i++) {
+				Thread.sleep(1000);
+			}
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		for (AgentController contorlerI : controlers){
+			try {
+				this.log("Kill");
+				contorlerI.kill();
+			} catch (StaleProxyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	private List<Class<? extends Agent_AbstractExperiment>> getAllExperimmentAgentClasses() {
+		
+		List<Class<? extends Agent_AbstractExperiment>> allAgentClasses =
+				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
+		
+		allAgentClasses.addAll(
+				getExperimmentAgentClasses(
+						Agent_ComputingAgent.class));
+		allAgentClasses.remove(Agent_ComputingAgent.class);
+		allAgentClasses.remove(Agent_WekaAbstractCA.class);
+		
+		allAgentClasses.addAll(
+				getExperimmentAgentClasses(
+						Agent_Search.class));
+		allAgentClasses.remove(Agent_Search.class);
+		
+		allAgentClasses.addAll(
+				getExperimmentAgentClasses(
+						Agent_Recommender.class));
+		allAgentClasses.remove(Agent_Recommender.class);
+		
+		return allAgentClasses;
+	}
+	
+	private List<Class<? extends Agent_AbstractExperiment>> getExperimmentAgentClasses(
+			Class<? extends Agent_AbstractExperiment> agentClass) {
+		
+		String packageToSearch = agentClass.getPackage().getName();
+		Reflections reflections = new Reflections(packageToSearch);
+
+		Set<Class<? extends Agent_AbstractExperiment>> allClassesSet = 
+		     reflections.getSubTypesOf(Agent_AbstractExperiment.class);
+		 
+		List<Class<? extends Agent_AbstractExperiment>> allClasses =
+				new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
+
+		return allClasses;
+	}
+	
 
 	private ACLMessage respondToGetAgentInfos(ACLMessage request, Action action) {
 

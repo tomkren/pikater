@@ -63,7 +63,6 @@ public class AgentInfoDAO extends AbstractDAO{
 		nai.setAgentClass(agentInfoOntology.getAgentClassName());
 		nai.setOntologyClass(agentInfoOntology.getOntologyClassName());
 		nai.setDescription(agentInfoOntology.getDescription());
-		System.out.println(agentInfoOntology.exportXML());
 		nai.setInformationXML(agentInfoOntology.exportXML());
 		nai.setName(agentInfoOntology.getName());
 		nai.setCreationTime(new Date());

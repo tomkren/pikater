@@ -103,7 +103,7 @@ public class AgentInfo implements Concept {
 	
 	public boolean equals(AgentInfo agentInfo) {
 		
-		return this.getName().equals(agentInfo.getName());
+		return this.getAgentClassName().equals(agentInfo.getAgentClassName());
 	}
 	
 	public String exportXML() {

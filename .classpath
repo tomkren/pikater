@@ -144,5 +144,7 @@
 	<classpathentry kind="lib" path="libraries/poi/ooxml-lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="libraries/poi/ooxml-lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="libraries/poi/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="libraries/reflections/guava-16.0.1.jar"/>
+	<classpathentry kind="lib" path="libraries/reflections/javassist.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
