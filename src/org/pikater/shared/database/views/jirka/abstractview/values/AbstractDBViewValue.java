@@ -62,6 +62,7 @@ public abstract class AbstractDBViewValue<T extends Object>
 		else
 		{
 			this.currentValue = newValue;
+			updateEntities(newValue);
 		}
 	}
 	
@@ -81,7 +82,7 @@ public abstract class AbstractDBViewValue<T extends Object>
 	{
 		if(isEdited())
 		{
-			commitValue();
+			commitEntities();
 			setLastCommitedValue();
 		}
 	}
@@ -94,8 +95,20 @@ public abstract class AbstractDBViewValue<T extends Object>
 		lastCommitedValue = getValue();
 	}
 	
+	//-----------------------------------------------------------------
+	// ABSTRACT INTERFACE
+	
 	/**
-	 * The procedure that actually stores the changed value to database.
+	 * Called when a new value is received. This method must do appropriate actions
+	 * to update related entities but NOT commit them to database yet. To commit, 
+	 * the {@link #commitEntities()} is used.
+	 * @param newValue
 	 */
-	protected abstract void commitValue();
+	protected abstract void updateEntities(T newValue);
+	
+	/**
+	 * Called to store the changed value (handled in {@link #updateEntities(T newValue)})
+	 * to database.
+	 */
+	protected abstract void commitEntities();
 }

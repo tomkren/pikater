@@ -35,7 +35,12 @@ public class UsersTableRow extends AbstractTableRowDBView
 				return new StringDBViewValue(user.getLogin(), true)
 				{
 					@Override
-					protected void commitValue()
+					protected void updateEntities(String newValue)
+					{
+					}
+					
+					@Override
+					protected void commitEntities()
 					{
 					}
 				};
@@ -43,7 +48,12 @@ public class UsersTableRow extends AbstractTableRowDBView
 				return new StringDBViewValue(user.getEmail(), true)
 				{
 					@Override
-					protected void commitValue()
+					protected void updateEntities(String newValue)
+					{
+					}
+					
+					@Override
+					protected void commitEntities()
 					{
 					}
 				};
@@ -51,7 +61,12 @@ public class UsersTableRow extends AbstractTableRowDBView
 				return new StringDBViewValue(user.getCreated().toString(), true)
 				{
 					@Override
-					protected void commitValue()
+					protected void updateEntities(String newValue)
+					{
+					}
+					
+					@Override
+					protected void commitEntities()
 					{
 					}
 				};
@@ -77,10 +92,14 @@ public class UsersTableRow extends AbstractTableRowDBView
 				return new RepresentativeDBViewValue(AppHelper.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()), false)
 				{
 					@Override
-					protected void commitValue()
+					protected void updateEntities(String newValue)
 					{
-						RepresentativeDBViewValue valueWrapper = (RepresentativeDBViewValue) getValueWrapper(column);
-						user.setPriorityMax(Integer.parseInt(valueWrapper.getValue()));
+						user.setPriorityMax(Integer.parseInt(newValue));
+					}
+					
+					@Override
+					protected void commitEntities()
+					{
 						commitRow();
 					}
 				};
@@ -93,7 +112,6 @@ public class UsersTableRow extends AbstractTableRowDBView
 	@Override
 	public void commitRow()
 	{
-		// TODO: when using 'setValue', values are not automatically updated into the entity...
 		DAOs.userDAO.updateEntity(user);
 	}
 }

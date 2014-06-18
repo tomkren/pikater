@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 
+/**
+ * A generic view for tables displaying dataset information.  
+ */
 public class DataSetTableView extends AbstractTableDBView{
 	/**
 	 * Table headers will be presented in the order defined here, so
@@ -21,7 +25,7 @@ public class DataSetTableView extends AbstractTableDBView{
 		 * First the read-only properties.
 		 */
 		DESCRIPTION,
-		NUMBER_OF_INSANCES,
+		NUMBER_OF_INSTANCES,
 		DEFAULT_TASK_TYPE,
 		SIZE,
 		CREATED,
@@ -44,7 +48,7 @@ public class DataSetTableView extends AbstractTableDBView{
 				case OWNER:
 					return ColumnType.STRING;
 					
-				case NUMBER_OF_INSANCES:
+				case NUMBER_OF_INSTANCES:
 				case SIZE:
 					return ColumnType.STRING;
 					
@@ -59,14 +63,20 @@ public class DataSetTableView extends AbstractTableDBView{
 	{
 		return Column.values();
 	}
+	
+	/** 
+	 * Constructor.
+	 * @param user The user to display datasets for. If null, all datasets (admin mode) should
+	 * be returned.
+	 */
+	public DataSetTableView(JPAUser user)
+	{
+		// TODO:
+	}
 
 	@Override
-	public Collection<? extends AbstractTableRowDBView> getUninitializedRows(QueryConstraints constraints)
+	public Collection<? extends AbstractTableRowDBView> getUninitializedRowsAscending(QueryConstraints constraints)
 	{
-		// IMPORTANT: as stated in Javadoc, the result collection should not be internally cached, so:
-		
-		// TODO: use constraints
-		
 		Collection<DataSetTableRow> rows = new ArrayList<DataSetTableRow>();
 		for(JPADataSetLO dslo : DAOs.dataSetDAO.getAll())
 		{

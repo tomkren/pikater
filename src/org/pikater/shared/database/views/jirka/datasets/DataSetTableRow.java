@@ -30,15 +30,25 @@ public class DataSetTableRow extends AbstractTableRowDBView {
 			return new StringDBViewValue(dataset.getDescription(), true)
 			{
 				@Override
-				protected void commitValue()
+				protected void updateEntities(String newValue)
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
 				{
 				}
 			};
-		case NUMBER_OF_INSANCES:
+		case NUMBER_OF_INSTANCES:
 			return new StringDBViewValue(dataset.getGlobalMetaData()!=null?""+dataset.getGlobalMetaData().getNumberofInstances():"N/A", true)
 			{
 				@Override
-				protected void commitValue()
+				protected void updateEntities(String newValue)
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
 				{
 				}
 			};
@@ -48,7 +58,12 @@ public class DataSetTableRow extends AbstractTableRowDBView {
 				return new StringDBViewValue(gmd.getDefaultTaskType()!=null? gmd.getDefaultTaskType().getName() : "N/A", true)
 				{
 					@Override
-					protected void commitValue()
+					protected void updateEntities(String newValue)
+					{
+					}
+					
+					@Override
+					protected void commitEntities()
 					{
 					}
 				};
@@ -57,36 +72,53 @@ public class DataSetTableRow extends AbstractTableRowDBView {
 				return new StringDBViewValue("N/A", true)
 				{
 					@Override
-					protected void commitValue()
+					protected void updateEntities(String newValue)
+					{
+					}
+					
+					@Override
+					protected void commitEntities()
 					{
 					}
 				};
 			}
 		case SIZE:
-			return new StringDBViewValue(AppHelper.formatFileSize(dataset.getSize()), true) {
-
+			return new StringDBViewValue(AppHelper.formatFileSize(dataset.getSize()), true)
+			{
 				@Override
-				protected void commitValue() {
-					// TODO Auto-generated method stub
-
+				protected void updateEntities(String newValue)
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
 				}
 			};
 		case CREATED:
-			return new StringDBViewValue(""+dataset.getCreated(),true) {
-
+			return new StringDBViewValue(""+dataset.getCreated(),true)
+			{
 				@Override
-				protected void commitValue() {
-					// TODO Auto-generated method stub
-
+				protected void updateEntities(String newValue)
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
 				}
 			};
 		case OWNER:
-			return new StringDBViewValue(dataset.getOwner().getLogin(),true) {
-
+			return new StringDBViewValue(dataset.getOwner().getLogin(),true) 
+			{
 				@Override
-				protected void commitValue() {
-					// TODO Auto-generated method stub
-
+				protected void updateEntities(String newValue)
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
 				}
 			};
 
@@ -97,7 +129,7 @@ public class DataSetTableRow extends AbstractTableRowDBView {
 	}
 
 	@Override
-	public void commitRow() {
-		// TODO Auto-generated method stub
+	public void commitRow()
+	{
 	}
 }

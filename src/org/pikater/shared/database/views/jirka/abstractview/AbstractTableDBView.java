@@ -50,6 +50,11 @@ public abstract class AbstractTableDBView
 					return String.class;
 			}
 		}
+		
+		public boolean isSortable()
+		{
+			return this != REPRESENTATIVE; 
+		}
 	}
 	
 	/**
@@ -67,7 +72,7 @@ public abstract class AbstractTableDBView
 	public Collection<? extends AbstractTableRowDBView> getRows(QueryConstraints constraints)
 	{
 		@SuppressWarnings("unchecked")
-		Collection<AbstractTableRowDBView> result = (Collection<AbstractTableRowDBView>) getUninitializedRows(constraints);
+		Collection<AbstractTableRowDBView> result = (Collection<AbstractTableRowDBView>) getUninitializedRowsAscending(constraints);
 		for(AbstractTableRowDBView row : result)
 		{
 			row.init(this);
@@ -76,9 +81,10 @@ public abstract class AbstractTableDBView
 	}
 	
 	/**
-	 * Returns a non-cached collection of uninitialized rows. Initialization
-	 * will be performed in the calling code.
+	 * Returns a non-cached collection of uninitialized rows in ascending order defined
+	 * by the query constraints given in the argument.
+	 * Initialization of the rows will be performed automatically.
 	 * @return
 	 */
-	protected abstract Collection<? extends AbstractTableRowDBView> getUninitializedRows(QueryConstraints constraints);
+	protected abstract Collection<? extends AbstractTableRowDBView> getUninitializedRowsAscending(QueryConstraints constraints);
 }

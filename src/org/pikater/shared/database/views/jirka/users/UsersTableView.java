@@ -56,7 +56,7 @@ public class UsersTableView extends AbstractTableDBView
 			}
 		}
 	}
-
+	
 	@Override
 	public IColumn[] getColumns()
 	{
@@ -64,7 +64,7 @@ public class UsersTableView extends AbstractTableDBView
 	}
 
 	@Override
-	public Collection<? extends AbstractTableRowDBView> getUninitializedRows(QueryConstraints constraints)
+	public Collection<? extends AbstractTableRowDBView> getUninitializedRowsAscending(QueryConstraints constraints)
 	{
 		// IMPORTANT: as stated in Javadoc, the result collection should not be internally cached, so:
 		
