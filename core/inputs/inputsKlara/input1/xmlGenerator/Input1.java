@@ -1,4 +1,4 @@
-package xmlGenerator.xmlGenerator;
+package xmlGenerator;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
