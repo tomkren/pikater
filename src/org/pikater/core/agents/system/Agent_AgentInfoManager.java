@@ -1,7 +1,9 @@
 package org.pikater.core.agents.system;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.pikater.core.agents.AgentNames;
@@ -11,6 +13,7 @@ import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaAbstractCA;
 import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
 import org.pikater.core.agents.experiment.search.Agent_Search;
+import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
@@ -109,14 +112,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		});
 		
 
-		//initializationAgentInfo();
+		initializationAgentInfo();
 
 	}
 
 	
 	private void initializationAgentInfo() {
 		
-		List<AgentController> controlers = new ArrayList<AgentController>();
+		Map<String, AgentController> controlers = new HashMap<String, AgentController>();
 
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : getAllExperimmentAgentClasses()) {
 			try {
@@ -125,32 +128,15 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 						agentClassI.getSimpleName(), agentClassI.getName(), null);
 				agentControllerI.start();
 				
-				controlers.add(agentControllerI);
+				controlers.put(agentClassI.getSimpleName(), agentControllerI);
 			} catch (ControllerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		try {
-			for (int i = 0; i < 100; i++) {
-				Thread.sleep(1000);
-			}
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		for (AgentController contorlerI : controlers){
-			try {
-				this.log("Kill");
-				contorlerI.kill();
-			} catch (StaleProxyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
+		Thread shutDownAgents = new ShutDownAgents(controlers);
+		shutDownAgents.start();
 	}
 	
 	private List<Class<? extends Agent_AbstractExperiment>> getAllExperimmentAgentClasses() {
@@ -173,6 +159,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				getExperimmentAgentClasses(
 						Agent_Recommender.class));
 		allAgentClasses.remove(Agent_Recommender.class);
+		
+		allAgentClasses.addAll(
+				getExperimmentAgentClasses(
+						Agent_VirtualBoxProvider.class));
+		allAgentClasses.remove(Agent_VirtualBoxProvider.class);
 		
 		return allAgentClasses;
 	}
@@ -324,5 +315,41 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		}
 
 	}
+
+}
+
+
+
+class ShutDownAgents extends Thread {
+
+	private Map<String, AgentController> controlers;
+
+	public ShutDownAgents(Map<String, AgentController> controlers) {
+		this.controlers = controlers;
+	}
+	
+    public void run() {
+    	
+		try {
+			for (int i = 0; i < 30; i++) {
+				Thread.sleep(1000);
+			}
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		for (String agentNameI : controlers.keySet()){
+
+			AgentController contorlerI = controlers.get(agentNameI);
+			try {
+				System.out.println("Shut down: " + agentNameI);
+				contorlerI.kill();
+			} catch (StaleProxyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    }
 
 }

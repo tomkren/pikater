@@ -40,8 +40,5 @@
         <agent type="org.pikater.core.agents.system.Agent_AgentInfoManager" name="AgentInfoManager">
         </agent>
 
-        <agent type="org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider" name="VirtualBoxProvider">
-        </agent>
-
     </agents>
 </configuration>

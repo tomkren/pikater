@@ -81,7 +81,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         Ontology ontology = RecomendOntology.getInstance();
         
         // receive request
-        MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));        
+        MessageTemplate mt = MessageTemplate.and(
+        		MessageTemplate.MatchOntology(ontology.getName()),
+        		MessageTemplate.MatchPerformative(ACLMessage.REQUEST));        
 		addBehaviour(new receiveRequest(this, mt));
 
 
