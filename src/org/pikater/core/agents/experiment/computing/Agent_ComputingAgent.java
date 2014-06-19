@@ -42,7 +42,9 @@ import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
+import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
@@ -65,7 +67,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	private static final long serialVersionUID = -7927583436579620995L;
 
 	protected Codec codec = new SLCodec();
-	private Ontology ontology = ExperimentOntology.getInstance();
+	// private Ontology ontology = ExperimentOntology.getInstance();
 
 	public enum states {
 		NEW, TRAINED
@@ -130,82 +132,11 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 				new java.util.ArrayList<Ontology>();
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
-
+		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(DataOntology.getInstance());
+		
 		return ontologies;
-	}
-	
-	protected boolean registerWithDF() {
-		// register with the DF
-		if (this.getAID().getLocalName().contains("Service")){
-			return false;
-		}
-		DFAgentDescription description = new DFAgentDescription();
-		// the description is the root description for each agent
-		// and how we prefer to communicate.
-		// description.addLanguages(language.getName());
-		// description.addOntologies(ontology.getName());
-		// description.addProtocols(InteractionProtocol.FIPA_REQUEST);
-		description.setName(getAID());
-
-		// the service description describes a particular service we
-		// provide.
-		ServiceDescription servicedesc = new ServiceDescription();
-		// the name of the service provided (we just re-use our agent name)
-		servicedesc.setName(getLocalName());
-
-		// The service type should be a unique string associated with
-		// the service.s
-		String typeDesc;
-		if (state == states.TRAINED) { // add fileName to service description
-			typeDesc = getAgentType() + " trained on " + trainFileName;
-		} else {
-			typeDesc = getAgentType();
-		}
-		servicedesc.setType(typeDesc);
-
-		// the service has a list of supported languages, ontologies
-		// and protocols for this service.
-		// servicedesc.addLanguages(language.getName());
-		// servicedesc.addOntologies(ontology.getName());
-		// servicedesc.addProtocols(InteractionProtocol.FIPA_REQUEST);
-
-		description.addServices(servicedesc);
-
-		// add "computing agent service"
-		ServiceDescription servicedesc_g = new ServiceDescription();
-
-		servicedesc_g.setName(getLocalName());
-		servicedesc_g.setType("ComputingAgent");
-		description.addServices(servicedesc_g);
-
-		// register synchronously registers us with the DF, we may
-		// prefer to do this asynchronously using a behaviour.
-		// System.out.println("DF: "+DFService.);
-
-		try {
-			DFService.register(this, description);
-			System.out.println(getLocalName()
-					+ ": successfully registered with DF; service type: "
-					+ typeDesc);
-			return true;
-		} catch (FIPAException e) {
-			System.err.println(getLocalName()
-					+ ": error registering with DF, exiting:" + e);
-			// doDelete();
-			return false;
-
-		}
-	} // end registerWithDF
-
-	protected void deregisterWithDF() {
-		try {
-			DFService.deregister(this);
-		} catch (FIPAException e) {
-			System.err.println(getLocalName()
-					+ " failed to deregister with DF.");
-			// doDelete();
-		}
-	} // end deregisterWithDF
+	}	
 
 	protected ACLMessage sendOptions(ACLMessage request) {
 		ACLMessage msgOut = request.createReply();
@@ -240,7 +171,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	protected void setup() {
 
 		initDefault();
-
+		
         if (containsArgument(CLASS_NAME)) {
             className = getArgumentValue(CLASS_NAME);
         }
@@ -251,27 +182,23 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
         // some important initializations before registering
         getParameters();
 
-        java.util.ArrayList<String> typeDescList = new java.util.ArrayList< String >();
-		typeDescList.add(AgentNames.COMPUTING_AGENT);
-
-        String typeDesc;
-		if (state == states.TRAINED) { // add fileName to service description
-			typeDesc = getAgentType() + " trained on " + trainFileName;
-		} else {
-			typeDesc = getAgentType();
-            typeDescList.add(typeDesc);
-		}
-
-		registerWithDF(typeDescList);
-		
-		//System.out.println("******------*******----****** " + getLocalName() );
-		//try {
-		//	Thread.sleep(10000);
-		//} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
-		
+		// register with the DF
+		if (! this.getAID().getLocalName().contains("Service")){	
+			java.util.List<String> descr = new java.util.ArrayList<String>();
+			descr.add(AgentNames.COMPUTING_AGENT);
+			descr.add(getLocalName());
+	
+			String typeDesc;
+			if (state == states.TRAINED) { // add fileName to service description
+				typeDesc = getAgentType() + " trained on " + trainFileName;
+			} else {
+				typeDesc = getAgentType();
+			}
+			descr.add(typeDesc);
+			
+			registerWithDF(descr);
+		}		
+				
 		if (!newAgent) {
 			resurrected = true;
 			System.out.println(getLocalName() + " resurrected.");
@@ -295,7 +222,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 			e.printStackTrace();
 		}
 		sendAgentInfo(getAgentInfo());
-
+		
 	} // end setup
 
 
@@ -365,6 +292,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 			log("using reader " + reader + ", filename: " + fileName);
 
+			Ontology ontology = DataOntology.getInstance();
+			
 			// request
 			msgOut = new ACLMessage(ACLMessage.REQUEST);
 			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -887,7 +816,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						success = false;
 						working = false;
 						failureMsg(e.getMessage());
-						System.out.println(getLocalName() + ": Error: " + e.getMessage() + ".");
+						System.err.println(getLocalName() + ": Error: " + e.getMessage() + ".");
 						// System.err.println(getLocalName() + ": Error: " + e.getMessage() + ".");
 						// e.printStackTrace();
 					}
@@ -982,7 +911,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						e.printStackTrace();
 					}
 			
-					if (current_task.getGetResults().equals("after_each_task")) {								
+					if (current_task.getGetResults() != null && current_task.getGetResults().equals("after_each_task")) {								
 						result_msg.addReceiver(new AID(current_task.getGuiAgent(), false));
 					}			
 					current_task.setFinish(getDateTime());
@@ -1079,7 +1008,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
     }
 
 	protected void terminate() {
-		deregisterWithDF();
 		doDelete();
 	}
 };

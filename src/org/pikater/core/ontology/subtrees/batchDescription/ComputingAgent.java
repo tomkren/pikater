@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
@@ -21,7 +22,8 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 	private String agentType;
 	private IModelDescription model;
     private List<Option> options;
-
+    private EvaluationMethod evaluationMethod;
+    
 	private DataSourceDescription trainingData;
     private DataSourceDescription testingData;
     private DataSourceDescription validationData;
@@ -59,8 +61,15 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
     }
     public void setValidationData(DataSourceDescription validationData) {
         this.validationData = validationData;
-    }
-    
+    }    
+	
+	public EvaluationMethod getEvaluationMethod() {
+		return evaluationMethod;
+	}
+	public void setEvaluationMethod(EvaluationMethod evaluationMethod) {
+		this.evaluationMethod = evaluationMethod;
+	}
+	
     public List<Option> getOptions() {
     	if (this.options == null) {
     		return new ArrayList<Option>();
@@ -76,8 +85,7 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
     	}
         this.options.add(option);
     }
-
-
+    
 	@Override
 	UniversalElement exportUniversalElement(
 			UniversalComputationDescription uModel) {

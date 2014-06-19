@@ -1,11 +1,23 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import jade.content.ContentElement;
+import jade.content.lang.Codec.CodecException;
+import jade.content.onto.OntologyException;
+import jade.content.onto.UngroundedException;
+import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
+import jade.core.AID;
+import jade.domain.FIPAException;
+import jade.domain.FIPANames;
+import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.ExecuteTaskBehaviour;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
@@ -15,7 +27,9 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.option.Options;
@@ -122,7 +136,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		Agent agent = new Agent();
         OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
         Options options = new Options(optionEdge.getOptions());
-	    // TODO zbavit se Options -> list instead
+
+        // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());
 		if (inputs.get("searchSolution") != null){
 			SearchSolution ss = (SearchSolution)inputs.get("searchSolution").getNext();
@@ -131,24 +146,86 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		agent.setOptions(options.getList());			
 		
 		Data data = new Data();
-		data.setExternal_train_file_name(((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId());
-		data.setExternal_test_file_name(((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId());
+		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
+		String testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();				
+		data.setExternal_train_file_name(training);
+		data.setExternal_test_file_name(testing);
+		data.setTestFileName(getHashOfFile(training, 1));
+		data.setTrainFileName(getHashOfFile(testing, 1));
 		
 		Task task = new Task();
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
 		task.setAgent(agent);
 		task.setData(data);
-        Option eval=options.getOption("evaluation_method");
-        if (eval!=null)
-        {
-            EvaluationMethod evaluation_method = new EvaluationMethod();
-            evaluation_method.setName(eval.getValue());
-            task.setEvaluation_method(evaluation_method);
-        }
-
-
+		task.setEvaluation_method(computationNode.getEvaluationMethod());
+		
 		return task;
+	}
+	
+	public String getHashOfFile(String nameOfFile, int userID) {
+		
+		TranslateFilename translate = new TranslateFilename();
+		translate.setExternalFilename(nameOfFile);
+		translate.setUserID(userID);
+
+		// create a request message
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(myAgent.getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+		msg.setLanguage(myAgent.getCodec().getName());
+		msg.setOntology(FilenameTranslationOntology.getInstance().getName());
+		// We want to receive a reply in 30 secs
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
+
+		Action a = new Action();
+		a.setAction(translate);
+		a.setActor(myAgent.getAID());
+
+		try {
+			myAgent.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			ce.printStackTrace();
+		} catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+
+
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(myAgent, msg);
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ContentElement content = null;
+		String fileHash = null;
+
+		try {
+			content = myAgent.getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (CodecException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (OntologyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			fileHash = (String) result.getValue();
+		}
+		
+		return fileHash;
 	}
 
 }

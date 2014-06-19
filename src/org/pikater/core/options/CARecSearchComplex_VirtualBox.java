@@ -17,11 +17,11 @@ public class CARecSearchComplex_VirtualBox {
 
 		Slot inputRecomendSlot = new Slot();
 		inputRecomendSlot.setDescription("Name of agent");
-		inputRecomendSlot.setDataType(SlotTypes.RECOMEND_TYPE);
-		inputRecomendSlot.setDataType("recomend");
+		inputRecomendSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
+		inputRecomendSlot.setDataType("recommend");
 		
 		Slot inputSearcherSlot = new Slot();
-		inputSearcherSlot.setDescription("Parameters produced by searcher");
+		inputSearcherSlot.setDescription("Parameters produced by search");
 		inputSearcherSlot.setSlotType(SlotTypes.SEARCH_TYPE);
 		inputSearcherSlot.setDataType("parameters");
 		

@@ -25,11 +25,12 @@
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="agentManager">
         </agent>
 
-        <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
+        <!-- <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
                 <argument key="sniffed" value="manager" sendOnlyValue="true" />
             </arguments>
         </agent>
+        -->
 
         <agent type="org.pikater.core.agents.system.Agent_InsertedBatchesLog" name="InsertedBatchesLog">
         </agent>

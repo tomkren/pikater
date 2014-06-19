@@ -98,74 +98,7 @@ public class Agent_Manager extends PikaterAgent {
 		
 	} // end setup
 		
-	
-	public String getHashOfFile(String nameOfFile) {
-		
-		TranslateFilename translate = new TranslateFilename();
-		translate.setExternalFilename(nameOfFile);
-		translate.setUserID(1);
-
-		// create a request message with SendProblem content
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.setSender(this.getAID());
-		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
-		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-		msg.setLanguage(codec.getName());
-		msg.setOntology(FilenameTranslationOntology.getInstance().getName());
-		// We want to receive a reply in 30 secs
-		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
-		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
-
-		Action a = new Action();
-		a.setAction(translate);
-		a.setActor(this.getAID());
-
-		try {
-			// Let JADE convert from Java objects to string
-			this.getContentManager().fillContent(msg, a);
-
-		} catch (CodecException ce) {
-			ce.printStackTrace();
-		} catch (OntologyException oe) {
-			oe.printStackTrace();
-		}
-
-
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(this, msg);
-		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		ContentElement content = null;
-		String fileHash = null;
-
-		try {
-			content = getContentManager().extractContent(reply);
-		} catch (UngroundedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (CodecException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (OntologyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		if (content instanceof Result) {
-			Result result = (Result) content;
 			
-			fileHash = (String) result.getValue();
-		}
-		
-		return fileHash;
-	}
-			
-		
 	public class subscriptionManager implements SubscriptionManager {
 		public boolean register(Subscription s) {
 			subscriptions.add(s);
@@ -177,8 +110,6 @@ public class Agent_Manager extends PikaterAgent {
 			return true;
 		}
 	}
-
-	
 	
 	
 	protected void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			

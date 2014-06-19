@@ -20,20 +20,14 @@
               <__is__a__set>false</__is__a__set>
               <__data__type>INT</__data__type>
               <__name>M</__name>
-              <__value>-1</__value>
+              <__value>-2</__value>
               <__number__of__values__to__try>0</__number__of__values__to__try>
               <numberOfOptions>0</numberOfOptions>
             </org.pikater.core.ontology.subtrees.option.Option>
-              <org.pikater.core.ontology.subtrees.option.Option>
-                  <__mutable>false</__mutable>
-                  <__is__a__set>false</__is__a__set>
-                  <__data__type>STRING</__data__type>
-                  <__name>evaluation_method</__name>
-                  <__value>CrossValidation</__value>
-                  <__number__of__values__to__try>0</__number__of__values__to__try>
-                  <numberOfOptions>0</numberOfOptions>
-              </org.pikater.core.ontology.subtrees.option.Option>
           </options>
+          <evaluationMethod>
+            <name>CrossValidation</name>
+          </evaluationMethod>
           <trainingData>
             <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
               <fileURI>weather.arff</fileURI>
