@@ -35,7 +35,7 @@ import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -77,7 +77,7 @@ public class Agent_Duration extends PikaterAgent {
         aid=communicator.createAgent(this,"LinearRegression","DurationServiceRegression",null);
         		
 		// compute one LR (as the first one is usually longer) 
-		addBehaviour(new ExecuteTask(this, createCFPmessage(aid, "dc7ce6dea5a75110486760cfac1051a5")));
+		addBehaviour(new ExecuteTaskInitiator(this, createCFPmessage(aid, "dc7ce6dea5a75110486760cfac1051a5")));
 		doWait(2000);
 		
         addBehaviour(new Test(this, t));			  
@@ -192,17 +192,17 @@ public class Agent_Duration extends PikaterAgent {
 
 		protected void onTick() {
 			  // compute linear regression on random (but the same) dataset
-			  addBehaviour(new ExecuteTask(myAgent, createCFPmessage(aid, "dc7ce6dea5a75110486760cfac1051a5")));			  
+			  addBehaviour(new ExecuteTaskInitiator(myAgent, createCFPmessage(aid, "dc7ce6dea5a75110486760cfac1051a5")));			  
 		} 
     }
     
-	protected class ExecuteTask extends ContractNetInitiator{
+	protected class ExecuteTaskInitiator extends ContractNetInitiator{
 
 		private static final long serialVersionUID = -4895199062239049907L;
 				
 		ACLMessage cfp; 
 		
-		public ExecuteTask(jade.core.Agent a, ACLMessage cfp) {
+		public ExecuteTaskInitiator(jade.core.Agent a, ACLMessage cfp) {
 			super(a, cfp);
 			this.cfp = cfp;
 		}
@@ -250,7 +250,7 @@ public class Agent_Duration extends PikaterAgent {
 			if (accept != null) {				
 				try {
 					ContentElement content = getContentManager().extractContent(cfp);
-					Execute execute = (Execute) (((Action) content).getAction());
+					ExecuteTask execute = (ExecuteTask) (((Action) content).getAction());
 					
 					Action a = new Action();
 					a.setAction(execute);
@@ -361,7 +361,7 @@ public class Agent_Duration extends PikaterAgent {
 		t.setGetResults("after_each_computation");
 		t.setSaveResults(false);
 
-		Execute ex = new Execute();
+		ExecuteTask ex = new ExecuteTask();
 		ex.setTask(t);
 		
 		try {

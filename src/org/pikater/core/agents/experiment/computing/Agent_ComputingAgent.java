@@ -52,7 +52,7 @@ import org.pikater.core.ontology.subtrees.result.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
@@ -492,7 +492,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 							send(result_msg);
 							return;
 							
-						} else if (((Action) content).getAction() instanceof Execute) {												
+						} else if (((Action) content).getAction() instanceof ExecuteTask) {												
 							send(processExecute(req));
 							return;
 						}
@@ -525,7 +525,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		private static final int LAST_JMP = 1;
 		ACLMessage incoming_request;
 		ACLMessage result_msg;
-		Execute execute_action;
+		ExecuteTask execute_action;
 		boolean success;
 		org.pikater.core.ontology.subtrees.task.Evaluation eval = new Evaluation();
 		String train_fn;
@@ -568,7 +568,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 				try {
 					ContentElement content = getContentManager()
 							.extractContent(incoming_request);
-					execute_action = (Execute) ((Action) content).getAction();
+					execute_action = (ExecuteTask) ((Action) content).getAction();
 					return true;
 				} catch (CodecException ce) {
 					ce.printStackTrace();

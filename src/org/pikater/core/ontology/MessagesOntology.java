@@ -33,7 +33,7 @@ import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -66,7 +66,7 @@ public class MessagesOntology extends BeanOntology {
             add(Eval.class);
             add(Evaluation.class);
             add(EvaluationMethod.class);
-            add(Execute.class);
+            add(ExecuteTask.class);
             add(ExecuteParameters.class);
             add(GetAgents.class);
             add(GetData.class);

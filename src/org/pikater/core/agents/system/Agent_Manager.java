@@ -32,7 +32,7 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -213,7 +213,7 @@ public class Agent_Manager extends PikaterAgent {
 	} // end sendSubscription
 	
 	
-	public ACLMessage execute2Message(Execute execute) {
+	public ACLMessage execute2Message(ExecuteTask execute) {
 		// create ACLMessage from Execute ontology action
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);

@@ -17,7 +17,7 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 
 import java.io.*;
 import java.sql.Timestamp;
@@ -45,7 +45,7 @@ public class ManagerAgentRequestResponder {
         return object;
     }
 
-    public ACLMessage RespondToSaveAction(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException {
+    public ACLMessage respondToSaveAction(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException {
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         SaveAgent sa = (SaveAgent) a.getAction();
 
@@ -80,7 +80,7 @@ public class ManagerAgentRequestResponder {
         return reply;
     }
 
-    public ACLMessage RespondToCreateAction(ACLMessage request) throws OntologyException, Codec.CodecException {
+    public ACLMessage respondToCreateAction(ACLMessage request) throws OntologyException, Codec.CodecException {
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         CreateAgent ca = (CreateAgent) a.getAction();
         String agent_name;
@@ -101,11 +101,11 @@ public class ManagerAgentRequestResponder {
         return reply;
     }
 
-    public ACLMessage RespondToLoadAction(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException, ControllerException {
+    public ACLMessage respondToLoadAction(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException, ControllerException {
 
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         LoadAgent la = (LoadAgent) a.getAction();
-        Execute fa = la.getFirst_action();
+        ExecuteTask fa = la.getFirst_action();
 
         Agent newAgent;
 

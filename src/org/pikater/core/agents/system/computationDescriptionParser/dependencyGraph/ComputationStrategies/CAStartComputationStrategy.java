@@ -22,7 +22,7 @@ import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 /**
@@ -63,7 +63,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
     }
 		
 	private ACLMessage prepareRequest(){
-		Execute ex = new Execute();
+		ExecuteTask ex = new ExecuteTask();
 		Task task = getTaskFromNode();
 				
 		ex.setTask(task);							

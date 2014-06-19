@@ -84,14 +84,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					action = (Action) getContentManager().extractContent(
 							request);
 				} catch (UngroundedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				    logError(e.getMessage());
 				} catch (CodecException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logError(e.getMessage());
 				} catch (OntologyException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logError(e.getMessage());
 				}
 
 				if (action.getAction() instanceof GetAgentInfos) {
@@ -105,7 +102,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
 
-				log("Failure responding to request: " + request.getContent());
+				logError("Failure responding to request: " + request.getContent());
 				return failure;
 			}
 
@@ -130,12 +127,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				
 				controlers.put(agentClassI.getSimpleName(), agentControllerI);
 			} catch (ControllerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logError(e.getMessage());
 			}
 		}
 		
-		Thread shutDownAgents = new ShutDownAgents(controlers);
+		Thread shutDownAgents = new ShutDownAgents(controlers, this);
 		shutDownAgents.start();
 	}
 	
@@ -195,11 +191,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 
 		return reply;
@@ -220,11 +214,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			getContentManager().fillContent(request,
 					new Action(receiver, new GetAgentInfos()));
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 		
 		ACLMessage reply = null;
@@ -235,8 +227,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			}
 			
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 
 		AgentInfos agentInfos = null;
@@ -246,14 +237,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			agentInfos = (AgentInfos) r.getValue();
 	
 		} catch (UngroundedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 
 		return agentInfos;
@@ -274,11 +262,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 
 		return reply;
@@ -301,11 +287,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			getContentManager().fillContent(request,
 					new Action(receiver, saveAgentInfo));
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 		
 		ACLMessage reply = null;
@@ -323,9 +307,12 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 class ShutDownAgents extends Thread {
 
 	private Map<String, AgentController> controlers;
+	private Agent_AgentInfoManager agent;
 
-	public ShutDownAgents(Map<String, AgentController> controlers) {
+	public ShutDownAgents(Map<String, AgentController> controlers,
+			Agent_AgentInfoManager agent) {
 		this.controlers = controlers;
+		this.agent = agent;
 	}
 	
     public void run() {
@@ -334,20 +321,18 @@ class ShutDownAgents extends Thread {
 			for (int i = 0; i < 30; i++) {
 				Thread.sleep(1000);
 			}
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (InterruptedException e) {
+			agent.logError(e.getMessage());
 		}
 		
 		for (String agentNameI : controlers.keySet()){
 
 			AgentController contorlerI = controlers.get(agentNameI);
 			try {
-				System.out.println("Shut down: " + agentNameI);
+				agent.log("Shut down: " + agentNameI);
 				contorlerI.kill();
 			} catch (StaleProxyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				agent.logError(e.getMessage());
 			}
 		}
     }
