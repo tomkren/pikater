@@ -9,12 +9,14 @@ import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.Align;
@@ -216,6 +218,9 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 			
 			case REPRESENTATIVE:
 				return ComboBox.class; // override the type declaration
+				
+			case ACTION:
+				return Button.class;
 			
 			default:
 				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());
@@ -233,6 +238,9 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 			
 			case REPRESENTATIVE:
 				return new DBTableItemPropertyCombo(container, (RepresentativeDBViewValue) value);
+				
+			case ACTION:
+				return new DBTableItemPropertyAction((ActionDBViewValue) value);
 				
 			default:
 				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());
@@ -267,7 +275,8 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		return rows.allItemsCount();
 	}
 	
-	private void batchSetValues(Set<Integer> ids, Header header, String newValue)
+	// TODO: do we even need this?
+	protected void batchSetValues(Set<Integer> ids, Header header, String newValue)
 	{
 		if(header.supportsBatchSet())
 		{

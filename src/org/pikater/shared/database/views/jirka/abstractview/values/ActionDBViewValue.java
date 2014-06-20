@@ -28,5 +28,5 @@ public abstract class ActionDBViewValue extends AbstractDBViewValue<String>
 	/**
 	 * Method called when the user clicks the GUI button linked to this view value.
 	 */
-	protected abstract void executeAction();
+	public abstract void executeAction();
 }
