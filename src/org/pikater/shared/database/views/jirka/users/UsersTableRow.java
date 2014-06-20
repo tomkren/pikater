@@ -10,12 +10,13 @@ import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 
 public class UsersTableRow extends AbstractTableRowDBView
 {
-	private final JPAUser user;
+	public final JPAUser user;
 	
 	public UsersTableRow(JPAUser user)
 	{
@@ -101,6 +102,16 @@ public class UsersTableRow extends AbstractTableRowDBView
 					protected void commitEntities()
 					{
 						commitRow();
+					}
+				};
+				
+			case RESET_PASSWORD:
+				return new ActionDBViewValue("Reset")
+				{
+					@Override
+					protected void executeAction()
+					{
+						// TODO: reset user password
 					}
 				};
 			
