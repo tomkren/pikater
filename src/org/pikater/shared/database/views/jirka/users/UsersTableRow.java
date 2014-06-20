@@ -1,7 +1,7 @@
 package org.pikater.shared.database.views.jirka.users;
 
+import java.text.SimpleDateFormat;
 import java.util.EnumSet;
-import java.util.Set;
 
 import org.pikater.shared.AppHelper;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -16,10 +16,12 @@ import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewV
 
 public class UsersTableRow extends AbstractTableRowDBView
 {
+	private final SimpleDateFormat dateFormatter;
 	public final JPAUser user;
 	
 	public UsersTableRow(JPAUser user)
 	{
+		this.dateFormatter = new SimpleDateFormat("dd.MM. yyyy");
 		this.user = user;
 	}
 
@@ -59,7 +61,7 @@ public class UsersTableRow extends AbstractTableRowDBView
 					}
 				};
 			case REGISTERED_AT:
-				return new StringDBViewValue(user.getCreated().toString(), true)
+				return new StringDBViewValue(dateFormatter.format(user.getCreated()), true)
 				{
 					@Override
 					protected void updateEntities(String newValue)
@@ -76,19 +78,21 @@ public class UsersTableRow extends AbstractTableRowDBView
 			 * And then the editable ones.
 			 */
 			case ACCOUNT_STATUS:
-                //TODO
-//                EnumSet<String> enum=EnumSet.allOf(JPAUserStatus.class);
-//                Set<String> values=AppHelper.enumSetToStringSet(enum);
-//				return new RepresentativeDBViewValue(values, user.getStatus().name(), false)
-//				{
-//					@Override
-//					protected void commitValue()
-//					{
-//						RepresentativeDBViewValue valueWrapper = (RepresentativeDBViewValue) getValueWrapper(column);
-//						user.setStatus(JPAUserStatus.valueOf(valueWrapper.getValue()));
-//						commitRow();
-//					}
-//				};
+				return new RepresentativeDBViewValue(AppHelper.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name(), false)
+				{
+					@Override
+					protected void updateEntities(String newValue)
+					{
+						user.setStatus(JPAUserStatus.valueOf(newValue));
+					}
+
+					@Override
+					protected void commitEntities()
+					{
+						commitRow();
+					}
+				};
+				
 			case MAXIMUM_PRIORITY:
 				return new RepresentativeDBViewValue(AppHelper.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()), false)
 				{
@@ -109,7 +113,7 @@ public class UsersTableRow extends AbstractTableRowDBView
 				return new ActionDBViewValue("Reset")
 				{
 					@Override
-					protected void executeAction()
+					public void executeAction()
 					{
 						// TODO: reset user password
 					}

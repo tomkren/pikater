@@ -15,8 +15,14 @@ public class UsersView extends DBTableLayout implements IContentComponent
 		super(new UsersTableView(), UsersTableView.Column.LOGIN);
 		setSizeUndefined();
 		
-		// TODO: set column sizes
-		// this.table.setColumnWidth(column, -1);
+		getTable().setColumnWidth(UsersTableView.Column.LOGIN, 150);
+		getTable().setColumnWidth(UsersTableView.Column.EMAIL, 200);
+		getTable().setColumnWidth(UsersTableView.Column.REGISTERED_AT, 100);
+		getTable().setColumnWidth(UsersTableView.Column.ACCOUNT_STATUS, 100);
+		getTable().setColumnWidth(UsersTableView.Column.MAXIMUM_PRIORITY, 100);
+		getTable().setColumnWidth(UsersTableView.Column.RESET_PASSWORD, 150);
+		
+		// TODO:
 		// this.table.setColumnExpandRatio(propertyId, expandRatio);
 	}
 

@@ -52,6 +52,7 @@ public class UsersTableView extends AbstractTableDBView
 				case EMAIL:
 				case LOGIN:
 				case REGISTERED_AT:
+					return ColumnType.STRING;
 					
 				case ACCOUNT_STATUS:
 				case MAXIMUM_PRIORITY:
