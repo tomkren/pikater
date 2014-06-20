@@ -8,6 +8,11 @@
   	margin-right: auto;
 }
 
+.topLevelElement.v-customlayout
+{
+	overflow: scroll;
+}
+
 .bannerArea
 {
 	background-color: black;
