@@ -17,6 +17,7 @@ public abstract class DBTableLayout extends VerticalLayout
 	
 	private final CheckBox chb_commit;
 	private final DBTable table;
+	private final HorizontalLayout tablePagingControls;
 	private final HorizontalLayout hl_btnInterface;
 	private final Button btn_saveChanges;
 	
@@ -27,6 +28,7 @@ public abstract class DBTableLayout extends VerticalLayout
 		setSpacing(true);
 		
 		this.chb_commit = new CheckBox("commit changes immediately", true);
+		this.chb_commit.setSizeUndefined();
 		this.chb_commit.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -5325141700170503845L;
@@ -39,8 +41,13 @@ public abstract class DBTableLayout extends VerticalLayout
 				btn_saveChanges.setVisible(!checked);
 			}
 		});
+		
 		this.table = new DBTable(dbView, defaultSortOrder);
-		this.table.setSizeUndefined();
+		this.table.setSizeFull();
+		
+		this.tablePagingControls = this.table.getPagingControls();
+		this.tablePagingControls.setSizeFull();
+		
 		this.btn_saveChanges = new Button("Save changes", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = -8473715451478153672L;
@@ -60,6 +67,7 @@ public abstract class DBTableLayout extends VerticalLayout
 		
 		addComponent(this.chb_commit);
 		addComponent(this.table);
+		addComponent(this.tablePagingControls);
 		addComponent(hl_btnInterface);
 	}
 	

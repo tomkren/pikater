@@ -1,11 +1,11 @@
 package org.pikater.web.vaadin.tabledbview;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
+import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 import org.pikater.shared.util.SimpleIDGenerator;
 
 public class DBTableContainerItems implements ICommitable
@@ -17,6 +17,7 @@ public class DBTableContainerItems implements ICommitable
 	}
 	
 	private final Map<Integer, DBTableItem> rows;
+	private QueryResult lastQueryResult;
 	private SortOrder currentSortOrder;
 	
 	public DBTableContainerItems()
@@ -37,20 +38,21 @@ public class DBTableContainerItems implements ICommitable
 	//-----------------------------------------------
 	// MAIN CONTAINER INTERFACE
 	
-	public void loadRows(DBTableContainer container, Collection<? extends AbstractTableRowDBView> queryResult)
+	public void loadRows(DBTableContainer container, QueryResult queryResult)
 	{
 		// first, clear the previous rows
 		this.rows.clear();
 		
 		// then generate the new ones
 		SimpleIDGenerator ids = new SimpleIDGenerator();
-		for(AbstractTableRowDBView row : queryResult)
+		for(AbstractTableRowDBView row : queryResult.getConstrainedResults())
 		{
 			this.rows.put(ids.getAndIncrement(), new DBTableItem(container, row));
 		}
 		
-		// and reset the sort order
+		// and finally:
 		resetSortOrder();
+		lastQueryResult = queryResult;
 	}
 	
 	public Set<Integer> getRowIDs()
@@ -63,13 +65,18 @@ public class DBTableContainerItems implements ICommitable
 		return this.rows.get(rowID);
 	}
 	
-	public int size()
+	public int tableItemsCount()
 	{
 		return this.rows.size();
 	}
 	
+	public int allItemsCount()
+	{
+		return lastQueryResult.getAllResultsCount();
+	}
+	
 	//-----------------------------------------------
-	// SORT INTERFACE
+	// SORT INTERFACE - REFER TO THE CONTAINER.SORTABLE INTERFACE JAVADOC WHEN IMPLEMENTING
 	
 	public void setSortOrder(boolean ascending)
 	{
@@ -148,12 +155,26 @@ public class DBTableContainerItems implements ICommitable
 
 	public boolean isFirstID(Object itemId)
 	{
-		return itemId.equals(SimpleIDGenerator.getFirstID());
+		if(itemId == null)
+		{
+			return false;
+		}
+		else
+		{
+			return itemId.equals(SimpleIDGenerator.getFirstID());
+		}
 	}
 
 	public boolean isLastID(Object itemId)
 	{
-		return itemId.equals(getLastItemID());
+		if(itemId == null)
+		{
+			return false;
+		}
+		else
+		{
+			return itemId.equals(getLastItemID());
+		}
 	}
 	
 	//-----------------------------------------------

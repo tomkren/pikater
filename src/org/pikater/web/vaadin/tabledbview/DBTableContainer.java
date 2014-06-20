@@ -69,14 +69,14 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Collection<?> getItemIds()
 	{
-		rows.loadRows(this, dbView.getRows(context.getQuery()));
+		rows.loadRows(this, dbView.queryRows(context.getQuery()));
 		return rows.getRowIDs();
 	}
 	
 	@Override
 	public int size()
 	{
-		return rows.size();
+		return rows.tableItemsCount();
 	}
 	
 	@Override
@@ -260,6 +260,11 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	public ISortableTableContainerContext getContext()
 	{
 		return context;
+	}
+	
+	public int getUnconstrainedQueryResultsCount()
+	{
+		return rows.allItemsCount();
 	}
 	
 	private void batchSetValues(Set<Integer> ids, Header header, String newValue)
