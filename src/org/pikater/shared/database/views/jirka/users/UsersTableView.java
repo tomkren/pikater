@@ -1,14 +1,16 @@
 package org.pikater.shared.database.views.jirka.users;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
+import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 
 public class UsersTableView extends AbstractTableDBView
 {
@@ -26,10 +28,15 @@ public class UsersTableView extends AbstractTableDBView
 		REGISTERED_AT,
 		
 		/*
-		 * And then the editable ones.
+		 * Then the editable ones.
 		 */
 		ACCOUNT_STATUS,
-		MAXIMUM_PRIORITY;
+		MAXIMUM_PRIORITY,
+		
+		/*
+		 * And finally, custom actions.
+		 */
+		RESET_PASSWORD;
 
 		@Override
 		public String getDisplayName()
@@ -45,11 +52,13 @@ public class UsersTableView extends AbstractTableDBView
 				case EMAIL:
 				case LOGIN:
 				case REGISTERED_AT:
-					return ColumnType.STRING;
 					
 				case ACCOUNT_STATUS:
 				case MAXIMUM_PRIORITY:
 					return ColumnType.REPRESENTATIVE;
+					
+				case RESET_PASSWORD:
+					return ColumnType.ACTION;
 					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
@@ -64,17 +73,49 @@ public class UsersTableView extends AbstractTableDBView
 	}
 
 	@Override
-	public Collection<? extends AbstractTableRowDBView> getUninitializedRowsAscending(QueryConstraints constraints)
+	public QueryResult queryUninitializedRows(final QueryConstraints constraints)
 	{
-		// IMPORTANT: as stated in Javadoc, the result collection should not be internally cached, so:
+		/*
+		 * IMPORTANT - as stated in Javadoc:
+		 * - the result collection should not be internally cached,
+		 * - the result collection should be sorted in ascending order.
+		 */
 		
-		// TODO: use constraints
+		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
 		
-		Collection<UsersTableRow> rows = new ArrayList<UsersTableRow>();
-		for(JPAUser user : DAOs.userDAO.getAll())
+		List<JPAUser> allUsers = DAOs.userDAO.getAll();
+		List<UsersTableRow> rows = new ArrayList<UsersTableRow>();
+		
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allUsers.size());
+		for(JPAUser user : allUsers.subList(constraints.getOffset(), endIndex))
 		{
 			rows.add(new UsersTableRow(user));
 		}
-		return rows;
+		
+		Collections.sort(rows, new Comparator<UsersTableRow>()
+		{
+			@Override
+			public int compare(UsersTableRow o1, UsersTableRow o2)
+			{
+				Column sortColumn = (Column) constraints.getSortOrder();
+				switch(sortColumn)
+				{
+					case LOGIN:
+						return o1.user.getLogin().compareToIgnoreCase(o2.user.getLogin());
+					case EMAIL:
+						return o1.user.getEmail().compareToIgnoreCase(o2.user.getEmail());
+					case MAXIMUM_PRIORITY:
+						return o1.user.getPriorityMax().compareTo(o2.user.getPriorityMax());
+					case REGISTERED_AT:
+						return o1.user.getCreated().compareTo(o2.user.getCreated());
+					default:
+						// throw new IllegalStateException("Unknown column: " + sortColumn.name());
+						break; // do nothing
+				}
+				return 0;
+			}
+		});
+		
+		return new QueryResult(rows, allUsers.size());
 	}
 }

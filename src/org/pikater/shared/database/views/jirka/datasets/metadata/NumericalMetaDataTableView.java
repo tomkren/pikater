@@ -1,7 +1,7 @@
 package org.pikater.shared.database.views.jirka.datasets.metadata;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import org.pikater.shared.AppHelper;
@@ -9,9 +9,9 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
+import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 
 /**
  * A generic view for tables displaying numerical metadata information for a dataset.  
@@ -96,19 +96,24 @@ public class NumericalMetaDataTableView extends AbstractTableDBView{
 		this.dslo=datasetlo;
 		this.currentLocale=locale;
 	}
-
+	
 	@Override
-	public Collection<? extends AbstractTableRowDBView> getUninitializedRowsAscending(QueryConstraints constraints)
+	protected QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		Collection<NumericalMetadataTableRow> rows = new ArrayList<NumericalMetadataTableRow>();
-		if(dslo!=null){
-		for(JPAAttributeMetaData md:dslo.getAttributeMetaData())
+		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
+		
+		List<NumericalMetadataTableRow> rows = new ArrayList<NumericalMetadataTableRow>();
+		if(dslo != null)
 		{
-			if(md instanceof JPAAttributeNumericalMetaData){
-				rows.add(new NumericalMetadataTableRow((JPAAttributeNumericalMetaData)md,this.currentLocale));
+			for(JPAAttributeMetaData md : dslo.getAttributeMetaData())
+			{
+				if(md instanceof JPAAttributeNumericalMetaData)
+				{
+					rows.add(new NumericalMetadataTableRow((JPAAttributeNumericalMetaData)md,this.currentLocale));
+				}
 			}
 		}
-		}
-		return rows;
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), rows.size());
+		return new QueryResult(rows.subList(constraints.getOffset(), endIndex), rows.size());
 	}
 }

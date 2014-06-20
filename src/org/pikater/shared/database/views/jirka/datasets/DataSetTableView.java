@@ -1,15 +1,15 @@
 package org.pikater.shared.database.views.jirka.datasets;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
+import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 
 /**
  * A generic view for tables displaying dataset information.  
@@ -75,13 +75,18 @@ public class DataSetTableView extends AbstractTableDBView{
 	}
 
 	@Override
-	public Collection<? extends AbstractTableRowDBView> getUninitializedRowsAscending(QueryConstraints constraints)
+	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		Collection<DataSetTableRow> rows = new ArrayList<DataSetTableRow>();
-		for(JPADataSetLO dslo : DAOs.dataSetDAO.getAll())
+		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
+		
+		List<JPADataSetLO> allDatasets = DAOs.dataSetDAO.getAll();
+		List<DataSetTableRow> rows = new ArrayList<DataSetTableRow>();
+		
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allDatasets.size());
+		for(JPADataSetLO dslo : allDatasets.subList(constraints.getOffset(), endIndex))
 		{
 			rows.add(new DataSetTableRow(dslo));
 		}
-		return rows;
+		return new QueryResult(rows, allDatasets.size());
 	}
 }

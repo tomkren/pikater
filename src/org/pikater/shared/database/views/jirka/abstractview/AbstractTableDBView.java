@@ -1,7 +1,5 @@
 package org.pikater.shared.database.views.jirka.abstractview;
 
-import java.util.Collection;
-
 /**
  * Database table view designed to work well with Vaadin's table {@link com.vaadin.data.Container}.
  * This view's interface has been reduced as much as possible so that only the essential
@@ -38,7 +36,13 @@ public abstract class AbstractTableDBView
 		 * Make sure the {@link org.pikater.shared.database.views.jirka.abstractview.values.BooleanDBViewValue} type's
 		 * generic parameter matches the one provided in the {@link #getResultJavaType()} method.
 		 */
-		BOOLEAN;
+		BOOLEAN,
+		
+		/**
+		 * A single string value, read-only.
+		 * It is being displayed as a button and if the user clicks on it, custom action is executed.
+		 */
+		ACTION;
 		
 		public Class<? extends Object> getResultJavaType()
 		{
@@ -53,7 +57,7 @@ public abstract class AbstractTableDBView
 		
 		public boolean isSortable()
 		{
-			return this != REPRESENTATIVE; 
+			return (this == STRING) || (this == BOOLEAN); 
 		}
 	}
 	
@@ -69,15 +73,18 @@ public abstract class AbstractTableDBView
 	 * @param sortOrder
 	 * @return
 	 */
-	public Collection<? extends AbstractTableRowDBView> getRows(QueryConstraints constraints)
+	public QueryResult queryRows(QueryConstraints constraints)
 	{
-		@SuppressWarnings("unchecked")
-		Collection<AbstractTableRowDBView> result = (Collection<AbstractTableRowDBView>) getUninitializedRowsAscending(constraints);
-		for(AbstractTableRowDBView row : result)
+		QueryResult queryResult = queryUninitializedRows(constraints);
+		if(queryResult.getConstrainedResults().size() > constraints.getMaxResults())
+		{
+			throw new IllegalStateException("Child view provided more results that it was asked for.");
+		}
+		for(AbstractTableRowDBView row : queryResult.getConstrainedResults())
 		{
 			row.init(this);
 		}
-		return result;
+		return queryResult;
 	}
 	
 	/**
@@ -86,5 +93,5 @@ public abstract class AbstractTableDBView
 	 * Initialization of the rows will be performed automatically.
 	 * @return
 	 */
-	protected abstract Collection<? extends AbstractTableRowDBView> getUninitializedRowsAscending(QueryConstraints constraints);
+	protected abstract QueryResult queryUninitializedRows(QueryConstraints constraints);
 }
