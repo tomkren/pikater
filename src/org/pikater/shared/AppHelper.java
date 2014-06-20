@@ -7,9 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.pikater.shared.logging.PikaterLogger;
@@ -152,5 +154,14 @@ public class AppHelper
 		final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
 		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
 		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+	}
+	
+	public static String formatDouble(Locale locale,double value){
+		NumberFormat numberFormat=NumberFormat.getInstance(locale);
+		return numberFormat.format(value);
+	}
+	
+	public static String formatBool(Locale locale,boolean value){
+		return ""+value;
 	}
 }
