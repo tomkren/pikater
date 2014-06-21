@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
@@ -44,7 +44,7 @@ public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 	public void setValue(T newValue) throws com.vaadin.data.Property.ReadOnlyException
 	{
 		valueWrapper.setValue(newValue);
-		if(container.getContext().getParentTable().isImmediate())
+		if(container.getParentTable().isImmediate())
 		{
 			valueWrapper.commit();
 		}

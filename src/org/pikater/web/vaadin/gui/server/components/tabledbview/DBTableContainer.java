@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,10 +7,10 @@ import java.util.Set;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
+import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Container;
@@ -18,35 +18,34 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.Align;
 
 public class DBTableContainer implements Container.Sortable, ICommitable
 {
 	private static final long serialVersionUID = 9197656251784900256L;
 
-	private final ISortableTableContainerContext context;
-	private final AbstractTableDBView dbView;
-	private final Set<IColumn> sortableColumns;
+	private final DBTable parentTable;
+	private final AbstractTableGUIView<? extends AbstractTableDBView> guiView;
 	
+	private final Set<IColumn> sortableColumns;
 	private final DBTableContainerItems rows;
 	
-	public DBTableContainer(ISortableTableContainerContext context, AbstractTableDBView dbView)
+	public DBTableContainer(AbstractTableGUIView<? extends AbstractTableDBView> guiView, DBTable parentTable)
 	{
-		this.context = context;
-		this.dbView = dbView;
+		this.parentTable = parentTable;
+		this.guiView = guiView;
+		
 		this.sortableColumns = new HashSet<IColumn>();
 		for(IColumn column : getContainerPropertyIds())
 		{
-			this.context.getParentTable().setColumnHeader(column, column.getDisplayName());
-			this.context.getParentTable().setColumnAlignment(column, Align.CENTER);
+			this.parentTable.setColumnHeader(column, column.getDisplayName());
+			this.parentTable.setColumnAlignment(column, Align.CENTER);
 			if(column.getColumnType().isSortable())
 			{
 				this.sortableColumns.add(column);
 			}
 		}
-		
-		this.rows = new DBTableContainerItems();
+		this.rows = new DBTableContainerItems(parentTable);
 	}
 	
 	//-----------------------------------------------------------
@@ -55,7 +54,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Collection<IColumn> getContainerPropertyIds()
 	{
-		return Arrays.asList(dbView.getColumns());
+		return Arrays.asList(guiView.getUnderlyingDBView().getColumns());
 	}
 	
 	@Override
@@ -71,7 +70,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Collection<?> getItemIds()
 	{
-		rows.loadRows(this, dbView.queryRows(context.getQuery()));
+		rows.loadRows(this, guiView.getUnderlyingDBView().queryRows(parentTable.getQuery()));
 		return rows.getRowIDs();
 	}
 	
@@ -237,7 +236,9 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 				return new DBTableItemPropertyGeneric<Object>(container, column, (AbstractDBViewValue<Object>) value);
 			
 			case REPRESENTATIVE:
-				return new DBTableItemPropertyCombo(container, (RepresentativeDBViewValue) value);
+				DBTableItemPropertyCombo result1 = new DBTableItemPropertyCombo(container.getParentTable(), (RepresentativeDBViewValue) value);
+				container.getGUIView().onCellCreate(column, result1.getValue());
+				return result1;
 				
 			case ACTION:
 				return new DBTableItemPropertyAction((ActionDBViewValue) value);
@@ -259,15 +260,14 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	//-----------------------------------------------------------
 	// AND FINALLY, SOME ADDED VALUE
 	
-	public interface ISortableTableContainerContext
+	public DBTable getParentTable()
 	{
-		Table getParentTable();
-		QueryConstraints getQuery();
+		return parentTable;
 	}
 	
-	public ISortableTableContainerContext getContext()
+	public AbstractTableGUIView<? extends AbstractTableDBView> getGUIView()
 	{
-		return context;
+		return guiView;
 	}
 	
 	public int getUnconstrainedQueryResultsCount()

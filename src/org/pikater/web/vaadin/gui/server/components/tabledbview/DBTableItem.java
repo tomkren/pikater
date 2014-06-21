@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class DBTableItem implements Item, ICommitable
 	private final AbstractTableRowDBView rowView;
 	private final Map<IColumn, Property<? extends Object>> columnToValue;
 	
-	public DBTableItem(DBTableContainer container, AbstractTableRowDBView rowView)
+	public DBTableItem(DBTableContainer container, AbstractTableRowDBView rowView, DBTable parentTable)
 	{
 		this.container = container;
 		this.rowView = rowView;
@@ -50,6 +50,11 @@ public class DBTableItem implements Item, ICommitable
 	public Property<? extends Object> getItemProperty(Object id)
 	{
 		return columnToValue.get(id);
+	}
+	
+	public AbstractTableRowDBView getRowView()
+	{
+		return rowView;
 	}
 	
 	// ------------------------------------------------------------------------------------------------

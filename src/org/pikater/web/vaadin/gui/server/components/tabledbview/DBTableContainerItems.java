@@ -1,10 +1,11 @@
-package org.pikater.web.vaadin.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
+import org.pikater.shared.database.views.jirka.abstractview.IExpandableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 import org.pikater.shared.util.SimpleIDGenerator;
 
@@ -16,12 +17,15 @@ public class DBTableContainerItems implements ICommitable
 		DESCENDING
 	}
 	
+	private final DBTable parentTable;
 	private final Map<Integer, DBTableItem> rows;
+	
 	private QueryResult lastQueryResult;
 	private SortOrder currentSortOrder;
 	
-	public DBTableContainerItems()
+	public DBTableContainerItems(DBTable parentTable)
 	{
+		this.parentTable = parentTable;
 		this.rows = new HashMap<Integer, DBTableItem>();
 		resetSortOrder();
 	}
@@ -47,7 +51,14 @@ public class DBTableContainerItems implements ICommitable
 		SimpleIDGenerator ids = new SimpleIDGenerator();
 		for(AbstractTableRowDBView row : queryResult.getConstrainedResults())
 		{
-			this.rows.put(ids.getAndIncrement(), new DBTableItem(container, row));
+			if(parentTable.rowsExpandIntoOtherViews() && !(row instanceof IExpandableDBView))
+			{
+				throw new IllegalArgumentException("Expandable row view is expected.");
+			}
+			else
+			{
+				this.rows.put(ids.getAndIncrement(), new DBTableItem(container, row, parentTable));
+			}
 		}
 		
 		// and finally:

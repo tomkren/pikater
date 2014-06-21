@@ -1,24 +1,24 @@
-package org.pikater.web.vaadin.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent;
-import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent.IPagingComponentContext;
-import org.pikater.web.vaadin.tabledbview.DBTableContainer.ISortableTableContainerContext;
+import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent.IPagedComponent;
+import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Table;
 
 @StyleSheet("dbTable.css")
-public class DBTable extends Table implements ICommitable, IPagingComponentContext
+public class DBTable extends Table implements IDBTableContainerContext, IPagedComponent, IDBTableConfig, ICommitable
 {
 	private static final long serialVersionUID = 6518669246548765191L;
 	
 	private final DBTableContainer tableContainer;
 	private final PagingComponent pagingControls;
 
-	public DBTable(AbstractTableDBView dbView, IColumn defaultSortColumn)
+	public DBTable(AbstractTableGUIView<? extends AbstractTableDBView> dbView)
 	{
 		super();
 		
@@ -35,29 +35,11 @@ public class DBTable extends Table implements ICommitable, IPagingComponentConte
 		this.pagingControls = new PagingComponent(this);
 		
 		// then setup the container
-		this.tableContainer = new DBTableContainer(new ISortableTableContainerContext()
-		{
-			@Override
-			public QueryConstraints getQuery()
-			{
-				return new QueryConstraints(
-						(IColumn) getSortContainerPropertyId(),
-						pagingControls.getOverallOffset(),
-						pagingControls.getPageSize()
-				);
-			}
-			
-			@Override
-			public Table getParentTable()
-			{
-				return DBTable.this;
-			}
-			
-		}, dbView);
+		this.tableContainer = new DBTableContainer(dbView, this);
 		
 		// and finish initialization
 		setContainerDataSource(tableContainer);
-		setSortContainerPropertyId(defaultSortColumn);
+		setSortContainerPropertyId(dbView.getUnderlyingDBView().getDefaultSortOrder());
 		addHeaderClickListener(new HeaderClickListener()
 		{
 			private static final long serialVersionUID = -1276767165561401427L;
@@ -73,6 +55,9 @@ public class DBTable extends Table implements ICommitable, IPagingComponentConte
 			}
 		});
 	}
+	
+	//-------------------------------------------------------------------
+	// INHERITED TABLE INTERFACE
 	
 	@Override
 	public void setSortContainerPropertyId(Object propertyId)
@@ -103,17 +88,21 @@ public class DBTable extends Table implements ICommitable, IPagingComponentConte
 		}
 	}
 	
+	//-------------------------------------------------------------------
+	// INHERITED CONTAINER RELATED INTERFACE
+	
 	@Override
-	public void commitToDB()
+	public QueryConstraints getQuery()
 	{
-		setEnabled(false);
-		if(!isImmediate())
-		{
-			commit(); // commits changes to properties which commit them to the view
-		}
-		tableContainer.commitToDB(); // commits changes to the database; changes are taken from the view
-		setEnabled(true);
+		return new QueryConstraints(
+				(IColumn) getSortContainerPropertyId(),
+				pagingControls.getOverallOffset(),
+				pagingControls.getPageSize()
+		);
 	}
+	
+	//-------------------------------------------------------------------
+	// INHERITED PAGING RELATED INTERFACE
 	
 	@Override
 	public int getAllItemsCount()
@@ -135,6 +124,30 @@ public class DBTable extends Table implements ICommitable, IPagingComponentConte
 		refreshRowCache();
 	}
 	
+	//-------------------------------------------------------------------
+	// OTHER INHERITED INTERFACE
+	
+	@Override
+	public boolean rowsExpandIntoOtherViews()
+	{
+		return false; // override in child classses to change
+	}
+	
+	@Override
+	public void commitToDB()
+	{
+		setEnabled(false);
+		if(!isImmediate())
+		{
+			commit(); // commits changes to properties which commit them to the view
+		}
+		tableContainer.commitToDB(); // commits changes to the database; changes are taken from the view
+		setEnabled(true);
+	}
+	
+	//-------------------------------------------------------------------
+	// OTHER PUBLIC INTERFACE
+	
 	public PagingComponent getPagingControls()
 	{
 		return pagingControls;
@@ -144,18 +157,17 @@ public class DBTable extends Table implements ICommitable, IPagingComponentConte
 	// PRIVATE INTERFACE
 	
 	/**
-	 * Sets the table to display exactly the number of items that were fetched from the database.</br>
-	 * As a side effect, refreshes the container's row index, just as the name of this method suggests.</br>
-	 * Setting page lenth is important because otherwise, Vaadin table will display a fixed number of
-	 * rows whether there are enough items to populate them or not.
+	 * Does a couple of things:
+	 * <ul>
+	 * <li> Sets the table to display exactly the number of items that were fetched from the database. As a
+	 * side effect, refreshes the container's row index, just as the name of this method suggests.
+	 * <li> Updates the underlying paging component accordingly.
+	 * <li> 
+	 * </ul> 
 	 */
 	private void rebuildContainerRowIndex(boolean resetPagePicker)
 	{
-		/*
-		 * Sets the table to display exactly the number of items that were fetched
-		 * from the database.
-		 * As a side effect, refreshes the container's row index, just as the
-		 * name of this method suggests.
+		/* 
 		 * Setting page lenth is important because otherwise, Vaadin table will
 		 * display a fixed number of rows whether there are enough items to
 		 * populate them or not.

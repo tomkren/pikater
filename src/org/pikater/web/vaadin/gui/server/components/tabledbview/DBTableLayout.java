@@ -1,7 +1,7 @@
-package org.pikater.web.vaadin.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
+import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -11,7 +11,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-public abstract class DBTableLayout extends VerticalLayout
+public class DBTableLayout extends VerticalLayout
 {
 	private static final long serialVersionUID = 6591677491205750540L;
 	
@@ -21,7 +21,7 @@ public abstract class DBTableLayout extends VerticalLayout
 	private final HorizontalLayout hl_btnInterface;
 	private final Button btn_saveChanges;
 	
-	public DBTableLayout(AbstractTableDBView dbView, IColumn defaultSortOrder)
+	public DBTableLayout(AbstractTableDBView dbView)
 	{
 		super();
 		setSizeUndefined();
@@ -42,7 +42,7 @@ public abstract class DBTableLayout extends VerticalLayout
 			}
 		});
 		
-		this.table = new DBTable(dbView, defaultSortOrder);
+		this.table = createTable(AbstractTableGUIView.getInstanceFromDBView(dbView));
 		this.table.setSizeFull();
 		
 		this.tablePagingControls = this.table.getPagingControls();
@@ -79,5 +79,10 @@ public abstract class DBTableLayout extends VerticalLayout
 	protected void addCustomActionButton(Button newBtn)
 	{
 		hl_btnInterface.addComponent(newBtn);
+	}
+	
+	protected DBTable createTable(AbstractTableGUIView<? extends AbstractTableDBView> dbView)
+	{
+		return new DBTable(dbView);
 	}
 }

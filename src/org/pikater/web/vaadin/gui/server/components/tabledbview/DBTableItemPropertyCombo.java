@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
 
@@ -11,7 +11,7 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 	
 	private final ComboBox comboBox;
 
-	public DBTableItemPropertyCombo(final DBTableContainer container, final RepresentativeDBViewValue valueWrapper)
+	public DBTableItemPropertyCombo(final DBTable parentTable, final RepresentativeDBViewValue valueWrapper)
 	{
 		this.comboBox = new ComboBox(null, valueWrapper.getValues());
 		this.comboBox.setValue(valueWrapper.getValue());
@@ -27,7 +27,7 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 			public void valueChange(ValueChangeEvent event)
 			{
 				valueWrapper.setValue((String) event.getProperty().getValue());
-				if(container.getContext().getParentTable().isImmediate())
+				if(parentTable.isImmediate())
 				{
 					valueWrapper.commit();
 				}
