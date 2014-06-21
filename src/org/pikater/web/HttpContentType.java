@@ -1,60 +1,62 @@
 package org.pikater.web;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
-public final class HttpContentType
+public enum HttpContentType
 {
-	// -------------------------------------------------------
-	// PUBLIC FIELDS
+	APPLICATION_XML("application/xml", ".xml"),
+	APPLICATION_XHTML_XML("application/xhtml+xml", ".xhtml"),
+	APPLICATION_JAR("application/java-archive", ".jar"),
+	APPLICATION_OCTET_STREAM("application/octet-stream", ".bin"),
+	TEXT_HTML("text/html", ".htm, .html"),
+	TEXT_PLAIN("text/plain", ".txt"),
+	WILDCARD("*/*", "any format");
 	
-	public static final String APPLICATION_XML = "application/xml";
-	public static final String APPLICATION_XHTML_XML = "application/xhtml+xml";
-	public static final String APPLICATION_JAR = "application/java-archive";
-	public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
-	public static final String TEXT_HTML = "text/html";
-	public static final String TEXT_PLAIN = "text/plain";
-	public static final String WILDCARD = "*/*";
+	private final String contentType;
+	private final String extensionList;
 	
-	// -------------------------------------------------------
-	// PRIVATE FIELDS
-	
-	private static final Map<String, String> mimeTypeToExtMapping = new HashMap<String, String>();
-	static
+	private HttpContentType(String contentType, String extensionList)
 	{
-		mimeTypeToExtMapping.put(APPLICATION_XML, ".xml");
-		mimeTypeToExtMapping.put(APPLICATION_XHTML_XML, ".xhtml");
-		mimeTypeToExtMapping.put(APPLICATION_JAR, ".jar");
-		mimeTypeToExtMapping.put(APPLICATION_OCTET_STREAM, ".bin");
-		mimeTypeToExtMapping.put(TEXT_HTML, ".htm, .html");
-		mimeTypeToExtMapping.put(TEXT_PLAIN, ".txt");
-		mimeTypeToExtMapping.put(WILDCARD, "any format");
+		this.contentType = contentType;
+		this.extensionList = extensionList;
 	}
 	
-	// -------------------------------------------------------
-	// PUBLIC METHODS
-	
-	public static String getExtensionListByMIMEType(String mimeType)
+	@Override
+	public String toString()
 	{
-		return mimeTypeToExtMapping.get(mimeType);
+		return contentType;
 	}
 	
-	public static String getExtensionListByMIMEType(Collection<String> mimeTypes)
+	public String getExtensionList()
+	{
+		return extensionList;
+	}
+	
+	public static List<String> getMimeTypeList(EnumSet<HttpContentType> contentTypes)
+	{
+		List<String> result = new ArrayList<String>();
+		Iterator<HttpContentType> iter = contentTypes.iterator();
+		while (iter.hasNext())
+		{
+			result.add(iter.next().contentType);
+		}
+		return result;
+	}
+	
+	public static String getExtensionList(EnumSet<HttpContentType> contentTypes)
 	{
 		StringBuilder result = new StringBuilder();
-		boolean first = true;
-		for(String mimeType : mimeTypes)
+		Iterator<HttpContentType> iter = contentTypes.iterator();
+		if(iter.hasNext())
 		{
-			if(!first)
-			{
-				result.append(", ");
-			}
-			else
-			{
-				first = false;
-			}
-			result.append(getExtensionListByMIMEType(mimeType));
+			result.append(iter.next().getExtensionList());
+		}
+		while(iter.hasNext())
+		{
+			result.append(", ").append(iter.next().getExtensionList());
 		}
 		return result.toString();
 	}

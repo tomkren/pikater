@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.EnumSet;
 
 import org.pikater.web.HttpContentType;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
@@ -66,12 +66,12 @@ public class ManageUserUploads implements Serializable
 	// -----------------------------------------------
 	// PUBLIC METHODS
 	
-	public MyMultiUpload getNewComponent(List<String> allowedMIMETypes, IUploadedFileHandler uploadedFileHandler)
+	public MyMultiUpload getNewComponent(EnumSet<HttpContentType> allowedMIMETypes, IUploadedFileHandler uploadedFileHandler)
 	{
-		MyMultiUpload result = new MyMultiUpload(stateWindow, uploadedFileHandler, null); // TODO:
+		MyMultiUpload result = new MyMultiUpload(stateWindow, uploadedFileHandler, this);
 		result.setMaxFileSize(oneGB);
-		result.setAcceptedMimeTypes(allowedMIMETypes);
-		result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", HttpContentType.getExtensionListByMIMEType(allowedMIMETypes)));
+		result.setAcceptedMimeTypes(HttpContentType.getMimeTypeList(allowedMIMETypes));
+		result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", HttpContentType.getExtensionList(allowedMIMETypes)));
 		result.setSizeErrorMsgPattern("Error: you can only upload files up to 1GB.");
 		result.setMaxVisibleRows(5);
 		result.getSmartUpload().setUploadButtonCaptions("Single upload", "Multi-upload");
