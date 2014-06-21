@@ -63,10 +63,16 @@ public abstract class AbstractTableDBView
 	
 	/**
 	 * Returns the enumeration of all columns this view defines.
-	 * @see {@link org.pikater.shared.database.views.jirka.users.UsersTableView} - example
+	 * @see {@link org.pikater.shared.database.views.jirka.users.UsersTableDBView} - example
 	 * @return
 	 */
 	public abstract IColumn[] getColumns();
+	
+	/**
+	 * Returns the column by which this view is sorted by default.
+	 * @return
+	 */
+	public abstract IColumn getDefaultSortOrder();
 	
 	/**
 	 * Returns a non-cached initialized collection of rows.
