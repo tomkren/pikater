@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,7 +29,7 @@ public class TestContent
 	public static AbstractComponent testMultiFileUpload()
 	{
 		return new ManageUserUploads().getNewComponent(
-				Arrays.asList(HttpContentType.APPLICATION_JAR),
+				EnumSet.of(HttpContentType.APPLICATION_JAR),
 				new IUploadedFileHandler()
 				{
 					@Override

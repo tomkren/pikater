@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
-import org.pikater.shared.database.views.jirka.users.UsersTableView;
+import org.pikater.shared.database.views.jirka.users.UsersTableDBView;
+import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
-import org.pikater.web.vaadin.tabledbview.DBTableLayout;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
@@ -12,18 +12,13 @@ public class UsersView extends DBTableLayout implements IContentComponent
 	
 	public UsersView()
 	{
-		super(new UsersTableView(), UsersTableView.Column.LOGIN);
+		super(new UsersTableDBView());
 		setSizeUndefined();
-		
-		getTable().setColumnWidth(UsersTableView.Column.LOGIN, 150);
-		getTable().setColumnWidth(UsersTableView.Column.EMAIL, 200);
-		getTable().setColumnWidth(UsersTableView.Column.REGISTERED_AT, 100);
-		getTable().setColumnWidth(UsersTableView.Column.ACCOUNT_STATUS, 100);
-		getTable().setColumnWidth(UsersTableView.Column.MAXIMUM_PRIORITY, 100);
-		getTable().setColumnWidth(UsersTableView.Column.RESET_PASSWORD, 150);
 		
 		// TODO:
 		// this.table.setColumnExpandRatio(propertyId, expandRatio);
+		
+		// TODO: a wizard to add datasets
 	}
 
 	@Override
