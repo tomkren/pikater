@@ -19,11 +19,11 @@ public class PagingComponent extends HorizontalLayout
 {
 	private static final long serialVersionUID = 5946124883390545518L;
 	
-	private final IPagingComponentContext context;
+	private final IPagedComponent context;
 	private final ComboBox cb_pageLength;
 	private final PagePicker pagePicker;
 
-	public PagingComponent(final IPagingComponentContext context)
+	public PagingComponent(final IPagedComponent context)
 	{
 		super();
 		setSpacing(true);
@@ -90,7 +90,7 @@ public class PagingComponent extends HorizontalLayout
 	// -------------------------------------------------------------
 	// INNER TYPES
 	
-	public interface IPagingComponentContext
+	public interface IPagedComponent
 	{
 		/**
 		 * Gets the sum of all items across all pages.
