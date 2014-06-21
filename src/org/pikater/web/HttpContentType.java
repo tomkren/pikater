@@ -7,10 +7,12 @@ import java.util.List;
 
 public enum HttpContentType
 {
-	APPLICATION_XML("application/xml", ".xml"),
-	APPLICATION_XHTML_XML("application/xhtml+xml", ".xhtml"),
 	APPLICATION_JAR("application/java-archive", ".jar"),
 	APPLICATION_OCTET_STREAM("application/octet-stream", ".bin"),
+	APPLICATION_MS_EXCEL("application/vnd.ms-excel", ".xls"),
+	APPLICATION_XHTML_XML("application/xhtml+xml", ".xhtml"),
+	APPLICATION_XML("application/xml", ".xml"),
+	TEXT_CSV("text/csv", ".csv"),
 	TEXT_HTML("text/html", ".htm, .html"),
 	TEXT_PLAIN("text/plain", ".txt"),
 	WILDCARD("*/*", "any format");

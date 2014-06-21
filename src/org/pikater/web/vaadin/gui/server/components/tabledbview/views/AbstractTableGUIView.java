@@ -31,6 +31,7 @@ public abstract class AbstractTableGUIView<T extends AbstractTableDBView>
 		for(IColumn column : underlyingDBView.getColumns())
 		{
 			table.setColumnWidth(column, getColumnSize(column));
+			// TODO: table.setColumnExpandRatio(propertyId, expandRatio);
 		}
 	}
 	

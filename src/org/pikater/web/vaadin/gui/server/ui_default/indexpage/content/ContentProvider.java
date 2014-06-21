@@ -3,8 +3,8 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.UsersView;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.DatasetsView;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.ProfileView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserDatasetsView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserProfileView;
 
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinSession;
@@ -202,10 +202,10 @@ public class ContentProvider
 			switch(this)
 			{
 				case VIEW_PROFILE:
-					return new ProfileView();
+					return new UserProfileView();
 				case VIEW_DATASETS:
 				case VIEW_METHODS:
-					return new DatasetsView();
+					return new UserDatasetsView();
 				default:
 					return new UnimplementedContent();
 			}

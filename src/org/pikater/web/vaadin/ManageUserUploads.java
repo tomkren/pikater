@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.EnumSet;
 
 import org.pikater.web.HttpContentType;
+import org.pikater.web.vaadin.gui.server.components.upload.IUploadedFileHandler;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
-import org.pikater.web.vaadin.gui.server.components.upload.uploadedfilehandler.IUploadedFileHandler;
 
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.UI;

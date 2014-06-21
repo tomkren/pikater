@@ -10,13 +10,13 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.CustomComponent;
 
-public class ProfileView extends CustomComponent implements IContentComponent
+public class UserProfileView extends CustomComponent implements IContentComponent
 {
 	private static final long serialVersionUID = -5751678204210363235L;
 	
 	private final UserProfileForm innerForm;
 	
-	public ProfileView()
+	public UserProfileView()
 	{
 		super();
 		

@@ -15,8 +15,6 @@ public class UsersView extends DBTableLayout implements IContentComponent
 		super(new UsersTableDBView());
 		setSizeUndefined();
 		
-		// TODO:
-		// this.table.setColumnExpandRatio(propertyId, expandRatio);
 		
 		// TODO: a wizard to add datasets
 	}
