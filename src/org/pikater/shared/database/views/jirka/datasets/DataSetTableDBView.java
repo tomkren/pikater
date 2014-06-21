@@ -1,6 +1,7 @@
 package org.pikater.shared.database.views.jirka.datasets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -14,7 +15,24 @@ import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 /**
  * A generic view for tables displaying dataset information.  
  */
-public class DataSetTableDBView extends AbstractTableDBView{
+public class DataSetTableDBView extends AbstractTableDBView
+{
+	private final JPAUser owner;
+	
+	/**  
+	 * @param user The user whose datasets to display. If null (admin mode), all datasets should
+	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method.
+	 */
+	public DataSetTableDBView(JPAUser user)
+	{
+		this.owner = user;
+	}
+	
+	private boolean adminMode()
+	{
+		return this.owner == null;
+	}
+	
 	/**
 	 * Table headers will be presented in the order defined here, so
 	 * make sure to order them right :). 
@@ -24,12 +42,12 @@ public class DataSetTableDBView extends AbstractTableDBView{
 		/*
 		 * First the read-only properties.
 		 */
+		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
+		CREATED,
 		DESCRIPTION,
 		NUMBER_OF_INSTANCES,
 		DEFAULT_TASK_TYPE,
-		SIZE,
-		CREATED,
-		OWNER;
+		SIZE;
 
 		@Override
 		public String getDisplayName()
@@ -42,13 +60,11 @@ public class DataSetTableDBView extends AbstractTableDBView{
 		{
 			switch(this)
 			{
-				case DESCRIPTION:
-				case DEFAULT_TASK_TYPE:
-				case CREATED:
 				case OWNER:
-					return ColumnType.STRING;
-					
+				case CREATED:
+				case DESCRIPTION:
 				case NUMBER_OF_INSTANCES:
+				case DEFAULT_TASK_TYPE:
 				case SIZE:
 					return ColumnType.STRING;
 					
@@ -61,29 +77,28 @@ public class DataSetTableDBView extends AbstractTableDBView{
 	@Override
 	public IColumn[] getColumns()
 	{
-		return Column.values();
+		if(adminMode())
+		{
+			return Column.values();
+		}
+		else
+		{
+			IColumn[] allColumns = Column.values();
+			return Arrays.copyOfRange(allColumns, 1, allColumns.length); // everything except owner, which is specified
+		}
 	}
 	
 	@Override
 	public IColumn getDefaultSortOrder()
 	{
-		return Column.OWNER;
+		return adminMode() ? Column.OWNER : Column.CREATED;
 	}
 	
-	/** 
-	 * Constructor.
-	 * @param user The user to display datasets for. If null, all datasets (admin mode) should
-	 * be returned.
-	 */
-	public DataSetTableDBView(JPAUser user)
-	{
-		// TODO:
-	}
-
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
+		// TODO: different results should be returned depending on whether 'owner' field is specified
 		
 		List<JPADataSetLO> allDatasets = DAOs.dataSetDAO.getAll();
 		List<DataSetTableDBRow> rows = new ArrayList<DataSetTableDBRow>();
