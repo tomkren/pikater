@@ -9,12 +9,12 @@ import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 
-public class CategoricalMetadataTableRow extends AbstractTableRowDBView {
+public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 
 	private JPAAttributeCategoricalMetaData attrCat=null;
 	private Locale currentLocale;
 
-	public CategoricalMetadataTableRow(JPAAttributeCategoricalMetaData attrCat,Locale locale)
+	public CategoricalMetadataTableDBRow(JPAAttributeCategoricalMetaData attrCat,Locale locale)
 	{
 		this.attrCat=attrCat;
 		this.currentLocale=locale;
@@ -23,7 +23,7 @@ public class CategoricalMetadataTableRow extends AbstractTableRowDBView {
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final IColumn column)
 	{
-		CategoricalMetaDataTableView.Column specificColumn = (CategoricalMetaDataTableView.Column) column;
+		CategoricalMetaDataTableDBView.Column specificColumn = (CategoricalMetaDataTableDBView.Column) column;
 		switch(specificColumn)
 		{
 		/*

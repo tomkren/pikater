@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.pikater.shared.AppHelper;
+import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
-import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
@@ -14,9 +14,9 @@ import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 
 /**
- * A generic view for tables displaying numerical metadata information for a dataset.  
+ * A generic view for tables displaying categorical metadata information for a dataset.  
  */
-public class NumericalMetaDataTableView extends AbstractTableDBView{
+public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 	/**
 	 * Table headers will be presented in the order defined here, so
 	 * make sure to order them right :). 
@@ -29,12 +29,7 @@ public class NumericalMetaDataTableView extends AbstractTableDBView{
 		NAME,
 		IS_TARGET,
 		IS_REAL,
-		AVERAGE,
-		MINIMUM,
-		MAXIMUM,
-		MODE,
-		MEDIAN,
-		VARIANCE,
+		NUMBER_OF_CATEGORIES,
 		RATIO_OF_MISSING_VALUES;
 
 		@Override
@@ -53,12 +48,7 @@ public class NumericalMetaDataTableView extends AbstractTableDBView{
 				case IS_REAL:
 				case IS_TARGET:
 					return ColumnType.STRING;
-				case MINIMUM:
-				case MAXIMUM:
-				case AVERAGE:
-				case MODE:
-				case MEDIAN:
-				case VARIANCE:
+				case NUMBER_OF_CATEGORIES:
 				case RATIO_OF_MISSING_VALUES:
 					return ColumnType.STRING;
 				default:
@@ -73,15 +63,20 @@ public class NumericalMetaDataTableView extends AbstractTableDBView{
 		return Column.values();
 	}
 	
+	@Override
+	public IColumn getDefaultSortOrder()
+	{
+		return Column.NAME;
+	}
 	
 	JPADataSetLO dslo=null;
 	Locale currentLocale;
 	/** 
 	 * Constructor.
-	 * Using this constructor values will be formatted using en-US locale 
+	 * Using this constructor values will be formatted using default locale 
 	 * @param datasetlo The dataset for which we want to list numerical metadata
 	 */
-	public NumericalMetaDataTableView(JPADataSetLO datasetlo)
+	public CategoricalMetaDataTableDBView(JPADataSetLO datasetlo)
 	{
 		this.dslo=datasetlo;
 		this.currentLocale=AppHelper.getDefaultLocale();
@@ -92,7 +87,7 @@ public class NumericalMetaDataTableView extends AbstractTableDBView{
 	 * @param datasetlo The dataset for which we want to list numerical metadata
 	 * @param locale Locale used for value formatting
 	 */
-	public NumericalMetaDataTableView(JPADataSetLO datasetlo,Locale locale){
+	public CategoricalMetaDataTableDBView(JPADataSetLO datasetlo,Locale locale){
 		this.dslo=datasetlo;
 		this.currentLocale=locale;
 	}
@@ -102,14 +97,14 @@ public class NumericalMetaDataTableView extends AbstractTableDBView{
 	{
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
 		
-		List<NumericalMetadataTableRow> rows = new ArrayList<NumericalMetadataTableRow>();
+		List<CategoricalMetadataTableDBRow> rows = new ArrayList<CategoricalMetadataTableDBRow>();
 		if(dslo != null)
 		{
 			for(JPAAttributeMetaData md : dslo.getAttributeMetaData())
 			{
-				if(md instanceof JPAAttributeNumericalMetaData)
+				if(md instanceof JPAAttributeCategoricalMetaData)
 				{
-					rows.add(new NumericalMetadataTableRow((JPAAttributeNumericalMetaData)md,this.currentLocale));
+					rows.add(new CategoricalMetadataTableDBRow((JPAAttributeCategoricalMetaData) md,this.currentLocale));
 				}
 			}
 		}

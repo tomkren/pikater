@@ -14,7 +14,7 @@ import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 /**
  * A generic view for tables displaying dataset information.  
  */
-public class DataSetTableView extends AbstractTableDBView{
+public class DataSetTableDBView extends AbstractTableDBView{
 	/**
 	 * Table headers will be presented in the order defined here, so
 	 * make sure to order them right :). 
@@ -64,12 +64,18 @@ public class DataSetTableView extends AbstractTableDBView{
 		return Column.values();
 	}
 	
+	@Override
+	public IColumn getDefaultSortOrder()
+	{
+		return Column.OWNER;
+	}
+	
 	/** 
 	 * Constructor.
 	 * @param user The user to display datasets for. If null, all datasets (admin mode) should
 	 * be returned.
 	 */
-	public DataSetTableView(JPAUser user)
+	public DataSetTableDBView(JPAUser user)
 	{
 		// TODO:
 	}
@@ -80,12 +86,12 @@ public class DataSetTableView extends AbstractTableDBView{
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
 		
 		List<JPADataSetLO> allDatasets = DAOs.dataSetDAO.getAll();
-		List<DataSetTableRow> rows = new ArrayList<DataSetTableRow>();
+		List<DataSetTableDBRow> rows = new ArrayList<DataSetTableDBRow>();
 		
 		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allDatasets.size());
 		for(JPADataSetLO dslo : allDatasets.subList(constraints.getOffset(), endIndex))
 		{
-			rows.add(new DataSetTableRow(dslo));
+			rows.add(new DataSetTableDBRow(dslo));
 		}
 		return new QueryResult(rows, allDatasets.size());
 	}

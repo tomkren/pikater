@@ -14,12 +14,12 @@ import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewV
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 
-public class UsersTableRow extends AbstractTableRowDBView
+public class UsersTableDBRow extends AbstractTableRowDBView
 {
 	private final SimpleDateFormat dateFormatter;
 	public final JPAUser user;
 	
-	public UsersTableRow(JPAUser user)
+	public UsersTableDBRow(JPAUser user)
 	{
 		this.dateFormatter = new SimpleDateFormat("dd.MM. yyyy");
 		this.user = user;
@@ -28,7 +28,7 @@ public class UsersTableRow extends AbstractTableRowDBView
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final IColumn column)
 	{
-		UsersTableView.Column specificColumn = (UsersTableView.Column) column;
+		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
 		switch(specificColumn)
 		{
 			/*

@@ -12,7 +12,7 @@ import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 
-public class UsersTableView extends AbstractTableDBView
+public class UsersTableDBView extends AbstractTableDBView
 {
 	/**
 	 * Table headers will be presented in the order defined here, so
@@ -72,6 +72,12 @@ public class UsersTableView extends AbstractTableDBView
 	{
 		return Column.values();
 	}
+	
+	@Override
+	public IColumn getDefaultSortOrder()
+	{
+		return Column.LOGIN;
+	}
 
 	@Override
 	public QueryResult queryUninitializedRows(final QueryConstraints constraints)
@@ -85,18 +91,18 @@ public class UsersTableView extends AbstractTableDBView
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
 		
 		List<JPAUser> allUsers = DAOs.userDAO.getAll();
-		List<UsersTableRow> rows = new ArrayList<UsersTableRow>();
+		List<UsersTableDBRow> rows = new ArrayList<UsersTableDBRow>();
 		
 		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allUsers.size());
 		for(JPAUser user : allUsers.subList(constraints.getOffset(), endIndex))
 		{
-			rows.add(new UsersTableRow(user));
+			rows.add(new UsersTableDBRow(user));
 		}
 		
-		Collections.sort(rows, new Comparator<UsersTableRow>()
+		Collections.sort(rows, new Comparator<UsersTableDBRow>()
 		{
 			@Override
-			public int compare(UsersTableRow o1, UsersTableRow o2)
+			public int compare(UsersTableDBRow o1, UsersTableDBRow o2)
 			{
 				Column sortColumn = (Column) constraints.getSortOrder();
 				switch(sortColumn)

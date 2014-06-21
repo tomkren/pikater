@@ -8,11 +8,11 @@ import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 
-public class DataSetTableRow extends AbstractTableRowDBView {
+public class DataSetTableDBRow extends AbstractTableRowDBView {
 
 	private JPADataSetLO dataset=null;
 
-	public DataSetTableRow(JPADataSetLO dataset)
+	public DataSetTableDBRow(JPADataSetLO dataset)
 	{
 		this.dataset=dataset;
 	}
@@ -20,7 +20,7 @@ public class DataSetTableRow extends AbstractTableRowDBView {
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final IColumn column)
 	{
-		DataSetTableView.Column specificColumn = (DataSetTableView.Column) column;
+		DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
 		switch(specificColumn)
 		{
 		/*
