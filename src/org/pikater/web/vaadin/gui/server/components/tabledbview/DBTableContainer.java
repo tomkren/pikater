@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
+import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.SortOrder;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
@@ -228,7 +229,8 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Property<? extends Object> getProperty(DBTableContainer container, IColumn column, AbstractDBViewValue<? extends Object> value)
+	public static Property<? extends Object> getProperty(DBTableContainer container, IColumn column, AbstractTableRowDBView row, 
+			AbstractDBViewValue<? extends Object> value)
 	{
 		switch(column.getColumnType())
 		{
@@ -242,7 +244,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 				return result1;
 				
 			case ACTION:
-				return new DBTableItemPropertyAction((ActionDBViewValue) value);
+				return new DBTableItemPropertyAction(container, column, row, (ActionDBViewValue) value);
 				
 			default:
 				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());

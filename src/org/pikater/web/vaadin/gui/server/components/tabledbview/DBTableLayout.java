@@ -1,6 +1,9 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
+import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
+import org.pikater.shared.database.views.jirka.abstractview.IColumn;
+import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -12,7 +15,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-public class DBTableLayout extends VerticalLayout
+public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 {
 	private static final long serialVersionUID = 6591677491205750540L;
 	
@@ -85,5 +88,11 @@ public class DBTableLayout extends VerticalLayout
 	protected DBTable createTable(AbstractTableGUIView<? extends AbstractTableDBView> dbView)
 	{
 		return new DBTable(dbView);
+	}
+
+	@Override
+	public void dbViewActionCalled(IColumn column, AbstractTableRowDBView row, ActionDBViewValue originalAction)
+	{
+		originalAction.execute();
 	}
 }

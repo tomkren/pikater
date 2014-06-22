@@ -155,6 +155,11 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		return pagingControls;
 	}
 	
+	public IDBTableLayout getViewRoot()
+	{
+		return (IDBTableLayout) getParent();
+	}
+	
 	//-------------------------------------------------------------------
 	// PRIVATE INTERFACE
 	

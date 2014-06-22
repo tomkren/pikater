@@ -1,5 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
+import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
+import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
 
 import com.vaadin.data.Property;
@@ -12,7 +14,7 @@ public class DBTableItemPropertyAction implements Property<Button>
 	
 	private final Button btn;
 	
-	public DBTableItemPropertyAction(final ActionDBViewValue valueWrapper)
+	public DBTableItemPropertyAction(final DBTableContainer container, final IColumn column, final AbstractTableRowDBView row, final ActionDBViewValue valueWrapper)
 	{
 		this.btn = new Button(valueWrapper.getValue(), new Button.ClickListener()
 		{
@@ -21,7 +23,7 @@ public class DBTableItemPropertyAction implements Property<Button>
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				valueWrapper.executeAction();
+				container.getParentTable().getViewRoot().dbViewActionCalled(column, row, valueWrapper);
 			}
 		});
 	}

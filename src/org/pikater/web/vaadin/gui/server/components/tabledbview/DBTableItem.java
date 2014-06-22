@@ -26,7 +26,7 @@ public class DBTableItem implements Item, ICommitable
 		this.columnToValue = new HashMap<IColumn, Property<? extends Object>>();
 		for(IColumn column : getItemPropertyIds())
 		{
-			this.columnToValue.put(column, DBTableContainer.getProperty(container, column, rowView.getValueWrapper(column)));
+			this.columnToValue.put(column, DBTableContainer.getProperty(container, column, rowView, rowView.getValueWrapper(column)));
 		}
 	}
 	
