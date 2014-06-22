@@ -26,12 +26,14 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -72,6 +74,7 @@ public class Agent_Manager extends PikaterAgent {
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
+		ontologies.add(AgentManagementOntology.getInstance());
 		
 		return ontologies;
 	}

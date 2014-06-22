@@ -125,7 +125,9 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				i++;
 			}
 		}
-
+		if (name == null){
+			name = type;
+		}
 		String generatedName = generateName(name);
 		
 		try {

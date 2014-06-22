@@ -44,6 +44,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		myAgent = manager;
 		this.computationId = computationId;
 		this.computationNode = computationNode;
+		this.graphId = graphId;
 	}
 
 	public void execute(ComputationNode computation){
