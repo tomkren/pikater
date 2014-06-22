@@ -90,7 +90,7 @@ public class ManagerAgentRequestResponder {
         Arguments arguments = ca.getArguments();
         
         String agentNameCreated =
-        		managerAgent.createAgent(agentType, agentName, arguments);
+        		managerAgent._createAgent(agentType, agentName, arguments);
 
         ACLMessage reply = request.createReply();
         reply.setPerformative(ACLMessage.INFORM);

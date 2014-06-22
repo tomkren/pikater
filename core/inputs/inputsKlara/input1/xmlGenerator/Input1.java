@@ -28,7 +28,7 @@ public final class Input1 {
 
         //Create validation method for a computing agent
         EvaluationMethod evaluationMethod = new EvaluationMethod();
-        evaluationMethod.setName("CrossValidation");
+        evaluationMethod.setType("CrossValidation");
         
         //Create cross validation option
         StepanuvOption optionF = new StepanuvOption();

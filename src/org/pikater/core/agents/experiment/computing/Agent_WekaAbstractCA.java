@@ -112,7 +112,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		log("Evaluation method: \t", 2);
 		
-		if (evaluation_method.getName().equals("CrossValidation") ){
+		if (evaluation_method.getType().equals("CrossValidation") ){
 			int folds = 5; // TODO read default value from file (if necessary)
 
 			if (evaluation_method.getOptions() != null){

@@ -25,15 +25,26 @@
               <numberOfOptions>0</numberOfOptions>
             </org.pikater.core.ontology.subtrees.option.Option>
           </options>
-          <evaluationMethod>
-            <name>CrossValidation</name>
+          <evaluationMethod id="9">
+            <type>CrossValidation</type>
+            <options id="10">
+              <org.pikater.core.ontology.subtrees.option.Option id="11">
+                <__mutable>false</__mutable>
+                <__is__a__set>false</__is__a__set>
+                <__data__type>INT</__data__type>
+                <__name>F</__name>
+                <__value>8</__value>
+                <__number__of__values__to__try>0</__number__of__values__to__try>
+                <numberOfOptions>0</numberOfOptions>
+              </org.pikater.core.ontology.subtrees.option.Option>
+            </options>
           </evaluationMethod>
-          <trainingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+          <trainingData id="12">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="13">
               <fileURI>weather.arff</fileURI>
             </dataProvider>
           </trainingData>
-          <testingData reference="10"/>
+          <testingData reference="12"/>
         </dataProvider>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>

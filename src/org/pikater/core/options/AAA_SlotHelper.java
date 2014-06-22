@@ -69,7 +69,7 @@ public abstract class AAA_SlotHelper {
 
 		Slot outputSlot = new Slot();
 		outputSlot.setDescription("Name of agent");
-		outputSlot.setDataType(SlotTypes.RECOMEND_TYPE);
+		outputSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
 		outputSlot.setDataType("recomend");
 
 		List<Slot> slots = new ArrayList<Slot>();
