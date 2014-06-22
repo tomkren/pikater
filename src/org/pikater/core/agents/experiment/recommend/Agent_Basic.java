@@ -100,8 +100,7 @@ public class Agent_Basic extends Agent_Recommender {
 		
 		if (agent != null){
 			log("Best agent type: "+ agent.getType() +
-					", options: " + agent.optionsToString() + 
-					", error rate: " + agent.getGui_id(), Verbosity.MINIMAL);
+					", options: " + agent.optionsToString(), Verbosity.MINIMAL);
 		}
 		else{
 			log("No results in database for file " + m_best.getExternalName());

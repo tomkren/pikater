@@ -226,6 +226,7 @@ public class Parser {
 
         }
         SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search);
+        searchNode.setModelClass(search.getSearchClass());
         searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,searchNode.getId(),1,searchNode));
         StandardBuffer searchBuffer=new StandardBuffer(searchNode,child);
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
