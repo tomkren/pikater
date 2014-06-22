@@ -901,7 +901,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 				if (Integer.parseInt(next_problem.getGui_id()) == problem_id) {
 
 					EvaluationMethod evaluation_method = new EvaluationMethod();
-					evaluation_method.setName(name);
+					evaluation_method.setType(name);
 					evaluation_method.setOptions(new java.util.ArrayList<Option>());
 					next_problem.setEvaluation_method(evaluation_method);
 				}
