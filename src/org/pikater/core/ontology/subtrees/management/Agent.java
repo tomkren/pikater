@@ -16,7 +16,6 @@ public class Agent implements Concept, Cloneable {
 	private String name;
 	private String type;
 	private List<Option> options;
-	private String guiId;
 	private byte[] object;
 
 	// Methods required to use this class to represent the OPTIONS role
@@ -39,13 +38,6 @@ public class Agent implements Concept, Cloneable {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public String getGui_id() {
-		return guiId;
-	}
-	public void setGui_id(String gui_id) {
-		this.guiId = gui_id;
 	}
 
 	public byte[] getObject() {
@@ -182,7 +174,6 @@ public class Agent implements Concept, Cloneable {
 	public Object clone() {
 
 		Agent agent = new Agent();
-		agent.setGui_id(guiId);
 		agent.setName(name);
 		agent.setObject(object);
 		agent.setOptions(options);

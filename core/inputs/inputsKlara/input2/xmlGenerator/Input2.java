@@ -41,17 +41,13 @@ public final class Input2 {
 		comAgent.setTestingData(fileDataSource);
 
         //Define options for search and the search itself
-		StepanuvOption optionSearchMethod = new StepanuvOption();
-		optionSearchMethod.setName("search_method");
-		optionSearchMethod.setOption( new OptionValue("ChooseXValues") );
-
 		StepanuvOption optionN = new StepanuvOption();
 		optionN.setName("N");
 		optionN.setSynopsis("number_of_values_to_try");
 		optionN.setOption( new OptionValue(5) );
 		
 		Search search = new Search();
-		search.addOption( Converter.toOption(optionSearchMethod) );
+        search.setSearchClass("ChooseXValues");
 		search.addOption( Converter.toOption(optionN) );
 
         //Complex computation agent - options + search + simple CA

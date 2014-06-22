@@ -50,17 +50,9 @@
             </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
           </errors>
           <search id="16">
+            <searchClass>ChooseXValues</searchClass>
             <options id="17">
               <org.pikater.core.ontology.subtrees.option.Option id="18">
-                <__mutable>false</__mutable>
-                <__is__a__set>false</__is__a__set>
-                <__data__type>STRING</__data__type>
-                <__name>search_method</__name>
-                <__value>ChooseXValues</__value>
-                <__number__of__values__to__try>0</__number__of__values__to__try>
-                <numberOfOptions>0</numberOfOptions>
-              </org.pikater.core.ontology.subtrees.option.Option>
-              <org.pikater.core.ontology.subtrees.option.Option id="19">
                 <__mutable>false</__mutable>
                 <__is__a__set>false</__is__a__set>
                 <__data__type>INT</__data__type>
