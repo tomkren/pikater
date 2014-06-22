@@ -13,7 +13,7 @@ import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.upload.IUploadedFileHandler;
+import org.pikater.web.vaadin.gui.server.components.upload.handlers.IUploadedFileHandler;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
@@ -28,7 +28,8 @@ public class TestContent
 		
 	public static AbstractComponent testMultiFileUpload()
 	{
-		return new ManageUserUploads().getNewComponent(
+		return new ManageUserUploads().createUploadButton(
+				"Upload",
 				EnumSet.of(HttpContentType.APPLICATION_JAR),
 				new IUploadedFileHandler()
 				{

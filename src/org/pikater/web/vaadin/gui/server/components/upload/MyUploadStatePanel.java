@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.upload;
 
-import org.pikater.web.vaadin.ManageUserUploads;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import com.vaadin.server.StreamVariable;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
@@ -13,17 +14,17 @@ public class MyUploadStatePanel extends UploadStatePanel
 {
 	private static final long serialVersionUID = 2373915541113299145L;
 	
-	private ManageUserUploads uploadManager;
+	private final Collection<IFileUploadEvents> fileUploadEventsCallbacks;
 
 	public MyUploadStatePanel(MyUploadStateWindow window)
     {
         super(window);
+        
+        this.fileUploadEventsCallbacks = new ArrayList<IFileUploadEvents>();
     }
 	
-	public void setUploadStateInstance(ManageUserUploads uploadManager)
-	{
-		this.uploadManager = uploadManager;
-	}
+	// ------------------------------------------------------------
+	// INHERITED INTERFACE
 	
 	@Override
 	public void setMultiUpload(SmartMultiUpload multiUpload)
@@ -34,23 +35,32 @@ public class MyUploadStatePanel extends UploadStatePanel
 	@Override
 	public void streamingStarted(StreamingStartEvent event)
 	{
-		// TODO: check whether maximum number of uploads has been reached and if so, wait until a slot is open 
-		this.uploadManager.onStreamingStart();
-		super.streamingStarted(event);
+		// TODO: check whether maximum number of uploads has been reached and if so, wait until a slot is open
+		super.streamingStarted(event); // always call this first, otherwise unexpected problems may occur
+		for(IFileUploadEvents callbacks : fileUploadEventsCallbacks)
+		{
+			callbacks.uploadStarted(event);
+		}
 	}
 	
 	@Override
 	public void streamingFailed(StreamingErrorEvent event)
 	{
-		this.uploadManager.onStreamingEnd();
-		super.streamingFailed(event);
+		super.streamingFailed(event); // always call this first, otherwise unexpected problems may occur
+		for(IFileUploadEvents callbacks : fileUploadEventsCallbacks)
+		{
+			callbacks.uploadFailed(event);
+		}
 	}
 	
 	@Override
 	public void streamingFinished(StreamingEndEvent event)
 	{
-		this.uploadManager.onStreamingEnd();
-		super.streamingFinished(event);
+		super.streamingFinished(event); // always call this first, otherwise unexpected problems may occur
+		for(IFileUploadEvents callbacks : fileUploadEventsCallbacks)
+		{
+			callbacks.uploadFinished(event);
+		}
 	}
 
 	/**
@@ -73,4 +83,12 @@ public class MyUploadStatePanel extends UploadStatePanel
         */
         super.onProgress(event);
     }
+    
+    // ------------------------------------------------------------
+ 	// OTHER PUBLIC INTERFACE
+ 	
+ 	public void addUploadStartListener(IFileUploadEvents callbacks)
+ 	{
+ 		this.fileUploadEventsCallbacks.add(callbacks);
+ 	}
 }
