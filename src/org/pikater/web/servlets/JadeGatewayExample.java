@@ -17,8 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.pikater.web.pikater.PikaterGateway;
 import org.pikater.web.pikater.PikaterActionInitiator;
+import org.pikater.core.agents.AgentNames;
+import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.system.Agent_Mailing;
 import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
@@ -33,7 +34,7 @@ import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 public class JadeGatewayExample extends HttpServlet {
     @Override
     public void init() throws ServletException {
-    	Class<PikaterGateway> gateway = org.pikater.web.pikater.PikaterGateway.class;
+    	Class<Agent_PikaterGateway> gateway = org.pikater.core.agents.gateway.Agent_PikaterGateway.class;
         JadeGateway.init(gateway.getName(), null);
     }
 
@@ -59,8 +60,8 @@ public class JadeGatewayExample extends HttpServlet {
         	AgentAction sendEmailAction = new SendEmail(Agent_Mailing.EmailType.TEST, req.getParameter("addr"));
         	Ontology mailingOntology = MailingOntology.getInstance();
         	
-            ACLMessage msg = PikaterGateway.makeActionRequest(
-            		"mailAgent", mailingOntology, sendEmailAction);
+            ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
+            		AgentNames.MAIL_AGENT, mailingOntology, sendEmailAction);
 
             PikaterActionInitiator initiator = new PikaterActionInitiator(msg);
             JadeGateway.execute(initiator, 10000);

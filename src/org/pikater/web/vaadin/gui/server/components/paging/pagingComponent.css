@@ -1,0 +1,10 @@
+@CHARSET "US-ASCII";
+
+.pagingComponent
+{
+}
+
+.pagingComponent .v-filterselect-input
+{
+	width: 30px;
+}

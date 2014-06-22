@@ -14,11 +14,8 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
 import org.pikater.core.agents.configuration.Arguments;
-import org.pikater.core.agents.system.management.AgentTypeDefinition;
-import org.pikater.core.agents.system.management.AgentTypesProvider;
-import org.pikater.core.agents.system.management.ManagerAgentRequestResponder;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentRequestResponder;
 import org.pikater.core.agents.configuration.Argument;
-import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
@@ -31,55 +28,51 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-
 public class Agent_ManagerAgent extends PikaterAgent {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4898611781694963107L;
 
-	private Map<String, AgentTypeDefinition> agentTypes = new HashMap<>();
-    private AgentTypesProvider agentTypesProvider=(AgentTypesProvider)context.getBean(AgentNames.TYPES_PROVIDER);
-    private ManagerAgentRequestResponder responder=new ManagerAgentRequestResponder(this);
+	private Map<String, Integer> agentTypeAndCount = new HashMap<>();
+	private ManagerAgentRequestResponder responder =
+			new ManagerAgentRequestResponder(this);
 
-    public static String saveDirectoryPath =
-    		"core" + System.getProperty("file.separator") +
-    		"saved" + System.getProperty("file.separator");
-    
-    
+	public static String saveDirectoryPath = "core"
+			+ System.getProperty("file.separator") + "saved"
+			+ System.getProperty("file.separator");
+
 	@Override
 	public java.util.List<Ontology> getOntologies() {
-		
+
 		List<Ontology> ontologies = new ArrayList<Ontology>();
-		
-		//ontologies.add(MessagesOntology.getInstance());
+
 		ontologies.add(AgentManagementOntology.getInstance());
-		
+
 		return ontologies;
 	}
-    
+
 	@Override
 	protected void setup() {
-        initDefault();
+		initDefault();
 		File data = new File(saveDirectoryPath);
-        if (!data.exists()) {
-            log("Creating directory saved");
-            if (data.mkdirs()) {
-                log("Succesfully created directory saved");
-            } else {
-                logError("Error creating directory saved");
-            }
-        }
+		if (!data.exists()) {
+			log("Creating directory saved");
+			if (data.mkdirs()) {
+				log("Succesfully created directory saved");
+			} else {
+				logError("Error creating directory saved");
+			}
+		}
 
-        registerWithDF();
-        
-		getAgentTypesFromFile();
-		
+		registerWithDF();
+
+
 		Ontology ontology = AgentManagementOntology.getInstance();
-		MessageTemplate mt = MessageTemplate.and(MessageTemplate
-				.MatchOntology(ontology.getName()), MessageTemplate
-				.MatchPerformative(ACLMessage.REQUEST));
+		MessageTemplate mt = MessageTemplate.and(
+				MessageTemplate.MatchOntology(ontology.getName()),
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
 		addBehaviour(new AchieveREResponder(this, mt) {
 
@@ -89,16 +82,15 @@ public class Agent_ManagerAgent extends PikaterAgent {
 			protected ACLMessage handleRequest(ACLMessage request)
 					throws NotUnderstoodException, RefuseException {
 				try {
-					Action a = (Action) getContentManager().extractContent(request);
-                    if (a.getAction() instanceof LoadAgent) {
-                        return responder.RespondToLoadAction(request);
-					}
-					else if (a.getAction() instanceof SaveAgent) {
+					Action a = (Action) getContentManager().extractContent(
+							request);
+					if (a.getAction() instanceof LoadAgent) {
+						return responder.respondToLoadAction(request);
+					} else if (a.getAction() instanceof SaveAgent) {
 						// write it into database
-                        return responder.RespondToSaveAction(request);
-					}
-				 	else if (a.getAction() instanceof CreateAgent){
-                        return responder.RespondToCreateAction(request);
+						return responder.respondToSaveAction(request);
+					} else if (a.getAction() instanceof CreateAgent) {
+						return responder.respondToCreateAction(request);
 					}
 				} catch (OntologyException e) {
 					e.printStackTrace();
@@ -112,93 +104,65 @@ public class Agent_ManagerAgent extends PikaterAgent {
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: " + request.getContent());
+				logError("Failure responding to request: "
+						+ request.getContent());
 				return failure;
 			}
 		});
 	}
-    
-	public String createAgent(String type, String name, Arguments args){
+
+	public String createAgent(String type, String name, Arguments args) {
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
-		Argument[] args1 = new Argument[0];
-        Argument[] args2 = new Argument[0];
+		Argument[] args2 = new Argument[0];
 
-		if (agentTypes.get(type).getOptions() != null){
-			args1 = agentTypes.get(type).getOptions();
+		if (args != null) {
+			args2 = new Argument[args.size()];
+			int i = 0;
+			for (Argument arg : args.getArguments()) {
+				args2[i] = arg;
+				i++;
+			}
 		}
+
+		String generatedName = generateName(name);
 		
-		if (args != null){
-            args2=new Argument[args.size()];
-            int i=0;
-            for (Argument arg:args.getArguments())
-            {
-                args2[i]=arg;
-                i++;
-            }
+		try {
+			AgentController agent = container.createNewAgent(name, type, args2);
+			agent.start();
+		} catch (ControllerException e) {
+			e.printStackTrace();
 		}
-
-		int size = args1.length + args2.length;
-		Argument[] Args = new Argument[size];
-        System.arraycopy(args1,0,Args,0,args1.length);
-        System.arraycopy(args2,0,Args,args1.length,args2.length);
-		String nameToGenerate=name = generateName(name);
-			try {
-                String agentType=agentTypes.get(type).getTypeName();
-                if (agentType==null){
-                    agentType=type;
-                }
-
-                // TODO:
-                // THIS IS HACK OF SOME BUG
-                if (agentType.startsWith("pikater.Agent_OptionsManager") ) {
-                        agentType = "pikater.Agent_OptionsManager";
-                }
-                
-				AgentController agent = container.createNewAgent(name, agentType, Args);
-				agent.start();
-			} catch (ControllerException e) {
-				 e.printStackTrace();
-            }
 		// provide agent time to register with DF etc.
 		doWait(300);
-		return nameToGenerate;
+		return generatedName;
 	}
 
-    private String generateName(String name) {
-        if (nodeName != null && !nodeName.isEmpty()) {
-            name = name + "-" + nodeName;
-        }
-        PlatformController container = getContainerController();
-        try {
-            AgentController agentWithTheSameName= container.getAgent(name);
-        }
-        catch (ControllerException exc)
-        {
-            //agent with the same name does not exist, we are good
-            return name;
-        }
+	private String generateName(String name) {
+		if (nodeName != null && !nodeName.isEmpty()) {
+			name = name + "-" + nodeName;
+		}
+		PlatformController container = getContainerController();
+		try {
+			container.getAgent(name);
+		} catch (ControllerException exc) {
+			// agent with the same name does not exist, we are good
+			return name;
+		}
 
-        for (Integer i=0; i<10000; i++)
-        {
-            String currentName = name+i.toString();
-            try {
-                //TODO: write without exceptions
-                AgentController agentWithTheSameName= container.getAgent(currentName);
-            }
-            catch (ControllerException exc)
-            {
-                //agent with the same name does not exist, we are good
-                name = currentName;
-                break;
-            }
-        }
-        return name;
+		for (Integer i = 0; i < 10000; i++) {
+			String currentName = name + i.toString();
+			try {
+				// TODO: write without exceptions
+				container.getAgent(currentName);
+			} catch (ControllerException exc) {
+				// agent with the same name does not exist, we are good
+				name = currentName;
+				break;
+			}
+		}
+		return name;
 	}
-	
-	private void getAgentTypesFromFile(){
-		// Sets up a file reader to read the agent_types file
-		agentTypes= agentTypesProvider.GetAgentTypes();
-	}
+
 }

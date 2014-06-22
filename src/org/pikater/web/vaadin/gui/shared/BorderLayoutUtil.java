@@ -45,18 +45,37 @@ public class BorderLayoutUtil
 	
 	public enum DimensionMode
 	{
-		AUTO,
-		MAX;
+		MAX,
+		AUTO;
 		
 		public String toString()
 		{
-			if(this == AUTO)
+			switch(this)
 			{
-				return "auto";
+				case AUTO:
+					return "auto";
+				case MAX:
+					return "100%";
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
 			}
-			else
+		}
+	}
+	
+	public enum DimensionUnit
+	{
+		PCT,
+		PX;
+		
+		public com.google.gwt.dom.client.Style.Unit toGWTUnit()
+		{
+			switch(this)
 			{
-				return "100%";
+				case PCT:
+				case PX:
+					return com.google.gwt.dom.client.Style.Unit.valueOf(name());
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
 			}
 		}
 	}

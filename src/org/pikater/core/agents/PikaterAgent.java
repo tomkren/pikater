@@ -15,7 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Arguments;
-import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.shared.logging.Logger;
 import org.pikater.shared.logging.Severity;
 import org.pikater.shared.logging.Verbosity;

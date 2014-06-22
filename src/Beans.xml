@@ -9,16 +9,10 @@
               <value>configuration.xml</value>
         </constructor-arg>
     </bean>
-<!--
-    <bean id="configuration" class="pikater.configuration.XmlConfigurationProvider" scope="singleton">
-        <constructor-arg name="filePath" value="configuration.xml"/>
-    </bean>
--->
+
     <bean id="logger" class="org.pikater.shared.logging.ConsoleLogger" scope="singleton"/>
 
     <bean id="guidGenerator" class="org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.IncrementalGUIDGenerator" lazy-init="false"/>
-
-    <bean id="agentTypesProvider" class="org.pikater.core.agents.system.Agent_TypesFromFileProvider" scope="singleton"/>
 
     <bean id="honza_local" class="org.pikater.shared.database.PostgreSQLConnectionProvider" scope="singleton">
         <constructor-arg index="0">  <!-- url -->
@@ -31,16 +25,9 @@
               <value>SrapRoPy</value>
         </constructor-arg>
     </bean>
-<!--
-    <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" scope="singleton">
-        <constructor-arg index="0">
-              <value>pikaterDataModel</value>
-        </constructor-arg>
-    </bean>
--->
 
     <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
          <property name="persistenceUnitName" value="pikaterDataModel"/>
     </bean>
-    
+
 </beans>

@@ -71,7 +71,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 				String name = null;
 				switch(type)
 				{
-					case COMPUTING:
+					case COMPUTE:
 						name = "Vepřová kýta";
 						break;
 					case INPUT:
@@ -80,16 +80,16 @@ public class ExpEditorUI extends CustomConfiguredUI
 					case METHOD:
 						name = "Chleba";
 						break;
-					case RECOMMENDER:
+					case CHOOSE:
 						name = "Klobása";
 						break;
-					case SEARCHER:
+					case SEARCH:
 						name = "Cibule";
 						break;
-					case VISUALIZER:
+					case DISPLAY:
 						name = "Bobkovej list";
 						break;
-					case WRAPPER:
+					case MULTIBOX:
 						name = "Protlak";
 						break;
 					default:

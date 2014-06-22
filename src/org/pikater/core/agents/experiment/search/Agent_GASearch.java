@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.options.GASearch_SearchBox;
 
 
 public class Agent_GASearch extends Agent_Search {
@@ -61,8 +62,8 @@ public class Agent_GASearch extends Agent_Search {
 	
 	@Override
 	protected AgentInfo getAgentInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return GASearch_SearchBox.get();
 	}
 
 	@Override

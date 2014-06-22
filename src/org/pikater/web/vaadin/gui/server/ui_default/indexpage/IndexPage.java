@@ -8,6 +8,7 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.ExpEditorUI.ExpEditorUISer
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
 import com.vaadin.annotations.StyleSheet;
@@ -31,7 +32,6 @@ public class IndexPage extends AutoVerticalBorderLayout
 	{
 		super();
 		setStyleName("topLevelElement");
-		// setSizeFull();
 		
 		this.contentArea = new ContentArea();
 		
@@ -42,7 +42,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setComponent(Border.WEST, new LeftMenu(this));
 		setComponent(Border.CENTER, contentArea); 
 		setComponentVisible(Border.EAST, false);
-		setColumnWidth(Column.CENTER, DimensionMode.MAX);
+		setColumnWidth(Column.CENTER, 100, DimensionUnit.PCT);
 		
 		setRowVisible(Row.SOUTH, false);
 		setRowHeight(Row.CENTER, DimensionMode.MAX);
@@ -67,7 +67,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 		}
 		else
 		{
-			this.contentArea.setContent(feature);
+			this.contentArea.setContentView(feature);
 		}
 	}
 	

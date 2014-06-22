@@ -5,9 +5,9 @@ import org.pikater.web.RequestReconstructor;
 import org.pikater.web.RequestReconstructor.RequestComponent;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.MyFancyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.DialogResultHandler;
 import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
 
 import com.porotype.iconfont.FontAwesome;
@@ -79,17 +79,17 @@ public abstract class CustomConfiguredUI extends UI
 		if(!ServerConfigurationInterface.isApplicationReadyToServe()) // application has not yet been setup and pikater has not yet been launched
 		{
 			// force the user to authenticate so that he can setup and launch pikater on remote machines
-			forceUserToAuthenticate(new MyDialogs.DialogResultHandler()
+			forceUserToAuthenticate(new IDialogResultHandler()
 			{
 				@Override
-				public boolean handleResult()
+				public boolean handleResult(Object[] args)
 				{
 					/*
 					 * First check whether the default admin account is allowed and was provided by the user.
 					 */
 
-					String login = (String) getArg(0);
-					String password = (String) getArg(1);
+					String login = (String) args[0];
+					String password = (String) args[1];
 					if(ServerConfigurationInterface.getConfig().defaultAdminAccountAllowed)
 					{
 						if(login.equals("pikater") && password.equals("pikater")) // check whether the given auth info matches the default account
@@ -235,7 +235,7 @@ public abstract class CustomConfiguredUI extends UI
 	 * A low-level implementation that supports custom authentication mechanism. Should not be seen by children.
 	 * @param authHandler the authentication mechanism
 	 */
-	private void forceUserToAuthenticate(final DialogResultHandler resultHandler)
+	private void forceUserToAuthenticate(final IDialogResultHandler resultHandler)
 	{
 		/*
 		 * This is necessary as a precaution to the user entering invalid auth info. If no content
@@ -255,18 +255,18 @@ public abstract class CustomConfiguredUI extends UI
 	 */
 	protected void forceUserToAuthenticate(final IAuthenticationSuccessful authHandler)
 	{
-		forceUserToAuthenticate(new MyDialogs.DialogResultHandler()
+		forceUserToAuthenticate(new IDialogResultHandler()
 		{
 			@Override
-			public boolean handleResult()
+			public boolean handleResult(Object[] args)
 			{
 				/* 
 				 * Try to authenticate using the database.
 				 * Note: database connection is assumed to have been checked in {@link StartupAndQuitListener}. 
 				 */
 
-				String login = (String) getArg(0);
-				String password = (String) getArg(1);
+				String login = (String) args[0];
+				String password = (String) args[1];
 				if(ManageAuth.authenticateUser(VaadinSession.getCurrent(), login, password)) // authentication succeeded
 				{
 					authHandler.onSuccessfulAuth();

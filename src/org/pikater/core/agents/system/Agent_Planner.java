@@ -4,7 +4,6 @@ package org.pikater.core.agents.system;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Vector;
-import java.util.Random;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -29,10 +28,11 @@ import jade.proto.ContractNetInitiator;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.configuration.Arguments;
-import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,25 +55,25 @@ public class Agent_Planner extends PikaterAgent {
 		return ontologies;
 	}
 
-    @Deprecated
-    private AID[] getAllComputingAgents(){
-        AID[] computingAgents = null;
+    private AID[] getAllAgents(String agentType){
 
         DFAgentDescription template = new DFAgentDescription();
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType(AgentNames.COMPUTING_AGENT);
-        template.addServices(sd);
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType(agentType);
+        template.addServices(serviceDescription);
+        
+        AID[] foundAgents = null;
         try {
             DFAgentDescription[] result = DFService.search(this, template);
-            computingAgents = new AID[result.length];
+            foundAgents = new AID[result.length];
             for (int i = 0; i < result.length; ++i) {
-                computingAgents[i] = result[i].getName();
+                foundAgents[i] = result[i].getName();
             }
         } catch (FIPAException e) {
             e.printStackTrace();
         }
 
-        return computingAgents;
+        return foundAgents;
     }
 
 
@@ -104,35 +104,15 @@ public class Agent_Planner extends PikaterAgent {
 		@Override
 		public void action() {
 			try {
-				ACLMessage req = receive(reqMsgTemplate);
-				if (req != null) {
-					ContentElement content = getContentManager().extractContent(req);
-					if (((Action) content).getAction() instanceof Execute) {
-						// create agent
-						// TODO pass the right type somewhere
-						String CAtype = "RBFNetwork";
-
-						// TODO choose a slave node
-						ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
-
-						log("about to create CA");
-						AID ca = comm.createAgent(Agent_Planner.this, CAtype, CAtype + Math.abs((new Random()).nextInt()), new Arguments());
-						log("CA created");
-
-						ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-						msg.addReceiver(ca);
-						msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-						msg.setLanguage(getCodec().getName());
-						msg.setOntology(TaskOntology.getInstance().getName());
-						Execute ex = (Execute) ((Action) content).getAction();
-						Action a = new Action(myAgent.getAID(), ex);
-						getContentManager().fillContent(msg, a);
-
-						addBehaviour(new doExecute(Agent_Planner.this, msg));
-						return;
+				ACLMessage request = receive(reqMsgTemplate);
+				if (request != null) {
+					Action a = (Action) getContentManager().extractContent(request);
+					
+					if (a.getAction() instanceof ExecuteTask) {
+						respondToExecuteTask(request, a);
 					}
 
-					ACLMessage result_msg = req.createReply();
+					ACLMessage result_msg = request.createReply();
 					result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 					send(result_msg);
 					return;
@@ -142,6 +122,41 @@ public class Agent_Planner extends PikaterAgent {
 			} catch (OntologyException oe) {
 				oe.printStackTrace();
 			}
+		}
+		
+		private void respondToExecuteTask(ACLMessage request, Action a) {
+			
+			ExecuteTask executeTask = (ExecuteTask) a.getAction();
+			Task task = executeTask.getTask();
+			String CAtype = task.getAgent().getType();
+
+			AID[] foundAgents = getAllAgents(AgentNames.MANAGER_AGENT);
+			// TODO choose a slave node
+			ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
+
+			log("about to create CA");
+			AID ca = comm.createAgent(Agent_Planner.this, CAtype, CAtype, new Arguments());
+			log("CA created");
+
+			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+			msg.addReceiver(ca);
+			msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+			msg.setLanguage(getCodec().getName());
+			msg.setOntology(TaskOntology.getInstance().getName());
+			
+			Action a_ = new Action(myAgent.getAID(), executeTask);
+			try {
+				getContentManager().fillContent(msg, a_);
+			} catch (CodecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OntologyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			addBehaviour(new doExecute(Agent_Planner.this, msg));
+			return;
 		}
 	}
 	
@@ -235,7 +250,7 @@ public class Agent_Planner extends PikaterAgent {
                 try {
                     ContentElement content = getContentManager().extractContent(cfp);
 
-                    Execute execute = (Execute) (((Action) content).getAction());
+                    ExecuteTask execute = (ExecuteTask) (((Action) content).getAction());
 
                     Action a = new Action();
                     a.setAction(execute);

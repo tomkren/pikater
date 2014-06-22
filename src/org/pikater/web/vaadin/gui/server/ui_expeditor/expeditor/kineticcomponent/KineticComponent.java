@@ -4,14 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.XStreamHelper;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalGui;
+import org.pikater.shared.experiment.universalformat.UniversalOntology;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClientRpc;
@@ -20,6 +22,8 @@ import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.vaadin.annotations.JavaScript;
@@ -43,32 +47,42 @@ public class KineticComponent extends AbstractComponent
 	 */
 	private CustomTabSheetTabComponent parentTab;
 	
-	//---------------------------------------------------------------
-	// PROGRAMMATIC FIELDS
-	
-	private final KineticComponentServerRpc serverRPC;
-	
 	/*
 	 * Dynamic information from the client side - absolute left corner position of the Kinetic stage.
 	 */
 	private int absoluteLeft;
 	private int absoluteTop;
 	
+	//---------------------------------------------------------------
+	// EXPERIMENT RELATED FIELDS
+	
 	/**
-	 * 
+	 * ID generator for boxes.
+	 */
+	private final SimpleIDGenerator boxIDGenerator;
+	
+	/**
+	 * The dynamic mapping between boxes and agent information. Only a portion of agent information
+	 * is sent to the client (+ some added value), wrapped in BoxInfo instance.
+	 * This field is the base for all format conversions and some other commands.
 	 */
 	private final Map<String, AgentInfo> boxIDToAgentInfo;
+	
+	/**
+	 * Used for saving experiments. The server has to issue an asynchronous command to the
+	 * client and wait for an answer. The answer is stored in this field.
+	 */
+	private ExperimentGraph graphExportedFromClient;
+	
+	//---------------------------------------------------------------
+	// OTHER PROGRAMMATIC FIELDS
+		
+	private final KineticComponentServerRpc serverRPC;
 	
 	//---------------------------------------------------------------
 	// CONSTRUCTOR
 	
-	/*
-	 * TODO: 
-	 * - createBox must create a mapping
-	 * - loading experiments has to create mappings 
-	 */
-	
-	public KineticComponent(ExpEditor parentEditor)
+	public KineticComponent(final ExpEditor parentEditor)
 	{
 		super();
 		setSizeFull();
@@ -82,7 +96,9 @@ public class KineticComponent extends AbstractComponent
 		this.absoluteLeft = 0;
 		this.absoluteTop = 0;
 		
+		this.boxIDGenerator = new SimpleIDGenerator();
 		this.boxIDToAgentInfo = new HashMap<String, AgentInfo>();
+		this.graphExportedFromClient = null;
 		
 		/*
 		 * Register actions to do on client commands.
@@ -91,7 +107,7 @@ public class KineticComponent extends AbstractComponent
 		this.serverRPC = new KineticComponentServerRpc()
 		{
 			private static final long serialVersionUID = -2769231541745495584L;
-
+			
 			@Override
 			public void command_setExperimentModified(boolean modified)
 			{
@@ -114,21 +130,35 @@ public class KineticComponent extends AbstractComponent
 			}
 
 			@Override
-			public void command_openOptionsManager(Integer[] selectedBoxesAgentIDs)
+			public void command_openOptionsManager(String[] selectedBoxesIDs)
 			{
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void response_reloadVisualStyle()
-			{
-				// TODO Auto-generated method stub
+				// convert to agent information array
+				AgentInfo[] selectedBoxesInformation = new AgentInfo[selectedBoxesIDs.length];
+				for(int i = 0; i < selectedBoxesIDs.length; i++)
+				{
+					if(boxIDToAgentInfo.containsKey(selectedBoxesIDs[i]))
+					{
+						selectedBoxesInformation[i] = boxIDToAgentInfo.get(selectedBoxesIDs[i]);
+					}
+					else
+					{
+						throw new IllegalStateException(String.format("Kinetic state out of sync. "
+								+ "No agent info was found for box ID '%s'.", selectedBoxesIDs[i]));
+					}
+				}
+				
+				// give the information to the box options toolbox to display
+				BoxOptionsToolbox toolbox = (BoxOptionsToolbox) parentEditor.getToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+				toolbox.setContentFrom(selectedBoxesInformation);
+				
+				// and display the toolbox
+				parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
 			}
 
 			@Override
 			public void response_sendExperimentToSave(ExperimentGraph experiment)
 			{
-				// TODO Auto-generated method stub
+				graphExportedFromClient = experiment;
 			}
 		};
 		registerRpc(this.serverRPC);
@@ -146,9 +176,9 @@ public class KineticComponent extends AbstractComponent
 	//---------------------------------------------------------------
 	// CLIENT RPC RELATED INTERFACE
 	
-	public void command_createBox(AgentInfo info, int absX, int absY)
+	public void createBox(AgentInfo info, int absX, int absY)
 	{
-		getClientRPC().command_createBox(getBoxInfo(info, absX, absY));
+		getClientRPC().command_createBox(createBoxInfo(info, absX - absoluteLeft, absY - absoluteTop));
 	}
 	
 	public void reloadVisualStyle()
@@ -158,13 +188,11 @@ public class KineticComponent extends AbstractComponent
 	
 	public void importExperiment(UniversalComputationDescription uniFormat)
 	{
+		resetEnvironment();
+		
 		try
 		{
-			ExperimentGraph webFormat = uniToWeb(uniFormat, ServerConfigurationInterface.getKnownAgents());
-			
-			// if no conversion problems:
-			resetEnvironment();
-			getClientRPC().command_receiveExperimentToLoad(webFormat);
+			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
 		}
 		catch (ConversionException e)
 		{
@@ -173,10 +201,48 @@ public class KineticComponent extends AbstractComponent
 		}
 	}
 	
-	public UniversalComputationDescription exportExperiment() throws ConversionException
+	public UniversalComputationDescription exportExperiment()
 	{
-		// TODO: send command to the client and wait for an answer...omg
-		return null;
+		// send command to the client
+		getClientRPC().request_sendExperimentToSave();
+		
+		// wait for an answer
+		final int maxWaitTime = 30000; // 30 seconds
+		final int waitTimePerIteration = 1000; // 1 second
+		int timeWaited = 0;
+		while(graphExportedFromClient == null)
+		{
+			try
+			{
+				Thread.sleep(waitTimePerIteration); 
+			}
+			catch (InterruptedException e)
+			{
+				PikaterLogger.logThrowable("Thread was interrupted while waiting for client answer. Perhaps a request timeout?", e);
+				return null;
+			}
+			
+			timeWaited += waitTimePerIteration;
+			if(timeWaited == maxWaitTime)
+			{
+				return null;
+			}
+		}
+		
+		// and finally, try to return what is promised
+		try
+		{
+			return webToUni(graphExportedFromClient);
+		}
+		catch (ConversionException e)
+		{
+			PikaterLogger.logThrowable("Could not convert to universal format because of the error below.", e);
+			return null;
+		}
+		finally
+		{
+			graphExportedFromClient = null;
+		}
 	}
 	
 	//---------------------------------------------------------------
@@ -200,19 +266,19 @@ public class KineticComponent extends AbstractComponent
 		return getRpcProxy(KineticComponentClientRpc.class);
 	}
 	
-	private BoxInfo getBoxInfo(AgentInfo info, int absX, int absY)
+	private BoxInfo createBoxInfo(AgentInfo info, int relX, int relY)
 	{
-		/*
+		BoxType type = BoxType.fromAgentInfo(info);
+		String newBoxID = String.valueOf(boxIDGenerator.getAndIncrement());
+		boxIDToAgentInfo.put(newBoxID, info);
 		return new BoxInfo(
-				boxID,
-				agentInfoID,
-				BoxType.fromAgentInfo(info),
+				newBoxID,
+				type.name(),
 				info.getName(),
-				absX - absoluteLeft,
-				absY - absoluteTop
+				relX,
+				relY,
+				type.toPictureURL()
 		);
-		*/
-		return null;
 	}
 	
 	private void resetEnvironment()
@@ -227,20 +293,60 @@ public class KineticComponent extends AbstractComponent
 	
 	private UniversalComputationDescription webToUni(ExperimentGraph webFormat) throws ConversionException
 	{
-		// TODO:
-		return null;
+		// first some checks
+		AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
+		if(webFormat == null)
+		{
+			throw new ConversionException(new NullPointerException("The argument web format is null."));
+		}
+		else if(agentInfoProvider == null)
+		{
+			throw new ConversionException(new NullPointerException("Agent information has not yet been received from pikater."));
+		}
+		
+		UniversalComputationDescription result = new UniversalComputationDescription();
+		for(BoxInfo boxInfo : webFormat.leafBoxes.values())
+		{
+			AgentInfo agentInfo = boxIDToAgentInfo.get(boxInfo.boxID);
+			if(agentInfo == null)
+			{
+				throw new ConversionException(new IllegalStateException(String.format(
+						"No agent info was found for box ID '%s'. Double check for box leaks.", boxInfo.boxID)));
+			}
+			
+			UniversalOntology ontologyInfo = new UniversalOntology();
+			try
+			{
+				ontologyInfo.setType(Class.forName(agentInfo.getOntologyClassName()));
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new ConversionException(new IllegalStateException(
+						"Could not convert '%s' to a class instance. Has the referenced class moved or been deleted?", e));
+			}
+			
+			// TODO: wrapper boxes, errors, options...
+			
+			UniversalElement elem = new UniversalElement();
+			elem.setGUIInfo(new UniversalGui(boxInfo.initialX, boxInfo.initialY));
+			elem.setOntologyInfo(ontologyInfo);
+			
+			result.addElement(elem);
+		}
+		return result;
 	}
 	
-	private ExperimentGraph uniToWeb(UniversalComputationDescription uniFormat, AgentInfoCollection agentInfoProvider) throws ConversionException
+	private ExperimentGraph uniToWeb(UniversalComputationDescription uniFormat) throws ConversionException
 	{
 		// first some checks
+		AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
 		if(uniFormat == null)
 		{
 			throw new ConversionException(new NullPointerException("The argument universal format is null."));
 		}
 		else if(agentInfoProvider == null)
 		{
-			throw new ConversionException(new NullPointerException("The argument box info provider is null."));
+			throw new ConversionException(new NullPointerException("Agent information has not yet been received from pikater."));
 		}
 		
 		// and then onto the conversion
@@ -260,7 +366,7 @@ public class KineticComponent extends AbstractComponent
 				}
 				else
 				{
-					BoxInfo info = getBoxInfo(agentInfo, element.getGUIInfo().x, element.getGUIInfo().y);
+					BoxInfo info = createBoxInfo(agentInfo, element.getGUIInfo().x, element.getGUIInfo().y);
 					String convertedBoxID = webFormat.addLeafBoxAndReturnID(info);
 					uniBoxToWebBoxID.put(element, convertedBoxID);
 				}
@@ -284,9 +390,8 @@ public class KineticComponent extends AbstractComponent
 		}
 		else
 		{
-			String xml = XStreamHelper.serializeToXML(uniFormat, XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
 			throw new ConversionException(new IllegalArgumentException(String.format(
-					"The universal format below is not fully compatible with the GUI (web) format.\n%s", xml)));
+					"The universal format below is not fully compatible with the GUI (web) format.\n%s", uniFormat.toXML())));
 		}
 	}
 }

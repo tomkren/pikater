@@ -1,6 +1,6 @@
 package org.pikater.core.options;
 
-import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
+import org.pikater.core.agents.experiment.virtual.Agent_VirtualCARecSearchComplexBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
@@ -18,32 +18,32 @@ public class CARecSearchComplex_VirtualBox {
 		Slot inputRecomendSlot = new Slot();
 		inputRecomendSlot.setDescription("Name of agent");
 		inputRecomendSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
-		inputRecomendSlot.setDataType("recommend");
-		
+		inputRecomendSlot.setDataType("recommend");		
+
 		Slot inputSearcherSlot = new Slot();
 		inputSearcherSlot.setDescription("Parameters produced by search");
 		inputSearcherSlot.setSlotType(SlotTypes.SEARCH_TYPE);
 		inputSearcherSlot.setDataType("parameters");
-		
 
 		Slot outputSlot = new Slot();
 		outputSlot.setDescription("data computed");
 		outputSlot.setSlotType(SlotTypes.AGENT_TYPE);
 		outputSlot.setDataType("data");
-		
+
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class);
+		agentInfo
+				.setAgentClass(Agent_VirtualCARecSearchComplexBoxProvider.class);
 		agentInfo.setOntologyClass(CARecSearchComplex.class);
-		
+
 		agentInfo.setName("Complex");
 		agentInfo.setDescription("Complex Box");
-		
+
 		agentInfo.addInputSlot(inputAgentSlot);
 		agentInfo.addInputSlot(inputRecomendSlot);
 		agentInfo.addInputSlot(inputSearcherSlot);
 
 		agentInfo.addOutputSlot(outputSlot);
-		
+
 		return agentInfo;
 	}
 

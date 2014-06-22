@@ -250,6 +250,11 @@ public class Toolbar extends VerticalLayout
 		if(newActiveTabContent != null)
 		{
 			clickModeCB.select(newActiveTabContent.getState().clickMode.name());
+			clickModeCB.setEnabled(true);
+		}
+		else
+		{
+			clickModeCB.setEnabled(false);
 		}
 	}
 	
@@ -292,16 +297,16 @@ public class Toolbar extends VerticalLayout
 			try
 			{
 				final UniversalComputationDescription uniFormat = activeComponent.exportExperiment();
-				MyDialogs.saveExperimentDialog(new MyDialogs.DialogResultHandler()
+				MyDialogs.saveExperimentDialog(new MyDialogs.IDialogResultHandler()
 				{
 					@Override
-					public boolean handleResult()
+					public boolean handleResult(Object[] args)
 					{
-						String name = (String) getArg(0);
-						Integer userAssignedPriority = (Integer) getArg(1);
-						Integer computationEstimateInHours = (Integer) getArg(2);
-						Boolean sendEmailWhenFinished = (Boolean) getArg(3);
-						String note = (String) getArg(4);
+						String name = (String) args[0];
+						Integer userAssignedPriority = (Integer) args[1];
+						Integer computationEstimateInHours = (Integer) args[2];
+						Boolean sendEmailWhenFinished = (Boolean) args[3];
+						String note = (String) args[4];
 						
 						String exportedExperiment = XStreamHelper.serializeToXML(uniFormat, 
 								XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));

@@ -11,17 +11,12 @@ ADMIN FEATURES:
 * schvalování nových agentů a dat. množin (nebude-li mít uživatel oprávnění)
 
 USER FEATURES:
-* registrace
-* zobrazení a úprava profilu
+* zobrazení a úprava profilu - defaultní priorita pro experimenty?
 * datové množiny (+ metadata k nim)
 	- zobrazení
 	- smazání? - asi jen skrytí uživateli
 	- přidání - včetně metadat, která se nedají zjistit automaticky
 * přidání agentů
-* definování experimentu
-	- uživatelova priorita (+ taky nějaká výchozí)
-	- odhad doby výpočtu
-	- zaslání emailu, až se to dokončí
 * výsledky experimentu
 	- zobrazení
 	- export do CSV

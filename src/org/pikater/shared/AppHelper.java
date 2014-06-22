@@ -7,8 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.pikater.shared.logging.PikaterLogger;
@@ -137,7 +140,7 @@ public class AppHelper
 	
 	public static Set<String> rangeToStringSet(int fromIncl, int toIncl)
 	{
-		Set<String> result = new HashSet<String>();
+		Set<String> result = new LinkedHashSet<String>(); // LinkedHashSet preserves insertion order
 		for(int i = fromIncl; i <= toIncl; i++)
 		{
 			result.add(String.valueOf(i));
@@ -152,4 +155,26 @@ public class AppHelper
 		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
 		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
+	
+	public static String formatInteger(Locale locale,int value){
+		NumberFormat numberFormat=NumberFormat.getInstance(locale);
+		return numberFormat.format(value);
+	}
+	
+	public static String formatDouble(Locale locale,double value){
+		NumberFormat numberFormat=NumberFormat.getInstance(locale);
+		return numberFormat.format(value);
+	}
+	
+	public static String formatBool(Locale locale,boolean value){
+		return ""+value;
+	}
+	
+	public static Locale getDefaultLocale(){
+		return new Locale.Builder()
+				.setLanguage("en")
+				.setRegion("US")
+				.build();
+	}
+	
 }

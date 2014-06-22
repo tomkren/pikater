@@ -12,6 +12,19 @@ public abstract class AbstractComputationBuffer<E> implements ComputationOutputB
     private ComputationNode target;
     private boolean isBlocked=false;
 
+    public AbstractComputationBuffer(ComputationNode source, ComputationNode target)
+    {
+        setSource(source);
+        setTarget(target);
+    }
+
+    public AbstractComputationBuffer(ComputationNode target)
+    {
+        setTarget(target);
+    }
+
+    public AbstractComputationBuffer(){}
+
     @Override
     public ComputationNode getSource() {
         return source;

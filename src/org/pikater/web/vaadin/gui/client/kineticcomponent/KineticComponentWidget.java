@@ -1,15 +1,14 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import net.edzard.kinetic.Kinetic;
-
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.KineticUndoRedoManager;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.google.gwt.core.client.Scheduler;
@@ -27,28 +26,17 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	private static final long serialVersionUID = 946534795907059986L;
 	
 	// ------------------------------------------------------
-	// EXPERIMENT RELATED FIELDS
-	
-	/**
-	 * All-purpose kinetic engine components.
-	 */
-	private final KineticEngine kineticState;
-	private final KineticShapeCreator kineticCreator;
-	private final KineticUndoRedoManager undoRedoManager;
-	
-	/**
-	 * Backup of the last loaded experiment. Since it is shared in the component's state, we have
-	 * to know when it is changed and when it is not.	
-	 */
-	private ExperimentGraph lastLoadedExperiment;
-	
-	// ------------------------------------------------------
 	// PROGRAMMATIC FIELDS
 	
 	/**
 	 * Reference to the client connector communicating with the server.	
 	 */
 	private final KineticComponentConnector connector;
+	
+	// ------------------------------------------------------
+	// EXPERIMENT RELATED FIELDS
+		
+	private KineticState state;
 	
 	// --------------------------------------------------------
 	// CONSTRUCTOR
@@ -58,40 +46,11 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		super();
 		
 		/*
-		 * Do the kinetic stuff.
-		 */
-		
-		// initialize kinetic managers
-		this.kineticState = new KineticEngine(this, Kinetic.createStage(getStageDOMElement()));
-		this.kineticCreator = new KineticShapeCreator(this.kineticState);
-		this.undoRedoManager = new KineticUndoRedoManager(this);
-		
-		// when the GWT event loop finishes and the component is fully read and its information published
-		Scheduler.get().scheduleDeferred(new ScheduledCommand()
-		{
-			@Override
-		    public void execute()
-			{
-				/*
-				 * TODO: only use this to expand... if one of the new dimensions is smaller than it was, only shrink the parent widget
-				 * This is not going to be extremely trivial...
-				 */
-				
-				// resize the kinetic stage to fully fill the parent component
-				Element elementWithKnownSize = getElement();
-				getEngine().resize(elementWithKnownSize.getOffsetWidth(), elementWithKnownSize.getOffsetHeight());
-				
-				// send information about absolute position to the server so that it can compute relative mouse position
-				getServerRPC().command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
-		    }
-		});
-		
-		/*
 		 * Do the rest.
 		 */
 		
 		this.connector = connector;
-		this.lastLoadedExperiment = null;
+		this.state = null;
 		
 		// handlers to register keys being pushed down and released when the editor has focus
 		addKeyDownHandler(new KeyDownHandler()
@@ -102,18 +61,18 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				switch (event.getNativeKeyCode())
 				{
 					case KeyCodes.KEY_BACKSPACE:
-						kineticState.deleteSelected();
+						getEngine().deleteSelected();
 						break;
 					case 90: // Z
 						if(GWTKeyboardManager.isControlKeyDown())
 						{
-							undoRedoManager.undo();
+							getHistoryManager().undo();
 						}
 						break;
 					case 89: // Y
 						if(GWTKeyboardManager.isControlKeyDown())
 						{
-							undoRedoManager.redo();
+							getHistoryManager().redo();
 						}
 						break;
 					case 87: // W
@@ -155,6 +114,47 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		*/
 	}
 	
+	public KineticState getState()
+	{
+		return state;
+	}
+	
+	public void initState(KineticState backup)
+	{
+		if(backup != null)
+		{
+			this.state = backup;
+			this.state.setParentWidget(this);
+		}
+		else
+		{
+			this.state = new KineticState(this);
+		}
+		
+		// when the GWT event loop finishes and the component is fully read and its information published
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+			public void execute()
+			{
+				/*
+				 * TODO: only use this to expand... if one of the new dimensions is smaller than it was, only shrink the parent widget
+				 * This is not going to be extremely trivial...
+				 */
+
+				// resize the kinetic stage to fully fill the parent component
+				Element elementWithKnownSize = getElement();
+				getEngine().resize(elementWithKnownSize.getOffsetWidth(), elementWithKnownSize.getOffsetHeight());
+
+				// send information about absolute position to the server so that it can compute relative mouse position
+				getServerRPC().command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
+				
+				// and finally, draw the stage
+				getEngine().draw(EngineComponent.STAGE);
+			}
+		});
+	}
+	
 	// *****************************************************************************************************
 	// COMMANDS FROM SERVER
 	
@@ -185,15 +185,11 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			{
 				if(experiment != null)
 				{
-					// first reset if necessary
-					if(lastLoadedExperiment != null)
-					{
-						command_resetKineticEnvironment();
-					}
+					// first reset
+					command_resetKineticEnvironment();
 					
 					// and then load the experiment
 					getEngine().fromIntermediateFormat(experiment);
-    				lastLoadedExperiment = experiment;
 				}
 				else
 				{
@@ -212,7 +208,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		    public void execute()
 			{
 				getEngine().destroyGraphAndClearStage();
-				getUndoRedoManager().clear();
+				getHistoryManager().clear();
 		    }
 		});
 	}
@@ -264,16 +260,12 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public void response_reloadVisualStyle()
-	{
-		getServerRPC().response_reloadVisualStyle();
-	}
-	
-	@Override
 	public void response_sendExperimentToSave(ExperimentGraph experiment)
 	{
 		getServerRPC().response_sendExperimentToSave(experiment);
-		getUndoRedoManager().clear();
+		
+		// TODO: only do this if saving the experiment is successful?
+		getHistoryManager().clear();
 	}
 	
 	// *****************************************************************************************************
@@ -284,17 +276,23 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	{
 		return getElement();
 	}
+	
+	@Override
+	public KineticEngine getEngine()
+	{
+		return state.getEngine();
+	}
+	
+	@Override
+	public KineticUndoRedoManager getHistoryManager()
+	{
+		return state.getHistoryManager();
+	}
 
 	@Override
 	public KineticShapeCreator getShapeCreator()
 	{
-		return kineticCreator;
-	}
-	
-	@Override
-	public KineticUndoRedoManager getUndoRedoManager()
-	{
-		return undoRedoManager;
+		return state.getShapeCreator();
 	}
 	
 	@Override
@@ -307,14 +305,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	public boolean openOptionsManagerOnSelectionChange()
 	{
 		return connector.getState().openOptionsOnSelection;
-	}
-	
-	// *****************************************************************************************************
-	// OTHER PUBLIC INTERFACE
-	
-	public KineticEngine getEngine()
-	{
-		return kineticState;
 	}
 	
 	// *****************************************************************************************************

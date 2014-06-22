@@ -1,11 +1,11 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.web.vaadin.gui.server.components.forms.abstractform.CustomFormLayout;
-import org.pikater.web.vaadin.gui.server.components.forms.fields.PasswordField;
+import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
-import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.PasswordField;
 
 public class ChangePasswordForm extends CustomFormLayout
 {
@@ -21,13 +21,13 @@ public class ChangePasswordForm extends CustomFormLayout
 	{
 		super(null);
 		
-		this.pf_currentPassword = new PasswordField("Current password:", null, true, false);
-		this.pf_newPassword = new PasswordField("New password:", null, true, false);
-		this.pf_newPasswordAgain = new PasswordField("New password again:", null, true, false);
+		this.pf_currentPassword = FormFieldFactory.getGeneralPasswordField("Current password:", null, true, false);
+		this.pf_newPassword = FormFieldFactory.getGeneralPasswordField("New password:", null, true, false);
+		this.pf_newPasswordAgain = FormFieldFactory.getGeneralPasswordField("New password again:", null, true, false);
 		
-		addField(pf_currentPassword, "current password");
-		addField(pf_newPassword, "new password");
-		addField(pf_newPasswordAgain, "new password again");
+		addField("current password", pf_currentPassword);
+		addField("new password", pf_newPassword);
+		addField("new password again", pf_newPasswordAgain);
 		
 		this.currentUser = user;
 	}
@@ -58,7 +58,7 @@ public class ChangePasswordForm extends CustomFormLayout
 	}
 
 	@Override
-	public ClickListener getActionButtonListener()
+	public IOnSubmit getSubmitAction()
 	{
 		return null;
 	}

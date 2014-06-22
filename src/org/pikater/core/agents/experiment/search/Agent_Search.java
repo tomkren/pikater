@@ -75,13 +75,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		
 		addBehaviour(new RequestServer(this));
 		
-		
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		sendAgentInfo(getAgentInfo());
 
 	} // end setup()

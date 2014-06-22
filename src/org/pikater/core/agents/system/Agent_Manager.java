@@ -6,7 +6,6 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -15,7 +14,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
@@ -25,21 +23,15 @@ import jade.proto.SubscriptionResponder.SubscriptionManager;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
-import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.manager.ComputationCollectionItem;
+import org.pikater.core.agents.system.manager.ParserBehaviour;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.file.TranslateFilename;
-import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
-import org.pikater.core.ontology.subtrees.task.Execute;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,7 +47,7 @@ public class Agent_Manager extends PikaterAgent {
 	private boolean no_xml_output = true;
 	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
 	private int problem_i = 0;
-	protected HashMap<Integer, ComputationCollectionItem> computationCollection =
+	public HashMap<Integer, ComputationCollectionItem> computationCollection =
 			new HashMap<Integer, ComputationCollectionItem>();
 	
 	
@@ -198,7 +190,7 @@ public class Agent_Manager extends PikaterAgent {
 	}
 
 	
-	protected void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
+	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
 		// Prepare the subscription message to the request originator
 		ACLMessage msgOut = originalMessage.createReply();
 		msgOut.setPerformative(result.getPerformative());

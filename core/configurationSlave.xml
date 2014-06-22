@@ -4,7 +4,7 @@
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_DataManager" name="dataManager">
+        <agent type="org.pikater.core.agents.system.Agent_DataManager" name="DataManager">
             <arguments>
                 <argument key="connection" value="honza_local"/>
             </arguments>

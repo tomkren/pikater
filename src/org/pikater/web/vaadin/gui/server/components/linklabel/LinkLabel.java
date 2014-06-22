@@ -58,6 +58,11 @@ public class LinkLabel extends AbstractComponent
 		setText(text);
 	}
 	
+	public String getText()
+	{
+		return getState().text;
+	}
+	
 	public void setText(String text)
 	{
 		getState().text = text;

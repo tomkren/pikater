@@ -19,7 +19,6 @@ import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.ExecuteTaskBehaviour;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
@@ -29,6 +28,8 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEd
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
+import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -37,7 +38,7 @@ import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 /**
@@ -78,7 +79,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
     }
 		
 	private ACLMessage prepareRequest(){
-		Execute ex = new Execute();
+		ExecuteTask ex = new ExecuteTask();
 		Task task = getTaskFromNode();
 				
 		ex.setTask(task);							
@@ -229,7 +230,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		return fileHash;
 	}
 	
-	public ACLMessage execute2Message(Execute execute) {
+	public ACLMessage execute2Message(ExecuteTask ex) {
 		// create ACLMessage from Execute ontology action
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
@@ -240,7 +241,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 	
 		Action a = new Action();
-		a.setAction(execute);
+		a.setAction(ex);
 		a.setActor(myAgent.getAID());
 
 		try {

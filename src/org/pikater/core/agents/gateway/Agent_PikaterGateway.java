@@ -6,10 +6,6 @@ import java.util.List;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.MailingOntology;
-import org.pikater.core.ontology.MessagesOntology;
-import org.pikater.core.ontology.MetadataOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.database.jpa.daos.DAOs;
 
 import jade.content.AgentAction;
 import jade.content.ContentManager;
@@ -18,23 +14,19 @@ import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.wrapper.ControllerException;
 import jade.lang.acl.ACLMessage;
-import jade.proto.AchieveREResponder;
 import jade.wrapper.gateway.GatewayAgent;
 import jade.wrapper.gateway.JadeGateway;
-
 
 public class Agent_PikaterGateway extends GatewayAgent {
 
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 6530381228391705988L;
+	private static final long serialVersionUID = -2247543952895575432L;
 
 	static final public Codec codec = new SLCodec();
     static private ContentManager contentManager;
@@ -43,8 +35,6 @@ public class Agent_PikaterGateway extends GatewayAgent {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AgentInfoOntology.getInstance());
-		ontologies.add(MessagesOntology.getInstance());
-		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(MailingOntology.getInstance());
 		
@@ -61,70 +51,9 @@ public class Agent_PikaterGateway extends GatewayAgent {
         }
 
         System.out.println("PikaterGateway started");
-        
-        this.addBehaviour(new AchieveREResponder(this, null) {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 324270572581200118L;
-
-			@Override
-			protected ACLMessage handleRequest(ACLMessage request) {
-				
-				Action action = null;
-				try {
-					action = (Action) getContentManager().extractContent(request);
-				} catch (UngroundedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (CodecException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (OntologyException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				if (action.getAction() instanceof AgentInfo) {
-					return respondToAgentInfo(request, action);
-				}
-				
-
-				ACLMessage failure = request.createReply();
-				failure.setPerformative(ACLMessage.FAILURE);
-				
-				System.out.println("Failure responding to request: " + request.getContent());
-				return failure;
-			}
-        	
-        });
     }
 
-    protected ACLMessage respondToAgentInfo(ACLMessage request, Action action) {
-    	
-    	AgentInfo agentInfo = (AgentInfo) action.getAction();
-    	System.out.println("Agent " + getName() + ": recieved AgentInfo from " + agentInfo.getAgentClassName() );
-    	
-    	DAOs.agentInfoDAO.storeAgentInfoOntology(agentInfo, getName());
-		
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(action, "OK");
-		try {
-			getContentManager().fillContent(reply, r);
-		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-    	return reply;
-	}
-
-	/** receiver je jmeno agenta (prijemce), action je nejaka AgentAction z Pikateri ontologie */
+    /** receiver je jmeno agenta (prijemce), action je nejaka AgentAction z Pikateri ontologie */
     static public ACLMessage makeActionRequest(String receiver, Ontology ontology, AgentAction action) throws CodecException, OntologyException, ControllerException {
         JadeGateway.checkJADE(); // force gateway container initialization to make AID resolution possible
         if (contentManager == null) {

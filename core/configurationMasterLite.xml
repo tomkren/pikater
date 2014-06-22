@@ -4,24 +4,24 @@
         <agent type="org.pikater.core.agents.system.Agent_Planner" name="Planner">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_Manager" name="manager">
+        <agent type="org.pikater.core.agents.system.Agent_Manager" name="Manager">
             <arguments>
                 <argument key="no_xml_output" value="true"/>
             </arguments>
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_DataManager" name="dataManager">
+        <agent type="org.pikater.core.agents.system.Agent_DataManager" name="DataManager">
             <arguments>
                 <argument key="connection" value="honza_local"/>
             </arguments>
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="agentManager">
+        <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="AgentManager">
         </agent>
 
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
-                <argument key="sniffed" value="manager" sendOnlyValue="true" />
+                <argument key="sniffed" value="Manager" sendOnlyValue="true" />
             </arguments>
         </agent>
 
