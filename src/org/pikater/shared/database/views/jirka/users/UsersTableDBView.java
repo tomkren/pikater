@@ -104,7 +104,7 @@ public class UsersTableDBView extends AbstractTableDBView
 			@Override
 			public int compare(UsersTableDBRow o1, UsersTableDBRow o2)
 			{
-				Column sortColumn = (Column) constraints.getSortOrder();
+				Column sortColumn = (Column) constraints.getSortColumn();
 				switch(sortColumn)
 				{
 					case LOGIN:

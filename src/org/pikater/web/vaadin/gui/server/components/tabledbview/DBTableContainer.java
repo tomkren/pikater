@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
+import org.pikater.shared.database.views.jirka.abstractview.SortOrder;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
@@ -77,7 +78,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public int size()
 	{
-		return rows.tableItemsCount();
+		return rows.getTableItemCount();
 	}
 	
 	@Override
@@ -270,9 +271,14 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		return guiView;
 	}
 	
+	public SortOrder getCurrentSortOrder()
+	{
+		return rows.getCurrentSortOrder();
+	}
+	
 	public int getUnconstrainedQueryResultsCount()
 	{
-		return rows.allItemsCount();
+		return rows.getAllItemsCount();
 	}
 	
 	// TODO: do we even need this?

@@ -7,16 +7,11 @@ import java.util.Set;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IExpandableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
+import org.pikater.shared.database.views.jirka.abstractview.SortOrder;
 import org.pikater.shared.util.SimpleIDGenerator;
 
 public class DBTableContainerItems implements ICommitable
 {
-	public enum SortOrder
-	{
-		ASCENDING,
-		DESCENDING
-	}
-	
 	private final DBTable parentTable;
 	private final Map<Integer, DBTableItem> rows;
 	
@@ -76,14 +71,19 @@ public class DBTableContainerItems implements ICommitable
 		return this.rows.get(rowID);
 	}
 	
-	public int tableItemsCount()
+	public int getTableItemCount()
 	{
 		return this.rows.size();
 	}
 	
-	public int allItemsCount()
+	public int getAllItemsCount()
 	{
 		return lastQueryResult.getAllResultsCount();
+	}
+	
+	public SortOrder getCurrentSortOrder()
+	{
+		return currentSortOrder;
 	}
 	
 	//-----------------------------------------------

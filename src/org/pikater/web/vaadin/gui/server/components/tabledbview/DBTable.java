@@ -39,6 +39,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		
 		// and finish initialization
 		setContainerDataSource(tableContainer);
+		dbView.setColumnSizes(this);
 		setSortContainerPropertyId(dbView.getUnderlyingDBView().getDefaultSortOrder());
 		addHeaderClickListener(new HeaderClickListener()
 		{
@@ -96,6 +97,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	{
 		return new QueryConstraints(
 				(IColumn) getSortContainerPropertyId(),
+				tableContainer.getCurrentSortOrder(),
 				pagingControls.getOverallOffset(),
 				pagingControls.getPageSize()
 		);
