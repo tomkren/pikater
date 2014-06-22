@@ -1,7 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
 import jade.content.Concept;
-
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
@@ -12,9 +11,6 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEd
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-
-import com.mysql.jdbc.log.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
