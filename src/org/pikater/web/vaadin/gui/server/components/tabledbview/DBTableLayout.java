@@ -8,6 +8,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
@@ -62,7 +63,7 @@ public class DBTableLayout extends VerticalLayout
 		
 		hl_btnInterface = new HorizontalLayout();
 		hl_btnInterface.setSpacing(true);
-		hl_btnInterface.setSizeFull();
+		hl_btnInterface.setSizeUndefined();
 		hl_btnInterface.addComponent(btn_saveChanges);
 		
 		addComponent(this.chb_commit);
@@ -76,9 +77,9 @@ public class DBTableLayout extends VerticalLayout
 		return table;
 	}
 	
-	protected void addCustomActionButton(Button newBtn)
+	protected void addCustomActionComponent(Component component)
 	{
-		hl_btnInterface.addComponent(newBtn);
+		hl_btnInterface.addComponent(component);
 	}
 	
 	protected DBTable createTable(AbstractTableGUIView<? extends AbstractTableDBView> dbView)

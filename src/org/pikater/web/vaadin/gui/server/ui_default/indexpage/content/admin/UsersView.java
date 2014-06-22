@@ -14,9 +14,6 @@ public class UsersView extends DBTableLayout implements IContentComponent
 	{
 		super(new UsersTableDBView());
 		setSizeUndefined();
-		
-		
-		// TODO: a wizard to add datasets
 	}
 
 	@Override

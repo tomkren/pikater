@@ -44,10 +44,10 @@ public class DataSetTableDBView extends AbstractTableDBView
 		 */
 		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
 		CREATED,
-		DESCRIPTION,
 		NUMBER_OF_INSTANCES,
 		DEFAULT_TASK_TYPE,
-		SIZE;
+		SIZE,
+		DESCRIPTION;
 
 		@Override
 		public String getDisplayName()

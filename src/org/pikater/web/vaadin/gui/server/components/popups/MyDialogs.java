@@ -105,7 +105,7 @@ public class MyDialogs
 	}
 	
 	// -------------------------------------------------------------------------
-	// PUBLIC ROUTINES FOR DISPLAYING SPECIALIZED DIALOGS
+	// ROUTINES FOR DISPLAYING SPECIALIZED DIALOGS
 	
 	public static void loginDialog(final IDialogResultHandler resultHandler)
 	{
