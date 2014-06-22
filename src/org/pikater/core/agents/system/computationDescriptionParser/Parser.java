@@ -185,13 +185,18 @@ public class Parser {
         agent.log("Ontology Parser - CARecSearchComplex");
 
         ComputationNode computingNode;
+        List<Option> childOptions;
         IComputingAgent iComputingAgent = complex.getComputingAgent();
         if (iComputingAgent instanceof CARecSearchComplex)
         {
-            computingNode=parseComplex((CARecSearchComplex)iComputingAgent);
+            CARecSearchComplex complexChild=(CARecSearchComplex)iComputingAgent;
+            childOptions=complexChild.getOptions();
+            computingNode=parseComplex(complexChild);
         }
         else
         {
+            ComputingAgent ca=(ComputingAgent)iComputingAgent;
+            childOptions=ca.getOptions();
             computingNode=parseComputing(iComputingAgent);
         }
         addOptionsToInputs(computingNode,complex.getOptions());
@@ -208,12 +213,12 @@ public class Parser {
         Search searchAgentO = complex.getSearch();
         if (searchAgentO!=null)
         {
-            return parseSearch(searchAgentO, computingNode, complex.getErrors());
+            return parseSearch(searchAgentO, computingNode, complex.getErrors(),childOptions);
         }
         return computingNode;
     }
 
-    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors) {
+    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors,List<Option> childOptions) {
         agent.log("Ontology Parser - Search");
 
         if (!alreadyProcessed.containsKey(search))
@@ -223,6 +228,12 @@ public class Parser {
         }
         SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search);
         searchNode.setModelClass(search.getSearchClass());
+
+        OptionEdge option=new OptionEdge();
+        option.setOptions(childOptions);
+        OneShotBuffer optionBuffer=new OneShotBuffer(option);
+        searchNode.addInput("childoptions",optionBuffer);
+
         searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,searchNode.getId(),1,searchNode));
         StandardBuffer searchBuffer=new StandardBuffer(searchNode,child);
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
