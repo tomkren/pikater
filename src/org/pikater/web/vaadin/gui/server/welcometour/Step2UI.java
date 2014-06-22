@@ -164,13 +164,13 @@ public class Step2UI extends VerticalLayout
 		if((selectedRowIDs != null) && !selectedRowIDs.isEmpty())
 		{
 			// prompt for the new value
-			MyDialogs.textPrompt("Specify a new value", column.name(), new MyDialogs.DialogResultHandler()
+			MyDialogs.textPrompt("Specify a new value", column.name(), new MyDialogs.IDialogResultHandler()
 			{
 				@Override
-				public boolean handleResult()
+				public boolean handleResult(Object[] args)
 				{
 					// and use the new value
-					tableDataSource.batchSetValues(selectedRowIDs, column, (String) getArg(0));
+					tableDataSource.batchSetValues(selectedRowIDs, column, (String) args[0]);
 					refresh();
 					return true;
 				}

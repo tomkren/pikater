@@ -1,11 +1,11 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule.RegistrationOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
 /**
  * Operation handling only the first item registration / deregistration. Item
@@ -13,83 +13,45 @@ import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
  */
 public final class ItemRegistrationOperation extends BiDiOperation
 {
-	private final ExperimentGraphItem[] graphItems;
-	private final SelectionPlugin selectionPlugin;
+	private final BoxPrototype[] boxes;
+	private final EdgePrototype[] edges;
+	private final ItemRegistrationModule itemRegistrationModule;
 	
-	public ItemRegistrationOperation(KineticEngine kineticState, ExperimentGraphItem[] graphItems)
+	public ItemRegistrationOperation(KineticEngine kineticState, BoxPrototype[] boxes, EdgePrototype[] edges)
 	{
 		super(kineticState);
-		this.graphItems = graphItems;
-		this.selectionPlugin = (SelectionPlugin) kineticState.getPlugin(SelectionPlugin.pluginID);
+		
+		this.boxes = boxes == null ? new BoxPrototype[0] : boxes;
+		this.edges = edges == null ? new EdgePrototype[0] : edges;
+		this.itemRegistrationModule = (ItemRegistrationModule) kineticState.getModule(ItemRegistrationModule.moduleID);
 	}
 	
 	@Override
 	public void firstExecution()
 	{
-		for(ExperimentGraphItem graphItem : graphItems)
+		for(BoxPrototype box : boxes)
 		{
-			kineticEngine.attachPluginHandlersTo(graphItem);
-			if(graphItem instanceof BoxPrototype)
-			{
-				kineticEngine.allBoxes.add((BoxPrototype)graphItem);
-			}
-			/*
-			 * IMPORTANT NOTE: edges are not registered here, because not both endpoints are specified when
-			 * creating them. It's the responsibility of edge creation code to register the edge in its
-			 * endpoints.
-			 */
-			graphItem.registerInKinetic();
+			kineticEngine.attachModuleHandlersTo(box);
 		}
-		kineticEngine.draw(EngineComponent.STAGE);
+		for(EdgePrototype edge : edges)
+		{
+			kineticEngine.attachModuleHandlersTo(edge);
+		}
+		redo();
 	}
 	
 	@Override
 	public void undo()
 	{
-		for(ExperimentGraphItem graphItem : graphItems)
-		{
-			if(graphItem.isSelected())
-			{
-				selectionPlugin.invertSelection(false, graphItem);
-			}
-			if(graphItem instanceof BoxPrototype)
-			{
-				kineticEngine.allBoxes.remove((BoxPrototype)graphItem);
-			}
-			else if(graphItem instanceof EdgePrototype)
-			{
-				((EdgePrototype) graphItem).unregisterEdgeInEndpoints();
-			}
-			else
-			{
-				throw new IllegalStateException("Unknown graph item type encountered.");
-			}
-			graphItem.unregisterInKinetic();
-		}
-		kineticEngine.draw(EngineComponent.STAGE); // some items may have been deselected + both edges and boxes can be unregistered
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, boxes);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, edges);
 	}
 
 	@Override
 	public void redo()
 	{
-		for(ExperimentGraphItem graphItem : graphItems)
-		{
-			// undo method ensures that items are not selected, so only do the following:
-			if(graphItem instanceof BoxPrototype)
-			{
-				kineticEngine.allBoxes.add((BoxPrototype)graphItem);
-			}
-			else if(graphItem instanceof EdgePrototype)
-			{
-				((EdgePrototype) graphItem).registerEdgeInEndpoints();
-			}
-			else
-			{
-				throw new IllegalStateException("Unknown graph item type encountered.");
-			}
-			graphItem.registerInKinetic();
-		}
-		kineticEngine.draw(EngineComponent.STAGE);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, boxes);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, edges);
 	}
 
 	@Override

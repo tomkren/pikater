@@ -1,20 +1,14 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import net.edzard.kinetic.Kinetic;
-import net.edzard.kinetic.Vector2d;
-
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.Experiment;
-import org.pikater.shared.experiment.webformat.ExperimentMetadata;
+import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.KineticUndoRedoManager;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.CreateEdgePlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.DragEdgePlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.TrackMousePlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.google.gwt.core.client.Scheduler;
@@ -27,25 +21,9 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.FocusPanel;
 
-public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc, KineticComponentServerRpc
+public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc, KineticComponentServerRpc, IKineticEngineContext
 {
 	private static final long serialVersionUID = 946534795907059986L;
-	
-	// ------------------------------------------------------
-	// EXPERIMENT RELATED FIELDS
-	
-	/**
-	 * All-purpose kinetic engine components.
-	 */
-	private final KineticEngine kineticState;
-	private final KineticShapeCreator kineticCreator;
-	private final KineticUndoRedoManager undoRedoManager;
-	
-	/**
-	 * Backup of the last loaded experiment. Since it is shared in the component's state, we have
-	 * to know when it is changed and when it is not.	
-	 */
-	private Experiment lastLoadedExperiment;
 	
 	// ------------------------------------------------------
 	// PROGRAMMATIC FIELDS
@@ -55,6 +33,11 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 */
 	private final KineticComponentConnector connector;
 	
+	// ------------------------------------------------------
+	// EXPERIMENT RELATED FIELDS
+		
+	private KineticState state;
+	
 	// --------------------------------------------------------
 	// CONSTRUCTOR
 	
@@ -63,47 +46,11 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		super();
 		
 		/*
-		 * Do the kinetic stuff.
-		 */
-		
-		// initialize kinetic managers
-		this.kineticState = new KineticEngine(this, Kinetic.createStage(getKineticEnvParentElement()));
-		this.kineticCreator = new KineticShapeCreator(this.kineticState);
-		this.undoRedoManager = new KineticUndoRedoManager(this);
-		
-		// add plugins to the engine
-		// IMPORTANT: don't violate the call order - it is very important for correct functionality since plugins may depend upon others
-		this.kineticState.addPlugin(new TrackMousePlugin(this.kineticState));
-		this.kineticState.addPlugin(new DragEdgePlugin(this.kineticState));
-		this.kineticState.addPlugin(new CreateEdgePlugin(kineticState));
-		this.kineticState.addPlugin(new SelectionPlugin(kineticState));
-		
-		// when the GWT event loop finishes and the component is fully read and its information published
-		Scheduler.get().scheduleDeferred(new ScheduledCommand()
-		{
-			@Override
-		    public void execute()
-			{
-				/*
-				 * TODO: only use this to expand... if one of the new dimensions is smaller than it was, only shrink the parent widget
-				 * This is not going to be extremely trivial...
-				 */
-				
-				// resize the kinetic stage to fully fill the parent component
-				Element elementWithKnownSize = getElement();
-				getEngine().resize(elementWithKnownSize.getOffsetWidth(), elementWithKnownSize.getOffsetHeight());
-				
-				// send information about absolute position to the server so that it can compute relative mouse position
-				getServerRPC().command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
-		    }
-		});
-		
-		/*
 		 * Do the rest.
 		 */
 		
 		this.connector = connector;
-		this.lastLoadedExperiment = null;
+		this.state = null;
 		
 		// handlers to register keys being pushed down and released when the editor has focus
 		addKeyDownHandler(new KeyDownHandler()
@@ -114,28 +61,25 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				switch (event.getNativeKeyCode())
 				{
 					case KeyCodes.KEY_BACKSPACE:
-						kineticState.deleteSelected();
+						getEngine().deleteSelected();
 						break;
 					case 90: // Z
 						if(GWTKeyboardManager.isControlKeyDown())
 						{
-							undoRedoManager.undo();
+							getHistoryManager().undo();
 						}
 						break;
 					case 89: // Y
 						if(GWTKeyboardManager.isControlKeyDown())
 						{
-							undoRedoManager.redo();
+							getHistoryManager().redo();
 						}
 						break;
 					case 87: // W
 						if(GWTKeyboardManager.isAltKeyDown())
 						{
-							// first alter the click mode
-							KineticComponentClickMode newClickMode = getSharedState().clickMode.getOther();
-							getSharedState().clickMode = newClickMode;
-							// and send notification to the server
-							command_alterClickModeNotification(newClickMode);
+							// the click mode will really be changed on the server...
+							command_alterClickMode(getClickMode().getOther());
 						}
 						break;
 					default:
@@ -170,18 +114,59 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		*/
 	}
 	
+	public KineticState getState()
+	{
+		return state;
+	}
+	
+	public void initState(KineticState backup)
+	{
+		if(backup != null)
+		{
+			this.state = backup;
+			this.state.setParentWidget(this);
+		}
+		else
+		{
+			this.state = new KineticState(this);
+		}
+		
+		// when the GWT event loop finishes and the component is fully read and its information published
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+			public void execute()
+			{
+				/*
+				 * TODO: only use this to expand... if one of the new dimensions is smaller than it was, only shrink the parent widget
+				 * This is not going to be extremely trivial...
+				 */
+
+				// resize the kinetic stage to fully fill the parent component
+				Element elementWithKnownSize = getElement();
+				getEngine().resize(elementWithKnownSize.getOffsetWidth(), elementWithKnownSize.getOffsetHeight());
+
+				// send information about absolute position to the server so that it can compute relative mouse position
+				getServerRPC().command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
+				
+				// and finally, draw the stage
+				getEngine().draw(EngineComponent.STAGE);
+			}
+		});
+	}
+	
 	// *****************************************************************************************************
 	// COMMANDS FROM SERVER
 	
 	@Override
-	public void command_createBox(final BoxInfo info, final int posX, final int posY)
+	public void command_createBox(final BoxInfo info)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
 		    public void execute()
 			{
-				getShapeCreator().createBox(NodeRegisterType.AUTOMATIC, info, new Vector2d(posX, posY));
+				getShapeCreator().createBox(NodeRegisterType.AUTOMATIC, info);
 		    }
 		});
 	}
@@ -191,7 +176,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 * resets the environment.
 	 */
 	@Override
-	public void command_receiveExperimentToLoad(final Experiment experiment)
+	public void command_receiveExperimentToLoad(final ExperimentGraph experiment)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -200,15 +185,11 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			{
 				if(experiment != null)
 				{
-					// first reset if necessary
-					if(lastLoadedExperiment != null)
-					{
-						command_resetKineticEnvironment();
-					}
+					// first reset
+					command_resetKineticEnvironment();
 					
 					// and then load the experiment
 					getEngine().fromIntermediateFormat(experiment);
-    				lastLoadedExperiment = experiment;
 				}
 				else
 				{
@@ -226,8 +207,8 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			@Override
 		    public void execute()
 			{
-				getEngine().resetEnvironment();
-				getUndoRedoManager().clear();
+				getEngine().destroyGraphAndClearStage();
+				getHistoryManager().clear();
 		    }
 		});
 	}
@@ -243,17 +224,16 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				getEngine().reloadVisualStyle();
 		    }
 		});
-		
 	}
 	
 	@Override
-	public void request_sendExperimentToSave(ExperimentMetadata metadata)
+	public void request_sendExperimentToSave()
 	{
-		response_sendExperimentToSave(metadata, getEngine().toIntermediateFormat());
+		response_sendExperimentToSave(getEngine().toIntermediateFormat());
 	}
 	
 	// *****************************************************************************************************
-	// COMMANDS TO SERVER
+	// COMMANDS TO SERVER - SIMPLE FORWARDING
 	
 	@Override
 	public void command_setExperimentModified(boolean modified)
@@ -268,50 +248,63 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public void response_reloadVisualStyle()
+	public void command_alterClickMode(KineticComponentClickMode newClickMode)
 	{
-		getServerRPC().response_reloadVisualStyle();
+		getServerRPC().command_alterClickMode(newClickMode);
 	}
 	
 	@Override
-	public void response_sendExperimentToSave(ExperimentMetadata metadata, Experiment experiment)
+	public void command_openOptionsManager(String[] selectedBoxesAgentIDs)
 	{
-		getServerRPC().response_sendExperimentToSave(metadata, experiment);
-		getUndoRedoManager().clear();
+		getServerRPC().command_openOptionsManager(selectedBoxesAgentIDs);
 	}
 	
 	@Override
-	public void command_alterClickModeNotification(KineticComponentClickMode newClickMode)
+	public void response_sendExperimentToSave(ExperimentGraph experiment)
 	{
-		getServerRPC().command_alterClickModeNotification(newClickMode);
+		getServerRPC().response_sendExperimentToSave(experiment);
+		
+		// TODO: only do this if saving the experiment is successful?
+		getHistoryManager().clear();
 	}
 	
 	// *****************************************************************************************************
-	// OTHER PUBLIC INTERFACE
+	// KINETIC CONTEXT INTERFACE
 	
-	public Element getKineticEnvParentElement()
+	@Override
+	public Element getStageDOMElement()
 	{
 		return getElement();
 	}
 	
+	@Override
 	public KineticEngine getEngine()
 	{
-		return kineticState;
+		return state.getEngine();
 	}
 	
+	@Override
+	public KineticUndoRedoManager getHistoryManager()
+	{
+		return state.getHistoryManager();
+	}
+
+	@Override
 	public KineticShapeCreator getShapeCreator()
 	{
-		return kineticCreator;
+		return state.getShapeCreator();
 	}
 	
-	public KineticUndoRedoManager getUndoRedoManager()
+	@Override
+	public KineticComponentClickMode getClickMode()
 	{
-		return undoRedoManager;
+		return connector.getState().clickMode;
 	}
 	
-	public KineticComponentState getSharedState()
+	@Override
+	public boolean openOptionsManagerOnSelectionChange()
 	{
-		return connector.getState();
+		return connector.getState().openOptionsOnSelection;
 	}
 	
 	// *****************************************************************************************************

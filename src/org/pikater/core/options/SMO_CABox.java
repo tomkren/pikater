@@ -266,7 +266,6 @@ public class SMO_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("SMO");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("SMO Method");
 
 		agentInfo.addOption(optionC);

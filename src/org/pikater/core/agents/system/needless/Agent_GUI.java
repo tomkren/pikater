@@ -48,7 +48,7 @@ import org.pikater.core.ontology.subtrees.option.Interval;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.result.Results;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Id;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -1598,7 +1598,7 @@ public abstract class Agent_GUI extends PikaterAgent {
 		}
 	}
 
-	protected void loadAgent(String _filename, Execute action, byte[] object)
+	protected void loadAgent(String _filename, ExecuteTask action, byte[] object)
 			throws FIPAException {
 		LoadAgent _loadAgent = new LoadAgent();
 

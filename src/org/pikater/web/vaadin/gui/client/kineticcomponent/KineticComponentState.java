@@ -18,6 +18,31 @@ public class KineticComponentState extends AbstractComponentState
 	 * http://www.gwtproject.org/doc/latest/DevGuideServerCommunication.html#DevGuideSerializableTypes
 	 */
 	
-	public boolean serverThinksThatSchemaIsModified = false;
-	public KineticComponentClickMode clickMode = KineticComponentClickMode.SELECTION;
+	/*
+	 * Toolbar settings.
+	 */
+	public KineticComponentClickMode clickMode;
+	public boolean openOptionsOnSelection;
+	
+	/*
+	 * Other programmatic fields shared. 
+	 */
+	public boolean serverThinksThatSchemaIsModified;
+	
+	public KineticComponentState()
+	{
+		this.clickMode = getDefaultClickMode();
+		this.openOptionsOnSelection = getDefaultOptionsOpenedOnSelection();
+		this.serverThinksThatSchemaIsModified = false;
+	}
+	
+	public static KineticComponentClickMode getDefaultClickMode()
+	{
+		return KineticComponentClickMode.SELECTION;
+	}
+	
+	public static boolean getDefaultOptionsOpenedOnSelection()
+	{
+		return true;
+	}
 }

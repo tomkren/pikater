@@ -156,7 +156,6 @@ public class EASearch_SearchBox {
 		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("EASearch");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Searcher using Evolution algorithm");
 
 		agentInfo.addOption(optionE);

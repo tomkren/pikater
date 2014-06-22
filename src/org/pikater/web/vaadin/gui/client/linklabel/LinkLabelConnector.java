@@ -36,10 +36,13 @@ public class LinkLabelConnector extends AbstractComponentConnector
 		{
 			public void onClick(ClickEvent event)
 			{
-				rpc.clicked(MouseEventDetailsBuilder.buildMouseEventDetails(
-						event.getNativeEvent(),
-						getWidget().getElement()
-				));
+				if(isEnabled())
+				{
+					rpc.clicked(MouseEventDetailsBuilder.buildMouseEventDetails(
+							event.getNativeEvent(),
+							getWidget().getElement()
+					));
+				}
 			}
 		});
 	}

@@ -1,30 +1,35 @@
 package org.pikater.shared.experiment.universalformat;
 
-public class UniversalConnector {
-	
-    private UniversalElement universalDataProvider;
+public class UniversalConnector
+{
     private String inputDataType;
 	private String outputDataType;
-
-    public String getInputDataType() {
+	private UniversalElement fromElement;
+	
+	public String getInputDataType()
+	{
 		return inputDataType;
 	}
-	public void setInputDataType(String inputDataType) {
+	public void setInputDataType(String inputDataType)
+	{
 		this.inputDataType = inputDataType;
 	}
-
-	public String getOutputDataType() {
+	
+	public String getOutputDataType()
+	{
 		return outputDataType;
 	}
-	public void setOutputDataType(String dataType) {
-		this.outputDataType = dataType;
+	public void setOutputDataType(String outputDataType)
+	{
+		this.outputDataType = outputDataType;
 	}
-
-	public UniversalElement getUniversalDataProvider() {
-		return universalDataProvider;
+	
+	public UniversalElement getFromElement()
+	{
+		return fromElement;
 	}
-	public void setUniversalDataProvider(UniversalElement universalDataProvider) {
-		this.universalDataProvider = universalDataProvider;
+	public void setFromElement(UniversalElement fromElement)
+	{
+		this.fromElement = fromElement;
 	}
-
 }

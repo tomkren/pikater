@@ -13,7 +13,6 @@ public class NBTree_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("NBTree");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("NBTree Method");
 
 

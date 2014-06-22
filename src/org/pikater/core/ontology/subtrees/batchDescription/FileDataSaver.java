@@ -45,13 +45,14 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 	    		dataSource.exportUniversalConnector(uModel);
 	    universalDataSource.setInputDataType("dataSource");
 	    
-		UniversalOntology element = new UniversalOntology();
-		element.setType(this.getClass());
-		element.setOptions(options);
-		element.addInputSlot(universalDataSource);
+		UniversalOntology ontologyInfo = new UniversalOntology();
+		ontologyInfo.setType(this.getClass());
+		ontologyInfo.setOptions(options);
+		ontologyInfo.addInputSlot(universalDataSource);
 
-		UniversalElement wrapper = new UniversalElement(uModel);
-		wrapper.setElement(element);
+		UniversalElement wrapper = new UniversalElement();
+		wrapper.setOntologyInfo(ontologyInfo);
+		uModel.addElement(wrapper);
 		
 		return wrapper;
 	}

@@ -113,7 +113,7 @@ public class JPAUser extends JPAAbstractEntity{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getPriorityMax() {
+	public Integer getPriorityMax() { // changed return type to allow comparisons without boxing
 		return priorityMax;
 	}
 	public void setPriorityMax(int priorityMax) {

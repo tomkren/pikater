@@ -7,7 +7,6 @@ import java.util.Map;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.ExecuteTaskBehaviour;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
@@ -15,6 +14,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.option.Option;
@@ -22,7 +22,7 @@ import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 /**
@@ -63,7 +63,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
     }
 		
 	private ACLMessage prepareRequest(){
-		Execute ex = new Execute();
+		ExecuteTask ex = new ExecuteTask();
 		Task task = getTaskFromNode();
 				
 		ex.setTask(task);							

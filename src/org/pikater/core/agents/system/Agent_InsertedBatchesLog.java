@@ -23,7 +23,6 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
-import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
@@ -31,8 +30,6 @@ import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
-import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 
 public class Agent_InsertedBatchesLog extends PikaterAgent {
 	
@@ -55,8 +52,8 @@ public class Agent_InsertedBatchesLog extends PikaterAgent {
 		initDefault();
 		registerWithDF(AgentNames.INSERTED_BATCHES_LOG);
 
-		RecieveExperiment recieveExp =
-			new RecieveExperiment(this, getCodec());
+		RecieveBatch recieveExp =
+			new RecieveBatch(this, getCodec());
 		addBehaviour(recieveExp);
 	}
 	
@@ -131,7 +128,7 @@ public class Agent_InsertedBatchesLog extends PikaterAgent {
 }
 
 
-class RecieveExperiment extends CyclicBehaviour {
+class RecieveBatch extends CyclicBehaviour {
 
 	/**
 	 * 
@@ -141,7 +138,7 @@ class RecieveExperiment extends CyclicBehaviour {
 	private Agent_InsertedBatchesLog agent = null;
 	private Codec codec = null;
 	
-	public RecieveExperiment(Agent_InsertedBatchesLog agent, Codec codec) {
+	public RecieveBatch(Agent_InsertedBatchesLog agent, Codec codec) {
 		this.agent = agent;
 		this.codec = codec;
 	}
@@ -152,7 +149,7 @@ class RecieveExperiment extends CyclicBehaviour {
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		ACLMessage request= this.agent.receive(reguestTemplate);
 		
-		if (request != null) {
+		if (request != null && agent.getContentManager() != null) {
 			
 			ContentElement ce = null;
 			try {
@@ -203,9 +200,9 @@ class RecieveExperiment extends CyclicBehaviour {
             msg.setOntology(ontology.getName());
             try {
     			agent.getContentManager().fillContent(msg, new Action(receiver, exeExperiment));
-    			
-    			ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg, 10000);
-    			System.out.println("Reply: " + replyOK.getContent());
+    			agent.send(msg);
+    			//ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg); //, 1000);
+    		    //System.out.println("Reply: " + replyOK.getContent());
     			
     		} catch (CodecException e) {
     			// TODO Auto-generated catch block
@@ -213,9 +210,6 @@ class RecieveExperiment extends CyclicBehaviour {
     		} catch (OntologyException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
-    		} catch (FIPAException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 
 		}

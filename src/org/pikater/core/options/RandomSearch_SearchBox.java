@@ -55,7 +55,6 @@ public class RandomSearch_SearchBox {
 		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("Random-Searcher");
-		agentInfo.setPicture("picture1.jpg");
 		agentInfo.setDescription("Selects and provides random values for its output parameters.");
 
 		agentInfo.addOption(optionE);

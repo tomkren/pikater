@@ -19,9 +19,10 @@ import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
 import com.vaadin.ui.Button;
 
-@SuppressWarnings("serial")
 public class WelcomeTourWizard extends Wizard
 {
+	private static final long serialVersionUID = 8369742100965859153L;
+	
 	// fields for child steps
 	private final Map<String, TopologyModel> parsedModels;
 	private Collection<RemoteServerInfoItem> wrappedModels;

@@ -55,7 +55,7 @@ public class DataSourceDescription implements Concept {
     	UniversalConnector connector =
     			new UniversalConnector();
     	connector.setOutputDataType(dataType);
-    	connector.setUniversalDataProvider(universalDataProvider);
+    	connector.setFromElement(universalDataProvider);
     	
     	return connector;
     }

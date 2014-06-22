@@ -40,6 +40,6 @@ public abstract class AbstractBox
 	
 	public boolean isLeaf()
 	{
-		return this.type != BoxType.WRAPPER;
+		return this.type != BoxType.MULTIBOX;
 	}
 }

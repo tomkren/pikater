@@ -160,14 +160,14 @@ public class TabSheet extends CustomComponent
 				}
 				else // if not, give the user a chance to cancel the action
 				{
-					MyDialogs.confirm("Really close this tab?", "The content will be lost, if unsaved.", new MyDialogs.DialogResultHandler()
+					MyDialogs.confirm("Really close this tab?", "The content will be lost, if unsaved.", new MyDialogs.IDialogResultHandler()
 					{
 						/*
 						 * If the user confirms, do the following: 
 						 */
 						
 						@Override
-						public boolean handleResult()
+						public boolean handleResult(Object[] args)
 						{
 							closeTab();
 							return true;

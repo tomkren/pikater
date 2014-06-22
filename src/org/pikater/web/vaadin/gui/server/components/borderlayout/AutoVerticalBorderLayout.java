@@ -4,33 +4,28 @@ import org.pikater.web.vaadin.gui.client.extensions.AutoVerticalBorderLayoutExte
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.Label;
 
 @StyleSheet("autoVerticalBorderLayout.css")
-public class AutoVerticalBorderLayout extends CustomComponent implements AutoVerticalBorderLayoutExtensionClientRpc
+public class AutoVerticalBorderLayout extends CustomLayout implements AutoVerticalBorderLayoutExtensionClientRpc
 {
 	private static final long serialVersionUID = 2971241997257911489L;
 	
-	private final CustomLayout innerLayout;
 	private final AutoVerticalBorderLayoutExtension extension;
 	
 	public AutoVerticalBorderLayout()
 	{
-		super();
+		super("autoVerticalBorderLayout");
 		
-		this.innerLayout = new CustomLayout("autoVerticalBorderLayout");
-		this.innerLayout.setSizeFull();
 		this.extension = new AutoVerticalBorderLayoutExtension();
-		this.extension.extend(innerLayout);
-		
-		setCompositionRoot(this.innerLayout);
+		this.extension.extend(this);
 	}
 	
 	public void setComponent(Border border, AbstractComponent component)
@@ -39,12 +34,12 @@ public class AutoVerticalBorderLayout extends CustomComponent implements AutoVer
 		{
 			throw new NullPointerException("The new component can not be null.");
 		}
-		innerLayout.addComponent(component, border.name());
+		addComponent(component, border.name());
 	}
 	
 	public Component getComponent(Border border)
 	{
-		return innerLayout.getComponent(border.name());
+		return getComponent(border.name());
 	}
 	
 	public void fillWithTestPanels()
@@ -63,11 +58,35 @@ public class AutoVerticalBorderLayout extends CustomComponent implements AutoVer
 	{
 		extension.getClientRPC().setRowHeight(row, dimMode);
 	}
+	
+	@Override
+	public void setColumnWidth(final Column designatedColumn, double value, DimensionUnit unit)
+	{
+		extension.getClientRPC().setColumnWidth(designatedColumn, value, unit);
+	}
+	
+	@Override
+	public void addRowStyleName(Row row, String styleName)
+	{
+		extension.getClientRPC().addRowStyleName(row, styleName);
+	}
 
 	@Override
-	public void setColumnWidth(Column row, DimensionMode dimMode)
+	public void removeRowStyleName(Row row, String styleName)
 	{
-		extension.getClientRPC().setColumnWidth(row, dimMode);
+		extension.getClientRPC().removeRowStyleName(row, styleName);
+	}
+	
+	@Override
+	public void addColumnStyleName(Column column, String styleName)
+	{
+		extension.getClientRPC().addColumnStyleName(column, styleName);
+	}
+
+	@Override
+	public void removeColumnStyleName(Column column, String styleName)
+	{
+		extension.getClientRPC().removeColumnStyleName(column, styleName);
 	}
 
 	@Override

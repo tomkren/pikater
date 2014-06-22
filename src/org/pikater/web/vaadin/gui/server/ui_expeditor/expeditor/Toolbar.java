@@ -1,13 +1,22 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
-import org.pikater.shared.experiment.webformat.ExperimentMetadata;
+import org.pikater.shared.XStreamHelper;
+import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -49,10 +58,10 @@ public class Toolbar extends VerticalLayout
 	{
 		MenuBar menu = new MenuBar();
 		menu.setSizeFull();
-		menu.setStyleName("experiment-editor-menu");
+		menu.setStyleName("expEditor-menu");
 		
 		MenuItem experimentMenuItem = menu.addItem("Experiment", null);
-		experimentMenuItem.setStyleName("top-level-menu-item");
+		experimentMenuItem.setStyleName("expEditor-menu-topLevelItem");
 		experimentMenuItem.addItem("Save active tab...", new Command()
 		{
 			private static final long serialVersionUID = -8383604249370403859L;
@@ -65,16 +74,7 @@ public class Toolbar extends VerticalLayout
 					@Override
 					public void doAction(KineticComponent activeComponent)
 					{
-						if(activeComponent.isContentModified())
-						{
-							// TODO: dialog and metadata
-							ExperimentMetadata metadata = new ExperimentMetadata("Test");
-							activeComponent.getClientRPC().request_sendExperimentToSave(metadata);
-						}
-						else
-						{
-							MyNotifications.showWarning("Nothing to save", "The active tab's content is not modified");
-						}
+						saveExperimentInActiveTab(activeComponent);
 					}
 				}, true);
 			}
@@ -86,14 +86,12 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				// TODO: dialog and experiment chooser
-				// parentEditor.getActiveKineticComponent().getClientRPC().command_receiveExperimentToLoad(experiment);
-				MyNotifications.showWarning(null, "Not implemented yet.");
+				loadArbitraryExperimentIntoANewTab();
 			}
 		});
 		
 		MenuItem settingsMenuItem = menu.addItem("Settings", null);
-		settingsMenuItem.setStyleName("top-level-menu-item");
+		settingsMenuItem.setStyleName("expEditor-menu-topLevelItem");
 		MenuItem shapeSizeMenuItem = settingsMenuItem.addItem("Shape size (%)", null);
 		for(int percent = 0; percent <= 100; percent += 25)
 		{
@@ -135,7 +133,7 @@ public class Toolbar extends VerticalLayout
 		});
 		
 		MenuItem viewMenuItem = menu.addItem("View", null);
-		viewMenuItem.setStyleName("top-level-menu-item");
+		viewMenuItem.setStyleName("expEditor-menu-topLevelItem");
 		viewMenuItem.addItem("Go full screen (only FF, Chrome & Opera)", new Command()
 		{
 			private static final long serialVersionUID = 4109313735302030716L;
@@ -147,11 +145,25 @@ public class Toolbar extends VerticalLayout
 				MyNotifications.showWarning(null, "Not implemented yet.");
 			}
 		});
+		viewMenuItem.addSeparator();
+		for(final ExpEditorToolbox toolbox : ExpEditorToolbox.values())
+		{
+			viewMenuItem.addItem(String.format("Open %s", toolbox.toDisplayName().toLowerCase()), new Command()
+			{
+				private static final long serialVersionUID = -3102966401422712532L;
+
+				@Override
+				public void menuSelected(MenuItem selectedItem)
+				{
+					parentEditor.openToolbox(toolbox);
+				}
+			});
+		}
 		
 		if(debugMode)
 		{
 			MenuItem debugMenuItem = menu.addItem("Debug", null);
-			debugMenuItem.setStyleName("top-level-menu-item");
+			debugMenuItem.setStyleName("expEditor-menu-topLevelItem");
 			debugMenuItem.addItem("Show debug window", new Command()
 			{
 				private static final long serialVersionUID = 4109313735302030716L;
@@ -196,14 +208,36 @@ public class Toolbar extends VerticalLayout
 				}, true);
 			}
 		});
+		clickModeCB.setEnabled(false);
+		
+		CheckBox chb_openOptions = new CheckBox("Open options on method select", KineticComponentState.getDefaultOptionsOpenedOnSelection());
+		chb_openOptions.addValueChangeListener(new ValueChangeListener()
+		{
+			private static final long serialVersionUID = -7751913095102968151L;
+
+			@Override
+			public void valueChange(final ValueChangeEvent event)
+			{
+				executeForNonNullActiveTab(new ActionForActiveKineticComponent()
+				{
+					@Override
+					public void doAction(KineticComponent activeComponent)
+					{
+						activeComponent.getState().openOptionsOnSelection = (Boolean) event.getProperty().getValue();
+					}
+				}, true);
+			}
+		});
 		
 		HorizontalLayout toolbarLayout = new HorizontalLayout();
-		toolbarLayout.setStyleName("experiment-editor-toolbar");
+		toolbarLayout.setStyleName("expEditor-toolbar");
 		toolbarLayout.setCaption("Instance specific settings and actions:");
 		toolbarLayout.setSpacing(true);
 		toolbarLayout.addComponent(clickModeLbl);
 		toolbarLayout.addComponent(clickModeCB);
 		toolbarLayout.setComponentAlignment(clickModeLbl, Alignment.MIDDLE_LEFT);
+		toolbarLayout.addComponent(chb_openOptions);
+		toolbarLayout.setComponentAlignment(chb_openOptions, Alignment.MIDDLE_LEFT);
 		
 		addComponent(toolbarLayout);
 	}
@@ -216,6 +250,11 @@ public class Toolbar extends VerticalLayout
 		if(newActiveTabContent != null)
 		{
 			clickModeCB.select(newActiveTabContent.getState().clickMode.name());
+			clickModeCB.setEnabled(true);
+		}
+		else
+		{
+			clickModeCB.setEnabled(false);
 		}
 	}
 	
@@ -225,20 +264,7 @@ public class Toolbar extends VerticalLayout
 	}
 	
 	//---------------------------------------------------------------
-	// PRIVATE METHODS
-	
-	private void setKineticBoxSize(int width)
-	{
-		parentEditor.getExtension().getClientRPC().command_setBoxSize(width);
-		executeForNonNullActiveTab(new ActionForActiveKineticComponent()
-		{
-			@Override
-			public void doAction(KineticComponent activeComponent)
-			{
-				activeComponent.getClientRPC().request_reloadVisualStyle();
-			}
-		}, false);
-	}
+	// MISCELLANEOUS PRIVATE INTERFACE
 	
 	private void executeForNonNullActiveTab(ActionForActiveKineticComponent action, boolean displayWarningIfNull)
 	{
@@ -260,6 +286,76 @@ public class Toolbar extends VerticalLayout
 	{
 		void doAction(KineticComponent activeComponent);
 	}
+	
+	//---------------------------------------------------------------
+	// UNTRIVIAL MENU ACTIONS (AFTER CHECKS)
+	
+	private void saveExperimentInActiveTab(KineticComponent activeComponent)
+	{
+		if(activeComponent.isContentModified())
+		{
+			try
+			{
+				final UniversalComputationDescription uniFormat = activeComponent.exportExperiment();
+				MyDialogs.saveExperimentDialog(new MyDialogs.IDialogResultHandler()
+				{
+					@Override
+					public boolean handleResult(Object[] args)
+					{
+						String name = (String) args[0];
+						Integer userAssignedPriority = (Integer) args[1];
+						Integer computationEstimateInHours = (Integer) args[2];
+						Boolean sendEmailWhenFinished = (Boolean) args[3];
+						String note = (String) args[4];
+						
+						String exportedExperiment = XStreamHelper.serializeToXML(uniFormat, 
+								XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
+						
+						// TODO: finish
+						
+						JPABatch newExpEntity = new JPABatch(
+								name,
+								note,
+								exportedExperiment,
+								ManageAuth.getUserEntity(VaadinSession.getCurrent()),
+								userAssignedPriority
+						);
+						DAOs.batchDAO.storeEntity(newExpEntity);
+						return true;
+					}
+				});
+			}
+			catch (Throwable t)
+			{
+				MyNotifications.showError(null, "Experiment could not be saved. Please, contact the administrators.");
+			}
+		}
+		else
+		{
+			MyNotifications.showWarning("Nothing to save", "The active tab's content is not modified.");
+		}
+	}
+	
+	private void loadArbitraryExperimentIntoANewTab()
+	{
+		// TODO: dialog and experiment chooser
+		// parentEditor.loadExperimentIntoNewTab(tabCaption, experiment);
+	}
+	
+	private void setKineticBoxSize(int width)
+	{
+		parentEditor.getExtension().getClientRPC().command_setBoxSize(width);
+		executeForNonNullActiveTab(new ActionForActiveKineticComponent()
+		{
+			@Override
+			public void doAction(KineticComponent activeComponent)
+			{
+				activeComponent.reloadVisualStyle();
+			}
+		}, false);
+	}
+	
+	
 	
 	/*
 	private void build(boolean debugMode)

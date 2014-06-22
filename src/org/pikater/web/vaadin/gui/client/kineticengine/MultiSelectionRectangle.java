@@ -13,29 +13,30 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.IShapeWrapper;
 public class MultiSelectionRectangle implements IShapeWrapper
 {
 	/**
-	 * The point, where the user started his selection with a mouse down event.
-	 */
-	public Vector2d originalMultiSelectionRectanglePosition;
-	
-	/**
-	 * The latest mouse position.
-	 */
-	private Vector2d oppositeCorner;
-	
-	/**
 	 * The kinetic shape to draw the rectangle.
 	 */
 	private final PathSVG path;
 	
+	/**
+	 * The point, where the user started his selection with a mouse down event.
+	 */
+	private Vector2d originalMousePosition;
+	
+	/**
+	 * The latest mouse position.
+	 */
+	private Vector2d currentMousePosition;
+	
 	public MultiSelectionRectangle()
 	{
 		super();
-		this.originalMultiSelectionRectanglePosition = Vector2d.origin;
 
 		this.path = Kinetic.createPathSVG(Vector2d.origin, "");
 		this.path.setStroke(Colour.red);
 		this.path.setListening(false);
 		// TODO: this.path.setLineStyle(LineStyle.DASHED);
+		
+		reset();
 	}
 	
 	// **********************************************************************************************
@@ -50,24 +51,35 @@ public class MultiSelectionRectangle implements IShapeWrapper
 	// **********************************************************************************************
 	// PUBLIC INTERFACE
 	
+	public Vector2d getOriginalMousePosition()
+	{
+		return this.originalMousePosition;
+	}
+	
+	public void setOriginalMousePosition(Vector2d position)
+	{
+		this.originalMousePosition = position;
+		this.currentMousePosition = position;
+	}
+	
 	public void updatePath(Vector2d left, Vector2d up, Vector2d right)
 	{
-		oppositeCorner = up;
-		this.path.setData(new Path().moveTo(originalMultiSelectionRectanglePosition).lineTo(left).lineTo(up).lineTo(right).lineTo(originalMultiSelectionRectanglePosition).toSVGPath());
+		this.currentMousePosition = up;
+		this.path.setData(new Path().moveTo(originalMousePosition).lineTo(left).lineTo(up).lineTo(right).lineTo(originalMousePosition).toSVGPath());
 	}
 	
 	public Box2d getPosAndSize()
 	{
 		Vector2d pos, size;
-		if(originalMultiSelectionRectanglePosition.x < oppositeCorner.x)
+		if(originalMousePosition.x < currentMousePosition.x)
 		{
-			pos = originalMultiSelectionRectanglePosition;
-			size = oppositeCorner.sub(originalMultiSelectionRectanglePosition);
+			pos = originalMousePosition;
+			size = currentMousePosition.sub(originalMousePosition);
 		}
 		else
 		{
-			pos = oppositeCorner;
-			size = originalMultiSelectionRectanglePosition.sub(oppositeCorner);
+			pos = currentMousePosition;
+			size = originalMousePosition.sub(currentMousePosition);
 		}
 		if(size.x < 0)
 		{
@@ -80,5 +92,11 @@ public class MultiSelectionRectangle implements IShapeWrapper
 			size.y = Math.abs(size.y);
 		}
 		return new Box2d(pos, size);
+	}
+	
+	public void reset()
+	{
+		this.originalMousePosition = Vector2d.origin;
+		this.currentMousePosition = Vector2d.origin;
 	}
 }

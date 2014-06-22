@@ -1,7 +1,5 @@
 package org.pikater.web.vaadin.gui.client.gwtmanagers;
 
-import org.pikater.shared.experiment.webformat.BoxInfoCollection;
-
 import com.google.gwt.user.client.Window;
 
 import net.edzard.kinetic.Vector2d;
@@ -9,34 +7,12 @@ import net.edzard.kinetic.Vector2d;
 public class GWTKineticSettings
 {
 	//----------------------------------------------------------------------------
-	// BOX DEFINITIONS
+	// BOX SIZE
 	
-	private static BoxInfoCollection boxDefinitions = null;
-	
-	public static BoxInfoCollection getBoxDefinitions()
-	{
-		if(boxDefinitions == null)
-		{
-			throw new NullPointerException("Box definitions have not yet been globally set: they are null.");
-		}
-		else
-		{
-			return boxDefinitions;
-		}
-	}
-	
-	public static void setBoxDefinitions(BoxInfoCollection boxDefinitions)
-	{
-		GWTKineticSettings.boxDefinitions = boxDefinitions;
-	}
-	
-	//----------------------------------------------------------------------------
-	// PUBLIC GETTERS
-	
-	private static final double minWidth = 100;
-	private static final double maxWidth = 200;
+	private static final double minWidth = 125;
+	private static final double maxWidth = 225;
 	private static final double difference = maxWidth - minWidth;
-	private static Vector2d currentSize = getSizeFromWidth(maxWidth); // default
+	private static Vector2d currentSize = getSizeFromWidth(175); // default
 	
 	public static Vector2d getCurrentBoxSize()
 	{

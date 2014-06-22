@@ -1,8 +1,9 @@
 package org.pikater.core.ontology.subtrees.batch;
 
-import jade.content.Concept;
+import jade.content.AgentAction;
 
-public class NewBatch implements Concept {
+
+public class NewBatch implements AgentAction {
 
 	/**
 	 * 

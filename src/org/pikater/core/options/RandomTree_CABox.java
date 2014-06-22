@@ -82,7 +82,6 @@ public class RandomTree_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("RandomTree");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Random Tree Method");
 
 		agentInfo.addOption(optionK);

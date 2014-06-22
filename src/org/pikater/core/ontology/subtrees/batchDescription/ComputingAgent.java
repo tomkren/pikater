@@ -19,7 +19,7 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 	private static final long serialVersionUID = 2127755171666013125L;
 
 	private String agentType;
-	private IModel model;
+	private IModelDescription model;
     private List<Option> options;
 
 	private DataSourceDescription trainingData;
@@ -33,10 +33,10 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 		this.agentType = agentType;
 	}
 
-	public IModel getModel() {
+	public IModelDescription getModel() {
 		return model;
 	}
-	public void setModel(IModel model) {
+	public void setModel(IModelDescription model) {
 		this.model = model;
 	}    
 
@@ -86,14 +86,14 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 	    		trainingData.exportUniversalConnector(uModel);
 	    universalTrainingData.setInputDataType("trainingData");
 
-		UniversalOntology element = new UniversalOntology();
-		element.setType(this.getClass());
-		element.setOptions(options);
-		element.addInputSlot(universalTrainingData);
+		UniversalOntology ontologyInfo = new UniversalOntology();
+		ontologyInfo.setType(this.getClass());
+		ontologyInfo.setOptions(options);
+		ontologyInfo.addInputSlot(universalTrainingData);
 		
-		UniversalElement wrapper =
-				new UniversalElement(uModel);
-		wrapper.setElement(element);
+		UniversalElement wrapper = new UniversalElement();
+		wrapper.setOntologyInfo(ontologyInfo);
+		uModel.addElement(wrapper);
 		
 		return wrapper;
 	}

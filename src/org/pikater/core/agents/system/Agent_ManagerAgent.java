@@ -91,14 +91,14 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				try {
 					Action a = (Action) getContentManager().extractContent(request);
                     if (a.getAction() instanceof LoadAgent) {
-                        return responder.RespondToLoadAction(request);
+                        return responder.respondToLoadAction(request);
 					}
 					else if (a.getAction() instanceof SaveAgent) {
 						// write it into database
-                        return responder.RespondToSaveAction(request);
+                        return responder.respondToSaveAction(request);
 					}
 				 	else if (a.getAction() instanceof CreateAgent){
-                        return responder.RespondToCreateAction(request);
+                        return responder.respondToCreateAction(request);
 					}
 				} catch (OntologyException e) {
 					e.printStackTrace();

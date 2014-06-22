@@ -13,13 +13,6 @@
   /********************************/
   
   /* Layout styles */
-  .topLevelElement
-  {
-  	width: 1200px;
-  	margin-left: auto;
-  	margin-right: auto;
-  }
-  
   .pikaterDialogContent
   {
   	padding-top: 5px;
@@ -67,6 +60,14 @@
   .maxHeight
   {
   	height: 100%;
+  }
+  .autoWidth
+  {
+  	width: auto;
+  }
+  .autoHeight
+  {
+  	height: auto;
   }
   .displayBorder
   {

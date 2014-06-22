@@ -65,18 +65,23 @@ public class JPABatch extends JPAAbstractEntity{
 	public JPABatch(){}
 	
 	/**
-	 * Constructor for batch with default parameters and specified name
-	 * @param owner The owner's JPAUser object
-	 * @param name The batch's name
+	 * A constructor to use from the GUI.
+	 * @param name
+	 * @param note
+	 * @param xml
+	 * @param owner
 	 */
-	public JPABatch(JPAUser owner,String name){
+	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority)
+	{
+		this.name=name;
+		this.note = note;
+		this.XML = xml;
+		this.owner=owner;
+		this.priority = userAssignedPriority;
+		
+		this.totalPriority=99; // TODO: this is probably just for tests
 		this.created=new Date();
 		this.status=JPABatchStatus.CREATED;
-		//probably this is for testing purposes only 
-		this.priority=owner.getPriorityMax();
-		this.totalPriority=99;
-		this.name=name;
-		this.owner=owner;
 	}
 
 	public void setName(String name){

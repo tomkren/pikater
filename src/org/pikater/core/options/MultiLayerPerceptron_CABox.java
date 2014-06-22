@@ -288,7 +288,6 @@ public class MultiLayerPerceptron_CABox {
 		agentInfo.setOntologyClass(Agent_WekaPerceptronCA.class);
 	
 		agentInfo.setName("MultiLayerPerceptron");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("Multi-layer perceptron method");
 
 		agentInfo.addOption(optionC);

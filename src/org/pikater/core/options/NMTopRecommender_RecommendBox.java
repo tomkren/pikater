@@ -13,7 +13,6 @@ public class NMTopRecommender_RecommendBox {
 		agentInfo.setOntologyClass(Recommend.class);
 	
 		agentInfo.setName("NMTop Recommend");
-		agentInfo.setPicture("picture0.jpg");
 		agentInfo.setDescription("NMTop Recommend");
 
 		//Slot Definition

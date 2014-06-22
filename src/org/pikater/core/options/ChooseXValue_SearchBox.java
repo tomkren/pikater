@@ -37,7 +37,6 @@ public class ChooseXValue_SearchBox {
 		agentInfo.setOntologyClass(Search.class);
 	
 		agentInfo.setName("Choose X Values Agent");
-		agentInfo.setPicture("picture0.jpg");
 		agentInfo.setDescription("Search which Choose X Values");
 
 		agentInfo.addOption(optionN);

@@ -57,7 +57,6 @@ public class NaiveBayes_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("NaiveBayes");
-		agentInfo.setPicture("picture5.jpg");
 		agentInfo.setDescription("Naive Bayes Method");
 
 		agentInfo.addOption(optionK);

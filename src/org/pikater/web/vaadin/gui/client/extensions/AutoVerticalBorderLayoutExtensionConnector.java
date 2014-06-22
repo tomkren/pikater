@@ -4,6 +4,7 @@ import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBor
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
 import com.google.gwt.core.client.Scheduler;
@@ -52,7 +53,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 		registerRpc(AutoVerticalBorderLayoutExtensionClientRpc.class, new AutoVerticalBorderLayoutExtensionClientRpc()
 		{
 			private static final long serialVersionUID = 8760526187099873218L;
-
+			
 			@Override
 			public void setRowHeight(final Row designatedRow, final DimensionMode dimMode)
 			{
@@ -76,31 +77,72 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					}
 				});
 			}
-
+			
 			@Override
-			public void setColumnWidth(final Column designatedColumn, final DimensionMode dimMode)
+			public void setColumnWidth(final Column designatedColumn, final double value, final DimensionUnit unit)
 			{
 				Scheduler.get().scheduleDeferred(new ScheduledCommand()
 				{
 					@Override
 				    public void execute()
 					{
-						if(dimMode == DimensionMode.MAX)
-						{
-							// set everything else to auto prior to setting the desired element to max
-							for(Column column : Column.values())
-							{
-								if(column != designatedColumn)
-								{
-									getElementByColumn(column).getStyle().setProperty("width", DimensionMode.AUTO.toString());
-								}
-							}
-						}
-						getElementByColumn(designatedColumn).getStyle().setProperty("width", dimMode.toString());
+						getElementByColumn(designatedColumn).getStyle().setWidth(value, unit.toGWTUnit());
 					}
 				});
 			}
 			
+			@Override
+			public void addRowStyleName(final Row row, final String styleName)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						getElementByRow(row).addClassName(styleName);
+					}
+				});
+			}
+
+			@Override
+			public void removeRowStyleName(final Row row, final String styleName)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						getElementByRow(row).removeClassName(styleName);
+					}
+				});
+			}
+
+			@Override
+			public void addColumnStyleName(final Column column, final String styleName)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						getElementByColumn(column).addClassName(styleName);
+					}
+				});
+			}
+
+			@Override
+			public void removeColumnStyleName(final Column column, final String styleName)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						getElementByColumn(column).removeClassName(styleName);
+					}
+				});
+			}
+
 			@Override
 			public void setRowVisible(final Row row, final boolean visible)
 			{
@@ -281,7 +323,13 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 	
 	private void setVisibility(Style style, boolean visible)
 	{
-		style.setDisplay(visible ? Display.INLINE_BLOCK : Display.NONE);
-		// style.setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+		if(visible)
+		{
+			style.clearProperty("display");
+		}
+		else
+		{
+			style.setDisplay(Display.NONE);
+		}
 	}
 }

@@ -173,7 +173,6 @@ public class PART_CABox {
 		agentInfo.setOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("PART");
-		agentInfo.setPicture("picture3.jpg");
 		agentInfo.setDescription("PART Method");
 
 		agentInfo.addOption(optionC);

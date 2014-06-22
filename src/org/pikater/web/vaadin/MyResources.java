@@ -35,10 +35,21 @@ public class MyResources
 	/*
 	 * Notification icons.
 	 */
-	public static final String relPath_IMG_notificationInfoIcon = "images/Win8MetroIcons/icon-info-48x48.png";
-	public static final String relPath_IMG_notificationSuccessIcon = "images/Win8MetroIcons/icon-success-48x48.png";
-	public static final String relPath_IMG_notificationWarnIcon = "images/Win8MetroIcons/icon-warn-48x48.png";
-	public static final String relPath_IMG_notificationErrorIcon = "images/Win8MetroIcons/icon-error-48x48.png";
+	public static final String relPath_IMG_notificationInfoIcon = "images/win8metroicons/notifications/icon-info-48x48.png";
+	public static final String relPath_IMG_notificationSuccessIcon = "images/win8metroicons/notifications/icon-success-48x48.png";
+	public static final String relPath_IMG_notificationWarnIcon = "images/win8metroicons/notifications/icon-warn-48x48.png";
+	public static final String relPath_IMG_notificationErrorIcon = "images/win8metroicons/notifications/icon-error-48x48.png";
+	
+	/*
+	 * Boxes.
+	 */
+	public static final String relPath_IMG_boxInputIcon = "images/win8metroicons/boxes/icon-input-48x48.png";
+	public static final String relPath_IMG_boxSearcherIcon = "images/win8metroicons/boxes/icon-searcher-48x48.png";
+	public static final String relPath_IMG_boxComputingIcon = "images/win8metroicons/boxes/icon-computing-48x48.png";
+	public static final String relPath_IMG_boxRecommenderIcon = "images/win8metroicons/boxes/icon-recommender-48x48.png";
+	public static final String relPath_IMG_boxMethodIcon = "images/win8metroicons/boxes/icon-method-48x48.png";
+	public static final String relPath_IMG_boxVizualizerIcon = "images/win8metroicons/boxes/icon-vizualizer-48x48.png";
+	public static final String relPath_IMG_boxWrapperIcon = "images/win8metroicons/boxes/icon-wrapper-48x48.png";
 	
 	/*
 	 * Various.
@@ -48,6 +59,7 @@ public class MyResources
 	public static final String relPath_IMG_nextIcon16 = "images/Arrow-Next-icon-16x16.png";
 	public static final String relPath_IMG_plusIcon16 = "images/Plus-icon-16x16.png";
 	public static final String relPath_IMG_closeIcon16 = "images/close-icon-16x16.png";
+	public static final String relPath_IMG_minimizeIcon16 = "images/minimize-icon-16x16.png";
 	
 	// ----------------------------------------------------------------
 	// RESOURCE FIELDS:
@@ -68,6 +80,17 @@ public class MyResources
 	public static final ThemeResource img_notificationErrorIcon = new ThemeResource(relPath_IMG_notificationErrorIcon);
 	
 	/*
+	 * Boxes.
+	public static final ThemeResource img_boxInputIcon = new ThemeResource(relPath_IMG_boxInputIcon);
+	public static final ThemeResource img_boxSearcherIcon = new ThemeResource(relPath_IMG_boxSearcherIcon);
+	public static final ThemeResource img_boxComputingIcon = new ThemeResource(relPath_IMG_boxComputingIcon);
+	public static final ThemeResource img_boxRecommenderIcon = new ThemeResource(relPath_IMG_boxRecommenderIcon);
+	public static final ThemeResource img_boxMethodIcon = new ThemeResource(relPath_IMG_boxMethodIcon);
+	public static final ThemeResource img_boxVizualizerIcon = new ThemeResource(relPath_IMG_boxVizualizerIcon);
+	public static final ThemeResource img_boxWrapperIcon = new ThemeResource(relPath_IMG_boxWrapperIcon);
+	*/
+	
+	/*
 	 * Various.
 	 */
 	public static final ThemeResource img_checkIcon16 = new ThemeResource(relPath_IMG_checkIcon16);
@@ -75,6 +98,7 @@ public class MyResources
 	public static final ThemeResource img_nextIcon16 = new ThemeResource(relPath_IMG_nextIcon16);
 	public static final ThemeResource img_plusIcon16 = new ThemeResource(relPath_IMG_plusIcon16);
 	public static final ThemeResource img_closeIcon16 = new ThemeResource(relPath_IMG_closeIcon16);
+	public static final ThemeResource img_minimizeIcon16 = new ThemeResource(relPath_IMG_minimizeIcon16);
 	
 	// ----------------------------------------------------------------
 	// PUBLIC METHODS:

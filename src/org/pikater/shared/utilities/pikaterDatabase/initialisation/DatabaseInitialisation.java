@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.pikater.core.agents.metadata.JPAMetaDataReader;
+import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -256,7 +256,7 @@ public class DatabaseInitialisation {
 
 		JPAUser stepan=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin("stepan")).getSingleResultWithNull();
 		
-		JPABatch batch = new JPABatch(stepan,"Stepan's batch of experiments - school project");
+		JPABatch batch = new JPABatch("Stepan", "Stepan's batch of experiments - school project", "<dummy></dummy>", stepan, stepan.getPriorityMax());
 		batch.addExperiment(experiment);
 
 		DAOs.batchDAO.storeEntity(batch);

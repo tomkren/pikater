@@ -1,7 +1,6 @@
 package org.pikater.core.agents.system;
 
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -22,7 +21,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
@@ -30,12 +28,12 @@ import jade.proto.ContractNetInitiator;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.AgentManagementOntology;
-import org.pikater.core.ontology.MessagesOntology;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,7 +51,7 @@ public class Agent_Planner extends PikaterAgent {
     @Override
 	public java.util.List<Ontology> getOntologies() {
 		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		return ontologies;
 	}
@@ -92,12 +90,13 @@ public class Agent_Planner extends PikaterAgent {
 	protected class RequestServer extends CyclicBehaviour {
 		private static final long serialVersionUID = -8439191651609121039L;
 
-		Ontology ontology = MessagesOntology.getInstance();
+		Ontology ontology = TaskOntology.getInstance();
 
 		private MessageTemplate reqMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
 				MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-						MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()), MessageTemplate.MatchOntology(ontology.getName()))));
+						MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+								MessageTemplate.MatchOntology(ontology.getName()))));
 
 		public RequestServer(PikaterAgent agent) {
 			super(agent);
@@ -109,10 +108,15 @@ public class Agent_Planner extends PikaterAgent {
 				ACLMessage req = receive(reqMsgTemplate);
 				if (req != null) {
 					ContentElement content = getContentManager().extractContent(req);
-					if (((Action) content).getAction() instanceof Execute) {
+					if (((Action) content).getAction() instanceof ExecuteTask) {
+						
+						ExecuteTask executeTask = (ExecuteTask) ((Action) content).getAction();
+						Task task = executeTask.getTask();
+						String CAtype = task.getAgent().getType();
+						
 						// create agent
 						// TODO pass the right type somewhere
-						String CAtype = "RBFNetwork";
+						CAtype = "RBFNetwork";
 
 						// TODO choose a slave node
 						ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
@@ -125,9 +129,9 @@ public class Agent_Planner extends PikaterAgent {
 						msg.addReceiver(ca);
 						msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 						msg.setLanguage(getCodec().getName());
-						msg.setOntology(MessagesOntology.getInstance().getName());
-						Execute ex = (Execute) ((Action) content).getAction();
-						Action a = new Action(myAgent.getAID(), ex);
+						msg.setOntology(TaskOntology.getInstance().getName());
+						
+						Action a = new Action(myAgent.getAID(), executeTask);
 						getContentManager().fillContent(msg, a);
 
 						addBehaviour(new doExecute(Agent_Planner.this, msg));
@@ -237,7 +241,7 @@ public class Agent_Planner extends PikaterAgent {
                 try {
                     ContentElement content = getContentManager().extractContent(cfp);
 
-                    Execute execute = (Execute) (((Action) content).getAction());
+                    ExecuteTask execute = (ExecuteTask) (((Action) content).getAction());
 
                     Action a = new Action();
                     a.setAction(execute);

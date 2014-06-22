@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.shared.util.CustomOrderSet;
@@ -63,7 +64,7 @@ public class BoxCellBrowser extends CustomComponent
 						public AbstractComponent getComponentForSource(CellBrowserCellSource source)
 						{
 							BoxType type = (BoxType) source.source;
-							int boxCountForThisType = ServerConfigurationInterface.getLatestBoxDefinitions().getByType(type).size();
+							int boxCountForThisType = ServerConfigurationInterface.getKnownAgents().getByType(type).size();
 							return new Label(String.format("%s (%d)", type.name(), boxCountForThisType));
 						}
 					};
@@ -78,7 +79,7 @@ public class BoxCellBrowser extends CustomComponent
 						public CustomOrderSet<CellBrowserCellSource> getSourceObjects()
 						{
 							Collection<CellBrowserCellSource> unsortedObjects = new ArrayList<CellBrowserCellSource>();
-							for(BoxInfo info : ServerConfigurationInterface.getLatestBoxDefinitions().getByType((BoxType) value))
+							for(AgentInfo info : ServerConfigurationInterface.getKnownAgents().getByType((BoxType) value))
 							{
 								unsortedObjects.add(new CellBrowserCellSource(info));
 							}
@@ -88,8 +89,8 @@ public class BoxCellBrowser extends CustomComponent
 										@Override
 										public int compare(CellBrowserCellSource o1, CellBrowserCellSource o2)
 										{
-											BoxInfo i1 = (BoxInfo) o1.source;
-											BoxInfo i2 = (BoxInfo) o2.source;
+											AgentInfo i1 = (AgentInfo) o1.source;
+											AgentInfo i2 = (AgentInfo) o2.source;
 											return i1.getName().compareTo(i2.getName()); // sort alphabetically by name
 										}
 									}
@@ -99,7 +100,7 @@ public class BoxCellBrowser extends CustomComponent
 						@Override
 						public AbstractComponent getComponentForSource(CellBrowserCellSource source)
 						{
-							BoxInfo info = (BoxInfo) source.source;
+							AgentInfo info = (AgentInfo) source.source;
 							Label result = new Label(info.getName());
 							result.setDescription(info.getDescription()); // tooltip
 							return result;

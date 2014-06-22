@@ -45,9 +45,11 @@ public class DefaultUI extends CustomConfiguredUI
 	{
 		/*
 		 * Don't forget to call this.
-		 * Also note, that you shouldn't update the UI in child classes of
-		 * {@link CustomConfiguredUI}. You only provide the content component
-		 * when you're asked to in the {@link #getChildContent()} method.
+		 * IMPORTANT:
+		 * 1) You shouldn't update the UI in this method. You only provide the content component
+		 * when you're asked to in the {@link #displayChildContent()} method.
+		 * 2) When {@link #displayChildContent()} is called, this method is still not finished.
+		 * You shouldn't have any initializing code after the super.init() all.
 		 */
 		super.init(request);
 	}

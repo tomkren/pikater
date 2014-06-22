@@ -1,7 +1,6 @@
 package org.pikater.web.vaadin.gui.client.kineticengine;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -12,7 +11,6 @@ import java.util.Set;
 
 import net.edzard.kinetic.Box2d;
 import net.edzard.kinetic.Container;
-import net.edzard.kinetic.Group;
 import net.edzard.kinetic.Kinetic;
 import net.edzard.kinetic.Layer;
 import net.edzard.kinetic.Node;
@@ -23,27 +21,26 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.shared.experiment.universalformat.UniversalGui;
-import org.pikater.shared.experiment.webformat.Experiment;
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager;
+import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.BiDiOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.CreateEdgeModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.TrackMouseModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.SelectionOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.DeleteSelectedOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.MoveBoxesOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.SwapEdgeEndPointOperation;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.IEnginePlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.SelectionPlugin;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.TrackMousePlugin;
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
 
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.json.client.JSONArray;
@@ -51,7 +48,6 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Element;
 
 @SuppressWarnings("deprecation")
 public final class KineticEngine
@@ -70,7 +66,7 @@ public final class KineticEngine
 	/**
 	 * The kinetic stage to draw everything in.
 	 */
-	private final Stage stage;
+	private Stage stage;
 	
 	/**
 	 * The layer where boxes and related shapes will be drawn. This layer will have the lowest ZIndex.
@@ -78,14 +74,14 @@ public final class KineticEngine
 	private final Layer layer1_boxes;
 	
 	/**
-	 * The layer where edges and related shapes will be drawn. This layer will be above layer1 and below layer3.
-	 */
-	private final Layer layer2_edges;
-	
-	/**
 	 * Special layer for selected content. This layer will have the highest ZIndex.
 	 */
-	private final Layer layer3_selection;
+	private final Layer layer2_selection;
+	
+	/**
+	 * The layer where edges and related shapes will be drawn. This layer will be above layer1 and below layer3.
+	 */
+	private final Layer layer3_edges;
 	
 	/**
 	 * A rectangle with dimensions identical to dimensions of the whole stage. This is solely to allow
@@ -101,86 +97,42 @@ public final class KineticEngine
 	private final MultiSelectionRectangle multiSelectionRectangle;
 	
 	/**
-	 * Group of individual boxes to move them all together in a single drag event and still leave their relative positions intact.
-	 * It can not be achieved without this wrapper container. 
-	 */
-	private final Group selectionGroup;
-	
-	/**
-	 * A self-explanatory variable.
-	 */
-	public final Set<BoxPrototype> allBoxes;
-	
-	/**
 	 * Plugins extend the functionality of the engine to allow nice and easy separation of problems and code. This avoids an incredible mess
 	 * and hugely improves bug-free modifiability.
 	 * Maps plugin ids to instances so each plugin is only held in a single instance.
 	 */
-	private final Map<String, IEnginePlugin> plugins;
+	private final Map<String, IEngineModule> modules;
 	
 	/**
 	 * Plugins will want to attach event handlers/listeners to graph items.
 	 * Maps names of graph items to a list of plugins that need to attach event handlers/listeners to them.
 	 */
-	private final Map<String, Set<IEnginePlugin>> pluginsForGraphItem;
+	private final Map<String, Set<IEngineModule>> modulesForGraphItem;
+	
+	/*
+	 * Individual plugins that will be used a lot in this class:
+	 */
+	private final ItemRegistrationModule itemRegistrationModule;
+	private final SelectionModule selectionModule;
 	
 	/**
-	 * The wrapper managing integration and communication between GWT and this engine.
+	 * The wrapper class providing contextual information and server communication.
 	 */
-	private final KineticComponentWidget parentWidget;
+	private KineticComponentWidget context;
 	
 	/**
 	 * All the event handlers of the engine.
 	 */
-	private final IEventListener selectionGroupDragStartHandler = new IEventListener()
-	{
-		@Override
-		public void handle(KineticEvent event)
-		{
-			GWTCursorManager.setCursorType(getParentDOMElement(), MyCursor.MOVE);
-			
-			// start of a drag operation - turn all edges in between into dashed lines of a special color that connect the centers of their endpoints boxes
-			SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
-			fromEdgesToBaseLines(selPlugin.getEdgesInBetween(), null); // draws changes by default
-			event.stopVerticalPropagation();
-		}
-	};
-	private final IEventListener selectionGroupDragMoveHandler = new IEventListener()
-	{
-		@Override
-		public void handle(KineticEvent event)
-		{
-			SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
-			updateBaseLines(selPlugin.getEdgesInBetween(), null); // draws changes by default
-			event.stopVerticalPropagation();
-		}
-	};
-	private final IEventListener selectionGroupDragEndHandler = new IEventListener()
-	{
-		@Override
-		public void handle(KineticEvent event)
-		{
-			GWTCursorManager.rollBackCursor(getParentDOMElement());
-			
-			// end of a drag - undo the effects of drag start and propagate the drag changes to selection items
-			SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
-			moveSelected(selPlugin.getEdgesInBetween()); // propagate the selection group's position to the selected items
-			fromBaseLinesToEdges(selPlugin.getEdgesInBetween()); // draws changes by default
-			event.stopVerticalPropagation();
-		}
-	};
 	private final IEventListener fillRectangleMouseDownHandler = new IEventListener()
 	{
 		@Override
 		public void handle(KineticEvent event)
 		{
-			SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
-			
 			// first deselect everything and draw selection layer if anything is deselected
-			selPlugin.deselectAllBut(null, true);
+			selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, true, true, selectionModule.getSelectedBoxes());
 						
 			// preparation for mousemove
-			multiSelectionRectangle.originalMultiSelectionRectanglePosition = getMousePosition();
+			multiSelectionRectangle.setOriginalMousePosition(getMousePosition());
 			multiSelectionRectangle.getMasterNode().show();
 			multiSelectionRectangle.getMasterNode().moveToTop();
 			fillRectangle.moveToTop();
@@ -196,9 +148,9 @@ public final class KineticEngine
 		{
 			Vector2d currentPosition = getMousePosition();
 			multiSelectionRectangle.updatePath(
-					new Vector2d(multiSelectionRectangle.originalMultiSelectionRectanglePosition.x, currentPosition.y),
+					new Vector2d(multiSelectionRectangle.getOriginalMousePosition().x, currentPosition.y),
 					currentPosition,
-					new Vector2d(currentPosition.x, multiSelectionRectangle.originalMultiSelectionRectanglePosition.y)
+					new Vector2d(currentPosition.x, multiSelectionRectangle.getOriginalMousePosition().y)
 			);
 			draw(EngineComponent.LAYER_SELECTION);
 			event.stopVerticalPropagation();
@@ -209,22 +161,25 @@ public final class KineticEngine
 		@Override
 		public void handle(KineticEvent event)
 		{
-			SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
-			
 			// TODO: make this faster with smarter collision detection!
 			
 			// handle the event
 			Box2d msrBox = multiSelectionRectangle.getPosAndSize();
-			for(BoxPrototype box : allBoxes) // only registered items are processed
+			Set<BoxPrototype> boxesToSelect = new HashSet<BoxPrototype>();
+			for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
 			{
 				if(!box.isSelected() && box.intersects(msrBox.getPosition(), msrBox.getSize()))
 				{
-					// select the box and its related edges if they have both ends selected
-					selPlugin.invertSelection(false, box);
+					boxesToSelect.add(box);
 				}
+			}
+			if(!boxesToSelect.isEmpty())
+			{
+				selectionModule.doSelectionRelatedOperation(SelectionOperation.SELECTION, false, true, boxesToSelect.toArray(new BoxPrototype[0]));
 			}
 			
 			// return the dynamic layer state to the original
+			multiSelectionRectangle.reset();
 			multiSelectionRectangle.getMasterNode().hide();
 			fillRectangle.moveToBottom();
 			fillRectangle.removeEventListener(EventType.Basic.MOUSEMOVE);
@@ -255,34 +210,30 @@ public final class KineticEngine
 	 * 		b) debug thoroughly to check whether a silent javascript exception is caused (happens sometimes).
 	 * - Events are fired in the order they were added, whether named or not.
 	 * - Events can not be simulated from named events... bug?
+	 * - Javascript can not convert objects to arbitrary type, so beware of using the "toArray()" method. Use "toArray(T[] array)" instead.
 	 */
-	public KineticEngine(KineticComponentWidget parentWidget, final Stage stage) 
+	
+	/**
+	 * Constructor.
+	 * Remember that this constructor only creates and partly sets up inner fields. The
+	 * {@link #setContext()} method needs to be used to fully initialize the engine. 
+	 */
+	public KineticEngine() 
 	{
 		/*
 		 * First setup the basic Kinetic variables.
 		 */
 		
-		this.stage = stage;
+		this.stage = null;
 		this.layer1_boxes = Kinetic.createLayer();
-		this.layer2_edges = Kinetic.createLayer();
-		this.layer3_selection = Kinetic.createLayer();
-		this.stage.add(this.layer1_boxes);
-		this.stage.add(this.layer2_edges);
-		this.stage.add(this.layer3_selection);
-		
-		/*
-		 * ZINDEX NOTES:
-		 * ZIndex = value that determines priority for event handlers when 2 objects collide. The higher ZIndex, the closer to the user.
-		 */
-		
-		setFirstArgHigherZIndex(layer2_edges, layer1_boxes);
-		setFirstArgHigherZIndex(layer3_selection, layer2_edges);
+		this.layer2_selection = Kinetic.createLayer();
+		this.layer3_edges = Kinetic.createLayer();
 		
 		/*
 		 * Setup internal layer variables and objects.
 		 */
 		
-		this.fillRectangle = Kinetic.createRectangle(new Box2d(Vector2d.origin, stage.getSize()));
+		this.fillRectangle = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
 		this.fillRectangle.setOpacity(0); // hidden objects don't listen for events, so it has to be fully transparent instead
 		this.fillRectangle.setDraggable(false);
 		this.layer1_boxes.add(this.fillRectangle); // has to be the selection layer since it is the topmost layer by default
@@ -319,54 +270,55 @@ public final class KineticEngine
 		*/
 		
 		this.multiSelectionRectangle = new MultiSelectionRectangle();
-		this.layer3_selection.add(multiSelectionRectangle.getMasterNode());
+		this.layer2_selection.add(multiSelectionRectangle.getMasterNode());
 		multiSelectionRectangle.getMasterNode().hide();
 		
-		this.selectionGroup = Kinetic.createGroup();
-		this.selectionGroup.setPosition(Vector2d.origin);
-		this.selectionGroup.setDraggable(true);
-		this.layer3_selection.add(selectionGroup);
-		this.selectionGroup.addEventListener(selectionGroupDragStartHandler, EventType.Basic.DRAGSTART);
-		this.selectionGroup.addEventListener(selectionGroupDragMoveHandler, EventType.Basic.DRAGMOVE);
-		this.selectionGroup.addEventListener(selectionGroupDragEndHandler, EventType.Basic.DRAGEND);
-		
 		/*
-		 * Setup other variables. 
+		 * Setup plugins.
+		 * IMPORTANT: don't violate the call order - it is very important for correct functionality since plugins may depend upon each other. 
 		 */
-		this.allBoxes = new HashSet<BoxPrototype>();
-		this.plugins = new HashMap<String, IEnginePlugin>();
-		this.pluginsForGraphItem = new HashMap<String, Set<IEnginePlugin>>();
-		this.parentWidget = parentWidget;
+		this.modules = new HashMap<String, IEngineModule>();
+		this.modulesForGraphItem = new HashMap<String, Set<IEngineModule>>();
+		addModule(new TrackMouseModule(this));
+		addModule(new SelectionModule(this));
+		addModule(new ItemRegistrationModule(this));
+		addModule(new DragEdgeModule(this));
+		addModule(new CreateEdgeModule(this));
+		this.itemRegistrationModule = (ItemRegistrationModule) getModule(ItemRegistrationModule.moduleID);
+		this.selectionModule = (SelectionModule) getModule(SelectionModule.moduleID);
 		
-		// and finally, draw the stage
-		draw(EngineComponent.STAGE);
+		this.context = null;
 	}
 	
 	// *****************************************************************************************************
 	// SERIALIZATION/DESERIALIZATION INTERFACE
 	
-	public Experiment toIntermediateFormat()
+	public ExperimentGraph toIntermediateFormat()
 	{
-		Experiment result = new Experiment();
+		ExperimentGraph result = new ExperimentGraph();
 		
 		// first convert all boxes
-		Map<BoxPrototype, Integer> nativeBoxToResultID = new HashMap<BoxPrototype, Integer>();
-		for(BoxPrototype box : allBoxes)
+		Map<BoxPrototype, String> boxToWebFormatID = new HashMap<BoxPrototype, String>();
+		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
 		{
-			Vector2d position = box.getAbsoluteNodePosition();
-			Integer serializedBoxID = result.addLeafBoxAndReturnID(new UniversalGui((int) position.x, (int) position.y), box.info);
-			nativeBoxToResultID.put(box, serializedBoxID);
+			Vector2d currentPosition = box.getAbsoluteNodePosition();
+			box.getInfo().initialX = (int) currentPosition.x;
+			box.getInfo().initialY = (int) currentPosition.y;
+			boxToWebFormatID.put(box, result.addLeafBoxAndReturnID(box.getInfo()));
 		}
 		
 		// then convert all edges
 		Set<EdgePrototype> serializedEdges = new HashSet<EdgePrototype>(); 
-		for(BoxPrototype box : allBoxes)
+		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
 		{
 			for(EdgePrototype edge : box.connectedEdges)
 			{
 				if(!serializedEdges.contains(edge))
 				{
-					result.connect(nativeBoxToResultID.get(edge.getEndPoint(EndPoint.FROM)), nativeBoxToResultID.get(edge.getEndPoint(EndPoint.TO)));
+					String fromBoxID = boxToWebFormatID.get(edge.getEndPoint(EndPoint.FROM));
+					String toBoxID = boxToWebFormatID.get(edge.getEndPoint(EndPoint.TO));
+					result.connect(fromBoxID, toBoxID);
+					serializedEdges.add(edge);
 				}
 			}
 		}
@@ -374,30 +326,29 @@ public final class KineticEngine
 		return result;
 	}
 	
-	public void fromIntermediateFormat(Experiment experiment)
+	public void fromIntermediateFormat(ExperimentGraph experiment)
 	{
 		// first convert all boxes
-		Map<Integer, BoxPrototype> guiBoxes = new HashMap<Integer, BoxPrototype>();
-		for(Integer leafBoxID : experiment.leafBoxes.keySet())
+		Map<String, BoxPrototype> guiBoxes = new HashMap<String, BoxPrototype>();
+		for(String leafBoxID : experiment.leafBoxes.keySet())
 		{
-			BoxPrototype guiBox = getShapeCreator().createBox(NodeRegisterType.MANUAL, experiment.leafBoxes.get(leafBoxID));
-			guiBoxes.put(leafBoxID, guiBox);
+			guiBoxes.put(leafBoxID, getContext().getShapeCreator().createBox(NodeRegisterType.MANUAL, experiment.leafBoxes.get(leafBoxID)));
 		}
 		
 		// then convert all edges
-		Collection<ExperimentGraphItem> allGraphItems = new ArrayList<ExperimentGraphItem>(guiBoxes.values()); // boxes should to be registered before edges
-		for(Entry<Integer, Set<Integer>> entry : experiment.edges.entrySet())
+		List<EdgePrototype> edges = new ArrayList<EdgePrototype>();
+		for(Entry<String, Set<String>> entry : experiment.edges.entrySet())
 		{
-			for(Integer toLeafBoxID : entry.getValue())
+			BoxPrototype fromBox = guiBoxes.get(entry.getKey());
+			for(String toLeafBoxID : entry.getValue())
 			{
-				BoxPrototype fromBox = guiBoxes.get(entry.getKey());
 				BoxPrototype toBox = guiBoxes.get(toLeafBoxID);
-				allGraphItems.add(getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromBox, toBox));
+				edges.add(getContext().getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromBox, toBox));
 			}
 		}
 		
-		// and finally, put everything into the enviroment
-		registerCreated(false, allGraphItems.toArray(new ExperimentGraphItem[0]));
+		// and finally, put everything into the environment
+		registerCreated(false, guiBoxes.values().toArray(new BoxPrototype[0]), edges.toArray(new EdgePrototype[0]));
 	}
 	
 	private String toJSON(EngineComponent component)
@@ -430,15 +381,17 @@ public final class KineticEngine
 		 * First reset the current state.
 		 */
 		
-		SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
-		selPlugin.deselectAllBut(null, false);
+		/*
+		 * TODO:
+		 */
 		
-		this.allBoxes.clear();
+		//  selPlugin.doSelectionRelatedOperation(OperationKind.DESELECTION, false, selPlugin.getSelectedBoxes());
+		// this.allBoxes.clear();
 		// this.parentCanvas.getUndoRedoManager().clear();
 		// this.parentCanvas.getShapeCreator().reset();
 		
 		this.layer1_boxes.destroyChildren();
-		this.layer2_edges.destroyChildren(); // TODO: this destroys fillRectangle - wait for the next KineticJS version?
+		this.layer3_edges.destroyChildren(); // TODO: this destroys fillRectangle - wait for the next KineticJS version?
 		
 		/*
 		 * Parse and build the graph.
@@ -448,13 +401,13 @@ public final class KineticEngine
 		Layer deserializedLayer = Kinetic.createNode(dLayerJSON).cast();
 		
 		// make clones of original objects
-		Map<String, BoxPrototype> originalIdToBoxWithNewID = BoxPrototype.getInstancesFrom(this.parentWidget.getShapeCreator(), deserializedLayer);
-		List<EdgePrototype> unbindedEdges = EdgePrototype.getInstancesFrom(this.parentWidget.getShapeCreator(), deserializedLayer);
+		Map<String, BoxPrototype> originalIdToBoxWithNewID = BoxPrototype.getInstancesFrom(getContext().getShapeCreator(), deserializedLayer);
+		List<EdgePrototype> unbindedEdges = EdgePrototype.getInstancesFrom(getContext().getShapeCreator(), deserializedLayer);
 		
 		// register the clones in our engine
 		List<ExperimentGraphItem> allItems = new ArrayList<ExperimentGraphItem>(originalIdToBoxWithNewID.values());
 		allItems.addAll(unbindedEdges);
-		registerCreated(false, (ExperimentGraphItem[]) allItems.toArray()); // beware if edges are required to be connected (so far they are not)
+		// registerCreated(false, (ExperimentGraphItem[]) allItems.toArray()); // beware if edges are required to be connected (so far they are not)
 		
 		// bind and build
         Map<String, JSONArray> edgeBindings = jsonToEdgeList(edgeListJSON);
@@ -464,8 +417,8 @@ public final class KineticEngine
         	{
         		// bind variables
         		EdgePrototype edge = unbindedEdges.remove(0);
-        		edge.connectFromBox(originalIdToBoxWithNewID.get(edgeBinding.getKey()));
-        		edge.connectToBox(originalIdToBoxWithNewID.get(edgeBinding.getValue().get(i).isString().stringValue()));
+        		edge.setEndpoint(EndPoint.FROM, originalIdToBoxWithNewID.get(edgeBinding.getKey()));
+        		edge.setEndpoint(EndPoint.TO, originalIdToBoxWithNewID.get(edgeBinding.getValue().get(i).isString().stringValue()));
         		
         		// bind graph components
         		edge.updateEdge();
@@ -479,19 +432,19 @@ public final class KineticEngine
 	private String getEdgeListJSON()
 	{
 		Map<String, JSONArray> edgeList = new HashMap<String, JSONArray>();
-		for(BoxPrototype box : allBoxes)
+		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
 		{
 			JSONArray array = new JSONArray();
 			for(EdgePrototype edge : box.connectedEdges)
 			{
-				if(edge.isFromEndpoint(box))
+				if(edge.getEndPoint(EndPoint.FROM) == box)
 				{
-					array.set(array.size(), new JSONString(edge.getOtherEndpoint(box).getID()));
+					array.set(array.size(), new JSONString(edge.getOtherEndpoint(box).getInfo().boxID));
 				}
 			}
 			if(array.size() > 0)
 			{
-				edgeList.put(box.getID(), array);
+				edgeList.put(box.getInfo().boxID, array);
 			}
 		}
 		return edgeListToJSON(edgeList);
@@ -530,35 +483,15 @@ public final class KineticEngine
 	}
 	
 	// *****************************************************************************************************
-	// INTERFACE TO USE FROM GUI
+	// INTERFACE TO USE FROM CONTEXT
 	
 	/**
-	 * This method only resets the engine, e.g. boxes, edges and selection. Further cleanup is expected to be done elsewhere.
+	 * This method only resets the engine, e.g. boxes, edges and selection. Further cleanup is expected to be done
+	 * in the calling code.
 	 */
-	public void resetEnvironment()
+	public void destroyGraphAndClearStage()
 	{
-		// first reset selection
-		SelectionPlugin selPlugin = (SelectionPlugin) getPlugin(SelectionPlugin.pluginID);
-		selPlugin.deselectAllBut(null, false);
-		
-		// then remove edges
-		for(BoxPrototype box : allBoxes)
-		{
-			for(EdgePrototype edge : box.connectedEdges)
-			{
-				edge.unregisterInKinetic();
-				edge.destroy();
-			}
-		}
-		
-		// remove boxes
-		for(BoxPrototype box : allBoxes)
-		{
-			box.destroy();
-		}
-		
-		// and finally, request redraw of the stage
-		draw(EngineComponent.STAGE);
+		itemRegistrationModule.destroyGraphAndClearStage();
 	}
 	
 	public void resize(int newWidth, int newHeight)
@@ -575,9 +508,9 @@ public final class KineticEngine
 	 * Undo/redo related wrapper routines.
 	 */
 	
-	public void registerCreated(boolean applyChangeToHistory, final ExperimentGraphItem... graphItems) 
+	public void registerCreated(boolean applyChangeToHistory, BoxPrototype[] boxes, EdgePrototype[] edges) 
 	{
-		ItemRegistrationOperation operation = new ItemRegistrationOperation(this, graphItems);
+		ItemRegistrationOperation operation = new ItemRegistrationOperation(this, boxes, edges);
 		if(applyChangeToHistory)
 		{
 			pushNewOperation(operation);
@@ -594,7 +527,8 @@ public final class KineticEngine
 	
 	public void moveSelected(Set<EdgePrototype> edgesInBetween)
 	{
-		MoveBoxesOperation operation = new MoveBoxesOperation(this, selectionGroup.getChildren().toArray(new Node[0]), edgesInBetween.toArray(new EdgePrototype[0]));
+		MoveBoxesOperation operation = new MoveBoxesOperation(this, selectionModule.getSelectedKineticNodes(),
+				edgesInBetween.toArray(new EdgePrototype[0]));
 		pushNewOperation(operation);
 		operation.firstExecution();
 	}
@@ -607,7 +541,7 @@ public final class KineticEngine
 	}
 	
 	/*
-	 * Box drag routines.
+	 * Box drag routines. 
 	 */
 	
 	public void fromEdgesToBaseLines(Set<EdgePrototype> edges, BoxPrototype movingBox)
@@ -640,63 +574,82 @@ public final class KineticEngine
 	}
 	
 	/*
-	 * Plugin related public routines.
+	 * Module related public routines.
 	 */
 	
-	public IEnginePlugin getPlugin(String id)
+	public IEngineModule getModule(String id)
 	{
-		return plugins.get(id);
+		return modules.get(id);
 	}
 	
-	public void addPlugin(IEnginePlugin plugin)
+	public void addModule(IEngineModule module)
 	{
-		plugins.put(plugin.getPluginID(), plugin);
-		for(String graphItemName : plugin.getItemsToAttachTo())
+		modules.put(module.getModuleID(), module);
+		String[] itemsToAttachTo = module.getItemsToAttachTo();
+		if(itemsToAttachTo != null)
 		{
-			if(!pluginsForGraphItem.containsKey(graphItemName))
+			for(String graphItemName : itemsToAttachTo) 
 			{
-				// LinkedHashSet retains the insertion order which is very important here
-				pluginsForGraphItem.put(graphItemName, new LinkedHashSet<IEnginePlugin>());
+				if(!modulesForGraphItem.containsKey(graphItemName))
+				{
+					// LinkedHashSet retains the insertion order which is very important here
+					modulesForGraphItem.put(graphItemName, new LinkedHashSet<IEngineModule>());
+				}
+				modulesForGraphItem.get(graphItemName).add(module);
 			}
-			pluginsForGraphItem.get(graphItemName).add(plugin);
 		}
 	}
 	
-	public void removePlugin(String pluginID)
+	public void attachModuleHandlersTo(ExperimentGraphItem graphItem)
 	{
-		plugins.remove(pluginID);
-	}
-	
-	public void attachPluginHandlersTo(ExperimentGraphItem graphItem)
-	{
-		for(IEnginePlugin plugin : pluginsForGraphItem.get(GWTMisc.getSimpleName(graphItem.getClass())))
+		for(IEngineModule module : modulesForGraphItem.get(GWTMisc.getSimpleName(graphItem.getClass())))
 		{
-			plugin.attachEventListeners(graphItem);
+			module.attachEventListeners(graphItem);
 		}
 	}
 	
 	public BoxPrototype getHoveredBox()
 	{
-		TrackMousePlugin mouseMoveHandler = (TrackMousePlugin) getPlugin(TrackMousePlugin.pluginID);
-		return mouseMoveHandler.getCurrentlyHoveredBox();
+		return ((TrackMouseModule) getModule(TrackMouseModule.moduleID)).getCurrentlyHoveredBox();
 	}
 	
 	/*
 	 * Miscellaneous public routines.
 	 */
 	
-	public void reloadVisualStyle()
+	public KineticComponentWidget getContext()
 	{
-		for(BoxPrototype box : allBoxes)
-		{
-			box.reloadVisualStyle();
-		}
-		draw(EngineComponent.STAGE);
+		return context;
 	}
 	
-	public KineticComponentClickMode getClickMode()
+	public void setContext(KineticComponentWidget context)
 	{
-		return parentWidget.getSharedState().clickMode;
+		/*
+		 * First set up the stage.
+		 */
+		if(this.stage != null)
+		{
+			this.layer1_boxes.remove();
+			this.layer2_selection.remove();
+			this.layer3_edges.remove();
+			this.stage.destroy();
+		}
+		this.stage = Kinetic.createStage(context.getStageDOMElement());
+		this.stage.add(layer1_boxes);
+		this.stage.add(layer2_selection);
+		this.stage.add(layer3_edges);
+		
+		/*
+		 * The set up z-indexes for layers.
+		 * NOTE: ZIndex = value that determines priority for event handlers when 2 objects collide. The higher ZIndex, the closer to the user. 
+		 */
+		
+		setFirstArgHigherZIndex(layer2_selection, layer1_boxes);
+		setFirstArgHigherZIndex(layer3_edges, layer2_selection);
+		
+		// and do the rest
+		this.fillRectangle.setSize(this.stage.getSize());
+		this.context = context;
 	}
 	
 	public Container getContainer(EngineComponent component)
@@ -706,9 +659,9 @@ public final class KineticEngine
 			case LAYER_BOXES:
 				return layer1_boxes;
 			case LAYER_EDGES:
-				return layer2_edges;
+				return layer3_edges;
 			case LAYER_SELECTION:
-				return layer3_selection;
+				return layer2_selection;
 			case STAGE:
 				return stage;
 			default:
@@ -718,7 +671,7 @@ public final class KineticEngine
 	
 	public Container getSelectionContainer()
 	{
-		return selectionGroup;
+		return selectionModule.getSelectionContainer();
 	}
 	
 	public Node getFillRectangle()
@@ -731,19 +684,17 @@ public final class KineticEngine
 		return stage.getPointerPosition();
 	}
 	
-	public Element getParentDOMElement()
+	public void reloadVisualStyle()
 	{
-		return parentWidget.getKineticEnvParentElement();
-	}
-	
-	public KineticShapeCreator getShapeCreator()
-	{
-		return parentWidget.getShapeCreator();
-	}
-	
-	public KineticUndoRedoManager getUndoRedoManager()
-	{
-		return parentWidget.getUndoRedoManager();
+		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
+		{
+			box.applyUserSettings();
+			for(EdgePrototype edge : box.connectedEdges)
+			{
+				edge.applyUserSettings();
+			}
+		}
+		draw(EngineComponent.STAGE);
 	}
 	
 	public void draw(EngineComponent component)
@@ -760,7 +711,7 @@ public final class KineticEngine
 	{
 		removeFillRectangleHandlers();
 		this.fillRectangle.addEventListener(fillRectangleMouseDownHandler, EventType.Basic.MOUSEDOWN);
-		this.fillRectangle.addEventListener(fillRectangleMouseMoveHandler, EventType.Basic.MOUSEMOVE);
+		// this.fillRectangle.addEventListener(fillRectangleMouseMoveHandler, EventType.Basic.MOUSEMOVE); // mouse down handler does this
 		this.fillRectangle.addEventListener(fillRectangleMouseUpHandler, EventType.Basic.MOUSEUP);
 	}
 	
@@ -769,7 +720,7 @@ public final class KineticEngine
 	
 	private void pushNewOperation(BiDiOperation operation)
 	{
-		parentWidget.getUndoRedoManager().push(operation);
+		getContext().getHistoryManager().push(operation);
 	}
 	
 	private void setFirstArgHigherZIndex(Node node1, Node node2)

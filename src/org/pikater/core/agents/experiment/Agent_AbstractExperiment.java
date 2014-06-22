@@ -25,10 +25,10 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 	
 	protected void sendAgentInfo(AgentInfo agentInfo) {
 		
-		AID receiver = new AID(AgentNames.GATEWAY, false);
+		AID receiver = new AID(AgentNames.AGENTINFO_MANAGER, false);
 		Ontology ontology = AgentInfoOntology.getInstance();
 		
-        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
         msg.addReceiver(receiver);
         msg.setLanguage(codec.getName());
         msg.setOntology(ontology.getName());
@@ -36,7 +36,7 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 			getContentManager().fillContent(msg, new Action(receiver, agentInfo));
 			
 			ACLMessage replyOK = FIPAService.doFipaRequestClient(this, msg, 10000);
-			log("Reply: " + replyOK.getContent());
+			log("Reply: OK");// + replyOK.getContent());
 			
 		} catch (CodecException e) {
 			// TODO Auto-generated catch block

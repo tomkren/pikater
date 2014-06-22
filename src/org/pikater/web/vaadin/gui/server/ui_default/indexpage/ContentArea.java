@@ -16,15 +16,13 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
-public class ContentArea extends CustomComponent
+public class ContentArea extends Panel
 {
 	private static final long serialVersionUID = 7642456908975377869L;
 	
-	private final Panel innerLayout;
 	private final Navigator navigator;
 	
 	private final SimpleIDGenerator idGenerator;
@@ -34,11 +32,9 @@ public class ContentArea extends CustomComponent
 	{
 		super();
 		setSizeFull();
+		setStyleName("contentArea");
 		
-		this.innerLayout = new Panel();
-		this.innerLayout.setSizeFull();
-		this.innerLayout.setStyleName("contentArea");
-		this.navigator = new Navigator(UI.getCurrent(), this.innerLayout);
+		this.navigator = new Navigator(UI.getCurrent(), this);
 		this.navigator.addViewChangeListener(new ViewChangeListener()
 		{
 			private static final long serialVersionUID = -6954284010979732570L;
@@ -58,10 +54,10 @@ public class ContentArea extends CustomComponent
 					IContentComponent currentView = (IContentComponent) event.getOldView();
 					if(currentView.hasUnsavedProgress())
 					{
-						MyDialogs.confirm("Navigate away?", currentView.getCloseDialogMessage(), new MyDialogs.DialogResultHandler()
+						MyDialogs.confirm("Navigate away?", currentView.getCloseDialogMessage(), new MyDialogs.IDialogResultHandler()
 						{
 							@Override
-							public boolean handleResult()
+							public boolean handleResult(Object[] args)
 							{
 								result = true;
 								return true; // close the dialog
@@ -88,8 +84,6 @@ public class ContentArea extends CustomComponent
 		
 		this.idGenerator = new SimpleIDGenerator();
 		this.registeredFeatures = new HashSet<IWebFeatureSet>();
-		
-		setCompositionRoot(this.innerLayout);
 	}
 	
 	//---------------------------------------------------------------
@@ -99,7 +93,7 @@ public class ContentArea extends CustomComponent
 	 * A little hack-around of the navigation system. Should only be used for testing purposes.
 	 * @param content
 	 */
-	public void setContent(Component content)
+	public void setContentView(Component content)
 	{
 		if(content instanceof IContentComponent)
 		{
@@ -122,7 +116,7 @@ public class ContentArea extends CustomComponent
 	 * The main routine for setting the content component.
 	 * @param feature
 	 */
-	public void setContent(IWebFeatureSet feature)
+	public void setContentView(IWebFeatureSet feature)
 	{
 		if(feature.accessAllowed(VaadinSession.getCurrent()))
 		{

@@ -3,7 +3,7 @@ package org.pikater.core.options;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
+import org.pikater.core.agents.experiment.virtual.Agent_VirtualFileInputBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
@@ -37,11 +37,10 @@ public class FileInput_VirtualBox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_VirtualBoxProvider.class);
+		agentInfo.setAgentClass(Agent_VirtualFileInputBoxProvider.class);
 		agentInfo.setOntologyClass(FileDataProvider.class);
 	
 		agentInfo.setName("FileInput");
-		agentInfo.setPicture("picture0.jpg");
 		agentInfo.setDescription("This box provides a data source to other boxes.");
 
 		agentInfo.addOption(optionIN);

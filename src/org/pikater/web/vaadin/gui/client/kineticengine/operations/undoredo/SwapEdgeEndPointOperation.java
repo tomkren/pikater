@@ -4,7 +4,8 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
 import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
-import org.pikater.web.vaadin.gui.client.kineticengine.plugins.DragEdgePlugin;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
 public class SwapEdgeEndPointOperation extends BiDiOperation
 {
@@ -16,12 +17,18 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 	public SwapEdgeEndPointOperation(KineticEngine kineticEngine)
 	{
 		super(kineticEngine);
-		DragEdgePlugin edgeDragOperation = (DragEdgePlugin) kineticEngine.getPlugin(DragEdgePlugin.pluginID);
+		
+		DragEdgeModule edgeDragOperation = (DragEdgeModule) kineticEngine.getModule(DragEdgeModule.moduleID);
 		this.edge = edgeDragOperation.getDraggedEdge();
 		this.endPointType = edgeDragOperation.getEndPointBeingChanged();
 		this.originalEndpoint = this.edge.getEndPoint(this.endPointType);
 		this.newEndpoint = kineticEngine.getHoveredBox();
-		assert(this.newEndpoint != null);
+		
+		if(this.newEndpoint == null)
+		{
+			throw new NullPointerException("Can not perform this operation because no hovered box was found. Did you"
+					+ "somehow break the track mouse plugin's functions?");
+		}
 	}
 
 	@Override
@@ -55,17 +62,7 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 	
 	private void setEdgeEndPoint(BoxPrototype box)
 	{
-		switch (endPointType)
-		{
-			case FROM:
-				edge.connectFromBox(box);
-				break;
-			case TO:
-				edge.connectToBox(box);
-				break;
-			default:
-				throw new IllegalStateException();
-		}
+		edge.setEndpoint(endPointType, box);
 		edge.updateEdge();
 	}
 	

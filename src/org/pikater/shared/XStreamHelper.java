@@ -1,9 +1,7 @@
 package org.pikater.shared;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
 import org.pikater.shared.logging.PikaterLogger;
@@ -29,6 +27,11 @@ public class XStreamHelper
 	// -------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
+	public static String serializeToXML(Object objectToSerialize, XStream serializer)
+	{
+		return String.format("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>%s%s", System.getProperty("line.separator"), serializer.toXML(objectToSerialize));
+	}
+	
 	public static void serializeToFile(String filePath, Object objectToSerialize, XStream serializer) throws IOException
 	{
 		if(new File(filePath).isFile())
@@ -37,9 +40,7 @@ public class XStreamHelper
 		}
 		else
 		{
-			OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(filePath), Charset.forName("UTF-8"));
-			writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
-			serializer.toXML(objectToSerialize, writer);
+			AppHelper.writeToFile(filePath, serializeToXML(objectToSerialize, serializer), Charset.forName("UTF-8"));
 		}
 	}
 	

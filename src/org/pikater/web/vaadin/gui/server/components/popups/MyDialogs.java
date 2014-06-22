@@ -9,6 +9,8 @@ import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.web.vaadin.gui.server.components.forms.ChangePasswordForm;
 import org.pikater.web.vaadin.gui.server.components.forms.CreateAccountForm;
 import org.pikater.web.vaadin.gui.server.components.forms.LoginForm;
+import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
+import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -53,9 +55,9 @@ public class MyDialogs
 	//----------------------------------------------------------------
 	// PUBLIC ROUTINES FOR DISPLAYING GENERAL USE DIALOGS
 	
-	public static void confirm(String title, String message, final DialogResultHandler resultHandler)
+	public static void confirm(String title, String message, IDialogResultHandler resultHandler)
 	{
-		MyMessageBoxListener listener = new MyMessageBoxListener(resultHandler);
+		MyMessageBoxListener listener = MyMessageBoxListener.getDefault(resultHandler);
 		MessageBox mb = MessageBox.showPlain(
 				Icon.QUESTION,
 				title == null ? "Confirm" : title,
@@ -67,17 +69,22 @@ public class MyDialogs
 		setupMessageBox(mb, ButtonId.YES, true, true);
 	}
 	
-	public static void textPrompt(String title, String inputLabel, final DialogResultHandler resultHandler)
+	public static void textPrompt(String title, String inputLabel, final IDialogResultHandler resultHandler)
 	{
 		final TextField tf = new TextField();
 		tf.setInputPrompt("Enter value");
 		MyMessageBoxListener listener = new MyMessageBoxListener(resultHandler)
 		{
 			@Override
-			protected boolean handleOK()
+			protected boolean allowOKHandle()
 			{
-				getResultHandler().addArg(tf.getValue());
-				return super.handleOK();
+				return true;
+			}
+			
+			@Override
+			protected void addArgs(List<Object> arguments)
+			{
+				arguments.add(tf.getValue());
 			}
 		};
 		MessageBox mb = MessageBox.showCustomized(
@@ -100,25 +107,16 @@ public class MyDialogs
 	// -------------------------------------------------------------------------
 	// PUBLIC ROUTINES FOR DISPLAYING SPECIALIZED DIALOGS
 	
-	public static void loginDialog(final DialogResultHandler resultHandler)
+	public static void loginDialog(final IDialogResultHandler resultHandler)
 	{
 		final LoginForm loginForm = new LoginForm();
-		MyMessageBoxListener listener = new MyMessageBoxListener(resultHandler)
+		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(loginForm, resultHandler)
 		{
 			@Override
-			protected boolean handleOK()
+			protected void addArgs(List<Object> arguments)
 			{
-				// if(loginForm.isFormValidAndUpdated()) // TODO: uncomment
-				if(true)
-				{
-					getResultHandler().addArg(loginForm.getLogin());
-					getResultHandler().addArg(loginForm.getPassword());
-					return super.handleOK();
-				}
-				else
-				{
-					return false;
-				}
+				arguments.add(loginForm.getLogin());
+				arguments.add(loginForm.getPassword());
 			}
 			
 			@Override
@@ -126,15 +124,15 @@ public class MyDialogs
 			{
 				if(button == ButtonId.CUSTOM_1)
 				{
-					createAccountDialog(new DialogResultHandler()
+					createAccountDialog(new IDialogResultHandler()
 					{
 						@Override
-						public boolean handleResult()
+						public boolean handleResult(Object[] args)
 						{
 							DAOs.userDAO.storeEntity(new JPAUser(
-									(String) getArg(0),
-									(String) getArg(1),
-									(String) getArg(2),
+									(String) args[0],
+									(String) args[1],
+									(String) args[2],
 									DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN)
 							));
 							return true;
@@ -157,26 +155,17 @@ public class MyDialogs
 		mb.getButton(ButtonId.CUSTOM_1).setCaption("Create account");
 	}
 	
-	public static void createAccountDialog(final DialogResultHandler resultHandler)
+	public static void createAccountDialog(final IDialogResultHandler resultHandler)
 	{
 		final CreateAccountForm caForm = new CreateAccountForm();
-		MyMessageBoxListener listener = new MyMessageBoxListener(resultHandler)
+		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(caForm, resultHandler)
 		{
 			@Override
-			protected boolean handleOK()
+			protected void addArgs(List<Object> arguments)
 			{
-				if(caForm.isFormValidAndUpdated())
-				{
-					getResultHandler().addArg(caForm.getLogin());
-					getResultHandler().addArg(caForm.getPassword());
-					getResultHandler().addArg(caForm.getEmail());
-					return super.handleOK();
-				}
-				else
-				{
-					MyNotifications.showError(null, "Email not valid.");
-					return false;
-				}
+				arguments.add(caForm.getLogin());
+				arguments.add(caForm.getPassword());
+				arguments.add(caForm.getEmail());
 			}
 		};
 		MessageBox mb = MessageBox.showCustomized(
@@ -190,9 +179,17 @@ public class MyDialogs
 		setupMessageBox(mb, ButtonId.OK, false, true);
 	}
 	
-	public static void passwordChangeDialog(ChangePasswordForm cpForm, final DialogResultHandler resultHandler)
+	public static void passwordChangeDialog(JPAUser currentUser, final IDialogResultHandler resultHandler)
 	{
-		MyMessageBoxListener listener = new MyMessageBoxListener(resultHandler);
+		final ChangePasswordForm cpForm = new ChangePasswordForm(currentUser);
+		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(cpForm, resultHandler)
+		{
+			@Override
+			protected void addArgs(List<Object> arguments)
+			{
+				arguments.add(cpForm.getChangedPassword());
+			}
+		};
 		MessageBox mb = MessageBox.showCustomized(
 				Icon.NONE,
 				"Change password",
@@ -204,58 +201,59 @@ public class MyDialogs
 		setupMessageBox(mb, ButtonId.OK, false, true);
 	}
 	
+	public static void saveExperimentDialog(final IDialogResultHandler resultHandler)
+	{
+		final SaveExperimentForm seForm = new SaveExperimentForm();
+		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(seForm, resultHandler)
+		{
+			@Override
+			protected void addArgs(List<Object> arguments)
+			{
+				arguments.add(seForm.getExperimentName());
+				arguments.add(seForm.getPriorityAssignedByUser());
+				arguments.add(seForm.getComputationEstimateInHours());
+				arguments.add(seForm.getSendEmailWhenFinished());
+				arguments.add(seForm.getExperimentNote());
+			}
+		};
+		MessageBox mb = MessageBox.showCustomized(
+				Icon.NONE,
+				"Save experiment from active tab",
+				seForm,
+				listener,
+				ButtonId.OK, ButtonId.CANCEL
+		);
+		listener.setParentBox(mb); // don't forget this!
+		setupMessageBox(mb, ButtonId.OK, false, true);
+	}
+	
 	// -------------------------------------------------------------------------
 	// PUBLIC DIALOG RESULTS
 	
-	public static abstract class DialogResultHandler
+	public static interface IDialogResultHandler
 	{
-		private final List<Object> args;
-		
-		public DialogResultHandler()
-		{
-			this.args = new ArrayList<Object>();
-		}
-		
-		protected Object getArg(int position)
-		{
-			return args.get(position);
-		}
-		
-		public void addArg(Object arg)
-		{
-			args.add(arg);
-		}
-		
 		/**
-		 * Custom action to be called when the dialog's main accept button is clicked. Use the
-		 * {@link getArg(int position)} method to get your needed arguments. 
+		 * Custom action to be called when the dialog's main accept button is clicked.
+		 * @param args
 		 * @return true if the dialog is no longer needed and should close
 		 */
-		public abstract boolean handleResult();
+		public boolean handleResult(Object[] args);
 	}
 	
 	// -------------------------------------------------------------------------
 	// SPECIAL INNER TYPE
 
-	private static class MyMessageBoxListener implements MessageBoxListener
+	private abstract static class MyMessageBoxListener implements MessageBoxListener
 	{
-		private final DialogResultHandler resultHandler;
+		private final IDialogResultHandler resultHandler;
+		private final List<Object> arguments;
 		private MessageBox parentBox;
 
-		public MyMessageBoxListener(DialogResultHandler resultHandler)
+		public MyMessageBoxListener(IDialogResultHandler resultHandler)
 		{
 			this.resultHandler = resultHandler;
+			this.arguments = new ArrayList<Object>();
 			this.parentBox = null;
-		}
-		
-		protected DialogResultHandler getResultHandler()
-		{
-			return resultHandler;
-		}
-		
-		protected MessageBox getParentBox()
-		{
-			return parentBox;
 		}
 		
 		public void setParentBox(MessageBox parentBox)
@@ -271,9 +269,17 @@ public class MyDialogs
 				case OK:
 				case YES:
 				case SAVE:
-					if(handleOK())
+					if(allowOKHandle())
 					{
-						getParentBox().close();
+						addArgs(arguments);
+						if(resultHandler.handleResult(arguments.toArray()))
+						{
+							parentBox.close();
+						}
+						else
+						{
+							arguments.clear();
+						}
 					}
 					break;
 				
@@ -281,28 +287,30 @@ public class MyDialogs
 				case CANCEL:
 				case CLOSE:
 				case NO:
-					getParentBox().close();
+					parentBox.close();
 					break;
 					
 				default:
 					if(!handleCustomButton(button))
 					{
-						throw new IllegalStateException(String.format("No action is mapped to the '%s' button.", getParentBox().getButton(button).getCaption()));
+						throw new IllegalStateException(String.format("No action is mapped to the '%s' button.", parentBox.getButton(button).getCaption()));
 					}
 					break;
 			}
 		}
 		
 		/**
-		 * The super implementation only calls {@link DialogResultHandler#handleResult()}. Override
-		 * to add arguments to the linked {@link DialogResultHandler} and then call:
-		 * <code>return super.handleOK();</code> or <code>return false;</code>.
-		 * @return true if the dialog is no longer needed and should close 
+		 * This method is called after the "ok" button is clicked on the dialog.
+		 * @return whether {@link #handleOK()} method should be called next
 		 */
-		protected boolean handleOK()
-		{
-			return getResultHandler().handleResult();
-		}
+		protected abstract boolean allowOKHandle();
+		
+		/**
+		 * This method is called after the {@link #allowOKHandle()} method.
+		 * Used to add arguments to the result handler passed to this listener.
+		 * @param arguments the list to add arguments to
+		 */
+		protected abstract void addArgs(List<Object> arguments);
 		
 		/**
 		 * The super implementation does nothing and is called for any button clicks that are not handled
@@ -315,6 +323,41 @@ public class MyDialogs
 		protected boolean handleCustomButton(ButtonId button)
 		{
 			return false;
+		}
+		
+		public static MyMessageBoxListener getDefault(IDialogResultHandler resultHandler)
+		{
+			return new MyMessageBoxListener(resultHandler)
+			{
+				@Override
+				protected boolean allowOKHandle()
+				{
+					return true;
+				}
+				
+				@Override
+				protected void addArgs(List<Object> arguments)
+				{
+				}
+			};
+		}
+	}
+	
+	private abstract static class MyFormMessageBoxListener extends MyMessageBoxListener
+	{
+		private final CustomFormLayout form; 
+
+		public MyFormMessageBoxListener(CustomFormLayout form, IDialogResultHandler resultHandler)
+		{
+			super(resultHandler);
+			
+			this.form = form;
+		}
+		
+		@Override
+		protected boolean allowOKHandle()
+		{
+			return form.isFormValidAndUpdated();
 		}
 	}
 }

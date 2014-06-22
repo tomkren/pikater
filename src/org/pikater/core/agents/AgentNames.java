@@ -1,19 +1,21 @@
 package org.pikater.core.agents;
 
 public abstract class AgentNames {
-	
-	public static String COMPUTATION_DESCRIPTION_PARSER = "ComputationDescriptionParser";
-	public static String DATA_MANAGER = "dataManager";
+
+	public static String INITIATOR = "Initiator";
+	public static String DATA_MANAGER = "DataManager";
 	public static String INSERTED_BATCHES_LOG = "InsertedBatchesLog";
 	public static String ARRFF_READER = "ARFFReader";
-	public static String MANAGER_AGENT = "agentManager";
-	public static String MANAGER = "manager";
+	public static String MANAGER_AGENT = "AgentManager";
+	public static String MANAGER = "Manager";
 	public static String COMPUTING_AGENT = "ComputingAgent";
 	public static String PLANNER = "Planner";
 	public static String GUI_AGENT = "GUIAgent";
-	public static String TYPES_PROVIDER = "agentTypesProvider";
+	public static String TYPES_PROVIDER = "AgentTypesProvider";
 	public static String GATEWAY = "Gateway";
+	public static String AGENTINFO_MANAGER = "AgentInfoManager";
 	public static String VIRTUAL_BOX_PROVIDER = "VirtualBoxProvider";
 	public static String FREDDIE = "Freddie";
+	public static String MAIL_AGENT = "mailAgent";
 
 }

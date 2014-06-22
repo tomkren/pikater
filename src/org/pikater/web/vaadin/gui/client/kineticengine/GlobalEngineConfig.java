@@ -21,12 +21,4 @@ public class GlobalEngineConfig
 	public static final int zIndex_box_masterRectangle = 2;
 	public static final int zIndex_edge_baseLine = 3;
 	public static final int zIndex_edge_container = 3;
-	
-	// *************************************************************************************
-	// SOME ROUTINES
-	
-	public static String getBoxIDFromNumber(int number)
-	{
-		return "box" + number;
-	}
 }

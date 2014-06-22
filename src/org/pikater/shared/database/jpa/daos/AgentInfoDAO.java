@@ -58,13 +58,13 @@ public class AgentInfoDAO extends AbstractDAO{
 		}
 	}
 	
-	public void storeAgentInfoOntology(AgentInfo agentInfoOntology,String senderAgentName){
+	public void storeAgentInfoOntology(AgentInfo agentInfoOntology){
 		JPAAgentInfo nai=new JPAAgentInfo();
 		nai.setAgentClass(agentInfoOntology.getAgentClassName());
 		nai.setOntologyClass(agentInfoOntology.getOntologyClassName());
-		nai.setDescription("AgentInfo from PikaterGateWay");
+		nai.setDescription(agentInfoOntology.getDescription());
 		nai.setInformationXML(agentInfoOntology.exportXML());
-		nai.setName(senderAgentName);
+		nai.setName(agentInfoOntology.getName());
 		nai.setCreationTime(new Date());
 		DAOs.agentInfoDAO.storeEntity(nai);
 	}

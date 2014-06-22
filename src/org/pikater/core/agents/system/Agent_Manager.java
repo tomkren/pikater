@@ -19,16 +19,20 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
+
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.manager.ComputationCollectionItem;
+import org.pikater.core.agents.system.manager.ParserBehaviour;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.core.ontology.subtrees.task.Execute;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,7 +49,7 @@ public class Agent_Manager extends PikaterAgent {
 	private boolean no_xml_output = true;
 	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
 	private int problem_i = 0;
-	protected HashMap<Integer, ComputationCollectionItem> computationCollection =
+	public HashMap<Integer, ComputationCollectionItem> computationCollection =
 			new HashMap<Integer, ComputationCollectionItem>();
 	
 	
@@ -60,6 +64,7 @@ public class Agent_Manager extends PikaterAgent {
 		ontologies.add(MessagesOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
 		
 		return ontologies;
@@ -178,7 +183,7 @@ public class Agent_Manager extends PikaterAgent {
 	
 	
 	
-	protected void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
+	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
 		// Prepare the subscription message to the request originator
 		ACLMessage msgOut = originalMessage.createReply();
 		msgOut.setPerformative(result.getPerformative());
@@ -208,13 +213,13 @@ public class Agent_Manager extends PikaterAgent {
 	} // end sendSubscription
 	
 	
-	public ACLMessage execute2Message(Execute execute) {
+	public ACLMessage execute2Message(ExecuteTask execute) {
 		// create ACLMessage from Execute ontology action
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setLanguage(codec.getName());
-		request.setOntology(ontology.getName());
-		request.addReceiver(getAgentByType("Planner"));
+		request.setOntology(TaskOntology.getInstance().getName());
+		request.addReceiver(getAgentByType(AgentNames.PLANNER));
 		
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 	
