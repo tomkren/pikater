@@ -4,6 +4,7 @@ import jade.content.Concept;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
@@ -122,6 +123,7 @@ public class Parser {
         StandardBuffer<ErrorEdge> buffer=new StandardBuffer<>(errorNode,child);
         errorNode.addBufferToOutput(errorDescription.getType(),buffer);
         child.addInput(errorDescription.getType(),buffer);
+        buffer.insert(new ErrorEdge(Float.MAX_VALUE));
     }
 
     //This is the root of all parsing
@@ -218,6 +220,7 @@ public class Parser {
 
         }
         SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search);
+        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,searchNode.getId(),1,searchNode));
         StandardBuffer searchBuffer=new StandardBuffer(searchNode,child);
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
         child.addInput("searchedoptions",searchBuffer);

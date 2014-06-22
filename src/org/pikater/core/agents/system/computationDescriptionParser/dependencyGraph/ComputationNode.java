@@ -32,6 +32,11 @@ public class ComputationNode {
         startBehavior=executeStrategy;
     }
 
+    public Boolean ContainsOutput(String outputName)
+    {
+        return outputs.containsKey(outputName);
+    }
+
     public Map<String,ComputationOutputBuffer> getInputs()
     {
          return inputs;

@@ -51,9 +51,14 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
     }		
 	
 	public void processError(ArrayList<Eval> errors){
-		 ErrorEdge ee = new ErrorEdge();
-		 ee.setErrors(errors);	
-		 computationNode.addToOutputAndProcess(ee, "errors");
+        for (Eval eval:errors)
+        {
+            if (computationNode.ContainsOutput(eval.getName()))
+            {
+                ErrorEdge ee = new ErrorEdge(eval.getValue());
+                computationNode.addToOutputAndProcess(ee, "errors");
+            }
+        }
 	}
 		
 	public void processValidation(String dataSourceName){

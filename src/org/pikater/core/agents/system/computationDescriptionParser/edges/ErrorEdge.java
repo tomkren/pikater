@@ -10,13 +10,17 @@ import java.util.ArrayList;
  * Time: 13:33
  */
 public class ErrorEdge extends EdgeValue {
-    private ArrayList<Eval> errors=new ArrayList<>();
+    private float value;
 
-    public ArrayList<Eval> getErrors() {
-        return errors;
+    public ErrorEdge(float value) {
+        this.value = value;
     }
 
-    public void setErrors(ArrayList<Eval> errors) {
-        this.errors = errors;
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
     }
 }

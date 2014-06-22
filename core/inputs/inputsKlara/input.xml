@@ -1,9 +1,13 @@
-<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription id="1">
+<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription
+        id="1">
     <rootElements id="2">
-        <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="3">
+        <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver
+                id="3">
             <dataSource id="4">
                 <dataType>Data</dataType>
-                <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex" id="5">
+                <dataProvider
+                        type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex"
+                        id="5">
                     <options id="6">
                         <org.pikater.core.ontology.subtrees.option.Option id="7">
                             <__mutable>false</__mutable>
@@ -25,8 +29,11 @@
                         </org.pikater.core.ontology.subtrees.option.Option>
                     </options>
                     <errors id="9">
-                        <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription id="10">
-                            <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" id="11">
+                        <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription
+                                id="10">
+                            <provider
+                                    type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent"
+                                    id="11">
                                 <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
                                 <options id="12">
                                     <org.pikater.core.ontology.subtrees.option.Option id="13">
@@ -58,7 +65,9 @@
                                     </org.pikater.core.ontology.subtrees.option.Option>
                                 </options>
                                 <trainingData id="16">
-                                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="17">
+                                    <dataProvider
+                                            type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider"
+                                            id="17">
                                         <fileURI>weather.arff</fileURI>
                                     </dataProvider>
                                 </trainingData>
@@ -90,7 +99,9 @@
                             </org.pikater.core.ontology.subtrees.option.Option>
                         </options>
                     </search>
-                    <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" reference="11"/>
+                    <computingAgent
+                            type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent"
+                            reference="11"/>
                 </dataProvider>
             </dataSource>
         </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.box.LeafBox;
+import org.pikater.web.experiment_backup.box.LeafBox;
 
 public final class OptionLoader
 {
