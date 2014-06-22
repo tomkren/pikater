@@ -8,6 +8,8 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -22,6 +24,11 @@ import jade.proto.SubscriptionResponder.SubscriptionManager;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -30,6 +37,7 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.task.Execute;
 
 import java.text.DateFormat;
@@ -51,6 +59,14 @@ public class Agent_Manager extends PikaterAgent {
 			new HashMap<Integer, ComputationCollectionItem>();
 	
 	
+	public Ontology getOntology() {
+		return ontology;
+	}
+
+	public void setOntology(Ontology ontology) {
+		this.ontology = ontology;
+	}
+
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
 	}
@@ -90,11 +106,11 @@ public class Agent_Manager extends PikaterAgent {
 						MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE),
 								MessageTemplate.MatchPerformative(ACLMessage.CANCEL));
 		
-        addBehaviour(new ParserBehaviour(this, getCodec(), ontology));
+		addBehaviour(new ParserBehaviour(this, getCodec(), ontology));
 				
 		addBehaviour (new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
 		
-		// addBehaviour (new RequestServer(this));
+		addBehaviour (new RequestServer(this)); // TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
 		
 	} // end setup
 		
@@ -111,6 +127,76 @@ public class Agent_Manager extends PikaterAgent {
 		}
 	}
 	
+	
+	protected class RequestServer extends CyclicBehaviour {
+
+		private static final long serialVersionUID = -6257623790759885083L;
+
+		MessageTemplate getSchemaFromSearchTemplate = 
+				MessageTemplate.and(
+				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_QUERY),
+				MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF),
+				MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+				MessageTemplate.MatchOntology(ontology.getName()))));
+
+		
+		public RequestServer(Agent agent) {			
+			super(agent);
+		}
+
+		@Override 
+		public void action() {
+			ACLMessage query = receive(getSchemaFromSearchTemplate);
+			
+			if (query != null) {
+				log(": a query message received from " + query.getSender().getName());
+
+				try {
+					ContentElement content = getContentManager().extractContent(query);
+					if (((Action) content).getAction() instanceof ExecuteParameters) {
+						// manager received new options from search to execute
+						ExecuteParameters ep = (ExecuteParameters) content;
+
+						// => fill CA's queue
+						String[] ids = query.getConversationId().split("_");
+						int graphId = Integer.parseInt(ids[0]);
+						int nodeId = Integer.parseInt(ids[1]);
+						SearchComputationNode searchNode = 
+								(SearchComputationNode) computationCollection.get(graphId)
+									.getProblemGraph().getNode(nodeId); 
+
+						SolutionEdge se = new SolutionEdge();
+						se.setOptions(ep.getSolutions());
+				    	searchNode.addToOutputAndProcess(se, "searchedoptions");						
+				    }
+					else{
+						logError("unknown message received.");
+					}
+				} catch (UngroundedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (CodecException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (OntologyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			else {
+				block();
+			}
+
+			/*
+			ACLMessage result_msg = request.createReply();
+			result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
+			send(result_msg);
+			*/
+			return;
+
+		}
+	}
+
 	
 	protected void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
 		// Prepare the subscription message to the request originator
@@ -140,33 +226,7 @@ public class Agent_Manager extends PikaterAgent {
 		}
 		
 	} // end sendSubscription
-	
-	
-	public ACLMessage execute2Message(Execute execute) {
-		// create ACLMessage from Execute ontology action
 		
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.setLanguage(codec.getName());
-		request.setOntology(TaskOntology.getInstance().getName());
-		request.addReceiver(getAgentByType(AgentNames.PLANNER));
-		
-		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-	
-		Action a = new Action();
-		a.setAction(execute);
-		a.setActor(this.getAID());
-
-		try {
-			getContentManager().fillContent(request, a);
-		} catch (CodecException e) {
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			e.printStackTrace();
-		}
-		
-		return request;
-	}
-	
 
 	public AID getAgentByType(String agentType) {
 		return (AID)getAgentByType(agentType, 1).get(0);
@@ -196,7 +256,7 @@ public class Agent_Manager extends PikaterAgent {
 			
 			while (Agents.size() < n) {
 				// create agent
-				AID aid = createAgent(agentType, null, null);
+				AID aid = createAgent(agentType);
 				Agents.add(aid);
 			}
 		} catch (FIPAException fe) {
@@ -207,14 +267,7 @@ public class Agent_Manager extends PikaterAgent {
 		return Agents;
 		
 	} // end getAgentByType
-	
-
-	public AID createAgent(String type, String name, List<Option> options) {
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
-        AID aid=communicator.createAgent((PikaterAgent)this,type,name,null);//todo
-		return aid;		
-	}
-	
+		
 	
 	private String getXMLValue(float value) {
 		if (value < 0) {

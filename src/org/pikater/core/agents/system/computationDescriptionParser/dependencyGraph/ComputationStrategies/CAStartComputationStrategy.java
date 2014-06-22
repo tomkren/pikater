@@ -28,6 +28,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSou
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.ontology.FilenameTranslationOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -82,7 +83,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 				
 		ex.setTask(task);							
 
-		return myAgent.execute2Message(ex);
+		return execute2Message(ex);
 	}
 	
 	//Create new options from solution with filled ? values (convert solution->options) 
@@ -227,5 +228,31 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		
 		return fileHash;
 	}
+	
+	public ACLMessage execute2Message(Execute execute) {
+		// create ACLMessage from Execute ontology action
+		
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.setLanguage(myAgent.getCodec().getName());
+		request.setOntology(TaskOntology.getInstance().getName());
+		request.addReceiver(myAgent.getAgentByType(AgentNames.PLANNER));
+		
+		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+	
+		Action a = new Action();
+		a.setAction(execute);
+		a.setActor(myAgent.getAID());
+
+		try {
+			myAgent.getContentManager().fillContent(request, a);
+		} catch (CodecException e) {
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			e.printStackTrace();
+		}
+		
+		return request;
+	}
+
 
 }

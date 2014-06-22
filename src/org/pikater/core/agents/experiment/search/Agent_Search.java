@@ -46,6 +46,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	
 	protected int query_block_size = 1;
 
+	private String conversationID;	
 	private List<Option> search_options = null;
 	private List<SearchItem> schema = null;
 	
@@ -207,7 +208,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									query.setOntology(ontology.getName());
 									query.setProtocol(FIPANames.InteractionProtocol.FIPA_QUERY);
 									//identifikace query a jeho odpovedi!!!
-									query.setConversationId(Integer.toString(i));
+									query.setConversationId(conversationID + "_" + Integer.toString(i));
 									try {
 										getContentManager().fillContent(query, action);
 									} catch (CodecException e) {
@@ -231,8 +232,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							else{
 								// System.out.println("!OK: Pars - Prisla evaluace");
 								//prisla evaluace - odpoved na QUERY
-								//prirad inform ke spravnemu query
-								int id = Integer.parseInt(response.getConversationId());
+								//prirad inform ke spravnemu query								
+								int id = Integer.parseInt(response.getConversationId().split("_")[2]);
 								Result res;
 								try {
 									res = (Result)getContentManager().extractContent(response);
@@ -286,6 +287,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					schema = get_next_parameters_action.getSchema();														
 					loadSearchOptions();
 					
+					conversationID = request.getConversationId(); 
+							
 					ACLMessage agree = request.createReply();
 					agree.setPerformative(ACLMessage.AGREE);
 					agree.setContent(Integer.toString(query_block_size));

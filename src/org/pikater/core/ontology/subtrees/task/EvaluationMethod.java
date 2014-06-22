@@ -4,12 +4,11 @@ import org.pikater.core.ontology.subtrees.option.Option;
 
 import jade.content.Concept;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EvaluationMethod implements Concept {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -9024769565945696142L;
 	private String name;
 	private List<Option> options;
@@ -27,4 +26,11 @@ public class EvaluationMethod implements Concept {
 	public List<Option> getOptions() {
 		return options;
 	}
+	
+    public void addOption(Option option) {
+    	if (this.options == null) {
+    		this.options = new ArrayList<Option>();
+    	}
+        this.options.add(option);
+    }
 }

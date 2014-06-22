@@ -31,7 +31,7 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 		myAgent.log("Agent " + inform.getSender().getName()
 				+ ": sending of Options have been finished.", 2);
         
-        strategy.processFinished();
+        strategy.finished();
         
         // send subscription to the original agent after each received task
         myAgent.sendSubscription(inform, msg);

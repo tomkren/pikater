@@ -6,11 +6,21 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
  * Time: 15:34
  */
 public class SearchComputationNode extends ComputationNode {
-    public SearchComputationNode(StartComputationStrategy executeStrategy) {
+    private String modelClass;
+    
+	public SearchComputationNode(StartComputationStrategy executeStrategy) {
         super(executeStrategy);
     }
 
     public SearchComputationNode() {
         super();
+    }
+    
+    public String getModelClass() {
+        return modelClass;
+    }
+
+    public void setModelClass(String modelClass) {
+        this.modelClass = modelClass;
     }
 }
