@@ -10,6 +10,7 @@ public enum HttpContentType
 	APPLICATION_JAR("application/java-archive", ".jar"),
 	APPLICATION_OCTET_STREAM("application/octet-stream", ".bin"),
 	APPLICATION_MS_EXCEL("application/vnd.ms-excel", ".xls"),
+	APPLICATION_MS_OFFICE_OPEN_SPREADSHEET("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx"),
 	APPLICATION_XHTML_XML("application/xhtml+xml", ".xhtml"),
 	APPLICATION_XML("application/xml", ".xml"),
 	TEXT_CSV("text/csv", ".csv"),

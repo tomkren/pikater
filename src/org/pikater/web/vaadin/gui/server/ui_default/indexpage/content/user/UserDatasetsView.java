@@ -143,8 +143,8 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			this.vLayout.setSpacing(true);
 			
 			Label label = new Label("You can optionally enter some ARFF headers that will be joined with the file you upload. "
-					+ "This could be especially handy if you're going to upload a '.csv' or '.xls' file. No ARFF headers are "
-					+ "currently being parsed from them.</br>"
+					+ "This should come in handy if you're not going to upload an ARFF file in which case the parser will have "
+					+ "no other way to mine the headers.</br>"
 					+ "If you have no ARFF headers to specify or after you have specified them, click the 'Next' button.", ContentMode.HTML);
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
@@ -196,14 +196,15 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			this.vLayout.addStyleName("maxWidth");
 			this.vLayout.setSpacing(true);
 			
-			Label label = new Label("Currently, only '.xls', '.csv' and '.arff' files are supported. All other extensions will be rejected.</br>"
+			Label label = new Label("Currently, only '.xls', '.xlsx', '.csv' and '.arff' files are supported. All other extensions will be rejected.</br>"
 					+ "Since there is no mime type for '.arff' files, you have to upload it as a '.txt' file.", ContentMode.HTML);
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
 			MyMultiUpload mmu = new ManageUserUploads().createUploadButton(
 					"Choose file to upload",
-					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN),
+					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
+							HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN),
 					getParentWizard().uploadedDataSetHandler
 			);
 			mmu.addFileUploadEventsCallback(new IFileUploadEvents()

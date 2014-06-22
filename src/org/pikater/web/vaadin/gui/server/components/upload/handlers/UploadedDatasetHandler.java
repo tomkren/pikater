@@ -6,7 +6,7 @@ public class UploadedDatasetHandler implements IUploadedFileHandler
 {
 	/**
 	 * This information may not always be provided. It is especially meant to be used
-	 * when we upload .csv and .xls files.
+	 * when we upload a file that is not an ARFF file.
 	 */
 	private String customARFFHeaders;
 	
