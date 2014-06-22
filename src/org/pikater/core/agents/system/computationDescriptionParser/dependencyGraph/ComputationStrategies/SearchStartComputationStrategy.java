@@ -48,7 +48,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 	public void execute(ComputationNode computation){
 		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
-
+		
 		Agent search = getSearchFromNode();
 		AID searchAID = myAgent.createAgent(search.getType());
 
