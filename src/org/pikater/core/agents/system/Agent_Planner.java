@@ -45,7 +45,7 @@ public class Agent_Planner extends PikaterAgent {
 	private static final long serialVersionUID = 820846175393846627L;
 
 	protected LinkedList<ACLMessage> requestsFIFO = new LinkedList<ACLMessage>();
-    protected int nResponders;
+
 
     @Override
 	public java.util.List<Ontology> getOntologies() {
@@ -134,9 +134,9 @@ public class Agent_Planner extends PikaterAgent {
 			// TODO choose a slave node
 			ManagerAgentCommunicator comm = new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
 
-			log("about to create CA");
+			log("Sending request to create CA " + CAtype);
 			AID ca = comm.createAgent(Agent_Planner.this, CAtype, CAtype, new Arguments());
-			log("CA created");
+			log("CA " + CAtype + " created");
 
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 			msg.addReceiver(ca);
@@ -144,9 +144,9 @@ public class Agent_Planner extends PikaterAgent {
 			msg.setLanguage(getCodec().getName());
 			msg.setOntology(TaskOntology.getInstance().getName());
 			
-			Action a_ = new Action(myAgent.getAID(), executeTask);
+			Action executeAction = new Action(myAgent.getAID(), executeTask);
 			try {
-				getContentManager().fillContent(msg, a_);
+				getContentManager().fillContent(msg, executeAction);
 			} catch (CodecException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -188,7 +188,8 @@ public class Agent_Planner extends PikaterAgent {
 	@Deprecated
 	protected class askComputingAgents extends ContractNetInitiator {
 		private static final long serialVersionUID = -7890655626575943947L;
-
+		
+	    int nResponders;
 		ACLMessage req;
         ACLMessage cfp;
 
