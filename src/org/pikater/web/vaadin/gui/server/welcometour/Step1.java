@@ -1,10 +1,12 @@
 package org.pikater.web.vaadin.gui.server.welcometour;
 
+import org.pikater.web.vaadin.gui.server.components.wizard.RefreshableWizardStep;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class Step1 extends WelcomeTourWizardStep
+public class Step1 extends RefreshableWizardStep<WelcomeTourWizard>
 {
 	private final Component content;
 	

@@ -16,6 +16,7 @@ import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.pikater.PikaterSSHLauncher;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.wizard.RefreshableWizardStep;
 import org.pikater.web.vaadin.gui.server.welcometour.Step3TableContainer;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
@@ -30,8 +31,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
-@SuppressWarnings("serial")
-public class Step3 extends WelcomeTourWizardStep
+public class Step3 extends RefreshableWizardStep<WelcomeTourWizard> 
 {
 	/**
 	 * Internal variable storing the top level GUI element of this wizard step.
@@ -68,6 +68,8 @@ public class Step3 extends WelcomeTourWizardStep
 		 */
 		final Button btn_launchPikaterOnConnectedServers = new Button("Launch Pikater on connected masters", new Button.ClickListener()
 		{
+			private static final long serialVersionUID = -4815413200621613910L;
+
 			@Override
 			public void buttonClick(ClickEvent event)
 			{ 
@@ -90,6 +92,8 @@ public class Step3 extends WelcomeTourWizardStep
 		});
 		Button btn_checkAvailabilityOfIncludedServers = new Button("Connect to designated machines if possible", new Button.ClickListener()
 		{
+			private static final long serialVersionUID = -6541999846400127008L;
+
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
@@ -135,6 +139,8 @@ public class Step3 extends WelcomeTourWizardStep
 		this.connectionTable.setHeight("100%");
 		this.connectionTable.addValueChangeListener(new Table.ValueChangeListener()
 		{
+			private static final long serialVersionUID = -6262657918609094172L;
+
 			@Override
 			public void valueChange(ValueChangeEvent event)
 			{

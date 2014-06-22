@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.pikater.shared.RemoteServerInfo;
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
+import org.pikater.web.vaadin.gui.server.components.wizard.RefreshableWizardStep;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 import org.vaadin.teemu.wizards.event.WizardCancelledEvent;
@@ -64,7 +65,8 @@ public class WelcomeTourWizard extends Wizard
 			@Override
 			public void activeStepChanged(WizardStepActivationEvent event)
 			{
-				WelcomeTourWizardStep step = (WelcomeTourWizardStep) event.getActivatedStep();
+				@SuppressWarnings("unchecked")
+				RefreshableWizardStep<WelcomeTourWizard> step = (RefreshableWizardStep<WelcomeTourWizard>) event.getActivatedStep();
 				step.refresh();
 				// System.out.println("activeStepChanged: " + event.getActivatedStep().getCaption());
 			}
