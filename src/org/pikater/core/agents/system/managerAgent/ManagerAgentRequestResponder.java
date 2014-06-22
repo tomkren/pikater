@@ -1,12 +1,15 @@
 package org.pikater.core.agents.system.managerAgent;
 
 import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
@@ -14,8 +17,11 @@ import jade.wrapper.ControllerException;
 
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
+import org.pikater.core.ontology.subtrees.management.KillAgent;
+import org.pikater.core.ontology.subtrees.management.KillYourself;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -46,7 +52,7 @@ public class ManagerAgentRequestResponder {
         return object;
     }
 
-    public ACLMessage respondToSaveAction(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException {
+    public ACLMessage respondToSaveAgent(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException {
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         SaveAgent sa = (SaveAgent) a.getAction();
 
@@ -81,13 +87,14 @@ public class ManagerAgentRequestResponder {
         return reply;
     }
 
-    public ACLMessage respondToCreateAction(ACLMessage request) throws OntologyException, Codec.CodecException {
+    public ACLMessage respondToCreateAgent(ACLMessage request) throws OntologyException, CodecException {
+    	
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
-        CreateAgent ca = (CreateAgent) a.getAction();
+        CreateAgent createAgent = (CreateAgent) a.getAction();
         
-        String agentName = ca.getName();
-        String agentType = ca.getType();
-        Arguments arguments = ca.getArguments();
+        String agentName = createAgent.getName();
+        String agentType = createAgent.getType();
+        Arguments arguments = createAgent.getArguments();
         
         String agentNameCreated =
         		managerAgent._createAgent(agentType, agentName, arguments);
@@ -100,7 +107,55 @@ public class ManagerAgentRequestResponder {
         return reply;
     }
 
-    public ACLMessage respondToLoadAction(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException, ControllerException {
+	public ACLMessage respondToKillAgent(ACLMessage request) throws OntologyException, CodecException {
+		
+        Action a = (Action) managerAgent.getContentManager().extractContent(request);
+        KillAgent killAgent = (KillAgent) a.getAction();
+
+        String agentName = killAgent.getName();
+        AID agentAID = new AID(agentName, false);
+        
+        managerAgent.log("Request to kill " + agentName + " agent");
+        Ontology ontology = AgentManagementOntology.getInstance();
+        Codec codec = managerAgent.getCodec();
+        
+        
+        ACLMessage msgToAgent = request.createReply();
+        msgToAgent.setPerformative(ACLMessage.REQUEST);
+        msgToAgent.setLanguage(codec.getName());
+        msgToAgent.setOntology(ontology.getName());
+        
+        try {
+        	Action actionToAgent = new Action(agentAID, new KillYourself());
+        	managerAgent.getContentManager().fillContent(msgToAgent, actionToAgent);
+        	
+		} catch (CodecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        String replyText = null;
+        try {
+			ACLMessage replyFromAgent = FIPAService.doFipaRequestClient(managerAgent, msgToAgent, 10000);
+			replyText = replyFromAgent.getContent();
+
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		managerAgent.log("Reply from " + agentName + " : " + replyText);
+
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		return reply;
+	}
+	
+    public ACLMessage respondToLoadAgent(ACLMessage request) throws OntologyException, Codec.CodecException, IOException, ClassNotFoundException, ControllerException {
 
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         LoadAgent la = (LoadAgent) a.getAction();
@@ -172,4 +227,5 @@ public class ManagerAgentRequestResponder {
 
         return reply;
     }
+
 }

@@ -19,6 +19,7 @@ import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
+import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
 
@@ -85,12 +86,17 @@ public class Agent_ManagerAgent extends PikaterAgent {
 					Action a = (Action) getContentManager().extractContent(
 							request);
 					if (a.getAction() instanceof LoadAgent) {
-						return responder.respondToLoadAction(request);
+						
+						return responder.respondToLoadAgent(request);
 					} else if (a.getAction() instanceof SaveAgent) {
 						// write it into database
-						return responder.respondToSaveAction(request);
+						return responder.respondToSaveAgent(request);
 					} else if (a.getAction() instanceof CreateAgent) {
-						return responder.respondToCreateAction(request);
+						
+						return responder.respondToCreateAgent(request);
+					} else if (a.getAction() instanceof KillAgent) {
+						
+						return responder.respondToKillAgent(request);
 					}
 				} catch (OntologyException e) {
 					e.printStackTrace();
