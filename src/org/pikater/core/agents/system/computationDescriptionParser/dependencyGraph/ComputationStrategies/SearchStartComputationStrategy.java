@@ -14,6 +14,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
+import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.option.Options;
@@ -21,6 +22,7 @@ import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 import java.util.ArrayList;
@@ -75,7 +77,8 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationId));
 
 		GetParameters gp = new GetParameters();
-		List schema = convertOptionsToSchema((ArrayList<Option>)inputs.get("CAoptions").getNext());
+		@SuppressWarnings("unchecked")
+		List<SearchItem> schema = convertOptionsToSchema((ArrayList<Option>)inputs.get("childoptions").getNext());
 		gp.setSchema(schema);
 		gp.setSearch_options((ArrayList<Option>)inputs.get("options").getNext());
 

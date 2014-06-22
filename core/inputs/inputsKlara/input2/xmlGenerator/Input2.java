@@ -47,7 +47,7 @@ public final class Input2 {
 		optionN.setOption( new OptionValue(5) );
 		
 		Search search = new Search();
-        search.setSearchClass("ChooseXValues");
+        search.setSearchClass("Agent_ChooseXValues");
 		search.addOption( Converter.toOption(optionN) );
 
         //Complex computation agent - options + search + simple CA
@@ -89,7 +89,7 @@ public final class Input2 {
 
 		String fileName = Agent_GUIKlara.filePath + "input2"
 				+ System.getProperty("file.separator")
-				+ "input2.xml";
+				+ "input.xml";
 
 		comDescription.exportXML(fileName);
 	}

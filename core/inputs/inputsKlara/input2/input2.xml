@@ -50,7 +50,7 @@
             </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
           </errors>
           <search id="16">
-            <searchClass>ChooseXValues</searchClass>
+            <searchClass>Agent_ChooseXValues</searchClass>
             <options id="17">
               <org.pikater.core.ontology.subtrees.option.Option id="18">
                 <__mutable>false</__mutable>
