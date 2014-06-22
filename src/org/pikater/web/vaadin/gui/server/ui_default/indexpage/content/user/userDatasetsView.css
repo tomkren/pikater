@@ -1,0 +1,28 @@
+@CHARSET "US-ASCII";
+
+.datasetUploadPopup
+{
+	width: 600px;
+	height: 500px;
+}
+
+.datasetUploadWizard
+{
+	padding-top: 15px;
+}
+
+.datasetUploadWizardStep
+{
+	padding: 15px;
+}
+  
+.v-label.v-label-undef-w.v-label-undefWidth-wordWrap
+{
+	/*
+	Problem: 'v-label-undef-w' overrides label's 'white-space' property to 'nowrap'.
+	What we want: text wrapped even if width is undefined.
+	Solution: add style 'v-label-undefWidth-wordWrap'.
+	*/
+	
+	white-space: normal; /* override the property again */
+}

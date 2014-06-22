@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user;
 
-import java.io.InputStream;
 import java.util.EnumSet;
 
 import org.pikater.shared.database.jpa.JPAUser;
@@ -9,15 +8,31 @@ import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageUserUploads;
+import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableLayout;
-import org.pikater.web.vaadin.gui.server.components.upload.IUploadedFileHandler;
+import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
+import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
+import org.pikater.web.vaadin.gui.server.components.upload.handlers.UploadedDatasetHandler;
+import org.pikater.web.vaadin.gui.server.components.wizard.ParentAwareWizardStep;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.vaadin.teemu.wizards.Wizard;
 
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.server.StreamVariable.StreamingEndEvent;
+import com.vaadin.server.StreamVariable.StreamingErrorEvent;
+import com.vaadin.server.StreamVariable.StreamingStartEvent;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window;
 
+@StyleSheet("userDatasetsView.css")
 public class UserDatasetsView extends DBTableLayout implements IContentComponent
 {
 	private static final long serialVersionUID = -1564809345462937610L;
@@ -25,50 +40,227 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 	public UserDatasetsView()
 	{
 		super(new DataSetTableDBView(ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent())));
-		setSizeFull();
+		setSizeUndefined();
 		
-		Button btn_uploadNewDatasets = new Button("Upload", new Button.ClickListener()
+		addCustomActionComponent(new Button("Upload a new dataset", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = -1045335713385385849L;
 
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				new ManageUserUploads().getNewComponent(
-						EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN),
-						new IUploadedFileHandler()
-						{
-							@Override
-							public void handleFile(InputStream streamToLocalFile, String fileName, String mimeType, long sizeInBytes)
-							{
-								// TODO: upload the file to DB
-								
-							}
-						}
-				);
+				// setting size via CSS doesn't work for Windows for some reason...
+				
+				MyPopup uploadPopup = new MyPopup("Guide to uploading a new dataset");
+				uploadPopup.setWidth("600px");
+				uploadPopup.setHeight("500px");
+				uploadPopup.setContent(new DataSetUploadWizard(uploadPopup));
+				uploadPopup.show();
 			}
-		});
-		// TODO: display help description that mentions renaming arff files to txt files because no such mime type exists
-		addCustomActionButton(btn_uploadNewDatasets);
+		}));
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		// TODO: no views in constructors or does it work?
 	}
 
 	@Override
 	public boolean hasUnsavedProgress()
 	{
-		// TODO Auto-generated method stub
+		/*
+		 * This method can only return false because we have made file upload independent of this view.
+		 * As to why this is important, refer to the Javadoc of {@link IFileUploadEvents}. 
+		 */
 		return false;
 	}
 
 	@Override
 	public String getCloseDialogMessage()
 	{
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	//----------------------------------------------------------------------------
+	// UPLOAD WIZARD
+	
+	private class DataSetUploadWizard extends Wizard
+	{
+		private static final long serialVersionUID = -2782484084003504941L;
+		
+		private final Window parentPopup;
+		private final UploadedDatasetHandler uploadedDataSetHandler; 
+		
+		public DataSetUploadWizard(Window parentPopup)
+		{
+			super();
+			setSizeFull();
+			DataSetUploadWizard.this.addStyleName("datasetUploadWizard");
+			
+			this.parentPopup = parentPopup;
+			this.uploadedDataSetHandler = new UploadedDatasetHandler();
+			
+			addStep(new Step1(this));
+			addStep(new Step2(this));
+			
+			getCancelButton().addClickListener(new Button.ClickListener()
+			{
+				private static final long serialVersionUID = 7767062741423812667L;
+
+				@Override
+				public void buttonClick(ClickEvent event)
+				{
+					closeWizardAndTheParentPopup();
+				}
+			});
+			getFinishButton().setEnabled(false);
+			getFinishButton().setVisible(false);
+		}
+		
+		public void setOptionalARFFHeaders(String headers)
+		{
+			this.uploadedDataSetHandler.setARFFHeaders(headers);
+		}
+		
+		public void closeWizardAndTheParentPopup()
+		{
+			parentPopup.close();
+		}
+	}
+	
+	private class Step1 extends ParentAwareWizardStep<DataSetUploadWizard>
+	{
+		private final VerticalLayout vLayout;
+		private final TextArea textArea;
+		
+		public Step1(DataSetUploadWizard parentWizard)
+		{
+			super(parentWizard);
+			
+			this.vLayout = new VerticalLayout();
+			this.vLayout.setSizeFull();
+			this.vLayout.setStyleName("datasetUploadWizardStep");
+			this.vLayout.setSpacing(true);
+			
+			Label label = new Label("You can optionally enter some ARFF headers that will be joined with the file you upload. "
+					+ "This could be especially handy if you're going to upload a '.csv' or '.xls' file. No ARFF headers are "
+					+ "currently being parsed from them.</br>"
+					+ "If you have no ARFF headers to specify or after you have specified them, click the 'Next' button.", ContentMode.HTML);
+			label.setSizeUndefined();
+			label.setStyleName("v-label-undefWidth-wordWrap");
+			
+			textArea = new TextArea();
+			textArea.setWordwrap(false);
+			textArea.setSizeFull();
+			
+			this.vLayout.addComponent(label);
+			this.vLayout.addComponent(textArea);
+			this.vLayout.setExpandRatio(textArea, 1);
+		}
+
+		@Override
+		public String getCaption()
+		{
+			return "ARFF headers";
+		}
+
+		@Override
+		public Component getContent()
+		{
+			return vLayout;
+		}
+
+		@Override
+		public boolean onAdvance()
+		{
+			getParentWizard().setOptionalARFFHeaders(textArea.getValue());
+			return true;
+		}
+
+		@Override
+		public boolean onBack()
+		{
+			return false;
+		}
+	}
+	
+	private class Step2 extends ParentAwareWizardStep<DataSetUploadWizard>
+	{
+		private final VerticalLayout vLayout;
+		
+		public Step2(DataSetUploadWizard parentWizard)
+		{
+			super(parentWizard);
+			this.vLayout = new VerticalLayout();
+			this.vLayout.setStyleName("datasetUploadWizardStep");
+			this.vLayout.addStyleName("maxWidth");
+			this.vLayout.setSpacing(true);
+			
+			Label label = new Label("Currently, only '.xls', '.csv' and '.arff' files are supported. All other extensions will be rejected.</br>"
+					+ "Since there is no mime type for '.arff' files, you have to upload it as a '.txt' file.", ContentMode.HTML);
+			label.setSizeUndefined();
+			label.setStyleName("v-label-undefWidth-wordWrap");
+			
+			MyMultiUpload mmu = new ManageUserUploads().createUploadButton(
+					"Choose file to upload",
+					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN),
+					getParentWizard().uploadedDataSetHandler
+			);
+			mmu.addFileUploadEventsCallback(new IFileUploadEvents()
+			{
+				@Override
+				public void uploadStarted(StreamingStartEvent event)
+				{
+					getParentWizard().parentPopup.setVisible(false);
+				}
+				
+				@Override
+				public void uploadFailed(StreamingErrorEvent event)
+				{
+					/*
+					 * Single file upload is assumed here.
+					 */
+					
+					uploadFinished(null);
+				}
+				
+				@Override
+				public void uploadFinished(StreamingEndEvent event)
+				{
+					/*
+					 * Single file upload is assumed here.
+					 */
+					
+					getParentWizard().closeWizardAndTheParentPopup();
+				}
+			});
+			
+			this.vLayout.addComponent(label);
+			this.vLayout.addComponent(mmu);
+		}
+
+		@Override
+		public String getCaption()
+		{
+			return "File to upload";
+		}
+
+		@Override
+		public Component getContent()
+		{
+			return vLayout;
+		}
+
+		@Override
+		public boolean onAdvance()
+		{
+			return false;
+		}
+
+		@Override
+		public boolean onBack()
+		{
+			return true;
+		}
 	}
 }
