@@ -12,7 +12,7 @@ public class BasicRecommend_RecommendBox {
 
 		Slot outputSlot = new Slot();
 		outputSlot.setSlotType("recomend");
-		outputSlot.setDataType(SlotTypes.RECOMEND_TYPE);
+		outputSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
 		
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.setAgentClass(Agent_Basic.class);

@@ -44,7 +44,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 				log(DurationServiceRegression_output_prefix, 2);
 		}
 		log("Training...", 2);
-				
+		log("Options: " + getOptions());
 
 		if(getClassifierClass() == null)
 			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
@@ -76,7 +76,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		log("start: " + new Date(start) + " : duration: " + duration, 2);
 		
 		state = states.TRAINED; // change agent state
-		OPTIONS = getClassifierClass().getOptions();
+		OPTIONS = getClassifierClass().getOptions();			
 
 		// write out net parameters
 		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){
@@ -112,18 +112,19 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		log("Evaluation method: \t", 2);
 		
-		if (evaluation_method.getName().equals("CrossValidation") ){
-			int folds = -1; 
-			for (Option next : evaluation_method.getOptions()) {
-				
-				if (next.getName().equals("F")){
-					folds = Integer.parseInt( (String)next.getValue() );
+		if (evaluation_method.getType().equals("CrossValidation") ){
+			int folds = 5; // TODO read default value from file (if necessary)
+
+			if (evaluation_method.getOptions() != null){
+				for (Option next : evaluation_method.getOptions()) {
+					
+					if (next.getName().equals("F")){
+						folds = Integer.parseInt( (String)next.getValue() );
+					}
+			
 				}
 			}
-			if (folds == -1){
-					folds = 5;
-				  // TODO read default value from file (if necessary)
-			}
+			
 			log(folds + "-fold cross validation.", 2);
 			eval.crossValidateModel(
 					getClassifierClass(),

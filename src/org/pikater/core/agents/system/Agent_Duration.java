@@ -354,7 +354,7 @@ public class Agent_Duration extends PikaterAgent {
 		t.setData(d);
 		
 		EvaluationMethod em = new EvaluationMethod();
-		em.setName("Standard"); // TODO don't evaluate at all
+		em.setType("Standard"); // TODO don't evaluate at all
 		
 		t.setEvaluation_method(em);
 		

@@ -111,7 +111,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		});
 	}
 
-	public String createAgent(String type, String name, Arguments args) {
+	public String _createAgent(String type, String name, Arguments args) {
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 

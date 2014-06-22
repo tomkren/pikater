@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -25,6 +26,18 @@ public final class Input1 {
         //Specify a datasource
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
 
+        //Create validation method for a computing agent
+        EvaluationMethod evaluationMethod = new EvaluationMethod();
+        evaluationMethod.setType("CrossValidation");
+        
+        //Create cross validation option
+        StepanuvOption optionF = new StepanuvOption();
+        optionF.setName("F");
+        optionF.setOption( new OptionValue(8) );
+                
+        evaluationMethod.addOption( Converter.toOption(optionF) );
+        
+        
         //Create two options for single computing agent
         StepanuvOption optionS = new StepanuvOption();
         optionS.setName("S");
@@ -34,19 +47,14 @@ public final class Input1 {
         optionM.setName("M");
         optionM.setOption( new OptionValue(-2) );
 
-        StepanuvOption optionEM = new StepanuvOption();
-        optionEM.setName("evaluation_method");
-        optionEM.setOption( new OptionValue("CrossValidation") );
-
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent.addOption( Converter.toOption(optionS) );
 		comAgent.addOption( Converter.toOption(optionM) );
-        comAgent.addOption( Converter.toOption(optionEM) );
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
-
+		comAgent.setEvaluationMethod(evaluationMethod);
 
         //Labeled data labeled by our CA are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();

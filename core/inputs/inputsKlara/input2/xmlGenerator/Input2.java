@@ -32,17 +32,11 @@ public final class Input2 {
         optionB.setName("B");
         optionB.setOption( new OptionValue("?") );
 
-
-        StepanuvOption optionEM = new StepanuvOption();
-        optionEM.setName("evaluation_method");
-        optionEM.setOption( new OptionValue("CrossValidation") );
-
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent.addOption( Converter.toOption(optionS) );
 		comAgent.addOption( Converter.toOption(optionB) );
-        comAgent.addOption( Converter.toOption(optionEM) );
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
 
@@ -61,17 +55,17 @@ public final class Input2 {
 		search.addOption( Converter.toOption(optionN) );
 
         //Complex computation agent - options + search + simple CA
-		StepanuvOption optionOutput = new StepanuvOption();
+/*		StepanuvOption optionOutput = new StepanuvOption();
 		optionOutput.setName("output");
 		optionOutput.setOption( new OptionValue("evaluation_only") );
-
+*/
 		StepanuvOption optionF = new StepanuvOption();
 		optionF.setName("F");
 		optionF.setOption( new OptionValue(10) );
 		
 		CARecSearchComplex complex = new CARecSearchComplex();
 		complex.setComputingAgent(comAgent);
-				complex.addOption( Converter.toOption(optionOutput) );
+//				complex.addOption( Converter.toOption(optionOutput) );
 		complex.addOption( Converter.toOption(optionF) );
         complex.setSearch(search);
 

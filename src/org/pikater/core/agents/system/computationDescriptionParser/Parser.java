@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
 import jade.content.Concept;
+
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
@@ -11,6 +12,9 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEd
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+
+import com.mysql.jdbc.log.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +57,7 @@ public class Parser {
         IDataProvider dataProvider = dataSource.getDataProvider();
         this.parseDataProvider(dataProvider, child, connectionName);
     }
-
+        
     public void parseDataProvider(IDataProvider dataProvider, ComputationNode child, String connectionName) {
         agent.log("Ontology Parser - IDataProvider");
         ComputationNode parent;
@@ -165,9 +169,11 @@ public class Parser {
         }
         ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent);
         computationGraph.addNode(computingNode);
-
-        ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
-        computingNode.setModelClass(computingAgentO.getAgentType());
+        		
+        ComputingAgent computingAgentO = (ComputingAgent) computingAgent;          
+        computingNode.setModelClass(computingAgentO.getAgentType());       
+        computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
+        
         ArrayList<Option> options=new ArrayList<Option>();
         for (Option o:computingAgentO.getOptions())
         {
@@ -175,7 +181,7 @@ public class Parser {
         }
         addOptionsToInputs(computingNode,options);
         fillDataSources(computingAgentO,computingNode);
-
+                       
         return computingNode;
     }
 
@@ -265,7 +271,7 @@ public class Parser {
             parseDataSourceDescription(validationData, node, "validation");
         }
     }
-
+    
     public ComputationGraph getComputationGraph() {
         return computationGraph;
     }

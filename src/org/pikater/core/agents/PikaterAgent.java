@@ -15,6 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.configuration.Arguments;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.shared.logging.Logger;
 import org.pikater.shared.logging.Severity;
 import org.pikater.shared.logging.Verbosity;
@@ -233,5 +234,18 @@ public abstract class PikaterAgent extends Agent {
 	public boolean isSameNode(AID id) {
 		return ((nodeName == null || nodeName.isEmpty()) && !id.getLocalName().contains("-")) ||
 				nodeName != null && id.getLocalName().endsWith("-" + nodeName);
+	}
+	
+	public AID createAgent(String type, String name, Arguments options){
+		ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
+		return communicator.createAgent(this,type,null,null);
+	}
+	
+	public AID createAgent(String type){
+		return createAgent(type, null, null);
+	}
+	
+	public AID createAgent(org.pikater.core.ontology.subtrees.management.Agent agent){
+		return createAgent(agent.getType(), agent.getName(), null ); // TODO agent.getOptions ... predelat optiony na argumenty
 	}
 }

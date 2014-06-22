@@ -1,23 +1,27 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies;
 
+import jade.content.lang.Codec.CodecException;
+import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
+
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,39 +36,30 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
 	int computationId;
 	int graphId;
-	ComputationNode computationNode;
+	SearchComputationNode computationNode;
 
 
 	public SearchStartComputationStrategy (Agent_Manager manager, int computationId,
-			int graphId, ComputationNode computationNode){
+			int graphId, SearchComputationNode computationNode){
 		myAgent = manager;
 		this.computationId = computationId;
 		this.computationNode = computationNode;
 	}
 
 	public void execute(ComputationNode computation){
-//		ACLMessage originalRequest = myAgent.getComputation(computationId).getMessage();
-//
-//		Agent search = getSearchFromNode();
-//		AID searchAID = createSearchAgent(search);
-//
-//		List<Option> mutable_options = getMutableOptions(search.getOptions());
-//
-//		myAgent.addBehaviour(new StartGettingParametersFromSearch(myAgent, originalRequest, prepareRequest(searchAID), this));
+		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
+
+		Agent search = getSearchFromNode();
+		AID searchAID = myAgent.createAgent(search.getType());
+
+		myAgent.addBehaviour(new StartGettingParametersFromSearch(myAgent, originalRequest, prepareRequest(searchAID), this));
     }
 
 
-	public void processFinished(){
-//		TODO
+	public void finished(){
+		// TODO mozna? Je tady neco potreba?
 	}
-
-	private AID createSearchAgent(Agent search){
-//		ManagerAgentCommunicator communicator=new ManagerAgentCommunicator("agentManager");
-//		String type = search.getType();
-//		return communicator.createAgent(myAgent,type,null,null);
-        return null;
-	}
-
+	
 
 	private ACLMessage prepareRequest(AID receiver){
 		// prepare request for the search agent
@@ -73,9 +68,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(receiver);
-//		msg.setLanguage(codec.getName());
-//		msg.setOntology(ontology.getName());
+		msg.setLanguage(myAgent.getCodec().getName());
+		msg.setOntology(myAgent.getOntology().getName());
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationId));
 
 		GetParameters gp = new GetParameters();
 		List schema = convertOptionsToSchema((ArrayList<Option>)inputs.get("CAoptions").getNext());
@@ -85,44 +81,30 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
         Action a = new Action();
 		a.setAction(gp);
 		a.setActor(myAgent.getAID());
-//
-//		myAgent.getContentManager().fillContent(msg, a);
 
-		return msg;
-	}
+		try {
+			myAgent.getContentManager().fillContent(msg, a);
+		} catch (CodecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	private Task getTaskFromNode(){
-		Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
-
-		Agent agent = new Agent();
-		agent.setType((String)inputs.get("modelType").getNext());
-		agent.setOptions((ArrayList<Option>)inputs.get("options").getNext());
-
-		Data data = new Data();
-		data.setExternal_train_file_name((String)inputs.get("train").getNext());
-		data.setExternal_test_file_name((String)inputs.get("test").getNext());
-
-		Task task = new Task();
-		task.setNodeId(computationNode.getId());
-		task.setGraphId(graphId);
-		task.setAgent(agent);
-		task.setData(data);
-		task.setEvaluation_method((EvaluationMethod)inputs.get("evaluation_method").getNext());
-
-		// TODO set note
-		// received_task.setNote(Integer.toString(taskNumber));
-		// increaseTaskNumber();
-
-		return task;
+		return msg;		
 	}
 
 	private Agent getSearchFromNode(){
 
-		Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
+		Map<String,ComputationOutputBuffer> inputs = computationNode.getInputs();
 
 		Agent agent = new Agent();
-		agent.setType((String)inputs.get("searchType").getNext());
-		agent.setOptions((ArrayList<Option>)inputs.get("options").getNext());
+		agent.setType(computationNode.getModelClass());
+		
+		OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
+	    Options options = new Options(optionEdge.getOptions());
+		agent.setOptions(options.getList());
 
 		return agent;
 	}
@@ -184,15 +166,4 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		return new_schema;
 	}
 
-	private List<Option> getMutableOptions(List<Option> Options){
-		List<Option> mutable = new ArrayList<Option>();
-		java.util.Iterator<Option> itr = Options.iterator();
-		while (itr.hasNext()) {
-			Option o = (Option) itr.next();
-			if (o.getMutable()){
-				mutable.add(o);
-			}
-		}
-		return mutable;
-	}
 }
