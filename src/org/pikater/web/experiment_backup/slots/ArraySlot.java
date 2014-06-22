@@ -2,7 +2,7 @@ package org.pikater.web.experiment_backup.slots;
 
 import java.util.Set;
 
-import org.pikater.shared.util.InstanceSet;
+import org.pikater.shared.util.collections.InstanceSet;
 import org.pikater.web.experiment_backup.resources.DataResource;
 import org.pikater.web.experiment_backup.resources.ParamResource;
 import org.pikater.web.experiment_backup.resources.Resource;

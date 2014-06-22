@@ -1,12 +1,13 @@
 package org.pikater.shared.database.views.jirka.datasets;
 
-import org.pikater.shared.AppHelper;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
+import org.pikater.shared.util.DateUtils;
+import org.pikater.shared.util.FilesizeUtils;
 
 public class DataSetTableDBRow extends AbstractTableRowDBView {
 
@@ -83,7 +84,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				};
 			}
 		case SIZE:
-			return new StringDBViewValue(AppHelper.formatFileSize(dataset.getSize()), true)
+			return new StringDBViewValue(FilesizeUtils.formatFileSize(dataset.getSize()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -96,7 +97,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case CREATED:
-			return new StringDBViewValue(""+dataset.getCreated(),true)
+			return new StringDBViewValue(DateUtils.toCzechDate(dataset.getCreated()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)

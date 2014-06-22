@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.util.IOUtils;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
@@ -40,13 +41,13 @@ public class XStreamHelper
 		}
 		else
 		{
-			AppHelper.writeToFile(filePath, serializeToXML(objectToSerialize, serializer), Charset.forName("UTF-8"));
+			IOUtils.writeToFile(filePath, serializeToXML(objectToSerialize, serializer), Charset.forName("UTF-8"));
 		}
 	}
 	
 	public static <T> T deserializeFromPath(Class<T> clazz, String path, XStream deserializer)
 	{
-		return deserializeFromXML(clazz, AppHelper.readTextFile(path), deserializer);
+		return deserializeFromXML(clazz, IOUtils.readTextFile(path), deserializer);
 	}
 	
 	@SuppressWarnings("unchecked")

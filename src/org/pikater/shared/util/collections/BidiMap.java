@@ -1,4 +1,4 @@
-package org.pikater.shared.util;
+package org.pikater.shared.util.collections;
 
 import java.io.Serializable;
 import java.util.HashMap;

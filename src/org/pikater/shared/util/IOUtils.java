@@ -1,4 +1,4 @@
-package org.pikater.shared;
+package org.pikater.shared.util;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -6,29 +6,25 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Set;
 
 import org.pikater.shared.logging.PikaterLogger;
-import org.reflections.Reflections;
 
-public class AppHelper
+public class IOUtils
 {
 	//----------------------------------------------------------------------------------------------------------------
-	// APPLICATION PATHS RELATED STUFF
+	// PATHS RELATED STUFF
 	
-	private static String baseAbsAppPath = null; // if you're going to use this, first set this field when the application starts
+	private static String baseAbsAppPath = null;
 	
 	public static void setAbsoluteBaseAppPath(String baseAbsAppPath)
 	{
-		AppHelper.baseAbsAppPath = baseAbsAppPath;
+		IOUtils.baseAbsAppPath = baseAbsAppPath;
 	}
 	
+	/**
+	 * If you're going to use this, first use the {@link #setAbsoluteBaseAppPath setAbsoluteBaseAppPath} method.
+	 * @return
+	 */
 	public static String getAbsoluteBaseAppPath()
 	{
 		return baseAbsAppPath;
@@ -88,8 +84,8 @@ public class AppHelper
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------
-	// OTHER PUBLIC ROUTINES
-	
+	// FILE RELATED STUFF
+		
 	public static String readTextFile(String filePath)
 	{
 		try
@@ -115,66 +111,4 @@ public class AppHelper
 			PikaterLogger.logThrowable(String.format("Could not write given content to file '%s' because of the below IO error:", filePath), e);
 		}
 	}
-	
-	public static <T> Set<Class<? extends T>> getSubtypesFromSamePackage(Class<T> clazz)
-	{
-		Reflections reflections = new Reflections(clazz.getPackage().getName());
-		return reflections.getSubTypesOf(clazz);
-	}
-	
-	public static Set<Class<? extends Object>> getTypesFromPackage(Package pkg)
-	{
-		Reflections reflections = new Reflections(pkg.getName());
-		return reflections.getSubTypesOf(Object.class);
-	}
-	
-	public static Set<String> enumSetToStringSet(EnumSet<?> enumSet)
-	{
-		Set<String> result = new HashSet<String>();
-		for(Enum<?> enumValue : enumSet)
-		{
-			result.add(enumValue.name());
-		}
-		return result;
-	}
-	
-	public static Set<String> rangeToStringSet(int fromIncl, int toIncl)
-	{
-		Set<String> result = new LinkedHashSet<String>(); // LinkedHashSet preserves insertion order
-		for(int i = fromIncl; i <= toIncl; i++)
-		{
-			result.add(String.valueOf(i));
-		}
-		return result;
-	}
-	
-	//Source: http://stackoverflow.com/questions/3263892/format-file-size-as-mb-gb-etc
-	public static String formatFileSize(long size){
-		if(size <= 0) return "0";
-		final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
-		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
-		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-	}
-	
-	public static String formatInteger(Locale locale,int value){
-		NumberFormat numberFormat=NumberFormat.getInstance(locale);
-		return numberFormat.format(value);
-	}
-	
-	public static String formatDouble(Locale locale,double value){
-		NumberFormat numberFormat=NumberFormat.getInstance(locale);
-		return numberFormat.format(value);
-	}
-	
-	public static String formatBool(Locale locale,boolean value){
-		return ""+value;
-	}
-	
-	public static Locale getDefaultLocale(){
-		return new Locale.Builder()
-				.setLanguage("en")
-				.setRegion("US")
-				.build();
-	}
-	
 }

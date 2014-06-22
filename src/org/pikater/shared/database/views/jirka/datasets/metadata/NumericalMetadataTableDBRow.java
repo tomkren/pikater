@@ -2,7 +2,7 @@ package org.pikater.shared.database.views.jirka.datasets.metadata;
 
 import java.util.Locale;
 
-import org.pikater.shared.AppHelper;
+import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
@@ -43,7 +43,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case AVERAGE:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale, attrNum.getAvarage()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getAvarage()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -56,7 +56,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case IS_REAL:
-			return new StringDBViewValue(AppHelper.formatBool(currentLocale,attrNum.getIsReal()), true)
+			return new StringDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.getIsReal()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -69,7 +69,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case IS_TARGET:
-			return new StringDBViewValue(AppHelper.formatBool(currentLocale,attrNum.isTarget()), true)
+			return new StringDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.isTarget()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -82,7 +82,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case MAXIMUM:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale,attrNum.getMax()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMax()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -95,7 +95,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case MEDIAN:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale,attrNum.getMedian()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMedian()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -108,7 +108,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case MINIMUM:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale,attrNum.getMin()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMin()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -121,7 +121,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case MODE:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale,attrNum.getMode()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMode()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -134,7 +134,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case RATIO_OF_MISSING_VALUES:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale,attrNum.getRatioOfMissingValues()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getRatioOfMissingValues()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -147,7 +147,7 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case VARIANCE:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale,attrNum.getVariance()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getVariance()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)

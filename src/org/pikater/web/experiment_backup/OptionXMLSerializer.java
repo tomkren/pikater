@@ -2,7 +2,7 @@ package org.pikater.web.experiment_backup;
 
 import java.io.PrintWriter;
 
-import org.pikater.shared.AppHelper;
+import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.util.Interval;
 import org.pikater.web.experiment_backup.options.AbstractOption;
@@ -17,19 +17,19 @@ public final class OptionXMLSerializer
 	{
 		// prepare serializer
 		serializer = new XStream();
-		for (Class<? extends BoxInfo> unit : AppHelper.getSubtypesFromSamePackage(BoxInfo.class))
+		for (Class<? extends BoxInfo> unit : LocaleUtils.getSubtypesFromSamePackage(BoxInfo.class))
 		{
 			serializer.processAnnotations(unit);
 		}
-		for (Class<? extends AbstractSlot> unit : AppHelper.getSubtypesFromSamePackage(AbstractSlot.class))
+		for (Class<? extends AbstractSlot> unit : LocaleUtils.getSubtypesFromSamePackage(AbstractSlot.class))
 		{
 			serializer.processAnnotations(unit);
 		}
-		for (Class<? extends AbstractOption> unit : AppHelper.getSubtypesFromSamePackage(AbstractOption.class))
+		for (Class<? extends AbstractOption> unit : LocaleUtils.getSubtypesFromSamePackage(AbstractOption.class))
 		{
 			serializer.processAnnotations(unit);
 		}
-		for (Class<? extends Object> unit : AppHelper.getTypesFromPackage(Interval.class.getPackage()))
+		for (Class<? extends Object> unit : LocaleUtils.getTypesFromPackage(Interval.class.getPackage()))
 		{
 			serializer.processAnnotations(unit);
 		}
@@ -38,7 +38,7 @@ public final class OptionXMLSerializer
 	public static void serialize()
 	{
 		// process types and serialize them
-		for (Class<? extends BoxInfo> unit : AppHelper.getSubtypesFromSamePackage(BoxInfo.class))
+		for (Class<? extends BoxInfo> unit : LocaleUtils.getSubtypesFromSamePackage(BoxInfo.class))
 		{
 			try
 			{

@@ -7,7 +7,7 @@ import java.util.Comparator;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxType;
-import org.pikater.shared.util.CustomOrderSet;
+import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowser;
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.ICellBrowserTreeViewModel;

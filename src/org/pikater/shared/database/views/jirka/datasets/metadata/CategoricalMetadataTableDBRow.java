@@ -2,7 +2,7 @@ package org.pikater.shared.database.views.jirka.datasets.metadata;
 
 import java.util.Locale;
 
-import org.pikater.shared.AppHelper;
+import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
@@ -43,7 +43,7 @@ public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case IS_TARGET:
-			return new StringDBViewValue(AppHelper.formatBool(currentLocale,attrCat.isTarget()), true)
+			return new StringDBViewValue(LocaleUtils.formatBool(currentLocale,attrCat.isTarget()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -57,7 +57,7 @@ public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 			};
 		
 		case RATIO_OF_MISSING_VALUES:
-			return new StringDBViewValue(AppHelper.formatDouble(currentLocale,attrCat.getRatioOfMissingValues()), true)
+			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getRatioOfMissingValues()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)
@@ -71,7 +71,7 @@ public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 			};
 		
 		case NUMBER_OF_CATEGORIES:
-			return new StringDBViewValue(AppHelper.formatInteger(currentLocale,attrCat.getNumberOfCategories()), true)
+			return new StringDBViewValue(LocaleUtils.formatInteger(currentLocale,attrCat.getNumberOfCategories()), true)
 			{
 				@Override
 				protected void updateEntities(String newValue)

@@ -1,9 +1,7 @@
 package org.pikater.shared.database.views.jirka.users;
 
-import java.text.SimpleDateFormat;
 import java.util.EnumSet;
 
-import org.pikater.shared.AppHelper;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
@@ -13,15 +11,15 @@ import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBVie
 import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
+import org.pikater.shared.util.DateUtils;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 public class UsersTableDBRow extends AbstractTableRowDBView
 {
-	private final SimpleDateFormat dateFormatter;
 	public final JPAUser user;
 	
 	public UsersTableDBRow(JPAUser user)
 	{
-		this.dateFormatter = new SimpleDateFormat("dd.MM. yyyy");
 		this.user = user;
 	}
 
@@ -61,7 +59,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					}
 				};
 			case REGISTERED_AT:
-				return new StringDBViewValue(dateFormatter.format(user.getCreated()), true)
+				return new StringDBViewValue(DateUtils.toCzechDate(user.getCreated()), true)
 				{
 					@Override
 					protected void updateEntities(String newValue)
@@ -78,7 +76,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 			 * And then the editable ones.
 			 */
 			case ACCOUNT_STATUS:
-				return new RepresentativeDBViewValue(AppHelper.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name(), false)
+				return new RepresentativeDBViewValue(CollectionUtils.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name(), false)
 				{
 					@Override
 					protected void updateEntities(String newValue)
@@ -94,7 +92,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 				};
 				
 			case MAXIMUM_PRIORITY:
-				return new RepresentativeDBViewValue(AppHelper.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()), false)
+				return new RepresentativeDBViewValue(CollectionUtils.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()), false)
 				{
 					@Override
 					protected void updateEntities(String newValue)

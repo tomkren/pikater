@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.pikater.shared.AppHelper;
+import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -89,7 +89,7 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 	public NumericalMetaDataTableDBView(JPADataSetLO datasetlo)
 	{
 		this.dslo=datasetlo;
-		this.currentLocale=AppHelper.getDefaultLocale();
+		this.currentLocale=LocaleUtils.getDefaultLocale();
 	}
 	
 	/**

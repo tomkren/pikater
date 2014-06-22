@@ -2,7 +2,7 @@ package org.pikater.web.vaadin;
 
 import java.io.File;
 
-import org.pikater.shared.AppHelper;
+import org.pikater.shared.util.IOUtils;
 
 import com.vaadin.server.FileResource;
 import com.vaadin.server.ThemeResource;
@@ -64,7 +64,7 @@ public class MyResources
 	// ----------------------------------------------------------------
 	// RESOURCE FIELDS:
 	
-	public static final FileResource prop_appConf = new FileResource(new File(AppHelper.joinPathComponents(AppHelper.getAbsoluteWEBINFCONFPath(), "appServer.properties")));
+	public static final FileResource prop_appConf = new FileResource(new File(IOUtils.joinPathComponents(IOUtils.getAbsoluteWEBINFCONFPath(), "appServer.properties")));
 	
 	/*
 	 * Banner.

@@ -7,10 +7,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.pikater.shared.AppHelper;
 import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
+import org.pikater.shared.util.IOUtils;
 import org.pikater.web.vaadin.MyResources;
 import org.pikater.web.config.JadeTopologies;
 import org.pikater.web.config.ServerConfiguration;
@@ -49,7 +49,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		
 		// this must be first
 		ServerConfigurationInterface.setField(ServerConfItem.CONTEXT, event.getServletContext());
-		AppHelper.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
+		IOUtils.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
 		
 		// set the application-wide logger - this must be second
 		PikaterLogger.setLogger(new GeneralPikaterLogger()

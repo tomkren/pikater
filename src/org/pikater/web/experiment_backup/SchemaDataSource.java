@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.pikater.shared.util.BidiMap;
 import org.pikater.shared.util.SimpleIDGenerator;
+import org.pikater.shared.util.collections.BidiMap;
 import org.pikater.web.experiment_backup.box.AbstractBox;
 import org.pikater.web.experiment_backup.box.LeafBox;
 import org.pikater.web.experiment_backup.box.LeafBox.SlotType;
