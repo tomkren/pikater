@@ -1,5 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
+
 import java.util.LinkedList;
 
 /**
@@ -9,6 +11,10 @@ import java.util.LinkedList;
  */
 public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
     LinkedList<E> buffer=new LinkedList<>();
+
+    public StandardBuffer(ComputationNode source, ComputationNode target) {
+           super(source,target);
+    }
 
     @Override
     public boolean hasNext() {
