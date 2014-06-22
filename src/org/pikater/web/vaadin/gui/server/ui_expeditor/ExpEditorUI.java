@@ -10,6 +10,7 @@ import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet;
+import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 import com.vaadin.annotations.Push;
@@ -116,10 +117,34 @@ public class ExpEditorUI extends CustomConfiguredUI
 		}
 		else
 		{
-			// simply create a new empty editor and let the user handle the rest
-			ExpEditor editor = new ExpEditor(!getSession().getConfiguration().isProductionMode());
-			setContent(editor);
+			/*
+			 * Display editor if authenticated or make the user authenticate first and then display it.
+			 */
+			if(ManageAuth.isUserAuthenticated(getSession()))
+			{
+				displayExperimentEditor();
+			}
+			else
+			{
+				forceUserToAuthenticate(new CustomConfiguredUI.IAuthenticationSuccessful()
+				{
+					@Override
+					public void onSuccessfulAuth()
+					{
+						displayExperimentEditor();
+					}
+				});
+			}
 		}
+	}
+	
+	private void displayExperimentEditor()
+	{
+		// TODO: 
+		
+		// simply create a new empty editor and let the user handle the rest
+		ExpEditor editor = new ExpEditor(!getSession().getConfiguration().isProductionMode());
+		setContent(editor);
 	}
 	
 	protected static void loadSampleExperiment(ExpEditor editor)

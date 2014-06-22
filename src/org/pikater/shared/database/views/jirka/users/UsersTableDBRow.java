@@ -111,7 +111,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 				return new ActionDBViewValue("Reset")
 				{
 					@Override
-					public void executeAction()
+					public void execute()
 					{
 						// TODO: reset user password
 					}

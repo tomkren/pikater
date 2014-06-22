@@ -62,10 +62,10 @@ public class DataSetTableDBView extends AbstractTableDBView
 			{
 				case OWNER:
 				case CREATED:
-				case DESCRIPTION:
 				case NUMBER_OF_INSTANCES:
 				case DEFAULT_TASK_TYPE:
 				case SIZE:
+				case DESCRIPTION:
 					return ColumnType.STRING;
 					
 				default:
