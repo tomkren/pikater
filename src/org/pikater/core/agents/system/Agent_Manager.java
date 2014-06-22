@@ -22,9 +22,9 @@ import jade.proto.SubscriptionResponder.SubscriptionManager;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.management.ManagerAgentCommunicator;
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;

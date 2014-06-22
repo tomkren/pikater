@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system.management;
+package org.pikater.core.agents.system.managerAgent;
 
 import jade.content.lang.Codec;
 import jade.content.onto.Ontology;
@@ -48,10 +48,10 @@ public class ManagerAgentCommunicator {
 		AID aid = null;
 		try {
 			agent.getContentManager().fillContent(msg_ca, a);
-			ACLMessage msg_name = FIPAService
+			ACLMessage msgRetursName = FIPAService
 					.doFipaRequestClient(agent, msg_ca);
 
-			aid = new AID(msg_name.getContent(), AID.ISLOCALNAME);
+			aid = new AID(msgRetursName.getContent(), AID.ISLOCALNAME);
 		} catch (FIPAException e) {
 			agent.logError(agent.getLocalName()
 					+ ": Exception while adding agent " + type + ": "

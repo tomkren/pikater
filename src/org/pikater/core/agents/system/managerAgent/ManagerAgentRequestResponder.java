@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system.management;
+package org.pikater.core.agents.system.managerAgent;
 
 import jade.content.lang.Codec;
 import jade.content.onto.Ontology;
@@ -12,6 +12,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 
+import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
@@ -83,20 +84,18 @@ public class ManagerAgentRequestResponder {
     public ACLMessage respondToCreateAction(ACLMessage request) throws OntologyException, Codec.CodecException {
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         CreateAgent ca = (CreateAgent) a.getAction();
-        String agent_name;
-        if (ca.getName() != null){
-            agent_name = ca.getName();
-        }
-        else{
-            agent_name = ca.getType();
-        }
-
-        agent_name = managerAgent.createAgent(ca.getType(), agent_name, ca.getArguments());
+        
+        String agentName = ca.getName();
+        String agentType = ca.getType();
+        Arguments arguments = ca.getArguments();
+        
+        String agentNameCreated =
+        		managerAgent.createAgent(agentType, agentName, arguments);
 
         ACLMessage reply = request.createReply();
         reply.setPerformative(ACLMessage.INFORM);
-        reply.setContent(agent_name);
-        managerAgent.log("Agent " + agent_name + " created.");
+        reply.setContent(agentNameCreated);
+        managerAgent.log("Agent " + agentNameCreated + " created.");
 
         return reply;
     }
