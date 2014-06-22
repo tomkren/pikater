@@ -78,7 +78,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 		GetParameters gp = new GetParameters();
 		@SuppressWarnings("unchecked")
-		List<SearchItem> schema = convertOptionsToSchema((ArrayList<Option>)inputs.get("childoptions").getNext());
+		List<SearchItem> schema = convertOptionsToSchema(((OptionEdge)inputs.get("childoptions").getNext()).getOptions());
 		gp.setSchema(schema);
 		gp.setSearch_options((ArrayList<Option>)inputs.get("options").getNext());
 

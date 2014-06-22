@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.option.Option;
@@ -42,7 +41,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 	private static final long serialVersionUID = 8637677510056974015L;
 	private Codec codec = new SLCodec();
-	private Ontology ontology = MessagesOntology.getInstance();
+	private Ontology ontology = SearchOntology.getInstance();
 	
 	protected int query_block_size = 1;
 
