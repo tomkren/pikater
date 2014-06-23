@@ -1,18 +1,22 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user;
 
+import java.io.File;
 import java.util.EnumSet;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.jirka.datasets.DataSetTableDBView;
+import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.quartz.PikaterJobScheduler;
+import org.pikater.shared.quartz.jobs.web.UploadedDatasetHandler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageUserUploads;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
-import org.pikater.web.vaadin.gui.server.components.upload.handlers.UploadedDatasetHandler;
 import org.pikater.web.vaadin.gui.server.components.wizard.ParentAwareWizardStep;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.vaadin.teemu.wizards.Wizard;
@@ -89,7 +93,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 		private static final long serialVersionUID = -2782484084003504941L;
 		
 		private final Window parentPopup;
-		private final UploadedDatasetHandler uploadedDataSetHandler; 
+		private String optionalARFFHeaders;
 		
 		public DataSetUploadWizard(Window parentPopup)
 		{
@@ -98,7 +102,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			DataSetUploadWizard.this.addStyleName("datasetUploadWizard");
 			
 			this.parentPopup = parentPopup;
-			this.uploadedDataSetHandler = new UploadedDatasetHandler();
+			this.optionalARFFHeaders = null;
 			
 			addStep(new Step1(this));
 			addStep(new Step2(this));
@@ -117,9 +121,14 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			getFinishButton().setVisible(false);
 		}
 		
+		public String getOptionalARFFHeaders()
+		{
+			return optionalARFFHeaders;
+		}
+		
 		public void setOptionalARFFHeaders(String headers)
 		{
-			this.uploadedDataSetHandler.setARFFHeaders(headers);
+			this.optionalARFFHeaders = headers;
 		}
 		
 		public void closeWizardAndTheParentPopup()
@@ -173,7 +182,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 		@Override
 		public boolean onAdvance()
 		{
-			getParentWizard().setOptionalARFFHeaders(textArea.getValue());
+			getParentWizard().setOptionalARFFHeaders(textArea.getValue().trim());
 			return true;
 		}
 
@@ -204,8 +213,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			MyMultiUpload mmu = new ManageUserUploads().createUploadButton(
 					"Choose file to upload",
 					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
-							HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN),
-					getParentWizard().uploadedDataSetHandler
+							HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN)
 			);
 			mmu.addFileUploadEventsCallback(new IFileUploadEvents()
 			{
@@ -222,17 +230,30 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 					 * Single file upload is assumed here.
 					 */
 					
-					uploadFinished(null);
+					getParentWizard().closeWizardAndTheParentPopup();
 				}
 				
 				@Override
-				public void uploadFinished(StreamingEndEvent event)
+				public void uploadFinished(StreamingEndEvent event, File uploadedTemporaryFile)
 				{
 					/*
 					 * Single file upload is assumed here.
 					 */
 					
-					getParentWizard().closeWizardAndTheParentPopup();
+					Object[] jobParams = new Object[] { uploadedTemporaryFile, getParentWizard().getOptionalARFFHeaders() };
+					try
+					{
+						PikaterJobScheduler.getJobScheduler().defineJob(UploadedDatasetHandler.class, jobParams);
+					}
+					catch (Throwable e)
+					{
+						PikaterLogger.logThrowable("Could not issue a dataset upload job.", e);
+						MyNotifications.showError("Upload failed", event.getFileName());
+					}
+					finally
+					{
+						getParentWizard().closeWizardAndTheParentPopup();
+					}
 				}
 			});
 			
