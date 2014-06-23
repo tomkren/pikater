@@ -73,6 +73,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
+import org.pikater.core.ontology.subtrees.batch.LoadBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
@@ -204,12 +205,26 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof SaveBatch) {
 						return respondToSaveBatch(request, a);
 					}
+					if (a.getAction() instanceof LoadBatch) {
+						return respondToLoadBatch(request, a);
+					}
 					if (a.getAction() instanceof UpdateBatchStatus) {
 						return respondToUpdateBatchStatus(request, a);
 					}
+					
+					/**
+					 * Experiment actions
+					 */
 					if (a.getAction() instanceof SaveExperiment) {
 						return respondToSaveExperiment(request, a);
 					}
+					if (a.getAction() instanceof UpdateExperimentStatus) {
+						return respondToUpdateBatchStatus(request, a);
+					}
+					
+					/**
+					 * Results actions
+					 */
 					if (a.getAction() instanceof SaveResults) {
 						return respondToSaveResults(request, a);
 					}
@@ -506,16 +521,19 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 
 		return reply;
 	}
 
+	private ACLMessage respondToLoadBatch(ACLMessage request, Action a) {
+		//TODO:
+		return null;
+	}
+	
 	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request, Action a) {
 
 		log("respondToUpdateBatchStatus");
@@ -566,11 +584,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage());
 		}
 		
 		return reply;

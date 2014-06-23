@@ -22,6 +22,7 @@ import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
+import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
@@ -57,31 +58,27 @@ public class ManagerCommunicator {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			ce.printStackTrace();
+			agent.logError(ce.getMessage());
 		} catch (OntologyException oe) {
-			oe.printStackTrace();
+			agent.logError(oe.getMessage());
 		}
 
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			agent.logError(e.getMessage());
 		}
 		
 		ContentElement content = null;
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			agent.logError(e1.getMessage());
 		} catch (CodecException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			agent.logError(e1.getMessage());
 		} catch (OntologyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			agent.logError(e1.getMessage());
 		}
 
 		if (content instanceof Result) {
@@ -127,31 +124,27 @@ public class ManagerCommunicator {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			ce.printStackTrace();
+			agent.logError(ce.getMessage());
 		} catch (OntologyException oe) {
-			oe.printStackTrace();
+			agent.logError(oe.getMessage());
 		}
 
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			agent.log(e.getMessage());
 		}
 		
 		ContentElement content = null;
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			agent.logError(e1.getMessage());
 		} catch (CodecException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			agent.logError(e1.getMessage());
 		} catch (OntologyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			agent.logError(e1.getMessage());
 		}
 
 		if (content instanceof Result) {
@@ -169,6 +162,43 @@ public class ManagerCommunicator {
 	}
 	
 	public void updateBatchStatus(PikaterAgent agent, int batchID, String batchStatus) {
+		
+		UpdateBatchStatus updateBatchStatus = new UpdateBatchStatus();
+		updateBatchStatus.setBatchID(batchID);
+		updateBatchStatus.setStatus(batchStatus);
+        
+        Ontology ontology = BatchOntology.getInstance();
+
+        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+        msg.setSender(agent.getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+        msg.setLanguage(agent.getCodec().getName());
+        msg.setOntology(ontology.getName());
+        msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+
+		Action a = new Action();
+		a.setAction(updateBatchStatus);
+		a.setActor(agent.getAID());
+
+		try {
+			// Let JADE convert from Java objects to string
+			agent.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			agent.logError(ce.getMessage());
+		} catch (OntologyException oe) {
+			agent.logError(oe.getMessage());
+		}
+
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(agent, msg);
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage());
+		}
+
 	}
 	
 	public void updateExperimentStatus(PikaterAgent agent, int experimentID, String experimentStatus) {
