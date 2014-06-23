@@ -1,16 +1,16 @@
 package org.pikater.core.agents.system;
 
 
-import jade.content.ContentElement;
-import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.domain.FIPAAgentManagement.NotUnderstoodException;
+import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.proto.AchieveREResponder;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
@@ -44,109 +44,120 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 		initDefault();
 		registerWithDF(AgentNames.GUI_AGENTS_COMMUNICATOR);
 
-		RecieveBatch recieveExp =
-			new RecieveBatch(this, getCodec());
-		addBehaviour(recieveExp);
-	}
-	
-	
-	public int sendBatchToSave(Batch batch) {
-
-		ManagerCommunicator comunicator =
-				new ManagerCommunicator();
-		return comunicator.saveBatch(this, batch);
-	}
-}
-
-
-class RecieveBatch extends CyclicBehaviour {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6561793512467823420L;
-
-	private Agent_GuiAgentsCommunicator agent = null;
-	private Codec codec = null;
-	
-	public RecieveBatch(Agent_GuiAgentsCommunicator agent, Codec codec) {
-		this.agent = agent;
-		this.codec = codec;
-	}
-
-	public void action() {
-
-		MessageTemplate reguestTemplate = 
-				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-		ACLMessage request= this.agent.receive(reguestTemplate);
+		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		
-		if (request != null && agent.getContentManager() != null) {
-			
-			ContentElement ce = null;
-			try {
-				ce = agent.getContentManager().extractContent(request);
-			} catch (CodecException | OntologyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		addBehaviour(new AchieveREResponder(this, mt) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+				try {
+					Action a = (Action) getContentManager().extractContent(request);
+					
+					/**
+					 * LogicalNameTraslate actions
+					 */
+					if (a.getAction() instanceof ExecuteBatch) {
+						return respondToExecuteBatch(request, a);
+					}
+				
+				} catch (OntologyException e) {
+					e.printStackTrace();
+					logError("Problem extracting content: " + e.getMessage());
+				} catch (CodecException e) {
+					e.printStackTrace();
+					logError("Codec problem: " + e.getMessage());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	
+				ACLMessage failure = request.createReply();
+				failure.setPerformative(ACLMessage.FAILURE);
+				logError("Failure responding to request: " + request.getContent());
+				return failure;
 			}
+	
+		});
+	}
+	
+	private ACLMessage respondToExecuteBatch(ACLMessage request, Action a) {
+		
+		ExecuteBatch exeBatch = (ExecuteBatch) a.getAction();
+        ComputationDescription compDescription = exeBatch.getDescription();
 
-			Action act = (Action)ce;
-			
-			if (!(act.getAction() instanceof ExecuteBatch)) {
-				return;
+        String batchName = null;
+        String batchNote = null;
+        int batchOwnerID = -1;
+        int batchPriority = -1;
+
+		AID klaraGUI = new AID(AgentNames.GUI_KLARA_AGENT, false);
+		String senderName = request.getSender().getLocalName() + "Agent";
+		
+			if (senderName.equals(klaraGUI.getLocalName()) ) {
+				
+				batchName = "Klara's Batch";
+				batchNote = "Inputed by GuiKlara Agent";
+				batchOwnerID = 6; //TODO:
+				batchPriority = 9;
+			} else {
+				
+				logError("Not permitted sender");
+				ACLMessage failure = request.createReply();
+				failure.setPerformative(ACLMessage.FAILURE);
+				return failure;
 			}
-           
-			System.out.println(agent.getName() + ": Agent recieved ComputingDescription from " + request.getSender().getName() );
-			ExecuteBatch exeExperiment = (ExecuteBatch) act.getAction();
-            ComputationDescription compDescription = exeExperiment.getDescription();
-
-            ACLMessage reply = request.createReply();
-            reply.setPerformative(ACLMessage.INFORM);
-            reply.setContent("OK");
-            agent.send(reply);
-
-
-
-            // send received ComputationDescription as Batch to DataManger to save to DB
-            int klaraID = 6;
+			           
+			log("Agent recieved ComputingDescription from " + request.getSender().getName() );
+			
 
             Batch batch = new Batch();
-            batch.setName("Klara's Batch");
-            batch.setNote("Inputed by GuiKlara Agent");
+            batch.setName(batchName);
+            batch.setNote(batchNote);
             batch.setStatus(BatchStatuses.WAITING);
-            batch.setPriority(9);
-            batch.setOwnerID(klaraID);
+            batch.setPriority(batchPriority);
+            batch.setOwnerID(batchOwnerID);
             batch.setDescription(compDescription);
 
-            int batchId = agent.sendBatchToSave(batch);
-            agent.log("BatchId: " + batchId);
+            // send received ComputationDescription as Batch to DataManger to save to DB
+            ManagerCommunicator communicator = new ManagerCommunicator();
+            int batchId =  communicator.saveBatch(this, batch);
+            log("BatchId: " + batchId + " saved");
 
+            
+
+            //TODO: send only NewBatch
             AID receiver = new AID(AgentNames.MANAGER, false);		
-
             Ontology ontology = BatchOntology.getInstance();
+            
+            ExecuteBatch execute = new ExecuteBatch();
+            execute.setDescription(compDescription);
             
             ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
             msg.addReceiver(receiver);
             msg.setLanguage(codec.getName());
             msg.setOntology(ontology.getName());
             try {
-    			agent.getContentManager().fillContent(msg, new Action(receiver, exeExperiment));
-    			agent.send(msg);
-    			//ACLMessage replyOK = FIPAService.doFipaRequestClient(agent, msg); //, 1000);
-    		    //System.out.println("Reply: " + replyOK.getContent());
+    			getContentManager().fillContent(msg, new Action(receiver, execute));
+    			send(msg);
     			
     		} catch (CodecException e) {
-    			// TODO Auto-generated catch block
+    			logError(e.getMessage());
     			e.printStackTrace();
     		} catch (OntologyException e) {
-    			// TODO Auto-generated catch block
+    			logError(e.getMessage());
     			e.printStackTrace();
 			}
-
-		}
+            //TODO: end
+		
+            
+            ACLMessage reply = request.createReply();
+            reply.setPerformative(ACLMessage.INFORM);
+            reply.setContent("OK");
+            return reply;
 	}
 	
-	
 }
+
 
 

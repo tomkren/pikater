@@ -63,7 +63,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-		registerWithDF();
+		registerWithDF(AgentNames.GUI_KLARA_AGENT);
 		
 		bufferedConsole=new BufferedReader(new InputStreamReader(System.in));
 
@@ -226,7 +226,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				ComputationDescription.importXML(fileName);
 
 
-		ExecuteBatch executeExpAction = new ExecuteBatch(comDescription);
+		ExecuteBatch executeBatch = new ExecuteBatch(comDescription);
 
 		try {
 			Thread.sleep(9000);
@@ -240,12 +240,13 @@ public class Agent_GUIKlara extends PikaterAgent {
         Ontology ontology = BatchOntology.getInstance();
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+        msg.setSender(getAID());
         msg.addReceiver(receiver);
         msg.setLanguage(getCodec().getName());
         msg.setOntology(ontology.getName());
 
         try {
-			getContentManager().fillContent(msg, new Action(receiver, executeExpAction));
+			getContentManager().fillContent(msg, new Action(receiver, executeBatch));
 			
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
 			String replyText = reply.getContent();
