@@ -75,12 +75,14 @@ import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
+import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
+import org.pikater.core.ontology.subtrees.experiment.UpdateExperimentStatus;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.file.GetFileInfo;
@@ -202,6 +204,9 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof SaveBatch) {
 						return respondToSaveBatch(request, a);
 					}
+					if (a.getAction() instanceof UpdateBatchStatus) {
+						return respondToUpdateBatchStatus(request, a);
+					}
 					if (a.getAction() instanceof SaveExperiment) {
 						return respondToSaveExperiment(request, a);
 					}
@@ -294,7 +299,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
-	
+
 	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		TranslateFilename tf = (TranslateFilename) a.getAction();
 		
@@ -511,6 +516,23 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request, Action a) {
+
+		log("respondToUpdateBatchStatus");
+		
+		UpdateBatchStatus updateBatchStatus = (UpdateBatchStatus) a.getAction();
+		
+		JPABatch batchJPA = DAOs.batchDAO.getByID(updateBatchStatus.getBatchID());
+		batchJPA.setStatus(updateBatchStatus.getStatus());
+		DAOs.batchDAO.updateEntity(batchJPA);
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK");
+		
+		return reply;
+	}
+	
 	private ACLMessage respondToSaveExperiment(ACLMessage request,
 			Action a) {
 		
@@ -533,8 +555,6 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		DAOs.experimentDAO.storeEntity(jpaExperiment);
 		
-		//jpaExperiment.setWorkflow(experiment.getWorkflow());
-		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		
@@ -556,6 +576,23 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	protected ACLMessage respondToUpdateExperimentStatus(ACLMessage request, Action a) {
+
+		log("respondToUpdateExperimentStatus");
+		
+		UpdateExperimentStatus updateExperimentStatus = (UpdateExperimentStatus) a.getAction();
+		
+		JPAExperiment experimentJPA = DAOs.experimentDAO.getByID(updateExperimentStatus.getExperimentID());
+		experimentJPA.setStatus(updateExperimentStatus.getStatus());
+		DAOs.experimentDAO.updateEntity(experimentJPA);
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK");
+		
+		return reply;
+	}
+	
 	@SuppressWarnings("serial")
 	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
 		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
@@ -733,6 +770,7 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 	}
 
+	
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
 		SaveResults sr = (SaveResults) a.getAction();
 		Task res = sr.getTask();
@@ -842,13 +880,13 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 	
+	
 	private String getDateTime() {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
 		Date date = new Date();
 
 		return dateFormat.format(date);
     }
-
 	
 
 	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {

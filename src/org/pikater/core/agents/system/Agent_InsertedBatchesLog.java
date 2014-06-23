@@ -6,28 +6,20 @@ import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.domain.FIPAException;
-import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.util.Date;
-
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.manager.ManagerCommunicator;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
-import org.pikater.core.ontology.subtrees.batch.SaveBatch;
-import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
@@ -58,72 +50,11 @@ public class Agent_InsertedBatchesLog extends PikaterAgent {
 	}
 	
 	
-	
-	
 	public int sendBatchToSave(Batch batch) {
 
-		SaveBatch saveBatch = new SaveBatch();
-		saveBatch.setBatch(batch);
-        
-        Ontology ontology = BatchOntology.getInstance();
-
-        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-        msg.setSender(this.getAID());
-		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
-		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-        msg.setLanguage(codec.getName());
-        msg.setOntology(ontology.getName());
-        msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
-
-		Action a = new Action();
-		a.setAction(saveBatch);
-		a.setActor(this.getAID());
-
-		try {
-			// Let JADE convert from Java objects to string
-			this.getContentManager().fillContent(msg, a);
-
-		} catch (CodecException ce) {
-			ce.printStackTrace();
-		} catch (OntologyException oe) {
-			oe.printStackTrace();
-		}
-
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(this, msg);
-		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		ContentElement content = null;
-		try {
-			content = getContentManager().extractContent(reply);
-		} catch (UngroundedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (CodecException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (OntologyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		if (content instanceof Result) {
-			Result result = (Result) content;
-			
-			SavedBatch savedBatch = (SavedBatch) result.getValue();
-			this.log(savedBatch.getMessage());
-			
-			return savedBatch.getSavedBatchId();
-		} else {
-			this.logError("Error - No Result ontology");
-		}
-		
-		return -1;
+		ManagerCommunicator comunicator =
+				new ManagerCommunicator();
+		return comunicator.saveBatch(this, batch);
 	}
 }
 
