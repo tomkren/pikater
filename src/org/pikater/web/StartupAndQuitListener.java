@@ -54,7 +54,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		// set the application-wide logger - this must be second
 		PikaterLogger.setLogger(new GeneralPikaterLogger()
 		{
-			private final Logger innerLogger = Logger.getAnonymousLogger();
+			private final Logger innerLogger = Logger.getLogger("log4j");
 			
 			@Override
 			public void logThrowable(String problemDescription, Throwable t)
@@ -68,6 +68,12 @@ public class StartupAndQuitListener implements ServletContextListener
 				innerLogger.log(logLevel, message);
 			}
 		});
+		
+		// TODO: delete this eventually (CustomConfiguredUI) handles it
+		if(!PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
+		{
+			throw new IllegalStateException("Application won't serve until the above errors are fixed.");
+		}
 		
 		// set parsed topologies to the application wide variable
 		ServerConfigurationInterface.setField(ServerConfItem.JADE_TOPOLOGIES, new JadeTopologies());
@@ -96,6 +102,6 @@ public class StartupAndQuitListener implements ServletContextListener
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0)
 	{
-		PikaterJobScheduler.shutdown();
+		PikaterJobScheduler.shutdownStaticScheduler();
 	}
 }
