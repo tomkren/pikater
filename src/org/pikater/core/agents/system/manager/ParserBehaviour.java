@@ -1,9 +1,7 @@
 package org.pikater.core.agents.system.manager;
 
 import jade.content.Concept;
-import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
-import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
@@ -16,7 +14,9 @@ import jade.proto.AchieveREResponder;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
+import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
+import org.pikater.core.ontology.subtrees.batch.NewBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
 public class ParserBehaviour extends AchieveREResponder {
@@ -24,60 +24,76 @@ public class ParserBehaviour extends AchieveREResponder {
 	private static final long serialVersionUID = 4754473043512463873L;
 	
 	private Agent_Manager agent;
-	private Codec codec = null;
-	private Ontology ontology = null;
 
-    public ParserBehaviour(
-    		Agent_Manager agent_Manager, Codec codec, Ontology ontology) {
+
+    public ParserBehaviour(Agent_Manager agent_Manager) {
     	super(agent_Manager, MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
     	
 		this.agent = agent_Manager;
-		this.codec = codec;
-		this.ontology = ontology;
+
     }
     
     @Override
     protected ACLMessage handleRequest(final ACLMessage request) throws NotUnderstoodException, RefuseException {
    
-    	Concept object = null;
+    	Concept concept = null;
  
     	try {
-        	//Serializable object = request.getContentObject();
-            object = ((Action)(agent.getContentManager().extractContent(request))).getAction();
+            concept = ((Action)(agent.getContentManager().extractContent(request))).getAction();
         } catch (UngroundedException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage());
 			e.printStackTrace();
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage());
 			e.printStackTrace();
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage());
 			e.printStackTrace();
 		}
-            
+           
 
-        ACLMessage reply = request.createReply();
-        reply.setPerformative(ACLMessage.CONFIRM);
-        reply.setContent("OK");
-
-    	if (object instanceof ExecuteBatch) {
+    	ACLMessage reply = request.createReply();
+    	
+    	if (concept instanceof ExecuteBatch) {
     		
     		ExecuteBatch executeExperiment =
-    				(ExecuteBatch) object;
+    				(ExecuteBatch) concept;
     		ComputationDescription comDescription =
 					executeExperiment.getDescription();
     		
-    		Parser parser = new Parser(this.agent);
-    		parser.parseRoots(comDescription);
-    		
-    		ComputationGraph computationGraph = parser.getComputationGraph();
-            ComputationCollectionItem item=new ComputationCollectionItem(computationGraph,request);
-            agent.computationCollection.put(1,item);
-    		computationGraph.startComputation();
+    		respondToNewBatch(comDescription, request);
 
+            reply.setPerformative(ACLMessage.CONFIRM);
+            reply.setContent("OK");
         }
+    	
+    	if (concept instanceof NewBatch) {
+    		
+    		NewBatch newBatch = (NewBatch) concept;
+    		
+    		ManagerCommunicator communicator = new ManagerCommunicator();
+    		Batch batch = communicator.loadBatch(agent, newBatch.getBatchId());
+    		ComputationDescription comDescription = batch.getDescription();
+    		
+    		respondToNewBatch(comDescription, request);
+    		
+            reply.setPerformative(ACLMessage.CONFIRM);
+            reply.setContent("OK");
+    	}
    
         return reply;
 
     }
+    
+    private void respondToNewBatch(ComputationDescription comDescription, ACLMessage request) {
+    	
+		Parser parser = new Parser(agent);
+		parser.parseRoots(comDescription);
+		
+		ComputationGraph computationGraph = parser.getComputationGraph();
+        ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request);
+        agent.computationCollection.put(1,item);
+		computationGraph.startComputation();
+    }
+    
 }

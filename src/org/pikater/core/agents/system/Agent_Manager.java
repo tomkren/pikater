@@ -101,7 +101,7 @@ public class Agent_Manager extends PikaterAgent {
 						MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE),
 								MessageTemplate.MatchPerformative(ACLMessage.CANCEL));
 		
-		addBehaviour(new ParserBehaviour(this, getCodec(), ontology));
+		addBehaviour(new ParserBehaviour(this));
 				
 		addBehaviour (new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
 		

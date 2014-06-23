@@ -56,7 +56,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 					Action a = (Action) getContentManager().extractContent(request);
 					
 					/**
-					 * LogicalNameTraslate actions
+					 * ExecuteBatch actions
 					 */
 					if (a.getAction() instanceof ExecuteBatch) {
 						return respondToExecuteBatch(request, a);

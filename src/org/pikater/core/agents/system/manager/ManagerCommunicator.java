@@ -204,4 +204,9 @@ public class ManagerCommunicator {
 	public void updateExperimentStatus(PikaterAgent agent, int experimentID, String experimentStatus) {
 	}
 	
+	
+	public Batch loadBatch(PikaterAgent agent, int batchID) {
+		return null;
+	}
+	
 }
