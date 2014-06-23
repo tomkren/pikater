@@ -530,8 +530,37 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage respondToLoadBatch(ACLMessage request, Action a) {
+		
+		LoadBatch loadBatch = (LoadBatch) a.getAction();
+		
+		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
+		
 		//TODO:
-		return null;
+		ComputationDescription compDescription = null;
+		//		ComputationDescription.importXML(batchJPA.getXML());
+		
+		Batch batch = new Batch();
+		batch.setId(batchJPA.getId());
+		batch.setName(batchJPA.getName());
+		batch.setStatus(batchJPA.getStatus().toString()); //TODO:
+		batch.setOwnerID(batchJPA.getOwner().getId());
+		batch.setPriority(batchJPA.getPriority());
+		batch.setDescription(compDescription);
+		
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
+		Result result = new Result(a, batch);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage());
+		} catch (OntologyException e) {
+			logError(e.getMessage());
+		}
+
+		return reply;
 	}
 	
 	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request, Action a) {

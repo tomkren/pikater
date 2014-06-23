@@ -20,6 +20,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
+import org.pikater.core.ontology.subtrees.batch.LoadBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
@@ -89,7 +90,7 @@ public class ManagerCommunicator {
 			
 			return savedBatch.getSavedBatchId();
 		} else {
-			agent.logError("Error - No Result ontology");
+			agent.logError("No Result ontology");
 		}
 		
 		return -1;
@@ -206,6 +207,61 @@ public class ManagerCommunicator {
 	
 	
 	public Batch loadBatch(PikaterAgent agent, int batchID) {
+
+		LoadBatch loadBatch = new LoadBatch();
+		loadBatch.setBatchID(batchID);
+		
+		Ontology ontology = BatchOntology.getInstance();
+
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(agent.getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		
+		msg.setLanguage(agent.getCodec().getName());
+		msg.setOntology(ontology.getName());
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+		
+		Action a = new Action();
+		a.setAction(loadBatch);
+		a.setActor(agent.getAID());
+		
+		try {
+			// Let JADE convert from Java objects to string
+			agent.getContentManager().fillContent(msg, a);
+		
+		} catch (CodecException ce) {
+			agent.logError(ce.getMessage());
+		} catch (OntologyException oe) {
+			agent.logError(oe.getMessage());
+		}
+		
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(agent, msg);
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage());
+		}
+		
+		ContentElement content = null;
+		try {
+			content = agent.getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			agent.logError(e1.getMessage());
+		} catch (CodecException e1) {
+			agent.logError(e1.getMessage());
+		} catch (OntologyException e1) {
+			agent.logError(e1.getMessage());
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			Batch savedBatch = (Batch) result.getValue();
+			return savedBatch;
+		} else {
+			agent.logError("No Result ontology");
+		}
 		return null;
 	}
 	
