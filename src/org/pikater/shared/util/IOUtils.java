@@ -27,6 +27,10 @@ public class IOUtils
 	 */
 	public static String getAbsoluteBaseAppPath()
 	{
+		if(baseAbsAppPath == null)
+		{
+			throw new IllegalStateException("The base application path has not been set.");
+		}
 		return baseAbsAppPath;
 	}
 	

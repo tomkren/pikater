@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 
-import java.io.InputStream;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Timer;
@@ -13,7 +12,6 @@ import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.upload.handlers.IUploadedFileHandler;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
@@ -30,15 +28,7 @@ public class TestContent
 	{
 		return new ManageUserUploads().createUploadButton(
 				"Upload",
-				EnumSet.of(HttpContentType.APPLICATION_JAR),
-				new IUploadedFileHandler()
-				{
-					@Override
-					public void handleFile(InputStream streamToLocalFile, String fileName, String mimeType, long sizeInBytes)
-					{
-						// TODO: upload the file to DB
-					}
-				}
+				EnumSet.of(HttpContentType.APPLICATION_JAR)
 		);
 	}
 
