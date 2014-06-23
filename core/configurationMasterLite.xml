@@ -25,10 +25,7 @@
             </arguments>
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_ComputationDescriptionParser" name="ComputationDescriptionParser">
-        </agent>
-
-        <agent type="org.pikater.core.agents.system.Agent_InputTransformer" name="InputTransformer">
+        <agent type="org.pikater.core.agents.system.Agent_GuiAgentsCommunicator" name="GuiAgentsCommunicator">
         </agent>
 
         <!--

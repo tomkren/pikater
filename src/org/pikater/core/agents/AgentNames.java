@@ -4,7 +4,7 @@ public abstract class AgentNames {
 
 	public static String INITIATOR = "Initiator";
 	public static String DATA_MANAGER = "DataManager";
-	public static String INSERTED_BATCHES_LOG = "InsertedBatchesLog";
+	public static String GUI_AGENTS_COMMUNICATOR = "GuiAgentsCommunicator";
 	public static String ARRFF_READER = "ARFFReader";
 	public static String MANAGER_AGENT = "AgentManager";
 	public static String MANAGER = "Manager";

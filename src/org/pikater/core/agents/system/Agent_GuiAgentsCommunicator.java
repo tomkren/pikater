@@ -23,7 +23,7 @@ import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
-public class Agent_InsertedBatchesLog extends PikaterAgent {
+public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 	
 	private static final long serialVersionUID = 7226837600070711675L;
 
@@ -42,7 +42,7 @@ public class Agent_InsertedBatchesLog extends PikaterAgent {
 	  	System.out.println("Agent: " +getLocalName() + " starts.");
 
 		initDefault();
-		registerWithDF(AgentNames.INSERTED_BATCHES_LOG);
+		registerWithDF(AgentNames.GUI_AGENTS_COMMUNICATOR);
 
 		RecieveBatch recieveExp =
 			new RecieveBatch(this, getCodec());
@@ -66,10 +66,10 @@ class RecieveBatch extends CyclicBehaviour {
 	 */
 	private static final long serialVersionUID = 6561793512467823420L;
 
-	private Agent_InsertedBatchesLog agent = null;
+	private Agent_GuiAgentsCommunicator agent = null;
 	private Codec codec = null;
 	
-	public RecieveBatch(Agent_InsertedBatchesLog agent, Codec codec) {
+	public RecieveBatch(Agent_GuiAgentsCommunicator agent, Codec codec) {
 		this.agent = agent;
 		this.codec = codec;
 	}

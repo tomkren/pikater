@@ -32,7 +32,7 @@
         </agent>
         -->
 
-        <agent type="org.pikater.core.agents.system.Agent_InsertedBatchesLog" name="InsertedBatchesLog">
+        <agent type="org.pikater.core.agents.system.Agent_GuiAgentsCommunicator" name="GuiAgentsCommunicator">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara">
