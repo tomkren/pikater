@@ -15,10 +15,13 @@ public class MyUploadStatePanel extends UploadStatePanel
 	private static final long serialVersionUID = 2373915541113299145L;
 	
 	private final Collection<IFileUploadEvents> fileUploadEventsCallbacks;
+	private final MyUploadReceiver uploadReceiver;
 
-	public MyUploadStatePanel(MyUploadStateWindow window)
+	public MyUploadStatePanel(MyUploadStateWindow window, MyUploadReceiver uploadReceiver)
     {
-        super(window);
+        super(window, uploadReceiver);
+        
+        this.uploadReceiver = uploadReceiver;
         
         this.fileUploadEventsCallbacks = new ArrayList<IFileUploadEvents>();
     }
@@ -59,7 +62,7 @@ public class MyUploadStatePanel extends UploadStatePanel
 		super.streamingFinished(event); // always call this first, otherwise unexpected problems may occur
 		for(IFileUploadEvents callbacks : fileUploadEventsCallbacks)
 		{
-			callbacks.uploadFinished(event);
+			callbacks.uploadFinished(event, uploadReceiver.getUploadedFileHandler());
 		}
 	}
 

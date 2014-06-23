@@ -1,5 +1,6 @@
 package org.pikater.web.vaadin;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.EnumSet;
 
@@ -7,7 +8,6 @@ import org.pikater.web.HttpContentType;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
-import org.pikater.web.vaadin.gui.server.components.upload.handlers.IUploadedFileHandler;
 
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
 import com.vaadin.server.StreamVariable.StreamingErrorEvent;
@@ -100,7 +100,7 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 	 * Only for internal use.
 	 */
 	@Override
-	public synchronized void uploadFinished(StreamingEndEvent event)
+	public synchronized void uploadFinished(StreamingEndEvent event, File uploadedFileHandler)
 	{
 		currentUploadsCount--;
 		if(!isAFileBeingUploaded())
@@ -122,9 +122,9 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 	 * @param uploadedFileHandler
 	 * @return
 	 */
-	public MyMultiUpload createUploadButton(String caption, EnumSet<HttpContentType> allowedMIMETypes, IUploadedFileHandler uploadedFileHandler)
+	public MyMultiUpload createUploadButton(String caption, EnumSet<HttpContentType> allowedMIMETypes)
 	{
-		MyMultiUpload result = new MyMultiUpload(stateWindow, uploadedFileHandler, false); // true doesn't work... seems to be a bug in the plugin
+		MyMultiUpload result = new MyMultiUpload(stateWindow, false); // true doesn't work... seems to be a bug in the plugin
 		result.setMaxFileSize(oneGB);
 		result.setAcceptedMimeTypes(HttpContentType.getMimeTypeList(allowedMIMETypes));
 		result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", HttpContentType.getExtensionList(allowedMIMETypes)));
