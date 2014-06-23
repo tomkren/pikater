@@ -27,6 +27,7 @@ import java.util.Vector;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.duration.Duration;
@@ -58,6 +59,15 @@ public class Agent_Duration extends PikaterAgent {
     	return "Duration";
     }
     
+	public java.util.List<Ontology> getOntologies() {
+		
+		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		ontologies.add(AgentManagementOntology.getInstance());
+		ontologies.add(MessagesOntology.getInstance());
+		
+		return ontologies;
+	}
+	
     @Override
     protected void setup() {
 
@@ -80,7 +90,7 @@ public class Agent_Duration extends PikaterAgent {
 		addBehaviour(new ExecuteTaskInitiator(this, createCFPmessage(aid, "dc7ce6dea5a75110486760cfac1051a5")));
 		doWait(2000);
 		
-        addBehaviour(new Test(this, t));			  
+        addBehaviour(new TestBehaviour(this, t));			  
         
         Ontology ontology = MessagesOntology.getInstance();
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
@@ -98,13 +108,13 @@ public class Agent_Duration extends PikaterAgent {
 
                     if (a.getAction() instanceof GetDuration) {
                         GetDuration gd = (GetDuration) a.getAction();
-                        Duration duration = gd.getDuration();
                         
                         ACLMessage reply = request.createReply();
                         reply.setPerformative(ACLMessage.INFORM);
-                                                
+                        
+                        Duration duration = gd.getDuration();
                         duration.setLR_duration(
-                        		countDuration(duration.getStart(), duration.getDuration()));
+                        		countDuration(duration.getStart(), duration.getDurationMiliseconds()));
                         		
                         Result r = new Result(gd, duration);                        
 						getContentManager().fillContent(reply, r);												
@@ -122,7 +132,7 @@ public class Agent_Duration extends PikaterAgent {
                 return failure;
             }
         });
-    }    
+    }
     
     private float countDuration(Date _start, int duration){    	
     	if (duration >= Integer.MAX_VALUE){
@@ -166,7 +176,7 @@ public class Agent_Duration extends PikaterAgent {
 	    		}
 	    		
 	    		// System.out.println("d: " + d + " LR dur: " + ((Duration)durations.get(i_d + i)).getDuration());
-	    		number_of_LRs += (float)d / (float)((Duration)durations.get(i_d + i)).getDuration();
+	    		number_of_LRs += (float)d / (float)((Duration)durations.get(i_d + i)).getDurationMiliseconds();
 	    		duration = duration - (int)Math.ceil(d);
 	    		
 	    		i++;
@@ -181,11 +191,11 @@ public class Agent_Duration extends PikaterAgent {
     	return number_of_LRs;
     }
   
-    protected class Test extends TickerBehaviour {
+    protected class TestBehaviour extends TickerBehaviour {
 
 		private static final long serialVersionUID = -2200601967185243650L;
 
-		public Test(Agent a, long period) {
+		public TestBehaviour(Agent a, long period) {
 			super(a, period);
 			
 		}
@@ -293,7 +303,7 @@ public class Agent_Duration extends PikaterAgent {
 					Duration d = new Duration();
 					for (Eval eval : ev) {
 						if(eval.getName().equals("duration")){
-							d.setDuration((int)eval.getValue());
+							d.setDurationMiliseconds((int)eval.getValue());
 						}
 					}
 					d.setStart(evaluation.getStart());
@@ -301,7 +311,7 @@ public class Agent_Duration extends PikaterAgent {
 					
 					if (log_LR_durations){
 						// write duration into a file:
-						log(d.getStart() + " - " + d.getDuration());
+						log(d.getStart() + " - " + d.getDurationMiliseconds());
 					}											
 					
 				}				

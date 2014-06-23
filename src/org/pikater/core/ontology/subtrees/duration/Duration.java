@@ -8,7 +8,7 @@ public class Duration implements Concept {
 	private static final long serialVersionUID = -7310795521154346932L;
 	
 	private Date start;
-	private int duration; // ms
+	private int durationMiliseconds; // ms
 	private float LR_duration;
 
 	public float getLR_duration() {
@@ -27,12 +27,12 @@ public class Duration implements Concept {
 		this.start = start;
 	}
 
-	public int getDuration() {
-		return duration;
+	public int getDurationMiliseconds() {
+		return durationMiliseconds;
 	}
 
-	public void setDuration(int duration) {
-		this.duration = duration;
+	public void setDurationMiliseconds(int duration) {
+		this.durationMiliseconds = duration;
 	}
 
 }
