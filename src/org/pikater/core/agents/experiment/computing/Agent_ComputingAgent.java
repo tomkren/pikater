@@ -431,6 +431,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 					result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 					send(result_msg);
 					return;
+				} else {
+					block(); // don't cycle waiting for messages
 				}
 			} catch (CodecException ce) {
 				ce.printStackTrace();
