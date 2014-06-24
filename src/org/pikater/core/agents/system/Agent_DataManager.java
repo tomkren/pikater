@@ -7,6 +7,7 @@ import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
+import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -17,6 +18,7 @@ import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
@@ -24,6 +26,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
@@ -88,6 +91,7 @@ import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
 import org.pikater.core.ontology.subtrees.experiment.UpdateExperimentStatus;
+import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.file.GetFileInfo;
@@ -111,6 +115,8 @@ import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
+import com.google.common.io.Files;
+
 public class Agent_DataManager extends PikaterAgent {
 
 	private final String DEFAULT_CONNECTION_PROVIDER = "defaultConnection";
@@ -127,6 +133,9 @@ public class Agent_DataManager extends PikaterAgent {
 	public static String datasetsPath =
 			"core" + System.getProperty("file.separator") +
 			"data" + System.getProperty("file.separator");
+	public static String externalAgentJarsPath =
+			"core" + System.getProperty("file.separator") +
+			"ext_agents" + System.getProperty("file.separator");
 	
 	@Override
 	public java.util.List<Ontology> getOntologies() {
@@ -301,6 +310,9 @@ public class Agent_DataManager extends PikaterAgent {
 					}
 					if (a.getAction() instanceof GetFile) {
 						return respondToGetFile(request, a);
+					}
+					if (a.getAction() instanceof GetExternalAgentJar) {
+						return respondToGetExternalAgentJar(request, a);
 					}
 					if (a.getAction() instanceof PrepareFileUpload) {
 						return respondToPrepareFileUpload(request, a);
@@ -738,6 +750,36 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
+		return reply;
+	}
+
+	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException, FailureException {
+		String type = ((GetExternalAgentJar)a.getAction()).getType();
+		log("getting JAR for agent type "+type);
+		
+		JPAExternalAgent ea = DAOs.externalAgentDAO.getByClass(type);
+
+		if (ea == null) {
+			throw new FailureException("Agent jar for type "+type+" not found in DB");
+		}else{
+			String jarname = type.replace(".", "_")+".jar";
+			String jarpath = externalAgentJarsPath+jarname;
+
+			File dest = new File(jarpath);
+			File tmp = new File(jarpath+".tmp");
+			try {
+				FileUtils.writeByteArrayToFile(tmp, ea.getJar());
+				Files.move(tmp, dest);
+			} catch (IOException e) {
+				throw new FailureException("Failed to write/move agent JAR");
+			}
+		}
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		Result r = new Result(a, "OK");
+		getContentManager().fillContent(reply, r);
+
 		return reply;
 	}
 

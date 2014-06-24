@@ -12,12 +12,15 @@ import jade.proto.AchieveREResponder;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
+import jade.wrapper.StaleProxyException;
 
 import org.pikater.core.agents.configuration.Arguments;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentRequestResponder;
 import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
+import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
@@ -50,6 +53,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 
 		ontologies.add(AgentManagementOntology.getInstance());
+		ontologies.add(DataOntology.getInstance());
 
 		return ontologies;
 	}
@@ -135,16 +139,29 @@ public class Agent_ManagerAgent extends PikaterAgent {
 			name = type;
 		}
 		String generatedName = generateName(name);
-		
+
 		try {
-			AgentController agent = container.createNewAgent(name, type, args2);
-			agent.start();
+			try {
+				doCreateAgent(generatedName, type, container, args2);
+			} catch (StaleProxyException e) { // we may have the class in DB
+				log("agent creation failed, trying to get JAR for type " + type + " from DB");
+				DataManagerService.getExternalAgent(this, type);
+				// DataManager will save the JAR to FS if it finds it so we can retry
+				doCreateAgent(generatedName, type, container, args2);
+			}
 		} catch (ControllerException e) {
 			e.printStackTrace();
+			return null;
 		}
+
 		// provide agent time to register with DF etc.
 		doWait(300);
 		return generatedName;
+	}
+	
+	private void doCreateAgent(String name, String type, PlatformController container, Argument[] args) throws ControllerException {
+		AgentController agent = container.createNewAgent(name, type, args);
+		agent.start();
 	}
 
 	private String generateName(String name) {
@@ -172,5 +189,4 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		}
 		return name;
 	}
-
 }

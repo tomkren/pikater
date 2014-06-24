@@ -4,6 +4,7 @@ package org.pikater.core.ontology;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.data.GetData;
+import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.BeanOntologyException;
@@ -21,6 +22,7 @@ public class DataOntology extends BeanOntology {
 		try {
 			add(getFilePackage);
 			add(SaveDataset.class);
+			add(GetExternalAgentJar.class);
 			
 			add(getDataPackage);
 			
