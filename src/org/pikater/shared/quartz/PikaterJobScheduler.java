@@ -1,72 +1,39 @@
 package org.pikater.shared.quartz;
 
-import static org.quartz.JobBuilder.newJob;
-
-import java.io.File;
-import java.util.Properties;
-
-import org.pikater.shared.PropertiesHandler;
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.shared.quartz.jobs.IPikaterJob;
-import org.pikater.shared.quartz.jobs.TestJob;
-import org.quartz.JobBuilder;
-import org.quartz.Scheduler;
+import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
+import org.pikater.shared.quartz.jobs.crons.RemoveExpiredTrainedModels;
+import org.pikater.shared.util.ReflectionUtils;
 import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
 
-public class PikaterJobScheduler extends PropertiesHandler
+public class PikaterJobScheduler
 {
-	private static Scheduler scheduler = null;
+	private static MyJobScheduler staticScheduler = null;
+	
+	//-----------------------------------------------------------
+	// SCHEDULER HANDLING
 	
 	/**
 	 * Initialize and start the cron job scheduler. Your application will not terminate until you call the
 	 * {@link #shutdown} method, because there will be active threads.
 	 */
-	public static boolean init(String quartzConfAbsPath)
+	public static boolean initStaticScheduler(String quartzConfAbsPath)
 	{
-		if(scheduler != null)
+		if(staticScheduler != null)
 		{
 			throw new IllegalStateException("Another instance of scheduler is running. Use the 'shutdown' method instead.");
 		}
 		else
 		{
+			PikaterJobScheduler.staticScheduler = new MyJobScheduler(quartzConfAbsPath);
 			try
 			{
-				/*
-				 * By default, StdSchedulerFactory load a properties file named "quartz.properties" from the 'current working
-				 * directory'. If that fails, then the "quartz.properties" file located (as a resource) in the org/quartz
-				 * package is loaded.
-				 * 
-				 * We will provide our own configuration:
-				 */
-				
-				String quartzConfPath = quartzConfAbsPath;
-				if(!quartzConfAbsPath.endsWith(System.getProperty("file.separator")))
-				{
-					quartzConfPath = quartzConfAbsPath + System.getProperty("file.separator");
-				}
-				Properties quartzConf = openProperties(new File(quartzConfPath + "quartz-configuration.properties"));
-
-				StdSchedulerFactory quartzFactory = new StdSchedulerFactory(quartzConf);
-				scheduler = quartzFactory.getScheduler();
-
-				//scheduler.getMetaData().
-				
-				// ****************************************************************
-				/*
-				 * THIS IS WHERE YOU TELL WHICH JOBS TO SCHEDULE.
-				 */
-				
-				defineCronJob(TestJob.class);
-				
-				// ****************************************************************
-				
-				scheduler.start();
+				PikaterJobScheduler.staticScheduler.start();
 				return true;
 			}
 			catch (SchedulerException se)
 			{
-				PikaterLogger.logThrowable("Could not initialized the application's cron job scheduler.", se);
+				PikaterLogger.logThrowable("Could not initialize the application's static quartz scheduler.", se);
 				return false;
 			}
 		}
@@ -75,51 +42,62 @@ public class PikaterJobScheduler extends PropertiesHandler
 	/**
 	 * Shutdown the scheduler. 
 	 */
-	public static boolean shutdown()
+	public static boolean shutdownStaticScheduler()
 	{
-		if(scheduler != null)
+		if(staticScheduler != null)
 		{
 			try
 			{
-				scheduler.shutdown();
+				staticScheduler.shutdown();
 	        }
 			catch (SchedulerException se)
 			{
-				PikaterLogger.logThrowable("Could not shutdown the application's cron job scheduler.", se);
+				PikaterLogger.logThrowable("Could not shutdown the application's static quartz scheduler.", se);
 				return false;
 	        }
 			finally
 			{
-				scheduler = null;
+				staticScheduler = null;
 			}
 		}
 		return true;
 	}
 	
-	private static void defineCronJob(Class<? extends IPikaterJob> jobClass)
+	//-----------------------------------------------------------
+	// CONVENIENCE ROUTINES
+	
+	public static MyJobScheduler getJobScheduler()
 	{
-		JobBuilder jobBuilder = newJob(jobClass);
-		IPikaterJob helperJobInstance;
-		try
+		if(staticScheduler == null)
 		{
-			helperJobInstance = jobClass.newInstance();
-			helperJobInstance.buildJob(jobBuilder);
-			scheduler.scheduleJob(jobBuilder.build(), helperJobInstance.getJobTrigger()); // tell quartz to schedule the job using our trigger
+			throw new IllegalStateException("Scheduler has not been initialized. First call {@link #initStaticScheduler}.");
 		}
-		catch (InstantiationException e)
+		else
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return staticScheduler;
 		}
-		catch (IllegalAccessException e)
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void defineCronJobs()
+	{
+		for(Class<? extends Object> clazz : ReflectionUtils.getTypesFromPackage(RemoveExpiredTrainedModels.class.getPackage()))
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (SchedulerException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(!clazz.isInterface() && ZeroArgJob.class.isAssignableFrom(clazz))
+			{
+				try
+				{
+					staticScheduler.defineJob((Class<? extends ZeroArgJob>) clazz);
+				}
+				catch (Throwable t)
+				{
+					PikaterLogger.logThrowable(String.format("Could not define the '%s' cron.", clazz.getName()), t);
+				}
+			}
+			else
+			{
+				throw new IllegalArgumentException(String.format("The '%s' cron does not inherit from '%s'.", clazz.getName(), ZeroArgJob.class.getName()));
+			}
 		}
 	}
 }

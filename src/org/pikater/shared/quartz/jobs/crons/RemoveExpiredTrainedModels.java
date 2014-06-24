@@ -1,37 +1,39 @@
-package org.pikater.shared.quartz.jobs;
+package org.pikater.shared.quartz.jobs.crons;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobBuilder;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 
-public class TestJob implements IPikaterJob
+@DisallowConcurrentExecution
+public class RemoveExpiredTrainedModels extends ZeroArgJob
 {
 	@Override
 	public void buildJob(JobBuilder builder)
 	{
-		builder.withIdentity("TestJob", "Jobs");
+		// builder.withIdentity("RemoveExpiredTrainedModels", "Jobs");
 	}
 
 	@Override
 	public Trigger getJobTrigger()
 	{
 	    return newTrigger()
-	        .withIdentity("TestJobTrigger", "Triggers")
+	        // .withIdentity("TestJobTrigger", "Triggers")
 	        .startNow()
 	        .withSchedule(
 	        		simpleSchedule()
-	                .withIntervalInSeconds(5)
+	                .withIntervalInHours(24 * 7) // 1 week
 	                .repeatForever())
 	        .build();
 	}
 	
 	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException
+	public void execute() throws JobExecutionException
 	{
-		System.out.println("Test job fired!");
+		// TODO: implement
 	}
 }

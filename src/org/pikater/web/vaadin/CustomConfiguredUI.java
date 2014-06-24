@@ -1,6 +1,8 @@
 package org.pikater.web.vaadin;
 
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.quartz.PikaterJobScheduler;
+import org.pikater.shared.util.IOUtils;
 import org.pikater.web.RequestReconstructor;
 import org.pikater.web.RequestReconstructor.RequestComponent;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -69,7 +71,7 @@ public abstract class CustomConfiguredUI extends UI
 			public void error(com.vaadin.server.ErrorEvent event)
 			{
 				PikaterLogger.logThrowable("Default UI error handler caught the following error:", event.getThrowable());
-				MyNotifications.showError("Server error", "Your last request spawned an error. Please contact the administrators.");
+				MyNotifications.showError("Internal server error", "A request spawned an error, please contact the admins.");
 			}
 		});
 		
@@ -160,13 +162,11 @@ public abstract class CustomConfiguredUI extends UI
 				 * Further initializations. 
 				 */
 				
-				// initialize and start the cron job scheduler
-				/*
-				if(!PikaterJobScheduler.init(AppHelper.getAbsolutePath(AppHelper.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
+				// initialize and start the job scheduler
+				if(!PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
 				{
 					throw new IllegalStateException("Application won't serve until the above errors are fixed.");
 				}
-				*/
 				
 				/*
 				 * Update UI. 
