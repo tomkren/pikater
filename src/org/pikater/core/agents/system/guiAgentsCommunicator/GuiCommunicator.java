@@ -101,7 +101,7 @@ public class GuiCommunicator {
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setSender(agent.getAID());
-		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.addReceiver(new AID(AgentNames.MANAGER, false));
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
         msg.setLanguage(new SLCodec().getName());
@@ -124,7 +124,7 @@ public class GuiCommunicator {
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
-			agent.log("Reply to new Batch: " + reply.getContent());
+			agent.log("Reply to NewBatch: " + reply.getContent());
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage());
 		}
