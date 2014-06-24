@@ -3,18 +3,22 @@ package org.pikater.shared.utilities.pikaterDatabase.initialisation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 
 import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
@@ -37,8 +41,7 @@ public class DatabaseInitialisation {
 		
 		DatabaseTest dbTest=new DatabaseTest();
 		
-		
-		this.createRolesAndUsers();
+		//this.createRolesAndUsers();
 		dbTest.listUserAndRoles();
 		/**
 		this.createSampleResult();
@@ -54,6 +57,7 @@ public class DatabaseInitialisation {
 		dbTest.listBatches();
 		**/
 		
+		addExternalAgent("core/ext_agents/org_pikater_external_ExternalWekaAgent.jar", "ExternalTestingAgent", "Testing agent from JAR");
 	}
 	
 	
@@ -260,6 +264,29 @@ public class DatabaseInitialisation {
 		batch.addExperiment(experiment);
 
 		DAOs.batchDAO.storeEntity(batch);
+	}
+	
+	public void addExternalAgent(String jar, String name, String desc) {
+		String cls = FilenameUtils.getBaseName(jar).replace(".jar", "").replace("_", ".");
+		if (DAOs.externalAgentDAO.getByClass(cls) != null) {
+			p("External agent "+ name +" already in DB.");
+			return;
+		}
+		JPAExternalAgent e = new JPAExternalAgent();
+		e.setAgentClass(cls);
+		e.setName(name);
+		e.setDescription(desc);
+		byte[] content;
+		try {
+			content = Files.readAllBytes(Paths.get(jar));
+		} catch (IOException e1) {
+			p("Failed to read JAR "+jar);
+			e1.printStackTrace();
+			return;
+		}
+		e.setJar(content);
+		DAOs.externalAgentDAO.storeEntity(e);
+		p("Stored external agent "+ name);
 	}
 	
 	private void p(String s){

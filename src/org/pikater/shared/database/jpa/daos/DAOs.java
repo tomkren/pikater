@@ -12,4 +12,5 @@ public class DAOs {
 	public static final TaskTypeDAO taskTypeDAO=new TaskTypeDAO();
 	public static final AgentInfoDAO agentInfoDAO=new AgentInfoDAO();
 	public static final ModelDAO modelDAO=new ModelDAO();
+	public static final ExternalAgentDAO externalAgentDAO=new ExternalAgentDAO();
 }
