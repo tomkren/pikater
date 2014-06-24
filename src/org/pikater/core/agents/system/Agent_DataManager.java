@@ -68,6 +68,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.pikater.core.ontology.subtrees.account.GetUser;
+import org.pikater.core.ontology.subtrees.account.GetUserID;
+import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
@@ -182,6 +185,16 @@ public class Agent_DataManager extends PikaterAgent {
 				try {
 					Action a = (Action) getContentManager().extractContent(request);
 
+					/*
+					 * Acount action
+					 */
+					if (a.getAction() instanceof GetUserID) {
+						return respondToGetUserID(request, a);
+					}
+					if (a.getAction() instanceof GetUser) {
+						return respondToGetUser(request, a);
+					}
+					
 					/**
 					 * LogicalNameTraslate actions
 					 */
@@ -314,7 +327,70 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
+	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {
+		
+		log("respondToGetUserID");
+		
+		GetUserID getUserID = (GetUserID)a.getAction();
+		
+		JPAUser userJPA = DAOs.userDAO.getByLogin(getUserID.getLogin()).get(0);
+		
+		if (userJPA == null) {
+			ACLMessage failure = request.createReply();
+			failure.setPerformative(ACLMessage.FAILURE);
+			logError("UserLogin " + getUserID.getLogin() + " doesn't exist");
+			return failure;
+		}
 
+		ACLMessage reply = request.createReply();
+		Result result = new Result(a, userJPA.getId());
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage());
+		} catch (OntologyException e) {
+			logError(e.getMessage());
+		}
+			
+		return reply;
+	}
+
+	private ACLMessage respondToGetUser(ACLMessage request, Action a) {
+
+		log("respondToGetUser");
+		
+		GetUser getUser = (GetUser)a.getAction();
+		
+		JPAUser userJPA = DAOs.userDAO.getByID(getUser.getUserID());
+		
+		if (userJPA == null) {
+			ACLMessage failure = request.createReply();
+			failure.setPerformative(ACLMessage.FAILURE);
+			logError("UserID " + getUser.getUserID() + " doesn't exist");
+			return failure;
+		}
+		
+		User user = new User();
+		user.setId(userJPA.getId());
+		user.setLogin(userJPA.getLogin());
+		user.setPriorityMax(userJPA.getPriorityMax());
+		user.setEmail(userJPA.getEmail());
+		user.setCreated(userJPA.getCreated());
+		user.setLastLogin(userJPA.getLastLogin());
+		
+		ACLMessage reply = request.createReply();
+		Result result = new Result(a, user);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage());
+		} catch (OntologyException e) {
+			logError(e.getMessage());
+		}
+			
+		return reply;
+	}
+	
 	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		TranslateFilename tf = (TranslateFilename) a.getAction();
 		
@@ -483,7 +559,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ComputationDescription description = batch.getDescription();
 		
         UniversalComputationDescription uDescription =
-        		description.ExportUniversalComputationDescription();
+        		description.exportUniversalComputationDescription();
         
 		@SuppressWarnings("unused")
 		int userId = batch.getOwnerID();
@@ -531,13 +607,14 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToLoadBatch(ACLMessage request, Action a) {
 		
+		log("respondToLoadBatch");
+		
 		LoadBatch loadBatch = (LoadBatch) a.getAction();
 		
 		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
 		
-		//TODO:
-		ComputationDescription compDescription = null;
-		//		ComputationDescription.importXML(batchJPA.getXML());
+		ComputationDescription compDescription =
+				ComputationDescription.importXML(batchJPA.getXML());
 		
 		Batch batch = new Batch();
 		batch.setId(batchJPA.getId());

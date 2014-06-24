@@ -224,7 +224,7 @@ public class UniversalComputationDescription
 	
 	public static void main(String[] args)
 	{
-		UniversalComputationDescription uDescription = SearchOnly.createDescription().ExportUniversalComputationDescription();
+		UniversalComputationDescription uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
 		System.out.println(XStreamHelper.serializeToXML(uDescription, 
 				XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class)));
 	}

@@ -50,7 +50,7 @@ public class ComputationDescription implements Concept {
 		this.rootElements.add(rootElement);
 	}
 
-	public UniversalComputationDescription ExportUniversalComputationDescription() {
+	public UniversalComputationDescription exportUniversalComputationDescription() {
 
 		List<FileDataSaver> rootElements = getRootElements();
 
@@ -93,8 +93,17 @@ public class ComputationDescription implements Concept {
 		return xml;
 	}
 
-	public static ComputationDescription importXML(String fileName)
+	public static ComputationDescription importXML(File file)
 			throws FileNotFoundException {
+
+		Scanner scanner = new Scanner(file);
+		String xml = scanner.useDelimiter("\\Z").next();
+		scanner.close();
+
+		return importXML(xml);
+	}
+	
+	public static ComputationDescription importXML(String xml) {
 
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
@@ -105,9 +114,6 @@ public class ComputationDescription implements Concept {
 		// xstream.aliasPackage("", descriptionOntology.getPackage().getName());
 		xstream.aliasAttribute("type", "class");
 
-		Scanner scanner = new Scanner(new File(fileName));
-		String xml = scanner.useDelimiter("\\Z").next();
-		scanner.close();
 
 		ComputationDescription computDes = (ComputationDescription) xstream
 				.fromXML(xml);

@@ -3,7 +3,6 @@ package org.pikater.core.agents.system.manager;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ProblemGraph;
 
 public class ComputationCollectionItem {
 	private ComputationGraph problemGraph;

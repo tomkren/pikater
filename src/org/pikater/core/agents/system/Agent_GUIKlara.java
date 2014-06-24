@@ -223,7 +223,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		System.out.println("Loading experiment from file: " + fileName);
 		
 		ComputationDescription comDescription =
-				ComputationDescription.importXML(fileName);
+				ComputationDescription.importXML(new File(fileName));
 
 
 		ExecuteBatch executeBatch = new ExecuteBatch(comDescription);
