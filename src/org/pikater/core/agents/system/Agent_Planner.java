@@ -116,6 +116,8 @@ public class Agent_Planner extends PikaterAgent {
 					result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 					send(result_msg);
 					return;
+				} else {
+					block(); // don't cycle waiting for messages
 				}
 			} catch (Codec.CodecException ce) {
 				ce.printStackTrace();
