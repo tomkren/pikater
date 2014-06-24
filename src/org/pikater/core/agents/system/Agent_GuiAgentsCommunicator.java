@@ -14,6 +14,7 @@ import jade.proto.AchieveREResponder;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.guiAgentsCommunicator.GuiCommunicator;
 import org.pikater.core.agents.system.manager.ManagerCommunicator;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
@@ -96,9 +97,12 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 		
 			if (senderName.equals(klaraGUI.getLocalName()) ) {
 				
+				GuiCommunicator communicator = new GuiCommunicator();
+				
 				batchName = "Klara's Batch";
 				batchNote = "Inputed by GuiKlara Agent";
-				batchOwnerID = 6; //TODO:
+				batchOwnerID = communicator.getUserID(this, "klara");
+				this.logError("-------------------------- " + batchOwnerID );
 				batchPriority = 9;
 			} else {
 				
