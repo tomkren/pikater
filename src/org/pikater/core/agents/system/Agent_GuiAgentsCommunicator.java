@@ -101,7 +101,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 				
 				batchName = "Klara's Batch";
 				batchNote = "Inputed by GuiKlara Agent";
-				batchOwnerID = communicator.getUserID(this, "klara");
+				batchOwnerID = 6; //communicator.getUserID(this, "klara");
 				this.logError("-------------------------- " + batchOwnerID );
 				batchPriority = 9;
 			} else {
