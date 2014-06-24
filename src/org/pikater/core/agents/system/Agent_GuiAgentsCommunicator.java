@@ -132,6 +132,10 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
             
 
             //TODO: send only NewBatch
+            //GuiCommunicator guiCommunicator = new GuiCommunicator();
+            //guiCommunicator.sendNewBatchInfoToManager(this, batchOwnerID, batchId);
+            
+            
             AID receiver = new AID(AgentNames.MANAGER, false);		
             Ontology ontology = BatchOntology.getInstance();
             

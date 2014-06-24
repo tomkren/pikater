@@ -187,7 +187,7 @@ public class Agent_DataManager extends PikaterAgent {
 				try {
 					Action a = (Action) getContentManager().extractContent(request);
 
-					/*
+					/**
 					 * Acount action
 					 */
 					if (a.getAction() instanceof GetUserID) {
@@ -397,53 +397,51 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 	
 	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws CodecException, OntologyException {
-		TranslateFilename tf = (TranslateFilename) a.getAction();
 		
-		log(new Date()+" RespondToTranslateFilename External File Name "+tf.getExternalFilename());
-		log(new Date()+" RespondToTranslateFilename Internal File Name "+tf.getInternalFilename());
-		log(new Date()+" RespondToTranslateFilename User ID "+tf.getUserID());
+		TranslateFilename transtateFile = (TranslateFilename) a.getAction();
+						
+		String translatedName = "error";
 		
-		JPAUser user=DAOs.userDAO.getByLogin("stepan").get(0);
-		logError(new Date()+" Using default user...");
-		
-		
-		java.util.List<JPAFilemapping> files=null;
-		
-		
-		String internalFilename = "error";
-		
-		if (tf.getInternalFilename() == null) {
-			//files=DAOs.filemappingDAO.getByUserIDandExternalFilename(tf.getUserID(), tf.getExternalFilename());
-			files=DAOs.filemappingDAO.getByUserIDandExternalFilename(user.getId(), tf.getExternalFilename());
-			if(files.size()>0){
-				internalFilename=files.get(0).getInternalfilename();
+		if (transtateFile.getExternalFilename() != null &&
+				transtateFile.getInternalFilename() == null) {
+
+			log("respondToTranslateFilename External File Name " + transtateFile.getExternalFilename());
+			
+			java.util.List <JPAFilemapping> files =
+					DAOs.filemappingDAO.getByExternalFilename(transtateFile.getExternalFilename());
+			if(files.size() > 0) {
+				translatedName = files.get(0).getInternalfilename();
 			} else {
 				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
 
-				String tempFileName = pathPrefix + tf.getExternalFilename();
+				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
-					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
+					translatedName = "temp" + System.getProperty("file.separator") + transtateFile.getExternalFilename();
 			}
 			
-		} else {
-			//files=DAOs.filemappingDAO.getByUserIDandInternalFilename(tf.getUserID(), tf.getInternalFilename());
-			files=DAOs.filemappingDAO.getByUserIDandInternalFilename(user.getId(), tf.getInternalFilename());
-			if(files.size()>0){
-				internalFilename=files.get(0).getExternalfilename();
+		} else if (transtateFile.getInternalFilename() != null &&
+				transtateFile.getExternalFilename() == null) {
+			
+			log("respondToTranslateFilename Internal File Name " + transtateFile.getInternalFilename());
+
+			java.util.List <JPAFilemapping> files =
+					DAOs.filemappingDAO.getByExternalFilename(transtateFile.getInternalFilename());
+			if(files.size() > 0) {
+				translatedName = files.get(0).getExternalfilename();
 			} else {
 				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
 
-				String tempFileName = pathPrefix + tf.getExternalFilename();
+				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
-					internalFilename = "temp" + System.getProperty("file.separator") + tf.getExternalFilename();
+					translatedName = "temp" + System.getProperty("file.separator") + transtateFile.getExternalFilename();
 			}
 		}
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		
-		Result r = new Result(tf, internalFilename);
-		getContentManager().fillContent(reply, r);
+		Result result = new Result(transtateFile, translatedName);
+		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
@@ -718,7 +716,7 @@ public class Agent_DataManager extends PikaterAgent {
 	@SuppressWarnings("serial")
 	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
 		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
-		log("DataManager.respondToPrepareFileUpload");
+		log("respondToPrepareFileUpload");
 
 		final ServerSocket serverSocket = new ServerSocket();
 		serverSocket.setSoTimeout(15000);
