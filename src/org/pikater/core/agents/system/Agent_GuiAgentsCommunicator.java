@@ -16,6 +16,7 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.guiAgentsCommunicator.GuiCommunicator;
 import org.pikater.core.agents.system.manager.ManagerCommunicator;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
@@ -31,6 +32,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 	@Override
 	public java.util.List<Ontology> getOntologies() {
 		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());		
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
@@ -101,8 +103,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 				
 				batchName = "Klara's Batch";
 				batchNote = "Inputed by GuiKlara Agent";
-				batchOwnerID = 6; //communicator.getUserID(this, "klara");
-				this.logError("-------------------------- " + batchOwnerID );
+				batchOwnerID = communicator.getUserID(this, "klara");
 				batchPriority = 9;
 			} else {
 				

@@ -2,6 +2,7 @@ package org.pikater.core.agents.system.guiAgentsCommunicator;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
@@ -13,11 +14,9 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
-import java.util.Date;
-
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.subtrees.account.GetUserID;
 
 public class GuiCommunicator {
@@ -31,16 +30,15 @@ public class GuiCommunicator {
 		GetUserID getUserID = new GetUserID();
 		getUserID.setLogin(login);
         
-        Ontology ontology = BatchOntology.getInstance();
+        Ontology ontology = AccountOntology.getInstance();
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setSender(agent.getAID());
 		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-        msg.setLanguage(agent.getCodec().getName());
+        msg.setLanguage(new SLCodec().getName());
         msg.setOntology(ontology.getName());
-        msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
 
 		Action a = new Action();
 		a.setAction(getUserID);
@@ -77,7 +75,7 @@ public class GuiCommunicator {
 		if (content instanceof Result) {
 			Result result = (Result) content;
 			
-			int userID = (int) result.getValue();
+			int userID = Integer.parseInt((String)result.getValue());
 			agent.log("Recieved ID " + userID);
 			
 			return userID;

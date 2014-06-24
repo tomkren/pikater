@@ -40,6 +40,7 @@ import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
@@ -132,6 +133,7 @@ public class Agent_DataManager extends PikaterAgent {
 			
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
+		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(MessagesOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
@@ -343,7 +345,11 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 
 		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		//reply.setContent(String.valueOf(userJPA.getId()));
+		
 		Result result = new Result(a, userJPA.getId());
+		result.setValue(String.valueOf(userJPA.getId()));
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
@@ -351,7 +357,7 @@ public class Agent_DataManager extends PikaterAgent {
 		} catch (OntologyException e) {
 			logError(e.getMessage());
 		}
-			
+
 		return reply;
 	}
 
