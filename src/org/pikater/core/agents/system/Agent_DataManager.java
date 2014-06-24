@@ -346,7 +346,6 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		//reply.setContent(String.valueOf(userJPA.getId()));
 		
 		Result result = new Result(a, userJPA.getId());
 		result.setValue(String.valueOf(userJPA.getId()));
@@ -397,7 +396,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 	
-	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToTranslateFilename(ACLMessage request, Action a) throws CodecException, OntologyException {
 		TranslateFilename tf = (TranslateFilename) a.getAction();
 		
 		log(new Date()+" RespondToTranslateFilename External File Name "+tf.getExternalFilename());
@@ -567,13 +566,8 @@ public class Agent_DataManager extends PikaterAgent {
         UniversalComputationDescription uDescription =
         		description.exportUniversalComputationDescription();
         
-		@SuppressWarnings("unused")
-		int userId = batch.getOwnerID();
-		//napevno ulozim pre Klaru
 		
-		JPAUser user=DAOs.userDAO.getByLogin("klara").get(0);
-		
-		userId=user.getId();
+		JPAUser user=DAOs.userDAO.getByID(batch.getOwnerID());
 		
         String batchXml = uDescription.toXML();		
         
