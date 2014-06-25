@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.ResultFormatter;
@@ -35,6 +36,10 @@ public class BatchDAO extends AbstractDAO {
 	
 	public List<JPABatch> getByStatus(JPABatchStatus status) {
 		return getByTypedNamedQuery("Batch.getByStatus", "status", status);
+	}
+	
+	public List<JPABatch> getByOwner(JPAUser owner) {
+		return getByTypedNamedQuery("Batch.getByOwner", "owner", owner);
 	}
 	
 	private List<JPABatch> getByTypedNamedQuery(String queryName,String paramName,Object param){
