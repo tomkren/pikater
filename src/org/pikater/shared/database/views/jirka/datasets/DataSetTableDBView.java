@@ -54,7 +54,13 @@ public class DataSetTableDBView extends AbstractTableDBView
 		@Override
 		public String getDisplayName()
 		{
-			return this.name();
+			switch(this)
+			{
+				case NUMBER_OF_INSTANCES:
+					return "INSTANCES";
+				default:
+					return this.name();	
+			}
 		}
 
 		@Override

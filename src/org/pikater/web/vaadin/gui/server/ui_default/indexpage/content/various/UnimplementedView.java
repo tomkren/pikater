@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various;
 
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

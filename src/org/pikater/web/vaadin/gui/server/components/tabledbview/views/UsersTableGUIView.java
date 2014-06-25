@@ -18,7 +18,7 @@ public class UsersTableGUIView extends AbstractTableGUIView<UsersTableDBView>
 		switch(specificColumn)
 		{
 			case LOGIN:
-				return 150;
+				return 125;
 			case EMAIL:
 				return 200;
 			case REGISTERED:

@@ -31,13 +31,19 @@ public class DataSetTableGUIView extends AbstractTableGUIView<DataSetTableDBView
 		switch(specificColumn)
 		{
 			case OWNER:
+				return 125;
+			
 			case DEFAULT_TASK_TYPE:
-			case NUMBER_OF_INSTANCES:
 				return 150;
+				
+			case NUMBER_OF_INSTANCES:
+				return 75;
 			
 			case CREATED:
-			case SIZE:
 				return 100;
+			
+			case SIZE:
+				return 75;
 				
 			case DESCRIPTION:
 				return 300;

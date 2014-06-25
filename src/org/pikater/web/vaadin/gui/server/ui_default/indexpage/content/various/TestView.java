@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

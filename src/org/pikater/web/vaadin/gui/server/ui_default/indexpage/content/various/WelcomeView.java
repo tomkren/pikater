@@ -6,7 +6,6 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

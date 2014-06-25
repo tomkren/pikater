@@ -4,7 +4,7 @@
 {
 }
 
-.dbTable .v-table-row-spacer
+.dbTable .v-table-row-spacer:last-child
 {
 	/*
 	 * Display a warning if no items are available for the table.

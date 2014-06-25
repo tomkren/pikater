@@ -24,8 +24,10 @@ public class DBTableItemPropertyAction implements Property<Button>
 			public void buttonClick(ClickEvent event)
 			{
 				container.getParentTable().getViewRoot().dbViewActionCalled(column, row, valueWrapper);
+				btn.setEnabled(valueWrapper.isEnabled());
 			}
 		});
+		this.btn.setEnabled(valueWrapper.isEnabled());
 	}
 
 	@Override
