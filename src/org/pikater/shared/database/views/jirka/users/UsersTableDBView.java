@@ -25,18 +25,20 @@ public class UsersTableDBView extends AbstractTableDBView
 		 */
 		LOGIN,
 		EMAIL,
-		REGISTERED_AT,
+		REGISTERED,
 		
 		/*
 		 * Then the editable ones.
 		 */
-		ACCOUNT_STATUS,
-		MAXIMUM_PRIORITY,
+		STATUS,
+		MAX_PRIORITY,
 		
 		/*
 		 * And finally, custom actions.
 		 */
-		RESET_PASSWORD;
+		ADMIN, // CHECKBOX
+		RESET_PSWD, // BUTTON
+		DELETE; // BUTTON
 
 		@Override
 		public String getDisplayName()
@@ -49,17 +51,21 @@ public class UsersTableDBView extends AbstractTableDBView
 		{
 			switch(this)
 			{
-				case EMAIL:
 				case LOGIN:
-				case REGISTERED_AT:
+				case EMAIL:
+				case REGISTERED:
 					return ColumnType.STRING;
 					
-				case ACCOUNT_STATUS:
-				case MAXIMUM_PRIORITY:
+				case STATUS:
+				case MAX_PRIORITY:
 					return ColumnType.REPRESENTATIVE;
 					
-				case RESET_PASSWORD:
-					return ColumnType.ACTION;
+				case ADMIN:
+					return ColumnType.BOOLEAN;
+					
+				case RESET_PSWD:
+				case DELETE:
+					return ColumnType.NAMED_ACTION;
 					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
@@ -111,10 +117,10 @@ public class UsersTableDBView extends AbstractTableDBView
 						return o1.user.getLogin().compareToIgnoreCase(o2.user.getLogin());
 					case EMAIL:
 						return o1.user.getEmail().compareToIgnoreCase(o2.user.getEmail());
-					case MAXIMUM_PRIORITY:
-						return o1.user.getPriorityMax().compareTo(o2.user.getPriorityMax());
-					case REGISTERED_AT:
+					case REGISTERED:
 						return o1.user.getCreated().compareTo(o2.user.getCreated());
+					case ADMIN:
+						return o1.user.isAdmin().compareTo(o2.user.isAdmin());
 					default:
 						// throw new IllegalStateException("Unknown column: " + sortColumn.name());
 						break; // do nothing

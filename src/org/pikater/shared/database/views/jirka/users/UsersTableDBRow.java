@@ -8,7 +8,8 @@ import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.BooleanDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 import org.pikater.shared.util.DateUtils;
@@ -58,7 +59,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					{
 					}
 				};
-			case REGISTERED_AT:
+			case REGISTERED:
 				return new StringDBViewValue(DateUtils.toCzechDate(user.getCreated()), true)
 				{
 					@Override
@@ -73,9 +74,9 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 				};
 				
 			/*
-			 * And then the editable ones.
+			 * Then the editable ones.
 			 */
-			case ACCOUNT_STATUS:
+			case STATUS:
 				return new RepresentativeDBViewValue(CollectionUtils.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name(), false)
 				{
 					@Override
@@ -90,8 +91,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 						commitRow();
 					}
 				};
-				
-			case MAXIMUM_PRIORITY:
+			case MAX_PRIORITY:
 				return new RepresentativeDBViewValue(CollectionUtils.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()), false)
 				{
 					@Override
@@ -107,16 +107,66 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					}
 				};
 				
-			case RESET_PASSWORD:
-				return new ActionDBViewValue("Reset")
+			/*
+			 * And finally, custom actions.
+			 */
+			case ADMIN:
+				return new BooleanDBViewValue(user.isAdmin(), false)
 				{
 					@Override
-					public void execute()
+					protected void updateEntities(Boolean newValue)
 					{
-						// TODO: reset user password
+						// TODO:
+					}
+					
+					@Override
+					protected void commitEntities()
+					{
+						commitRow();
 					}
 				};
-			
+			case RESET_PSWD:
+				return new NamedActionDBViewValue("Reset")
+				{
+					@Override
+					public boolean isEnabled()
+					{
+						return true;
+					}
+
+					@Override
+					protected void updateEntities()
+					{
+						// TODO:
+					}
+
+					@Override
+					protected void commitEntities()
+					{
+						commitRow();
+					}
+				};
+			case DELETE:
+				return new NamedActionDBViewValue("Delete")
+				{
+					@Override
+					public boolean isEnabled()
+					{
+						return true;
+					}
+
+					@Override
+					protected void updateEntities()
+					{
+					}
+
+					@Override
+					protected void commitEntities()
+					{
+						// TODO:
+					}
+				};
+				
 			default:
 				throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}
