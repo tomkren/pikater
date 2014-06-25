@@ -51,10 +51,6 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		String optionalARFFHeaders = getArg(1);
 		File convertedFile = null;
 		
-		if(optionalARFFHeaders.equals("")){
-			optionalARFFHeaders=null;
-		}
-		
 		try {
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
 			
@@ -110,7 +106,7 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		
 		File convertedFile=new File(file.getAbsolutePath()+".convert");
 		
-		if(path.endsWith("arff")){
+		if(path.endsWith("txt")){
 			if(header==null){
 				return file;
 			}else{
