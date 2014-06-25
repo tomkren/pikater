@@ -1,8 +1,17 @@
 package org.pikater.web.vaadin;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+
+import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.web.request.HttpRequestUtils;
+import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.ExpEditorUI;
 
 import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.RequestHandler;
@@ -11,12 +20,59 @@ import com.vaadin.server.SessionDestroyEvent;
 import com.vaadin.server.SessionDestroyListener;
 import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
+import com.vaadin.server.UIClassSelectionEvent;
+import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;
+import com.vaadin.ui.UI;
 
 public class CustomConfiguredUIServlet extends VaadinServlet implements SessionInitListener, SessionDestroyListener
 {
 	private static final long serialVersionUID = -8268135994612358127L;
+	
+	//--------------------------------------------------------
+	// UI TO URL MAPPING
+
+	private static final Map<String, PikaterUI> urlPatternToUI = new HashMap<String, PikaterUI>();
+	static
+	{
+		for(PikaterUI ui : PikaterUI.values())
+		{
+			urlPatternToUI.put(ui.getURLPattern(), ui);
+		}
+	}
+
+	/**
+	 * Public definition of all used UIs. By default, the application won't serve any UIs that are
+	 * not declared in this enumeration.
+	 */
+	public enum PikaterUI
+	{
+		INDEX_PAGE("index", DefaultUI.class),
+		EXP_EDITOR("expEditor", ExpEditorUI.class);
+
+		private final String mappedURL;
+		private final Class<? extends UI> mappedUI;
+
+		private PikaterUI(String mappedURL, Class<? extends UI> mappedUI)
+		{
+			this.mappedURL = mappedURL;
+			this.mappedUI = mappedUI;
+		}
+
+		public String getURLPattern()
+		{
+			return mappedURL;
+		}
+		
+		public Class<? extends UI> getUI()
+		{
+			return mappedUI;
+		}
+	}
+	
+	//--------------------------------------------------------
+	// INHERITED INTERFACE
 	
 	@Override
     protected void servletInitialized() throws ServletException
@@ -53,7 +109,36 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
     @Override
     public void sessionInit(SessionInitEvent event) throws ServiceException
     {
-    	// do nothing
+    	event.getSession().addUIProvider(new UIProvider()
+		{
+			private static final long serialVersionUID = -1327822157863022893L;
+
+			@Override
+			public Class<? extends UI> getUIClass(UIClassSelectionEvent event)
+			{
+				String servletPath = HttpRequestUtils.getServletPathWhetherMappedOrNot(VaadinServletService.getCurrentServletRequest());
+				PikaterUI resultUI = urlPatternToUI.get(servletPath);
+				if(resultUI == null)
+				{
+					try
+					{
+						VaadinServletService.getCurrentResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
+					}
+					catch (IOException e)
+					{
+						PikaterLogger.logThrowable(String.format("An undefined resource with servlet path '%s' was requested "
+								+ "but writing an error code of 400 (NOT_FOUND) to the response failed because of the "
+								+ "following exception. Vaadin should have defaulted to error code 500 instead.", servletPath
+						), e);
+					}
+					return null;
+				}
+				else
+				{
+					return resultUI.getUI();
+				}
+			}
+		});
     }
     
     @Override

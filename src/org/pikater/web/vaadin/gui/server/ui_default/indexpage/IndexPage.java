@@ -1,10 +1,10 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.web.vaadin.CustomConfiguredUI;
+import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeatureSet;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.ExpEditorUI.ExpEditorUIServlet;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
@@ -52,7 +52,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 			 * doesn't support that because of security reasons.
 			 */
 			
-			String urlToOpen = CustomConfiguredUI.getBaseAppURLFromLastRequest() + ExpEditorUIServlet.mainURLPattern; 
+			String urlToOpen = CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + PikaterUI.EXP_EDITOR.getURLPattern(); 
 			getUI().getPage().setLocation(urlToOpen);
 		}
 		else

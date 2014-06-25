@@ -1,11 +1,13 @@
 package org.pikater.web.vaadin;
 
+import javax.servlet.annotation.WebServlet;
+
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
-import org.pikater.web.RequestReconstructor;
-import org.pikater.web.RequestReconstructor.RequestComponent;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.request.HttpRequestComponent;
+import org.pikater.web.request.HttpRequestUtils;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.MyFancyNotifications;
@@ -13,6 +15,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
 
 import com.porotype.iconfont.FontAwesome;
+import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServletService;
@@ -24,9 +27,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.UI;
 
-/**
+/** 
  * A UI encapsulating all other specific UIs in this application so that child UIs don't
- * have to bother with the same old routines of settings everything up.</br>
+ * have to bother with the same old routines of setting everything up.</br>
  * Takes care of various things:
  * <ol>
  * <li> Checking whether the application has been launched properly and if not, handles
@@ -40,6 +43,27 @@ import com.vaadin.ui.UI;
 public abstract class CustomConfiguredUI extends UI
 {
 	private static final long serialVersionUID = 3280691990478021417L;
+	
+	//--------------------------------------------------------
+	// APPLICATION SERVLET DEFINITION
+	
+	/**
+	 * <font color="red">A single servlet to serve all content of this application, whether static or dynamic.</font></br></br>
+	 * This means that as long as all used UIs inherit from {@link CustomConfiguredUI}, the following rules take place:
+	 * <ul>
+	 * <li> everything is taken care of and you need not bother defining your own servlets,
+	 * <li> if you add new UIs, you still have to create a URL mapping for them in {@link CustomConfiguredUIServlet}.
+	 * </ul>
+	 */
+	@WebServlet(value = {"/*", "/VAADIN/*"}, asyncSupported = true)
+	@VaadinServletConfiguration(productionMode = false, ui = CustomConfiguredUI.class, widgetset = "org.pikater.web.vaadin.gui.PikaterWidgetset")
+	public static class AppServlet extends CustomConfiguredUIServlet
+	{
+		private static final long serialVersionUID = 2623580800316091787L;
+	}
+	
+	//--------------------------------------------------------
+	// FIELDS & METHODS
 	
 	private final UniversalUIExtension universalUIExt = new UniversalUIExtension();
 	private final MyFancyNotifications notifications = new MyFancyNotifications();
@@ -301,7 +325,7 @@ public abstract class CustomConfiguredUI extends UI
 	
 	public static String getBaseAppURLFromLastRequest()
 	{
-		return RequestReconstructor.getRequestPrefix(VaadinServletService.getCurrentServletRequest(), RequestComponent.P4_APPCONTEXT);
+		return HttpRequestUtils.getPrefix(VaadinServletService.getCurrentServletRequest(), HttpRequestComponent.P4_APPCONTEXT);
 	}
 	
 	public static boolean isDebugModeActive()
