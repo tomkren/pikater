@@ -9,7 +9,6 @@ import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.DataSetConverter;
-import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.utils.DataSetConverter.InputType;
 import org.pikater.shared.database.utils.exception.DataSetConverterCellException;
 import org.pikater.shared.database.utils.exception.DataSetConverterException;
@@ -21,7 +20,7 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 {
 	public UploadedDatasetHandler()
 	{
-		super(2); // number of arguments
+		super(3); // number of arguments
 	}
 	
 	@Override
@@ -30,9 +29,13 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		switch (index)
 		{
 			case 0:
-				return arg instanceof File;
+				return arg instanceof JPAUser;
 			case 1:
+			case 2:
 				return arg instanceof String;
+			case 3:
+				return arg instanceof File;
+			
 			default:
 				return false;
 		}
@@ -47,32 +50,32 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 	@Override
 	protected void execute() throws JobExecutionException
 	{
-		File uploadedFile = getArg(0);
+		// information from GUI that can not be computed
+		JPAUser owner = getArg(0);
 		String optionalARFFHeaders = getArg(1);
-		File convertedFile = null;
+		String description = getArg(2);
+		File uploadedFile = getArg(3);
 		
+		// the conversion
+		File convertedFile = null;
 		try {
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
-			
-			String username = "sj";
-			String description = "Dataset saved in web UI";
-			
-			JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin(username)).getSingleResult();
 			
 			JPADataSetLO newDSLO=new JPADataSetLO();
 			newDSLO.setCreated(new Date());
 			newDSLO.setDescription(description);
-			newDSLO.setOwner(user);
+			newDSLO.setOwner(owner);
 			//hash a OID will be set using DAO
 			DAOs.dataSetDAO.storeNewDataSet(convertedFile, newDSLO);
 			
 			JPAFilemapping fm=new JPAFilemapping();
 			fm.setExternalfilename(convertedFile.getName());
 			fm.setInternalfilename(newDSLO.getHash());
-			fm.setUser(user);
+			fm.setUser(owner);
 			DAOs.filemappingDAO.storeEntity(fm);
 			
 			//TODO: Notify Pikater that new dataset was uploaded, to compute the metadata
+			// TODO: approve the dataset if owner has sufficient rights
 			
 		} catch (IOException e) {
 			throw new JobExecutionException(e);
