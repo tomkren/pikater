@@ -303,4 +303,9 @@ public abstract class CustomConfiguredUI extends UI
 	{
 		return RequestReconstructor.getRequestPrefix(VaadinServletService.getCurrentServletRequest(), RequestComponent.P4_APPCONTEXT);
 	}
+	
+	public static boolean isDebugModeActive()
+	{
+		return !VaadinSession.getCurrent().getConfiguration().isProductionMode();
+	}
 }

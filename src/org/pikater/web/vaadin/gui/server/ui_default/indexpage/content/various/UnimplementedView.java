@@ -1,15 +1,16 @@
-package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
+package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various;
 
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Label;
 
-public class UnimplementedContent extends Label implements IContentComponent
+public class UnimplementedView extends Label implements IContentComponent
 {
 	private static final long serialVersionUID = -7610583075707286907L;
 
-	public UnimplementedContent()
+	public UnimplementedView()
 	{
 		// super("<font color=\"red\">Unimplemented yet.</font>", ContentMode.HTML);
 		super("Unimplemented yet");

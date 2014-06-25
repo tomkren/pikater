@@ -38,7 +38,7 @@ public class BannerArea extends HorizontalLayout
 			@Override
 			public void click(ClickEvent event)
 			{
-				parentPage.setContentAreaComponent(UserFeature.VIEW_PROFILE);
+				parentPage.openContent(UserFeature.VIEW_PROFILE);
 			}
 		});
 		

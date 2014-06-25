@@ -12,7 +12,6 @@ import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 
 import com.vaadin.annotations.StyleSheet;
-import com.vaadin.ui.AbstractComponent;
 
 @StyleSheet("indexPage.css")
 public class IndexPage extends AutoVerticalBorderLayout
@@ -20,13 +19,6 @@ public class IndexPage extends AutoVerticalBorderLayout
 	private static final long serialVersionUID = -5286072324040828820L;
 	
 	private final ContentArea contentArea;
-	
-	/* 
-	 * TODO: BoxInfo reference should be a reversible IDs... since box definitions have no decent IDs, we have to make
-	 * them in a fashion that will allow us to find the substitute, unless referenced directly, as it is now. In that
-	 * case we will have to manually check for newer versions when validating the experiments.
-	 * TODO: cellBrowserDnD drags the label component instead of the custom inner layout sometimes and class cast issues occur...
-	 */
 	
 	public IndexPage()
 	{
@@ -47,13 +39,11 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setRowVisible(Row.SOUTH, false);
 		setRowHeight(Row.CENTER, DimensionMode.MAX);
 		
-		setContentAreaComponent(DefaultFeature.WELCOME);
-		// setTestContentAreaComponent(TestContent.testMultiFileUpload());
-		// setTestContentAreaComponent(TestContent.testJSCH());
-		// setTestContentAreaComponent(TestContent.testEditor(!getSession().getConfiguration().isProductionMode()));
+		openContent(DefaultFeature.WELCOME);
+		// openContent(DefaultFeature.TEST);
 	}
 	
-	public void setContentAreaComponent(IWebFeatureSet feature)
+	public void openContent(IWebFeatureSet feature)
 	{
 		if(feature.shouldOpenInSeperateTab())
 		{
@@ -69,16 +59,5 @@ public class IndexPage extends AutoVerticalBorderLayout
 		{
 			this.contentArea.setContentView(feature);
 		}
-	}
-	
-	/**
-	 * <font color="red">RED ALERT:</font> use this really wisely because it forcibly override the content
-	 * without any add-on features that {@link #setContentAreaComponent} provides.
-	 * @param component
-	 */
-	@SuppressWarnings("unused")
-	private void setTestContentAreaComponent(AbstractComponent component)
-	{
-		this.contentArea.setContent(component);
 	}
 }

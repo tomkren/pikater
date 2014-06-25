@@ -1,7 +1,6 @@
-package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
+package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various;
 
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -9,32 +8,52 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
-import org.pikater.web.HttpContentType;
-import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
-import com.vaadin.ui.AbstractComponent;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.VerticalLayout;
 
-public class TestContent
+public class TestView extends VerticalLayout implements IContentComponent
 {
+	private static final long serialVersionUID = -6639847503623900929L;
+
+	public TestView()
+	{
+		super();
+		setSizeFull();
+		
+		testJSCH();
+	}
+
+	@Override
+	public void enter(ViewChangeEvent event)
+	{
+	}
+
+	@Override
+	public boolean hasUnsavedProgress()
+	{
+		return false;
+	}
+
+	@Override
+	public String getCloseDialogMessage()
+	{
+		return null;
+	}
+	
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
 		
-	public static AbstractComponent testMultiFileUpload()
+	public void testJSCH()
 	{
-		return new ManageUserUploads().createUploadButton(
-				"Upload",
-				EnumSet.of(HttpContentType.APPLICATION_JAR)
-		);
-	}
-
-	public static AbstractComponent testJSCH()
-	{
-		return new SimpleConsoleComponent(new SSHSession(
+		addComponent(new SimpleConsoleComponent(new SSHSession(
 				"nassoftwerak.ms.mff.cuni.cz",
 				"e2:dc:09:34:e5:94:11:7f:fd:ee:00:09:b8:1e:f5:d4",
 				"softwerak",
@@ -59,7 +78,7 @@ public class TestContent
 						// TODO Auto-generated method stub
 					}
 				})
-		);
+		));
 	}
 	
 	// -------------------------------------------------------------------
