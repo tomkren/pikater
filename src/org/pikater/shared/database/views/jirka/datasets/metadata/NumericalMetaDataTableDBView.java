@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -12,6 +11,7 @@ import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
+import org.pikater.shared.util.LocaleUtils;
 
 /**
  * A generic view for tables displaying numerical metadata information for a dataset.  

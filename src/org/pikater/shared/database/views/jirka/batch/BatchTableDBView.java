@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
@@ -76,7 +75,7 @@ public class BatchTableDBView extends AbstractTableDBView
 				case MAX_PRIORITY:
 					return ColumnType.STRING;
 				case EXPERIMENTS:
-					return ColumnType.ACTION;
+					return ColumnType.NAMED_ACTION;
 					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());

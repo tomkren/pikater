@@ -76,7 +76,7 @@ public class ExperimentTableDBView extends AbstractTableDBView
 					return ColumnType.STRING;
 				case MODEL:
 				case RESULTS:
-					return ColumnType.ACTION;
+					return ColumnType.NAMED_ACTION;
 					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());

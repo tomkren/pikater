@@ -90,7 +90,7 @@ public class ResultTableDBView extends AbstractTableDBView
 					return ColumnType.STRING;
 				
 				case CREATED_MODEL:
-					return ColumnType.ACTION;
+					return ColumnType.NAMED_ACTION;
 					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());

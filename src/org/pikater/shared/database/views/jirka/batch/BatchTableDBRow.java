@@ -2,14 +2,14 @@ package org.pikater.shared.database.views.jirka.batch;
 
 import java.util.Locale;
 
-import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 import org.pikater.shared.util.DateUtils;
+import org.pikater.shared.util.LocaleUtils;
 
 public class BatchTableDBRow extends AbstractTableRowDBView {
 
@@ -124,18 +124,43 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 			};
 		case EXPERIMENTS:
 			if((batch.getExperiments()==null) || batch.getExperiments().isEmpty()){
-				return new ActionDBViewValue("No Experiments") {
+				return new NamedActionDBViewValue("No Experiments") {
+					
 					@Override
-					public void execute() {
-						//we dont need to do anything
+					public boolean isEnabled()
+					{
+						return true;
+					}
+
+					@Override
+					protected void updateEntities()
+					{
+					}
+
+					@Override
+					protected void commitEntities()
+					{
 					}
 				};
 			}else{
-				return new ActionDBViewValue("Show Experiments") {	
+				return new NamedActionDBViewValue("Show Experiments") {	
+
 					@Override
-					public void execute() {
+					public boolean isEnabled()
+					{
+						return true;
+					}
+
+					@Override
+					protected void updateEntities()
+					{
 						// TODO Auto-generated method stub
-						
+					}
+
+					@Override
+					protected void commitEntities()
+					{
+						// TODO Auto-generated method stub
 					}
 				};
 			}

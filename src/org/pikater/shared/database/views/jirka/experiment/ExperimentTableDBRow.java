@@ -4,7 +4,7 @@ import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 import org.pikater.shared.util.DateUtils;
 
@@ -106,27 +106,68 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 			};
 		case MODEL:
 			//TODO: Implement best model retrieval
-			return new ActionDBViewValue("Get Best Model") {	
+			return new NamedActionDBViewValue("Get Best Model") {	
+
 				@Override
-				public void execute() {
+				public boolean isEnabled()
+				{
+					return true;
+				}
+
+				@Override
+				protected void updateEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				protected void commitEntities()
+				{
 					// TODO Auto-generated method stub
 				}
 			};
 
 		case RESULTS:
 			if((experiment.getResults()==null) || experiment.getResults().isEmpty()){
-				return new ActionDBViewValue("No Results") {
+				return new NamedActionDBViewValue("No Results") {
+					
 					@Override
-					public void execute() {
-						//we dont need to do anything
+					public boolean isEnabled()
+					{
+						return true;
+					}
+
+					@Override
+					protected void updateEntities()
+					{
+						// TODO Auto-generated method stub
+					}
+
+					@Override
+					protected void commitEntities()
+					{
+						// TODO Auto-generated method stub
 					}
 				};
 			}else{
-				return new ActionDBViewValue("Show Results") {	
+				return new NamedActionDBViewValue("Show Results") {	
+
 					@Override
-					public void execute() {
+					public boolean isEnabled()
+					{
+						return true;
+					}
+
+					@Override
+					protected void updateEntities()
+					{
 						// TODO Auto-generated method stub
-						
+					}
+
+					@Override
+					protected void commitEntities()
+					{
+						// TODO Auto-generated method stub
 					}
 				};
 			}

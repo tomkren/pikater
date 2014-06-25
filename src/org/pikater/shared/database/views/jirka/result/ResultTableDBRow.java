@@ -2,14 +2,14 @@ package org.pikater.shared.database.views.jirka.result;
 
 import java.util.Locale;
 
-import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 import org.pikater.shared.util.DateUtils;
+import org.pikater.shared.util.LocaleUtils;
 
 public class ResultTableDBRow extends AbstractTableRowDBView {
 
@@ -195,10 +195,24 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 		
 		case CREATED_MODEL:
 			//TODO: Implement best model retrieval
-			return new ActionDBViewValue("Get Model") {	
+			return new NamedActionDBViewValue("Get Model") {	
+
 				@Override
-				public void execute() {
-					// TODO add model retrieval implementation
+				public boolean isEnabled()
+				{
+					return true;
+				}
+
+				@Override
+				protected void updateEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				protected void commitEntities()
+				{
+					// TODO Auto-generated method stub
 				}
 			};
 		

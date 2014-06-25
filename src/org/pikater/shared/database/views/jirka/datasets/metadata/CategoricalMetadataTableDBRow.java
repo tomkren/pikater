@@ -2,12 +2,12 @@ package org.pikater.shared.database.views.jirka.datasets.metadata;
 
 import java.util.Locale;
 
-import org.pikater.shared.LocaleUtils;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
+import org.pikater.shared.util.LocaleUtils;
 
 public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 
