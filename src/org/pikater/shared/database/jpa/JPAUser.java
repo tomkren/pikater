@@ -155,7 +155,7 @@ public class JPAUser extends JPAAbstractEntity{
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
-	public boolean isAdmin(){
+	public Boolean isAdmin(){ // changed return type to allow comparisons without boxing
 		return this.role.isAdmin();
 	}
 	public boolean isUser(){

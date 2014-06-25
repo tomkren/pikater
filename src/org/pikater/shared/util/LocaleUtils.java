@@ -1,4 +1,4 @@
-package org.pikater.shared;
+package org.pikater.shared.util;
 
 import java.text.NumberFormat;
 import java.util.Locale;
