@@ -5,6 +5,7 @@ import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
 import org.pikater.shared.util.DateUtils;
 import org.pikater.shared.util.FilesizeUtils;
@@ -122,7 +123,52 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				{
 				}
 			};
-
+			
+		/*
+		 * And then actions.
+		 */
+		case APPROVE:
+			return new NamedActionDBViewValue("Approve")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					// TODO: whether this dataset is already approved 
+					return true;
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+			};
+		case DELETE:
+			return new NamedActionDBViewValue("Delete")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return true;
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+					// TODO: don't really delete but "hide" instead?
+				}
+			};
 
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

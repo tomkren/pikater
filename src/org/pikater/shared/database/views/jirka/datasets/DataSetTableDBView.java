@@ -1,7 +1,7 @@
 package org.pikater.shared.database.views.jirka.datasets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -47,7 +47,9 @@ public class DataSetTableDBView extends AbstractTableDBView
 		NUMBER_OF_INSTANCES,
 		DEFAULT_TASK_TYPE,
 		SIZE,
-		DESCRIPTION;
+		DESCRIPTION,
+		APPROVE,
+		DELETE;
 
 		@Override
 		public String getDisplayName()
@@ -68,8 +70,24 @@ public class DataSetTableDBView extends AbstractTableDBView
 				case DESCRIPTION:
 					return ColumnType.STRING;
 					
+				case APPROVE:
+				case DELETE:
+					return ColumnType.NAMED_ACTION;
+					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
+			}
+		}
+		
+		public static EnumSet<Column> getColumns(boolean adminMode)
+		{
+			if(adminMode)
+			{
+				return EnumSet.allOf(Column.class);
+			}
+			else
+			{
+				return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVE));
 			}
 		}
 	}
@@ -77,15 +95,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 	@Override
 	public IColumn[] getColumns()
 	{
-		if(adminMode())
-		{
-			return Column.values();
-		}
-		else
-		{
-			IColumn[] allColumns = Column.values();
-			return Arrays.copyOfRange(allColumns, 1, allColumns.length); // everything except owner, which is specified
-		}
+		return (IColumn[]) Column.getColumns(adminMode()).toArray(new Column[0]);
 	}
 	
 	@Override
