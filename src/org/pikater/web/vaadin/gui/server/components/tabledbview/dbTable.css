@@ -13,3 +13,8 @@
 {
 	width: 100%;
 }
+
+.dbTable .v-checkbox
+{
+	text-align: center;
+}

@@ -66,7 +66,7 @@ public class ExpandableDBTableWizard extends Wizard
 			{
 				activateStep(addStep(dbView));
 			}
-		});
+		}, false); // TODO: immediate or not?
 		super.addStep(result);
 		return result;
 	}

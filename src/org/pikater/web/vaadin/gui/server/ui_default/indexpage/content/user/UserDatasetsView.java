@@ -43,7 +43,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 	
 	public UserDatasetsView()
 	{
-		super(new DataSetTableDBView(ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent())));
+		super(new DataSetTableDBView(ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent())), true);
 		setSizeUndefined();
 		
 		addCustomActionComponent(new Button("Upload a new dataset", new Button.ClickListener()

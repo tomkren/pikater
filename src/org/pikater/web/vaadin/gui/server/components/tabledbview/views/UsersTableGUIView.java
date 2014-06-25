@@ -10,7 +10,7 @@ public class UsersTableGUIView extends AbstractTableGUIView<UsersTableDBView>
 	{
 		super(underlyingDBView);
 	}
-
+	
 	@Override
 	public int getColumnSize(IColumn column)
 	{
@@ -21,14 +21,18 @@ public class UsersTableGUIView extends AbstractTableGUIView<UsersTableDBView>
 				return 150;
 			case EMAIL:
 				return 200;
-			case REGISTERED_AT:
+			case REGISTERED:
 				return 100;
-			case ACCOUNT_STATUS:
+			case STATUS:
 				return 100;
-			case MAXIMUM_PRIORITY:
+			case MAX_PRIORITY:
 				return 100;
-			case RESET_PASSWORD:
-				return 150;
+			case ADMIN:
+				return 75;
+			case RESET_PSWD:
+				return 100;
+			case DELETE:
+				return 100;
 			default:
 				throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}

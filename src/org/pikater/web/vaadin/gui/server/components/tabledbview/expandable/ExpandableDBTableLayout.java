@@ -15,9 +15,9 @@ public class ExpandableDBTableLayout extends DBTableLayout implements WizardStep
 	private final String caption;
 	private final IDBTableLayoutOwnerExpandable layoutOwner;
 
-	public ExpandableDBTableLayout(AbstractTableDBView dbView, IDBTableLayoutOwnerExpandable layoutOwner)
+	public ExpandableDBTableLayout(AbstractTableDBView dbView, IDBTableLayoutOwnerExpandable layoutOwner, boolean immediate)
 	{
-		super(dbView);
+		super(dbView, immediate);
 		setSizeFull();
 		
 		this.caption = dbView.getClass().getSimpleName();
