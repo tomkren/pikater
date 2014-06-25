@@ -10,7 +10,8 @@ import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBVi
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
 import org.pikater.shared.database.views.jirka.abstractview.SortOrder;
 import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.BooleanDBViewValue;
+import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
@@ -19,6 +20,7 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Table.Align;
 
@@ -214,13 +216,15 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		switch(column.getColumnType())
 		{
 			case BOOLEAN:
+				return CheckBox.class;
+			
 			case STRING:
 				return column.getColumnType().getResultJavaType(); // simply forward the type declaration
 			
 			case REPRESENTATIVE:
 				return ComboBox.class; // override the type declaration
 				
-			case ACTION:
+			case NAMED_ACTION:
 				return Button.class;
 			
 			default:
@@ -235,6 +239,8 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		switch(column.getColumnType())
 		{
 			case BOOLEAN:
+				return new DBTableItemPropertyCheck(container.getParentTable(), (BooleanDBViewValue) value);
+				
 			case STRING:
 				return new DBTableItemPropertyGeneric<Object>(container, column, (AbstractDBViewValue<Object>) value);
 			
@@ -243,8 +249,8 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 				container.getGUIView().onCellCreate(column, result1.getValue());
 				return result1;
 				
-			case ACTION:
-				return new DBTableItemPropertyAction(container, column, row, (ActionDBViewValue) value);
+			case NAMED_ACTION:
+				return new DBTableItemPropertyAction(container, column, row, (NamedActionDBViewValue) value);
 				
 			default:
 				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());

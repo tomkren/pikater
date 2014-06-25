@@ -39,10 +39,10 @@ public abstract class AbstractTableDBView
 		BOOLEAN,
 		
 		/**
-		 * A single string value, read-only.
-		 * It is being displayed as a button and if the user clicks on it, custom action is executed.
+		 * Corresponds to a button. If using this column type, you should only name the action and provide
+		 * an execute callback. 
 		 */
-		ACTION;
+		NAMED_ACTION;
 		
 		public Class<? extends Object> getResultJavaType()
 		{
