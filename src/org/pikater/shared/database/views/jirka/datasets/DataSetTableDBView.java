@@ -98,9 +98,15 @@ public class DataSetTableDBView extends AbstractTableDBView
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-		// TODO: different results should be returned depending on whether 'owner' field is specified
 		
-		List<JPADataSetLO> allDatasets = DAOs.dataSetDAO.getAll();
+		List<JPADataSetLO> allDatasets;
+		
+		if(this.adminMode()){
+			allDatasets = DAOs.dataSetDAO.getAll();
+		}else{
+			allDatasets = DAOs.dataSetDAO.getByOwner(owner);
+		}
+		
 		List<DataSetTableDBRow> rows = new ArrayList<DataSetTableDBRow>();
 		
 		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allDatasets.size());

@@ -1,11 +1,11 @@
-package org.pikater.shared.database.views.jirka.experiment;
+package org.pikater.shared.database.views.jirka.result;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
 import org.pikater.shared.database.views.jirka.abstractview.IColumn;
@@ -13,23 +13,23 @@ import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
 import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
 
 /**
- * A generic view for tables displaying experiment information.  
+ * A generic view for tables displaying result errors and statistic.  
  */
-public class ExperimentTableDBView extends AbstractTableDBView
+public class ResultTableDBView extends AbstractTableDBView
 {
 	private final JPAUser owner;
-	private JPABatch batch;
+	private JPAExperiment experiment;
 	
 	/**  
-	 * @param user The user whose experiments to display. If null (admin mode), all datasets should
+	 * @param user The user whose experiment results to display. If null (admin mode), all datasets should
 	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method.
-	 * The owner of the batch is compared to the given user.
-	 * @param batch The batch for which the experiments are listed
+	 * The owner of the batch of experiment is compared to the given user.
+	 * @param experiment The experiment for which the results are listed
 	 */
-	public ExperimentTableDBView(JPAUser user,JPABatch batch)
+	public ResultTableDBView(JPAUser user,JPAExperiment experiment)
 	{
 		this.owner = user;
-		this.batch=batch;
+		this.experiment = experiment;
 	}
 	
 	private boolean adminMode()
@@ -47,13 +47,19 @@ public class ExperimentTableDBView extends AbstractTableDBView
 		 * First the read-only properties.
 		 */
 		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
-		STATUS,
-		MODEL_STRATEGY,
-		CREATED,
+		AGENT_NAME,
+		WEKA_OPTIONS,
+		ERROR_RATE,
+		KAPPA_STATISTIC,
+		MEAN_ABSOLUTE_ERROR,
+		ROOT_MEAN_SQUARED_ERROR,
+		RELATIVE_ABSOLUTE_ERROR,
+		ROOT_RELATIVE_SQUARED_ERROR,
 		STARTED,
 		FINISHED,
-		MODEL,
-		RESULTS;
+		NOTE,
+		CREATED_MODEL;
+		
 
 		@Override
 		public String getDisplayName()
@@ -68,14 +74,22 @@ public class ExperimentTableDBView extends AbstractTableDBView
 			{
 				case OWNER:
 		
-				case CREATED:
+				case AGENT_NAME:
+				case NOTE:
+				case WEKA_OPTIONS:
+				
+				case ERROR_RATE:
+				case KAPPA_STATISTIC:
+				case MEAN_ABSOLUTE_ERROR:
+				case RELATIVE_ABSOLUTE_ERROR:
+				case ROOT_MEAN_SQUARED_ERROR:
+				case ROOT_RELATIVE_SQUARED_ERROR:
+					
 				case STARTED:
 				case FINISHED:
-					
-				case STATUS:
 					return ColumnType.STRING;
-				case MODEL:
-				case RESULTS:
+				
+				case CREATED_MODEL:
 					return ColumnType.ACTION;
 					
 				default:
@@ -101,7 +115,7 @@ public class ExperimentTableDBView extends AbstractTableDBView
 	@Override
 	public IColumn getDefaultSortOrder()
 	{
-		return adminMode() ? Column.OWNER : Column.CREATED;
+		return adminMode() ? Column.OWNER : Column.AGENT_NAME;
 	}
 	
 	@Override
@@ -109,26 +123,26 @@ public class ExperimentTableDBView extends AbstractTableDBView
 	{
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
 
-		List<JPAExperiment> experiments;
+		List<JPAResult> results;
 		
 		if(owner==null){
-			experiments=batch.getExperiments();
+			results=experiment.getResults();
 		}else{
-			if(owner.getLogin().equals(batch.getOwner().getLogin())){
-				experiments=batch.getExperiments();
+			if(owner.getLogin().equals(experiment.getBatch().getOwner().getLogin())){
+				results=experiment.getResults();
 			}else{
-				experiments=new ArrayList<JPAExperiment>();
+				results=new ArrayList<JPAResult>();
 			}
 		}
 		
 		
-		List<ExperimentTableDBRow> rows = new ArrayList<ExperimentTableDBRow>();
+		List<ResultTableDBRow> rows = new ArrayList<ResultTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), experiments.size());
-		for(JPAExperiment experiment : experiments.subList(constraints.getOffset(), endIndex))
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), results.size());
+		for(JPAResult result : results.subList(constraints.getOffset(), endIndex))
 		{
-			rows.add(new ExperimentTableDBRow(experiment));
+			rows.add(new ResultTableDBRow(result));
 		}
-		return new QueryResult(rows, experiments.size());
+		return new QueryResult(rows, results.size());
 	}
 }
