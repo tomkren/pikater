@@ -66,7 +66,7 @@ public class PlannerCommunicator {
 				AgentNames.MANAGER_AGENT);
 
 		agent.log("Sending request to create CA " + CAtype);
-		AID caAID = comm.createAgent(agent, agentManagerAID, CAtype, CAtype,
+		AID caAID = comm.createAgent(agent, CAtype, CAtype,
 				new Arguments());
 		agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
 
@@ -173,7 +173,7 @@ public class PlannerCommunicator {
 				AgentNames.MANAGER_AGENT);
 
 		agent.log("Sending request to create CA " + CAtype);
-		AID ca = comm.createAgent(agent, null, CAtype, CAtype,
+		AID ca = comm.createAgent(agent, CAtype, CAtype,
 				new Arguments());
 		agent.log("CA " + CAtype + " created");
 

@@ -9,6 +9,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -25,9 +26,11 @@ public class ManagerAgentCommunicator {
 		_initAgentAID = initAgentAID;
 	}
 
-	public AID createAgent(PikaterAgent agent, AID agentManagerAID,
+	public AID createAgent(PikaterAgent agent,
 			String type, String name, Arguments options) {
 
+		AID agentManagerAID = new AID(AgentNames.MANAGER_AGENT, false);
+		
 		Ontology ontology = AgentManagementOntology.getInstance();
 
 		ACLMessage msg_ca = new ACLMessage(ACLMessage.REQUEST);
