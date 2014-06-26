@@ -10,7 +10,13 @@ public abstract class NamedActionDBViewValue extends AbstractDBViewValue<String>
 	 */
 	public NamedActionDBViewValue(String value)
 	{
-		super(DBViewValueType.NAMED_ACTION, value, true); // read-only since the name of the action is constant
+		super(DBViewValueType.NAMED_ACTION, value);
+	}
+	
+	@Override
+	public boolean isReadOnly()
+	{
+		return true; // read-only since the name of the action is constant
 	}
 	
 	/**

@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
-import org.pikater.shared.database.views.base.values.StringDBViewValue;
+import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.util.DateUtils;
@@ -32,96 +32,25 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 		 * First the read-only properties.
 		 */
 		case NAME:
-			return new StringDBViewValue(batch.getName(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(batch.getName());
 		case CREATED:
-			return new StringDBViewValue(DateUtils.toCzechDate(batch.getCreated()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(batch.getCreated()));
 		case FINISHED:
-			return new StringDBViewValue(DateUtils.toCzechDate(batch.getFinished()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(batch.getFinished()));
 		case MAX_PRIORITY:
-			return new StringDBViewValue(LocaleUtils.formatInteger(currentLocale, batch.getTotalPriority()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatInteger(currentLocale, batch.getTotalPriority()));
 		case PRIORITY:
-			return new StringDBViewValue(LocaleUtils.formatInteger(currentLocale, batch.getPriority()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatInteger(currentLocale, batch.getPriority()));
 		case OWNER:
-			return new StringDBViewValue(batch.getOwner().getLogin(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(batch.getOwner().getLogin());
 		case STATUS:
-			return new StringDBViewValue(batch.getStatus().name(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(batch.getStatus().name());
+		case NOTE: //TODO: make it editable (note for me)
+			return new StringReadOnlyDBViewValue(batch.getNote());
+			
+		/*
+		 * And then custom actions.
+		 */
 		case EXPERIMENTS:
 			if((batch.getExperiments()==null) || batch.getExperiments().isEmpty()){
 				return new NamedActionDBViewValue("No Experiments") {
@@ -164,22 +93,6 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 					}
 				};
 			}
-		
-			
-		case NOTE: //TODO: make it editable (note for me)
-			return new StringDBViewValue(batch.getNote(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
-		
 
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

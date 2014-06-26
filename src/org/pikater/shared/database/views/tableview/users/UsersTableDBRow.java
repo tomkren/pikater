@@ -9,7 +9,7 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
-import org.pikater.shared.database.views.base.values.StringDBViewValue;
+import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.util.DateUtils;
@@ -34,50 +34,17 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 			 * First the read-only properties.
 			 */
 			case LOGIN:
-				return new StringDBViewValue(user.getLogin(), true)
-				{
-					@Override
-					protected void updateEntities(String newValue)
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
+				return new StringReadOnlyDBViewValue(user.getLogin());
 			case EMAIL:
-				return new StringDBViewValue(user.getEmail(), true)
-				{
-					@Override
-					protected void updateEntities(String newValue)
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
+				return new StringReadOnlyDBViewValue(user.getEmail());
 			case REGISTERED:
-				return new StringDBViewValue(DateUtils.toCzechDate(user.getCreated()), true)
-				{
-					@Override
-					protected void updateEntities(String newValue)
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
+				return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(user.getCreated()));
 				
 			/*
 			 * Then the editable ones.
 			 */
 			case STATUS:
-				return new RepresentativeDBViewValue(CollectionUtils.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name(), false)
+				return new RepresentativeDBViewValue(CollectionUtils.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name())
 				{
 					@Override
 					protected void updateEntities(String newValue)
@@ -92,7 +59,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					}
 				};
 			case MAX_PRIORITY:
-				return new RepresentativeDBViewValue(CollectionUtils.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()), false)
+				return new RepresentativeDBViewValue(CollectionUtils.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()))
 				{
 					@Override
 					protected void updateEntities(String newValue)
@@ -111,7 +78,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 			 * And finally, custom actions.
 			 */
 			case ADMIN:
-				return new BooleanDBViewValue(user.isAdmin(), false)
+				return new BooleanDBViewValue(user.isAdmin())
 				{
 					@Override
 					protected void updateEntities(Boolean newValue)

@@ -4,7 +4,7 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
-import org.pikater.shared.database.views.base.values.StringDBViewValue;
+import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.util.DateUtils;
@@ -29,103 +29,26 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 		 * First the read-only properties.
 		 */
 		case DESCRIPTION:
-			return new StringDBViewValue(dataset.getDescription(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(dataset.getDescription());
 		case NUMBER_OF_INSTANCES:
-			return new StringDBViewValue(dataset.getGlobalMetaData()!=null?""+dataset.getGlobalMetaData().getNumberofInstances():"N/A", true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(dataset.getGlobalMetaData()!=null?""+dataset.getGlobalMetaData().getNumberofInstances():"N/A");
 		case DEFAULT_TASK_TYPE:
 			JPAGlobalMetaData gmd=dataset.getGlobalMetaData();
 			if(gmd!=null){
-				return new StringDBViewValue(gmd.getDefaultTaskType()!=null? gmd.getDefaultTaskType().getName() : "N/A", true)
-				{
-					@Override
-					protected void updateEntities(String newValue)
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
+				return new StringReadOnlyDBViewValue(gmd.getDefaultTaskType()!=null? gmd.getDefaultTaskType().getName() : "N/A");
 			}else{
 				//the global metadata for this dataset is not available
-				return new StringDBViewValue("N/A", true)
-				{
-					@Override
-					protected void updateEntities(String newValue)
-					{
-					}
-					
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
+				return new StringReadOnlyDBViewValue("N/A");
 			}
 		case SIZE:
-			return new StringDBViewValue(FilesizeUtils.formatFileSize(dataset.getSize()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(FilesizeUtils.formatFileSize(dataset.getSize()));
 		case CREATED:
-			return new StringDBViewValue(DateUtils.toCzechDate(dataset.getCreated()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(dataset.getCreated()));
 		case OWNER:
-			return new StringDBViewValue(dataset.getOwner().getLogin(),true) 
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(dataset.getOwner().getLogin()); 
 			
 		/*
-		 * And then actions.
+		 * And then custom actions.
 		 */
 		case APPROVE:
 			return new NamedActionDBViewValue("Approve")

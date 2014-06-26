@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.base.values.StringDBViewValue;
+import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.util.LocaleUtils;
@@ -30,136 +30,25 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 		 * First the read-only properties.
 		 */
 		case NAME:
-			return new StringDBViewValue(attrNum.getName(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(attrNum.getName());
 		case AVERAGE:
-			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getAvarage()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getAvarage()));
 		case IS_REAL:
-			return new StringDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.getIsReal()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.getIsReal()));
 		case IS_TARGET:
-			return new StringDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.isTarget()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.isTarget()));
 		case MAXIMUM:
-			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMax()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMax()));
 		case MEDIAN:
-			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMedian()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMedian()));
 		case MINIMUM:
-			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMin()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMin()));
 		case MODE:
-			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMode()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMode()));
 		case RATIO_OF_MISSING_VALUES:
-			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getRatioOfMissingValues()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getRatioOfMissingValues()));
 		case VARIANCE:
-			return new StringDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getVariance()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
-		
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getVariance()));
 
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

@@ -9,13 +9,11 @@ public abstract class AbstractDBViewValue<T extends Object>
 	private final DBViewValueType type;
 	private T lastCommitedValue;
 	private T currentValue;
-	private final boolean readOnly;
 	
-	public AbstractDBViewValue(DBViewValueType type, T value, boolean readOnly)
+	public AbstractDBViewValue(DBViewValueType type, T value)
 	{
 		this.type = type;
 		this.currentValue = value;
-		this.readOnly = readOnly;
 		setLastCommitedValue();
 	}
 	
@@ -26,15 +24,6 @@ public abstract class AbstractDBViewValue<T extends Object>
 	public DBViewValueType getType()
 	{
 		return type;
-	}
-	
-	/**
-	 * Is this value read-only?
-	 * @return
-	 */
-	public boolean isReadOnly()
-	{
-		return readOnly;
 	}
 	
 	/**
@@ -95,6 +84,12 @@ public abstract class AbstractDBViewValue<T extends Object>
 	
 	//-----------------------------------------------------------------
 	// ABSTRACT INTERFACE
+	
+	/**
+	 * Is this value read-only?
+	 * @return
+	 */
+	public abstract boolean isReadOnly();
 	
 	/**
 	 * Called when a new value is received. This method must do appropriate actions

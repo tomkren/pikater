@@ -3,7 +3,7 @@ package org.pikater.shared.database.views.tableview.batches.experiments;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
-import org.pikater.shared.database.views.base.values.StringDBViewValue;
+import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.util.DateUtils;
@@ -27,83 +27,21 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 		 * First the read-only properties.
 		 */
 		case CREATED:
-			return new StringDBViewValue(DateUtils.toCzechDate(experiment.getCreated().getTime()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getCreated().getTime()));
 		case STARTED:
-			return new StringDBViewValue(DateUtils.toCzechDate(experiment.getStarted().getTime()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getStarted().getTime()));
 		case FINISHED:
-			return new StringDBViewValue(DateUtils.toCzechDate(experiment.getFinished().getTime()), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getFinished().getTime()));
 		case OWNER:
-			return new StringDBViewValue(experiment.getBatch()==null?"error":experiment.getBatch().getOwner().getLogin(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(experiment.getBatch()==null?"error":experiment.getBatch().getOwner().getLogin());
 		case STATUS:
-			return new StringDBViewValue(experiment.getStatus().name(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(experiment.getStatus().name());
 		case MODEL_STRATEGY:
-			return new StringDBViewValue(experiment.getModelStrategy().name(), true)
-			{
-				@Override
-				protected void updateEntities(String newValue)
-				{
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-			};
+			return new StringReadOnlyDBViewValue(experiment.getModelStrategy().name());
+			
+		/*
+		 * And then custom actions.
+		 */
 		case MODEL:
 			//TODO: Implement best model retrieval
 			return new NamedActionDBViewValue("Get Best Model") {	
@@ -171,7 +109,6 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 					}
 				};
 			}
-		
 		
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
