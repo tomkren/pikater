@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
+import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
@@ -14,7 +14,7 @@ public class DBTableItemPropertyAction implements Property<Button>
 	
 	private final Button btn;
 	
-	public DBTableItemPropertyAction(final DBTableContainer container, final IColumn column, final AbstractTableRowDBView row, final ActionDBViewValue valueWrapper)
+	public DBTableItemPropertyAction(final DBTableContainer container, final ITableColumn column, final AbstractTableRowDBView row, final NamedActionDBViewValue valueWrapper)
 	{
 		this.btn = new Button(valueWrapper.getValue(), new Button.ClickListener()
 		{
@@ -24,8 +24,10 @@ public class DBTableItemPropertyAction implements Property<Button>
 			public void buttonClick(ClickEvent event)
 			{
 				container.getParentTable().getViewRoot().dbViewActionCalled(column, row, valueWrapper);
+				btn.setEnabled(valueWrapper.isEnabled());
 			}
 		});
+		this.btn.setEnabled(valueWrapper.isEnabled());
 	}
 
 	@Override

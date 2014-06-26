@@ -76,7 +76,7 @@ public class LeftMenu extends MenuBar
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				parent.setContentAreaComponent(feature);
+				parent.openContent(feature);
 			}
 		});
 	}

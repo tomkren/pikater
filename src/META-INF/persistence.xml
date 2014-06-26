@@ -23,6 +23,7 @@
         <class>org.pikater.shared.database.jpa.JPAFilemapping</class>
         <class>org.pikater.shared.database.jpa.JPAModel</class>
         <class>org.pikater.shared.database.jpa.JPAAgentInfo</class>
+        <class>org.pikater.shared.database.jpa.JPAExternalAgent</class>
       <properties>
 
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />

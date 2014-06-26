@@ -1,7 +1,5 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
-import javax.servlet.annotation.WebServlet;
-
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.webformat.BoxType;
@@ -9,15 +7,14 @@ import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.CustomConfiguredUIServlet;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
-import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 
 @Theme("pikater")
@@ -27,18 +24,6 @@ public class ExpEditorUI extends CustomConfiguredUI
 {
 	private static final long serialVersionUID = -797960197800185978L;
 	
-	@WebServlet(value = {"/experimentEditor", "/experimentEditor/*", "/VAADIN/*"}, asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = ExpEditorUI.class, widgetset = "org.pikater.web.vaadin.gui.PikaterWidgetset")
-	public static class ExpEditorUIServlet extends CustomConfiguredUIServlet
-	{
-		private static final long serialVersionUID = 2623580800316091787L;
-		
-		/**
-		 * Always keep this in sync with what's in the WebServlet annotation under the "value" parameter.
-		 */
-		public static final String mainURLPattern = "/experimentEditor";
-	}
-
 	@Override
 	protected void init(VaadinRequest request)
 	{
@@ -120,7 +105,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 			/*
 			 * Display editor if authenticated or make the user authenticate first and then display it.
 			 */
-			if(ManageAuth.isUserAuthenticated(getSession()))
+			if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
 			{
 				displayExperimentEditor();
 			}
@@ -143,7 +128,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 		// TODO: 
 		
 		// simply create a new empty editor and let the user handle the rest
-		ExpEditor editor = new ExpEditor(!getSession().getConfiguration().isProductionMode());
+		ExpEditor editor = new ExpEditor(isDebugModeActive());
 		setContent(editor);
 	}
 	

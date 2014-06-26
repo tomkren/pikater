@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview.expandable;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IExpandableDBView;
+import org.pikater.shared.database.views.base.IExpandableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableContainer;

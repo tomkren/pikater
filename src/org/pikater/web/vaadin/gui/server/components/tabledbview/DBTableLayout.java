@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.values.ActionDBViewValue;
+import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -25,13 +25,13 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 	private final HorizontalLayout hl_btnInterface;
 	private final Button btn_saveChanges;
 	
-	public DBTableLayout(AbstractTableDBView dbView)
+	public DBTableLayout(AbstractTableDBView dbView, boolean immediateCommit)
 	{
 		super();
 		setSizeUndefined();
 		setSpacing(true);
 		
-		this.chb_commit = new CheckBox("commit changes immediately", true);
+		this.chb_commit = new CheckBox("commit changes immediately", immediateCommit);
 		this.chb_commit.setSizeUndefined();
 		this.chb_commit.addValueChangeListener(new ValueChangeListener()
 		{
@@ -45,6 +45,8 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 				btn_saveChanges.setVisible(!checked);
 			}
 		});
+		this.chb_commit.setEnabled(immediateCommit);
+		this.chb_commit.setVisible(immediateCommit);
 		
 		this.table = createTable(AbstractTableGUIView.getInstanceFromDBView(dbView));
 		this.table.setSizeFull();
@@ -62,7 +64,7 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 				table.commitToDB();
 			}
 		});
-		this.btn_saveChanges.setVisible(false);
+		this.btn_saveChanges.setVisible(!immediateCommit);
 		
 		hl_btnInterface = new HorizontalLayout();
 		hl_btnInterface.setSpacing(true);
@@ -73,6 +75,9 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 		addComponent(this.table);
 		addComponent(this.tablePagingControls);
 		addComponent(hl_btnInterface);
+		
+		// leave this for last
+		this.chb_commit.setValue(immediateCommit);
 	}
 	
 	public DBTable getTable()
@@ -91,8 +96,8 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 	}
 
 	@Override
-	public void dbViewActionCalled(IColumn column, AbstractTableRowDBView row, ActionDBViewValue originalAction)
+	public void dbViewActionCalled(ITableColumn column, AbstractTableRowDBView row, NamedActionDBViewValue originalAction)
 	{
-		originalAction.execute();
+		originalAction.actionExecuted(getTable().isImmediate());
 	}
 }

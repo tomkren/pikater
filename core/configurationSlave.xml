@@ -5,9 +5,6 @@
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_DataManager" name="DataManager">
-            <arguments>
-                <argument key="connection" value="honza_local"/>
-            </arguments>
         </agent>
     </agents>
 </configuration>

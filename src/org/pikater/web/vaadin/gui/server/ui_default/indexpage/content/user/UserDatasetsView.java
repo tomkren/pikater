@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.EnumSet;
 
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.views.jirka.datasets.DataSetTableDBView;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.quartz.jobs.web.UploadedDatasetHandler;
@@ -43,7 +43,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 	
 	public UserDatasetsView()
 	{
-		super(new DataSetTableDBView(ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent())));
+		super(new DataSetTableDBView(ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent())), true);
 		setSizeUndefined();
 		
 		addCustomActionComponent(new Button("Upload a new dataset", new Button.ClickListener()
@@ -72,11 +72,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 	@Override
 	public boolean hasUnsavedProgress()
 	{
-		/*
-		 * This method can only return false because we have made file upload independent of this view.
-		 * As to why this is important, refer to the Javadoc of {@link IFileUploadEvents}. 
-		 */
-		return false;
+		return false; // datasets are completely read-only, except for adding new datasets which is independent of Vaadin anyway
 	}
 
 	@Override
@@ -94,6 +90,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 		
 		private final Window parentPopup;
 		private String optionalARFFHeaders;
+		private String optionalDatasetDescription;
 		
 		public DataSetUploadWizard(Window parentPopup)
 		{
@@ -103,9 +100,11 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			
 			this.parentPopup = parentPopup;
 			this.optionalARFFHeaders = null;
+			this.optionalDatasetDescription = null;
 			
 			addStep(new Step1(this));
 			addStep(new Step2(this));
+			addStep(new Step3(this));
 			
 			getCancelButton().addClickListener(new Button.ClickListener()
 			{
@@ -131,6 +130,16 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			this.optionalARFFHeaders = headers;
 		}
 		
+		public String getOptionalDatasetDescription()
+		{
+			return optionalDatasetDescription;
+		}
+
+		public void setOptionalDatasetDescription(String description)
+		{
+			this.optionalDatasetDescription = description;
+		}
+
 		public void closeWizardAndTheParentPopup()
 		{
 			parentPopup.close();
@@ -152,9 +161,8 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			this.vLayout.setSpacing(true);
 			
 			Label label = new Label("You can optionally enter some ARFF headers that will be joined with the file you upload. "
-					+ "This should come in handy if you're not going to upload an ARFF file in which case the parser will have "
-					+ "no other way to mine the headers.</br>"
-					+ "If you have no ARFF headers to specify or after you have specified them, click the 'Next' button.", ContentMode.HTML);
+					+ "Specify them when you're going to upload a non-ARFF file because the parser can not mine the headers then.</br>"
+					+ "When you're done, click the 'Next' button.", ContentMode.HTML);
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
@@ -196,8 +204,61 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 	private class Step2 extends ParentAwareWizardStep<DataSetUploadWizard>
 	{
 		private final VerticalLayout vLayout;
+		private final TextArea textArea;
 		
 		public Step2(DataSetUploadWizard parentWizard)
+		{
+			super(parentWizard);
+			
+			this.vLayout = new VerticalLayout();
+			this.vLayout.setSizeFull();
+			this.vLayout.setStyleName("datasetUploadWizardStep");
+			this.vLayout.setSpacing(true);
+			
+			Label label = new Label("Any special description to attach to the dataset for future reference?");
+			label.setSizeUndefined();
+			label.setStyleName("v-label-undefWidth-wordWrap");
+			
+			textArea = new TextArea();
+			textArea.setWordwrap(false);
+			textArea.setSizeFull();
+			
+			this.vLayout.addComponent(label);
+			this.vLayout.addComponent(textArea);
+			this.vLayout.setExpandRatio(textArea, 1);
+		}
+
+		@Override
+		public String getCaption()
+		{
+			return "Description";
+		}
+
+		@Override
+		public Component getContent()
+		{
+			return vLayout;
+		}
+
+		@Override
+		public boolean onAdvance()
+		{
+			getParentWizard().setOptionalDatasetDescription(textArea.getValue().trim());
+			return true;
+		}
+
+		@Override
+		public boolean onBack()
+		{
+			return false;
+		}
+	}
+	
+	private class Step3 extends ParentAwareWizardStep<DataSetUploadWizard>
+	{
+		private final VerticalLayout vLayout;
+		
+		public Step3(DataSetUploadWizard parentWizard)
 		{
 			super(parentWizard);
 			this.vLayout = new VerticalLayout();
@@ -205,7 +266,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			this.vLayout.addStyleName("maxWidth");
 			this.vLayout.setSpacing(true);
 			
-			Label label = new Label("Currently, only '.xls', '.xlsx', '.csv' and '.arff' files are supported. All other extensions will be rejected.</br>"
+			Label label = new Label("Currently, only '.xls', '.xlsx', '.csv' and '.txt' files are supported. All other extensions will be rejected.</br>"
 					+ "Since there is no mime type for '.arff' files, you have to upload it as a '.txt' file.", ContentMode.HTML);
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
@@ -240,20 +301,32 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 					 * Single file upload is assumed here.
 					 */
 					
-					Object[] jobParams = new Object[] { uploadedTemporaryFile, getParentWizard().getOptionalARFFHeaders() };
-					try
+					if(!ServerConfigurationInterface.avoidUsingDBForNow())
 					{
-						PikaterJobScheduler.getJobScheduler().defineJob(UploadedDatasetHandler.class, jobParams);
+						Object[] jobParams = new Object[]
+						{
+								ManageAuth.getUserEntity(VaadinSession.getCurrent()),
+								getParentWizard().getOptionalARFFHeaders(),
+								getParentWizard().getOptionalDatasetDescription(),
+								uploadedTemporaryFile,
+						};
+						try
+						{
+							PikaterJobScheduler.getJobScheduler().defineJob(UploadedDatasetHandler.class, jobParams);
+						}
+						catch (Throwable e)
+						{
+							PikaterLogger.logThrowable("Could not issue a dataset upload job.", e);
+							MyNotifications.showError("Upload failed", event.getFileName());
+							return; // don't let the success notification be displayed
+						}
+						finally
+						{
+							getParentWizard().closeWizardAndTheParentPopup();
+						}
 					}
-					catch (Throwable e)
-					{
-						PikaterLogger.logThrowable("Could not issue a dataset upload job.", e);
-						MyNotifications.showError("Upload failed", event.getFileName());
-					}
-					finally
-					{
-						getParentWizard().closeWizardAndTheParentPopup();
-					}
+					
+					MyNotifications.showSuccess("Upload successful", event.getFileName());
 				}
 			});
 			

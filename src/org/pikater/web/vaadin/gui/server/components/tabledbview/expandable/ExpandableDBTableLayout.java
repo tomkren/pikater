@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview.expandable;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
@@ -15,9 +15,9 @@ public class ExpandableDBTableLayout extends DBTableLayout implements WizardStep
 	private final String caption;
 	private final IDBTableLayoutOwnerExpandable layoutOwner;
 
-	public ExpandableDBTableLayout(AbstractTableDBView dbView, IDBTableLayoutOwnerExpandable layoutOwner)
+	public ExpandableDBTableLayout(AbstractTableDBView dbView, IDBTableLayoutOwnerExpandable layoutOwner, boolean immediate)
 	{
-		super(dbView);
+		super(dbView, immediate);
 		setSizeFull();
 		
 		this.caption = dbView.getClass().getSimpleName();

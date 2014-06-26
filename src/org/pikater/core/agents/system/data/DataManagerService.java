@@ -25,6 +25,7 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.database.ShutdownDatabase;
+import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.file.GetFileInfo;
@@ -478,5 +479,23 @@ public class DataManagerService extends FIPAService {
 			return true;			
 		}
 
+	}
+
+	public static void getExternalAgent(PikaterAgent agent, String type) {
+		agent.log("getting jar for type "+type+" from dataManager");
+		GetExternalAgentJar act = new GetExternalAgentJar();
+		act.setType(type);
+
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		request.setOntology(DataOntology.getInstance().getName());
+		request.setLanguage(codec.getName());
+		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		try {
+			agent.getContentManager().fillContent(request, new Action(agent.getAID(), act));
+			FIPAService.doFipaRequestClient(agent, request);
+		} catch (CodecException | OntologyException | FIPAException e) {
+			e.printStackTrace();
+		}
 	}
 }

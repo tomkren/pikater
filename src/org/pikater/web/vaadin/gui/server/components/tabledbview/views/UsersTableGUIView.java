@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview.views;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.users.UsersTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 
 public class UsersTableGUIView extends AbstractTableGUIView<UsersTableDBView>
 {
@@ -10,25 +10,29 @@ public class UsersTableGUIView extends AbstractTableGUIView<UsersTableDBView>
 	{
 		super(underlyingDBView);
 	}
-
+	
 	@Override
-	public int getColumnSize(IColumn column)
+	public int getColumnSize(ITableColumn column)
 	{
 		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
 		switch(specificColumn)
 		{
 			case LOGIN:
-				return 150;
+				return 125;
 			case EMAIL:
 				return 200;
-			case REGISTERED_AT:
+			case REGISTERED:
 				return 100;
-			case ACCOUNT_STATUS:
+			case STATUS:
 				return 100;
-			case MAXIMUM_PRIORITY:
+			case MAX_PRIORITY:
 				return 100;
-			case RESET_PASSWORD:
-				return 150;
+			case ADMIN:
+				return 75;
+			case RESET_PSWD:
+				return 100;
+			case DELETE:
+				return 100;
 			default:
 				throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}

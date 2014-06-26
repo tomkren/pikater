@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
 import com.vaadin.data.Property;
 
@@ -10,10 +10,10 @@ public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 	private static final long serialVersionUID = -2142093421893500620L;
 	
 	private final DBTableContainer container;
-	private final IColumn column;
+	private final ITableColumn column;
 	private final AbstractDBViewValue<T> valueWrapper;
 	
-	public DBTableItemPropertyGeneric(DBTableContainer container, IColumn column, AbstractDBViewValue<T> valueWrapper)
+	public DBTableItemPropertyGeneric(DBTableContainer container, ITableColumn column, AbstractDBViewValue<T> valueWrapper)
 	{
 		this.container = container;
 		this.column = column;

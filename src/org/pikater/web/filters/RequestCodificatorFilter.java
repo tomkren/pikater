@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI.DefaultUIServlet;
+import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 
 @WebFilter(filterName="filter1", description = "Adds the default UI identifier to incoming default requests "
 		+ "(e.g. 'localhost:8080/Pikater' => 'localhost:8080/Pikater/index)'. To achieve this, a client redirect "
@@ -26,13 +26,13 @@ public class RequestCodificatorFilter extends AbstractFilter
 		{
 			printRequestComponents(RequestCodificatorFilter.class.getSimpleName(), httpRequest);
 		}
-		if(!isFirstPathComponentDefined(httpRequest))
+		if(!isServletPathDefined(httpRequest))
 		{
 			if(isDebugMode())
 			{
 				PikaterLogger.log(Level.WARNING, "Request is about to be redirected...");
 			}
-			clientRedirect(servletResponse, DefaultUIServlet.mainURLPattern);
+			clientRedirect(servletResponse, PikaterUI.INDEX_PAGE.getURLPattern());
 		}
 		else
 		{

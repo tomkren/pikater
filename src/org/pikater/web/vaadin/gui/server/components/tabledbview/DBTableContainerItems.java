@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IExpandableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.QueryResult;
-import org.pikater.shared.database.views.jirka.abstractview.SortOrder;
+import org.pikater.shared.database.views.base.IExpandableDBView;
+import org.pikater.shared.database.views.base.QueryResult;
+import org.pikater.shared.database.views.base.SortOrder;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.util.SimpleIDGenerator;
 
 public class DBTableContainerItems implements ICommitable

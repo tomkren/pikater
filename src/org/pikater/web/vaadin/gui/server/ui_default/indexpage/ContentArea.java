@@ -3,7 +3,6 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.AdminFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
@@ -12,7 +11,6 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentPro
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.UserFeature;
 
 import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
@@ -25,7 +23,6 @@ public class ContentArea extends Panel
 	
 	private final Navigator navigator;
 	
-	private final SimpleIDGenerator idGenerator;
 	private final Set<IWebFeatureSet> registeredFeatures;
 	
 	public ContentArea()
@@ -82,35 +79,11 @@ public class ContentArea extends Panel
 			}
 		});
 		
-		this.idGenerator = new SimpleIDGenerator();
 		this.registeredFeatures = new HashSet<IWebFeatureSet>();
 	}
 	
 	//---------------------------------------------------------------
 	// PUBLIC INTERFACE
-	
-	/**
-	 * A little hack-around of the navigation system. Should only be used for testing purposes.
-	 * @param content
-	 */
-	public void setContentView(Component content)
-	{
-		if(content instanceof IContentComponent)
-		{
-			throw new IllegalArgumentException("The provided component implements the IContentComponent interface. "
-					+ "Use the 'setContent(IWebFeature)' method instead.");
-		}
-		else if(content instanceof View)
-		{
-			String dynamicallyAssignedViewName = getNextViewName(); 
-			navigator.addView(dynamicallyAssignedViewName, (View) content);
-			navigator.navigateTo(dynamicallyAssignedViewName);
-		}
-		else
-		{
-			throw new IllegalArgumentException("The provided component does not implement the View interface.");
-		}
-	}
 	
 	/**
 	 * The main routine for setting the content component.
@@ -157,15 +130,5 @@ public class ContentArea extends Panel
 	private void registerFeature(IWebFeatureSet feature)
 	{
 		navigator.addView(feature.toNavigatorName(), feature.toComponent());
-	}
-	
-	/**
-	 * Creates view names for components that do not implement the IContentComponent interface.
-	 * @see #setContent(Component content)
-	 * @return
-	 */
-	private String getNextViewName()
-	{
-		return "UnnamedView" + String.valueOf(idGenerator.getAndIncrement());
 	}
 }

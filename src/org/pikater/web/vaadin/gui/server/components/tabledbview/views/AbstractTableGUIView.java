@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview.views;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.datasets.DataSetTableDBView;
-import org.pikater.shared.database.views.jirka.users.UsersTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTable;
 
 import com.vaadin.ui.Component;
@@ -22,21 +22,21 @@ public abstract class AbstractTableGUIView<T extends AbstractTableDBView>
 		return underlyingDBView;
 	}
 	
-	public void onCellCreate(IColumn column, Object component)
+	public void onCellCreate(ITableColumn column, Object component)
 	{
 		((Component) component).setWidth("100%");
 	}
 	
 	public void setColumnSizes(DBTable table)
 	{
-		for(IColumn column : underlyingDBView.getColumns())
+		for(ITableColumn column : underlyingDBView.getColumns())
 		{
 			table.setColumnWidth(column, getColumnSize(column));
 			// TODO: table.setColumnExpandRatio(propertyId, expandRatio); // override fixed column width
 		}
 	}
 	
-	public abstract int getColumnSize(IColumn column);
+	public abstract int getColumnSize(ITableColumn column);
 	
 	public static AbstractTableGUIView<? extends AbstractTableDBView> getInstanceFromDBView(AbstractTableDBView dbView)
 	{

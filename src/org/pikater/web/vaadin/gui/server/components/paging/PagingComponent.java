@@ -247,7 +247,8 @@ public class PagingComponent extends HorizontalLayout
 		{
 			double allItemsCount = context.getAllItemsCount();
 			double pageSize = getPageSize();
-			reset((int) Math.ceil(allItemsCount / pageSize));
+			int pagesNeeded = (int) Math.ceil(allItemsCount / pageSize); 
+			reset(pagesNeeded == 0 ? 1 : pagesNeeded);
 		}
 		
 		// ---------------------------------------------------
