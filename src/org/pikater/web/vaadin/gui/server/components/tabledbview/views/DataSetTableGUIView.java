@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview.views;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.datasets.DataSetTableDBView;
-import org.pikater.shared.database.views.jirka.datasets.DataSetTableDBView.Column;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView.Column;
 
 public class DataSetTableGUIView extends AbstractTableGUIView<DataSetTableDBView>
 {
@@ -13,7 +13,7 @@ public class DataSetTableGUIView extends AbstractTableGUIView<DataSetTableDBView
 	}
 	
 	@Override
-	public void onCellCreate(IColumn column, Object component)
+	public void onCellCreate(ITableColumn column, Object component)
 	{
 		super.onCellCreate(column, component);
 		
@@ -25,7 +25,7 @@ public class DataSetTableGUIView extends AbstractTableGUIView<DataSetTableDBView
 	}
 
 	@Override
-	public int getColumnSize(IColumn column)
+	public int getColumnSize(ITableColumn column)
 	{
 		DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
 		switch(specificColumn)

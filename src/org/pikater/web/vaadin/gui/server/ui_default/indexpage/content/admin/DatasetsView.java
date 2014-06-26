@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
-import org.pikater.shared.database.views.jirka.datasets.DataSetTableDBView;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 

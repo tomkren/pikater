@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.EnumSet;
 
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.views.jirka.datasets.DataSetTableDBView;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.quartz.jobs.web.UploadedDatasetHandler;

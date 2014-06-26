@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview.expandable;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.event.WizardCancelledEvent;
 import org.vaadin.teemu.wizards.event.WizardCompletedEvent;

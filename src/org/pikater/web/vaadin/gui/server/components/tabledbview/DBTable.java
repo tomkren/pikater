@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.QueryConstraints;
+import org.pikater.shared.database.views.base.QueryConstraints;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent;
 import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent.IPagedComponent;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
@@ -48,7 +48,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 			@Override
 			public void headerClick(HeaderClickEvent event)
 			{
-				IColumn column = (IColumn) event.getPropertyId();
+				ITableColumn column = (ITableColumn) event.getPropertyId();
 				if(column.getColumnType().isSortable())
 				{
 					setSortContainerPropertyId(event.getPropertyId()); // Vaadin will not do this by itself... doh
@@ -63,7 +63,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	@Override
 	public void setSortContainerPropertyId(Object propertyId)
 	{
-		IColumn column = (IColumn) propertyId;
+		ITableColumn column = (ITableColumn) propertyId;
 		if(propertyId == null)
 		{
 			throw new NullPointerException("Can not set null sort column. A column to sort with must always be set.");
@@ -96,7 +96,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	public QueryConstraints getQuery()
 	{
 		return new QueryConstraints(
-				(IColumn) getSortContainerPropertyId(),
+				(ITableColumn) getSortContainerPropertyId(),
 				tableContainer.getCurrentSortOrder(),
 				pagingControls.getOverallOffset(),
 				pagingControls.getPageSize()

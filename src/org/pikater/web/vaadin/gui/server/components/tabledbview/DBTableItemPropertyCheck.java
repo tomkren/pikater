@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
-import org.pikater.shared.database.views.jirka.abstractview.values.BooleanDBViewValue;
+import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.CheckBox;

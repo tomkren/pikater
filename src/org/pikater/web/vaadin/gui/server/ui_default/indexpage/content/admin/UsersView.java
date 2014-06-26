@@ -1,10 +1,10 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.StringDBViewValue;
-import org.pikater.shared.database.views.jirka.users.UsersTableDBView;
+import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
+import org.pikater.shared.database.views.base.values.StringDBViewValue;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
@@ -39,7 +39,7 @@ public class UsersView extends DBTableLayout implements IContentComponent
 	}
 	
 	@Override
-	public void dbViewActionCalled(final IColumn column, final AbstractTableRowDBView row, final NamedActionDBViewValue originalAction)
+	public void dbViewActionCalled(final ITableColumn column, final AbstractTableRowDBView row, final NamedActionDBViewValue originalAction)
 	{
 		// the only action in this view is reset password for a user
 		

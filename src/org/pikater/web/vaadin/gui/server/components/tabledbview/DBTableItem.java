@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -16,15 +16,15 @@ public class DBTableItem implements Item, ICommitable
 	
 	private final DBTableContainer container;
 	private final AbstractTableRowDBView rowView;
-	private final Map<IColumn, Property<? extends Object>> columnToValue;
+	private final Map<ITableColumn, Property<? extends Object>> columnToValue;
 	
 	public DBTableItem(DBTableContainer container, AbstractTableRowDBView rowView, DBTable parentTable)
 	{
 		this.container = container;
 		this.rowView = rowView;
 		
-		this.columnToValue = new HashMap<IColumn, Property<? extends Object>>();
-		for(IColumn column : getItemPropertyIds())
+		this.columnToValue = new HashMap<ITableColumn, Property<? extends Object>>();
+		for(ITableColumn column : getItemPropertyIds())
 		{
 			this.columnToValue.put(column, DBTableContainer.getProperty(container, column, rowView, rowView.getValueWrapper(column)));
 		}
@@ -37,7 +37,7 @@ public class DBTableItem implements Item, ICommitable
 	}
 	
 	@Override
-	public Collection<IColumn> getItemPropertyIds()
+	public Collection<ITableColumn> getItemPropertyIds()
 	{
 		/*
 		 * By default, all rows have a value for every table column. If no such value can

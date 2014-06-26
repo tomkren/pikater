@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview;
 
-import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
+import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.ComboBox;

@@ -5,14 +5,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.abstractview.SortOrder;
-import org.pikater.shared.database.views.jirka.abstractview.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.BooleanDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.NamedActionDBViewValue;
-import org.pikater.shared.database.views.jirka.abstractview.values.RepresentativeDBViewValue;
+import org.pikater.shared.database.views.base.SortOrder;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
+import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
+import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
@@ -31,7 +31,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	private final DBTable parentTable;
 	private final AbstractTableGUIView<? extends AbstractTableDBView> guiView;
 	
-	private final Set<IColumn> sortableColumns;
+	private final Set<ITableColumn> sortableColumns;
 	private final DBTableContainerItems rows;
 	
 	public DBTableContainer(AbstractTableGUIView<? extends AbstractTableDBView> guiView, DBTable parentTable)
@@ -39,8 +39,8 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		this.parentTable = parentTable;
 		this.guiView = guiView;
 		
-		this.sortableColumns = new HashSet<IColumn>();
-		for(IColumn column : getContainerPropertyIds())
+		this.sortableColumns = new HashSet<ITableColumn>();
+		for(ITableColumn column : getContainerPropertyIds())
 		{
 			this.parentTable.setColumnHeader(column, column.getDisplayName());
 			this.parentTable.setColumnAlignment(column, Align.CENTER);
@@ -56,7 +56,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	// FIRST CONTAINER-SPECIFIC INHERITED REQUIRED INTERFACE
 	
 	@Override
-	public Collection<IColumn> getContainerPropertyIds()
+	public Collection<ITableColumn> getContainerPropertyIds()
 	{
 		return Arrays.asList(guiView.getUnderlyingDBView().getColumns());
 	}
@@ -64,7 +64,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Class<? extends Object> getType(Object propertyId)
 	{
-		return getPresentationType((IColumn) propertyId);
+		return getPresentationType((ITableColumn) propertyId);
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	//-----------------------------------------------------------
 	// VIEW TYPE TO PRESENTATION TYPE BINDING METHODS
 	
-	public static Class<? extends Object> getPresentationType(IColumn column)
+	public static Class<? extends Object> getPresentationType(ITableColumn column)
 	{
 		switch(column.getColumnType())
 		{
@@ -233,7 +233,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Property<? extends Object> getProperty(DBTableContainer container, IColumn column, AbstractTableRowDBView row, 
+	public static Property<? extends Object> getProperty(DBTableContainer container, ITableColumn column, AbstractTableRowDBView row, 
 			AbstractDBViewValue<? extends Object> value)
 	{
 		switch(column.getColumnType())

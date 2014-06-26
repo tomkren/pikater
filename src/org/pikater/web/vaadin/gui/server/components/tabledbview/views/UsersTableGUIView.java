@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.tabledbview.views;
 
-import org.pikater.shared.database.views.jirka.abstractview.AbstractTableDBView;
-import org.pikater.shared.database.views.jirka.abstractview.IColumn;
-import org.pikater.shared.database.views.jirka.users.UsersTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 
 public class UsersTableGUIView extends AbstractTableGUIView<UsersTableDBView>
 {
@@ -12,7 +12,7 @@ public class UsersTableGUIView extends AbstractTableGUIView<UsersTableDBView>
 	}
 	
 	@Override
-	public int getColumnSize(IColumn column)
+	public int getColumnSize(ITableColumn column)
 	{
 		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
 		switch(specificColumn)
