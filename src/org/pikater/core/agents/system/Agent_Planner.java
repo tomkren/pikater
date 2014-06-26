@@ -29,10 +29,7 @@ import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.FinishedTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
-/**
- * Created with IntelliJ IDEA. User: Klara Date: 3/16/14 Time: 1:27 AM To change
- * this template use File | Settings | File Templates.
- */
+
 public class Agent_Planner extends PikaterAgent {
 	
 	private static final long serialVersionUID = 820846175393846627L;
@@ -58,19 +55,7 @@ public class Agent_Planner extends PikaterAgent {
 	}
 
 
-	protected void setup() {
-		initDefault();
-
-		registerWithDF(AgentNames.PLANNER);
-
-//		addBahaviour(new OneShotBehaviour(this, null) {} );
-		
-		try {
-			Thread.sleep(30000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	private void initCPUCores() {
 		
 		AID managerAgentAID = new AID(AgentNames.MANAGER_AGENT, false);
 		PlannerCommunicator comminicator = new PlannerCommunicator(this);
@@ -84,7 +69,22 @@ public class Agent_Planner extends PikaterAgent {
 			CPUCore cpuCore = new CPUCore(managerAgentAID, i);
 			untappedCores.add(cpuCore);
 		}
+	}
+	
+	protected void setup() {
+		initDefault();
 
+		registerWithDF(AgentNames.PLANNER);
+
+		// waiting to start ManagerAgent
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			logError("Sleep error");
+			e1.printStackTrace();
+		}
+		initCPUCores();
+		
 		
 		Ontology taskOntontology = TaskOntology.getInstance();
 		Ontology agentManagementOntontology = AgentManagementOntology.getInstance();
@@ -148,6 +148,7 @@ public class Agent_Planner extends PikaterAgent {
 		waitingToStartComputingTasks.addLast(executeTask.getTask());
 		plan();
 
+		//TODO:
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		reply.setContent("OK - ExecuteTask msg accepted");

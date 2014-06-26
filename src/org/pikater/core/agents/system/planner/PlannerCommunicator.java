@@ -23,7 +23,6 @@ import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
-import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class PlannerCommunicator {
@@ -34,7 +33,7 @@ public class PlannerCommunicator {
 		this.agent = agent;
 	}
 	
-	private AID[] getAllAgents(String agentType) {
+	public AID[] getAllAgents(String agentType) {
 
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription serviceDescription = new ServiceDescription();
@@ -87,26 +86,7 @@ public class PlannerCommunicator {
 			e.printStackTrace();
 		}
 
-		agent.addBehaviour(new OneTaskManagementBehaviour(agent, msg));
-		
-		int f=0;
-		if (10 > f) {
-			return;
-		}
-		
-		try {
-			ACLMessage reply = FIPAService.doFipaRequestClient(agent, msg);
-			String repliedText = reply.getContent();
-			
-			if (reply.getPerformative() == ACLMessage.INFORM) {
-				agent.log(repliedText);
-			} else {
-				agent.logError(repliedText);
-			}
-		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
-		}
+		agent.addBehaviour(new OneTaskComputingCABehaviour(agent, msg));
 	}
 	
 	public ComputerInfo getComputerInfo(AID managerAgentAID) {
@@ -159,48 +139,5 @@ public class PlannerCommunicator {
 		
 		return null;
 	}
-	
-	//TODO: casem smazat
-	public ACLMessage respondToExecuteTask(ACLMessage request, Action a) {
 
-		ExecuteTask executeTask = (ExecuteTask) a.getAction();
-		Task task = executeTask.getTask();
-		String CAtype = task.getAgent().getType();
-
-		AID[] foundAgents = getAllAgents(AgentNames.MANAGER_AGENT);
-		// TODO choose a slave node
-		ManagerAgentCommunicator comm = new ManagerAgentCommunicator(
-				AgentNames.MANAGER_AGENT);
-
-		agent.log("Sending request to create CA " + CAtype);
-		AID ca = comm.createAgent(agent, CAtype, CAtype,
-				new Arguments());
-		agent.log("CA " + CAtype + " created");
-
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.addReceiver(ca);
-		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		msg.setLanguage(agent.getCodec().getName());
-		msg.setOntology(TaskOntology.getInstance().getName());
-
-		Action executeAction = new Action(agent.getAID(), executeTask);
-		try {
-			agent.getContentManager().fillContent(msg, executeAction);
-		} catch (CodecException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
-		}
-
-		agent.addBehaviour(new OneTaskManagementBehaviour(agent, msg));
-		
-		ACLMessage requestAcceptedMsg = request.createReply();
-		requestAcceptedMsg.setPerformative(ACLMessage.INFORM);
-		agent.log("Request " + executeTask.getClass().getSimpleName() +
-				" GraphId: " + executeTask.getTask().getGraphId() +
-				" accepted");
-		return requestAcceptedMsg;
-	}
 }

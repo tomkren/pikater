@@ -5,12 +5,12 @@ import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.agents.PikaterAgent;
 
-public class OneTaskManagementBehaviour extends AchieveREInitiator {
+public class OneTaskComputingCABehaviour extends AchieveREInitiator {
 	
 	private static final long serialVersionUID = 1572211801881987607L;
 	private PikaterAgent agent;
 
-	public OneTaskManagementBehaviour(PikaterAgent agent, ACLMessage msg) {
+	public OneTaskComputingCABehaviour(PikaterAgent agent, ACLMessage msg) {
 		super(agent, msg);
 		this.agent = agent;
 	}
