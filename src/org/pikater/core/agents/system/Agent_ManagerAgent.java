@@ -19,6 +19,7 @@ import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
+import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
@@ -36,7 +37,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	 */
 	private static final long serialVersionUID = 4898611781694963107L;
 
-	private Map<String, Integer> agentTypeAndCount = new HashMap<>();
+	private Map<String, Integer> agentTypeAndCount = new HashMap<String, Integer>();
 	private ManagerAgentRequestResponder responder =
 			new ManagerAgentRequestResponder(this);
 
@@ -89,7 +90,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 						
 						return responder.respondToLoadAgent(request);
 					} else if (a.getAction() instanceof SaveAgent) {
-						// write it into database
+
 						return responder.respondToSaveAgent(request);
 					} else if (a.getAction() instanceof CreateAgent) {
 						
@@ -97,7 +98,11 @@ public class Agent_ManagerAgent extends PikaterAgent {
 					} else if (a.getAction() instanceof KillAgent) {
 						
 						return responder.respondToKillAgent(request);
+					} else if (a.getAction() instanceof GetComputerInfo) {
+					
+						return responder.respondToGetComputerInfo(request);
 					}
+
 				} catch (OntologyException e) {
 					e.printStackTrace();
 					logError("Problem extracting content: " + e.getMessage());

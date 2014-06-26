@@ -25,8 +25,9 @@ public class ManagerAgentCommunicator {
 		_initAgentAID = initAgentAID;
 	}
 
-	public AID createAgent(PikaterAgent agent, String type, String name,
-			Arguments options) {
+	public AID createAgent(PikaterAgent agent, AID agentManagerAID,
+			String type, String name, Arguments options) {
+
 		Ontology ontology = AgentManagementOntology.getInstance();
 
 		ACLMessage msg_ca = new ACLMessage(ACLMessage.REQUEST);

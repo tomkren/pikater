@@ -5,6 +5,7 @@ import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.FIPAException;
@@ -19,7 +20,9 @@ import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
+import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.KillYourself;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
@@ -225,6 +228,42 @@ public class ManagerAgentRequestResponder {
         reply.setPerformative(jade.lang.acl.ACLMessage.INFORM);
 
 
+        return reply;
+    }
+    
+    public ACLMessage respondToGetComputerInfo(ACLMessage request) throws OntologyException, CodecException {
+    	
+        Action a = (Action) managerAgent.getContentManager().extractContent(request);
+        GetComputerInfo getComputerInfo = (GetComputerInfo) a.getAction();
+
+        managerAgent.log("Request to get ComputerInfo");
+        Ontology ontology = AgentManagementOntology.getInstance();
+        Codec codec = managerAgent.getCodec();
+        
+        int cores = Runtime.getRuntime().availableProcessors();
+        String osName = System.getProperty("os.name");
+        
+        ComputerInfo computerInfo = new ComputerInfo();
+        computerInfo.setOperationSystem(osName);
+        computerInfo.setNumberOfCores(cores);
+        
+        ACLMessage reply = request.createReply();
+        reply.setPerformative(ACLMessage.INFORM);
+        reply.setLanguage(codec.getName());
+        reply.setOntology(ontology.getName());
+        
+    	Result result = new Result(a.getAction(), computerInfo);
+    	
+        try {
+        	managerAgent.getContentManager().fillContent(reply, result);	
+		} catch (CodecException e) {
+			managerAgent.log(e.getMessage());
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			managerAgent.log(e.getMessage());
+			e.printStackTrace();
+		}
+        
         return reply;
     }
 
