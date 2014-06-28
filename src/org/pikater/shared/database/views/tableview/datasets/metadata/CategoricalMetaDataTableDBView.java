@@ -29,8 +29,8 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 		 */
 		NAME,
 		IS_TARGET,
-		IS_REAL,
-		NUMBER_OF_CATEGORIES,
+		// IS_REAL, // TODO: not implemented in row view 
+		CATEGORY_COUNT,
 		RATIO_OF_MISSING_VALUES;
 
 		@Override
@@ -44,14 +44,15 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 		{
 			switch(this)
 			{
-				case NAME:
-					return DBViewValueType.STRING;
-				case IS_REAL:
+				// case IS_REAL:
 				case IS_TARGET:
-					return DBViewValueType.STRING;
-				case NUMBER_OF_CATEGORIES:
+					return DBViewValueType.BOOLEAN;
+					
+				case NAME:
+				case CATEGORY_COUNT:
 				case RATIO_OF_MISSING_VALUES:
 					return DBViewValueType.STRING;
+				
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}

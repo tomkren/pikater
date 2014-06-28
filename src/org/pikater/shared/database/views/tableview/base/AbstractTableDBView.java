@@ -1,5 +1,8 @@
 package org.pikater.shared.database.views.tableview.base;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 
@@ -20,6 +23,19 @@ public abstract class AbstractTableDBView
 	 */
 	public abstract ITableColumn[] getColumns();
 	
+	public Collection<ITableColumn> getSortableColumns()
+	{
+		HashSet<ITableColumn> result = new HashSet<ITableColumn>();
+		for(ITableColumn column : getColumns())
+		{
+			if(column.getColumnType().isSortable())
+			{
+				result.add(column);
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * Returns the column by which this view is sorted by default.
 	 * @return
@@ -36,7 +52,7 @@ public abstract class AbstractTableDBView
 		QueryResult queryResult = queryUninitializedRows(constraints);
 		if(queryResult.getConstrainedResults().size() > constraints.getMaxResults())
 		{
-			throw new IllegalStateException("Child view provided more results that it was asked for.");
+			throw new IllegalStateException("Child view provided more results than it was asked for.");
 		}
 		for(AbstractTableRowDBView row : queryResult.getConstrainedResults())
 		{

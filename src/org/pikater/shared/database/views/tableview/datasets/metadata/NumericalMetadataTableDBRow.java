@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.BooleanReadOnlyDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -34,17 +35,19 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 		case AVERAGE:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, attrNum.getAvarage()));
 		case IS_REAL:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.getIsReal()));
+			return new BooleanReadOnlyDBViewValue(attrNum.getIsReal());
 		case IS_TARGET:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatBool(currentLocale,attrNum.isTarget()));
+			return new BooleanReadOnlyDBViewValue(attrNum.isTarget());
 		case MAXIMUM:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMax()));
 		case MEDIAN:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMedian()));
 		case MINIMUM:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMin()));
+			/*
 		case MODE:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getMode()));
+			*/
 		case RATIO_OF_MISSING_VALUES:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getRatioOfMissingValues()));
 		case VARIANCE:

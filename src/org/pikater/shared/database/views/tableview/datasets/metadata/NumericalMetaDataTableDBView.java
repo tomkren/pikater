@@ -33,7 +33,7 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 		MINIMUM,
 		MAXIMUM,
 		AVERAGE,
-		MODE,
+		// MODE,
 		MEDIAN,
 		VARIANCE,
 		RATIO_OF_MISSING_VALUES;
@@ -53,11 +53,11 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 					return DBViewValueType.STRING;
 				case IS_REAL:
 				case IS_TARGET:
-					return DBViewValueType.STRING;
+					return DBViewValueType.BOOLEAN;
 				case MINIMUM:
 				case MAXIMUM:
 				case AVERAGE:
-				case MODE:
+				// case MODE:
 				case MEDIAN:
 				case VARIANCE:
 				case RATIO_OF_MISSING_VALUES:

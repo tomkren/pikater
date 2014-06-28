@@ -18,15 +18,23 @@ import org.pikater.shared.database.views.tableview.base.ITableColumn;
  */
 public class DataSetTableDBView extends AbstractTableDBView
 {
-	private final JPAUser owner;
+	private JPAUser owner;
 	
-	/**  
-	 * @param user The user whose datasets to display. If null (admin mode), all datasets should
-	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method.
+	/**
+	 * By default, admin mode (all datasets of all users) will be inspected. 
 	 */
-	public DataSetTableDBView(JPAUser user)
+	public DataSetTableDBView()
 	{
-		this.owner = user;
+		this.owner = null;
+	}
+	
+	/** 
+	 * @param owner The user whose datasets to display. If null (admin mode), all datasets should
+	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method instead.
+	 */
+	public void setDatasetOwner(JPAUser owner)
+	{
+		this.owner = owner;
 	}
 	
 	private boolean adminMode()

@@ -18,6 +18,11 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 	{
 		this.dataset=dataset;
 	}
+	
+	public JPADataSetLO getDataset()
+	{
+		return dataset;
+	}
 
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
