@@ -1,4 +1,4 @@
-package org.pikater.shared.database.views.tableview.results;
+package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
 import java.util.Locale;
 
