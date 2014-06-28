@@ -11,8 +11,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import org.apache.commons.io.FilenameUtils;
 
+import org.apache.commons.io.FilenameUtils;
 import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
 import org.pikater.shared.database.jpa.JPABatch;
@@ -24,13 +24,16 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.Hash;
 import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.util.DateUtils;
 import org.pikater.shared.utilities.pikaterDatabase.tests.DatabaseTest;
 
 public class DatabaseInitialisation {
@@ -58,6 +61,7 @@ public class DatabaseInitialisation {
 		**/
 		
 		addExternalAgent("core/ext_agents/org_pikater_external_ExternalWekaAgent.jar", "ExternalTestingAgent", "Testing agent from JAR");
+		listExternalAgents();
 	}
 	
 	
@@ -272,10 +276,16 @@ public class DatabaseInitialisation {
 			p("External agent "+ name +" already in DB.");
 			return;
 		}
+		JPAUser owner=new CustomActionResultFormatter<JPAUser>(
+				DAOs.userDAO.getByLogin("sj"),
+				EmptyResultAction.LOG_NULL).getSingleResultWithNull();
+		
 		JPAExternalAgent e = new JPAExternalAgent();
 		e.setAgentClass(cls);
 		e.setName(name);
 		e.setDescription(desc);
+		e.setOwner(owner);
+		e.setCreated(new Date());
 		byte[] content;
 		try {
 			content = Files.readAllBytes(Paths.get(jar));
@@ -287,6 +297,15 @@ public class DatabaseInitialisation {
 		e.setJar(content);
 		DAOs.externalAgentDAO.storeEntity(e);
 		p("Stored external agent "+ name);
+	}
+	
+	public void listExternalAgents(){
+		List<JPAExternalAgent> agents=DAOs.externalAgentDAO.getAll();
+		p("");
+		p("Available external agents: ");
+		for(JPAExternalAgent agent:agents){
+			p(agent.getName()+" "+agent.getAgentClass()+" \""+agent.getDescription()+"\" "+DateUtils.toCzechDate(agent.getCreated()));
+		}
 	}
 	
 	private void p(String s){
