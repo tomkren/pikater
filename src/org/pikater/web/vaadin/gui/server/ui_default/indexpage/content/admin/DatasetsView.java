@@ -184,7 +184,7 @@ public class DatasetsView extends ExpandableView
 				case NAME:
 					return 100;
 				case IS_TARGET:
-					return 75; // TODO
+					return 75;
 				case CATEGORY_COUNT:
 					return 125;
 				case RATIO_OF_MISSING_VALUES:
@@ -228,7 +228,7 @@ public class DatasetsView extends ExpandableView
 			{
 				case NAME:
 					return 100;
-				case IS_TARGET: // TODO
+				case IS_TARGET:
 				case IS_REAL:
 				case MINIMUM:
 				case MAXIMUM:
