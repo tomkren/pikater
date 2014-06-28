@@ -1,5 +1,15 @@
 @CHARSET "US-ASCII";
 
+.datasetDetailView
+{
+	width: 100%;
+}
+
+.datasetDetailView .v-panel
+{
+	width: 100%;
+}
+
 .datasetUploadPopup
 {
 	width: 600px;

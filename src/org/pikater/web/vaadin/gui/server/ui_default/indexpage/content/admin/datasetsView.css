@@ -1,0 +1,16 @@
+@CHARSET "US-ASCII";
+
+.datasetDetailView
+{
+	width: 100%;
+}
+
+.datasetDetailView .v-panel
+{
+	width: 100%;
+}
+
+.datasetDetailView .v-spacing
+{
+	height: 25px;
+}
