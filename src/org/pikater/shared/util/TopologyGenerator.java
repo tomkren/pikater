@@ -1,4 +1,4 @@
-package org.pikater.web;
+package org.pikater.shared.util;
 
 import java.io.IOException;
 
@@ -6,7 +6,6 @@ import org.pikater.shared.RemoteServerInfo;
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
 import org.pikater.shared.XStreamHelper;
-import org.pikater.shared.util.IOUtils;
 
 import com.thoughtworks.xstream.XStream;
 
