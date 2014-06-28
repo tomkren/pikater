@@ -44,7 +44,6 @@ import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
-import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.GetData;
@@ -54,7 +53,7 @@ import org.pikater.core.ontology.subtrees.result.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.ExecuteTask;
+import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
@@ -422,7 +421,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						send(result_msg);
 						return;
 
-					} else if (((Action) content).getAction() instanceof ExecuteTask) {
+					} else if (((Action) content).getAction() instanceof ExecuteTaksOnCPUCore) {
 						send(processExecute(req));
 						return;
 					}
@@ -458,7 +457,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		private static final int LAST_JMP = 1;
 		ACLMessage incoming_request;
 		ACLMessage result_msg;
-		ExecuteTask execute_action;
+		ExecuteTaksOnCPUCore execute_action;
 		boolean success;
 		org.pikater.core.ontology.subtrees.task.Evaluation eval = new Evaluation();
 		String train_fn;
@@ -501,7 +500,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 				try {
 					ContentElement content = getContentManager()
 							.extractContent(incoming_request);
-					execute_action = (ExecuteTask) ((Action) content)
+					execute_action = (ExecuteTaksOnCPUCore) ((Action) content)
 							.getAction();
 					return true;
 				} catch (CodecException ce) {
