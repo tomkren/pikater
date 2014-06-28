@@ -11,6 +11,7 @@ import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
@@ -41,14 +42,39 @@ public class UserDatasetsView extends DatasetsView
 	public UserDatasetsView()
 	{
 		super();
+		
+		this.mainDatasetsLayout.addCustomActionComponent(new Button("Upload new dataset", new Button.ClickListener()
+		{
+			private static final long serialVersionUID = -1045335713385385849L;
+
+			@Override
+			public void buttonClick(ClickEvent event)
+			{
+				MyPopup datasetUploadWizardWindow = new MyPopup("Dataset upload guide");
+				datasetUploadWizardWindow.setWidth("600px");
+				datasetUploadWizardWindow.setHeight("500px");
+				datasetUploadWizardWindow.setContent(new DatasetUploadWizard(datasetUploadWizardWindow));
+				datasetUploadWizardWindow.show();
+			}
+		}));
 	}
 	
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		this.underlyingView.setDatasetOwner(ManageAuth.getUserEntity(VaadinSession.getCurrent()));
-		this.mainDatasetsLayout.setImmediate(false);
-		super.finishInit(); // always call this last and don't forget to!
+		if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
+		{
+			this.mainDatasetsLayout.setCommitImmediately(false);
+			this.underlyingView.setDatasetOwner(ManageAuth.getUserEntity(VaadinSession.getCurrent()));
+			
+			// always call these last, when you're absolutely ready to display the content
+			this.mainDatasetsLayout.setView(new DatasetDBViewRoot());
+			super.finishInit(); // don't forget to!
+		}
+		else
+		{
+			throw new IllegalStateException("User is not logged in.");
+		}
 	}
 	
 	//----------------------------------------------------------------------------

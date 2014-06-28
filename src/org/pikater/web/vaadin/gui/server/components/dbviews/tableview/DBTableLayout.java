@@ -39,8 +39,6 @@ public class DBTableLayout extends VerticalLayout
 			{
 				boolean checked = (Boolean) event.getProperty().getValue();
 				table.setImmediate(checked);
-				chb_commit.setEnabled(checked);
-				chb_commit.setVisible(checked);
 				btn_saveChanges.setVisible(!checked);
 			}
 		});
@@ -61,6 +59,7 @@ public class DBTableLayout extends VerticalLayout
 				table.commitToDB();
 			}
 		});
+		this.btn_saveChanges.setVisible(false);
 		
 		hl_btnInterface = new HorizontalLayout();
 		hl_btnInterface.setSpacing(true);

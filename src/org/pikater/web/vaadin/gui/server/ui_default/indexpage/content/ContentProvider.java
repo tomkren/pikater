@@ -18,11 +18,11 @@ public class ContentProvider
 {
 	public interface IWebFeatureSet
 	{
-		String toMenuCaption();
-		String toNavigatorName();
 		boolean accessAllowed(VaadinSession session);
 		boolean shouldOpenInSeperateTab();
-		IContentComponent toComponent();
+		String toMenuCaption();
+		String toNavigatorName();
+		Class<? extends IContentComponent> toComponentClass();
 	}
 	
 	public interface IContentComponent extends View
@@ -33,27 +33,17 @@ public class ContentProvider
 	
 	public enum DefaultFeature implements IWebFeatureSet
 	{
-		WELCOME,
-		TEST;
+		// IMPORTANT: always bind the default content with empty navigator name.
+		WELCOME("", WelcomeView.class),
+		TEST("test", TestView.class);
 		
-		@Override
-		public String toMenuCaption()
-		{
-			return null;
-		}
+		private final Class<? extends IContentComponent> mappedComponent;
+		private final String navigatorName;
 		
-		@Override
-		public String toNavigatorName()
+		private DefaultFeature(String navigatorName, Class<? extends IContentComponent> mappedComponent)
 		{
-			switch(this)
-			{
-				case TEST:
-					return "test";
-				case WELCOME:
-					return "welcome";
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
+			this.navigatorName = navigatorName;
+			this.mappedComponent = mappedComponent;
 		}
 		
 		@Override
@@ -75,29 +65,43 @@ public class ContentProvider
 		{
 			return false;
 		}
-
+		
 		@Override
-		public IContentComponent toComponent()
+		public String toMenuCaption()
 		{
-			switch(this)
-			{
-				case TEST:
-					return new TestView();
-				case WELCOME:
-					return new WelcomeView();
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
+			return null;
+		}
+		
+		@Override
+		public String toNavigatorName()
+		{
+			return navigatorName;
+		}
+		
+		@Override
+		public Class<? extends IContentComponent> toComponentClass()
+		{
+			return mappedComponent;
 		}
 	}
 	
 	public enum AdminFeature implements IWebFeatureSet
 	{
-		VIEW_USERS,
-		VIEW_DATASETS,
-		VIEW_METHODS,
-		VIEW_SCHEDULED_EXPERIMENTS,
-		VIEW_SYSTEM_STATUS;
+		// IMPORTANT: all navigator names should start with "admin". See {@link #getFeatureFromNavigatorName} below.
+		VIEW_USERS("adminAllUsers", UsersView.class),
+		VIEW_DATASETS("adminAllDatasets", DatasetsView.class),
+		VIEW_METHODS("adminAllMethods", UnimplementedView.class),
+		VIEW_SCHEDULED_EXPERIMENTS("adminAllExperiments", UnimplementedView.class),
+		VIEW_SYSTEM_STATUS("adminSystemStatus", UnimplementedView.class);
+		
+		private final Class<? extends IContentComponent> mappedComponent;
+		private final String navigatorName;
+		
+		private AdminFeature(String navigatorName, Class<? extends IContentComponent> mappedComponent)
+		{
+			this.navigatorName = navigatorName;
+			this.mappedComponent = mappedComponent;
+		}
 		
 		@Override
 		public String toMenuCaption()
@@ -120,26 +124,6 @@ public class ContentProvider
 		}
 		
 		@Override
-		public String toNavigatorName()
-		{
-			switch(this)
-			{
-				case VIEW_USERS:
-					return "adminAllUsers";
-				case VIEW_DATASETS:
-					return "adminAllDatasets";
-				case VIEW_METHODS:
-					return "adminAllMethods";
-				case VIEW_SCHEDULED_EXPERIMENTS:
-					return "adminAllExperiments";
-				case VIEW_SYSTEM_STATUS:
-					return "adminSystemStatus";
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
-		}
-		
-		@Override
 		public boolean accessAllowed(VaadinSession session)
 		{
 			return ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
@@ -152,27 +136,54 @@ public class ContentProvider
 		}
 		
 		@Override
-		public IContentComponent toComponent()
+		public String toNavigatorName()
 		{
-			switch(this)
-			{
-				case VIEW_USERS:
-					return new UsersView();
-				case VIEW_DATASETS:
-					return new DatasetsView();
-				default:
-					return new UnimplementedView();
-			}
+			return navigatorName;
+		}
+		
+		@Override
+		public Class<? extends IContentComponent>  toComponentClass()
+		{
+			return mappedComponent;
 		}
 	}
 	
 	public enum UserFeature implements IWebFeatureSet
 	{
-		VIEW_PROFILE,
-		VIEW_DATASETS,
-		VIEW_METHODS,
-		EXPERIMENT_EDITOR,
-		VIEW_EXPERIMENT_RESULTS;
+		// IMPORTANT: all navigator names should start with "user". See {@link #getFeatureFromNavigatorName} below.
+		VIEW_PROFILE("userProfile", UserProfileView.class),
+		VIEW_DATASETS("userDatasets", UserDatasetsView.class),
+		VIEW_METHODS("userMethods", UnimplementedView.class),
+		EXPERIMENT_EDITOR(null, null),
+		VIEW_EXPERIMENT_RESULTS("userResults", UnimplementedView.class);
+		
+		private final Class<? extends IContentComponent> mappedComponent;
+		private final String navigatorName;
+		
+		private UserFeature(String navigatorName, Class<? extends IContentComponent> mappedComponent)
+		{
+			this.navigatorName = navigatorName;
+			this.mappedComponent = mappedComponent;
+		}
+		
+		@Override
+		public boolean accessAllowed(VaadinSession session)
+		{
+			if(ServerConfigurationInterface.avoidUsingDBForNow())
+			{
+				return true;
+			}
+			else
+			{
+				return ManageAuth.isUserAuthenticated(session); // only allowed for authenticated users
+			}
+		}
+		
+		@Override
+		public boolean shouldOpenInSeperateTab()
+		{
+			return this == EXPERIMENT_EDITOR;
+		}
 		
 		@Override
 		public String toMenuCaption()
@@ -197,55 +208,45 @@ public class ContentProvider
 		@Override
 		public String toNavigatorName()
 		{
-			switch(this)
-			{
-				case VIEW_PROFILE:
-					return "userProfile";
-				case VIEW_DATASETS:
-					return "userDatasets";
-				case VIEW_METHODS:
-					return "userMethods";
-				case EXPERIMENT_EDITOR:
-					return null; // always opened in a new tab or window (UI), so history support is not needed
-				case VIEW_EXPERIMENT_RESULTS:
-					return "experimentResults";
-				
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
+			return navigatorName;
 		}
 		
 		@Override
-		public boolean accessAllowed(VaadinSession session)
+		public Class<? extends IContentComponent> toComponentClass()
 		{
-			if(ServerConfigurationInterface.avoidUsingDBForNow())
+			return mappedComponent;
+		}
+	}
+	
+	public static IWebFeatureSet getFeatureFromNavigatorName(String navigatorName)
+	{
+		if(navigatorName == null)
+		{
+			return null;
+		}
+		else if(navigatorName.startsWith("admin"))
+		{
+			return getFeatureFromNavigatorName(navigatorName, AdminFeature.values());
+		}
+		else if(navigatorName.startsWith("user"))
+		{
+			return getFeatureFromNavigatorName(navigatorName, UserFeature.values());
+		}
+		else
+		{
+			return getFeatureFromNavigatorName(navigatorName, DefaultFeature.values());
+		}
+	}
+	
+	private static IWebFeatureSet getFeatureFromNavigatorName(String navigatorName, IWebFeatureSet[] features)
+	{
+		for(IWebFeatureSet feature : features)
+		{
+			if(feature.toNavigatorName().equalsIgnoreCase(navigatorName))
 			{
-				return true;
-			}
-			else
-			{
-				return ManageAuth.isUserAuthenticated(session); // only allowed for authenticated users
+				return feature;
 			}
 		}
-		
-		@Override
-		public boolean shouldOpenInSeperateTab()
-		{
-			return this == EXPERIMENT_EDITOR;
-		}
-		
-		@Override
-		public IContentComponent toComponent()
-		{
-			switch(this)
-			{
-				case VIEW_PROFILE:
-					return new UserProfileView();
-				case VIEW_DATASETS:
-					return new UserDatasetsView();
-				default:
-					return new UnimplementedView();
-			}
-		}
+		return null;
 	}
 }
