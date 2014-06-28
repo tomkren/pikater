@@ -1,8 +1,7 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.pikater.shared.database.views.base.SortOrder;
@@ -13,7 +12,7 @@ import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
+import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Container;
@@ -22,33 +21,17 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Table.Align;
 
 public class DBTableContainer implements Container.Sortable, ICommitable
 {
 	private static final long serialVersionUID = 9197656251784900256L;
 
 	private final DBTable parentTable;
-	private final AbstractTableGUIView<? extends AbstractTableDBView> guiView;
-	
-	private final Set<ITableColumn> sortableColumns;
 	private final DBTableContainerItems rows;
 	
-	public DBTableContainer(AbstractTableGUIView<? extends AbstractTableDBView> guiView, DBTable parentTable)
+	public DBTableContainer(DBTable parentTable)
 	{
 		this.parentTable = parentTable;
-		this.guiView = guiView;
-		
-		this.sortableColumns = new HashSet<ITableColumn>();
-		for(ITableColumn column : getContainerPropertyIds())
-		{
-			this.parentTable.setColumnHeader(column, column.getDisplayName());
-			this.parentTable.setColumnAlignment(column, Align.CENTER);
-			if(column.getColumnType().isSortable())
-			{
-				this.sortableColumns.add(column);
-			}
-		}
 		this.rows = new DBTableContainerItems(parentTable);
 	}
 	
@@ -58,7 +41,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Collection<ITableColumn> getContainerPropertyIds()
 	{
-		return Arrays.asList(guiView.getUnderlyingDBView().getColumns());
+		return Arrays.asList(viewRoot.getUnderlyingDBView().getColumns());
 	}
 	
 	@Override
@@ -74,7 +57,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Collection<?> getItemIds()
 	{
-		rows.loadRows(this, guiView.getUnderlyingDBView().queryRows(parentTable.getQuery()));
+		rows.loadRows(this, viewRoot.getUnderlyingDBView().queryRows(parentTable.getQuery()));
 		return rows.getRowIDs();
 	}
 	
@@ -157,7 +140,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	
 	public Collection<?> getSortableContainerPropertyIds()
 	{
-		return sortableColumns;
+		return viewRoot.getUnderlyingDBView().getSortableColumns();
 	}
 	
 	public Object firstItemId()
@@ -246,7 +229,8 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 			
 			case REPRESENTATIVE:
 				DBTableItemPropertyCombo result1 = new DBTableItemPropertyCombo(container.getParentTable(), (RepresentativeDBViewValue) value);
-				container.getGUIView().onCellCreate(column, result1.getValue());
+				result1.getValue().setWidth("100%");
+				container.getViewRoot().onCellCreate(column, result1.getValue());
 				return result1;
 				
 			case NAMED_ACTION:
@@ -269,14 +253,21 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	//-----------------------------------------------------------
 	// AND FINALLY, SOME ADDED VALUE
 	
+	private IDBViewRoot<? extends AbstractTableDBView> viewRoot;
+	
+	public void setViewRoot(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
+	{
+		this.viewRoot = viewRoot;		
+	}
+	
 	public DBTable getParentTable()
 	{
 		return parentTable;
 	}
 	
-	public AbstractTableGUIView<? extends AbstractTableDBView> getGUIView()
+	public IDBViewRoot<? extends AbstractTableDBView> getViewRoot()
 	{
-		return guiView;
+		return viewRoot;
 	}
 	
 	public SortOrder getCurrentSortOrder()

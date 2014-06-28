@@ -1,28 +1,33 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.util.collections.CustomOrderSet;
+import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent;
 import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent.IPagedComponent;
-import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Table;
 
 @StyleSheet("dbTable.css")
-public class DBTable extends Table implements IDBTableContainerContext, IPagedComponent, IDBTableConfig, ICommitable
+public class DBTable extends Table implements IDBTableContainerContext, IPagedComponent, ICommitable
 {
 	private static final long serialVersionUID = 6518669246548765191L;
 	
 	private final DBTableContainer tableContainer;
 	private final PagingComponent pagingControls;
 
-	public DBTable(AbstractTableGUIView<? extends AbstractTableDBView> dbView)
+	public DBTable()
 	{
 		super();
 		
-		setImmediate(true);
+		setImmediate(true); // this is counted on in {@link DBTableLayout}
 		setEditable(true);
 		setColumnReorderingAllowed(false);
 		setColumnCollapsingAllowed(true);
@@ -35,26 +40,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		this.pagingControls = new PagingComponent(this);
 		
 		// then setup the container
-		this.tableContainer = new DBTableContainer(dbView, this);
-		
-		// and finish initialization
-		setContainerDataSource(tableContainer);
-		dbView.setColumnSizes(this);
-		setSortContainerPropertyId(dbView.getUnderlyingDBView().getDefaultSortOrder());
-		addHeaderClickListener(new HeaderClickListener()
-		{
-			private static final long serialVersionUID = -1276767165561401427L;
-
-			@Override
-			public void headerClick(HeaderClickEvent event)
-			{
-				ITableColumn column = (ITableColumn) event.getPropertyId();
-				if(column.getColumnType().isSortable())
-				{
-					setSortContainerPropertyId(event.getPropertyId()); // Vaadin will not do this by itself... doh
-				}
-			}
-		});
+		this.tableContainer = new DBTableContainer(this);
 	}
 	
 	//-------------------------------------------------------------------
@@ -130,12 +116,6 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	// OTHER INHERITED INTERFACE
 	
 	@Override
-	public boolean rowsExpandIntoOtherViews()
-	{
-		return false; // override in child classses to change
-	}
-	
-	@Override
 	public void commitToDB()
 	{
 		setEnabled(false);
@@ -150,14 +130,80 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	//-------------------------------------------------------------------
 	// OTHER PUBLIC INTERFACE
 	
+	/**
+	 * The most important method. Without this, the table is but an empty shell.
+	 * @param viewRoot
+	 */
+	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
+	{
+		// first all kinds of setting things up:
+		for(ITableColumn column : viewRoot.getUnderlyingDBView().getColumns())
+		{
+			setColumnHeader(column, column.getDisplayName());
+			setColumnAlignment(column, Align.CENTER);
+			setColumnWidth(column, viewRoot.getColumnSize(column));
+			// TODO: table.setColumnExpandRatio(propertyId, expandRatio); // override fixed column width
+		}
+		addHeaderClickListener(new HeaderClickListener()
+		{
+			private static final long serialVersionUID = -1276767165561401427L;
+
+			@Override
+			public void headerClick(HeaderClickEvent event)
+			{
+				ITableColumn column = (ITableColumn) event.getPropertyId();
+				if(column.getColumnType().isSortable())
+				{
+					setSortContainerPropertyId(event.getPropertyId()); // Vaadin will not do this by itself... doh
+				}
+			}
+		});
+		tableContainer.setViewRoot(viewRoot);
+		setContainerDataSource(tableContainer);
+		setSortContainerPropertyId(viewRoot.getUnderlyingDBView().getDefaultSortOrder()); // this will rebuild the container row cache
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Set<Object> getSelectedRowIDs()
+	{
+		Set<Object> result = new HashSet<Object>();
+		final Object selectedRowIDs = getValue();
+		if(selectedRowIDs != null)
+		{
+			if(isMultiSelect())
+			{
+				result.addAll((Set<Object>) selectedRowIDs);
+			}
+			else if(isSelectable())
+			{
+				result.add(selectedRowIDs); // a single value
+			}
+		}
+		return result;
+	}
+	
+	public boolean isARowSelected()
+	{
+		return !getSelectedRowIDs().isEmpty();
+	}
+	
+	public AbstractTableRowDBView[] getViewsOfSelectedRows()
+	{
+		CustomOrderSet<Object> sortedSelectedItemSet = new CustomOrderSet<Object>(getSelectedRowIDs());
+			
+		AbstractTableRowDBView[] result = new AbstractTableRowDBView[sortedSelectedItemSet.size()];
+		int index = 0;
+		for(Object itemID : sortedSelectedItemSet)
+		{
+			result[index] = tableContainer.getItem(itemID).getRowView();
+			index++;
+		}
+		return result;
+	}
+	
 	public PagingComponent getPagingControls()
 	{
 		return pagingControls;
-	}
-	
-	public IDBTableLayout getViewRoot()
-	{
-		return (IDBTableLayout) getParent();
 	}
 	
 	//-------------------------------------------------------------------

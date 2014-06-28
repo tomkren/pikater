@@ -1,10 +1,9 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.pikater.shared.database.views.base.IExpandableDBView;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
@@ -46,14 +45,7 @@ public class DBTableContainerItems implements ICommitable
 		SimpleIDGenerator ids = new SimpleIDGenerator();
 		for(AbstractTableRowDBView row : queryResult.getConstrainedResults())
 		{
-			if(parentTable.rowsExpandIntoOtherViews() && !(row instanceof IExpandableDBView))
-			{
-				throw new IllegalArgumentException("Expandable row view is expected.");
-			}
-			else
-			{
-				this.rows.put(ids.getAndIncrement(), new DBTableItem(container, row, parentTable));
-			}
+			this.rows.put(ids.getAndIncrement(), new DBTableItem(container, row, parentTable));
 		}
 		
 		// and finally:

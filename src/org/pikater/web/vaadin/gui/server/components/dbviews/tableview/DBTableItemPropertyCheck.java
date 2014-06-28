@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 
@@ -15,6 +15,7 @@ public class DBTableItemPropertyCheck implements Property<CheckBox>
 	{
 		this.checkBox = new CheckBox(null, valueWrapper.getValue());
 		this.checkBox.setImmediate(true);
+		this.checkBox.setReadOnly(valueWrapper.isReadOnly());
 		this.checkBox.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -7967404862064544415L;

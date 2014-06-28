@@ -1,10 +1,7 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
-import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.web.vaadin.gui.server.components.tabledbview.views.AbstractTableGUIView;
+import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -15,7 +12,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-public class DBTableLayout extends VerticalLayout implements IDBTableLayout
+public class DBTableLayout extends VerticalLayout
 {
 	private static final long serialVersionUID = 6591677491205750540L;
 	
@@ -25,13 +22,13 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 	private final HorizontalLayout hl_btnInterface;
 	private final Button btn_saveChanges;
 	
-	public DBTableLayout(AbstractTableDBView dbView, boolean immediateCommit)
+	public DBTableLayout()
 	{
 		super();
 		setSizeUndefined();
 		setSpacing(true);
 		
-		this.chb_commit = new CheckBox("commit changes immediately", immediateCommit);
+		this.chb_commit = new CheckBox("commit changes immediately", true); // table is, by default, immediate
 		this.chb_commit.setSizeUndefined();
 		this.chb_commit.addValueChangeListener(new ValueChangeListener()
 		{
@@ -42,13 +39,13 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 			{
 				boolean checked = (Boolean) event.getProperty().getValue();
 				table.setImmediate(checked);
+				chb_commit.setEnabled(checked);
+				chb_commit.setVisible(checked);
 				btn_saveChanges.setVisible(!checked);
 			}
 		});
-		this.chb_commit.setEnabled(immediateCommit);
-		this.chb_commit.setVisible(immediateCommit);
 		
-		this.table = createTable(AbstractTableGUIView.getInstanceFromDBView(dbView));
+		this.table = new DBTable();
 		this.table.setSizeFull();
 		
 		this.tablePagingControls = this.table.getPagingControls();
@@ -64,7 +61,6 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 				table.commitToDB();
 			}
 		});
-		this.btn_saveChanges.setVisible(!immediateCommit);
 		
 		hl_btnInterface = new HorizontalLayout();
 		hl_btnInterface.setSpacing(true);
@@ -75,9 +71,6 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 		addComponent(this.table);
 		addComponent(this.tablePagingControls);
 		addComponent(hl_btnInterface);
-		
-		// leave this for last
-		this.chb_commit.setValue(immediateCommit);
 	}
 	
 	public DBTable getTable()
@@ -85,19 +78,18 @@ public class DBTableLayout extends VerticalLayout implements IDBTableLayout
 		return table;
 	}
 	
-	protected void addCustomActionComponent(Component component)
+	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
-		hl_btnInterface.addComponent(component);
+		table.setView(viewRoot);
 	}
 	
-	protected DBTable createTable(AbstractTableGUIView<? extends AbstractTableDBView> dbView)
+	public void setCommitImmediately(boolean immediate)
 	{
-		return new DBTable(dbView);
+		chb_commit.setValue(immediate);
 	}
-
-	@Override
-	public void dbViewActionCalled(ITableColumn column, AbstractTableRowDBView row, NamedActionDBViewValue originalAction)
+	
+	public void addCustomActionComponent(Component component)
 	{
-		originalAction.actionExecuted(getTable().isImmediate());
+		hl_btnInterface.addComponent(component);
 	}
 }

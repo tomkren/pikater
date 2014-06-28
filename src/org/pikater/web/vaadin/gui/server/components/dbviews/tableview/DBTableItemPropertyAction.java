@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
@@ -23,8 +23,15 @@ public class DBTableItemPropertyAction implements Property<Button>
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				container.getParentTable().getViewRoot().dbViewActionCalled(column, row, valueWrapper);
-				btn.setEnabled(valueWrapper.isEnabled());
+				container.getViewRoot().approveAction(column, row, new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						valueWrapper.actionExecuted(container.getParentTable().isImmediate());
+						btn.setEnabled(valueWrapper.isEnabled());
+					}
+				});
 			}
 		});
 		this.btn.setEnabled(valueWrapper.isEnabled());

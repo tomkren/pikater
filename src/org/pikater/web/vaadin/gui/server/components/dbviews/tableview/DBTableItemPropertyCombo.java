@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 

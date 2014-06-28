@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.tabledbview;
+package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
 import java.util.Collection;
 import java.util.HashMap;
