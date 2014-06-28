@@ -39,6 +39,7 @@ import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
@@ -240,8 +241,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 					if (a.getAction() instanceof GetOptions) {
 						return respondToGetOptions(request, a);
 
-					} else if (a.getAction() instanceof ExecuteTaksOnCPUCore) {
-						return respondExecuteTaksOnCPUCore(request, a);
+					} else if (a.getAction() instanceof ExecuteTask) {
+						return respondExecuteTask(request, a);
 					}
 
 					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
@@ -263,7 +264,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		return communicator.sendOptions(Agent_ComputingAgent.this, request);
 	}
 	
-	private ACLMessage respondExecuteTaksOnCPUCore(ACLMessage request, Action a) {
+	private ACLMessage respondExecuteTask(ACLMessage request, Action a) {
 		
 		ComputingComminicator communicator = new ComputingComminicator();
 		return communicator.executeTask(this, request);

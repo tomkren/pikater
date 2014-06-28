@@ -9,15 +9,15 @@ public class FinishedTask implements Concept {
 	 */
 	private static final long serialVersionUID = 1147257054671778027L;
 
-	private int taskID;
+	private Task task;
 	private int cpuCoreID;
 
-	public int getTaskID() {
-		return taskID;
+	public Task getTask() {
+		return task;
 	}
 
-	public void setTaskID(int taskID) {
-		this.taskID = taskID;
+	public void setTask(Task task) {
+		this.task = task;
 	}
 
 	public int getCpuCoreID() {

@@ -13,11 +13,11 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
@@ -30,6 +30,8 @@ import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
+import org.pikater.core.ontology.subtrees.task.FinishedTask;
 
 public class ComputingAction extends FSMBehaviour {
 	/**
@@ -47,7 +49,7 @@ public class ComputingAction extends FSMBehaviour {
 	private static final int LAST_JMP = 1;
 	ACLMessage incomingRequest;
 	ACLMessage resultMsg;
-	ExecuteTaksOnCPUCore executeAction;
+	ExecuteTask executeAction;
 	boolean success;
 	Evaluation eval = new Evaluation();
 	String trainFn;
@@ -61,7 +63,7 @@ public class ComputingAction extends FSMBehaviour {
 	/* Resulting message: FAILURE */
 
 	void failureMsg(String desc) {
-		java.util.List<Eval> evaluations = new java.util.ArrayList<Eval>();
+		List<Eval> evaluations = new ArrayList<Eval>();
 
 		Eval er = new Eval();
 		er.setName("error_rate");
@@ -92,13 +94,13 @@ public class ComputingAction extends FSMBehaviour {
 			try {
 				ContentElement content = agent.getContentManager()
 						.extractContent(incomingRequest);
-				executeAction = (ExecuteTaksOnCPUCore) ((Action) content)
+				executeAction = (ExecuteTask) ((Action) content)
 						.getAction();
 				return true;
 			} catch (CodecException ce) {
-				ce.printStackTrace();
+				agent.logError("", ce);
 			} catch (OntologyException oe) {
-				oe.printStackTrace();
+				agent.logError("", oe);
 			}
 		} else {
 			block();
@@ -108,7 +110,7 @@ public class ComputingAction extends FSMBehaviour {
 	}
 
 	/* Extract data from INFORM message (ARFF reader) */
-	DataInstances processGetData(ACLMessage inform) {
+	private DataInstances processGetData(ACLMessage inform) {
 		ContentElement content;
 		try {
 			content = agent.getContentManager().extractContent(inform);
@@ -131,11 +133,11 @@ public class ComputingAction extends FSMBehaviour {
 				}
 			}
 		} catch (UngroundedException e) {
-			e.printStackTrace();
+			agent.logError("", e);
 		} catch (CodecException e) {
-			e.printStackTrace();
+			agent.logError("", e);
 		} catch (OntologyException e) {
-			e.printStackTrace();
+			agent.logError("", e);
 		}
 		return null;
 	}
@@ -171,9 +173,9 @@ public class ComputingAction extends FSMBehaviour {
 				agent.setOptions(executeAction.getTask());
 
 				// set agent name in Task
-				Agent agent_ = agent.currentTask.getAgent();
-				agent_.setName(agent.getLocalName());
-				agent.currentTask.setAgent(agent_);
+				Agent agentOnt = agent.currentTask.getAgent();
+				agentOnt.setName(agent.getLocalName());
+				agent.currentTask.setAgent(agentOnt);
 
 				eval = new Evaluation();
 				success = true;
@@ -182,48 +184,48 @@ public class ComputingAction extends FSMBehaviour {
 				mode = data.getMode();
 
 				trainFn = data.getTrainFileName();
-				AchieveREInitiator get_train_behaviour = (AchieveREInitiator) ((ComputingAction) parent).getState(GETTRAINDATA_STATE);
+				AchieveREInitiator getTrainBehaviour = (AchieveREInitiator) ((ComputingAction) parent).getState(GETTRAINDATA_STATE);
 
 				if (!trainFn.equals(agent.trainFileName)) {
 					
 					ComputingComminicator communicator = new ComputingComminicator();
 					ACLMessage dataMsg = communicator.sendGetDataReq(agent, trainFn);
 					
-					get_train_behaviour.reset(dataMsg);
+					getTrainBehaviour.reset(dataMsg);
 				} else {
 					// We have already the right data
-					get_train_behaviour.reset(null);
+					getTrainBehaviour.reset(null);
 				}
 
 				if (!mode.equals("train_only")) {
 					testFn = data.getTestFileName();
-					AchieveREInitiator get_test_behaviour = (AchieveREInitiator) ((ComputingAction) parent)
+					AchieveREInitiator getTestBehaviour = (AchieveREInitiator) ((ComputingAction) parent)
 							.getState(GETTESTDATA_STATE);
 					if (!testFn.equals(agent.testFileName)) {
 						
 						ComputingComminicator communicator = new ComputingComminicator();
 						ACLMessage dataMsg = communicator.sendGetDataReq(agent, testFn);
 
-						get_test_behaviour.reset(dataMsg);
+						getTestBehaviour.reset(dataMsg);
 					} else {
 						// We have already the right data
-						get_test_behaviour.reset(null);
+						getTestBehaviour.reset(null);
 					}
 				}
 
 				if (data.getLabelFileName() != null) {
 					labelFn = data.getLabelFileName();
-					AchieveREInitiator get_label_behaviour = (AchieveREInitiator) ((ComputingAction) parent)
+					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator) ((ComputingAction) parent)
 							.getState(GETLABELDATA_STATE);
 					if (!labelFn.equals(agent.labelFileName)) {
 						
 						ComputingComminicator communicator = new ComputingComminicator();
 						ACLMessage dataMsg = communicator.sendGetDataReq(agent, labelFn);
 						
-						get_label_behaviour.reset(dataMsg);
+						getLabelBehaviour.reset(dataMsg);
 					} else {
 						// We have already the right data
-						get_label_behaviour.reset(null);
+						getLabelBehaviour.reset(null);
 					}
 				}
 			}
@@ -245,10 +247,10 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances _train = processGetData(inform);
-				if (_train != null) {
+				DataInstances trainDataInstances = processGetData(inform);
+				if (trainDataInstances != null) {
 					agent.trainFileName = trainFn;
-					agent.ontoTrain = _train;
+					agent.ontoTrain = trainDataInstances;
 					agent.train = agent.ontoTrain.toWekaInstances();
 					agent.train.setClassIndex(agent.train.numAttributes() - 1);
 					next = NEXT_JMP;
@@ -284,10 +286,10 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances _test = processGetData(inform);
-				if (_test != null) {
+				DataInstances testDataInstances = processGetData(inform);
+				if (testDataInstances != null) {
 					agent.testFileName = testFn;
-					agent.ontoTest = _test;
+					agent.ontoTest = testDataInstances;
 					agent.test = agent.ontoTest.toWekaInstances();
 					agent.test.setClassIndex(agent.test.numAttributes() - 1);
 
@@ -325,10 +327,10 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances _label = processGetData(inform);
-				if (_label != null) {
+				DataInstances labelDataInstances = processGetData(inform);
+				if (labelDataInstances != null) {
 					agent.labelFileName = labelFn;
-					agent.ontoLabel = _label;
+					agent.ontoLabel = labelDataInstances;
 					agent.label = agent.ontoLabel.toWekaInstances();
 					agent.label.setClassIndex(agent.label.numAttributes() - 1);
 					next = NEXT_JMP;
@@ -365,11 +367,11 @@ public class ComputingAction extends FSMBehaviour {
 			public void action() {
 				try {
 
-					java.util.List<DataInstances> labeledData = new java.util.ArrayList<DataInstances>();
+					List<DataInstances> labeledData = new ArrayList<DataInstances>();
 
 					eval = new Evaluation();
 
-					eval.setEvaluations(new java.util.ArrayList<Eval>());
+					eval.setEvaluations(new ArrayList<Eval>());
 
 					Date start = null;
 					if (agent.state != Agent_ComputingAgent.states.TRAINED) {
@@ -430,10 +432,9 @@ public class ComputingAction extends FSMBehaviour {
 					success = false;
 					agent.working = false;
 					failureMsg(e.getMessage());
-					System.err.println(agent.getLocalName() + ": Error: "
+					agent.log(agent.getLocalName() + ": Error: "
 							+ e.getMessage() + ".");
-
-					// e.printStackTrace();
+					agent.logError("", e);
 				}
 			}
 
@@ -456,9 +457,10 @@ public class ComputingAction extends FSMBehaviour {
 
 				if (success && (resultMsg == null)) {
 
-					if ((agent.currentTask.getSaveMode() != null && agent.currentTask
-							.getSaveMode().equals("file"))
-							&& !agent.resurrected) {
+					if ((agent.currentTask.getSaveMode() != null &&
+							agent.currentTask .getSaveMode().equals("file")) && 
+							!agent.resurrected) {
+						
 						try {
 							ComputingComminicator communicator = new ComputingComminicator();
 							String objectFilename = communicator.saveAgentToFile(agent);
@@ -502,9 +504,7 @@ public class ComputingAction extends FSMBehaviour {
 					;
 					agent.currentTask.setResult(eval);
 
-					List results = new ArrayList();
-					results.add(agent.currentTask);
-					Result result = new Result((Action) content, results);
+					Result result = new Result((Action) content, agent.currentTask);
 					agent.getContentManager().fillContent(resultMsg, result);
 
 				} catch (UngroundedException e) {
