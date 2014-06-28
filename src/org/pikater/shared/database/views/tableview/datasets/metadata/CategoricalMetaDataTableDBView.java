@@ -29,7 +29,6 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 		 */
 		NAME,
 		IS_TARGET,
-		// IS_REAL, // TODO: not implemented in row view 
 		CATEGORY_COUNT,
 		RATIO_OF_MISSING_VALUES;
 
