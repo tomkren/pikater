@@ -17,6 +17,7 @@ public class Task implements Concept {
     private String getResults;
     private String guiAgent;
     private boolean saveResults;
+    private int cpuCoreID;
 
     public String getStart() {
         return start;
@@ -152,9 +153,14 @@ public class Task implements Concept {
     public void setOutput(ArrayList<TaskOutput> output) {
         this.output = output;
     }
+    public int getCpuCoreID() {
+		return cpuCoreID;
+	}
+	public void setCpuCoreID(int cpuCoreID) {
+		this.cpuCoreID = cpuCoreID;
+	}
 
-
-    public Object getOutputByName(InOutType name) {
+	public Object getOutputByName(InOutType name) {
         for (TaskOutput to: this.output){
             if (to.getName().equals(name)){
                 return to.getValue();
