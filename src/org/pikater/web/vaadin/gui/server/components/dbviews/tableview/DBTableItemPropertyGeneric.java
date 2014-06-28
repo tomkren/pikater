@@ -19,18 +19,21 @@ public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 		this.column = column;
 		this.valueWrapper = valueWrapper;
 		
-		// compatibility check
-		Class<?> valueTypeClass = getValue().getClass();
-		Class<?> viewBindingTypeClass = getType();
-		if(!valueTypeClass.equals(viewBindingTypeClass))
+		if(getValue() != null)
 		{
-			throw new ClassCastException(
-					String.format("Incorrect type binding detected. '%s' suggests '%s' but '%s' returns '%s'",
-							column.getClass().getName(),
-							viewBindingTypeClass.getName(),
-							valueWrapper.getClass().getName(),
-							valueTypeClass.getName())
-			);
+			// compatibility check
+			Class<?> valueTypeClass = getValue().getClass();
+			Class<?> viewBindingTypeClass = getType();
+			if(!valueTypeClass.equals(viewBindingTypeClass))
+			{
+				throw new ClassCastException(
+						String.format("Incorrect type binding detected. '%s' suggests '%s' but '%s' returns '%s'",
+								column.getClass().getName(),
+								viewBindingTypeClass.getName(),
+								valueWrapper.getClass().getName(),
+								valueTypeClass.getName())
+				);
+			}
 		}
 	}
 
