@@ -16,7 +16,12 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 	{
 		this.experiment=experiment;
 	}
-
+	
+	public JPAExperiment getExperiment()
+	{
+		return experiment;
+	}
+	
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
 	{
