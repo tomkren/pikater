@@ -1,14 +1,10 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import org.pikater.shared.util.ReflectionUtils;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.AdminFeature;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeatureSet;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.UserFeature;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
@@ -22,8 +18,6 @@ public class ContentArea extends Panel
 	private static final long serialVersionUID = 7642456908975377869L;
 	
 	private final Navigator navigator;
-	
-	private final Set<IWebFeatureSet> registeredFeatures;
 	
 	public ContentArea()
 	{
@@ -79,7 +73,13 @@ public class ContentArea extends Panel
 			}
 		});
 		
-		this.registeredFeatures = new HashSet<IWebFeatureSet>();
+		/*
+		 * Register all available views so that navigator will always know what view to create.
+		 */
+		for(Class<? extends IWebFeatureSet> featureSetClass : ReflectionUtils.getSubtypesFromPackage(ContentProvider.class.getPackage(), IWebFeatureSet.class))
+		{
+			registerAllViewsFromFeatureSet(featureSetClass);
+		}
 	}
 	
 	//---------------------------------------------------------------
@@ -93,10 +93,6 @@ public class ContentArea extends Panel
 	{
 		if(feature.accessAllowed(VaadinSession.getCurrent()))
 		{
-			if(!registeredFeatures.contains(feature)) // lazy individual registering
-			{
-				registerFeature(feature);
-			}
 			navigator.navigateTo(feature.toNavigatorName());
 		}
 		else
@@ -108,27 +104,17 @@ public class ContentArea extends Panel
 	//---------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	@SuppressWarnings("unused")
-	private void registerAllAvailableViews()
-	{
-		registerAllViewsFromFeatureSet(DefaultFeature.class);
-		registerAllViewsFromFeatureSet(AdminFeature.class);
-		registerAllViewsFromFeatureSet(UserFeature.class);
-	}
-	
 	private void registerAllViewsFromFeatureSet(Class<? extends IWebFeatureSet> clazz)
 	{
 		for(IWebFeatureSet feature : clazz.getEnumConstants())
 		{
 			if(feature.accessAllowed(VaadinSession.getCurrent()))
 			{
-				registerFeature(feature);
+				if(feature.toComponentClass() != null)
+				{
+					navigator.addView(feature.toNavigatorName(), feature.toComponentClass());
+				}
 			}
 		}
-	}
-	
-	private void registerFeature(IWebFeatureSet feature)
-	{
-		navigator.addView(feature.toNavigatorName(), feature.toComponent());
 	}
 }

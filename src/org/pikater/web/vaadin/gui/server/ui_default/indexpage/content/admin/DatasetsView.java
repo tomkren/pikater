@@ -42,14 +42,16 @@ public class DatasetsView extends ExpandableView
 		this.mainDatasetsLayout = new DBTableLayout();
 		this.mainDatasetsLayout.setSizeUndefined();
 		this.mainDatasetsLayout.getTable().setMultiSelect(false); // this is required below
-		this.mainDatasetsLayout.setView(new DatasetDBViewRoot());
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		this.mainDatasetsLayout.setImmediate(false);
-		super.finishInit(); // always call this last and don't forget to!
+		this.mainDatasetsLayout.setCommitImmediately(false);
+		
+		// always call these last, when you're absolutely ready to display the content
+		this.mainDatasetsLayout.setView(new DatasetDBViewRoot());
+		super.finishInit(); // don't forget to!
 	}
 
 	@Override
@@ -76,6 +78,10 @@ public class DatasetsView extends ExpandableView
 	
 	protected class DatasetDBViewRoot implements IDBViewRoot<DataSetTableDBView>
 	{
+		public DatasetDBViewRoot()
+		{
+		}
+		
 		@Override
 		public DataSetTableDBView getUnderlyingDBView()
 		{
