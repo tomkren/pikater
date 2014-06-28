@@ -14,7 +14,12 @@ public class ConsoleLogger implements Logger {
     public void logError(String source, String errorDescription) {
         logError(source,errorDescription,Severity.Normal);
     }
-
+    
+    @Override
+    public void logError(String source, Exception exception) {
+    	System.err.println(source);
+    }
+    
     @Override
     public void logError(String source, String errorDescription, Severity severity) {
         if (severity==Severity.Critical)

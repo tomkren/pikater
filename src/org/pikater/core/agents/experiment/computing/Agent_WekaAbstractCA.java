@@ -37,7 +37,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	}
 	
 	@Override
-	protected Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
+	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
 						
 		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){
@@ -145,7 +145,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	}
 
 	@Override
-	protected void evaluateCA(EvaluationMethod evaluation_method,
+	public void evaluateCA(EvaluationMethod evaluation_method,
 			org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception{
 		
 		float default_value = Float.MAX_VALUE;
@@ -207,7 +207,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	}
 
 	@Override
-	protected DataInstances getPredictions(Instances test,
+	public DataInstances getPredictions(Instances test,
 			DataInstances onto_test) {
 
 		//Evaluation eval = test();

@@ -6,15 +6,11 @@ import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.FSMBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
@@ -23,8 +19,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.proto.AchieveREInitiator;
-import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 
 import java.io.ByteArrayOutputStream;
@@ -39,18 +33,17 @@ import java.util.Random;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
-import org.pikater.core.agents.system.data.AgentDataSource;
-import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
+import org.pikater.core.agents.experiment.computing.computing.ComputingAction;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.management.Agent;
+import org.pikater.core.ontology.subtrees.management.SaveAgent;
 import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.result.PartialResults;
-import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
@@ -65,7 +58,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	private static final long serialVersionUID = -7927583436579620995L;
 
 	protected Codec codec = new SLCodec();
-	// private Ontology ontology = ExperimentOntology.getInstance();
 
 	public enum states {
 		NEW, TRAINED
@@ -82,42 +74,40 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	public boolean hasGotRightData = false;
 
 	// protected Vector<MyWekaOption> Options;
-	protected org.pikater.core.ontology.subtrees.management.Agent agent_options = null;
+	protected Agent agent_options = null;
 
 	protected Instances data; // data read from fileName file
-	Instances train;
-	DataInstances onto_train;
-	Instances test;
-	DataInstances onto_test;
+	public Instances train;
+	public DataInstances onto_train;
+	public Instances test;
+	public DataInstances onto_test;
 
-	Instances label;
-	DataInstances onto_label;
+	public Instances label;
+	public DataInstances onto_label;
 	int convId = 0;
 
 	protected String[] OPTIONS;
-	protected org.pikater.core.ontology.subtrees.task.Task current_task = null;
-	// protected String[] OPTIONS_;
+	public  org.pikater.core.ontology.subtrees.task.Task current_task = null;
+
 	protected String className;
 
 	protected Object[] args;
 
-	boolean working = false; // TODO -> state?
+	public boolean working = false; // TODO -> state?
 
-	LinkedList<ACLMessage> taskFIFO = new LinkedList<ACLMessage>();
+	public LinkedList<ACLMessage> taskFIFO = new LinkedList<ACLMessage>();
 
-	private Behaviour execution_behaviour = null;
+	public Behaviour execution_behaviour = null;
 
 	private boolean newAgent = true;
-	private boolean resurrected = false;
+	public boolean resurrected = false;
 
-	private boolean engaged = false;
+	public abstract Date train(Evaluation evaluation) throws Exception;
 
-	protected abstract Date train(Evaluation evaluation) throws Exception;
-
-	protected abstract void evaluateCA(EvaluationMethod evaluation_method,
+	public abstract void evaluateCA(EvaluationMethod evaluation_method,
 			Evaluation evaluation) throws Exception;
 
-	protected abstract DataInstances getPredictions(Instances test,
+	public abstract DataInstances getPredictions(Instances test,
 			DataInstances onto_test);
 
 	public abstract String getAgentType();
@@ -149,9 +139,9 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 				getContentManager().fillContent(msgOut, result);
 				// send(msgOut);
 			} catch (CodecException ce) {
-				ce.printStackTrace();
+				logError("", ce);
 			} catch (OntologyException oe) {
-				oe.printStackTrace();
+				logError("", oe);
 			}
 
 		} catch (Exception e) {
@@ -209,7 +199,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		setEnabledO2ACommunication(true, 0);
 
 		addBehaviour(new RequestServer(this));
-		addBehaviour(execution_behaviour = new ProcessAction(this));
+		addBehaviour(execution_behaviour = new ComputingAction(this));
 
 		sendAgentInfo(getAgentInfo());
 		
@@ -244,7 +234,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		return strOPTIONS;
 	}
 
-	protected ACLMessage sendGetDataReq(String fileName) {
+	public ACLMessage sendGetDataReq(String fileName) {
 		AID[] ARFFReaders;
 		AID reader = null;
 		ACLMessage msgOut = null;
@@ -286,8 +276,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 			// request
 			msgOut = new ACLMessage(ACLMessage.REQUEST);
 			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-			// msgOut.setReplyByDate(new Date(System.currentTimeMillis() +
-			// 10000));
 			msgOut.setLanguage(codec.getName());
 			msgOut.setOntology(ontology.getName());
 			msgOut.addReceiver(reader);
@@ -376,7 +364,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 														.getInstance()
 														.getName()))));
 
-		public RequestServer(Agent agent) {
+		public RequestServer(PikaterAgent agent) {
 			super(agent);
 		}
 
@@ -441,549 +429,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		}
 	}
 
-	private class ProcessAction extends FSMBehaviour {
-		/**
-		 * 
-	     */
-		private static final long serialVersionUID = 7417933314402310322L;
-
-		private static final String INIT_STATE = "Init";
-		private static final String GETTRAINDATA_STATE = "GetTrainingData";
-		private static final String GETTESTDATA_STATE = "GetTestData";
-		private static final String GETLABELDATA_STATE = "GetLabelData";
-		private static final String TRAINTEST_STATE = "TrainTest";
-		private static final String SENDRESULTS_STATE = "SendResults";
-		private static final int NEXT_JMP = 0;
-		private static final int LAST_JMP = 1;
-		ACLMessage incoming_request;
-		ACLMessage result_msg;
-		ExecuteTaksOnCPUCore execute_action;
-		boolean success;
-		org.pikater.core.ontology.subtrees.task.Evaluation eval = new Evaluation();
-		String train_fn;
-		String test_fn;
-		String label_fn;
-		String output;
-		String mode;
-
-		/* Resulting message: FAILURE */
-
-		void failureMsg(String desc) {
-			java.util.List<Eval> evaluations = new java.util.ArrayList<Eval>();
-
-			Eval er = new Eval();
-			er.setName("error_rate");
-			er.setValue(Float.MAX_VALUE);
-			evaluations.add(er);
-
-			// set duration to max_float
-			Eval du = new Eval();
-			du.setName("duration");
-			du.setValue(Integer.MAX_VALUE);
-			evaluations.add(du);
-
-			// set start to now
-			Eval st = new Eval();
-			st.setName("start");
-			st.setValue(System.currentTimeMillis());
-			evaluations.add(st);
-
-			eval.setEvaluations(evaluations);
-
-			eval.setStatus(desc);
-		}
-
-		/* Get a message from the FIFO of tasks */
-		boolean getRequest() {
-			if (taskFIFO.size() > 0) {
-				incoming_request = taskFIFO.removeFirst();
-				try {
-					ContentElement content = getContentManager()
-							.extractContent(incoming_request);
-					execute_action = (ExecuteTaksOnCPUCore) ((Action) content)
-							.getAction();
-					return true;
-				} catch (CodecException ce) {
-					ce.printStackTrace();
-				} catch (OntologyException oe) {
-					oe.printStackTrace();
-				}
-			} else {
-				block();
-			}
-
-			return false;
-		}
-
-		/* Extract data from INFORM message (ARFF reader) */
-		org.pikater.core.ontology.subtrees.dataInstance.DataInstances processGetData(
-				ACLMessage inform) {
-			ContentElement content;
-			try {
-				content = getContentManager().extractContent(inform);
-				if (content instanceof Result) {
-					Result result = (Result) content;
-					if (result.getValue() instanceof org.pikater.core.ontology.subtrees.dataInstance.DataInstances) {
-						return (org.pikater.core.ontology.subtrees.dataInstance.DataInstances) result
-								.getValue();
-					} else if (result.getValue() instanceof Boolean) {
-						// log("getting o2a data");
-						Object o = getO2AObject();
-						if (o == null)
-							throw new IllegalStateException(
-									"received GetData response without o2a object in queue");
-						else
-							return (org.pikater.core.ontology.subtrees.dataInstance.DataInstances) o;
-					} else {
-						throw new IllegalStateException(
-								"received unexpected Inform");
-					}
-				}
-			} catch (UngroundedException e) {
-				e.printStackTrace();
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		ProcessAction(Agent a) {
-			super(a);
-			/* FSM: register states */
-			// init state
-
-			registerFirstState(new Behaviour(a) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -4607390644948524477L;
-
-				// int next;
-				boolean cont;
-
-				@Override
-				public void action() {
-					result_msg = null;
-					execute_action = null;
-					if (!getRequest()) {
-						// no task to execute
-						cont = true;
-						// block();
-						return;
-					}
-					cont = false;
-					if (!resurrected) {
-						state = Agent_ComputingAgent.states.NEW;
-					}
-					// Set options
-					setOptions(execute_action.getTask());
-
-					// set agent name in Task
-					org.pikater.core.ontology.subtrees.management.Agent agent = current_task
-							.getAgent();
-					agent.setName(getLocalName());
-					current_task.setAgent(agent);
-
-					eval = new Evaluation();
-					success = true;
-					Data data = execute_action.getTask().getData();
-					output = data.getOutput();
-					mode = data.getMode();
-
-					train_fn = data.getTrainFileName();
-					AchieveREInitiator get_train_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
-							.getState(GETTRAINDATA_STATE);
-
-					// get_train_behaviour.reset(sendGetDataReq(train_fn));
-
-					if (!train_fn.equals(trainFileName)) {
-						get_train_behaviour.reset(sendGetDataReq(train_fn));
-					} else {
-						// We have already the right data
-						get_train_behaviour.reset(null);
-					}
-
-					if (!mode.equals("train_only")) {
-						test_fn = data.getTestFileName();
-						AchieveREInitiator get_test_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
-								.getState(GETTESTDATA_STATE);
-						if (!test_fn.equals(testFileName)) {
-							get_test_behaviour.reset(sendGetDataReq(test_fn));
-						} else {
-							// We have already the right data
-							get_test_behaviour.reset(null);
-						}
-					}
-
-					if (data.getLabelFileName() != null) {
-						label_fn = data.getLabelFileName();
-						AchieveREInitiator get_label_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
-								.getState(GETLABELDATA_STATE);
-						if (!label_fn.equals(labelFileName)) {
-							get_label_behaviour.reset(sendGetDataReq(label_fn));
-						} else {
-							// We have already the right data
-							get_label_behaviour.reset(null);
-						}
-					}
-				}
-
-				@Override
-				public boolean done() {
-					return !cont;
-				}
-			}, INIT_STATE);
-
-			// get train data state
-			registerState(new AchieveREInitiator(a, null) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -133823979702541803L;
-
-				public int next = NEXT_JMP;
-
-				@Override
-				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _train = processGetData(inform);
-					if (_train != null) {
-						trainFileName = train_fn;
-						onto_train = _train;
-						train = onto_train.toWekaInstances();
-						train.setClassIndex(train.numAttributes() - 1);
-						next = NEXT_JMP;
-						return;
-					} else {
-						next = LAST_JMP;
-						failureMsg("No train data received from the reader agent: Wrong content.");
-						return;
-					}
-				}
-
-				@Override
-				protected void handleFailure(ACLMessage failure) {
-					failureMsg("No train data received from the reader agent: Reader Failed.");
-					next = LAST_JMP;
-				}
-
-				@Override
-				public int onEnd() {
-					next = NEXT_JMP;
-					return next;
-				}
-			}, GETTRAINDATA_STATE);
-
-			// get test data state
-			registerState(new AchieveREInitiator(a, null) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 2398937572588954013L;
-
-				public int next = NEXT_JMP;
-
-				@Override
-				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _test = processGetData(inform);
-					if (_test != null) {
-						testFileName = test_fn;
-						onto_test = _test;
-						test = onto_test.toWekaInstances();
-						test.setClassIndex(test.numAttributes() - 1);
-
-						next = NEXT_JMP;
-						return;
-					} else {
-						next = LAST_JMP;
-						failureMsg("No test data received from the reader agent: Wrong content.");
-						return;
-					}
-
-				}
-
-				@Override
-				protected void handleFailure(ACLMessage failure) {
-					failureMsg("No test data received from the reader agent: Reader Failed.");
-					next = LAST_JMP;
-				}
-
-				@Override
-				public int onEnd() {
-					next = NEXT_JMP;
-					return next;
-				}
-			}, GETTESTDATA_STATE);
-
-			// get label data state
-			registerState(new AchieveREInitiator(a, null) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -968264895781473739L;
-
-				public int next = NEXT_JMP;
-
-				@Override
-				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _label = processGetData(inform);
-					if (_label != null) {
-						labelFileName = label_fn;
-						onto_label = _label;
-						label = onto_label.toWekaInstances();
-						label.setClassIndex(label.numAttributes() - 1);
-						next = NEXT_JMP;
-						return;
-					} else {
-						next = LAST_JMP;
-						failureMsg("No label data received from the reader agent: Wrong content.");
-						return;
-					}
-				}
-
-				@Override
-				protected void handleFailure(ACLMessage failure) {
-					failureMsg("No label data received from the reader agent: Reader Failed.");
-					next = LAST_JMP;
-				}
-
-				@Override
-				public int onEnd() {
-					next = NEXT_JMP;
-					return next;
-				}
-			}, GETLABELDATA_STATE);
-
-			// Train&test&label state
-			registerState(new Behaviour(a) {
-
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 1479579948554502568L;
-
-				@Override
-				public void action() {
-					try {
-
-						java.util.List<DataInstances> labeledData = new java.util.ArrayList<DataInstances>();
-
-						eval = new Evaluation();
-
-						eval.setEvaluations(new java.util.ArrayList<Eval>());
-						// Date start = new Date();
-						Date start = null;
-						if (state != Agent_ComputingAgent.states.TRAINED) {
-							start = train(eval);
-						} else if (!resurrected) {
-							if (!mode.equals("test_only")) {
-								start = train(eval);
-							}
-						}
-						eval.setStart(start);
-						// Date end = new Date();
-						// int duration = (int) (end.getTime() -
-						// start.getTime());
-
-						if (state == Agent_ComputingAgent.states.TRAINED) {
-							EvaluationMethod evaluation_method = execute_action
-									.getTask().getEvaluation_method();
-
-							if (!mode.equals("train_only")) {
-								evaluateCA(evaluation_method, eval);
-
-								if (output.equals("predictions")) {
-									DataInstances di = new DataInstances();
-									di.fillWekaInstances(test);
-									DataInstances labeledTest = getPredictions(
-											test, di);
-									labeledData.add(labeledTest);
-									// Save datasource and inform datasource
-									// manager about this particular datasource
-									AgentDataSource.SerializeFile(labeledTest,
-											result_msg.getConversationId()
-													+ ".labeledtest");
-									AgentDataSourceCommunicator dsCom = new AgentDataSourceCommunicator(
-											(PikaterAgent) myAgent, true);
-									dsCom.registerDataSources(
-											result_msg.getConversationId(),
-											new String[] { "labeledtest" });
-									if (!labelFileName.equals("")) {
-										di = new DataInstances();
-										di.fillWekaInstances(label);
-										DataInstances labeledPredictions = getPredictions(
-												label, di);
-										// Save datasource and inform datasource
-										// manager about this particular
-										// datasource
-										AgentDataSource
-												.SerializeFile(
-														labeledPredictions,
-														result_msg
-																.getConversationId()
-																+ ".labeledpredictions");
-										dsCom.registerDataSources(
-												result_msg.getConversationId(),
-												new String[] { "labeledpredictions" });
-										labeledData.add(labeledPredictions);
-									}
-									eval.setLabeledData(labeledData);
-								}
-							}
-						}
-
-					} catch (Exception e) {
-						success = false;
-						working = false;
-						failureMsg(e.getMessage());
-						System.err.println(getLocalName() + ": Error: " + e.getMessage() + ".");
-
-						// e.printStackTrace();
-					}
-				}
-
-				@Override
-				public boolean done() {
-					return (state == Agent_ComputingAgent.states.TRAINED)
-							|| !success;
-				}
-			}, TRAINTEST_STATE);
-
-			// send results state
-			registerState(new OneShotBehaviour(a) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -7838676822707371053L;
-
-				@Override
-				public void action() {
-
-					if (success && (result_msg == null)) {
-						// save agent every time it executes a task
-						/*
-						 * String objectFilename = null; try { // resurrected =
-						 * false; objectFilename = save(); } catch
-						 * (CodecException e) { // TODO Auto-generated catch
-						 * block e.printStackTrace(); } catch (OntologyException
-						 * e) { // TODO Auto-generated catch block
-						 * e.printStackTrace(); } catch (IOException e) { //
-						 * TODO Auto-generated catch block e.printStackTrace();
-						 * } catch (FIPAException e) { // TODO Auto-generated
-						 * catch block e.printStackTrace(); }
-						 */
-
-						if ((current_task.getSaveMode() != null && current_task
-								.getSaveMode().equals("file")) && !resurrected) {
-							try {
-								String objectFilename = saveAgentToFile();
-								eval.setObjectFilename(objectFilename);
-
-							} catch (CodecException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (OntologyException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (FIPAException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-
-						if ((current_task.getSaveMode() != null && current_task
-								.getSaveMode().equals("message"))) {
-							try {
-								eval.setObject(getAgentObject());
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
-					}
-
-					result_msg = incoming_request.createReply();
-					result_msg.setPerformative(ACLMessage.INFORM);
-
-					ContentElement content;
-					try {
-						content = getContentManager().extractContent(
-								incoming_request);
-
-						// Prepare the content: Result with current task &
-						// filled in evaluaton
-						if (resurrected) {
-							eval.setObject(null);
-						}
-						;
-						current_task.setResult(eval);
-
-						List results = new ArrayList();
-						results.add(current_task);
-						Result result = new Result((Action) content, results);
-						getContentManager().fillContent(result_msg, result);
-
-					} catch (UngroundedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (CodecException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (OntologyException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			
-					if (current_task.getGetResults() != null && current_task.getGetResults().equals("after_each_task")) {								
-						result_msg.addReceiver(new AID(current_task.getGuiAgent(), false));
-					}			
-
-					current_task.setFinish(getDateTime());
-
-					send(result_msg);
-
-					if (taskFIFO.size() > 0) {
-						execution_behaviour.restart();
-					} else {
-						log("CA terminating");
-						terminate();
-					}
-
-				}
-			}, SENDRESULTS_STATE);
-
-			/* FSM: register transitions */
-			// init state transition
-			registerDefaultTransition(INIT_STATE, GETTRAINDATA_STATE);
-
-			// get train data transitions
-			registerTransition(GETTRAINDATA_STATE, GETTESTDATA_STATE, NEXT_JMP);
-			registerTransition(GETTRAINDATA_STATE, SENDRESULTS_STATE, LAST_JMP);
-
-			// get test data transitions
-			registerTransition(GETTESTDATA_STATE, GETLABELDATA_STATE, NEXT_JMP);
-			registerTransition(GETTESTDATA_STATE, SENDRESULTS_STATE, LAST_JMP);
-
-			// get label data transition
-			registerTransition(GETLABELDATA_STATE, TRAINTEST_STATE, NEXT_JMP);
-			registerTransition(GETLABELDATA_STATE, SENDRESULTS_STATE, LAST_JMP);
-
-			// train&test state transition
-			registerDefaultTransition(TRAINTEST_STATE, SENDRESULTS_STATE);
-
-			// backward transition: reset all states
-			registerDefaultTransition(SENDRESULTS_STATE, INIT_STATE,
-					new String[] { INIT_STATE, GETTRAINDATA_STATE,
-							GETTESTDATA_STATE, GETLABELDATA_STATE,
-							TRAINTEST_STATE, SENDRESULTS_STATE });
-		}
-	}
-
-	private byte[] getAgentObject() throws IOException {
+	public byte[] getAgentObject() throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
 		oos.writeObject(this);
@@ -994,20 +440,20 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		return data;
 	}
 
-	private org.pikater.core.ontology.subtrees.management.Agent getAgentWithFilledObject()
+	private Agent getAgentWithFilledObject()
 			throws IOException {
 
-		org.pikater.core.ontology.subtrees.management.Agent savedAgent = current_task
+		Agent savedAgent = current_task
 				.getAgent();
 		savedAgent.setObject(getAgentObject());
 
 		return savedAgent;
 	}
 
-	private String saveAgentToFile() throws IOException, CodecException,
+	public String saveAgentToFile() throws IOException, CodecException,
 			OntologyException, FIPAException {
 
-		org.pikater.core.ontology.subtrees.management.SaveAgent saveAgent = new org.pikater.core.ontology.subtrees.management.SaveAgent();
+		SaveAgent saveAgent = new SaveAgent();
 
 		saveAgent.setAgent(getAgentWithFilledObject());
 
@@ -1029,14 +475,15 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		return objectFilename;
 	}
 
-	private String getDateTime() {
+	public String getDateTime() {
 		DateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss.SSSSSS");
 		Date date = new Date();
 		return dateFormat.format(date);
 	}
 
-	protected void terminate() {
+	public void terminate() {
 		doDelete();
 	}
-};
+}
+
