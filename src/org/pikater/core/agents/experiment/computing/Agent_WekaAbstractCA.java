@@ -48,8 +48,8 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		if(getClassifierClass() == null)
 			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
-		if (OPTIONS.length > 0) {
-			getClassifierClass().setOptions(OPTIONS);
+		if (options.length > 0) {
+			getClassifierClass().setOptions(options);
 		}
 		
 		long start = System.currentTimeMillis();
@@ -76,7 +76,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		log("start: " + new Date(start) + " : duration: " + duration, 2);
 		
 		state = states.TRAINED; // change agent state
-		OPTIONS = getClassifierClass().getOptions();			
+		options = getClassifierClass().getOptions();			
 
 		// write out net parameters
 		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){

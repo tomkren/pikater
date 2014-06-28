@@ -45,14 +45,14 @@ public class ComputingAction extends FSMBehaviour {
 	private static final String SENDRESULTS_STATE = "SendResults";
 	private static final int NEXT_JMP = 0;
 	private static final int LAST_JMP = 1;
-	ACLMessage incoming_request;
-	ACLMessage result_msg;
-	ExecuteTaksOnCPUCore execute_action;
+	ACLMessage incomingRequest;
+	ACLMessage resultMsg;
+	ExecuteTaksOnCPUCore executeAction;
 	boolean success;
 	Evaluation eval = new Evaluation();
-	String train_fn;
-	String test_fn;
-	String label_fn;
+	String trainFn;
+	String testFn;
+	String labelFn;
 	String output;
 	String mode;
 
@@ -88,11 +88,11 @@ public class ComputingAction extends FSMBehaviour {
 	/* Get a message from the FIFO of tasks */
 	boolean getRequest() {
 		if (agent.taskFIFO.size() > 0) {
-			incoming_request = agent.taskFIFO.removeFirst();
+			incomingRequest = agent.taskFIFO.removeFirst();
 			try {
 				ContentElement content = agent.getContentManager()
-						.extractContent(incoming_request);
-				execute_action = (ExecuteTaksOnCPUCore) ((Action) content)
+						.extractContent(incomingRequest);
+				executeAction = (ExecuteTaksOnCPUCore) ((Action) content)
 						.getAction();
 				return true;
 			} catch (CodecException ce) {
@@ -155,8 +155,8 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			public void action() {
-				result_msg = null;
-				execute_action = null;
+				resultMsg = null;
+				executeAction = null;
 				if (!getRequest()) {
 					// no task to execute
 					cont = true;
@@ -168,35 +168,43 @@ public class ComputingAction extends FSMBehaviour {
 					agent.state = Agent_ComputingAgent.states.NEW;
 				}
 				// Set options
-				agent.setOptions(execute_action.getTask());
+				agent.setOptions(executeAction.getTask());
 
 				// set agent name in Task
-				Agent agent_ = agent.current_task.getAgent();
+				Agent agent_ = agent.currentTask.getAgent();
 				agent_.setName(agent.getLocalName());
-				agent.current_task.setAgent(agent_);
+				agent.currentTask.setAgent(agent_);
 
 				eval = new Evaluation();
 				success = true;
-				Data data = execute_action.getTask().getData();
+				Data data = executeAction.getTask().getData();
 				output = data.getOutput();
 				mode = data.getMode();
 
-				train_fn = data.getTrainFileName();
+				trainFn = data.getTrainFileName();
 				AchieveREInitiator get_train_behaviour = (AchieveREInitiator) ((ComputingAction) parent).getState(GETTRAINDATA_STATE);
 
-				if (!train_fn.equals(agent.trainFileName)) {
-					get_train_behaviour.reset(agent.sendGetDataReq(train_fn));
+				if (!trainFn.equals(agent.trainFileName)) {
+					
+					ComputingComminicator communicator = new ComputingComminicator();
+					ACLMessage dataMsg = communicator.sendGetDataReq(agent, trainFn);
+					
+					get_train_behaviour.reset(dataMsg);
 				} else {
 					// We have already the right data
 					get_train_behaviour.reset(null);
 				}
 
 				if (!mode.equals("train_only")) {
-					test_fn = data.getTestFileName();
+					testFn = data.getTestFileName();
 					AchieveREInitiator get_test_behaviour = (AchieveREInitiator) ((ComputingAction) parent)
 							.getState(GETTESTDATA_STATE);
-					if (!test_fn.equals(agent.testFileName)) {
-						get_test_behaviour.reset(agent.sendGetDataReq(test_fn));
+					if (!testFn.equals(agent.testFileName)) {
+						
+						ComputingComminicator communicator = new ComputingComminicator();
+						ACLMessage dataMsg = communicator.sendGetDataReq(agent, testFn);
+
+						get_test_behaviour.reset(dataMsg);
 					} else {
 						// We have already the right data
 						get_test_behaviour.reset(null);
@@ -204,12 +212,15 @@ public class ComputingAction extends FSMBehaviour {
 				}
 
 				if (data.getLabelFileName() != null) {
-					label_fn = data.getLabelFileName();
+					labelFn = data.getLabelFileName();
 					AchieveREInitiator get_label_behaviour = (AchieveREInitiator) ((ComputingAction) parent)
 							.getState(GETLABELDATA_STATE);
-					if (!label_fn.equals(agent.labelFileName)) {
-						get_label_behaviour.reset(agent
-								.sendGetDataReq(label_fn));
+					if (!labelFn.equals(agent.labelFileName)) {
+						
+						ComputingComminicator communicator = new ComputingComminicator();
+						ACLMessage dataMsg = communicator.sendGetDataReq(agent, labelFn);
+						
+						get_label_behaviour.reset(dataMsg);
 					} else {
 						// We have already the right data
 						get_label_behaviour.reset(null);
@@ -236,9 +247,9 @@ public class ComputingAction extends FSMBehaviour {
 			protected void handleInform(ACLMessage inform) {
 				DataInstances _train = processGetData(inform);
 				if (_train != null) {
-					agent.trainFileName = train_fn;
-					agent.onto_train = _train;
-					agent.train = agent.onto_train.toWekaInstances();
+					agent.trainFileName = trainFn;
+					agent.ontoTrain = _train;
+					agent.train = agent.ontoTrain.toWekaInstances();
 					agent.train.setClassIndex(agent.train.numAttributes() - 1);
 					next = NEXT_JMP;
 					return;
@@ -275,9 +286,9 @@ public class ComputingAction extends FSMBehaviour {
 			protected void handleInform(ACLMessage inform) {
 				DataInstances _test = processGetData(inform);
 				if (_test != null) {
-					agent.testFileName = test_fn;
-					agent.onto_test = _test;
-					agent.test = agent.onto_test.toWekaInstances();
+					agent.testFileName = testFn;
+					agent.ontoTest = _test;
+					agent.test = agent.ontoTest.toWekaInstances();
 					agent.test.setClassIndex(agent.test.numAttributes() - 1);
 
 					next = NEXT_JMP;
@@ -316,9 +327,9 @@ public class ComputingAction extends FSMBehaviour {
 			protected void handleInform(ACLMessage inform) {
 				DataInstances _label = processGetData(inform);
 				if (_label != null) {
-					agent.labelFileName = label_fn;
-					agent.onto_label = _label;
-					agent.label = agent.onto_label.toWekaInstances();
+					agent.labelFileName = labelFn;
+					agent.ontoLabel = _label;
+					agent.label = agent.ontoLabel.toWekaInstances();
 					agent.label.setClassIndex(agent.label.numAttributes() - 1);
 					next = NEXT_JMP;
 					return;
@@ -371,7 +382,7 @@ public class ComputingAction extends FSMBehaviour {
 					eval.setStart(start);
 
 					if (agent.state == Agent_ComputingAgent.states.TRAINED) {
-						EvaluationMethod evaluation_method = execute_action
+						EvaluationMethod evaluation_method = executeAction
 								.getTask().getEvaluation_method();
 
 						if (!mode.equals("train_only")) {
@@ -386,12 +397,12 @@ public class ComputingAction extends FSMBehaviour {
 								// Save datasource and inform datasource
 								// manager about this particular datasource
 								AgentDataSource.SerializeFile(labeledTest,
-										result_msg.getConversationId()
+										resultMsg.getConversationId()
 												+ ".labeledtest");
 								AgentDataSourceCommunicator dsCom = new AgentDataSourceCommunicator(
 										(PikaterAgent) myAgent, true);
 								dsCom.registerDataSources(
-										result_msg.getConversationId(),
+										resultMsg.getConversationId(),
 										new String[] { "labeledtest" });
 								if (!agent.labelFileName.equals("")) {
 									di = new DataInstances();
@@ -403,10 +414,10 @@ public class ComputingAction extends FSMBehaviour {
 									// datasource
 									AgentDataSource.SerializeFile(
 											labeledPredictions,
-											result_msg.getConversationId()
+											resultMsg.getConversationId()
 													+ ".labeledpredictions");
 									dsCom.registerDataSources(
-											result_msg.getConversationId(),
+											resultMsg.getConversationId(),
 											new String[] { "labeledpredictions" });
 									labeledData.add(labeledPredictions);
 								}
@@ -443,13 +454,14 @@ public class ComputingAction extends FSMBehaviour {
 			@Override
 			public void action() {
 
-				if (success && (result_msg == null)) {
+				if (success && (resultMsg == null)) {
 
-					if ((agent.current_task.getSaveMode() != null && agent.current_task
+					if ((agent.currentTask.getSaveMode() != null && agent.currentTask
 							.getSaveMode().equals("file"))
 							&& !agent.resurrected) {
 						try {
-							String objectFilename = agent.saveAgentToFile();
+							ComputingComminicator communicator = new ComputingComminicator();
+							String objectFilename = communicator.saveAgentToFile(agent);
 							eval.setObjectFilename(objectFilename);
 
 						} catch (CodecException e) {
@@ -463,8 +475,8 @@ public class ComputingAction extends FSMBehaviour {
 						}
 					}
 
-					if (agent.current_task.getSaveMode() != null
-							&& agent.current_task.getSaveMode().equals(
+					if (agent.currentTask.getSaveMode() != null
+							&& agent.currentTask.getSaveMode().equals(
 									"message")) {
 						try {
 							eval.setObject(agent.getAgentObject());
@@ -474,13 +486,13 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 
-				result_msg = incoming_request.createReply();
-				result_msg.setPerformative(ACLMessage.INFORM);
+				resultMsg = incomingRequest.createReply();
+				resultMsg.setPerformative(ACLMessage.INFORM);
 
 				ContentElement content;
 				try {
 					content = agent.getContentManager().extractContent(
-							incoming_request);
+							incomingRequest);
 
 					// Prepare the content: Result with current task &
 					// filled in evaluaton
@@ -488,12 +500,12 @@ public class ComputingAction extends FSMBehaviour {
 						eval.setObject(null);
 					}
 					;
-					agent.current_task.setResult(eval);
+					agent.currentTask.setResult(eval);
 
 					List results = new ArrayList();
-					results.add(agent.current_task);
+					results.add(agent.currentTask);
 					Result result = new Result((Action) content, results);
-					agent.getContentManager().fillContent(result_msg, result);
+					agent.getContentManager().fillContent(resultMsg, result);
 
 				} catch (UngroundedException e) {
 					agent.logError("", e);
@@ -503,19 +515,19 @@ public class ComputingAction extends FSMBehaviour {
 					agent.logError("", e);
 				}
 
-				if (agent.current_task.getGetResults() != null
-						&& agent.current_task.getGetResults().equals(
+				if (agent.currentTask.getGetResults() != null
+						&& agent.currentTask.getGetResults().equals(
 								"after_each_task")) {
-					result_msg.addReceiver(new AID(agent.current_task
+					resultMsg.addReceiver(new AID(agent.currentTask
 							.getGuiAgent(), false));
 				}
 
-				agent.current_task.setFinish(agent.getDateTime());
+				agent.currentTask.setFinish(agent.getDateTime());
 
-				agent.send(result_msg);
+				agent.send(resultMsg);
 
 				if (agent.taskFIFO.size() > 0) {
-					agent.execution_behaviour.restart();
+					agent.executionBehaviour.restart();
 				} else {
 					agent.log("CA terminating");
 					agent.terminate();

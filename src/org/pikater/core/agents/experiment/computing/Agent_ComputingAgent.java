@@ -1,49 +1,41 @@
 package org.pikater.core.agents.experiment.computing;
 
-import jade.content.ContentElement;
+import jade.content.Concept;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
-import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAAgentManagement.NotUnderstoodException;
+import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.util.leap.List;
+import jade.proto.AchieveREResponder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.List;
 
 import org.pikater.core.agents.AgentNames;
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.computing.ComputingAction;
+import org.pikater.core.agents.experiment.computing.computing.ComputingComminicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.management.SaveAgent;
-import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
-import org.pikater.core.ontology.subtrees.result.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
@@ -74,20 +66,20 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	public boolean hasGotRightData = false;
 
 	// protected Vector<MyWekaOption> Options;
-	protected Agent agent_options = null;
+	public Agent agentOptions = null;
 
 	protected Instances data; // data read from fileName file
 	public Instances train;
-	public DataInstances onto_train;
+	public DataInstances ontoTrain;
 	public Instances test;
-	public DataInstances onto_test;
+	public DataInstances ontoTest;
 
 	public Instances label;
-	public DataInstances onto_label;
-	int convId = 0;
+	public DataInstances ontoLabel;
+	public int convId = 0;
 
-	protected String[] OPTIONS;
-	public  org.pikater.core.ontology.subtrees.task.Task current_task = null;
+	protected String[] options;
+	public Task currentTask = null;
 
 	protected String className;
 
@@ -97,7 +89,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 	public LinkedList<ACLMessage> taskFIFO = new LinkedList<ACLMessage>();
 
-	public Behaviour execution_behaviour = null;
+	public Behaviour executionBehaviour = null;
 
 	private boolean newAgent = true;
 	public boolean resurrected = false;
@@ -124,35 +116,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		return ontologies;
 	}
 
-	protected ACLMessage sendOptions(ACLMessage request) {
-		ACLMessage msgOut = request.createReply();
-		msgOut.setPerformative(ACLMessage.INFORM);
-		try {
-			// Prepare the content
-			ContentElement content = getContentManager()
-					.extractContent(request); // TODO exception block?
-			Result result = new Result((Action) content, agent_options);
-			// result.setValue(options);
-
-			try {
-				// Let JADE convert from Java objects to string
-				getContentManager().fillContent(msgOut, result);
-				// send(msgOut);
-			} catch (CodecException ce) {
-				logError("", ce);
-			} catch (OntologyException oe) {
-				logError("", oe);
-			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return msgOut;
-
-	} // end SendOptions
-
 	@Override
 	protected void setup() {
 
@@ -166,12 +129,10 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
             // TODO loadAgent(getLocalName());
             // args = new String[0]; // arguments are empty
         }
-        // some important initializations before registering
-        getParameters();
 
 		// register with the DF
 		if (! this.getAID().getLocalName().contains("Service")){	
-			java.util.List<String> descr = new java.util.ArrayList<String>();
+			List<String> descr = new ArrayList<String>();
 			descr.add(AgentNames.COMPUTING_AGENT);
 			descr.add(getLocalName());
 	
@@ -190,7 +151,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 			resurrected = true;
 			System.out.println(getLocalName() + " resurrected.");
 			taskFIFO = new LinkedList<ACLMessage>();
-			execution_behaviour.reset();
+			executionBehaviour.reset();
 			state = states.TRAINED;
 			return;
 		}
@@ -198,8 +159,16 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 		setEnabledO2ACommunication(true, 0);
 
-		addBehaviour(new RequestServer(this));
-		addBehaviour(execution_behaviour = new ComputingAction(this));
+		MessageTemplate reqMsgTemplate = MessageTemplate
+				.and(MessageTemplate
+						.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+						MessageTemplate.and(MessageTemplate
+								.MatchPerformative(ACLMessage.REQUEST),
+								MessageTemplate.MatchOntology(
+										TaskOntology.getInstance().getName())));
+
+		addBehaviour(new RequestServer(this, reqMsgTemplate));
+		addBehaviour(executionBehaviour = new ComputingAction(this));
 
 		sendAgentInfo(getAgentInfo());
 		
@@ -212,267 +181,103 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		// guiAgent
 	}
 
-	public boolean setOptions(org.pikater.core.ontology.subtrees.task.Task task) {
+	public boolean setOptions(Task task) {
 		/*
 		 * INPUT: task with weka options Fills the OPTIONS array and
 		 * current_task.
 		 */
-		current_task = task;
-		OPTIONS = task.getAgent().optionsToString().split("[ ]+");
+		currentTask = task;
+		options = task.getAgent().optionsToString().split("[ ]+");
 
 		return true;
-	} // end loadConfiguration
+	}
 
 	public String getOptions() {
 		// write out OPTIONS
 
 		String strOPTIONS = "";
 		strOPTIONS += "OPTIONS:";
-		for (int i = 0; i < OPTIONS.length; i++) {
-			strOPTIONS += " " + OPTIONS[i];
+		for (int i = 0; i < options.length; i++) {
+			strOPTIONS += " " + options[i];
 		}
 		return strOPTIONS;
 	}
 
-	public ACLMessage sendGetDataReq(String fileName) {
-		AID[] ARFFReaders;
-		AID reader = null;
-		ACLMessage msgOut = null;
-		// Make the list of reader agents
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.ARRFF_READER);
-		template.addServices(sd);
-		try {
-			GetData get_data = new GetData();
-
-			DFAgentDescription[] result = DFService.search(this, template);
-			// System.out.println(getLocalName() +
-			// ": Found the following ARFFReader agents:");
-			ARFFReaders = new AID[result.length];
-			for (int i = 0; i < result.length; ++i) {
-				if (isSameNode(result[i].getName())) {
-					// prefer local reader for O2A transfer
-					reader = result[i].getName();
-					log("preferring reader " + reader.getName());
-					get_data.setO2aAgent(getLocalName());
-					break;
-				}
-				ARFFReaders[i] = result[i].getName();
-				// System.out.println("    " + ARFFReaders[i].getName());
-			}
-
-			// randomly choose one of the readers if none preferred
-			if (reader == null) {
-				Random randomGenerator = new Random();
-				int randomInt = randomGenerator.nextInt(result.length);
-				reader = ARFFReaders[randomInt];
-			}
-
-			log("using reader " + reader + ", filename: " + fileName);
-
-			Ontology ontology = DataOntology.getInstance();
-			
-			// request
-			msgOut = new ACLMessage(ACLMessage.REQUEST);
-			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-			msgOut.setLanguage(codec.getName());
-			msgOut.setOntology(ontology.getName());
-			msgOut.addReceiver(reader);
-			msgOut.setConversationId("get-data_" + convId++);
-			// content
-			get_data.setFileName(fileName);
-			Action a = new Action();
-			a.setAction(get_data);
-			a.setActor(this.getAID());
-			getContentManager().fillContent(msgOut, a);
-		} catch (FIPAException fe) {
-			fe.printStackTrace();
-			return null;
-		} catch (CodecException e) {
-			e.printStackTrace();
-			return null;
-		} catch (OntologyException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return msgOut;
-	} // end sendGetDataReq
-
+	// TODO: will we accept or refuse the request? (working, size of
+	// taksFIFO, latency time...)
+	public boolean acceptTask() {
+		return true/* taskFIFO.size()<=MAX_TASKS */;
+	}
+	
 	public static byte[] toBytes(Object object) throws Exception {
-		java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-		java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(baos);
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(object);
 
 		return baos.toByteArray();
 	}
 
-	/*
-	 * Send partial results to the GUI Agent(s) call it after training or during
-	 * training?
-	 */
-	protected void sendResultsToGUI(Boolean first_time, Task _task,
-			List _evaluations) {
-		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.GUI_AGENT);
-		template.addServices(sd);
-		try {
-			DFAgentDescription[] gui_agents = DFService.search(this, template);
-			for (int i = 0; i < gui_agents.length; ++i) {
-				msgOut.addReceiver(gui_agents[i].getName());
-			}
-		} catch (FIPAException fe) {
-			fe.printStackTrace();
+	protected class RequestServer extends AchieveREResponder {
+		
+		public RequestServer(Agent_ComputingAgent agent, MessageTemplate mt) {
+			super(agent, mt);
 		}
 
-		msgOut.setConversationId("partial-results");
-
-		PartialResults content = new PartialResults();
-		content.setResults(_evaluations);
-		// content.setTask_id(_task.getId());
-		if (first_time) {
-			content.setTask(_task);
-		}
-		try {
-			getContentManager().fillContent(msgOut, content);
-		} catch (CodecException e) {
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			e.printStackTrace();
-		}
-
-		send(msgOut);
-	}
-
-	protected class RequestServer extends CyclicBehaviour {
 		/**
-			 * 
-			 */
+		 * 
+		 */
 		private static final long serialVersionUID = 1074564968341084444L;
 
-		private MessageTemplate reqMsgTemplate = MessageTemplate
-				.and(MessageTemplate
-						.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-						MessageTemplate.and(MessageTemplate
-								.MatchPerformative(ACLMessage.REQUEST),
-								MessageTemplate.and(MessageTemplate
-										.MatchLanguage(codec.getName()),
-										MessageTemplate
-												.MatchOntology(TaskOntology
-														.getInstance()
-														.getName()))));
-
-		public RequestServer(PikaterAgent agent) {
-			super(agent);
-		}
-
-		// TODO: will we accept or refuse the request? (working, size of
-		// taksFIFO, latency time...)
-		boolean acceptTask() {
-			return true/* taskFIFO.size()<=MAX_TASKS */;
-		}
-
-		ACLMessage processExecute(ACLMessage req) {
-			ACLMessage result_msg = req.createReply();
-			if (acceptTask()) {
-				result_msg.setPerformative(ACLMessage.AGREE);
-				taskFIFO.addLast(req);
-
-				if (taskFIFO.size() == 1) {
-					if (!execution_behaviour.isRunnable()) {
-						execution_behaviour.restart();
-					}
-				}
-				/*
-				 * if (!execution_behaviour.isRunnable()) {
-				 * execution_behaviour.restart(); }
-				 */
-			} else {
-				result_msg.setPerformative(ACLMessage.REFUSE);
-				result_msg.setContent("(Computing agent overloaded)");
-			}
-			return result_msg;
-		}
-
 		@Override
-		public void action() {
-
-			ContentElement content;
+		protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+			
+			ACLMessage resultMsg = request.createReply();
 			try {
-				ACLMessage req = receive(reqMsgTemplate);
-				if (req != null) {
-					content = getContentManager().extractContent(req);
-					if (((Action) content).getAction() instanceof GetOptions) {
-						ACLMessage result_msg = sendOptions(req);
-						send(result_msg);
-						return;
+				Action a = (Action) getContentManager().extractContent(request);
 
-					} else if (((Action) content).getAction() instanceof ExecuteTaksOnCPUCore) {
-						send(processExecute(req));
-						return;
+					
+					if (a.getAction() instanceof GetOptions) {
+						return respondToGetOptions(request, a);
+
+					} else if (a.getAction() instanceof ExecuteTaksOnCPUCore) {
+						return respondExecuteTaksOnCPUCore(request, a);
 					}
 
-					ACLMessage result_msg = req.createReply();
-					result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-					send(result_msg);
-					return;
-				} else {
-					block(); // don't cycle waiting for messages
-				}
+					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
+
 			} catch (CodecException ce) {
 				ce.printStackTrace();
 			} catch (OntologyException oe) {
 				oe.printStackTrace();
 			}
+			
+			return resultMsg;
 		}
+
+	}
+	
+	private ACLMessage respondToGetOptions(ACLMessage request, Concept concept) {
+		
+		ComputingComminicator communicator = new ComputingComminicator();
+		return communicator.sendOptions(Agent_ComputingAgent.this, request);
+	}
+	
+	private ACLMessage respondExecuteTaksOnCPUCore(ACLMessage request, Action a) {
+		
+		ComputingComminicator communicator = new ComputingComminicator();
+		return communicator.executeTask(this, request);
 	}
 
 	public byte[] getAgentObject() throws IOException {
+		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
 		oos.writeObject(this);
 		oos.flush();
 		oos.close();
 
-		byte[] data = bos.toByteArray();
-		return data;
-	}
-
-	private Agent getAgentWithFilledObject()
-			throws IOException {
-
-		Agent savedAgent = current_task
-				.getAgent();
-		savedAgent.setObject(getAgentObject());
-
-		return savedAgent;
-	}
-
-	public String saveAgentToFile() throws IOException, CodecException,
-			OntologyException, FIPAException {
-
-		SaveAgent saveAgent = new SaveAgent();
-
-		saveAgent.setAgent(getAgentWithFilledObject());
-
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID(AgentNames.MANAGER_AGENT, false));
-		request.setOntology(TaskOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
-		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-		Action a = new Action();
-		a.setActor(this.getAID());
-		a.setAction(saveAgent);
-
-		getContentManager().fillContent(request, a);
-		ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
-
-		String objectFilename = reply.getContent();
-
-		return objectFilename;
+		return bos.toByteArray();
 	}
 
 	public String getDateTime() {
