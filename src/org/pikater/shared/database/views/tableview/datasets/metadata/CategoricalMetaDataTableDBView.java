@@ -43,7 +43,6 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 		{
 			switch(this)
 			{
-				// case IS_REAL:
 				case IS_TARGET:
 					return DBViewValueType.BOOLEAN;
 					
