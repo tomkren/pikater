@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -53,10 +52,13 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 		 * First the read-only properties.
 		 */
 		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
+		CREATED,
 		NAME,
 		AGENT_CLASS,
 		DESCRIPTION,
-		CREATED;
+		APPROVE,
+		DOWNLOAD,
+		DELETE;
 
 		@Override
 		public String getDisplayName()
@@ -76,27 +78,34 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 				case CREATED:
 					return DBViewValueType.STRING;
 					
+				case APPROVE:
+				case DOWNLOAD:
+				case DELETE:
+					return DBViewValueType.NAMED_ACTION;
+					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
-		}
-		
-		public static EnumSet<Column> getColumns(boolean adminMode)
-		{
-			return EnumSet.allOf(Column.class);
 		}
 	}
 
 	@Override
 	public ITableColumn[] getColumns()
 	{
-		return (ITableColumn[]) Column.getColumns(adminMode()).toArray(new Column[0]);
+		if(adminMode())
+		{
+			return Column.values(); 
+		}
+		else
+		{
+			return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVE)).toArray(new ITableColumn[0]);
+		}
 	}
 	
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return adminMode() ? Column.OWNER : Column.NAME;
+		return adminMode() ? Column.OWNER : Column.CREATED;
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package org.pikater.shared.database.views.tableview.externalagents;
 
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -40,6 +41,72 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(agent.getName());
 		case CREATED:
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(agent.getCreated()));
+			
+		/*
+		 * And then custom actions.
+		 */
+		case APPROVE:
+			return new NamedActionDBViewValue("Approve")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					// TODO: whether agent is approved or not
+					return true;
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+			};
+		case DOWNLOAD:
+			return new NamedActionDBViewValue("Download")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return true;
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+				}
+			};
+		case DELETE:
+			return new NamedActionDBViewValue("Delete")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return true;
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+					// TODO: "hide" or really remove?
+				}
+			};
+			
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}
