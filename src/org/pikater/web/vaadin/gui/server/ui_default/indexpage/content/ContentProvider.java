@@ -3,9 +3,11 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.AgentsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.DatasetsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.UsersView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserAgentsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserBatchesView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserDatasetsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserProfileView;
@@ -92,7 +94,7 @@ public class ContentProvider
 		// IMPORTANT: all navigator names should start with "admin". See {@link #getFeatureFromNavigatorName} below.
 		VIEW_USERS("adminAllUsers", UsersView.class),
 		VIEW_DATASETS("adminAllDatasets", DatasetsView.class),
-		VIEW_METHODS("adminAllUserAgents", UnimplementedView.class),
+		VIEW_METHODS("adminAllUserAgents", AgentsView.class),
 		VIEW_EXPERIMENTS("adminAllExperiments", BatchesView.class),
 		VIEW_SYSTEM_STATUS("adminSystemStatus", UnimplementedView.class);
 		
@@ -155,7 +157,7 @@ public class ContentProvider
 		// IMPORTANT: all navigator names should start with "user". See {@link #getFeatureFromNavigatorName} below.
 		VIEW_PROFILE("userProfile", UserProfileView.class),
 		VIEW_DATASETS("userDatasets", UserDatasetsView.class),
-		VIEW_METHODS("userAgents", UnimplementedView.class),
+		VIEW_METHODS("userAgents", UserAgentsView.class),
 		EXPERIMENT_EDITOR(null, null), // TODO: display this as a button
 		VIEW_EXPERIMENTS("userExperiments", UserBatchesView.class);
 		
