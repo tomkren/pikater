@@ -1,6 +1,7 @@
 package org.pikater.shared.database.pglargeobject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.sql.SQLException;
 
@@ -91,6 +92,15 @@ public class PostgreLargeObjectReader extends Reader {
 		} catch (SQLException e) {
 			return -1;
 		}
+	}
+	
+	/**
+	 * Return an InputStream object for the LargeObject associated with this reader
+	 * @return the object of inputstream
+	 * @throws SQLException
+	 */
+	public InputStream getInputStream() throws SQLException{
+		return obj.getInputStream();
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package org.pikater.shared.database.jpa;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -80,6 +81,10 @@ public class JPAExternalAgent extends JPAAbstractEntity{
 	}
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+	public ByteArrayInputStream getInputStream(){
+		ByteArrayInputStream bis=new ByteArrayInputStream(jar);
+		return bis;
 	}
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
