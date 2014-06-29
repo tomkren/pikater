@@ -29,7 +29,6 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionE
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
-import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -37,7 +36,6 @@ import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 

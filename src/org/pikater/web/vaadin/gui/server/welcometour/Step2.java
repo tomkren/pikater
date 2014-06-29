@@ -10,15 +10,14 @@ import org.pikater.shared.TopologyModel;
 import org.pikater.shared.XStreamHelper;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.IOUtils;
-import org.pikater.web.vaadin.gui.server.components.wizard.RefreshableWizardStep;
+import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 
-public class Step2 extends RefreshableWizardStep<WelcomeTourWizard>
+public class Step2 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTourWizard>
 {
 	private final Component content;
-	
 	private final Step2UI ui;
 	
 	public Step2(WelcomeTourWizard parentWizard)
@@ -75,7 +74,7 @@ public class Step2 extends RefreshableWizardStep<WelcomeTourWizard>
 						}
 						else
 						{
-							parentWizard.addParsedModel(topologyFile.getName(), model);
+							getOutput().addParsedModel(topologyFile.getName(), model);
 						}
 					}
 					catch (Throwable t)
@@ -85,9 +84,9 @@ public class Step2 extends RefreshableWizardStep<WelcomeTourWizard>
 					}
 				}
 				
-				parentWizard.allModelsParsedCallback(); // this is needed for the following to work:
+				getOutput().allModelsParsedCallback(); // this is needed for the following to work:
 				
-				ui = new Step2UI(omittedModels, parentWizard.getParsedModels().keySet(), parentWizard.getWrappedModels());
+				ui = new Step2UI(omittedModels, getOutput().getParsedModels().keySet(), getOutput().getWrappedModels());
 				content = ui;
 			}
 		}

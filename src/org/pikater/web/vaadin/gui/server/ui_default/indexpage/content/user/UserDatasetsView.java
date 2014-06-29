@@ -3,104 +3,109 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user;
 import java.io.File;
 import java.util.EnumSet;
 
-import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.shared.quartz.jobs.web.UploadedDatasetHandler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.quartzjobs.UploadedDatasetHandler;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
-import org.pikater.web.vaadin.gui.server.components.tabledbview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
-import org.pikater.web.vaadin.gui.server.components.wizard.ParentAwareWizardStep;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
-import org.vaadin.teemu.wizards.Wizard;
+import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
+import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithOutput;
+import org.pikater.web.vaadin.gui.server.components.wizards.steps.ParentAwareWizardStep;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.DatasetsView;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
 import com.vaadin.server.StreamVariable.StreamingErrorEvent;
 import com.vaadin.server.StreamVariable.StreamingStartEvent;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window;
 
 @StyleSheet("userDatasetsView.css")
-public class UserDatasetsView extends DBTableLayout implements IContentComponent
+public class UserDatasetsView extends DatasetsView
 {
-	private static final long serialVersionUID = -1564809345462937610L;
+	private static final long serialVersionUID = 5568928739598297585L;
 	
 	public UserDatasetsView()
 	{
-		super(new DataSetTableDBView(ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent())), true);
-		setSizeUndefined();
+		super();
 		
-		addCustomActionComponent(new Button("Upload a new dataset", new Button.ClickListener()
+		this.mainDatasetsLayout.addCustomActionComponent(new Button("Upload new dataset", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = -1045335713385385849L;
 
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				// setting size via CSS doesn't work for Windows for some reason...
-				
-				MyPopup uploadPopup = new MyPopup("Guide to uploading a new dataset");
-				uploadPopup.setWidth("600px");
-				uploadPopup.setHeight("500px");
-				uploadPopup.setContent(new DataSetUploadWizard(uploadPopup));
-				uploadPopup.show();
+				MyPopup datasetUploadWizardWindow = new MyPopup("Dataset upload guide");
+				datasetUploadWizardWindow.setWidth("600px");
+				datasetUploadWizardWindow.setHeight("500px");
+				datasetUploadWizardWindow.setContent(new DatasetUploadWizard(datasetUploadWizardWindow));
+				datasetUploadWizardWindow.show();
 			}
 		}));
 	}
-
+	
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-	}
-
-	@Override
-	public boolean hasUnsavedProgress()
-	{
-		return false; // datasets are completely read-only, except for adding new datasets which is independent of Vaadin anyway
-	}
-
-	@Override
-	public String getCloseDialogMessage()
-	{
-		return null;
+		if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
+		{
+			this.mainDatasetsLayout.setCommitImmediately(false);
+			this.underlyingView.setDatasetOwner(ManageAuth.getUserEntity(VaadinSession.getCurrent()));
+			
+			// always call these last, when you're absolutely ready to display the content
+			this.mainDatasetsLayout.setView(new DatasetDBViewRoot());
+			super.finishInit(); // don't forget to!
+		}
+		else
+		{
+			throw new IllegalStateException("User is not logged in.");
+		}
 	}
 	
 	//----------------------------------------------------------------------------
 	// UPLOAD WIZARD
+
+	private class DatasetUploadCommons implements IWizardCommon
+	{
+		public String optionalARFFHeaders;
+		public String optionalDatasetDescription;
+		
+		public DatasetUploadCommons()
+		{
+			this.optionalARFFHeaders = null;
+			this.optionalDatasetDescription = null;
+		}
+	}
 	
-	private class DataSetUploadWizard extends Wizard
+	private class DatasetUploadWizard extends WizardWithOutput<DatasetUploadCommons>
 	{
 		private static final long serialVersionUID = -2782484084003504941L;
 		
 		private final Window parentPopup;
-		private String optionalARFFHeaders;
-		private String optionalDatasetDescription;
 		
-		public DataSetUploadWizard(Window parentPopup)
+		public DatasetUploadWizard(Window parentPopup)
 		{
-			super();
+			super(new DatasetUploadCommons());
 			setSizeFull();
-			DataSetUploadWizard.this.addStyleName("datasetUploadWizard");
+			DatasetUploadWizard.this.addStyleName("datasetUploadWizard");
 			
 			this.parentPopup = parentPopup;
-			this.optionalARFFHeaders = null;
-			this.optionalDatasetDescription = null;
 			
 			addStep(new Step1(this));
 			addStep(new Step2(this));
@@ -120,38 +125,18 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			getFinishButton().setVisible(false);
 		}
 		
-		public String getOptionalARFFHeaders()
-		{
-			return optionalARFFHeaders;
-		}
-		
-		public void setOptionalARFFHeaders(String headers)
-		{
-			this.optionalARFFHeaders = headers;
-		}
-		
-		public String getOptionalDatasetDescription()
-		{
-			return optionalDatasetDescription;
-		}
-
-		public void setOptionalDatasetDescription(String description)
-		{
-			this.optionalDatasetDescription = description;
-		}
-
 		public void closeWizardAndTheParentPopup()
 		{
 			parentPopup.close();
 		}
 	}
 	
-	private class Step1 extends ParentAwareWizardStep<DataSetUploadWizard>
+	private class Step1 extends ParentAwareWizardStep<DatasetUploadCommons, DatasetUploadWizard>
 	{
 		private final VerticalLayout vLayout;
 		private final TextArea textArea;
 		
-		public Step1(DataSetUploadWizard parentWizard)
+		public Step1(DatasetUploadWizard parentWizard)
 		{
 			super(parentWizard);
 			
@@ -190,7 +175,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 		@Override
 		public boolean onAdvance()
 		{
-			getParentWizard().setOptionalARFFHeaders(textArea.getValue().trim());
+			getOutput().optionalARFFHeaders = textArea.getValue().trim();
 			return true;
 		}
 
@@ -201,12 +186,12 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 		}
 	}
 	
-	private class Step2 extends ParentAwareWizardStep<DataSetUploadWizard>
+	private class Step2 extends ParentAwareWizardStep<DatasetUploadCommons, DatasetUploadWizard>
 	{
 		private final VerticalLayout vLayout;
 		private final TextArea textArea;
 		
-		public Step2(DataSetUploadWizard parentWizard)
+		public Step2(DatasetUploadWizard parentWizard)
 		{
 			super(parentWizard);
 			
@@ -243,22 +228,22 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 		@Override
 		public boolean onAdvance()
 		{
-			getParentWizard().setOptionalDatasetDescription(textArea.getValue().trim());
+			getOutput().optionalDatasetDescription = textArea.getValue().trim();
 			return true;
 		}
 
 		@Override
 		public boolean onBack()
 		{
-			return false;
+			return true;
 		}
 	}
 	
-	private class Step3 extends ParentAwareWizardStep<DataSetUploadWizard>
+	private class Step3 extends ParentAwareWizardStep<DatasetUploadCommons, DatasetUploadWizard>
 	{
 		private final VerticalLayout vLayout;
 		
-		public Step3(DataSetUploadWizard parentWizard)
+		public Step3(DatasetUploadWizard parentWizard)
 		{
 			super(parentWizard);
 			this.vLayout = new VerticalLayout();
@@ -271,7 +256,8 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
-			MyMultiUpload mmu = new ManageUserUploads().createUploadButton(
+			ManageUserUploads uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads); 
+			MyMultiUpload mmu = uploadManager.createUploadButton(
 					"Choose file to upload",
 					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
 							HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN)
@@ -306,8 +292,8 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 						Object[] jobParams = new Object[]
 						{
 								ManageAuth.getUserEntity(VaadinSession.getCurrent()),
-								getParentWizard().getOptionalARFFHeaders(),
-								getParentWizard().getOptionalDatasetDescription(),
+								getOutput().optionalARFFHeaders,
+								getOutput().optionalDatasetDescription,
 								uploadedTemporaryFile,
 						};
 						try
@@ -316,7 +302,7 @@ public class UserDatasetsView extends DBTableLayout implements IContentComponent
 						}
 						catch (Throwable e)
 						{
-							PikaterLogger.logThrowable("Could not issue a dataset upload job.", e);
+							PikaterLogger.logThrowable("Could not issue an uploaded dataset handling job.", e);
 							MyNotifications.showError("Upload failed", event.getFileName());
 							return; // don't let the success notification be displayed
 						}

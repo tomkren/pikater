@@ -9,6 +9,13 @@ public class DateUtils
 	
 	public static String toCzechDate(Date date)
 	{
-		return czechDateFormatter.format(date);
+		if(date == null)
+		{
+			return "";
+		}
+		else
+		{
+			return czechDateFormatter.format(date);
+		}
 	}
 }

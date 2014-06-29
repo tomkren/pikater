@@ -1,12 +1,12 @@
 package org.pikater.web.vaadin.gui.server.welcometour;
 
-import org.pikater.web.vaadin.gui.server.components.wizard.RefreshableWizardStep;
+import org.pikater.web.vaadin.gui.server.components.wizards.steps.ParentAwareWizardStep;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class Step1 extends RefreshableWizardStep<WelcomeTourWizard>
+public class Step1 extends ParentAwareWizardStep<WelcomeTourCommons, WelcomeTourWizard>
 {
 	private final Component content;
 	
@@ -19,11 +19,6 @@ public class Step1 extends RefreshableWizardStep<WelcomeTourWizard>
 		layout.addComponent(new Label("Click 'next' to continue"));
 		
 		this.content = layout;
-	}
-	
-	@Override
-	public void refresh()
-	{
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.BooleanReadOnlyDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -32,10 +33,10 @@ public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 		case NAME:
 			return new StringReadOnlyDBViewValue(attrCat.getName());
 		case IS_TARGET:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatBool(currentLocale,attrCat.isTarget()));
+			return new BooleanReadOnlyDBViewValue(attrCat.isTarget());
 		case RATIO_OF_MISSING_VALUES:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getRatioOfMissingValues()));
-		case NUMBER_OF_CATEGORIES:
+		case CATEGORY_COUNT:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatInteger(currentLocale,attrCat.getNumberOfCategories()));
 		
 		default:

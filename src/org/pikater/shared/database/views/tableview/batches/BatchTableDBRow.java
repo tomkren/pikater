@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -20,6 +19,11 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 	{
 		this.batch=batch;
 		this.currentLocale=LocaleUtils.getDefaultLocale();
+	}
+	
+	public JPABatch getBatch()
+	{
+		return batch;
 	}
 
 	@Override
@@ -48,52 +52,6 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 		case NOTE: //TODO: make it editable (note for me)
 			return new StringReadOnlyDBViewValue(batch.getNote());
 			
-		/*
-		 * And then custom actions.
-		 */
-		case EXPERIMENTS:
-			if((batch.getExperiments()==null) || batch.getExperiments().isEmpty()){
-				return new NamedActionDBViewValue("No Experiments") {
-					
-					@Override
-					public boolean isEnabled()
-					{
-						return true;
-					}
-
-					@Override
-					protected void updateEntities()
-					{
-					}
-
-					@Override
-					protected void commitEntities()
-					{
-					}
-				};
-			}else{
-				return new NamedActionDBViewValue("Show Experiments") {	
-
-					@Override
-					public boolean isEnabled()
-					{
-						return true;
-					}
-
-					@Override
-					protected void updateEntities()
-					{
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					protected void commitEntities()
-					{
-						// TODO Auto-generated method stub
-					}
-				};
-			}
-
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
 		}

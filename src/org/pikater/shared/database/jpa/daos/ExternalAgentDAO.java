@@ -5,10 +5,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
+import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
 
 public class ExternalAgentDAO extends AbstractDAO {
+	
 	public JPAExternalAgent getByClass(String cls) {
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -32,12 +34,36 @@ public class ExternalAgentDAO extends AbstractDAO {
 	}
 
 	@Override
-	public <R extends JPAAbstractEntity> List<R> getAll() {
-		throw new UnsupportedOperationException();
+	public List<JPAExternalAgent> getAll() {
+		return EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("ExternalAgent.getAll", JPAExternalAgent.class)
+				.getResultList();
 	}
 
 	@Override
-	public <R extends JPAAbstractEntity> R getByID(int ID, EmptyResultAction era) {
-		throw new UnsupportedOperationException();
+	public JPAExternalAgent getByID(int ID, EmptyResultAction era) {
+		return new CustomActionResultFormatter<JPAExternalAgent>(
+				getByTypedNamedQuery("ExternalAgent.getByID", "id", ID),
+				era)
+				.getSingleResultWithNull();
 	}
+	
+	public List<JPAExternalAgent> getByOwner(JPAUser user) {
+		return getByTypedNamedQuery("ExternalAgent.getByOwner", "owner", user);
+	}
+	
+	private List<JPAExternalAgent> getByTypedNamedQuery(String queryName,String paramName,Object param){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return
+				em
+				.createNamedQuery(queryName,JPAExternalAgent.class)
+				.setParameter(paramName, param)
+				.getResultList();
+		}finally{
+			em.close();
+		}
+	}
+	
 }

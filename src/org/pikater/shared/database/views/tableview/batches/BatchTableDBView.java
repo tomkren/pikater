@@ -43,15 +43,14 @@ public class BatchTableDBView extends AbstractTableDBView
 		/*
 		 * First the read-only properties.
 		 */
-		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
-		NAME,
-		NOTE,
+		FINISHED, // both users and admins should probably be most interested in the latest batches
+		STATUS, // and whether they are yet finished or not
 		PRIORITY,
 		MAX_PRIORITY,
-		STATUS,
 		CREATED,
-		FINISHED,
-		EXPERIMENTS;
+		OWNER,
+		NAME,
+		NOTE; // this should be last because of potentially long text
 
 		@Override
 		public String getDisplayName()
@@ -69,14 +68,13 @@ public class BatchTableDBView extends AbstractTableDBView
 				case NOTE:
 				case CREATED:
 				case FINISHED:
-					
 				case STATUS:
+					return DBViewValueType.STRING;
 					
+				// TODO: these should be editable?
 				case PRIORITY:
 				case MAX_PRIORITY:
 					return DBViewValueType.STRING;
-				case EXPERIMENTS:
-					return DBViewValueType.NAMED_ACTION;
 					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
@@ -101,7 +99,7 @@ public class BatchTableDBView extends AbstractTableDBView
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return adminMode() ? Column.OWNER : Column.CREATED;
+		return Column.FINISHED;
 	}
 	
 	@Override

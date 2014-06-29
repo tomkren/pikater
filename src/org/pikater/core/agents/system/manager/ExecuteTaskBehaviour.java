@@ -80,8 +80,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 			if (content instanceof Result) {
 				// get the original task from msg
 				Result result = (Result) content;					
-				List tasks = (List)result.getValue();
-				Task t = (Task) tasks.get(0); // there is only one task in Result
+				Task t = (Task)result.getValue();
 
 				// save results to the database										
 				if (t.isSave_results()){

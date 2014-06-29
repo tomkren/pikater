@@ -32,5 +32,6 @@ public class MyPopup extends Window
 	{
 		UI.getCurrent().addWindow(this);
 		center();
+		focus(); // to allow immediate close via escape key
 	}
 }

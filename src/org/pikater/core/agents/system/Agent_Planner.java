@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
+import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
@@ -22,11 +25,11 @@ import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.planner.CPUCore;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
+import org.pikater.core.agents.system.planner.TaskToSolve;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
-import org.pikater.core.ontology.subtrees.task.FinishedTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 
@@ -34,12 +37,12 @@ public class Agent_Planner extends PikaterAgent {
 	
 	private static final long serialVersionUID = 820846175393846627L;
 
-	private LinkedList<Task> waitingToStartComputingTasks =
-			new LinkedList<Task>();
-	private LinkedList<Task> computingTasks =
-			new LinkedList<Task>();
-	private Map <CPUCore, Task> computingCores =
-			new HashMap<CPUCore, Task>();
+	private LinkedList<TaskToSolve> waitingToStartComputingTasks =
+			new LinkedList<TaskToSolve>();
+	private LinkedList<TaskToSolve> computingTasks =
+			new LinkedList<TaskToSolve>();
+	private Map <CPUCore, TaskToSolve> computingCores =
+			new HashMap<CPUCore, TaskToSolve>();
 	private List<CPUCore> untappedCores =
 			new ArrayList<CPUCore>();
 	
@@ -91,15 +94,15 @@ public class Agent_Planner extends PikaterAgent {
 		
 		MessageTemplate reqMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(
-						FIPANames.InteractionProtocol.FIPA_REQUEST),
+					FIPANames.InteractionProtocol.FIPA_REQUEST),
+					MessageTemplate.and(
+						MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 						MessageTemplate.and(
-								MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-								MessageTemplate.and(
-										MessageTemplate.MatchLanguage(codec.getName()),
-										MessageTemplate.or(
-												MessageTemplate.MatchOntology(taskOntontology.getName()),
-												MessageTemplate.MatchOntology(agentManagementOntontology.getName())
-										))));
+							MessageTemplate.MatchLanguage(codec.getName()),
+							MessageTemplate.or(
+								MessageTemplate.MatchOntology(taskOntontology.getName()),
+								MessageTemplate.MatchOntology(agentManagementOntontology.getName())
+							))));
 
 		addBehaviour(new AchieveREResponder(this, reqMsgTemplate) {
 
@@ -117,9 +120,6 @@ public class Agent_Planner extends PikaterAgent {
 					 */
 					if (a.getAction() instanceof ExecuteTask) {
 						return respondToExecuteTask(request, a);
-					}
-					if (a.getAction() instanceof FinishedTask) {
-						return respondToFinishedTask(request, a);
 					}
 
 				} catch (OntologyException e) {
@@ -145,7 +145,9 @@ public class Agent_Planner extends PikaterAgent {
 
 		ExecuteTask executeTask = (ExecuteTask) a.getAction();
 
-		waitingToStartComputingTasks.addLast(executeTask.getTask());
+		TaskToSolve taskToSolve = new TaskToSolve(
+				executeTask.getTask(), a, request);
+		waitingToStartComputingTasks.addLast(taskToSolve);
 		plan();
 
 		//TODO:
@@ -156,36 +158,62 @@ public class Agent_Planner extends PikaterAgent {
 		return null;
 	}
 
-	protected ACLMessage respondToFinishedTask(ACLMessage request, Action a) {
+	public void respondToFinishedTask(ACLMessage finishedTaskMsg) {
 
-		FinishedTask finishedTask = (FinishedTask) a.getAction();
+		Result result = null;
+		try {
+			result = (Result) getContentManager().extractContent(
+					finishedTaskMsg);
+		} catch (UngroundedException e1) {
+			this.logError("", e1);
+		} catch (CodecException e1) {
+			this.logError("", e1);
+		} catch (OntologyException e1) {
+			this.logError("", e1);
+		}
+		
+		Task finishedTask = (Task) result.getValue();//.getAction();
 
-		CPUCore cpuCore = new CPUCore(request.getSender(),
+		CPUCore cpuCore = new CPUCore(finishedTaskMsg.getSender(),
 				finishedTask.getCpuCoreID());
 
-		Task task = getComputingTask(finishedTask.getTaskID());
+		TaskToSolve taskToSolve = getComputingTask(finishedTask.getGraphId());
 
 		computingCores.remove(cpuCore);
 		untappedCores.add(cpuCore);
 
-		computingTasks.remove(task);
+		computingTasks.remove(taskToSolve);
 
-		plan();
+		//plan();
 
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		reply.setContent("OK - FinishedTask msg recieved");
-
-		// TODO: send info to manager - add behaviour?
-		return reply;
+		/////
+		ACLMessage msgToManager = taskToSolve.getMsg().createReply();
+		msgToManager.setPerformative(ACLMessage.INFORM);
+		msgToManager.setLanguage(new SLCodec().getName());
+		msgToManager.setOntology(TaskOntology.getInstance().getName());
+		
+		Result executeResult = new Result(taskToSolve.getAction(), finishedTask);
+		try {
+			getContentManager().fillContent(msgToManager, executeResult);
+		} catch (CodecException e) {
+			logError(e.getMessage());
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			logError(e.getMessage());
+			e.printStackTrace();
+		}
+		send(msgToManager);
+		/////
+		
+		//ACLMessage reply = finishedTaskMsg.createReply();
+		//reply.setPerformative(ACLMessage.INFORM);
+		//reply.setContent("OK - FinishedTask msg recieved");
 	}
 
 	private void plan() {
 
-		Task task = waitingToStartComputingTasks.get(0); // TODO: improve
-															// selection - by
-															// priority and
-															// workflow
+		TaskToSolve task = waitingToStartComputingTasks.get(0);
+		// TODO: improve selection - by priority and workflow
 
 		CPUCore selectedCore = untappedCores.get(0); // TODO: improve selection
 
@@ -195,15 +223,15 @@ public class Agent_Planner extends PikaterAgent {
 		computingCores.put(selectedCore, task);
 		untappedCores.remove(selectedCore);
 
-		PlannerCommunicator communicator = new PlannerCommunicator(this);
-		communicator.sendExecuteTask(task, selectedCore.getAID());
+		PlannerCommunicator communiocator = new PlannerCommunicator(this);
+		communiocator.sendExecuteTask(task.getTask(), selectedCore.getAID());
 
 	}
 
-	private Task getComputingTask(int taskID) {
+	private TaskToSolve getComputingTask(int taskID) {
 
-		for (Task taskI : computingTasks) {
-			if (taskI.getGraphId() == taskID) {
+		for (TaskToSolve taskI : computingTasks) {
+			if (taskI.getTask().getGraphId() == taskID) {
 				return taskI;
 			}
 		}

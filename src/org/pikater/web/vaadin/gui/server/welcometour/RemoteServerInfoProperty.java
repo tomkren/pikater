@@ -5,9 +5,10 @@ import org.pikater.shared.RemoteServerInfo.FieldType;
 
 import com.vaadin.data.Property;
 
-@SuppressWarnings("serial")
 public class RemoteServerInfoProperty implements Property<String>
 {
+	private static final long serialVersionUID = -5592575393926531075L;
+	
 	private final RemoteServerInfo server;
 	private final FieldType field;
 

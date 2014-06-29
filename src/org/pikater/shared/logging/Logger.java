@@ -8,5 +8,6 @@ package org.pikater.shared.logging;
 public interface Logger {
     void log(String source, String text);
     void logError(String source,String errorDescription);
+    void logError(String source, Exception exception);
     void logError(String source,String errorDescription,Severity severity);
 }

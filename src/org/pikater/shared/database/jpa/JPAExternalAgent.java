@@ -1,5 +1,7 @@
 package org.pikater.shared.database.jpa;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,14 +10,21 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 
 
 @Entity	
 @Table(name="ExternalAgent")
 @NamedQueries({
+	@NamedQuery(name="ExternalAgent.getAll",query="select o from JPAExternalAgent o"),
+	@NamedQuery(name="ExternalAgent.getByID",query="select o from JPAExternalAgent o where o.id=:id"),
+	@NamedQuery(name="ExternalAgent.getByOwner",query="select o from JPAExternalAgent o where o.owner=:owner"),
 	@NamedQuery(name="ExternalAgent.getByClass",query="select o from JPAExternalAgent o where o.agentClass=:class")
 })
-public class JPAExternalAgent {
+public class JPAExternalAgent extends JPAAbstractEntity{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -26,6 +35,9 @@ public class JPAExternalAgent {
 	private String description;
 	@Column(nullable=false)
 	private byte[] jar;
+	private JPAUser owner;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	public int getId() {
 		return id;
@@ -56,5 +68,21 @@ public class JPAExternalAgent {
 	}
 	public void setJar(byte[] jar) {
 		this.jar = jar;
+	}
+	public JPAUser getOwner() {
+		return owner;
+	}
+	public void setOwner(JPAUser owner) {
+		this.owner = owner;
+	}
+	public Date getCreated() {
+		return created;
+	}
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+	@Override
+	public void updateValues(JPAAbstractEntity newValues) throws Exception {
+		throw new NotUpdatableEntityException();
 	}
 }

@@ -1,59 +1,45 @@
 package org.pikater.core.agents.experiment.computing;
 
-import jade.content.ContentElement;
+import jade.content.Concept;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
-import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.FSMBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAAgentManagement.NotUnderstoodException;
+import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.proto.AchieveREInitiator;
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
+import jade.proto.AchieveREResponder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.List;
 
 import org.pikater.core.agents.AgentNames;
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
-import org.pikater.core.agents.system.data.AgentDataSource;
-import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
+import org.pikater.core.agents.experiment.computing.computing.ComputingAction;
+import org.pikater.core.agents.experiment.computing.computing.ComputingComminicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.data.Data;
-import org.pikater.core.ontology.subtrees.data.GetData;
+import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
-import org.pikater.core.ontology.subtrees.result.PartialResults;
-import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
@@ -65,7 +51,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	private static final long serialVersionUID = -7927583436579620995L;
 
 	protected Codec codec = new SLCodec();
-	// private Ontology ontology = ExperimentOntology.getInstance();
 
 	public enum states {
 		NEW, TRAINED
@@ -82,42 +67,40 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	public boolean hasGotRightData = false;
 
 	// protected Vector<MyWekaOption> Options;
-	protected org.pikater.core.ontology.subtrees.management.Agent agent_options = null;
+	public Agent agentOptions = null;
 
 	protected Instances data; // data read from fileName file
-	Instances train;
-	DataInstances onto_train;
-	Instances test;
-	DataInstances onto_test;
+	public Instances train;
+	public DataInstances ontoTrain;
+	public Instances test;
+	public DataInstances ontoTest;
 
-	Instances label;
-	DataInstances onto_label;
-	int convId = 0;
+	public Instances label;
+	public DataInstances ontoLabel;
+	public int convId = 0;
 
-	protected String[] OPTIONS;
-	protected org.pikater.core.ontology.subtrees.task.Task current_task = null;
-	// protected String[] OPTIONS_;
+	protected String[] options;
+	public Task currentTask = null;
+
 	protected String className;
 
 	protected Object[] args;
 
-	boolean working = false; // TODO -> state?
+	public boolean working = false; // TODO -> state?
 
-	LinkedList<ACLMessage> taskFIFO = new LinkedList<ACLMessage>();
+	public LinkedList<ACLMessage> taskFIFO = new LinkedList<ACLMessage>();
 
-	private Behaviour execution_behaviour = null;
+	public Behaviour executionBehaviour = null;
 
 	private boolean newAgent = true;
-	private boolean resurrected = false;
+	public boolean resurrected = false;
 
-	private boolean engaged = false;
+	public abstract Date train(Evaluation evaluation) throws Exception;
 
-	protected abstract Date train(Evaluation evaluation) throws Exception;
-
-	protected abstract void evaluateCA(EvaluationMethod evaluation_method,
+	public abstract void evaluateCA(EvaluationMethod evaluation_method,
 			Evaluation evaluation) throws Exception;
 
-	protected abstract DataInstances getPredictions(Instances test,
+	public abstract DataInstances getPredictions(Instances test,
 			DataInstances onto_test);
 
 	public abstract String getAgentType();
@@ -134,35 +117,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		return ontologies;
 	}
 
-	protected ACLMessage sendOptions(ACLMessage request) {
-		ACLMessage msgOut = request.createReply();
-		msgOut.setPerformative(ACLMessage.INFORM);
-		try {
-			// Prepare the content
-			ContentElement content = getContentManager()
-					.extractContent(request); // TODO exception block?
-			Result result = new Result((Action) content, agent_options);
-			// result.setValue(options);
-
-			try {
-				// Let JADE convert from Java objects to string
-				getContentManager().fillContent(msgOut, result);
-				// send(msgOut);
-			} catch (CodecException ce) {
-				ce.printStackTrace();
-			} catch (OntologyException oe) {
-				oe.printStackTrace();
-			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return msgOut;
-
-	} // end SendOptions
-
 	@Override
 	protected void setup() {
 
@@ -176,12 +130,10 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
             // TODO loadAgent(getLocalName());
             // args = new String[0]; // arguments are empty
         }
-        // some important initializations before registering
-        getParameters();
 
 		// register with the DF
 		if (! this.getAID().getLocalName().contains("Service")){	
-			java.util.List<String> descr = new java.util.ArrayList<String>();
+			List<String> descr = new ArrayList<String>();
 			descr.add(AgentNames.COMPUTING_AGENT);
 			descr.add(getLocalName());
 	
@@ -200,7 +152,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 			resurrected = true;
 			System.out.println(getLocalName() + " resurrected.");
 			taskFIFO = new LinkedList<ACLMessage>();
-			execution_behaviour.reset();
+			executionBehaviour.reset();
 			state = states.TRAINED;
 			return;
 		}
@@ -208,8 +160,16 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 		setEnabledO2ACommunication(true, 0);
 
-		addBehaviour(new RequestServer(this));
-		addBehaviour(execution_behaviour = new ProcessAction(this));
+		MessageTemplate reqMsgTemplate = MessageTemplate
+				.and(MessageTemplate
+						.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+						MessageTemplate.and(MessageTemplate
+								.MatchPerformative(ACLMessage.REQUEST),
+								MessageTemplate.MatchOntology(
+										TaskOntology.getInstance().getName())));
+
+		addBehaviour(new RequestServer(this, reqMsgTemplate));
+		addBehaviour(executionBehaviour = new ComputingAction(this));
 
 		sendAgentInfo(getAgentInfo());
 		
@@ -222,822 +182,114 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		// guiAgent
 	}
 
-	public boolean setOptions(org.pikater.core.ontology.subtrees.task.Task task) {
+	public boolean setOptions(Task task) {
 		/*
 		 * INPUT: task with weka options Fills the OPTIONS array and
 		 * current_task.
 		 */
-		current_task = task;
-		OPTIONS = task.getAgent().optionsToString().split("[ ]+");
+		currentTask = task;
+		options = task.getAgent().optionsToString().split("[ ]+");
 
 		return true;
-	} // end loadConfiguration
+	}
 
 	public String getOptions() {
 		// write out OPTIONS
 
 		String strOPTIONS = "";
 		strOPTIONS += "OPTIONS:";
-		for (int i = 0; i < OPTIONS.length; i++) {
-			strOPTIONS += " " + OPTIONS[i];
+		for (int i = 0; i < options.length; i++) {
+			strOPTIONS += " " + options[i];
 		}
 		return strOPTIONS;
 	}
 
-	protected ACLMessage sendGetDataReq(String fileName) {
-		AID[] ARFFReaders;
-		AID reader = null;
-		ACLMessage msgOut = null;
-		// Make the list of reader agents
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.ARRFF_READER);
-		template.addServices(sd);
-		try {
-			GetData get_data = new GetData();
-
-			DFAgentDescription[] result = DFService.search(this, template);
-			// System.out.println(getLocalName() +
-			// ": Found the following ARFFReader agents:");
-			ARFFReaders = new AID[result.length];
-			for (int i = 0; i < result.length; ++i) {
-				if (isSameNode(result[i].getName())) {
-					// prefer local reader for O2A transfer
-					reader = result[i].getName();
-					log("preferring reader " + reader.getName());
-					get_data.setO2aAgent(getLocalName());
-					break;
-				}
-				ARFFReaders[i] = result[i].getName();
-				// System.out.println("    " + ARFFReaders[i].getName());
-			}
-
-			// randomly choose one of the readers if none preferred
-			if (reader == null) {
-				Random randomGenerator = new Random();
-				int randomInt = randomGenerator.nextInt(result.length);
-				reader = ARFFReaders[randomInt];
-			}
-
-			log("using reader " + reader + ", filename: " + fileName);
-
-			Ontology ontology = DataOntology.getInstance();
-			
-			// request
-			msgOut = new ACLMessage(ACLMessage.REQUEST);
-			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-			// msgOut.setReplyByDate(new Date(System.currentTimeMillis() +
-			// 10000));
-			msgOut.setLanguage(codec.getName());
-			msgOut.setOntology(ontology.getName());
-			msgOut.addReceiver(reader);
-			msgOut.setConversationId("get-data_" + convId++);
-			// content
-			get_data.setFileName(fileName);
-			Action a = new Action();
-			a.setAction(get_data);
-			a.setActor(this.getAID());
-			getContentManager().fillContent(msgOut, a);
-		} catch (FIPAException fe) {
-			fe.printStackTrace();
-			return null;
-		} catch (CodecException e) {
-			e.printStackTrace();
-			return null;
-		} catch (OntologyException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return msgOut;
-	} // end sendGetDataReq
-
+	// TODO: will we accept or refuse the request? (working, size of
+	// taksFIFO, latency time...)
+	public boolean acceptTask() {
+		return true/* taskFIFO.size()<=MAX_TASKS */;
+	}
+	
 	public static byte[] toBytes(Object object) throws Exception {
-		java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-		java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(baos);
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(object);
 
 		return baos.toByteArray();
 	}
 
-	/*
-	 * Send partial results to the GUI Agent(s) call it after training or during
-	 * training?
-	 */
-	protected void sendResultsToGUI(Boolean first_time, Task _task,
-			List _evaluations) {
-		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.GUI_AGENT);
-		template.addServices(sd);
-		try {
-			DFAgentDescription[] gui_agents = DFService.search(this, template);
-			for (int i = 0; i < gui_agents.length; ++i) {
-				msgOut.addReceiver(gui_agents[i].getName());
-			}
-		} catch (FIPAException fe) {
-			fe.printStackTrace();
+	protected class RequestServer extends AchieveREResponder {
+		
+		public RequestServer(Agent_ComputingAgent agent, MessageTemplate mt) {
+			super(agent, mt);
 		}
 
-		msgOut.setConversationId("partial-results");
-
-		PartialResults content = new PartialResults();
-		content.setResults(_evaluations);
-		// content.setTask_id(_task.getId());
-		if (first_time) {
-			content.setTask(_task);
-		}
-		try {
-			getContentManager().fillContent(msgOut, content);
-		} catch (CodecException e) {
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			e.printStackTrace();
-		}
-
-		send(msgOut);
-	}
-
-	protected class RequestServer extends CyclicBehaviour {
 		/**
-			 * 
-			 */
+		 * 
+		 */
 		private static final long serialVersionUID = 1074564968341084444L;
 
-		private MessageTemplate reqMsgTemplate = MessageTemplate
-				.and(MessageTemplate
-						.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-						MessageTemplate.and(MessageTemplate
-								.MatchPerformative(ACLMessage.REQUEST),
-								MessageTemplate.and(MessageTemplate
-										.MatchLanguage(codec.getName()),
-										MessageTemplate
-												.MatchOntology(TaskOntology
-														.getInstance()
-														.getName()))));
-
-		public RequestServer(Agent agent) {
-			super(agent);
-		}
-
-		// TODO: will we accept or refuse the request? (working, size of
-		// taksFIFO, latency time...)
-		boolean acceptTask() {
-			return true/* taskFIFO.size()<=MAX_TASKS */;
-		}
-
-		ACLMessage processExecute(ACLMessage req) {
-			ACLMessage result_msg = req.createReply();
-			if (acceptTask()) {
-				result_msg.setPerformative(ACLMessage.AGREE);
-				taskFIFO.addLast(req);
-
-				if (taskFIFO.size() == 1) {
-					if (!execution_behaviour.isRunnable()) {
-						execution_behaviour.restart();
-					}
-				}
-				/*
-				 * if (!execution_behaviour.isRunnable()) {
-				 * execution_behaviour.restart(); }
-				 */
-			} else {
-				result_msg.setPerformative(ACLMessage.REFUSE);
-				result_msg.setContent("(Computing agent overloaded)");
-			}
-			return result_msg;
-		}
-
 		@Override
-		public void action() {
-
-			ContentElement content;
+		protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+			
+			ACLMessage resultMsg = request.createReply();
 			try {
-				ACLMessage req = receive(reqMsgTemplate);
-				if (req != null) {
-					content = getContentManager().extractContent(req);
-					if (((Action) content).getAction() instanceof GetOptions) {
-						ACLMessage result_msg = sendOptions(req);
-						send(result_msg);
-						return;
+				Action a = (Action) getContentManager().extractContent(request);
 
-					} else if (((Action) content).getAction() instanceof ExecuteTaksOnCPUCore) {
-                        ACLMessage result_msg = processExecute(req);
-                        send(result_msg);
-						return;
+					
+					if (a.getAction() instanceof GetOptions) {
+						return respondToGetOptions(request, a);
+
+					} else if (a.getAction() instanceof ExecuteTask) {
+						return respondExecuteTask(request, a);
 					}
 
-					ACLMessage result_msg = req.createReply();
-					result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-					send(result_msg);
-					return;
-				} else {
-					block(); // don't cycle waiting for messages
-				}
+					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
+
 			} catch (CodecException ce) {
 				ce.printStackTrace();
 			} catch (OntologyException oe) {
 				oe.printStackTrace();
 			}
-		}
-	}
-
-	private class ProcessAction extends FSMBehaviour {
-		/**
-		 * 
-	     */
-		private static final long serialVersionUID = 7417933314402310322L;
-
-		private static final String INIT_STATE = "Init";
-		private static final String GETTRAINDATA_STATE = "GetTrainingData";
-		private static final String GETTESTDATA_STATE = "GetTestData";
-		private static final String GETLABELDATA_STATE = "GetLabelData";
-		private static final String TRAINTEST_STATE = "TrainTest";
-		private static final String SENDRESULTS_STATE = "SendResults";
-		private static final int NEXT_JMP = 0;
-		private static final int LAST_JMP = 1;
-		ACLMessage incoming_request;
-		ACLMessage result_msg;
-		ExecuteTaksOnCPUCore execute_action;
-		boolean success;
-		org.pikater.core.ontology.subtrees.task.Evaluation eval = new Evaluation();
-		String train_fn;
-		String test_fn;
-		String label_fn;
-		String output;
-		String mode;
-
-		/* Resulting message: FAILURE */
-
-		void failureMsg(String desc) {
-			java.util.List<Eval> evaluations = new java.util.ArrayList<Eval>();
-
-			Eval er = new Eval();
-			er.setName("error_rate");
-			er.setValue(Float.MAX_VALUE);
-			evaluations.add(er);
-
-			// set duration to max_float
-			Eval du = new Eval();
-			du.setName("duration");
-			du.setValue(Integer.MAX_VALUE);
-			evaluations.add(du);
-
-			// set start to now
-			Eval st = new Eval();
-			st.setName("start");
-			st.setValue(System.currentTimeMillis());
-			evaluations.add(st);
-
-			eval.setEvaluations(evaluations);
-
-			eval.setStatus(desc);
-		}
-
-		/* Get a message from the FIFO of tasks */
-		boolean getRequest() {
-			if (taskFIFO.size() > 0) {
-				incoming_request = taskFIFO.removeFirst();
-				try {
-					ContentElement content = getContentManager()
-							.extractContent(incoming_request);
-					execute_action = (ExecuteTaksOnCPUCore) ((Action) content)
-							.getAction();
-					return true;
-				} catch (CodecException ce) {
-					ce.printStackTrace();
-				} catch (OntologyException oe) {
-					oe.printStackTrace();
-				}
-			} else {
-				block();
-			}
-
-			return false;
-		}
-
-		/* Extract data from INFORM message (ARFF reader) */
-		org.pikater.core.ontology.subtrees.dataInstance.DataInstances processGetData(
-				ACLMessage inform) {
-			ContentElement content;
-			try {
-				content = getContentManager().extractContent(inform);
-				if (content instanceof Result) {
-					Result result = (Result) content;
-					if (result.getValue() instanceof org.pikater.core.ontology.subtrees.dataInstance.DataInstances) {
-						return (org.pikater.core.ontology.subtrees.dataInstance.DataInstances) result
-								.getValue();
-					} else if (result.getValue() instanceof Boolean) {
-						// log("getting o2a data");
-						Object o = getO2AObject();
-						if (o == null)
-							throw new IllegalStateException(
-									"received GetData response without o2a object in queue");
-						else
-							return (org.pikater.core.ontology.subtrees.dataInstance.DataInstances) o;
-					} else {
-						throw new IllegalStateException(
-								"received unexpected Inform");
-					}
-				}
-			} catch (UngroundedException e) {
-				e.printStackTrace();
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		ProcessAction(Agent a) {
-			super(a);
-			/* FSM: register states */
-			// init state
-
-			registerFirstState(new Behaviour(a) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -4607390644948524477L;
-
-				// int next;
-				boolean cont;
-
-				@Override
-				public void action() {
-					result_msg = null;
-					execute_action = null;
-					if (!getRequest()) {
-						// no task to execute
-						cont = true;
-						// block();
-						return;
-					}
-					cont = false;
-					if (!resurrected) {
-						state = Agent_ComputingAgent.states.NEW;
-					}
-					// Set options
-					setOptions(execute_action.getTask());
-
-					// set agent name in Task
-					org.pikater.core.ontology.subtrees.management.Agent agent = current_task
-							.getAgent();
-					agent.setName(getLocalName());
-					current_task.setAgent(agent);
-
-					eval = new Evaluation();
-					success = true;
-					Data data = execute_action.getTask().getData();
-					output = data.getOutput();
-					mode = data.getMode();
-
-					train_fn = data.getTrainFileName();
-					AchieveREInitiator get_train_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
-							.getState(GETTRAINDATA_STATE);
-
-					// get_train_behaviour.reset(sendGetDataReq(train_fn));
-
-					if (!train_fn.equals(trainFileName)) {
-						get_train_behaviour.reset(sendGetDataReq(train_fn));
-					} else {
-						// We have already the right data
-						get_train_behaviour.reset(null);
-					}
-
-					if (!mode.equals("train_only")) {
-						test_fn = data.getTestFileName();
-						AchieveREInitiator get_test_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
-								.getState(GETTESTDATA_STATE);
-						if (!test_fn.equals(testFileName)) {
-							get_test_behaviour.reset(sendGetDataReq(test_fn));
-						} else {
-							// We have already the right data
-							get_test_behaviour.reset(null);
-						}
-					}
-
-					if (data.getLabelFileName() != null) {
-						label_fn = data.getLabelFileName();
-						AchieveREInitiator get_label_behaviour = (AchieveREInitiator) ((ProcessAction) parent)
-								.getState(GETLABELDATA_STATE);
-						if (!label_fn.equals(labelFileName)) {
-							get_label_behaviour.reset(sendGetDataReq(label_fn));
-						} else {
-							// We have already the right data
-							get_label_behaviour.reset(null);
-						}
-					}
-				}
-
-				@Override
-				public boolean done() {
-					return !cont;
-				}
-			}, INIT_STATE);
-
-			// get train data state
-			registerState(new AchieveREInitiator(a, null) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -133823979702541803L;
-
-				public int next = NEXT_JMP;
-
-				@Override
-				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _train = processGetData(inform);
-					if (_train != null) {
-						trainFileName = train_fn;
-						onto_train = _train;
-						train = onto_train.toWekaInstances();
-						train.setClassIndex(train.numAttributes() - 1);
-						next = NEXT_JMP;
-						return;
-					} else {
-						next = LAST_JMP;
-						failureMsg("No train data received from the reader agent: Wrong content.");
-						return;
-					}
-				}
-
-				@Override
-				protected void handleFailure(ACLMessage failure) {
-					failureMsg("No train data received from the reader agent: Reader Failed.");
-					next = LAST_JMP;
-				}
-
-				@Override
-				public int onEnd() {
-					next = NEXT_JMP;
-					return next;
-				}
-			}, GETTRAINDATA_STATE);
-
-			// get test data state
-			registerState(new AchieveREInitiator(a, null) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 2398937572588954013L;
-
-				public int next = NEXT_JMP;
-
-				@Override
-				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _test = processGetData(inform);
-					if (_test != null) {
-						testFileName = test_fn;
-						onto_test = _test;
-						test = onto_test.toWekaInstances();
-						test.setClassIndex(test.numAttributes() - 1);
-
-						next = NEXT_JMP;
-						return;
-					} else {
-						next = LAST_JMP;
-						failureMsg("No test data received from the reader agent: Wrong content.");
-						return;
-					}
-
-				}
-
-				@Override
-				protected void handleFailure(ACLMessage failure) {
-					failureMsg("No test data received from the reader agent: Reader Failed.");
-					next = LAST_JMP;
-				}
-
-				@Override
-				public int onEnd() {
-					next = NEXT_JMP;
-					return next;
-				}
-			}, GETTESTDATA_STATE);
-
-			// get label data state
-			registerState(new AchieveREInitiator(a, null) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -968264895781473739L;
-
-				public int next = NEXT_JMP;
-
-				@Override
-				protected void handleInform(ACLMessage inform) {
-					org.pikater.core.ontology.subtrees.dataInstance.DataInstances _label = processGetData(inform);
-					if (_label != null) {
-						labelFileName = label_fn;
-						onto_label = _label;
-						label = onto_label.toWekaInstances();
-						label.setClassIndex(label.numAttributes() - 1);
-						next = NEXT_JMP;
-						return;
-					} else {
-						next = LAST_JMP;
-						failureMsg("No label data received from the reader agent: Wrong content.");
-						return;
-					}
-				}
-
-				@Override
-				protected void handleFailure(ACLMessage failure) {
-					failureMsg("No label data received from the reader agent: Reader Failed.");
-					next = LAST_JMP;
-				}
-
-				@Override
-				public int onEnd() {
-					next = NEXT_JMP;
-					return next;
-				}
-			}, GETLABELDATA_STATE);
-
-			// Train&test&label state
-			registerState(new Behaviour(a) {
-
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 1479579948554502568L;
-
-				@Override
-				public void action() {
-					try {
-
-						java.util.List<DataInstances> labeledData = new java.util.ArrayList<DataInstances>();
-
-						eval = new Evaluation();
-
-						eval.setEvaluations(new java.util.ArrayList<Eval>());
-						// Date start = new Date();
-						Date start = null;
-						if (state != Agent_ComputingAgent.states.TRAINED) {
-							start = train(eval);
-						} else if (!resurrected) {
-							if (!mode.equals("test_only")) {
-								start = train(eval);
-							}
-						}
-						eval.setStart(start);
-						// Date end = new Date();
-						// int duration = (int) (end.getTime() -
-						// start.getTime());
-
-						if (state == Agent_ComputingAgent.states.TRAINED) {
-							EvaluationMethod evaluation_method = execute_action
-									.getTask().getEvaluation_method();
-
-							if (!mode.equals("train_only")) {
-								evaluateCA(evaluation_method, eval);
-
-								if (output.equals("predictions")) {
-									DataInstances di = new DataInstances();
-									di.fillWekaInstances(test);
-									DataInstances labeledTest = getPredictions(
-											test, di);
-									labeledData.add(labeledTest);
-									// Save datasource and inform datasource
-									// manager about this particular datasource
-									AgentDataSource.SerializeFile(labeledTest,
-											result_msg.getConversationId()
-													+ ".labeledtest");
-									AgentDataSourceCommunicator dsCom = new AgentDataSourceCommunicator(
-											(PikaterAgent) myAgent, true);
-									dsCom.registerDataSources(
-											result_msg.getConversationId(),
-											new String[] { "labeledtest" });
-									if (!labelFileName.equals("")) {
-										di = new DataInstances();
-										di.fillWekaInstances(label);
-										DataInstances labeledPredictions = getPredictions(
-												label, di);
-										// Save datasource and inform datasource
-										// manager about this particular
-										// datasource
-										AgentDataSource
-												.SerializeFile(
-														labeledPredictions,
-														result_msg
-																.getConversationId()
-																+ ".labeledpredictions");
-										dsCom.registerDataSources(
-												result_msg.getConversationId(),
-												new String[] { "labeledpredictions" });
-										labeledData.add(labeledPredictions);
-									}
-									eval.setLabeledData(labeledData);
-								}
-							}
-						}
-
-					} catch (Exception e) {
-						success = false;
-						working = false;
-						failureMsg(e.getMessage());
-						System.err.println(getLocalName() + ": Error: " + e.getMessage() + ".");
-
-						// e.printStackTrace();
-					}
-				}
-
-				@Override
-				public boolean done() {
-					return (state == Agent_ComputingAgent.states.TRAINED)
-							|| !success;
-				}
-			}, TRAINTEST_STATE);
-
-			// send results state
-			registerState(new OneShotBehaviour(a) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = -7838676822707371053L;
-
-				@Override
-				public void action() {
-
-					if (success && (result_msg == null)) {
-						// save agent every time it executes a task
-						/*
-						 * String objectFilename = null; try { // resurrected =
-						 * false; objectFilename = save(); } catch
-						 * (CodecException e) { // TODO Auto-generated catch
-						 * block e.printStackTrace(); } catch (OntologyException
-						 * e) { // TODO Auto-generated catch block
-						 * e.printStackTrace(); } catch (IOException e) { //
-						 * TODO Auto-generated catch block e.printStackTrace();
-						 * } catch (FIPAException e) { // TODO Auto-generated
-						 * catch block e.printStackTrace(); }
-						 */
-
-						if ((current_task.getSaveMode() != null && current_task
-								.getSaveMode().equals("file")) && !resurrected) {
-							try {
-								String objectFilename = saveAgentToFile();
-								eval.setObjectFilename(objectFilename);
-
-							} catch (CodecException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (OntologyException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (FIPAException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-
-						if ((current_task.getSaveMode() != null && current_task
-								.getSaveMode().equals("message"))) {
-							try {
-								eval.setObject(getAgentObject());
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
-					}
-
-					result_msg = incoming_request.createReply();
-					result_msg.setPerformative(ACLMessage.INFORM);
-
-					ContentElement content;
-					try {
-						content = getContentManager().extractContent(
-								incoming_request);
-
-						// Prepare the content: Result with current task &
-						// filled in evaluaton
-						if (resurrected) {
-							eval.setObject(null);
-						}
-						;
-						current_task.setResult(eval);
-
-						List results = new ArrayList();
-						results.add(current_task);
-						Result result = new Result((Action) content, results);
-						getContentManager().fillContent(result_msg, result);
-
-					} catch (UngroundedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (CodecException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (OntologyException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 			
-					if (current_task.getGetResults() != null && current_task.getGetResults().equals("after_each_task")) {								
-						result_msg.addReceiver(new AID(current_task.getGuiAgent(), false));
-					}			
-
-					current_task.setFinish(getDateTime());
-
-					send(result_msg);
-
-					if (taskFIFO.size() > 0) {
-						execution_behaviour.restart();
-					} else {
-						log("CA terminating");
-						terminate();
-					}
-
-				}
-			}, SENDRESULTS_STATE);
-
-			/* FSM: register transitions */
-			// init state transition
-			registerDefaultTransition(INIT_STATE, GETTRAINDATA_STATE);
-
-			// get train data transitions
-			registerTransition(GETTRAINDATA_STATE, GETTESTDATA_STATE, NEXT_JMP);
-			registerTransition(GETTRAINDATA_STATE, SENDRESULTS_STATE, LAST_JMP);
-
-			// get test data transitions
-			registerTransition(GETTESTDATA_STATE, GETLABELDATA_STATE, NEXT_JMP);
-			registerTransition(GETTESTDATA_STATE, SENDRESULTS_STATE, LAST_JMP);
-
-			// get label data transition
-			registerTransition(GETLABELDATA_STATE, TRAINTEST_STATE, NEXT_JMP);
-			registerTransition(GETLABELDATA_STATE, SENDRESULTS_STATE, LAST_JMP);
-
-			// train&test state transition
-			registerDefaultTransition(TRAINTEST_STATE, SENDRESULTS_STATE);
-
-			// backward transition: reset all states
-			registerDefaultTransition(SENDRESULTS_STATE, INIT_STATE,
-					new String[] { INIT_STATE, GETTRAINDATA_STATE,
-							GETTESTDATA_STATE, GETLABELDATA_STATE,
-							TRAINTEST_STATE, SENDRESULTS_STATE });
+			return resultMsg;
 		}
+
+	}
+	
+	private ACLMessage respondToGetOptions(ACLMessage request, Concept concept) {
+		
+		ComputingComminicator communicator = new ComputingComminicator();
+		return communicator.sendOptions(Agent_ComputingAgent.this, request);
+	}
+	
+	private ACLMessage respondExecuteTask(ACLMessage request, Action a) {
+		
+		ComputingComminicator communicator = new ComputingComminicator();
+		return communicator.executeTask(this, request);
 	}
 
-	private byte[] getAgentObject() throws IOException {
+	public byte[] getAgentObject() throws IOException {
+		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
 		oos.writeObject(this);
 		oos.flush();
 		oos.close();
 
-		byte[] data = bos.toByteArray();
-		return data;
+		return bos.toByteArray();
 	}
 
-	private org.pikater.core.ontology.subtrees.management.Agent getAgentWithFilledObject()
-			throws IOException {
-
-		org.pikater.core.ontology.subtrees.management.Agent savedAgent = current_task
-				.getAgent();
-		savedAgent.setObject(getAgentObject());
-
-		return savedAgent;
-	}
-
-	private String saveAgentToFile() throws IOException, CodecException,
-			OntologyException, FIPAException {
-
-		org.pikater.core.ontology.subtrees.management.SaveAgent saveAgent = new org.pikater.core.ontology.subtrees.management.SaveAgent();
-
-		saveAgent.setAgent(getAgentWithFilledObject());
-
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID(AgentNames.MANAGER_AGENT, false));
-		request.setOntology(TaskOntology.getInstance().getName());
-		request.setLanguage(codec.getName());
-		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-		Action a = new Action();
-		a.setActor(this.getAID());
-		a.setAction(saveAgent);
-
-		getContentManager().fillContent(request, a);
-		ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
-
-		String objectFilename = reply.getContent();
-
-		return objectFilename;
-	}
-
-	private String getDateTime() {
+	public String getDateTime() {
 		DateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss.SSSSSS");
 		Date date = new Date();
 		return dateFormat.format(date);
 	}
 
-	protected void terminate() {
+	public void terminate() {
 		doDelete();
 	}
-};
+}
+

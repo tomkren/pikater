@@ -16,7 +16,7 @@ import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.pikater.PikaterSSHLauncher;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
-import org.pikater.web.vaadin.gui.server.components.wizard.RefreshableWizardStep;
+import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;
 import org.pikater.web.vaadin.gui.server.welcometour.Step3TableContainer;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
@@ -31,7 +31,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
-public class Step3 extends RefreshableWizardStep<WelcomeTourWizard> 
+public class Step3 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTourWizard> 
 {
 	/**
 	 * Internal variable storing the top level GUI element of this wizard step.
@@ -56,7 +56,7 @@ public class Step3 extends RefreshableWizardStep<WelcomeTourWizard>
 	{
 		super(parentWizard);
 		
-		this.dataSource = new Step3TableContainer(parentWizard.getWrappedModels());
+		this.dataSource = new Step3TableContainer(getOutput().getWrappedModels());
 		this.serverIDToLauncherMapping = new HashMap<Object, PikaterSSHLauncher>();
 		for(Object rowID : this.dataSource.getItemIds())
 		{

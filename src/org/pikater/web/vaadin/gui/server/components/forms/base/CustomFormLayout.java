@@ -30,7 +30,6 @@ public abstract class CustomFormLayout extends VerticalLayout
 	public CustomFormLayout(String submitButtonCaption)
 	{
 		super();
-		setSizeUndefined();
 		setSpacing(true);
 		
 		this.fLayout = new FormLayout();
@@ -134,9 +133,18 @@ public abstract class CustomFormLayout extends VerticalLayout
 		fLayout.addComponent(field);
 	}
 	
-	protected void addCustomButton(Button btn)
+	protected void addCustomButtonInterface(Component component)
 	{
-		buttonInterface.addComponent(btn);
+		buttonInterface.addComponent(component);
+	}
+	
+	protected synchronized void updateActionButton()
+	{
+		// brute-force...
+		if(btn_actionBtn != null)
+		{
+			btn_actionBtn.setEnabled(isFormValidAndUpdated());
+		}
 	}
 	
 	protected static <T extends Object> void setValueAndIgnoreReadOnly(AbstractField<T> field, T value)
@@ -203,15 +211,6 @@ public abstract class CustomFormLayout extends VerticalLayout
 		public FieldInfo(String notificationDescription)
 		{
 			this.notificationDescription = notificationDescription;
-		}
-	}
-	
-	private synchronized void updateActionButton()
-	{
-		// brute-force...
-		if(btn_actionBtn != null)
-		{
-			btn_actionBtn.setEnabled(isFormValidAndUpdated());
 		}
 	}
 	

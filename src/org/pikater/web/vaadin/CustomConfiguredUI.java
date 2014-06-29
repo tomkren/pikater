@@ -332,4 +332,23 @@ public abstract class CustomConfiguredUI extends UI
 	{
 		return !VaadinSession.getCurrent().getConfiguration().isProductionMode();
 	}
+	
+	public static String getURIFragment()
+	{
+		String result = UI.getCurrent().getPage().getUriFragment();
+		if((result == null) || !result.startsWith("!")) 
+		{
+			return result;
+		}
+		else
+		{
+			return result.substring(1);
+		}
+	}
+	
+	public static boolean isURIFragmentDefined()
+	{
+		String uriFragment = getURIFragment();
+		return (uriFragment != null) && !uriFragment.isEmpty(); 
+	}
 }

@@ -18,6 +18,11 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 	{
 		this.dataset=dataset;
 	}
+	
+	public JPADataSetLO getDataset()
+	{
+		return dataset;
+	}
 
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
@@ -70,6 +75,25 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				protected void commitEntities()
 				{
 					// TODO Auto-generated method stub
+				}
+			};
+		case DOWNLOAD:
+			return new NamedActionDBViewValue("Download")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return true;
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
 				}
 			};
 		case DELETE:
