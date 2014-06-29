@@ -29,7 +29,6 @@ public class AgentUploadForm extends CustomFormLayout
 {
 	private static final long serialVersionUID = -7727756941636752874L;
 	
-	private final TextField tf_agentName;
 	private final TextField tf_agentClass;
 	private final TextArea tf_agentDescription;
 	private final MyMultiUpload upload;
@@ -38,12 +37,9 @@ public class AgentUploadForm extends CustomFormLayout
 	{
 		super(null);
 		
-		this.tf_agentName = FormFieldFactory.getGeneralTextField("Agent name:", "Name of the agent?", null, true, false);
-		this.tf_agentClass = FormFieldFactory.getGeneralTextField("Agent class:", "Class of the agent?", null, true, false);
+		this.tf_agentClass = FormFieldFactory.getGeneralTextField("Agent class (incl. package):", "Class of the agent?", null, true, false);
 		this.tf_agentDescription = FormFieldFactory.getGeneralTextArea("Optional description:", "Any description of the agent for future reference?", null, false, false);
 		
-		this.tf_agentName.setSizeFull();
-		addField("agent name", tf_agentName);
 		this.tf_agentClass.setSizeFull();
 		addField("class name", tf_agentClass);
 		this.tf_agentDescription.setSizeFull();
@@ -84,7 +80,7 @@ public class AgentUploadForm extends CustomFormLayout
 					Object[] jobParams = new Object[]
 					{
 							ManageAuth.getUserEntity(VaadinSession.getCurrent()),
-							tf_agentName.getValue(),
+							event.getFileName(),
 							tf_agentClass.getValue(),
 							tf_agentDescription.getValue(),
 							uploadedTemporaryFile,

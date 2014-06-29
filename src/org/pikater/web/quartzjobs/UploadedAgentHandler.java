@@ -50,7 +50,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 	{
 		// information from GUI
 		JPAUser owner = getArg(0);
-		String agentName = getArg(1);
+		String fileName = getArg(1);
 		String agentClass = getArg(2);
 		String agentDescription = getArg(3);
 		File uploadedFile = getArg(4);
@@ -60,7 +60,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 		{
 			JPAExternalAgent agent = new JPAExternalAgent();
 			agent.setAgentClass(agentClass);
-			agent.setName(agentName);
+			agent.setName(fileName);
 			agent.setDescription(agentDescription);
 			agent.setOwner(owner);
 			agent.setCreated(new Date());

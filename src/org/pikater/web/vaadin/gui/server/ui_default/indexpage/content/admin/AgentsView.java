@@ -8,7 +8,7 @@ import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentT
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView.Column;
 import org.pikater.web.HttpContentType;
-import org.pikater.web.servlets.download.DynamicDownloadServlet;
+import org.pikater.web.servlets.download.DownloadRegistrar;
 import org.pikater.web.servlets.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
@@ -96,7 +96,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 		{
 			// download, don't run action
 			final ExternalAgentTableDBRow rowView = (ExternalAgentTableDBRow) row;
-			Page.getCurrent().setLocation(DynamicDownloadServlet.issueAOneTimeDownloadURL(new IDownloadResource()
+			Page.getCurrent().setLocation(DownloadRegistrar.issueAOneTimeDownloadURL(new IDownloadResource()
 			{
 				@Override
 				public InputStream getStream()
@@ -119,8 +119,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 				@Override
 				public String getFilename()
 				{
-					// TODO:
-					return null;
+					return rowView.getAgent().getName();
 				}
 			}));
 		}
