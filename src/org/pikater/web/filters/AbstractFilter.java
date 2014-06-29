@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -16,15 +17,15 @@ import org.pikater.web.request.HttpRequestUtils;
 
 public abstract class AbstractFilter implements Filter
 {
-	private boolean DEBUG;
-	
 	//----------------------------------------------------------
 	// SINGLE (AND SIMPLE) IMPLEMENTATION OF SOME INHERITED ROUTINES
+	
+	private ServletContext context = null;
 	
 	@Override
 	public void init(FilterConfig arg0) throws ServletException
 	{
-		DEBUG = Boolean.parseBoolean(arg0.getServletContext().getInitParameter("DEBUG"));
+		context = arg0.getServletContext();
 	}
 	
 	@Override
@@ -79,9 +80,14 @@ public abstract class AbstractFilter implements Filter
 	//----------------------------------------------------------
 	// DEBUG ROUTINES
 	
+	protected boolean isApplicationInProductionMode()
+	{
+		return Boolean.parseBoolean(context.getInitParameter("productionMode"));
+	}
+	
 	protected boolean isDebugMode()
 	{
-		return DEBUG;
+		return Boolean.parseBoolean(context.getInitParameter("printDebugInfoInFilters"));
 	}
 	
 	protected void printRequestComponents(String filterName, HttpServletRequest httpRequest)
