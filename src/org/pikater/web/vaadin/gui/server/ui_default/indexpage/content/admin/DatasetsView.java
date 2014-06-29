@@ -1,5 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
+import java.io.InputStream;
+
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -8,6 +10,10 @@ import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView.Column;
 import org.pikater.shared.database.views.tableview.datasets.metadata.CategoricalMetaDataTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.metadata.NumericalMetaDataTableDBView;
+import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBRow;
+import org.pikater.web.HttpContentType;
+import org.pikater.web.servlets.download.DynamicDownloadServlet;
+import org.pikater.web.servlets.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTable;
@@ -22,6 +28,7 @@ import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
@@ -123,6 +130,7 @@ public class DatasetsView extends ExpandableView
 					return 300;
 					
 				case APPROVE:
+				case DOWNLOAD:
 				case DELETE:
 					return 100;
 					
@@ -135,7 +143,40 @@ public class DatasetsView extends ExpandableView
 		public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 		{
 			DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
-			if(specificColumn == Column.DELETE)
+			if(specificColumn == Column.DOWNLOAD)
+			{
+				// download, don't run action
+				final DataSetTableDBRow rowView = (DataSetTableDBRow) row;
+				Page.getCurrent().setLocation(DynamicDownloadServlet.issueAOneTimeDownloadURL(new IDownloadResource()
+				{
+					@Override
+					public InputStream getStream()
+					{
+						// TODO:
+						return null;
+					}
+					
+					@Override
+					public long getSize()
+					{
+						return rowView.getDataset().getSize();
+					}
+					
+					@Override
+					public String getMimeType()
+					{
+						return HttpContentType.APPLICATION_JAR.toString();
+					}
+					
+					@Override
+					public String getFilename()
+					{
+						// TODO:
+						return null;
+					}
+				}));
+			}
+			else if(specificColumn == Column.DELETE)
 			{
 				MyDialogs.confirm(null, "Really delete this dataset?", new MyDialogs.IDialogResultHandler()
 				{
@@ -184,7 +225,7 @@ public class DatasetsView extends ExpandableView
 				case NAME:
 					return 100;
 				case IS_TARGET:
-					return 75; // TODO
+					return 75;
 				case CATEGORY_COUNT:
 					return 125;
 				case RATIO_OF_MISSING_VALUES:
@@ -228,7 +269,7 @@ public class DatasetsView extends ExpandableView
 			{
 				case NAME:
 					return 100;
-				case IS_TARGET: // TODO
+				case IS_TARGET:
 				case IS_REAL:
 				case MINIMUM:
 				case MAXIMUM:

@@ -10,6 +10,7 @@ import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
+import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
@@ -26,11 +27,9 @@ import org.pikater.core.agents.system.planner.CPUCore;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.TaskToSolve;
 import org.pikater.core.ontology.AgentManagementOntology;
-import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
-import org.pikater.core.ontology.subtrees.task.FinishedTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 
@@ -95,15 +94,15 @@ public class Agent_Planner extends PikaterAgent {
 		
 		MessageTemplate reqMsgTemplate = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(
-						FIPANames.InteractionProtocol.FIPA_REQUEST),
+					FIPANames.InteractionProtocol.FIPA_REQUEST),
+					MessageTemplate.and(
+						MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 						MessageTemplate.and(
-								MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-								MessageTemplate.and(
-										MessageTemplate.MatchLanguage(codec.getName()),
-										MessageTemplate.or(
-												MessageTemplate.MatchOntology(taskOntontology.getName()),
-												MessageTemplate.MatchOntology(agentManagementOntontology.getName())
-										))));
+							MessageTemplate.MatchLanguage(codec.getName()),
+							MessageTemplate.or(
+								MessageTemplate.MatchOntology(taskOntontology.getName()),
+								MessageTemplate.MatchOntology(agentManagementOntontology.getName())
+							))));
 
 		addBehaviour(new AchieveREResponder(this, reqMsgTemplate) {
 
@@ -121,9 +120,6 @@ public class Agent_Planner extends PikaterAgent {
 					 */
 					if (a.getAction() instanceof ExecuteTask) {
 						return respondToExecuteTask(request, a);
-					}
-					if (a.getAction() instanceof FinishedTask) {
-						return respondToFinishedTask(request, a);
 					}
 
 				} catch (OntologyException e) {
@@ -162,28 +158,41 @@ public class Agent_Planner extends PikaterAgent {
 		return null;
 	}
 
-	protected ACLMessage respondToFinishedTask(ACLMessage request, Action a) {
+	public void respondToFinishedTask(ACLMessage finishedTaskMsg) {
 
-		FinishedTask finishedTask = (FinishedTask) a.getAction();
+		Result result = null;
+		try {
+			result = (Result) getContentManager().extractContent(
+					finishedTaskMsg);
+		} catch (UngroundedException e1) {
+			this.logError("", e1);
+		} catch (CodecException e1) {
+			this.logError("", e1);
+		} catch (OntologyException e1) {
+			this.logError("", e1);
+		}
+		
+		Task finishedTask = (Task) result.getValue();//.getAction();
 
-		CPUCore cpuCore = new CPUCore(request.getSender(),
+		CPUCore cpuCore = new CPUCore(finishedTaskMsg.getSender(),
 				finishedTask.getCpuCoreID());
 
-		TaskToSolve task = getComputingTask(finishedTask.getTaskID());
+		TaskToSolve taskToSolve = getComputingTask(finishedTask.getGraphId());
 
 		computingCores.remove(cpuCore);
 		untappedCores.add(cpuCore);
 
-		computingTasks.remove(task);
+		computingTasks.remove(taskToSolve);
 
-		plan();
+		//plan();
 
 		/////
-		ACLMessage msgToManager = task.getMsg().createReply();
+		ACLMessage msgToManager = taskToSolve.getMsg().createReply();
+		msgToManager.setPerformative(ACLMessage.INFORM);
 		msgToManager.setLanguage(new SLCodec().getName());
-		msgToManager.setOntology(BatchOntology.getInstance().getName());
+		msgToManager.setOntology(TaskOntology.getInstance().getName());
 		
-		Result executeResult = new Result(task.getAction(), task.getTask());
+		Result executeResult = new Result(taskToSolve.getAction(), finishedTask);
 		try {
 			getContentManager().fillContent(msgToManager, executeResult);
 		} catch (CodecException e) {
@@ -196,12 +205,9 @@ public class Agent_Planner extends PikaterAgent {
 		send(msgToManager);
 		/////
 		
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		reply.setContent("OK - FinishedTask msg recieved");
-
-		// TODO: send info to manager - add behaviour?
-		return reply;
+		//ACLMessage reply = finishedTaskMsg.createReply();
+		//reply.setPerformative(ACLMessage.INFORM);
+		//reply.setContent("OK - FinishedTask msg recieved");
 	}
 
 	private void plan() {

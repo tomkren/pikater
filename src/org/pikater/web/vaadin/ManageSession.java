@@ -5,6 +5,7 @@ import com.vaadin.server.VaadinSession;
 public class ManageSession
 {
 	public static final String key_userID = "k_uid";
+	public static final String key_userUploads = "k_uu";
 	
 	public static void setAttribute(VaadinSession session, String key, Object value)
 	{

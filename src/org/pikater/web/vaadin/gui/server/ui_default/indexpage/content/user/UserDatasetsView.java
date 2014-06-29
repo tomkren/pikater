@@ -5,10 +5,11 @@ import java.util.EnumSet;
 
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.shared.quartz.jobs.web.UploadedDatasetHandler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.quartzjobs.UploadedDatasetHandler;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
@@ -234,7 +235,7 @@ public class UserDatasetsView extends DatasetsView
 		@Override
 		public boolean onBack()
 		{
-			return false;
+			return true;
 		}
 	}
 	
@@ -255,7 +256,8 @@ public class UserDatasetsView extends DatasetsView
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
-			MyMultiUpload mmu = new ManageUserUploads().createUploadButton(
+			ManageUserUploads uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads); 
+			MyMultiUpload mmu = uploadManager.createUploadButton(
 					"Choose file to upload",
 					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
 							HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN)
@@ -300,7 +302,7 @@ public class UserDatasetsView extends DatasetsView
 						}
 						catch (Throwable e)
 						{
-							PikaterLogger.logThrowable("Could not issue a dataset upload job.", e);
+							PikaterLogger.logThrowable("Could not issue an uploaded dataset handling job.", e);
 							MyNotifications.showError("Upload failed", event.getFileName());
 							return; // don't let the success notification be displayed
 						}

@@ -56,10 +56,10 @@ public class MyResources
 	 */
 	public static final String relPath_IMG_checkIcon16 = "images/check-16x16.png";
 	public static final String relPath_IMG_clearIcon16 = "images/clear-16x16.png";
-	public static final String relPath_IMG_nextIcon16 = "images/Arrow-Next-icon-16x16.png";
-	public static final String relPath_IMG_plusIcon16 = "images/Plus-icon-16x16.png";
 	public static final String relPath_IMG_closeIcon16 = "images/close-icon-16x16.png";
 	public static final String relPath_IMG_minimizeIcon16 = "images/minimize-icon-16x16.png";
+	public static final String relPath_IMG_nextIcon16 = "images/Arrow-Next-icon-16x16.png";
+	public static final String relPath_IMG_plusIcon16 = "images/Plus-icon-16x16.png";
 	
 	// ----------------------------------------------------------------
 	// RESOURCE FIELDS:

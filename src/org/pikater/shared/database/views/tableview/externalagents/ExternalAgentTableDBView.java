@@ -1,10 +1,10 @@
-package org.pikater.shared.database.views.tableview.datasets;
+package org.pikater.shared.database.views.tableview.externalagents;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.base.QueryConstraints;
@@ -14,25 +14,25 @@ import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
 /**
- * A generic view for tables displaying dataset information.  
+ * A generic view for tables displaying information about agents uploaded from external JAR files.  
  */
-public class DataSetTableDBView extends AbstractTableDBView
+public class ExternalAgentTableDBView extends AbstractTableDBView
 {
 	private JPAUser owner;
 	
 	/**
-	 * By default, admin mode (all datasets of all users) will be inspected. 
+	 * By default, admin mode (all agents of all users) will be inspected. 
 	 */
-	public DataSetTableDBView()
+	public ExternalAgentTableDBView()
 	{
 		this.owner = null;
 	}
 	
 	/** 
-	 * @param owner The user whose datasets to display. If null (admin mode), all datasets should
+	 * @param owner The user whose agents to display. If null (admin mode), all agents should
 	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method instead.
 	 */
-	public void setDatasetOwner(JPAUser owner)
+	public void setAgentOwner(JPAUser owner)
 	{
 		this.owner = owner;
 	}
@@ -53,9 +53,8 @@ public class DataSetTableDBView extends AbstractTableDBView
 		 */
 		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
 		CREATED,
-		NUMBER_OF_INSTANCES,
-		DEFAULT_TASK_TYPE,
-		SIZE,
+		NAME,
+		AGENT_CLASS,
 		DESCRIPTION,
 		APPROVE,
 		DOWNLOAD,
@@ -64,13 +63,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 		@Override
 		public String getDisplayName()
 		{
-			switch(this)
-			{
-				case NUMBER_OF_INSTANCES:
-					return "INSTANCES";
-				default:
-					return this.name();	
-			}
+			return this.name();
 		}
 
 		@Override
@@ -79,11 +72,10 @@ public class DataSetTableDBView extends AbstractTableDBView
 			switch(this)
 			{
 				case OWNER:
-				case CREATED:
-				case NUMBER_OF_INSTANCES:
-				case DEFAULT_TASK_TYPE:
-				case SIZE:
+				case NAME:
+				case AGENT_CLASS:
 				case DESCRIPTION:
+				case CREATED:
 					return DBViewValueType.STRING;
 					
 				case APPROVE:
@@ -95,24 +87,19 @@ public class DataSetTableDBView extends AbstractTableDBView
 					throw new IllegalStateException("Unknown state: " + name());
 			}
 		}
-		
-		public static EnumSet<Column> getColumns(boolean adminMode)
-		{
-			if(adminMode)
-			{
-				return EnumSet.allOf(Column.class);
-			}
-			else
-			{
-				return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVE));
-			}
-		}
 	}
 
 	@Override
 	public ITableColumn[] getColumns()
 	{
-		return (ITableColumn[]) Column.getColumns(adminMode()).toArray(new Column[0]);
+		if(adminMode())
+		{
+			return Column.values(); 
+		}
+		else
+		{
+			return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVE)).toArray(new ITableColumn[0]);
+		}
 	}
 	
 	@Override
@@ -126,21 +113,21 @@ public class DataSetTableDBView extends AbstractTableDBView
 	{
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
 		
-		List<JPADataSetLO> allDatasets;
+		List<JPAExternalAgent> agents;
 		
 		if(this.adminMode()){
-			allDatasets = DAOs.dataSetDAO.getAll();
+			agents = DAOs.externalAgentDAO.getAll();
 		}else{
-			allDatasets = DAOs.dataSetDAO.getByOwner(owner);
+			agents=DAOs.externalAgentDAO.getByOwner(owner);
 		}
 		
-		List<DataSetTableDBRow> rows = new ArrayList<DataSetTableDBRow>();
+		List<ExternalAgentTableDBRow> rows = new ArrayList<ExternalAgentTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allDatasets.size());
-		for(JPADataSetLO dslo : allDatasets.subList(constraints.getOffset(), endIndex))
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), agents.size());
+		for(JPAExternalAgent agent : agents.subList(constraints.getOffset(), endIndex))
 		{
-			rows.add(new DataSetTableDBRow(dslo));
+			rows.add(new ExternalAgentTableDBRow(agent));
 		}
-		return new QueryResult(rows, allDatasets.size());
+		return new QueryResult(rows, agents.size());
 	}
 }

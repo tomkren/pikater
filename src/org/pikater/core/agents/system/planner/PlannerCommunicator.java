@@ -15,21 +15,21 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.agents.AgentNames;
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.configuration.Arguments;
+import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
-import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
+import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class PlannerCommunicator {
 
-	private PikaterAgent agent;
+	private Agent_Planner agent;
 	
-	public PlannerCommunicator(PikaterAgent agent) {
+	public PlannerCommunicator(Agent_Planner agent) {
 		this.agent = agent;
 	}
 	
@@ -56,7 +56,7 @@ public class PlannerCommunicator {
 
 	public void sendExecuteTask(Task task, AID agentManagerAID) {
 
-		ExecuteTaksOnCPUCore executeTask = new ExecuteTaksOnCPUCore();
+		ExecuteTask executeTask = new ExecuteTask();
 		executeTask.setTask(task);
 		
 		String CAtype = task.getAgent().getType();

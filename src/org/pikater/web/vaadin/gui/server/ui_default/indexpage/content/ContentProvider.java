@@ -3,8 +3,12 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.AgentsView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.DatasetsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.UsersView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserAgentsView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserBatchesView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserDatasetsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserProfileView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various.TestView;
@@ -90,8 +94,8 @@ public class ContentProvider
 		// IMPORTANT: all navigator names should start with "admin". See {@link #getFeatureFromNavigatorName} below.
 		VIEW_USERS("adminAllUsers", UsersView.class),
 		VIEW_DATASETS("adminAllDatasets", DatasetsView.class),
-		VIEW_METHODS("adminAllMethods", UnimplementedView.class),
-		VIEW_SCHEDULED_EXPERIMENTS("adminAllExperiments", UnimplementedView.class),
+		VIEW_METHODS("adminAllUserAgents", AgentsView.class),
+		VIEW_EXPERIMENTS("adminAllExperiments", BatchesView.class),
 		VIEW_SYSTEM_STATUS("adminSystemStatus", UnimplementedView.class);
 		
 		private final Class<? extends IContentComponent> mappedComponent;
@@ -113,8 +117,8 @@ public class ContentProvider
 				case VIEW_DATASETS:
 					return "All datasets";
 				case VIEW_METHODS:
-					return "All methods";
-				case VIEW_SCHEDULED_EXPERIMENTS:
+					return "All user agents";
+				case VIEW_EXPERIMENTS:
 					return "All experiments";
 				case VIEW_SYSTEM_STATUS:
 					return "View system status";
@@ -153,9 +157,9 @@ public class ContentProvider
 		// IMPORTANT: all navigator names should start with "user". See {@link #getFeatureFromNavigatorName} below.
 		VIEW_PROFILE("userProfile", UserProfileView.class),
 		VIEW_DATASETS("userDatasets", UserDatasetsView.class),
-		VIEW_METHODS("userMethods", UnimplementedView.class),
-		EXPERIMENT_EDITOR(null, null),
-		VIEW_EXPERIMENT_RESULTS("userResults", UnimplementedView.class);
+		VIEW_METHODS("userAgents", UserAgentsView.class),
+		EXPERIMENT_EDITOR(null, null), // TODO: display this as a button
+		VIEW_EXPERIMENTS("userExperiments", UserBatchesView.class);
 		
 		private final Class<? extends IContentComponent> mappedComponent;
 		private final String navigatorName;
@@ -192,14 +196,14 @@ public class ContentProvider
 			{
 				case VIEW_PROFILE:
 					return "View & edit profile";
-				case EXPERIMENT_EDITOR:
-					return "Go to experiment editor";
 				case VIEW_DATASETS:
 					return "My datasets";
 				case VIEW_METHODS:
-					return "My methods";
-				case VIEW_EXPERIMENT_RESULTS:
-					return "My experiment results";
+					return "My agents";
+				case EXPERIMENT_EDITOR:
+					return "Go to experiment editor";
+				case VIEW_EXPERIMENTS:
+					return "My experiments";
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}

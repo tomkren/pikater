@@ -68,13 +68,13 @@ public class ExperimentTableDBView extends AbstractTableDBView
 			switch(this)
 			{
 				case OWNER:
-		
 				case CREATED:
 				case STARTED:
 				case FINISHED:
-					
 				case STATUS:
+				case MODEL_STRATEGY:
 					return DBViewValueType.STRING;
+					
 				case MODEL:
 				case RESULTS:
 					return DBViewValueType.NAMED_ACTION;
