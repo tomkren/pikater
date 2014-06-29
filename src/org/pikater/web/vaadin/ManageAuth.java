@@ -72,7 +72,7 @@ public class ManageAuth
 		else
 		{
 			ManageSession.setAttribute(session, ManageSession.key_userID, userID);
-			NoSessionStore.bind(userID, session);
+			ManageSession.setAttribute(session, ManageSession.key_userUploads, new ManageUserUploads());
 		}
 	}
 	
@@ -80,7 +80,7 @@ public class ManageAuth
 	{
 		if(isUserAuthenticated(session))
 		{
-			NoSessionStore.unbind(getUserID(session), session);
+			ManageSession.clearAttribute(session, ManageSession.key_userUploads);
 			ManageSession.clearAttribute(session, ManageSession.key_userID);
 			
 			// Redirect from the page
