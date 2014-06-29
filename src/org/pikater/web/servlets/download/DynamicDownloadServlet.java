@@ -18,6 +18,7 @@ import org.apache.http.HttpStatus;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.quartzjobs.DownloadTokenExpirationjob;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 @WebServlet(value = "/download", asyncSupported = true, loadOnStartup = 1)
 public class DynamicDownloadServlet extends HttpServlet
@@ -54,7 +55,6 @@ public class DynamicDownloadServlet extends HttpServlet
 					resp.setContentLength((int) resource.getSize());
 					
 					// TODO: set cache time or other things, if you mean to
-					// TODO: stream, file name, mime type, content length
 					
 					InputStream input = null;
 			        try
@@ -72,6 +72,12 @@ public class DynamicDownloadServlet extends HttpServlet
 			        {
 			        	PikaterLogger.logThrowable(
 			        			String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", resource.getFilename()), e);
+			        	MyNotifications.showError("Download ended with error", resource.getFilename());
+			        }
+			        catch (Throwable t)
+			        {
+			        	PikaterLogger.logThrowable(String.format("Unknown error occured while uploading file '%s'.", resource.getFilename()), t);
+			        	MyNotifications.showError("Download ended with error", resource.getFilename());
 			        }
 			        finally
 			        {

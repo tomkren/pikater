@@ -101,8 +101,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 				@Override
 				public InputStream getStream()
 				{
-					// TODO:
-					return null;
+					return rowView.getAgent().getInputStream();
 				}
 				
 				@Override
