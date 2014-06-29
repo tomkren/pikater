@@ -18,6 +18,7 @@ public class ConsoleLogger implements Logger {
     @Override
     public void logError(String source, Exception exception) {
     	System.err.println(source);
+    	exception.printStackTrace();
     }
     
     @Override
