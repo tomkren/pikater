@@ -14,13 +14,17 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
+import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.subtrees.data.Data;
@@ -32,6 +36,11 @@ import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.FinishedTask;
+
+import com.google.common.io.Files;
+
+import weka.core.Instances;
+import weka.core.converters.ArffSaver;
 
 public class ComputingAction extends FSMBehaviour {
 	/**
@@ -488,6 +497,17 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 
+				String md5;
+				if (agent.test != null) {
+					md5 = SaveArff(agent.test);
+					agent.log("Saved test to " + md5);
+				}
+				if (agent.label != null) {
+					md5 = SaveArff(agent.label);
+					agent.log("Saved label to " + md5);
+				}
+				// TODO return result filename to Planner?
+
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);
 
@@ -559,5 +579,22 @@ public class ComputingAction extends FSMBehaviour {
 		registerDefaultTransition(SENDRESULTS_STATE, INIT_STATE, new String[] {
 				INIT_STATE, GETTRAINDATA_STATE, GETTESTDATA_STATE,
 				GETLABELDATA_STATE, TRAINTEST_STATE, SENDRESULTS_STATE });
+	}
+
+	protected String SaveArff(Instances i) {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(i);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			saver.setDestination(out);
+			saver.writeBatch();
+			byte[] bout = out.toByteArray();
+			String md5 = DigestUtils.md5Hex(bout);
+			Files.write(bout, new File(Agent_DataManager.dataFilesPath + md5));
+			return md5;
+		} catch (IOException e) {
+			agent.logError("Failed to write results", e);
+			return null;
+		}
 	}
 }
