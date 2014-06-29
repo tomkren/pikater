@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
 import jade.content.Concept;
+
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
@@ -9,6 +10,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSou
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.option.Option;
 
@@ -229,6 +231,8 @@ public class Parser {
         SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search);
         searchNode.setModelClass(search.getSearchClass());
 
+        childOptions = setMutableOptions(childOptions);
+        
         OptionEdge option=new OptionEdge();
         option.setOptions(childOptions);
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
@@ -290,5 +294,16 @@ public class Parser {
         option.setOptions(options);
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         node.addInput("options",optionBuffer);
+    }
+    
+    private List<Option> setMutableOptions(List<Option> childOptions){
+    	List<Option> Options = new ArrayList<Option>();
+    	for (Option opt : childOptions){
+    		if (opt.getValue().contains("?") ){
+    			opt.setMutable(true);
+    			Options.add(opt);
+    		}
+    	}
+    	return Options;
     }
 }
