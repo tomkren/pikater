@@ -77,6 +77,25 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 					// TODO Auto-generated method stub
 				}
 			};
+		case DOWNLOAD:
+			return new NamedActionDBViewValue("Download")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return true;
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+				}
+			};
 		case DELETE:
 			return new NamedActionDBViewValue("Delete")
 			{

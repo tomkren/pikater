@@ -58,6 +58,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 		SIZE,
 		DESCRIPTION,
 		APPROVE,
+		DOWNLOAD,
 		DELETE;
 
 		@Override
@@ -86,6 +87,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 					return DBViewValueType.STRING;
 					
 				case APPROVE:
+				case DOWNLOAD:
 				case DELETE:
 					return DBViewValueType.NAMED_ACTION;
 					
