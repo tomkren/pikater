@@ -7,5 +7,5 @@ public interface IDownloadResource
 	String getFilename();
 	String getMimeType();
 	long getSize();
-	InputStream getStream();
+	InputStream getStream() throws Throwable;
 }

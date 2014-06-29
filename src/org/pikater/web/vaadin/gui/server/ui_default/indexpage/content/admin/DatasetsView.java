@@ -3,6 +3,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 import java.io.InputStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
@@ -10,9 +11,8 @@ import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView.Column;
 import org.pikater.shared.database.views.tableview.datasets.metadata.CategoricalMetaDataTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.metadata.NumericalMetaDataTableDBView;
-import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBRow;
 import org.pikater.web.HttpContentType;
-import org.pikater.web.servlets.download.DynamicDownloadServlet;
+import org.pikater.web.servlets.download.DownloadRegistrar;
 import org.pikater.web.servlets.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
@@ -147,13 +147,12 @@ public class DatasetsView extends ExpandableView
 			{
 				// download, don't run action
 				final DataSetTableDBRow rowView = (DataSetTableDBRow) row;
-				Page.getCurrent().setLocation(DynamicDownloadServlet.issueAOneTimeDownloadURL(new IDownloadResource()
+				Page.getCurrent().setLocation(DownloadRegistrar.issueAOneTimeDownloadURL(new IDownloadResource()
 				{
 					@Override
-					public InputStream getStream()
+					public InputStream getStream() throws Throwable
 					{
-						// TODO:
-						return null;
+						return PostgreLobAccess.getPostgreLargeObjectReader(rowView.getDataset().getOID()).getInputStream();
 					}
 					
 					@Override

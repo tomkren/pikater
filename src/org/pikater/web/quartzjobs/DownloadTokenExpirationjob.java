@@ -1,20 +1,21 @@
 package org.pikater.web.quartzjobs;
 
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
+import static org.quartz.DateBuilder.*;
 
 import java.util.UUID;
 
 import org.pikater.shared.quartz.jobs.base.AbstractJobWithArgs;
+import org.pikater.web.servlets.download.DownloadRegistrar;
 import org.pikater.web.servlets.download.DynamicDownloadServlet;
 import org.pikater.web.servlets.download.IDownloadResource;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 
-public class DownloadTokenExpirationjob extends AbstractJobWithArgs
+public class DownloadTokenExpirationJob extends AbstractJobWithArgs
 {
-	public DownloadTokenExpirationjob()
+	public DownloadTokenExpirationJob()
 	{
 		super(2);
 	}
@@ -42,9 +43,7 @@ public class DownloadTokenExpirationjob extends AbstractJobWithArgs
 	public Trigger getJobTrigger()
 	{
 		return newTrigger()
-				.withSchedule(
-		        		simpleSchedule()
-		                .withIntervalInSeconds(DynamicDownloadServlet.EXPIRATION_TIME_IN_SECONDS))
+				.startAt(futureDate(DynamicDownloadServlet.EXPIRATION_TIME_IN_SECONDS, IntervalUnit.SECOND))
 		        .build();
 	}
 
@@ -53,6 +52,6 @@ public class DownloadTokenExpirationjob extends AbstractJobWithArgs
 	{
 		UUID token = getArg(0);
 		IDownloadResource resource = getArg(1);
-		DynamicDownloadServlet.downloadExpired(token, resource);
+		DownloadRegistrar.downloadExpired(token, resource);
 	}
 }
