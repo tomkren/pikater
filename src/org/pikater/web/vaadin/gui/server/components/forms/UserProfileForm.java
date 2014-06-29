@@ -71,7 +71,7 @@ public class UserProfileForm extends CustomFormLayout
 		addField("password", passwordField);
 		addField("email", emailField);
 		
-		addCustomButton(btn_changePassword);
+		addCustomButtonInterface(btn_changePassword);
 	}
 
 	@Override
