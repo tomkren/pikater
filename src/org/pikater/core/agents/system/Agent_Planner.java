@@ -195,8 +195,8 @@ public class Agent_Planner extends PikaterAgent {
 		computingCores.put(selectedCore, task);
 		untappedCores.remove(selectedCore);
 
-		PlannerCommunicator communiocator = new PlannerCommunicator(this);
-		communiocator.sendExecuteTask(task, selectedCore.getAID());
+		PlannerCommunicator communicator = new PlannerCommunicator(this);
+		communicator.sendExecuteTask(task, selectedCore.getAID());
 
 	}
 

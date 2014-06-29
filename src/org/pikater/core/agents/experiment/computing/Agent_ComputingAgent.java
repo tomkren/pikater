@@ -422,7 +422,8 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 						return;
 
 					} else if (((Action) content).getAction() instanceof ExecuteTaksOnCPUCore) {
-						send(processExecute(req));
+                        ACLMessage result_msg = processExecute(req);
+                        send(result_msg);
 						return;
 					}
 
