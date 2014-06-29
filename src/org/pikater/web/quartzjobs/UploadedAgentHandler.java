@@ -3,7 +3,6 @@ package org.pikater.web.quartzjobs;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 
@@ -56,22 +55,27 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 		String agentDescription = getArg(3);
 		File uploadedFile = getArg(4);
 
-		// TODO:
-		JPAExternalAgent agent = new JPAExternalAgent();
-		agent.setAgentClass(agentClass);
-		agent.setName(agentName);
-		agent.setDescription(agentDescription);
-		agent.setOwner(owner);
-		agent.setCreated(new Date());
-		byte[] content;
-		try {
-			content = Files.readAllBytes(Paths.get(uploadedFile.getAbsolutePath()));
-		} catch (IOException e) {
-			throw new JobExecutionException("Unable to open input jar", e);
+		// transport to database
+		try
+		{
+			JPAExternalAgent agent = new JPAExternalAgent();
+			agent.setAgentClass(agentClass);
+			agent.setName(agentName);
+			agent.setDescription(agentDescription);
+			agent.setOwner(owner);
+			agent.setCreated(new Date());
+			byte[] content;
+			try {
+				content = Files.readAllBytes(Paths.get(uploadedFile.getAbsolutePath()));
+			} catch (IOException e) {
+				throw new JobExecutionException("Unable to open input jar", e);
+			}
+			agent.setJar(content);
+			DAOs.externalAgentDAO.storeEntity(agent);
 		}
-		agent.setJar(content);
-		DAOs.externalAgentDAO.storeEntity(agent);
-		
-		
+		finally
+		{
+			uploadedFile.delete();
+		}
 	}
 }
