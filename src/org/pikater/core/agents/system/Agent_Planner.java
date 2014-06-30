@@ -80,6 +80,7 @@ public class Agent_Planner extends PikaterAgent {
 		registerWithDF(AgentNames.PLANNER);
 
 		// waiting to start ManagerAgent
+		doWait(3000);
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e1) {

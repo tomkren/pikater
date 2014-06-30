@@ -232,7 +232,7 @@ public class Parser {
         SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search);
         searchNode.setModelClass(search.getSearchClass());
 
-        childOptions = setMutableOptions(childOptions);
+        setMutableOptions(childOptions);
         
         OptionEdge option=new OptionEdge();
         option.setOptions(childOptions);
@@ -297,14 +297,12 @@ public class Parser {
         node.addInput("options",optionBuffer);
     }
     
-    private List<Option> setMutableOptions(List<Option> childOptions){
-    	List<Option> Options = new ArrayList<Option>();
+    private void setMutableOptions(List<Option> childOptions){
     	for (Option opt : childOptions){
     		if (opt.getValue().contains("?") ){
     			opt.setMutable(true);
-    			Options.add(opt);
     		}
     	}
-    	return Options;
     }
+    
 }
