@@ -36,7 +36,7 @@ public class ComputationGraph {
     {
         nodes.put(node.getId(),node);
     }
-    public void startComputation()
+    public void startBatchComputation()
     {
            for (ComputationNode node:nodes.values())
            {
@@ -45,6 +45,12 @@ public class ComputationGraph {
                    node.startComputation();
                }
            }
+    }
+
+    public void computationBatchFinished()
+    {
+        //TODOStepan: log end of computation
+        //TODOJakub: call this when the batch is completed
     }
         
     public int getId() {

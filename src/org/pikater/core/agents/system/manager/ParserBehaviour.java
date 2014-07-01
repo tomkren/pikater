@@ -93,7 +93,8 @@ public class ParserBehaviour extends AchieveREResponder {
 		ComputationGraph computationGraph = parser.getComputationGraph();
         ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request);
         agent.computationCollection.put(1,item);
-		computationGraph.startComputation();
+        //TODOStepan: change status to computing and log to database
+		computationGraph.startBatchComputation();
     }
     
 }
