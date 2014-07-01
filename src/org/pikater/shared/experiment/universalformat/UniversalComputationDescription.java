@@ -18,7 +18,7 @@ public class UniversalComputationDescription
 	
 	/**
 	 * Tree of ComputingDescription. Ontology elements wrapped in
-	 * UniversalElement ArrayList. Contains only FileDataSavers.
+	 * UniversalElement Set. Contains only FileDataSavers.
 	 */
 	private final Set<UniversalElement> rootElements;
 
@@ -52,6 +52,10 @@ public class UniversalComputationDescription
 	public void addGlobalOptions(Option... options)
 	{
 		this.globalOptions.addAll(Arrays.asList(options));
+	}
+	
+	public void addGlobalOptions(Set<Option> options) {
+		this.globalOptions.addAll(options);
 	}
 	
 	public Set<UniversalElement> getRootElements()

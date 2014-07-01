@@ -135,7 +135,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
             //GuiCommunicator guiCommunicator = new GuiCommunicator();
             //guiCommunicator.sendNewBatchInfoToManager(this, batchOwnerID, batchId);
             
-            
+
             AID receiver = new AID(AgentNames.MANAGER, false);		
             Ontology ontology = BatchOntology.getInstance();
             
@@ -158,7 +158,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
     			e.printStackTrace();
 			}
             //TODO: end
-		
+//*/		
             
             ACLMessage reply = request.createReply();
             reply.setPerformative(ACLMessage.INFORM);
