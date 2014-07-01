@@ -14,8 +14,8 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
-import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.management.Agent;
+import org.pikater.core.ontology.subtrees.option.Interval;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
@@ -114,10 +114,23 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	}
 
 
-	private void addOptionToSchema(Option opt, List schema){
-		String[] values = ((String)opt.getUser_value()).split(",");
+	private void addOptionToSchema(Option opt, List<SearchItem> schema){
+		String[] values = ((String)opt.getValue()).split(",");
 		int numArgs = values.length;
 		if (!opt.getIs_a_set()) {
+			
+			// TODO !!!!! OPRAVIT !!!!! jenom hack, prosel Input2 !!!!!
+			// zkopirovat do optionu z optionu, ktere o sobe posle agent
+			// pripadne od uzivatele
+			if (opt.getData_type().equals("STRING")){
+				opt.setData_type("INT");
+				Interval range = new Interval();
+				range.setMin(new Float(3));
+				range.setMax(new Float(8));
+				opt.setRange(range);
+				opt.setNumber_of_values_to_try(3);
+			}
+			
 			if (opt.getData_type().equals("INT") || opt.getData_type().equals("MIXED")) {
 				for (int i = 0; i < numArgs; i++) {
 					if (values[i].equals("?")) {
@@ -157,8 +170,8 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 
 	//Create schema of solutions from options (Convert options->schema)
-	private List convertOptionsToSchema(List<Option> options){
-		List<Option> new_schema = new ArrayList<Option>();
+	private List<SearchItem> convertOptionsToSchema(List<Option> options){
+		List<SearchItem> new_schema = new ArrayList<SearchItem>();
 		if(options==null)
 			return new_schema;
 		java.util.Iterator<Option> itr = options.iterator();
