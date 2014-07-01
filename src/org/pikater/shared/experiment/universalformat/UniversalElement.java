@@ -19,7 +19,7 @@ public class UniversalElement
 	{
 		if (ontologyInfo == null)
 		{
-			throw new NullPointerException("Argument can not be null.");
+			throw new NullPointerException("Argument can't be null.");
 		}
 		this.ontologyInfo = ontologyInfo;
 	}
@@ -33,7 +33,7 @@ public class UniversalElement
 	{
 		if(guiInfo == null)
 		{
-			throw new NullPointerException("Argument can not be null.");
+			throw new NullPointerException("Argument can't be null.");
 		}
 		this.guiInfo = guiInfo;
 	}

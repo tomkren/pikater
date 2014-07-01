@@ -83,9 +83,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 			try {
 				runAutomat();
 			} catch (IOException e) {
-				logError("Error with console in KlaraGUI");
+				logError("Error with console in KlaraGUI", e);
 			} catch (Exception e) {
-				logError("General error...");
+				logError("General error...", e);
 			}
 			
 		}
@@ -103,7 +103,6 @@ public class Agent_GUIKlara extends PikaterAgent {
 				"\n"
 				);
 
-		//Changed for reason, that Eclipse doesn't support System.console()
 		if (bufferedConsole == null) {
 
 			System.out.println("Error, console not found.");
@@ -115,13 +114,11 @@ public class Agent_GUIKlara extends PikaterAgent {
 				doDelete();
 				
 			} catch (FIPAException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logError(e.getMessage(), e);
 			}
 			return;
 		}
 
-		/**
 		System.out.println("Please enter your password: ");
 		String inputPassword=bufferedConsole.readLine();
 		String correctPassword="123";
@@ -130,7 +127,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			System.err.println("Sorry, you're not Klara");
 			return;
 		}
-		**/
+		
 		System.out.println(" I welcome you Klara !!!");
 
 		String defaultFileName = "input.xml";
@@ -209,11 +206,9 @@ public class Agent_GUIKlara extends PikaterAgent {
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
             }
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("Ontology/codec error occurred: "+e.getMessage(), e);
         } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("FIPA error occurred: "+e.getMessage(), e);
         }
 		
 	}
@@ -231,8 +226,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		try {
 			Thread.sleep(9000);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logError(e1.getMessage(), e1);
 		}
 
         AID receiver = new AID(AgentNames.GUI_AGENTS_COMMUNICATOR, false);
@@ -252,17 +246,13 @@ public class Agent_GUIKlara extends PikaterAgent {
 			String replyText = reply.getContent();
 			
 			log("Reply: " + replyText);
-			System.out.println("Reply: " + replyText);
 			
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		}
 
 	}

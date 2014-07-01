@@ -3,9 +3,6 @@ package org.pikater.web.servlets.download;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Level;
 
 import javax.servlet.ServletException;
@@ -16,8 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.web.quartzjobs.DownloadTokenExpirationjob;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 @WebServlet(value = "/download", asyncSupported = true, loadOnStartup = 1)
 public class DynamicDownloadServlet extends HttpServlet
@@ -26,9 +22,6 @@ public class DynamicDownloadServlet extends HttpServlet
 	
 	private static final int DEFAULT_BUFFER_SIZE = 2048;
 	public static final int EXPIRATION_TIME_IN_SECONDS = 15;
-	
-	private static final Object lock_object = new Object();
-	private static final Map<UUID, IDownloadResource> uuidToResource = new HashMap<UUID, IDownloadResource>();
 	
 	//--------------------------------------------------------------
 	// INHERITED INTERFACE
@@ -39,7 +32,7 @@ public class DynamicDownloadServlet extends HttpServlet
 		String token = req.getParameter("t");
 		if((token != null) && !token.isEmpty())
 		{
-			IDownloadResource resource = downloadPicked(token);
+			IDownloadResource resource = DownloadRegistrar.downloadPicked(token);
 			if(resource != null)
 			{
 				if(resource.getSize() > Integer.MAX_VALUE) // "HttpServletResponse.setContentLength()" only accepts int type
@@ -54,7 +47,6 @@ public class DynamicDownloadServlet extends HttpServlet
 					resp.setContentLength((int) resource.getSize());
 					
 					// TODO: set cache time or other things, if you mean to
-					// TODO: stream, file name, mime type, content length
 					
 					InputStream input = null;
 			        try
@@ -72,6 +64,12 @@ public class DynamicDownloadServlet extends HttpServlet
 			        {
 			        	PikaterLogger.logThrowable(
 			        			String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", resource.getFilename()), e);
+			        	MyNotifications.showError("Download ended with error", resource.getFilename());
+			        }
+			        catch (Throwable t)
+			        {
+			        	PikaterLogger.logThrowable(String.format("Unknown error occured while uploading file '%s'.", resource.getFilename()), t);
+			        	MyNotifications.showError("Download ended with error", resource.getFilename());
 			        }
 			        finally
 			        {
@@ -89,69 +87,5 @@ public class DynamicDownloadServlet extends HttpServlet
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		doGet(req, resp);
-	}
-	
-	//--------------------------------------------------------------
-	// INTERFACE TO MAKE IT QUITE SECURE AND THREAD-SAFE
-	
-	/**
-	 * Associates a download resource with a unique download URL.
-	 * @param resource the resource to associate
-	 * @return The download URL. Feed it to the {@link com.vaadin.server.Page#setLocation setLocation} method
-	 * and observe what happens :).
-	 */
-	public static String issueAOneTimeDownloadURL(IDownloadResource resource)
-	{
-		synchronized(lock_object)
-		{
-			UUID newUUID;
-			while(uuidToResource.containsKey(newUUID = UUID.randomUUID()))
-			{
-			}
-			uuidToResource.put(newUUID, resource);
-			
-			try
-			{
-				PikaterJobScheduler.getJobScheduler().defineJob(DownloadTokenExpirationjob.class, new Object[] { newUUID, resource });
-				return "/Pikater/download?t=" + newUUID.toString();
-			}
-			catch (Throwable e)
-			{
-				/*
-				 * Send a runtime error that will be caught by the default error handler on Vaadin UI,
-				 * logged and client will see a notification of an error with 500 status code (internal
-				 * server error).
-				 */
-				throw new RuntimeException("Could not issue the current download expiration job.", e);
-			}
-		}
-	}
-	
-	public static IDownloadResource downloadPicked(String token) 
-	{
-		try
-		{
-			UUID uuid = UUID.fromString(token);
-			IDownloadResource result = uuidToResource.get(uuid);
-			if(result != null)
-			{
-				uuidToResource.remove(uuid);
-			}
-			return result;
-		}
-		catch (Throwable t)
-		{
-			// no need to log this... invalid token is invalid token
-			return null;
-		}
-	}
-	
-	public static void downloadExpired(UUID token, IDownloadResource resource) 
-	{
-		IDownloadResource result = uuidToResource.get(token);
-		if((result != null) && result.equals(resource))
-		{
-			uuidToResource.remove(token);
-		}
 	}
 }

@@ -39,24 +39,22 @@ public class UniversalOntology
     
 	public void setOptions(Collection<Option> options)
 	{
+		if (options == null) {
+			throw new NullPointerException("Argument options can't be null");
+		}
 		this.options.clear();
 		this.options.addAll(options);
 	}
 	
-	public void setOptions(jade.util.leap.ArrayList options)
-	{
-    	if (options == null)
-    	{
-    		this.options.clear();
-    	}
-    	else
-    	{
-    		for (int i = 0; i <  options.size(); i++)
-    		{
-    			this.options.add( (Option) options.get(i) );
-    		}
-    	}
-	}
+	public Option getOptionByName(String name) {
+		
+		for (Option optionI : getOptions()) {
+			if (optionI.getName().equals(name)) {
+				return optionI;
+			}
+		}
+		return null;
+	} 
     
 	public Collection<ErrorDescription> getErrors()
 	{

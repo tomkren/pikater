@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.universalformat.UniversalElement;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -21,56 +23,66 @@ public class ComputationDescription implements Concept {
 
 	private static final long serialVersionUID = -7951850172320173523L;
 
-	private List<Option> globalOptions;
-	private List<FileDataSaver> rootElements;
+	private List<Option> globalOptions = new ArrayList<Option>();
+	private List<FileDataSaver> rootElements = new ArrayList<FileDataSaver>();
 
 	public List<Option> getGlobalOptions() {
 		return globalOptions;
 	}
 
-	public void setGlobalOptions(ArrayList<Option> globalOptions) {
+	public void setGlobalOptions(List<Option> globalOptions) {
+		if (globalOptions == null) {
+			throw new IllegalArgumentException("Argument globalOptions can't be null");
+		}
 		this.globalOptions = globalOptions;
 	}
 
 	public List<FileDataSaver> getRootElements() {
-		if (rootElements == null) {
-			return new ArrayList<FileDataSaver>();
-		}
 		return rootElements;
 	}
 
 	public void setRootElements(List<FileDataSaver> rootElements) {
+		if (rootElements == null) {
+			throw new IllegalArgumentException("Argument rootElements can't be null");
+		}
 		this.rootElements = rootElements;
 	}
 
 	public void addRootElement(FileDataSaver rootElement) {
-		if (rootElements == null) {
-			this.rootElements = new ArrayList<FileDataSaver>();
+		if (rootElement == null) {
+			throw new IllegalArgumentException("Argument rootElement can't be null");
 		}
 		this.rootElements.add(rootElement);
 	}
 
 	public UniversalComputationDescription exportUniversalComputationDescription() {
 
-		List<FileDataSaver> rootElements = getRootElements();
-
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
+		uModel.addGlobalOptions(new HashSet<Option>(this.getGlobalOptions()));
 
-		if (getGlobalOptions() != null) {
-			for (int i = 0; i < getGlobalOptions().size(); i++) {
-				Option optionI = (Option) getGlobalOptions().get(i);
-				uModel.addGlobalOptions(optionI);
-			}
+		for (FileDataSaver saverI : getRootElements()) {
+			saverI.exportUniversalElement(uModel);
 		}
 
-		if (rootElements != null) {
-			for (int i = 0; i < rootElements.size(); i++) {
-
-				FileDataSaver saver = rootElements.get(i);
-				saver.exportUniversalElement(uModel);
-			}
-		}
 		return uModel;
+	}
+
+	public static ComputationDescription importUniversalComputationDescription(
+			UniversalComputationDescription uDescription) {
+		
+		ComputationDescription compDescription = new ComputationDescription();
+		
+		List<Option> globalOptionList = new ArrayList<Option>(uDescription.getGlobalOptions());
+		compDescription.setGlobalOptions(globalOptionList);
+		
+		List<UniversalElement> rootElementsList = new ArrayList<UniversalElement>(uDescription.getRootElements());
+		for (UniversalElement uElementI : rootElementsList) {
+			
+			FileDataSaver fileSaverI = FileDataSaver.importUniversalElement(uElementI);
+			compDescription.addRootElement(fileSaverI);
+		}
+		
+		return compDescription;
 	}
 
 	public String exportXML(String fileName) throws FileNotFoundException {

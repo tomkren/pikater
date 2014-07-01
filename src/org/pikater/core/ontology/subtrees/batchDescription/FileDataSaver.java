@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-import jade.util.leap.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
@@ -36,9 +37,9 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 
 		Option nameOfFileOption = new Option();
 		nameOfFileOption.setName("nameOfFile");
-		nameOfFileOption.setValue(nameOfFile);
+		nameOfFileOption.setValue(getNameOfFile());
 
-	    ArrayList options = new ArrayList();
+	    List<Option> options = new ArrayList<Option>();
 	    options.add(nameOfFileOption);
 	    
 	    UniversalConnector universalDataSource =
@@ -56,5 +57,19 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 		
 		return wrapper;
 	}
+	
+	static FileDataSaver importUniversalElement(
+			UniversalElement uElement) {
+		
+		UniversalOntology uOntology = uElement.getOntologyInfo();
+		
+		FileDataSaver fileDataSaver = new FileDataSaver();
 
+		Option optionNameOfFile = uOntology.getOptionByName("nameOfFile");
+		fileDataSaver.setNameOfFile(optionNameOfFile.getValue());
+		
+		
+		return fileDataSaver;
+	}
+	
 }

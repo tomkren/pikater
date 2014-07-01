@@ -575,7 +575,7 @@ public class Agent_DataManager extends PikaterAgent {
 		
         UniversalComputationDescription uDescription =
         		description.exportUniversalComputationDescription();
-        
+
 		
 		JPAUser user=DAOs.userDAO.getByID(batch.getOwnerID());
 		
@@ -623,8 +623,11 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
 		
+        UniversalComputationDescription uDescription =
+        		UniversalComputationDescription.fromXML(batchJPA.getXML());
+
 		ComputationDescription compDescription =
-				ComputationDescription.importXML(batchJPA.getXML());
+				ComputationDescription.importUniversalComputationDescription(uDescription);
 		
 		Batch batch = new Batch();
 		batch.setId(batchJPA.getId());
