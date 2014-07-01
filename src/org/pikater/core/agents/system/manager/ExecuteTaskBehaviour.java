@@ -7,15 +7,12 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
-import jade.util.leap.List;
-
 import org.pikater.core.agents.system.Agent_Manager;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Task;
-
-import java.util.ArrayList;
 
 public class ExecuteTaskBehaviour extends AchieveREInitiator{
 
@@ -81,6 +78,13 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				// get the original task from msg
 				Result result = (Result) content;					
 				Task t = (Task)result.getValue();
+                ComputationCollectionItem computation= myAgent.getComputation(t.getGraphId());
+                ComputationNode node= computation.getProblemGraph().getNode(t.getNodeId());
+                if (node.ContainsOutput("file"))
+                {
+                    DataSourceEdge labeledData =new DataSourceEdge();
+                    node.addToOutputAndProcess(labeledData,"file");
+                }
 
 				// save results to the database										
 				if (t.isSave_results()){
@@ -88,40 +92,19 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				}
 				
 				// fill the right queues in problem graph
-				if (t.getOutputByName(Task.InOutType.ERRORS) != null){
-					@SuppressWarnings("unchecked")
-					ArrayList<Eval> errors = (ArrayList<Eval>) t.getOutputByName(Task.InOutType.ERRORS);
-					
-					strategy.processError(errors);
-				}				
-				
-				if (t.getOutputByName(Task.InOutType.VALIDATION) != null){
-					String dataSourceName = (String) t.getOutputByName(Task.InOutType.VALIDATION);
-					
-					strategy.processValidation(dataSourceName);
-				}				
-				
-				// kdyz to bylo od searche, zmerguj; nebo searche resit vlastnim jadovskym chovanim?
-				
-				
-				/*
-				// send evaluation to search agent
-				if (msg.getPerformative() == ACLMessage.QUERY_REF){
-					// the original message was a query (sender of the task 
-					// was s search agent)
-				
-					ACLMessage reply = msg.createReply();
-					reply.setPerformative(ACLMessage.INFORM);
-
-					ContentElement query_content = getContentManager().extractContent(msg);
-					
-					Result reply_result = new Result((Action) query_content, t.getResult());
-					getContentManager().fillContent(reply, reply_result);
-					
-					send(reply);								
-				}
-				
-				*/
+                //TODO: add after search strategy is completed
+//				if (t.getOutputByName(Task.InOutType.ERRORS) != null){
+//					@SuppressWarnings("unchecked")
+//					ArrayList<Eval> errors = (ArrayList<Eval>) t.getOutputByName(Task.InOutType.ERRORS);
+//
+//					strategy.processError(errors);
+//				}
+				     //TODO: what is this? just send labeled data?
+//				if (t.getOutputByName(Task.InOutType.VALIDATION) != null){
+//					String dataSourceName = (String) t.getOutputByName(Task.InOutType.VALIDATION);
+//
+//					strategy.processValidation(dataSourceName);
+//				}
 			}
 
 		} catch (UngroundedException e) {
@@ -136,7 +119,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 		myAgent.sendSubscription(inform, msg);
 	}
 		
-	private boolean isLastTask(){			
+	private boolean isLastTask(){
 		// TODO - return true if there is not anything to compute in the graph
 		
 		return false;

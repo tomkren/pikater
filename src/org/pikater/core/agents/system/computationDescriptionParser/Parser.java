@@ -4,6 +4,7 @@ import jade.content.Concept;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.FileSavingStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
@@ -37,8 +38,8 @@ public class Parser {
 
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
-            //TODO: update strategy to file saving one
-            FileSaverNode saverNode=new FileSaverNode(new DummyComputationStrategy());
+            FileSaverNode saverNode=new FileSaverNode();
+            saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),1,saverNode));
             computationGraph.addNode(saverNode);
             alreadyProcessed.put(dataSaver,saverNode);
             parseDataSourceDescription(dataSource, saverNode, "file");

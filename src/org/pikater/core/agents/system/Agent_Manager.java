@@ -200,7 +200,13 @@ public class Agent_Manager extends PikaterAgent {
 		
 		// copy content of inform message to a subscription
 		try {
-			getContentManager().fillContent(msgOut, getContentManager().extractContent(result));
+            ContentElement content= getContentManager().extractContent(result);
+            //TODO: bad ontology
+            if (true)
+            {
+                return;
+            }
+			getContentManager().fillContent(msgOut, content );
 		} catch (UngroundedException e) {
 			e.printStackTrace();
 		} catch (CodecException e) {

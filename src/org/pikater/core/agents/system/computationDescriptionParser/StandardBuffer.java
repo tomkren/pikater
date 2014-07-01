@@ -28,7 +28,7 @@ public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
 
     @Override
     public E getNext() {
-        return buffer.getFirst();
+        return buffer.pollFirst();
     }
 
     @Override
