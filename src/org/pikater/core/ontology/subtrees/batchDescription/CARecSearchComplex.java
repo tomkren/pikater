@@ -3,7 +3,6 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 
@@ -11,7 +10,7 @@ import org.pikater.core.ontology.subtrees.option.Option;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class CARecSearchComplex extends AbstractDataProcessing implements IComputingAgent, IDataProvider {
+public class CARecSearchComplex extends DataProcessing implements IComputingAgent, IDataProvider {
 
 	private static final long serialVersionUID = -913470799010962236L;
 
@@ -64,42 +63,45 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
     }
 	
 	@Override
-	public List<Option> getUniversalOptions() {
+	public List<Option> exportAllOptions() {
 		return this.options;
 	}
 	@Override
-	public void setUniversalOptions(List<Option> options) {
+	public void importAllOptions(List<Option> options) {
 		this.options = options;	
 	}
 	
 	@Override
-	public List<ErrorDescription> getUniversalErrors() {
+	public List<ErrorDescription> exportAllErrors() {
 		return this.errors;
 	}
 	@Override
-	public void setUniversalErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorDescription> errors) {
 		this.errors = errors;
 	}
 	
 	@Override
-	public List<Slot> getInputSlots() {
+	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
 		
-		Slot searchSlot = new Slot();
-		searchSlot.setInputDataType("search");
-		searchSlot.setOutputDataType("search");
-		searchSlot.setAbstractDataProcessing(search);
+		DataSourceDescription searchSlot =
+				new DataSourceDescription();
+		searchSlot.setDataInputType("search");
+		searchSlot.setDataOutputType("search");
+		searchSlot.setDataProvider(search);
+		
+		DataSourceDescription recommenderSlot =
+				new DataSourceDescription();
+		recommenderSlot.setDataInputType("recommender");
+		recommenderSlot.setDataOutputType("recommender");
+		recommenderSlot.setDataProvider(recommender);
+		
+		DataSourceDescription computingAgentSlot =
+				new DataSourceDescription();
+		computingAgentSlot.setDataInputType("computingAgent");
+		computingAgentSlot.setDataOutputType("computingAgent");
+		computingAgentSlot.setDataProvider((IDataProvider) computingAgent);
 
-		Slot recommenderSlot = new Slot();
-		recommenderSlot.setInputDataType("recommender");
-		recommenderSlot.setOutputDataType("recommender");
-		recommenderSlot.setAbstractDataProcessing(recommender);
-
-		Slot computingAgentSlot = new Slot();
-		computingAgentSlot.setInputDataType("computingAgent");
-		computingAgentSlot.setOutputDataType("computingAgent");
-		computingAgentSlot.setAbstractDataProcessing(computingAgent);
-
-		List<Slot> slots = new ArrayList<Slot>();
+		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
 		slots.add(searchSlot);
 		slots.add(recommenderSlot);
 		slots.add(computingAgentSlot);
@@ -107,17 +109,18 @@ public class CARecSearchComplex extends AbstractDataProcessing implements ICompu
 		return slots;
 	}
 	@Override
-	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
-		for (Slot slotI : universalInputSlots) {
-			if (slotI.getInputDataType().equals("search")) {
-				search = (Search) slotI.getAbstractDataProcessing();
+		for (DataSourceDescription slotI : dataSourceDescriptions) {
+			
+			if (slotI.getDataInputType().equals("search")) {
+				search = (Search) slotI.getDataProvider();
 			}
-			if (slotI.getInputDataType().equals("recommender")) {
-				recommender = (Recommend) slotI.getAbstractDataProcessing();
+			if (slotI.getDataInputType().equals("recommender")) {
+				recommender = (Recommend) slotI.getDataProvider();
 			}
-			if (slotI.getInputDataType().equals("computingAgent")) {
-				computingAgent = (IComputingAgent) slotI.getAbstractDataProcessing();
+			if (slotI.getDataInputType().equals("computingAgent")) {
+				computingAgent = (IComputingAgent) slotI.getDataProvider();
 			}
 		}
 		

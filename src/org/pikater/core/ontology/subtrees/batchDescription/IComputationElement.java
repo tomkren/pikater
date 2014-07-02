@@ -2,7 +2,6 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
@@ -16,13 +15,14 @@ public interface IComputationElement extends Concept {
 	public int getId();
 	public void setId(int id);
 	
-	public List<Option> getUniversalOptions();
-	public List<ErrorDescription> getUniversalErrors();
-	public List<Slot> getInputSlots();
-
-	public void setUniversalOptions(List<Option> options);
-	public void setUniversalErrors(List<ErrorDescription> errors);
-	public void setUniversalInputSlots(List<Slot> universalInputSlots);
+	public List<Option> exportAllOptions();
+	public void importAllOptions(List<Option> options);
 	
-	public UniversalOntology exportUniversalElement();
+	public List<ErrorDescription> exportAllErrors();
+	public void importAllErrors(List<ErrorDescription> errors);
+	
+	public List<DataSourceDescription> exportAllDataSourceDescriptions();
+	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions);
+	
+	public UniversalOntology exportUniversalOntology();
 }

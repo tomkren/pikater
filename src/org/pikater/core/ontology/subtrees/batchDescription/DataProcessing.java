@@ -3,30 +3,36 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
+import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
  * Created by Stepan on 20.4.14.
  */
-public class DataProcessing extends AbstractDataProcessing implements IDataProvider {
+public class DataProcessing implements IDataProvider {
 
 	private static final long serialVersionUID = -2418323249803736416L;
 
-	private boolean isPreprocessing;
-	private List<Option> options;
+	private int id = -1;
+	private List<Option> options =
+			new ArrayList<Option>();
     
-	private List<ErrorDescription> errors;
-	private List<DataSourceDescription> dataSources;
+	private List<ErrorDescription> errors =
+			new ArrayList<ErrorDescription>();
+	private List<DataSourceDescription> dataSources =
+			new ArrayList<DataSourceDescription>();
 
-	public boolean isPreprocessing() {
-		return isPreprocessing;
+	public int getId() {
+		return id;
 	}
-	public void setPreprocessing(boolean isPreprocessing) {
-		this.isPreprocessing = isPreprocessing;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public List<Option> getOptions() {
@@ -50,52 +56,94 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
         this.dataSources = dataSources;
     }
     public void addDataSources(DataSourceDescription dataSources) {
-    	if (this.dataSources == null) {
-    		this.dataSources = new ArrayList<DataSourceDescription>();
+    	
+    	if (dataSources == null) {
+    		throw new IllegalArgumentException("Argument dataSources can't be null");
     	}
         this.dataSources.add(dataSources);
     }
 
+	
 	@Override
-	public List<Option> getUniversalOptions() {
-		return this.options;
+	public List<Option> exportAllOptions() {
+		return getOptions();
 	}
 	@Override
-	public void setUniversalOptions(List<Option> options) {
-		this.options = options;
+	public void importAllOptions(List<Option> options) {
+		setOptions(options);
 	}
 	
 	@Override
-	public List<ErrorDescription> getUniversalErrors() {
-		return this.errors;
+	public List<ErrorDescription> exportAllErrors() {
+		return getErrors();
 	}
 	@Override
-	public void setUniversalErrors(List<ErrorDescription> errors) {
-		this.errors = errors;
+	public void importAllErrors(List<ErrorDescription> errors) {
+		setErrors(errors);
 		
 	}
 	
 	@Override
-	public List<Slot> getInputSlots() {
+	public List<DataSourceDescription> exportAllDataSourceDescriptions() {		
+		return getDataSources();
+	}
+	@Override
+	public void importAllDataSourceDescriptions(
+			List<DataSourceDescription> dataSourceDescriptions) {
+		setDataSources(dataSourceDescriptions);
+	}
 	
-		List<Slot> slots = new ArrayList<Slot>();
+	public int generateIDs(int lastUsedId) {
 		
-		for (DataSourceDescription dI : dataSources ) {
+		if (this.getId() == -1) {
+			this.setId(lastUsedId++);
+		}
+		return lastUsedId;
+	}
 
-			Slot slot = new Slot();
-			slot.setInputDataType("");
-			slot.setOutputDataType(dI.getDataType());
-			slot.setAbstractDataProcessing(dI.getDataProvider());
-			
-			slots.add(slot);
+	public UniversalOntology exportUniversalOntology() {
+		
+		UniversalOntology ontologyInfo = new UniversalOntology();
+		ontologyInfo.setId(getId());
+		ontologyInfo.setType(getClass());
+		ontologyInfo.setOptions(exportAllOptions());
+		ontologyInfo.setErrors(exportAllErrors());
+		//ontologyInfo.addInputSlots(null);
+		
+		return ontologyInfo;
+	}
+	public static DataProcessing importUniversalOntology(UniversalOntology uOntology) {
+		
+		Constructor<?> cons = null;
+		try {
+			cons = uOntology.getType().getConstructor();
+		} catch (NoSuchMethodException e) {
+			Log.error(e.getMessage(), e);
+		} catch (SecurityException e) {
+			Log.error(e.getMessage(), e);
 		}
 		
-		return slots;
-	}
-	@Override
-	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
-		// TODO Auto-generated method stub
+		Object object = null;
+		try {
+			object = cons.newInstance();
+		} catch (InstantiationException e) {
+			Log.error(e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			Log.error(e.getMessage(), e);
+		} catch (IllegalArgumentException e) {
+			Log.error(e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+			Log.error(e.getMessage(), e);
+		}
 		
+		DataProcessing dataProcess = (DataProcessing) object;
+		dataProcess.setId(uOntology.getId());
+		dataProcess.setOptions(
+				new ArrayList<Option>(uOntology.getOptions()));
+		dataProcess.setErrors(
+				new ArrayList<ErrorDescription>(uOntology.getErrors()));
+		
+		return dataProcess;
 	}
-
+	
 }

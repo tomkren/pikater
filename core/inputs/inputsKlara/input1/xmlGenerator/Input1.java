@@ -58,7 +58,7 @@ public final class Input1 {
 
         //Labeled data labeled by our CA are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setDataType("Data");
+		computingDataSource.setDataOutputType("Data");
 		computingDataSource.setDataProvider(comAgent);
 
         //Save labeled data

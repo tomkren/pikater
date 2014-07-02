@@ -3,19 +3,18 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Recommend extends AbstractDataProcessing {
+public class Recommend extends DataProcessing {
 
 	private static final long serialVersionUID = -1204258141585020540L;
 
 	private String recommenderClass;
-    private List<Option> options;
+    private List<Option> options = new ArrayList<Option>();
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -26,23 +25,21 @@ public class Recommend extends AbstractDataProcessing {
     }
 
     public List<Option> getOptions() {
-    	if (this.options == null) {
-    		return new ArrayList<Option>();
-    	}
         return options;
     }
     public void setOptions(ArrayList<Option> options) {
         this.options = options;
     }
     public void addOption(Option option) {
-    	if (this.options == null) {
-    		this.options = new ArrayList<Option>();
-    	}
+		
+    	if (option == null) {
+			throw new IllegalArgumentException("Argument option can't be null");
+		}
         this.options.add(option);
     }
 
 	@Override
-	public List<Option> getUniversalOptions() {
+	public List<Option> exportAllOptions() {
 		
 		Option recommenderClassOption = new Option();
 		recommenderClassOption.setName("recommenderClass");
@@ -53,17 +50,21 @@ public class Recommend extends AbstractDataProcessing {
 		return options;
 	}
 	@Override
-	public void setUniversalOptions(List<Option> options) {
-		// TODO Auto-generated method stub
+	public void importAllOptions(List<Option> options) {
 		
+    	if (options == null) {
+    		throw new IllegalArgumentException("Argument options can't be null");
+    	}
+    	
+		this.options = options;
 	}
 
 	@Override
-	public List<ErrorDescription> getUniversalErrors() {
+	public List<ErrorDescription> exportAllErrors() {
 		return new ArrayList<ErrorDescription>();
 	}
 	@Override
-	public void setUniversalErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorDescription> errors) {
 		
 		if (errors != null && !errors.isEmpty()) {
 			new IllegalArgumentException("Argument errors can be only null");
@@ -71,14 +72,14 @@ public class Recommend extends AbstractDataProcessing {
 	}
 
 	@Override
-	public List<Slot> getInputSlots() {
-		return new ArrayList<Slot>();
+	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
+		return new ArrayList<DataSourceDescription>();
 	}
 	@Override
-	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
-		if (universalInputSlots != null && !universalInputSlots.isEmpty()) {
-			new IllegalArgumentException("Argument universalInputSlots can be only null");
+		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
+			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		}
 	}
 

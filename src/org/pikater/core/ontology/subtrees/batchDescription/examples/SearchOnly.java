@@ -76,7 +76,7 @@ public class SearchOnly {
 
         DataSourceDescription CAds = new DataSourceDescription();
         CAds.setDataProvider(ca);
-        CAds.setDataType("trained");
+        CAds.setDataOutputType("trained");
 
         FileDataSaver fds = new FileDataSaver();
         fds.setDataSource(CAds);

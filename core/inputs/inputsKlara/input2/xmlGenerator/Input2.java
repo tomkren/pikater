@@ -75,7 +75,7 @@ public final class Input2 {
         // Note that the data provider is complex.
         // To save each iteration the data source would have to be comAgent
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setDataType("Data");
+		computingDataSource.setDataOutputType("Data");
 		computingDataSource.setDataProvider(complex);
 
         FileDataSaver saver = new FileDataSaver();

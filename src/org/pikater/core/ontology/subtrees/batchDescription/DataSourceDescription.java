@@ -14,16 +14,16 @@ public class DataSourceDescription implements Concept {
 
 	private static final long serialVersionUID = 2090764353306584887L;
 
-	private String dataType;
     private IDataProvider dataProvider;
+	private String dataOutputType;
+	private String dataInputType;
 
-    public DataSourceDescription()
-    {
 
+    public DataSourceDescription() {
     }
 
-    public DataSourceDescription(String fileName)
-    {
+    public DataSourceDescription(String fileName) {
+    	
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI(fileName);
 
@@ -37,21 +37,29 @@ public class DataSourceDescription implements Concept {
         this.dataProvider = dataProvider;
     }
 
-    public String getDataType() {
-        return dataType;
+    public String getDataOutputType() {
+        return dataOutputType;
     }
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
+    public void setDataOutputType(String dataType) {
+        this.dataOutputType = dataType;
     }
     
-    UniversalConnector exportUniversalConnector(
+    public String getDataInputType() {
+		return dataInputType;
+	}
+
+	public void setDataInputType(String dataInputType) {
+		this.dataInputType = dataInputType;
+	}
+
+	UniversalConnector exportUniversalConnector(
     		UniversalComputationDescription uModel) {
     	    	
-    	AbstractDataProcessing dataProcessing =
-    			(AbstractDataProcessing) dataProvider;
+    	DataProcessing dataProcessing =
+    			(DataProcessing) dataProvider;
     	
     	UniversalOntology uOntology =
-    			dataProcessing.exportUniversalElement();
+    			dataProcessing.exportUniversalOntology();
     	UniversalElement universalDataProvider =
     			new UniversalElement();
     	universalDataProvider.setOntologyInfo(uOntology);
@@ -59,7 +67,7 @@ public class DataSourceDescription implements Concept {
     	
     	UniversalConnector connector =
     			new UniversalConnector();
-    	connector.setOutputDataType(dataType);
+    	connector.setOutputDataType(dataOutputType);
     	connector.setFromElement(universalDataProvider);
     	
     	return connector;

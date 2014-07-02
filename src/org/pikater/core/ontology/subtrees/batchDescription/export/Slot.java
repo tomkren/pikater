@@ -1,19 +1,19 @@
 package org.pikater.core.ontology.subtrees.batchDescription.export;
 
-import org.pikater.core.ontology.subtrees.batchDescription.IComputationElement;
+import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
 
 public class Slot {
 	
-	private IComputationElement abstractDataProcessing;
+	private DataProcessing dataProcessing;
     private String inputDataType;
 	private String outputDataType;
 	
 	
-	public IComputationElement getAbstractDataProcessing() {
-		return abstractDataProcessing;
+	public DataProcessing getDataProcessing() {
+		return dataProcessing;
 	}
-	public void setAbstractDataProcessing(IComputationElement abstractDataProcessing) {
-		this.abstractDataProcessing = abstractDataProcessing;
+	public void setDataProcessing(DataProcessing dataProcessing) {
+		this.dataProcessing = dataProcessing;
 	}
 	public String getInputDataType() {
 		return inputDataType;

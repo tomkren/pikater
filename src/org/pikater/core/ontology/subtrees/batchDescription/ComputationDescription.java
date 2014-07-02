@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
@@ -97,15 +96,15 @@ public class ComputationDescription implements Concept {
 			if (! finishedDataProcessings.containsKey(dataProcessing.getId()) ) {
 				
 				UniversalOntology uOntology =
-						dataProcessing.exportUniversalElement();
+						dataProcessing.exportUniversalOntology();
 				
 				finishedtUniOntologys.put(
 						uOntology.getId(), uOntology);
 				finishedDataProcessings.put(
 						dataProcessing.getId(), dataProcessing);
 				
-				for (Slot slotI : dataProcessing.getInputSlots()) {
-					fifo.add( slotI.getAbstractDataProcessing() );
+				for (DataSourceDescription descrI : dataProcessing.exportAllDataSourceDescriptions()) {
+					fifo.add( descrI.getDataProvider());
 				}
 			}
 		}
@@ -116,17 +115,17 @@ public class ComputationDescription implements Concept {
 			UniversalOntology ontoI = finishedtUniOntologys.get(keyI);
 			IComputationElement processI = finishedDataProcessings.get(keyI);
 			
-			List<Slot> slotsI = processI.getInputSlots();
-			for (Slot slotIJ : slotsI) {
+			List<DataSourceDescription> slotsI = processI.exportAllDataSourceDescriptions();
+			for (DataSourceDescription slotIJ : slotsI) {
 	
 				UniversalElement uniElement = new UniversalElement();
 				UniversalOntology uniOntology =
-						finishedtUniOntologys.get(slotIJ.getAbstractDataProcessing().getId());
+						finishedtUniOntologys.get(slotIJ.getDataProvider().getId());
 				uniElement.setOntologyInfo(uniOntology);
 				
 				UniversalConnector connector = new UniversalConnector();
-				connector.setInputDataType(slotIJ.getInputDataType());
-				connector.setOutputDataType(slotIJ.getOutputDataType());
+				connector.setInputDataType(slotIJ.getDataInputType());
+				connector.setOutputDataType(slotIJ.getDataOutputType());
 				connector.setFromElement(uniElement);
 				
 				ontoI.addInputSlot(connector);

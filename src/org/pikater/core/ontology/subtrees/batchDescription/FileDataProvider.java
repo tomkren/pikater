@@ -1,17 +1,14 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 /**
  * Created by Martin Pilat on 27.12.13.
  */
-public class FileDataProvider extends AbstractDataProcessing implements IDataProvider {
+public class FileDataProvider extends DataProcessing implements IDataProvider {
 
 	private static final long serialVersionUID = -7222688693820033064L;
 
@@ -26,7 +23,7 @@ public class FileDataProvider extends AbstractDataProcessing implements IDataPro
     }
 	
 	@Override
-	public List<Option> getUniversalOptions() {
+	public List<Option> exportAllOptions() {
 		
 		Option fileURIOption = new Option();
 		fileURIOption.setName("fileURI");
@@ -38,17 +35,22 @@ public class FileDataProvider extends AbstractDataProcessing implements IDataPro
 		return options;
 	}
 	@Override
-	public void setUniversalOptions(List<Option> options) {
-		// TODO Auto-generated method stub
+	public void importAllOptions(List<Option> options) {
+		
+		for (Option optionI : options) {
+			if (optionI.getName().equals("fileURI")) {
+				this.fileURI = optionI.getValue();
+			}
+		}
 		
 	}
 	
 	@Override
-	public List<ErrorDescription> getUniversalErrors() {
+	public List<ErrorDescription> exportAllErrors() {
 		return new ArrayList<ErrorDescription>();
 	}
 	@Override
-	public void setUniversalErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorDescription> errors) {
 		
 		if (errors != null && !errors.isEmpty()) {
 			new IllegalArgumentException("Argument errors can be only null");
@@ -56,14 +58,14 @@ public class FileDataProvider extends AbstractDataProcessing implements IDataPro
 	}
 
 	@Override
-	public List<Slot> getInputSlots() {
-		return new ArrayList<Slot>();
+	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
+		return new ArrayList<DataSourceDescription>();
 	}
 	@Override
-	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
-		if (universalInputSlots != null && !universalInputSlots.isEmpty()) {
-			new IllegalArgumentException("Argument universalInputSlots can be only null");
+		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
+			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		}
 		
 	}

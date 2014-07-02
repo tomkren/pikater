@@ -1,0 +1,93 @@
+<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription id="1">
+  <globalOptions id="2"/>
+  <rootElements id="3">
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="4">
+      <id>-1</id>
+      <options id="5"/>
+      <errors id="6"/>
+      <dataSources id="7"/>
+      <dataSource id="8">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex" id="9">
+          <id>-1</id>
+          <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="10"/>
+          <errors defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="11"/>
+          <dataSources id="12"/>
+          <options id="13">
+            <org.pikater.core.ontology.subtrees.option.Option id="14">
+              <__mutable>false</__mutable>
+              <__is__a__set>false</__is__a__set>
+              <__data__type>INT</__data__type>
+              <__name>F</__name>
+              <__value>10</__value>
+              <__number__of__values__to__try>0</__number__of__values__to__try>
+              <numberOfOptions>0</numberOfOptions>
+            </org.pikater.core.ontology.subtrees.option.Option>
+          </options>
+          <errors id="15">
+            <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription id="16">
+              <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" id="17">
+                <id>-1</id>
+                <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="18"/>
+                <errors id="19"/>
+                <dataSources id="20"/>
+                <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
+                <options id="21">
+                  <org.pikater.core.ontology.subtrees.option.Option id="22">
+                    <__mutable>false</__mutable>
+                    <__is__a__set>false</__is__a__set>
+                    <__data__type>INT</__data__type>
+                    <__name>S</__name>
+                    <__value>1</__value>
+                    <__number__of__values__to__try>0</__number__of__values__to__try>
+                    <numberOfOptions>0</numberOfOptions>
+                  </org.pikater.core.ontology.subtrees.option.Option>
+                  <org.pikater.core.ontology.subtrees.option.Option id="23">
+                    <__mutable>false</__mutable>
+                    <__is__a__set>false</__is__a__set>
+                    <__data__type>STRING</__data__type>
+                    <__name>B</__name>
+                    <__value>?</__value>
+                    <__number__of__values__to__try>0</__number__of__values__to__try>
+                    <numberOfOptions>0</numberOfOptions>
+                  </org.pikater.core.ontology.subtrees.option.Option>
+                </options>
+                <trainingData id="24">
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="25">
+                    <id>-1</id>
+                    <options id="26"/>
+                    <errors id="27"/>
+                    <dataSources id="28"/>
+                    <fileURI>weather.arff</fileURI>
+                  </dataProvider>
+                </trainingData>
+                <testingData reference="24"/>
+              </provider>
+              <type>RMSE</type>
+            </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
+          </errors>
+          <search id="29">
+            <id>-1</id>
+            <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="30"/>
+            <errors id="31"/>
+            <dataSources id="32"/>
+            <searchClass>Agent_ChooseXValues</searchClass>
+            <options id="33">
+              <org.pikater.core.ontology.subtrees.option.Option id="34">
+                <__mutable>false</__mutable>
+                <__is__a__set>false</__is__a__set>
+                <__data__type>INT</__data__type>
+                <__name>N</__name>
+                <__synopsis>number_of_values_to_try</__synopsis>
+                <__value>5</__value>
+                <__number__of__values__to__try>0</__number__of__values__to__try>
+                <numberOfOptions>0</numberOfOptions>
+              </org.pikater.core.ontology.subtrees.option.Option>
+            </options>
+          </search>
+          <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" reference="17"/>
+        </dataProvider>
+        <dataOutputType>Data</dataOutputType>
+      </dataSource>
+    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+  </rootElements>
+</org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>

@@ -3,13 +3,12 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Search extends AbstractDataProcessing {
+public class Search extends DataProcessing {
 
 	private static final long serialVersionUID = 7856131679884259768L;
 	
@@ -42,7 +41,7 @@ public class Search extends AbstractDataProcessing {
     }
 
 	@Override
-	public List<Option> getUniversalOptions() {
+	public List<Option> exportAllOptions() {
 		
 		Option searchClassOption = new Option();
 		searchClassOption.setName("searchClass");
@@ -55,31 +54,36 @@ public class Search extends AbstractDataProcessing {
 		return options;
 	}
 	@Override
-	public void setUniversalOptions(List<Option> options) {
-		// TODO Auto-generated method stub
-	}
-	
-	@Override
-	public List<ErrorDescription> getUniversalErrors() {
-		return new ArrayList<ErrorDescription>();
-	}
-	@Override
-	public void setUniversalErrors(List<ErrorDescription> errors) {
+	public void importAllOptions(List<Option> options) {
 		
-		if (errors != null && !errors.isEmpty()) {
-			new IllegalArgumentException("Argument errors can be only null");
+		for (Option optionI : options) {
+			if (optionI.getName().equals("searchClass")) {
+				this.searchClass = optionI.getValue();
+			}
 		}
 	}
 	
 	@Override
-	public List<Slot> getInputSlots() {
-		return new ArrayList<Slot>();
+	public List<ErrorDescription> exportAllErrors() {
+		return new ArrayList<ErrorDescription>();
 	}
 	@Override
-	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+	public void importAllErrors(List<ErrorDescription> errors) {
 		
-		if (universalInputSlots != null && !universalInputSlots.isEmpty()) {
-			new IllegalArgumentException("Argument universalInputSlots can be only null");
+		if (errors != null && !errors.isEmpty()) {
+			throw new IllegalArgumentException("Argument errors can be only null");
+		}
+	}
+	
+	@Override
+	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
+		return new ArrayList<DataSourceDescription>();
+	}
+	@Override
+	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
+		
+		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
+			throw new IllegalArgumentException("Argument universalInputSlots can be only null");
 		}
 	}
 	

@@ -4,7 +4,6 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
@@ -12,7 +11,7 @@ import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class ComputingAgent extends AbstractDataProcessing implements IDataProvider, IComputingAgent, IErrorProvider {
+public class ComputingAgent extends DataProcessing implements IDataProvider, IComputingAgent, IErrorProvider {
 
 	private static final long serialVersionUID = 2127755171666013125L;
 
@@ -87,7 +86,7 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 
 
 	@Override
-	public List<Option> getUniversalOptions() {
+	public List<Option> exportAllOptions() {
 		
 		Option agentTypeOption = new Option();
 		agentTypeOption.setName("agentType");
@@ -110,56 +109,76 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 		return options;
 	}
 	@Override
-	public void setUniversalOptions(List<Option> options) {
-		// TODO Auto-generated method stub
+	public void importAllOptions(List<Option> options) {
+		
+		List<Option> optionss = new ArrayList<Option>();
+		
+		for (Option optionI : options) {
+			
+			if (optionI.getName().equals("agentType")) {
+				this.agentType = optionI.getValue();
+				
+			} else if (optionI.getName().equals("model")) {
+				//this.evaluationMethod = optionI.getValue(); TODO:
+
+			} else if (optionI.getName().equals("evaluationMethod")) {
+				//this.evaluationMethod = optionI.getValue();  TODO:
+				
+			} else {
+				optionss.add(optionI);
+			}
+		}
+		
+		this.options = optionss;
 		
 	}
 	
 	@Override
-	public List<ErrorDescription> getUniversalErrors() {
+	public List<ErrorDescription> exportAllErrors() {
 		return new ArrayList<ErrorDescription>();
 	}
 	@Override
-	public void setUniversalErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorDescription> errors) {
 		
 		if (errors != null && !errors.isEmpty()) {
 			throw new IllegalArgumentException("Argument errors can be only null");
 		}
-		
 	}	
     
 	@Override
-	public List<Slot> getInputSlots() {
+	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
 		
-		Slot trainingDataSlot = new Slot();
-		trainingDataSlot.setInputDataType("trainingData");
-		trainingDataSlot.setOutputDataType(trainingData.getDataType());
-		trainingDataSlot.setAbstractDataProcessing(
-				trainingData.getDataProvider());
+		trainingData.setDataInputType("trainingData");
+		testingData.setDataInputType("testingData");
+		validationData.setDataInputType("validationData");
 
-		Slot testingDataSlot = new Slot();
-		testingDataSlot.setInputDataType("testingData");
-		testingDataSlot.setOutputDataType(testingData.getDataType());
-		testingDataSlot.setAbstractDataProcessing(
-				(AbstractDataProcessing) testingData.getDataProvider());
-
-		Slot validationDataSlot = new Slot();
-		validationDataSlot.setInputDataType("validationData");
-		validationDataSlot.setOutputDataType(validationData.getDataType());
-		validationDataSlot.setAbstractDataProcessing(
-				(AbstractDataProcessing) testingData.getDataProvider());
-
-		List<Slot> slots = new ArrayList<Slot>();
-		slots.add(trainingDataSlot);
-		slots.add(testingDataSlot);
-		slots.add(validationDataSlot);
+		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
+		slots.add(trainingData);
+		slots.add(testingData);
+		slots.add(validationData);
 		
 		return slots;
 	}
 	
 	@Override
-	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
-		// TODO Auto-generated method stub
+	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
+				
+		for (DataSourceDescription descriptionI : dataSourceDescriptions) {
+						
+			if (descriptionI.getDataInputType().equals("trainingData")) {
+				trainingData = descriptionI;
+				
+			} else if (descriptionI.getDataInputType().equals("testingData")) {
+				testingData = descriptionI;
+				
+			} else if (descriptionI.getDataInputType().equals("validationData")) {
+				validationData = descriptionI;
+				
+			} else {
+				throw new IllegalArgumentException(descriptionI.getDataOutputType());
+			}
+			
+		}
 		
 	}
 	
