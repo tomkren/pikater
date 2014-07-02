@@ -3,6 +3,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 import jade.content.Concept;
 
@@ -49,8 +50,12 @@ public class DataSourceDescription implements Concept {
     	AbstractDataProcessing dataProcessing =
     			(AbstractDataProcessing) dataProvider;
     	
+    	UniversalOntology uOntology =
+    			dataProcessing.exportUniversalElement();
     	UniversalElement universalDataProvider =
-    			dataProcessing.exportUniversalElement(uModel);
+    			new UniversalElement();
+    	universalDataProvider.setOntologyInfo(uOntology);
+    	
     	
     	UniversalConnector connector =
     			new UniversalConnector();

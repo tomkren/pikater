@@ -3,9 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
@@ -30,33 +29,6 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 	public void setNameOfFile(String nameOfFile) {
 		this.nameOfFile = nameOfFile;
 	}
-
-	@Override
-	UniversalElement exportUniversalElement(
-			UniversalComputationDescription uModel) {
-
-		Option nameOfFileOption = new Option();
-		nameOfFileOption.setName("nameOfFile");
-		nameOfFileOption.setValue(getNameOfFile());
-
-	    List<Option> options = new ArrayList<Option>();
-	    options.add(nameOfFileOption);
-	    
-	    UniversalConnector universalDataSource =
-	    		dataSource.exportUniversalConnector(uModel);
-	    universalDataSource.setInputDataType("dataSource");
-	    
-		UniversalOntology ontologyInfo = new UniversalOntology();
-		ontologyInfo.setType(this.getClass());
-		ontologyInfo.setOptions(options);
-		ontologyInfo.addInputSlot(universalDataSource);
-
-		UniversalElement wrapper = new UniversalElement();
-		wrapper.setOntologyInfo(ontologyInfo);
-		uModel.addElement(wrapper);
-		
-		return wrapper;
-	}
 	
 	static FileDataSaver importUniversalElement(
 			UniversalElement uElement) {
@@ -70,6 +42,48 @@ public class FileDataSaver extends AbstractDataProcessing implements IDataSaver 
 		
 		
 		return fileDataSaver;
+	}
+	
+	@Override
+	public List<Option> getUniversalOptions() {
+		
+		Option nameOfFileOption = new Option();
+		nameOfFileOption.setName("nameOfFile");
+		nameOfFileOption.setValue(getNameOfFile());
+
+	    List<Option> options = new ArrayList<Option>();
+	    options.add(nameOfFileOption);
+
+	    return options;
+	}
+	@Override
+	public void setUniversalOptions(List<Option> options) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public List<Slot> getInputSlots() {
+		return new ArrayList<Slot>();
+	}
+	@Override
+	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+		
+		if (universalInputSlots != null && !universalInputSlots.isEmpty()) {
+			new IllegalArgumentException("Argument universalInputSlots can be only null");
+		}
+	}
+	
+	@Override
+	public List<ErrorDescription> getUniversalErrors() {
+		return new ArrayList<ErrorDescription>();
+	}
+	@Override
+	public void setUniversalErrors(List<ErrorDescription> errors) {
+
+		if (errors != null && !errors.isEmpty()) {
+			new IllegalArgumentException("Argument errors can be only null");
+		}
 	}
 	
 }

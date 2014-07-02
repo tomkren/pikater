@@ -6,13 +6,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
+import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -25,7 +30,7 @@ public class ComputationDescription implements Concept {
 
 	private List<Option> globalOptions = new ArrayList<Option>();
 	private List<FileDataSaver> rootElements = new ArrayList<FileDataSaver>();
-
+	
 	public List<Option> getGlobalOptions() {
 		return globalOptions;
 	}
@@ -42,6 +47,7 @@ public class ComputationDescription implements Concept {
 	}
 
 	public void setRootElements(List<FileDataSaver> rootElements) {
+		
 		if (rootElements == null) {
 			throw new IllegalArgumentException("Argument rootElements can't be null");
 		}
@@ -49,21 +55,88 @@ public class ComputationDescription implements Concept {
 	}
 
 	public void addRootElement(FileDataSaver rootElement) {
+		
 		if (rootElement == null) {
 			throw new IllegalArgumentException("Argument rootElement can't be null");
 		}
 		this.rootElements.add(rootElement);
 	}
 
+	public void generateIDs() {
+		
+		int lastUsedNumber = -1;
+		for (FileDataSaver fileSaverI : rootElements) {
+			lastUsedNumber = fileSaverI.generateIDs(lastUsedNumber);
+		}
+	}
+	
 	public UniversalComputationDescription exportUniversalComputationDescription() {
 
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
 		uModel.addGlobalOptions(new HashSet<Option>(this.getGlobalOptions()));
 
+		
+		// map - id x ontology
+		Map<Integer, UniversalOntology> finishedtUniOntologys =
+				new HashMap<Integer, UniversalOntology>();
+		Map<Integer, IComputationElement> finishedDataProcessings =
+				new HashMap<Integer, IComputationElement>();
+		
+		List<IComputationElement> fifo = new ArrayList<IComputationElement>();
+		
 		for (FileDataSaver saverI : getRootElements()) {
-			saverI.exportUniversalElement(uModel);
+			fifo.add(saverI);
 		}
 
+		// searching to a depth of graph
+		while (! fifo.isEmpty()) {
+
+			IComputationElement dataProcessing = fifo.get(0);
+			fifo.remove(0);
+			
+			if (! finishedDataProcessings.containsKey(dataProcessing.getId()) ) {
+				
+				UniversalOntology uOntology =
+						dataProcessing.exportUniversalElement();
+				
+				finishedtUniOntologys.put(
+						uOntology.getId(), uOntology);
+				finishedDataProcessings.put(
+						dataProcessing.getId(), dataProcessing);
+				
+				for (Slot slotI : dataProcessing.getInputSlots()) {
+					fifo.add( slotI.getAbstractDataProcessing() );
+				}
+			}
+		}
+		
+		// connecting to graph
+		for ( Integer keyI : finishedtUniOntologys.keySet()) {
+			
+			UniversalOntology ontoI = finishedtUniOntologys.get(keyI);
+			IComputationElement processI = finishedDataProcessings.get(keyI);
+			
+			List<Slot> slotsI = processI.getInputSlots();
+			for (Slot slotIJ : slotsI) {
+	
+				UniversalElement uniElement = new UniversalElement();
+				UniversalOntology uniOntology =
+						finishedtUniOntologys.get(slotIJ.getAbstractDataProcessing().getId());
+				uniElement.setOntologyInfo(uniOntology);
+				
+				UniversalConnector connector = new UniversalConnector();
+				connector.setInputDataType(slotIJ.getInputDataType());
+				connector.setOutputDataType(slotIJ.getOutputDataType());
+				connector.setFromElement(uniElement);
+				
+				ontoI.addInputSlot(connector);
+			}
+			
+			UniversalElement elementI =  new UniversalElement();
+			elementI.setOntologyInfo(ontoI);
+			uModel.addElement(elementI);
+		}
+		
 		return uModel;
 	}
 

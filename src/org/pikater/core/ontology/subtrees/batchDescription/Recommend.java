@@ -3,11 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.universalformat.UniversalElement;
-import org.pikater.shared.experiment.universalformat.UniversalOntology;
-
 
 
 /**
@@ -45,24 +42,44 @@ public class Recommend extends AbstractDataProcessing {
     }
 
 	@Override
-	UniversalElement exportUniversalElement(
-			UniversalComputationDescription uModel) {
+	public List<Option> getUniversalOptions() {
 		
 		Option recommenderClassOption = new Option();
 		recommenderClassOption.setName("recommenderClass");
 		recommenderClassOption.setValue(recommenderClass);
 		
-		ArrayList<Option> options = new ArrayList<Option>();
-		options.add(recommenderClassOption);
-		
-		UniversalOntology ontologyInfo = new UniversalOntology();
-		ontologyInfo.setType(this.getClass());
-		ontologyInfo.setOptions(options);
-		
-		UniversalElement wrapper = new UniversalElement();
-		wrapper.setOntologyInfo(ontologyInfo);
-		uModel.addElement(wrapper);
-		
-		return wrapper;
+		List<Option> options = new ArrayList<Option>();
+		options.addAll(this.options);
+		return options;
 	}
+	@Override
+	public void setUniversalOptions(List<Option> options) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ErrorDescription> getUniversalErrors() {
+		return new ArrayList<ErrorDescription>();
+	}
+	@Override
+	public void setUniversalErrors(List<ErrorDescription> errors) {
+		
+		if (errors != null && !errors.isEmpty()) {
+			new IllegalArgumentException("Argument errors can be only null");
+		}
+	}
+
+	@Override
+	public List<Slot> getInputSlots() {
+		return new ArrayList<Slot>();
+	}
+	@Override
+	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+		
+		if (universalInputSlots != null && !universalInputSlots.isEmpty()) {
+			new IllegalArgumentException("Argument universalInputSlots can be only null");
+		}
+	}
+
 }

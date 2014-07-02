@@ -6,11 +6,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.universalformat.UniversalConnector;
-import org.pikater.shared.experiment.universalformat.UniversalElement;
-import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
  * Created by Stepan on 20.4.14.
@@ -60,27 +57,45 @@ public class DataProcessing extends AbstractDataProcessing implements IDataProvi
     }
 
 	@Override
-	UniversalElement exportUniversalElement(
-			UniversalComputationDescription uModel) {
-
-		UniversalOntology ontologyInfo = new UniversalOntology();
-		ontologyInfo.setType(this.getClass());
-		ontologyInfo.setOptions(options);
-
-		for (int i = 0; i < dataSources.size(); i++) {
-
-			DataSourceDescription dI =
-					(DataSourceDescription) dataSources.get(i);
-			UniversalConnector uc = dI.exportUniversalConnector(uModel);
-
-			ontologyInfo.addInputSlot(uc);
-		}
-
-		UniversalElement wrapper = new UniversalElement();
-		wrapper.setOntologyInfo(ontologyInfo);
-		uModel.addElement(wrapper);
+	public List<Option> getUniversalOptions() {
+		return this.options;
+	}
+	@Override
+	public void setUniversalOptions(List<Option> options) {
+		this.options = options;
+	}
+	
+	@Override
+	public List<ErrorDescription> getUniversalErrors() {
+		return this.errors;
+	}
+	@Override
+	public void setUniversalErrors(List<ErrorDescription> errors) {
+		this.errors = errors;
 		
-		return wrapper;
+	}
+	
+	@Override
+	public List<Slot> getInputSlots() {
+	
+		List<Slot> slots = new ArrayList<Slot>();
+		
+		for (DataSourceDescription dI : dataSources ) {
+
+			Slot slot = new Slot();
+			slot.setInputDataType("");
+			slot.setOutputDataType(dI.getDataType());
+			slot.setAbstractDataProcessing(dI.getDataProvider());
+			
+			slots.add(slot);
+		}
+		
+		return slots;
+	}
+	@Override
+	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

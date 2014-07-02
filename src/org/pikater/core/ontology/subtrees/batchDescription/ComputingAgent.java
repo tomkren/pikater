@@ -4,12 +4,9 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.batchDescription.export.Slot;
 import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.universalformat.UniversalConnector;
-import org.pikater.shared.experiment.universalformat.UniversalElement;
-import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 
 /**
@@ -21,7 +18,7 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 
 	private String agentType;
 	private IModelDescription model;
-    private List<Option> options;
+    private List<Option> options = new ArrayList<Option>();
     private EvaluationMethod evaluationMethod;
     
 	private DataSourceDescription trainingData;
@@ -71,40 +68,101 @@ public class ComputingAgent extends AbstractDataProcessing implements IDataProvi
 	}
 	
     public List<Option> getOptions() {
-    	if (this.options == null) {
-    		return new ArrayList<Option>();
-    	}
         return options;
     }
     public void setOptions(List<Option> options) {
+    	
+    	if (options == null) {
+    		throw new NullPointerException("Argument options can't be null");
+    	}
         this.options = options;
     }
     public void addOption(Option option) {
-    	if (this.options == null) {
-    		this.options = new ArrayList<Option>();
+    	
+    	if (option == null) {
+    		throw new NullPointerException("Argument option can't be null");
     	}
         this.options.add(option);
     }
+
+
+	@Override
+	public List<Option> getUniversalOptions() {
+		
+		Option agentTypeOption = new Option();
+		agentTypeOption.setName("agentType");
+		agentTypeOption.setValue(agentType);
+
+		Option modelOption = new Option();
+		modelOption.setName("model");
+		modelOption.setValue(model.toString()); // TODO
+
+		Option evaluationMethodOption = new Option();
+		evaluationMethodOption.setName("evaluationMethod");
+		evaluationMethodOption.setValue(evaluationMethod.toString()); // TODO
+
+		
+		List<Option> options = new ArrayList<Option>();
+		options.add(agentTypeOption);
+		options.add(modelOption);
+		options.add(evaluationMethodOption);
+		options.addAll(this.options);
+		return options;
+	}
+	@Override
+	public void setUniversalOptions(List<Option> options) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public List<ErrorDescription> getUniversalErrors() {
+		return new ArrayList<ErrorDescription>();
+	}
+	@Override
+	public void setUniversalErrors(List<ErrorDescription> errors) {
+		
+		if (errors != null && !errors.isEmpty()) {
+			throw new IllegalArgumentException("Argument errors can be only null");
+		}
+		
+	}	
     
 	@Override
-	UniversalElement exportUniversalElement(
-			UniversalComputationDescription uModel) {
-			    
-	    UniversalConnector universalTrainingData =
-	    		trainingData.exportUniversalConnector(uModel);
-	    universalTrainingData.setInputDataType("trainingData");
+	public List<Slot> getInputSlots() {
+		
+		Slot trainingDataSlot = new Slot();
+		trainingDataSlot.setInputDataType("trainingData");
+		trainingDataSlot.setOutputDataType(trainingData.getDataType());
+		trainingDataSlot.setAbstractDataProcessing(
+				trainingData.getDataProvider());
 
-		UniversalOntology ontologyInfo = new UniversalOntology();
-		ontologyInfo.setType(this.getClass());
-		ontologyInfo.setOptions(options);
-		ontologyInfo.addInputSlot(universalTrainingData);
+		Slot testingDataSlot = new Slot();
+		testingDataSlot.setInputDataType("testingData");
+		testingDataSlot.setOutputDataType(testingData.getDataType());
+		testingDataSlot.setAbstractDataProcessing(
+				(AbstractDataProcessing) testingData.getDataProvider());
+
+		Slot validationDataSlot = new Slot();
+		validationDataSlot.setInputDataType("validationData");
+		validationDataSlot.setOutputDataType(validationData.getDataType());
+		validationDataSlot.setAbstractDataProcessing(
+				(AbstractDataProcessing) testingData.getDataProvider());
+
+		List<Slot> slots = new ArrayList<Slot>();
+		slots.add(trainingDataSlot);
+		slots.add(testingDataSlot);
+		slots.add(validationDataSlot);
 		
-		UniversalElement wrapper = new UniversalElement();
-		wrapper.setOntologyInfo(ontologyInfo);
-		uModel.addElement(wrapper);
-		
-		return wrapper;
+		return slots;
 	}
+	
+	@Override
+	public void setUniversalInputSlots(List<Slot> universalInputSlots) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 }
 
