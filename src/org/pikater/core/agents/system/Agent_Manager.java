@@ -193,7 +193,12 @@ public class Agent_Manager extends PikaterAgent {
 	}
 
 	
-	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {			
+	public void sendSubscription(ACLMessage result, ACLMessage originalMessage) {
+        //TODO: get rid of this, probable te information will be taken form somewhere else
+        if (true)
+        {
+            return;
+        }
 		// Prepare the subscription message to the request originator
 		ACLMessage msgOut = originalMessage.createReply();
 		msgOut.setPerformative(result.getPerformative());
@@ -202,10 +207,6 @@ public class Agent_Manager extends PikaterAgent {
 		try {
             ContentElement content= getContentManager().extractContent(result);
             //TODO: bad ontology
-            if (true)
-            {
-                return;
-            }
 			getContentManager().fillContent(msgOut, content );
 		} catch (UngroundedException e) {
 			e.printStackTrace();

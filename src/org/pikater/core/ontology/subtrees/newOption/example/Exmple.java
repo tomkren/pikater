@@ -51,7 +51,6 @@ public class Exmple {
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(2),
-				typeM,
 				"M");
 		optionM.setDescription("Set minimum number of instances per leaf");
 		
