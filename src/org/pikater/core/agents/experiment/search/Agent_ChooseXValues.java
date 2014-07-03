@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.ChooseXValue_SearchBox;
@@ -99,12 +100,13 @@ public class Agent_ChooseXValues extends Agent_Search {
 
 	@Override
 	protected void loadSearchOptions() {
-		List<Option> search_options = getSearch_options();
+		List<NewOption> search_options = getSearch_options();
 		
-		for (Option next : search_options) {
+		for (NewOption next : search_options) {
 
 			if (next.getName().equals("N")){
-				default_number_of_values_to_try = Integer.parseInt(next.getValue());
+				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				default_number_of_values_to_try = value.getValue();
 			}
 		}
 		List<SearchItem> schema = getSchema();

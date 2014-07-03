@@ -77,5 +77,14 @@ public class SetRestriction implements IRestriction {
 
 		return false;
 	}
+	
+	public SetRestriction cloneSetRestriction() {
+		
+		SetRestriction setRest = new SetRestriction();
+		for (IValue valueI : values) {
+			setRest.addValue(valueI.cloneValue());
+		}
+		return setRest;
+	}
 
 }

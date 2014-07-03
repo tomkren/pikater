@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
-import org.pikater.core.dataStructures.options.Converter;
-import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.core.dataStructures.options.types.OptionInterval;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
 
 
 /**
@@ -30,17 +29,16 @@ public class SearchOnly {
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
-        List<Option> options = new ArrayList<Option>();
-        StepanuvOption lr = new StepanuvOption();
-        lr.setName("L");
-        lr.setOption(new OptionInterval(new Double(0.0) ,new Double(1.0)));
+        List<NewOption> options = new ArrayList<NewOption>();
+        NewOption lr = new NewOption(
+        		new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(0.0)),
+        		"L");
+        
+        NewOption hr = new NewOption(
+        		new IntegerValue(4), "H");
  
-        StepanuvOption hr = new StepanuvOption();
-        hr.setName("H");
-        hr.setOption(new OptionValue(new Integer(4)) );
- 
-        options.add(Converter.toOption(lr));
-        options.add(Converter.toOption(hr));
+        options.add(lr);
+        options.add(hr);
 
         ca.setOptions(options);
 
@@ -59,18 +57,16 @@ public class SearchOnly {
         Search sa = new Search();
         sa.setSearchClass("whatever.ea.is.in.EA");
 
-        List<Option> searchParameters = new ArrayList<Option>();
+        List<NewOption> searchParameters = new ArrayList<NewOption>();
         
-        StepanuvOption pr = new StepanuvOption();
-        pr.setName("ea.popSize");
-        pr.setOption(new OptionValue(new Integer(50)) );
-        
-        StepanuvOption ear = new StepanuvOption();
-        ear.setName("ea.mutationRate");
-        ear.setOption(new OptionValue(new Double(0.03)) );
+        NewOption pr = new NewOption(
+        		new IntegerValue(50), "ea.popSize");
 
-        searchParameters.add(Converter.toOption(pr));
-        searchParameters.add(Converter.toOption(ear));
+        NewOption ear = new NewOption(
+        		new DoubleValue(0.03), "ea.mutationRate");
+
+        searchParameters.add(pr);
+        searchParameters.add(ear);
 
         crsc.setSearch(sa);
 

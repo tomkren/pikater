@@ -33,8 +33,9 @@ import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
-import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
 
 import java.io.BufferedReader;
@@ -89,7 +90,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 		sendAgentInfo(getAgentInfo());
 
-    }  // end setup()
+    }
          
 	
 	protected class receiveRequest extends AchieveREResponder {
@@ -101,7 +102,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		
 		public receiveRequest(Agent a, MessageTemplate mt) {
 			super(a, mt);
-			// TODO Auto-generated constructor stub
 		}
 
         @Override
@@ -121,7 +121,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                     // merge options with .opt file options
                     myAgentOntology.setOptions(getParameters());
 
-                    log("options: " + myAgentOntology.optionsToString(), 2);
+                    log("options: " + Options.exportToWeka(myAgentOntology.getOptions()), 2);
 
                     Data data = rec.getData();
                     
@@ -147,20 +147,20 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         			log("********** Agent "
         					+ recommended_agent.getType()
         					+ " recommended. Options: "
-        					+ recommended_agent.toGuiString()
+        					+ Options.exportToWeka(recommended_agent.getOptions())
         					+ "**********", Verbosity.MINIMAL);
 
-                		// Prepare the content of inform message                       
-        				Result result = new Result(a, recommended_agent);
-        				try {
-        					getContentManager().fillContent(reply, result);
-        				} catch (CodecException ce) {
-        					ce.printStackTrace();
-        				} catch (OntologyException oe) {
-        					oe.printStackTrace();
-        				}
+            		// Prepare the content of inform message                       
+    				Result result = new Result(a, recommended_agent);
+    				try {
+    					getContentManager().fillContent(reply, result);
+    				} catch (CodecException ce) {
+    					ce.printStackTrace();
+    				} catch (OntologyException oe) {
+    					oe.printStackTrace();
+    				}
 
-        				performative = ACLMessage.INFORM;
+    				performative = ACLMessage.INFORM;
         		}
             } catch (OntologyException e) {
                 e.printStackTrace();
@@ -174,9 +174,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         }
     }				        
     
-	private java.util.List<Option> mergeOptions(java.util.List<Option> o1_CA, java.util.List<Option> o2) {
+	private java.util.List<NewOption> mergeOptions(java.util.List<NewOption> o1_CA, java.util.List<NewOption> o2) {
 		
-		java.util.List<Option> new_options = new java.util.ArrayList<Option>();
+		java.util.List<NewOption> new_options = new java.util.ArrayList<NewOption>();
 		if (o1_CA != null) {
 
 			// if this type of agent has got some options
@@ -185,42 +185,42 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 			// go through the CA options
 			// replace the value and add it to the new options
 
-			for (Option next_option : o2) {
+			for (NewOption o2I : o2) {
 				
-				next_option.setValue(next_option.getDefault_value());
+				o2I.setValue(o2I.getDefault_value());
 				
-				for (Option next_CA_option : o1_CA) {
+				for (NewOption o1CAJ : o1_CA) {
 
-					if (next_option.getName().equals(next_CA_option.getName())) {
+					if (o2I.getName().equals(o1CAJ.getName())) {
 						// ostatni optiony zustanou puvodni (= ze souboru)			
 
-						next_option.setUser_value(next_CA_option.getUser_value());
+						o2I.setUser_value(o1CAJ.getUser_value());
 
 						// copy the value
-                        if (next_CA_option.getValue() != null){ 
-                        	next_option.setValue(next_CA_option.getValue());
+                        if (o1CAJ.getValue() != null){ 
+                        	o2I.setValue(o1CAJ.getValue());
                         }
                                                
-                        if (next_CA_option.getData_type() != null){
-                        	next_option.setData_type(next_CA_option.getData_type());                        
+                        if (o1CAJ.getData_type() != null){
+                        	o2I.setData_type(o1CAJ.getData_type());                        
                         }
                         
-						if (next_CA_option.getValue().contains("?")){
+						if (o1CAJ.getValue().contains("?")){
 							// just in case the someone forgot to set opt to mutable
-							next_option.setMutable(true);
+							o2I.setMutable(true);
 						}
 					}
 				}
 				
-				if (next_option.getValue() != null){
-					new_options.add(next_option);
+				if (o2I.getValue() != null){
+					new_options.add(o2I);
 				}
 			}
 		}
 		return new_options;
 	}
 	
-	protected java.util.List<Option> getAgentOptions(String agentType) {
+	protected java.util.List<NewOption> getAgentOptions(String agentType) {
 
 		Ontology ontology = MessagesOntology.getInstance();
 		
@@ -301,117 +301,10 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         return aid;
 	}
 	
-	protected java.util.List<Option> getParameters(){
-		java.util.ArrayList<Option> optFileOptions = getParametersFromOptFile();
+	protected java.util.List<NewOption> getParameters(){
+		java.util.List<NewOption> optFileOptions =
+				this.getAgentInfo().getOptions();
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	
-	protected String getOptFileName(){
-		return System.getProperty("file.separator") + "options" +
-				System.getProperty("file.separator") + getAgentType() +".opt";
-	}
-
-	private java.util.ArrayList<Option> getParametersFromOptFile(){
-		// set default values of options
-		// if values exceed intervals in .opt file -> warning
-
-		// fill the Options vector:
-		java.util.ArrayList<Option> optionsResult = new java.util.ArrayList<Option>();
-		
-		String optPath = System.getProperty("user.dir") +
-				System.getProperty("file.separator") + "options" + 
-				System.getProperty("file.separator") + getAgentType() + ".opt";
-
-			// read options from file
-			try {
-				/* Sets up a file reader to read the options file */
-				FileReader input = new FileReader(optPath);
-				/*
-				 * Filter FileReader through a Buffered read to read a line at a
-				 * time
-				 */
-				BufferedReader bufRead = new BufferedReader(input);
-
-				String line; // String that holds current file line
-				// Read first line
-				line = bufRead.readLine();
-
-				// Read through file one line at time. Print line # and line
-				while (line != null) {
-					// parse the line
-					String delims = "[ ]+";
-					String[] params = line.split(delims, 11);
-
-					if (params[0].equals("$")) {
-						
-						String dt = null; 										
-						if (params[2].equals("boolean")) {
-							dt = "BOOLEAN";
-						}
-						if (params[2].equals("float")) {
-							dt = "FLOAT";
-						}
-						if (params[2].equals("int")) {
-							dt = "INT";
-						}
-						if (params[2].equals("mixed")) {
-							dt = "MIXED";
-						}					
-						
-						float numArgsMin;
-						float numArgsMax;
-						float rangeMin = 0;
-						float rangeMax = 0;
-						String range;
-						java.util.List<String> set = null;
-						
-						if (dt.equals("BOOLEAN")){
-							numArgsMin = 1;
-							numArgsMax = 1;
-							range = null;						
-						}
-						else{
-							numArgsMin = Float.parseFloat(params[3]);
-							numArgsMax = Float.parseFloat(params[4]);
-							range = params[5];
-
-							if (range.equals("r")){
-								rangeMin = Float.parseFloat(params[6]);
-								rangeMax = Float.parseFloat(params[7]);
-							}
-							if (range.equals("s")){
-								set = new java.util.ArrayList<String>();
-								String[] s = params[6].split("[ ]+");
-								for (int i=0; i<s.length; i++){
-									set.add(s[i]);
-								}
-							}
-						}
-						
-						Option o = new Option(params[1], dt,
-								numArgsMin, numArgsMax,
-								range, rangeMin, rangeMax, set,
-								params[params.length-3],
-								params[params.length-2],
-								params[params.length-1]);
-						
-						optionsResult.add(o);
-						
-					}
-
-					line = bufRead.readLine();
-
-				}
-				bufRead.close();
-				
-			} catch (ArrayIndexOutOfBoundsException e) {
-				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			return optionsResult;
-	} // end getParameters
 }

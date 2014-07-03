@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.RandomSearch_SearchBox;
@@ -46,19 +48,21 @@ public class Agent_RandomSearch extends Agent_Search {
 	@Override
 	protected void loadSearchOptions(){
 		
-		List<Option> search_options = getSearch_options();
+		List<NewOption> search_options = getSearch_options();
 		// find maximum tries in Options
 
 		final_error_rate = (float) 0.01;
 		maximum_tries= 10;
 		
-		for (Option next : search_options) {
+		for (NewOption next : search_options) {
 			
 			if (next.getName().equals("E")){
-				final_error_rate = Float.parseFloat(next.getValue());
+				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				final_error_rate = value.getValue();
 			}
 			if (next.getName().equals("M")){
-				maximum_tries = Integer.parseInt(next.getValue());
+				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				maximum_tries = value.getValue();
 			}
 		}
 		// query_block_size = 1;

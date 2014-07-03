@@ -4,7 +4,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 
@@ -17,7 +18,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 	private String agentType;
 	private IModelDescription model;
-    private List<Option> options = new ArrayList<Option>();
+    private List<NewOption> options = new ArrayList<NewOption>();
     private EvaluationMethod evaluationMethod;
     
 	private DataSourceDescription trainingData;
@@ -66,17 +67,17 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		this.evaluationMethod = evaluationMethod;
 	}
 	
-    public List<Option> getOptions() {
+    public List<NewOption> getOptions() {
         return options;
     }
-    public void setOptions(List<Option> options) {
+    public void setOptions(List<NewOption> options) {
     	
     	if (options == null) {
     		throw new NullPointerException("Argument options can't be null");
     	}
         this.options = options;
     }
-    public void addOption(Option option) {
+    public void addOption(NewOption option) {
     	
     	if (option == null) {
     		throw new NullPointerException("Argument option can't be null");
@@ -86,22 +87,18 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 
 	@Override
-	public List<Option> exportAllOptions() {
+	public List<NewOption> exportAllOptions() {
 		
-		Option agentTypeOption = new Option();
-		agentTypeOption.setName("agentType");
-		agentTypeOption.setValue(agentType);
+		NewOption agentTypeOption =
+				new NewOption(new StringValue(agentType), "agentType");
 
-		Option modelOption = new Option();
-		modelOption.setName("model");
-		modelOption.setValue(model.toString()); // TODO
+		NewOption modelOption = new NewOption(
+				new StringValue(model.toString()), "model");  // TODO
 
-		Option evaluationMethodOption = new Option();
-		evaluationMethodOption.setName("evaluationMethod");
-		evaluationMethodOption.setValue(evaluationMethod.toString()); // TODO
-
+		NewOption evaluationMethodOption = new NewOption( // TODO
+				new StringValue(evaluationMethod.toString()), "evaluationMethod");
 		
-		List<Option> options = new ArrayList<Option>();
+		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(agentTypeOption);
 		options.add(modelOption);
 		options.add(evaluationMethodOption);
@@ -109,14 +106,15 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		return options;
 	}
 	@Override
-	public void importAllOptions(List<Option> options) {
+	public void importAllOptions(List<NewOption> options) {
 		
-		List<Option> optionss = new ArrayList<Option>();
+		List<NewOption> optionss = new ArrayList<NewOption>();
 		
-		for (Option optionI : options) {
+		for (NewOption optionI : options) {
 			
 			if (optionI.getName().equals("agentType")) {
-				this.agentType = optionI.getValue();
+				StringValue valueI = (StringValue) optionI.getValues().get(0).getValue(); 
+				this.agentType = valueI.getValue();
 				
 			} else if (optionI.getName().equals("model")) {
 				//this.evaluationMethod = optionI.getValue(); TODO:

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
@@ -70,21 +72,25 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		stability = 0.5;
 		final_error_rate = 0.01;
 		
-		List<Option> search_options = getSearch_options();
+		List<NewOption> search_options = getSearch_options();
 		
-		for (Option next : search_options) {
+		for (NewOption next : search_options) {
 
 			if (next.getName().equals("E")){
-				final_error_rate = Float.parseFloat(next.getValue()); 
+				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				final_error_rate = value.getValue(); 
 			}
 			if (next.getName().equals("M")){
-				maximum_tries = Integer.parseInt(next.getValue()); 
+				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				maximum_tries = value.getValue(); 
 			}
 			if (next.getName().equals("S")){
-				stability = Float.parseFloat(next.getValue()); 
+				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				stability = value.getValue(); 
 			}
 			if (next.getName().equals("T")){
-				temperature = Float.parseFloat(next.getValue()); 
+				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				temperature = value.getValue(); 
 			}
 		}
 	}

@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 import jade.content.Concept;
@@ -15,8 +15,8 @@ public interface IComputationElement extends Concept {
 	public int getId();
 	public void setId(int id);
 	
-	public List<Option> exportAllOptions();
-	public void importAllOptions(List<Option> options);
+	public List<NewOption> exportAllOptions();
+	public void importAllOptions(List<NewOption> options);
 	
 	public List<ErrorDescription> exportAllErrors();
 	public void importAllErrors(List<ErrorDescription> errors);

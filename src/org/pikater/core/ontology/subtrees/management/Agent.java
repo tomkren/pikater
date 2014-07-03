@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.management;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 
 import jade.content.Concept;
 
@@ -15,14 +15,14 @@ public class Agent implements Concept, Cloneable {
 	private static final long serialVersionUID = 6257129995443147585L;
 	private String name;
 	private String type;
-	private List<Option> options;
+	private List<NewOption> options;
 	private byte[] object;
 
 	// Methods required to use this class to represent the OPTIONS role
-	public List<Option> getOptions() {
+	public List<NewOption> getOptions() {
 		return options;
 	}
-	public void setOptions(List<Option> options) {
+	public void setOptions(List<NewOption> options) {
 		this.options = options;
 	}
 
@@ -48,10 +48,10 @@ public class Agent implements Concept, Cloneable {
 	}
 
 	// -----------------------------
-
-	public List<Option> stringToOptions(String optString) {
+/*
+	public List<NewOption> stringToOptions(String optString) {
 		String[] optArray = optString.split("[ ]+");
-		List<Option> optList = new ArrayList<Option>();
+		List<NewOption> optList = new ArrayList<NewOption>();
 		for (int i = 0; i < optArray.length; i++) {
 			if (optArray[i].startsWith("-")) {
 				String name = optArray[i].replaceFirst("-", "");
@@ -59,7 +59,7 @@ public class Agent implements Concept, Cloneable {
 				// (or it is the last element)
 				// => it's a boolean parameter
 
-				Option opt = new Option();
+				NewOption opt = new NewOption();
 				String value;
 				if (i == optArray.length - 1) {
 					value = "True";
@@ -91,36 +91,40 @@ public class Agent implements Concept, Cloneable {
 		}
 		return optList;
 	}
-
+*/
+	/*
 	public String optionsToString() {
 
-		String str = "";
+		String wekaString = "";
 		if (options == null) {
-			return str;
+			return wekaString;
 		}
 
-		for (Option next_opt : options) {
+		for (NewOption optionI : options) {
+			
 
-			if (next_opt.getValue() == null
-					|| next_opt.getValue().equals("null")) {
+			if (optionI.getValue() == null
+					|| optionI.getValue().equals("null")) {
 				// don't include this option to the string
 			} else {
-				if (next_opt.getData_type().equals("BOOLEAN")) {
-					if (next_opt.getValue().equals("True")) {
-						str += "-" + next_opt.getName() + " ";
+				if (optionI.getData_type().equals("BOOLEAN")) {
+					if (optionI.getValue().equals("True")) {
+						str += "-" + optionI.getName() + " ";
 					}
 				} else {
-					str += "-" + next_opt.getName() + " " + next_opt.getValue()
+					str += "-" + optionI.getName() + " " + optionI.getValue()
 							+ " ";
 				}
 			}
+
 		}
-		return str;
+		return wekaString;
 	}
+*/
+	
+	public NewOption getOptionByName(String name) {
 
-	public Option getOptionByName(String name) {
-
-		for (Option optionI : getOptions()) {
+		for (NewOption optionI : getOptions()) {
 			if (optionI.getName().equals(name)) {
 				return optionI;
 			}
@@ -128,14 +132,14 @@ public class Agent implements Concept, Cloneable {
 
 		return null;
 	}
-
+/*
 	public String toGuiString() {
 		if (options == null) {
 			return "";
 		}
 
 		String str = "";
-		for (Option optionI : options) {
+		for (NewOption optionI : options) {
 
 			if (optionI.getData_type().equals("BOOLEAN")) {
 				if (optionI.getValue().equals("True")) {
@@ -170,7 +174,7 @@ public class Agent implements Concept, Cloneable {
 		}
 		return str;
 	}
-
+*/
 	public Object clone() {
 
 		Agent agent = new Agent();

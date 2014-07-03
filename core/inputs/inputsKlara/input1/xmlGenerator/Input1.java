@@ -2,13 +2,12 @@ package xmlGenerator;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
-import org.pikater.core.dataStructures.options.Converter;
-import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 import java.io.FileNotFoundException;
@@ -30,28 +29,25 @@ public final class Input1 {
         EvaluationMethod evaluationMethod = new EvaluationMethod();
         evaluationMethod.setType("CrossValidation");
         
-        //Create cross validation option
-        StepanuvOption optionF = new StepanuvOption();
-        optionF.setName("F");
-        optionF.setOption( new OptionValue(8) );
-                
-        evaluationMethod.addOption( Converter.toOption(optionF) );
+        //Create cross validation option                
+        NewOption optionF = new NewOption(
+        		new IntegerValue(8), "F"); 
+        
+        evaluationMethod.addOption(optionF);
         
         
         //Create two options for single computing agent
-        StepanuvOption optionS = new StepanuvOption();
-        optionS.setName("S");
-        optionS.setOption( new OptionValue(1) );
+        NewOption optionS = new NewOption(
+        		new IntegerValue(1), "S"); 
 
-        StepanuvOption optionM = new StepanuvOption();
-        optionM.setName("M");
-        optionM.setOption( new OptionValue(-2) );
-
+        NewOption optionM = new NewOption(
+        		new IntegerValue(-2), "M"); 
+        
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
-		comAgent.addOption( Converter.toOption(optionS) );
-		comAgent.addOption( Converter.toOption(optionM) );
+		comAgent.addOption(optionS);
+		comAgent.addOption(optionM);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
 		comAgent.setEvaluationMethod(evaluationMethod);

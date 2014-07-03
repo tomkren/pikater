@@ -21,4 +21,19 @@ public class StringValue implements IValue {
 		this.value = value;
 	}
 	
+	@Override
+	public IValue cloneValue() {
+
+		StringValue valueNew = new StringValue();
+		valueNew.setValue(value);
+		
+		return valueNew;
+	}
+	
+	@Override
+	public String exportToWeka() {
+		
+		return value;
+	}
+	
 }

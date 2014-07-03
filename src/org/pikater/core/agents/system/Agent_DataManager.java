@@ -108,6 +108,7 @@ import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.model.GetModel;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.model.SaveModel;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.result.SavedResult;
@@ -936,26 +937,17 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	
-	private ACLMessage respondToSaveResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
-		SaveResults sr = (SaveResults) a.getAction();
-		Task res = sr.getTask();
+	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
+		
+		SaveResults saveResult = (SaveResults) a.getAction();
+		Task task = saveResult.getTask();
+		Options options = new Options(task.getAgent().getOptions());
 	
 		try {
 			JPAResult jparesult = new JPAResult();
 
-			jparesult.setAgentName(res.getAgent().getName());
-			// nesedi na novy model kde jsou ciselne ID agentu - stary model
-			// pouziva Stringy...
-			// jparesult.setAgentTypeId(res.getAgent().getType());
-			jparesult.setOptions(res.getAgent().optionsToString());
-			// cim se ma naplnit serializedFilename?
-			// co tyhle hodnoty co v novem model nejsou?
-			// query += "\'" +
-			// res.getData().removePath(res.getData().getTrain_file_name()) +
-			// "\',";
-			// query += "\'" +
-			// res.getData().removePath(res.getData().getTest_file_name()) +
-			// "\',";
+			jparesult.setAgentName(task.getAgent().getName());
+			jparesult.setOptions(options.exportXML());
 
 			float Error_rate = Float.MAX_VALUE;
 			float Kappa_statistic = Float.MAX_VALUE;
@@ -969,7 +961,7 @@ public class Agent_DataManager extends PikaterAgent {
 			@SuppressWarnings("unused")
 			float durationLR = Float.MAX_VALUE;
 
-			for ( Eval next_eval: res.getResult().getEvaluations() ) {
+			for ( Eval next_eval: task.getResult().getEvaluations() ) {
 
 				if (next_eval.getName().equals("error_rate")) {
 					Error_rate = next_eval.getValue();
@@ -1006,8 +998,8 @@ public class Agent_DataManager extends PikaterAgent {
 			String start = getDateTime();
 			String finish = getDateTime();
 			
-			if (res.getStart() != null) { start = res.getStart(); }
-			if (res.getFinish() != null){ finish = res.getFinish(); }
+			if (task.getStart() != null) { start = task.getStart(); }
+			if (task.getFinish() != null){ finish = task.getFinish(); }
 			
 			jparesult.setErrorRate(Error_rate);
 			jparesult.setKappaStatistic(Kappa_statistic);
@@ -1016,23 +1008,21 @@ public class Agent_DataManager extends PikaterAgent {
 			jparesult.setRelativeAbsoluteError(Relative_absolute_error);
 			jparesult.setRootRelativeSquaredError(Root_relative_squared_error);
 			jparesult.setStart(new Date(Timestamp.valueOf(start).getTime()));
-			// query += "\'" + Timestamp.valueOf(res.getStart()) + "\',";
 			jparesult.setFinish(new Date(Timestamp.valueOf(finish).getTime()));
-			// query += "\'" + Timestamp.valueOf(res.getFinish()) + "\',";
 
 			// v novem modelu tohle neni
 			// query += "\'" + duration + "\',";
 			// query += "\'" + durationLR + "\',";
 
 			// je to ono?
-			jparesult.setSerializedFileName(res.getResult().getObjectFilename());
+			jparesult.setSerializedFileName(task.getResult().getObjectFilename());
 			// query += "\'" + res.getResult().getObject_filename() + "\', ";
 
 			// jparesult.setExperiment(TODO);
 			// query += "\'" + res.getId().getIdentificator() + "\',"; // TODO -
 			// pozor - neni jednoznacne, pouze pro jednoho managera
 			// query += "\'" + res.getProblem_name() + "\',";
-			jparesult.setNote(res.getNote());
+			jparesult.setNote(task.getNote());
 			log("JPA Result    "+jparesult.getErrorRate());
 			DAOs.resultDAO.storeEntity(jparesult);
 			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).info("Persisted JPAResult");
@@ -1255,10 +1245,12 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 		rs.next();
 
+		Options options = Options.importXML(rs.getString("options"));
+		
 		Agent agent = new Agent();
 		agent.setName(rs.getString("agentName"));
 		agent.setType(rs.getString("agentType"));
-		agent.setOptions(agent.stringToOptions(rs.getString("options")));
+		agent.setOptions(options.getList());
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);

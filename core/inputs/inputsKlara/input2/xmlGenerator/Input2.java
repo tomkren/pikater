@@ -7,10 +7,11 @@ import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
-import org.pikater.core.dataStructures.options.Converter;
-import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
 
 //Example: single datasource, search the space of parameters of single computation model
 // Save the results of the best iteration of search
@@ -23,46 +24,33 @@ public final class Input2 {
         //Specify a datasource
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
 
-        //Create two options for single computing agent
-        StepanuvOption optionS = new StepanuvOption();
-        optionS.setName("S");
-        optionS.setOption( new OptionValue(1) );
-
-        StepanuvOption optionB = new StepanuvOption();
-        optionB.setName("B");
-        optionB.setOption( new OptionValue("?") );
+        //Create two options for single computing agent        
+        NewOption optionS = new NewOption(
+        		new IntegerValue(1), "S"); 
+        
+        NewOption optionB = new NewOption(
+        		new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(100.0), 5),
+        		"B");
 
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
-		comAgent.addOption( Converter.toOption(optionS) );
-		comAgent.addOption( Converter.toOption(optionB) );
+		comAgent.addOption(optionS);
+		comAgent.addOption(optionB);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
 
-        //Define options for search and the search itself
-		StepanuvOption optionN = new StepanuvOption();
-		optionN.setName("N");
-		optionN.setSynopsis("number_of_values_to_try");
-		optionN.setOption( new OptionValue(5) );
 		
 		Search search = new Search();
         search.setSearchClass("Agent_ChooseXValues");
-		search.addOption( Converter.toOption(optionN) );
-
-        //Complex computation agent - options + search + simple CA
-/*		StepanuvOption optionOutput = new StepanuvOption();
-		optionOutput.setName("output");
-		optionOutput.setOption( new OptionValue("evaluation_only") );
-*/
-		StepanuvOption optionF = new StepanuvOption();
-		optionF.setName("F");
-		optionF.setOption( new OptionValue(10) );
+		
+        NewOption optionF = new NewOption(
+        		new IntegerValue(10), "F"); 
 		
 		CARecSearchComplex complex = new CARecSearchComplex();
 		complex.setComputingAgent(comAgent);
-//				complex.addOption( Converter.toOption(optionOutput) );
-		complex.addOption( Converter.toOption(optionF) );
+
+		complex.addOption(optionF);
         complex.setSearch(search);
 
         //Set error provider

@@ -3,7 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+
 
 
 
@@ -14,7 +15,7 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 
 	private static final long serialVersionUID = -913470799010962236L;
 
-	private List<Option> options = new ArrayList<Option>();
+	private List<NewOption> options = new ArrayList<NewOption>();
     private List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
 
     private Search search;
@@ -49,13 +50,13 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
         this.recommender = recommender;
     }
 
-    public List<Option> getOptions() {
+    public List<NewOption> getOptions() {
         return options;
     }
-    public void setOptions(List<Option> options) {
+    public void setOptions(List<NewOption> options) {
         this.options = options;
     }
-    public void addOption(Option option) {
+    public void addOption(NewOption option) {
     	if (option == null) {
     		throw new NullPointerException("Argument option can't be null");
     	}
@@ -63,11 +64,11 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
     }
 	
 	@Override
-	public List<Option> exportAllOptions() {
+	public List<NewOption> exportAllOptions() {
 		return this.options;
 	}
 	@Override
-	public void importAllOptions(List<Option> options) {
+	public void importAllOptions(List<NewOption> options) {
 		this.options = options;	
 	}
 	

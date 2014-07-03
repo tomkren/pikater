@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
-import org.pikater.core.dataStructures.options.Converter;
-import org.pikater.core.dataStructures.options.StepanuvOption;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 
 /**
@@ -30,18 +29,16 @@ public class SimpleTraining {
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
-        List<Option> options = new ArrayList<Option>();
+        List<NewOption> options = new ArrayList<NewOption>();
 
-        StepanuvOption lr = new StepanuvOption();
-        lr.setName("L");
-        lr.setOption(new OptionValue(new Double(0.001)) );
+        NewOption lr = new NewOption(
+        		new DoubleValue(0.001), "L"); 
+        
+        NewOption hr = new NewOption(
+        		new IntegerValue(4), "H"); 
 
-        StepanuvOption hr = new StepanuvOption();
-        hr.setName("H");
-        hr.setOption(new OptionValue(new Integer(4)) );
-
-        options.add(Converter.toOption(lr));
-        options.add(Converter.toOption(hr));
+        options.add(lr);
+        options.add(hr);
 
         ca.setOptions(options);
 

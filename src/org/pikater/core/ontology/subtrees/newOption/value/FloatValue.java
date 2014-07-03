@@ -20,5 +20,19 @@ public class FloatValue implements IValue {
 	public void setValue(float value) {
 		this.value = value;
 	}
+	
+	@Override
+	public IValue cloneValue() {
+		
+		FloatValue valueNew = new FloatValue();
+		valueNew.setValue(value);
+		
+		return valueNew;
+	}
 
+	@Override
+	public String exportToWeka() {
+		
+		return String.valueOf(value);
+	}
 }

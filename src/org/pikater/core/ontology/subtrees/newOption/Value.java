@@ -76,4 +76,13 @@ public class Value implements IRestriction {
 		return valueOk && defaultValueOk && typeOk;
 	}
 
+	public Value cloneValue() {
+		
+		Value valueNew = new Value();
+		valueNew.setType(type.cloneType());
+		valueNew.setValue(value.cloneValue());
+		valueNew.setDefaultValue(defaultValue.cloneValue());
+		
+		return valueNew;
+	}
 }

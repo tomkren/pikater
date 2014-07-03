@@ -11,6 +11,17 @@ public class QuestionMarkRange implements IValue {
 	private IValue min;
 	private IValue max;
 	
+	public QuestionMarkRange() {}
+	public QuestionMarkRange(IValue min, IValue max) {
+		this.min = min;
+		this.max = max;
+	}
+
+	public QuestionMarkRange(IValue min, IValue max, int countOfValuesToTry) {
+		this.min = min;
+		this.max = max;
+		this.countOfValuesToTry = countOfValuesToTry;
+	}
 	
 	public int getCountOfValuesToTry() {
 		return countOfValuesToTry;
@@ -31,6 +42,23 @@ public class QuestionMarkRange implements IValue {
 	}
 	public void setMax(IValue max) {
 		this.max = max;
+	}
+
+	@Override
+	public IValue cloneValue() {
+		
+		QuestionMarkRange valueNew = new QuestionMarkRange();
+		valueNew.setCountOfValuesToTry(countOfValuesToTry);
+		valueNew.setMin(min.cloneValue());
+		valueNew.setMin(max.cloneValue());
+		
+		return valueNew;		
+	}
+	
+	@Override
+	public String exportToWeka() {
+		
+		return "?";
 	}
 
 }

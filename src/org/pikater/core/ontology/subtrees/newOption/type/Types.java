@@ -1,5 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.type;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jade.content.Concept;
@@ -25,4 +26,16 @@ public class Types implements Concept {
 		this.types = types;
 	}
 	
+	public Types cloneTypes() {
+			
+		List<Type> typeList = new ArrayList<Type>();
+		for (Type typeI : types) {
+			typeList.add(typeI);
+		}
+		
+		Types typesNew = new Types();
+		typesNew.setTypes(typeList);
+
+		return typesNew;
+	}
 }

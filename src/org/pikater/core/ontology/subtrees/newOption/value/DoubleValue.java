@@ -20,5 +20,19 @@ public class DoubleValue implements IValue {
 	public void setValue(double value) {
 		this.value = value;
 	}
+	
+	@Override
+	public IValue cloneValue() {
+		
+		DoubleValue valueNew = new DoubleValue();
+		valueNew.setValue(value);
+		
+		return valueNew;
+	}
 
+	@Override
+	public String exportToWeka() {
+		
+		return String.valueOf(value);
+	}
 }

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.XStreamHelper;
 
 public class UniversalComputationDescription
@@ -14,7 +14,7 @@ public class UniversalComputationDescription
 	/**
 	 * Top-level options for this computation.
 	 */
-	private final Set<Option> globalOptions;
+	private final Set<NewOption> globalOptions;
 	
 	/**
 	 * Tree of ComputingDescription. Ontology elements wrapped in
@@ -35,7 +35,7 @@ public class UniversalComputationDescription
 	
 	public UniversalComputationDescription()
 	{
-		this.globalOptions = new HashSet<Option>();
+		this.globalOptions = new HashSet<NewOption>();
 		this.rootElements = new HashSet<UniversalElement>();
 		this.allElements = new HashSet<UniversalElement>();
 		this.defaultWrapper = new UniversalGuiWrapper(null);
@@ -44,17 +44,17 @@ public class UniversalComputationDescription
 	// ----------------------------------------------------------
 	// SOME BASIC INTERFACE
 
-	public Set<Option> getGlobalOptions()
+	public Set<NewOption> getGlobalOptions()
 	{
 		return globalOptions;
 	}
 
-	public void addGlobalOptions(Option... options)
+	public void addGlobalOptions(NewOption... options)
 	{
 		this.globalOptions.addAll(Arrays.asList(options));
 	}
 	
-	public void addGlobalOptions(Set<Option> options) {
+	public void addGlobalOptions(Set<NewOption> options) {
 		this.globalOptions.addAll(options);
 	}
 	

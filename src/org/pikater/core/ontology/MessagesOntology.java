@@ -16,12 +16,14 @@ import org.pikater.core.ontology.subtrees.file.ImportFile;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.GetAgents;
 import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.IValue;
 import org.pikater.core.ontology.subtrees.oldPikaterMessages.Method;
 import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
-import org.pikater.core.ontology.subtrees.option.Interval;
-import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.core.ontology.subtrees.option.Options;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.PartialResults;
@@ -53,8 +55,18 @@ public class MessagesOntology extends BeanOntology {
 	private MessagesOntology() {
         super("MessagesOntology");
 
+        String optionPackage = NewOption.class.getPackage().getName();
+        String restrictionPackage = IRestriction.class.getPackage().getName();
+        String typePackage = Type.class.getPackage().getName();
+        String valuePackage = IValue.class.getPackage().getName();
+        
         try {
 
+            add(optionPackage);
+            add(restrictionPackage);
+            add(typePackage);
+            add(valuePackage);
+            
         	///////////////OLD PIKATER////////////////////////
         	// messages
             add(Agent.class);
@@ -79,10 +91,8 @@ public class MessagesOntology extends BeanOntology {
             add(Id.class);
             add(ImportFile.class);
             add(Instance.class);
-            add(Interval.class);
             add(LoadResults.class);
             add(Method.class);
-            add(Option.class);
             add(Options.class);
             add(PartialResults.class);
             add(Problem.class);

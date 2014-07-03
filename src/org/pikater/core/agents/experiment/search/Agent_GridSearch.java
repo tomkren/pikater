@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
@@ -189,15 +190,17 @@ public class Agent_GridSearch extends Agent_Search {
 
     @Override
     protected void loadSearchOptions() { 
-        List<Option> search_options = getSearch_options();
+        List<NewOption> search_options = getSearch_options();
         
-        for (Option next : search_options) {
+        for (NewOption next : search_options) {
 
             if (next.getName().equals("N")) {
-                defaultTries = Integer.parseInt(next.getValue());
+            	IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+                defaultTries = value.getValue();
             }
             if (next.getName().equals("B")) {
-                query_block_size = Integer.parseInt(next.getValue());
+            	IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+                query_block_size = value.getValue();
             }
             //if (next.getName().equals("L")) {
             //   linearSteps = Boolean.parseBoolean(next.getValue());
@@ -206,7 +209,8 @@ public class Agent_GridSearch extends Agent_Search {
             //    logSteps = Boolean.parseBoolean(next.getValue());
             //}
             if (next.getName().equals("Z")) {
-                logZero = Double.parseDouble(next.getValue());
+               	IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+                logZero = value.getValue();
             }
         }
         schema = getSchema();

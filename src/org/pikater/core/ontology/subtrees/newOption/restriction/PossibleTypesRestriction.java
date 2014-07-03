@@ -86,4 +86,13 @@ public class PossibleTypesRestriction implements IRestriction {
 		return true;
 	}
 
+	public PossibleTypesRestriction clonePossibleTypesRestriction() {
+		
+		PossibleTypesRestriction ptr = new PossibleTypesRestriction();
+		for (Types typesI : possibleTypes) {
+			ptr.addPossibleValues(typesI.cloneTypes());
+		}
+		return ptr;
+	}
+
 }

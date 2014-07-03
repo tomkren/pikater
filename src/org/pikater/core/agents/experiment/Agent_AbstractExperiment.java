@@ -39,14 +39,11 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 			log("Reply: OK");// + replyOK.getContent());
 			
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		}
 
 	}

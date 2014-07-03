@@ -3,7 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 
 
 /**
@@ -14,7 +15,7 @@ public class Recommend extends DataProcessing {
 	private static final long serialVersionUID = -1204258141585020540L;
 
 	private String recommenderClass;
-    private List<Option> options = new ArrayList<Option>();
+    private List<NewOption> options = new ArrayList<NewOption>();
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -24,13 +25,13 @@ public class Recommend extends DataProcessing {
         this.recommenderClass = recommenderClass;
     }
 
-    public List<Option> getOptions() {
+    public List<NewOption> getOptions() {
         return options;
     }
-    public void setOptions(ArrayList<Option> options) {
+    public void setOptions(ArrayList<NewOption> options) {
         this.options = options;
     }
-    public void addOption(Option option) {
+    public void addOption(NewOption option) {
 		
     	if (option == null) {
 			throw new IllegalArgumentException("Argument option can't be null");
@@ -39,18 +40,18 @@ public class Recommend extends DataProcessing {
     }
 
 	@Override
-	public List<Option> exportAllOptions() {
+	public List<NewOption> exportAllOptions() {
 		
-		Option recommenderClassOption = new Option();
-		recommenderClassOption.setName("recommenderClass");
-		recommenderClassOption.setValue(recommenderClass);
+		NewOption recommenderClassOption = new NewOption(
+				new StringValue(recommenderClass), "recommenderClass");
 		
-		List<Option> options = new ArrayList<Option>();
+		List<NewOption> options = new ArrayList<NewOption>();
+		options.add(recommenderClassOption);
 		options.addAll(this.options);
 		return options;
 	}
 	@Override
-	public void importAllOptions(List<Option> options) {
+	public void importAllOptions(List<NewOption> options) {
 		
     	if (options == null) {
     		throw new IllegalArgumentException("Argument options can't be null");

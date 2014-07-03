@@ -34,11 +34,11 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -187,8 +187,12 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		 * INPUT: task with weka options Fills the OPTIONS array and
 		 * current_task.
 		 */
+		
+		String wekaOptionsString = 
+				Options.exportToWeka(task.getAgent().getOptions());
+		
+		options = wekaOptionsString.split("[ ]+");
 		currentTask = task;
-		options = task.getAgent().optionsToString().split("[ ]+");
 
 		return true;
 	}

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
@@ -20,8 +20,8 @@ public class DataProcessing implements IDataProvider {
 	private static final long serialVersionUID = -2418323249803736416L;
 
 	private int id = -1;
-	private List<Option> options =
-			new ArrayList<Option>();
+	private List<NewOption> options =
+			new ArrayList<NewOption>();
     
 	private List<ErrorDescription> errors =
 			new ArrayList<ErrorDescription>();
@@ -35,10 +35,10 @@ public class DataProcessing implements IDataProvider {
 		this.id = id;
 	}
 
-	public List<Option> getOptions() {
+	public List<NewOption> getOptions() {
 		return options;
 	}
-	public void setOptions(List<Option> options) {
+	public void setOptions(List<NewOption> options) {
 		this.options = options;
 	}
 
@@ -65,11 +65,11 @@ public class DataProcessing implements IDataProvider {
 
 	
 	@Override
-	public List<Option> exportAllOptions() {
+	public List<NewOption> exportAllOptions() {
 		return getOptions();
 	}
 	@Override
-	public void importAllOptions(List<Option> options) {
+	public void importAllOptions(List<NewOption> options) {
 		setOptions(options);
 	}
 	
@@ -90,7 +90,7 @@ public class DataProcessing implements IDataProvider {
 	@Override
 	public void importAllDataSourceDescriptions(
 			List<DataSourceDescription> dataSourceDescriptions) {
-		setDataSources(dataSourceDescriptions);
+		getDataSources();
 	}
 	
 	public int generateIDs(int lastUsedId) {
@@ -139,7 +139,7 @@ public class DataProcessing implements IDataProvider {
 		DataProcessing dataProcess = (DataProcessing) object;
 		dataProcess.setId(uOntology.getId());
 		dataProcess.setOptions(
-				new ArrayList<Option>(uOntology.getOptions()));
+				new ArrayList<NewOption>(uOntology.getOptions()));
 		dataProcess.setErrors(
 				new ArrayList<ErrorDescription>(uOntology.getErrors()));
 		

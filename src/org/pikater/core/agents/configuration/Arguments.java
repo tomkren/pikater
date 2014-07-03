@@ -2,10 +2,7 @@ package org.pikater.core.agents.configuration;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.pikater.core.ontology.subtrees.option.Option;
 
 /**
  * User: Kuba

@@ -1,5 +1,8 @@
 package org.pikater.core.agents.system;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -17,9 +20,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.proto.ContractNetInitiator;
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
-
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -32,7 +32,7 @@ import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
@@ -46,7 +46,7 @@ public class Agent_Duration extends PikaterAgent {
     
     private final String LOG_LR_DURATIONS_NAME="log_LR_durations";
 	
-	List durations = new ArrayList();  // list of Durations
+    List<Duration> durations = new ArrayList<Duration>();
     
     int t = 10000; //ms
     AID aid = null;
@@ -59,9 +59,9 @@ public class Agent_Duration extends PikaterAgent {
     	return "Duration";
     }
     
-	public java.util.List<Ontology> getOntologies() {
+	public List<Ontology> getOntologies() {
 		
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(MessagesOntology.getInstance());
 		
@@ -144,7 +144,7 @@ public class Agent_Duration extends PikaterAgent {
     	
     	// find the duration right before the start
     	int i_d = durations.size()-1;
-    	while (start < ((Duration)durations.get(i_d)).getStart().getTime()){    		
+    	while (start < (durations.get(i_d)).getStart().getTime()){    		
     		i_d--;
     	}
     	
@@ -176,7 +176,7 @@ public class Agent_Duration extends PikaterAgent {
 	    		}
 	    		
 	    		// System.out.println("d: " + d + " LR dur: " + ((Duration)durations.get(i_d + i)).getDuration());
-	    		number_of_LRs += (float)d / (float)((Duration)durations.get(i_d + i)).getDurationMiliseconds();
+	    		number_of_LRs += (float)d / (float)(durations.get(i_d + i)).getDurationMiliseconds();
 	    		duration = duration - (int)Math.ceil(d);
 	    		
 	    		i++;
@@ -289,7 +289,7 @@ public class Agent_Duration extends PikaterAgent {
 				content = getContentManager().extractContent(inform);
 				if (content instanceof Result) {
 					Result result = (Result) content;					
-					List tasks = (List)result.getValue();
+					jade.util.leap.List tasks = (jade.util.leap.List)result.getValue();
 					Task t = (Task) tasks.get(0);
 					
 					if (durations.size() > 1000000) { // over 270 hours
@@ -298,7 +298,7 @@ public class Agent_Duration extends PikaterAgent {
 					
 					// save the duration of the computation to the list
 					Evaluation evaluation = (Evaluation)t.getResult();
-					java.util.List<Eval> ev = evaluation.getEvaluations();
+					List<Eval> ev = evaluation.getEvaluations();
 					
 					Duration d = new Duration();
 					for (Eval eval : ev) {
@@ -341,12 +341,12 @@ public class Agent_Duration extends PikaterAgent {
 		cfp.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 
 		// We want to receive a reply in 10 secs
-		cfp.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+		cfp.setReplyByDate(new java.util.Date(System.currentTimeMillis() + 10000));
 
 		org.pikater.core.ontology.subtrees.management.Agent ag =
 				new org.pikater.core.ontology.subtrees.management.Agent();
 		ag.setType("LinearRegression");
-		ag.setOptions(new java.util.ArrayList<Option>());
+		ag.setOptions(new ArrayList<NewOption>());
 
 		Data d = new Data();
 		d.setTestFileName("xxx");

@@ -19,6 +19,21 @@ public class BooleanValue implements IValue {
 	}
 	public void setValue(boolean value) {
 		this.value = value;
+	}
+	
+	@Override
+	public IValue cloneValue() {
+		
+		BooleanValue valueNew = new BooleanValue();
+		valueNew.setValue(value);
+		
+		return valueNew;
+	}
+	
+	@Override
+	public String exportToWeka() {
+		
+		return String.valueOf(value);
 	}	
 
 }

@@ -20,5 +20,18 @@ public class IntegerValue implements IValue {
 	public void setValue(int value) {
 		this.value = value;
 	}
+	@Override
+	public IValue cloneValue() {
 
+		IntegerValue valueNew = new IntegerValue();
+		valueNew.setValue(value);
+		
+		return valueNew;
+	}
+	
+	@Override
+	public String exportToWeka() {
+		
+		return String.valueOf(value);
+	}
 }

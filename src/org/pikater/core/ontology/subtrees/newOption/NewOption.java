@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkSet;
+
+import com.thoughtworks.xstream.XStream;
 
 public class NewOption {
 
@@ -57,6 +62,7 @@ public class NewOption {
 	public void setValues(List<Value> values) {
 		this.values = values;
 	}
+	
 	public boolean isEmpty() {
 		return values == null && values.size() == 0;
 	}
@@ -77,6 +83,34 @@ public class NewOption {
 			PossibleTypesRestriction possibleTypesRestriction) {
 		this.possibleTypesRestriction = possibleTypesRestriction;
 	}
+	
+	public boolean isMutable() {
+		
+		for (Value valueI : values) {
+			IValue ivalueI = valueI.getValue();
+			if (ivalueI instanceof QuestionMarkRange ||
+					ivalueI instanceof QuestionMarkSet) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public NewOption cloneOption() {
+		
+		NewOption newOption = new NewOption();
+		newOption.setName(getName());
+		newOption.setDescription(getDescription());
+		
+		for (Value valueI : values) {
+			newOption.addValue(valueI.cloneValue());
+		}
+		newOption.setPossibleTypesRestriction(
+				possibleTypesRestriction.clonePossibleTypesRestriction());
+		
+		return newOption;
+	}
+	
 	public boolean isValid() {
 
 		if (values == null || values.isEmpty() ) {
@@ -87,4 +121,39 @@ public class NewOption {
 		return true;
 	}
 
+	public String exportToWeka() {
+		
+		String wekaString = "-" + this.getName();
+		
+		for (Value valueI : values) {
+			if (valueI.getValue() instanceof NullValue) {
+				continue;
+			}
+
+			wekaString += " " + valueI.getValue().exportToWeka();
+		}
+		
+		return wekaString;
+	}
+	
+	public String exportXML() {
+
+		XStream xstream = new XStream();
+		xstream.setMode(XStream.ID_REFERENCES);
+		
+		String xml = xstream.toXML(this);
+
+		return xml;
+	}
+	
+	public static NewOption importXML(String xml) {
+
+		XStream xstream = new XStream();
+		xstream.setMode(XStream.ID_REFERENCES);
+
+		NewOption optionNew = (NewOption) xstream
+				.fromXML(xml);
+
+		return optionNew;
+	}
 }

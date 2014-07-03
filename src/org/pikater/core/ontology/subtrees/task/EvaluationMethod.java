@@ -1,29 +1,30 @@
 package org.pikater.core.ontology.subtrees.task;
 
-import org.pikater.core.ontology.subtrees.option.Option;
 
 import jade.content.Concept;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+
 public class EvaluationMethod implements Concept {
 
 	private static final long serialVersionUID = -9024769565945696142L;
 	private String type;
-	private List<Option> options;
+	private List<NewOption> options;
 
 
-	public void setOptions(List<Option> options) {
+	public void setOptions(List<NewOption> options) {
 		this.options = options;
 	}
-	public List<Option> getOptions() {
+	public List<NewOption> getOptions() {
 		return options;
 	}
 	
-    public void addOption(Option option) {
+    public void addOption(NewOption option) {
     	if (this.options == null) {
-    		this.options = new ArrayList<Option>();
+    		this.options = new ArrayList<NewOption>();
     	}
         this.options.add(option);
     }

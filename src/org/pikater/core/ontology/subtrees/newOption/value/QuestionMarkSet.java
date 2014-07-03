@@ -1,5 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.value;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionMarkSet implements IValue {
@@ -11,6 +12,7 @@ public class QuestionMarkSet implements IValue {
 
 	private int countOfValuesToTry;
 	private List<IValue> values;
+	
 	public int getCountOfValuesToTry() {
 		return countOfValuesToTry;
 	}
@@ -23,5 +25,27 @@ public class QuestionMarkSet implements IValue {
 	public void setValues(List<IValue> values) {
 		this.values = values;
 	}
+	
+	@Override
+	public IValue cloneValue() {
+
+		QuestionMarkSet setNew = new QuestionMarkSet();
+		setNew.setCountOfValuesToTry(countOfValuesToTry);
+		
+		List<IValue> valuesNew = new ArrayList<IValue>();
+		for (IValue valueI : values) {
+			valuesNew.add(valueI.cloneValue());
+		}
+		setNew.setValues(valuesNew);
+		
+		return setNew;
+	}
+	
+	@Override
+	public String exportToWeka() {
+		
+		return "?";
+	}
+	
 	
 }

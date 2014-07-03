@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
 import jade.content.Concept;
+
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
@@ -11,8 +12,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeVal
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.option.Option;
-
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -171,8 +171,8 @@ public class Parser {
         computingNode.setModelClass(computingAgentO.getAgentType());       
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         
-        ArrayList<Option> options=new ArrayList<Option>();
-        for (Option o:computingAgentO.getOptions())
+        ArrayList<NewOption> options=new ArrayList<NewOption>();
+        for (NewOption o:computingAgentO.getOptions())
         {
             options.add(o);
         }
@@ -186,7 +186,7 @@ public class Parser {
         agent.log("Ontology Parser - CARecSearchComplex");
 
         ComputationNode computingNode;
-        List<Option> childOptions;
+        List<NewOption> childOptions;
         IComputingAgent iComputingAgent = complex.getComputingAgent();
         if (iComputingAgent instanceof CARecSearchComplex)
         {
@@ -219,7 +219,7 @@ public class Parser {
         return computingNode;
     }
 
-    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors,List<Option> childOptions) {
+    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors,List<NewOption> childOptions) {
         agent.log("Ontology Parser - Search");
 
         if (!alreadyProcessed.containsKey(search))
@@ -259,7 +259,7 @@ public class Parser {
         child.addInput("recommender",recBuffer);
         computationGraph.addNode(recNode);
         alreadyProcessed.put(recommender,recNode);
-        List<Option> options = recommender.getOptions();
+        List<NewOption> options = recommender.getOptions();
 
         addOptionsToInputs(recNode, options);
         recNode.setRecommenderClass(recommender.getRecommenderClass());
@@ -285,7 +285,7 @@ public class Parser {
         return computationGraph;
     }
 
-    private void addOptionsToInputs(ComputationNode node,List<Option> options)
+    private void addOptionsToInputs(ComputationNode node,List<NewOption> options)
     {
         OptionEdge option=new OptionEdge();
         option.setOptions(options);

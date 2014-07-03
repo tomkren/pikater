@@ -1,12 +1,8 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
-import jade.util.leap.ArrayList;
-
-import org.pikater.core.ontology.subtrees.option.Option;
-
 import java.util.List;
 
-import java.util.List;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 
 /**
  * User: Kuba
@@ -14,13 +10,13 @@ import java.util.List;
  * Time: 13:28
  */
 public class OptionEdge extends EdgeValue {
-    private List<Option> options;
+    private List<NewOption> options;
 
-    public List<Option> getOptions() {
+    public List<NewOption> getOptions() {
         return options;
     }
 
-    public void setOptions(List<Option> options) {
+    public void setOptions(List<NewOption> options) {
         this.options = options;
     }
 }

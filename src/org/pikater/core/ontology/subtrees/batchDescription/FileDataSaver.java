@@ -3,7 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
@@ -36,31 +37,33 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 		
 		FileDataSaver fileDataSaver = new FileDataSaver();
 
-		Option optionNameOfFile = uOntology.getOptionByName("nameOfFile");
-		fileDataSaver.setNameOfFile(optionNameOfFile.getValue());
+		NewOption optionNameOfFile = uOntology.getOptionByName("nameOfFile");
+		StringValue value = (StringValue) optionNameOfFile.getValues().get(0).getValue();
+		fileDataSaver.setNameOfFile(value.getValue());
 		
 		
 		return fileDataSaver;
 	}
 	
 	@Override
-	public List<Option> exportAllOptions() {
+	public List<NewOption> exportAllOptions() {
 		
-		Option nameOfFileOption = new Option();
-		nameOfFileOption.setName("nameOfFile");
-		nameOfFileOption.setValue(getNameOfFile());
+		NewOption nameOfFileOption = new NewOption(
+				new StringValue(getNameOfFile()), "nameOfFile");
 
-	    List<Option> options = new ArrayList<Option>();
+	    List<NewOption> options = new ArrayList<NewOption>();
 	    options.add(nameOfFileOption);
 
 	    return options;
 	}
 	@Override
-	public void importAllOptions(List<Option> options) {
+	public void importAllOptions(List<NewOption> options) {
 		
-		for (Option optionI : options) {
+		for (NewOption optionI : options) {
 			if (optionI.getName().equals("nameOfFile")) {
-				this.nameOfFile = optionI.getValue();
+				StringValue value = (StringValue)
+						optionI.getValues().get(0).getValue();
+				this.nameOfFile = value.getValue();
 			}
 		}
 		

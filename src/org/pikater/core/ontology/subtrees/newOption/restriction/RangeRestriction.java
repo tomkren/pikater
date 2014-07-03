@@ -67,5 +67,13 @@ public class RangeRestriction implements IRestriction {
 
 		return false;
 	}
+	
+	public RangeRestriction cloneRangeRestriction() {
+		
+		RangeRestriction rangeNew = new RangeRestriction();
+		rangeNew.setMinValeu(minValeu.cloneValue());
+		rangeNew.setMaxValeu(maxValeu.cloneValue());
+		return rangeNew;
+	}
 
 }

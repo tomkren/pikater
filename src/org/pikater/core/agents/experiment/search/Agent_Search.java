@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.SearchOntology;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
-import org.pikater.core.ontology.subtrees.option.Option;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -46,7 +46,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	protected int query_block_size = 1;
 
 	private String conversationID;	
-	private List<Option> search_options = null;
+	private List<NewOption> search_options = null;
 	private List<SearchItem> schema = null;
 	
 	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
@@ -87,12 +87,12 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		}
 		
 	}
-	protected List<Option> getSearch_options() {
+	protected List<NewOption> getSearch_options() {
 
 		if(search_options != null) {
 			return search_options;
 		} else {
-			return new ArrayList<Option>();
+			return new ArrayList<NewOption>();
 		}
 	}
 	
@@ -302,105 +302,17 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 	
 	protected ACLMessage getParameters(ACLMessage request) {
-		ACLMessage reply = request.createReply();
 		
 		org.pikater.core.ontology.subtrees.management.Agent agent = null;
+		agent = new org.pikater.core.ontology.subtrees.management.Agent();
+		agent.setName(getLocalName());
+		agent.setType(getAgentType());
+		agent.setOptions(getAgentInfo().getOptions());
 
-		String optPath = System.getProperty("user.dir") +
-			System.getProperty("file.separator") + "options" + 
-			System.getProperty("file.separator") + getAgentType() + ".opt";
-
-		// read options from file
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
 		try {
-			/* Sets up a file reader to read the options file */
-			FileReader input = new FileReader(optPath);
-			/*
-			 * Filter FileReader through a Buffered read to read a line at a
-			 * time
-			 */
-			BufferedReader bufRead = new BufferedReader(input);
-
-			String line; // String that holds current file line
-			// Read first line
-			line = bufRead.readLine();
-
-			// list of ontology.messages.Option
-			List<Option> _options = new ArrayList<Option>();
-			agent = new org.pikater.core.ontology.subtrees.management.Agent();
-			agent.setName(getLocalName());
-			agent.setType(getAgentType());
-			
-			// Read through file one line at time. Print line # and line
-			while (line != null) {
-				// parse the line
-				String delims = "[ ]+";
-				String[] params = line.split(delims, 11);
-
-				if (params[0].equals("$")) {
-					
-					String dt = null; 										
-					if (params[2].equals("boolean")) {
-						dt = "BOOLEAN";
-					}
-					if (params[2].equals("float")) {
-						dt = "FLOAT";
-					}
-					if (params[2].equals("int")) {
-						dt = "INT";
-					}
-					if (params[2].equals("mixed")) {
-						dt = "MIXED";
-					}					
-					
-					float numArgsMin;
-					float numArgsMax;
-					float rangeMin = 0;
-					float rangeMax = 0;
-					String range;
-					List<String> set = null;
-					
-					if (dt.equals("BOOLEAN")){
-						numArgsMin = 1;
-						numArgsMax = 1;
-						range = null;						
-					}
-					else{
-						numArgsMin = Float.parseFloat(params[3]);
-						numArgsMax = Float.parseFloat(params[4]);
-						range = params[5];
-
-						if (range.equals("r")){
-							rangeMin = Float.parseFloat(params[6]);
-							rangeMax = Float.parseFloat(params[7]);
-						}
-						if (range.equals("s")){
-							set = new ArrayList<String>();
-							String[] s = params[6].split("[ ]+");
-							for (int i=0; i<s.length; i++){
-								set.add(s[i]);
-							}
-						}
-					}
-					
-					Option o = new Option(params[1], dt,
-							numArgsMin, numArgsMax,
-							range, rangeMin, rangeMax, set,
-							params[params.length-3],
-							params[params.length-2],
-							params[params.length-1]);
-					
-					_options.add(o);
-					
-				}
-
-				line = bufRead.readLine();
-
-			}
-			agent.setOptions(_options);
-			bufRead.close();
-
-			reply.setPerformative(ACLMessage.INFORM);
-
 			// Prepare the content
 			ContentElement content = getContentManager()
 					.extractContent(request); // TODO exception block?
@@ -412,10 +324,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			e.printStackTrace();
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent(e.getMessage());
 		} catch (CodecException e) {
 			e.printStackTrace();
 			reply.setPerformative(ACLMessage.FAILURE);
@@ -424,13 +332,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			e.printStackTrace();
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent(e.getMessage());
 		}
 		
 		return reply;
-	} // end getParameters
+	}
 
 }

@@ -21,8 +21,7 @@ import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
-import org.pikater.core.ontology.subtrees.option.Interval;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
@@ -161,12 +160,12 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             }
         }
 
-        java.util.List<Option> optionSamples = getAgentOptions(bestAgentType);
-        java.util.List<Option> options = new java.util.ArrayList<Option>();
+        java.util.List<NewOption> optionSamples = getAgentOptions(bestAgentType);
+        java.util.List<NewOption> options = new java.util.ArrayList<NewOption>();
         
-        for (Option optionI : optionSamples) {
+        for (NewOption optionI : optionSamples) {
 
-            Option newOpt = optionI.copyOption();        	
+        	NewOption newOpt = optionI.cloneOption()();        	
             
             //ignore boolean and set options for now, set their value to the one of the best agent on closest file
             if (optionI.getData_type().equals("BOOLEAN") || optionI.getData_type().equals("MIXED")) {

@@ -74,4 +74,17 @@ public class Type implements IRestriction {
 		return new Type(className);
 	}
 
+	public Type cloneType() {
+		
+		Type typeNew = new Type();
+		typeNew.setClassName(className);
+		if (rangeRestriction != null) {
+			typeNew.setRangeRestriction(rangeRestriction.cloneRangeRestriction());
+		}
+		if (setRestriction != null) {
+			typeNew.setSetRestriction(setRestriction.cloneSetRestriction());
+		}
+		return typeNew;
+	}
+	
 }

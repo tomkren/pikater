@@ -32,8 +32,8 @@ import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.core.ontology.subtrees.option.Options;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -91,9 +91,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	}
 	
 	//Create new options from solution with filled ? values (convert solution->options) 
-	private Options fillOptionsWithSolution(List<Option> options, SearchSolution solution){
+	private Options fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
 		Options res_options = new Options();
-		List<Option> options_list = new ArrayList<Option>();
+		List<NewOption> options_list = new ArrayList<NewOption>();
 		if(options==null){
 			return res_options;
 		}
@@ -103,12 +103,11 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 			return res_options;
 		}
 		java.util.Iterator<String> sol_itr = solution.getValues().iterator();
-		java.util.Iterator<Option> opt_itr = options.iterator();
-		while (opt_itr.hasNext()) {
-			Option opt = (Option) opt_itr.next();
-			Option new_opt = opt.copyOption();
-			if(opt.getMutable())
-				new_opt.setValue(fillOptWithSolution(opt, sol_itr));
+		
+		for (NewOption optionI : options) {
+			NewOption new_opt = optionI.cloneOption();
+			if(optionI.isMutable())
+				new_opt.setValue(fillOptWithSolution(optionI, sol_itr));
 			options_list.add(new_opt);
 		}
 		res_options.setList(options_list);
@@ -116,17 +115,17 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	}
 	
 	//Fill an option's ? with values in iterator
-	private String fillOptWithSolution(Option opt, java.util.Iterator<String> solution_itr){		
+	private String fillOptWithSolution(NewOption opt, java.util.Iterator<String> solution_itr){		
 		String res_values = "";
 		String[] values = ((String)opt.getUser_value()).split(",");
-		int numArgs = values.length;
-		for (int i = 0; i < numArgs; i++) {
+
+		for (int i = 0; i < values.length; i++) {
 			if (values[i].equals("?")) {
 				res_values+=(String)solution_itr.next();
 			}else{
 				res_values+=values[i];
 			}
-			if (i < numArgs-1){
+			if (i < values.length-1){
 				res_values+=",";
 			}
 		}
@@ -214,14 +213,11 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		try {
 			content = myAgent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			myAgent.logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			myAgent.logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			myAgent.logError(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
@@ -250,9 +246,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		try {
 			myAgent.getContentManager().fillContent(request, a);
 		} catch (CodecException e) {
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		}
 		
 		return request;

@@ -7,6 +7,10 @@ import org.pikater.core.ontology.subtrees.batchDescription.IModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.ModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.value.IValue;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 
@@ -19,7 +23,12 @@ public class TaskOntology extends BeanOntology {
 
         String taskPackage = Task.class.getPackage().getName();
         String dataPackage = Data.class.getPackage().getName();
-                
+        
+        String optionPackage = NewOption.class.getPackage().getName();
+        String restrictionPackage = IRestriction.class.getPackage().getName();
+        String typePackage = Type.class.getPackage().getName();
+        String valuePackage = IValue.class.getPackage().getName();
+        
         try {
 
             add(taskPackage);
@@ -27,6 +36,11 @@ public class TaskOntology extends BeanOntology {
             add(IModelDescription.class);
             add(ModelDescription.class);
             add(NewModel.class);
+            
+            add(optionPackage);
+            add(restrictionPackage);
+            add(typePackage);
+            add(valuePackage);
 
         } catch (Exception e) {
             e.printStackTrace();

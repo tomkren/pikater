@@ -3,7 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 
 /**
  * Created by Martin Pilat on 27.12.13.
@@ -23,23 +24,23 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
     }
 	
 	@Override
-	public List<Option> exportAllOptions() {
+	public List<NewOption> exportAllOptions() {
 		
-		Option fileURIOption = new Option();
-		fileURIOption.setName("fileURI");
-		fileURIOption.setValue(fileURI);
+		NewOption fileURIOption = new NewOption(
+				new StringValue(fileURI), "fileURI");
 		
-		List<Option> options = new ArrayList<Option>();
+		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(fileURIOption);
 		
 		return options;
 	}
 	@Override
-	public void importAllOptions(List<Option> options) {
+	public void importAllOptions(List<NewOption> options) {
 		
-		for (Option optionI : options) {
+		for (NewOption optionI : options) {
 			if (optionI.getName().equals("fileURI")) {
-				this.fileURI = optionI.getValue();
+				StringValue value = (StringValue) optionI.getValues().get(0).getValue();
+				this.fileURI = value.getValue();
 			}
 		}
 		

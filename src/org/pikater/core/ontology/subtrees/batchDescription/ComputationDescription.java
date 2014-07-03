@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
@@ -27,14 +27,14 @@ public class ComputationDescription implements Concept {
 
 	private static final long serialVersionUID = -7951850172320173523L;
 
-	private List<Option> globalOptions = new ArrayList<Option>();
+	private List<NewOption> globalOptions = new ArrayList<NewOption>();
 	private List<FileDataSaver> rootElements = new ArrayList<FileDataSaver>();
 	
-	public List<Option> getGlobalOptions() {
+	public List<NewOption> getGlobalOptions() {
 		return globalOptions;
 	}
 
-	public void setGlobalOptions(List<Option> globalOptions) {
+	public void setGlobalOptions(List<NewOption> globalOptions) {
 		if (globalOptions == null) {
 			throw new IllegalArgumentException("Argument globalOptions can't be null");
 		}
@@ -72,7 +72,7 @@ public class ComputationDescription implements Concept {
 	public UniversalComputationDescription exportUniversalComputationDescription() {
 
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
-		uModel.addGlobalOptions(new HashSet<Option>(this.getGlobalOptions()));
+		uModel.addGlobalOptions(new HashSet<NewOption>(this.getGlobalOptions()));
 
 		
 		// map - id x ontology
@@ -144,7 +144,7 @@ public class ComputationDescription implements Concept {
 		
 		ComputationDescription compDescription = new ComputationDescription();
 		
-		List<Option> globalOptionList = new ArrayList<Option>(uDescription.getGlobalOptions());
+		List<NewOption> globalOptionList = new ArrayList<NewOption>(uDescription.getGlobalOptions());
 		compDescription.setGlobalOptions(globalOptionList);
 		
 		List<UniversalElement> rootElementsList = new ArrayList<UniversalElement>(uDescription.getRootElements());

@@ -3,7 +3,9 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
+
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -13,7 +15,7 @@ public class Search extends DataProcessing {
 	private static final long serialVersionUID = 7856131679884259768L;
 	
 	private String searchClass;
-    private List<Option> options = new ArrayList<Option>();
+    private List<NewOption> options = new ArrayList<NewOption>();
 
     public String getSearchClass() {
         return searchClass;
@@ -22,18 +24,18 @@ public class Search extends DataProcessing {
         this.searchClass = searchClass;
     }
 
-    public List<Option> getOptions() {
+    public List<NewOption> getOptions() {
         return options;
     }
     
-    public void setOptions(ArrayList<Option> options) {
+    public void setOptions(ArrayList<NewOption> options) {
     	if (options == null) {
     		throw new NullPointerException("Argument options can't be null");
     	}
         this.options = options;
     }
     
-    public void addOption(Option option) {
+    public void addOption(NewOption option) {
     	if (option == null) {
     		throw new NullPointerException("Argument option can't be null");
     	}
@@ -41,24 +43,24 @@ public class Search extends DataProcessing {
     }
 
 	@Override
-	public List<Option> exportAllOptions() {
+	public List<NewOption> exportAllOptions() {
 		
-		Option searchClassOption = new Option();
-		searchClassOption.setName("searchClass");
-		searchClassOption.setValue(searchClass);
+		NewOption searchClassOption = new NewOption(
+				new StringValue(searchClass), "searchClass");
 		
-		List<Option> options = new ArrayList<Option>();
+		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(searchClassOption);
 		options.addAll(this.options);
 		
 		return options;
 	}
 	@Override
-	public void importAllOptions(List<Option> options) {
+	public void importAllOptions(List<NewOption> options) {
 		
-		for (Option optionI : options) {
+		for (NewOption optionI : options) {
 			if (optionI.getName().equals("searchClass")) {
-				this.searchClass = optionI.getValue();
+				StringValue valueI = (StringValue) optionI.getValues().get(0).getValue();
+				this.searchClass = valueI.getValue();
 			}
 		}
 	}

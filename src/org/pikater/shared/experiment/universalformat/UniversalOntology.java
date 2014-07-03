@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription;
-import org.pikater.core.ontology.subtrees.option.Option;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
 
 public class UniversalOntology {
 	private Class<?> type;
@@ -14,12 +14,12 @@ public class UniversalOntology {
 	private final Collection<UniversalConnector> inputSlots;
 
 	private final Collection<ErrorDescription> errors;
-	private final Collection<Option> options;
+	private final Collection<NewOption> options;
 
 	public UniversalOntology() {
 		this.inputSlots = new ArrayList<UniversalConnector>();
 		this.errors = new ArrayList<ErrorDescription>();
-		this.options = new ArrayList<Option>();
+		this.options = new ArrayList<NewOption>();
 	}
 
 	public int getId() {
@@ -38,11 +38,11 @@ public class UniversalOntology {
 		this.type = type;
 	}
 
-	public Collection<Option> getOptions() {
+	public Collection<NewOption> getOptions() {
 		return options;
 	}
 
-	public void setOptions(Collection<Option> options) {
+	public void setOptions(Collection<NewOption> options) {
 		if (options == null) {
 			throw new NullPointerException("Argument options can't be null");
 		}
@@ -50,9 +50,9 @@ public class UniversalOntology {
 		this.options.addAll(options);
 	}
 
-	public Option getOptionByName(String name) {
+	public NewOption getOptionByName(String name) {
 
-		for (Option optionI : getOptions()) {
+		for (NewOption optionI : getOptions()) {
 			if (optionI.getName().equals(name)) {
 				return optionI;
 			}

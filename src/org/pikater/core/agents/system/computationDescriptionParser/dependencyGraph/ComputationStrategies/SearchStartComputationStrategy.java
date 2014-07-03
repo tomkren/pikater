@@ -16,8 +16,8 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionE
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.option.Option;
-import org.pikater.core.ontology.subtrees.option.Options;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
@@ -80,7 +80,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		@SuppressWarnings("unchecked")
 		List<SearchItem> schema = convertOptionsToSchema(((OptionEdge)inputs.get("childoptions").getNext()).getOptions());
 		gp.setSchema(schema);
-		gp.setSearch_options((ArrayList<Option>)inputs.get("options").getNext());
+		gp.setSearch_options((ArrayList<NewOption>)inputs.get("options").getNext());
 
         Action a = new Action();
 		a.setAction(gp);
@@ -114,7 +114,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	}
 
 
-	private void addOptionToSchema(Option opt, List schema){
+	private void addOptionToSchema(NewOption opt, List schema){
 		String[] values = ((String)opt.getUser_value()).split(",");
 		int numArgs = values.length;
 		if (!opt.getIs_a_set()) {
@@ -157,13 +157,13 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 
 	//Create schema of solutions from options (Convert options->schema)
-	private List convertOptionsToSchema(List<Option> options){
-		List<Option> new_schema = new ArrayList<Option>();
+	private List convertOptionsToSchema(List<NewOption> options){
+		List<NewOption> new_schema = new ArrayList<NewOption>();
 		if(options==null)
 			return new_schema;
-		java.util.Iterator<Option> itr = options.iterator();
+		java.util.Iterator<NewOption> itr = options.iterator();
 		while (itr.hasNext()) {
-			Option opt = (Option) itr.next();
+			NewOption opt = (NewOption) itr.next();
 			if(opt.getMutable())
 				addOptionToSchema(opt, new_schema);
 		}
