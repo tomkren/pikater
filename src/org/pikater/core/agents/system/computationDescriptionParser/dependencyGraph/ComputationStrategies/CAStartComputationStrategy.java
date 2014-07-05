@@ -106,7 +106,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		
 		for (NewOption optionI : options) {
 			NewOption new_opt = optionI.cloneOption();
-			if(optionI.isMutable())
+			if(optionI.getIsMutable())
 				new_opt.setValue(fillOptWithSolution(optionI, sol_itr));
 			options_list.add(new_opt);
 		}
@@ -117,7 +117,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	//Fill an option's ? with values in iterator
 	private String fillOptWithSolution(NewOption opt, java.util.Iterator<String> solution_itr){		
 		String res_values = "";
-		String[] values = ((String)opt.getUser_value()).split(",");
+		String[] values = new String[0]; //((String)opt.getUser_value()).split(",");
+		//TODO: Jakub
 
 		for (int i = 0; i < values.length; i++) {
 			if (values[i].equals("?")) {

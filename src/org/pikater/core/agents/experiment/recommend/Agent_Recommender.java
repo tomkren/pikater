@@ -38,10 +38,6 @@ import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
 
 public abstract class Agent_Recommender extends Agent_AbstractExperiment {
@@ -187,32 +183,24 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 			for (NewOption o2I : o2) {
 				
-				o2I.setValue(o2I.getDefault_value());
+				o2I.resetToDefaultValue();
 				
 				for (NewOption o1CAJ : o1_CA) {
 
 					if (o2I.getName().equals(o1CAJ.getName())) {
 						// ostatni optiony zustanou puvodni (= ze souboru)			
 
-						o2I.setUser_value(o1CAJ.getUser_value());
-
 						// copy the value
-                        if (o1CAJ.getValue() != null){ 
-                        	o2I.setValue(o1CAJ.getValue());
-                        }
-                                               
-                        if (o1CAJ.getData_type() != null){
-                        	o2I.setData_type(o1CAJ.getData_type());                        
-                        }
+                        o2I.setValues(o1CAJ.cloneValues());
                         
-						if (o1CAJ.getValue().contains("?")){
+						if (o1CAJ.containsQuestionMark()){
 							// just in case the someone forgot to set opt to mutable
-							o2I.setMutable(true);
+							o2I.setIsMutable(true);
 						}
 					}
 				}
 				
-				if (o2I.getValue() != null){
+				if (o2I.isValid()){
 					new_options.add(o2I);
 				}
 			}

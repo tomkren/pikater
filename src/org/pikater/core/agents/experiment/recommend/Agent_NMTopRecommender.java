@@ -8,9 +8,6 @@ import jade.util.leap.Iterator;
 import jade.util.leap.LinkedList;
 import jade.util.leap.List;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,6 +19,14 @@ import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Value;
+import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.type.Types;
+import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
@@ -149,14 +154,14 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         log("Best agent: " + bestAgentType);
 
-        ArrayList<Agent> bestAgentOptions = new ArrayList<Agent>();
+        ArrayList<Agent> bestAgents = new ArrayList<Agent>();
 
         it = agents.iterator();
         while (it.hasNext()) {
             Agent a = (Agent) it.next();
 
             if (a.getType().equals(bestAgentType)) {
-                bestAgentOptions.add(a);
+                bestAgents.add(a);
             }
         }
 
@@ -165,54 +170,117 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         
         for (NewOption optionI : optionSamples) {
 
-        	NewOption newOpt = optionI.cloneOption()();        	
+        	String computedDatatype = optionI.computeDataType();
+        	NewOption newOpt = optionI.cloneOption();        	
             
-            //ignore boolean and set options for now, set their value to the one of the best agent on closest file
-            if (optionI.getData_type().equals("BOOLEAN") || optionI.getData_type().equals("MIXED")) {
-                if (bestAgentOptions.get(0).getOptionByName(optionI.getName()) == null){
-                	continue;
-                }
-                newOpt.setValue(bestAgentOptions.get(0).getOptionByName(optionI.getName()).getValue());                
-            }
-            else {
+            
+        	//ignore boolean and set options for now, set their value to the one of the best agent on closest file
+        	if (computedDatatype.equals(IntegerValue.class.getSimpleName())  || 
+        			computedDatatype.equals(FloatValue.class.getSimpleName())) {
+        		
 	            double sum = 0;
 	            int count = 0;
 	            String optionName = optionI.getName();
-	            for (Agent a : bestAgentOptions) {
-	            	if (a.getOptionByName(optionName) != null){
-	            		sum += Double.parseDouble(a.getOptionByName(optionName).getValue());
+	            for (Agent agentI : bestAgents) {
+	            	if (agentI.getOptionByName(optionName) != null){
+	            		
+	            		NewOption optionOfAgentI = agentI.getOptionByName(optionName);
+	            		Value valueOfAgentI = optionOfAgentI.getValues().get(0);
+	            		IValue valueI = valueOfAgentI.getValue();
+	            		
+	            		if (valueI instanceof IntegerValue) {
+	            			IntegerValue integerValue = (IntegerValue) valueI;
+	            			sum += integerValue.getValue();
+	            		}
+	            		if (valueI instanceof FloatValue) {
+	            			FloatValue floatValue = (FloatValue) valueI;
+	            			sum += floatValue.getValue();
+	            		}
+	            		
 	            	}
 	                count++;
 	            }
 	            double avg = sum/count;
 	            
 	            double stdDev = 0;
-	            for (Agent a : bestAgentOptions) {
-	            	if (a.getOptionByName(optionName) != null){
-	            		stdDev += Math.pow(Double.parseDouble(a.getOptionByName(optionName).getValue()) - avg, 2);
+	            for (Agent agent : bestAgents) {
+	            	if (agent.getOptionByName(optionName) != null) {
+	            		
+	            		NewOption optionOfAgentI = agent.getOptionByName(optionName);
+	            		Value valueOfAgentI = optionOfAgentI.getValues().get(0);
+	            		IValue valueI = valueOfAgentI.getValue();
+	            		
+	            		if (valueI instanceof IntegerValue) {
+	            			IntegerValue integerValue = (IntegerValue) valueI;
+	            			stdDev += Math.pow(integerValue.getValue() - avg, 2);
+	            		}
+	            		if (valueI instanceof FloatValue) {
+	            			FloatValue floatValue = (FloatValue) valueI;
+	            			stdDev += Math.pow(floatValue.getValue() - avg, 2);
+	            		}
 	            	}
 	            }
 	            
 	            stdDev = Math.sqrt(stdDev/count);
 	
 	            if (stdDev > 0) {
-	                newOpt.setValue("?");
-	                newOpt.setUser_value("?");
-	                newOpt.setMutable(true);
-	                Interval range = new Interval();
-	                range.setMin((float)Math.max(avg - 2*stdDev, optionI.getRange().getMin()));
-	                range.setMax((float)Math.min(avg + 2*stdDev, optionI.getRange().getMax()));
-	                newOpt.setRange(range);
+	            	
+	            	java.util.List<Types> typesList = optionI.getPossibleTypesRestriction().getPossibleTypes();
+	            	Types types = typesList.get(0);
+	            	Type type = types.getTypes().get(0);
+	            	
+	            	RangeRestriction rangeRestriction = type.getRangeRestriction();
+	            	IValue minValue = rangeRestriction.getMinValeu();
+	            	IValue maxValue = rangeRestriction.getMaxValeu();
+	            	
+	            	float finalMin = 0;
+	            	float finalMax = 0;
+	            	
+	            	if (minValue instanceof IntegerValue) {
+	            		IntegerValue integeMin = (IntegerValue) minValue;
+	            		IntegerValue integerMax = (IntegerValue) maxValue;
+	            		
+	            		finalMin = (float) Math.max(avg - 2*stdDev, integeMin.getValue());
+	            		finalMax = (float) Math.min(avg - 2*stdDev, integerMax.getValue());
+	            	}
+	            	if (minValue instanceof FloatValue) {
+	            		FloatValue floatMin = (FloatValue) minValue;
+	            		FloatValue floatMax = (FloatValue) maxValue;
+	            		
+	            		finalMin = (float) Math.max(avg - 2*stdDev, floatMin.getValue());
+	            		finalMax = (float) Math.min(avg - 2*stdDev, floatMax.getValue());
+	            	}	            	
+	            	
+	            	QuestionMarkRange questionMark = new QuestionMarkRange(
+	            			new FloatValue(finalMin),
+	            			new FloatValue(finalMax));
+	            	
+	                newOpt.addValue(new Value(questionMark));
+	                newOpt.setIsMutable(true);
 	            }
 	            else {
-	                if (optionI.getData_type().equals("FLOAT")) {
-	                    newOpt.setValue(Double.toString(avg));
+	            	Value valueI = optionI.getValues().get(0);
+            		IValue iValueI = valueI.getValue();
+            		
+	                if (iValueI instanceof FloatValue) {
+	                	float valueFloat = (float) avg;
+	                    newOpt.addValue(new Value(new FloatValue(valueFloat)));
 	                }
-	                if (optionI.getData_type().equals("INT")) {
-	                    newOpt.setValue(Integer.toString((int)avg));
+	                if (iValueI instanceof IntegerValue) {
+	                	int valueInteger = (int) avg;
+	                	newOpt.addValue(new Value(new IntegerValue(valueInteger)));
 	                }
 	            }
-            }
+        	} else {
+        		
+        		Agent bestAgent = bestAgents.get(0);
+                if (bestAgent.getOptionByName(optionI.getName()) == null){
+                	continue;
+                }
+                NewOption option0 = bestAgent.getOptionByName(optionI.getName());
+                newOpt.setValues(option0.cloneValues());   
+        	}
+
             options.add(newOpt);
         }
 
@@ -290,107 +358,5 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         return 1;
     }
 
-    //remove this method when the bug with opts parsing is removed
-    List readOptionsFromFile(String agentName) {
-        String optPath = System.getProperty("user.dir")
-                + System.getProperty("file.separator") + "options"
-                + System.getProperty("file.separator") + agentName + ".opt";
-
-        // read options from file
-        try {
-            /* Sets up a file reader to read the options file */
-            FileReader input = new FileReader(optPath);
-            /*
-             * Filter FileReader through a Buffered read to read a line at a
-             * time
-             */
-            BufferedReader bufRead = new BufferedReader(input);
-
-            String line; // String that holds current file line
-            // Read first line
-            line = bufRead.readLine();
-
-            // list of ontology.messages.Option
-            List _options = new jade.util.leap.ArrayList();
-
-            // Read through file one line at time. Print line # and line
-            while (line != null) {
-                // parse the line
-                String delims = "[ ]+";
-                String[] params = line.split(delims, 11);
-
-                for (int i = 0; i < params.length; i++) {
-                    if (params[i].equals("MAXINT")) {
-                        params[i] = Integer.toString(Integer.MAX_VALUE);
-                    }
-                }
-                
-                if (params[0].equals("$")) {
-
-                    String dt = null;
-                    if (params[2].equals("boolean")) {
-                        dt = "BOOLEAN";
-                    }
-                    if (params[2].equals("float")) {
-                        dt = "FLOAT";
-                    }
-                    if (params[2].equals("int")) {
-                        dt = "INT";
-                    }
-                    if (params[2].equals("mixed")) {
-                        dt = "MIXED";
-                    }
-
-                    float numArgsMin;
-                    float numArgsMax;
-                    float rangeMin = 0;
-                    float rangeMax = 0;
-                    String range;
-                    java.util.List<String> set = null;
-
-                    if (dt.equals("BOOLEAN")) {
-                        numArgsMin = 1;
-                        numArgsMax = 1;
-                        range = null;
-                    } else {
-                        numArgsMin = Float.parseFloat(params[3]);
-                        numArgsMax = Float.parseFloat(params[4]);
-                        range = params[5];
-
-                        if (range.equals("r")) {
-                            rangeMin = Float.parseFloat(params[6]);
-                            rangeMax = Float.parseFloat(params[7]);
-                        }
-                        if (range.equals("s")) {
-                            set = new java.util.ArrayList<String>();
-                            String[] s = params[6].split("[ ]+");
-                            for (int i = 0; i < s.length; i++) {
-                                set.add(s[i]);
-                            }
-                        }
-                    }
-
-                    Option o = new Option(params[1], dt,
-                            numArgsMin, numArgsMax,
-                            range, rangeMin, rangeMax, set,
-                            params[params.length - 3],
-                            params[params.length - 2],
-                            params[params.length - 1]);
-
-                    _options.add(o);
-
-                }
-
-                line = bufRead.readLine();
-            }
-            bufRead.close();
-            return _options;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
 }

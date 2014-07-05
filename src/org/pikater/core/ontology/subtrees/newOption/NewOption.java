@@ -18,6 +18,7 @@ public class NewOption {
 	private String description;
 	
 	private List<Value> values;
+	private boolean isMutable = false;
 	
 	private PossibleTypesRestriction possibleTypesRestriction;
 	
@@ -75,7 +76,14 @@ public class NewOption {
 		}
 		values.add(value);
 	}
-
+	
+	public boolean getIsMutable() {
+		return isMutable;
+	}
+	public void setIsMutable(boolean isMutable) {
+		this.isMutable = isMutable;
+	}
+	
 	public PossibleTypesRestriction getPossibleTypesRestriction() {
 		return possibleTypesRestriction;
 	}
@@ -84,7 +92,7 @@ public class NewOption {
 		this.possibleTypesRestriction = possibleTypesRestriction;
 	}
 	
-	public boolean isMutable() {
+	public boolean containsQuestionMark() {
 		
 		for (Value valueI : values) {
 			IValue ivalueI = valueI.getValue();
@@ -95,12 +103,33 @@ public class NewOption {
 		}
 		return false;
 	}
+	
+	public String computeDataType() {
+		
+		String firstValue = null;
+		for (Value valueI : values) {
+			if (firstValue == null) {
+				firstValue = valueI.getValue().getClass().getSimpleName();
+			} else {
+				String currentValue = valueI.getValue().getClass().getSimpleName(); 
+				if (! firstValue.equals(currentValue)) {
+					return "MIXED";
+				}
+			}
+		}
+		return firstValue;
+	}
+	
+	public void resetToDefaultValue() {
+		//TODO:
+	}
 
 	public NewOption cloneOption() {
 		
 		NewOption newOption = new NewOption();
 		newOption.setName(getName());
 		newOption.setDescription(getDescription());
+		newOption.setIsMutable(this.getIsMutable());
 		
 		for (Value valueI : values) {
 			newOption.addValue(valueI.cloneValue());
@@ -155,5 +184,13 @@ public class NewOption {
 				.fromXML(xml);
 
 		return optionNew;
+	}
+	
+	public List<Value> cloneValues() {
+		List<Value> valuesClone = new ArrayList<Value>();
+		for (Value valueI : values) {
+			valuesClone.add(valueI.cloneValue());
+		}
+		return valuesClone;
 	}
 }

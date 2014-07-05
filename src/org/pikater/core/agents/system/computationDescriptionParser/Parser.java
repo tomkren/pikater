@@ -296,10 +296,10 @@ public class Parser {
         node.addInput("options",optionBuffer);
     }
     
-    private void setMutableOptions(List<Option> childOptions){
-    	for (Option opt : childOptions){
-    		if (opt.getValue().contains("?") ){
-    			opt.setMutable(true);
+    private void setMutableOptions(List<NewOption> childOptions){
+    	for (NewOption opt : childOptions){
+    		if (opt.containsQuestionMark() ){
+    			opt.setIsMutable(true);
     		}
     	}
     }

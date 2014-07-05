@@ -179,7 +179,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		java.util.Iterator<NewOption> itr = options.iterator();
 		while (itr.hasNext()) {
 			NewOption opt = (NewOption) itr.next();
-			if(opt.isMutable())
+			if(opt.getIsMutable())
 				addOptionToSchema(opt, new_schema);
 		}
 		return new_schema;
