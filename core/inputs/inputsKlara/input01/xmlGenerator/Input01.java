@@ -16,11 +16,11 @@ import java.util.List;
 
 
 //Example: Single datasource -> single computing agent. -> Single save
-public final class Input1 {
+public final class Input01 {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		System.out.println("Exporting Ontology input1 to Klara's input XML configuration file.");
+		System.out.println("Exporting Ontology input01 to Klara's input XML configuration file.");
 
         //Specify a datasource
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
@@ -68,9 +68,9 @@ public final class Input1 {
         ComputationDescription comDescription = new ComputationDescription();
         comDescription.setRootElements(roots);
 
-		String fileName = Agent_GUIKlara.filePath + "input1"
+		String fileName = Agent_GUIKlara.filePath + "input01"
 				+ System.getProperty("file.separator")
-				+ "input1.xml";
+				+ "input.xml";
 
 		comDescription.exportXML(fileName);
     }

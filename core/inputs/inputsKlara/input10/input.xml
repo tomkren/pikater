@@ -1,0 +1,49 @@
+<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription id="1">
+  <globalOptions id="2"/>
+  <rootElements id="3">
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="4">
+      <id>-1</id>
+      <options id="5"/>
+      <errors id="6"/>
+      <dataSources id="7"/>
+      <dataSource id="8">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing" id="9">
+          <id>-1</id>
+          <options id="10"/>
+          <errors id="11"/>
+          <dataSources id="12">
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="13">
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="14">
+                <id>-1</id>
+                <options id="15"/>
+                <errors id="16"/>
+                <dataSources id="17"/>
+                <fileURI>weather.arff</fileURI>
+              </dataProvider>
+            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="18">
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="19">
+                <id>-1</id>
+                <options id="20"/>
+                <errors id="21"/>
+                <dataSources id="22"/>
+                <fileURI>weather2.arff</fileURI>
+              </dataProvider>
+            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+          </dataSources>
+        </dataProvider>
+        <dataOutputType>Data-Even</dataOutputType>
+      </dataSource>
+    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="23">
+      <id>-1</id>
+      <options id="24"/>
+      <errors id="25"/>
+      <dataSources id="26"/>
+      <dataSource id="27">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing" reference="9"/>
+        <dataOutputType>Data-Odd</dataOutputType>
+      </dataSource>
+    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+  </rootElements>
+</org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>

@@ -1,0 +1,124 @@
+<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription id="1">
+  <globalOptions id="2"/>
+  <rootElements id="3">
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="4">
+      <id>-1</id>
+      <options id="5"/>
+      <errors id="6"/>
+      <dataSources id="7"/>
+      <dataSource id="8">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex" id="9">
+          <id>-1</id>
+          <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="10"/>
+          <errors defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="11"/>
+          <dataSources id="12"/>
+          <options id="13">
+            <org.pikater.core.ontology.subtrees.newOption.NewOption id="14">
+              <name>CrossValidation</name>
+              <values id="15">
+                <values id="16">
+                  <org.pikater.core.ontology.subtrees.newOption.Value id="17">
+                    <type id="18">
+                      <className>org.pikater.core.ontology.subtrees.newOption.value.StringValue</className>
+                    </type>
+                    <value type="org.pikater.core.ontology.subtrees.newOption.value.StringValue" id="19">
+                      <value>evaluation_method</value>
+                    </value>
+                  </org.pikater.core.ontology.subtrees.newOption.Value>
+                </values>
+              </values>
+              <isMutable>false</isMutable>
+            </org.pikater.core.ontology.subtrees.newOption.NewOption>
+            <org.pikater.core.ontology.subtrees.newOption.NewOption id="20">
+              <name>output</name>
+              <values id="21">
+                <values id="22">
+                  <org.pikater.core.ontology.subtrees.newOption.Value id="23">
+                    <type id="24">
+                      <className>org.pikater.core.ontology.subtrees.newOption.value.StringValue</className>
+                    </type>
+                    <value type="org.pikater.core.ontology.subtrees.newOption.value.StringValue" id="25">
+                      <value>evaluation_only</value>
+                    </value>
+                  </org.pikater.core.ontology.subtrees.newOption.Value>
+                </values>
+              </values>
+              <isMutable>false</isMutable>
+            </org.pikater.core.ontology.subtrees.newOption.NewOption>
+          </options>
+          <errors id="26"/>
+          <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" id="27">
+            <id>-1</id>
+            <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="28"/>
+            <errors id="29"/>
+            <dataSources id="30"/>
+            <options id="31"/>
+            <trainingData id="32">
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex" id="33">
+                <id>-1</id>
+                <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="34"/>
+                <errors defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="35"/>
+                <dataSources id="36"/>
+                <options id="37">
+                  <org.pikater.core.ontology.subtrees.newOption.NewOption id="38">
+                    <name>evaluation_method</name>
+                    <values id="39">
+                      <values id="40">
+                        <org.pikater.core.ontology.subtrees.newOption.Value id="41">
+                          <type id="42">
+                            <className>org.pikater.core.ontology.subtrees.newOption.value.StringValue</className>
+                          </type>
+                          <value type="org.pikater.core.ontology.subtrees.newOption.value.StringValue" id="43">
+                            <value>CrossValidation</value>
+                          </value>
+                        </org.pikater.core.ontology.subtrees.newOption.Value>
+                      </values>
+                    </values>
+                    <isMutable>false</isMutable>
+                  </org.pikater.core.ontology.subtrees.newOption.NewOption>
+                  <org.pikater.core.ontology.subtrees.newOption.NewOption id="44">
+                    <name>output</name>
+                    <values id="45">
+                      <values id="46">
+                        <org.pikater.core.ontology.subtrees.newOption.Value id="47">
+                          <type id="48">
+                            <className>org.pikater.core.ontology.subtrees.newOption.value.StringValue</className>
+                          </type>
+                          <value type="org.pikater.core.ontology.subtrees.newOption.value.StringValue" id="49">
+                            <value>evaluation_only</value>
+                          </value>
+                        </org.pikater.core.ontology.subtrees.newOption.Value>
+                      </values>
+                    </values>
+                    <isMutable>false</isMutable>
+                  </org.pikater.core.ontology.subtrees.newOption.NewOption>
+                </options>
+                <errors id="50"/>
+                <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" id="51">
+                  <id>-1</id>
+                  <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="52"/>
+                  <errors id="53"/>
+                  <dataSources id="54"/>
+                  <options id="55"/>
+                  <trainingData id="56">
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="57">
+                      <id>-1</id>
+                      <options id="58"/>
+                      <errors id="59"/>
+                      <dataSources id="60"/>
+                      <fileURI>?????.arff</fileURI>
+                    </dataProvider>
+                  </trainingData>
+                  <testingData reference="56"/>
+                </computingAgent>
+              </dataProvider>
+              <dataOutputType>Data</dataOutputType>
+            </trainingData>
+            <testingData reference="32"/>
+          </computingAgent>
+        </dataProvider>
+        <dataOutputType>Data</dataOutputType>
+      </dataSource>
+    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+  </rootElements>
+</org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>

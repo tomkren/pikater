@@ -15,11 +15,11 @@ import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
 
 //Example: single datasource, search the space of parameters of single computation model
 // Save the results of the best iteration of search
-public final class Input2 {
+public final class Input02 {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		System.out.println("Exporting Ontology input2 to Klara's input XML configuration file.");
+		System.out.println("Exporting Ontology input02 to Klara's input XML configuration file.");
 
         //Specify a datasource
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
@@ -75,7 +75,7 @@ public final class Input2 {
         ComputationDescription comDescription = new ComputationDescription();
         comDescription.setRootElements(roots);
 
-		String fileName = Agent_GUIKlara.filePath + "input2"
+		String fileName = Agent_GUIKlara.filePath + "input02"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 
