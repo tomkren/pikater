@@ -39,7 +39,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 		
 		for (NewOption optionI : options) {
 			if (optionI.getName().equals("fileURI")) {
-				StringValue value = (StringValue) optionI.getValues().get(0).getValue();
+				StringValue value = (StringValue) optionI.convertToSingleValue().getValue();
 				this.fileURI = value.getValue();
 			}
 		}

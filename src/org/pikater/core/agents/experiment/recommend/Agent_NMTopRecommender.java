@@ -185,7 +185,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agentI.getOptionByName(optionName) != null){
 	            		
 	            		NewOption optionOfAgentI = agentI.getOptionByName(optionName);
-	            		Value valueOfAgentI = optionOfAgentI.getValues().get(0);
+	            		Value valueOfAgentI = optionOfAgentI.convertToSingleValue();
 	            		IValue valueI = valueOfAgentI.getValue();
 	            		
 	            		if (valueI instanceof IntegerValue) {
@@ -207,7 +207,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agent.getOptionByName(optionName) != null) {
 	            		
 	            		NewOption optionOfAgentI = agent.getOptionByName(optionName);
-	            		Value valueOfAgentI = optionOfAgentI.getValues().get(0);
+	            		Value valueOfAgentI = optionOfAgentI.convertToSingleValue();
 	            		IValue valueI = valueOfAgentI.getValue();
 	            		
 	            		if (valueI instanceof IntegerValue) {
@@ -259,7 +259,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	                newOpt.setIsMutable(true);
 	            }
 	            else {
-	            	Value valueI = optionI.getValues().get(0);
+	            	Value valueI = optionI.convertToSingleValue();
             		IValue iValueI = valueI.getValue();
             		
 	                if (iValueI instanceof FloatValue) {
@@ -278,7 +278,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                 	continue;
                 }
                 NewOption option0 = bestAgent.getOptionByName(optionI.getName());
-                newOpt.setValues(option0.cloneValues());   
+                newOpt.setValues(option0.getValues().cloneValues());   
         	}
 
             options.add(newOpt);

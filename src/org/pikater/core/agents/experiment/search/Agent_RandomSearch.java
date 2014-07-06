@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -56,12 +57,14 @@ public class Agent_RandomSearch extends Agent_Search {
 		
 		for (NewOption next : search_options) {
 			
+			Value valueI = next.convertToSingleValue();
+			
 			if (next.getName().equals("E")){
-				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				FloatValue value = (FloatValue) valueI.getValue();
 				final_error_rate = value.getValue();
 			}
 			if (next.getName().equals("M")){
-				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				IntegerValue value = (IntegerValue) valueI.getValue();
 				maximum_tries = value.getValue();
 			}
 		}

@@ -6,6 +6,8 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -64,6 +66,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		}
 		return false;
 	}
+	
 
 	@Override
 	protected void loadSearchOptions() {
@@ -72,27 +75,24 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		stability = 0.5;
 		final_error_rate = 0.01;
 		
-		List<NewOption> search_options = getSearch_options();
+		Options options = new Options(getSearch_options());
 		
-		for (NewOption next : search_options) {
+		NewOption optionE = options.getOptionByName("E");
+		FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
+		final_error_rate = valueE.getValue(); 
 
-			if (next.getName().equals("E")){
-				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
-				final_error_rate = value.getValue(); 
-			}
-			if (next.getName().equals("M")){
-				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
-				maximum_tries = value.getValue(); 
-			}
-			if (next.getName().equals("S")){
-				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
-				stability = value.getValue(); 
-			}
-			if (next.getName().equals("T")){
-				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
-				temperature = value.getValue(); 
-			}
-		}
+		NewOption optionM = options.getOptionByName("M");
+		IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
+		maximum_tries = valueM.getValue(); 
+
+		NewOption optionS = options.getOptionByName("S");
+		FloatValue valueS = (FloatValue) optionS.convertToSingleValue().getValue();
+		stability = valueS.getValue(); 
+
+		NewOption optionT = options.getOptionByName("T");
+		FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getValue();
+		temperature = valueT.getValue(); 
+		
 	}
 
 	@Override

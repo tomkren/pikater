@@ -1,7 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
@@ -17,7 +16,7 @@ public class NewOption {
 	private String name;
 	private String description;
 	
-	private List<Value> values;
+	private Values values;
 	private boolean isMutable = false;
 	
 	private PossibleTypesRestriction possibleTypesRestriction;
@@ -57,24 +56,30 @@ public class NewOption {
 		this.description = description;
 	}
 
-	public List<Value> getValues() {
+	public Values getValues() {
 		return values;
 	}
-	public void setValues(List<Value> values) {
+	public void setValues(Values values) {
 		this.values = values;
+	}
+	public void resetValues(List<Value> values) {
+		this.values.setValues(values);
+	}
+	public List<Value> returnValues() {
+		return this.values.getValues();
 	}
 	
 	public boolean isEmpty() {
-		return values == null && values.size() == 0;
+		return values == null && values.getValues().size() == 0;
 	}
 	public boolean isSingleValue() {
-		return values.size() == 1;
+		return values.getValues().size() == 1;
 	}
 	public void addValue(Value value) {
 		if (this.values == null) {
-			this.values = new ArrayList<Value>();
+			this.values = new Values();
 		}
-		values.add(value);
+		values.addValue(value);
 	}
 	
 	public boolean getIsMutable() {
@@ -92,9 +97,24 @@ public class NewOption {
 		this.possibleTypesRestriction = possibleTypesRestriction;
 	}
 	
+	public Value convertToSingleValue() {
+		if (this.values == null) {
+			throw new IllegalStateException("Field values can't be null");
+		}
+		
+		List<Value> valueList = this.values.getValues();
+		if (valueList.size() == 1) {
+			return valueList.get(0);
+		} else {
+			throw new IllegalStateException(
+					"This option can't be convert to single value");
+		}
+		
+	}
+	
 	public boolean containsQuestionMark() {
 		
-		for (Value valueI : values) {
+		for (Value valueI : values.getValues()) {
 			IValue ivalueI = valueI.getValue();
 			if (ivalueI instanceof QuestionMarkRange ||
 					ivalueI instanceof QuestionMarkSet) {
@@ -107,7 +127,7 @@ public class NewOption {
 	public String computeDataType() {
 		
 		String firstValue = null;
-		for (Value valueI : values) {
+		for (Value valueI : values.getValues()) {
 			if (firstValue == null) {
 				firstValue = valueI.getValue().getClass().getSimpleName();
 			} else {
@@ -131,7 +151,7 @@ public class NewOption {
 		newOption.setDescription(getDescription());
 		newOption.setIsMutable(this.getIsMutable());
 		
-		for (Value valueI : values) {
+		for (Value valueI : values.getValues()) {
 			newOption.addValue(valueI.cloneValue());
 		}
 		newOption.setPossibleTypesRestriction(
@@ -142,7 +162,8 @@ public class NewOption {
 	
 	public boolean isValid() {
 
-		if (values == null || values.isEmpty() ) {
+		if (values.getValues() == null ||
+				values.getValues().isEmpty() ) {
 			return false;
 		}
 		
@@ -154,7 +175,7 @@ public class NewOption {
 		
 		String wekaString = "-" + this.getName();
 		
-		for (Value valueI : values) {
+		for (Value valueI : values.getValues()) {
 			if (valueI.getValue() instanceof NullValue) {
 				continue;
 			}
@@ -185,12 +206,5 @@ public class NewOption {
 
 		return optionNew;
 	}
-	
-	public List<Value> cloneValues() {
-		List<Value> valuesClone = new ArrayList<Value>();
-		for (Value valueI : values) {
-			valuesClone.add(valueI.cloneValue());
-		}
-		return valuesClone;
-	}
+
 }

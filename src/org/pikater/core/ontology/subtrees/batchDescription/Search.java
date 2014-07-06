@@ -59,7 +59,7 @@ public class Search extends DataProcessing {
 		
 		for (NewOption optionI : options) {
 			if (optionI.getName().equals("searchClass")) {
-				StringValue valueI = (StringValue) optionI.getValues().get(0).getValue();
+				StringValue valueI = (StringValue) optionI.convertToSingleValue().getValue();
 				this.searchClass = valueI.getValue();
 			}
 		}

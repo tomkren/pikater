@@ -113,7 +113,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		for (NewOption optionI : options) {
 			
 			if (optionI.getName().equals("agentType")) {
-				StringValue valueI = (StringValue) optionI.getValues().get(0).getValue(); 
+				StringValue valueI = (StringValue) optionI.convertToSingleValue().getValue(); 
 				this.agentType = valueI.getValue();
 				
 			} else if (optionI.getName().equals("model")) {

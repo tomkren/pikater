@@ -191,7 +191,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						// ostatni optiony zustanou puvodni (= ze souboru)			
 
 						// copy the value
-                        o2I.setValues(o1CAJ.cloneValues());
+                        o2I.setValues(o1CAJ.getValues().cloneValues());
                         
 						if (o1CAJ.containsQuestionMark()){
 							// just in case the someone forgot to set opt to mutable

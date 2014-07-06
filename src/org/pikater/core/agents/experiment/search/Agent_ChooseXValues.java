@@ -105,7 +105,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 		for (NewOption next : search_options) {
 
 			if (next.getName().equals("N")){
-				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				IntegerValue value = (IntegerValue) next.convertToSingleValue().getValue();
 				default_number_of_values_to_try = value.getValue();
 			}
 		}

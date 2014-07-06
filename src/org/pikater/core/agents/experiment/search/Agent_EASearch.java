@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -320,44 +321,37 @@ public class Agent_EASearch extends Agent_Search {
         
         for (NewOption next : search_options) {
         	
+        	Value valueI = next.convertToSingleValue();
             if (next.getName().equals("E")) {
-            	FloatValue value = (FloatValue)
-            			next.getValues().get(0).getValue();
+            	FloatValue value = (FloatValue) valueI.getValue();
                 goalError = value.getValue();
             }
             if (next.getName().equals("M")) {
-            	IntegerValue value = (IntegerValue)
-            			next.getValues().get(0).getValue();
+            	IntegerValue value = (IntegerValue) valueI.getValue();
                 maxGeneration = value.getValue();
             }
             if (next.getName().equals("T")) {
-            	FloatValue value = (FloatValue)
-            			next.getValues().get(0).getValue();
+            	FloatValue value = (FloatValue) valueI.getValue();
                 mutProb = value.getValue();
             }
             if (next.getName().equals("X")) {
-            	FloatValue value = (FloatValue)
-            			next.getValues().get(0).getValue();
+            	FloatValue value = (FloatValue) valueI.getValue();
                 xOverProb = value.getValue();
             }
             if (next.getName().equals("P")) {
-            	IntegerValue value = (IntegerValue)
-            			next.getValues().get(0).getValue();
+            	IntegerValue value = (IntegerValue) valueI.getValue();
                 popSize = value.getValue();
             }
             if (next.getName().equals("I")) {
-            	IntegerValue value = (IntegerValue)
-            			next.getValues().get(0).getValue();
+            	IntegerValue value = (IntegerValue) valueI.getValue();
                 maxEval = value.getValue();
             }
             if (next.getName().equals("F")) {
-            	FloatValue value = (FloatValue)
-            			next.getValues().get(0).getValue();
+            	FloatValue value = (FloatValue) valueI.getValue();
                 mutProbPerField = value.getValue();
             }
             if (next.getName().equals("L")) {
-            	FloatValue value = (FloatValue)
-            			next.getValues().get(0).getValue();
+            	FloatValue value = (FloatValue) valueI.getValue();
                 eliteSize = value.getValue();
             }
             //if (next.getName().equals("S")) {

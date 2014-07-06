@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -165,28 +166,30 @@ public class Agent_GASearch extends Agent_Search {
 		List<NewOption> search_options = getSearch_options();
 		// find maximum tries in Options
 		for (NewOption next : search_options) {
+			
+			Value valueI = next.convertToSingleValue();
 			if (next.getName().equals("E")){
-				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				FloatValue value = (FloatValue) valueI.getValue();
 				final_error_rate = value.getValue(); 
 			}
 			if (next.getName().equals("M")){
-				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				IntegerValue value = (IntegerValue) valueI.getValue();
 				maximum_generations = value.getValue(); 
 			}
 			if (next.getName().equals("T")){
-				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				FloatValue value = (FloatValue) valueI.getValue();
 				mut_prob = value.getValue(); 
 			}
 			if (next.getName().equals("X")){
-				FloatValue value = (FloatValue) next.getValues().get(0).getValue();
+				FloatValue value = (FloatValue) valueI.getValue();
 				xover_prob = value.getValue(); 
 			}
 			if (next.getName().equals("P")){
-				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				IntegerValue value = (IntegerValue) valueI.getValue();
 				pop_size = value.getValue(); 
 			}
 			if (next.getName().equals("S")){
-				IntegerValue value = (IntegerValue) next.getValues().get(0).getValue();
+				IntegerValue value = (IntegerValue) valueI.getValue();
 				tournament_size = value.getValue(); 
 			}
 		}

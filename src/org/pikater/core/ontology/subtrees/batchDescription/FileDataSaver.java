@@ -38,7 +38,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 		FileDataSaver fileDataSaver = new FileDataSaver();
 
 		NewOption optionNameOfFile = uOntology.getOptionByName("nameOfFile");
-		StringValue value = (StringValue) optionNameOfFile.getValues().get(0).getValue();
+		StringValue value = (StringValue) optionNameOfFile.convertToSingleValue().getValue();
 		fileDataSaver.setNameOfFile(value.getValue());
 		
 		
@@ -62,7 +62,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 		for (NewOption optionI : options) {
 			if (optionI.getName().equals("nameOfFile")) {
 				StringValue value = (StringValue)
-						optionI.getValues().get(0).getValue();
+						optionI.convertToSingleValue().getValue();
 				this.nameOfFile = value.getValue();
 			}
 		}

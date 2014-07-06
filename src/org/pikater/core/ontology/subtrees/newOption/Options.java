@@ -26,7 +26,7 @@ public class Options implements Concept{
 	public Options(){
 	}
 
-    public NewOption getOption(String optionName)
+    public NewOption getOptionByName(String optionName)
     {
         for (NewOption option : options) {
             if (option.getName().equals(optionName))
