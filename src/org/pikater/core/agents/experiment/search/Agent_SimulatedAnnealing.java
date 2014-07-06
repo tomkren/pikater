@@ -75,7 +75,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		stability = 0.5;
 		final_error_rate = 0.01;
 		
-		Options options = new Options(getSearch_options());
+		Options options = new Options(getSearchOptions());
 		
 		NewOption optionE = options.getOptionByName("E");
 		FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();

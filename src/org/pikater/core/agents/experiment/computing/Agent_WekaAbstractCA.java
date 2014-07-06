@@ -14,6 +14,7 @@ import java.util.Random;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -115,19 +116,14 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		log("Evaluation method: \t", 2);
 		
 		if (evaluation_method.getType().equals("CrossValidation") ){
-			int folds = 5; // TODO read default value from file (if necessary)
-
-			if (evaluation_method.getOptions() != null){
-				for (NewOption next : evaluation_method.getOptions()) {
-					
-					Value valueI = next.convertToSingleValue();
-					
-					if (next.getName().equals("F")){
-						IntegerValue value = (IntegerValue) valueI.getValue();
-						folds = value.getValue();
-					}
 			
-				}
+			int folds = 5; // TODO read default value from file (if necessary)
+			if (evaluation_method.getOptions() != null) {
+				
+				Options options = new Options(evaluation_method.getOptions());
+				NewOption optionF = options.getOptionByName("F");
+				IntegerValue valueF = (IntegerValue) optionF.convertToSingleValue().getValue();
+				folds = valueF.getValue();
 			}
 			
 			log(folds + "-fold cross validation.", 2);
@@ -136,7 +132,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 					test,
 					folds, new Random(1));
 		}
-		else{ // name = Standard
+		else { // name = Standard
 			log("Standard weka evaluation.", 2);
 			eval.evaluateModel(getClassifierClass(), test);
 		}

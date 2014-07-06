@@ -100,7 +100,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 
 	@Override
 	protected void loadSearchOptions() {
-		List<NewOption> search_options = getSearch_options();
+		List<NewOption> search_options = getSearchOptions();
 		
 		for (NewOption next : search_options) {
 

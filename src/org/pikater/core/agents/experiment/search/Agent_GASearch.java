@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
@@ -163,36 +164,40 @@ public class Agent_GASearch extends Agent_Search {
 		final_error_rate = 0.1;
 		tournament_size = 2;
 		
-		List<NewOption> search_options = getSearch_options();
-		// find maximum tries in Options
-		for (NewOption next : search_options) {
-			
-			Value valueI = next.convertToSingleValue();
-			if (next.getName().equals("E")){
-				FloatValue value = (FloatValue) valueI.getValue();
-				final_error_rate = value.getValue(); 
-			}
-			if (next.getName().equals("M")){
-				IntegerValue value = (IntegerValue) valueI.getValue();
-				maximum_generations = value.getValue(); 
-			}
-			if (next.getName().equals("T")){
-				FloatValue value = (FloatValue) valueI.getValue();
-				mut_prob = value.getValue(); 
-			}
-			if (next.getName().equals("X")){
-				FloatValue value = (FloatValue) valueI.getValue();
-				xover_prob = value.getValue(); 
-			}
-			if (next.getName().equals("P")){
-				IntegerValue value = (IntegerValue) valueI.getValue();
-				pop_size = value.getValue(); 
-			}
-			if (next.getName().equals("S")){
-				IntegerValue value = (IntegerValue) valueI.getValue();
-				tournament_size = value.getValue(); 
-			}
+		// find maximum tries in Options		
+		Options options = new Options(getSearchOptions());
+		
+		if (options.containsOptionByName("E")) {
+			NewOption optionE = options.getOptionByName("E");
+			FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
+			final_error_rate = valueE.getValue(); 
 		}
+		if (options.containsOptionByName("M")) {
+			NewOption optionM = options.getOptionByName("M");
+			IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
+			maximum_generations = valueM.getValue(); 
+		}		
+		if (options.containsOptionByName("T")) {
+			NewOption optionT = options.getOptionByName("T");
+			FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getValue();
+			mut_prob = valueT.getValue(); 
+		}
+		if (options.containsOptionByName("X")) {
+			NewOption optionX = options.getOptionByName("X");
+			FloatValue valueX = (FloatValue) optionX.convertToSingleValue().getValue();
+			xover_prob = valueX.getValue(); 
+		}
+		if (options.containsOptionByName("P")) {
+			NewOption optionP = options.getOptionByName("P");
+			IntegerValue valueP = (IntegerValue) optionP.convertToSingleValue().getValue();
+			pop_size = valueP.getValue(); 
+		}
+		if (options.containsOptionByName("S")) {
+			NewOption optionS = options.getOptionByName("S");
+			IntegerValue valueS = (IntegerValue) optionS.convertToSingleValue().getValue();
+			tournament_size = valueS.getValue(); 
+		}
+
 		query_block_size = pop_size;
 
 	}

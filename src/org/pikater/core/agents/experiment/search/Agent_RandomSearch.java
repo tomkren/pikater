@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
@@ -49,30 +50,28 @@ public class Agent_RandomSearch extends Agent_Search {
 	@Override
 	protected void loadSearchOptions(){
 		
-		List<NewOption> search_options = getSearch_options();
-		// find maximum tries in Options
-
 		final_error_rate = (float) 0.01;
 		maximum_tries= 10;
 		
-		for (NewOption next : search_options) {
-			
-			Value valueI = next.convertToSingleValue();
-			
-			if (next.getName().equals("E")){
-				FloatValue value = (FloatValue) valueI.getValue();
-				final_error_rate = value.getValue();
-			}
-			if (next.getName().equals("M")){
-				IntegerValue value = (IntegerValue) valueI.getValue();
-				maximum_tries = value.getValue();
-			}
+		// find maximum tries in Options
+		Options options = new Options(getSearchOptions());
+		
+		if (options.containsOptionByName("E")) {
+			NewOption optionE = options.getOptionByName("E");
+			FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
+			final_error_rate = valueE.getValue(); 
 		}
+		if (options.containsOptionByName("M")) {
+			NewOption optionM = options.getOptionByName("M");
+			IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
+			maximum_tries = valueM.getValue(); 
+		}	
+		
 		// query_block_size = 1;
 		query_block_size = maximum_tries;
-		System.out.println(getLocalName()+" parameters are: ");
-		System.out.println("   final_error_rate: " + final_error_rate);
-		System.out.println("   maximum_tries: " + maximum_tries);		
+		log(getLocalName()+" parameters are: ");
+		log("   final_error_rate: " + final_error_rate);
+		log("   maximum_tries: " + maximum_tries);		
 	}
 
 	@Override

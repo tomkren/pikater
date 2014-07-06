@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -191,31 +192,31 @@ public class Agent_GridSearch extends Agent_Search {
 
     @Override
     protected void loadSearchOptions() { 
-        List<NewOption> search_options = getSearch_options();
         
-        for (NewOption next : search_options) {
-
-			Value valueI = next.convertToSingleValue();
-			
-            if (next.getName().equals("N")) {
-            	IntegerValue value = (IntegerValue) valueI.getValue();
-                defaultTries = value.getValue();
-            }
-            if (next.getName().equals("B")) {
-            	IntegerValue value = (IntegerValue) valueI.getValue();
-                query_block_size = value.getValue();
-            }
-            //if (next.getName().equals("L")) {
-            //   linearSteps = Boolean.parseBoolean(next.getValue());
-            //}
-            //if (next.getName().equals("G")) {
-            //    logSteps = Boolean.parseBoolean(next.getValue());
-            //}
-            if (next.getName().equals("Z")) {
-               	IntegerValue value = (IntegerValue) valueI.getValue();
-                logZero = value.getValue();
-            }
+        Options options = new Options(getSearchOptions());
+        
+        if (options.containsOptionByName("N")) {
+        	NewOption optionN = options.getOptionByName("N");
+        	IntegerValue valueN = (IntegerValue) optionN.convertToSingleValue().getValue();
+        	defaultTries = valueN.getValue();
         }
+        if (options.containsOptionByName("B")) {
+        	NewOption optionB = options.getOptionByName("B");
+        	IntegerValue valueB = (IntegerValue) optionB.convertToSingleValue().getValue();
+        	query_block_size = valueB.getValue();
+        }
+        if (options.containsOptionByName("Z")) {
+        	NewOption optionZ = options.getOptionByName("Z");
+        	IntegerValue valueZ = (IntegerValue) optionZ.convertToSingleValue().getValue();
+        	logZero = valueZ.getValue();
+        }
+        //if (next.getName().equals("L")) {
+        //   linearSteps = Boolean.parseBoolean(next.getValue());
+        //}
+        //if (next.getName().equals("G")) {
+        //    logSteps = Boolean.parseBoolean(next.getValue());
+        //}
+        
         schema = getSchema();
     }
 

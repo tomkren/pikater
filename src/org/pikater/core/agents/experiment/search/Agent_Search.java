@@ -87,7 +87,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		}
 		
 	}
-	protected List<NewOption> getSearch_options() {
+	protected List<NewOption> getSearchOptions() {
 
 		if(search_options != null) {
 			return search_options;

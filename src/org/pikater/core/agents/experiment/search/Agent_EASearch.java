@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
@@ -311,56 +312,64 @@ public class Agent_EASearch extends Agent_Search {
 
     @Override
     protected void loadSearchOptions() {
+    	
         popSize = 10;
         mutProb = 0.2;
         xOverProb = 0.5;
         maxGeneration = 5;
         goalError = 0.02;
-        List<NewOption> search_options = getSearch_options();
-        // find maximum tries in Options
+
+        Options options = new Options(getSearchOptions());
         
-        for (NewOption next : search_options) {
-        	
-        	Value valueI = next.convertToSingleValue();
-            if (next.getName().equals("E")) {
-            	FloatValue value = (FloatValue) valueI.getValue();
-                goalError = value.getValue();
-            }
-            if (next.getName().equals("M")) {
-            	IntegerValue value = (IntegerValue) valueI.getValue();
-                maxGeneration = value.getValue();
-            }
-            if (next.getName().equals("T")) {
-            	FloatValue value = (FloatValue) valueI.getValue();
-                mutProb = value.getValue();
-            }
-            if (next.getName().equals("X")) {
-            	FloatValue value = (FloatValue) valueI.getValue();
-                xOverProb = value.getValue();
-            }
-            if (next.getName().equals("P")) {
-            	IntegerValue value = (IntegerValue) valueI.getValue();
-                popSize = value.getValue();
-            }
-            if (next.getName().equals("I")) {
-            	IntegerValue value = (IntegerValue) valueI.getValue();
-                maxEval = value.getValue();
-            }
-            if (next.getName().equals("F")) {
-            	FloatValue value = (FloatValue) valueI.getValue();
-                mutProbPerField = value.getValue();
-            }
-            if (next.getName().equals("L")) {
-            	FloatValue value = (FloatValue) valueI.getValue();
-                eliteSize = value.getValue();
-            }
-            //if (next.getName().equals("S")) {
-            //    surrogate = Boolean.parseBoolean(next.getValue());
-            //}
-            //if (next.getName().equals("O")) {
-            //    multiobjective = Boolean.parseBoolean(next.getValue());
-            //}
+        if (options.containsOptionByName("E")) {
+	        NewOption optionE = options.getOptionByName("E");
+	        FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
+	        goalError = valueE.getValue();
         }
+        if (options.containsOptionByName("M")) {
+	        NewOption optionM = options.getOptionByName("M");
+	        IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
+	        maxGeneration = valueM.getValue();
+        }
+        if (options.containsOptionByName("T")) {
+	        NewOption optionT = options.getOptionByName("T");
+	        FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getValue();
+	        mutProb = valueT.getValue();
+        }
+        if (options.containsOptionByName("X")) {
+	        NewOption optionX = options.getOptionByName("X");
+	        FloatValue valueX = (FloatValue) optionX.convertToSingleValue().getValue();
+	        xOverProb = valueX.getValue();
+        }
+        if (options.containsOptionByName("P")) {
+	        NewOption optionP = options.getOptionByName("P");
+	        IntegerValue valueP = (IntegerValue) optionP.convertToSingleValue().getValue();
+	        popSize = valueP.getValue();
+        }
+        if (options.containsOptionByName("I")) {
+	        NewOption optionI = options.getOptionByName("I");
+	        IntegerValue valueI = (IntegerValue) optionI.convertToSingleValue().getValue();
+	        maxEval = valueI.getValue();
+        }
+        if (options.containsOptionByName("F")) {
+	        NewOption optionF = options.getOptionByName("F");
+	        FloatValue valueF = (FloatValue) optionF.convertToSingleValue().getValue();
+	        mutProbPerField = valueF.getValue();
+        }
+
+        if (options.containsOptionByName("L")) {
+	        NewOption optionL = options.getOptionByName("L");
+	        FloatValue valueL = (FloatValue) optionL.convertToSingleValue().getValue();
+	        eliteSize = valueL.getValue();
+        }
+
+        //if (next.getName().equals("S")) {
+        //    surrogate = Boolean.parseBoolean(next.getValue());
+        //}
+        //if (next.getName().equals("O")) {
+        //    multiobjective = Boolean.parseBoolean(next.getValue());
+        //}
+        
         query_block_size = popSize;
 
     }
