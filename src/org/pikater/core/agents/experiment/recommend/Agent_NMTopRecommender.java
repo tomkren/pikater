@@ -185,9 +185,8 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agentI.getOptionByName(optionName) != null){
 	            		
 	            		NewOption optionOfAgentI = agentI.getOptionByName(optionName);
-	            		Value valueOfAgentI = optionOfAgentI.convertToSingleValue();
-	            		IValue valueI = valueOfAgentI.getValue();
-	            		
+	            		IValue valueI = optionOfAgentI.convertToSingleValue().getValue();
+	            		 		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
 	            			sum += integerValue.getValue();
@@ -207,8 +206,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agent.getOptionByName(optionName) != null) {
 	            		
 	            		NewOption optionOfAgentI = agent.getOptionByName(optionName);
-	            		Value valueOfAgentI = optionOfAgentI.convertToSingleValue();
-	            		IValue valueI = valueOfAgentI.getValue();
+	            		IValue valueI = optionOfAgentI.convertToSingleValue().getValue();
 	            		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
