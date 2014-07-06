@@ -10,50 +10,61 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public final class Input10 {
 
 	public static void main(String[] args) throws FileNotFoundException {
+
+		System.out
+				.println("Exporting Ontology input10 to Klara's input XML configuration file.");
+
+		// Specify a datasource
+		DataSourceDescription fileDataSource1 = new DataSourceDescription(
+				"weather.arff");
+		DataSourceDescription fileDataSource2 = new DataSourceDescription(
+				"weather2.arff");
+
+		// PreProcessing
+		DataPreProcessing processing = new DataPreProcessing();
+		processing.addDataSources(fileDataSource1);
+		processing.addDataSources(fileDataSource2);
+
+		DataSourceDescription dataSourceSunny = new DataSourceDescription();
+		dataSourceSunny.setDataOutputType("Data-Sunny");
+		dataSourceSunny.setDataProvider(processing);
+
+		// Save Sunny data
+		FileDataSaver saverSunny = new FileDataSaver();
+		saverSunny.setDataSource(dataSourceSunny);
+
+		DataSourceDescription dataSourceOvercast = new DataSourceDescription();
+		dataSourceOvercast.setDataOutputType("Data-Overcast");
+		dataSourceOvercast.setDataProvider(processing);
+
+		// Save Overcast data
+		FileDataSaver saverOvercast = new FileDataSaver();
+		saverOvercast.setDataSource(dataSourceOvercast);
+
+		DataSourceDescription dataSourceRainy = new DataSourceDescription();
+		dataSourceRainy.setDataOutputType("Data-Rainy");
+		dataSourceRainy.setDataProvider(processing);
+
+		// Save Overcast data
+		FileDataSaver saverRainy = new FileDataSaver();
+		saverRainy.setDataSource(dataSourceRainy);
 		
-		System.out.println("Exporting Ontology input10 to Klara's input XML configuration file.");
+		// Our requirements for the description are ready, lets create new
+		// computation description
+		List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
+		roots.add(saverSunny);
+		roots.add(saverOvercast);
+		roots.add(saverRainy);
 
-        //Specify a datasource
-        DataSourceDescription fileDataSource1 = new DataSourceDescription("weather.arff");
-        DataSourceDescription fileDataSource2 = new DataSourceDescription("weather2.arff");
-
-        //PreProcessing
-        DataPreProcessing processing = new DataPreProcessing();
-        processing.addDataSources(fileDataSource1);
-        processing.addDataSources(fileDataSource2);
-
-		DataSourceDescription dataSourceEven = new DataSourceDescription();
-		dataSourceEven.setDataOutputType("Data-Even");
-		dataSourceEven.setDataProvider(processing);
-
-        //Save odd data
-        FileDataSaver saverEven = new FileDataSaver();
-        saverEven.setDataSource(dataSourceEven);
-
-		DataSourceDescription dataSourceOdd = new DataSourceDescription();
-		dataSourceOdd.setDataOutputType("Data-Odd");
-		dataSourceOdd.setDataProvider(processing);
-
-        //Save odd data
-        FileDataSaver saverOdd = new FileDataSaver();
-        saverOdd.setDataSource(dataSourceOdd);
-        
-        //Our requirements for the description are ready, lets create new computation description
-        List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
-        roots.add(saverEven);
-        roots.add(saverOdd);
-        
-        ComputationDescription comDescription = new ComputationDescription();
-        comDescription.setRootElements(roots);
+		ComputationDescription comDescription = new ComputationDescription();
+		comDescription.setRootElements(roots);
 
 		String fileName = Agent_GUIKlara.filePath + "input10"
-				+ System.getProperty("file.separator")
-				+ "input.xml";
+				+ System.getProperty("file.separator") + "input.xml";
 
 		comDescription.exportXML(fileName);
-    }
+	}
 }
