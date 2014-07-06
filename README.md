@@ -1,17 +1,21 @@
-#Extended Pikater
+<!-- --- title: GitHub overview -->
 
-This project extends the <a href="https://github.com/peskk3am/pikater4">Pikater</a> project with multi-user support, web based GUI and distributed infrastructure to allow simultaneous computation of many individual tasks. For that purpose, the following technologies are used:
-* <a href="https://vaadin.com/home">Vaadin framework</a> based on Google Web Toolkit (GWT).
-* <a href="https://github.com/ericdrowell/KineticJS">KineticJS</a> for experiment editor drawing (see main features) and <a href="https://github.com/neothemachine/KineticGWT">KineticGWT</a> for easy development in GWT.
-* <a href="http://jade.tilab.com/">Jade</a> multi-agent system for easy integration with Pikater and the infrastructure it provides.
+This project extends the [Pikater](https://github.com/peskk3am/pikater4) project with multi-user support, web based GUI and distributed infrastructure to allow simultaneous computation of many individual tasks. For that purpose, the following principal technologies are used:
+* [Jade](http://jade.tilab.com/) multi-agent system. Required by the original Pikater project.
+* [Vaadin](https://vaadin.com/book/-/page/preface.html) framework based on [Google Web Toolkit (GWT)](http://www.gwtproject.org/) to build the aforementioned GUI.
+* [Java persistence API (JPA)](http://en.wikipedia.org/wiki/Java_Persistence_API). This way, we can make sure the project could be rewritten to support various relational databases with minimum effort.
+* [KineticJS](https://github.com/ericdrowell/KineticJS) to draw experiments on the client (see main features) and [KineticGWT](https://github.com/neothemachine/KineticGWT) for easy integration in GWT.
 
-##Main features
+
+
+
+## Main features
 
 Client:
 * 2D editor to define experiments (boxes and edges style).
 * Potentially many experiments may be scheduled to execution.
 * Displaying the experiment results and converting/downloading them into a human-readable format, such as CSV.
-* Uploading custom data sets, computation methods and models.
+* Uploading custom data sets and computation methods.
 
 Server:
 * Many features of the original Pikater project, such as computation method recommendation.
@@ -20,27 +24,30 @@ Server:
 * Administrator functions, such as supervision of all scheduled experiments.
 
 
-##How it works
 
-See <a href="https://www.dropbox.com/s/uum4080mpk068h0/Architektura.png">this</a> picture.
 
-##How to use
+## How to use
 
-###Launching from a servlet container
+### Deployment
 
-1) Install and prepare a PostGRE database. Change the following files accordingly:
-* src/beans.xml
-* src/META-INF/persistence.xml
+1. Install and prepare the database (currently only PostGRE is supported). Change the following files accordingly:
+	* `src/beans.xml`
+	* `src/META-INF/persistence.xml`
+2. Edit files in the `WebContent/WEB-INF/conf` directory:
+	* `appServer.properties` is used to configure the web application.
+	* `jadeTopology1.xml` is used to provide directives to additional machines - one master machine to coordinate the application's core and other slave machines to do the work.
+3. Install and prepare a servlet container (e.g. Apache Tomcat), deploy the application into it and start it.
 
-2) Edit the `WebContent/WEB-INF/conf` directory.
+### Launching
 
-3) Install and prepare a servlet container (Apache Tomcat, …).
+#### From a servlet container
 
-4) Deploy the "WebContent" into the servlet container and start it.
+1. Access the page, e.g. go to `http://localhost:8080/Pikater` (for Apache Tomcat) or `http://my.domain/Pikater`. A login dialog will appear.
+2. Enter the default login and password (from `WebContent/WEB-INF/conf/appServer.properties` - see above) and follow the launch wizard.
 
-5) Access the page, enter the default login and password, follow the application launching wizard.
+#### From the command line
 
-###Launching from a command line
+<font color="red">// TODO: make this properly</font>
 
 `-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl
 -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl`
@@ -49,8 +56,8 @@ Tj. např.:
 
 `java -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl -cp jade.jar jade.Boot -local-host localhost -gui -agents mailAgent:pikater.agents.utility.MailAgent;mailTester:org.pikater.core.agents.system.mailing.MailAgentTester`
 
-Pro spuštění InitiatorAgenta co spustí výpočet:
-Nejlepis pouzit soubory /core/runPikaterMaster.sh /core/runPikaterSlave.sh
+Pro spuštění InitiatorAgenta co spustí výpočet:  
+Nejlepší použít soubory `/core/runPikaterMaster.sh` a `/core/runPikaterSlave.sh`
 
 Centralni bod:
 `java -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl -cp jade.jar jade.Boot -local-host localhost -gui -local-host localhost -agents initiator:org.pikater.core.agents.system.Agent_Initiator(core/configurationMaster.xml)`
@@ -58,19 +65,17 @@ Centralni bod:
 Jeden vypocetni server:
 `java -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl -cp jade.jar jade.Boot -local-host localhost -gui -local-host localhost -agents initiator:org.pikater.core.agents.system.Agent_Initiator(core/configurationSlave.xml)`
 
-##Documentation
 
-###Core
-* <a href="http://jade.tilab.com/doc/">Jade documentation</a>
 
-###Shared
-* <a href="http://docs.oracle.com/javaee/5/tutorial/doc/bnbpz.html">Java persistence API documentation</a>
-* <a href="http://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cmp30cfg.htm">Using Java Persistence API</a>
-* <a href="http://epaul.github.io/jsch-documentation/javadoc/">JSch javadoc</a>
 
-###Web server
-* <a href="https://vaadin.com/book/-/page/preface.html">Book of Vaadin 7</a>
-* <a href="http://tomcat.apache.org/tomcat-7.0-doc/servletapi/">Servlet 3.0 documentation</a>
-* <a href="http://www.quartz-scheduler.org/documentation">Java Quartz Scheduler (cron jobs) documentation</a>
-* <a href="http://www.quartz-scheduler.org/documentation/quartz-2.2.x/configuration">Java Quartz Scheduler configuration reference</a>
-* <a href="http://tomcat.apache.org/tomcat-7.0-doc/logging.html">Logging in Apache Tomcat</a>
+## Information about this repository
+
+<font color="red">// TODO: information/description/commentaries to individual files/folders</font>
+
+
+
+
+## Documentation
+
+* [[Open documentation overview|Documentation]]
+

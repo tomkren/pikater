@@ -1,0 +1,79 @@
+/***************************************************/
+/* OVERRIDE PREDEFINED STYLES */
+
+.markdown-body
+{
+    padding-top: 1em;
+}
+
+.markdown-body h2
+{
+    margin: 1.5em 0 15px;
+}
+
+/***************************************************/
+/* OUR OWN HORIZONTAL NAVIGATOR */
+
+.horizontal-navigator
+{
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background-color: lightgray;
+    margin-bottom: 25px;
+}
+
+.horizontal-navigator .span
+{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/***************************************************/
+/* HEADER AUTO-NUMBERING */
+
+body
+{
+    counter-reset: section;
+}
+
+h2
+{
+    counter-reset: sub-section;
+}
+h3
+{
+    counter-reset: composite;
+}
+h4
+{
+    counter-reset: detail;
+}
+
+/* use UNICODE's '\0000a0' (non-breaking space) to manually add space between the header numbers and text */
+
+h2:before
+{
+    counter-increment: section;
+    content: counter(section) "\0000a0\0000a0";
+}
+h3:before
+{
+    counter-increment: sub-section;
+    content: counter(section) "." counter(sub-section) "\0000a0\0000a0";
+}
+h4:before
+{
+    counter-increment: composite;
+    content: counter(section) "." counter(sub-section) "." counter(composite) "\0000a0\0000a0";
+}
+h5:before
+{
+    counter-increment: detail;
+    content: counter(section) "." counter(sub-section) "." counter(composite) "." counter(detail) "\0000a0\0000a0";
+}
+   
+/***************************************************/
+/* VARIOUS OTHER STYLES */
+
