@@ -77,5 +77,5 @@ Jeden vypocetni server:
 
 ## Documentation
 
-* [[Open documentation overview|Documentation]]
+* <a href="docs/Documentation.md">Open documentation overview</a>
 
