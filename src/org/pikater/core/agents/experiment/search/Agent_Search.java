@@ -307,7 +307,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		agent = new org.pikater.core.ontology.subtrees.management.Agent();
 		agent.setName(getLocalName());
 		agent.setType(getAgentType());
-		agent.setOptions(getAgentInfo().getOptions());
+		agent.setOptions(getAgentInfo().getOptions().getAll());
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);

@@ -56,12 +56,12 @@ public class Agent_RandomSearch extends Agent_Search {
 		// find maximum tries in Options
 		Options options = new Options(getSearchOptions());
 		
-		if (options.containsOptionByName("E")) {
+		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.getOptionByName("E");
 			FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
 			final_error_rate = valueE.getValue(); 
 		}
-		if (options.containsOptionByName("M")) {
+		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.getOptionByName("M");
 			IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
 			maximum_tries = valueM.getValue(); 

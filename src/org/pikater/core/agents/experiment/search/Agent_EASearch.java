@@ -321,43 +321,43 @@ public class Agent_EASearch extends Agent_Search {
 
         Options options = new Options(getSearchOptions());
         
-        if (options.containsOptionByName("E")) {
+        if (options.containsOptionWithName("E")) {
 	        NewOption optionE = options.getOptionByName("E");
 	        FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
 	        goalError = valueE.getValue();
         }
-        if (options.containsOptionByName("M")) {
+        if (options.containsOptionWithName("M")) {
 	        NewOption optionM = options.getOptionByName("M");
 	        IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
 	        maxGeneration = valueM.getValue();
         }
-        if (options.containsOptionByName("T")) {
+        if (options.containsOptionWithName("T")) {
 	        NewOption optionT = options.getOptionByName("T");
 	        FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getValue();
 	        mutProb = valueT.getValue();
         }
-        if (options.containsOptionByName("X")) {
+        if (options.containsOptionWithName("X")) {
 	        NewOption optionX = options.getOptionByName("X");
 	        FloatValue valueX = (FloatValue) optionX.convertToSingleValue().getValue();
 	        xOverProb = valueX.getValue();
         }
-        if (options.containsOptionByName("P")) {
+        if (options.containsOptionWithName("P")) {
 	        NewOption optionP = options.getOptionByName("P");
 	        IntegerValue valueP = (IntegerValue) optionP.convertToSingleValue().getValue();
 	        popSize = valueP.getValue();
         }
-        if (options.containsOptionByName("I")) {
+        if (options.containsOptionWithName("I")) {
 	        NewOption optionI = options.getOptionByName("I");
 	        IntegerValue valueI = (IntegerValue) optionI.convertToSingleValue().getValue();
 	        maxEval = valueI.getValue();
         }
-        if (options.containsOptionByName("F")) {
+        if (options.containsOptionWithName("F")) {
 	        NewOption optionF = options.getOptionByName("F");
 	        FloatValue valueF = (FloatValue) optionF.convertToSingleValue().getValue();
 	        mutProbPerField = valueF.getValue();
         }
 
-        if (options.containsOptionByName("L")) {
+        if (options.containsOptionWithName("L")) {
 	        NewOption optionL = options.getOptionByName("L");
 	        FloatValue valueL = (FloatValue) optionL.convertToSingleValue().getValue();
 	        eliteSize = valueL.getValue();

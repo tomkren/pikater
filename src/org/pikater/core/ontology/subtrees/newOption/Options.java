@@ -1,37 +1,47 @@
 package org.pikater.core.ontology.subtrees.newOption;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-public class Options implements Concept{
-	/**
-	 * 
-	 */
+public class Options implements Concept, Iterable<NewOption>
+{
 	private static final long serialVersionUID = -8578686409784032991L;
+	
 	private List<NewOption> options;
 	
-	public void setList(List<NewOption> list) {
-		this.options = list;
-	}
-	public List<NewOption> getList() {
-		return options;
+	public Options()
+	{
+		this.options = new ArrayList<NewOption>();
 	}
 	
-	public Options(List<NewOption> list){
-		setList(list);
+	public Options(List<NewOption> list)
+	{
+		set(list);
 	}
-	public Options(){
+	
+	@Override
+	public Iterator<NewOption> iterator()
+	{
+		return options.iterator();
+	}
+	
+	public List<NewOption> getAll()
+	{
+		return options;
+	}
+	public void set(List<NewOption> list)
+	{
+		this.options = list;
 	}
 
-	public boolean containsOptionByName(String optionName) {
-        for (NewOption option : options) {
-            if (option.getName().equals(optionName))
-                return true;
-        }
-        return false;
+	public boolean containsOptionWithName(String optionName)
+	{
+        return getOptionByName(optionName) != null;
 	}
     public NewOption getOptionByName(String optionName)
     {
@@ -40,6 +50,10 @@ public class Options implements Concept{
                 return option;
         }
         return null;
+    }
+    public void addOption(NewOption option)
+    {
+        this.options.add(option);
     }
     
     public String exportToWeka() {

@@ -107,7 +107,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		
 		OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
 	    Options options = new Options(optionEdge.getOptions());
-		agent.setOptions(options.getList());
+		agent.setOptions(options.getAll());
 
 		return agent;
 	}

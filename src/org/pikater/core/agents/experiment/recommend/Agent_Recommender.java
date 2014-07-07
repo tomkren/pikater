@@ -291,7 +291,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	protected java.util.List<NewOption> getParameters(){
 		java.util.List<NewOption> optFileOptions =
-				this.getAgentInfo().getOptions();
+				this.getAgentInfo().getOptions().getAll();
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	

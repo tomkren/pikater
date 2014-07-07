@@ -1250,7 +1250,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Agent agent = new Agent();
 		agent.setName(rs.getString("agentName"));
 		agent.setType(rs.getString("agentType"));
-		agent.setOptions(options.getList());
+		agent.setOptions(options.getAll());
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);

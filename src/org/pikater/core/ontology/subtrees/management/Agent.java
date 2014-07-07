@@ -50,7 +50,7 @@ public class Agent implements Concept, Cloneable {
 	
 	public boolean containsOptionByName(String optionName) {
 		Options option = new Options(getOptions());
-		return option.containsOptionByName(optionName);		
+		return option.containsOptionWithName(optionName);		
 	}
 	public NewOption getOptionByName(String name) {
 		Options option = new Options(getOptions());

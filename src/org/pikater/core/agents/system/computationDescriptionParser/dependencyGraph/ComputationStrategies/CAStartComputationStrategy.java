@@ -99,7 +99,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		}
 		//if no solution values to fill - return the option
 		if(solution.getValues() == null){
-			res_options.setList(options);
+			res_options.set(options);
 			return res_options;
 		}
 		java.util.Iterator<String> sol_itr = solution.getValues().iterator();
@@ -107,10 +107,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		for (NewOption optionI : options) {
 			NewOption new_opt = optionI.cloneOption();
 			if(optionI.getIsMutable())
-				new_opt.setValue(fillOptWithSolution(optionI, sol_itr));
+				new_opt.setValues(fillOptWithSolution(optionI, sol_itr));
 			options_list.add(new_opt);
 		}
-		res_options.setList(options_list);
+		res_options.set(options_list);
 		return res_options;
 	}
 	
@@ -146,9 +146,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
         agent.setType(computationNode.getModelClass());
 		if (inputs.get("searchSolution") != null){
 			SearchSolution ss = (SearchSolution)inputs.get("searchSolution").getNext();
-			options =  fillOptionsWithSolution(options.getList(), ss);
+			options =  fillOptionsWithSolution(options.getAll(), ss);
 		}
-		agent.setOptions(options.getList());			
+		agent.setOptions(options.getAll());			
 		
 		Data data = new Data();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();

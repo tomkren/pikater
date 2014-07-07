@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -23,7 +24,7 @@ public class AgentInfo implements Concept {
 	private String name;
 	private String description;
 
-	private List<NewOption> options;
+	private Options options;
 	
 	private List<Slot> inputSlots;
 	private List<Slot> outputSlots;
@@ -62,17 +63,19 @@ public class AgentInfo implements Concept {
 		this.description = description;
 	}
 
-	public List<NewOption> getOptions() {
+	public Options getOptions()
+	{
 		return options;
 	}
-	public void setOptions(List<NewOption> options) {
+	public void setOptions(Options options)
+	{
 		this.options = options;
 	}
 	public void addOption(NewOption option) {
 		if (this.options == null) {
-			this.options = new ArrayList<NewOption>();
+			this.options = new Options();
 		}
-		this.options.add(option);
+		this.options.addOption(option);
 	}
 
 	public List<Slot> getInputSlots() {
