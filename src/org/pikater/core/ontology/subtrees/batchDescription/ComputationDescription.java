@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -169,22 +170,81 @@ public class ComputationDescription implements Concept {
 
 	public static ComputationDescription importUniversalComputationDescription(
 			UniversalComputationDescription uDescription) {
+
+		ComputationDescription description = new ComputationDescription();
+		description.setGlobalOptions(
+				new ArrayList<NewOption>(uDescription.getGlobalOptions()) );
+
+		// map - id x ontology
+		Map<Integer, UniversalOntology> finishedtUniOntologys =
+				new HashMap<Integer, UniversalOntology>();
+		Map<Integer, IComputationElement> finishedDataProcessings =
+				new HashMap<Integer, IComputationElement>();
 		
-		ComputationDescription compDescription = new ComputationDescription();
+		List<UniversalElement> fifo = new ArrayList<UniversalElement>();
 		
-		List<NewOption> globalOptionList = new ArrayList<NewOption>(uDescription.getGlobalOptions());
-		compDescription.setGlobalOptions(globalOptionList);
-		
-		List<UniversalElement> rootElementsList = new ArrayList<UniversalElement>(uDescription.getRootElements());
-		for (UniversalElement uElementI : rootElementsList) {
+		for (UniversalElement uElementI : uDescription.getRootElements()) {
+			fifo.add(uElementI);
+		}
+
+		// searching to a depth of graph
+		while (! fifo.isEmpty()) {
+
+			UniversalElement uElement = fifo.get(0);
+			fifo.remove(0);
 			
-			FileDataSaver fileSaverI = FileDataSaver.importUniversalElement(uElementI);
-			compDescription.addRootElement(fileSaverI);
+			UniversalOntology uOntology = uElement.getOntologyInfo();
+			if (! finishedDataProcessings.containsKey(uOntology.getId()) ) {
+				
+				DataProcessing ontology =
+						DataProcessing.importUniversalOntology(uOntology);
+				
+				finishedtUniOntologys.put(
+						uOntology.getId(), uOntology);
+				finishedDataProcessings.put(
+						uOntology.getId(), ontology);
+				
+				for (UniversalConnector connectorI : uElement.getOntologyInfo().getInputSlots()) {
+					fifo.add( connectorI.getFromElement());
+				}
+			}
 		}
 		
-		return compDescription;
+		// connecting to graph
+		for ( Integer keyI : finishedDataProcessings.keySet()) {
+
+			DataProcessing processI = (DataProcessing) finishedDataProcessings.get(keyI);
+			UniversalOntology uOntoI = finishedtUniOntologys.get(keyI);
+			
+			List<DataSourceDescription> inputSlots = new ArrayList<DataSourceDescription>();
+			
+			Collection<UniversalConnector> slotsI = uOntoI.getInputSlots();
+			for (UniversalConnector slotIJ : slotsI) {
+	
+				UniversalElement uElement = slotIJ.getFromElement();
+				IDataProvider dataProvider =  (IDataProvider)
+						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
+				
+				DataSourceDescription dataSourceDesc = new DataSourceDescription();
+				dataSourceDesc.setDataInputType(slotIJ.getInputDataType());
+				dataSourceDesc.setDataOutputType(slotIJ.getOutputDataType());
+				dataSourceDesc.setDataProvider(dataProvider);
+				
+				inputSlots.add(dataSourceDesc);
+			}
+			
+			processI.importAllDataSourceDescriptions(inputSlots);
+			
+			if (processI instanceof FileDataSaver) {
+				FileDataSaver saverOnto = (FileDataSaver)processI; 
+				description.addRootElement(saverOnto);
+			}
+		}
+		
+		return description;
 	}
 
+	
 	public String exportXML(String fileName) throws FileNotFoundException {
 
 		generateIDs();

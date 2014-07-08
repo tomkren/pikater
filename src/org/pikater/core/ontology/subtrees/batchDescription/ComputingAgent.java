@@ -125,7 +125,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 			Value value = optModel.convertToSingleValue();
 			if (value.getTypedValue() instanceof StringValue) {
 				StringValue stringValue = (StringValue) value.getTypedValue();
-				if (stringValue.equals(NewModel.class.getSimpleName())) {
+				if (stringValue.getValue().equals(NewModel.class.getSimpleName())) {
 					this.model = new NewModel();
 				} else {
 					throw new IllegalStateException();

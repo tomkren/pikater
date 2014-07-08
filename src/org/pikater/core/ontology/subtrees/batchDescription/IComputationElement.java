@@ -25,6 +25,7 @@ public interface IComputationElement extends Concept {
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions);
 	
 	public UniversalOntology exportUniversalOntology();
+	//public void importUniversalOntology(UniversalOntology uOntology);
 	
 	public boolean equalsElement(IComputationElement element);
 }

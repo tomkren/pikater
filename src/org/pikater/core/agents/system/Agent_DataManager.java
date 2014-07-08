@@ -572,7 +572,7 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage respondToGetModels(ACLMessage request, Action a) {
-		GetModels gm=(GetModels)a.getAction();
+		//GetModels gm=(GetModels)a.getAction();
 		
 		java.util.List<JPAModel> savedModels=DAOs.modelDAO.getAll();
 		

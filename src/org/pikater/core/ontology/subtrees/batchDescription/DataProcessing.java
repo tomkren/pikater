@@ -138,9 +138,9 @@ public class DataProcessing implements IDataProvider {
 		
 		DataProcessing dataProcess = (DataProcessing) object;
 		dataProcess.setId(uOntology.getId());
-		dataProcess.setOptions(
+		dataProcess.importAllOptions(
 				new ArrayList<NewOption>(uOntology.getOptions()));
-		dataProcess.setErrors(
+		dataProcess.importAllErrors(
 				new ArrayList<ErrorDescription>(uOntology.getErrors()));
 		
 		return dataProcess;
