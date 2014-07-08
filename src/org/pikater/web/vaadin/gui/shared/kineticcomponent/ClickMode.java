@@ -1,11 +1,11 @@
-package org.pikater.web.vaadin.gui.shared;
+package org.pikater.web.vaadin.gui.shared.kineticcomponent;
 
-public enum KineticComponentClickMode
+public enum ClickMode
 {
 	SELECTION,
 	CONNECTION;
 	
-	public KineticComponentClickMode getOther()
+	public ClickMode getOther()
 	{
 		switch (this)
 		{

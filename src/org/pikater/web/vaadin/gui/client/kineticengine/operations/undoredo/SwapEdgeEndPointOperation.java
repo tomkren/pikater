@@ -1,18 +1,18 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
 public class SwapEdgeEndPointOperation extends BiDiOperation
 {
-	private final EdgePrototype edge;
+	private final EdgeGraphItemClient edge;
 	private final EndPoint endPointType;
-	private final BoxPrototype originalEndpoint;
-	private final BoxPrototype newEndpoint;
+	private final BoxGraphItemClient originalEndpoint;
+	private final BoxGraphItemClient newEndpoint;
 	
 	public SwapEdgeEndPointOperation(KineticEngine kineticEngine)
 	{
@@ -60,7 +60,7 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 	// **********************************************************************************************
 	// PRIVATE INTERFACE
 	
-	private void setEdgeEndPoint(BoxPrototype box)
+	private void setEdgeEndPoint(BoxGraphItemClient box)
 	{
 		edge.setEndpoint(endPointType, box);
 		edge.updateEdge();

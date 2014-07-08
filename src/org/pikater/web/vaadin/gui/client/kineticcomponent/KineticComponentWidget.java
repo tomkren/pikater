@@ -9,7 +9,10 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.KineticUndoRedoManager;
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.GraphItemSetChange;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -248,15 +251,15 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public void command_alterClickMode(KineticComponentClickMode newClickMode)
+	public void command_alterClickMode(ClickMode newClickMode)
 	{
 		getServerRPC().command_alterClickMode(newClickMode);
 	}
 	
 	@Override
-	public void command_openOptionsManager(String[] selectedBoxesAgentIDs)
+	public void command_selectionChange(String[] selectedBoxesAgentIDs)
 	{
-		getServerRPC().command_openOptionsManager(selectedBoxesAgentIDs);
+		getServerRPC().command_selectionChange(selectedBoxesAgentIDs);
 	}
 	
 	@Override
@@ -266,6 +269,18 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		
 		// TODO: only do this if saving the experiment is successful?
 		getHistoryManager().clear();
+	}
+	
+	@Override
+	public void command_itemSetChange(GraphItemSetChange changeType, BoxGraphItemShared[] boxes)
+	{
+		getServerRPC().command_itemSetChange(changeType, boxes);
+	}
+
+	@Override
+	public void command_itemSetChange(GraphItemSetChange changeType, EdgeGraphItemShared[] edges)
+	{
+		getServerRPC().command_itemSetChange(changeType, edges);
 	}
 	
 	// *****************************************************************************************************
@@ -296,15 +311,9 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public KineticComponentClickMode getClickMode()
+	public ClickMode getClickMode()
 	{
 		return connector.getState().clickMode;
-	}
-	
-	@Override
-	public boolean openOptionsManagerOnSelectionChange()
-	{
-		return connector.getState().openOptionsOnSelection;
 	}
 	
 	// *****************************************************************************************************

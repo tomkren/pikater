@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 import com.vaadin.shared.AbstractComponentState;
 
@@ -21,8 +21,7 @@ public class KineticComponentState extends AbstractComponentState
 	/*
 	 * Toolbar settings.
 	 */
-	public KineticComponentClickMode clickMode;
-	public boolean openOptionsOnSelection;
+	public ClickMode clickMode;
 	
 	/*
 	 * Other programmatic fields shared. 
@@ -32,17 +31,11 @@ public class KineticComponentState extends AbstractComponentState
 	public KineticComponentState()
 	{
 		this.clickMode = getDefaultClickMode();
-		this.openOptionsOnSelection = getDefaultOptionsOpenedOnSelection();
 		this.serverThinksThatSchemaIsModified = false;
 	}
 	
-	public static KineticComponentClickMode getDefaultClickMode()
+	public static ClickMode getDefaultClickMode()
 	{
-		return KineticComponentClickMode.SELECTION;
-	}
-	
-	public static boolean getDefaultOptionsOpenedOnSelection()
-	{
-		return true;
+		return ClickMode.SELECTION;
 	}
 }

@@ -1,7 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.graphitems;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph;
 
 import net.edzard.kinetic.Box2d;
 import net.edzard.kinetic.Colour;
@@ -10,22 +7,18 @@ import net.edzard.kinetic.Kinetic;
 import net.edzard.kinetic.Layer;
 import net.edzard.kinetic.Line;
 import net.edzard.kinetic.Line.LineCap;
+import net.edzard.kinetic.Line.LineStyle;
 import net.edzard.kinetic.Node;
 import net.edzard.kinetic.Path;
 import net.edzard.kinetic.PathSVG;
 import net.edzard.kinetic.Rectangle;
-import net.edzard.kinetic.Vector2d;
-import net.edzard.kinetic.Line.LineStyle;
 import net.edzard.kinetic.Rectangle.RectanglePoint;
+import net.edzard.kinetic.Vector2d;
 
-import org.pikater.web.vaadin.gui.client.kineticengine.GlobalEngineConfig;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 
-import com.google.gwt.core.client.JsArray;
-
-public class EdgePrototype extends ExperimentGraphItem
+public class EdgeGraphItemClient extends AbstractGraphItemClient
 {
 	// **********************************************************************************************
 	// INNER KINETIC COMPONENTS
@@ -99,8 +92,8 @@ public class EdgePrototype extends ExperimentGraphItem
 	/**
 	 * Boxes that this edge connects.
 	 */
-	private BoxPrototype fromBox;
-	private BoxPrototype toBox;
+	private BoxGraphItemClient fromBox;
+	private BoxGraphItemClient toBox;
 	
 	/**
 	 * The state indicating whether this edge is currently being displayed as an edge or as a baseline.
@@ -110,7 +103,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	/**
 	 * Regular constructor.
 	 */
-	public EdgePrototype(KineticEngine kineticEngine)
+	public EdgeGraphItemClient(KineticEngine kineticEngine)
 	{
 		super(kineticEngine);
 		
@@ -246,7 +239,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	// **********************************************************************************************
 	// ENDPOINT OR EDGE DRAGGING RELATED METHODS
 	
-	public void endPointDrag_toBaseLine(BoxPrototype draggedEndPoint)
+	public void endPointDrag_toBaseLine(BoxGraphItemClient draggedEndPoint)
 	{
 		// IMPORTANT: don't violate the call order
 		baseLine.setEnd(getOtherEndpoint(draggedEndPoint).getAbsolutePointPosition(RectanglePoint.CENTER));
@@ -254,7 +247,7 @@ public class EdgePrototype extends ExperimentGraphItem
 		toBaseLine_onFinish();
 	}
 	
-	public void endPointDrag_updateBaseLine(BoxPrototype draggedEndPoint)
+	public void endPointDrag_updateBaseLine(BoxGraphItemClient draggedEndPoint)
 	{
 		updateBaseLineStart(draggedEndPoint.getAbsolutePointPosition(RectanglePoint.CENTER));
 	}
@@ -264,7 +257,7 @@ public class EdgePrototype extends ExperimentGraphItem
 		toEdge_onFinish(true);
 	}
 	
-	public void edgeDrag_toBaseLine(Vector2d initialDragPosition, BoxPrototype staticBox)
+	public void edgeDrag_toBaseLine(Vector2d initialDragPosition, BoxGraphItemClient staticBox)
 	{
 		// IMPORTANT: don't violate the call order
 		baseLine.setEnd(staticBox.getAbsolutePointPosition(RectanglePoint.CENTER));
@@ -285,29 +278,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	// **********************************************************************************************
 	// JUST SOME GETTERS AND UNIMPORTANT PUBLIC ROUTINES
 	
-	public static List<EdgePrototype> getInstancesFrom(KineticShapeCreator shapeCreator, Layer dynamicLayer)
-	{
-		// first find all arrows and baselines
-		JsArray<Node> containers = dynamicLayer.find("." + GlobalEngineConfig.name_edge_container);
-		JsArray<Node> baseLines = dynamicLayer.find("." + GlobalEngineConfig.name_edge_baseLine);
-		
-		// just in case check
-		assert(containers.length() == baseLines.length());
-		
-		// now pair up arrows with baselines (arrows alone determine the edge in the original graph, so it doesn't matter which baseline we connect to which arrow)
-		List<EdgePrototype> result = new ArrayList<EdgePrototype>();
-		for(int i = 0; i < containers.length(); i++)
-		{
-			/*
-			Group container = containers.get(i).cast();
-			Line baseLine = baseLines.get(i).cast();
-			result.add(shapeCreator.createEdge(NodeRegisterType.MANUAL, container, baseLine));
-			*/
-		}
-		return result;
-	}
-	
-	public BoxPrototype getEndPoint(EndPoint endPoint)
+	public BoxGraphItemClient getEndPoint(EndPoint endPoint)
 	{
 		switch (endPoint)
 		{
@@ -353,7 +324,7 @@ public class EdgePrototype extends ExperimentGraphItem
 		return (fromBox.isSelected() ? 1 : 0) + (toBox.isSelected() ? 1 : 0);
 	}
 	
-	public BoxPrototype getOtherEndpoint(BoxPrototype oneEndpoint)
+	public BoxGraphItemClient getOtherEndpoint(BoxGraphItemClient oneEndpoint)
 	{
 		if((oneEndpoint == null) && (fromBox == null) && (toBox == null))
 		{
@@ -373,13 +344,13 @@ public class EdgePrototype extends ExperimentGraphItem
 		}
 	}
 	
-	public BoxPrototype getSelectedEndpoint()
+	public BoxGraphItemClient getSelectedEndpoint()
 	{
 		assert(isExactlyOneEndSelected());
 		return fromBox.isSelected() ? fromBox : toBox;
 	}
 	
-	public BoxPrototype getNotSelectedEndpoint()
+	public BoxGraphItemClient getNotSelectedEndpoint()
 	{
 		assert(isExactlyOneEndSelected());
 		return fromBox.isSelected() ? toBox : fromBox;
@@ -392,7 +363,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	 * When using this method, keep in mind that eventually {@link #setEdgeRegisteredInEndpoints(boolean registered)}
 	 * needs to be called to keep consistency.
 	 */
-	public void setEndpoint(EndPoint endPoint, BoxPrototype box)
+	public void setEndpoint(EndPoint endPoint, BoxGraphItemClient box)
 	{
 		switch(endPoint)
 		{
@@ -417,7 +388,7 @@ public class EdgePrototype extends ExperimentGraphItem
 	
 	/**
 	 * Only call this method after both endpoints have been correctly set with the
-	 * {@link #setEndpoint(EndPoint endPoint, BoxPrototype box)} method.
+	 * {@link #setEndpoint(EndPoint endPoint, BoxGraphItemClient box)} method.
 	 */
 	public void setEdgeRegisteredInEndpoints(boolean registered)
 	{

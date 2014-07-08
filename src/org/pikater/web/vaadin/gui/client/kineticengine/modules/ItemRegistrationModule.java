@@ -6,11 +6,14 @@ import java.util.Set;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.SelectionOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.GraphItemSetChange;
 
 public class ItemRegistrationModule implements IEngineModule
 {
@@ -29,7 +32,7 @@ public class ItemRegistrationModule implements IEngineModule
 	/**
 	 * A self-explanatory variable.
 	 */
-	private final Set<BoxPrototype> allRegisteredBoxes;
+	private final Set<BoxGraphItemClient> allRegisteredBoxes;
 	
 	/**
 	 * Constructor.
@@ -40,7 +43,7 @@ public class ItemRegistrationModule implements IEngineModule
 		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = engine;
 		this.selectionModule = (SelectionModule) engine.getModule(SelectionModule.moduleID);
-		this.allRegisteredBoxes = new HashSet<BoxPrototype>();
+		this.allRegisteredBoxes = new HashSet<BoxGraphItemClient>();
 	}
 	
 	// **********************************************************************************************
@@ -59,7 +62,7 @@ public class ItemRegistrationModule implements IEngineModule
 	}
 
 	@Override
-	public void attachEventListeners(ExperimentGraphItem graphItem)
+	public void attachEventListeners(AbstractGraphItemClient graphItem)
 	{
 	}
 	
@@ -78,7 +81,7 @@ public class ItemRegistrationModule implements IEngineModule
 		 */
 		UNREGISTER;
 		
-		public boolean registrationCheck(EdgePrototype edge)
+		public boolean registrationCheck(EdgeGraphItemClient edge)
 		{
 			boolean registered = edge.getMasterNode().isRegistered();
 			return this == REGISTER ? !registered : registered; // only register unregistered edges and vice versa
@@ -95,7 +98,7 @@ public class ItemRegistrationModule implements IEngineModule
 	 * @param drawOnFinish
 	 * @param boxes
 	 */
-	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, BoxPrototype... boxes)
+	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, BoxGraphItemClient... boxes)
 	{
 		// first deselect provided boxes, if necessary
 		if(opKind == RegistrationOperation.UNREGISTER)
@@ -106,7 +109,7 @@ public class ItemRegistrationModule implements IEngineModule
 		// then do the action
 		if(opKind == RegistrationOperation.REGISTER)
 		{
-			for(BoxPrototype box : boxes)
+			for(BoxGraphItemClient box : boxes)
 			{
 				box.setVisibleInKinetic(true);
 				allRegisteredBoxes.add(box);
@@ -114,12 +117,15 @@ public class ItemRegistrationModule implements IEngineModule
 		}
 		else
 		{
-			for(BoxPrototype box : boxes)
+			for(BoxGraphItemClient box : boxes)
 			{
 				box.setVisibleInKinetic(false);
 				allRegisteredBoxes.remove(box);
 			}
 		}
+		
+		// send info to the server
+		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, BoxGraphItemShared.fromArray(boxes));
 
 		// and finally, request redraw of the stage
 		if(drawOnFinish)
@@ -138,10 +144,10 @@ public class ItemRegistrationModule implements IEngineModule
 	 * @param drawOnFinish
 	 * @param edges
 	 */
-	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, EdgePrototype... edges)
+	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, EdgeGraphItemClient... edges)
 	{
 		boolean visible = opKind == RegistrationOperation.REGISTER;
-		for(EdgePrototype edge : edges)
+		for(EdgeGraphItemClient edge : edges)
 		{
 			if(edge.isSelected())
 			{
@@ -152,11 +158,14 @@ public class ItemRegistrationModule implements IEngineModule
 			{
 				edge.setEdgeRegisteredInEndpoints(visible);
 			}
-			if(opKind.registrationCheck(edge)) // only add each edge once (it has 2 endpoints)
+			if(opKind.registrationCheck(edge)) // don't register in kinetic again, if the edge is already registered
 			{
 				edge.setVisibleInKinetic(visible);
 			}
 		}
+		
+		// send info to the server
+		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, EdgeGraphItemShared.fromArray(edges));
 		
 		if(drawOnFinish)
 		{
@@ -171,26 +180,38 @@ public class ItemRegistrationModule implements IEngineModule
 	 */
 	public void destroyGraphAndClearStage()
 	{
-		/*
-		 * First deselect everything - selection plugin will not merge selections should this operation be unmade.
-		 */
+		// first deselect everything - selection plugin will not merge selections should this operation be unmade
 		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, getRegisteredBoxes());
 		
 		// then destroy edges
-		for(BoxPrototype box : allRegisteredBoxes)
+		Set<EdgeGraphItemClient> destroyedEdges = new HashSet<EdgeGraphItemClient>();
+		for(BoxGraphItemClient box : allRegisteredBoxes)
 		{
-			for(EdgePrototype edge : box.connectedEdges)
+			for(EdgeGraphItemClient edge : box.connectedEdges)
 			{
 				if(edge.getMasterNode().isRegistered()) // only destroy each edge once (it has 2 endpoints)
 				{
 					edge.setVisibleInKinetic(false);
 					edge.destroy();
+					if(edge.areBothEndsDefined()) // destroying an item is required to keep programmatic fields intact
+					{
+						destroyedEdges.add(edge);
+					}
+					else
+					{
+						throw new IllegalStateException("Edges were destroyed and apparently also "
+								+ "unregistered from connected boxes. The connection has to be kept intact.");
+					}
 				}
 			}
 		}
+		
+		// send info to the server
+		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, BoxGraphItemShared.fromArray(getRegisteredBoxes()));
+		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, EdgeGraphItemShared.fromArray(destroyedEdges.toArray(new EdgeGraphItemClient[0])));
 
 		// destroy boxes
-		for(BoxPrototype box : allRegisteredBoxes)
+		for(BoxGraphItemClient box : allRegisteredBoxes)
 		{
 			box.destroy();
 		}
@@ -202,8 +223,8 @@ public class ItemRegistrationModule implements IEngineModule
 	// *****************************************************************************************************
 	// OTHER PUBLIC INTERFACE
 	
-	public BoxPrototype[] getRegisteredBoxes()
+	public BoxGraphItemClient[] getRegisteredBoxes()
 	{
-		return allRegisteredBoxes.toArray(new BoxPrototype[0]);
+		return allRegisteredBoxes.toArray(new BoxGraphItemClient[0]);
 	}
 }

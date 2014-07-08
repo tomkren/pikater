@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.graphitems;
+package org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 
-public abstract class ExperimentGraphItem implements IShapeWrapper
+public abstract class AbstractGraphItemClient implements IKineticShapeWrapper
 {
 	/**
 	 * The engine to register and call back to.
@@ -50,7 +50,7 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 		
 		public static List<VisualStyle> getDefault()
 		{
-			List<VisualStyle> result = new ArrayList<ExperimentGraphItem.VisualStyle>();
+			List<VisualStyle> result = new ArrayList<AbstractGraphItemClient.VisualStyle>();
 			result.add(NOT_SELECTED);
 			result.add(NOT_HIGHLIGHTED);
 			return result;
@@ -60,7 +60,7 @@ public abstract class ExperimentGraphItem implements IShapeWrapper
 	// ******************************************************************************************
 	// CONSTRUCTOR
 	
-	public ExperimentGraphItem(KineticEngine kineticEngine)
+	public AbstractGraphItemClient(KineticEngine kineticEngine)
 	{
 		this.isSelected = false;
 		this.kineticEngine = kineticEngine;

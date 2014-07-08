@@ -4,7 +4,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.KineticUndoRedoManager;
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 import com.google.gwt.user.client.Element;
 
@@ -59,14 +59,8 @@ public class KineticState implements IKineticEngineContext
 	}
 
 	@Override
-	public KineticComponentClickMode getClickMode()
+	public ClickMode getClickMode()
 	{
 		return parentWidget.getClickMode();
-	}
-
-	@Override
-	public boolean openOptionsManagerOnSelectionChange()
-	{
-		return parentWidget.openOptionsManagerOnSelectionChange();
 	}
 }

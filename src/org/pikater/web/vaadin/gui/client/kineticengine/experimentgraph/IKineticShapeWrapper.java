@@ -1,8 +1,8 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.graphitems;
+package org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph;
 
 import net.edzard.kinetic.Node;
 
-public interface IShapeWrapper
+public interface IKineticShapeWrapper
 {
 	/**
 	 * Gets the master node.

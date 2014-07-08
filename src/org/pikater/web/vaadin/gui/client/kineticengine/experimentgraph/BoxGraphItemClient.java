@@ -1,38 +1,31 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.graphitems;
+package org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import com.google.gwt.core.client.JsArray;
 
 import net.edzard.kinetic.Box2d;
 import net.edzard.kinetic.Colour;
 import net.edzard.kinetic.Group;
 import net.edzard.kinetic.Image;
 import net.edzard.kinetic.Kinetic;
-import net.edzard.kinetic.Layer;
 import net.edzard.kinetic.Node;
 import net.edzard.kinetic.Rectangle;
-import net.edzard.kinetic.Text;
-import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.Rectangle.RectanglePoint;
+import net.edzard.kinetic.Text;
 import net.edzard.kinetic.Text.FontStyle;
+import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
-import org.pikater.web.vaadin.gui.client.kineticengine.GlobalEngineConfig;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 
 @SuppressWarnings("deprecation")
-public class BoxPrototype extends ExperimentGraphItem
+public class BoxGraphItemClient extends AbstractGraphItemClient
 {
 	// **********************************************************************************************
 	// INNER KINETIC COMPONENTS
@@ -70,7 +63,7 @@ public class BoxPrototype extends ExperimentGraphItem
 	 * The Set interface is counted upon in {@link #registerEdge()} and {@link #unregisterEdge()}
 	 * methods so don't change it lightly.
 	 */
-	public final Set<EdgePrototype> connectedEdges;
+	public final Set<EdgeGraphItemClient> connectedEdges;
 	
 	/**
 	 * Reference to an external box information received from the server.
@@ -80,13 +73,13 @@ public class BoxPrototype extends ExperimentGraphItem
 	/**
 	 * Regular constructor.
 	 */
-	public BoxPrototype(KineticEngine kineticEngine, BoxInfo info)
+	public BoxGraphItemClient(KineticEngine kineticEngine, BoxInfo info)
 	{
 		super(kineticEngine);
 		
 		// first programmatic fields
 		this.info = info;
-		this.connectedEdges = new HashSet<EdgePrototype>();
+		this.connectedEdges = new HashSet<EdgeGraphItemClient>();
 		
 		// setup master rectangle
 		rectangle = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
@@ -127,7 +120,7 @@ public class BoxPrototype extends ExperimentGraphItem
 			@Override
 			public void handle(KineticEvent event)
 			{
-				getKineticEngine().fromEdgesToBaseLines(connectedEdges, BoxPrototype.this); // draws changes by default
+				getKineticEngine().fromEdgesToBaseLines(connectedEdges, BoxGraphItemClient.this); // draws changes by default
 				event.stopVerticalPropagation();
 			}
 		}, EventType.Basic.DRAGSTART);
@@ -136,7 +129,7 @@ public class BoxPrototype extends ExperimentGraphItem
 			@Override
 			public void handle(KineticEvent event)
 			{
-				getKineticEngine().updateBaseLines(connectedEdges, BoxPrototype.this); // draws changes by default
+				getKineticEngine().updateBaseLines(connectedEdges, BoxGraphItemClient.this); // draws changes by default
 				event.stopVerticalPropagation();
 			}
 		}, EventType.Basic.DRAGMOVE);
@@ -248,27 +241,6 @@ public class BoxPrototype extends ExperimentGraphItem
 	// **********************************************************************************************
 	// PUBLIC INTERFACE
 	
-	@Deprecated
-	public static Map<String, BoxPrototype> getInstancesFrom(KineticShapeCreator shapeCreator, Layer dynamicLayer)
-	{
-		Map<String, BoxPrototype> result = new HashMap<String, BoxPrototype>();
-		JsArray<Node> boxContainers = dynamicLayer.find("." + GlobalEngineConfig.name_box_container); 
-		for(int i = 0; i < boxContainers.length(); i++)
-		{
-			// if we try to load existing nodes into a new box instance, it just won't work for some reason... we have to make a clone
-			/*
-			Group boxContainer = boxContainers.get(i).cast();
-			Text textLabel = boxContainer.find("." + GlobalEngineConfig.name_box_textLabel).get(0).cast();
-			Rectangle masterShape = boxContainer.find("." + GlobalEngineConfig.name_box_masterRectangle).get(0).cast();			
-			
-			// TODO: serialize/deserialize box info instances
-			BoxPrototype newInstance = shapeCreator.createBox(NodeRegisterType.MANUAL, textLabel.getText(), boxContainer.getPosition());
-			result.put(boxContainer.getID(), newInstance); // IMPORTANT: register the original ID, not the new one
-			*/
-		}
-		return result;
-	}
-	
 	public BoxInfo getInfo()
 	{
 		return info;
@@ -284,7 +256,7 @@ public class BoxPrototype extends ExperimentGraphItem
 		return rectangle.getAbsolutePointPosition(point);
 	}
 	
-	public boolean isNotConnectedTo(BoxPrototype otherBox)
+	public boolean isNotConnectedTo(BoxGraphItemClient otherBox)
 	{
 		return Collections.disjoint(connectedEdges, otherBox.connectedEdges);
 	}
@@ -294,7 +266,7 @@ public class BoxPrototype extends ExperimentGraphItem
 		return rectangle.intersects(selectionAbsPos, selectionSize);
 	}
 	
-	public void setEdgeRegistered(EdgePrototype edge, boolean registered)
+	public void setEdgeRegistered(EdgeGraphItemClient edge, boolean registered)
 	{
 		if(registered)
 		{

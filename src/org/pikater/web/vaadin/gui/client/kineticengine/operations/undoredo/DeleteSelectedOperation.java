@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule.RegistrationOperation;
@@ -12,11 +12,12 @@ public class DeleteSelectedOperation extends BiDiOperation
 {
 	private final SelectionModule selectionModule;
 	private final ItemRegistrationModule itemRegistrationModule;
-	private final BoxPrototype[] originalSelectedBoxes;
+	private final BoxGraphItemClient[] originalSelectedBoxes;
 	
 	public DeleteSelectedOperation(KineticEngine kineticState)
 	{
 		super(kineticState);
+		
 		this.selectionModule = (SelectionModule) kineticState.getModule(SelectionModule.moduleID);
 		this.itemRegistrationModule = (ItemRegistrationModule) kineticState.getModule(ItemRegistrationModule.moduleID);
 		this.originalSelectedBoxes = this.selectionModule.getSelectedBoxes();

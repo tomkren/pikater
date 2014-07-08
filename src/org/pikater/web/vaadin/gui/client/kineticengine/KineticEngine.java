@@ -25,10 +25,10 @@ import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.CreateEdgeModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
@@ -41,13 +41,6 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.Delet
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.MoveBoxesOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.SwapEdgeEndPointOperation;
-
-import com.google.gwt.core.client.JsArrayString;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
 
 @SuppressWarnings("deprecation")
 public final class KineticEngine
@@ -165,8 +158,8 @@ public final class KineticEngine
 			
 			// handle the event
 			Box2d msrBox = multiSelectionRectangle.getPosAndSize();
-			Set<BoxPrototype> boxesToSelect = new HashSet<BoxPrototype>();
-			for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
+			Set<BoxGraphItemClient> boxesToSelect = new HashSet<BoxGraphItemClient>();
+			for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
 			{
 				if(!box.isSelected() && box.intersects(msrBox.getPosition(), msrBox.getSize()))
 				{
@@ -175,7 +168,7 @@ public final class KineticEngine
 			}
 			if(!boxesToSelect.isEmpty())
 			{
-				selectionModule.doSelectionRelatedOperation(SelectionOperation.SELECTION, false, true, boxesToSelect.toArray(new BoxPrototype[0]));
+				selectionModule.doSelectionRelatedOperation(SelectionOperation.SELECTION, false, true, boxesToSelect.toArray(new BoxGraphItemClient[0]));
 			}
 			
 			// return the dynamic layer state to the original
@@ -195,8 +188,7 @@ public final class KineticEngine
 	 * - pohybování nevybraných krabiček spojit s UNDO/REDO
 	 * - až bude fungovat cancelBubble a zbavíme se fillRectanglu, bude možný i rovnou snadno rozšířit kreslení baseLine i na boxy
 	 * - bug s algoritmem počítání hran (hrany jdou pres box)
-	 * - vyhrát si s vlastníma kurzorama .cur soubory a ClientBundle zřejmě
-	 * - update serialization/deserialization
+	 * - vyhrát si s vlastníma kurzorama .cur soubory a ClientBundle zřejmě 
 	 */
 	
 	/*
@@ -298,8 +290,8 @@ public final class KineticEngine
 		ExperimentGraph result = new ExperimentGraph();
 		
 		// first convert all boxes
-		Map<BoxPrototype, String> boxToWebFormatID = new HashMap<BoxPrototype, String>();
-		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
+		Map<BoxGraphItemClient, String> boxToWebFormatID = new HashMap<BoxGraphItemClient, String>();
+		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
 		{
 			Vector2d currentPosition = box.getAbsoluteNodePosition();
 			box.getInfo().initialX = (int) currentPosition.x;
@@ -308,10 +300,10 @@ public final class KineticEngine
 		}
 		
 		// then convert all edges
-		Set<EdgePrototype> serializedEdges = new HashSet<EdgePrototype>(); 
-		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
+		Set<EdgeGraphItemClient> serializedEdges = new HashSet<EdgeGraphItemClient>(); 
+		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
 		{
-			for(EdgePrototype edge : box.connectedEdges)
+			for(EdgeGraphItemClient edge : box.connectedEdges)
 			{
 				if(!serializedEdges.contains(edge))
 				{
@@ -329,157 +321,26 @@ public final class KineticEngine
 	public void fromIntermediateFormat(ExperimentGraph experiment)
 	{
 		// first convert all boxes
-		Map<String, BoxPrototype> guiBoxes = new HashMap<String, BoxPrototype>();
+		Map<String, BoxGraphItemClient> guiBoxes = new HashMap<String, BoxGraphItemClient>();
 		for(String leafBoxID : experiment.leafBoxes.keySet())
 		{
 			guiBoxes.put(leafBoxID, getContext().getShapeCreator().createBox(NodeRegisterType.MANUAL, experiment.leafBoxes.get(leafBoxID)));
 		}
 		
 		// then convert all edges
-		List<EdgePrototype> edges = new ArrayList<EdgePrototype>();
+		List<EdgeGraphItemClient> edges = new ArrayList<EdgeGraphItemClient>();
 		for(Entry<String, Set<String>> entry : experiment.edges.entrySet())
 		{
-			BoxPrototype fromBox = guiBoxes.get(entry.getKey());
+			BoxGraphItemClient fromBox = guiBoxes.get(entry.getKey());
 			for(String toLeafBoxID : entry.getValue())
 			{
-				BoxPrototype toBox = guiBoxes.get(toLeafBoxID);
+				BoxGraphItemClient toBox = guiBoxes.get(toLeafBoxID);
 				edges.add(getContext().getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromBox, toBox));
 			}
 		}
 		
 		// and finally, put everything into the environment
-		registerCreated(false, guiBoxes.values().toArray(new BoxPrototype[0]), edges.toArray(new EdgePrototype[0]));
-	}
-	
-	private String toJSON(EngineComponent component)
-	{
-		return getContainer(component).toJSON();
-	}
-	
-	/**
-	 * Only use this for debug purposes.
-	 * @param component
-	 * @param attrsToPrint
-	 * @return
-	 */
-	@Deprecated()
-	private String toMyJSON(EngineComponent component, JsArrayString attrsToPrint)
-	{
-		return getContainer(component).toMyJSON(attrsToPrint);
-	}
-	
-	/**
-	 * Method is currently buggy.
-	 * @param component
-	 * @param attrsToPrint
-	 * @return
-	 */
-	@Deprecated
-	private void fromJSON(String dLayerJSON, String edgeListJSON)
-	{
-		/*
-		 * First reset the current state.
-		 */
-		
-		/*
-		 * TODO:
-		 */
-		
-		//  selPlugin.doSelectionRelatedOperation(OperationKind.DESELECTION, false, selPlugin.getSelectedBoxes());
-		// this.allBoxes.clear();
-		// this.parentCanvas.getUndoRedoManager().clear();
-		// this.parentCanvas.getShapeCreator().reset();
-		
-		this.layer1_boxes.destroyChildren();
-		this.layer3_edges.destroyChildren(); // TODO: this destroys fillRectangle - wait for the next KineticJS version?
-		
-		/*
-		 * Parse and build the graph.
-		 */
-		
-		// create a virtual layer from which we will get all boxes and edges and register them in our own original layer
-		Layer deserializedLayer = Kinetic.createNode(dLayerJSON).cast();
-		
-		// make clones of original objects
-		Map<String, BoxPrototype> originalIdToBoxWithNewID = BoxPrototype.getInstancesFrom(getContext().getShapeCreator(), deserializedLayer);
-		List<EdgePrototype> unbindedEdges = EdgePrototype.getInstancesFrom(getContext().getShapeCreator(), deserializedLayer);
-		
-		// register the clones in our engine
-		List<ExperimentGraphItem> allItems = new ArrayList<ExperimentGraphItem>(originalIdToBoxWithNewID.values());
-		allItems.addAll(unbindedEdges);
-		// registerCreated(false, (ExperimentGraphItem[]) allItems.toArray()); // beware if edges are required to be connected (so far they are not)
-		
-		// bind and build
-        Map<String, JSONArray> edgeBindings = jsonToEdgeList(edgeListJSON);
-        for(Entry<String, JSONArray> edgeBinding : edgeBindings.entrySet())
-        {
-        	for(int i = 0; i < edgeBinding.getValue().size(); i++)
-        	{
-        		// bind variables
-        		EdgePrototype edge = unbindedEdges.remove(0);
-        		edge.setEndpoint(EndPoint.FROM, originalIdToBoxWithNewID.get(edgeBinding.getKey()));
-        		edge.setEndpoint(EndPoint.TO, originalIdToBoxWithNewID.get(edgeBinding.getValue().get(i).isString().stringValue()));
-        		
-        		// bind graph components
-        		edge.updateEdge();
-        	}
-        }
-        
-        // and finally, draw changes
-        draw(EngineComponent.STAGE);
-	}
-	
-	private String getEdgeListJSON()
-	{
-		Map<String, JSONArray> edgeList = new HashMap<String, JSONArray>();
-		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
-		{
-			JSONArray array = new JSONArray();
-			for(EdgePrototype edge : box.connectedEdges)
-			{
-				if(edge.getEndPoint(EndPoint.FROM) == box)
-				{
-					array.set(array.size(), new JSONString(edge.getOtherEndpoint(box).getInfo().boxID));
-				}
-			}
-			if(array.size() > 0)
-			{
-				edgeList.put(box.getInfo().boxID, array);
-			}
-		}
-		return edgeListToJSON(edgeList);
-	}
-	
-	private static String edgeListToJSON(Map<String, JSONArray> edgeList)
-	{
-	    String json = "";
-	    if (edgeList != null && !edgeList.isEmpty())
-	    {
-	        JSONObject jsonObj = new JSONObject();
-	        for (Entry<String, JSONArray> entry: edgeList.entrySet())
-	        {
-	            jsonObj.put(entry.getKey(), entry.getValue());
-	        }
-	        json = jsonObj.toString();
-	        // System.out.println("Serialized JSON: " + json);
-	    }
-	    return json;
-	}
-
-	private static Map<String, JSONArray> jsonToEdgeList(String json)
-	{
-	    Map<String, JSONArray> result = new HashMap<String, JSONArray>();
-
-	    JSONValue parsed = JSONParser.parseStrict(json);
-	    JSONObject jsonObj = parsed.isObject();
-	    if (jsonObj != null)
-	    {
-	        for (String key : jsonObj.keySet())
-	        {
-	        	result.put(key, jsonObj.get(key).isArray());
-	        }
-	    }
-	    return result;
+		registerCreated(false, guiBoxes.values().toArray(new BoxGraphItemClient[0]), edges.toArray(new EdgeGraphItemClient[0]));
 	}
 	
 	// *****************************************************************************************************
@@ -508,7 +369,7 @@ public final class KineticEngine
 	 * Undo/redo related wrapper routines.
 	 */
 	
-	public void registerCreated(boolean applyChangeToHistory, BoxPrototype[] boxes, EdgePrototype[] edges) 
+	public void registerCreated(boolean applyChangeToHistory, BoxGraphItemClient[] boxes, EdgeGraphItemClient[] edges) 
 	{
 		ItemRegistrationOperation operation = new ItemRegistrationOperation(this, boxes, edges);
 		if(applyChangeToHistory)
@@ -525,10 +386,10 @@ public final class KineticEngine
 		operation.firstExecution();
 	}
 	
-	public void moveSelected(Set<EdgePrototype> edgesInBetween)
+	public void moveSelected(Set<EdgeGraphItemClient> edgesInBetween)
 	{
 		MoveBoxesOperation operation = new MoveBoxesOperation(this, selectionModule.getSelectedKineticNodes(),
-				edgesInBetween.toArray(new EdgePrototype[0]));
+				edgesInBetween.toArray(new EdgeGraphItemClient[0]));
 		pushNewOperation(operation);
 		operation.firstExecution();
 	}
@@ -544,9 +405,9 @@ public final class KineticEngine
 	 * Box drag routines. 
 	 */
 	
-	public void fromEdgesToBaseLines(Set<EdgePrototype> edges, BoxPrototype movingBox)
+	public void fromEdgesToBaseLines(Set<EdgeGraphItemClient> edges, BoxGraphItemClient movingBox)
 	{
-		for(EdgePrototype edge : edges)
+		for(EdgeGraphItemClient edge : edges)
 		{
 			edge.endPointDrag_toBaseLine(movingBox != null ? movingBox : edge.getSelectedEndpoint());
 		}
@@ -554,18 +415,18 @@ public final class KineticEngine
 		draw(EngineComponent.LAYER_SELECTION);
 	}
 	
-	public void updateBaseLines(Set<EdgePrototype> edges, BoxPrototype movingBox)
+	public void updateBaseLines(Set<EdgeGraphItemClient> edges, BoxGraphItemClient movingBox)
 	{
-		for(EdgePrototype edge : edges)
+		for(EdgeGraphItemClient edge : edges)
 		{
 			edge.endPointDrag_updateBaseLine(movingBox != null ? movingBox : edge.getSelectedEndpoint());
 		}
 		draw(EngineComponent.LAYER_EDGES);
 	}
 	
-	public void fromBaseLinesToEdges(Set<EdgePrototype> edges)
+	public void fromBaseLinesToEdges(Set<EdgeGraphItemClient> edges)
 	{
-		for(EdgePrototype edge : edges)
+		for(EdgeGraphItemClient edge : edges)
 		{
 			edge.endPointDrag_toEdge();
 		}
@@ -600,7 +461,7 @@ public final class KineticEngine
 		}
 	}
 	
-	public void attachModuleHandlersTo(ExperimentGraphItem graphItem)
+	public void attachModuleHandlersTo(AbstractGraphItemClient graphItem)
 	{
 		for(IEngineModule module : modulesForGraphItem.get(GWTMisc.getSimpleName(graphItem.getClass())))
 		{
@@ -608,7 +469,7 @@ public final class KineticEngine
 		}
 	}
 	
-	public BoxPrototype getHoveredBox()
+	public BoxGraphItemClient getHoveredBox()
 	{
 		return ((TrackMouseModule) getModule(TrackMouseModule.moduleID)).getCurrentlyHoveredBox();
 	}
@@ -686,10 +547,10 @@ public final class KineticEngine
 	
 	public void reloadVisualStyle()
 	{
-		for(BoxPrototype box : itemRegistrationModule.getRegisteredBoxes())
+		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
 		{
 			box.applyUserSettings();
-			for(EdgePrototype edge : box.connectedEdges)
+			for(EdgeGraphItemClient edge : box.connectedEdges)
 			{
 				edge.applyUserSettings();
 			}
