@@ -15,7 +15,7 @@ import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
 
@@ -36,7 +36,7 @@ public class J48_CABox {
 		optionU.setPossibleTypesRestriction(restrictionU);
 		
 		
-		List<IValue> valuesC = new ArrayList<IValue>();
+		List<ITypedValue> valuesC = new ArrayList<ITypedValue>();
 		valuesC.add(new NullValue());
 		valuesC.add(new NullValue());
 		valuesC.add(new NullValue());

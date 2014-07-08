@@ -15,7 +15,7 @@ import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
 
@@ -28,7 +28,7 @@ public class PART_CABox {
 		# $ C float 1 1 r 0.0001 0.4 
 		$ C float 1 1 s null, 0.0001, 0.1, 0.2, 0.25, 0.3, 0.4, 0.5
 		**/
-		List<IValue> list = new ArrayList<IValue>(
+		List<ITypedValue> list = new ArrayList<ITypedValue>(
 				Arrays.asList(
 						new NullValue(), new FloatValue(0.0001f),
 						new FloatValue(0.1f), new FloatValue(0.2f),
@@ -92,7 +92,7 @@ public class PART_CABox {
 		# Set number of folds for reduced error pruning. One fold is used as the pruning set. (Default: 3)
 		$ N int 1 1 s null, 1, 2, 3, 4, 5
 		**/
-		List<IValue> listN = new ArrayList<IValue>(
+		List<ITypedValue> listN = new ArrayList<ITypedValue>(
 				Arrays.asList(
 						new NullValue(), new IntegerValue(1),
 						new IntegerValue(2), new IntegerValue(3),

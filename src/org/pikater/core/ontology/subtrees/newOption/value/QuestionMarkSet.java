@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.newOption.value;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionMarkSet implements IValue {
+public class QuestionMarkSet implements ITypedValue {
 
 	/**
 	 * 
@@ -11,7 +11,7 @@ public class QuestionMarkSet implements IValue {
 	private static final long serialVersionUID = 4434448192843651477L;
 
 	private int countOfValuesToTry;
-	private List<IValue> values;
+	private List<ITypedValue> values;
 	
 	public int getCountOfValuesToTry() {
 		return countOfValuesToTry;
@@ -19,21 +19,21 @@ public class QuestionMarkSet implements IValue {
 	public void setCountOfValuesToTry(int countOfValuesToTry) {
 		this.countOfValuesToTry = countOfValuesToTry;
 	}
-	public List<IValue> getValues() {
+	public List<ITypedValue> getValues() {
 		return values;
 	}
-	public void setValues(List<IValue> values) {
+	public void setValues(List<ITypedValue> values) {
 		this.values = values;
 	}
 	
 	@Override
-	public IValue cloneValue() {
+	public ITypedValue cloneValue() {
 
 		QuestionMarkSet setNew = new QuestionMarkSet();
 		setNew.setCountOfValuesToTry(countOfValuesToTry);
 		
-		List<IValue> valuesNew = new ArrayList<IValue>();
-		for (IValue valueI : values) {
+		List<ITypedValue> valuesNew = new ArrayList<ITypedValue>();
+		for (ITypedValue valueI : values) {
 			valuesNew.add(valueI.cloneValue());
 		}
 		setNew.setValues(valuesNew);

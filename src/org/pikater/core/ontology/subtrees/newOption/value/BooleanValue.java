@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.value;
 
-public class BooleanValue implements IValue {
+public class BooleanValue implements ITypedValue {
 
 	/**
 	 * 
@@ -22,7 +22,7 @@ public class BooleanValue implements IValue {
 	}
 	
 	@Override
-	public IValue cloneValue() {
+	public ITypedValue cloneValue() {
 		
 		BooleanValue valueNew = new BooleanValue();
 		valueNew.setValue(value);

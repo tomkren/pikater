@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.value;
 
-public class StringValue implements IValue {
+public class StringValue implements ITypedValue {
 
 	/**
 	 * 
@@ -22,7 +22,7 @@ public class StringValue implements IValue {
 	}
 	
 	@Override
-	public IValue cloneValue() {
+	public ITypedValue cloneValue() {
 
 		StringValue valueNew = new StringValue();
 		valueNew.setValue(value);

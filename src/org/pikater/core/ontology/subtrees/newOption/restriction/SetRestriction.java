@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
 
 public class SetRestriction implements IRestriction {
@@ -14,22 +14,22 @@ public class SetRestriction implements IRestriction {
 	 */
 	private static final long serialVersionUID = 611963641797046162L;
 
-	private List<IValue> values;
+	private List<ITypedValue> values;
 
 	public SetRestriction() {}
-	public SetRestriction(List<IValue> values) {
+	public SetRestriction(List<ITypedValue> values) {
 		this.values = values;
 	}
 
-	public List<IValue> getValues() {
+	public List<ITypedValue> getValues() {
 		return values;
 	}
-	public void setValues(List<IValue> values) {
+	public void setValues(List<ITypedValue> values) {
 		this.values = values;
 	}
-	public void addValue(IValue value) {
+	public void addValue(ITypedValue value) {
 		if (this.values == null) {
-			this.values = new ArrayList<IValue>();
+			this.values = new ArrayList<ITypedValue>();
 		}
 		
 		this.values.add(value);
@@ -38,7 +38,7 @@ public class SetRestriction implements IRestriction {
 	@Override
 	public Type getClassName() {
 
-		IValue value0 = values.get(0);
+		ITypedValue value0 = values.get(0);
 		return new Type(value0.getClass());
 	}
 
@@ -50,13 +50,13 @@ public class SetRestriction implements IRestriction {
 		}
 		
 		// check if all values are instances of same class
-		IValue value0 = new NullValue();
-		for (IValue valueI : values) {
+		ITypedValue value0 = new NullValue();
+		for (ITypedValue valueI : values) {
 			if (valueI.getClass() != NullValue.class) {
 				value0 = valueI;
 			}
 		}
-		for (IValue valueI : values) {
+		for (ITypedValue valueI : values) {
 			if (valueI.getClass() == NullValue.class) {
 				continue;
 			}
@@ -67,9 +67,9 @@ public class SetRestriction implements IRestriction {
 		return true;
 	}
 
-	public boolean contains(IValue value) {
+	public boolean contains(ITypedValue value) {
 
-		for (IValue valueI : values) {
+		for (ITypedValue valueI : values) {
 			if (valueI.equals(value)) {
 				return true;
 			}
@@ -81,7 +81,7 @@ public class SetRestriction implements IRestriction {
 	public SetRestriction cloneSetRestriction() {
 		
 		SetRestriction setRest = new SetRestriction();
-		for (IValue valueI : values) {
+		for (ITypedValue valueI : values) {
 			setRest.addValue(valueI.cloneValue());
 		}
 		return setRest;

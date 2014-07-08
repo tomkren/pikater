@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkSet;
@@ -23,19 +23,19 @@ public class NewOption {
 	
 	
 	public NewOption() {}
-	public NewOption(IValue value, String name) {
+	public NewOption(ITypedValue value, String name) {
 		
 		this.addValue(new Value(value));
 		this.setName(name);
 	}
-	public NewOption(IValue defaultValue, Type type, String name) {
+	public NewOption(ITypedValue defaultValue, Type type, String name) {
 		
 		this.addValue( new Value(null, defaultValue, type) );
 		this.setName(name);
 	}
-	public NewOption(List<IValue> values, String name) {
+	public NewOption(List<ITypedValue> values, String name) {
 		
-		for (IValue valueI : values) {
+		for (ITypedValue valueI : values) {
 			this.addValue( new Value(valueI) );
 		}
 		this.setName(name);
@@ -115,7 +115,7 @@ public class NewOption {
 	public boolean containsQuestionMark() {
 		
 		for (Value valueI : values.getValues()) {
-			IValue ivalueI = valueI.getValue();
+			ITypedValue ivalueI = valueI.getValue();
 			if (ivalueI instanceof QuestionMarkRange ||
 					ivalueI instanceof QuestionMarkSet) {
 				return true;

@@ -1,7 +1,7 @@
 package org.pikater.core.ontology.subtrees.newOption.restriction;
 
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class RangeRestriction implements IRestriction {
@@ -11,26 +11,26 @@ public class RangeRestriction implements IRestriction {
 	 */
 	private static final long serialVersionUID = -9196397486608350955L;
 
-	private IValue minValeu;
-	private IValue maxValeu;
+	private ITypedValue minValeu;
+	private ITypedValue maxValeu;
 	
 	public RangeRestriction() {}
-	public RangeRestriction(IValue minValeu, IValue maxValeu) {
+	public RangeRestriction(ITypedValue minValeu, ITypedValue maxValeu) {
 		this.minValeu = minValeu;
 		this.maxValeu = maxValeu;
 	}
 
-	public IValue getMinValeu() {
+	public ITypedValue getMinValeu() {
 		return minValeu;
 	}
-	public void setMinValeu(IValue minValeu) {
+	public void setMinValeu(ITypedValue minValeu) {
 		this.minValeu = minValeu;
 	}
 
-	public IValue getMaxValeu() {
+	public ITypedValue getMaxValeu() {
 		return maxValeu;
 	}
-	public void setMaxValeu(IValue maxValeu) {
+	public void setMaxValeu(ITypedValue maxValeu) {
 		this.maxValeu = maxValeu;
 	}
 
@@ -45,7 +45,7 @@ public class RangeRestriction implements IRestriction {
 		return true;
 	}
 
-	public boolean contains(IValue value) {
+	public boolean contains(ITypedValue value) {
 		
 		if (value == null ||
 				minValeu.getClass() != value.getClass() ) {

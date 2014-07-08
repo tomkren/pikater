@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 
 
 public class AgentInfoOntology extends BeanOntology {
@@ -23,7 +23,7 @@ public class AgentInfoOntology extends BeanOntology {
         String optionPackage = NewOption.class.getPackage().getName();
         String restrictionPackage = IRestriction.class.getPackage().getName();
         String typePackage = Type.class.getPackage().getName();
-        String valuePackage = IValue.class.getPackage().getName();
+        String valuePackage = ITypedValue.class.getPackage().getName();
         
         String agentInfoPackage = AgentInfo.class.getPackage().getName();
         

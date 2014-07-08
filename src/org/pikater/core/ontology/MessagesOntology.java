@@ -20,7 +20,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.oldPikaterMessages.Method;
 import org.pikater.core.ontology.subtrees.oldPikaterMessages.Problem;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
@@ -58,7 +58,7 @@ public class MessagesOntology extends BeanOntology {
         String optionPackage = NewOption.class.getPackage().getName();
         String restrictionPackage = IRestriction.class.getPackage().getName();
         String typePackage = Type.class.getPackage().getName();
-        String valuePackage = IValue.class.getPackage().getName();
+        String valuePackage = ITypedValue.class.getPackage().getName();
         
         try {
 

@@ -14,7 +14,7 @@ import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 
 public class SMO_CABox {
@@ -88,7 +88,7 @@ public class SMO_CABox {
 		Type typeN = new Type(IntegerValue.class);
 		typeN.setSetRestriction(
 				new SetRestriction(
-						new ArrayList<IValue>(
+						new ArrayList<ITypedValue>(
 								Arrays.asList( new IntegerValue(0), new IntegerValue(1), new IntegerValue(2) ) )));
 		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
 		restrictionN.addPossibleValues( new Types(

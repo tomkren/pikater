@@ -24,7 +24,7 @@ import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
@@ -185,7 +185,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agentI.getOptionByName(optionName) != null){
 	            		
 	            		NewOption optionOfAgentI = agentI.getOptionByName(optionName);
-	            		IValue valueI = optionOfAgentI.convertToSingleValue().getValue();
+	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getValue();
 	            		 		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
@@ -206,7 +206,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agent.getOptionByName(optionName) != null) {
 	            		
 	            		NewOption optionOfAgentI = agent.getOptionByName(optionName);
-	            		IValue valueI = optionOfAgentI.convertToSingleValue().getValue();
+	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getValue();
 	            		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
@@ -228,8 +228,8 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	Type type = types.getTypes().get(0);
 	            	
 	            	RangeRestriction rangeRestriction = type.getRangeRestriction();
-	            	IValue minValue = rangeRestriction.getMinValeu();
-	            	IValue maxValue = rangeRestriction.getMaxValeu();
+	            	ITypedValue minValue = rangeRestriction.getMinValeu();
+	            	ITypedValue maxValue = rangeRestriction.getMaxValeu();
 	            	
 	            	float finalMin = 0;
 	            	float finalMax = 0;
@@ -258,7 +258,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            }
 	            else {
 	            	Value valueI = optionI.convertToSingleValue();
-            		IValue iValueI = valueI.getValue();
+            		ITypedValue iValueI = valueI.getValue();
             		
 	                if (iValueI instanceof FloatValue) {
 	                	float valueFloat = (float) avg;

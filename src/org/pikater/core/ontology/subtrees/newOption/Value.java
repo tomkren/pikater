@@ -1,7 +1,7 @@
 package org.pikater.core.ontology.subtrees.newOption;
 
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
 
 public class Value implements IRestriction {
@@ -13,20 +13,20 @@ public class Value implements IRestriction {
 
 	private Type type;
 
-	private IValue value;
-	private IValue defaultValue;
+	private ITypedValue value;
+	private ITypedValue defaultValue;
 
 
 	public Value() {}
-	public Value(IValue value) {
+	public Value(ITypedValue value) {
 		this.value = value;
 		this.type = new Type(value.getClass());
 	}
-	public Value(IValue value, Type type) {
+	public Value(ITypedValue value, Type type) {
 		this.value = value;
 		this.type = type;
 	}
-	public Value(IValue value, IValue defaultValue, Type type) {
+	public Value(ITypedValue value, ITypedValue defaultValue, Type type) {
 		this.value = value;
 		this.defaultValue = defaultValue;
 		this.type = type;
@@ -39,17 +39,17 @@ public class Value implements IRestriction {
 		this.type = type;
 	}
 
-	public IValue getValue() {
+	public ITypedValue getValue() {
 		return value;
 	}
-	public void setValue(IValue value) {
+	public void setValue(ITypedValue value) {
 		this.value = value;
 	}
 
-	public IValue getDefaultValue() {
+	public ITypedValue getDefaultValue() {
 		return defaultValue;
 	}
-	public void setDefaultValue(IValue defaultValue) {
+	public void setDefaultValue(ITypedValue defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 

@@ -9,7 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
 
@@ -72,7 +72,7 @@ public class Exmple {
 			optionC.setList( listC );
 		*/
 		
-		List<IValue> values = new ArrayList<IValue>();
+		List<ITypedValue> values = new ArrayList<ITypedValue>();
 		values.add(new NullValue());
 		values.add(new NullValue());
 		values.add(new NullValue());

@@ -17,7 +17,7 @@ import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.value.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IValue;
+import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 
@@ -220,8 +220,8 @@ public class MultiLayerPerceptron_CABox {
 		typeHn.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(2), new IntegerValue(10) ));
-		List<IValue> list =  new ArrayList<IValue>(
-				new ArrayList<IValue>(Arrays.asList(
+		List<ITypedValue> list =  new ArrayList<ITypedValue>(
+				new ArrayList<ITypedValue>(Arrays.asList(
 					new StringValue("a"), new StringValue("i"),
 					new StringValue("o"), new StringValue("t")
 					)) );		

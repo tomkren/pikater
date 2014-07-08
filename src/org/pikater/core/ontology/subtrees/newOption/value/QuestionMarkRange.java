@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.value;
 
-public class QuestionMarkRange implements IValue {
+public class QuestionMarkRange implements ITypedValue {
 
 	/**
 	 * 
@@ -8,16 +8,16 @@ public class QuestionMarkRange implements IValue {
 	private static final long serialVersionUID = 4064649544713291827L;
 
 	private int countOfValuesToTry;
-	private IValue min;
-	private IValue max;
+	private ITypedValue min;
+	private ITypedValue max;
 	
 	public QuestionMarkRange() {}
-	public QuestionMarkRange(IValue min, IValue max) {
+	public QuestionMarkRange(ITypedValue min, ITypedValue max) {
 		this.min = min;
 		this.max = max;
 	}
 
-	public QuestionMarkRange(IValue min, IValue max, int countOfValuesToTry) {
+	public QuestionMarkRange(ITypedValue min, ITypedValue max, int countOfValuesToTry) {
 		this.min = min;
 		this.max = max;
 		this.countOfValuesToTry = countOfValuesToTry;
@@ -30,22 +30,22 @@ public class QuestionMarkRange implements IValue {
 		this.countOfValuesToTry = countOfValuesToTry;
 	}
 	
-	public IValue getMin() {
+	public ITypedValue getMin() {
 		return min;
 	}
-	public void setMin(IValue min) {
+	public void setMin(ITypedValue min) {
 		this.min = min;
 	}
 	
-	public IValue getMax() {
+	public ITypedValue getMax() {
 		return max;
 	}
-	public void setMax(IValue max) {
+	public void setMax(ITypedValue max) {
 		this.max = max;
 	}
 
 	@Override
-	public IValue cloneValue() {
+	public ITypedValue cloneValue() {
 		
 		QuestionMarkRange valueNew = new QuestionMarkRange();
 		valueNew.setCountOfValuesToTry(countOfValuesToTry);
