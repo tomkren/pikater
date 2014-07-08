@@ -71,13 +71,18 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 	
 	@Override
 	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
-		return new ArrayList<DataSourceDescription>();
+		
+		List<DataSourceDescription> ds = new ArrayList<DataSourceDescription>();
+		ds.add(this.dataSource);
+		return ds;
 	}
 	@Override
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
-		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
+		if (dataSourceDescriptions.size() != 1) {
 			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
+		} else {
+			this.dataSource = dataSourceDescriptions.get(0);
 		}
 	}
 	

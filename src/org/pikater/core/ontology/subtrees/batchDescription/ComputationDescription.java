@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
@@ -67,6 +68,33 @@ public class ComputationDescription implements Concept {
 		for (FileDataSaver fileSaverI : rootElements) {
 			lastUsedNumber = fileSaverI.generateIDs(lastUsedNumber);
 		}
+		
+		List<IComputationElement> fifo = new ArrayList<IComputationElement>();
+		
+		for (FileDataSaver saverI : getRootElements()) {
+			fifo.add(saverI);
+		}
+
+		int id = 0;
+		while (! fifo.isEmpty()) {
+
+			IComputationElement dataProcessing = fifo.get(0);
+			fifo.remove(0);
+			
+			if (dataProcessing.getId() ==  -1) {
+				
+				dataProcessing.setId(id);
+				id++;
+				
+				for (DataSourceDescription descrI : dataProcessing.exportAllDataSourceDescriptions()) {
+					
+					if (descrI.getDataProvider() != null) {
+						fifo.add(descrI.getDataProvider());
+					}
+				}
+			}
+		}
+
 	}
 	
 	public UniversalComputationDescription exportUniversalComputationDescription() {
@@ -203,6 +231,17 @@ public class ComputationDescription implements Concept {
 				.fromXML(xml);
 
 		return computDes;
+	}
+	
+	
+	public static void main(String [ ] args) {
+		
+		ComputationDescription cd = SimpleTraining.createDescription();
+		cd.generateIDs();
+		
+		UniversalComputationDescription ucd = cd.exportUniversalComputationDescription();
+		
+		ComputationDescription cd2 = ComputationDescription.importUniversalComputationDescription(ucd);
 	}
 
 }

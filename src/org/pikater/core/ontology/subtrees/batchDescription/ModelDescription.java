@@ -9,6 +9,11 @@ public class ModelDescription implements IModelDescription {
 
 	private int modelID;
 
+	public ModelDescription() {}
+	
+	public ModelDescription(int modelID) {
+		this.modelID = modelID;
+	}
 	public int getModelID() {
 		return modelID;
 	}

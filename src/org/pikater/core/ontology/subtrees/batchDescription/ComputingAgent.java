@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.Value;
+import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
@@ -93,41 +96,58 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 				new NewOption(new StringValue(agentType), "agentType");
 
 		NewOption modelOption = new NewOption(
-				new StringValue(model.toString()), "model");  // TODO
+				new StringValue(model.getClass().getSimpleName()), "model");  // TODO
 
-		NewOption evaluationMethodOption = new NewOption( // TODO
-				new StringValue(evaluationMethod.toString()), "evaluationMethod");
+//		NewOption evaluationMethodOption = new NewOption( // TODO
+//				new StringValue(evaluationMethod.toString()), "evaluationMethod");
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(agentTypeOption);
 		options.add(modelOption);
-		options.add(evaluationMethodOption);
+		//options.add(evaluationMethodOption);
 		options.addAll(this.options);
 		return options;
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		
-		List<NewOption> optionss = new ArrayList<NewOption>();
-		
-		for (NewOption optionI : options) {
-			
-			if (optionI.getName().equals("agentType")) {
-				StringValue valueI = (StringValue) optionI.convertToSingleValue().getValue(); 
-				this.agentType = valueI.getValue();
-				
-			} else if (optionI.getName().equals("model")) {
-				//this.evaluationMethod = optionI.getValue(); TODO:
+		Options optionsOntol = new Options(options);
 
-			} else if (optionI.getName().equals("evaluationMethod")) {
-				//this.evaluationMethod = optionI.getValue();  TODO:
-				
+		NewOption optAgentType = optionsOntol.getOptionByName("agentType");
+		if (optAgentType != null) {
+			StringValue valueAgentType = (StringValue)
+					optAgentType.convertToSingleValue().getValue(); 
+			this.agentType = valueAgentType.getValue();
+		}
+
+		NewOption optModel = optionsOntol.getOptionByName("model");
+		if (optModel != null) {
+			Value value = optModel.convertToSingleValue();
+			if (value.getValue() instanceof StringValue) {
+				StringValue stringValue = (StringValue) value.getValue();
+				if (stringValue.equals(NewModel.class.getSimpleName())) {
+					this.model = new NewModel();
+				} else {
+					throw new IllegalStateException();
+				}
+			} else if (value.getValue() instanceof IntegerValue) {
+				IntegerValue integerValue = (IntegerValue) value.getValue();
+				this.model = new ModelDescription(integerValue.getValue());
 			} else {
-				optionss.add(optionI);
+				throw new IllegalStateException();
 			}
 		}
+
+		NewOption optMethod = optionsOntol.getOptionByName("evaluationMethod");
+		if (optMethod != null) {
+			//TODO:
+		}
+
+		options.remove(optAgentType);
+		options.remove(optModel);
+		options.remove(optMethod);
 		
-		this.options = optionss;
+		this.options = options;
 		
 	}
 	
@@ -145,39 +165,45 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     
 	@Override
 	public List<DataSourceDescription> exportAllDataSourceDescriptions() {
-		
-		trainingData.setDataInputType("trainingData");
-		testingData.setDataInputType("testingData");
-		validationData.setDataInputType("validationData");
 
 		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
-		slots.add(trainingData);
-		slots.add(testingData);
-		slots.add(validationData);
+		
+		if (trainingData != null) {
+			trainingData.setDataInputType("trainingData");
+			slots.add(trainingData);
+		}
+		
+		if (testingData != null) {
+			testingData.setDataInputType("testingData");
+			slots.add(testingData);
+		}
+		
+		if (validationData != null) {
+			validationData.setDataInputType("validationData");
+			slots.add(validationData);
+		}
 		
 		return slots;
 	}
 	
 	@Override
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
-				
-		for (DataSourceDescription descriptionI : dataSourceDescriptions) {
-						
-			if (descriptionI.getDataInputType().equals("trainingData")) {
-				trainingData = descriptionI;
-				
-			} else if (descriptionI.getDataInputType().equals("testingData")) {
-				testingData = descriptionI;
-				
-			} else if (descriptionI.getDataInputType().equals("validationData")) {
-				validationData = descriptionI;
-				
-			} else {
-				throw new IllegalArgumentException(descriptionI.getDataOutputType());
-			}
-			
-		}
 		
+		DataSourceDescriptions descriptions =
+				new DataSourceDescriptions(dataSourceDescriptions);
+		
+		DataSourceDescription descriptinTrainingData = 
+				descriptions.getDataSourceDescriptionIBynputType("trainingData");
+		trainingData = descriptinTrainingData;
+
+		DataSourceDescription descriptinTestingData = 
+				descriptions.getDataSourceDescriptionIBynputType("testingData");
+		testingData = descriptinTestingData;
+		
+		DataSourceDescription descriptinValidationData = 
+				descriptions.getDataSourceDescriptionIBynputType("validationData");
+		validationData = descriptinValidationData;
+				
 	}
 	
 
