@@ -1,28 +1,29 @@
-<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription id="1">
-  <globalOptions id="2"/>
-  <rootElements id="3">
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="4">
-      <id>-1</id>
-      <options id="5"/>
-      <errors id="6"/>
-      <dataSources id="7"/>
-      <dataSource id="8">
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" id="9">
-          <id>-1</id>
-          <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="10"/>
-          <errors id="11"/>
-          <dataSources id="12"/>
+<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
+  <globalOptions/>
+  <rootElements>
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+      <id>0</id>
+      <options/>
+      <errors/>
+      <dataSources/>
+      <dataSource>
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+          <id>1</id>
+          <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+          <errors/>
+          <dataSources/>
           <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
-          <options id="13">
-            <org.pikater.core.ontology.subtrees.newOption.NewOption id="14">
+          <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+          <options>
+            <org.pikater.core.ontology.subtrees.newOption.NewOption>
               <name>S</name>
-              <values id="15">
-                <values id="16">
-                  <org.pikater.core.ontology.subtrees.newOption.Value id="17">
-                    <type id="18">
+              <values>
+                <values>
+                  <org.pikater.core.ontology.subtrees.newOption.Value>
+                    <type>
                       <className>org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue</className>
                     </type>
-                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue" id="19">
+                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue">
                       <value>1</value>
                     </typedValue>
                   </org.pikater.core.ontology.subtrees.newOption.Value>
@@ -30,15 +31,15 @@
               </values>
               <isMutable>false</isMutable>
             </org.pikater.core.ontology.subtrees.newOption.NewOption>
-            <org.pikater.core.ontology.subtrees.newOption.NewOption id="20">
+            <org.pikater.core.ontology.subtrees.newOption.NewOption>
               <name>M</name>
-              <values id="21">
-                <values id="22">
-                  <org.pikater.core.ontology.subtrees.newOption.Value id="23">
-                    <type id="24">
+              <values>
+                <values>
+                  <org.pikater.core.ontology.subtrees.newOption.Value>
+                    <type>
                       <className>org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue</className>
                     </type>
-                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue" id="25">
+                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue">
                       <value>-2</value>
                     </typedValue>
                   </org.pikater.core.ontology.subtrees.newOption.Value>
@@ -47,18 +48,18 @@
               <isMutable>false</isMutable>
             </org.pikater.core.ontology.subtrees.newOption.NewOption>
           </options>
-          <evaluationMethod id="26">
+          <evaluationMethod>
             <type>CrossValidation</type>
-            <options id="27">
-              <org.pikater.core.ontology.subtrees.newOption.NewOption id="28">
+            <options>
+              <org.pikater.core.ontology.subtrees.newOption.NewOption>
                 <name>F</name>
-                <values id="29">
-                  <values id="30">
-                    <org.pikater.core.ontology.subtrees.newOption.Value id="31">
-                      <type id="32">
+                <values>
+                  <values>
+                    <org.pikater.core.ontology.subtrees.newOption.Value>
+                      <type>
                         <className>org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue</className>
                       </type>
-                      <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue" id="33">
+                      <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue">
                         <value>8</value>
                       </typedValue>
                     </org.pikater.core.ontology.subtrees.newOption.Value>
@@ -68,16 +69,17 @@
               </org.pikater.core.ontology.subtrees.newOption.NewOption>
             </options>
           </evaluationMethod>
-          <trainingData id="34">
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="35">
-              <id>-1</id>
-              <options id="36"/>
-              <errors id="37"/>
-              <dataSources id="38"/>
+          <trainingData>
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+              <id>2</id>
+              <options/>
+              <errors/>
+              <dataSources/>
               <fileURI>weather.arff</fileURI>
             </dataProvider>
+            <dataInputType>testingData</dataInputType>
           </trainingData>
-          <testingData reference="34"/>
+          <testingData reference="../trainingData"/>
         </dataProvider>
         <dataOutputType>Data</dataOutputType>
       </dataSource>

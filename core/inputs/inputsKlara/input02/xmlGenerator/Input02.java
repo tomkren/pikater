@@ -39,8 +39,8 @@ public final class Input02 {
 		comAgent.addOption(optionB);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
+		comAgent.setModel(new NewModel());
 
-		
 		Search search = new Search();
         search.setSearchClass("Agent_ChooseXValues");
 		

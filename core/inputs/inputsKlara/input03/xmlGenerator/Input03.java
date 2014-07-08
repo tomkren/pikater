@@ -3,13 +3,13 @@ package xmlGenerator;
 import java.io.FileNotFoundException;
 
 import org.pikater.core.agents.system.Agent_GUIKlara;
-import org.pikater.core.dataStructures.options.types.OptionValue;
 import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
 
@@ -31,7 +31,8 @@ public final class Input03 {
 		//comAgent1.setModelClass("Agent_?????.class.getName()");
 		comAgent1.setTrainingData(fileDataSource);
 		comAgent1.setTestingData(fileDataSource);
-
+		comAgent1.setModel(new NewModel());
+		
 		NewOption optionEM1 = new NewOption(
 				new StringValue("CrossValidation"),
 				"evaluation_method");
@@ -56,6 +57,7 @@ public final class Input03 {
 		//comAgent2.setModelClass("Agent_?????.class.getName()");
 		comAgent2.setTrainingData(computingDataSource1);
 		comAgent2.setTestingData(computingDataSource1);
+		comAgent2.setModel(new NewModel());
 
 		NewOption optionEM2 = new NewOption(
 				new StringValue("evaluation_method"),

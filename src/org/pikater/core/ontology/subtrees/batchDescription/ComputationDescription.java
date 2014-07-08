@@ -187,8 +187,9 @@ public class ComputationDescription implements Concept {
 
 	public String exportXML(String fileName) throws FileNotFoundException {
 
+		generateIDs();
+		
 		XStream xstream = new XStream();
-		xstream.setMode(XStream.ID_REFERENCES);
 
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;
@@ -218,7 +219,6 @@ public class ComputationDescription implements Concept {
 	public static ComputationDescription importXML(String xml) {
 
 		XStream xstream = new XStream();
-		xstream.setMode(XStream.ID_REFERENCES);
 
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;

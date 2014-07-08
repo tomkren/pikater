@@ -75,7 +75,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 				runFile(filePath + "input.xml");
 				
 			} catch (FileNotFoundException e) {
-				System.out.println(" File not found.");
+				System.out.println("File not found.");
+				logError("File not found.", e);
 			}
 			
 		} else {

@@ -6,6 +6,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
@@ -51,6 +52,7 @@ public final class Input01 {
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
 		comAgent.setEvaluationMethod(evaluationMethod);
+		comAgent.setModel(new NewModel());
 
         //Labeled data labeled by our CA are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();
