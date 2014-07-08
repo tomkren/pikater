@@ -16,9 +16,12 @@ public class SetRestriction implements IRestriction {
 
 	private List<ITypedValue> values;
 
-	public SetRestriction() {}
+	public SetRestriction() {
+		this.values = new ArrayList<ITypedValue>();
+	}
 	public SetRestriction(List<ITypedValue> values) {
-		this.values = values;
+		this.values = new ArrayList<ITypedValue>();
+		addAllValues(values);
 	}
 
 	public List<ITypedValue> getValues() {
@@ -28,11 +31,15 @@ public class SetRestriction implements IRestriction {
 		this.values = values;
 	}
 	public void addValue(ITypedValue value) {
-		if (this.values == null) {
-			this.values = new ArrayList<ITypedValue>();
+		if (value == null) {
+			throw new IllegalArgumentException("Argument value can't be null");
 		}
 		
 		this.values.add(value);
+	}
+	public void addAllValues(List<ITypedValue> values) {
+		
+		this.values.addAll(values);
 	}
 
 	@Override

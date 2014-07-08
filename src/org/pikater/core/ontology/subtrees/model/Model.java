@@ -41,4 +41,8 @@ public class Model implements Concept {
 		this.serializedAgent = serializedAgent;
 	}
 	
+	public boolean isAgentType(Class<?> agentClass) {
+		return this.agentClassName.equals(agentClass.getName());
+	}
+	
 }

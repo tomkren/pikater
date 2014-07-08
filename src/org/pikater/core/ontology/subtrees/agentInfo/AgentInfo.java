@@ -104,6 +104,11 @@ public class AgentInfo implements Concept {
 		this.outputSlots.add(outputSlot);
 	}
 	
+	public boolean isOntologyType(Class<?> ontologyClass) {
+		
+		return this.ontologyClassName.equals(ontologyClass.getName());
+	}
+	
 	public boolean equals(AgentInfo agentInfo) {
 		
 		return this.getAgentClassName().equals(agentInfo.getAgentClassName());

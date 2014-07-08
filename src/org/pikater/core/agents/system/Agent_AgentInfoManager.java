@@ -14,6 +14,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaAbstractCA;
 import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
 import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
+import org.pikater.core.agents.system.agentInfoManager.AgentInfoManagerCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
@@ -187,9 +188,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		AgentInfos agInfos = getAgentInfos();
-
-		Result r = new Result(action, agInfos);
+		AgentInfoManagerCommunicator communicator =
+				new AgentInfoManagerCommunicator(this);
+		
+		AgentInfos agenInfos = communicator.getAgentInfos();
+		Models models = communicator.getAllModels();
+		agenInfos.importModels(models);
+		
+		Result r = new Result(action, agenInfos);
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
@@ -202,100 +208,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 	}
 
-	private AgentInfos getAgentInfos() {
-		
-		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
-		Ontology ontology = AgentInfoOntology.getInstance();
-		
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(receiver);
-		request.setLanguage(getCodec().getName());
-		request.setOntology(ontology.getName());
-	        
-		try {
-			getContentManager().fillContent(request,
-					new Action(receiver, new GetAgentInfos()));
-		} catch (CodecException e) {
-			logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
-		}
-		
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(this, request, 10000);
-			if (reply == null) {
-				return null;
-			}
-			
-		} catch (FIPAException e) {
-			logError(e.getMessage());
-		}
-
-		AgentInfos agentInfos = null;
-		try {
-			Result r = (Result) getContentManager().extractContent(reply);
 	
-			agentInfos = (AgentInfos) r.getValue();
-	
-		} catch (UngroundedException e) {
-			logError(e.getMessage(), e);
-		} catch (CodecException e) {
-			logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
-		}
-
-		return agentInfos;
-	}
-	
-	private Models getAllModels() {
-		
-		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
-		Ontology ontology = AgentInfoOntology.getInstance();
-		
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(receiver);
-		request.setLanguage(getCodec().getName());
-		request.setOntology(ontology.getName());
-	        
-		try {
-			getContentManager().fillContent(request,
-					new Action(receiver, new GetModels()));
-		} catch (CodecException e) {
-			logError(e.getMessage());
-		} catch (OntologyException e) {
-			logError(e.getMessage());
-		}
-		
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(this, request, 10000);
-			if (reply == null) {
-				return null;
-			}
-			
-		} catch (FIPAException e) {
-			logError(e.getMessage());
-		}
-
-		Models models = null;
-		try {
-			Result r = (Result) getContentManager().extractContent(reply);
-	
-			models = (Models) r.getValue();
-	
-		} catch (UngroundedException e) {
-			logError(e.getMessage());
-		} catch (CodecException e) {
-			logError(e.getMessage());
-		} catch (OntologyException e) {
-			logError(e.getMessage());
-		}
-
-		return models;
-	}
-
 	protected ACLMessage respondToAgentInfo(ACLMessage request, Action action) {
 
 		AgentInfo agentInfo = (AgentInfo) action.getAction();

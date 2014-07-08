@@ -3,6 +3,15 @@ package org.pikater.core.ontology.subtrees.agentInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jfree.util.Log;
+import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.model.Models;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.Value;
+import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+
 import jade.content.Concept;
 
 public class AgentInfos implements Concept {
@@ -32,4 +41,40 @@ public class AgentInfos implements Concept {
 		this.agentInfos.add(agentInfo);
 	}
 
+	
+	public void importModels(Models models) {
+		
+		for (AgentInfo agentInfoI: getAllCAAgentInfos()) {
+			String agentClassName = agentInfoI.getAgentClassName();
+			Class<?> agentClass = null;
+			try {
+				agentClass = Class.forName(agentClassName);
+			} catch (ClassNotFoundException e) {
+				Log.error(e.getMessage(), e);
+			}
+			
+			List<ITypedValue> typedValues = models.getModelIDsByAgentType(agentClass);
+			
+			Options options = agentInfoI.getOptions();
+			NewOption optionModel = options.getOptionByName("model");
+			Value value = optionModel.convertToSingleValue();
+			SetRestriction setRestriction = value.getType().getSetRestriction();
+			setRestriction.addAllValues(typedValues);
+		}
+	}
+	
+	private List<AgentInfo> getAllCAAgentInfos() {
+		
+		List<AgentInfo> selectedInfos =
+				new ArrayList<AgentInfo>();
+		for (AgentInfo angentInfoI : agentInfos) {
+			
+			if (angentInfoI.isOntologyType(ComputingAgent.class)) {
+				selectedInfos.add(angentInfoI);
+			}
+		}
+		
+		return selectedInfos;
+	}
+	
 }

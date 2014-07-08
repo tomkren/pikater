@@ -1,6 +1,10 @@
 package org.pikater.core.ontology.subtrees.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 
 import jade.content.Concept;
 
@@ -25,6 +29,31 @@ public class Models implements Concept {
 	}
 	public void addAllModels(List<Model> models) {
 		this.models.addAll(models);
+	}
+
+	public List<Model> getModelsByAgentType(Class<?> agentType) {
+		
+		List<Model> selectedModels = new ArrayList<Model>();
+		for (Model modelI : models) {
+			if (modelI.isAgentType(agentType)) {
+				selectedModels.add(modelI);
+			}
+		}
+		
+		return selectedModels;
+	}
+
+	public List<ITypedValue> getModelIDsByAgentType(Class<?> agentType) {
+		
+		List<Model> selectedModels = getModelsByAgentType(agentType);
+		
+		List<ITypedValue> modelIDs = new ArrayList<ITypedValue>();
+		
+		for (Model modelI : selectedModels) {
+			modelIDs.add(new IntegerValue(modelI.getResultID()));
+		}
+		
+		return modelIDs;
 	}
 
 }
