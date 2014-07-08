@@ -32,7 +32,7 @@
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
-        <dataOutputType>Data-Even</dataOutputType>
+        <dataOutputType>Data-Sunny</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
     <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="23">
@@ -42,7 +42,17 @@
       <dataSources id="26"/>
       <dataSource id="27">
         <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing" reference="9"/>
-        <dataOutputType>Data-Odd</dataOutputType>
+        <dataOutputType>Data-Overcast</dataOutputType>
+      </dataSource>
+    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="28">
+      <id>-1</id>
+      <options id="29"/>
+      <errors id="30"/>
+      <dataSources id="31"/>
+      <dataSource id="32">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing" reference="9"/>
+        <dataOutputType>Data-Rainy</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>

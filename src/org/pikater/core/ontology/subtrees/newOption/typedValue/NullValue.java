@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.value;
+package org.pikater.core.ontology.subtrees.newOption.typedValue;
 
 public class NullValue implements ITypedValue {
 

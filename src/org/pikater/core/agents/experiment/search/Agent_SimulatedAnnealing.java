@@ -7,8 +7,8 @@ import java.util.Random;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
@@ -77,19 +77,19 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		Options options = new Options(getSearchOptions());
 		
 		NewOption optionE = options.getOptionByName("E");
-		FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
+		FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();
 		final_error_rate = valueE.getValue(); 
 
 		NewOption optionM = options.getOptionByName("M");
-		IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
+		IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getTypedValue();
 		maximum_tries = valueM.getValue(); 
 
 		NewOption optionS = options.getOptionByName("S");
-		FloatValue valueS = (FloatValue) optionS.convertToSingleValue().getValue();
+		FloatValue valueS = (FloatValue) optionS.convertToSingleValue().getTypedValue();
 		stability = valueS.getValue(); 
 
 		NewOption optionT = options.getOptionByName("T");
-		FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getValue();
+		FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getTypedValue();
 		temperature = valueT.getValue(); 
 		
 	}

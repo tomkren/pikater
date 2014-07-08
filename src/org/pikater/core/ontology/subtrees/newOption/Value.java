@@ -1,7 +1,7 @@
 package org.pikater.core.ontology.subtrees.newOption;
 
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
 
 public class Value implements IRestriction {
@@ -13,21 +13,21 @@ public class Value implements IRestriction {
 
 	private Type type;
 
-	private ITypedValue value;
+	private ITypedValue typedValue;
 	private ITypedValue defaultValue;
 
 
 	public Value() {}
-	public Value(ITypedValue value) {
-		this.value = value;
-		this.type = new Type(value.getClass());
+	public Value(ITypedValue typedValue) {
+		this.typedValue = typedValue;
+		this.type = new Type(typedValue.getClass());
 	}
 	public Value(ITypedValue value, Type type) {
-		this.value = value;
+		this.typedValue = value;
 		this.type = type;
 	}
-	public Value(ITypedValue value, ITypedValue defaultValue, Type type) {
-		this.value = value;
+	public Value(ITypedValue typedValue, ITypedValue defaultValue, Type type) {
+		this.typedValue = typedValue;
 		this.defaultValue = defaultValue;
 		this.type = type;
 	}
@@ -39,11 +39,11 @@ public class Value implements IRestriction {
 		this.type = type;
 	}
 
-	public ITypedValue getValue() {
-		return value;
+	public ITypedValue getTypedValue() {
+		return typedValue;
 	}
-	public void setValue(ITypedValue value) {
-		this.value = value;
+	public void setTypedValue(ITypedValue typedValue) {
+		this.typedValue = typedValue;
 	}
 
 	public ITypedValue getDefaultValue() {
@@ -62,8 +62,8 @@ public class Value implements IRestriction {
 	public boolean isValid() {
 		
 		boolean valueOk = true;
-		if (value != null && type != null) {
-			valueOk = type.equals( new Type(value.getClass()) );
+		if (typedValue != null && type != null) {
+			valueOk = type.equals( new Type(typedValue.getClass()) );
 		}
 
 		boolean defaultValueOk = true;
@@ -80,7 +80,7 @@ public class Value implements IRestriction {
 		
 		Value valueNew = new Value();
 		valueNew.setType(type.cloneType());
-		valueNew.setValue(value.cloneValue());
+		valueNew.setTypedValue(typedValue.cloneValue());
 		valueNew.setDefaultValue(defaultValue.cloneValue());
 		
 		return valueNew;

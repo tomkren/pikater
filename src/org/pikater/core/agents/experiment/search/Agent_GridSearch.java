@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
@@ -196,17 +196,17 @@ public class Agent_GridSearch extends Agent_Search {
         
         if (options.containsOptionWithName("N")) {
         	NewOption optionN = options.getOptionByName("N");
-        	IntegerValue valueN = (IntegerValue) optionN.convertToSingleValue().getValue();
+        	IntegerValue valueN = (IntegerValue) optionN.convertToSingleValue().getTypedValue();
         	defaultTries = valueN.getValue();
         }
         if (options.containsOptionWithName("B")) {
         	NewOption optionB = options.getOptionByName("B");
-        	IntegerValue valueB = (IntegerValue) optionB.convertToSingleValue().getValue();
+        	IntegerValue valueB = (IntegerValue) optionB.convertToSingleValue().getTypedValue();
         	query_block_size = valueB.getValue();
         }
         if (options.containsOptionWithName("Z")) {
         	NewOption optionZ = options.getOptionByName("Z");
-        	IntegerValue valueZ = (IntegerValue) optionZ.convertToSingleValue().getValue();
+        	IntegerValue valueZ = (IntegerValue) optionZ.convertToSingleValue().getTypedValue();
         	logZero = valueZ.getValue();
         }
         //if (next.getName().equals("L")) {

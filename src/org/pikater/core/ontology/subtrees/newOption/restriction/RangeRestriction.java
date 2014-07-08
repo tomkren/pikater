@@ -1,8 +1,8 @@
 package org.pikater.core.ontology.subtrees.newOption.restriction;
 
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 
 public class RangeRestriction implements IRestriction {
 

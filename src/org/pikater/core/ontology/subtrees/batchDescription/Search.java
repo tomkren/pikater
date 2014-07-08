@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
 
 
 /**
@@ -61,7 +61,7 @@ public class Search extends DataProcessing {
 		Options optionsOnt = new Options(options);
 		
 		NewOption optSearchClass = optionsOnt.getOptionByName("searchClass");
-		StringValue value = (StringValue) optSearchClass.convertToSingleValue().getValue();
+		StringValue value = (StringValue) optSearchClass.convertToSingleValue().getTypedValue();
 		this.searchClass = value.getValue();
 
 		options.remove(optSearchClass);

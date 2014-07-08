@@ -11,7 +11,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
 
 
 public final class Input03 {

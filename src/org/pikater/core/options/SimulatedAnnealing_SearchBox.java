@@ -11,8 +11,8 @@ import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRes
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.value.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 
 public class SimulatedAnnealing_SearchBox {
 

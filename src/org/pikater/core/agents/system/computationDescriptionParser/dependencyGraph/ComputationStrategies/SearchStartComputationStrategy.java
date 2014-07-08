@@ -114,6 +114,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 
 	private void addOptionToSchema(NewOption opt, List schema){
+/*
 		String[] values = ((String)opt.getUser_value()).split(",");
 
 		int numArgs = values.length;
@@ -166,6 +167,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 				}
 			}
 		}
+*/
 	}
 
 

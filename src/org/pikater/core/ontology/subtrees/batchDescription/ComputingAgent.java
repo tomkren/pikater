@@ -7,8 +7,8 @@ import java.util.List;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.value.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 
@@ -116,22 +116,22 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		NewOption optAgentType = optionsOntol.getOptionByName("agentType");
 		if (optAgentType != null) {
 			StringValue valueAgentType = (StringValue)
-					optAgentType.convertToSingleValue().getValue(); 
+					optAgentType.convertToSingleValue().getTypedValue(); 
 			this.agentType = valueAgentType.getValue();
 		}
 
 		NewOption optModel = optionsOntol.getOptionByName("model");
 		if (optModel != null) {
 			Value value = optModel.convertToSingleValue();
-			if (value.getValue() instanceof StringValue) {
-				StringValue stringValue = (StringValue) value.getValue();
+			if (value.getTypedValue() instanceof StringValue) {
+				StringValue stringValue = (StringValue) value.getTypedValue();
 				if (stringValue.equals(NewModel.class.getSimpleName())) {
 					this.model = new NewModel();
 				} else {
 					throw new IllegalStateException();
 				}
-			} else if (value.getValue() instanceof IntegerValue) {
-				IntegerValue integerValue = (IntegerValue) value.getValue();
+			} else if (value.getTypedValue() instanceof IntegerValue) {
+				IntegerValue integerValue = (IntegerValue) value.getTypedValue();
 				this.model = new ModelDescription(integerValue.getValue());
 			} else {
 				throw new IllegalStateException();

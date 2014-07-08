@@ -9,8 +9,8 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.EASearch_SearchBox;
@@ -323,43 +323,43 @@ public class Agent_EASearch extends Agent_Search {
         
         if (options.containsOptionWithName("E")) {
 	        NewOption optionE = options.getOptionByName("E");
-	        FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getValue();
+	        FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();
 	        goalError = valueE.getValue();
         }
         if (options.containsOptionWithName("M")) {
 	        NewOption optionM = options.getOptionByName("M");
-	        IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getValue();
+	        IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getTypedValue();
 	        maxGeneration = valueM.getValue();
         }
         if (options.containsOptionWithName("T")) {
 	        NewOption optionT = options.getOptionByName("T");
-	        FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getValue();
+	        FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getTypedValue();
 	        mutProb = valueT.getValue();
         }
         if (options.containsOptionWithName("X")) {
 	        NewOption optionX = options.getOptionByName("X");
-	        FloatValue valueX = (FloatValue) optionX.convertToSingleValue().getValue();
+	        FloatValue valueX = (FloatValue) optionX.convertToSingleValue().getTypedValue();
 	        xOverProb = valueX.getValue();
         }
         if (options.containsOptionWithName("P")) {
 	        NewOption optionP = options.getOptionByName("P");
-	        IntegerValue valueP = (IntegerValue) optionP.convertToSingleValue().getValue();
+	        IntegerValue valueP = (IntegerValue) optionP.convertToSingleValue().getTypedValue();
 	        popSize = valueP.getValue();
         }
         if (options.containsOptionWithName("I")) {
 	        NewOption optionI = options.getOptionByName("I");
-	        IntegerValue valueI = (IntegerValue) optionI.convertToSingleValue().getValue();
+	        IntegerValue valueI = (IntegerValue) optionI.convertToSingleValue().getTypedValue();
 	        maxEval = valueI.getValue();
         }
         if (options.containsOptionWithName("F")) {
 	        NewOption optionF = options.getOptionByName("F");
-	        FloatValue valueF = (FloatValue) optionF.convertToSingleValue().getValue();
+	        FloatValue valueF = (FloatValue) optionF.convertToSingleValue().getTypedValue();
 	        mutProbPerField = valueF.getValue();
         }
 
         if (options.containsOptionWithName("L")) {
 	        NewOption optionL = options.getOptionByName("L");
-	        FloatValue valueL = (FloatValue) optionL.convertToSingleValue().getValue();
+	        FloatValue valueL = (FloatValue) optionL.convertToSingleValue().getTypedValue();
 	        eliteSize = valueL.getValue();
         }
 

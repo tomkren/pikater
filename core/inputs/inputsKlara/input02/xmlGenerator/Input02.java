@@ -9,9 +9,9 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.value.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
 
 //Example: single datasource, search the space of parameters of single computation model
 // Save the results of the best iteration of search

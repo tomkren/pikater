@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 
 
 public class AgentInfoOntology extends BeanOntology {

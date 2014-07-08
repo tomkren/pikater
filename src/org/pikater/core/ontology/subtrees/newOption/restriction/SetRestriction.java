@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
 
 public class SetRestriction implements IRestriction {
 

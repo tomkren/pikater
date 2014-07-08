@@ -23,10 +23,10 @@ import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.value.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.value.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
@@ -185,7 +185,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agentI.getOptionByName(optionName) != null){
 	            		
 	            		NewOption optionOfAgentI = agentI.getOptionByName(optionName);
-	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getValue();
+	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getTypedValue();
 	            		 		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
@@ -206,7 +206,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agent.getOptionByName(optionName) != null) {
 	            		
 	            		NewOption optionOfAgentI = agent.getOptionByName(optionName);
-	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getValue();
+	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getTypedValue();
 	            		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
@@ -258,7 +258,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            }
 	            else {
 	            	Value valueI = optionI.convertToSingleValue();
-            		ITypedValue iValueI = valueI.getValue();
+            		ITypedValue iValueI = valueI.getTypedValue();
             		
 	                if (iValueI instanceof FloatValue) {
 	                	float valueFloat = (float) avg;

@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.value.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.value.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.value.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkSet;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -115,7 +115,7 @@ public class NewOption {
 	public boolean containsQuestionMark() {
 		
 		for (Value valueI : values.getValues()) {
-			ITypedValue ivalueI = valueI.getValue();
+			ITypedValue ivalueI = valueI.getTypedValue();
 			if (ivalueI instanceof QuestionMarkRange ||
 					ivalueI instanceof QuestionMarkSet) {
 				return true;
@@ -129,9 +129,9 @@ public class NewOption {
 		String firstValue = null;
 		for (Value valueI : values.getValues()) {
 			if (firstValue == null) {
-				firstValue = valueI.getValue().getClass().getSimpleName();
+				firstValue = valueI.getTypedValue().getClass().getSimpleName();
 			} else {
-				String currentValue = valueI.getValue().getClass().getSimpleName(); 
+				String currentValue = valueI.getTypedValue().getClass().getSimpleName(); 
 				if (! firstValue.equals(currentValue)) {
 					return "MIXED";
 				}
@@ -176,11 +176,11 @@ public class NewOption {
 		String wekaString = "-" + this.getName();
 		
 		for (Value valueI : values.getValues()) {
-			if (valueI.getValue() instanceof NullValue) {
+			if (valueI.getTypedValue() instanceof NullValue) {
 				continue;
 			}
 
-			wekaString += " " + valueI.getValue().exportToWeka();
+			wekaString += " " + valueI.getTypedValue().exportToWeka();
 		}
 		
 		return wekaString;

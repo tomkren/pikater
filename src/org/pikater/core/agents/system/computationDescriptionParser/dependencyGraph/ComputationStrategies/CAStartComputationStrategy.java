@@ -107,7 +107,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		for (NewOption optionI : options) {
 			NewOption new_opt = optionI.cloneOption();
 			if(optionI.getIsMutable())
-				new_opt.setValues(fillOptWithSolution(optionI, sol_itr));
+				new_opt.setValues(null); //TODO: fillOptWithSolution(optionI, sol_itr));
 			options_list.add(new_opt);
 		}
 		res_options.set(options_list);
