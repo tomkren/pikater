@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.client.kineticengine;
 
 import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
 
 public class KineticShapeCreator
 {
@@ -30,14 +30,14 @@ public class KineticShapeCreator
 	/**
 	 * Creates a fully initialized box, if registered automatically. Only use this method when creating boxes in the GUI.
 	 */
-	public BoxPrototype createBox(NodeRegisterType nrt, BoxInfo info)
+	public BoxGraphItemClient createBox(NodeRegisterType nrt, BoxInfo info)
 	{
-		BoxPrototype result = new BoxPrototype(kineticEngine, info);
+		BoxGraphItemClient result = new BoxGraphItemClient(kineticEngine, info);
 		result.applyUserSettings();
 		result.reloadVisualStyles(false);
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(true, new BoxPrototype[] { result }, null);
+			kineticEngine.registerCreated(true, new BoxGraphItemClient[] { result }, null);
 		}
 	    return result;
 	}
@@ -45,9 +45,9 @@ public class KineticShapeCreator
 	/**
 	 * Creates a fully initialized edge, if registered automatically and both endpoints are not null (they can be).
 	 */
-	public EdgePrototype createEdge(NodeRegisterType nrt, BoxPrototype fromBox, BoxPrototype toBox)
+	public EdgeGraphItemClient createEdge(NodeRegisterType nrt, BoxGraphItemClient fromBox, BoxGraphItemClient toBox)
 	{
-		EdgePrototype result = new EdgePrototype(kineticEngine);
+		EdgeGraphItemClient result = new EdgeGraphItemClient(kineticEngine);
 		result.applyUserSettings();
 		result.reloadVisualStyles(false);
 		result.setEndpoint(EndPoint.FROM, fromBox);
@@ -58,7 +58,7 @@ public class KineticShapeCreator
 		}
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(true, null, new EdgePrototype[] { result });
+			kineticEngine.registerCreated(true, null, new EdgeGraphItemClient[] { result });
 		}
 		return result;
 	}

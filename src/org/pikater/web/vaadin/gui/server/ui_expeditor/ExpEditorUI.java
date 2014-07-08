@@ -1,7 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -63,17 +62,11 @@ public class ExpEditorUI extends CustomConfiguredUI
 					case INPUT:
 						name = "Brambory";
 						break;
-					case METHOD:
-						name = "Chleba";
-						break;
 					case CHOOSE:
 						name = "Klobása";
 						break;
 					case SEARCH:
 						name = "Cibule";
-						break;
-					case DISPLAY:
-						name = "Bobkovej list";
 						break;
 					case MULTIBOX:
 						name = "Protlak";
@@ -129,11 +122,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 		
 		// simply create a new empty editor and let the user handle the rest
 		ExpEditor editor = new ExpEditor(isDebugModeActive());
+		// editor.loadExperimentIntoNewTab("test experiment", UniversalComputationDescription.getDummy());
 		setContent(editor);
-	}
-	
-	protected static void loadSampleExperiment(ExpEditor editor)
-	{
-		editor.loadExperimentIntoNewTab("test experiment", UniversalComputationDescription.getDummy());
 	}
 }

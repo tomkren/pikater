@@ -18,12 +18,12 @@ import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 @SuppressWarnings("deprecation")
 public class SelectionModule implements IEngineModule
@@ -44,19 +44,19 @@ public class SelectionModule implements IEngineModule
 	/**
 	 * A self-explanatory variable.
 	 */
-	private final Set<BoxPrototype> selectedBoxes;
+	private final Set<BoxGraphItemClient> selectedBoxes;
 	
 	/** 
 	 * Edges with exactly one of their ends (a box) selected.
 	 */
-	private final Set<EdgePrototype> edgesInBetween;
+	private final Set<EdgeGraphItemClient> edgesInBetween;
 	
 	/**
 	 * The special event handlers/listeners to attach to graph items.
 	 */
 	private final class BoxClickListener extends BoxListener
  	{
- 		public BoxClickListener(BoxPrototype parentBox)
+ 		public BoxClickListener(BoxGraphItemClient parentBox)
 		{
  			super(parentBox);
 		}
@@ -69,7 +69,7 @@ public class SelectionModule implements IEngineModule
 				doSelectionRelatedOperation(SelectionOperation.getInvertSelectionOperation(parentBox), false, true, parentBox); // select or deselect this box only
 	 			onFinish(event);
  			}
- 			else if(kineticEngine.getContext().getClickMode() == KineticComponentClickMode.SELECTION) // it's clear we want to select
+ 			else if(kineticEngine.getContext().getClickMode() == ClickMode.SELECTION) // it's clear we want to select
  			{
  				if(selectedBoxes.size() == 1)
  				{
@@ -110,8 +110,8 @@ public class SelectionModule implements IEngineModule
 	{
 		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
-		this.selectedBoxes = new HashSet<BoxPrototype>();
-		this.edgesInBetween = new HashSet<EdgePrototype>();
+		this.selectedBoxes = new HashSet<BoxGraphItemClient>();
+		this.edgesInBetween = new HashSet<EdgeGraphItemClient>();
 		
 		this.selectionGroup = Kinetic.createGroup();
 		this.selectionGroup.setPosition(Vector2d.origin);
@@ -134,15 +134,15 @@ public class SelectionModule implements IEngineModule
 	@Override
 	public String[] getItemsToAttachTo()
 	{
-		return new String[] { GWTMisc.getSimpleName(BoxPrototype.class) };
+		return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };
 	}
 
 	@Override
-	public void attachEventListeners(ExperimentGraphItem graphItem)
+	public void attachEventListeners(AbstractGraphItemClient graphItem)
 	{
-		if(graphItem instanceof BoxPrototype)
+		if(graphItem instanceof BoxGraphItemClient)
 		{
-			BoxPrototype box = (BoxPrototype) graphItem;
+			BoxGraphItemClient box = (BoxGraphItemClient) graphItem;
 			box.getMasterNode().addEventListener(new BoxClickListener(box), EventType.Basic.CLICK.withName(moduleID));
 		}
 		else
@@ -200,7 +200,7 @@ public class SelectionModule implements IEngineModule
 		SELECTION,
 		DESELECTION;
 		
-		public static SelectionOperation getInvertSelectionOperation(ExperimentGraphItem graphItem)
+		public static SelectionOperation getInvertSelectionOperation(AbstractGraphItemClient graphItem)
 		{
 			return graphItem.isSelected() ? DESELECTION : SELECTION;
 		}
@@ -218,10 +218,10 @@ public class SelectionModule implements IEngineModule
 	 * @param notifyServer
 	 * @param boxes
 	 */
-	public void doSelectionRelatedOperation(SelectionOperation opKind, boolean drawOnFinish, boolean notifyServer, BoxPrototype... boxes)
+	public void doSelectionRelatedOperation(SelectionOperation opKind, boolean drawOnFinish, boolean notifyServer, BoxGraphItemClient... boxes)
 	{
 		boolean aBoxInverted = false;
-		for(BoxPrototype box : boxes)
+		for(BoxGraphItemClient box : boxes)
 		{
 			/*
 			 * First select/deselect all the boxes (not the edges).
@@ -261,16 +261,16 @@ public class SelectionModule implements IEngineModule
 				}
 			}
 		}
-		if(aBoxInverted && notifyServer && kineticEngine.getContext().openOptionsManagerOnSelectionChange())
+		if(aBoxInverted && notifyServer)
 		{
 			String[] selectedBoxesIDs = new String[selectedBoxes.size()];
 			int index = 0;
-			for(BoxPrototype box : selectedBoxes)
+			for(BoxGraphItemClient box : selectedBoxes)
 			{
 				selectedBoxesIDs[index] = box.getInfo().boxID;
 				index++;
 			}
-			kineticEngine.getContext().command_openOptionsManager(selectedBoxesIDs);
+			kineticEngine.getContext().command_selectionChange(selectedBoxesIDs);
 		}
 		if(drawOnFinish)
 		{
@@ -278,7 +278,7 @@ public class SelectionModule implements IEngineModule
 		}
 	}
 	
-	public void onEdgeDragOperationFinished(EdgePrototype edge, BoxPrototype originalEndPoint, BoxPrototype newEndPoint, BoxPrototype staticEndPoint)
+	public void onEdgeDragOperationFinished(EdgeGraphItemClient edge, BoxGraphItemClient originalEndPoint, BoxGraphItemClient newEndPoint, BoxGraphItemClient staticEndPoint)
 	{
 		// IMPORTANT: this code assumes that the endpoint swap has not been done yet
 		if(originalEndPoint.isSelected() != newEndPoint.isSelected())
@@ -312,7 +312,7 @@ public class SelectionModule implements IEngineModule
 		}
 	}
 	
-	public void onEdgeCreateOperation(EdgePrototype edge)
+	public void onEdgeCreateOperation(EdgeGraphItemClient edge)
 	{
 		if(edge.isSelected())
 		{
@@ -347,12 +347,12 @@ public class SelectionModule implements IEngineModule
 		return getSelectionContainer().getChildren().toArray(new Node[0]);
 	}
 	
-	public BoxPrototype[] getSelectedBoxes()
+	public BoxGraphItemClient[] getSelectedBoxes()
 	{
-		return selectedBoxes.toArray(new BoxPrototype[0]);
+		return selectedBoxes.toArray(new BoxGraphItemClient[0]);
 	}
 	
-	public Set<EdgePrototype> getEdgesInBetween()
+	public Set<EdgeGraphItemClient> getEdgesInBetween()
 	{
 		return edgesInBetween;
 	}
@@ -360,11 +360,11 @@ public class SelectionModule implements IEngineModule
 	// *****************************************************************************************************
 	// PRIVATE INTERFACE
 	
-	private void onBoxSelection(BoxPrototype box)
+	private void onBoxSelection(BoxGraphItemClient box)
 	{
 		selectedBoxes.add(box);
 		
-		for(EdgePrototype edge : box.connectedEdges)
+		for(EdgeGraphItemClient edge : box.connectedEdges)
 		{
 			if(edge.areBothEndsSelected())
 			{
@@ -378,11 +378,11 @@ public class SelectionModule implements IEngineModule
 		}
 	}
 	
-	private void onBoxDeselection(BoxPrototype box)
+	private void onBoxDeselection(BoxGraphItemClient box)
 	{
 		selectedBoxes.remove(box);
 		
-		for(EdgePrototype edge : box.connectedEdges)
+		for(EdgeGraphItemClient edge : box.connectedEdges)
 		{
 			// at least one of the edge's endpoints must not be selected at this moment, so:
 			if(edge.isExactlyOneEndSelected())

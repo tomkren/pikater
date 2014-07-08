@@ -5,18 +5,18 @@ import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
 public class MoveBoxesOperation extends BiDiOperation
 {
 	private final Node[] originalNodes;
-	private final EdgePrototype[] originalEdgesInBetween;
+	private final EdgeGraphItemClient[] originalEdgesInBetween;
 	
 	private Vector2d delta;
 	
-	public MoveBoxesOperation(KineticEngine kineticState, Node[] originalNodes, EdgePrototype[] originalEdgesInBetween)
+	public MoveBoxesOperation(KineticEngine kineticState, Node[] originalNodes, EdgeGraphItemClient[] originalEdgesInBetween)
 	{
 		super(kineticState);
 		this.originalNodes = originalNodes;
@@ -79,7 +79,7 @@ public class MoveBoxesOperation extends BiDiOperation
 	private void updateEdgesInBetweenAndDraw()
 	{
 		// update the edges caught between selection and dynamic layer
-		for(EdgePrototype edge : originalEdgesInBetween)
+		for(EdgeGraphItemClient edge : originalEdgesInBetween)
 		{
 			edge.updateEdge();
 		}

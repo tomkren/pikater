@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule.RegistrationOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
@@ -13,27 +13,27 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOpera
  */
 public final class ItemRegistrationOperation extends BiDiOperation
 {
-	private final BoxPrototype[] boxes;
-	private final EdgePrototype[] edges;
+	private final BoxGraphItemClient[] boxes;
+	private final EdgeGraphItemClient[] edges;
 	private final ItemRegistrationModule itemRegistrationModule;
 	
-	public ItemRegistrationOperation(KineticEngine kineticState, BoxPrototype[] boxes, EdgePrototype[] edges)
+	public ItemRegistrationOperation(KineticEngine kineticEngine, BoxGraphItemClient[] boxes, EdgeGraphItemClient[] edges)
 	{
-		super(kineticState);
+		super(kineticEngine);
 		
-		this.boxes = boxes == null ? new BoxPrototype[0] : boxes;
-		this.edges = edges == null ? new EdgePrototype[0] : edges;
-		this.itemRegistrationModule = (ItemRegistrationModule) kineticState.getModule(ItemRegistrationModule.moduleID);
+		this.boxes = boxes == null ? new BoxGraphItemClient[0] : boxes;
+		this.edges = edges == null ? new EdgeGraphItemClient[0] : edges;
+		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
 	}
 	
 	@Override
 	public void firstExecution()
 	{
-		for(BoxPrototype box : boxes)
+		for(BoxGraphItemClient box : boxes)
 		{
 			kineticEngine.attachModuleHandlersTo(box);
 		}
-		for(EdgePrototype edge : edges)
+		for(EdgeGraphItemClient edge : edges)
 		{
 			kineticEngine.attachModuleHandlersTo(edge);
 		}
@@ -43,8 +43,8 @@ public final class ItemRegistrationOperation extends BiDiOperation
 	@Override
 	public void undo()
 	{
-		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, boxes);
-		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, edges);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, edges);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, boxes);
 	}
 
 	@Override

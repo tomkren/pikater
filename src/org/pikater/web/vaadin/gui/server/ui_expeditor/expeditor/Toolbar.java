@@ -5,12 +5,11 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -184,7 +183,7 @@ public class Toolbar extends VerticalLayout
 	{
 		Label clickModeLbl = new Label("Click effect:");
 		clickModeCB = new ComboBox();
-		for(KineticComponentClickMode clickMode : KineticComponentClickMode.values())
+		for(ClickMode clickMode : ClickMode.values())
 		{
 			clickModeCB.addItem(clickMode.name());
 		}
@@ -203,14 +202,14 @@ public class Toolbar extends VerticalLayout
 					@Override
 					public void doAction(KineticComponent activeComponent)
 					{
-						activeComponent.getState().clickMode = KineticComponentClickMode.valueOf((String) clickModeCB.getValue());
+						activeComponent.getState().clickMode = ClickMode.valueOf((String) clickModeCB.getValue());
 					}
 				}, true);
 			}
 		});
 		clickModeCB.setEnabled(false);
 		
-		CheckBox chb_openOptions = new CheckBox("Open options on method select", KineticComponentState.getDefaultOptionsOpenedOnSelection());
+		CheckBox chb_openOptions = new CheckBox("Bind options manager with selection changes", KineticComponent.areSelectionChangesBoundWithOptionsManagerByDefault());
 		chb_openOptions.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -7751913095102968151L;
@@ -223,7 +222,7 @@ public class Toolbar extends VerticalLayout
 					@Override
 					public void doAction(KineticComponent activeComponent)
 					{
-						activeComponent.getState().openOptionsOnSelection = (Boolean) event.getProperty().getValue();
+						activeComponent.setBindOptionsManagerWithSelectionChanges((Boolean) event.getProperty().getValue());
 					}
 				}, true);
 			}
@@ -258,7 +257,7 @@ public class Toolbar extends VerticalLayout
 		}
 	}
 	
-	public void onClickModeAlteredOnClient(KineticComponentClickMode newClickMode)
+	public void onClickModeAlteredOnClient(ClickMode newClickMode)
 	{
 		clickModeCB.select(newClickMode.name());
 	}

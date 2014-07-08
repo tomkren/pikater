@@ -9,14 +9,14 @@ import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem.VisualStyle;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient.VisualStyle;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 @SuppressWarnings("deprecation")
 public final class CreateEdgeModule implements IEngineModule
@@ -41,12 +41,12 @@ public final class CreateEdgeModule implements IEngineModule
 		/**
 		 * The box that starts this operation.
 		 */
-		private BoxPrototype fromEndPoint;
+		private BoxGraphItemClient fromEndPoint;
 		
 		/**
 		 * The edge that is being created.
 		 */
-		private EdgePrototype newEdge;
+		private EdgeGraphItemClient newEdge;
 		
 		public CreateEdgeContext()
 		{
@@ -57,7 +57,7 @@ public final class CreateEdgeModule implements IEngineModule
 		// --------------------------------------------------------
 		// OPERATION START/END ROUTINES
 		
-		public void startOperation(BoxPrototype box)
+		public void startOperation(BoxGraphItemClient box)
 		{
 			fromEndPoint = box;
 			
@@ -74,7 +74,7 @@ public final class CreateEdgeModule implements IEngineModule
 			finishOperation(null);
 		}
 		
-		public void finishOperation(BoxPrototype toEndPoint)
+		public void finishOperation(BoxGraphItemClient toEndPoint)
 		{
 			// IMPORTANT: don't violate the call order
 			fromEndPoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
@@ -106,12 +106,12 @@ public final class CreateEdgeModule implements IEngineModule
 		// --------------------------------------------------------
 		// VARIOUS
 		
-		public BoxPrototype getFromEndPoint()
+		public BoxGraphItemClient getFromEndPoint()
 		{
 			return fromEndPoint;
 		}
 		
-		public EdgePrototype getNewEdge()
+		public EdgeGraphItemClient getNewEdge()
 		{
 			return newEdge;
 		}
@@ -141,7 +141,7 @@ public final class CreateEdgeModule implements IEngineModule
 	 */
 	private class BoxClickListener extends BoxListener
 	{
-		public BoxClickListener(BoxPrototype parentBox)
+		public BoxClickListener(BoxGraphItemClient parentBox)
 		{
 			super(parentBox);
 		}
@@ -162,7 +162,7 @@ public final class CreateEdgeModule implements IEngineModule
 				event.stopVerticalPropagation();
 				event.setProcessed();
 			}
-			else if((kineticEngine.getContext().getClickMode() == KineticComponentClickMode.CONNECTION) 
+			else if((kineticEngine.getContext().getClickMode() == ClickMode.CONNECTION) 
 					|| GWTKeyboardManager.isAltKeyDown()) // when it's either clear we want to connect or the right modifier key is down 
 			{
 				/*
@@ -178,7 +178,7 @@ public final class CreateEdgeModule implements IEngineModule
 				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseDownHandler, EventType.Basic.MOUSEDOWN);
 				
 				// and display the new edge
-				kineticEngine.registerCreated(true, null, new EdgePrototype[] { edgeCreationContext.getNewEdge() });
+				kineticEngine.registerCreated(true, null, new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() });
 				
 				event.stopVerticalPropagation();
 				event.setProcessed();
@@ -187,7 +187,7 @@ public final class CreateEdgeModule implements IEngineModule
 	}
 	private class BoxMouseEnterListener extends BoxListener
 	{
-		public BoxMouseEnterListener(BoxPrototype parentBox)
+		public BoxMouseEnterListener(BoxGraphItemClient parentBox)
 		{
 			super(parentBox);
 		}
@@ -207,7 +207,7 @@ public final class CreateEdgeModule implements IEngineModule
 	}
 	private class BoxMouseLeaveListener extends BoxListener
 	{
-		public BoxMouseLeaveListener(BoxPrototype parentBox)
+		public BoxMouseLeaveListener(BoxGraphItemClient parentBox)
 		{
 			super(parentBox);
 		}
@@ -272,15 +272,15 @@ public final class CreateEdgeModule implements IEngineModule
 	@Override
 	public String[] getItemsToAttachTo()
 	{
-		return new String[] { GWTMisc.getSimpleName(BoxPrototype.class) };
+		return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };
 	}
 	
 	@Override
-	public void attachEventListeners(ExperimentGraphItem graphItem)
+	public void attachEventListeners(AbstractGraphItemClient graphItem)
 	{
-		if(graphItem instanceof BoxPrototype)
+		if(graphItem instanceof BoxGraphItemClient)
 		{
-			BoxPrototype box = (BoxPrototype) graphItem;
+			BoxGraphItemClient box = (BoxGraphItemClient) graphItem;
 			box.getMasterNode().addEventListener(new BoxClickListener(box), EventType.Basic.CLICK.withName(moduleID));
 			box.getMasterNode().addEventListener(new BoxMouseEnterListener(box), EventType.Basic.MOUSEENTER.withName(moduleID));
 			box.getMasterNode().addEventListener(new BoxMouseLeaveListener(box), EventType.Basic.MOUSELEAVE.withName(moduleID));

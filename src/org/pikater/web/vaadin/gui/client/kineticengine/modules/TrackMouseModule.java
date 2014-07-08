@@ -7,8 +7,8 @@ import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventListener;
@@ -25,14 +25,14 @@ public final class TrackMouseModule implements IEngineModule
 	/**
 	 * The box that the mouse is currently hovering on.
 	 */
-	private BoxPrototype currentlyHoveredBox;
+	private BoxGraphItemClient currentlyHoveredBox;
 	
 	/**
 	 * The special event handlers/listeners to attach to boxes.
 	 */
 	private class BoxMouseOverListener extends BoxListener
 	{
-		public BoxMouseOverListener(BoxPrototype parentBox)
+		public BoxMouseOverListener(BoxGraphItemClient parentBox)
 		{
 			super(parentBox);
 		}
@@ -76,15 +76,15 @@ public final class TrackMouseModule implements IEngineModule
 	@Override
 	public String[] getItemsToAttachTo()
 	{
-		return new String[] { GWTMisc.getSimpleName(BoxPrototype.class) };
+		return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };
 	}
 
 	@Override
-	public void attachEventListeners(ExperimentGraphItem graphItem)
+	public void attachEventListeners(AbstractGraphItemClient graphItem)
 	{
-		if(graphItem instanceof BoxPrototype)
+		if(graphItem instanceof BoxGraphItemClient)
 		{
-			BoxPrototype box = (BoxPrototype)graphItem;
+			BoxGraphItemClient box = (BoxGraphItemClient)graphItem;
 			box.getMasterNode().addEventListener(new BoxMouseOverListener(box), EventType.Basic.MOUSEOVER.withName(moduleID));
 			box.getMasterNode().addEventListener(new BoxMouseOutHandler(), EventType.Basic.MOUSEOUT.withName(moduleID));
 		}
@@ -102,7 +102,7 @@ public final class TrackMouseModule implements IEngineModule
 		return currentlyHoveredBox != null;
 	}
 	
-	public BoxPrototype getCurrentlyHoveredBox()
+	public BoxGraphItemClient getCurrentlyHoveredBox()
 	{
 		return currentlyHoveredBox;
 	}
@@ -110,7 +110,7 @@ public final class TrackMouseModule implements IEngineModule
 	// **********************************************************************************************
 	// PRIVATE INTERFACE
 
-	private void setCurrentlyHoveredBox(BoxPrototype currentlyHoveredBox)
+	private void setCurrentlyHoveredBox(BoxGraphItemClient currentlyHoveredBox)
 	{
 		this.currentlyHoveredBox = currentlyHoveredBox;
 	}

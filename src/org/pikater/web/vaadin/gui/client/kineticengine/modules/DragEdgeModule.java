@@ -8,11 +8,11 @@ import net.edzard.kinetic.event.KineticEvent;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.BoxPrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.EdgePrototype.EndPoint;
-import org.pikater.web.vaadin.gui.client.kineticengine.graphitems.ExperimentGraphItem.VisualStyle;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient.VisualStyle;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventListener;
@@ -30,7 +30,7 @@ public final class DragEdgeModule implements IEngineModule
 	/**
 	 * The edge that is currently being dragged.
 	 */
-	private EdgePrototype draggedEdge;
+	private EdgeGraphItemClient draggedEdge;
 	
 	/**
 	 * The dragged edge's endpoint that is being dragged.
@@ -42,10 +42,10 @@ public final class DragEdgeModule implements IEngineModule
 	 */
 	private class DragMarkMouseDownListener extends ModuleEventListener
 	{
-		private final EdgePrototype edgeBeingDragged;
+		private final EdgeGraphItemClient edgeBeingDragged;
 		private final EndPoint draggedEdgeEndpoint;
 		
-		public DragMarkMouseDownListener(EdgePrototype edgeBeingDragged, EndPoint draggedEdgeEndpoint)
+		public DragMarkMouseDownListener(EdgeGraphItemClient edgeBeingDragged, EndPoint draggedEdgeEndpoint)
 		{
 			this.edgeBeingDragged = edgeBeingDragged;
 			this.draggedEdgeEndpoint = draggedEdgeEndpoint;
@@ -66,7 +66,7 @@ public final class DragEdgeModule implements IEngineModule
 	}
 	private class BoxMouseEnterListener extends BoxListener
 	{
-		public BoxMouseEnterListener(BoxPrototype parentBox)
+		public BoxMouseEnterListener(BoxGraphItemClient parentBox)
 		{
 			super(parentBox);
 		}
@@ -86,7 +86,7 @@ public final class DragEdgeModule implements IEngineModule
 	}
 	private class BoxMouseLeaveListener extends BoxListener
 	{
-		public BoxMouseLeaveListener(BoxPrototype parentBox)
+		public BoxMouseLeaveListener(BoxGraphItemClient parentBox)
 		{
 			super(parentBox);
 		}
@@ -138,11 +138,11 @@ public final class DragEdgeModule implements IEngineModule
 		{
 			// IMPORTANT: don't violate the call order
 			draggedEdge.edgeDrag_toEdge(false); // only switches the edge's internal state, doesn't update the edge or draws anything whatsoever
-			BoxPrototype newEndpoint = kineticEngine.getHoveredBox();
+			BoxGraphItemClient newEndpoint = kineticEngine.getHoveredBox();
 			if(newEndpoint != null)
 			{
 				newEndpoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
-				BoxPrototype originalEndpoint = draggedEdge.getEndPoint(draggedEdgeEndpoint); 
+				BoxGraphItemClient originalEndpoint = draggedEdge.getEndPoint(draggedEdgeEndpoint); 
 				if(newEndpoint != originalEndpoint) // now we know for sure we are going to change the endpoint
 				{
 					// IMPORTANT: don't violate the call order
@@ -181,23 +181,23 @@ public final class DragEdgeModule implements IEngineModule
 	public String[] getItemsToAttachTo()
 	{
 		return new String[] {
-				GWTMisc.getSimpleName(EdgePrototype.class),
-				GWTMisc.getSimpleName(BoxPrototype.class),
+				GWTMisc.getSimpleName(EdgeGraphItemClient.class),
+				GWTMisc.getSimpleName(BoxGraphItemClient.class),
 		};
 	}
 	
 	@Override
-	public void attachEventListeners(ExperimentGraphItem graphItem)
+	public void attachEventListeners(AbstractGraphItemClient graphItem)
 	{
-		if(graphItem instanceof EdgePrototype)
+		if(graphItem instanceof EdgeGraphItemClient)
 		{
-			EdgePrototype edge = (EdgePrototype)graphItem;
+			EdgeGraphItemClient edge = (EdgeGraphItemClient)graphItem;
 			setEdgeEventHandler(edge, EndPoint.FROM);
 			setEdgeEventHandler(edge, EndPoint.TO);
 		}
-		else if(graphItem instanceof BoxPrototype)
+		else if(graphItem instanceof BoxGraphItemClient)
 		{
-			BoxPrototype box = (BoxPrototype)graphItem;
+			BoxGraphItemClient box = (BoxGraphItemClient)graphItem;
 			box.getMasterNode().addEventListener(new BoxMouseEnterListener(box), EventType.Basic.MOUSEENTER.withName(moduleID));
 			box.getMasterNode().addEventListener(new BoxMouseLeaveListener(box), EventType.Basic.MOUSELEAVE.withName(moduleID));
 			box.getMasterNode().addEventListener(new BoxMouseUpListener(), EventType.Basic.MOUSEUP.withName(moduleID));
@@ -216,7 +216,7 @@ public final class DragEdgeModule implements IEngineModule
 		return draggedEdge != null;
 	}
 	
-	public EdgePrototype getDraggedEdge()
+	public EdgeGraphItemClient getDraggedEdge()
 	{
 		return draggedEdge;
 	}
@@ -229,12 +229,12 @@ public final class DragEdgeModule implements IEngineModule
 	// **********************************************************************************************
 	// PRIVATE INTERFACE
 	
-	private void setEdgeEventHandler(EdgePrototype edge, EndPoint endPoint)
+	private void setEdgeEventHandler(EdgeGraphItemClient edge, EndPoint endPoint)
 	{
 		edge.getDragMark(endPoint).addEventListener(new DragMarkMouseDownListener(edge, endPoint), EventType.Basic.MOUSEDOWN.withName(moduleID));
 	}
 	
-	private void setEdgeBeingDragged(EdgePrototype edge, EndPoint endPoint)
+	private void setEdgeBeingDragged(EdgeGraphItemClient edge, EndPoint endPoint)
 	{
 		draggedEdge = edge;
 		draggedEdgeEndpoint = endPoint;
@@ -244,7 +244,7 @@ public final class DragEdgeModule implements IEngineModule
 		kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseUpHandler, EventType.Basic.MOUSEUP);
 	}
 	
-	private boolean isStaticEndpointForThisDrag(BoxPrototype box)
+	private boolean isStaticEndpointForThisDrag(BoxGraphItemClient box)
 	{
 		return draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()) == box;
 	}

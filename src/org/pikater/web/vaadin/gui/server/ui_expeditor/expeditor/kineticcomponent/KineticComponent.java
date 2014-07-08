@@ -24,7 +24,10 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTa
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
-import org.pikater.web.vaadin.gui.shared.KineticComponentClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.GraphItemSetChange;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractComponent;
@@ -76,8 +79,10 @@ public class KineticComponent extends AbstractComponent
 	
 	//---------------------------------------------------------------
 	// OTHER PROGRAMMATIC FIELDS
-		
+	
 	private final KineticComponentServerRpc serverRPC;
+	
+	private boolean bindOptionsManagerWithSelectionChanges;
 	
 	//---------------------------------------------------------------
 	// CONSTRUCTOR
@@ -123,36 +128,51 @@ public class KineticComponent extends AbstractComponent
 			}
 			
 			@Override
-			public void command_alterClickMode(KineticComponentClickMode newClickMode)
+			public void command_alterClickMode(ClickMode newClickMode)
 			{
 				getState().clickMode = newClickMode;
 				KineticComponent.this.parentEditor.getToolbar().onClickModeAlteredOnClient(newClickMode);
 			}
+			
+			@Override
+			public void command_itemSetChange(GraphItemSetChange changeType, BoxGraphItemShared[] boxes)
+			{
+				// TODO Auto-generated method stub
+			}
 
 			@Override
-			public void command_openOptionsManager(String[] selectedBoxesIDs)
+			public void command_itemSetChange(GraphItemSetChange changeType, EdgeGraphItemShared[] edges)
 			{
-				// convert to agent information array
-				AgentInfo[] selectedBoxesInformation = new AgentInfo[selectedBoxesIDs.length];
-				for(int i = 0; i < selectedBoxesIDs.length; i++)
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void command_selectionChange(String[] selectedBoxesIDs)
+			{
+				if(bindOptionsManagerWithSelectionChanges)
 				{
-					if(boxIDToAgentInfo.containsKey(selectedBoxesIDs[i]))
+					// convert to agent information array
+					AgentInfo[] selectedBoxesInformation = new AgentInfo[selectedBoxesIDs.length];
+					for(int i = 0; i < selectedBoxesIDs.length; i++)
 					{
-						selectedBoxesInformation[i] = boxIDToAgentInfo.get(selectedBoxesIDs[i]);
+						if(boxIDToAgentInfo.containsKey(selectedBoxesIDs[i]))
+						{
+							selectedBoxesInformation[i] = boxIDToAgentInfo.get(selectedBoxesIDs[i]);
+						}
+						else
+						{
+							throw new IllegalStateException(String.format("Kinetic state out of sync. "
+									+ "No agent info was found for box ID '%s'.", selectedBoxesIDs[i]));
+						}
 					}
-					else
-					{
-						throw new IllegalStateException(String.format("Kinetic state out of sync. "
-								+ "No agent info was found for box ID '%s'.", selectedBoxesIDs[i]));
-					}
+					
+					// give the information to the box options toolbox to display
+					BoxOptionsToolbox toolbox = (BoxOptionsToolbox) parentEditor.getToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+					toolbox.setContentFrom(selectedBoxesInformation);
+					
+					// and display the toolbox whether already visible or not
+					parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
 				}
-				
-				// give the information to the box options toolbox to display
-				BoxOptionsToolbox toolbox = (BoxOptionsToolbox) parentEditor.getToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
-				toolbox.setContentFrom(selectedBoxesInformation);
-				
-				// and display the toolbox
-				parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
 			}
 
 			@Override
@@ -162,6 +182,8 @@ public class KineticComponent extends AbstractComponent
 			}
 		};
 		registerRpc(this.serverRPC);
+		
+		this.bindOptionsManagerWithSelectionChanges = areSelectionChangesBoundWithOptionsManagerByDefault();
 	}
 	
 	//---------------------------------------------------------------
@@ -247,6 +269,21 @@ public class KineticComponent extends AbstractComponent
 	
 	//---------------------------------------------------------------
 	// MISCELLANEOUS PUBLIC INTERFACE
+	
+	public boolean areSelectionChangesBoundWithOptionsManager()
+	{
+		return bindOptionsManagerWithSelectionChanges;
+	}
+	
+	public static boolean areSelectionChangesBoundWithOptionsManagerByDefault()
+	{
+		return true;
+	}
+
+	public void setBindOptionsManagerWithSelectionChanges(boolean bindOptionsManagerWithSelectionChanges)
+	{
+		this.bindOptionsManagerWithSelectionChanges = bindOptionsManagerWithSelectionChanges;
+	}
 	
 	public void setParentTab(CustomTabSheetTabComponent parentTab)
 	{
