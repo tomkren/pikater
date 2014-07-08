@@ -19,6 +19,8 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
+import org.pikater.core.ontology.subtrees.model.GetModels;
+import org.pikater.core.ontology.subtrees.model.Models;
 import org.reflections.Reflections;
 
 import jade.content.lang.Codec.CodecException;
@@ -214,9 +216,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			getContentManager().fillContent(request,
 					new Action(receiver, new GetAgentInfos()));
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 		
 		ACLMessage reply = null;
@@ -237,6 +239,53 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			agentInfos = (AgentInfos) r.getValue();
 	
 		} catch (UngroundedException e) {
+			logError(e.getMessage(), e);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return agentInfos;
+	}
+	
+	private Models getAllModels() {
+		
+		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		Ontology ontology = AgentInfoOntology.getInstance();
+		
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.addReceiver(receiver);
+		request.setLanguage(getCodec().getName());
+		request.setOntology(ontology.getName());
+	        
+		try {
+			getContentManager().fillContent(request,
+					new Action(receiver, new GetModels()));
+		} catch (CodecException e) {
+			logError(e.getMessage());
+		} catch (OntologyException e) {
+			logError(e.getMessage());
+		}
+		
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(this, request, 10000);
+			if (reply == null) {
+				return null;
+			}
+			
+		} catch (FIPAException e) {
+			logError(e.getMessage());
+		}
+
+		Models models = null;
+		try {
+			Result r = (Result) getContentManager().extractContent(reply);
+	
+			models = (Models) r.getValue();
+	
+		} catch (UngroundedException e) {
 			logError(e.getMessage());
 		} catch (CodecException e) {
 			logError(e.getMessage());
@@ -244,7 +293,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			logError(e.getMessage());
 		}
 
-		return agentInfos;
+		return models;
 	}
 
 	protected ACLMessage respondToAgentInfo(ACLMessage request, Action action) {

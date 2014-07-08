@@ -81,7 +81,7 @@ public class ComputationDescription implements Concept {
 			IComputationElement dataProcessing = fifo.get(0);
 			fifo.remove(0);
 			
-			if (dataProcessing.getId() ==  -1) {
+			if (dataProcessing.getId() == -1) {
 				
 				dataProcessing.setId(id);
 				id++;

@@ -106,7 +106,9 @@ import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.model.GetModel;
+import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Model;
+import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.model.SaveModel;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
@@ -292,6 +294,9 @@ public class Agent_DataManager extends PikaterAgent {
 					}
 					if (a.getAction() instanceof GetModel) {
 						return respondToGetModel(request, a);
+					}
+					if (a.getAction() instanceof GetModels) {
+						return respondToGetModels(request, a);
 					}
 					
 					/**
@@ -565,7 +570,37 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 		return reply;
 	}
-	
+
+	private ACLMessage respondToGetModels(ACLMessage request, Action a) {
+		GetModels gm=(GetModels)a.getAction();
+		
+		java.util.List<JPAModel> savedModels=DAOs.modelDAO.getAll();
+		
+		Models models = new Models();
+		for (JPAModel modelJPA : savedModels) {
+			
+			Model retrModel = new Model();
+			retrModel.setAgentClassName(modelJPA.getAgentClassName());
+			retrModel.setResultID(modelJPA.getCreatorResult().getId());
+			retrModel.setSerializedAgent(modelJPA.getSerializedAgent());
+			
+			models.addModel(retrModel);
+		}
+		
+		ACLMessage reply = request.createReply();
+
+		Result result = new Result(a, models);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return reply;
+	}
+
 	private ACLMessage respondToSaveBatch(ACLMessage request, Action a) {
 		
 		log("RespondToSaveBatch");

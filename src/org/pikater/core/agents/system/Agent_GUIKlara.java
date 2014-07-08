@@ -224,6 +224,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 		ExecuteBatch executeBatch = new ExecuteBatch(comDescription);
 
+		// waiting to start of all agents
 		try {
 			Thread.sleep(9000);
 		} catch (InterruptedException e1) {

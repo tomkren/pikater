@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.model;
 
 import jade.content.Concept;
 
-public class Model implements Concept{
+public class Model implements Concept {
 	private static final long serialVersionUID = 4882357602886884881L;
 	private int resultID;
 	private String agentClassName;

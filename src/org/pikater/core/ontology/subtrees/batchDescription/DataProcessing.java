@@ -146,4 +146,10 @@ public class DataProcessing implements IDataProvider {
 		return dataProcess;
 	}
 	
+	@Override
+	public boolean equalsElement(IComputationElement element) {
+		
+		return this.getId() == element.getId();
+	}
+	
 }
