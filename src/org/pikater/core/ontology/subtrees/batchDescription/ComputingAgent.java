@@ -108,6 +108,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		options.addAll(this.options);
 		return options;
 	}
+
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		
@@ -205,7 +206,6 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		validationData = descriptinValidationData;
 				
 	}
-	
 
 }
 

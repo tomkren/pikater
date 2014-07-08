@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
-import org.pikater.shared.experiment.universalformat.UniversalElement;
-import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 public class FileDataSaver extends DataProcessing implements IDataSaver {
 
@@ -30,22 +28,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 	public void setNameOfFile(String nameOfFile) {
 		this.nameOfFile = nameOfFile;
 	}
-	
-	static FileDataSaver importUniversalElement(
-			UniversalElement uElement) {
 		
-		UniversalOntology uOntology = uElement.getOntologyInfo();
-		
-		FileDataSaver fileDataSaver = new FileDataSaver();
-
-		NewOption optionNameOfFile = uOntology.getOptionByName("nameOfFile");
-		StringValue value = (StringValue) optionNameOfFile.convertToSingleValue().getTypedValue();
-		fileDataSaver.setNameOfFile(value.getValue());
-		
-		
-		return fileDataSaver;
-	}
-	
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
