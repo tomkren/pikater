@@ -1,6 +1,5 @@
 package org.pikater.shared.experiment.webformat;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +10,15 @@ import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.vaadin.MyResources;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 public enum BoxType
 {
-	INPUT(FileDataProvider.class, MyResources.relPath_IMG_boxInputIcon),
-	SEARCH(Search.class, MyResources.relPath_IMG_boxSearcherIcon),
-	COMPUTE(ComputingAgent.class, MyResources.relPath_IMG_boxComputingIcon),
+	INPUT(FileDataProvider.class, MyResources.relPath_IMG_boxInputIcon), // TODO: simple file icon
 	CHOOSE(Recommend.class, MyResources.relPath_IMG_boxRecommenderIcon),
-	METHOD(Method.class, MyResources.relPath_IMG_boxMethodIcon),
-	DISPLAY(ExpEditor.class, MyResources.relPath_IMG_boxVizualizerIcon), // TODO: change this properly
+	COMPUTE(ComputingAgent.class, MyResources.relPath_IMG_boxComputingIcon),
+	SEARCH(Search.class, MyResources.relPath_IMG_boxSearcherIcon),
+	// SAVE(FileDataSaver.class, MyResources.), // TODO: simple file icon
+	
 	MULTIBOX(BoxType.class, MyResources.relPath_IMG_boxWrapperIcon); // wrappers are never going to have their own ontologies anyway
 	
 	private final Class<?> mappedOntologyClass;
