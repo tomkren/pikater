@@ -120,12 +120,19 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 	}
 
-	
 	private void initializationAgentInfo() {
+		List<Class<? extends Agent_AbstractExperiment>> classes =
+				getAllExperimmentAgentClasses();
+		
+		wakeUpAgentInfo(classes);
+	}
+
+	private void wakeUpAgentInfo(
+			List<Class<? extends Agent_AbstractExperiment>> agentClasses) {
 		
 		Map<String, AgentController> controlers = new HashMap<String, AgentController>();
 
-		for (Class<? extends Agent_AbstractExperiment> agentClassI : getAllExperimmentAgentClasses()) {
+		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
 			try {
 				PlatformController container = getContainerController();
 				AgentController agentControllerI = container.createNewAgent(
@@ -213,8 +220,27 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	}
 
 	protected ACLMessage respondToNewAgent(ACLMessage request, Action action) {
-		// TODO Auto-generated method stub
-		return null;
+
+		NewAgent newAgent = (NewAgent)action.getAction();
+		String agentClassName = newAgent.getAgentClassName();
+		
+		Class<? extends Agent_AbstractExperiment> agentClass = null;
+		try {
+			agentClass = (Class<? extends Agent_AbstractExperiment>) Class.forName(agentClassName);
+		} catch (ClassNotFoundException e) {
+			logError(e.getMessage(), e);
+		}
+		
+		List<Class<? extends Agent_AbstractExperiment>> classes =
+				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
+		classes.add(agentClass);
+		
+		wakeUpAgentInfo(classes);
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK");
+		return reply;
 	}
 
 	
