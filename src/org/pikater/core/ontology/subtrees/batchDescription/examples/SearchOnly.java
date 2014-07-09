@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 
 /**
@@ -27,6 +28,8 @@ public class SearchOnly {
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
+        ca.setModel(new NewModel());
+        ca.setEvaluationMethod(new EvaluationMethod("CrossValidation"));
         //"whatever.mlp.is.in.MLP"
 
         List<NewOption> options = new ArrayList<NewOption>();

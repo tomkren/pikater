@@ -12,8 +12,13 @@ public class EvaluationMethod implements Concept {
 
 	private static final long serialVersionUID = -9024769565945696142L;
 	private String type;
+
 	private List<NewOption> options;
 
+	public EvaluationMethod() {}
+	public EvaluationMethod(String type) {
+		this.type = type;
+	}
 
 	public void setOptions(List<NewOption> options) {
 		this.options = options;
@@ -28,6 +33,7 @@ public class EvaluationMethod implements Concept {
     	}
         this.options.add(option);
     }
+
 	public String getType() {
 		return type;
 	}
