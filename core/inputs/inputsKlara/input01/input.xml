@@ -13,7 +13,6 @@
           <errors/>
           <dataSources/>
           <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
-          <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
           <options>
             <org.pikater.core.ontology.subtrees.newOption.NewOption>
               <name>S</name>
@@ -48,6 +47,7 @@
               <isMutable>false</isMutable>
             </org.pikater.core.ontology.subtrees.newOption.NewOption>
           </options>
+          <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
           <evaluationMethod>
             <type>CrossValidation</type>
             <options>

@@ -3,6 +3,7 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
+import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
@@ -29,6 +30,8 @@ public class AgentInfoOntology extends BeanOntology {
         String agentInfoPackage = AgentInfo.class.getPackage().getName();
         String modelPackage = Model.class.getPackage().getName();
         
+        String agentPackage = NewAgent.class.getPackage().getName();
+        
         try {
             add(optionPackage);
             add(restrictionPackage);
@@ -37,6 +40,8 @@ public class AgentInfoOntology extends BeanOntology {
             
             add(agentInfoPackage);
             add(modelPackage);
+            
+            add(agentPackage);
 
         } catch (Exception e) {
             e.printStackTrace();
