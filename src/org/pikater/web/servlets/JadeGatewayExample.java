@@ -61,7 +61,7 @@ public class JadeGatewayExample extends HttpServlet {
         	Ontology mailingOntology = MailingOntology.getInstance();
         	
             ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-            		AgentNames.MAIL_AGENT, mailingOntology, sendEmailAction);
+            		AgentNames.MAILING, mailingOntology, sendEmailAction);
 
             PikaterActionInitiator initiator = new PikaterActionInitiator(msg);
             JadeGateway.execute(initiator, 10000);

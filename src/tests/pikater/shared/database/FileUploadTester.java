@@ -1,4 +1,4 @@
-package org.pikater.core.agents.util;
+package tests.pikater.shared.database;
 
 import java.io.IOException;
 

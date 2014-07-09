@@ -15,6 +15,7 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 
@@ -32,7 +33,7 @@ public class Agent_Mailing extends PikaterAgent {
     @Override
     protected void setup() {
         initDefault();
-        registerWithDF("Mailing");
+        registerWithDF(AgentNames.MAILING);
         
         addBehaviour(new AchieveREResponder(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)) {
             private static final long serialVersionUID = 746138569142900592L;
@@ -46,7 +47,7 @@ public class Agent_Mailing extends PikaterAgent {
                     else
                         throw new RefuseException("Invalid action requested");
                 } catch (CodecException | OntologyException e) {
-                    // e.printStackTrace();
+                	Agent_Mailing.this.logError(e.getMessage(), e);
                     throw new NotUnderstoodException("Unknown codec/ontology: "+e.getMessage());
                 }
             }
@@ -70,8 +71,8 @@ public class Agent_Mailing extends PikaterAgent {
             }
         } catch (MessagingException e) {
             String error = "Failed to dispatch e-mail for "+to+" : "+e.getMessage();
-            logError(error);
-            //e.printStackTrace();
+            logError(error, e);
+
             reply.setPerformative(ACLMessage.FAILURE);
             reply.setContent(error);
             return reply;

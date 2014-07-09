@@ -16,6 +16,6 @@ public abstract class AgentNames {
 	public static String AGENTINFO_MANAGER = "AgentInfoManager";
 	public static String VIRTUAL_BOX_PROVIDER = "VirtualBoxProvider";
 	public static String FREDDIE = "Freddie";
-	public static String MAIL_AGENT = "mailAgent";
+	public static String MAILING = "Mailing";
 
 }
