@@ -2,11 +2,13 @@ package org.pikater.core.utilities.evolution.individuals;
 
 import java.util.Arrays;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.surrogate.ModelInputNormalizer;
-import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
@@ -22,11 +24,11 @@ import weka.core.Instances;
 public class SearchItemIndividual extends MultiobjectiveIndividual {
 
     SearchItem[] schema;
-    String[] items;
+    ITypedValue[] items;
 
     public SearchItemIndividual(int n) {
         schema = new SearchItem[n];
-        items = new String[n];
+        items = new ITypedValue[n];
     }
     
     public void setSchema(int n, SearchItem s) {
@@ -38,13 +40,13 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
     }
     
     @Override
-    public String get(int n) {
+    public ITypedValue get(int n) {
         return items[n];
     }
 
     @Override
-    public void set(int n, Object o) {
-        items[n] = (String)o;
+    public void set(int n, ITypedValue o) {
+        items[n] = o;
     }
 
     @Override
@@ -70,10 +72,10 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         SearchItemIndividual newSI = (SearchItemIndividual)super.clone();
         
         newSI.schema = schema;
-        newSI.items = new String[items.length];
+        newSI.items = new ITypedValue[items.length];
         
         for (int i = 0; i < items.length; i++) {
-            newSI.items[i] = new String(items[i]);
+            newSI.items[i] = items[i].cloneValue();
         }
         
         newSI.fitnessValue = fitnessValue;
@@ -98,7 +100,7 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
             if (schema[i] instanceof SetSItem) {
                 FastVector values = new FastVector();
                 
-                for (String valueI : schema[i].possibleValues() ) {
+                for (ITypedValue valueI : schema[i].possibleValues() ) {
                     values.addElement(valueI);
                 }
                 attributes.addElement(new Attribute("a" + i, values));
@@ -133,20 +135,26 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         
         for (int i = 0; i < items.length; i++) {
             if (schema[i] instanceof SetSItem) {
-                inst.setValue(i, items[i]);
+                inst.setValue(i, items[i].toString());
                 continue;
             }
-            if (schema[i] instanceof BoolSItem) {
-                inst.setValue(i, items[i].equals("False") ? 0.0 : 1.0);
-                continue;
+            else
+            {
+                IntervalSearchItem searchItem=(IntervalSearchItem)schema[i];
+
+                if (searchItem.getMin() instanceof BooleanValue) {
+                    inst.setValue(i, items[i].equals("False") ? 0.0 : 1.0);
+                    continue;
+                }
+                if (searchItem.getMin() instanceof IntegerValue) {
+                    inst.setValue(i, norm.normalizeInt(items[i], (IntervalSearchItem)schema[i]));
+                    continue;
+                }
+                if (searchItem.getMin() instanceof FloatValue) {
+                    inst.setValue(i, norm.normalizeFloat(items[i], (IntervalSearchItem)schema[i]));
+                }
             }
-            if (schema[i] instanceof IntSItem) {
-                inst.setValue(i, norm.normalizeInt(items[i], (IntSItem)schema[i]));
-                continue;
-            }
-            if (schema[i] instanceof FloatSItem) {
-                inst.setValue(i, norm.normalizeFloat(items[i], (FloatSItem)schema[i]));
-            }
+
         }
         
         return inst;

@@ -4,21 +4,19 @@
  */
 package org.pikater.core.agents.experiment.search;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
-import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.*;
 import org.pikater.core.options.GridSearch_SearchBox;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -36,7 +34,7 @@ public class Agent_GridSearch extends Agent_Search {
     boolean linearSteps = true;
     boolean logSteps = true;
     double logZero = 1.0E-8;
-    ArrayList<String> values = null;
+    ArrayList<ITypedValue> values = null;
 
     @Override
     protected String getAgentType() {
@@ -82,7 +80,7 @@ public class Agent_GridSearch extends Agent_Search {
         return ret;
     }
 
-    private ArrayList<String> generateValues() {
+    private ArrayList<ITypedValue> generateValues() {
         
         ArrayList<String> vals = new ArrayList<String>();
         
@@ -93,7 +91,12 @@ public class Agent_GridSearch extends Agent_Search {
             if (tries == 0) {
                 tries = defaultTries;
             }
-            ArrayList<String> valsForItem = new ArrayList<String>();
+            ArrayList<ITypedValue> valsForItem = new ArrayList<>();
+            IntervalSearchItem searchItem= ((IntervalSearchItem) si);
+            if (searchItem.getMin() instanceof BooleanValue)
+            {
+                    valsForItem.addAll(searchItem.possibleValues());
+            }
             if (si instanceof IntSItem) {
                 IntSItem isi = (IntSItem)si;
                 if (isi.getMax() - isi.getMin() < tries) {
@@ -148,11 +151,6 @@ public class Agent_GridSearch extends Agent_Search {
                         }
                     }
                 }
-            }
-
-            if (si instanceof BoolSItem) {
-                valsForItem.add("True");
-                valsForItem.add("False");
             }
 
             if (si instanceof SetSItem) {

@@ -15,7 +15,7 @@ public class Value implements IRestriction {
 
 	private ITypedValue typedValue;
 	private ITypedValue defaultValue;
-
+    private Boolean isMutable;
 
 	public Value() {}
 	public Value(ITypedValue typedValue) {
@@ -85,4 +85,12 @@ public class Value implements IRestriction {
 		
 		return valueNew;
 	}
+
+    public Boolean getIsMutable() {
+        return isMutable;
+    }
+
+    public void setIsMutable(Boolean isMutable) {
+        this.isMutable = isMutable;
+    }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jade.content.Concept;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 
 
 public class SearchSolution implements Concept {
@@ -11,22 +12,22 @@ public class SearchSolution implements Concept {
 	 * 
 	 */
 	private static final long serialVersionUID = 5183991490097709263L;
-	private List<String> values;//list of string-values
+	private List<ITypedValue> values;//list of string-values
 
-	public List<String> getValues() {
+	public List<ITypedValue> getValues() {
 		if(values!=null)
 			return values;
-		return new ArrayList<String>();
+		return new ArrayList<ITypedValue>();
 	}
 
-	public void setValues(List<String> values) {
+	public void setValues(List<ITypedValue> values) {
 		this.values = values;
 	}
 	
 	public void printContent(){
 		
 		boolean start = true;
-		for (String valueI : getValues() ) {
+		for (ITypedValue valueI : getValues() ) {
 			if(!start)
 				System.out.print(",");
 			System.out.print(valueI);

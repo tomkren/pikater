@@ -4,8 +4,10 @@
  */
 package org.pikater.core.utilities.evolution.surrogate;
 
-import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 
 /**
  *
@@ -14,17 +16,17 @@ import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
 public class LogarithmicNormalizer extends ModelInputNormalizer{
 
     @Override
-    public double normalizeFloat(String dbl, FloatSItem schema) {
-        double val = Double.parseDouble(dbl);
-        val -= schema.getMin();
+    public double normalizeFloat(ITypedValue dbl, IntervalSearchItem schema) {
+        double val = ((FloatValue) dbl).getValue();
+        val -= ((FloatValue) schema.getMin()).getValue();
         val += 1.0;
         return Math.log(val);
     }
 
     @Override
-    public double normalizeInt(String n, IntSItem schema) {
-        double val = Integer.parseInt(n);
-        val -= schema.getMin();
+    public double normalizeInt(ITypedValue n, IntervalSearchItem schema) {
+        double val = ((IntegerValue) n).getValue();
+        val -= ((IntegerValue) schema.getMin()).getValue();
         val += 1.0;
         return Math.log(val);
     }
