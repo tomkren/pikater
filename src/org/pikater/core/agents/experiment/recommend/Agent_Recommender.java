@@ -22,10 +22,10 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.configuration.Arguments;
 import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.MetadataOntology;

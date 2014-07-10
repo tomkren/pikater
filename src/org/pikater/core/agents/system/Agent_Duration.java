@@ -25,8 +25,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
-import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DurationOntology;

@@ -1,4 +1,4 @@
-package org.pikater.core.agents;
+package org.pikater.core;
 
 public abstract class AgentNames {
 

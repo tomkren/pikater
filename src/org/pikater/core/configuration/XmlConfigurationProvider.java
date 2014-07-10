@@ -1,4 +1,4 @@
-package org.pikater.core.agents.configuration;
+package org.pikater.core.configuration;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -7,6 +7,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

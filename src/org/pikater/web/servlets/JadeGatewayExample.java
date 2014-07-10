@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.pikater.web.pikater.PikaterActionInitiator;
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.system.Agent_Mailing;
 import org.pikater.core.ontology.MailingOntology;

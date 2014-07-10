@@ -16,8 +16,8 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 
-import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
+import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;

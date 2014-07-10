@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.computing.ComputingAction;
 import org.pikater.core.agents.experiment.computing.computing.ComputingComminicator;

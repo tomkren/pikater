@@ -6,12 +6,12 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
-import org.pikater.core.agents.configuration.AgentConfiguration;
-import org.pikater.core.agents.configuration.Argument;
-import org.pikater.core.agents.configuration.Configuration;
-import org.pikater.core.agents.configuration.XmlConfigurationProvider;
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.configuration.AgentConfiguration;
+import org.pikater.core.configuration.Argument;
+import org.pikater.core.configuration.Configuration;
+import org.pikater.core.configuration.XmlConfigurationProvider;
 import org.pikater.core.ontology.AgentManagementOntology;
 
 import java.text.SimpleDateFormat;

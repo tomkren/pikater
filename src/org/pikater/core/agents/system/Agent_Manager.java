@@ -20,7 +20,7 @@ import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
 
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
