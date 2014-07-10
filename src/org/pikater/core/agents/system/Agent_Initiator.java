@@ -1,5 +1,6 @@
 package org.pikater.core.agents.system;
 
+import jade.content.onto.Ontology;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
@@ -11,8 +12,10 @@ import org.pikater.core.agents.configuration.Configuration;
 import org.pikater.core.agents.configuration.XmlConfigurationProvider;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.AgentManagementOntology;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,6 +26,14 @@ public class Agent_Initiator extends PikaterAgent {
 	private String fileName = "core" + System.getProperty("file.separator")
 			+ "configurationMaster.xml";
 
+	@Override
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(AgentManagementOntology.getInstance());
+		return ontologies;
+	}
+	
 	@Override
 	protected void setup() {
 		initDefault();
@@ -114,4 +125,5 @@ public class Agent_Initiator extends PikaterAgent {
 
 		initLogging();
 	}
+
 }

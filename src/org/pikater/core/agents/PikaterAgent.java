@@ -57,13 +57,7 @@ public abstract class PikaterAgent extends Agent {
 		return codec;
 	}
 
-	public List<Ontology> getOntologies() {
-		
-		List<Ontology> ontologies = new ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
-		
-		return ontologies;
-	}
+	public abstract List<Ontology> getOntologies();
 
 	protected String getAgentType() {
 		return this.getClass().getName();

@@ -7,6 +7,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.content.Concept;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 
@@ -17,6 +18,7 @@ import javax.mail.internet.*;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 
 /** Agent, ktery resi komunikaci s mistnim SMTP serverem, tj. odesilani ruznych e-mailu i jejich tvorbu. */
@@ -29,6 +31,15 @@ public class Agent_Mailing extends PikaterAgent {
     /** Adresa, ktera bude uvedena ve FROM u mailu, ktere agent posle
      * TODO: nekam do konfigurace? */
     private static final String SENDER_EMAIL = "pikater@noreply.cz";
+
+	@Override
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MailingOntology.getInstance());
+		
+		return ontologies;
+	}
 
     @Override
     protected void setup() {
@@ -112,4 +123,5 @@ public class Agent_Mailing extends PikaterAgent {
         
         log("sent e-mail to "+to);
     }
+
 }
