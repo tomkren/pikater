@@ -50,8 +50,8 @@ public class Agent_Planner extends PikaterAgent {
 			new HashMap<AID, ComputerInfo>();
 
 	@Override
-	public java.util.List<Ontology> getOntologies() {
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+	public List<Ontology> getOntologies() {
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		return ontologies;
