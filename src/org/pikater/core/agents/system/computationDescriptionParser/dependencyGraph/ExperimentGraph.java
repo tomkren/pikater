@@ -2,23 +2,23 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 
 import java.util.ArrayList;
 
-public class ProblemGraph {
+public class ExperimentGraph {
 	protected Integer id;
 	
 	/*
 	 * Top layer of problem tree
 	 */
-	private ArrayList<ProblemItem> problems =
-			new ArrayList<ProblemItem>();
+	private ArrayList<Experimenttem> problems =
+			new ArrayList<Experimenttem>();
 
 
-	public ArrayList<ProblemItem> getProblems() {
+	public ArrayList<Experimenttem> getProblems() {
 		return problems;
 	}
-	public void setProblems(ArrayList<ProblemItem> problems) {
+	public void setProblems(ArrayList<Experimenttem> problems) {
 		this.problems = problems;
 	}
-	public void addRootProblem(ProblemItem problem) {
+	public void addRootProblem(Experimenttem problem) {
 		this.problems.add(problem);
 	}
 	
@@ -30,23 +30,23 @@ public class ProblemGraph {
 	public boolean areAllProblemsFinished() {
 		
 		// if exists some rootItem which is not finished
-		for (ProblemItem problemI : problems) {
+		for (Experimenttem problemI : problems) {
 			
-			if (problemI.getStatus() != ProblemItem.ProblemStatus.IS_FINISHED) {
+			if (problemI.getStatus() != Experimenttem.ProblemStatus.IS_FINISHED) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public ArrayList<ProblemItem> getAllIndependetWaitingProblems() {
+	public ArrayList<Experimenttem> getAllIndependetWaitingProblems() {
 		
-		ArrayList<ProblemItem> problems =
-				new ArrayList<ProblemItem>();
+		ArrayList<Experimenttem> problems =
+				new ArrayList<Experimenttem>();
 		
-		for (ProblemItem problemI : problems) {
+		for (Experimenttem problemI : problems) {
 			
-			ArrayList<ProblemItem> problemsI =
+			ArrayList<Experimenttem> problemsI =
 					problemI.getIndependentItems();
 			
 			problems.addAll(problemsI);
