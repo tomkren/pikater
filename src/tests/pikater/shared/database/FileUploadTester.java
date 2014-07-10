@@ -1,6 +1,8 @@
 package tests.pikater.shared.database;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
@@ -9,6 +11,7 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.file.PrepareFileUpload;
 
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
@@ -20,6 +23,14 @@ import jade.lang.acl.ACLMessage;
 public class FileUploadTester extends PikaterAgent {
 	private static final long serialVersionUID = -8946304470396671885L;
 
+	@Override
+	public List<Ontology> getOntologies() {
+
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(DataOntology.getInstance());
+		return ontologies;
+	}
+	
 	@Override
 	protected void setup() {
 		initDefault();
@@ -49,17 +60,18 @@ public class FileUploadTester extends PikaterAgent {
 			// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
 			DataTransferService.doClientFileTransfer("772c551b8486b932aed784a582b9c1b1_", "localhost", port);
 		} catch (CodecException | OntologyException e) {
-			logError("Ontology/codec error occurred: " + e.getMessage());
+			logError("Ontology/codec error occurred: " + e.getMessage(), e);
 			e.printStackTrace();
 		} catch (FIPAException e) {
-			logError("FIPA error occurred: " + e.getMessage());
+			logError("FIPA error occurred: " + e.getMessage(), e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logError("IO error occurred: " + e.getMessage());
+			logError("IO error occurred: " + e.getMessage(), e);
 			e.printStackTrace();
 		}
 
 		log("FileUploadTester ending");
 		doDelete();
 	}
+
 }

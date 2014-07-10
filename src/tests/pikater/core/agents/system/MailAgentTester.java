@@ -1,5 +1,8 @@
 package tests.pikater.core.agents.system;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Mailing;
@@ -22,6 +25,13 @@ public class MailAgentTester extends PikaterAgent {
     
     private static final String DESTINATION_ADDRESS = "j.krajicek@atlas.cz";
 
+	@Override
+	public List<Ontology> getOntologies() {
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MailingOntology.getInstance());
+		return ontologies;
+	}
+	
     @Override
     protected void setup() {
         initDefault();
@@ -63,4 +73,5 @@ public class MailAgentTester extends PikaterAgent {
         getContentManager().fillContent(msg, new Action(target, action));
         return msg;
     }
+
 }
