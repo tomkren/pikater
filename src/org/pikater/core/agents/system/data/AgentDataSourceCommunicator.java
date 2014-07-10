@@ -16,7 +16,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.dataSource.DataSourcePath;
 import org.pikater.core.ontology.subtrees.dataSource.GetDataSourcePath;
 import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
@@ -55,7 +55,7 @@ public class AgentDataSourceCommunicator {
     }
 
     public String getDataSourceLocalPath(String taskId,String type) {
-    	Ontology ontology = MessagesOntology.getInstance();
+    	Ontology ontology = DataOntology.getInstance();
     	
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.addReceiver(receiverAid);
@@ -80,7 +80,7 @@ public class AgentDataSourceCommunicator {
     }
 
     public void registerDataSources(String taskId,String[] typeList) {
-    	Ontology ontology = MessagesOntology.getInstance();
+    	Ontology ontology = DataOntology.getInstance();
     	
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
         msg.addReceiver(receiverAid);

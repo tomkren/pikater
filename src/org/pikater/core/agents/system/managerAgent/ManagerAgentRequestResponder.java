@@ -19,7 +19,6 @@ import jade.wrapper.ControllerException;
 import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
-import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
@@ -209,7 +208,7 @@ public class ManagerAgentRequestResponder {
             ac.setAction(fa);
             ac.setActor(request.getSender());
 
-            Ontology ontology = MessagesOntology.getInstance();
+            Ontology ontology = AgentManagementOntology.getInstance();
             
             jade.lang.acl.ACLMessage first_message = new jade.lang.acl.ACLMessage(jade.lang.acl.ACLMessage.REQUEST);
             first_message.setLanguage(managerAgent.getCodec().getName());

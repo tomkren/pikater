@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.option.GetOptions;
 
 
 public class AgentInfoOntology extends BeanOntology {
@@ -43,6 +44,7 @@ public class AgentInfoOntology extends BeanOntology {
             
             add(agentPackage);
 
+            add(GetOptions.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

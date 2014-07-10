@@ -5,7 +5,7 @@ import jade.util.leap.Serializable;
 
 import org.apache.commons.io.FileUtils;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.DataOntology;
 import org.pikater.shared.logging.Severity;
 
 import java.io.*;
@@ -37,7 +37,7 @@ public class AgentDataSource extends PikaterAgent {
 	public List<Ontology> getOntologies() {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(DataOntology.getInstance());
 		
 		return ontologies;
 	}

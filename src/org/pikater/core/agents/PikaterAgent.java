@@ -19,7 +19,6 @@ import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.shared.logging.Logger;
 import org.pikater.shared.logging.Severity;
 import org.pikater.shared.logging.Verbosity;
-import org.pikater.core.ontology.MessagesOntology;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -20,6 +20,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.proto.ContractNetInitiator;
+
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -28,7 +29,8 @@ import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.agents.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
-import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.DurationOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
@@ -63,7 +65,7 @@ public class Agent_Duration extends PikaterAgent {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AgentManagementOntology.getInstance());
-		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(DurationOntology.getInstance());
 		
 		return ontologies;
 	}
@@ -73,7 +75,7 @@ public class Agent_Duration extends PikaterAgent {
 
 		initDefault();
 		
-		registerWithDF();
+		registerWithDF(AgentNames.DURATION);
     	
 		if (containsArgument(LOG_LR_DURATIONS_NAME)) {
 			if (isArgumentValueTrue(LOG_LR_DURATIONS_NAME)){
@@ -87,12 +89,12 @@ public class Agent_Duration extends PikaterAgent {
         aid=communicator.createAgent(this,"LinearRegression","DurationServiceRegression",null);
         		
 		// compute one LR (as the first one is usually longer) 
-		addBehaviour(new ExecuteTaskInitiator(this, createCFPmessage(aid, "dc7ce6dea5a75110486760cfac1051a5")));
+		addBehaviour(new ExecuteTaskInitiator(this, createCFPmessage(aid, this, "dc7ce6dea5a75110486760cfac1051a5")));
 		doWait(2000);
 		
         addBehaviour(new TestBehaviour(this, t));			  
         
-        Ontology ontology = MessagesOntology.getInstance();
+        Ontology ontology = DurationOntology.getInstance();
         MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
         addBehaviour(new AchieveREResponder(this, mt) {
@@ -194,15 +196,17 @@ public class Agent_Duration extends PikaterAgent {
     protected class TestBehaviour extends TickerBehaviour {
 
 		private static final long serialVersionUID = -2200601967185243650L;
+		private PikaterAgent agent;
 
-		public TestBehaviour(Agent a, long period) {
-			super(a, period);
+		public TestBehaviour(PikaterAgent agent, long period) {
+			super(agent, period);
+			this.agent = agent;
 			
 		}
 
 		protected void onTick() {
 			  // compute linear regression on random (but the same) dataset
-			  addBehaviour(new ExecuteTaskInitiator(myAgent, createCFPmessage(aid, "dc7ce6dea5a75110486760cfac1051a5")));			  
+			  addBehaviour(new ExecuteTaskInitiator(agent, createCFPmessage(aid, agent, "dc7ce6dea5a75110486760cfac1051a5")));			  
 		} 
     }
     
@@ -210,10 +214,12 @@ public class Agent_Duration extends PikaterAgent {
 
 		private static final long serialVersionUID = -4895199062239049907L;
 				
-		ACLMessage cfp; 
+		private ACLMessage cfp;
+		private PikaterAgent agent;
 		
-		public ExecuteTaskInitiator(jade.core.Agent a, ACLMessage cfp) {
-			super(a, cfp);
+		public ExecuteTaskInitiator(PikaterAgent agent, ACLMessage cfp) {
+			super(agent, cfp);
+			this.agent = agent;
 			this.cfp = cfp;
 		}
 
@@ -269,10 +275,10 @@ public class Agent_Duration extends PikaterAgent {
 					getContentManager().fillContent(accept, a);
 
 				} catch (CodecException exception) {
-					// TODO Auto-generated catch block
+					agent.logError(exception.getMessage(), exception);
 					exception.printStackTrace();
 				} catch (OntologyException exception) {
-					// TODO Auto-generated catch block
+					agent.logError(exception.getMessage(), exception);
 					exception.printStackTrace();
 				}
 				
@@ -316,22 +322,22 @@ public class Agent_Duration extends PikaterAgent {
 					
 				}				
 			} catch (UngroundedException e) {
-				// TODO Auto-generated catch block
+				agent.logError(e.getMessage(), e);
 				e.printStackTrace();
 			} catch (CodecException e) {
-				// TODO Auto-generated catch block
+				agent.logError(e.getMessage(), e);
 				e.printStackTrace();
 			} catch (OntologyException e) {
-				// TODO Auto-generated catch block
+				agent.logError(e.getMessage(), e);
 				e.printStackTrace();
 			}			
 		}			
 	} // end of call for proposal bahavior
 
         
-    protected ACLMessage createCFPmessage(AID aid, String filename) {
+    protected ACLMessage createCFPmessage(AID aid, PikaterAgent agent, String filename) {
 
-        Ontology ontology = MessagesOntology.getInstance();
+        Ontology ontology = TaskOntology.getInstance();
     	
 		// create CFP message for Linear Regression Computing Agent							  		
 		ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
@@ -382,10 +388,10 @@ public class Agent_Duration extends PikaterAgent {
 			getContentManager().fillContent(cfp, a);
 
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage(), e);
 			e.printStackTrace();
 		}
 				

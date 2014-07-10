@@ -14,15 +14,12 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
+import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
-import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +68,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(receiver);
 		msg.setLanguage(myAgent.getCodec().getName());
-		msg.setOntology(myAgent.getOntology().getName());
+		msg.setOntology(SearchOntology.getInstance().getName());
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationId));
 
@@ -88,10 +85,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		try {
 			myAgent.getContentManager().fillContent(msg, a);
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
+			myAgent.logError(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
+			myAgent.logError(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -115,6 +112,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 	private void addOptionToSchema(NewOption opt, List schema){
 /*
+ TODO:
 		String[] values = ((String)opt.getUser_value()).split(",");
 
 		int numArgs = values.length;

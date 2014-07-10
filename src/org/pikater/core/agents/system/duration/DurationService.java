@@ -9,26 +9,26 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.agents.AgentNames;
+import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
-
 
 public class DurationService extends FIPAService {
 
 	static final Codec codec = new SLCodec();
 
-	public static Duration getDuration(Agent agent, GetDuration gd) {            
+	public static Duration getDuration(PikaterAgent agent, GetDuration gd) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID("duration", false));
-		request.setOntology(MessagesOntology.getInstance().getName());
+		request.addReceiver(new AID(AgentNames.DURATION, false));
+		request.setOntology(DurationOntology.getInstance().getName());
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
@@ -39,34 +39,37 @@ public class DurationService extends FIPAService {
 		try {
 			agent.getContentManager().fillContent(request, a);
 		} catch (CodecException e1) {
+			agent.logError(e1.getMessage(), e1);
 			e1.printStackTrace();
 		} catch (OntologyException e1) {
+			agent.logError(e1.getMessage(), e1);
 			e1.printStackTrace();
 		}
 
 		Duration duration = gd.getDuration();
 		duration.setLR_duration(-1);
-		try {						
+		try {
 			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
-			
-			// get Duration from the received message			
-			ContentElement content = agent.getContentManager().extractContent(reply);
-							
-			duration = (Duration)(((Result) content).getValue());									
-			
+
+			// get Duration from the received message
+			ContentElement content = agent.getContentManager().extractContent(
+					reply);
+
+			duration = (Duration) (((Result) content).getValue());
+
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		} catch (UngroundedException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
+			agent.logError(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
 		return duration;
-        }
+	}
 }

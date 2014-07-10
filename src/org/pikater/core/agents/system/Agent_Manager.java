@@ -30,7 +30,8 @@ import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
-import org.pikater.core.ontology.MessagesOntology;
+import org.pikater.core.ontology.RecomendOntology;
+import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 
@@ -43,7 +44,6 @@ public class Agent_Manager extends PikaterAgent {
 
 	private static final long serialVersionUID = -5140758757320827589L;
 	
-	private Ontology ontology = MessagesOntology.getInstance();
 	
 	private final String NO_XML_OUTPUT ="no_xml_output";
 	private boolean no_xml_output = true;
@@ -53,14 +53,6 @@ public class Agent_Manager extends PikaterAgent {
 			new HashMap<Integer, ComputationCollectionItem>();
 	
 	
-	public Ontology getOntology() {
-		return ontology;
-	}
-
-	public void setOntology(Ontology ontology) {
-		this.ontology = ontology;
-	}
-
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
 	}
@@ -69,7 +61,8 @@ public class Agent_Manager extends PikaterAgent {
 	public List<Ontology> getOntologies() {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(RecomendOntology.getInstance());
+		ontologies.add(SearchOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(TaskOntology.getInstance());
@@ -127,7 +120,9 @@ public class Agent_Manager extends PikaterAgent {
 
 		private static final long serialVersionUID = -6257623790759885083L;
 
-		MessageTemplate getSchemaFromSearchTemplate = 
+		Ontology ontology = SearchOntology.getInstance();
+		
+		MessageTemplate getSchemaFromSearchTemplate =
 				MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_QUERY),
 				MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF),
@@ -209,10 +204,13 @@ public class Agent_Manager extends PikaterAgent {
             //TODO: bad ontology
 			getContentManager().fillContent(msgOut, content );
 		} catch (UngroundedException e) {
+			logError(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (CodecException e) {
+			logError(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
