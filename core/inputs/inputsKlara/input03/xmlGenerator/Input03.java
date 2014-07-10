@@ -16,10 +16,7 @@ import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
 
 public final class Input03 {
 
-	public static void main(String[] args) throws FileNotFoundException {
-		
-		System.out.println("Exporting Ontology input3 to Klara's input XML configuration file.");
-		
+	public static ComputationDescription createDescription() {
 		
         FileDataProvider fileDataProvider = new FileDataProvider();
         fileDataProvider.setFileURI("?????.arff");
@@ -49,8 +46,6 @@ public final class Input03 {
 		DataSourceDescription computingDataSource1 = new DataSourceDescription();
 		computingDataSource1.setDataOutputType("Data");
 		computingDataSource1.setDataProvider(complex1);
-
-
 
 
 		ComputingAgent comAgent2 = new ComputingAgent();
@@ -83,6 +78,15 @@ public final class Input03 {
 
         ComputationDescription comDescription = new ComputationDescription();
         comDescription.addRootElement(saver);
+		
+        return comDescription;
+	}
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		System.out.println("Exporting Ontology input3 to Klara's input XML configuration file.");
+		
+		ComputationDescription comDescription = createDescription();
 
 		String fileName = Agent_GUIKlara.filePath + "input03"
 				+ System.getProperty("file.separator")

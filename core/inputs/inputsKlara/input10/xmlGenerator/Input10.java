@@ -12,11 +12,8 @@ import java.util.List;
 
 public final class Input10 {
 
-	public static void main(String[] args) throws FileNotFoundException {
-
-		System.out
-				.println("Exporting Ontology input10 to Klara's input XML configuration file.");
-
+	public static ComputationDescription createDescription() {
+		
 		// Specify a datasource
 		DataSourceDescription fileDataSource1 = new DataSourceDescription(
 				"weather.arff");
@@ -61,6 +58,16 @@ public final class Input10 {
 
 		ComputationDescription comDescription = new ComputationDescription();
 		comDescription.setRootElements(roots);
+
+		return comDescription;
+	}
+	
+	public static void main(String[] args) throws FileNotFoundException {
+
+		System.out
+				.println("Exporting Ontology input10 to Klara's input XML configuration file.");
+
+		ComputationDescription comDescription = createDescription();
 
 		String fileName = Agent_GUIKlara.filePath + "input10"
 				+ System.getProperty("file.separator") + "input.xml";

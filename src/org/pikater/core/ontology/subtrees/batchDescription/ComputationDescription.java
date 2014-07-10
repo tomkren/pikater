@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
-import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
@@ -123,6 +121,10 @@ public class ComputationDescription implements Concept {
 			IComputationElement dataProcessing = fifo.get(0);
 			fifo.remove(0);
 			
+			if (dataProcessing == null) {
+				continue;
+			}
+			
 			if (! finishedDataProcessings.containsKey(dataProcessing.getId()) ) {
 				
 				UniversalOntology uOntology =
@@ -146,6 +148,7 @@ public class ComputationDescription implements Concept {
 			IComputationElement processI = finishedDataProcessings.get(keyI);
 			
 			List<DataSourceDescription> slotsI = processI.exportAllDataSourceDescriptions();
+			System.out.println(processI.getClass());
 			for (DataSourceDescription slotIJ : slotsI) {
 	
 				UniversalElement uniElement = new UniversalElement();

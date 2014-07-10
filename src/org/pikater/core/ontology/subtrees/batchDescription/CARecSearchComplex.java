@@ -103,10 +103,15 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		computingAgentSlot.setDataProvider((IDataProvider) computingAgent);
 
 		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
-		slots.add(searchSlot);
-		slots.add(recommenderSlot);
-		slots.add(computingAgentSlot);
-		
+		if (search != null) {
+			slots.add(searchSlot);
+		}
+		if (recommender != null) {
+			slots.add(recommenderSlot);
+		}
+		if (computingAgent != null) {
+			slots.add(computingAgentSlot);
+		}
 		return slots;
 	}
 	@Override

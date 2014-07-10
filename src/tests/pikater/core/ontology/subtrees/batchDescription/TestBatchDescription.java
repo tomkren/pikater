@@ -5,53 +5,53 @@ import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
+import xmlGenerator.Input01;
+import xmlGenerator.Input02;
+import xmlGenerator.Input03;
+
 public class TestBatchDescription {
 
 	public static void test() {
 
-		testSimpleTraining();
-		testSearchOnly();
+		testComputatingDescription(
+				SimpleTraining.createDescription(),
+				"SimpleTraining");
+		testComputatingDescription(
+				SearchOnly.createDescription(),
+				"SearchOnly");
+
+		testComputatingDescription(
+				Input01.createDescription(),
+				"Input01");
+		testComputatingDescription(
+				Input02.createDescription(),
+				"Input02");
+		testComputatingDescription(
+				Input03.createDescription(),
+				"Input03");
+
 	}
 
-	private static void testSimpleTraining() {
+	private static void testComputatingDescription(
+			ComputationDescription comDescription, String note) {
 		
-		ComputationDescription descriptinSimpleTraining = SimpleTraining.createDescription();
-		descriptinSimpleTraining.generateIDs();
+		comDescription.generateIDs();
 		
 		UniversalComputationDescription udescriptinSimpleTraining =
-				descriptinSimpleTraining.exportUniversalComputationDescription();
+				comDescription.exportUniversalComputationDescription();
 		
-		ComputationDescription descriptinSimpleTraining2 =
+		ComputationDescription comDescription2 =
 				ComputationDescription.importUniversalComputationDescription(
 						udescriptinSimpleTraining);
 
-		String xml1 = descriptinSimpleTraining.exportXML();
-		String xml2 = descriptinSimpleTraining2.exportXML();
+		String xml1 = comDescription.exportXML();
+		String xml2 = comDescription2.exportXML();
 		
 		if (xml1.equals(xml2)) {
-			System.out.println("OK - SimpleTraining");
+			System.out.println("OK - " + note);
+		} else {
+			System.out.println("Error - " + note);
 		}
-	}
-
-	private static void testSearchOnly() {
-		
-		ComputationDescription descriptionSearchOnly = SearchOnly.createDescription();
-		descriptionSearchOnly.generateIDs();
-		
-		UniversalComputationDescription udescriptionSearchOnly =
-				descriptionSearchOnly.exportUniversalComputationDescription();
-		
-		ComputationDescription descriptionSearchOnly2 =
-				ComputationDescription.importUniversalComputationDescription(
-						udescriptionSearchOnly);
-		
-		String xml1 = descriptionSearchOnly.exportXML();
-		String xml2 = descriptionSearchOnly2.exportXML();
-		
-		if (xml1.equals(xml2)) {
-			System.out.println("OK - SearchOnly");
-		}
-
 	}
 
 }

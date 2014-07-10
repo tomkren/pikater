@@ -12,15 +12,14 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 //Example: single datasource, search the space of parameters of single computation model
 // Save the results of the best iteration of search
 public final class Input02 {
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static ComputationDescription createDescription() {
 		
-		System.out.println("Exporting Ontology input02 to Klara's input XML configuration file.");
-
         //Specify a datasource
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
 
@@ -39,6 +38,7 @@ public final class Input02 {
 		comAgent.addOption(optionB);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
+		comAgent.setEvaluationMethod(new EvaluationMethod("Standart"));
 		comAgent.setModel(new NewModel());
 
 		Search search = new Search();
@@ -69,11 +69,20 @@ public final class Input02 {
         FileDataSaver saver = new FileDataSaver();
         saver.setDataSource(computingDataSource);
 
-        List<FileDataSaver> roots = new ArrayList<>();
+        List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
         roots.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();
         comDescription.setRootElements(roots);
+
+        return comDescription;
+	}
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		System.out.println("Exporting Ontology input02 to Klara's input XML configuration file.");
+
+		ComputationDescription comDescription = createDescription();
 
 		String fileName = Agent_GUIKlara.filePath + "input02"
 				+ System.getProperty("file.separator")

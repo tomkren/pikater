@@ -19,10 +19,8 @@ import java.util.List;
 //Example: Single datasource -> single computing agent. -> Single save
 public final class Input01 {
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static ComputationDescription createDescription() {
 		
-		System.out.println("Exporting Ontology input01 to Klara's input XML configuration file.");
-
         //Specify a datasource
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
 
@@ -51,6 +49,7 @@ public final class Input01 {
 		comAgent.addOption(optionM);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
+		//comAgent.setEvaluationMethod(new EvaluationMethod("Standart"));
 		comAgent.setEvaluationMethod(evaluationMethod);
 		comAgent.setModel(new NewModel());
 
@@ -64,12 +63,21 @@ public final class Input01 {
         saver.setDataSource(computingDataSource);
 
         //Our requirements for the description are ready, lets create new computation description
-        List<FileDataSaver> roots = new ArrayList<>();
+        List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
         roots.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();
         comDescription.setRootElements(roots);
 
+        return comDescription;
+	}
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		System.out.println("Exporting Ontology input01 to Klara's input XML configuration file.");
+
+		ComputationDescription comDescription = createDescription();
+		
 		String fileName = Agent_GUIKlara.filePath + "input01"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
