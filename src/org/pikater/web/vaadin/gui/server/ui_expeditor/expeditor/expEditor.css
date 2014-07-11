@@ -4,6 +4,11 @@
 {
 }
 
+.expEditor.v-customlayout
+{
+	overflow: scroll;
+}
+
 .expEditor-menu
 {
 }

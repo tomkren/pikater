@@ -3,6 +3,7 @@ package org.pikater.web.vaadin.gui.client.kineticengine;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EdgeState;
 import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
 
 public class KineticShapeCreator
@@ -54,7 +55,12 @@ public class KineticShapeCreator
 		result.setEndpoint(EndPoint.TO, toBox);
 		if((fromBox != null) && (toBox != null))
 		{
+			result.setInternalState(EdgeState.EDGE);
 			result.updateEdge();
+		}
+		else
+		{
+			result.setInternalState(EdgeState.BASELINE);
 		}
 		if(nrt == NodeRegisterType.AUTOMATIC)
 		{

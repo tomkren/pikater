@@ -2,9 +2,9 @@ package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
 import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.GraphItemSetChange;
 
 import com.vaadin.shared.communication.ServerRpc;
 
@@ -16,8 +16,8 @@ public interface KineticComponentServerRpc extends ServerRpc
 	void command_alterClickMode(ClickMode newClickMode);
 	
 	// experiment graph related commands
-	void command_itemSetChange(GraphItemSetChange changeType, BoxGraphItemShared[] boxes);
-	void command_itemSetChange(GraphItemSetChange changeType, EdgeGraphItemShared[] edges);
+	void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes);
+	void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges);
 	void command_selectionChange(String[] selectedBoxesAgentIDs);
 	
 	// responses

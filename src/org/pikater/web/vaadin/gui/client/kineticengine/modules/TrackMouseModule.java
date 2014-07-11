@@ -74,13 +74,18 @@ public final class TrackMouseModule implements IEngineModule
 	}
 	
 	@Override
-	public String[] getItemsToAttachTo()
+	public void createModuleCrossReferences()
+	{
+	}
+	
+	@Override
+	public String[] getGraphItemTypesToAttachHandlersTo()
 	{
 		return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };
 	}
 
 	@Override
-	public void attachEventListeners(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient graphItem)
 	{
 		if(graphItem instanceof BoxGraphItemClient)
 		{
