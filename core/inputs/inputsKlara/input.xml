@@ -50,24 +50,6 @@
           <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
           <evaluationMethod>
             <type>CrossValidation</type>
-            <options>
-              <org.pikater.core.ontology.subtrees.newOption.NewOption>
-                <name>F</name>
-                <values>
-                  <values>
-                    <org.pikater.core.ontology.subtrees.newOption.Value>
-                      <type>
-                        <className>org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue</className>
-                      </type>
-                      <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue">
-                        <value>8</value>
-                      </typedValue>
-                    </org.pikater.core.ontology.subtrees.newOption.Value>
-                  </values>
-                </values>
-                <isMutable>false</isMutable>
-              </org.pikater.core.ontology.subtrees.newOption.NewOption>
-            </options>
           </evaluationMethod>
           <trainingData>
             <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -77,9 +59,18 @@
               <dataSources/>
               <fileURI>weather.arff</fileURI>
             </dataProvider>
-            <dataInputType>testingData</dataInputType>
+            <dataInputType>trainingData</dataInputType>
           </trainingData>
-          <testingData reference="../trainingData"/>
+          <testingData>
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+              <id>2</id>
+              <options/>
+              <errors/>
+              <dataSources/>
+              <fileURI>weather.arff</fileURI>
+            </dataProvider>
+            <dataInputType>testingData</dataInputType>
+          </testingData>
         </dataProvider>
         <dataOutputType>Data</dataOutputType>
       </dataSource>

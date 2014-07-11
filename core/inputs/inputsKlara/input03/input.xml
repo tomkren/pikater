@@ -52,8 +52,9 @@
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
             <options/>
+            <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+            <evaluationMethod/>
             <trainingData>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex">
                 <id>3</id>
@@ -100,8 +101,9 @@
                   <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                   <errors/>
                   <dataSources/>
-                  <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
                   <options/>
+                  <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+                  <evaluationMethod/>
                   <trainingData>
                     <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                       <id>5</id>
@@ -110,15 +112,97 @@
                       <dataSources/>
                       <fileURI>?????.arff</fileURI>
                     </dataProvider>
-                    <dataInputType>testingData</dataInputType>
+                    <dataInputType>trainingData</dataInputType>
                   </trainingData>
-                  <testingData reference="../trainingData"/>
+                  <testingData>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                      <id>5</id>
+                      <options/>
+                      <errors/>
+                      <dataSources/>
+                      <fileURI>?????.arff</fileURI>
+                    </dataProvider>
+                    <dataInputType>testingData</dataInputType>
+                  </testingData>
+                </computingAgent>
+              </dataProvider>
+              <dataOutputType>Data</dataOutputType>
+              <dataInputType>trainingData</dataInputType>
+            </trainingData>
+            <testingData>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex">
+                <id>3</id>
+                <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                <errors defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                <dataSources/>
+                <options>
+                  <org.pikater.core.ontology.subtrees.newOption.NewOption>
+                    <name>evaluation_method</name>
+                    <values>
+                      <values>
+                        <org.pikater.core.ontology.subtrees.newOption.Value>
+                          <type>
+                            <className>org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue</className>
+                          </type>
+                          <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue">
+                            <value>CrossValidation</value>
+                          </typedValue>
+                        </org.pikater.core.ontology.subtrees.newOption.Value>
+                      </values>
+                    </values>
+                    <isMutable>false</isMutable>
+                  </org.pikater.core.ontology.subtrees.newOption.NewOption>
+                  <org.pikater.core.ontology.subtrees.newOption.NewOption>
+                    <name>output</name>
+                    <values>
+                      <values>
+                        <org.pikater.core.ontology.subtrees.newOption.Value>
+                          <type>
+                            <className>org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue</className>
+                          </type>
+                          <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue">
+                            <value>evaluation_only</value>
+                          </typedValue>
+                        </org.pikater.core.ontology.subtrees.newOption.Value>
+                      </values>
+                    </values>
+                    <isMutable>false</isMutable>
+                  </org.pikater.core.ontology.subtrees.newOption.NewOption>
+                </options>
+                <errors/>
+                <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+                  <id>4</id>
+                  <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                  <errors/>
+                  <dataSources/>
+                  <options/>
+                  <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+                  <evaluationMethod/>
+                  <trainingData>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                      <id>5</id>
+                      <options/>
+                      <errors/>
+                      <dataSources/>
+                      <fileURI>?????.arff</fileURI>
+                    </dataProvider>
+                    <dataInputType>trainingData</dataInputType>
+                  </trainingData>
+                  <testingData>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                      <id>5</id>
+                      <options/>
+                      <errors/>
+                      <dataSources/>
+                      <fileURI>?????.arff</fileURI>
+                    </dataProvider>
+                    <dataInputType>testingData</dataInputType>
+                  </testingData>
                 </computingAgent>
               </dataProvider>
               <dataOutputType>Data</dataOutputType>
               <dataInputType>testingData</dataInputType>
-            </trainingData>
-            <testingData reference="../trainingData"/>
+            </testingData>
           </computingAgent>
         </dataProvider>
         <dataOutputType>Data</dataOutputType>

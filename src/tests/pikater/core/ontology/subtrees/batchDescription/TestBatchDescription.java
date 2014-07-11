@@ -16,6 +16,7 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				SimpleTraining.createDescription(),
 				"SimpleTraining");
+
 		testComputatingDescription(
 				SearchOnly.createDescription(),
 				"SearchOnly");
@@ -23,9 +24,11 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input01.createDescription(),
 				"Input01");
+
 		testComputatingDescription(
 				Input02.createDescription(),
 				"Input02");
+
 		testComputatingDescription(
 				Input03.createDescription(),
 				"Input03");
@@ -46,7 +49,14 @@ public class TestBatchDescription {
 
 		String xml1 = comDescription.exportXML();
 		String xml2 = comDescription2.exportXML();
-		
+/*		
+		try {
+			comDescription.exportXML("comDescription.xml");
+			comDescription2.exportXML("comDescription2.xml");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+*/
 		if (xml1.equals(xml2)) {
 			System.out.println("OK - " + note);
 		} else {

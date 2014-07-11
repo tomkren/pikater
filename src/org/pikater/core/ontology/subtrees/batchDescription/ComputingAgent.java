@@ -53,22 +53,46 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
         return trainingData;
     }
     public void setTrainingData(DataSourceDescription trainingData) {
-        this.trainingData = trainingData;
+    	if (trainingData == null) {
+    		throw new IllegalArgumentException("Argument trainingData can't be null");
+    	}
+    	DataSourceDescription trainingDataC = new DataSourceDescription(); 
+    	trainingDataC.setDataInputType("trainingData");
+    	trainingDataC.setDataOutputType(trainingData.getDataOutputType());
+    	trainingDataC.setDataProvider(trainingData.getDataProvider());
+    	
+        this.trainingData = trainingDataC;
     }
 
     public DataSourceDescription getTestingData() {
         return testingData;
     }
     public void setTestingData(DataSourceDescription testingData) {
-        this.testingData = testingData;
+    	if (testingData == null) {
+    		throw new IllegalArgumentException("Argument testingData can't be null");
+    	}
+    	DataSourceDescription testingDataC = new DataSourceDescription(); 
+    	testingDataC.setDataInputType("testingData");
+    	testingDataC.setDataOutputType(testingData.getDataOutputType());
+    	testingDataC.setDataProvider(testingData.getDataProvider());
+
+        this.testingData = testingDataC;
     }
 
     public DataSourceDescription getValidationData() {
         return validationData;
     }
     public void setValidationData(DataSourceDescription validationData) {
-        this.validationData = validationData;
-    }    
+    	if (validationData == null) {
+    		throw new IllegalArgumentException("Argument validationData can't be null");
+    	}
+    	DataSourceDescription validationDataC = new DataSourceDescription(); 
+    	validationDataC.setDataInputType("validationData");
+    	validationDataC.setDataOutputType(validationData.getDataOutputType());
+    	validationDataC.setDataProvider(validationData.getDataProvider());
+
+        this.validationData = validationDataC;
+    }
 	
 	public EvaluationMethod getEvaluationMethod() {
 		return evaluationMethod;
@@ -181,18 +205,27 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
 		
 		if (trainingData != null) {
-			trainingData.setDataInputType("trainingData");
-			slots.add(trainingData);
+			DataSourceDescription trainingDataC = new DataSourceDescription();
+			trainingDataC.setDataInputType("trainingData");
+			trainingDataC.setDataOutputType(trainingData.getDataOutputType());
+			trainingDataC.setDataProvider(trainingData.getDataProvider());
+			slots.add(trainingDataC);
 		}
 		
 		if (testingData != null) {
-			testingData.setDataInputType("testingData");
-			slots.add(testingData);
+			DataSourceDescription testingDataC = new DataSourceDescription();
+			testingDataC.setDataInputType("testingData");
+			testingDataC.setDataOutputType(testingData.getDataOutputType());
+			testingDataC.setDataProvider(testingData.getDataProvider());
+			slots.add(testingDataC);
 		}
 		
 		if (validationData != null) {
-			validationData.setDataInputType("validationData");
-			slots.add(validationData);
+			DataSourceDescription validationDataC = new DataSourceDescription();
+			validationDataC.setDataInputType("validationData");
+			validationDataC.setDataOutputType(validationData.getDataOutputType());
+			validationDataC.setDataProvider(validationData.getDataProvider());
+			slots.add(validationDataC);
 		}
 		
 		return slots;

@@ -40,7 +40,7 @@ public final class Input01 {
         		new IntegerValue(1), "S"); 
 
         NewOption optionM = new NewOption(
-        		new IntegerValue(-2), "M"); 
+        		new IntegerValue(-2), "M");
         
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
@@ -49,8 +49,8 @@ public final class Input01 {
 		comAgent.addOption(optionM);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
-		//comAgent.setEvaluationMethod(new EvaluationMethod("Standart"));
-		comAgent.setEvaluationMethod(evaluationMethod);
+		comAgent.setEvaluationMethod(new EvaluationMethod("CrossValidation"));
+		//comAgent.setEvaluationMethod(evaluationMethod);
 		comAgent.setModel(new NewModel());
 
         //Labeled data labeled by our CA are the new datasource

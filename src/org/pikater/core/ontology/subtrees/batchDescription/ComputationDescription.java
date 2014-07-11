@@ -253,6 +253,7 @@ public class ComputationDescription implements Concept {
 		generateIDs();
 		
 		XStream xstream = new XStream();
+		xstream.setMode(XStream.NO_REFERENCES);
 
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;
@@ -287,7 +288,8 @@ public class ComputationDescription implements Concept {
 	public static ComputationDescription importXML(String xml) {
 
 		XStream xstream = new XStream();
-
+		xstream.setMode(XStream.NO_REFERENCES);
+		
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;
 
