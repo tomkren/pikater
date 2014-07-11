@@ -160,14 +160,39 @@ public class NewOption {
 		return newOption;
 	}
 	
-	public boolean isValid() {
-
+	public boolean isValid(boolean validateTypeBinding)
+	{
 		if (values.getValues() == null ||
 				values.getValues().isEmpty() ) {
 			return false;
 		}
 		
-		//TODO: otestovat moznosti typu
+		if(values.getValues().size() != possibleTypesRestriction.getPossibleTypes().size())
+		{
+			return false;
+		}
+		
+		//TODO: otestovat moznosti typu - like this?:
+		if(validateTypeBinding)
+		{
+			for(int i = 0; i < values.getValues().size(); i++)
+			{
+				if(!possibleTypesRestriction.getPossibleTypes().get(i).getTypes().contains(
+						values.getValues().get(i).getType()))
+				{
+					return false;
+				}
+			}
+		}
+		
+		for(Value value : values.getValues())
+		{
+			if(!value.isValid())
+			{
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
