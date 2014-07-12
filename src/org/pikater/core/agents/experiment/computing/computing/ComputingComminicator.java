@@ -51,14 +51,13 @@ public class ComputingComminicator {
 	}
 	
 	public ACLMessage sendGetDataReq(Agent_ComputingAgent agent, String fileName) {
-
 		AID[] ARFFReaders;
 		AID reader = null;
 		ACLMessage msgOut = null;
 		// Make the list of reader agents
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.ARRFF_READER);
+		sd.setType(AgentNames.ARFF_READER);
 		template.addServices(sd);
 		try {
 			GetData getData = new GetData();
@@ -101,7 +100,6 @@ public class ComputingComminicator {
 			a.setAction(getData);
 			a.setActor(agent.getAID());
 			agent.getContentManager().fillContent(msgOut, a);
-
 		} catch (FIPAException fe) {
 			agent.logError("", fe);
 			return null;
