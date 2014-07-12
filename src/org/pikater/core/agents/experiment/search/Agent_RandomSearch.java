@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
@@ -91,8 +92,7 @@ public class Agent_RandomSearch extends Agent_Search {
 	
 	private SearchSolution genRandomSolution(){
 		// go through the solutions Vector, generate random values
-		List<String> new_solution = new ArrayList<String>();
-		
+		List<ITypedValue> new_solution = new ArrayList<ITypedValue>();
 		for (SearchItem si : getSchema() ) {
 			new_solution.add(si.randomValue(rnd_gen));
 		}

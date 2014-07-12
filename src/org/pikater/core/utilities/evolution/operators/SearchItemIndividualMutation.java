@@ -1,10 +1,11 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
-import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 /**
@@ -46,21 +47,29 @@ public class SearchItemIndividualMutation implements Operator {
                          if (o1.getSchema(j) instanceof SetSItem) {
                             o1.set(j, p1.getSchema(j).randomValue(rng.getRandom()));
                          }
-                         if (o1.getSchema(j) instanceof FloatSItem) {
-                             FloatSItem fs = (FloatSItem)o1.getSchema(j);
-                             float val = Float.parseFloat(o1.get(j));
-                             val += changeWidth*(fs.getMax()-fs.getMin())*rng.nextGaussian();
-                             val = Math.min(val, fs.getMax());
-                             val = Math.max(val, fs.getMin());
-                             o1.set(j, String.valueOf(val));
-                         }
-                         if (o1.getSchema(j) instanceof IntSItem) {
-                             IntSItem fs = (IntSItem)o1.getSchema(j);
-                             int val = Integer.parseInt(o1.get(j));
-                             val += changeWidth*(fs.getMax()-fs.getMin())*rng.nextGaussian();
-                             val = Math.min(val, fs.getMax());
-                             val = Math.max(val, fs.getMin());
-                             o1.set(j, String.valueOf(val));
+                         if (o1.getSchema(j) instanceof IntervalSearchItem) {
+                             IntervalSearchItem sItem=(IntervalSearchItem)o1.getSchema(j);
+                             if (sItem.getMin() instanceof FloatValue)
+                             {
+                                 float val = ((FloatValue)o1.get(j)).getValue();
+                                 float min= ((FloatValue) sItem.getMin()).getValue();
+                                 float max= ((FloatValue) sItem.getMax()).getValue();
+                                 val += changeWidth*(max-min)*rng.nextGaussian();
+                                 val = Math.min(val, max);
+                                 val = Math.max(val, min);
+                                 o1.set(j, new FloatValue(val));
+                             }
+                             else if (sItem.getMin() instanceof IntegerValue)
+                             {
+                                 int val = ((IntegerValue)o1.get(j)).getValue();
+                                 int min= ((IntegerValue) sItem.getMin()).getValue();
+                                 int max= ((IntegerValue) sItem.getMax()).getValue();
+                                 val += changeWidth*(max-min)*rng.nextGaussian();
+                                 val = Math.min(val, max);
+                                 val = Math.max(val, min);
+                                 o1.set(j, new IntegerValue(val));
+                             }
+
                          }
                      }
                  }

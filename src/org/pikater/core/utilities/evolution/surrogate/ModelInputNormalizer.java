@@ -4,8 +4,8 @@
  */
 package org.pikater.core.utilities.evolution.surrogate;
 
-import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 
 /**
  *
@@ -13,7 +13,7 @@ import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
  */
 public abstract class ModelInputNormalizer {
     
-    public abstract double normalizeFloat(String dbl, FloatSItem schema);
-    public abstract double normalizeInt(String n, IntSItem schema);
+    public abstract double normalizeFloat(ITypedValue dbl, IntervalSearchItem schema);
+    public abstract double normalizeInt(ITypedValue n, IntervalSearchItem schema);
     
 }

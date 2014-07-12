@@ -4,15 +4,15 @@
  */
 package org.pikater.core.utilities.evolution.surrogate;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 import org.pikater.core.utilities.evolution.multiobjective.MultiobjectiveFitnessEvaluator;
-import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntSItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -63,15 +63,15 @@ public class ASMMOMAModelValueProvider implements ModelValueProvider{
         double dist = 0;
         
         for (int i = 0; i < i1.length(); i++) {
-            SearchItem s1 = i1.getSchema(i);
-            if (s1 instanceof FloatSItem) {
-                double range = ((FloatSItem)s1).getMax() - ((FloatSItem)s1).getMin();
-                dist += Math.pow((Float.parseFloat(i1.get(i)) - Float.parseFloat(i2.get(i)))/range, 2);
+            IntervalSearchItem s1 = (IntervalSearchItem)i1.getSchema(i);
+            if (s1.getMin() instanceof FloatValue) {
+                double range = ((FloatValue)s1.getMax()).getValue() - ((FloatValue)s1.getMin()).getValue();
+                dist += Math.pow(((FloatValue)i1.get(i)).getValue() - ((FloatValue)(i2.get(i))).getValue()/range, 2);
                 continue;
             }
-            if (s1 instanceof IntSItem) {
-                double range = ((IntSItem)s1).getMax() - ((IntSItem)s1).getMin();
-                dist += Math.pow((Integer.parseInt(i1.get(i)) - Integer.parseInt(i2.get(i)))/range, 2);
+            if (s1.getMin() instanceof IntegerValue) {
+                double range = ((IntegerValue)s1.getMax()).getValue() - ((IntegerValue)s1.getMin()).getValue();
+                dist += Math.pow(((IntegerValue)i1.get(i)).getValue() - ((IntegerValue)(i2.get(i))).getValue()/range, 2);
                 continue;
             }
             dist += i1.equals(i2) ? 0 : 1;

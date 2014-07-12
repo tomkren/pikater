@@ -40,4 +40,9 @@ public class Values implements Concept {
 		}
 		return new Values(valuesClone);
 	}
+
+    public int size()
+    {
+        return getValues().size();
+    }
 }

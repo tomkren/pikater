@@ -1,19 +1,19 @@
 package org.pikater.core.agents.experiment.search;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.GASearch_SearchBox;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 public class Agent_GASearch extends Agent_Search {
@@ -205,9 +205,9 @@ public class Agent_GASearch extends Agent_Search {
 	//new random options
 	private SearchSolution randomIndividual() {
 		
-		List<String> new_solution = new ArrayList<String>();
+		List<ITypedValue> new_solution = new ArrayList<>();
 		for (SearchItem si : getSchema() ) {
-			String val = si.randomValue(rnd_gen);
+			ITypedValue val = si.randomValue(rnd_gen);
 			new_solution.add(val);
 		}		
 		SearchSolution res_sol = new SearchSolution();
@@ -232,12 +232,12 @@ public class Agent_GASearch extends Agent_Search {
 	
 	//Half uniform crossover
 	private void xoverIndividuals(SearchSolution sol1, SearchSolution sol2){
-		List<String> new_solution1 = new ArrayList<String>();
-		List<String> new_solution2 = new ArrayList<String>();
+		List<ITypedValue> new_solution1 = new ArrayList<>();
+		List<ITypedValue> new_solution2 = new ArrayList<>();
 		
 		for (int i = 0; i < new_solution1.size(); i++) {
-			String val1 = (String) sol1.getValues().get(i);
-			String val2 = (String) sol2.getValues().get(i);
+			ITypedValue val1 =  sol1.getValues().get(i);
+            ITypedValue val2 =  sol2.getValues().get(i);
 			if(rnd_gen.nextBoolean()){
 				//The same...
 				new_solution1.add(val1);
@@ -255,11 +255,11 @@ public class Agent_GASearch extends Agent_Search {
 	//mutation of the option
 	private void mutateIndividual(SearchSolution sol){
 		
-		List<String> new_sol = new ArrayList<String>();
+		List<ITypedValue> new_sol = new ArrayList<>();
 		for (int i = 0; i < getSchema().size(); i++ ) {
 			
 			SearchItem si = getSchema().get(i);
-			String val = ((String) sol.getValues().get(i));
+            ITypedValue val = sol.getValues().get(i);
 			if(rnd_gen.nextDouble() < mut_prob)
 				val = si.randomValue(rnd_gen);
 			new_sol.add(val);
@@ -270,7 +270,7 @@ public class Agent_GASearch extends Agent_Search {
 	
 	//Clone options
 	private SearchSolution cloneSol(SearchSolution sol){
-		List<String> new_solution = sol.getValues();
+		List<ITypedValue> new_solution = sol.getValues();
 		SearchSolution res_sol = new SearchSolution();
 		res_sol.setValues(new_solution);
 		return res_sol;

@@ -18,8 +18,18 @@ import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.Value;
+import org.pikater.core.ontology.subtrees.newOption.Values;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
+<<<<<<< HEAD
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+=======
+import org.pikater.core.ontology.subtrees.search.searchItems.*;
+>>>>>>> KJ
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,61 +121,45 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 
 	private void addOptionToSchema(NewOption opt, List schema){
-/*
- TODO:
-		String[] values = ((String)opt.getUser_value()).split(",");
 
-		int numArgs = values.length;
-		if (!opt.getIs_a_set()) {
-			
-			// TODO !!!!! OPRAVIT !!!!! jenom hack, prosel Input2 !!!!!
-			// zkopirovat do optionu z optionu, ktere o sobe posle agent
-			// pripadne od uzivatele
-			if (opt.getData_type().equals("STRING")){
-				opt.setData_type("INT");
-				Interval range = new Interval();
-				range.setMin(new Float(3));
-				range.setMax(new Float(8));
-				opt.setRange(range);
-				opt.setNumber_of_values_to_try(3);
-			}
-			
-			if (opt.getData_type().equals("INT") || opt.getData_type().equals("MIXED")) {
-				for (int i = 0; i < numArgs; i++) {
-					if (values[i].equals("?")) {
-						IntSItem itm = new IntSItem();
-						itm.setNumber_of_values_to_try(opt.getNumber_of_values_to_try());
-						itm.setMin(opt.getRange().getMin().intValue());
-						itm.setMax(opt.getRange().getMax().intValue());
-						schema.add(itm);
-					}
-				}
-			}else if (opt.getData_type().equals("FLOAT")) {
-				for (int i = 0; i < numArgs; i++) {
-					if (values[i].equals("?")) {
-						FloatSItem itm = new FloatSItem();
-						itm.setNumber_of_values_to_try(opt.getNumber_of_values_to_try());
-						itm.setMin(opt.getRange().getMin());
-						itm.setMax(opt.getRange().getMax());
-						schema.add(itm);
-					}
-				}
-			}else if (opt.getData_type().equals("BOOLEAN")) {
-				BoolSItem itm = new BoolSItem();
-				itm.setNumber_of_values_to_try(opt.getNumber_of_values_to_try());
-				schema.add(itm);
-			}
-		}else{
-			for (int i = 0; i < numArgs; i++) {
-				if (values[i].equals("?")) {
-					SetSItem itm = new SetSItem();
-					itm.setNumber_of_values_to_try(opt.getNumber_of_values_to_try());
-					itm.setSet(opt.getSet());
-					schema.add(itm);
-				}
-			}
-		}
-*/
+        Values values = (opt.getValues());
+
+
+        // TODO !!!!! OPRAVIT !!!!! jenom hack, prosel Input2 !!!!!
+        // No values propagated so far, remove the if after options are propagated from config
+        // zkopirovat do optionu z optionu, ktere o sobe posle agent
+        // pripadne od uzivatele
+//        if (opt.getData_type().equals("STRING")){
+//            opt.setData_type("INT");
+//            Interval range = new Interval();
+//            range.setMin(new Float(3));
+//            range.setMax(new Float(8));
+//            opt.setRange(range);
+//            opt.setNumber_of_values_to_try(3);
+//        }
+		for (Value value:values.getValues()) {
+            Boolean isMutable = value.getIsMutable();
+            if (!isMutable) continue;
+
+            ITypedValue typedValue = value.getTypedValue();
+            if (typedValue instanceof QuestionMarkRange)
+            {
+                QuestionMarkRange questionMarkRange = (QuestionMarkRange) typedValue;
+                IntervalSearchItem itm = new IntervalSearchItem();
+                itm.setNumber_of_values_to_try(questionMarkRange.getCountOfValuesToTry());
+                itm.setMin(questionMarkRange.getMin());
+                itm.setMax(questionMarkRange.getMax());
+                schema.add(itm);
+            }
+            else if (typedValue instanceof QuestionMarkSet)
+            {
+                QuestionMarkSet questionMarkSet = (QuestionMarkSet) typedValue;
+                SetSItem itm = new SetSItem();
+                itm.setNumber_of_values_to_try(questionMarkSet.getCountOfValuesToTry());
+                itm.setSet(questionMarkSet.getValues());
+                schema.add(itm);
+            }
+        }
 	}
 
 
