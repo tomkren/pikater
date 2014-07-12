@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.search.Agent_GridSearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -23,7 +23,7 @@ public class GridSearch_SearchBox {
 		typeB.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
+		TypeRestriction restrictionB = new TypeRestriction();
 		restrictionB.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeB )) ));
 		
@@ -39,7 +39,7 @@ public class GridSearch_SearchBox {
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		TypeRestriction restrictionN = new TypeRestriction();
 		restrictionN.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
@@ -55,7 +55,7 @@ public class GridSearch_SearchBox {
 		typeZ.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1000.0f) ));
-		PossibleTypesRestriction restrictionZ = new PossibleTypesRestriction();
+		TypeRestriction restrictionZ = new TypeRestriction();
 		restrictionZ.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeZ )) ));
 		

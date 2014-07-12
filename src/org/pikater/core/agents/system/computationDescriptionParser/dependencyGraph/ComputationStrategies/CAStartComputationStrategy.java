@@ -105,9 +105,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		java.util.Iterator<String> sol_itr = solution.getValues().iterator();
 		
 		for (NewOption optionI : options) {
-			NewOption new_opt = optionI.cloneOption();
+			NewOption new_opt = optionI.clone();
 			if(optionI.getIsMutable())
-				new_opt.setValues(null); //TODO: fillOptWithSolution(optionI, sol_itr));
+				new_opt.setValuesWrapper(null); //TODO: fillOptWithSolution(optionI, sol_itr));
 			options_list.add(new_opt);
 		}
 		res_options.set(options_list);

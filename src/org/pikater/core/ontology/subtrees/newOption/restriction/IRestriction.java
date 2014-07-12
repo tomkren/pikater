@@ -6,6 +6,6 @@ import jade.content.Concept;
 
 public interface IRestriction extends Concept {
 
-	public Type getClassName();
+	public Type getType();
 	public boolean isValid();
 }

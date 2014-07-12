@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRandomTreeCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -25,7 +25,7 @@ public class RandomTree_CABox {
 		typeK.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(50) ));
-		PossibleTypesRestriction restrictionK = new PossibleTypesRestriction();
+		TypeRestriction restrictionK = new TypeRestriction();
 		restrictionK.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeK )) ));
 		
@@ -45,7 +45,7 @@ public class RandomTree_CABox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		TypeRestriction restrictionM = new TypeRestriction();
 		restrictionM.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
@@ -65,7 +65,7 @@ public class RandomTree_CABox {
 		typeQ.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionQ = new PossibleTypesRestriction();
+		TypeRestriction restrictionQ = new TypeRestriction();
 		restrictionQ.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeQ )) ));
 		

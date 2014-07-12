@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaNNgeCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -25,7 +25,7 @@ public class NNge_CABox {
 		typeI.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionI = new PossibleTypesRestriction();
+		TypeRestriction restrictionI = new TypeRestriction();
 		restrictionI.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeI )) ));
 		
@@ -44,7 +44,7 @@ public class NNge_CABox {
 		typeG.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(50) ));
-		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
+		TypeRestriction restrictionG = new TypeRestriction();
 		restrictionG.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeG )) ));
 		

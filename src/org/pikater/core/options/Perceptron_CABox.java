@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -27,7 +27,7 @@ public class Perceptron_CABox {
 		typeL.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
+		TypeRestriction restrictionL = new TypeRestriction();
 		restrictionL.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeL )) ));
 		
@@ -47,7 +47,7 @@ public class Perceptron_CABox {
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
-		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		TypeRestriction restrictionN = new TypeRestriction();
 		restrictionN.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
@@ -68,7 +68,7 @@ public class Perceptron_CABox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		TypeRestriction restrictionS = new TypeRestriction();
 		restrictionS.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
@@ -86,7 +86,7 @@ public class Perceptron_CABox {
 		$ C boolean
 		**/
 		Type typeC = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
+		TypeRestriction restrictionC = new TypeRestriction();
 		restrictionC.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		

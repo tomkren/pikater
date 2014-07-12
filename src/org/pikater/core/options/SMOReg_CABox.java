@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaSMOregCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
@@ -27,7 +27,7 @@ public class SMOReg_CABox  {
 		# Watch out, the value of epsilon is used with the (normalized/standardize) data
 		**/
 		Type typeS = new Type(FloatValue.class);
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		TypeRestriction restrictionS = new TypeRestriction();
 		restrictionS.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
@@ -43,7 +43,7 @@ public class SMOReg_CABox  {
 		# The complexity constant C. (default 1)
 		**/
 		Type typeC = new Type(IntegerValue.class);
-		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
+		TypeRestriction restrictionC = new TypeRestriction();
 		restrictionC.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		
@@ -60,7 +60,7 @@ public class SMOReg_CABox  {
 		# The exponent for the polynomial kernel. (default 1)
 		**/
 		Type typeE = new Type(IntegerValue.class);
-		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		TypeRestriction restrictionE = new TypeRestriction();
 		restrictionE.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
@@ -77,7 +77,7 @@ public class SMOReg_CABox  {
 		# Gamma for the RBF kernel. (default 0.01)
 		**/
 		Type typeG = new Type(FloatValue.class);
-		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
+		TypeRestriction restrictionG = new TypeRestriction();
 		restrictionG.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeG )) ));
 		
@@ -97,7 +97,7 @@ public class SMOReg_CABox  {
 				new SetRestriction(
 						new ArrayList<ITypedValue>(
 								Arrays.asList( new IntegerValue(0), new IntegerValue(1), new IntegerValue(2) )) ));
-		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		TypeRestriction restrictionN = new TypeRestriction();
 		restrictionN.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
@@ -113,7 +113,7 @@ public class SMOReg_CABox  {
 		$ F boolean
 		**/
 		Type typeF = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionF = new PossibleTypesRestriction();
+		TypeRestriction restrictionF = new TypeRestriction();
 		restrictionF.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeF )) ));
 		
@@ -129,7 +129,7 @@ public class SMOReg_CABox  {
 		$ O boolean
 		**/
 		Type typeO = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionO = new PossibleTypesRestriction();
+		TypeRestriction restrictionO = new TypeRestriction();
 		restrictionO.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeO )) ));
 		
@@ -145,7 +145,7 @@ public class SMOReg_CABox  {
 		$ R boolean
 		**/
 		Type typeR = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
+		TypeRestriction restrictionR = new TypeRestriction();
 		restrictionR.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeR )) ));
 		
@@ -165,7 +165,7 @@ public class SMOReg_CABox  {
 		typeA.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionA = new PossibleTypesRestriction();
+		TypeRestriction restrictionA = new TypeRestriction();
 		restrictionA.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeA )) ));
 		
@@ -182,7 +182,7 @@ public class SMOReg_CABox  {
 		# Sets the epsilon for round-off error. (default 1.0e-12)
 		**/
 		Type typeP = new Type(FloatValue.class);
-		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
+		TypeRestriction restrictionP = new TypeRestriction();
 		restrictionP.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeP )) ));
 		
@@ -199,7 +199,7 @@ public class SMOReg_CABox  {
 		# Sets the tolerance parameter. (default 1.0e-3)
 		**/
 		Type typeT = new Type(FloatValue.class);
-		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
+		TypeRestriction restrictionT = new TypeRestriction();
 		restrictionT.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeT )) ));
 		

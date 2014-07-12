@@ -10,7 +10,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
@@ -39,7 +39,7 @@ public class MultiLayerPerceptron_CABox {
 		typeL.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.001f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
+		TypeRestriction restrictionL = new TypeRestriction();
 		restrictionL.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeL )) ));
 		
@@ -60,7 +60,7 @@ public class MultiLayerPerceptron_CABox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(0.9f) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		TypeRestriction restrictionM = new TypeRestriction();
 		restrictionM.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
@@ -80,7 +80,7 @@ public class MultiLayerPerceptron_CABox {
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10000) ));
-		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
+		TypeRestriction restrictionN = new TypeRestriction();
 		restrictionN.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeN )) ));
 		
@@ -102,7 +102,7 @@ public class MultiLayerPerceptron_CABox {
 		typeV.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionV = new PossibleTypesRestriction();
+		TypeRestriction restrictionV = new TypeRestriction();
 		restrictionV.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeV )) ));
 		
@@ -123,7 +123,7 @@ public class MultiLayerPerceptron_CABox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		TypeRestriction restrictionS = new TypeRestriction();
 		restrictionV.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
@@ -145,7 +145,7 @@ public class MultiLayerPerceptron_CABox {
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(50) ));
-		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		TypeRestriction restrictionE = new TypeRestriction();
 		restrictionE.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
@@ -162,7 +162,7 @@ public class MultiLayerPerceptron_CABox {
 		$ D boolean
 		**/
 		Type typeD = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionD = new PossibleTypesRestriction();
+		TypeRestriction restrictionD = new TypeRestriction();
 		restrictionD.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeD )) ));
 		
@@ -179,7 +179,7 @@ public class MultiLayerPerceptron_CABox {
 		$ I boolean
 		**/
 		Type typeI = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionI = new PossibleTypesRestriction();
+		TypeRestriction restrictionI = new TypeRestriction();
 		restrictionI.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeI )) ));
 		
@@ -197,7 +197,7 @@ public class MultiLayerPerceptron_CABox {
 		$ G boolean
 		**/
 		Type typeG = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
+		TypeRestriction restrictionG = new TypeRestriction();
 		restrictionG.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeG )) ));
 		
@@ -229,7 +229,7 @@ public class MultiLayerPerceptron_CABox {
 		typeHs.setSetRestriction(
 				new SetRestriction(list) );
 				
-		PossibleTypesRestriction restrictionH = new PossibleTypesRestriction();
+		TypeRestriction restrictionH = new TypeRestriction();
 		restrictionH.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeHn, typeHs )) ));
 		
@@ -247,7 +247,7 @@ public class MultiLayerPerceptron_CABox {
 		$ B boolean
         ***/		
 		Type typeB = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
+		TypeRestriction restrictionB = new TypeRestriction();
 		restrictionB.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeB )) ));
 		
@@ -266,7 +266,7 @@ public class MultiLayerPerceptron_CABox {
 		$ C boolean
 		**/
 		Type typeC = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
+		TypeRestriction restrictionC = new TypeRestriction();
 		restrictionC.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		

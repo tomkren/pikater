@@ -43,7 +43,7 @@ public class SetRestriction implements IRestriction {
 	}
 
 	@Override
-	public Type getClassName() {
+	public Type getType() {
 
 		ITypedValue value0 = values.get(0);
 		return new Type(value0.getClass());
@@ -74,18 +74,8 @@ public class SetRestriction implements IRestriction {
 		return true;
 	}
 
-	public boolean contains(ITypedValue value) {
-
-		for (ITypedValue valueI : values) {
-			if (valueI.equals(value)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
-	public SetRestriction cloneSetRestriction() {
+	@Override
+	public SetRestriction clone() {
 		
 		SetRestriction setRest = new SetRestriction();
 		for (ITypedValue valueI : values) {

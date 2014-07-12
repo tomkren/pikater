@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.search.Agent_GASearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -22,7 +22,7 @@ public class GASearch_SearchBox {
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		TypeRestriction restrictionE = new TypeRestriction();
 		restrictionE.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
@@ -38,7 +38,7 @@ public class GASearch_SearchBox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		TypeRestriction restrictionM = new TypeRestriction();
 		restrictionM.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		
@@ -54,7 +54,7 @@ public class GASearch_SearchBox {
 		typeT.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
+		TypeRestriction restrictionT = new TypeRestriction();
 		restrictionT.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeT )) ));
 		
@@ -70,7 +70,7 @@ public class GASearch_SearchBox {
 		typeX.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionX = new PossibleTypesRestriction();
+		TypeRestriction restrictionX = new TypeRestriction();
 		restrictionX.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeX )) ));
 		
@@ -86,7 +86,7 @@ public class GASearch_SearchBox {
 		typeP.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
+		TypeRestriction restrictionP = new TypeRestriction();
 		restrictionP.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeP )) ));
 		
@@ -102,7 +102,7 @@ public class GASearch_SearchBox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		TypeRestriction restrictionS = new TypeRestriction();
 		restrictionS.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		

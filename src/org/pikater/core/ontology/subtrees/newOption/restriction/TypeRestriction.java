@@ -6,7 +6,7 @@ import java.util.List;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
 
-public class PossibleTypesRestriction implements IRestriction {
+public class TypeRestriction implements IRestriction {
 
 	/**
 	 * 
@@ -16,8 +16,8 @@ public class PossibleTypesRestriction implements IRestriction {
 	private List<Types> possibleTypes;
 	
 	
-	public PossibleTypesRestriction() {}
-	public PossibleTypesRestriction(List<Types> possibleTypes) {
+	public TypeRestriction() {}
+	public TypeRestriction(List<Types> possibleTypes) {
 		this.possibleTypes = possibleTypes;
 	}
 
@@ -57,7 +57,7 @@ public class PossibleTypesRestriction implements IRestriction {
 	}
 	
 	@Override
-	public Type getClassName() {
+	public Type getType() {
 
 		if (possibleTypes == null || possibleTypes.isEmpty()) {
 			return null;
@@ -86,13 +86,13 @@ public class PossibleTypesRestriction implements IRestriction {
 		return true;
 	}
 
-	public PossibleTypesRestriction clonePossibleTypesRestriction() {
+	@Override
+	public TypeRestriction clone() {
 		
-		PossibleTypesRestriction ptr = new PossibleTypesRestriction();
+		TypeRestriction ptr = new TypeRestriction();
 		for (Types typesI : possibleTypes) {
 			ptr.addPossibleValues(typesI.cloneTypes());
 		}
 		return ptr;
 	}
-
 }

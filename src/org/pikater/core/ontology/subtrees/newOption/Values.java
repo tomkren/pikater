@@ -32,11 +32,12 @@ public class Values implements Concept {
 		this.values.add(value);
 	}
 	
-	public Values cloneValues() {
+	@Override
+	public Values clone() {
 		
 		List<Value> valuesClone = new ArrayList<Value>();
 		for (Value valueI : values) {
-			valuesClone.add(valueI.cloneValue());
+			valuesClone.add(valueI.clone());
 		}
 		return new Values(valuesClone);
 	}

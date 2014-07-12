@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -40,7 +40,7 @@ public class LinearRegression_CABox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(2) ));
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		TypeRestriction restrictionS = new TypeRestriction();
 		restrictionS.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
@@ -53,7 +53,7 @@ public class LinearRegression_CABox {
 		
 		
 		Type typeC = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
+		TypeRestriction restrictionC = new TypeRestriction();
 		restrictionC.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeC )) ));
 		
@@ -69,7 +69,7 @@ public class LinearRegression_CABox {
 		typeR.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0000000001f), new FloatValue(0.0001f) ));
-		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
+		TypeRestriction restrictionR = new TypeRestriction();
 		restrictionR.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeR )) ));
 		

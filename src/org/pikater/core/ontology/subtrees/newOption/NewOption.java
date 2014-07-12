@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.newOption;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
@@ -19,27 +19,28 @@ public class NewOption {
 	private Values values;
 	private boolean isMutable = false;
 	
-	private PossibleTypesRestriction possibleTypesRestriction;
+	private TypeRestriction possibleTypesRestriction;
 	
 	
-	public NewOption() {}
+	public NewOption() {
+		this.values = new Values();
+	}
 	public NewOption(ITypedValue value, String name) {
-		
-		this.addValue(new Value(value));
+		this.values = new Values();
+		this.values.addValue(new Value(value));
 		this.setName(name);
 	}
 	public NewOption(ITypedValue defaultValue, Type type, String name) {
-		
-		this.addValue( new Value(null, defaultValue, type) );
+		this.values = new Values();
+		this.values.addValue( new Value(null, defaultValue, type) );
 		this.setName(name);
 	}
 	public NewOption(List<ITypedValue> values, String name) {
-		
+		this.values = new Values();
 		for (ITypedValue valueI : values) {
-			this.addValue( new Value(valueI) );
+			this.getValuesWrapper().addValue( new Value(valueI) );
 		}
 		this.setName(name);
-	
 	}
 
 	public String getName() {
@@ -56,17 +57,14 @@ public class NewOption {
 		this.description = description;
 	}
 
-	public Values getValues() {
+	public Values getValuesWrapper() {
 		return values;
 	}
-	public void setValues(Values values) {
+	public void setValuesWrapper(Values values) {
 		this.values = values;
 	}
 	public void resetValues(List<Value> values) {
 		this.values.setValues(values);
-	}
-	public List<Value> returnValues() {
-		return this.values.getValues();
 	}
 	
 	public boolean isEmpty() {
@@ -74,12 +72,6 @@ public class NewOption {
 	}
 	public boolean isSingleValue() {
 		return values.getValues().size() == 1;
-	}
-	public void addValue(Value value) {
-		if (this.values == null) {
-			this.values = new Values();
-		}
-		values.addValue(value);
 	}
 	
 	public boolean getIsMutable() {
@@ -89,18 +81,15 @@ public class NewOption {
 		this.isMutable = isMutable;
 	}
 	
-	public PossibleTypesRestriction getPossibleTypesRestriction() {
+	public TypeRestriction getPossibleTypesRestriction() {
 		return possibleTypesRestriction;
 	}
 	public void setPossibleTypesRestriction(
-			PossibleTypesRestriction possibleTypesRestriction) {
+			TypeRestriction possibleTypesRestriction) {
 		this.possibleTypesRestriction = possibleTypesRestriction;
 	}
 	
 	public Value convertToSingleValue() {
-		if (this.values == null) {
-			throw new IllegalStateException("Field values can't be null");
-		}
 		
 		List<Value> valueList = this.values.getValues();
 		if (valueList.size() == 1) {
@@ -144,7 +133,8 @@ public class NewOption {
 		//TODO:
 	}
 
-	public NewOption cloneOption() {
+	@Override
+	public NewOption clone() {
 		
 		NewOption newOption = new NewOption();
 		newOption.setName(getName());
@@ -152,10 +142,10 @@ public class NewOption {
 		newOption.setIsMutable(this.getIsMutable());
 		
 		for (Value valueI : values.getValues()) {
-			newOption.addValue(valueI.cloneValue());
+			newOption.getValuesWrapper().addValue(valueI.clone());
 		}
 		newOption.setPossibleTypesRestriction(
-				possibleTypesRestriction.clonePossibleTypesRestriction());
+				possibleTypesRestriction.clone());
 		
 		return newOption;
 	}

@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaNaiveBayesCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
@@ -21,7 +21,7 @@ public class NaiveBayes_CABox {
 		$ K boolean
 		**/
 		Type typeK = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionK = new PossibleTypesRestriction();
+		TypeRestriction restrictionK = new TypeRestriction();
 		restrictionK.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeK )) ));
 		
@@ -38,7 +38,7 @@ public class NaiveBayes_CABox {
 		$ D boolean
 		**/
 		Type typeD = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionD = new PossibleTypesRestriction();
+		TypeRestriction restrictionD = new TypeRestriction();
 		restrictionD.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeD )) ));
 		

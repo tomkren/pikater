@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -22,7 +22,7 @@ public class RandomSearch_SearchBox {
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(1.0) ));
-		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
+		TypeRestriction restrictionE = new TypeRestriction();
 		restrictionE.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeE )) ));
 		
@@ -38,7 +38,7 @@ public class RandomSearch_SearchBox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		TypeRestriction restrictionM = new TypeRestriction();
 		restrictionM.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		

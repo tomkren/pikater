@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -26,7 +26,7 @@ public class RBFNetwork_CABox {
 		typeB.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(2), new IntegerValue(1000) ));
-		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
+		TypeRestriction restrictionB = new TypeRestriction();
 		restrictionB.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeB )) ));
 		
@@ -46,7 +46,7 @@ public class RBFNetwork_CABox {
 		typeW.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.01f), new FloatValue(2.0f) ));
-		PossibleTypesRestriction restrictionW = new PossibleTypesRestriction();
+		TypeRestriction restrictionW = new TypeRestriction();
 		restrictionW.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeW )) ));
 		
@@ -66,7 +66,7 @@ public class RBFNetwork_CABox {
 		typeR.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.000000001f), new FloatValue(10.0f) ));
-		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
+		TypeRestriction restrictionR = new TypeRestriction();
 		restrictionR.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeR )) ));
 		
@@ -87,7 +87,7 @@ public class RBFNetwork_CABox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
+		TypeRestriction restrictionS = new TypeRestriction();
 		restrictionS.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeS )) ));
 		
@@ -107,7 +107,7 @@ public class RBFNetwork_CABox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(-1), new IntegerValue(50) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
+		TypeRestriction restrictionM = new TypeRestriction();
 		restrictionM.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeM )) ));
 		

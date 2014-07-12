@@ -7,7 +7,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaOneRCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.type.Types;
@@ -26,7 +26,7 @@ public class OneR_CABox {
 		typeB.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
+		TypeRestriction restrictionB = new TypeRestriction();
 		restrictionB.addPossibleValues( new Types(
 				new ArrayList<Type>(Arrays.asList( typeB )) ));
 		

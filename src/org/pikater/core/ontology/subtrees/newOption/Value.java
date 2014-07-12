@@ -33,7 +33,7 @@ public class Value implements IRestriction {
 	}
 
 	public Type getType() {
-		return type;
+		return this.type;
 	}
 	public void setType(Type type) {
 		this.type = type;
@@ -53,11 +53,7 @@ public class Value implements IRestriction {
 		this.defaultValue = defaultValue;
 	}
 
-	@Override
-	public Type getClassName() {
-		return this.type;
-	}
-
+	
 	@Override
 	public boolean isValid() {
 		
@@ -76,10 +72,11 @@ public class Value implements IRestriction {
 		return valueOk && defaultValueOk && typeOk;
 	}
 
-	public Value cloneValue() {
+	@Override
+	public Value clone() {
 		
 		Value valueNew = new Value();
-		valueNew.setType(type.cloneType());
+		valueNew.setType(type.clone());
 		valueNew.setTypedValue(typedValue.cloneValue());
 		valueNew.setDefaultValue(defaultValue.cloneValue());
 		

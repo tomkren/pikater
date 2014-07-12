@@ -4,39 +4,40 @@ import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 
-public class RangeRestriction implements IRestriction {
+public class RangeRestriction implements IRestriction
+{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9196397486608350955L;
 
-	private ITypedValue minValeu;
-	private ITypedValue maxValeu;
+	private ITypedValue minValue;
+	private ITypedValue maxValue;
 	
 	public RangeRestriction() {}
-	public RangeRestriction(ITypedValue minValeu, ITypedValue maxValeu) {
-		this.minValeu = minValeu;
-		this.maxValeu = maxValeu;
+	public RangeRestriction(ITypedValue minValue, ITypedValue maxValue) {
+		this.minValue = minValue;
+		this.maxValue = maxValue;
 	}
 
-	public ITypedValue getMinValeu() {
-		return minValeu;
+	public ITypedValue getMinValue() {
+		return minValue;
 	}
-	public void setMinValeu(ITypedValue minValeu) {
-		this.minValeu = minValeu;
+	public void setMinValue(ITypedValue minValue) {
+		this.minValue = minValue;
 	}
 
-	public ITypedValue getMaxValeu() {
-		return maxValeu;
+	public ITypedValue getMaxValue() {
+		return maxValue;
 	}
-	public void setMaxValeu(ITypedValue maxValeu) {
-		this.maxValeu = maxValeu;
+	public void setMaxValue(ITypedValue maxValue) {
+		this.maxValue = maxValue;
 	}
 
 	@Override
-	public Type getClassName() {
-		return new Type(minValeu.getClass());
+	public Type getType() {
+		return new Type(minValue.getClass());
 	}
 
 	@Override
@@ -48,13 +49,13 @@ public class RangeRestriction implements IRestriction {
 	public boolean contains(ITypedValue value) {
 		
 		if (value == null ||
-				minValeu.getClass() != value.getClass() ) {
+				minValue.getClass() != value.getClass() ) {
 			return false;
 		}
 		
 		if (value instanceof IntegerValue) {
-			int min = ((IntegerValue)minValeu).getValue();
-			int max = ((IntegerValue)maxValeu).getValue();
+			int min = ((IntegerValue)minValue).getValue();
+			int max = ((IntegerValue)maxValue).getValue();
 			
 			int val = ((IntegerValue)value).getValue();
 			
@@ -68,12 +69,12 @@ public class RangeRestriction implements IRestriction {
 		return false;
 	}
 	
-	public RangeRestriction cloneRangeRestriction() {
+	@Override
+	public RangeRestriction clone() {
 		
 		RangeRestriction rangeNew = new RangeRestriction();
-		rangeNew.setMinValeu(minValeu.cloneValue());
-		rangeNew.setMaxValeu(maxValeu.cloneValue());
+		rangeNew.setMinValue(minValue.cloneValue());
+		rangeNew.setMaxValue(maxValue.cloneValue());
 		return rangeNew;
 	}
-
 }

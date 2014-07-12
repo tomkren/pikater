@@ -38,12 +38,10 @@ public class Type implements IRestriction {
 		this.rangeRestriction = rangeRestriction;
 		this.setRestriction = setRestriction;
 	}
-
-	public void setClassName(String className) {
-		this.className = className;
-	}
-	public void setClassName(Class<?> classs) {
-		this.className = classs.getName();
+	
+	public String getClassName()
+	{
+		return className;
 	}
 
 	public RangeRestriction getRangeRestriction() {
@@ -69,20 +67,20 @@ public class Type implements IRestriction {
 	}
 
 	@Override
-	public Type getClassName() {
+	public Type getType() {
 
 		return new Type(className);
 	}
 
-	public Type cloneType() {
+	@Override
+	public Type clone() {
 		
-		Type typeNew = new Type();
-		typeNew.setClassName(className);
+		Type typeNew = new Type(className);
 		if (rangeRestriction != null) {
-			typeNew.setRangeRestriction(rangeRestriction.cloneRangeRestriction());
+			typeNew.setRangeRestriction(rangeRestriction.clone());
 		}
 		if (setRestriction != null) {
-			typeNew.setSetRestriction(setRestriction.cloneSetRestriction());
+			typeNew.setSetRestriction(setRestriction.clone());
 		}
 		return typeNew;
 	}

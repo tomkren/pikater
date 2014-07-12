@@ -171,7 +171,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         for (NewOption optionI : optionSamples) {
 
         	String computedDatatype = optionI.computeDataType();
-        	NewOption newOpt = optionI.cloneOption();        	
+        	NewOption newOpt = optionI.clone();        	
             
             
         	//ignore boolean and set options for now, set their value to the one of the best agent on closest file
@@ -228,8 +228,8 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	Type type = types.getTypes().get(0);
 	            	
 	            	RangeRestriction rangeRestriction = type.getRangeRestriction();
-	            	ITypedValue minValue = rangeRestriction.getMinValeu();
-	            	ITypedValue maxValue = rangeRestriction.getMaxValeu();
+	            	ITypedValue minValue = rangeRestriction.getMinValue();
+	            	ITypedValue maxValue = rangeRestriction.getMaxValue();
 	            	
 	            	float finalMin = 0;
 	            	float finalMax = 0;
@@ -253,7 +253,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            			new FloatValue(finalMin),
 	            			new FloatValue(finalMax));
 	            	
-	                newOpt.addValue(new Value(questionMark));
+	                newOpt.getValuesWrapper().addValue(new Value(questionMark));
 	                newOpt.setIsMutable(true);
 	            }
 	            else {
@@ -262,11 +262,11 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             		
 	                if (iValueI instanceof FloatValue) {
 	                	float valueFloat = (float) avg;
-	                    newOpt.addValue(new Value(new FloatValue(valueFloat)));
+	                    newOpt.getValuesWrapper().addValue(new Value(new FloatValue(valueFloat)));
 	                }
 	                if (iValueI instanceof IntegerValue) {
 	                	int valueInteger = (int) avg;
-	                	newOpt.addValue(new Value(new IntegerValue(valueInteger)));
+	                	newOpt.getValuesWrapper().addValue(new Value(new IntegerValue(valueInteger)));
 	                }
 	            }
         	} else {
@@ -276,7 +276,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                 	continue;
                 }
                 NewOption option0 = bestAgent.getOptionByName(optionI.getName());
-                newOpt.setValues(option0.getValues().cloneValues());   
+                newOpt.setValuesWrapper(option0.getValuesWrapper().clone());   
         	}
 
             options.add(newOpt);
