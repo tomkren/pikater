@@ -4,10 +4,7 @@
         <agent type="org.pikater.core.agents.system.Agent_Planner" name="Planner">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_Manager" name="Manager">
-            <arguments>
-                <argument key="no_xml_output" value="true"/>
-            </arguments>
+        <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_DataManager" name="DataManager">
@@ -15,20 +12,19 @@
 
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent">
         </agent>
-
+<!--
+        <agent type="org.pikater.core.agents.system.Agent_AgentInfoManager" name="AgentInfoManager">
+        </agent>
+-->
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
-                <argument key="sniffed" value="Manager" sendOnlyValue="true" />
+                <argument key="sniffed" value="Planner" sendOnlyValue="true" />
             </arguments>
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_GuiAgentsCommunicator" name="GuiAgentsCommunicator">
-        </agent>
 
-        <!--
-        <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara">
+        <agent type="tests.pikater.core.agents.system.planner.Agent_PlannerTester" name="PlannerTester">
         </agent>
-        -->
 
     </agents>
 </configuration>

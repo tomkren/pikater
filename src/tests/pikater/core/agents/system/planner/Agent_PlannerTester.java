@@ -1,4 +1,4 @@
-package tests.pikater.core.agents.system;
+package tests.pikater.core.agents.system.planner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,21 +9,25 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.domain.FIPAException;
+import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
+import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.type.Type;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
-import org.pikater.core.options.RBFNetwork_CABox;
 
-public class PlannerTester extends PikaterAgent {
+public class Agent_PlannerTester extends PikaterAgent {
 
     /**
 	 * 
@@ -42,6 +46,11 @@ public class PlannerTester extends PikaterAgent {
     protected void setup() {
         initDefault();
 
+		registerWithDF("PlannerTester");
+		
+		// waiting to start ManagerAgent
+		doWait(6000);
+		
         sendTask();
         
         log("PlannerTester ending");
@@ -52,9 +61,16 @@ public class PlannerTester extends PikaterAgent {
     	
         AID receiver = new AID(AgentNames.PLANNER, false);
     	
+		NewOption optionB = new NewOption(
+				new IntegerValue(3),
+				"B" );
+		List<NewOption> options = new ArrayList<NewOption>();
+		options.add(optionB);
+		
     	Agent agent = new Agent();
-    	agent.setName(RBFNetwork_CABox.class.getSimpleName());
-    	agent.setType(RBFNetwork_CABox.class.getName());
+    	agent.setName(Agent_WekaRBFNetworkCA.class.getSimpleName());
+    	agent.setType(Agent_WekaRBFNetworkCA.class.getName());
+        agent.setOptions(options); 
     	//agent.setOptions(options); //S,M
     	
     	Data data = new Data();
@@ -79,6 +95,7 @@ public class PlannerTester extends PikaterAgent {
         try {
         	
             ACLMessage request = makeActionRequest(receiver, executeTask);
+            //send(request);
             log("Sending test request to Planner");
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
             if (reply == null)
@@ -101,7 +118,9 @@ public class PlannerTester extends PikaterAgent {
     	
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.addReceiver(receiver);
+        msg.addReplyTo(new AID("PlannerTester", false));
         msg.setLanguage(getCodec().getName());
+        msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
         msg.setOntology(ontology.getName());
         getContentManager().fillContent(msg, new Action(receiver, executeTask));
         return msg;
