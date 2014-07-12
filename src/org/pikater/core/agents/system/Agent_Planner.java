@@ -186,7 +186,7 @@ public class Agent_Planner extends PikaterAgent {
 			logError(e1.getMessage(), e1);
 		}
 		
-		Task finishedTask = (Task) result.getValue();//.getAction();
+		Task finishedTask = (Task) result.getValue();
 
 		CPUCore cpuCore = new CPUCore(finishedTaskMsg.getSender(),
 				finishedTask.getCpuCoreID());

@@ -33,9 +33,7 @@ import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
-import org.pikater.core.ontology.subtrees.task.FinishedTask;
 
 import com.google.common.io.Files;
 
@@ -107,9 +105,9 @@ public class ComputingAction extends FSMBehaviour {
 						.getAction();
 				return true;
 			} catch (CodecException ce) {
-				agent.logError("", ce);
+				agent.logError(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError("", oe);
+				agent.logError(oe.getMessage(), oe);
 			}
 		} else {
 			block();
@@ -142,11 +140,11 @@ public class ComputingAction extends FSMBehaviour {
 				}
 			}
 		} catch (UngroundedException e) {
-			agent.logError("", e);
+			agent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError("", e);
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError("", e);
+			agent.logError(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -166,6 +164,14 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			public void action() {
+/*				
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+*/				
 				resultMsg = null;
 				executeAction = null;
 				if (!getRequest()) {
@@ -193,7 +199,8 @@ public class ComputingAction extends FSMBehaviour {
 				mode = data.getMode();
 
 				trainFn = data.getTrainFileName();
-				AchieveREInitiator getTrainBehaviour = (AchieveREInitiator) ((ComputingAction) parent).getState(GETTRAINDATA_STATE);
+				AchieveREInitiator getTrainBehaviour = (AchieveREInitiator)
+						((ComputingAction) parent).getState(GETTRAINDATA_STATE);
 
 				if (!trainFn.equals(agent.trainFileName)) {
 					
@@ -208,8 +215,9 @@ public class ComputingAction extends FSMBehaviour {
 
 				if (!mode.equals("train_only")) {
 					testFn = data.getTestFileName();
-					AchieveREInitiator getTestBehaviour = (AchieveREInitiator) ((ComputingAction) parent)
-							.getState(GETTESTDATA_STATE);
+					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
+							((ComputingAction) parent).getState(GETTESTDATA_STATE);
+					
 					if (!testFn.equals(agent.testFileName)) {
 						
 						ComputingComminicator communicator = new ComputingComminicator();
@@ -224,8 +232,9 @@ public class ComputingAction extends FSMBehaviour {
 
 				if (data.getLabelFileName() != null) {
 					labelFn = data.getLabelFileName();
-					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator) ((ComputingAction) parent)
-							.getState(GETLABELDATA_STATE);
+					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator)
+							((ComputingAction) parent).getState(GETLABELDATA_STATE);
+					
 					if (!labelFn.equals(agent.labelFileName)) {
 						
 						ComputingComminicator communicator = new ComputingComminicator();
@@ -443,7 +452,7 @@ public class ComputingAction extends FSMBehaviour {
 					failureMsg(e.getMessage());
 					agent.log(agent.getLocalName() + ": Error: "
 							+ e.getMessage() + ".");
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				}
 			}
 
@@ -476,13 +485,13 @@ public class ComputingAction extends FSMBehaviour {
 							eval.setObjectFilename(objectFilename);
 
 						} catch (CodecException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						} catch (OntologyException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						} catch (IOException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						} catch (FIPAException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						}
 					}
 
@@ -492,7 +501,7 @@ public class ComputingAction extends FSMBehaviour {
 						try {
 							eval.setObject(agent.getAgentObject());
 						} catch (IOException e1) {
-							agent.logError("", e1);
+							agent.logError(e1.getMessage(), e1);
 						}
 					}
 				}
@@ -528,11 +537,11 @@ public class ComputingAction extends FSMBehaviour {
 					agent.getContentManager().fillContent(resultMsg, result);
 
 				} catch (UngroundedException e) {
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				} catch (CodecException e) {
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				} catch (OntologyException e) {
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				}
 
 				if (agent.currentTask.getGetResults() != null

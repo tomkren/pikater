@@ -32,9 +32,9 @@ import org.pikater.core.ontology.subtrees.task.Task;
 public class ComputingComminicator {
 
 	public ACLMessage executeTask(Agent_ComputingAgent agent, ACLMessage req) {
-		ACLMessage result_msg = req.createReply();
+		ACLMessage resultMsg = req.createReply();
 		if (agent.acceptTask()) {
-			result_msg.setPerformative(ACLMessage.AGREE);
+			resultMsg.setPerformative(ACLMessage.AGREE);
 			agent.taskFIFO.addLast(req);
 
 			if (agent.taskFIFO.size() == 1) {
@@ -44,10 +44,10 @@ public class ComputingComminicator {
 			}
 
 		} else {
-			result_msg.setPerformative(ACLMessage.REFUSE);
-			result_msg.setContent("(Computing agent overloaded)");
+			resultMsg.setPerformative(ACLMessage.REFUSE);
+			resultMsg.setContent("(Computing agent overloaded)");
 		}
-		return result_msg;
+		return resultMsg;
 	}
 	
 	public ACLMessage sendGetDataReq(Agent_ComputingAgent agent, String fileName) {

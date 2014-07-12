@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkSet;
 
 import com.thoughtworks.xstream.XStream;
 
+
 public class NewOption {
 
 	private String name;
