@@ -7,79 +7,79 @@ import org.pikater.core.agents.experiment.search.Agent_SimulatedAnnealing;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 
 public class SimulatedAnnealing_SearchBox {
 
 	public static AgentInfo get() {
 
-		Type typeE = new Type(DoubleValue.class);
+		ValueType typeE = new ValueType(DoubleValue.class);
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(1.0) ));
-		TypeRestriction restrictionE = new TypeRestriction();
-		restrictionE.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeE )) ));
+		TypeRestrictions restrictionE = new TypeRestrictions();
+		restrictionE.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new DoubleValue(0.1),
-				new Type(DoubleValue.class),
+				new ValueType(DoubleValue.class),
 				"E" );
 		optionE.setDescription("Set minimum number of instances per leaf");
-		optionE.setPossibleTypesRestriction(restrictionE);
+		optionE.setTypeRestrictions(restrictionE);
 		
 		
-		Type typeM = new Type(IntegerValue.class);
+		ValueType typeM = new ValueType(IntegerValue.class);
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000)) );
-		TypeRestriction restrictionM = new TypeRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(50),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"M" );
 		optionM.setDescription("M");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 		
 
-		Type typeT = new Type(DoubleValue.class);
+		ValueType typeT = new ValueType(DoubleValue.class);
 		typeT.setRangeRestriction(
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(100.0) ));
-		TypeRestriction restrictionT = new TypeRestriction();
-		restrictionT.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeT )) ));
+		TypeRestrictions restrictionT = new TypeRestrictions();
+		restrictionT.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeT )) ));
 		
 		NewOption optionT = new NewOption(
 				new DoubleValue(1.0),
-				new Type(DoubleValue.class),
+				new ValueType(DoubleValue.class),
 				"T" );
 		optionT.setDescription("T");
-		optionT.setPossibleTypesRestriction(restrictionT);
+		optionT.setTypeRestrictions(restrictionT);
 		
 		
-		Type typeS = new Type(DoubleValue.class);
+		ValueType typeS = new ValueType(DoubleValue.class);
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(1.0) ));
-		TypeRestriction restrictionS = new TypeRestriction();
-		restrictionS.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeS )) ));
+		TypeRestrictions restrictionS = new TypeRestrictions();
+		restrictionS.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new DoubleValue(0.5),
-				new Type(DoubleValue.class),
+				new ValueType(DoubleValue.class),
 				"S" );
 		optionS.setDescription("T");
-		optionS.setPossibleTypesRestriction(restrictionS);
+		optionS.setTypeRestrictions(restrictionS);
 		
 		
 		AgentInfo agentInfo = new AgentInfo();

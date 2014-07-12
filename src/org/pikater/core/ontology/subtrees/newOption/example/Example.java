@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.NullValue;
 
-public class Exmple {
+public class Example {
 
 	public static NewOption getU() {
 		
@@ -44,7 +44,7 @@ public class Exmple {
 			optionM.setList( new OptionList() );
 		 */
 
-		Type typeM = new Type(
+		ValueType typeM = new ValueType(
 				IntegerValue.class,
 				new RangeRestriction(new IntegerValue(1), new IntegerValue(10))
 				);
@@ -83,7 +83,7 @@ public class Exmple {
 		values.add(new FloatValue(0.3f));
 		values.add(new FloatValue(0.4f));
 		
-		Type typeC = new Type(
+		ValueType typeC = new ValueType(
 				FloatValue.class,
 				new SetRestriction(values)
 				);

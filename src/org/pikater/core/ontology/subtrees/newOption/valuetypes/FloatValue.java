@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.typedValue;
+package org.pikater.core.ontology.subtrees.newOption.valuetypes;
 
 public class FloatValue implements ITypedValue {
 
@@ -34,5 +34,11 @@ public class FloatValue implements ITypedValue {
 	public String exportToWeka() {
 		
 		return String.valueOf(value);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Float";
 	}
 }

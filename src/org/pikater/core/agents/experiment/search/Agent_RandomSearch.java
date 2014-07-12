@@ -6,10 +6,10 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.RandomSearch_SearchBox;
@@ -54,7 +54,7 @@ public class Agent_RandomSearch extends Agent_Search {
 		maximum_tries= 10;
 		
 		// find maximum tries in Options
-		Options options = new Options(getSearchOptions());
+		OptionList options = new OptionList(getSearchOptions());
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.getOptionByName("E");

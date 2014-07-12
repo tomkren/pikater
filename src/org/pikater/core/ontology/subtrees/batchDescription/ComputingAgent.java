@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.StringValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 
@@ -143,7 +143,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		
-		Options optionsOntol = new Options(options);
+		OptionList optionsOntol = new OptionList(options);
 
 		//import agentType
 		NewOption optAgentType = optionsOntol.getOptionByName("agentType");

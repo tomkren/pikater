@@ -7,10 +7,10 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.EASearch_SearchBox;
@@ -319,7 +319,7 @@ public class Agent_EASearch extends Agent_Search {
         maxGeneration = 5;
         goalError = 0.02;
 
-        Options options = new Options(getSearchOptions());
+        OptionList options = new OptionList(getSearchOptions());
         
         if (options.containsOptionWithName("E")) {
 	        NewOption optionE = options.getOptionByName("E");

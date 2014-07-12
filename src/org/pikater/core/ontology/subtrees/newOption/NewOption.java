@@ -2,12 +2,10 @@ package org.pikater.core.ontology.subtrees.newOption;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.QuestionMarkSet;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -16,31 +14,28 @@ public class NewOption {
 	private String name;
 	private String description;
 	
-	private Values values;
+	private ValueList values;
 	private boolean isMutable = false;
 	
-	private TypeRestriction possibleTypesRestriction;
+	private TypeRestrictions typeRestrictions;
 	
-	
-	public NewOption() {
-		this.values = new Values();
+	public NewOption(String name) {
+		this.values = new ValueList();
+		this.name = name;
 	}
 	public NewOption(ITypedValue value, String name) {
-		this.values = new Values();
+		this(name);
 		this.values.addValue(new Value(value));
-		this.setName(name);
 	}
-	public NewOption(ITypedValue defaultValue, Type type, String name) {
-		this.values = new Values();
+	public NewOption(ITypedValue defaultValue, ValueType type, String name) {
+		this(name);
 		this.values.addValue( new Value(null, defaultValue, type) );
-		this.setName(name);
 	}
 	public NewOption(List<ITypedValue> values, String name) {
-		this.values = new Values();
+		this(name);
 		for (ITypedValue valueI : values) {
-			this.getValuesWrapper().addValue( new Value(valueI) );
+			this.values.addValue( new Value(valueI) );
 		}
-		this.setName(name);
 	}
 
 	public String getName() {
@@ -57,21 +52,19 @@ public class NewOption {
 		this.description = description;
 	}
 
-	public Values getValuesWrapper() {
+	public ValueList getValuesWrapper() {
 		return values;
 	}
-	public void setValuesWrapper(Values values) {
+	public void setValuesWrapper(ValueList values) {
 		this.values = values;
 	}
-	public void resetValues(List<Value> values) {
-		this.values.setValues(values);
-	}
 	
-	public boolean isEmpty() {
-		return values == null && values.getValues().size() == 0;
+	public boolean isEmpty()
+	{
+		return values.size() == 0;
 	}
 	public boolean isSingleValue() {
-		return values.getValues().size() == 1;
+		return values.size() == 1;
 	}
 	
 	public boolean getIsMutable() {
@@ -81,12 +74,11 @@ public class NewOption {
 		this.isMutable = isMutable;
 	}
 	
-	public TypeRestriction getPossibleTypesRestriction() {
-		return possibleTypesRestriction;
+	public TypeRestrictions getTypeRestrictions() {
+		return typeRestrictions;
 	}
-	public void setPossibleTypesRestriction(
-			TypeRestriction possibleTypesRestriction) {
-		this.possibleTypesRestriction = possibleTypesRestriction;
+	public void setTypeRestrictions(TypeRestrictions typeRestrictions) {
+		this.typeRestrictions = typeRestrictions;
 	}
 	
 	public Value convertToSingleValue() {
@@ -98,7 +90,6 @@ public class NewOption {
 			throw new IllegalStateException(
 					"This option can't be convert to single value");
 		}
-		
 	}
 	
 	public boolean containsQuestionMark() {
@@ -134,19 +125,13 @@ public class NewOption {
 	}
 
 	@Override
-	public NewOption clone() {
-		
-		NewOption newOption = new NewOption();
-		newOption.setName(getName());
+	public NewOption clone()
+	{
+		NewOption newOption = new NewOption(getName());
 		newOption.setDescription(getDescription());
 		newOption.setIsMutable(this.getIsMutable());
-		
-		for (Value valueI : values.getValues()) {
-			newOption.getValuesWrapper().addValue(valueI.clone());
-		}
-		newOption.setPossibleTypesRestriction(
-				possibleTypesRestriction.clone());
-		
+		newOption.setValuesWrapper(values.clone());	
+		newOption.setTypeRestrictions(typeRestrictions.clone());
 		return newOption;
 	}
 	
@@ -157,7 +142,7 @@ public class NewOption {
 			return false;
 		}
 		
-		if(values.getValues().size() != possibleTypesRestriction.getPossibleTypes().size())
+		if(values.size() != typeRestrictions.size())
 		{
 			return false;
 		}
@@ -165,10 +150,10 @@ public class NewOption {
 		//TODO: otestovat moznosti typu - like this?:
 		if(validateTypeBinding)
 		{
-			for(int i = 0; i < values.getValues().size(); i++)
+			for(int i = 0; i < values.size(); i++)
 			{
-				if(!possibleTypesRestriction.getPossibleTypes().get(i).getTypes().contains(
-						values.getValues().get(i).getType()))
+				if(!typeRestrictions.getByIndex(i).getTypes().contains(
+						values.getValue(i).getType()))
 				{
 					return false;
 				}

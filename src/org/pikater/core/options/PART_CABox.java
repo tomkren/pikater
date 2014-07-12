@@ -8,16 +8,16 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaPARTCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.NullValue;
 
 public class PART_CABox {
 	
@@ -35,56 +35,56 @@ public class PART_CABox {
 						new FloatValue(0.25f), new FloatValue(0.3f),
 						new FloatValue(0.4f), new FloatValue(0.5f)
 				));
-		Type typeC = new Type(FloatValue.class);
+		ValueType typeC = new ValueType(FloatValue.class);
 		typeC.setSetRestriction(
 				new SetRestriction( list ) );
-		TypeRestriction restrictionC = new TypeRestriction();
-		restrictionC.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeC )) ));
+		TypeRestrictions restrictionC = new TypeRestrictions();
+		restrictionC.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new FloatValue(0.25f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"C" );
 		optionC.setDescription("Set the number of folder to use in the computing of the mutual information");
-		optionC.setPossibleTypesRestriction(restrictionC);
+		optionC.setTypeRestrictions(restrictionC);
 		
 		
 		/**
 		# Set minimum number of instances per leaf. (Default: 2)
 		$ M int 1 1 r 1 10
 		**/
-		Type typeM = new Type(IntegerValue.class);
+		ValueType typeM = new ValueType(IntegerValue.class);
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10) ));
-		TypeRestriction restrictionM = new TypeRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(2),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"M" );
 		optionM.setDescription("Set minimum number of instances per leaf");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 		
 		
 		/**
 		# Use reduced error pruning.
 		$ R boolean
 		**/
-		Type typeR = new Type(BooleanValue.class);
-		TypeRestriction restrictionR = new TypeRestriction();
-		restrictionR.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeR )) ));
+		ValueType typeR = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionR = new TypeRestrictions();
+		restrictionR.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"R" );
 		optionR.setDescription("Use reduced error pruning");
-		optionR.setPossibleTypesRestriction(restrictionR);
+		optionR.setTypeRestrictions(restrictionR);
 
 
 		
@@ -98,73 +98,73 @@ public class PART_CABox {
 						new IntegerValue(2), new IntegerValue(3),
 						new IntegerValue(4), new IntegerValue(5)
 				));
-		Type typeN = new Type(FloatValue.class);
+		ValueType typeN = new ValueType(FloatValue.class);
 		typeN.setSetRestriction(
 				new SetRestriction( listN ) );
-		TypeRestriction restrictionN = new TypeRestriction();
-		restrictionN.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeN )) ));
+		TypeRestrictions restrictionN = new TypeRestrictions();
+		restrictionN.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(3),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"N" );
 		optionN.setDescription("Set the number of folder to use in the computing of the mutual information");
-		optionN.setPossibleTypesRestriction(restrictionN);
+		optionN.setTypeRestrictions(restrictionN);
 
 
 		/**
 		# Use binary splits for nominal attributes.
 		$ B boolean
 		**/
-		Type typeB = new Type(BooleanValue.class);
-		TypeRestriction restrictionB = new TypeRestriction();
-		restrictionB.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeB )) ));
+		ValueType typeB = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionB = new TypeRestrictions();
+		restrictionB.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeB )) ));
 		
 		NewOption optionB = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"B" );
 		optionB.setDescription("Use reduced error pruning");
-		optionB.setPossibleTypesRestriction(restrictionB);
+		optionB.setTypeRestrictions(restrictionB);
 
 
 		/**
 		# Generate unpruned decision list.
 		$ U boolean
 		**/
-		Type typeU = new Type(BooleanValue.class);
-		TypeRestriction restrictionU = new TypeRestriction();
-		restrictionU.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeU )) ));
+		ValueType typeU = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionU = new TypeRestrictions();
+		restrictionU.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeU )) ));
 		
 		NewOption optionU = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"U" );
 		optionU.setDescription("Generate unpruned decision list");
-		optionU.setPossibleTypesRestriction(restrictionU);
+		optionU.setTypeRestrictions(restrictionU);
 		
 		
 		/**
 		# The seed for reduced-error pruning.
 		$ Q int 1 1 r 1 MAXINT
 		**/
-		Type typeQ = new Type(IntegerValue.class);
+		ValueType typeQ = new ValueType(IntegerValue.class);
 		typeQ.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
-		TypeRestriction restrictionQ = new TypeRestriction();
-		restrictionQ.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeQ )) ));
+		TypeRestrictions restrictionQ = new TypeRestrictions();
+		restrictionQ.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeQ )) ));
 		
 		NewOption optionQ = new NewOption(
 				new IntegerValue(1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"Q" );
 		optionQ.setDescription("The seed for reduced-error pruning");
-		optionQ.setPossibleTypesRestriction(restrictionQ);
+		optionQ.setTypeRestrictions(restrictionQ);
 		
 		
 

@@ -6,9 +6,9 @@ import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
@@ -74,7 +74,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		stability = 0.5;
 		final_error_rate = 0.01;
 		
-		Options options = new Options(getSearchOptions());
+		OptionList options = new OptionList(getSearchOptions());
 		
 		NewOption optionE = options.getOptionByName("E");
 		FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();

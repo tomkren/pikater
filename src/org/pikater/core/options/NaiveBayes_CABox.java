@@ -7,10 +7,10 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaNaiveBayesCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.BooleanValue;
 
 public class NaiveBayes_CABox {
 
@@ -20,34 +20,34 @@ public class NaiveBayes_CABox {
 		#Use kernel estimation for modelling numeric attributes rather than a single normal distribution.
 		$ K boolean
 		**/
-		Type typeK = new Type(BooleanValue.class);
-		TypeRestriction restrictionK = new TypeRestriction();
-		restrictionK.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeK )) ));
+		ValueType typeK = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionK = new TypeRestrictions();
+		restrictionK.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeK )) ));
 		
 		NewOption optionK = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"K" );
 		optionK.setDescription("Use kernel estimation for modelling numeric attributes rather than a single normal distribution");
-		optionK.setPossibleTypesRestriction(restrictionK);
+		optionK.setTypeRestrictions(restrictionK);
 		
 		
 		/**
 		# Use supervised discretization to process numeric attributes.
 		$ D boolean
 		**/
-		Type typeD = new Type(BooleanValue.class);
-		TypeRestriction restrictionD = new TypeRestriction();
-		restrictionD.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeD )) ));
+		ValueType typeD = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionD = new TypeRestrictions();
+		restrictionD.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeD )) ));
 		
 		NewOption optionD = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"D" );
 		optionD.setDescription("Use supervised discretization to process numeric attributes");
-		optionD.setPossibleTypesRestriction(restrictionD);
+		optionD.setTypeRestrictions(restrictionD);
 		
 
 

@@ -17,7 +17,7 @@ import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 
@@ -103,7 +103,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		agent.setType(computationNode.getModelClass());
 		
 		OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
-	    Options options = new Options(optionEdge.getOptions());
+	    OptionList options = new OptionList(optionEdge.getOptions());
 		agent.setOptions(options.getAll());
 
 		return agent;

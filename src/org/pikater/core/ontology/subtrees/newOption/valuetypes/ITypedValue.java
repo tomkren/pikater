@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.typedValue;
+package org.pikater.core.ontology.subtrees.newOption.valuetypes;
 
 import jade.content.Concept;
 

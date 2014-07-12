@@ -7,10 +7,10 @@ import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
 
 import jade.content.Concept;
 
@@ -55,7 +55,7 @@ public class AgentInfos implements Concept {
 			
 			List<ITypedValue> typedValues = models.getModelIDsByAgentType(agentClass);
 			
-			Options options = agentInfoI.getOptions();
+			OptionList options = agentInfoI.getOptions();
 			NewOption optionModel = options.getOptionByName("model");
 			Value value = optionModel.convertToSingleValue();
 			SetRestriction setRestriction = value.getType().getSetRestriction();

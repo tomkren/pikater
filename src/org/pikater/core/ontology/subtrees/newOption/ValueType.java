@@ -1,15 +1,12 @@
-package org.pikater.core.ontology.subtrees.newOption.type;
+package org.pikater.core.ontology.subtrees.newOption;
 
-import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
+import jade.content.Concept;
 
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 
-public class Type implements IRestriction {
-
-	/**
-	 * 
-	 */
+public class ValueType implements Concept
+{
 	private static final long serialVersionUID = -4658896847448815807L;
 
 	private String className;
@@ -17,22 +14,22 @@ public class Type implements IRestriction {
 	private RangeRestriction rangeRestriction;
 	private SetRestriction setRestriction;
 	
-	public Type() {}
-	public Type(Class<?> classs) {
+	public ValueType() {}
+	public ValueType(Class<?> classs) {
 		this.className = classs.getName();
 	}
-	public Type(String className) {
+	public ValueType(String className) {
 		this.className = className;
 	}
-	public Type(Class<?> classs, RangeRestriction rangeRestriction) {
+	public ValueType(Class<?> classs, RangeRestriction rangeRestriction) {
 		this.className = classs.getName();
 		this.rangeRestriction = rangeRestriction;
 	}
-	public Type(Class<?> classs, SetRestriction setRestriction) {
+	public ValueType(Class<?> classs, SetRestriction setRestriction) {
 		this.className = classs.getName();
 		this.setRestriction = setRestriction;
 	}
-	public Type(Class<?> classs, RangeRestriction rangeRestriction,
+	public ValueType(Class<?> classs, RangeRestriction rangeRestriction,
 			SetRestriction setRestriction) {
 		this.className = classs.getName();
 		this.rangeRestriction = rangeRestriction;
@@ -57,25 +54,16 @@ public class Type implements IRestriction {
 	public void setSetRestriction(SetRestriction setRestriction) {
 		this.setRestriction = setRestriction;
 	}
-	@Override
-	public boolean isValid() {
-
-		boolean rangeOk = rangeRestriction.isValid();
-		boolean setOk = setRestriction.isValid();
-
-		return rangeOk && setOk;
+	
+	public boolean isValid()
+	{
+		return rangeRestriction.isValid() && setRestriction.isValid();
 	}
-
+	
 	@Override
-	public Type getType() {
-
-		return new Type(className);
-	}
-
-	@Override
-	public Type clone() {
+	public ValueType clone() {
 		
-		Type typeNew = new Type(className);
+		ValueType typeNew = new ValueType(className);
 		if (rangeRestriction != null) {
 			typeNew.setRangeRestriction(rangeRestriction.clone());
 		}

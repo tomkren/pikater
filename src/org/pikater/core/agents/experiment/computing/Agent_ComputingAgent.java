@@ -34,7 +34,7 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
@@ -189,7 +189,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		 */
 		
 		String wekaOptionsString = 
-				Options.exportToWeka(task.getAgent().getOptions());
+				OptionList.exportToWeka(task.getAgent().getOptions());
 		
 		options = wekaOptionsString.split("[ ]+");
 		currentTask = task;

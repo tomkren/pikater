@@ -7,12 +7,12 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 
 public class RBFNetwork_CABox {
 	
@@ -22,60 +22,60 @@ public class RBFNetwork_CABox {
 		# number of clusters, default 2
 		$ B int 1 1 r 2 1000
 		**/
-		Type typeB = new Type(IntegerValue.class);
+		ValueType typeB = new ValueType(IntegerValue.class);
 		typeB.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(2), new IntegerValue(1000) ));
-		TypeRestriction restrictionB = new TypeRestriction();
-		restrictionB.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeB )) ));
+		TypeRestrictions restrictionB = new TypeRestrictions();
+		restrictionB.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeB )) ));
 		
 		NewOption optionB = new NewOption(
 				new IntegerValue(2),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"B" );
 		optionB.setDescription("Number of clusters");
-		optionB.setPossibleTypesRestriction(restrictionB);
+		optionB.setTypeRestrictions(restrictionB);
 		
 		
 		/**
 		# minStdDev, default 0.1
 		$ W float 1 1 r 0.01 2
 		**/
-		Type typeW = new Type(FloatValue.class);
+		ValueType typeW = new ValueType(FloatValue.class);
 		typeW.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.01f), new FloatValue(2.0f) ));
-		TypeRestriction restrictionW = new TypeRestriction();
-		restrictionW.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeW )) ));
+		TypeRestrictions restrictionW = new TypeRestrictions();
+		restrictionW.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeW )) ));
 		
 		NewOption optionW = new NewOption(
 				new FloatValue(0.25f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"W" );
 		optionW.setDescription("minStdDev");
-		optionW.setPossibleTypesRestriction(restrictionW);
+		optionW.setTypeRestrictions(restrictionW);
 		
 		
 		/**
 		# Ridge (Set the Ridge value for the logistic or linear regression), default 1.0E-8
 		$ R float 1 1 r 0.000000001 10
 		**/
-		Type typeR = new Type(FloatValue.class);
+		ValueType typeR = new ValueType(FloatValue.class);
 		typeR.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.000000001f), new FloatValue(10.0f) ));
-		TypeRestriction restrictionR = new TypeRestriction();
-		restrictionR.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeR )) ));
+		TypeRestrictions restrictionR = new TypeRestrictions();
+		restrictionR.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new FloatValue(1.0e-8f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"R" );
 		optionR.setDescription("Ridge (Set the Ridge value for the logistic or linear regression)");
-		optionR.setPossibleTypesRestriction(restrictionR);
+		optionR.setTypeRestrictions(restrictionR);
 		
 		
 		/**
@@ -83,40 +83,40 @@ public class RBFNetwork_CABox {
 		#  (Value should be >= 0 and and a long, Default = 0).
 		$ S int 1 1 r 0 MAXINT
 		**/
-		Type typeS = new Type(IntegerValue.class);
+		ValueType typeS = new ValueType(IntegerValue.class);
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		TypeRestriction restrictionS = new TypeRestriction();
-		restrictionS.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeS )) ));
+		TypeRestrictions restrictionS = new TypeRestrictions();
+		restrictionS.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new IntegerValue(0),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"S" );
 		optionS.setDescription("The value used to seed the random number generator");
-		optionS.setPossibleTypesRestriction(restrictionS);
+		optionS.setTypeRestrictions(restrictionS);
 		
 		
 		/**
 		#  Set the maximum number of iterations for the logistic regression. (default -1, until convergence).
 		$ M int 1 1 r -1 50
 		**/
-		Type typeM = new Type(IntegerValue.class);
+		ValueType typeM = new ValueType(IntegerValue.class);
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(-1), new IntegerValue(50) ));
-		TypeRestriction restrictionM = new TypeRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(-1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"M" );
 		optionM.setDescription("Set the maximum number of iterations for the logistic regression");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 
 
 

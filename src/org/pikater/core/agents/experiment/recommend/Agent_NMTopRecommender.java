@@ -19,14 +19,15 @@ import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.QuestionMarkRange;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
@@ -223,9 +224,8 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	
 	            if (stdDev > 0) {
 	            	
-	            	java.util.List<Types> typesList = optionI.getPossibleTypesRestriction().getPossibleTypes();
-	            	Types types = typesList.get(0);
-	            	Type type = types.getTypes().get(0);
+	            	TypeRestriction typeRestriction = optionI.getTypeRestrictions().getByIndex(0);
+	            	ValueType type = typeRestriction.getTypes().get(0);
 	            	
 	            	RangeRestriction rangeRestriction = type.getRangeRestriction();
 	            	ITypedValue minValue = rangeRestriction.getMinValue();

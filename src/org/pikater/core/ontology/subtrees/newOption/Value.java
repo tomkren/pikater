@@ -1,17 +1,14 @@
 package org.pikater.core.ontology.subtrees.newOption;
 
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
+import jade.content.Concept;
 
-public class Value implements IRestriction {
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
 
-	/**
-	 * 
-	 */
+public class Value implements Concept
+{
 	private static final long serialVersionUID = 4778874898115080831L;
 
-	private Type type;
+	private ValueType type;
 
 	private ITypedValue typedValue;
 	private ITypedValue defaultValue;
@@ -20,22 +17,22 @@ public class Value implements IRestriction {
 	public Value() {}
 	public Value(ITypedValue typedValue) {
 		this.typedValue = typedValue;
-		this.type = new Type(typedValue.getClass());
+		this.type = new ValueType(typedValue.getClass());
 	}
-	public Value(ITypedValue value, Type type) {
+	public Value(ITypedValue value, ValueType type) {
 		this.typedValue = value;
 		this.type = type;
 	}
-	public Value(ITypedValue typedValue, ITypedValue defaultValue, Type type) {
+	public Value(ITypedValue typedValue, ITypedValue defaultValue, ValueType type) {
 		this.typedValue = typedValue;
 		this.defaultValue = defaultValue;
 		this.type = type;
 	}
 
-	public Type getType() {
+	public ValueType getType() {
 		return this.type;
 	}
-	public void setType(Type type) {
+	public void setType(ValueType type) {
 		this.type = type;
 	}
 
@@ -54,17 +51,16 @@ public class Value implements IRestriction {
 	}
 
 	
-	@Override
 	public boolean isValid() {
 		
 		boolean valueOk = true;
 		if (typedValue != null && type != null) {
-			valueOk = type.equals( new Type(typedValue.getClass()) );
+			valueOk = type.equals( new ValueType(typedValue.getClass()) );
 		}
 
 		boolean defaultValueOk = true;
 		if (defaultValue != null && type != null) {
-			defaultValueOk = type.equals( new Type(defaultValue.getClass()) );
+			defaultValueOk = type.equals( new ValueType(defaultValue.getClass()) );
 		}
 
 		boolean typeOk = type.isValid();

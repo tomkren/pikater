@@ -1,8 +1,8 @@
-package org.pikater.core.ontology.subtrees.newOption.restriction;
+package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 
 public class RangeRestriction implements IRestriction
 {
@@ -36,8 +36,8 @@ public class RangeRestriction implements IRestriction
 	}
 
 	@Override
-	public Type getType() {
-		return new Type(minValue.getClass());
+	public ValueType getType() {
+		return new ValueType(minValue.getClass());
 	}
 
 	@Override

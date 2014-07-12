@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.typedValue;
+package org.pikater.core.ontology.subtrees.newOption.valuetypes;
 
 public class QuestionMarkRange implements ITypedValue {
 
@@ -60,5 +60,10 @@ public class QuestionMarkRange implements ITypedValue {
 		
 		return "?";
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return "QuestionMarkRange";
+	}
 }

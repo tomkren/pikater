@@ -9,26 +9,26 @@ import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.StringValue;
 
 public class FileInput_VirtualBox {
 	
 	public static AgentInfo get() {
 
-		Type typeIN = new Type(StringValue.class);
-		TypeRestriction restrictionIN = new TypeRestriction();
-		restrictionIN.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeIN )) ));
+		ValueType typeIN = new ValueType(StringValue.class);
+		TypeRestrictions restrictionIN = new TypeRestrictions();
+		restrictionIN.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeIN )) ));
 		
 		NewOption optionIN = new NewOption(
 				new StringValue("inputFile.ARFF"),
-				new Type(StringValue.class),
+				new ValueType(StringValue.class),
 				"File" );
 		optionIN.setDescription("File name");
-		optionIN.setPossibleTypesRestriction(restrictionIN);
+		optionIN.setTypeRestrictions(restrictionIN);
 		
 
 		Slot outputSlot = new Slot();

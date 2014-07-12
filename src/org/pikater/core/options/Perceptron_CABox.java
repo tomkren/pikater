@@ -7,13 +7,13 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 
 public class Perceptron_CABox {
 
@@ -23,40 +23,40 @@ public class Perceptron_CABox {
 		# learning rate, default 0.3; 1 arguments
 		$ L float 1 1 r 0 1
 		**/	
-		Type typeL = new Type(FloatValue.class);
+		ValueType typeL = new ValueType(FloatValue.class);
 		typeL.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		TypeRestriction restrictionL = new TypeRestriction();
-		restrictionL.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeL )) ));
+		TypeRestrictions restrictionL = new TypeRestrictions();
+		restrictionL.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeL )) ));
 		
 		NewOption optionL = new NewOption(
 				new FloatValue(0.3f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"L" );
 		optionL.setDescription("Learning rate");
-		optionL.setPossibleTypesRestriction(restrictionL);
+		optionL.setTypeRestrictions(restrictionL);
 		
 		
 		/**
 		#  Number of epochs to train through.
 		$ N int 1 1 r 1 1000
 		 **/
-		Type typeN = new Type(IntegerValue.class);
+		ValueType typeN = new ValueType(IntegerValue.class);
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
-		TypeRestriction restrictionN = new TypeRestriction();
-		restrictionN.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeN )) ));
+		TypeRestrictions restrictionN = new TypeRestrictions();
+		restrictionN.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"N" );
 		optionN.setDescription("Number of epochs to train through");
-		optionN.setPossibleTypesRestriction(restrictionN);
+		optionN.setTypeRestrictions(restrictionN);
 		
 		
 		/**
@@ -64,20 +64,20 @@ public class Perceptron_CABox {
 		#  Seed of the random number generator (Default = 0).
 		$ S int 1 1 r 0 MAXINT
 		**/
-		Type typeS = new Type(IntegerValue.class);
+		ValueType typeS = new ValueType(IntegerValue.class);
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		TypeRestriction restrictionS = new TypeRestriction();
-		restrictionS.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeS )) ));
+		TypeRestrictions restrictionS = new TypeRestrictions();
+		restrictionS.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new IntegerValue(0),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"S" );
 		optionS.setDescription("Seed of the random number generator");
-		optionS.setPossibleTypesRestriction(restrictionS);
+		optionS.setTypeRestrictions(restrictionS);
 		
 		
 		/**
@@ -85,17 +85,17 @@ public class Perceptron_CABox {
 		#  (Set this to not normalize the class if it's numeric).
 		$ C boolean
 		**/
-		Type typeC = new Type(BooleanValue.class);
-		TypeRestriction restrictionC = new TypeRestriction();
-		restrictionC.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeC )) ));
+		ValueType typeC = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionC = new TypeRestrictions();
+		restrictionC.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"C" );
 		optionC.setDescription("Normalizing a numeric class will NOT be done");
-		optionC.setPossibleTypesRestriction(restrictionC);
+		optionC.setTypeRestrictions(restrictionC);
 
 		
 		

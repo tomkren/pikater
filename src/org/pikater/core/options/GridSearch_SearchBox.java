@@ -7,64 +7,64 @@ import org.pikater.core.agents.experiment.search.Agent_GridSearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
 
 
 public class GridSearch_SearchBox {
 	
 	public static AgentInfo get() {
 		
-		Type typeB = new Type(IntegerValue.class);
+		ValueType typeB = new ValueType(IntegerValue.class);
 		typeB.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		TypeRestriction restrictionB = new TypeRestriction();
-		restrictionB.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeB )) ));
+		TypeRestrictions restrictionB = new TypeRestrictions();
+		restrictionB.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeB )) ));
 		
 		NewOption optionB = new NewOption(
 				new IntegerValue(10),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"B" );
 		optionB.setDescription("Maximum block size");
-		optionB.setPossibleTypesRestriction(restrictionB);
+		optionB.setTypeRestrictions(restrictionB);
 
 		
-		Type typeN = new Type(IntegerValue.class);
+		ValueType typeN = new ValueType(IntegerValue.class);
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		TypeRestriction restrictionN = new TypeRestriction();
-		restrictionN.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeN )) ));
+		TypeRestrictions restrictionN = new TypeRestrictions();
+		restrictionN.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(10),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"N" );
 		optionN.setDescription("Default number of tries");
-		optionN.setPossibleTypesRestriction(restrictionN);
+		optionN.setTypeRestrictions(restrictionN);
 		
 		
-		Type typeZ = new Type(FloatValue.class);
+		ValueType typeZ = new ValueType(FloatValue.class);
 		typeZ.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1000.0f) ));
-		TypeRestriction restrictionZ = new TypeRestriction();
-		restrictionZ.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeZ )) ));
+		TypeRestrictions restrictionZ = new TypeRestrictions();
+		restrictionZ.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeZ )) ));
 		
 		NewOption optionZ = new NewOption(
 				new FloatValue(10),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"Z" );
 		optionZ.setDescription("Zero for logarithmic steps");
-		optionZ.setPossibleTypesRestriction(restrictionZ);
+		optionZ.setTypeRestrictions(restrictionZ);
 				
 		
 		AgentInfo agentInfo = new AgentInfo();
