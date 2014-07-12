@@ -19,7 +19,9 @@ public class NewOption {
 	private boolean isMutable = false;
 	
 	private TypeRestrictions typeRestrictions;
-	
+
+	public NewOption() {
+	}
 	public NewOption(String name) {
 		this.values = new ValueList();
 		this.name = name;
