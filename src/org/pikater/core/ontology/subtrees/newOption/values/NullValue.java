@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.typedValue;
+package org.pikater.core.ontology.subtrees.newOption.values;
 
 public class NullValue implements ITypedValue {
 
@@ -17,5 +17,11 @@ public class NullValue implements ITypedValue {
 	public String exportToWeka() {
 		
 		return "";
-	}	
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "NONE";
+	}
 }

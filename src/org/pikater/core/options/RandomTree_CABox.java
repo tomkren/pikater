@@ -7,11 +7,11 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRandomTreeCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 public class RandomTree_CABox {
 	
@@ -21,60 +21,60 @@ public class RandomTree_CABox {
 		# Sets the number of randomly chosen attributes.
 		$ K int 1 1 r 1 50
 		**/
-		Type typeK = new Type(IntegerValue.class);
+		ValueType typeK = new ValueType(IntegerValue.class);
 		typeK.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(50) ));
-		PossibleTypesRestriction restrictionK = new PossibleTypesRestriction();
-		restrictionK.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeK )) ));
+		TypeRestrictions restrictionK = new TypeRestrictions();
+		restrictionK.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeK )) ));
 		
 		NewOption optionK = new NewOption(
 				new IntegerValue(1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"K" );
 		optionK.setDescription("Sets the number of randomly chosen attributes");
-		optionK.setPossibleTypesRestriction(restrictionK);
+		optionK.setTypeRestrictions(restrictionK);
 		
 		
 		/**
 		# The minimum total weight of the instances in a leaf.
 		$ M int 1 1 r 0 100
 		**/
-		Type typeM = new Type(IntegerValue.class);
+		ValueType typeM = new ValueType(IntegerValue.class);
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(0),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"M" );
 		optionM.setDescription("The minimum total weight of the instances in a leaf");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 		
 		
 		/**
 		# The random number seed used for selecting attributes.
 		$ Q int 1 1 r 1 MAXINT
 		**/
-		Type typeQ = new Type(IntegerValue.class);
+		ValueType typeQ = new ValueType(IntegerValue.class);
 		typeQ.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionQ = new PossibleTypesRestriction();
-		restrictionQ.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeQ )) ));
+		TypeRestrictions restrictionQ = new TypeRestrictions();
+		restrictionQ.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeQ )) ));
 		
 		NewOption optionQ = new NewOption(
 				new IntegerValue(0),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"Q" );
 		optionQ.setDescription("The random number seed used for selecting attributes");
-		optionQ.setPossibleTypesRestriction(restrictionQ);
+		optionQ.setTypeRestrictions(restrictionQ);
 
 
 		AgentInfo agentInfo = new AgentInfo();

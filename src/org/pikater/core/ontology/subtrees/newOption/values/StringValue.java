@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.typedValue;
+package org.pikater.core.ontology.subtrees.newOption.values;
 
 public class StringValue implements ITypedValue {
 
@@ -36,4 +36,9 @@ public class StringValue implements ITypedValue {
 		return value;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return "String";
+	}
 }

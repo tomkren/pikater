@@ -1,11 +1,11 @@
-package org.pikater.core.ontology.subtrees.newOption.restriction;
+package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 
 public class SetRestriction implements IRestriction {
 
@@ -43,10 +43,10 @@ public class SetRestriction implements IRestriction {
 	}
 
 	@Override
-	public Type getClassName() {
+	public ValueType getType() {
 
 		ITypedValue value0 = values.get(0);
-		return new Type(value0.getClass());
+		return new ValueType(value0.getClass());
 	}
 
 	@Override
@@ -74,18 +74,8 @@ public class SetRestriction implements IRestriction {
 		return true;
 	}
 
-	public boolean contains(ITypedValue value) {
-
-		for (ITypedValue valueI : values) {
-			if (valueI.equals(value)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
-	public SetRestriction cloneSetRestriction() {
+	@Override
+	public SetRestriction clone() {
 		
 		SetRestriction setRest = new SetRestriction();
 		for (ITypedValue valueI : values) {

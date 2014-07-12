@@ -19,14 +19,15 @@ import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.options.NMTopRecommender_RecommendBox;
 
 /**
@@ -171,7 +172,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         for (NewOption optionI : optionSamples) {
 
         	String computedDatatype = optionI.computeDataType();
-        	NewOption newOpt = optionI.cloneOption();        	
+        	NewOption newOpt = optionI.clone();        	
             
             
         	//ignore boolean and set options for now, set their value to the one of the best agent on closest file
@@ -223,13 +224,12 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	
 	            if (stdDev > 0) {
 	            	
-	            	java.util.List<Types> typesList = optionI.getPossibleTypesRestriction().getPossibleTypes();
-	            	Types types = typesList.get(0);
-	            	Type type = types.getTypes().get(0);
+	            	TypeRestriction typeRestriction = optionI.getTypeRestrictions().getByIndex(0);
+	            	ValueType type = typeRestriction.getTypes().get(0);
 	            	
 	            	RangeRestriction rangeRestriction = type.getRangeRestriction();
-	            	ITypedValue minValue = rangeRestriction.getMinValeu();
-	            	ITypedValue maxValue = rangeRestriction.getMaxValeu();
+	            	ITypedValue minValue = rangeRestriction.getMinValue();
+	            	ITypedValue maxValue = rangeRestriction.getMaxValue();
 	            	
 	            	float finalMin = 0;
 	            	float finalMax = 0;
@@ -253,7 +253,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            			new FloatValue(finalMin),
 	            			new FloatValue(finalMax));
 	            	
-	                newOpt.addValue(new Value(questionMark));
+	                newOpt.getValuesWrapper().addValue(new Value(questionMark));
 	                newOpt.setIsMutable(true);
 	            }
 	            else {
@@ -262,11 +262,11 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             		
 	                if (iValueI instanceof FloatValue) {
 	                	float valueFloat = (float) avg;
-	                    newOpt.addValue(new Value(new FloatValue(valueFloat)));
+	                    newOpt.getValuesWrapper().addValue(new Value(new FloatValue(valueFloat)));
 	                }
 	                if (iValueI instanceof IntegerValue) {
 	                	int valueInteger = (int) avg;
-	                	newOpt.addValue(new Value(new IntegerValue(valueInteger)));
+	                	newOpt.getValuesWrapper().addValue(new Value(new IntegerValue(valueInteger)));
 	                }
 	            }
         	} else {
@@ -276,7 +276,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                 	continue;
                 }
                 NewOption option0 = bestAgent.getOptionByName(optionI.getName());
-                newOpt.setValues(option0.getValues().cloneValues());   
+                newOpt.setValuesWrapper(option0.getValuesWrapper().clone());   
         	}
 
             options.add(newOpt);

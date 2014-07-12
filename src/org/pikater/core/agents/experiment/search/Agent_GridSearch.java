@@ -10,8 +10,8 @@ import java.util.LinkedList;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.BoolSItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.FloatSItem;
@@ -192,7 +192,7 @@ public class Agent_GridSearch extends Agent_Search {
     @Override
     protected void loadSearchOptions() { 
         
-        Options options = new Options(getSearchOptions());
+        OptionList options = new OptionList(getSearchOptions());
         
         if (options.containsOptionWithName("N")) {
         	NewOption optionN = options.getOptionByName("N");

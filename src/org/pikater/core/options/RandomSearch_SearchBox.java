@@ -7,47 +7,47 @@ import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 public class RandomSearch_SearchBox {
 
 	public static AgentInfo get() {
 
-		Type typeE = new Type(DoubleValue.class);
+		ValueType typeE = new ValueType(DoubleValue.class);
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new DoubleValue(0.0), new DoubleValue(1.0) ));
-		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
-		restrictionE.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeE )) ));
+		TypeRestrictions restrictionE = new TypeRestrictions();
+		restrictionE.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new DoubleValue(0.01),
-				new Type(DoubleValue.class),
+				new ValueType(DoubleValue.class),
 				"E" );
 		optionE.setDescription("E");
-		optionE.setPossibleTypesRestriction(restrictionE);
+		optionE.setTypeRestrictions(restrictionE);
 		
 		
-		Type typeM = new Type(IntegerValue.class);
+		ValueType typeM = new ValueType(IntegerValue.class);
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(10),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"M" );
 		optionM.setDescription("M");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 		
 
 		AgentInfo agentInfo = new AgentInfo();

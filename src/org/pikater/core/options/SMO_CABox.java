@@ -7,15 +7,15 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaSMOCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 public class SMO_CABox {
 	
@@ -25,240 +25,240 @@ public class SMO_CABox {
 		# -C num The complexity constant C. (default 1)
 		$ C float 1 1 r 0.0001 5
 		**/	
-		Type typeC = new Type(FloatValue.class);
+		ValueType typeC = new ValueType(FloatValue.class);
 		typeC.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0001f), new FloatValue(5.0f) ));
-		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
-		restrictionC.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeC )) ));
+		TypeRestrictions restrictionC = new TypeRestrictions();
+		restrictionC.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new FloatValue(1.0f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"C" );
 		optionC.setDescription("Num The complexity");
-		optionC.setPossibleTypesRestriction(restrictionC);
+		optionC.setTypeRestrictions(restrictionC);
 		
 		
 		/**
 		# -E num
 		# The exponent for the polynomial kernel. (default 1)
 		**/
-		Type typeE = new Type(IntegerValue.class);
+		ValueType typeE = new ValueType(IntegerValue.class);
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
-		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
-		restrictionE.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeE )) ));
+		TypeRestrictions restrictionE = new TypeRestrictions();
+		restrictionE.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new IntegerValue(1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"E" );
 		optionE.setDescription("The exponent for the polynomial kernel");
-		optionE.setPossibleTypesRestriction(restrictionE);
+		optionE.setTypeRestrictions(restrictionE);
 		
 		
 		/**
 		# -G num Gamma for the RBF kernel. (default 0.01)
 		$ G float 1 1 r 0.0001 4
 		**/
-		Type typeG = new Type(FloatValue.class);
+		ValueType typeG = new ValueType(FloatValue.class);
 		typeG.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0001f), new FloatValue(4.0f) ));
-		PossibleTypesRestriction restrictionG = new PossibleTypesRestriction();
-		restrictionG.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeG )) ));
+		TypeRestrictions restrictionG = new TypeRestrictions();
+		restrictionG.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeG )) ));
 		
 		NewOption optionG = new NewOption(
 				new FloatValue(0.01f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"G" );
 		optionG.setDescription("Num Gamma for the RBF kernel");
-		optionG.setPossibleTypesRestriction(restrictionG);
+		optionG.setTypeRestrictions(restrictionG);
 
 		
 		/**
 		# Whether to 0=normalize/1=standardize/2=neither. (default 0=normalize)
 		$ N int 1 1 s 0, 1, 2
 		**/
-		Type typeN = new Type(IntegerValue.class);
+		ValueType typeN = new ValueType(IntegerValue.class);
 		typeN.setSetRestriction(
 				new SetRestriction(
 						new ArrayList<ITypedValue>(
 								Arrays.asList( new IntegerValue(0), new IntegerValue(1), new IntegerValue(2) ) )));
-		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeN )) ));
+		TypeRestrictions restrictionN = new TypeRestrictions();
+		restrictionN.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"N" );
 		optionN.setDescription("Num Gamma for the RBF kernel");
-		optionN.setPossibleTypesRestriction(restrictionN);
+		optionN.setTypeRestrictions(restrictionN);
 		
 		
 		/**
 		# Feature-space normalization (only for non-linear polynomial kernels).
 		$ F boolean
 		**/
-		Type typeF = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionF = new PossibleTypesRestriction();
-		restrictionF.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeF )) ));
+		ValueType typeF = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionF = new TypeRestrictions();
+		restrictionF.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeF )) ));
 		
 		NewOption optionF = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"F" );
 		optionF.setDescription("Feature-space normalization (only for non-linear polynomial kernels)");
-		optionF.setPossibleTypesRestriction(restrictionF);
+		optionF.setTypeRestrictions(restrictionF);
 		
 		
 		/**
 		# Use lower-order terms (only for non-linear polynomial kernels).
 		$ O boolean
 		**/
-		Type typeO = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionO = new PossibleTypesRestriction();
-		restrictionO.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeO )) ));
+		ValueType typeO = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionO = new TypeRestrictions();
+		restrictionO.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeO )) ));
 		
 		NewOption optionO = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"O" );
 		optionO.setDescription("Use lower-order terms (only for non-linear polynomial kernels)");
-		optionO.setPossibleTypesRestriction(restrictionO);
+		optionO.setTypeRestrictions(restrictionO);
 		
 		
 		/**
 		# Use the RBF kernel. (default poly)
 		$ R boolean
 		**/
-		Type typeR = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
-		restrictionR.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeR )) ));
+		ValueType typeR = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionR = new TypeRestrictions();
+		restrictionR.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"R" );
 		optionR.setDescription("Use the RBF kernel");
-		optionR.setPossibleTypesRestriction(restrictionR);
+		optionR.setTypeRestrictions(restrictionR);
 		
 		
 		/**
 		# Sets the size of the kernel cache. Should be a prime number. (default 250007, use 0 for full cache)
 		$ A int 1 1 r 0 MAXINT
 		**/		
-		Type typeA = new Type(IntegerValue.class);
+		ValueType typeA = new ValueType(IntegerValue.class);
 		typeA.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionA = new PossibleTypesRestriction();
-		restrictionA.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeA )) ));
+		TypeRestrictions restrictionA = new TypeRestrictions();
+		restrictionA.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeA )) ));
 		
 		NewOption optionA = new NewOption(
 				new IntegerValue(250007),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"A" );
 		optionA.setDescription("Sets the size of the kernel cache. Should be a prime number");
-		optionA.setPossibleTypesRestriction(restrictionA);
+		optionA.setTypeRestrictions(restrictionA);
 		
 		
 		/**
 		# -L num
 		# Sets the tolerance parameter. (default 1.0e-3)
 		**/
-		Type typeL = new Type(FloatValue.class);
-		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
-		restrictionL.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeL )) ));
+		ValueType typeL = new ValueType(FloatValue.class);
+		TypeRestrictions restrictionL = new TypeRestrictions();
+		restrictionL.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeL )) ));
 		
 		NewOption optionL = new NewOption(
 				new FloatValue(1.0e-3f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"L" );
 		optionL.setDescription("Sets the tolerance parameter");
-		optionL.setPossibleTypesRestriction(restrictionL);
+		optionL.setTypeRestrictions(restrictionL);
 		
 		
 		/**
 		# -P num
 		# Sets the epsilon for round-off error. (default 1.0e-12)
 		**/
-		Type typeP = new Type(FloatValue.class);
-		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
-		restrictionP.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeP )) ));
+		ValueType typeP = new ValueType(FloatValue.class);
+		TypeRestrictions restrictionP = new TypeRestrictions();
+		restrictionP.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeP )) ));
 		
 		NewOption optionP = new NewOption(
 				new FloatValue(1.0e-12f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"P" );
 		optionP.setDescription("Sets the epsilon for round-off error");
-		optionP.setPossibleTypesRestriction(restrictionP);
+		optionP.setTypeRestrictions(restrictionP);
 		
 		
 		/**
 		# Fit logistic models to SVM outputs.
 		$ M boolean
 		**/
-		Type typeM = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		ValueType typeM = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"M" );
 		optionM.setDescription("Fit logistic models to SVM outputs");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 		
 		
 		/**
 		# -V num
 		# Number of folds for cross-validation used to generate data for logistic models. (default -1, use training data)
 		**/
-		Type typeV = new Type(IntegerValue.class);
-		PossibleTypesRestriction restrictionV = new PossibleTypesRestriction();
-		restrictionV.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeV )) ));
+		ValueType typeV = new ValueType(IntegerValue.class);
+		TypeRestrictions restrictionV = new TypeRestrictions();
+		restrictionV.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeV )) ));
 		
 		NewOption optionV = new NewOption(
 				new IntegerValue(-1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"V" );
 		optionV.setDescription("Number of folds for cross-validation used to generate data for logistic models. (default -1, use training data)");
-		optionV.setPossibleTypesRestriction(restrictionV);
+		optionV.setTypeRestrictions(restrictionV);
 		
 		
 		/**
 		# Random number seed for cross-validation. (default 1)
 		$ W int 1 1 r 1 MAXINT
 		**/
-		Type typeW = new Type(IntegerValue.class);
+		ValueType typeW = new ValueType(IntegerValue.class);
 		typeW.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionW = new PossibleTypesRestriction();
-		restrictionW.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeW )) ));
+		TypeRestrictions restrictionW = new TypeRestrictions();
+		restrictionW.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeW )) ));
 		
 		NewOption optionW = new NewOption(
 				new IntegerValue(-1),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"W" );
 		optionW.setDescription("Random number seed for cross-validation");
-		optionW.setPossibleTypesRestriction(restrictionW);
+		optionW.setTypeRestrictions(restrictionW);
 		
 
 		AgentInfo agentInfo = new AgentInfo();

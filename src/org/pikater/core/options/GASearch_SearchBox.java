@@ -7,111 +7,111 @@ import org.pikater.core.agents.experiment.search.Agent_GASearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 public class GASearch_SearchBox {
 	
 	public static AgentInfo get() {
 
-		Type typeE = new Type(FloatValue.class);
+		ValueType typeE = new ValueType(FloatValue.class);
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionE = new PossibleTypesRestriction();
-		restrictionE.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeE )) ));
+		TypeRestrictions restrictionE = new TypeRestrictions();
+		restrictionE.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeE )) ));
 		
 		NewOption optionE = new NewOption(
 				new FloatValue(0.1f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"E" );
 		optionE.setDescription("Minimum error rate");
-		optionE.setPossibleTypesRestriction(restrictionE);
+		optionE.setTypeRestrictions(restrictionE);
 
 
-		Type typeM = new Type(IntegerValue.class);
+		ValueType typeM = new ValueType(IntegerValue.class);
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(10),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"M" );
 		optionM.setDescription("Maximal number of generations");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 
 		
-		Type typeT = new Type(FloatValue.class);
+		ValueType typeT = new ValueType(FloatValue.class);
 		typeT.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionT = new PossibleTypesRestriction();
-		restrictionT.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeT )) ));
+		TypeRestrictions restrictionT = new TypeRestrictions();
+		restrictionT.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeT )) ));
 		
 		NewOption optionT = new NewOption(
 				new FloatValue(0.2f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"T" );
 		optionT.setDescription("Mutation rate");
-		optionT.setPossibleTypesRestriction(restrictionT);
+		optionT.setTypeRestrictions(restrictionT);
 
 		
-		Type typeX = new Type(FloatValue.class);
+		ValueType typeX = new ValueType(FloatValue.class);
 		typeX.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionX = new PossibleTypesRestriction();
-		restrictionX.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeX )) ));
+		TypeRestrictions restrictionX = new TypeRestrictions();
+		restrictionX.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeX )) ));
 		
 		NewOption optionX = new NewOption(
 				new FloatValue(0.5f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"X" );
 		optionX.setDescription("Crossover probability");
-		optionX.setPossibleTypesRestriction(restrictionX);
+		optionX.setTypeRestrictions(restrictionX);
 
 		
-		Type typeP = new Type(IntegerValue.class);
+		ValueType typeP = new ValueType(IntegerValue.class);
 		typeP.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionP = new PossibleTypesRestriction();
-		restrictionP.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeP )) ));
+		TypeRestrictions restrictionP = new TypeRestrictions();
+		restrictionP.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeP )) ));
 		
 		NewOption optionP = new NewOption(
 				new IntegerValue(5),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"P" );
 		optionP.setDescription("Population size");
-		optionP.setPossibleTypesRestriction(restrictionP);
+		optionP.setTypeRestrictions(restrictionP);
 
 
-		Type typeS = new Type(IntegerValue.class);
+		ValueType typeS = new ValueType(IntegerValue.class);
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeS )) ));
+		TypeRestrictions restrictionS = new TypeRestrictions();
+		restrictionS.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new IntegerValue(2),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"S" );
 		optionS.setDescription("Size of tournament in selection");
-		optionS.setPossibleTypesRestriction(restrictionS);
+		optionS.setTypeRestrictions(restrictionS);
 
 
 		

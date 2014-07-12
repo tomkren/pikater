@@ -5,8 +5,8 @@ import java.util.List;
 
 import jade.content.Concept;
 
-public class Values implements Concept {
-
+public class ValueList implements Concept
+{
 	/**
 	 * 
 	 */
@@ -14,10 +14,10 @@ public class Values implements Concept {
 
 	private List<Value> values;
 
-	public Values() {
+	public ValueList() {
 		values = new ArrayList<Value>();
 	}
-	public Values(List<Value> values) {
+	public ValueList(List<Value> values) {
 		this.values = values;
 	}
 	
@@ -31,13 +31,19 @@ public class Values implements Concept {
 	public void addValue(Value value) {
 		this.values.add(value);
 	}
+	public Value getValue(int index)
+	{
+		return values.get(index);
+	}
 	
-	public Values cloneValues() {
-		
-		List<Value> valuesClone = new ArrayList<Value>();
-		for (Value valueI : values) {
-			valuesClone.add(valueI.cloneValue());
-		}
-		return new Values(valuesClone);
+	public int size()
+	{
+		return values.size();
+	}
+	
+	@Override
+	public ValueList clone()
+	{
+		return new ValueList(new ArrayList<Value>(values));
 	}
 }

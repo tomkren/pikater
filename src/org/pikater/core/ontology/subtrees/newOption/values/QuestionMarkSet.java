@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.typedValue;
+package org.pikater.core.ontology.subtrees.newOption.values;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +47,9 @@ public class QuestionMarkSet implements ITypedValue {
 		return "?";
 	}
 	
-	
+	@Override
+	public String toString()
+	{
+		return "QuestionMarkRange";
+	}
 }

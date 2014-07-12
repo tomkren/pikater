@@ -14,9 +14,9 @@ import java.util.Random;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
@@ -120,7 +120,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 			int folds = 5; // TODO read default value from file (if necessary)
 			if (evaluation_method.getOptions() != null) {
 				
-				Options options = new Options(evaluation_method.getOptions());
+				OptionList options = new OptionList(evaluation_method.getOptions());
 				NewOption optionF = options.getOptionByName("F");
 				IntegerValue valueF = (IntegerValue) optionF.convertToSingleValue().getTypedValue();
 				folds = valueF.getValue();

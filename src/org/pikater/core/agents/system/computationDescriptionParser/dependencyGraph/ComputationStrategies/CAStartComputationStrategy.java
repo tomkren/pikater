@@ -33,7 +33,7 @@ import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -91,8 +91,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	}
 	
 	//Create new options from solution with filled ? values (convert solution->options) 
-	private Options fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
-		Options res_options = new Options();
+	private OptionList fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
+		OptionList res_options = new OptionList();
 		List<NewOption> options_list = new ArrayList<NewOption>();
 		if(options==null){
 			return res_options;
@@ -105,9 +105,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		java.util.Iterator<String> sol_itr = solution.getValues().iterator();
 		
 		for (NewOption optionI : options) {
-			NewOption new_opt = optionI.cloneOption();
+			NewOption new_opt = optionI.clone();
 			if(optionI.getIsMutable())
-				new_opt.setValues(null); //TODO: fillOptWithSolution(optionI, sol_itr));
+				new_opt.setValuesWrapper(null); //TODO: fillOptWithSolution(optionI, sol_itr));
 			options_list.add(new_opt);
 		}
 		res_options.set(options_list);
@@ -140,7 +140,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 				
 		Agent agent = new Agent();
         OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
-        Options options = new Options(optionEdge.getOptions());
+        OptionList options = new OptionList(optionEdge.getOptions());
 
         // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());

@@ -8,32 +8,32 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaJ48;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
+import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 
 public class J48_CABox {
 	
 	public static AgentInfo get() {
 		
-		Type typeU = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionU = new PossibleTypesRestriction();
-		restrictionU.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeU )) ));
+		ValueType typeU = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionU = new TypeRestrictions();
+		restrictionU.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeU )) ));
 		
 		NewOption optionU = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"U" );
 		optionU.setDescription("Use unpruned tree");
-		optionU.setPossibleTypesRestriction(restrictionU);
+		optionU.setTypeRestrictions(restrictionU);
 		
 		
 		List<ITypedValue> valuesC = new ArrayList<ITypedValue>();
@@ -47,118 +47,118 @@ public class J48_CABox {
 		valuesC.add(new FloatValue(0.3f));
 		valuesC.add(new FloatValue(0.4f));
 				
-		Type typeC = new Type(FloatValue.class);
+		ValueType typeC = new ValueType(FloatValue.class);
 		typeC.setSetRestriction(new SetRestriction(valuesC));
-		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
-		restrictionC.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeC )) ));
+		TypeRestrictions restrictionC = new TypeRestrictions();
+		restrictionC.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
 		
 		NewOption optionC = new NewOption(
 				new FloatValue(0.25f),
-				new Type(FloatValue.class),
+				new ValueType(FloatValue.class),
 				"C" );
 		optionC.setDescription("Set confidence threshold for pruning. (Default: 0.25) (smaller values incur more pruning).");
-		optionC.setPossibleTypesRestriction(restrictionC);
+		optionC.setTypeRestrictions(restrictionC);
 		
 		
-		Type typeM = new Type(IntegerValue.class);
+		ValueType typeM = new ValueType(IntegerValue.class);
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10) ));
-		PossibleTypesRestriction restrictionM = new PossibleTypesRestriction();
-		restrictionM.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeM )) ));
+		TypeRestrictions restrictionM = new TypeRestrictions();
+		restrictionM.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
 		NewOption optionM = new NewOption(
 				new IntegerValue(2),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"M" );
 		optionM.setDescription("Set minimum number of instances per leaf");
-		optionM.setPossibleTypesRestriction(restrictionM);
+		optionM.setTypeRestrictions(restrictionM);
 		
 				
-		Type typeR = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionR = new PossibleTypesRestriction();
-		restrictionR.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeR )) ));
+		ValueType typeR = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionR = new TypeRestrictions();
+		restrictionR.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
 		
 		NewOption optionR = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"R" );
 		optionR.setDescription("Use reduced error pruning. No subtree raising is performed");
-		optionR.setPossibleTypesRestriction(restrictionR);
+		optionR.setTypeRestrictions(restrictionR);
 
 		
-		Type typeN = new Type(IntegerValue.class);
+		ValueType typeN = new ValueType(IntegerValue.class);
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10) ));
-		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeN )) ));
+		TypeRestrictions restrictionN = new TypeRestrictions();
+		restrictionN.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
 		NewOption optionN = new NewOption(
 				new IntegerValue(3),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"N" );
 		optionN.setDescription("Set minimum number of instances per leaf");
-		optionN.setPossibleTypesRestriction(restrictionN);
+		optionN.setTypeRestrictions(restrictionN);
 
 		
-		Type typeB = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
-		restrictionB.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeB )) ));
+		ValueType typeB = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionB = new TypeRestrictions();
+		restrictionB.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeB )) ));
 		
 		NewOption optionB = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"B" );
 		optionB.setDescription("Use binary splits for nominal attributes");
-		optionB.setPossibleTypesRestriction(restrictionB);
+		optionB.setTypeRestrictions(restrictionB);
 		
 
-		Type typeS = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeS )) ));
+		ValueType typeS = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionS = new TypeRestrictions();
+		restrictionS.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
 		NewOption optionS = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"S" );
 		optionS.setDescription("Don't perform subtree raising");
-		optionS.setPossibleTypesRestriction(restrictionB);
+		optionS.setTypeRestrictions(restrictionB);
 		
 		
-		Type typeA = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionA = new PossibleTypesRestriction();
-		restrictionA.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeA )) ));
+		ValueType typeA = new ValueType(BooleanValue.class);
+		TypeRestrictions restrictionA = new TypeRestrictions();
+		restrictionA.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeA )) ));
 		
 		NewOption optionA = new NewOption(
 				new BooleanValue(false),
-				new Type(BooleanValue.class),
+				new ValueType(BooleanValue.class),
 				"A" );
 		optionA.setDescription("If set, Laplace smoothing is used for predicted probabilites");
-		optionA.setPossibleTypesRestriction(restrictionA);
+		optionA.setTypeRestrictions(restrictionA);
 
 
-		Type typeQ = new Type(IntegerValue.class);
+		ValueType typeQ = new ValueType(IntegerValue.class);
 		typeQ.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionQ = new PossibleTypesRestriction();
-		restrictionQ.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeQ )) ));
+		TypeRestrictions restrictionQ = new TypeRestrictions();
+		restrictionQ.add( new TypeRestriction(
+				new ArrayList<ValueType>(Arrays.asList( typeQ )) ));
 		
 		NewOption optionQ = new NewOption(
 				new IntegerValue(3),
-				new Type(IntegerValue.class),
+				new ValueType(IntegerValue.class),
 				"Q" );
 		optionQ.setDescription("The seed for reduced-error pruning");
-		optionQ.setPossibleTypesRestriction(restrictionQ);
+		optionQ.setTypeRestrictions(restrictionQ);
 		
 
 		AgentInfo agentInfo = new AgentInfo();
