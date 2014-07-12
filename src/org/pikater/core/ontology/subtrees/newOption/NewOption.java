@@ -2,10 +2,10 @@ package org.pikater.core.ontology.subtrees.newOption;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 
 import com.thoughtworks.xstream.XStream;
 

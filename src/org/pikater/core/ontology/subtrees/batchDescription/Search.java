@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.OptionList;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 
 /**

@@ -8,7 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 public class BatchOntology extends BeanOntology {

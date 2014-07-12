@@ -3,8 +3,8 @@ package org.pikater.core.ontology.subtrees.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 import jade.content.Concept;
 

@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.valuetypes;
+package org.pikater.core.ontology.subtrees.newOption.values;
 
 public class BooleanValue implements ITypedValue {
 

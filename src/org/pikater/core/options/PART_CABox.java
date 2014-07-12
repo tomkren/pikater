@@ -13,11 +13,11 @@ import org.pikater.core.ontology.subtrees.newOption.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 
 public class PART_CABox {
 	

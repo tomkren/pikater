@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.newOption;
 
 import jade.content.Concept;
 
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 
 public class Value implements Concept
 {

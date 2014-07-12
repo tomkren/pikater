@@ -9,7 +9,7 @@ import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 
 

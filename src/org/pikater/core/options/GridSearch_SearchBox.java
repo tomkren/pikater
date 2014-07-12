@@ -11,8 +11,8 @@ import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
 import org.pikater.core.ontology.subtrees.newOption.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 
 public class GridSearch_SearchBox {

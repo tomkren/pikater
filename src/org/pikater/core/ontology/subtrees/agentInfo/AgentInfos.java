@@ -10,7 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.OptionList;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 
 import jade.content.Concept;
 

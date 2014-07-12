@@ -22,7 +22,7 @@ import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.ValueType;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;

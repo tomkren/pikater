@@ -12,7 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
 import org.pikater.core.ontology.subtrees.newOption.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.valuetypes.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 public class FileInput_VirtualBox {
 	
