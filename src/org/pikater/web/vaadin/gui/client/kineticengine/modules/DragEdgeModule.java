@@ -28,6 +28,11 @@ public final class DragEdgeModule implements IEngineModule
 	private final KineticEngine kineticEngine;
 	
 	/**
+	 * Selection module is needed to keep consistency of selected graph items set.
+	 */
+	private SelectionModule selectionModule;
+	
+	/**
 	 * The edge that is currently being dragged.
 	 */
 	private EdgeGraphItemClient draggedEdge;
@@ -146,9 +151,7 @@ public final class DragEdgeModule implements IEngineModule
 				if(newEndpoint != originalEndpoint) // now we know for sure we are going to change the endpoint
 				{
 					// IMPORTANT: don't violate the call order
-					SelectionModule selectionPlugin = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
-					selectionPlugin.onEdgeDragOperationFinished(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
-					
+					selectionModule.onEdgeDragOperationFinished(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
 					kineticEngine.swapEdgeEndpoint(); // changes the endpoint, updates the edge but doesn't draw
 				}
 			}
@@ -178,7 +181,13 @@ public final class DragEdgeModule implements IEngineModule
 	}
 	
 	@Override
-	public String[] getItemsToAttachTo()
+	public void createModuleCrossReferences()
+	{
+		selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
+	}
+	
+	@Override
+	public String[] getGraphItemTypesToAttachHandlersTo()
 	{
 		return new String[] {
 				GWTMisc.getSimpleName(EdgeGraphItemClient.class),
@@ -187,7 +196,7 @@ public final class DragEdgeModule implements IEngineModule
 	}
 	
 	@Override
-	public void attachEventListeners(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient graphItem)
 	{
 		if(graphItem instanceof EdgeGraphItemClient)
 		{

@@ -23,6 +23,7 @@ import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 
 @SuppressWarnings("deprecation")
 public class BoxGraphItemClient extends AbstractGraphItemClient
@@ -240,6 +241,16 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 	
 	// **********************************************************************************************
 	// PUBLIC INTERFACE
+	
+	public static BoxGraphItemShared[] toShared(BoxGraphItemClient... boxes)
+	{
+		BoxGraphItemShared[] result = new BoxGraphItemShared[boxes.length];
+		for(int i = 0; i < boxes.length; i++)
+		{
+			result[i] = new BoxGraphItemShared(boxes[i].getInfo().boxID);
+		}
+		return result;
+	}
 	
 	public BoxInfo getInfo()
 	{

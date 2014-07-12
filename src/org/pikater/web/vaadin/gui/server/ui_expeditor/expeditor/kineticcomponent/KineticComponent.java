@@ -25,9 +25,9 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.GraphItemSetChange;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractComponent;
@@ -125,6 +125,8 @@ public class KineticComponent extends AbstractComponent
 			{
 				KineticComponent.this.absoluteLeft = absoluteX;
 				KineticComponent.this.absoluteTop = absoluteY;
+				
+				// MyNotifications.showInfo(null, "On load callback");
 			}
 			
 			@Override
@@ -135,15 +137,17 @@ public class KineticComponent extends AbstractComponent
 			}
 			
 			@Override
-			public void command_itemSetChange(GraphItemSetChange changeType, BoxGraphItemShared[] boxes)
+			public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
 			{
 				// TODO Auto-generated method stub
+				// MyNotifications.showInfo(null, "Boxes");
 			}
 
 			@Override
-			public void command_itemSetChange(GraphItemSetChange changeType, EdgeGraphItemShared[] edges)
+			public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 			{
 				// TODO Auto-generated method stub
+				// MyNotifications.showInfo(null, "Edges");
 			}
 			
 			@Override
@@ -166,12 +170,16 @@ public class KineticComponent extends AbstractComponent
 						}
 					}
 					
-					// give the information to the box options toolbox to display
 					BoxOptionsToolbox toolbox = (BoxOptionsToolbox) parentEditor.getToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
-					toolbox.setContentFrom(selectedBoxesInformation);
 					
-					// and display the toolbox whether already visible or not
-					parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+					// display the toolbox if there's a reason to
+					if(selectedBoxesInformation.length > 0)
+					{
+						parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+					}
+					
+					// and give the box options toolbox information to display
+					toolbox.setContentFromSelectedBoxes(selectedBoxesInformation);
 				}
 			}
 

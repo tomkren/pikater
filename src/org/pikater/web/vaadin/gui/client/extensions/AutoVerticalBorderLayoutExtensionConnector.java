@@ -10,7 +10,6 @@ import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.ComponentConnector;
@@ -151,7 +150,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					@Override
 				    public void execute()
 					{
-						setVisibility(getElementByRow(row).getStyle(), visible);
+						setVisibility(getElementByRow(row), visible);
 					}
 				});
 			}
@@ -164,7 +163,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					@Override
 				    public void execute()
 					{
-						setVisibility(getElementByColumn(column).getStyle(), visible);
+						setVisibility(getElementByColumn(column), visible);
 					}
 				});
 			}
@@ -177,7 +176,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					@Override
 				    public void execute()
 					{
-						setVisibility(getElementByBorder(border).getStyle(), visible);
+						setVisibility(getElementByBorder(border), visible);
 					}
 				});
 			}
@@ -321,15 +320,15 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 		}
 	}
 	
-	private void setVisibility(Style style, boolean visible)
+	private void setVisibility(Element elem, boolean visible)
 	{
 		if(visible)
 		{
-			style.clearProperty("display");
+			elem.getStyle().clearProperty("display");
 		}
 		else
 		{
-			style.setDisplay(Display.NONE);
+			elem.getStyle().setDisplay(Display.NONE);
 		}
 	}
 }

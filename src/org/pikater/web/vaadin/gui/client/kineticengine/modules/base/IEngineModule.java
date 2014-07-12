@@ -5,6 +5,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractG
 public interface IEngineModule
 {
 	public String getModuleID();
-	public String[] getItemsToAttachTo();
-	public void attachEventListeners(AbstractGraphItemClient graphItem);
+	public void createModuleCrossReferences();
+	public String[] getGraphItemTypesToAttachHandlersTo();
+	public void attachHandlers(AbstractGraphItemClient graphItem);
 }
