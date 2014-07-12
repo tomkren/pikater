@@ -266,18 +266,26 @@ public final class KineticEngine
 		multiSelectionRectangle.getMasterNode().hide();
 		
 		/*
-		 * Setup plugins.
-		 * IMPORTANT: don't violate the call order - it is very important for correct functionality since plugins may depend upon each other. 
+		 * Setup special feature modules.
+		 * 
+		 * IMPORTANT: don't violate the call order. Modules add click handlers to graph
+		 * items (in the order they are defined here) and some prevent further processing of
+		 * events with other modules.
 		 */
 		this.modules = new HashMap<String, IEngineModule>();
 		this.modulesForGraphItem = new HashMap<String, Set<IEngineModule>>();
 		addModule(new TrackMouseModule(this));
+		addModule(new CreateEdgeModule(this)); // this has to be before selection module
 		addModule(new SelectionModule(this));
 		addModule(new ItemRegistrationModule(this));
 		addModule(new DragEdgeModule(this));
-		addModule(new CreateEdgeModule(this));
 		this.itemRegistrationModule = (ItemRegistrationModule) getModule(ItemRegistrationModule.moduleID);
 		this.selectionModule = (SelectionModule) getModule(SelectionModule.moduleID);
+		
+		for(IEngineModule module : modules.values())
+		{
+			module.createModuleCrossReferences();
+		}
 		
 		this.context = null;
 	}
@@ -446,7 +454,7 @@ public final class KineticEngine
 	public void addModule(IEngineModule module)
 	{
 		modules.put(module.getModuleID(), module);
-		String[] itemsToAttachTo = module.getItemsToAttachTo();
+		String[] itemsToAttachTo = module.getGraphItemTypesToAttachHandlersTo();
 		if(itemsToAttachTo != null)
 		{
 			for(String graphItemName : itemsToAttachTo) 
@@ -465,7 +473,7 @@ public final class KineticEngine
 	{
 		for(IEngineModule module : modulesForGraphItem.get(GWTMisc.getSimpleName(graphItem.getClass())))
 		{
-			module.attachEventListeners(graphItem);
+			module.attachHandlers(graphItem);
 		}
 	}
 	

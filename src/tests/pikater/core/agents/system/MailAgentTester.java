@@ -1,6 +1,9 @@
-package org.pikater.core.agents.util;
+package tests.pikater.core.agents.system;
 
-import org.pikater.core.agents.AgentNames;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Mailing;
 import org.pikater.core.ontology.MailingOntology;
@@ -22,12 +25,19 @@ public class MailAgentTester extends PikaterAgent {
     
     private static final String DESTINATION_ADDRESS = "j.krajicek@atlas.cz";
 
+	@Override
+	public List<Ontology> getOntologies() {
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MailingOntology.getInstance());
+		return ontologies;
+	}
+	
     @Override
     protected void setup() {
         initDefault();
 
         // dal by se taky najit v DF, kdybych nevedel, jak se jmenuje
-        AID receiver = new AID(AgentNames.MAIL_AGENT, false);
+        AID receiver = new AID(AgentNames.MAILING, false);
 
         // pozadavek, ktery primeje MailAgenta poslat testovaci e-mail
         SendEmail action = new SendEmail(Agent_Mailing.EmailType.TEST, DESTINATION_ADDRESS);
@@ -41,10 +51,10 @@ public class MailAgentTester extends PikaterAgent {
             else
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage());
+            logError("Ontology/codec error occurred: "+e.getMessage(), e);
             e.printStackTrace();
         } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage());
+            logError("FIPA error occurred: "+e.getMessage(), e);
             e.printStackTrace();
         }
 
@@ -63,4 +73,5 @@ public class MailAgentTester extends PikaterAgent {
         getContentManager().fillContent(msg, new Action(target, action));
         return msg;
     }
+
 }

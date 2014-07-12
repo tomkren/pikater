@@ -7,6 +7,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.content.Concept;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 
@@ -15,7 +16,9 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
 
 /** Agent, ktery resi komunikaci s mistnim SMTP serverem, tj. odesilani ruznych e-mailu i jejich tvorbu. */
@@ -29,10 +32,19 @@ public class Agent_Mailing extends PikaterAgent {
      * TODO: nekam do konfigurace? */
     private static final String SENDER_EMAIL = "pikater@noreply.cz";
 
+	@Override
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(MailingOntology.getInstance());
+		
+		return ontologies;
+	}
+
     @Override
     protected void setup() {
         initDefault();
-        registerWithDF("Mailing");
+        registerWithDF(AgentNames.MAILING);
         
         addBehaviour(new AchieveREResponder(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)) {
             private static final long serialVersionUID = 746138569142900592L;
@@ -46,7 +58,7 @@ public class Agent_Mailing extends PikaterAgent {
                     else
                         throw new RefuseException("Invalid action requested");
                 } catch (CodecException | OntologyException e) {
-                    // e.printStackTrace();
+                	Agent_Mailing.this.logError(e.getMessage(), e);
                     throw new NotUnderstoodException("Unknown codec/ontology: "+e.getMessage());
                 }
             }
@@ -70,8 +82,8 @@ public class Agent_Mailing extends PikaterAgent {
             }
         } catch (MessagingException e) {
             String error = "Failed to dispatch e-mail for "+to+" : "+e.getMessage();
-            logError(error);
-            //e.printStackTrace();
+            logError(error, e);
+
             reply.setPerformative(ACLMessage.FAILURE);
             reply.setContent(error);
             return reply;
@@ -111,4 +123,5 @@ public class Agent_Mailing extends PikaterAgent {
         
         log("sent e-mail to "+to);
     }
+
 }

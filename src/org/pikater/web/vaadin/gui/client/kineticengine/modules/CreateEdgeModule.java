@@ -29,15 +29,20 @@ public final class CreateEdgeModule implements IEngineModule
 	private final KineticEngine kineticEngine;
 	
 	/**
+	 * The selection module instance to use.
+	 */
+	private SelectionModule selectionModule;
+	
+	/**
+	 * The instance handling this operation's state.
+	 */
+	private final CreateEdgeContext edgeCreationContext;
+	
+	/**
 	 * The class to handle all logic behind edge creating.
 	 */
 	private class CreateEdgeContext
 	{
-		/**
-		 * The selection module instance to use.
-		 */
-		private final SelectionModule selectionModule;
-		
 		/**
 		 * The box that starts this operation.
 		 */
@@ -50,7 +55,6 @@ public final class CreateEdgeModule implements IEngineModule
 		
 		public CreateEdgeContext()
 		{
-			this.selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
 			reset();
 		}
 		
@@ -128,11 +132,6 @@ public final class CreateEdgeModule implements IEngineModule
 		}
 	}
 	
-	/**
-	 * The instance handling this operation's state.
-	 */
-	private final CreateEdgeContext edgeCreationContext;
-	
 	// **********************************************************************************************
 	// ITEM LISTENERS
 	
@@ -177,8 +176,11 @@ public final class CreateEdgeModule implements IEngineModule
 				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseMoveHandler, EventType.Basic.MOUSEMOVE);
 				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseDownHandler, EventType.Basic.MOUSEDOWN);
 				
-				// and display the new edge
+				// register the new edge
 				kineticEngine.registerCreated(true, null, new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() });
+				
+				// and display changes
+				kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.stopVerticalPropagation();
 				event.setProcessed();
@@ -270,13 +272,19 @@ public final class CreateEdgeModule implements IEngineModule
 	}
 	
 	@Override
-	public String[] getItemsToAttachTo()
+	public void createModuleCrossReferences()
+	{
+		selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
+	}
+	
+	@Override
+	public String[] getGraphItemTypesToAttachHandlersTo()
 	{
 		return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };
 	}
 	
 	@Override
-	public void attachEventListeners(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient graphItem)
 	{
 		if(graphItem instanceof BoxGraphItemClient)
 		{

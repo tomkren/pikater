@@ -1,7 +1,8 @@
 package org.pikater.core.ontology.subtrees.management;
 
 import jade.content.AgentAction;
-import org.pikater.core.agents.configuration.Arguments;
+
+import org.pikater.core.configuration.Arguments;
 
 public class CreateAgent implements AgentAction {
 

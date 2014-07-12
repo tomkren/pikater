@@ -2,6 +2,7 @@ package org.pikater.core.agents.system;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -24,12 +25,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Agent_ARFFReader extends PikaterAgent {
 	private static final long serialVersionUID = 7116837600070711675L;
 	// data read from file
 	protected Instances data;
 
+	@Override
+	public List<Ontology> getOntologies() {
+
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(DataOntology.getInstance());
+		
+		return ontologies;
+	}
+	
 	boolean ReadFromFile(String relativeFileName) {
 		if (relativeFileName == null || relativeFileName.length() == 0) {
 			return false;
@@ -153,4 +164,5 @@ public class Agent_ARFFReader extends PikaterAgent {
 			return notUnderstood;
 		} // end prepareResultNotification
 	}
+
 }

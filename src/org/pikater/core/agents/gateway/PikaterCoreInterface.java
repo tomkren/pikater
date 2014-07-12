@@ -1,6 +1,7 @@
 package org.pikater.core.agents.gateway;
 
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
+import org.pikater.core.agents.gateway.newAgent.PikaterGateway_NewAgent;
 import org.pikater.core.agents.gateway.newBatch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -23,6 +24,14 @@ public class PikaterCoreInterface {
 	 */
 	public static void newBatch(int IDNewBatch) throws Exception {
 		PikaterGateway_NewBatch.newBatch(IDNewBatch);
+	}
+
+	/*
+	 * Public interface Send the information to PikaterCore by using the
+	 * NewAgent ontology which contains only agent className.
+	 */
+	public static void newAgent(Class<?> agentClass) throws Exception {
+		PikaterGateway_NewAgent.newAgent(agentClass);
 	}
 
 	/*

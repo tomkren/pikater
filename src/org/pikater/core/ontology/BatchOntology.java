@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restriction.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.type.Type;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 public class BatchOntology extends BeanOntology {
 
@@ -24,6 +25,8 @@ public class BatchOntology extends BeanOntology {
         String restrictionPackage = IRestriction.class.getPackage().getName();
         String typePackage = Type.class.getPackage().getName();
         String valuePackage = ITypedValue.class.getPackage().getName();
+
+        String methodPackage = EvaluationMethod.class.getPackage().getName();
         
         try {
             add(computingDescriptionPackage);
@@ -32,6 +35,8 @@ public class BatchOntology extends BeanOntology {
             add(restrictionPackage);
             add(typePackage);
             add(valuePackage);
+            
+            add(methodPackage);
 
         } catch (Exception e) {
             e.printStackTrace();

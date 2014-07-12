@@ -21,13 +21,13 @@ import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 
-import org.pikater.core.agents.configuration.Arguments;
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.configuration.Arguments;
 import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
@@ -81,7 +81,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         MessageTemplate mt = MessageTemplate.and(
         		MessageTemplate.MatchOntology(ontology.getName()),
         		MessageTemplate.MatchPerformative(ACLMessage.REQUEST));        
-		addBehaviour(new receiveRequest(this, mt));
+		addBehaviour(new RecommendBehaviour(this, mt));
 
 
 		sendAgentInfo(getAgentInfo());
@@ -89,15 +89,17 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     }
          
 	
-	protected class receiveRequest extends AchieveREResponder {
+	protected class RecommendBehaviour extends AchieveREResponder {
 
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = -8353926385111974474L;		
+		private static final long serialVersionUID = -8353926385111974474L;
+		private PikaterAgent agent;
 		
-		public receiveRequest(Agent a, MessageTemplate mt) {
-			super(a, mt);
+		public RecommendBehaviour(PikaterAgent agent, MessageTemplate mt) {
+			super(agent, mt);
+			this.agent = agent;
 		}
 
         @Override
@@ -129,7 +131,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						// or fetch them from database:
 						GetMetadata gm = new GetMetadata();
 						gm.setInternal_filename(rec.getData().getTestFileName());
-						metadata = DataManagerService.getMetadata(myAgent, gm);
+						metadata = DataManagerService.getMetadata(agent, gm);
 						data.setMetadata(metadata);
 					}                            			
 
@@ -210,7 +212,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	protected java.util.List<NewOption> getAgentOptions(String agentType) {
 
-		Ontology ontology = MessagesOntology.getInstance();
+		Ontology ontology = AgentInfoOntology.getInstance();
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		// find an agent according to type

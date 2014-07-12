@@ -10,9 +10,9 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.GraphItemSetChange;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -89,7 +89,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 						// GWTLogger.logWarning("KeyCode down: " + event.getNativeEvent().getKeyCode());
 						break;
 				}
-				event.stopPropagation();
 			}
 		});
 		addMouseOverHandler(new MouseOverHandler()
@@ -148,9 +147,9 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				// resize the kinetic stage to fully fill the parent component
 				Element elementWithKnownSize = getElement();
 				getEngine().resize(elementWithKnownSize.getOffsetWidth(), elementWithKnownSize.getOffsetHeight());
-
+				
 				// send information about absolute position to the server so that it can compute relative mouse position
-				getServerRPC().command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
+				command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
 				
 				// and finally, draw the stage
 				getEngine().draw(EngineComponent.STAGE);
@@ -163,14 +162,14 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	
 	@Override
 	public void command_createBox(final BoxInfo info)
-	{
+	{	
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
-		    public void execute()
+			public void execute()
 			{
 				getShapeCreator().createBox(NodeRegisterType.AUTOMATIC, info);
-		    }
+			}
 		});
 	}
 	
@@ -184,7 +183,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
-		    public void execute()
+			public void execute()
 			{
 				if(experiment != null)
 				{
@@ -198,7 +197,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				{
 					command_resetKineticEnvironment();
 				}
-		    }
+			}
 		});
 	}
 	
@@ -208,11 +207,11 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
-		    public void execute()
+			public void execute()
 			{
 				getEngine().destroyGraphAndClearStage();
 				getHistoryManager().clear();
-		    }
+			}
 		});
 	}
 	
@@ -222,17 +221,24 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
-		    public void execute()
+			public void execute()
 			{
 				getEngine().reloadVisualStyle();
-		    }
+			}
 		});
 	}
 	
 	@Override
 	public void request_sendExperimentToSave()
 	{
-		response_sendExperimentToSave(getEngine().toIntermediateFormat());
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+			public void execute()
+			{
+				response_sendExperimentToSave(getEngine().toIntermediateFormat());
+			}
+		});
 	}
 	
 	// *****************************************************************************************************
@@ -271,16 +277,40 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		getHistoryManager().clear();
 	}
 	
+	/*
+	 * VAADIN'S BUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUG!
+	 * Vaadin's RPC always takes the latest method with the same name and erasure (ignoring types), e.g.:
+	 * 
+	 * class Whatever1 implements Serializable
+	 * {
+	 * }
+	 * 
+	 * class Whatever2 implements Serializable
+	 * {
+	 * }
+	 * 
+	 * void foo(Whatever1 whatever1);
+	 * void foo(Whatever2 whatever2);
+	 * 
+	 * When calling "rpc.foo(Whatever1)", "foo(Whatever2)" is used anyway.
+	 * 
 	@Override
-	public void command_itemSetChange(GraphItemSetChange changeType, BoxGraphItemShared[] boxes)
+	public void command_itemSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 	{
-		getServerRPC().command_itemSetChange(changeType, boxes);
+		getServerRPC().command_itemSetChange(opKind, edges);
+	}
+	*/
+	
+	@Override
+	public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
+	{
+		getServerRPC().command_boxSetChange(opKind, boxes);
 	}
 
 	@Override
-	public void command_itemSetChange(GraphItemSetChange changeType, EdgeGraphItemShared[] edges)
+	public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 	{
-		getServerRPC().command_itemSetChange(changeType, edges);
+		getServerRPC().command_edgeSetChange(opKind, edges);
 	}
 	
 	// *****************************************************************************************************

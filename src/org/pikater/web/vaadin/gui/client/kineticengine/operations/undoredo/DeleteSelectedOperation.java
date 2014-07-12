@@ -4,9 +4,9 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule;
-import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule.RegistrationOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.SelectionOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 
 public class DeleteSelectedOperation extends BiDiOperation
 {

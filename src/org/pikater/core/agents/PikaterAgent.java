@@ -13,13 +13,13 @@ import jade.domain.FIPAException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
-import org.pikater.core.agents.configuration.Argument;
-import org.pikater.core.agents.configuration.Arguments;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.configuration.Argument;
+import org.pikater.core.configuration.Arguments;
 import org.pikater.shared.logging.Logger;
 import org.pikater.shared.logging.Severity;
 import org.pikater.shared.logging.Verbosity;
-import org.pikater.core.ontology.MessagesOntology;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,13 +57,7 @@ public abstract class PikaterAgent extends Agent {
 		return codec;
 	}
 
-	public List<Ontology> getOntologies() {
-		
-		List<Ontology> ontologies = new ArrayList<Ontology>();
-		ontologies.add(MessagesOntology.getInstance());
-		
-		return ontologies;
-	}
+	public abstract List<Ontology> getOntologies();
 
 	protected String getAgentType() {
 		return this.getClass().getName();

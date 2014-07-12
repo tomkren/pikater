@@ -1,5 +1,8 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.edzard.kinetic.Box2d;
 import net.edzard.kinetic.Colour;
 import net.edzard.kinetic.Group;
@@ -17,6 +20,7 @@ import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
 
 public class EdgeGraphItemClient extends AbstractGraphItemClient
 {
@@ -64,7 +68,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 	// **********************************************************************************************
 	// PROGRAMMATIC VARIABLES AND TYPES
 	
-	private static enum InternalState
+	public enum EdgeState
 	{
 		EDGE,
 		BASELINE
@@ -98,7 +102,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 	/**
 	 * The state indicating whether this edge is currently being displayed as an edge or as a baseline.
 	 */
-	private InternalState internalState;
+	private EdgeState internalState;
 	
 	/**
 	 * Regular constructor.
@@ -110,7 +114,6 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 		// first programmatic fields
 		this.fromBox = null;
 		this.toBox = null;
-		this.internalState = InternalState.EDGE;
 		
 		// setup the edge if not connected
 		this.baseLine = Kinetic.createLine(Vector2d.origin, Vector2d.origin);
@@ -183,9 +186,6 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 			Layer layer = getKineticEngine().getContainer(EngineComponent.LAYER_EDGES).cast();
 			layer.add(groupContainer);
 			layer.add(baseLine);
-			
-			assert(internalState == InternalState.EDGE);
-			baseLine.hide();
 		}
 		else
 		{
@@ -218,7 +218,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 	@Override
 	public EngineComponent getComponentToDraw()
 	{
-		return internalState == InternalState.BASELINE ? EngineComponent.LAYER_EDGES :
+		return internalState == EdgeState.BASELINE ? EngineComponent.LAYER_EDGES :
 			(isSelected() ? EngineComponent.LAYER_SELECTION : EngineComponent.LAYER_EDGES);
 	}
 	
@@ -244,7 +244,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 		// IMPORTANT: don't violate the call order
 		baseLine.setEnd(getOtherEndpoint(draggedEndPoint).getAbsolutePointPosition(RectanglePoint.CENTER));
 		endPointDrag_updateBaseLine(draggedEndPoint);
-		toBaseLine_onFinish();
+		setInternalState(EdgeState.BASELINE);
 	}
 	
 	public void endPointDrag_updateBaseLine(BoxGraphItemClient draggedEndPoint)
@@ -262,7 +262,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 		// IMPORTANT: don't violate the call order
 		baseLine.setEnd(staticBox.getAbsolutePointPosition(RectanglePoint.CENTER));
 		edgeDrag_updateBaseLine(initialDragPosition);
-		toBaseLine_onFinish();
+		setInternalState(EdgeState.BASELINE);
 	}
 	
 	public void edgeDrag_updateBaseLine(Vector2d newPosition)
@@ -277,6 +277,22 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 	
 	// **********************************************************************************************
 	// JUST SOME GETTERS AND UNIMPORTANT PUBLIC ROUTINES
+	
+	public static EdgeGraphItemShared[] toShared(EdgeGraphItemClient... edges)
+	{
+		Set<EdgeGraphItemShared> resultSet = new HashSet<EdgeGraphItemShared>();
+		for(int i = 0; i < edges.length; i++)
+		{
+			if(edges[i].areBothEndsDefined())
+			{
+				resultSet.add(new EdgeGraphItemShared(
+						edges[i].getEndPoint(EndPoint.FROM).getInfo().boxID,
+						edges[i].getEndPoint(EndPoint.TO).getInfo().boxID
+				));
+			}
+		}
+		return resultSet.toArray(new EdgeGraphItemShared[0]);
+	}
 	
 	public BoxGraphItemClient getEndPoint(EndPoint endPoint)
 	{
@@ -346,18 +362,40 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 	
 	public BoxGraphItemClient getSelectedEndpoint()
 	{
-		assert(isExactlyOneEndSelected());
+		if(!isExactlyOneEndSelected())
+		{
+			throw new IllegalStateException("Exactly one endpoint needs to be selected.");
+		}
 		return fromBox.isSelected() ? fromBox : toBox;
 	}
 	
 	public BoxGraphItemClient getNotSelectedEndpoint()
 	{
-		assert(isExactlyOneEndSelected());
+		if(!isExactlyOneEndSelected())
+		{
+			throw new IllegalStateException("Exactly one endpoint needs to be selected.");
+		}
 		return fromBox.isSelected() ? toBox : fromBox;
 	}
 	
 	// **********************************************************************************************
 	// OTHER IMPORTANT PUBLIC METHODS
+	
+	public void setInternalState(EdgeState newState)
+	{
+		if(newState == EdgeState.BASELINE)
+		{
+			internalState = EdgeState.BASELINE;
+			groupContainer.hide();
+			baseLine.show();
+		}
+		else // edge mode
+		{
+			internalState = EdgeState.EDGE;
+			baseLine.hide();
+			groupContainer.show();
+		}
+	}
 	
 	/**
 	 * When using this method, keep in mind that eventually {@link #setEdgeRegisteredInEndpoints(boolean registered)}
@@ -409,6 +447,11 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 	 */
 	public void updateEdge()
 	{
+		if(internalState == EdgeState.BASELINE)
+		{
+			throw new IllegalStateException("Edge is in baseline mode. Switch to edge mode before executing this method.");
+		}
+		
 		// compute new endpoints
 		Vector2d delta = toBox.getAbsolutePointPosition(RectanglePoint.CENTER).sub(fromBox.getAbsolutePointPosition(RectanglePoint.CENTER)); // the vector from A to B <=> B-A <=> delta
 		double angle = Math.toDegrees(Math.atan2(delta.y, delta.x));
@@ -457,7 +500,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 		Vector2d rightArrowEnd = new Vector2d(toPos.x, toPos.y);
 		rightArrowEnd.sub(u);
 		rightArrowEnd.sub(v);
-
+		
 		// update the arrow
 		this.arrow.setData(new Path().moveTo(fromPos).lineTo(toPos).moveTo(leftArrowEnd).lineTo(toPos).lineTo(rightArrowEnd).closePath().toSVGPath());
 		this.arrow.setPosition(0, 0); // reset any selection drags to avoid the X and Y properties to act as an offset
@@ -479,22 +522,14 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 		}
 	}
 	
-	private void toBaseLine_onFinish()
-	{
-		// change the state
-		internalState = InternalState.BASELINE;
-		
-		// and switch visible components
-		groupContainer.hide();
-		baseLine.show();
-	}
-	
+	/**
+	 * Called to switch internal state to 'edge', after both endpoints have been specified.
+	 * @param updateEdge
+	 */
 	private void toEdge_onFinish(boolean updateEdge)
 	{
-		// IMPORTANT: don't violate the call order
-		
 		// change the state
-		internalState = InternalState.EDGE;
+		setInternalState(EdgeState.EDGE);
 		
 		// update arrow positions
 		if(updateEdge)
@@ -502,9 +537,5 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 			updateEdge();
 		}
 		setEdgeRegisteredInEndpoints(true);
-		
-		// and switch visible components
-		baseLine.hide();
-		groupContainer.show();
 	}
 }

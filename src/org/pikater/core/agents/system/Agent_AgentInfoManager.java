@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
@@ -16,11 +16,11 @@ import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
 import org.pikater.core.agents.system.agentInfoManager.AgentInfoManagerCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
-import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.reflections.Reflections;
 
@@ -87,15 +87,19 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					action = (Action) getContentManager().extractContent(
 							request);
 				} catch (UngroundedException e) {
-				    logError(e.getMessage());
+				    logError(e.getMessage(), e);
 				} catch (CodecException e) {
-					logError(e.getMessage());
+					logError(e.getMessage(), e);
 				} catch (OntologyException e) {
-					logError(e.getMessage());
+					logError(e.getMessage(), e);
 				}
 
 				if (action.getAction() instanceof GetAgentInfos) {
 					return respondToGetAgentInfos(request, action);
+				}
+
+				if (action.getAction() instanceof NewAgent) {
+					return respondToNewAgent(request, action);
 				}
 
 				if (action.getAction() instanceof AgentInfo) {
@@ -116,12 +120,19 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 	}
 
-	
 	private void initializationAgentInfo() {
+		List<Class<? extends Agent_AbstractExperiment>> classes =
+				getAllExperimmentAgentClasses();
+		
+		wakeUpAgentInfo(classes);
+	}
+
+	private void wakeUpAgentInfo(
+			List<Class<? extends Agent_AbstractExperiment>> agentClasses) {
 		
 		Map<String, AgentController> controlers = new HashMap<String, AgentController>();
 
-		for (Class<? extends Agent_AbstractExperiment> agentClassI : getAllExperimmentAgentClasses()) {
+		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
 			try {
 				PlatformController container = getContainerController();
 				AgentController agentControllerI = container.createNewAgent(
@@ -130,7 +141,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				
 				controlers.put(agentClassI.getSimpleName(), agentControllerI);
 			} catch (ControllerException e) {
-				logError(e.getMessage());
+				logError(e.getMessage(), e);
 			}
 		}
 		
@@ -199,13 +210,37 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 
 		return reply;
 
+	}
+
+	protected ACLMessage respondToNewAgent(ACLMessage request, Action action) {
+
+		NewAgent newAgent = (NewAgent)action.getAction();
+		String agentClassName = newAgent.getAgentClassName();
+		
+		Class<? extends Agent_AbstractExperiment> agentClass = null;
+		try {
+			agentClass = (Class<? extends Agent_AbstractExperiment>) Class.forName(agentClassName);
+		} catch (ClassNotFoundException e) {
+			logError(e.getMessage(), e);
+		}
+		
+		List<Class<? extends Agent_AbstractExperiment>> classes =
+				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
+		classes.add(agentClass);
+		
+		wakeUpAgentInfo(classes);
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK");
+		return reply;
 	}
 
 	
@@ -224,9 +259,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 
 		return reply;
@@ -249,9 +284,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			getContentManager().fillContent(request,
 					new Action(receiver, saveAgentInfo));
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 		
 		ACLMessage reply = null;
@@ -284,7 +319,7 @@ class ShutDownAgents extends Thread {
 				Thread.sleep(1000);
 			}
 		} catch (InterruptedException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		}
 		
 		for (String agentNameI : controlers.keySet()){
@@ -294,7 +329,7 @@ class ShutDownAgents extends Thread {
 				agent.log("Shut down: " + agentNameI);
 				contorlerI.kill();
 			} catch (StaleProxyException e) {
-				agent.logError(e.getMessage());
+				agent.logError(e.getMessage(), e);
 			}
 		}
     }

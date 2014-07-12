@@ -1,4 +1,4 @@
-package org.pikater.core.agents;
+package org.pikater.core;
 
 public abstract class AgentNames {
 
@@ -16,6 +16,7 @@ public abstract class AgentNames {
 	public static String AGENTINFO_MANAGER = "AgentInfoManager";
 	public static String VIRTUAL_BOX_PROVIDER = "VirtualBoxProvider";
 	public static String FREDDIE = "Freddie";
-	public static String MAIL_AGENT = "mailAgent";
+	public static String MAILING = "Mailing";
+	public static String DURATION = "duration";
 
 }

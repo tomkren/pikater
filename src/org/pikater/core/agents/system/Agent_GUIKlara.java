@@ -20,7 +20,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;

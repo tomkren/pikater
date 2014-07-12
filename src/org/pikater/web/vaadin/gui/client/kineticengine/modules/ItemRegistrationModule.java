@@ -11,9 +11,8 @@ import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraph
 import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.SelectionOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.GraphItemSetChange;
 
 public class ItemRegistrationModule implements IEngineModule
 {
@@ -27,7 +26,7 @@ public class ItemRegistrationModule implements IEngineModule
 	/**
 	 * Selection plugin is needed for manual deselection.
 	 */
-	private final SelectionModule selectionModule;
+	private SelectionModule selectionModule;
 	
 	/**
 	 * A self-explanatory variable.
@@ -42,7 +41,6 @@ public class ItemRegistrationModule implements IEngineModule
 	{
 		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = engine;
-		this.selectionModule = (SelectionModule) engine.getModule(SelectionModule.moduleID);
 		this.allRegisteredBoxes = new HashSet<BoxGraphItemClient>();
 	}
 	
@@ -54,39 +52,26 @@ public class ItemRegistrationModule implements IEngineModule
 	{
 		return moduleID;
 	}
+	
+	@Override
+	public void createModuleCrossReferences()
+	{
+		selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID); 
+	}
 
 	@Override
-	public String[] getItemsToAttachTo()
+	public String[] getGraphItemTypesToAttachHandlersTo()
 	{
 		return null;
 	}
 
 	@Override
-	public void attachEventListeners(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient graphItem)
 	{
 	}
 	
 	// *****************************************************************************************************
 	// PUBLIC TYPES AND INTERFACE TO PERFORM ALL ITEM REGISTRATION/UNREGISTRATION RELATED OPERATIONS
-	
-	public enum RegistrationOperation
-	{
-		/**
-		 * Register and display items immediately.
-		 */
-		REGISTER,
-		
-		/**
-		 * Remove items from the graph immediately but don't destroy or disconnect them.
-		 */
-		UNREGISTER;
-		
-		public boolean registrationCheck(EdgeGraphItemClient edge)
-		{
-			boolean registered = edge.getMasterNode().isRegistered();
-			return this == REGISTER ? !registered : registered; // only register unregistered edges and vice versa
-		}
-	}
 	
 	/**
 	 * Does the operation corresponding to the arguments. The following things are
@@ -125,7 +110,10 @@ public class ItemRegistrationModule implements IEngineModule
 		}
 		
 		// send info to the server
-		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, BoxGraphItemShared.fromArray(boxes));
+		if(boxes.length != 0)
+		{
+			kineticEngine.getContext().command_boxSetChange(opKind, BoxGraphItemClient.toShared(boxes));
+		}
 
 		// and finally, request redraw of the stage
 		if(drawOnFinish)
@@ -158,14 +146,27 @@ public class ItemRegistrationModule implements IEngineModule
 			{
 				edge.setEdgeRegisteredInEndpoints(visible);
 			}
-			if(opKind.registrationCheck(edge)) // don't register in kinetic again, if the edge is already registered
+			
+			// only register unregistered edges and vice versa - don't register an already registered edge again
+			if((opKind == RegistrationOperation.REGISTER) && !edge.getMasterNode().isRegistered())
 			{
-				edge.setVisibleInKinetic(visible);
+				edge.setVisibleInKinetic(true);
+			}
+			else if((opKind == RegistrationOperation.UNREGISTER) && edge.getMasterNode().isRegistered())
+			{
+				edge.setVisibleInKinetic(false);
 			}
 		}
 		
 		// send info to the server
-		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, EdgeGraphItemShared.fromArray(edges));
+		if(edges.length != 0)
+		{
+			EdgeGraphItemShared[] serializedEdges = EdgeGraphItemClient.toShared(edges);
+			if(serializedEdges.length > 0)
+			{
+				kineticEngine.getContext().command_edgeSetChange(opKind, serializedEdges);
+			}
+		}
 		
 		if(drawOnFinish)
 		{
@@ -207,8 +208,8 @@ public class ItemRegistrationModule implements IEngineModule
 		}
 		
 		// send info to the server
-		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, BoxGraphItemShared.fromArray(getRegisteredBoxes()));
-		kineticEngine.getContext().command_itemSetChange(GraphItemSetChange.DELETION, EdgeGraphItemShared.fromArray(destroyedEdges.toArray(new EdgeGraphItemClient[0])));
+		// kineticEngine.getContext().command_itemSetChange(RegistrationOperation.UNREGISTER, BoxGraphItemShared.fromArray(getRegisteredBoxes()));
+		// kineticEngine.getContext().command_itemSetChange(RegistrationOperation.UNREGISTER, EdgeGraphItemShared.fromArray(destroyedEdges.toArray(new EdgeGraphItemClient[0])));
 
 		// destroy boxes
 		for(BoxGraphItemClient box : allRegisteredBoxes)

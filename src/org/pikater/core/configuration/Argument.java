@@ -1,4 +1,4 @@
-package org.pikater.core.agents.configuration;
+package org.pikater.core.configuration;
 
 /**
  * User: Kuba

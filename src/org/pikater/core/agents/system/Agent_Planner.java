@@ -21,7 +21,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.planner.CPUCore;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
@@ -50,8 +50,8 @@ public class Agent_Planner extends PikaterAgent {
 			new HashMap<AID, ComputerInfo>();
 
 	@Override
-	public java.util.List<Ontology> getOntologies() {
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+	public List<Ontology> getOntologies() {
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		return ontologies;

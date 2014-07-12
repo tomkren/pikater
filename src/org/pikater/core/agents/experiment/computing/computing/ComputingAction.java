@@ -394,7 +394,7 @@ public class ComputingAction extends FSMBehaviour {
 
 					if (agent.state == Agent_ComputingAgent.states.TRAINED) {
 						EvaluationMethod evaluation_method = executeAction
-								.getTask().getEvaluation_method();
+								.getTask().getEvaluationMethod();
 
 						if (!mode.equals("train_only")) {
 							agent.evaluateCA(evaluation_method, eval);

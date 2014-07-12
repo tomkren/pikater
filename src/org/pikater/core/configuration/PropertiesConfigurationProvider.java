@@ -1,4 +1,4 @@
-package org.pikater.core.agents.configuration;
+package org.pikater.core.configuration;
 
 import java.io.FileInputStream;
 import java.io.IOException;

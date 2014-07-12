@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
@@ -122,6 +121,10 @@ public class ComputationDescription implements Concept {
 			IComputationElement dataProcessing = fifo.get(0);
 			fifo.remove(0);
 			
+			if (dataProcessing == null) {
+				continue;
+			}
+			
 			if (! finishedDataProcessings.containsKey(dataProcessing.getId()) ) {
 				
 				UniversalOntology uOntology =
@@ -145,6 +148,7 @@ public class ComputationDescription implements Concept {
 			IComputationElement processI = finishedDataProcessings.get(keyI);
 			
 			List<DataSourceDescription> slotsI = processI.exportAllDataSourceDescriptions();
+			System.out.println(processI.getClass());
 			for (DataSourceDescription slotIJ : slotsI) {
 	
 				UniversalElement uniElement = new UniversalElement();
@@ -244,12 +248,12 @@ public class ComputationDescription implements Concept {
 		return description;
 	}
 
-	
-	public String exportXML(String fileName) throws FileNotFoundException {
+	public String exportXML() {
 
 		generateIDs();
 		
 		XStream xstream = new XStream();
+		xstream.setMode(XStream.NO_REFERENCES);
 
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;
@@ -259,11 +263,16 @@ public class ComputationDescription implements Concept {
 
 		String xml = xstream.toXML(this);
 
+		return xml;
+	}
+
+	public void exportXML(String fileName) throws FileNotFoundException {
+
+		String xml = exportXML();
+
 		PrintWriter file = new PrintWriter(fileName);
 		file.println(xml);
 		file.close();
-
-		return xml;
 	}
 
 	public static ComputationDescription importXML(File file)
@@ -279,7 +288,8 @@ public class ComputationDescription implements Concept {
 	public static ComputationDescription importXML(String xml) {
 
 		XStream xstream = new XStream();
-
+		xstream.setMode(XStream.NO_REFERENCES);
+		
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;
 
@@ -291,17 +301,6 @@ public class ComputationDescription implements Concept {
 				.fromXML(xml);
 
 		return computDes;
-	}
-	
-	
-	public static void main(String [ ] args) {
-		
-		ComputationDescription cd = SimpleTraining.createDescription();
-		cd.generateIDs();
-		
-		UniversalComputationDescription ucd = cd.exportUniversalComputationDescription();
-		
-		ComputationDescription cd2 = ComputationDescription.importUniversalComputationDescription(ucd);
 	}
 
 }

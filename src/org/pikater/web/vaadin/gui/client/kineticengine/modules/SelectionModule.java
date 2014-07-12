@@ -130,15 +130,20 @@ public class SelectionModule implements IEngineModule
 	{
 		return moduleID;
 	}
+	
+	@Override
+	public void createModuleCrossReferences()
+	{
+	}
 
 	@Override
-	public String[] getItemsToAttachTo()
+	public String[] getGraphItemTypesToAttachHandlersTo()
 	{
 		return new String[] { GWTMisc.getSimpleName(BoxGraphItemClient.class) };
 	}
 
 	@Override
-	public void attachEventListeners(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient graphItem)
 	{
 		if(graphItem instanceof BoxGraphItemClient)
 		{

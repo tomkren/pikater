@@ -285,24 +285,19 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		switch(toolbox)
 		{
 			case METHOD_BROWSER:
-				if(visible)
-				{
-					if(toolbox_boxOptions.isVisible())
-					{
-						setComponentVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER.toComponentPosition(), false);
-					}
-				}
 				setComponentVisible(toolbox.toComponentPosition(), visible);
+				
+				if(visible && toolbox_boxOptions.isVisible())
+				{
+					setComponentVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER.toComponentPosition(), false);
+				}
 				break;
 			case METHOD_OPTION_MANAGER:
-				if(visible)
-				{
-					if(toolbox_boxBrowser.isVisible())
-					{
-						setComponentVisible(ExpEditorToolbox.METHOD_BROWSER.toComponentPosition(), false);
-					}
-				}
 				setComponentVisible(toolbox.toComponentPosition(), visible);
+				if(visible && toolbox_boxBrowser.isVisible())
+				{
+					setComponentVisible(ExpEditorToolbox.METHOD_BROWSER.toComponentPosition(), false);
+				}
 				break;
 			case UTILITIES:
 				setComponentVisible(toolbox.toComponentPosition(), visible);

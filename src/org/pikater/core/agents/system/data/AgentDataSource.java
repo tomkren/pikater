@@ -1,12 +1,17 @@
 package org.pikater.core.agents.system.data;
 
+import jade.content.onto.Ontology;
 import jade.util.leap.Serializable;
+
 import org.apache.commons.io.FileUtils;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.DataOntology;
 import org.pikater.shared.logging.Severity;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * User: Kuba
@@ -28,6 +33,15 @@ public class AgentDataSource extends PikaterAgent {
     private HashSet<String> ownedDataSources=new HashSet<>();
     public static String SERVICE_TYPE ="AgentDataSource";
 
+	@Override
+	public List<Ontology> getOntologies() {
+		
+		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(DataOntology.getInstance());
+		
+		return ontologies;
+	}
+	
     //TODO: move to more appropriate location
     public static  void SerializeFile(Serializable toSerialize,String fileName) throws IOException {
         FileOutputStream fileOut = new FileOutputStream(pathToLocalSources+fileName);
@@ -70,5 +84,6 @@ public class AgentDataSource extends PikaterAgent {
         File localDataSourcesDirectory=new File(pathToLocalSources);
         FileUtils.cleanDirectory(localDataSourcesDirectory);
     }
+
 }
 

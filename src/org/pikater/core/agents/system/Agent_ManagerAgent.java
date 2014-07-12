@@ -14,11 +14,11 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 import jade.wrapper.StaleProxyException;
 
-import org.pikater.core.agents.configuration.Arguments;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentRequestResponder;
-import org.pikater.core.agents.configuration.Argument;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.configuration.Argument;
+import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;

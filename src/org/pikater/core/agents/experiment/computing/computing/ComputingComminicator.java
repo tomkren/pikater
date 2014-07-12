@@ -19,7 +19,7 @@ import jade.util.leap.List;
 import java.io.IOException;
 import java.util.Random;
 
-import org.pikater.core.agents.AgentNames;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.TaskOntology;

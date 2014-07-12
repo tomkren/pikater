@@ -110,10 +110,10 @@ public class Task implements Concept {
     public void setData(Data data) {
         this.data = data;
     }
-    public EvaluationMethod getEvaluation_method() {
+    public EvaluationMethod getEvaluationMethod() {
         return evaluation_method;
     }
-    public void setEvaluation_method(EvaluationMethod evaluation_method) {
+    public void setEvaluationMethod(EvaluationMethod evaluation_method) {
         this.evaluation_method = evaluation_method;
     }
     public String getSave_mode() {

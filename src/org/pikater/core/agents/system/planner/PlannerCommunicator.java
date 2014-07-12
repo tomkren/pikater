@@ -14,10 +14,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.agents.AgentNames;
-import org.pikater.core.agents.configuration.Arguments;
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;

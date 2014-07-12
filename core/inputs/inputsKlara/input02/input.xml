@@ -38,7 +38,6 @@
                 <errors/>
                 <dataSources/>
                 <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
-                <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
                 <options>
                   <org.pikater.core.ontology.subtrees.newOption.NewOption>
                     <name>S</name>
@@ -79,6 +78,10 @@
                     <isMutable>false</isMutable>
                   </org.pikater.core.ontology.subtrees.newOption.NewOption>
                 </options>
+                <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+                <evaluationMethod>
+                  <type>Standart</type>
+                </evaluationMethod>
                 <trainingData>
                   <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                     <id>4</id>
@@ -87,9 +90,18 @@
                     <dataSources/>
                     <fileURI>weather.arff</fileURI>
                   </dataProvider>
-                  <dataInputType>testingData</dataInputType>
+                  <dataInputType>trainingData</dataInputType>
                 </trainingData>
-                <testingData reference="../trainingData"/>
+                <testingData>
+                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                    <id>4</id>
+                    <options/>
+                    <errors/>
+                    <dataSources/>
+                    <fileURI>weather.arff</fileURI>
+                  </dataProvider>
+                  <dataInputType>testingData</dataInputType>
+                </testingData>
               </provider>
               <type>RMSE</type>
             </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
@@ -102,7 +114,77 @@
             <searchClass>Agent_ChooseXValues</searchClass>
             <options/>
           </search>
-          <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent" reference="../errors[2]/org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription/provider"/>
+          <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+            <id>3</id>
+            <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+            <errors/>
+            <dataSources/>
+            <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
+            <options>
+              <org.pikater.core.ontology.subtrees.newOption.NewOption>
+                <name>S</name>
+                <values>
+                  <values>
+                    <org.pikater.core.ontology.subtrees.newOption.Value>
+                      <type>
+                        <className>org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue</className>
+                      </type>
+                      <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue">
+                        <value>1</value>
+                      </typedValue>
+                    </org.pikater.core.ontology.subtrees.newOption.Value>
+                  </values>
+                </values>
+                <isMutable>false</isMutable>
+              </org.pikater.core.ontology.subtrees.newOption.NewOption>
+              <org.pikater.core.ontology.subtrees.newOption.NewOption>
+                <name>B</name>
+                <values>
+                  <values>
+                    <org.pikater.core.ontology.subtrees.newOption.Value>
+                      <type>
+                        <className>org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange</className>
+                      </type>
+                      <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange">
+                        <countOfValuesToTry>5</countOfValuesToTry>
+                        <min type="org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue">
+                          <value>0.0</value>
+                        </min>
+                        <max type="org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue">
+                          <value>100.0</value>
+                        </max>
+                      </typedValue>
+                    </org.pikater.core.ontology.subtrees.newOption.Value>
+                  </values>
+                </values>
+                <isMutable>false</isMutable>
+              </org.pikater.core.ontology.subtrees.newOption.NewOption>
+            </options>
+            <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+            <evaluationMethod>
+              <type>Standart</type>
+            </evaluationMethod>
+            <trainingData>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                <id>4</id>
+                <options/>
+                <errors/>
+                <dataSources/>
+                <fileURI>weather.arff</fileURI>
+              </dataProvider>
+              <dataInputType>trainingData</dataInputType>
+            </trainingData>
+            <testingData>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                <id>4</id>
+                <options/>
+                <errors/>
+                <dataSources/>
+                <fileURI>weather.arff</fileURI>
+              </dataProvider>
+              <dataInputType>testingData</dataInputType>
+            </testingData>
+          </computingAgent>
         </dataProvider>
         <dataOutputType>Data</dataOutputType>
       </dataSource>

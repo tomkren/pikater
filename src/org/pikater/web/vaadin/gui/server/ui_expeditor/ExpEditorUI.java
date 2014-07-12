@@ -1,6 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.example.Exmple;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -76,6 +78,12 @@ public class ExpEditorUI extends CustomConfiguredUI
 					
 				}
 				agentInfo.setName(name);
+				
+				Options options = new Options();
+				options.addOption(Exmple.getC());
+				options.addOption(Exmple.getN());
+				options.addOption(Exmple.getU());
+				agentInfo.setOptions(options);
 				
 				agentInfos.addDefinition(agentInfo);
 			}

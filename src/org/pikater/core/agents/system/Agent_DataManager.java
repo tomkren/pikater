@@ -49,9 +49,9 @@ import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
-import org.pikater.core.ontology.MessagesOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
+import org.pikater.core.ontology.ResultOntology;
 import org.postgresql.PGConnection;
 
 import java.io.File;
@@ -146,7 +146,7 @@ public class Agent_DataManager extends PikaterAgent {
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
 		ontologies.add(AccountOntology.getInstance());
-		ontologies.add(MessagesOntology.getInstance());
+		ontologies.add(ResultOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
