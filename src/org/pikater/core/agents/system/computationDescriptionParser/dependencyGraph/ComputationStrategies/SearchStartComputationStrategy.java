@@ -29,6 +29,7 @@ import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

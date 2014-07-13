@@ -32,6 +32,8 @@ public class SearchOntology extends BeanOntology {
 
             add(searchItemPackage);
             
+            add(SearchItem.class);
+            
 
         } catch (Exception e) {
             e.printStackTrace();
