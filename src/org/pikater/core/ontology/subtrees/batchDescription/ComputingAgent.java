@@ -149,23 +149,23 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		NewOption optAgentType = optionsOntol.getOptionByName("agentType");
 		if (optAgentType != null) {
 			StringValue valueAgentType = (StringValue)
-					optAgentType.convertToSingleValue().getTypedValue(); 
+					optAgentType.toSingleValue().getCurrentValue(); 
 			this.agentType = valueAgentType.getValue();
 		}
 
 		//import model
 		NewOption optModel = optionsOntol.getOptionByName("model");
 		if (optModel != null) {
-			Value value = optModel.convertToSingleValue();
-			if (value.getTypedValue() instanceof StringValue) {
-				StringValue stringValue = (StringValue) value.getTypedValue();
+			Value value = optModel.toSingleValue();
+			if (value.getCurrentValue() instanceof StringValue) {
+				StringValue stringValue = (StringValue) value.getCurrentValue();
 				if (stringValue.getValue().equals(NewModel.class.getSimpleName())) {
 					this.model = new NewModel();
 				} else {
 					throw new IllegalStateException("Option doesn't contain correct value");
 				}
-			} else if (value.getTypedValue() instanceof IntegerValue) {
-				IntegerValue integerValue = (IntegerValue) value.getTypedValue();
+			} else if (value.getCurrentValue() instanceof IntegerValue) {
+				IntegerValue integerValue = (IntegerValue) value.getCurrentValue();
 				this.model = new ModelDescription(integerValue.getValue());
 			} else {
 				throw new IllegalStateException("Option doesn't contain correct type");
@@ -175,7 +175,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		//import evaluationMethod
 		NewOption optMethod = optionsOntol.getOptionByName("evaluationMethod");
 		StringValue valueMethod = (StringValue)
-				optMethod.convertToSingleValue().getTypedValue();
+				optMethod.toSingleValue().getCurrentValue();
 		this.evaluationMethod = new EvaluationMethod(
 				valueMethod.getValue() );
 		

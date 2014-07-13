@@ -1,16 +1,10 @@
 package org.pikater.core.options;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
@@ -22,60 +16,33 @@ public class RBFNetwork_CABox {
 		# number of clusters, default 2
 		$ B int 1 1 r 2 1000
 		**/
-		ValueType typeB = new ValueType(IntegerValue.class);
-		typeB.setRangeRestriction(
-				new RangeRestriction(
-						new IntegerValue(2), new IntegerValue(1000) ));
-		RestrictionsForOption restrictionB = new RestrictionsForOption();
-		restrictionB.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeB )) ));
-		
-		NewOption optionB = new NewOption(
+		NewOption optionB = new NewOption("B", new IntegerValue(2), new RangeRestriction(
 				new IntegerValue(2),
-				new ValueType(IntegerValue.class),
-				"B" );
+				new IntegerValue(1000))
+		);
 		optionB.setDescription("Number of clusters");
-		optionB.setTypeRestrictions(restrictionB);
 		
 		
 		/**
 		# minStdDev, default 0.1
 		$ W float 1 1 r 0.01 2
 		**/
-		ValueType typeW = new ValueType(FloatValue.class);
-		typeW.setRangeRestriction(
-				new RangeRestriction(
-						new FloatValue(0.01f), new FloatValue(2.0f) ));
-		RestrictionsForOption restrictionW = new RestrictionsForOption();
-		restrictionW.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeW )) ));
-		
-		NewOption optionW = new NewOption(
-				new FloatValue(0.25f),
-				new ValueType(FloatValue.class),
-				"W" );
+		NewOption optionW = new NewOption("W", new FloatValue(0.25f), new RangeRestriction(
+				new FloatValue(0.01f),
+				new FloatValue(2.0f))
+		);
 		optionW.setDescription("minStdDev");
-		optionW.setTypeRestrictions(restrictionW);
 		
 		
 		/**
 		# Ridge (Set the Ridge value for the logistic or linear regression), default 1.0E-8
 		$ R float 1 1 r 0.000000001 10
 		**/
-		ValueType typeR = new ValueType(FloatValue.class);
-		typeR.setRangeRestriction(
-				new RangeRestriction(
-						new FloatValue(0.000000001f), new FloatValue(10.0f) ));
-		RestrictionsForOption restrictionR = new RestrictionsForOption();
-		restrictionR.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
-		
-		NewOption optionR = new NewOption(
-				new FloatValue(1.0e-8f),
-				new ValueType(FloatValue.class),
-				"R" );
+		NewOption optionR = new NewOption("R", new FloatValue(1.0e-8f), new RangeRestriction(
+				new FloatValue(0.000000001f),
+				new FloatValue(10.0f))
+		);
 		optionR.setDescription("Ridge (Set the Ridge value for the logistic or linear regression)");
-		optionR.setTypeRestrictions(restrictionR);
 		
 		
 		/**
@@ -83,41 +50,22 @@ public class RBFNetwork_CABox {
 		#  (Value should be >= 0 and and a long, Default = 0).
 		$ S int 1 1 r 0 MAXINT
 		**/
-		ValueType typeS = new ValueType(IntegerValue.class);
-		typeS.setRangeRestriction(
-				new RangeRestriction(
-						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		RestrictionsForOption restrictionS = new RestrictionsForOption();
-		restrictionS.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
-		
-		NewOption optionS = new NewOption(
+		NewOption optionS = new NewOption("S", new IntegerValue(0), new RangeRestriction(
 				new IntegerValue(0),
-				new ValueType(IntegerValue.class),
-				"S" );
+				new IntegerValue(Integer.MAX_VALUE))
+		);
 		optionS.setDescription("The value used to seed the random number generator");
-		optionS.setTypeRestrictions(restrictionS);
 		
 		
 		/**
 		#  Set the maximum number of iterations for the logistic regression. (default -1, until convergence).
 		$ M int 1 1 r -1 50
 		**/
-		ValueType typeM = new ValueType(IntegerValue.class);
-		typeM.setRangeRestriction(
-				new RangeRestriction(
-						new IntegerValue(-1), new IntegerValue(50) ));
-		RestrictionsForOption restrictionM = new RestrictionsForOption();
-		restrictionM.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
-		
-		NewOption optionM = new NewOption(
+		NewOption optionM = new NewOption("M", new IntegerValue(-1), new RangeRestriction(
 				new IntegerValue(-1),
-				new ValueType(IntegerValue.class),
-				"M" );
+				new IntegerValue(50))
+		);
 		optionM.setDescription("Set the maximum number of iterations for the logistic regression");
-		optionM.setTypeRestrictions(restrictionM);
-
 
 
 		AgentInfo agentInfo = new AgentInfo();

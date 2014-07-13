@@ -58,12 +58,12 @@ public class Agent_RandomSearch extends Agent_Search {
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.getOptionByName("E");
-			FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();
+			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
 			final_error_rate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.getOptionByName("M");
-			IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getTypedValue();
+			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
 			maximum_tries = valueM.getValue(); 
 		}	
 		

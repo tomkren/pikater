@@ -1,16 +1,10 @@
 package org.pikater.core.options;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
@@ -36,49 +30,23 @@ public class LinearRegression_CABox {
 		$ R float 1 1 r 0.0000000001 0.0001 
 
 		*/
-		ValueType typeS = new ValueType(IntegerValue.class);
-		typeS.setRangeRestriction(
-				new RangeRestriction(
-						new IntegerValue(0), new IntegerValue(2) ));
-		RestrictionsForOption restrictionS = new RestrictionsForOption();
-		restrictionS.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
-		NewOption optionS = new NewOption(
-				new IntegerValue(6),
-				new ValueType(IntegerValue.class),
-				"S" );
+		NewOption optionS = new NewOption("S", new IntegerValue(6), new RangeRestriction(
+				new IntegerValue(0),
+				new IntegerValue(2))
+		);
 		optionS.setDescription("Set the attriute selection method to use. 1 = None, 2 = Greedy (default 0 = M5' method)");
-		optionS.setTypeRestrictions(restrictionS);
 		
 		
-		ValueType typeC = new ValueType(BooleanValue.class);
-		RestrictionsForOption restrictionC = new RestrictionsForOption();
-		restrictionC.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
-		
-		NewOption optionC = new NewOption(
-				new BooleanValue(false),
-				new ValueType(BooleanValue.class),
-				"C" );
+		NewOption optionC = new NewOption("C", new BooleanValue(false));
 		optionC.setDescription("Do not try to eliminate colinear attributes");
-		optionC.setTypeRestrictions(restrictionC);
 		
 
-		ValueType typeR = new ValueType(FloatValue.class);
-		typeR.setRangeRestriction(
-				new RangeRestriction(
-						new FloatValue(0.0000000001f), new FloatValue(0.0001f) ));
-		RestrictionsForOption restrictionR = new RestrictionsForOption();
-		restrictionR.add( new TypeRestriction(
-				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
-		
-		NewOption optionR = new NewOption(
-				new FloatValue(0.00000001f),
-				new ValueType(FloatValue.class),
-				"R" );
+		NewOption optionR = new NewOption("R", new FloatValue(0.00000001f), new RangeRestriction(
+				new FloatValue(0.0000000001f),
+				new FloatValue(0.0001f))
+		);
 		optionR.setDescription("The ridge parameter (default 1.0e-8)");
-		optionR.setTypeRestrictions(restrictionR);
 		
 	
 		AgentInfo agentInfo = new AgentInfo();

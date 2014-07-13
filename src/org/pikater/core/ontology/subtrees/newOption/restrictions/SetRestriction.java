@@ -7,18 +7,13 @@ import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 
-public class SetRestriction implements IRestriction {
-
-	/**
-	 * 
-	 */
+public class SetRestriction implements IRestriction
+{
 	private static final long serialVersionUID = 611963641797046162L;
 
 	private List<ITypedValue> values;
 
-	public SetRestriction() {
-		this.values = new ArrayList<ITypedValue>();
-	}
+	public SetRestriction() {}
 	public SetRestriction(List<ITypedValue> values) {
 		this.values = new ArrayList<ITypedValue>();
 		addAllValues(values);
@@ -43,10 +38,9 @@ public class SetRestriction implements IRestriction {
 	}
 
 	@Override
-	public ValueType getType() {
-
-		ITypedValue value0 = values.get(0);
-		return new ValueType(value0.getClass());
+	public ValueType getType()
+	{
+		return new ValueType(values.get(0).getClass());
 	}
 
 	@Override
@@ -75,13 +69,13 @@ public class SetRestriction implements IRestriction {
 	}
 
 	@Override
-	public SetRestriction clone() {
-		
+	public SetRestriction clone()
+	{
 		SetRestriction setRest = new SetRestriction();
-		for (ITypedValue valueI : values) {
+		for (ITypedValue valueI : values)
+		{
 			setRest.addValue(valueI.clone());
 		}
 		return setRest;
 	}
-
 }

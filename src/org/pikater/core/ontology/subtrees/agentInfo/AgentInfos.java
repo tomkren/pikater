@@ -57,7 +57,7 @@ public class AgentInfos implements Concept {
 			
 			NewOptionList options = agentInfoI.getOptions();
 			NewOption optionModel = options.getOptionByName("model");
-			Value value = optionModel.convertToSingleValue();
+			Value value = optionModel.toSingleValue();
 			SetRestriction setRestriction = value.getType().getSetRestriction();
 			setRestriction.addAllValues(typedValues);
 		}

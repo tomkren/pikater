@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 
 import jade.content.Concept;
 
 public class ValuesForOption implements Concept
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3600291732186684079L;
 
 	private List<Value> values;
-
-	public ValuesForOption() {
-		values = new ArrayList<Value>();
-	}
-	public ValuesForOption(List<Value> values) {
+	
+	/**
+	 * Should only be used by JADE.
+	 */
+	@Deprecated
+	public ValuesForOption() {}
+	public ValuesForOption(List<Value> values)
+	{
 		this.values = values;
 	}
 	
@@ -43,9 +47,52 @@ public class ValuesForOption implements Concept
 		return values.size();
 	}
 	
+	public boolean containsQuestionMark()
+	{
+		for (Value valueI : values)
+		{
+			ITypedValue ivalueI = valueI.getCurrentValue();
+			if (ivalueI instanceof QuestionMarkRange ||
+					ivalueI instanceof QuestionMarkSet) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isValid()
+	{
+		for(Value value : values)
+		{
+			if(!value.isValid())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public String exportToWeka()
+	{
+		String result = "";
+		for (Value valueI : values)
+		{
+			if (!(valueI.getCurrentValue() instanceof NullValue))
+			{
+				result += " " + valueI.getCurrentValue().exportToWeka();
+			}
+		}
+		return result;
+	}
+	
 	@Override
 	public ValuesForOption clone()
 	{
-		return new ValuesForOption(new ArrayList<Value>(values));
+		List<Value> valuesCopied = new ArrayList<Value>();
+		for(Value value : values)
+		{
+			valuesCopied.add(value.clone());
+		}
+		return new ValuesForOption(valuesCopied);
 	}
 }

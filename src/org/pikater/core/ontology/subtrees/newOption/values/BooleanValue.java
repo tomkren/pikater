@@ -1,23 +1,22 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class BooleanValue implements ITypedValue {
-
-	/**
-	 * 
-	 */
+public class BooleanValue implements ITypedValue
+{
 	private static final long serialVersionUID = 486219518827018753L;
 
 	private boolean value;
 	
-	/*
-	 * Default constructor is needed.
+	/**
+	 * Should only be used by JADE.
 	 */
+	@Deprecated
 	public BooleanValue() {}
 	public BooleanValue(boolean value) {
 		this.value = value;
 	}
 	
-	public boolean getValue() {
+	public Boolean getValue()
+	{
 		return value;
 	}
 	public void setValue(boolean value) {
@@ -25,12 +24,9 @@ public class BooleanValue implements ITypedValue {
 	}
 	
 	@Override
-	public ITypedValue clone() {
-		
-		BooleanValue valueNew = new BooleanValue();
-		valueNew.setValue(value);
-		
-		return valueNew;
+	public ITypedValue clone()
+	{
+		return new BooleanValue(value);
 	}
 	
 	@Override

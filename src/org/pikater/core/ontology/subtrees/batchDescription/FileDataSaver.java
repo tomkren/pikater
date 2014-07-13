@@ -47,7 +47,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 		
 		NewOption optionFile = optinsOnt.getOptionByName("nameOfFile");
 		StringValue value = (StringValue)
-				optionFile.convertToSingleValue().getTypedValue();
+				optionFile.toSingleValue().getCurrentValue();
 		this.nameOfFile = value.getValue();
 		
 	}

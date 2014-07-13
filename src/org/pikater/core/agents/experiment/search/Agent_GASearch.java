@@ -169,32 +169,32 @@ public class Agent_GASearch extends Agent_Search {
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.getOptionByName("E");
-			FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();
+			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
 			final_error_rate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.getOptionByName("M");
-			IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getTypedValue();
+			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
 			maximum_generations = valueM.getValue(); 
 		}		
 		if (options.containsOptionWithName("T")) {
 			NewOption optionT = options.getOptionByName("T");
-			FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getTypedValue();
+			FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
 			mut_prob = valueT.getValue(); 
 		}
 		if (options.containsOptionWithName("X")) {
 			NewOption optionX = options.getOptionByName("X");
-			FloatValue valueX = (FloatValue) optionX.convertToSingleValue().getTypedValue();
+			FloatValue valueX = (FloatValue) optionX.toSingleValue().getCurrentValue();
 			xover_prob = valueX.getValue(); 
 		}
 		if (options.containsOptionWithName("P")) {
 			NewOption optionP = options.getOptionByName("P");
-			IntegerValue valueP = (IntegerValue) optionP.convertToSingleValue().getTypedValue();
+			IntegerValue valueP = (IntegerValue) optionP.toSingleValue().getCurrentValue();
 			pop_size = valueP.getValue(); 
 		}
 		if (options.containsOptionWithName("S")) {
 			NewOption optionS = options.getOptionByName("S");
-			IntegerValue valueS = (IntegerValue) optionS.convertToSingleValue().getTypedValue();
+			IntegerValue valueS = (IntegerValue) optionS.toSingleValue().getCurrentValue();
 			tournament_size = valueS.getValue(); 
 		}
 

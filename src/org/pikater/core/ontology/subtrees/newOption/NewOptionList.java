@@ -23,7 +23,7 @@ public class NewOptionList implements Concept, Iterable<NewOption>
 	
 	public NewOptionList(List<NewOption> list)
 	{
-		set(list);
+		setOptions(list);
 	}
 	
 	@Override
@@ -32,11 +32,11 @@ public class NewOptionList implements Concept, Iterable<NewOption>
 		return options.iterator();
 	}
 	
-	public List<NewOption> getAll()
+	public List<NewOption> getOptions()
 	{
 		return options;
 	}
-	public void set(List<NewOption> list)
+	public void setOptions(List<NewOption> list)
 	{
 		this.options = list;
 	}

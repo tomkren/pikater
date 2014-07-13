@@ -2,80 +2,122 @@ package org.pikater.core.ontology.subtrees.newOption.base;
 
 import jade.content.Concept;
 
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 
 public class Value implements Concept
 {
 	private static final long serialVersionUID = 4778874898115080831L;
 
+	private ITypedValue defaultValue;
+	private ITypedValue currentValue;
 	private ValueType type;
 
-	private ITypedValue typedValue;
-	private ITypedValue defaultValue;
-
-
-	public Value() {}
-	public Value(ITypedValue typedValue) {
-		this.typedValue = typedValue;
-		this.type = new ValueType(typedValue.getClass());
+	/**
+	 * Used to create an empty value suitable for multi-value options.
+	 */
+	@Deprecated
+	public Value()
+	{
 	}
-	public Value(ITypedValue value, ValueType type) {
-		this.typedValue = value;
-		this.type = type;
+	/**
+	 * Value type is inferred from the arguments.
+	 * @param defaultValue
+	 */
+	public Value(ITypedValue defaultValue)
+	{
+		this(defaultValue, null, null);
 	}
-	public Value(ITypedValue typedValue, ITypedValue defaultValue, ValueType type) {
-		this.typedValue = typedValue;
+	/**
+	 * Value type is inferred from the arguments.
+	 * @param defaultValue
+	 */
+	public Value(ITypedValue defaultValue, RangeRestriction rangeRestriction)
+	{
+		this(defaultValue, rangeRestriction, null);
+	}
+	/**
+	 * Value type is inferred from the arguments.
+	 * @param defaultValue
+	 */
+	public Value(ITypedValue defaultValue, SetRestriction setRestriction)
+	{
+		this(defaultValue, null, setRestriction);
+	}
+	/**
+	 * Value type is inferred from the arguments.
+	 * @param defaultValue
+	 */
+	public Value(ITypedValue defaultValue, RangeRestriction rangeRestriction, SetRestriction setRestriction)
+	{
 		this.defaultValue = defaultValue;
+		this.currentValue = this.defaultValue.clone();
+		this.type = new ValueType(defaultValue.getClass(), rangeRestriction, setRestriction);
+	}
+	/**
+	 * Copy-constructor for internal use.
+	 * @return
+	 */
+	private Value(ValueType type, ITypedValue defaultValue, ITypedValue currentValue)
+	{
+		this.defaultValue = defaultValue;
+		this.currentValue = currentValue;
 		this.type = type;
 	}
 
-	public ValueType getType() {
-		return this.type;
-	}
-	public void setType(ValueType type) {
-		this.type = type;
-	}
-
-	public ITypedValue getTypedValue() {
-		return typedValue;
-	}
-	public void setTypedValue(ITypedValue typedValue) {
-		this.typedValue = typedValue;
-	}
-
-	public ITypedValue getDefaultValue() {
+	public ITypedValue getDefaultValue()
+	{
 		return defaultValue;
 	}
-	public void setDefaultValue(ITypedValue defaultValue) {
+	public void setDefaultValue(ITypedValue defaultValue)
+	{
 		this.defaultValue = defaultValue;
 	}
-
+	public ITypedValue getCurrentValue()
+	{
+		return currentValue;
+	}
+	public void setCurrentValue(ITypedValue currentValue)
+	{
+		this.currentValue = currentValue;
+	}
+	public ValueType getType()
+	{
+		return type;
+	}
+	public void setType(ValueType type)
+	{
+		this.type = type;
+	}
 	
-	public boolean isValid() {
-		
-		boolean valueOk = true;
-		if (typedValue != null && type != null) {
-			valueOk = type.equals( new ValueType(typedValue.getClass()) );
+	public boolean isValid()
+	{
+		if(currentValue == null)
+		{
+			return false;
 		}
-
-		boolean defaultValueOk = true;
-		if (defaultValue != null && type != null) {
-			defaultValueOk = type.equals( new ValueType(defaultValue.getClass()) );
+		else if(!type.getTypeClass().equals(currentValue.getClass()))
+		{
+			return false;
 		}
-
-		boolean typeOk = type.isValid();
-
-		return valueOk && defaultValueOk && typeOk;
+		else if((defaultValue != null) && !defaultValue.getClass().equals(currentValue.getClass()))
+		{
+			return false;
+		}
+		else
+		{
+			return type.isValid();
+		}
 	}
 
 	@Override
-	public Value clone() {
-		
-		Value valueNew = new Value();
-		valueNew.setType(type.clone());
-		valueNew.setTypedValue(typedValue.clone());
-		valueNew.setDefaultValue(defaultValue.clone());
-		
-		return valueNew;
+	public Value clone()
+	{
+		return new Value(
+				type.clone(),
+				getDefaultValue() != null ? getDefaultValue().clone() : null,
+				currentValue.clone()
+		);
 	}
 }

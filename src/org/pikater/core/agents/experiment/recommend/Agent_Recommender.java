@@ -6,7 +6,6 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
@@ -195,9 +194,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						// copy the value
                         o2I.setValuesWrapper(o1CAJ.getValuesWrapper().clone());
                         
-						if (o1CAJ.containsQuestionMark()){
+						if (o1CAJ.getValuesWrapper().containsQuestionMark()){
 							// just in case the someone forgot to set opt to mutable
-							o2I.setIsMutable(true);
+							o2I.setImmutable(true);
 						}
 					}
 				}
@@ -293,7 +292,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	protected java.util.List<NewOption> getParameters(){
 		java.util.List<NewOption> optFileOptions =
-				this.getAgentInfo().getOptions().getAll();
+				this.getAgentInfo().getOptions().getOptions();
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	

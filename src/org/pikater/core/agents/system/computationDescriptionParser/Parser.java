@@ -11,7 +11,6 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSou
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
-import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
@@ -299,8 +298,8 @@ public class Parser {
     
     private void setMutableOptions(List<NewOption> childOptions){
     	for (NewOption opt : childOptions){
-    		if (opt.containsQuestionMark() ){
-    			opt.setIsMutable(true);
+    		if (opt.getValuesWrapper().containsQuestionMark() ){
+    			opt.setImmutable(true);
     		}
     	}
     }

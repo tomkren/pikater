@@ -104,7 +104,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		
 		OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
 	    NewOptionList options = new NewOptionList(optionEdge.getOptions());
-		agent.setOptions(options.getAll());
+		agent.setOptions(options.getOptions());
 
 		return agent;
 	}
@@ -179,7 +179,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		java.util.Iterator<NewOption> itr = options.iterator();
 		while (itr.hasNext()) {
 			NewOption opt = (NewOption) itr.next();
-			if(opt.getIsMutable())
+			if(opt.isImmutable())
 				addOptionToSchema(opt, new_schema);
 		}
 		return new_schema;

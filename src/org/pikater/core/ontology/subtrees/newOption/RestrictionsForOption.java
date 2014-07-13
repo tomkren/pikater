@@ -14,20 +14,27 @@ public class RestrictionsForOption implements Concept
 	
 	private List<TypeRestriction> restrictions;
 	
+	/**
+	 * Should only be used by JADE.
+	 */
+	@Deprecated
 	public RestrictionsForOption() {}
 	public RestrictionsForOption(List<TypeRestriction> possibleTypes) {
 		this.restrictions = possibleTypes;
 	}
 
-	public List<TypeRestriction> getAll() {
+	public List<TypeRestriction> getRestrictions()
+	{
 		return restrictions;
 	}
+	public void setRestrictions(List<TypeRestriction> restrictions)
+	{
+		this.restrictions = restrictions;
+	}
+	
 	public TypeRestriction getByIndex(int index)
 	{
 		return restrictions.get(index);
-	}
-	public void set(List<TypeRestriction> possibleTypes) {
-		this.restrictions = possibleTypes;
 	}
 	public void add(TypeRestriction types) {
 
@@ -90,6 +97,11 @@ public class RestrictionsForOption implements Concept
 	@Override
 	public RestrictionsForOption clone()
 	{
-		return new RestrictionsForOption(new ArrayList<TypeRestriction>(restrictions));
+		List<TypeRestriction> restrictionsCopied = new ArrayList<TypeRestriction>();
+		for(TypeRestriction restriction : restrictions)
+		{
+			restrictionsCopied.add(restriction.clone());
+		}
+		return new RestrictionsForOption(restrictionsCopied);
 	}
 }

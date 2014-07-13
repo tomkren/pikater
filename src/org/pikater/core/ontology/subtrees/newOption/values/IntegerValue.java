@@ -1,35 +1,30 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class IntegerValue implements ITypedValue {
-
-	/**
-	 * 
-	 */
+public class IntegerValue implements ITypedValue
+{
 	private static final long serialVersionUID = -2925380308174903951L;
 
 	private int value;
 
-	/*
-	 * Default constructor is needed.
+	/**
+	 * Should only be used by JADE.
 	 */
+	@Deprecated
 	public IntegerValue() {}
 	public IntegerValue(int value) {
 		this.value = value;
 	}
 
-	public int getValue() {
+	public Integer getValue() {
 		return value;
 	}
 	public void setValue(int value) {
 		this.value = value;
 	}
 	@Override
-	public ITypedValue clone() {
-
-		IntegerValue valueNew = new IntegerValue();
-		valueNew.setValue(value);
-		
-		return valueNew;
+	public ITypedValue clone()
+	{
+		return new IntegerValue(value);
 	}
 	
 	@Override

@@ -2,7 +2,6 @@ package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
 import jade.content.Concept;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
@@ -14,20 +13,33 @@ public class TypeRestriction implements Concept
 	private List<ValueType> types;
 
 	public TypeRestriction() {}
-	public TypeRestriction(List<ValueType> types) {
+	public TypeRestriction(List<ValueType> types)
+	{
 		setTypes(types);
 	}
 	
-	public List<ValueType> getTypes() {
+	public List<ValueType> getTypes()
+	{
 		return types;
 	}
-	public void setTypes(List<ValueType> types) {
+	public void setTypes(List<ValueType> types)
+	{
 		this.types = types;
+	}
+	
+	public void addtype(ValueType type)
+	{
+		types.add(type);
 	}
 	
 	@Override
 	public TypeRestriction clone()
 	{
-		return new TypeRestriction(new ArrayList<ValueType>(types));
+		TypeRestriction result = new TypeRestriction();
+		for(ValueType type : types)
+		{
+			result.addtype(type.clone());
+		}
+		return result;
 	}
 }

@@ -18,7 +18,6 @@ import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
-import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
@@ -186,7 +185,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agentI.getOptionByName(optionName) != null){
 	            		
 	            		NewOption optionOfAgentI = agentI.getOptionByName(optionName);
-	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getTypedValue();
+	            		ITypedValue valueI = optionOfAgentI.toSingleValue().getCurrentValue();
 	            		 		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
@@ -207,7 +206,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	if (agent.getOptionByName(optionName) != null) {
 	            		
 	            		NewOption optionOfAgentI = agent.getOptionByName(optionName);
-	            		ITypedValue valueI = optionOfAgentI.convertToSingleValue().getTypedValue();
+	            		ITypedValue valueI = optionOfAgentI.toSingleValue().getCurrentValue();
 	            		
 	            		if (valueI instanceof IntegerValue) {
 	            			IntegerValue integerValue = (IntegerValue) valueI;
@@ -224,7 +223,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	
 	            if (stdDev > 0) {
 	            	
-	            	TypeRestriction typeRestriction = optionI.getTypeRestrictions().getByIndex(0);
+	            	TypeRestriction typeRestriction = optionI.getValueRestrictions().getByIndex(0);
 	            	ValueType type = typeRestriction.getTypes().get(0);
 	            	
 	            	RangeRestriction rangeRestriction = type.getRangeRestriction();
@@ -251,14 +250,16 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	
 	            	QuestionMarkRange questionMark = new QuestionMarkRange(
 	            			new FloatValue(finalMin),
-	            			new FloatValue(finalMax));
+	            			new FloatValue(finalMax),
+	            			0
+	            	);
 	            	
 	                newOpt.getValuesWrapper().addValue(new Value(questionMark));
-	                newOpt.setIsMutable(true);
+	                newOpt.setImmutable(true);
 	            }
 	            else {
-	            	Value valueI = optionI.convertToSingleValue();
-            		ITypedValue iValueI = valueI.getTypedValue();
+	            	Value valueI = optionI.toSingleValue();
+            		ITypedValue iValueI = valueI.getCurrentValue();
             		
 	                if (iValueI instanceof FloatValue) {
 	                	float valueFloat = (float) avg;

@@ -1,23 +1,21 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class FloatValue implements ITypedValue {
-
-	/**
-	 * 
-	 */
+public class FloatValue implements ITypedValue
+{
 	private static final long serialVersionUID = -6154392916809467193L;
 	
 	private float value;
 	
-	/*
-	 * Default constructor is needed.
+	/**
+	 * Should only be used by JADE.
 	 */
+	@Deprecated
 	public FloatValue() {}
 	public FloatValue(float value) {
 		this.value = value;
 	}
 
-	public float getValue() {
+	public Float getValue() {
 		return value;
 	}
 	public void setValue(float value) {
@@ -25,12 +23,9 @@ public class FloatValue implements ITypedValue {
 	}
 	
 	@Override
-	public ITypedValue clone() {
-		
-		FloatValue valueNew = new FloatValue();
-		valueNew.setValue(value);
-		
-		return valueNew;
+	public ITypedValue clone()
+	{
+		return new FloatValue(value);
 	}
 
 	@Override

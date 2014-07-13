@@ -61,7 +61,7 @@ public class Search extends DataProcessing {
 		NewOptionList optionsOnt = new NewOptionList(options);
 		
 		NewOption optSearchClass = optionsOnt.getOptionByName("searchClass");
-		StringValue value = (StringValue) optSearchClass.convertToSingleValue().getTypedValue();
+		StringValue value = (StringValue) optSearchClass.toSingleValue().getCurrentValue();
 		this.searchClass = value.getValue();
 
 		options.remove(optSearchClass);
