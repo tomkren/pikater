@@ -116,39 +116,6 @@ public class ComputingAction extends FSMBehaviour {
 		return false;
 	}
 
-	/* Extract data from INFORM message (ARFF reader) */
-	private DataInstances processGetData(ACLMessage inform) {
-		ContentElement content;
-		try {
-			content = agent.getContentManager().extractContent(inform);
-			if (content instanceof Result) {
-				Result result = (Result) content;
-
-				if (result.getValue() instanceof DataInstances) {
-					return (DataInstances) result.getValue();
-				} else if (result.getValue() instanceof Boolean) {
-
-					Object dataInstance = agent.getO2AObject();
-					if (dataInstance == null)
-						throw new IllegalStateException(
-								"received GetData response without o2a object in queue");
-					else
-						return (DataInstances) dataInstance;
-				} else {
-					throw new IllegalStateException(
-							"received unexpected Inform");
-				}
-			}
-		} catch (UngroundedException e) {
-			agent.logError(e.getMessage(), e);
-		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
-		}
-		return null;
-	}
-
 	public ComputingAction(final Agent_ComputingAgent agent) {
 		super(agent);
 		this.agent = agent;
@@ -204,8 +171,7 @@ public class ComputingAction extends FSMBehaviour {
 
 				if (!trainFn.equals(agent.trainFileName)) {
 					
-					ComputingComminicator communicator = new ComputingComminicator();
-					ACLMessage dataMsg = communicator.sendGetDataReq(agent, trainFn);
+					ACLMessage dataMsg = agent.makeGetDataRequest(trainFn);
 					
 					getTrainBehaviour.reset(dataMsg);
 				} else {
@@ -220,8 +186,7 @@ public class ComputingAction extends FSMBehaviour {
 					
 					if (!testFn.equals(agent.testFileName)) {
 						
-						ComputingComminicator communicator = new ComputingComminicator();
-						ACLMessage dataMsg = communicator.sendGetDataReq(agent, testFn);
+						ACLMessage dataMsg = agent.makeGetDataRequest(testFn);
 
 						getTestBehaviour.reset(dataMsg);
 					} else {
@@ -237,8 +202,7 @@ public class ComputingAction extends FSMBehaviour {
 					
 					if (!labelFn.equals(agent.labelFileName)) {
 						
-						ComputingComminicator communicator = new ComputingComminicator();
-						ACLMessage dataMsg = communicator.sendGetDataReq(agent, labelFn);
+						ACLMessage dataMsg = agent.makeGetDataRequest(labelFn);
 						
 						getLabelBehaviour.reset(dataMsg);
 					} else {
@@ -265,7 +229,7 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances trainDataInstances = processGetData(inform);
+				DataInstances trainDataInstances = agent.processGetDataResponse(inform);
 				if (trainDataInstances != null) {
 					agent.trainFileName = trainFn;
 					agent.ontoTrain = trainDataInstances;
@@ -304,7 +268,7 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances testDataInstances = processGetData(inform);
+				DataInstances testDataInstances = agent.processGetDataResponse(inform);
 				if (testDataInstances != null) {
 					agent.testFileName = testFn;
 					agent.ontoTest = testDataInstances;
@@ -345,7 +309,7 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances labelDataInstances = processGetData(inform);
+				DataInstances labelDataInstances = agent.processGetDataResponse(inform);
 				if (labelDataInstances != null) {
 					agent.labelFileName = labelFn;
 					agent.ontoLabel = labelDataInstances;
@@ -508,11 +472,11 @@ public class ComputingAction extends FSMBehaviour {
 
 				String md5;
 				if (agent.test != null) {
-					md5 = SaveArff(agent.test);
+					md5 = agent.saveArff(agent.test);
 					agent.log("Saved test to " + md5);
 				}
 				if (agent.label != null) {
-					md5 = SaveArff(agent.label);
+					md5 = agent.saveArff(agent.label);
 					agent.log("Saved label to " + md5);
 				}
 				// TODO return result filename to Planner?
@@ -588,22 +552,5 @@ public class ComputingAction extends FSMBehaviour {
 		registerDefaultTransition(SENDRESULTS_STATE, INIT_STATE, new String[] {
 				INIT_STATE, GETTRAINDATA_STATE, GETTESTDATA_STATE,
 				GETLABELDATA_STATE, TRAINTEST_STATE, SENDRESULTS_STATE });
-	}
-
-	protected String SaveArff(Instances i) {
-		ArffSaver saver = new ArffSaver();
-		saver.setInstances(i);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try {
-			saver.setDestination(out);
-			saver.writeBatch();
-			byte[] bout = out.toByteArray();
-			String md5 = DigestUtils.md5Hex(bout);
-			Files.write(bout, new File(Agent_DataManager.dataFilesPath + md5));
-			return md5;
-		} catch (IOException e) {
-			agent.logError("Failed to write results", e);
-			return null;
-		}
 	}
 }

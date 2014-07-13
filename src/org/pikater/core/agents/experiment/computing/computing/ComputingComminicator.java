@@ -2,7 +2,6 @@ package org.pikater.core.agents.experiment.computing.computing;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
-import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -17,13 +16,10 @@ import jade.lang.acl.ACLMessage;
 import jade.util.leap.List;
 
 import java.io.IOException;
-import java.util.Random;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
-import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
 import org.pikater.core.ontology.subtrees.result.PartialResults;
@@ -50,69 +46,6 @@ public class ComputingComminicator {
 		return resultMsg;
 	}
 	
-	public ACLMessage sendGetDataReq(Agent_ComputingAgent agent, String fileName) {
-		AID[] ARFFReaders;
-		AID reader = null;
-		ACLMessage msgOut = null;
-		// Make the list of reader agents
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.ARFF_READER);
-		template.addServices(sd);
-		try {
-			GetData getData = new GetData();
-
-			DFAgentDescription[] result = DFService.search(agent, template);
-
-			ARFFReaders = new AID[result.length];
-			for (int i = 0; i < result.length; ++i) {
-				if (agent.isSameNode(result[i].getName())) {
-					// prefer local reader for O2A transfer
-					reader = result[i].getName();
-					agent.log("preferring reader " + reader.getName());
-					getData.setO2aAgent(agent.getLocalName());
-					break;
-				}
-				ARFFReaders[i] = result[i].getName();
-			}
-
-			// randomly choose one of the readers if none preferred
-			if (reader == null) {
-				Random randomGenerator = new Random();
-				int randomInt = randomGenerator.nextInt(result.length);
-				reader = ARFFReaders[randomInt];
-			}
-
-			agent.log("using reader " + reader + ", filename: " + fileName);
-
-			Ontology ontology = DataOntology.getInstance();
-
-			// request
-			msgOut = new ACLMessage(ACLMessage.REQUEST);
-			msgOut.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-			msgOut.setLanguage(agent.getCodec().getName());
-			msgOut.setOntology(ontology.getName());
-			msgOut.addReceiver(reader);
-			msgOut.setConversationId("get-data_" + agent.convId++);
-			// content
-			getData.setFileName(fileName);
-			Action a = new Action();
-			a.setAction(getData);
-			a.setActor(agent.getAID());
-			agent.getContentManager().fillContent(msgOut, a);
-		} catch (FIPAException fe) {
-			agent.logError("", fe);
-			return null;
-		} catch (CodecException e) {
-			agent.logError("", e);
-			return null;
-		} catch (OntologyException e) {
-			agent.logError("", e);
-			return null;
-		}
-		return msgOut;
-	}
-
 	/*
 	 * Send partial results to the GUI Agent(s) call it after training or during
 	 * training?
