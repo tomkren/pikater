@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.pikater.core.agents.experiment.search.Agent_ChooseXValues;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
@@ -21,7 +21,7 @@ public class ChooseXValue_SearchBox {
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(2000) ));
-		TypeRestrictions restrictionN = new TypeRestrictions();
+		RestrictionsForOption restrictionN = new RestrictionsForOption();
 		restrictionN.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		

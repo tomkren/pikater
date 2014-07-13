@@ -9,6 +9,9 @@ public class StringValue implements ITypedValue {
 
 	private String value;
 	
+	/*
+	 * Default constructor is needed.
+	 */
 	public StringValue() {}
 	public StringValue(String value) {
 		this.value = value;
@@ -22,7 +25,7 @@ public class StringValue implements ITypedValue {
 	}
 	
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 
 		StringValue valueNew = new StringValue();
 		valueNew.setValue(value);
@@ -37,8 +40,8 @@ public class StringValue implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
-		return "String";
+		return "Text";
 	}
 }

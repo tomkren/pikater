@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
@@ -40,7 +40,7 @@ public class LinearRegression_CABox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(2) ));
-		TypeRestrictions restrictionS = new TypeRestrictions();
+		RestrictionsForOption restrictionS = new RestrictionsForOption();
 		restrictionS.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
@@ -53,7 +53,7 @@ public class LinearRegression_CABox {
 		
 		
 		ValueType typeC = new ValueType(BooleanValue.class);
-		TypeRestrictions restrictionC = new TypeRestrictions();
+		RestrictionsForOption restrictionC = new RestrictionsForOption();
 		restrictionC.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
 		
@@ -69,7 +69,7 @@ public class LinearRegression_CABox {
 		typeR.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0000000001f), new FloatValue(0.0001f) ));
-		TypeRestrictions restrictionR = new TypeRestrictions();
+		RestrictionsForOption restrictionR = new RestrictionsForOption();
 		restrictionR.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
 		

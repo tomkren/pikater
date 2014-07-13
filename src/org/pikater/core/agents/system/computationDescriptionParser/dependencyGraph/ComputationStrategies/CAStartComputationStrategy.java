@@ -32,8 +32,8 @@ import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.OptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -91,8 +91,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	}
 	
 	//Create new options from solution with filled ? values (convert solution->options) 
-	private OptionList fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
-		OptionList res_options = new OptionList();
+	private NewOptionList fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
+		NewOptionList res_options = new NewOptionList();
 		List<NewOption> options_list = new ArrayList<NewOption>();
 		if(options==null){
 			return res_options;
@@ -140,7 +140,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 				
 		Agent agent = new Agent();
         OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
-        OptionList options = new OptionList(optionEdge.getOptions());
+        NewOptionList options = new NewOptionList(optionEdge.getOptions());
 
         // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());

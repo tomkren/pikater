@@ -6,9 +6,14 @@ public class NullValue implements ITypedValue {
 	 * 
 	 */
 	private static final long serialVersionUID = 4240750027791781820L;
+	
+	/*
+	 * Default constructor is needed.
+	 */
+	public NullValue() {}
 
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 
 		return new NullValue();
 	}
@@ -20,7 +25,7 @@ public class NullValue implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
 		return "NONE";
 	}

@@ -1,7 +1,9 @@
-package org.pikater.core.ontology.subtrees.newOption;
+package org.pikater.core.ontology.subtrees.newOption.base;
 
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
@@ -9,21 +11,18 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 
 import com.thoughtworks.xstream.XStream;
 
-
 public class NewOption {
 
 	private String name;
 	private String description;
 	
-	private ValueList values;
+	private ValuesForOption values;
 	private boolean isMutable = false;
 	
-	private TypeRestrictions typeRestrictions;
-
-	public NewOption() {
-	}
+	private RestrictionsForOption typeRestrictions;
+	
 	public NewOption(String name) {
-		this.values = new ValueList();
+		this.values = new ValuesForOption();
 		this.name = name;
 	}
 	public NewOption(ITypedValue value, String name) {
@@ -55,10 +54,10 @@ public class NewOption {
 		this.description = description;
 	}
 
-	public ValueList getValuesWrapper() {
+	public ValuesForOption getValuesWrapper() {
 		return values;
 	}
-	public void setValuesWrapper(ValueList values) {
+	public void setValuesWrapper(ValuesForOption values) {
 		this.values = values;
 	}
 	
@@ -77,10 +76,10 @@ public class NewOption {
 		this.isMutable = isMutable;
 	}
 	
-	public TypeRestrictions getTypeRestrictions() {
+	public RestrictionsForOption getTypeRestrictions() {
 		return typeRestrictions;
 	}
-	public void setTypeRestrictions(TypeRestrictions typeRestrictions) {
+	public void setTypeRestrictions(RestrictionsForOption typeRestrictions) {
 		this.typeRestrictions = typeRestrictions;
 	}
 	

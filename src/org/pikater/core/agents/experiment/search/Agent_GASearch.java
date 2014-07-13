@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.OptionList;
-import org.pikater.core.ontology.subtrees.newOption.Value;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -165,7 +165,7 @@ public class Agent_GASearch extends Agent_Search {
 		tournament_size = 2;
 		
 		// find maximum tries in Options		
-		OptionList options = new OptionList(getSearchOptions());
+		NewOptionList options = new NewOptionList(getSearchOptions());
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.getOptionByName("E");

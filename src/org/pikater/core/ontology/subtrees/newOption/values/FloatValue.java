@@ -9,6 +9,9 @@ public class FloatValue implements ITypedValue {
 	
 	private float value;
 	
+	/*
+	 * Default constructor is needed.
+	 */
 	public FloatValue() {}
 	public FloatValue(float value) {
 		this.value = value;
@@ -22,7 +25,7 @@ public class FloatValue implements ITypedValue {
 	}
 	
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 		
 		FloatValue valueNew = new FloatValue();
 		valueNew.setValue(value);
@@ -37,7 +40,7 @@ public class FloatValue implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
 		return "Float";
 	}

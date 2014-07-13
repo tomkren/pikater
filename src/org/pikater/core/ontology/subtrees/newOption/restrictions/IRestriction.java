@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 
 import jade.content.Concept;
 

@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.pikater.core.agents.experiment.search.Agent_GridSearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
@@ -23,7 +23,7 @@ public class GridSearch_SearchBox {
 		typeB.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		TypeRestrictions restrictionB = new TypeRestrictions();
+		RestrictionsForOption restrictionB = new RestrictionsForOption();
 		restrictionB.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeB )) ));
 		
@@ -39,7 +39,7 @@ public class GridSearch_SearchBox {
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100000) ));
-		TypeRestrictions restrictionN = new TypeRestrictions();
+		RestrictionsForOption restrictionN = new RestrictionsForOption();
 		restrictionN.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
@@ -55,7 +55,7 @@ public class GridSearch_SearchBox {
 		typeZ.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1000.0f) ));
-		TypeRestrictions restrictionZ = new TypeRestrictions();
+		RestrictionsForOption restrictionZ = new RestrictionsForOption();
 		restrictionZ.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeZ )) ));
 		

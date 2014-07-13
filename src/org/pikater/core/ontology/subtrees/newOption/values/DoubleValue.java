@@ -9,6 +9,9 @@ public class DoubleValue implements ITypedValue {
 
 	private double value;
 	
+	/*
+	 * Default constructor is needed.
+	 */
 	public DoubleValue() {}
 	public DoubleValue(double value) {
 		this.value = value;
@@ -22,7 +25,7 @@ public class DoubleValue implements ITypedValue {
 	}
 	
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 		
 		DoubleValue valueNew = new DoubleValue();
 		valueNew.setValue(value);
@@ -37,7 +40,7 @@ public class DoubleValue implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
 		return "Double";
 	}

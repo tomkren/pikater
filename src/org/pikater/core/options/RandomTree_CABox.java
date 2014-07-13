@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRandomTreeCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
@@ -25,7 +25,7 @@ public class RandomTree_CABox {
 		typeK.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(50) ));
-		TypeRestrictions restrictionK = new TypeRestrictions();
+		RestrictionsForOption restrictionK = new RestrictionsForOption();
 		restrictionK.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeK )) ));
 		
@@ -45,7 +45,7 @@ public class RandomTree_CABox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		TypeRestrictions restrictionM = new TypeRestrictions();
+		RestrictionsForOption restrictionM = new RestrictionsForOption();
 		restrictionM.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
@@ -65,7 +65,7 @@ public class RandomTree_CABox {
 		typeQ.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
-		TypeRestrictions restrictionQ = new TypeRestrictions();
+		RestrictionsForOption restrictionQ = new RestrictionsForOption();
 		restrictionQ.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeQ )) ));
 		

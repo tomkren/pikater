@@ -9,6 +9,9 @@ public class IntegerValue implements ITypedValue {
 
 	private int value;
 
+	/*
+	 * Default constructor is needed.
+	 */
 	public IntegerValue() {}
 	public IntegerValue(int value) {
 		this.value = value;
@@ -21,7 +24,7 @@ public class IntegerValue implements ITypedValue {
 		this.value = value;
 	}
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 
 		IntegerValue valueNew = new IntegerValue();
 		valueNew.setValue(value);
@@ -36,7 +39,7 @@ public class IntegerValue implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
 		return "Integer";
 	}

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 public class UniversalOntology {
 	private Class<?> type;

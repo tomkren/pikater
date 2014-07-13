@@ -5,16 +5,17 @@ import jade.content.Concept;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 
-public class TypeRestrictions implements Concept
+public class RestrictionsForOption implements Concept
 {
 	private static final long serialVersionUID = 236577012228824852L;
 	
 	private List<TypeRestriction> restrictions;
 	
-	public TypeRestrictions() {}
-	public TypeRestrictions(List<TypeRestriction> possibleTypes) {
+	public RestrictionsForOption() {}
+	public RestrictionsForOption(List<TypeRestriction> possibleTypes) {
 		this.restrictions = possibleTypes;
 	}
 
@@ -87,8 +88,8 @@ public class TypeRestrictions implements Concept
 	*/
 
 	@Override
-	public TypeRestrictions clone()
+	public RestrictionsForOption clone()
 	{
-		return new TypeRestrictions(new ArrayList<TypeRestriction>(restrictions));
+		return new RestrictionsForOption(new ArrayList<TypeRestriction>(restrictions));
 	}
 }

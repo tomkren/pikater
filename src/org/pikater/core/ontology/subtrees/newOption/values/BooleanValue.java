@@ -8,7 +8,10 @@ public class BooleanValue implements ITypedValue {
 	private static final long serialVersionUID = 486219518827018753L;
 
 	private boolean value;
-
+	
+	/*
+	 * Default constructor is needed.
+	 */
 	public BooleanValue() {}
 	public BooleanValue(boolean value) {
 		this.value = value;
@@ -22,7 +25,7 @@ public class BooleanValue implements ITypedValue {
 	}
 	
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 		
 		BooleanValue valueNew = new BooleanValue();
 		valueNew.setValue(value);
@@ -37,7 +40,7 @@ public class BooleanValue implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
 		return "Boolean";
 	}

@@ -3,9 +3,11 @@ package org.pikater.core.ontology.subtrees.newOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.base.Value;
+
 import jade.content.Concept;
 
-public class ValueList implements Concept
+public class ValuesForOption implements Concept
 {
 	/**
 	 * 
@@ -14,10 +16,10 @@ public class ValueList implements Concept
 
 	private List<Value> values;
 
-	public ValueList() {
+	public ValuesForOption() {
 		values = new ArrayList<Value>();
 	}
-	public ValueList(List<Value> values) {
+	public ValuesForOption(List<Value> values) {
 		this.values = values;
 	}
 	
@@ -42,8 +44,8 @@ public class ValueList implements Concept
 	}
 	
 	@Override
-	public ValueList clone()
+	public ValuesForOption clone()
 	{
-		return new ValueList(new ArrayList<Value>(values));
+		return new ValuesForOption(new ArrayList<Value>(values));
 	}
 }

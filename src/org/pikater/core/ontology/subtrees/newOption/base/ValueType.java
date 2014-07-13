@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption;
+package org.pikater.core.ontology.subtrees.newOption.base;
 
 import jade.content.Concept;
 
@@ -34,6 +34,11 @@ public class ValueType implements Concept
 		this.className = classs.getName();
 		this.rangeRestriction = rangeRestriction;
 		this.setRestriction = setRestriction;
+	}
+	
+	public Class<?> getTypeClass() throws ClassNotFoundException
+	{
+		return Class.forName(className);
 	}
 	
 	public String getClassName()
@@ -73,4 +78,39 @@ public class ValueType implements Concept
 		return typeNew;
 	}
 	
+	@Override
+	public String toString()
+	{
+		try
+		{
+			String result = getTypeClass().newInstance().toString();
+			if(rangeRestriction != null)
+			{
+				result = result + "[R]";
+			}
+			if(setRestriction != null)
+			{
+				result = result + "[S]";
+			}
+			return result;
+		}
+		catch (InstantiationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		catch (IllegalAccessException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

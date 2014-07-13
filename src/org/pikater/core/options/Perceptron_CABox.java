@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
@@ -27,7 +27,7 @@ public class Perceptron_CABox {
 		typeL.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		TypeRestrictions restrictionL = new TypeRestrictions();
+		RestrictionsForOption restrictionL = new RestrictionsForOption();
 		restrictionL.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeL )) ));
 		
@@ -47,7 +47,7 @@ public class Perceptron_CABox {
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
-		TypeRestrictions restrictionN = new TypeRestrictions();
+		RestrictionsForOption restrictionN = new RestrictionsForOption();
 		restrictionN.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
@@ -68,7 +68,7 @@ public class Perceptron_CABox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		TypeRestrictions restrictionS = new TypeRestrictions();
+		RestrictionsForOption restrictionS = new RestrictionsForOption();
 		restrictionS.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
@@ -86,7 +86,7 @@ public class Perceptron_CABox {
 		$ C boolean
 		**/
 		ValueType typeC = new ValueType(BooleanValue.class);
-		TypeRestrictions restrictionC = new TypeRestrictions();
+		RestrictionsForOption restrictionC = new RestrictionsForOption();
 		restrictionC.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
 		

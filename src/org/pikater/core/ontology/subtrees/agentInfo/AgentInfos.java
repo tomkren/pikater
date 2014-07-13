@@ -6,9 +6,9 @@ import java.util.List;
 import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.OptionList;
-import org.pikater.core.ontology.subtrees.newOption.Value;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 
@@ -55,7 +55,7 @@ public class AgentInfos implements Concept {
 			
 			List<ITypedValue> typedValues = models.getModelIDsByAgentType(agentClass);
 			
-			OptionList options = agentInfoI.getOptions();
+			NewOptionList options = agentInfoI.getOptions();
 			NewOption optionModel = options.getOptionByName("model");
 			Value value = optionModel.convertToSingleValue();
 			SetRestriction setRestriction = value.getType().getSetRestriction();

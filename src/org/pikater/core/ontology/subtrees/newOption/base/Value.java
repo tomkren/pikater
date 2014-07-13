@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption;
+package org.pikater.core.ontology.subtrees.newOption.base;
 
 import jade.content.Concept;
 
@@ -73,8 +73,8 @@ public class Value implements Concept
 		
 		Value valueNew = new Value();
 		valueNew.setType(type.clone());
-		valueNew.setTypedValue(typedValue.cloneValue());
-		valueNew.setDefaultValue(defaultValue.cloneValue());
+		valueNew.setTypedValue(typedValue.clone());
+		valueNew.setDefaultValue(defaultValue.clone());
 		
 		return valueNew;
 	}

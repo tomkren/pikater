@@ -8,9 +8,9 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
@@ -19,7 +19,7 @@ public class FileInput_VirtualBox {
 	public static AgentInfo get() {
 
 		ValueType typeIN = new ValueType(StringValue.class);
-		TypeRestrictions restrictionIN = new TypeRestrictions();
+		RestrictionsForOption restrictionIN = new RestrictionsForOption();
 		restrictionIN.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeIN )) ));
 		

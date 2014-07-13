@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+
 import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-public class OptionList implements Concept, Iterable<NewOption>
+public class NewOptionList implements Concept, Iterable<NewOption>
 {
 	private static final long serialVersionUID = -8578686409784032991L;
 	
 	private List<NewOption> options;
 	
-	public OptionList()
+	public NewOptionList()
 	{
 		this.options = new ArrayList<NewOption>();
 	}
 	
-	public OptionList(List<NewOption> list)
+	public NewOptionList(List<NewOption> list)
 	{
 		set(list);
 	}
@@ -57,7 +59,7 @@ public class OptionList implements Concept, Iterable<NewOption>
     }
     
     public String exportToWeka() {
-    	return OptionList.exportToWeka(options);
+    	return NewOptionList.exportToWeka(options);
     }
     
 	public static String exportToWeka(List<NewOption> options) {
@@ -81,12 +83,12 @@ public class OptionList implements Concept, Iterable<NewOption>
 		return xml;
 	}
 	
-	public static OptionList importXML(String xml) {
+	public static NewOptionList importXML(String xml) {
 
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 
-		OptionList optionsNew = (OptionList) xstream
+		NewOptionList optionsNew = (NewOptionList) xstream
 				.fromXML(xml);
 
 		return optionsNew;

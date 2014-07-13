@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.pikater.core.agents.experiment.computing.Agent_WekaNNgeCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
@@ -25,7 +25,7 @@ public class NNge_CABox {
 		typeI.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		TypeRestrictions restrictionI = new TypeRestrictions();
+		RestrictionsForOption restrictionI = new RestrictionsForOption();
 		restrictionI.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeI )) ));
 		
@@ -44,7 +44,7 @@ public class NNge_CABox {
 		typeG.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(50) ));
-		TypeRestrictions restrictionG = new TypeRestrictions();
+		RestrictionsForOption restrictionG = new RestrictionsForOption();
 		restrictionG.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeG )) ));
 		

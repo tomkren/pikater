@@ -6,9 +6,9 @@ import java.util.Arrays;
 import org.pikater.core.agents.experiment.search.Agent_GASearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
@@ -22,7 +22,7 @@ public class GASearch_SearchBox {
 		typeE.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		TypeRestrictions restrictionE = new TypeRestrictions();
+		RestrictionsForOption restrictionE = new RestrictionsForOption();
 		restrictionE.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeE )) ));
 		
@@ -38,7 +38,7 @@ public class GASearch_SearchBox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(1000) ));
-		TypeRestrictions restrictionM = new TypeRestrictions();
+		RestrictionsForOption restrictionM = new RestrictionsForOption();
 		restrictionM.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
@@ -54,7 +54,7 @@ public class GASearch_SearchBox {
 		typeT.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		TypeRestrictions restrictionT = new TypeRestrictions();
+		RestrictionsForOption restrictionT = new RestrictionsForOption();
 		restrictionT.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeT )) ));
 		
@@ -70,7 +70,7 @@ public class GASearch_SearchBox {
 		typeX.setRangeRestriction(
 				new RangeRestriction(
 						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		TypeRestrictions restrictionX = new TypeRestrictions();
+		RestrictionsForOption restrictionX = new RestrictionsForOption();
 		restrictionX.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeX )) ));
 		
@@ -86,7 +86,7 @@ public class GASearch_SearchBox {
 		typeP.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		TypeRestrictions restrictionP = new TypeRestrictions();
+		RestrictionsForOption restrictionP = new RestrictionsForOption();
 		restrictionP.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeP )) ));
 		
@@ -102,7 +102,7 @@ public class GASearch_SearchBox {
 		typeS.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(100) ));
-		TypeRestrictions restrictionS = new TypeRestrictions();
+		RestrictionsForOption restrictionS = new RestrictionsForOption();
 		restrictionS.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		

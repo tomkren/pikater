@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.OptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -74,7 +74,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		stability = 0.5;
 		final_error_rate = 0.01;
 		
-		OptionList options = new OptionList(getSearchOptions());
+		NewOptionList options = new NewOptionList(getSearchOptions());
 		
 		NewOption optionE = options.getOptionByName("E");
 		FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();

@@ -7,9 +7,9 @@ import java.util.List;
 import org.pikater.core.agents.experiment.computing.Agent_WekaJ48;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.TypeRestrictions;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
@@ -24,7 +24,7 @@ public class J48_CABox {
 	public static AgentInfo get() {
 		
 		ValueType typeU = new ValueType(BooleanValue.class);
-		TypeRestrictions restrictionU = new TypeRestrictions();
+		RestrictionsForOption restrictionU = new RestrictionsForOption();
 		restrictionU.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeU )) ));
 		
@@ -49,7 +49,7 @@ public class J48_CABox {
 				
 		ValueType typeC = new ValueType(FloatValue.class);
 		typeC.setSetRestriction(new SetRestriction(valuesC));
-		TypeRestrictions restrictionC = new TypeRestrictions();
+		RestrictionsForOption restrictionC = new RestrictionsForOption();
 		restrictionC.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeC )) ));
 		
@@ -65,7 +65,7 @@ public class J48_CABox {
 		typeM.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10) ));
-		TypeRestrictions restrictionM = new TypeRestrictions();
+		RestrictionsForOption restrictionM = new RestrictionsForOption();
 		restrictionM.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeM )) ));
 		
@@ -78,7 +78,7 @@ public class J48_CABox {
 		
 				
 		ValueType typeR = new ValueType(BooleanValue.class);
-		TypeRestrictions restrictionR = new TypeRestrictions();
+		RestrictionsForOption restrictionR = new RestrictionsForOption();
 		restrictionR.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeR )) ));
 		
@@ -94,7 +94,7 @@ public class J48_CABox {
 		typeN.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(10) ));
-		TypeRestrictions restrictionN = new TypeRestrictions();
+		RestrictionsForOption restrictionN = new RestrictionsForOption();
 		restrictionN.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeN )) ));
 		
@@ -107,7 +107,7 @@ public class J48_CABox {
 
 		
 		ValueType typeB = new ValueType(BooleanValue.class);
-		TypeRestrictions restrictionB = new TypeRestrictions();
+		RestrictionsForOption restrictionB = new RestrictionsForOption();
 		restrictionB.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeB )) ));
 		
@@ -120,7 +120,7 @@ public class J48_CABox {
 		
 
 		ValueType typeS = new ValueType(BooleanValue.class);
-		TypeRestrictions restrictionS = new TypeRestrictions();
+		RestrictionsForOption restrictionS = new RestrictionsForOption();
 		restrictionS.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeS )) ));
 		
@@ -133,7 +133,7 @@ public class J48_CABox {
 		
 		
 		ValueType typeA = new ValueType(BooleanValue.class);
-		TypeRestrictions restrictionA = new TypeRestrictions();
+		RestrictionsForOption restrictionA = new RestrictionsForOption();
 		restrictionA.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeA )) ));
 		
@@ -149,7 +149,7 @@ public class J48_CABox {
 		typeQ.setRangeRestriction(
 				new RangeRestriction(
 						new IntegerValue(1), new IntegerValue(Integer.MAX_VALUE) ));
-		TypeRestrictions restrictionQ = new TypeRestrictions();
+		RestrictionsForOption restrictionQ = new RestrictionsForOption();
 		restrictionQ.add( new TypeRestriction(
 				new ArrayList<ValueType>(Arrays.asList( typeQ )) ));
 		

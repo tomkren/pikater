@@ -11,6 +11,9 @@ public class QuestionMarkRange implements ITypedValue {
 	private ITypedValue min;
 	private ITypedValue max;
 	
+	/*
+	 * Default constructor is needed.
+	 */
 	public QuestionMarkRange() {}
 	public QuestionMarkRange(ITypedValue min, ITypedValue max) {
 		this.min = min;
@@ -45,12 +48,12 @@ public class QuestionMarkRange implements ITypedValue {
 	}
 
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 		
 		QuestionMarkRange valueNew = new QuestionMarkRange();
 		valueNew.setCountOfValuesToTry(countOfValuesToTry);
-		valueNew.setMin(min.cloneValue());
-		valueNew.setMin(max.cloneValue());
+		valueNew.setMin(min.clone());
+		valueNew.setMin(max.clone());
 		
 		return valueNew;		
 	}
@@ -62,7 +65,7 @@ public class QuestionMarkRange implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
 		return "QuestionMarkRange";
 	}

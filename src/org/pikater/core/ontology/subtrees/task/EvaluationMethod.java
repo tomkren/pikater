@@ -6,7 +6,7 @@ import jade.content.Concept;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 public class EvaluationMethod implements Concept {
 

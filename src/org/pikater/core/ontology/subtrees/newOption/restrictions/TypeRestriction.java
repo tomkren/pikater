@@ -5,7 +5,7 @@ import jade.content.Concept;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 
 public class TypeRestriction implements Concept
 {

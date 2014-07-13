@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.newOption.restrictions;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 
@@ -79,7 +79,7 @@ public class SetRestriction implements IRestriction {
 		
 		SetRestriction setRest = new SetRestriction();
 		for (ITypedValue valueI : values) {
-			setRest.addValue(valueI.cloneValue());
+			setRest.addValue(valueI.clone());
 		}
 		return setRest;
 	}

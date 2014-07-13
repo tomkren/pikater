@@ -110,7 +110,7 @@ import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.model.SaveModel;
-import org.pikater.core.ontology.subtrees.newOption.OptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.result.SavedResult;
@@ -976,7 +976,7 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
-		OptionList options = new OptionList(task.getAgent().getOptions());
+		NewOptionList options = new NewOptionList(task.getAgent().getOptions());
 	
 		try {
 			JPAResult jparesult = new JPAResult();
@@ -1280,7 +1280,7 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 		rs.next();
 
-		OptionList options = OptionList.importXML(rs.getString("options"));
+		NewOptionList options = NewOptionList.importXML(rs.getString("options"));
 		
 		Agent agent = new Agent();
 		agent.setName(rs.getString("agentName"));

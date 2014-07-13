@@ -13,7 +13,8 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEd
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

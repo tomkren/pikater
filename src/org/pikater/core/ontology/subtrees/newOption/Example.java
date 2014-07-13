@@ -1,10 +1,10 @@
-package org.pikater.core.ontology.subtrees.newOption.example;
+package org.pikater.core.ontology.subtrees.newOption;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;

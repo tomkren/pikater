@@ -13,6 +13,11 @@ public class QuestionMarkSet implements ITypedValue {
 	private int countOfValuesToTry;
 	private List<ITypedValue> values;
 	
+	/*
+	 * Default constructor is needed.
+	 */
+	public QuestionMarkSet() {}
+	
 	public int getCountOfValuesToTry() {
 		return countOfValuesToTry;
 	}
@@ -27,14 +32,14 @@ public class QuestionMarkSet implements ITypedValue {
 	}
 	
 	@Override
-	public ITypedValue cloneValue() {
+	public ITypedValue clone() {
 
 		QuestionMarkSet setNew = new QuestionMarkSet();
 		setNew.setCountOfValuesToTry(countOfValuesToTry);
 		
 		List<ITypedValue> valuesNew = new ArrayList<ITypedValue>();
 		for (ITypedValue valueI : values) {
-			valuesNew.add(valueI.cloneValue());
+			valuesNew.add(valueI.clone());
 		}
 		setNew.setValues(valuesNew);
 		
@@ -48,7 +53,7 @@ public class QuestionMarkSet implements ITypedValue {
 	}
 	
 	@Override
-	public String toString()
+	public String toDisplayName()
 	{
 		return "QuestionMarkRange";
 	}

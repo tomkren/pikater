@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
-import org.pikater.core.ontology.subtrees.newOption.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
@@ -73,8 +73,8 @@ public class RangeRestriction implements IRestriction
 	public RangeRestriction clone() {
 		
 		RangeRestriction rangeNew = new RangeRestriction();
-		rangeNew.setMinValue(minValue.cloneValue());
-		rangeNew.setMaxValue(maxValue.cloneValue());
+		rangeNew.setMinValue(minValue.clone());
+		rangeNew.setMaxValue(maxValue.clone());
 		return rangeNew;
 	}
 }

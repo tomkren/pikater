@@ -3,8 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.OptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 public class FileDataSaver extends DataProcessing implements IDataSaver {
@@ -43,7 +43,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		
-		OptionList optinsOnt = new OptionList(options);
+		NewOptionList optinsOnt = new NewOptionList(options);
 		
 		NewOption optionFile = optinsOnt.getOptionByName("nameOfFile");
 		StringValue value = (StringValue)
