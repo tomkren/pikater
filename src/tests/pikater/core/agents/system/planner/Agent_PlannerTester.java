@@ -62,9 +62,7 @@ public class Agent_PlannerTester extends PikaterAgent {
     	
         AID receiver = new AID(AgentNames.PLANNER, false);
     	
-		NewOption optionB = new NewOption(
-				new IntegerValue(3),
-				"B" );
+		NewOption optionB = new NewOption("B", new IntegerValue(3));
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(optionB);
 		
@@ -117,9 +115,7 @@ public class Agent_PlannerTester extends PikaterAgent {
     	
         AID receiver = new AID(AgentNames.PLANNER, false);
     	
-		NewOption optionC = new NewOption(
-				new FloatValue(0.25f),
-				"C" );
+		NewOption optionC = new NewOption("C", new FloatValue(0.25f));
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(optionC);
 		
