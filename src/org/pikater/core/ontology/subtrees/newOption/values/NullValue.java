@@ -1,6 +1,8 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class NullValue implements ITypedValue
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+
+public class NullValue implements IValueData
 {
 	private static final long serialVersionUID = 4240750027791781820L;
 	
@@ -25,7 +27,7 @@ public class NullValue implements ITypedValue
 	}
 	
 	@Override
-	public ITypedValue clone()
+	public IValueData clone()
 	{
 		return new NullValue();
 	}

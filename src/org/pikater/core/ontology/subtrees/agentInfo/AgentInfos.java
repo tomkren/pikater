@@ -10,7 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 import jade.content.Concept;
 
@@ -53,7 +53,7 @@ public class AgentInfos implements Concept {
 				Log.error(e.getMessage(), e);
 			}
 			
-			List<ITypedValue> typedValues = models.getModelIDsByAgentType(agentClass);
+			List<IValueData> typedValues = models.getModelIDsByAgentType(agentClass);
 			
 			NewOptionList options = agentInfoI.getOptions();
 			NewOption optionModel = options.getOptionByName("model");

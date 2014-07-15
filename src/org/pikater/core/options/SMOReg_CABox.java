@@ -11,8 +11,8 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestrictio
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class SMOReg_CABox  {
 	
@@ -55,7 +55,7 @@ public class SMOReg_CABox  {
 		# Whether to 0=normalize/1=standardize/2=neither. (default 0=normalize)
 		$ N int 1 1 s 0, 1, 2
 		**/
-		NewOption optionN = new NewOption("N", new IntegerValue(1), new SetRestriction(new ArrayList<ITypedValue>(Arrays.asList(
+		NewOption optionN = new NewOption("N", new IntegerValue(1), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
 				new IntegerValue(0),
 				new IntegerValue(1),
 				new IntegerValue(2))))

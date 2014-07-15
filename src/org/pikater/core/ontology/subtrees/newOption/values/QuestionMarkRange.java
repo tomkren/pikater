@@ -1,19 +1,23 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class QuestionMarkRange implements ITypedValue
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+
+public class QuestionMarkRange implements IValidatedValueData
 {
 	private static final long serialVersionUID = 4064649544713291827L;
 
 	private int countOfValuesToTry;
-	private ITypedValue min;
-	private ITypedValue max;
+	private IValueData min;
+	private IValueData max;
 	
 	/**
 	 * Should only be used by JADE.
 	 */
 	@Deprecated
 	public QuestionMarkRange() {}
-	public QuestionMarkRange(ITypedValue min, ITypedValue max, int countOfValuesToTry)
+	public QuestionMarkRange(IValueData min, IValueData max, int countOfValuesToTry)
 	{
 		this.min = min;
 		this.max = max;
@@ -24,20 +28,25 @@ public class QuestionMarkRange implements ITypedValue
 	{
 		return countOfValuesToTry;
 	}
-	
 	public void setCountOfValuesToTry(int countOfValuesToTry)
 	{
 		this.countOfValuesToTry = countOfValuesToTry;
 	}
-	
-	public ITypedValue getMin()
+	public IValueData getMin()
 	{
 		return min;
 	}
-	
-	public ITypedValue getMax()
+	public void setMin(IValueData min)
+	{
+		this.min = min;
+	}
+	public IValueData getMax()
 	{
 		return max;
+	}
+	public void setMax(IValueData max)
+	{
+		this.max = max;
 	}
 	
 	@Override
@@ -47,7 +56,7 @@ public class QuestionMarkRange implements ITypedValue
 	}
 
 	@Override
-	public ITypedValue clone()
+	public IValueData clone()
 	{
 		return new QuestionMarkRange(min.clone(), max.clone(), countOfValuesToTry);
 	}
@@ -62,5 +71,19 @@ public class QuestionMarkRange implements ITypedValue
 	public String toDisplayName()
 	{
 		return "QuestionMarkRange";
+	}
+	
+	@Override
+	public boolean isValid()
+	{
+		if((min == null) || (max == null) || !min.getClass().equals(max.getClass()))
+		{
+			return false;
+		}
+		else if(!(min instanceof IComparableValueData) || ((IComparableValueData) min).compareTo((IComparableValueData) max) > 0)
+		{
+			return false;
+		}
+		return (countOfValuesToTry > 0);
 	}
 }

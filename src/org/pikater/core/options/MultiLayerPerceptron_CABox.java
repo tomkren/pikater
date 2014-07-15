@@ -16,9 +16,9 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 
 public class MultiLayerPerceptron_CABox {
@@ -133,12 +133,12 @@ public class MultiLayerPerceptron_CABox {
 		# type list - length (2 numbers), range (2 numbers)  ... max
 		$ H mixed 1 3 s 2, 3, 4, 5, 6, 7, 8, 9, 10, i, o
 		**/		
-		ValueType typeHn = new ValueType(IntegerValue.class, new RangeRestriction(
+		ValueType typeHn = new ValueType(new IntegerValue(2), new RangeRestriction(
 				new IntegerValue(2),
 				new IntegerValue(10))
 		);
-		ValueType typeHs = new ValueType(StringValue.class, new SetRestriction(new ArrayList<ITypedValue>(
-				new ArrayList<ITypedValue>(Arrays.asList(
+		ValueType typeHs = new ValueType(new StringValue("a"), new SetRestriction(new ArrayList<IValueData>(
+				new ArrayList<IValueData>(Arrays.asList(
 						new StringValue("a"), new StringValue("i"),
 						new StringValue("o"), new StringValue("t")))))
 		);

@@ -3,19 +3,22 @@ package org.pikater.core.ontology.subtrees.newOption.values;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionMarkSet implements ITypedValue
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+
+public class QuestionMarkSet implements IValidatedValueData
 {
 	private static final long serialVersionUID = 4434448192843651477L;
 
 	private int countOfValuesToTry;
-	private List<ITypedValue> values;
+	private List<IValueData> values;
 	
 	/**
 	 * Should only be used by JADE.
 	 */
 	@Deprecated
 	public QuestionMarkSet() {}
-	public QuestionMarkSet(List<ITypedValue> values, int countOfValuesToTry)
+	public QuestionMarkSet(List<IValueData> values, int countOfValuesToTry)
 	{
 		this.values = values;
 		this.countOfValuesToTry = countOfValuesToTry;
@@ -29,11 +32,11 @@ public class QuestionMarkSet implements ITypedValue
 	{
 		this.countOfValuesToTry = countOfValuesToTry;
 	}
-	public List<ITypedValue> getValues()
+	public List<IValueData> getValues()
 	{
 		return values;
 	}
-	public void setValues(List<ITypedValue> values)
+	public void setValues(List<IValueData> values)
 	{
 		this.values = values;
 	}
@@ -45,10 +48,10 @@ public class QuestionMarkSet implements ITypedValue
 	}
 	
 	@Override
-	public ITypedValue clone()
+	public IValueData clone()
 	{
-		List<ITypedValue> valuesCopied = new ArrayList<ITypedValue>();
-		for(ITypedValue value : values)
+		List<IValueData> valuesCopied = new ArrayList<IValueData>();
+		for(IValueData value : values)
 		{
 			valuesCopied.add(value.clone());
 		}
@@ -65,5 +68,15 @@ public class QuestionMarkSet implements ITypedValue
 	public String toDisplayName()
 	{
 		return "QuestionMarkRange";
+	}
+	
+	@Override
+	public boolean isValid()
+	{
+		if((values == null) || values.isEmpty())
+		{
+			return false; 
+		}
+		return (countOfValuesToTry > 0) && (countOfValuesToTry <= values.size());
 	}
 }

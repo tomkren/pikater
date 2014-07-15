@@ -1,10 +1,13 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class DoubleValue implements ITypedValue
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+
+public class DoubleValue implements IComparableValueData
 {
 	private static final long serialVersionUID = 1276470189024492227L;
 
-	private double value;
+	private Double value;
 	
 	/**
 	 * Should only be used by JADE.
@@ -23,7 +26,7 @@ public class DoubleValue implements ITypedValue
 	}
 	
 	@Override
-	public ITypedValue clone()
+	public IValueData clone()
 	{
 		return new DoubleValue(value);
 	}
@@ -38,5 +41,11 @@ public class DoubleValue implements ITypedValue
 	public String toDisplayName()
 	{
 		return "Double";
+	}
+	
+	@Override
+	public int compareTo(IComparableValueData o)
+	{
+		return value.compareTo((Double) o.getValue());
 	}
 }

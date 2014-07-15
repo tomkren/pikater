@@ -10,7 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -32,14 +32,13 @@ public class NewOption implements Concept
 	public NewOption() {}
 	
 	/**
-	 * Creates an option with a single predefined value. Value 
-	 * type and restrictions are inferred from the arguments.
+	 * Creates an option with a single predefined value. Value type and restrictions are inferred.
 	 * @param name
 	 * @param value
 	 */
-	public NewOption(String name, ITypedValue defaultValue)
+	public NewOption(String name, IValueData defaultValue)
 	{
-		this(name, defaultValue, null, null);
+		this(name, new Value(defaultValue), new TypeRestriction(Arrays.asList(new ValueType(defaultValue)))); 
 	}
 	/**
 	 * Creates an option with a single predefined value. Value 
@@ -48,9 +47,9 @@ public class NewOption implements Concept
 	 * @param defaultValue
 	 * @param rangeRestriction
 	 */
-	public NewOption(String name, ITypedValue defaultValue, RangeRestriction rangeRestriction)
+	public NewOption(String name, IValueData defaultValue, RangeRestriction rangeRestriction)
 	{
-		this(name, defaultValue, rangeRestriction, null);
+		this(name, new Value(defaultValue, rangeRestriction));
 	}
 	/**
 	 * Creates an option with a single predefined value. Value 
@@ -59,28 +58,25 @@ public class NewOption implements Concept
 	 * @param defaultValue
 	 * @param setRestriction
 	 */
-	public NewOption(String name, ITypedValue defaultValue, SetRestriction setRestriction)
+	public NewOption(String name, IValueData defaultValue, SetRestriction setRestriction)
 	{
-		this(name, defaultValue, null, setRestriction);
-	}
-	/**
-	 * Creates an option with a single predefined value. Value 
-	 * type and restrictions are inferred from the arguments.
-	 * @param name
-	 * @param defaultValue
-	 * @param rangeRestriction
-	 * @param setRestriction
-	 */
-	public NewOption(String name, ITypedValue defaultValue, RangeRestriction rangeRestriction, SetRestriction setRestriction)
-	{
-		this(name, new Value(defaultValue, rangeRestriction, setRestriction), new TypeRestriction(Arrays.asList(
-				new ValueType(defaultValue.getClass(), rangeRestriction, setRestriction))));
+		this(name, new Value(defaultValue, setRestriction));
 	}
 	/**
 	 * Creates an option with a single predefined value. Value 
 	 * type and restrictions are inferred from the arguments.
 	 * @param name
 	 * @param value
+	 * @param restriction
+	 */
+	public NewOption(String name, Value value)
+	{
+		this(name, value, new TypeRestriction(Arrays.asList(value.getType())));
+	}
+	/**
+	 * Creates an option with a single predefined value. Value type is inferred, restriction is given.
+	 * @param name
+	 * @param value <font color="red">make sure the value's type is the same instance as in the 'restriction' param</font>
 	 * @param restriction
 	 */
 	public NewOption(String name, Value value, TypeRestriction restriction)
@@ -105,9 +101,9 @@ public class NewOption implements Concept
 	private NewOption(String name, ValuesForOption values, RestrictionsForOption restrictions)
 	{
 		this.name = name;
+		this.immutable = false;
 		this.valuesWrapper = values;
 		this.valueRestrictions = restrictions;
-		this.immutable = false;
 	}
 
 	public String getName()
@@ -179,6 +175,10 @@ public class NewOption implements Concept
 			throw new IllegalStateException("This option can not be converted to a single value.");
 		}
 	}
+	public TypeRestriction getValueRestrictionForIndex(int index)
+	{
+		return valueRestrictions.getByIndex(index);
+	}
 	public String computeDataType()
 	{
 		String firstValue = null;
@@ -219,13 +219,11 @@ public class NewOption implements Concept
 		{
 			return false;
 		}
-		if(valuesWrapper.size() != valueRestrictions.size())
+		else if(valuesWrapper.size() != valueRestrictions.size())
 		{
 			return false;
 		}
-		
-		//TODO: otestovat moznosti typu - like this?:
-		if(validateTypeBinding)
+		else if(validateTypeBinding)
 		{
 			for(int i = 0; i < valuesWrapper.size(); i++)
 			{
@@ -236,8 +234,7 @@ public class NewOption implements Concept
 				}
 			}
 		}
-		
-		return valuesWrapper.isValid();
+		return valuesWrapper.isValid() && valueRestrictions.isValid();
 	}
 
 	public String exportToWeka()

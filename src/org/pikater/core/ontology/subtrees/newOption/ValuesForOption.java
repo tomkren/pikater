@@ -1,17 +1,18 @@
 package org.pikater.core.ontology.subtrees.newOption;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 import jade.content.Concept;
 
-public class ValuesForOption implements Concept
+public class ValuesForOption implements Concept, Iterable<Value>
 {
 	private static final long serialVersionUID = -3600291732186684079L;
 
@@ -34,6 +35,12 @@ public class ValuesForOption implements Concept
 		this.values = values;
 	}
 	
+	@Override
+	public Iterator<Value> iterator()
+	{
+		return values.iterator();
+	}
+	
 	public void addValue(Value value) {
 		this.values.add(value);
 	}
@@ -51,7 +58,7 @@ public class ValuesForOption implements Concept
 	{
 		for (Value valueI : values)
 		{
-			ITypedValue ivalueI = valueI.getCurrentValue();
+			IValueData ivalueI = valueI.getCurrentValue();
 			if (ivalueI instanceof QuestionMarkRange ||
 					ivalueI instanceof QuestionMarkSet) {
 				return true;

@@ -3,8 +3,8 @@ package org.pikater.core.ontology.subtrees.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 import jade.content.Concept;
 
@@ -43,11 +43,11 @@ public class Models implements Concept {
 		return selectedModels;
 	}
 
-	public List<ITypedValue> getModelIDsByAgentType(Class<?> agentType) {
+	public List<IValueData> getModelIDsByAgentType(Class<?> agentType) {
 		
 		List<Model> selectedModels = getModelsByAgentType(agentType);
 		
-		List<ITypedValue> modelIDs = new ArrayList<ITypedValue>();
+		List<IValueData> modelIDs = new ArrayList<IValueData>();
 		
 		for (Model modelI : selectedModels) {
 			modelIDs.add(new IntegerValue(modelI.getResultID()));

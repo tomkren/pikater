@@ -11,9 +11,9 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestrictio
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class J48_CABox {
 	
@@ -24,7 +24,7 @@ public class J48_CABox {
 		
 		
 		// TODO: why all these null values if the collection is used as a set restriction?
-		List<ITypedValue> valuesC = new ArrayList<ITypedValue>();
+		List<IValueData> valuesC = new ArrayList<IValueData>();
 		valuesC.add(new NullValue());
 		valuesC.add(new NullValue());
 		valuesC.add(new NullValue());

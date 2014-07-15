@@ -1,10 +1,13 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class FloatValue implements ITypedValue
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+
+public class FloatValue implements IComparableValueData
 {
 	private static final long serialVersionUID = -6154392916809467193L;
 	
-	private float value;
+	private Float value;
 	
 	/**
 	 * Should only be used by JADE.
@@ -23,7 +26,7 @@ public class FloatValue implements ITypedValue
 	}
 	
 	@Override
-	public ITypedValue clone()
+	public IValueData clone()
 	{
 		return new FloatValue(value);
 	}
@@ -38,5 +41,10 @@ public class FloatValue implements ITypedValue
 	public String toDisplayName()
 	{
 		return "Float";
+	}
+	@Override
+	public int compareTo(IComparableValueData o)
+	{
+		return value.compareTo((Float) o.getValue());
 	}
 }

@@ -20,16 +20,9 @@ public class NewOptionList implements Concept, Iterable<NewOption>
 	{
 		this.options = new ArrayList<NewOption>();
 	}
-	
 	public NewOptionList(List<NewOption> list)
 	{
 		setOptions(list);
-	}
-	
-	@Override
-	public Iterator<NewOption> iterator()
-	{
-		return options.iterator();
 	}
 	
 	public List<NewOption> getOptions()
@@ -40,6 +33,12 @@ public class NewOptionList implements Concept, Iterable<NewOption>
 	{
 		this.options = list;
 	}
+	
+	@Override
+	public Iterator<NewOption> iterator()
+	{
+		return options.iterator();
+	}
 
 	public boolean containsOptionWithName(String optionName)
 	{
@@ -47,9 +46,12 @@ public class NewOptionList implements Concept, Iterable<NewOption>
 	}
     public NewOption getOptionByName(String optionName)
     {
-        for (NewOption option : options) {
+        for (NewOption option : options)
+        {
             if (option.getName().equals(optionName))
+            {
                 return option;
+            }
         }
         return null;
     }
@@ -93,5 +95,4 @@ public class NewOptionList implements Concept, Iterable<NewOption>
 
 		return optionsNew;
 	}
-	
 }

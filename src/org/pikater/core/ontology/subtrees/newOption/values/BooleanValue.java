@@ -1,10 +1,13 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class BooleanValue implements ITypedValue
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+
+public class BooleanValue implements IComparableValueData
 {
 	private static final long serialVersionUID = 486219518827018753L;
 
-	private boolean value;
+	private Boolean value;
 	
 	/**
 	 * Should only be used by JADE.
@@ -24,7 +27,7 @@ public class BooleanValue implements ITypedValue
 	}
 	
 	@Override
-	public ITypedValue clone()
+	public IValueData clone()
 	{
 		return new BooleanValue(value);
 	}
@@ -39,5 +42,11 @@ public class BooleanValue implements ITypedValue
 	public String toDisplayName()
 	{
 		return "Boolean";
+	}
+	
+	@Override
+	public int compareTo(IComparableValueData o)
+	{
+		return value.compareTo((Boolean) o.getValue());
 	}
 }

@@ -1,17 +1,14 @@
 package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
-import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class RangeRestriction implements IRestriction
 {
 	private static final long serialVersionUID = -9196397486608350955L;
 
-	private ITypedValue minValue;
-	private ITypedValue maxValue;
+	private IValueData minValue;
+	private IValueData maxValue;
 	
 	/**
 	 * Should only be used by JADE.
@@ -20,78 +17,63 @@ public class RangeRestriction implements IRestriction
 	public RangeRestriction()
 	{
 	}
-	public RangeRestriction(ITypedValue minValue, ITypedValue maxValue)
+	public RangeRestriction(IValueData minValue, IValueData maxValue)
 	{
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 	}
 
-	public ITypedValue getMinValue()
+	public IValueData getMinValue()
 	{
 		return minValue;
 	}
-	public void setMinValue(ITypedValue minValue)
+	public void setMinValue(IValueData minValue)
 	{
 		this.minValue = minValue;
 	}
-	public ITypedValue getMaxValue()
+	public IValueData getMaxValue()
 	{
 		return maxValue;
 	}
-	public void setMaxValue(ITypedValue maxValue)
+	public void setMaxValue(IValueData maxValue)
 	{
 		this.maxValue = maxValue;
 	}
 	
-	public boolean contains(ITypedValue value)
-	{
-		if(isValid())
-		{
-			if (minValue.getClass().equals(value.getClass()))
-			{
-				if (value instanceof DoubleValue || value instanceof FloatValue || value instanceof IntegerValue)
-				{
-					Number min = (Number) minValue.getValue();
-					Number max = (Number) maxValue.getValue();
-					Number val = (Number) value.getValue();
-					
-					return min.doubleValue() <= val.doubleValue() && val.doubleValue() <= max.doubleValue();
-				}
-				else
-				{
-					throw new IllegalStateException(String.format("Unimplemented for type: '%s'", value.getClass().getName()));
-				}
-			}
-			else
-			{
-				throw new IllegalArgumentException("Given value's type does not match the restriction.");
-			}
-		}
-		else
-		{
-			throw new IllegalStateException("This restriction is not valid.");
-		}
-	}
-
-	@Override
-	public ValueType getType()
-	{
-		return new ValueType(minValue.getClass());
-	}
-
 	@Override
 	public boolean isValid()
 	{
-		if((minValue != null) && (maxValue != null))
+		if((minValue == null) || (maxValue == null) || !minValue.getClass().equals(maxValue.getClass()))
 		{
-			return minValue.getClass().equals(maxValue.getClass());
+			return false;
+		}
+		else if (!(minValue instanceof IComparableValueData) || 
+				(((IComparableValueData) minValue).compareTo((IComparableValueData) maxValue) > 0))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	@Override
+	public boolean isValidAgainst(Object obj)
+	{
+		if(isValid() && obj.getClass().equals(minValue.getClass()))
+		{
+			IComparableValueData minComp = (IComparableValueData) minValue; 
+			IComparableValueData maxComp = (IComparableValueData) maxValue;
+			IComparableValueData valueComp = (IComparableValueData) obj;
+			return (minComp.compareTo(valueComp) <= 0) && (valueComp.compareTo(maxComp) <= 0); 
 		}
 		else
 		{
 			return false;
 		}
 	}
-
+	
 	@Override
 	public RangeRestriction clone()
 	{

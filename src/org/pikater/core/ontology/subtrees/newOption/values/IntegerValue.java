@@ -1,10 +1,13 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-public class IntegerValue implements ITypedValue
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+
+public class IntegerValue implements IComparableValueData
 {
 	private static final long serialVersionUID = -2925380308174903951L;
 
-	private int value;
+	private Integer value;
 
 	/**
 	 * Should only be used by JADE.
@@ -21,8 +24,9 @@ public class IntegerValue implements ITypedValue
 	public void setValue(int value) {
 		this.value = value;
 	}
+	
 	@Override
-	public ITypedValue clone()
+	public IValueData clone()
 	{
 		return new IntegerValue(value);
 	}
@@ -37,5 +41,11 @@ public class IntegerValue implements ITypedValue
 	public String toDisplayName()
 	{
 		return "Integer";
+	}
+	
+	@Override
+	public int compareTo(IComparableValueData o)
+	{
+		return value.compareTo((Integer) o.getValue());
 	}
 }

@@ -8,8 +8,9 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestrictio
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class Example {
 
@@ -62,7 +63,10 @@ public class Example {
 			optionC.setList( listC );
 		*/
 		
-		List<ITypedValue> values = new ArrayList<ITypedValue>();
+		List<IValueData> values = new ArrayList<IValueData>();
+		values.add(new NullValue());
+		values.add(new NullValue());
+		values.add(new NullValue());
 		values.add(new FloatValue(0.0001f));
 		values.add(new FloatValue(0.1f));
 		values.add(new FloatValue(0.2f));
