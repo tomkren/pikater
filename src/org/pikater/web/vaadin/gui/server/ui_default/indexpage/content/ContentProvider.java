@@ -130,7 +130,7 @@ public class ContentProvider
 		@Override
 		public boolean accessAllowed(VaadinSession session)
 		{
-			return ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
+			return ServerConfigurationInterface.avoidUsingDBForNow() ? true : ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
 		}
 		
 		@Override

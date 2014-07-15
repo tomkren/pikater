@@ -34,6 +34,11 @@ public class LinkLabel extends AbstractComponent
 		}
 	}
 	
+	public LinkLabel(String text)
+	{
+		this(text, LinkLabelColorConf.STANDARD, null);
+	}
+	
 	public LinkLabel(String text, final ClickListener listener)
 	{
 		this(text, LinkLabelColorConf.STANDARD, listener);
@@ -42,30 +47,34 @@ public class LinkLabel extends AbstractComponent
 	public LinkLabel(String text, LinkLabelColorConf conf, final ClickListener listener)
 	{
 		super();
-		setStyleName(conf.toStyleName());
+		setStyleName("v-label");
+		addStyleName(conf.toStyleName());
 		
-		registerRpc(new LinkLabelServerRpc()
+		if(listener != null)
 		{
-			private static final long serialVersionUID = 8647290803389019408L;
-
-			@Override
-			public void clicked(MouseEventDetails mouseDetails)
+			registerRpc(new LinkLabelServerRpc()
 			{
-				listener.click(new ClickEvent(LinkLabel.this, mouseDetails));
-			}
-		});
+				private static final long serialVersionUID = 8647290803389019408L;
+	
+				@Override
+				public void clicked(MouseEventDetails mouseDetails)
+				{
+					listener.click(new ClickEvent(LinkLabel.this, mouseDetails));
+				}
+			});
+		}
 		
-		setText(text);
+		setValue(text);
 	}
 	
-	public String getText()
+	public String getValue()
 	{
 		return getState().text;
 	}
 	
-	public void setText(String text)
+	public void setValue(String value)
 	{
-		getState().text = text;
+		getState().text = value;
 	}
 	
 	@Override

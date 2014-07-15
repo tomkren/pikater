@@ -255,7 +255,7 @@ public class KineticComponent extends AbstractComponent
 			timeWaited += waitTimePerIteration;
 			if(timeWaited == maxWaitTime)
 			{
-				return null;
+				throw new IllegalStateException("No graph was received from client. Request timed out.");
 			}
 		}
 		

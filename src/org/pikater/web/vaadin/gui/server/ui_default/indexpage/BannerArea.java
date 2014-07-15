@@ -88,11 +88,11 @@ public class BannerArea extends HorizontalLayout
 		
 		if(ServerConfigurationInterface.avoidUsingDBForNow())
 		{
-			link_loggedInAs.setText("some_account");
+			link_loggedInAs.setValue("some_account");
 		}
 		else
 		{
-			link_loggedInAs.setText(ManageAuth.getUserEntity(getSession()).getLogin());
+			link_loggedInAs.setValue(ManageAuth.getUserEntity(getSession()).getLogin());
 		}
 	}
 }
