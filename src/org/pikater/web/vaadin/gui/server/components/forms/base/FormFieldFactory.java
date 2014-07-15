@@ -1,11 +1,16 @@
 package org.pikater.web.vaadin.gui.server.components.forms.base;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
+import org.pikater.web.vaadin.gui.server.components.forms.validators.TrueValidator;
+
+import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.data.validator.EmailValidator;
-import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.ui.AbstractTextField;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
@@ -41,26 +46,26 @@ public class FormFieldFactory
 		return result;
 	}
 	
-	public static ComboBox getGeneralComboBox(String caption, boolean required)
+	public static ComboBox getGeneralComboBox(String caption, Collection<?> options, Object defaultOption, boolean required, boolean readonly)
 	{
-		ComboBox result = new ComboBox(caption);
+		ComboBox result = new ComboBox(caption, options);
+		result.setNewItemsAllowed(false);
+		if(defaultOption != null)
+		{
+			result.select(defaultOption);
+		}
+		result.setImmediate(true);
 		result.setTextInputAllowed(false);
 		result.setNullSelectionAllowed(false);
 		result.setRequired(required);
+		result.setReadOnly(readonly);
 		return result;
 	}
 	
-	public static CheckBox getGeneralCheckField(String caption, boolean initialState, boolean readOnly)
+	public static ComboBox getGeneralCheckField(String caption, boolean initialState, boolean required, boolean readOnly)
 	{
-		final CheckBox result = new CheckBox(caption, initialState);
-		result.setReadOnly(readOnly);
-		
-		if(!readOnly)
-		{
-			result.setValidationVisible(true);
-			// value change event is triggered everytime the value is changed by default
-		}
-		
+		ComboBox result = getGeneralComboBox(caption, Arrays.asList(Boolean.TRUE, Boolean.FALSE), initialState, required, readOnly);
+		result.setConverter(StringToBooleanConverter.class); // TODO: is this even necessary?
 		return result;
 	}
 	
@@ -80,10 +85,35 @@ public class FormFieldFactory
 		return result;
 	}
 	
-	public static TextField getComputationEstimateInHoursField()
+	/**
+	 * A generic method to create a range-validated number field: integer float or double by default.
+	 * @param caption
+	 * @param value
+	 * @param min
+	 * @param max
+	 * @param required
+	 * @param readOnly
+	 * @return
+	 */
+	public static <N extends Number> TextField getNumericField(String caption, N value, N min, N max, boolean required, boolean readOnly)
 	{
-		TextField result = getGeneralTextField("Est. computation time (hours):", "How many hours?", null, true, false);
-		addMinimumIntegerValidator(result, 0);
+		if(value == null)
+		{
+			throw new NullPointerException();
+		}
+		else
+		{
+			final TextField result = getGeneralTextField(caption, "Enter a number", String.valueOf(value), required, readOnly);
+			result.addValidator(new NumberRangeValidator<N>(value.getClass(), min, max));
+			return result;
+		}
+	}
+	
+	public static TextField getFloatField(String caption, Float value, Float min, Float max, boolean required, boolean readOnly)
+	{
+		final TextField result = new TextField(caption);
+		setupTextFieldToWorkWithCustomForms(result, String.valueOf(value), "Enter a float number", required, readOnly);
+		result.addValidator(new NumberRangeValidator<Float>(Float.class, min, max));
 		return result;
 	}
 	
@@ -96,7 +126,7 @@ public class FormFieldFactory
 		field.setInputPrompt(inputPrompt);
 		field.setReadOnly(readOnly);
 		field.setRequired(required);
-		
+
 		if(!readOnly)
 		{
 			field.setValidationVisible(true);
@@ -104,7 +134,7 @@ public class FormFieldFactory
 			field.addTextChangeListener(new FieldEvents.TextChangeListener()
 			{
 				private static final long serialVersionUID = 1895549466379801259L;
-
+	
 				@Override
 				public void textChange(TextChangeEvent event)
 				{
@@ -113,38 +143,14 @@ public class FormFieldFactory
 				}
 			});
 		}
-		
+
 		/*
-		 * Validators are never checked if the field is empty so there's no point
-		 * in defining a validator that checks whether the field is required but empty.
-		 * However, we need to define a default validator that succeeds when the field
-		 * is not empty and even if read-only. If other validators are set, their
-		 * failure will result in validation failure.
-		 */
-		field.addValidator(new TrueValidator());
-	}
-	
-	@SuppressWarnings("unused")
-	private static void addUnboundedIntegerValidator(TextField field)
-	{
-		field.addValidator(new IntegerRangeValidator("Not an integer number.", null, null));
-	}
-	
-	@SuppressWarnings("unused")
-	private static void addMaximumIntegerValidator(TextField field, Integer maxValue)
-	{
-		field.addValidator(new IntegerRangeValidator(String.format("Not an integer from negative infinity to %d.", maxValue), null, maxValue));
-	}
-	
-	@SuppressWarnings("unused")
-	private static void addMinimumIntegerValidator(TextField field, Integer minValue)
-	{
-		field.addValidator(new IntegerRangeValidator(String.format("Not an integer from %d to positive infinity.", minValue), minValue, null));
-	}
-	
-	@SuppressWarnings("unused")
-	private static void addRangedIntegerValidator(TextField field, Integer minValue, Integer maxValue)
-	{
-		field.addValidator(new IntegerRangeValidator(String.format("Not an integer between %d and %d.", minValue, maxValue), minValue, maxValue));
+		* Validators are never checked if the field is empty so there's no point
+		* in defining a validator that checks whether the field is required but empty.
+		* However, we need to define a default validator that succeeds when the field
+		* is not empty and even if read-only. If other validators are set, their
+		* failure will result in validation failure.
+		*/
+		// field.addValidator(new TrueValidator()); // TODO: is this even necessary?
 	}
 }

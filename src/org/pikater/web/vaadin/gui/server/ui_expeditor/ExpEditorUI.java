@@ -1,8 +1,20 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.example.Exmple;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -79,12 +91,23 @@ public class ExpEditorUI extends CustomConfiguredUI
 				}
 				agentInfo.setName(name);
 				
-				Options options = new Options();
-				options.addOption(Exmple.getC());
-				options.addOption(Exmple.getN());
-				options.addOption(Exmple.getU());
-				agentInfo.setOptions(options);
+				NewOptionList options = new NewOptionList();
+				options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
+				options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
+						new IntegerValue(2),
+						new IntegerValue(3),
+						new IntegerValue(5),
+						new IntegerValue(10))))
+				));
+				options.addOption(new NewOption("Double", new DoubleValue(1)));
+				options.addOption(new NewOption("Boolean", new BooleanValue(true)));
+				options.addOption(new NewOption("Float", new FloatValue(1)));
+				options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(
+						new IntegerValue(5), new IntegerValue(10), 3)));
+				options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(new ArrayList<IValueData>(Arrays.asList(
+						new IntegerValue(5), new IntegerValue(10))), 3)));
 				
+				agentInfo.setOptions(options);
 				agentInfos.addDefinition(agentInfo);
 			}
 		}

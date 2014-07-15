@@ -9,6 +9,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
@@ -119,8 +120,7 @@ public abstract class CustomFormLayout extends VerticalLayout
 	 */
 	protected void addField(String notificationDescription, AbstractField<? extends Object> field) 
 	{
-		fieldInfo.put(field, new FieldInfo(notificationDescription));
-		field.addValueChangeListener(new Property.ValueChangeListener()
+		fieldInfo.put(field, new FieldInfo(notificationDescription, new Property.ValueChangeListener()
 		{
 			private static final long serialVersionUID = -5059574562934358334L;
 
@@ -129,8 +129,23 @@ public abstract class CustomFormLayout extends VerticalLayout
 			{
 				updateActionButton();
 			}
-		});
+		}));
+		field.addValueChangeListener(fieldInfo.get(field).listener);
 		fLayout.addComponent(field);
+	}
+	
+	/**
+	 * Completely detach the field from the form leaving it in original state.
+	 * @param field
+	 */
+	protected void removeField(AbstractField<? extends Object> field) 
+	{
+		if(fieldInfo.containsKey(field))
+		{
+			field.removeValueChangeListener(fieldInfo.get(field).listener);
+			fieldInfo.remove(field);
+			fLayout.removeComponent(field);
+		}
 	}
 	
 	protected void addCustomButtonInterface(Component component)
@@ -207,10 +222,12 @@ public abstract class CustomFormLayout extends VerticalLayout
 	private static class FieldInfo
 	{
 		public final String notificationDescription;
+		public final ValueChangeListener listener;
 		
-		public FieldInfo(String notificationDescription)
+		public FieldInfo(String notificationDescription, ValueChangeListener listener)
 		{
 			this.notificationDescription = notificationDescription;
+			this.listener = listener;
 		}
 	}
 	

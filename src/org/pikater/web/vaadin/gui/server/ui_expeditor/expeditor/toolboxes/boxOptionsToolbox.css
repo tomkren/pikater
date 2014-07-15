@@ -2,7 +2,7 @@
 
 .boxOptionsToolboxSize
 {
-	width: 200px;
+	min-width: 250px;
 	height: 100%;
 }
 
@@ -10,4 +10,46 @@
 {
 	padding: 1px;
 	border: 1px solid black;
+	max-width: 350px;
+	overflow: auto;
+}
+
+.boxOptionsToolbox .verticalComponentSpacing
+{
+	margin-bottom: 15px;
+}
+
+.boxOptionsToolbox .v-horizontallayout
+{
+	height: 25px;
+}
+
+.boxOptionsToolbox .v-label
+{
+	line-height: 25px;
+}
+
+.boxOptionsToolbox .emphasizedLabel.v-widget, .optionsOverview .v-captiontext
+{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/*************************************************************/
+/* INDIVIDUAL VIEWS */
+
+.boxOptionsToolbox .optionsOverview, .boxOptionsToolbox .optionView
+{
+	padding: 10px;
+}
+
+.optionsOverview .v-captiontext /* captions for vertical panels listing options */
+{
+	margin-bottom: 5px;
+}
+
+.optionsOverview .optionBar
+{
+	padding-left: 10px;
+	background: #fff;
 }
