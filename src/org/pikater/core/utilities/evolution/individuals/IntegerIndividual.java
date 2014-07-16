@@ -1,6 +1,9 @@
 package org.pikater.core.utilities.evolution.individuals;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
+
 import java.util.Arrays;
 
 /**
@@ -57,8 +60,8 @@ public class IntegerIndividual extends ArrayIndividual{
     }
 
     @Override
-    public void set(int n, Object o) {
-        genes[n] = (Integer)o;
+    public void set(int n, ITypedValue o) {
+        genes[n] = ((IntegerValue) o).getValue();
     }
 
     /**

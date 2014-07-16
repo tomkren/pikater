@@ -1,4 +1,3 @@
-package xmlGenerator;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public final class Input02 {
 		comAgent.addOption(optionB);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
-		comAgent.setEvaluationMethod(new EvaluationMethod("Standart"));
+		comAgent.setEvaluationMethod(new EvaluationMethod("Crossvalidation"));
 		comAgent.setModel(new NewModel());
 
 		Search search = new Search();

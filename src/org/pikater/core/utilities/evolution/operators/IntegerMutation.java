@@ -1,5 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.IntegerIndividual;
@@ -31,7 +32,7 @@ public class IntegerMutation implements Operator{
              if (rng.nextDouble() < mutationProbability) {
                  for (int j = 0; j < o1.length(); j++) {
                      if (rng.nextDouble() < geneChangeProbability) {
-                         o1.set(j, RandomNumberGenerator.getInstance().nextInt(o1.getMax() - o1.getMin()) + o1.getMin());
+                         o1.set(j, new IntegerValue( RandomNumberGenerator.getInstance().nextInt(o1.getMax() - o1.getMin()) + o1.getMin()) );
                      }
                  }
              }

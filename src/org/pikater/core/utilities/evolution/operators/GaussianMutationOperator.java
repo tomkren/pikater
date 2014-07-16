@@ -1,5 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.RealIndividual;
@@ -41,7 +42,7 @@ public class GaussianMutationOperator implements Operator{
              if (rng.nextDouble() < mutationProbability) {
                  for (int j = 0; j < o1.length(); j++) {
                      if (rng.nextDouble() < geneChangeProbability) {
-                         o1.set(j, ((Double)o1.get(j)) + sigma*RandomNumberGenerator.getInstance().nextGaussian());
+                         o1.set(j, new DoubleValue( ((Double)o1.get(j)) + sigma*RandomNumberGenerator.getInstance().nextGaussian()) );
                      }
                  }
              }

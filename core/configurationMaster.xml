@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <agents>
-        <agent type="org.pikater.core.agents.system.Agent_Planner" name="Planner">
+        <agent type="org.pikater.core.agents.system.Agent_Manager" name="Manager">
+            <arguments>
+                <argument key="no_xml_output" value="true"/>
+            </arguments>
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_ARFFReader" name="Reader_Cervenacek">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_Manager" name="Manager">
-            <arguments>
-                <argument key="no_xml_output" value="true"/>
-            </arguments>
+        <agent type="org.pikater.core.agents.system.Agent_Planner" name="Planner">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_DataManager" name="DataManager">

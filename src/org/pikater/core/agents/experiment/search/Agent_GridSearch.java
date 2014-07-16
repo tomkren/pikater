@@ -8,6 +8,8 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -67,9 +69,9 @@ public class Agent_GridSearch extends Agent_Search {
         
         for (int i = 0; i < values.size(); i++) {
             SearchSolution ss = new SearchSolution();
-            List<String> v = new ArrayList<String>();
-            for (String s: values.get(i).split(",")) {
-                v.add(s);
+            List<ITypedValue> v = new ArrayList<ITypedValue>();
+            for (ITypedValue s: values) { // values.get(i).split(",")
+            	v.add(s);
             }
             ss.setValues(v);
             ret.add(ss);
@@ -82,9 +84,9 @@ public class Agent_GridSearch extends Agent_Search {
 
     private ArrayList<ITypedValue> generateValues() {
         
-        ArrayList<String> vals = new ArrayList<String>();
+        ArrayList<ITypedValue> vals = new ArrayList<ITypedValue>();
         
-        ArrayList<ArrayList<String>> valsForOpts = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<ITypedValue>> valsForOpts = new ArrayList<ArrayList<ITypedValue>>();
 
         for (SearchItem si : schema ) {
             Integer tries = si.getNumber_of_values_to_try();
@@ -97,66 +99,72 @@ public class Agent_GridSearch extends Agent_Search {
             {
                     valsForItem.addAll(searchItem.possibleValues());
             }
-            if (si instanceof IntSItem) {
-                IntSItem isi = (IntSItem)si;
-                if (isi.getMax() - isi.getMin() < tries) {
-                    for (int i = isi.getMin(); i <= isi.getMax(); i++) {
-                        valsForItem.add(Integer.toString(i));
-                    }
-                } else {
-                    if (linearSteps) {
-                        double stepSize = 1.0 * (isi.getMax() - isi.getMin()) / (tries - 1);
-                        for (int i = 0; i < tries; i++) {
-                            String add = Integer.toString((int) Math.round(isi.getMin() + i * stepSize));
-                            if (!valsForItem.contains(add)) {
-                                valsForItem.add(add);
-                            }
-                        }
-                    }
-                    if (logSteps) {
-                        double normalization = isi.getMin() < logZero ? isi.getMin() - logZero : 0.0;
-                        double start = Math.log(isi.getMin() - normalization);
-                        double range = Math.log(isi.getMax() - normalization) - Math.log(isi.getMin() - normalization);
-                        double stepSize = range / (tries - 1);
-                        for (int i = 0; i < tries; i++) {
-                            String add = Integer.toString((int) Math.round(Math.exp(start + i * stepSize) + normalization));
-                            if (!valsForItem.contains(add)) {
-                                valsForItem.add(add);
-                            }
-                        }
-                    }
-                }
-            }
+            if (si instanceof IntervalSearchItem) {
+            	IntervalSearchItem isi = (IntervalSearchItem)si;
+            	if (isi.getMin() instanceof IntegerValue)
+            	{            		            	
+	            	int max = ((IntegerValue)isi.getMax()).getValue();
+	            	int min = ((IntegerValue)isi.getMin()).getValue();
+	            	if ( max - min < tries) {
+	                    for (int i = min; i <= max; i++) {
+	                        valsForItem.add(new IntegerValue(i));
+	                    }
+	                } else {
+	                    if (linearSteps) {
+	                        double stepSize = 1.0 * (max - min) / (tries - 1);
+	                        for (int i = 0; i < tries; i++) {
+	                            ITypedValue add = new IntegerValue((int) Math.round(min + i * stepSize));
+	                            if (!valsForItem.contains(add)) {
+	                                valsForItem.add(add);
+	                            }
+	                        }
+	                    }
+	                    if (logSteps) {
+	                        double normalization = min < logZero ? min - logZero : 0.0;
+	                        double start = Math.log(min - normalization);
+	                        double range = Math.log(max - normalization) - Math.log(min - normalization);
+	                        double stepSize = range / (tries - 1);
+	                        for (int i = 0; i < tries; i++) {
+	                            ITypedValue add = new IntegerValue((int) Math.round(Math.exp(start + i * stepSize) + normalization));
+	                            if (!valsForItem.contains(add)) {
+	                                valsForItem.add(add);
+	                            }
+	                        }
+	                    }
+	                }	            	
+            	}
+            	if (isi.getMin() instanceof FloatValue)
+            	{            		            	
 
-            if (si instanceof FloatSItem) {
-                FloatSItem isi = (FloatSItem)si;
-                if (linearSteps) {
-                    double stepSize = 1.0 * (isi.getMax() - isi.getMin()) / (tries - 1);
-                    for (int i = 0; i < tries; i++) {
-                        String add = Double.toString(isi.getMin() + i * stepSize);
-                        if (!valsForItem.contains(add)) {
-                            valsForItem.add(add);
-                        }
-                    }
-                }
-                if (logSteps) {
-                    double normalization = isi.getMin() < logZero ? isi.getMin() - logZero : 0.0;
-                    double start = Math.log(isi.getMin() - normalization);
-                    double range = Math.log(isi.getMax() - normalization) - Math.log(isi.getMin() - normalization);
-                    double stepSize = range / (tries - 1);
-                    for (int i = 0; i < tries; i++) {
-                        String add = Double.toString(Math.exp(start + i * stepSize) + normalization);
-                        if (!valsForItem.contains(add)) {
-                            valsForItem.add(add);
-                        }
-                    }
-                }
+	                float max = ((FloatValue)isi.getMax()).getValue();
+	            	int min = ((IntegerValue)isi.getMin()).getValue();
+	                if (linearSteps) {
+	                    double stepSize = 1.0 * (max - min) / (tries - 1);
+	                    for (int i = 0; i < tries; i++) {
+	                        ITypedValue add = new DoubleValue(min + i * stepSize);
+	                        if (!valsForItem.contains(add)) {
+	                            valsForItem.add(add);
+	                        }
+	                    }
+	                }
+	                if (logSteps) {
+	                    double normalization = min < logZero ? min - logZero : 0.0;
+	                    double start = Math.log(min - normalization);
+	                    double range = Math.log(max - normalization) - Math.log(min - normalization);
+	                    double stepSize = range / (tries - 1);
+	                    for (int i = 0; i < tries; i++) {
+	                        DoubleValue add = new DoubleValue(Math.exp(start + i * stepSize) + normalization);
+	                        if (!valsForItem.contains(add)) {
+	                            valsForItem.add(add);
+	                        }
+	                    }
+	                }
+            	}
             }
-
             if (si instanceof SetSItem) {
                 SetSItem ssi = (SetSItem) si;
                 for (int i = 0; i < tries && i < ssi.getSet().size(); i++) {
-                    valsForItem.add(ssi.getSet().get(i).toString());
+                    valsForItem.add(ssi.getSet().get(i));
                 }
             }
             valsForOpts.add(valsForItem);
@@ -167,19 +175,23 @@ public class Agent_GridSearch extends Agent_Search {
         vals.addAll(valsForOpts.get(0));
         
         for (int i = 1; i < valsForOpts.size(); i++) {
-            ArrayList<String> newVals = new ArrayList<String>();
+            ArrayList<ITypedValue> newVals = new ArrayList<ITypedValue>();
             for (int j = 0; j < vals.size(); j++) {
-                for (int k = 0; k < valsForOpts.get(i).size(); k++) {
-                    newVals.add(vals.get(j) + "," + valsForOpts.get(i).get(k));
-                    System.err.println("VALUES: " + vals.get(j) + "," + valsForOpts.get(i).get(k));
+                List<ITypedValue> list = new ArrayList<ITypedValue>();             
+            	for (int k = 0; k < valsForOpts.get(i).size(); k++) {
+                    list.add( valsForOpts.get(i).get(k));
+                	// newVals.add(vals.get(j) + "," + valsForOpts.get(i).get(k));
+                    // System.err.println("VALUES: " + vals.get(j) + "," + valsForOpts.get(i).get(k));
                 }
+            	newVals.add(list);
             }
             vals = newVals;
         }
         
-        for (String v : vals) {
+        /* for (String v : vals) {
             System.err.println("VALUES: " + v);
         }
+        */
         
         return vals;
     }

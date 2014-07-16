@@ -1,5 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.RealIndividual;
@@ -42,8 +43,8 @@ public class AveragingCrossoverOperator implements Operator{
                     double d1 = (Double)o1.get(j);
                     double d2 = (Double)o2.get(j);
 
-                    o1.set(j, weight*d1 + (1-weight)*d2);
-                    o2.set(j, (1-weight)*d1 + weight*d2);
+                    o1.set(j, new DoubleValue(weight*d1 + (1-weight)*d2));
+                    o2.set(j, new DoubleValue((1-weight)*d1 + weight*d2));
                     
                 }
 

@@ -34,6 +34,7 @@ import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -102,7 +103,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 			res_options.set(options);
 			return res_options;
 		}
-		java.util.Iterator<String> sol_itr = solution.getValues().iterator();
+		java.util.Iterator<ITypedValue> sol_itr = solution.getValues().iterator();
 		
 		for (NewOption optionI : options) {
 			NewOption new_opt = optionI.cloneOption();

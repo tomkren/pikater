@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
@@ -227,7 +228,7 @@ public class Agent_EASearch extends Agent_Search {
         List<SearchSolution> ret = new ArrayList<SearchSolution>();
         for (Individual i : pop.getSortedIndividuals()) {
             SearchItemIndividual si = (SearchItemIndividual)i;
-            List<String> vals = new ArrayList<String>();
+            List<ITypedValue> vals = new ArrayList<ITypedValue>();
             
             for (int j = 0; j < si.length(); j++) {
                 vals.add(si.get(j).toString());

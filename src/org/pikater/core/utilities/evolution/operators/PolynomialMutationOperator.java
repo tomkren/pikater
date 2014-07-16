@@ -1,5 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
@@ -57,7 +58,7 @@ public class PolynomialMutationOperator implements Operator {
             if (y > yHi) {
                 y = yHi;
             }
-            ch.set(i, y);
+            ch.set(i, new DoubleValue(y) );
         }
     }
 }

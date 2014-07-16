@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
@@ -43,13 +44,13 @@ public class Agent_ChooseXValues extends Agent_Search {
 	}
 
 	//TODO: Something less recursive
-	private void generate(List<String> cur_solution_part,
-			List<List<String>> possible_solution_values, int beg_ind) {
+	private void generate(List<ITypedValue> cur_solution_part,
+			List<List<ITypedValue>> possible_solution_values, int beg_ind) {
 		
 		if (possible_solution_values.size()-beg_ind < 1) {//if we are at the end
 			
-			List<String> vals = new ArrayList<String>();
-			for (String valI : cur_solution_part) {
+			List<ITypedValue> vals = new ArrayList<ITypedValue>();
+			for (ITypedValue valI : cur_solution_part) {
 				vals.add(valI);
 			}
 
@@ -61,7 +62,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 			return;
 		}
 		
-		List<String> pos_vals = possible_solution_values.get(beg_ind);
+		List<ITypedValue> pos_vals = possible_solution_values.get(beg_ind);
 		for (int i = 0; i < pos_vals.size(); i++) {//For each possible value on the index beg_ind
 			cur_solution_part.add(pos_vals.get(i));//append the value to the part of the solution
 			
@@ -72,8 +73,8 @@ public class Agent_ChooseXValues extends Agent_Search {
 
 
 	private void generateSolutions_list(List<SearchItem> schema) {
-		List<List<String>> possible_solutions =
-				new ArrayList<List<String>>();
+		List<List<ITypedValue>> possible_solutions =
+				new ArrayList<List<ITypedValue>>();
 		
 		for (SearchItem searchItemI : schema) {
 			if (searchItemI.getNumber_of_values_to_try() == 0) {
@@ -81,7 +82,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 			}
 			possible_solutions.add(searchItemI.possibleValues());
 		}
-		generate(new ArrayList<String>(), possible_solutions, 0);
+		generate(new ArrayList<ITypedValue>(), possible_solutions, 0);
 		n = solutions_list.size();
 	}
 

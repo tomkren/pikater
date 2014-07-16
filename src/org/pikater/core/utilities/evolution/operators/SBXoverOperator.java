@@ -1,5 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
@@ -78,13 +79,13 @@ public class SBXoverOperator implements Operator {
                 c2=y_hi;
             if (RandomNumberGenerator.getInstance().nextDouble()<=0.5)
             {
-                a.set(i, c2);
-                b.set(i, c1);
+                a.set(i, new DoubleValue(c2));
+                b.set(i, new DoubleValue(c1));
             }
             else
             {
-                a.set(i, c1);
-                b.set(i, c2);
+                a.set(i, new DoubleValue(c1));
+                b.set(i, new DoubleValue(c2));
             }
 		}
 	}

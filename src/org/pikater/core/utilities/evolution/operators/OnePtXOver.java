@@ -1,5 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
 import org.pikater.core.utilities.evolution.individuals.ArrayIndividual;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
@@ -36,8 +37,8 @@ public class OnePtXOver implements Operator {
 
                 for (int j = point; j < p1.length(); j++) {
                     Object tmp = o1.get(j);
-                    o1.set(j,o2.get(j));
-                    o2.set(j, tmp);
+                    o1.set(j, new DoubleValue((double)o2.get(j)) );
+                    o2.set(j, new DoubleValue((double)tmp));
                 }
 
             }

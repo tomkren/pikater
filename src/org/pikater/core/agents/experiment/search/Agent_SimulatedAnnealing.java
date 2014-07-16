@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
@@ -146,7 +147,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	//Neighbor function: Random solutions in case of beginning, or mutation of existing
 	private SearchSolution Neighbor(SearchSolution sol){
 
-		List<String> new_solution = new ArrayList<String>();
+		List<ITypedValue> new_solution = new ArrayList<ITypedValue>();
 		if(sol == null){
 			//Completely new solution
 			for (SearchItem si : getSchema() ) {
@@ -158,7 +159,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 			for (int i = 0; i < getSchema().size(); i++) {
 				
 				SearchItem si = getSchema().get(i);
-				String val = sol.getValues().get(i);
+				ITypedValue val = sol.getValues().get(i);
 				
 				if(rnd_gen.nextDouble() > stability) {
 					val = si.randomValue(rnd_gen);

@@ -1,6 +1,10 @@
 package org.pikater.core.utilities.evolution.individuals;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
+
 import java.util.Arrays;
 
 /** Individual represented using an array of booleans.
@@ -35,8 +39,8 @@ public class BooleanIndividual extends ArrayIndividual{
     }
 
     @Override
-    public void set(int n, Object o) {
-        genes[n] = (Boolean)o;
+    public void set(int n, ITypedValue o) {
+        genes[n] = ((BooleanValue) o ).getValue();
     }
 
     /**

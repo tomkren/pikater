@@ -1,5 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
+import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
 import org.pikater.core.utilities.evolution.individuals.BooleanIndividual;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
@@ -32,7 +33,7 @@ public class BitFlipMutation implements Operator {
                  for (int j = 0; j < o1.length(); j++) {
                      if (rng.nextDouble() < bitFlipProbability) {
                          boolean b = o1.toBooleanArray()[j];
-                         o1.set(j, !b);
+                         o1.set(j, new BooleanValue(!b));
                      }
                  }
              }
