@@ -11,7 +11,6 @@ import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomLayout;
-import com.vaadin.ui.Label;
 
 @StyleSheet("autoVerticalBorderLayout.css")
 public class AutoVerticalBorderLayout extends CustomLayout implements AutoVerticalBorderLayoutExtensionClientRpc
@@ -40,14 +39,6 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 	public Component getComponent(Border border)
 	{
 		return getComponent(border.name());
-	}
-	
-	public void fillWithTestPanels()
-	{
-		for(Border border : Border.values())
-		{
-			setComponent(border, createTestComponent());
-		}
 	}
 	
 	//------------------------------------------------------------------
@@ -123,15 +114,5 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 	public void setColumnVisible(Column column, boolean visible)
 	{
 		extension.getClientRPC().setColumnVisible(column, visible);
-	}
-	
-	//------------------------------------------------------------------
-	// MISCELLANEOUS
-	
-	private Label createTestComponent()
-	{
-		Label lbl = new Label("something");
-		lbl.setSizeFull();
-		return lbl;
 	}
 }
