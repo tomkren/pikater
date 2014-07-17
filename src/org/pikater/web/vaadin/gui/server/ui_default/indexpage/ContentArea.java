@@ -4,7 +4,7 @@ import org.pikater.shared.util.ReflectionUtils;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeatureSet;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
@@ -34,7 +34,7 @@ public class ContentArea extends Panel
 
 			/**
 			 * Called after {@link Navigator#navigateTo(String)}, e.g. after {@link ContentArea#setContent(Component content)} or
-			 * {@link ContentArea#setContent(IWebFeatureSet feature)} method.
+			 * {@link ContentArea#setContent(IWebFeature feature)} method.
 			 */
 			@Override
 			public boolean beforeViewChange(ViewChangeEvent event)
@@ -76,7 +76,7 @@ public class ContentArea extends Panel
 		/*
 		 * Register all available views so that navigator will always know what view to create.
 		 */
-		for(Class<? extends IWebFeatureSet> featureSetClass : ReflectionUtils.getSubtypesFromPackage(ContentProvider.class.getPackage(), IWebFeatureSet.class))
+		for(Class<? extends IWebFeature> featureSetClass : ReflectionUtils.getSubtypesFromPackage(ContentProvider.class.getPackage(), IWebFeature.class))
 		{
 			registerAllViewsFromFeatureSet(featureSetClass);
 		}
@@ -89,7 +89,7 @@ public class ContentArea extends Panel
 	 * The main routine for setting the content component.
 	 * @param feature
 	 */
-	public void setContentView(IWebFeatureSet feature)
+	public void setContentView(IWebFeature feature)
 	{
 		if(feature.accessAllowed(VaadinSession.getCurrent()))
 		{
@@ -104,9 +104,9 @@ public class ContentArea extends Panel
 	//---------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	private void registerAllViewsFromFeatureSet(Class<? extends IWebFeatureSet> clazz)
+	private void registerAllViewsFromFeatureSet(Class<? extends IWebFeature> clazz)
 	{
-		for(IWebFeatureSet feature : clazz.getEnumConstants())
+		for(IWebFeature feature : clazz.getEnumConstants())
 		{
 			if(feature.accessAllowed(VaadinSession.getCurrent()))
 			{
