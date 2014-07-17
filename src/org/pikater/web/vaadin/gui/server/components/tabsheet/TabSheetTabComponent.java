@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.tabsheet;
 
 import org.pikater.web.vaadin.MyResources;
-import org.pikater.web.vaadin.gui.server.components.IconButton;
+import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;
 
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.ui.Alignment;

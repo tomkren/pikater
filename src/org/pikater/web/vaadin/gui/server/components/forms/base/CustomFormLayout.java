@@ -155,10 +155,22 @@ public abstract class CustomFormLayout extends VerticalLayout
 	
 	protected synchronized void updateActionButton()
 	{
-		// brute-force...
 		if(btn_actionBtn != null)
 		{
+			/*
+			 * Brute-force check all fields and update action button accordingly.
+			 * TODO: cache the state of individual fields and check/compute
+			 * state for the updated field.
+			 */
 			btn_actionBtn.setEnabled(isFormValidAndUpdated());
+		}
+		else
+		{
+			/*
+			 * Brute-force check all fields and display notifications like
+			 * "A field is required to be set".
+			 */
+			isFormValidAndUpdated();
 		}
 	}
 	

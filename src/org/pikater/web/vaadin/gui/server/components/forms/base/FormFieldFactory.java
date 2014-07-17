@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
-import org.pikater.web.vaadin.gui.server.components.forms.validators.TrueValidator;
+import org.pikater.web.vaadin.gui.server.components.forms.validators.RequiredValidator;
 
 import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.data.validator.EmailValidator;
@@ -50,14 +50,14 @@ public class FormFieldFactory
 	{
 		ComboBox result = new ComboBox(caption, options);
 		result.setNewItemsAllowed(false);
-		if(defaultOption != null)
-		{
-			result.select(defaultOption);
-		}
 		result.setImmediate(true);
 		result.setTextInputAllowed(false);
 		result.setNullSelectionAllowed(false);
 		result.setRequired(required);
+		if(defaultOption != null)
+		{
+			result.select(defaultOption);
+		}
 		result.setReadOnly(readonly);
 		return result;
 	}
@@ -104,17 +104,10 @@ public class FormFieldFactory
 		else
 		{
 			final TextField result = getGeneralTextField(caption, "Enter a number", String.valueOf(value), required, readOnly);
+			result.addValidator(new RequiredValidator(result));
 			result.addValidator(new NumberRangeValidator<N>(value.getClass(), min, max));
 			return result;
 		}
-	}
-	
-	public static TextField getFloatField(String caption, Float value, Float min, Float max, boolean required, boolean readOnly)
-	{
-		final TextField result = new TextField(caption);
-		setupTextFieldToWorkWithCustomForms(result, String.valueOf(value), "Enter a float number", required, readOnly);
-		result.addValidator(new NumberRangeValidator<Float>(Float.class, min, max));
-		return result;
 	}
 	
 	//-------------------------------------------------------------------
@@ -126,7 +119,7 @@ public class FormFieldFactory
 		field.setInputPrompt(inputPrompt);
 		field.setReadOnly(readOnly);
 		field.setRequired(required);
-
+		field.setRequiredError("This field is required.");
 		if(!readOnly)
 		{
 			field.setValidationVisible(true);
@@ -143,14 +136,5 @@ public class FormFieldFactory
 				}
 			});
 		}
-
-		/*
-		* Validators are never checked if the field is empty so there's no point
-		* in defining a validator that checks whether the field is required but empty.
-		* However, we need to define a default validator that succeeds when the field
-		* is not empty and even if read-only. If other validators are set, their
-		* failure will result in validation failure.
-		*/
-		// field.addValidator(new TrueValidator()); // TODO: is this even necessary?
 	}
 }

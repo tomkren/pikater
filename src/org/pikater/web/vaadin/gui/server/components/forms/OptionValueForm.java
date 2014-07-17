@@ -108,7 +108,7 @@ public class OptionValueForm extends CustomFormLayout
 		else
 		{
 			String selectedType;
-			if(value.getType() != null) // value has defined type, as it should have
+			if((value.getType() != null) && typeToDisplayString.containsKey(value.getType())) // value has defined type and it is a known type in restrictions
 			{
 				selectedType = typeToDisplayString.getValue(value.getType());
 				if(value.getCurrentValue() == null)
@@ -144,7 +144,7 @@ public class OptionValueForm extends CustomFormLayout
 				public void valueChange(ValueChangeEvent event)
 				{
 					// first get rid of the old fields
-					for(AbstractField<Object> field : typeSpecificFormFields)
+					for(AbstractField<Object> field : typeSpecificFormFields) // TODO: actually use this collection in other methods
 					{
 						removeField(field);
 					}
@@ -178,11 +178,7 @@ public class OptionValueForm extends CustomFormLayout
 		Class<? extends IValueData> typeClass = value.getCurrentValue().getClass();
 		if(typeClass.equals(NullValue.class))
 		{
-			/*
-			 * Null values can not be set and thus there's no sense in creating any field
-			 * whatsoever. Simply set the value to null value (possibly auto-correct).
-			 */
-			value.setCurrentValue(new NullValue());
+			// these values can not be set and hence no field is created whatsoever
 		}
 		else if(typeClass.equals(BooleanValue.class))
 		{
@@ -206,9 +202,29 @@ public class OptionValueForm extends CustomFormLayout
 			// finalize
 			addField("value", cb_value);
 		}
-		else if(typeClass.equals(IntegerValue.class))
+		
+		else if(typeClass.equals(QuestionMarkRange.class))
 		{
-			setupNumericValueField(value, new IOnNumericValueChange<Integer>()
+			// TODO: range can be set by user or is it fixed?
+			
+		}
+		else if(typeClass.equals(QuestionMarkSet.class))
+		{
+			// TODO: set can be edited by user or is it fixed?
+			
+		}
+		else
+		{
+			setupNumericFieldFromValueType(typeClass, value, "Value:", "value");
+		}
+	}
+	
+	private void setupNumericFieldFromValueType(Class<? extends IValueData> typeClass, final Value value, String caption,
+			String notificationIdentifier)
+	{
+		if(typeClass.equals(IntegerValue.class))
+		{
+			setupNumericField(value, caption, notificationIdentifier, new IOnNumericValueChange<Integer>()
 			{
 				@Override
 				public void valueChanged(Integer number)
@@ -219,7 +235,7 @@ public class OptionValueForm extends CustomFormLayout
 		}
 		else if(typeClass.equals(FloatValue.class))
 		{
-			setupNumericValueField(value, new IOnNumericValueChange<Float>()
+			setupNumericField(value, caption, notificationIdentifier, new IOnNumericValueChange<Float>()
 			{
 				@Override
 				public void valueChanged(Float number)
@@ -230,7 +246,7 @@ public class OptionValueForm extends CustomFormLayout
 		}
 		else if(typeClass.equals(DoubleValue.class))
 		{
-			setupNumericValueField(value, new IOnNumericValueChange<Double>()
+			setupNumericField(value, caption, notificationIdentifier, new IOnNumericValueChange<Double>()
 			{
 				@Override
 				public void valueChanged(Double number)
@@ -239,14 +255,6 @@ public class OptionValueForm extends CustomFormLayout
 				}
 			});
 		}
-		else if(typeClass.equals(QuestionMarkRange.class))
-		{
-			// TODO: range can be set by user or is it fixed?
-		}
-		else if(typeClass.equals(QuestionMarkSet.class))
-		{
-			// TODO: set can be edited by user or is it fixed?
-		}
 		else
 		{
 			throw new IllegalStateException(String.format("Unknown value type: '%s'", typeClass.getName()));
@@ -254,7 +262,8 @@ public class OptionValueForm extends CustomFormLayout
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <N extends Number & Comparable<? super N>> void setupNumericValueField(final Value value, final IOnNumericValueChange<N> valueChangeHandler)
+	private <N extends Number & Comparable<? super N>> void setupNumericField(final Value value, String caption,
+			String notificationIdentifier, final IOnNumericValueChange<N> valueChangeHandler)
 	{
 		// cast value
 		final N currentValue = (N) value.getCurrentValue().getValue();
@@ -269,7 +278,7 @@ public class OptionValueForm extends CustomFormLayout
 			}
 			Collections.sort(options);
 			
-			final ComboBox cb_value = FormFieldFactory.getGeneralComboBox("Value:", options, currentValue, true, false);
+			final ComboBox cb_value = FormFieldFactory.getGeneralComboBox(caption, options, currentValue, true, false);
 			cb_value.setSizeFull();
 			cb_value.addValueChangeListener(new Property.ValueChangeListener()
 			{
@@ -283,7 +292,7 @@ public class OptionValueForm extends CustomFormLayout
 			});
 
 			// finalize
-			addField("value", cb_value);
+			addField(notificationIdentifier, cb_value);
 		}
 		else // whether range restriction is defined or not
 		{
@@ -293,7 +302,7 @@ public class OptionValueForm extends CustomFormLayout
 				min = (N) value.getType().getRangeRestriction().getMinValue().getValue();
 				max = (N) value.getType().getRangeRestriction().getMaxValue().getValue();
 			}
-			final TextField tf_value = FormFieldFactory.getNumericField("Value:", currentValue, min, max, true, false);
+			final TextField tf_value = FormFieldFactory.getNumericField(caption, currentValue, min, max, true, false);
 			tf_value.setSizeFull();
 			tf_value.addValueChangeListener(new Property.ValueChangeListener()
 			{
@@ -318,7 +327,7 @@ public class OptionValueForm extends CustomFormLayout
 			});
 
 			// finalize
-			addField("value", tf_value);
+			addField(notificationIdentifier, tf_value);
 		}
 	}
 

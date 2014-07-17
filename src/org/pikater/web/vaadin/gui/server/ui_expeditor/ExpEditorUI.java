@@ -21,6 +21,7 @@ import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
 import com.vaadin.annotations.Push;
@@ -120,9 +121,8 @@ public class ExpEditorUI extends CustomConfiguredUI
 		
 		if(ServerConfigurationInterface.getKnownAgents() == null)
 		{
-			// if not, let the user select an option to wait until box definitions are available 
-			
-			// TODO:
+			// if not, let the user know 
+			MyDialogs.info("Not available yet", "The application needs to perform some tasks before this feature is accessible. Please, try again in a short while.");
 		}
 		else
 		{
@@ -149,8 +149,6 @@ public class ExpEditorUI extends CustomConfiguredUI
 	
 	private void displayExperimentEditor()
 	{
-		// TODO: 
-		
 		// simply create a new empty editor and let the user handle the rest
 		ExpEditor editor = new ExpEditor(isDebugModeActive());
 		// editor.loadExperimentIntoNewTab("test experiment", UniversalComputationDescription.getDummy());
