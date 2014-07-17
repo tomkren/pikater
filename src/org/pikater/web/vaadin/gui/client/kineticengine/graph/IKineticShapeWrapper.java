@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph;
+package org.pikater.web.vaadin.gui.client.kineticengine.graph;
 
 import net.edzard.kinetic.Node;
 

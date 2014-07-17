@@ -1,9 +1,14 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.operations.base;
+package org.pikater.web.vaadin.gui.client.kineticengine;
 
 import java.util.Stack;
 
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
+/**
+ * TODO: options editing makes this incomplete... we have to merge all changes
+ * to be registered either on the server or the client.
+ */
 public class KineticUndoRedoManager
 {
 	private final KineticComponentWidget widget;
@@ -37,10 +42,10 @@ public class KineticUndoRedoManager
 	
 	public void clear()
 	{
-		alterStateIf(!undoStack.isEmpty());
-		
 		undoStack.clear();
 		redoStack.clear();
+		
+		alterStateIf(undoStack.isEmpty());
 	}
 	
 	public void push(BiDiOperation operation)

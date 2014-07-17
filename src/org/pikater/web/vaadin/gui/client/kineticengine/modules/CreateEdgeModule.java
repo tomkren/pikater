@@ -8,12 +8,12 @@ import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient.VisualStyle;
+import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator.GraphItemRegistration;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
@@ -66,7 +66,7 @@ public final class CreateEdgeModule implements IEngineModule
 			fromEndPoint = box;
 			
 			// create the new edge and convert it to baseline
-			newEdge = kineticEngine.getContext().getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromEndPoint, null);
+			newEdge = kineticEngine.getContext().getGraphItemCreator().createEdge(GraphItemRegistration.MANUAL, fromEndPoint, null);
 			newEdge.edgeDrag_toBaseLine(kineticEngine.getMousePosition(), fromEndPoint);
 		}
 		

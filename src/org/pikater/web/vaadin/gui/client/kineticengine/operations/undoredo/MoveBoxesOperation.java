@@ -5,7 +5,7 @@ import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 

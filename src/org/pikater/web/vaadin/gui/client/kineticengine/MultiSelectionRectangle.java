@@ -8,7 +8,7 @@ import net.edzard.kinetic.Path;
 import net.edzard.kinetic.PathSVG;
 import net.edzard.kinetic.Vector2d;
 
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.IKineticShapeWrapper;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.IKineticShapeWrapper;
 
 public class MultiSelectionRectangle implements IKineticShapeWrapper
 {

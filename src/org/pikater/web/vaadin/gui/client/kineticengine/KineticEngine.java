@@ -24,11 +24,11 @@ import net.edzard.kinetic.event.KineticEvent;
 import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.AbstractGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator.GraphItemRegistration;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.CreateEdgeModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
@@ -184,14 +184,6 @@ public final class KineticEngine
 	};
 	
 	/*
-	 * TODO: 
-	 * - pohybování nevybraných krabiček spojit s UNDO/REDO
-	 * - až bude fungovat cancelBubble a zbavíme se fillRectanglu, bude možný i rovnou snadno rozšířit kreslení baseLine i na boxy
-	 * - bug s algoritmem počítání hran (hrany jdou pres box)
-	 * - vyhrát si s vlastníma kurzorama .cur soubory a ClientBundle zřejmě 
-	 */
-	
-	/*
 	 * GENERAL NOTES ABOUT KINETIC BEHAVIOUR:
 	 * - Each node can only have 1 parent (container) - a group or a layer! Beware of what happens when you cross add a node into a different layer...
 	 * - When moving a node from a group to a layer, both layers need to be drawn, if distinct.
@@ -332,7 +324,7 @@ public final class KineticEngine
 		Map<String, BoxGraphItemClient> guiBoxes = new HashMap<String, BoxGraphItemClient>();
 		for(String leafBoxID : experiment.leafBoxes.keySet())
 		{
-			guiBoxes.put(leafBoxID, getContext().getShapeCreator().createBox(NodeRegisterType.MANUAL, experiment.leafBoxes.get(leafBoxID)));
+			guiBoxes.put(leafBoxID, getContext().getGraphItemCreator().createBox(GraphItemRegistration.MANUAL, experiment.leafBoxes.get(leafBoxID)));
 		}
 		
 		// then convert all edges
@@ -343,7 +335,7 @@ public final class KineticEngine
 			for(String toLeafBoxID : entry.getValue())
 			{
 				BoxGraphItemClient toBox = guiBoxes.get(toLeafBoxID);
-				edges.add(getContext().getShapeCreator().createEdge(NodeRegisterType.MANUAL, fromBox, toBox));
+				edges.add(getContext().getGraphItemCreator().createEdge(GraphItemRegistration.MANUAL, fromBox, toBox));
 			}
 		}
 		
@@ -580,7 +572,7 @@ public final class KineticEngine
 	{
 		removeFillRectangleHandlers();
 		this.fillRectangle.addEventListener(fillRectangleMouseDownHandler, EventType.Basic.MOUSEDOWN);
-		// this.fillRectangle.addEventListener(fillRectangleMouseMoveHandler, EventType.Basic.MOUSEMOVE); // mouse down handler does this
+		// this.fillRectangle.addEventListener(fillRectangleMouseMoveHandler, EventType.Basic.MOUSEMOVE); // don't uncomment - mouse down handler does this
 		this.fillRectangle.addEventListener(fillRectangleMouseUpHandler, EventType.Basic.MOUSEUP);
 	}
 	
