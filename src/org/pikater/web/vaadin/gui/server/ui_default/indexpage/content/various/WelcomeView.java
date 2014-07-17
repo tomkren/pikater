@@ -20,6 +20,7 @@ public class WelcomeView extends Label implements IContentComponent
 	public WelcomeView()
 	{
 		super("", ContentMode.HTML);
+		setSizeFull();
 	}
 	
 	@Override

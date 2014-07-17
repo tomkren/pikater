@@ -5,8 +5,8 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.forms.OptionValueForm;
-import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 
@@ -269,7 +269,7 @@ public class BoxOptionsToolbox extends Toolbox
 	{
 		private static final long serialVersionUID = -2739307294944663713L;
 		
-		private final LinkLabel lbl_optionName;
+		private final Anchor link_optionName;
 		private OptionValueForm currentForm;
 		
 		public OptionView(BoxOptionsToolboxViewContext context)
@@ -291,14 +291,14 @@ public class BoxOptionsToolbox extends Toolbox
 			
 			Label lbl_values = new Label("Value for option");
 			lbl_values.setStyleName("emphasizedLabel");
-			this.lbl_optionName = new LinkLabel("");
-			this.lbl_optionName.addStyleName("emphasizedLabel");
+			this.link_optionName = new Anchor("", "");
+			this.link_optionName.addStyleName("emphasizedLabel");
 			
 			HorizontalLayout hl_optionIndetification = new HorizontalLayout();
 			hl_optionIndetification.setStyleName("verticalComponentSpacing");
 			hl_optionIndetification.setSpacing(true);
 			hl_optionIndetification.addComponent(lbl_values);
-			hl_optionIndetification.addComponent(this.lbl_optionName);
+			hl_optionIndetification.addComponent(this.link_optionName);
 			
 			addComponent(btn_backToOverview);
 			addComponent(getBoxIdentificationLabel());
@@ -309,8 +309,8 @@ public class BoxOptionsToolbox extends Toolbox
 		{
 			if(getContext().getCurrentlyViewedOption() != option)
 			{
-				lbl_optionName.setValue(option.getName() + ":");
-				lbl_optionName.setDescription(option.getDescription());
+				link_optionName.setValue(option.getName() + ":");
+				link_optionName.setDescription(option.getDescription());
 				if(currentForm != null)
 				{
 					removeComponent(currentForm);

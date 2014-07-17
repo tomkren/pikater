@@ -12,35 +12,13 @@
   /* Insert your theme rules here */
   /********************************/
   
-  /* Icon button */
-  .icon-button
+  /* styles for top-level vaadin-defined page element */
+  .topLevelElement
   {
-	border: 1px outset #ddd;
-	
-	margin: 0;
-	padding: 0;
-	
-	border-radius: 75%; 
-	-moz-border-radius: 75%; 
-	-webkit-border-radius: 75%;
-  }
-  .icon-button:active
-  {
-    border: 1px inset #ddd;
-  }
-  
-  /* TODO Toggle button */
-  .toggle-button
-  {
-  	border: 2px outset #ddd;
-  }
-  .toggle-button:active
-  {
-    cursor: pointer;
-  }
-  .toggle-button-pushed
-  {
-    border: 2px inset #ddd;
+  	width: 1250px;
+  	height: 100%;
+  	margin-left: auto;
+  	margin-right: auto;
   }
   
   /* Miscellaneous global styles */

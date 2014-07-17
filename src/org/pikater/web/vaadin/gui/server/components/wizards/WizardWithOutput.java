@@ -22,6 +22,7 @@ public class WizardWithOutput<T extends IWizardCommon> extends Wizard
 	public WizardWithOutput(T output)
 	{
 		super();
+		setSizeUndefined();
 		setStyleName("myWizard");
 		
 		this.output = output;

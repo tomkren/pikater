@@ -3,12 +3,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.MyResources;
-import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel;
-import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel.LinkLabelColorConf;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.UserFeature;
 
-import com.vaadin.event.MouseEvents;
-import com.vaadin.event.MouseEvents.ClickEvent; 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -21,7 +16,8 @@ public class BannerArea extends HorizontalLayout
 {
 	private static final long serialVersionUID = 8822379309622158669L;
 	
-	private final LinkLabel link_loggedInAs;
+	private final Label lbl_loggedInAs;
+	private final Label lbl_accountName;
 
 	public BannerArea(final IndexPage parentPage)
 	{
@@ -30,26 +26,18 @@ public class BannerArea extends HorizontalLayout
 		setSizeFull();
 		
 		Image checkIcon = new Image(null, MyResources.img_checkIcon16);
-		Label lbl_loggedInAs = new Label("Logged in as:");
-		link_loggedInAs = new LinkLabel(null, LinkLabelColorConf.BANNER_AREA, new MouseEvents.ClickListener()
-		{
-			private static final long serialVersionUID = -7249554724660903953L;
-
-			@Override
-			public void click(ClickEvent event)
-			{
-				parentPage.openContent(UserFeature.VIEW_PROFILE);
-			}
-		});
+		this.lbl_loggedInAs = new Label("Logged in as:");
+		this.lbl_accountName = new Label();
+		this.lbl_accountName.setStyleName("label-accountName");
 		
 		HorizontalLayout loggedInAs = new HorizontalLayout();
 		loggedInAs.setSpacing(true);
 		loggedInAs.addComponent(checkIcon);
 		loggedInAs.addComponent(lbl_loggedInAs);
-		loggedInAs.addComponent(link_loggedInAs);
+		loggedInAs.addComponent(lbl_accountName);
 		loggedInAs.setComponentAlignment(checkIcon, Alignment.MIDDLE_CENTER);
 		loggedInAs.setComponentAlignment(lbl_loggedInAs, Alignment.MIDDLE_CENTER);
-		loggedInAs.setComponentAlignment(link_loggedInAs, Alignment.MIDDLE_CENTER);
+		loggedInAs.setComponentAlignment(lbl_accountName, Alignment.MIDDLE_CENTER);
 		
 		Button btn_logout = new Button("Logout", new Button.ClickListener()
 		{
@@ -88,11 +76,11 @@ public class BannerArea extends HorizontalLayout
 		
 		if(ServerConfigurationInterface.avoidUsingDBForNow())
 		{
-			link_loggedInAs.setValue("some_account");
+			lbl_accountName.setValue("some_account");
 		}
 		else
 		{
-			link_loggedInAs.setValue(ManageAuth.getUserEntity(getSession()).getLogin());
+			lbl_accountName.setValue(ManageAuth.getUserEntity(getSession()).getLogin());
 		}
 	}
 }
