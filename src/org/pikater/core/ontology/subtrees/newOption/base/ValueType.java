@@ -4,6 +4,8 @@ import jade.content.Concept;
 
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class ValueType implements Concept
@@ -97,6 +99,7 @@ public class ValueType implements Concept
 	/**
 	 * - Default value is set.
 	 * - At least one of range and set restrictions is not set.
+	 * - No restriction is set for question mark values.
 	 * - If a restriction is set, it needs to be valid.
 	 * @return 
 	 */
@@ -107,6 +110,11 @@ public class ValueType implements Concept
 			return false;
 		}
 		else if((rangeRestriction != null) && (setRestriction != null))
+		{
+			return false;
+		}
+		else if (((defaultValue instanceof QuestionMarkRange) || (defaultValue instanceof QuestionMarkSet)) &&
+				((rangeRestriction != null) || (setRestriction != null)))
 		{
 			return false;
 		}

@@ -67,7 +67,7 @@ public class QuestionMarkSet implements IValidatedValueData
 	@Override
 	public String toDisplayName()
 	{
-		return "QuestionMarkRange";
+		return "QuestionMarkSet";
 	}
 	
 	@Override

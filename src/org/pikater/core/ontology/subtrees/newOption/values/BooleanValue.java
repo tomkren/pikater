@@ -1,9 +1,8 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-public class BooleanValue implements IComparableValueData
+public class BooleanValue implements IValueData
 {
 	private static final long serialVersionUID = 486219518827018753L;
 
@@ -42,11 +41,5 @@ public class BooleanValue implements IComparableValueData
 	public String toDisplayName()
 	{
 		return "Boolean";
-	}
-	
-	@Override
-	public int compareTo(IComparableValueData o)
-	{
-		return value.compareTo((Boolean) o.getValue());
 	}
 }
