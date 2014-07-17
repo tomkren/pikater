@@ -80,8 +80,6 @@ public class KineticComponent extends AbstractComponent
 	//---------------------------------------------------------------
 	// OTHER PROGRAMMATIC FIELDS
 	
-	private final KineticComponentServerRpc serverRPC;
-	
 	private boolean bindOptionsManagerWithSelectionChanges;
 	
 	//---------------------------------------------------------------
@@ -105,11 +103,13 @@ public class KineticComponent extends AbstractComponent
 		this.boxIDToAgentInfo = new HashMap<String, AgentInfo>();
 		this.graphExportedFromClient = null;
 		
+		this.bindOptionsManagerWithSelectionChanges = areSelectionChangesBoundWithOptionsManagerByDefault();
+		
 		/*
-		 * Register actions to do on client commands.
+		 * Register handlers for client commands.
 		 */
 		
-		this.serverRPC = new KineticComponentServerRpc()
+		registerRpc(new KineticComponentServerRpc()
 		{
 			private static final long serialVersionUID = -2769231541745495584L;
 			
@@ -118,6 +118,7 @@ public class KineticComponent extends AbstractComponent
 			{
 				getState().serverThinksThatSchemaIsModified = modified;
 				parentTab.setTabContentModified(modified);
+				parentEditor.getExtension().setKineticContentModified(KineticComponent.this, modified);
 			}
 
 			@Override
@@ -188,10 +189,7 @@ public class KineticComponent extends AbstractComponent
 			{
 				graphExportedFromClient = experiment;
 			}
-		};
-		registerRpc(this.serverRPC);
-		
-		this.bindOptionsManagerWithSelectionChanges = areSelectionChangesBoundWithOptionsManagerByDefault();
+		});
 	}
 	
 	//---------------------------------------------------------------
@@ -219,7 +217,6 @@ public class KineticComponent extends AbstractComponent
 	public void importExperiment(UniversalComputationDescription uniFormat)
 	{
 		resetEnvironment();
-		
 		try
 		{
 			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
@@ -227,7 +224,7 @@ public class KineticComponent extends AbstractComponent
 		catch (ConversionException e)
 		{
 			PikaterLogger.logThrowable("", e);
-			MyNotifications.showError(null, "Could not import experiment. Contact the administrators.");
+			MyNotifications.showError("Could not import experiment", "Please, contact the administrators.");
 		}
 	}
 	
@@ -329,7 +326,6 @@ public class KineticComponent extends AbstractComponent
 	private void resetEnvironment()
 	{
 		getClientRPC().command_resetKineticEnvironment();
-		serverRPC.command_setExperimentModified(false);
 		boxIDToAgentInfo.clear();
 	}
 	

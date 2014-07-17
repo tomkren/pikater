@@ -1,7 +1,11 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.pikater.web.vaadin.gui.client.extensions.ExpEditorExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.extensions.ExpEditorExtensionServerRpc;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 import com.vaadin.server.AbstractExtension;
 
@@ -9,8 +13,11 @@ public class ExpEditorExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;
 	
+	private final Set<KineticComponent> modifiedContent;
+	
 	public ExpEditorExtension()
 	{
+		this.modifiedContent = new HashSet<KineticComponent>();
 		registerRpc(new ExpEditorExtensionServerRpc()
 		{
 			private static final long serialVersionUID = 216446786216335413L;
@@ -28,6 +35,15 @@ public class ExpEditorExtension extends AbstractExtension
 	
 	public ExpEditorExtensionClientRpc getClientRPC()
 	{
-		return getRpcProxy(ExpEditorExtensionClientRpc.class); 
+		return getRpcProxy(ExpEditorExtensionClientRpc.class);
+	}
+	
+	public void setKineticContentModified(KineticComponent content, boolean modified)
+	{
+		if(modified ? modifiedContent.add(content) : modifiedContent.remove(content))
+		{
+			// modified content size changed
+			getClientRPC().command_modifiedTabsCountChanged(modifiedContent.size());
+		}
 	}
 }
