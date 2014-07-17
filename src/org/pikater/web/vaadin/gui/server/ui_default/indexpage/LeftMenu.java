@@ -1,28 +1,84 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
+import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.AdminFeature;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeatureSet;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.UserFeature;
 
-import com.vaadin.ui.MenuBar;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.Tree;
+import com.vaadin.ui.VerticalLayout;
 
-public class LeftMenu extends MenuBar
+public class LeftMenu extends Panel
 {
 	private static final long serialVersionUID = -3876199300842530858L;
 	
-	/*
-	 * Programmatic fields.
+	//----------------------------------------------------------
+	// COMPONENT FIELDS
+	
+	/**
+	 * The menu component. Constructed when this component is attached and first child
+	 * of inner layout.
 	 */
-	private final IndexPage parent;
+	private Tree menu;
+	
+	//----------------------------------------------------------
+	// PROGRAMMATIC FIELDS
+	
+	private final SimpleIDGenerator idGenerator;
+	private final Map<Integer, IWebFeature> menuItemIDToFeature;
 
-	public LeftMenu(IndexPage parent)
+	public LeftMenu(final IndexPage parent)
 	{
 		super();
-		setAutoOpen(true);
+		setSizeFull();
 		
-		this.parent = parent;
+		this.idGenerator = new SimpleIDGenerator();
+		this.menuItemIDToFeature = new HashMap<Integer, IWebFeature>();
+		
+		// define the topmost component
+		VerticalLayout innerLayout = new VerticalLayout();
+		innerLayout.setStyleName("leftMenu");
+		
+		// define the menu component
+		this.menu = new Tree();
+		this.menu.setImmediate(true);
+		this.menu.addValueChangeListener(new Property.ValueChangeListener()
+		{
+			private static final long serialVersionUID = 6026687725039562858L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event)
+			{
+				Integer menuItemID = (Integer) event.getProperty().getValue();
+				if(menuItemIDToFeature.containsKey(menuItemID))
+				{
+					parent.openContent(menuItemIDToFeature.get(menuItemID));
+				}
+			}
+		});
+		
+		// define additional menu item, that is not directly part of it (internally)
+		Anchor anchor = new Anchor("Open experiment editor", String.format("window.open('%s', '_blank');", 
+				CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + PikaterUI.EXP_EDITOR.getURLPattern()));
+		anchor.setStyleName("v-tree-node-caption");
+		
+		// add leaf components
+		innerLayout.addComponent(this.menu);
+		innerLayout.addComponent(anchor);
+		
+		// add topmost component
+		setContent(innerLayout);
 	}
 	
 	@Override
@@ -44,40 +100,31 @@ public class LeftMenu extends MenuBar
 	{
 		if(withAdminMenu)
 		{
-			buildAdminMenu();
+			buildMenuCategory("Admin features", AdminFeature.class);
 		}
-		buildUserMenu();
+		buildMenuCategory("User features", UserFeature.class);
 	}
 	
-	private void buildAdminMenu()
+	private void buildMenuCategory(String caption, Class<? extends IWebFeature> featureSetClass)
 	{
-		MenuItem adminMenu = addItem("Admin features", null);
-		for(AdminFeature feature : AdminFeature.values())
+		Integer rootMenuID = addMenuItem(caption);
+		for(IWebFeature feature : featureSetClass.getEnumConstants())
 		{
-			buildMenuItem(adminMenu, feature);
+			Integer subMenuID = addMenuItem(feature.toMenuCaption());
+			menu.setParent(subMenuID, rootMenuID);
+			menu.setChildrenAllowed(subMenuID, false);
+			
+			// only items registered like this will have custom action called on click
+			menuItemIDToFeature.put(subMenuID, feature);
 		}
+		menu.expandItem(rootMenuID);
 	}
 	
-	private void buildUserMenu()
+	private Integer addMenuItem(String caption)
 	{
-		MenuItem userMenu = addItem("User features", null);
-		for(UserFeature feature : UserFeature.values())
-		{
-			buildMenuItem(userMenu, feature);
-		}
-	}
-	
-	private void buildMenuItem(MenuItem parentMenuItem, final IWebFeatureSet feature)
-	{
-		parentMenuItem.addItem(feature.toMenuCaption(), new Command()
-		{
-			private static final long serialVersionUID = -2161709698587068923L;
-
-			@Override
-			public void menuSelected(MenuItem selectedItem)
-			{
-				parent.openContent(feature);
-			}
-		});
+		Integer menuItemID = idGenerator.getAndIncrement();
+		menu.addItem(menuItemID);
+		menu.setItemCaption(menuItemID, caption);
+		return menuItemID;
 	}
 }
