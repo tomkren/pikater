@@ -14,19 +14,16 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
-import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
+import org.pikater.core.ontology.messages.TaskOutput;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -34,11 +31,9 @@ import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
-
-import com.google.common.io.Files;
+import org.pikater.core.ontology.subtrees.task.Task.InOutType;
 
 import weka.core.Instances;
-import weka.core.converters.ArffSaver;
 
 public class ComputingAction extends FSMBehaviour {
 	/**
@@ -470,16 +465,8 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 
-				String md5;
-				if (agent.test != null) {
-					md5 = agent.saveArff(agent.test);
-					agent.log("Saved test to " + md5);
-				}
-				if (agent.label != null) {
-					md5 = agent.saveArff(agent.label);
-					agent.log("Saved label to " + md5);
-				}
-				// TODO return result filename to Planner?
+				addTaskOutput(InOutType.TEST, agent.test);
+				addTaskOutput(InOutType.TRAIN, agent.label);
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);
@@ -552,5 +539,23 @@ public class ComputingAction extends FSMBehaviour {
 		registerDefaultTransition(SENDRESULTS_STATE, INIT_STATE, new String[] {
 				INIT_STATE, GETTRAINDATA_STATE, GETTESTDATA_STATE,
 				GETLABELDATA_STATE, TRAINTEST_STATE, SENDRESULTS_STATE });
+	}
+
+	private String addTaskOutput(InOutType type, Instances inst) {
+		if (inst != null) {
+			String md5 = agent.saveArff(inst);
+			agent.log("Saved "+type+" to " + md5);
+			TaskOutput to = new TaskOutput();
+			to.setType(type);
+			to.setName(md5);
+			
+			if (agent.currentTask.getOutput() == null) {
+				agent.currentTask.setOutput(new ArrayList<TaskOutput>());
+			}
+			agent.currentTask.getOutput().add(to);
+			return md5;
+		} else {
+			return null;
+		}
 	}
 }
