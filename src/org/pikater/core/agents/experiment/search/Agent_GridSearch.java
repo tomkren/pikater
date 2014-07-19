@@ -7,11 +7,7 @@ package org.pikater.core.agents.experiment.search;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.*;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.*;
 import org.pikater.core.options.GridSearch_SearchBox;
@@ -84,7 +80,7 @@ public class Agent_GridSearch extends Agent_Search {
 
     private ArrayList<ITypedValue> generateValues() {
         
-        ArrayList<ITypedValue> vals = new ArrayList<ITypedValue>();
+        ArrayList<ITypedValue> vals = new ArrayList<>();
         
         ArrayList<ArrayList<ITypedValue>> valsForOpts = new ArrayList<ArrayList<ITypedValue>>();
 
@@ -177,13 +173,11 @@ public class Agent_GridSearch extends Agent_Search {
         for (int i = 1; i < valsForOpts.size(); i++) {
             ArrayList<ITypedValue> newVals = new ArrayList<ITypedValue>();
             for (int j = 0; j < vals.size(); j++) {
-                List<ITypedValue> list = new ArrayList<ITypedValue>();             
             	for (int k = 0; k < valsForOpts.get(i).size(); k++) {
-                    list.add( valsForOpts.get(i).get(k));
+                    newVals.add(new StringValue(vals.get(j) + "," + valsForOpts.get(i).get(k)));
                 	// newVals.add(vals.get(j) + "," + valsForOpts.get(i).get(k));
                     // System.err.println("VALUES: " + vals.get(j) + "," + valsForOpts.get(i).get(k));
                 }
-            	newVals.add(list);
             }
             vals = newVals;
         }

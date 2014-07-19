@@ -1,21 +1,20 @@
 package org.pikater.core.agents.experiment.search;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.newOption.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.Value;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
 import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.EASearch_SearchBox;
-import org.pikater.core.utilities.evolution.*;
+import org.pikater.core.utilities.evolution.MergingReplacement;
+import org.pikater.core.utilities.evolution.Population;
+import org.pikater.core.utilities.evolution.RandomNumberGenerator;
+import org.pikater.core.utilities.evolution.Replacement;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.individuals.SearchItemIndividual;
 import org.pikater.core.utilities.evolution.multiobjective.NSGAFitnessEvaluator;
@@ -25,12 +24,11 @@ import org.pikater.core.utilities.evolution.operators.SearchItemIndividualMutati
 import org.pikater.core.utilities.evolution.selectors.BestIndividualsSelector;
 import org.pikater.core.utilities.evolution.selectors.Selector;
 import org.pikater.core.utilities.evolution.selectors.TournamentSelector;
-import org.pikater.core.utilities.evolution.surrogate.ASMMOMAModelValueProvider;
-import org.pikater.core.utilities.evolution.surrogate.FitnessModelValueProvider;
-import org.pikater.core.utilities.evolution.surrogate.IdentityNormalizer;
-import org.pikater.core.utilities.evolution.surrogate.LogarithmicNormalizer;
-import org.pikater.core.utilities.evolution.surrogate.SearchItemIndividualArchive;
-import org.pikater.core.utilities.evolution.surrogate.SurrogateMutationOperator;
+import org.pikater.core.utilities.evolution.surrogate.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Agent_EASearch extends Agent_Search {
     /*
@@ -165,7 +163,7 @@ public class Agent_EASearch extends Agent_Search {
             SearchItemIndividual sampleIndividual = new SearchItemIndividual(schema.size());
             
             for (int i = 0; i < schema.size(); i++) {
-                sampleIndividual.set(i, "");
+                sampleIndividual.set(i, new StringValue(""));
                 sampleIndividual.setSchema(i, schema.get(i));
             }
             
@@ -231,7 +229,7 @@ public class Agent_EASearch extends Agent_Search {
             List<ITypedValue> vals = new ArrayList<ITypedValue>();
             
             for (int j = 0; j < si.length(); j++) {
-                vals.add(si.get(j).toString());
+                vals.add(si.get(j));
             }
             
             SearchSolution ss = new SearchSolution();

@@ -1,3 +1,4 @@
+package xmlGenerator;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
