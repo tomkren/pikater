@@ -3,9 +3,9 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 
 /**
@@ -58,10 +58,10 @@ public class Search extends DataProcessing {
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		
-		Options optionsOnt = new Options(options);
+		NewOptionList optionsOnt = new NewOptionList(options);
 		
 		NewOption optSearchClass = optionsOnt.getOptionByName("searchClass");
-		StringValue value = (StringValue) optSearchClass.convertToSingleValue().getTypedValue();
+		StringValue value = (StringValue) optSearchClass.toSingleValue().getCurrentValue();
 		this.searchClass = value.getValue();
 
 		options.remove(optSearchClass);

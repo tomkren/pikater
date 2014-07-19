@@ -66,7 +66,7 @@ public class Task implements Concept {
         return saveResults;
     }
 
-    public enum InOutType {TRAIN, TEST, ERRORS, VALIDATION, AGENT};
+    public enum InOutType {TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA};
 
     // administrative:
     private int graphId;

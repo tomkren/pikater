@@ -14,8 +14,12 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -59,8 +63,24 @@ public class Agent_Planner extends PikaterAgent {
 
 
 	private void initCPUCores() {
-		
+
+		 DFAgentDescription template = new DFAgentDescription();
+		 ServiceDescription sd = new ServiceDescription();
+		 sd.setType(Agent_ManagerAgent.class.getName());
+		 template.addServices(sd);
+		 
+		 DFAgentDescription[] result = null;
+		 try {
+			result = DFService.search(this, template);
+		} catch (FIPAException e1) {
+			logError(e1.getMessage(), e1);
+		}
+		if (result.length == 0) {
+			return;
+		}
+	
 		AID managerAgentAID = new AID(AgentNames.MANAGER_AGENT, false);
+		
 		PlannerCommunicator comminicator = new PlannerCommunicator(this);
 		ComputerInfo computerInfo =
 				comminicator.getComputerInfo(managerAgentAID);
@@ -81,12 +101,7 @@ public class Agent_Planner extends PikaterAgent {
 
 		// waiting to start ManagerAgent
 		doWait(3000);
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e1) {
-			logError("Sleep error");
-			e1.printStackTrace();
-		}
+
 		initCPUCores();
 		
 		
@@ -124,11 +139,9 @@ public class Agent_Planner extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					e.printStackTrace();
-					logError("Problem extracting content: " + e.getMessage());
+					logError("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					e.printStackTrace();
-					logError("Codec problem: " + e.getMessage());
+					logError("Codec problem: " + e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
@@ -166,14 +179,14 @@ public class Agent_Planner extends PikaterAgent {
 			result = (Result) getContentManager().extractContent(
 					finishedTaskMsg);
 		} catch (UngroundedException e1) {
-			this.logError("", e1);
+			logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			this.logError("", e1);
+			logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			this.logError("", e1);
+			logError(e1.getMessage(), e1);
 		}
 		
-		Task finishedTask = (Task) result.getValue();//.getAction();
+		Task finishedTask = (Task) result.getValue();
 
 		CPUCore cpuCore = new CPUCore(finishedTaskMsg.getSender(),
 				finishedTask.getCpuCoreID());
@@ -197,11 +210,9 @@ public class Agent_Planner extends PikaterAgent {
 		try {
 			getContentManager().fillContent(msgToManager, executeResult);
 		} catch (CodecException e) {
-			logError(e.getMessage());
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		}
 		send(msgToManager);
 		/////

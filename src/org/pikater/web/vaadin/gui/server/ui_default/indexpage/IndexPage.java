@@ -1,11 +1,10 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeatureSet;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
@@ -24,7 +23,6 @@ public class IndexPage extends AutoVerticalBorderLayout
 	public IndexPage()
 	{
 		super();
-		setStyleName("topLevelElement");
 		
 		this.contentArea = new ContentArea();
 		
@@ -44,7 +42,7 @@ public class IndexPage extends AutoVerticalBorderLayout
 		if(CustomConfiguredUI.isURIFragmentDefined()) // a browser refresh or bookmark
 		{
 			// try to stay on the page
-			IWebFeatureSet featureFromRequest = ContentProvider.getFeatureFromNavigatorName(CustomConfiguredUI.getURIFragment());
+			IWebFeature featureFromRequest = ContentProvider.getFeatureFromNavigatorName(CustomConfiguredUI.getURIFragment());
 			if(featureFromRequest == null)
 			{
 				// default to our basic content
@@ -63,25 +61,12 @@ public class IndexPage extends AutoVerticalBorderLayout
 		}
 	}
 	
-	public void openContent(IWebFeatureSet feature)
+	public void openContent(IWebFeature feature)
 	{
-		if(feature.shouldOpenInSeperateTab())
-		{
-			/*
-			 * TODO: if already exists... set focus to the right tab? Unfortunately, GWT (or JS)
-			 * doesn't support that because of security reasons.
-			 */
-			
-			String urlToOpen = CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + PikaterUI.EXP_EDITOR.getURLPattern(); 
-			getUI().getPage().setLocation(urlToOpen);
-		}
-		else
-		{
-			this.contentArea.setContentView(feature);
-		}
+		this.contentArea.setContentView(feature);
 	}
 	
-	private IWebFeatureSet getDefaultContent()
+	private IWebFeature getDefaultContent()
 	{
 		return DefaultFeature.WELCOME;
 		// return DefaultFeature.TEST;

@@ -22,8 +22,8 @@ import com.vaadin.server.VaadinServletService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.UI;
 
@@ -95,7 +95,7 @@ public abstract class CustomConfiguredUI extends UI
 			public void error(com.vaadin.server.ErrorEvent event)
 			{
 				PikaterLogger.logThrowable("Default UI error handler caught the following error:", event.getThrowable());
-				MyNotifications.showError("Internal server error", "A request spawned an error, please contact the admins.");
+				MyNotifications.showApplicationError();
 			}
 		});
 		
@@ -159,7 +159,7 @@ public abstract class CustomConfiguredUI extends UI
 	}
 	
 	//-------------------------------------------------------------------
-	// PRIVATE INTERFACE - UI building
+	// PRIVATE INTERFACE AND TYPES - UI building
 	
 	/**
 	 * Make the user launch the application first (to be usable at all) and then display index page to him if authenticated for that.
@@ -213,24 +213,22 @@ public abstract class CustomConfiguredUI extends UI
 	 */
 	private void setMyContent(Component content)
 	{
-		if(content == null) // mostly likely Vaadin's own initialization, unfortunately...
+		if(content == null) // most likely Vaadin's own initialization, unfortunately...
 		{
 			/*
-			 * We have to set the null content and return because nothing is initialized yet in here.
-			 * If this is not after all Vaadin's initialization, notifications will not generate any
-			 * errors but still won't work because the notifications component will have not been added
-			 * to the UI.
+			 * We have to forward the call and return because nothing is initialized
+			 * at this point. This method has been called from super constructor.
 			 */
 			super.setContent(content);
 		}
 		else
 		{
-			VerticalLayout vLayout = new VerticalLayout();
-			vLayout.setSizeFull();
-			vLayout.addComponent(notifications); // always ensure that notifications component is added
-			vLayout.addComponent(content); // causes a NullPointerException if null
-			vLayout.setExpandRatio(content, 1);
-			super.setContent(vLayout);
+			CssLayout cssLayout = new CssLayout();
+			cssLayout.setStyleName("topLevelElement"); // don't set it to full size...
+			cssLayout.addComponent(content);
+			content.setSizeFull();
+			cssLayout.addComponent(notifications); // always ensure that notifications component is added
+			super.setContent(cssLayout); // the method is overriden in these class - let's avoid an infinite loop
 		}
 	}
 	
@@ -262,8 +260,10 @@ public abstract class CustomConfiguredUI extends UI
 	private void forceUserToAuthenticate(final IDialogResultHandler resultHandler)
 	{
 		/*
-		 * This is necessary as a precaution to the user entering invalid auth info. If no content
+		 * This is necessary for two reasons:
+		 * 1) As a precaution to the user entering invalid auth info. If no content
 		 * component is supplied to the UI, the login dialog disappears after the "init()" method finishes.
+		 * 2) Notifications won't be displayed otherwise.
 		 */
 		setMyContent(new Label());
 		

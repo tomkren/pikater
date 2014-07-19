@@ -33,9 +33,7 @@ import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.task.ExecuteTaksOnCPUCore;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
-import org.pikater.core.ontology.subtrees.task.FinishedTask;
 
 import com.google.common.io.Files;
 
@@ -107,48 +105,15 @@ public class ComputingAction extends FSMBehaviour {
 						.getAction();
 				return true;
 			} catch (CodecException ce) {
-				agent.logError("", ce);
+				agent.logError(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError("", oe);
+				agent.logError(oe.getMessage(), oe);
 			}
 		} else {
 			block();
 		}
 
 		return false;
-	}
-
-	/* Extract data from INFORM message (ARFF reader) */
-	private DataInstances processGetData(ACLMessage inform) {
-		ContentElement content;
-		try {
-			content = agent.getContentManager().extractContent(inform);
-			if (content instanceof Result) {
-				Result result = (Result) content;
-
-				if (result.getValue() instanceof DataInstances) {
-					return (DataInstances) result.getValue();
-				} else if (result.getValue() instanceof Boolean) {
-
-					Object dataInstance = agent.getO2AObject();
-					if (dataInstance == null)
-						throw new IllegalStateException(
-								"received GetData response without o2a object in queue");
-					else
-						return (DataInstances) dataInstance;
-				} else {
-					throw new IllegalStateException(
-							"received unexpected Inform");
-				}
-			}
-		} catch (UngroundedException e) {
-			agent.logError("", e);
-		} catch (CodecException e) {
-			agent.logError("", e);
-		} catch (OntologyException e) {
-			agent.logError("", e);
-		}
-		return null;
 	}
 
 	public ComputingAction(final Agent_ComputingAgent agent) {
@@ -166,6 +131,14 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			public void action() {
+/*				
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+*/				
 				resultMsg = null;
 				executeAction = null;
 				if (!getRequest()) {
@@ -193,12 +166,12 @@ public class ComputingAction extends FSMBehaviour {
 				mode = data.getMode();
 
 				trainFn = data.getTrainFileName();
-				AchieveREInitiator getTrainBehaviour = (AchieveREInitiator) ((ComputingAction) parent).getState(GETTRAINDATA_STATE);
+				AchieveREInitiator getTrainBehaviour = (AchieveREInitiator)
+						((ComputingAction) parent).getState(GETTRAINDATA_STATE);
 
 				if (!trainFn.equals(agent.trainFileName)) {
 					
-					ComputingComminicator communicator = new ComputingComminicator();
-					ACLMessage dataMsg = communicator.sendGetDataReq(agent, trainFn);
+					ACLMessage dataMsg = agent.makeGetDataRequest(trainFn);
 					
 					getTrainBehaviour.reset(dataMsg);
 				} else {
@@ -208,12 +181,12 @@ public class ComputingAction extends FSMBehaviour {
 
 				if (!mode.equals("train_only")) {
 					testFn = data.getTestFileName();
-					AchieveREInitiator getTestBehaviour = (AchieveREInitiator) ((ComputingAction) parent)
-							.getState(GETTESTDATA_STATE);
+					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
+							((ComputingAction) parent).getState(GETTESTDATA_STATE);
+					
 					if (!testFn.equals(agent.testFileName)) {
 						
-						ComputingComminicator communicator = new ComputingComminicator();
-						ACLMessage dataMsg = communicator.sendGetDataReq(agent, testFn);
+						ACLMessage dataMsg = agent.makeGetDataRequest(testFn);
 
 						getTestBehaviour.reset(dataMsg);
 					} else {
@@ -224,12 +197,12 @@ public class ComputingAction extends FSMBehaviour {
 
 				if (data.getLabelFileName() != null) {
 					labelFn = data.getLabelFileName();
-					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator) ((ComputingAction) parent)
-							.getState(GETLABELDATA_STATE);
+					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator)
+							((ComputingAction) parent).getState(GETLABELDATA_STATE);
+					
 					if (!labelFn.equals(agent.labelFileName)) {
 						
-						ComputingComminicator communicator = new ComputingComminicator();
-						ACLMessage dataMsg = communicator.sendGetDataReq(agent, labelFn);
+						ACLMessage dataMsg = agent.makeGetDataRequest(labelFn);
 						
 						getLabelBehaviour.reset(dataMsg);
 					} else {
@@ -256,7 +229,7 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances trainDataInstances = processGetData(inform);
+				DataInstances trainDataInstances = agent.processGetDataResponse(inform);
 				if (trainDataInstances != null) {
 					agent.trainFileName = trainFn;
 					agent.ontoTrain = trainDataInstances;
@@ -295,7 +268,7 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances testDataInstances = processGetData(inform);
+				DataInstances testDataInstances = agent.processGetDataResponse(inform);
 				if (testDataInstances != null) {
 					agent.testFileName = testFn;
 					agent.ontoTest = testDataInstances;
@@ -336,7 +309,7 @@ public class ComputingAction extends FSMBehaviour {
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
-				DataInstances labelDataInstances = processGetData(inform);
+				DataInstances labelDataInstances = agent.processGetDataResponse(inform);
 				if (labelDataInstances != null) {
 					agent.labelFileName = labelFn;
 					agent.ontoLabel = labelDataInstances;
@@ -443,7 +416,7 @@ public class ComputingAction extends FSMBehaviour {
 					failureMsg(e.getMessage());
 					agent.log(agent.getLocalName() + ": Error: "
 							+ e.getMessage() + ".");
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				}
 			}
 
@@ -476,13 +449,13 @@ public class ComputingAction extends FSMBehaviour {
 							eval.setObjectFilename(objectFilename);
 
 						} catch (CodecException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						} catch (OntologyException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						} catch (IOException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						} catch (FIPAException e) {
-							agent.logError("", e);
+							agent.logError(e.getMessage(), e);
 						}
 					}
 
@@ -492,18 +465,18 @@ public class ComputingAction extends FSMBehaviour {
 						try {
 							eval.setObject(agent.getAgentObject());
 						} catch (IOException e1) {
-							agent.logError("", e1);
+							agent.logError(e1.getMessage(), e1);
 						}
 					}
 				}
 
 				String md5;
 				if (agent.test != null) {
-					md5 = SaveArff(agent.test);
+					md5 = agent.saveArff(agent.test);
 					agent.log("Saved test to " + md5);
 				}
 				if (agent.label != null) {
-					md5 = SaveArff(agent.label);
+					md5 = agent.saveArff(agent.label);
 					agent.log("Saved label to " + md5);
 				}
 				// TODO return result filename to Planner?
@@ -528,11 +501,11 @@ public class ComputingAction extends FSMBehaviour {
 					agent.getContentManager().fillContent(resultMsg, result);
 
 				} catch (UngroundedException e) {
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				} catch (CodecException e) {
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				} catch (OntologyException e) {
-					agent.logError("", e);
+					agent.logError(e.getMessage(), e);
 				}
 
 				if (agent.currentTask.getGetResults() != null
@@ -579,22 +552,5 @@ public class ComputingAction extends FSMBehaviour {
 		registerDefaultTransition(SENDRESULTS_STATE, INIT_STATE, new String[] {
 				INIT_STATE, GETTRAINDATA_STATE, GETTESTDATA_STATE,
 				GETLABELDATA_STATE, TRAINTEST_STATE, SENDRESULTS_STATE });
-	}
-
-	protected String SaveArff(Instances i) {
-		ArffSaver saver = new ArffSaver();
-		saver.setInstances(i);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try {
-			saver.setDestination(out);
-			saver.writeBatch();
-			byte[] bout = out.toByteArray();
-			String md5 = DigestUtils.md5Hex(bout);
-			Files.write(bout, new File(Agent_DataManager.dataFilesPath + md5));
-			return md5;
-		} catch (IOException e) {
-			agent.logError("Failed to write results", e);
-			return null;
-		}
 	}
 }

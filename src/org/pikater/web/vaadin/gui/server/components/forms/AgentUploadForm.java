@@ -17,6 +17,11 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 
+import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.event.ShortcutAction.ModifierKey;
+import com.vaadin.event.ShortcutListener;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
 import com.vaadin.server.StreamVariable.StreamingErrorEvent;
@@ -37,11 +42,22 @@ public class AgentUploadForm extends CustomFormLayout
 	{
 		super(null);
 		
-		this.tf_agentClass = FormFieldFactory.getGeneralTextField("Agent class (incl. package):", "Class of the agent?", null, true, false);
-		this.tf_agentDescription = FormFieldFactory.getGeneralTextArea("Optional description:", "Any description of the agent for future reference?", null, false, false);
-		
+		this.tf_agentClass = FormFieldFactory.getGeneralTextField("Agent class (incl. package):", "Class of the agent?", null, false, false);
 		this.tf_agentClass.setSizeFull();
+		this.tf_agentClass.addValidator(new RegexpValidator("^[a-zA-Z_\\$][\\w\\$]*(?:\\.[a-zA-Z_\\$][\\w\\$]*)*$", 
+				"Not a valid package name. Press ALT+H to display online help."));
+		this.tf_agentClass.addShortcutListener(new ShortcutListener("", KeyCode.H, new int[] { ModifierKey.ALT })
+		{
+			private static final long serialVersionUID = -6065729102159170915L;
+
+			@Override
+			public void handleAction(Object sender, Object target)
+			{
+				Page.getCurrent().open("http://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html", "_blank");
+			}
+		});
 		addField("class name", tf_agentClass);
+		this.tf_agentDescription = FormFieldFactory.getGeneralTextArea("Optional description:", "Any description of the agent for future reference?", null, false, false);
 		this.tf_agentDescription.setSizeFull();
 		addField("description", tf_agentDescription);
 		

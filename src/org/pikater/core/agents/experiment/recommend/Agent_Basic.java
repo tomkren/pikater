@@ -6,7 +6,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
 import org.pikater.core.options.BasicRecommend_RecommendBox;
 
 import jade.util.leap.Iterator;
@@ -100,7 +100,7 @@ public class Agent_Basic extends Agent_Recommender {
 				.getTheBestAgent(this, nearestInternalName);
 		
 		if (agent != null){
-			String wekaOptionString = Options.exportToWeka(agent.getOptions()); 
+			String wekaOptionString = NewOptionList.exportToWeka(agent.getOptions()); 
 			log("Best agent type: "+ agent.getType() +
 					", options: " + wekaOptionString, Verbosity.MINIMAL);
 		}

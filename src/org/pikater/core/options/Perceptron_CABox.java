@@ -1,19 +1,13 @@
 package org.pikater.core.options;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 public class Perceptron_CABox {
 
@@ -23,40 +17,22 @@ public class Perceptron_CABox {
 		# learning rate, default 0.3; 1 arguments
 		$ L float 1 1 r 0 1
 		**/	
-		Type typeL = new Type(FloatValue.class);
-		typeL.setRangeRestriction(
-				new RangeRestriction(
-						new FloatValue(0.0f), new FloatValue(1.0f) ));
-		PossibleTypesRestriction restrictionL = new PossibleTypesRestriction();
-		restrictionL.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeL )) ));
-		
-		NewOption optionL = new NewOption(
-				new FloatValue(0.3f),
-				new Type(FloatValue.class),
-				"L" );
+		NewOption optionL = new NewOption("L", new FloatValue(0.3f), new RangeRestriction(
+				new FloatValue(0.0f),
+				new FloatValue(1.0f))
+		);
 		optionL.setDescription("Learning rate");
-		optionL.setPossibleTypesRestriction(restrictionL);
 		
 		
 		/**
 		#  Number of epochs to train through.
 		$ N int 1 1 r 1 1000
 		 **/
-		Type typeN = new Type(IntegerValue.class);
-		typeN.setRangeRestriction(
-				new RangeRestriction(
-						new IntegerValue(1), new IntegerValue(1000) ));
-		PossibleTypesRestriction restrictionN = new PossibleTypesRestriction();
-		restrictionN.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeN )) ));
-		
-		NewOption optionN = new NewOption(
+		NewOption optionN = new NewOption("N", new IntegerValue(1), new RangeRestriction(
 				new IntegerValue(1),
-				new Type(IntegerValue.class),
-				"N" );
+				new IntegerValue(1000))
+		);
 		optionN.setDescription("Number of epochs to train through");
-		optionN.setPossibleTypesRestriction(restrictionN);
 		
 		
 		/**
@@ -64,20 +40,11 @@ public class Perceptron_CABox {
 		#  Seed of the random number generator (Default = 0).
 		$ S int 1 1 r 0 MAXINT
 		**/
-		Type typeS = new Type(IntegerValue.class);
-		typeS.setRangeRestriction(
-				new RangeRestriction(
-						new IntegerValue(0), new IntegerValue(Integer.MAX_VALUE) ));
-		PossibleTypesRestriction restrictionS = new PossibleTypesRestriction();
-		restrictionS.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeS )) ));
-		
-		NewOption optionS = new NewOption(
+		NewOption optionS = new NewOption("S", new IntegerValue(0), new RangeRestriction(
 				new IntegerValue(0),
-				new Type(IntegerValue.class),
-				"S" );
+				new IntegerValue(Integer.MAX_VALUE))
+		);
 		optionS.setDescription("Seed of the random number generator");
-		optionS.setPossibleTypesRestriction(restrictionS);
 		
 		
 		/**
@@ -85,18 +52,8 @@ public class Perceptron_CABox {
 		#  (Set this to not normalize the class if it's numeric).
 		$ C boolean
 		**/
-		Type typeC = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionC = new PossibleTypesRestriction();
-		restrictionC.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeC )) ));
-		
-		NewOption optionC = new NewOption(
-				new BooleanValue(false),
-				new Type(BooleanValue.class),
-				"C" );
+		NewOption optionC = new NewOption("C", new BooleanValue(false));
 		optionC.setDescription("Normalizing a numeric class will NOT be done");
-		optionC.setPossibleTypesRestriction(restrictionC);
-
 		
 		
 		AgentInfo agentInfo = new AgentInfo();

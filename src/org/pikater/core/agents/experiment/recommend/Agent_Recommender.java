@@ -202,7 +202,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 					}
 				}
 				
-				if (o2I.isValid(false)){	// TODO true or false?
+				if (o2I.isValid(false)){
 					new_options.add(o2I);
 				}
 			}

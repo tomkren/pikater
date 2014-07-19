@@ -1,17 +1,11 @@
 package org.pikater.core.options;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaOneRCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restriction.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 
 public class OneR_CABox {
 	
@@ -22,20 +16,11 @@ public class OneR_CABox {
 		# Specify the minimum number of objects in a bucket (default: 6).
 		$ B int 1 1 r 1 100
 		**/
-		Type typeB = new Type(IntegerValue.class);
-		typeB.setRangeRestriction(
-				new RangeRestriction(
-						new IntegerValue(1), new IntegerValue(100) ));
-		PossibleTypesRestriction restrictionB = new PossibleTypesRestriction();
-		restrictionB.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeB )) ));
-		
-		NewOption optionB = new NewOption(
-				new IntegerValue(6),
-				new Type(IntegerValue.class),
-				"B" );
+		NewOption optionB = new NewOption("B", new IntegerValue(6), new RangeRestriction(
+				new IntegerValue(1),
+				new IntegerValue(100))
+		);
 		optionB.setDescription("Specify the minimum number of objects in a bucket");
-		optionB.setPossibleTypesRestriction(restrictionB);
 		
 
 		AgentInfo agentInfo = new AgentInfo();

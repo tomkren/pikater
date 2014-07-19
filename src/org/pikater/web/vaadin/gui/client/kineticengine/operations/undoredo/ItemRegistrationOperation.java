@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.BoxGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.experimentgraph.EdgeGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;

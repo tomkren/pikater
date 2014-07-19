@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.SearchOntology;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
@@ -307,7 +307,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		agent = new org.pikater.core.ontology.subtrees.management.Agent();
 		agent.setName(getLocalName());
 		agent.setType(getAgentType());
-		agent.setOptions(getAgentInfo().getOptions().getAll());
+		agent.setOptions(getAgentInfo().getOptions().getOptions());
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);

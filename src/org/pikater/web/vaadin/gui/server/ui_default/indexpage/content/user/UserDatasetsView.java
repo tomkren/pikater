@@ -145,8 +145,8 @@ public class UserDatasetsView extends DatasetsView
 			this.vLayout.setStyleName("datasetUploadWizardStep");
 			this.vLayout.setSpacing(true);
 			
-			Label label = new Label("You can optionally enter some ARFF headers that will be joined with the file you upload. "
-					+ "Specify them when you're going to upload a non-ARFF file because the parser can not mine the headers then.</br>"
+			Label label = new Label("You can optionally specify some ARFF headers to be joined with the uploaded file, especially it "
+					+ "is NOT an ARFF file.</br>"
 					+ "When you're done, click the 'Next' button.", ContentMode.HTML);
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
@@ -252,7 +252,7 @@ public class UserDatasetsView extends DatasetsView
 			this.vLayout.setSpacing(true);
 			
 			Label label = new Label("Currently, only '.xls', '.xlsx', '.csv' and '.txt' files are supported. All other extensions will be rejected.</br>"
-					+ "Since there is no mime type for '.arff' files, you have to upload it as a '.txt' file.", ContentMode.HTML);
+					+ "Since there is no mime type for '.arff' files, you have to upload them as '.txt' files.", ContentMode.HTML);
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			

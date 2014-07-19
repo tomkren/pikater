@@ -1,5 +1,6 @@
 package org.pikater.core.ontology.subtrees.data;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
@@ -12,6 +13,7 @@ public class Data implements Concept {
 	 */
 	private static final long serialVersionUID = 4653771087310692679L;
 
+	private List<String> dataFileNames;
 	private String internalTrainFileName;
 	private String externalTrainFileName;
 	private String internalTestFileName;
@@ -96,6 +98,12 @@ public class Data implements Concept {
 	
 	public String removePath(String filename){				
 		return filename.split(Pattern.quote(System.getProperty("file.separator")))[2];
+	}
+	public List<String> getDataFileNames() {
+		return dataFileNames;
+	}
+	public void setDataFileNames(List<String> dataFileNames) {
+		this.dataFileNames = dataFileNames;
 	}
 
 }

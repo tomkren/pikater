@@ -27,13 +27,13 @@ public class MyDialogs
 	// PRIVATE INTERFACE
 	
 	/**
-	 * Applies settings common to all message boxes of this application.
+	 * Applies general message box settings.
 	 * @param box
 	 * @param enterButton which button to bind with the ENTER key
 	 * @param closeWithAnyButton whether the dialog should close after clicking ANY of its buttons
 	 * @param escapeToClose
 	 */
-	private static void setupMessageBox(MessageBox box, ButtonId enterButton, boolean closeWithAnyButton, boolean escapeToClose)
+	private static void setupMessageBox(MessageBox box, boolean closeWithAnyButton)
 	{
 		box.getWindow().setResizable(false);
 		box.getWindow().setDraggable(false);
@@ -41,19 +41,56 @@ public class MyDialogs
 		{
 			box.setAutoClose(closeWithAnyButton);
 		}
-		if(escapeToClose)
-		{
-			box.getWindow().setCloseShortcut(KeyCode.ESCAPE, null);
-		}
-		box.getButton(enterButton).setClickShortcut(KeyCodes.KEY_ENTER, null);
 		
 		// TODO:
 		// content.setStyleName("pikaterDialogContent");
 		// parentUI.setFocusedComponent(box);
 	}
 	
+	/**
+	 * Applies custom actions to some keyboard input, namely:
+	 * <ul>
+	 * <li> Button to be "clicked" when user hits the "ENTER" key.
+	 * <li> Message box closing when user hits the "ESCAPE" key.
+	 * </ul>
+	 *   
+	 * @param box
+	 * @param enterButton
+	 * @param escapeToClose
+	 */
+	private static void bindActionsToKeyboard(MessageBox box, ButtonId enterButton, boolean escapeToClose)
+	{
+		if(enterButton != null)
+		{
+			box.getButton(enterButton).setClickShortcut(KeyCodes.KEY_ENTER, null);
+		}
+		if(escapeToClose)
+		{
+			box.getWindow().setCloseShortcut(KeyCode.ESCAPE, null);
+		}
+	}
+	
 	//----------------------------------------------------------------
 	// PUBLIC ROUTINES FOR DISPLAYING GENERAL USE DIALOGS
+	
+	public static void info(String title, String message)
+	{
+		MessageBox mb = MessageBox.showPlain(
+				Icon.INFO,
+				title == null ? "Notification" : title,
+				message,
+				ButtonId.CLOSE
+		);
+		setupMessageBox(mb, true);
+		bindActionsToKeyboard(mb, ButtonId.CLOSE, true);
+	}
+	
+	public static void error(String title, String message)
+	{
+		MessageBox mb = MessageBox.showPlain(Icon.ERROR, title == null ? "Error" : title, message, ButtonId.OK);
+		setupMessageBox(mb, true);
+		bindActionsToKeyboard(mb, ButtonId.OK, true);
+	}
 	
 	public static void confirm(String title, String message, IDialogResultHandler resultHandler)
 	{
@@ -66,7 +103,8 @@ public class MyDialogs
 				ButtonId.YES, ButtonId.NO
 		);
 		listener.setParentBox(mb); // don't forget this!
-		setupMessageBox(mb, ButtonId.YES, true, true);
+		setupMessageBox(mb, true);
+		bindActionsToKeyboard(mb, ButtonId.YES, true);
 	}
 	
 	public static void textPrompt(String title, String inputLabel, final IDialogResultHandler resultHandler)
@@ -95,13 +133,8 @@ public class MyDialogs
 				ButtonId.OK
 		);
 		listener.setParentBox(mb); // don't forget this!
-		setupMessageBox(mb, ButtonId.OK, false, true);
-	}
-	
-	public static void error(String title, String message)
-	{
-		MessageBox mb = MessageBox.showPlain(Icon.ERROR, title == null ? "Error" : title, message, ButtonId.OK);
-		setupMessageBox(mb, ButtonId.OK, true, true);
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.OK, true);
 	}
 	
 	// -------------------------------------------------------------------------
@@ -151,7 +184,8 @@ public class MyDialogs
 				ButtonId.OK, ButtonId.CUSTOM_1
 		);
 		listener.setParentBox(mb); // don't forget this!
-		setupMessageBox(mb, ButtonId.OK, false, false);
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.OK, false);
 		mb.getButton(ButtonId.CUSTOM_1).setCaption("Create account");
 	}
 	
@@ -176,7 +210,8 @@ public class MyDialogs
 				ButtonId.OK, ButtonId.CANCEL
 		);
 		listener.setParentBox(mb); // don't forget this!
-		setupMessageBox(mb, ButtonId.OK, false, true);
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.OK, true);
 	}
 	
 	public static void passwordChangeDialog(JPAUser currentUser, final IDialogResultHandler resultHandler)
@@ -198,7 +233,8 @@ public class MyDialogs
 				ButtonId.OK, ButtonId.CANCEL
 		);
 		listener.setParentBox(mb); // don't forget this!
-		setupMessageBox(mb, ButtonId.OK, false, true);
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.OK, true);
 	}
 	
 	public static void saveExperimentDialog(final IDialogResultHandler resultHandler)
@@ -224,7 +260,8 @@ public class MyDialogs
 				ButtonId.OK, ButtonId.CANCEL
 		);
 		listener.setParentBox(mb); // don't forget this!
-		setupMessageBox(mb, ButtonId.OK, false, true);
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.OK, true);
 	}
 	
 	// -------------------------------------------------------------------------

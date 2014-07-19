@@ -10,7 +10,7 @@ import com.vaadin.ui.UI;
 public class MyNotifications
 {
 	//----------------------------------------------------------------
-	// PUBLIC ROUTINES FOR DISPLAYING GENERAL USE NOTIFICATIONS
+	// GENERAL USE NOTIFICATIONS
 	
 	public static void showSuccess(String title, String description)
 	{
@@ -30,6 +30,14 @@ public class MyNotifications
 	public static void showError(String title, String description)
 	{
 		getCurrentNotificationsManager().showNotification(null, title, description, MyResources.img_notificationErrorIcon);
+	}
+	
+	//----------------------------------------------------------------
+	// SPECIFIC USE NOTIFICATIONS
+	
+	public static void showApplicationError()
+	{
+		getCurrentNotificationsManager().showNotification(null, "Application error", "Please contact the administrators.", MyResources.img_notificationErrorIcon);
 	}
 	
 	//----------------------------------------------------------------

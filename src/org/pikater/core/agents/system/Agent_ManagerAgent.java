@@ -62,6 +62,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
+
 		File data = new File(saveDirectoryPath);
 		if (!data.exists()) {
 			log("Creating directory saved");
@@ -79,6 +80,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		MessageTemplate mt = MessageTemplate.and(
 				MessageTemplate.MatchOntology(ontology.getName()),
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+
 
 		addBehaviour(new AchieveREResponder(this, mt) {
 
@@ -124,6 +126,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				return failure;
 			}
 		});
+
 	}
 
 	public String _createAgent(String type, String name, Arguments args) {

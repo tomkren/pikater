@@ -18,4 +18,12 @@ public interface ExpEditorExtensionClientRpc extends ClientRpc
 	 * @param percent the percentage of width of the browser's viewport
 	 */
 	void command_setBoxSize(int percent);
+	
+	/**
+	 * Called everytime the modified content set changes. Useful to
+	 * handle close events and let the user confirm leaving unsaved
+	 * content behind.
+	 * @param newCount
+	 */
+	void command_modifiedTabsCountChanged(int newCount);
 }

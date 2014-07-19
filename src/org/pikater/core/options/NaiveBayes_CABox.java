@@ -1,16 +1,10 @@
 package org.pikater.core.options;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaNaiveBayesCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restriction.PossibleTypesRestriction;
-import org.pikater.core.ontology.subtrees.newOption.type.Type;
-import org.pikater.core.ontology.subtrees.newOption.type.Types;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 
 public class NaiveBayes_CABox {
 
@@ -20,36 +14,16 @@ public class NaiveBayes_CABox {
 		#Use kernel estimation for modelling numeric attributes rather than a single normal distribution.
 		$ K boolean
 		**/
-		Type typeK = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionK = new PossibleTypesRestriction();
-		restrictionK.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeK )) ));
-		
-		NewOption optionK = new NewOption(
-				new BooleanValue(false),
-				new Type(BooleanValue.class),
-				"K" );
+		NewOption optionK = new NewOption("K", new BooleanValue(false));
 		optionK.setDescription("Use kernel estimation for modelling numeric attributes rather than a single normal distribution");
-		optionK.setPossibleTypesRestriction(restrictionK);
 		
 		
 		/**
 		# Use supervised discretization to process numeric attributes.
 		$ D boolean
 		**/
-		Type typeD = new Type(BooleanValue.class);
-		PossibleTypesRestriction restrictionD = new PossibleTypesRestriction();
-		restrictionD.addPossibleValues( new Types(
-				new ArrayList<Type>(Arrays.asList( typeD )) ));
-		
-		NewOption optionD = new NewOption(
-				new BooleanValue(false),
-				new Type(BooleanValue.class),
-				"D" );
+		NewOption optionD = new NewOption("D", new BooleanValue(false));
 		optionD.setDescription("Use supervised discretization to process numeric attributes");
-		optionD.setPossibleTypesRestriction(restrictionD);
-		
-
 
 
 		AgentInfo agentInfo = new AgentInfo();

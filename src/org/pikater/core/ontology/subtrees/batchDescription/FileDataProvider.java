@@ -3,8 +3,8 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 /**
  * Created by Martin Pilat on 27.12.13.
@@ -39,7 +39,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 		
 		for (NewOption optionI : options) {
 			if (optionI.getName().equals("fileURI")) {
-				StringValue value = (StringValue) optionI.convertToSingleValue().getTypedValue();
+				StringValue value = (StringValue) optionI.toSingleValue().getCurrentValue();
 				this.fileURI = value.getValue();
 			}
 		}

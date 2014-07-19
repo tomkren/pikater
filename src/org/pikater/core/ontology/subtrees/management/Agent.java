@@ -2,8 +2,8 @@ package org.pikater.core.ontology.subtrees.management;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import jade.content.Concept;
 
@@ -49,11 +49,11 @@ public class Agent implements Concept, Cloneable {
 	}
 	
 	public boolean containsOptionByName(String optionName) {
-		Options option = new Options(getOptions());
+		NewOptionList option = new NewOptionList(getOptions());
 		return option.containsOptionWithName(optionName);		
 	}
 	public NewOption getOptionByName(String name) {
-		Options option = new Options(getOptions());
+		NewOptionList option = new NewOptionList(getOptions());
 		return option.getOptionByName(name);
 	}
 

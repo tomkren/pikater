@@ -20,9 +20,9 @@
                 <values>
                   <org.pikater.core.ontology.subtrees.newOption.Value>
                     <type>
-                      <className>org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue</className>
+                      <className>org.pikater.core.ontology.subtrees.newOption.values.IntegerValue</className>
                     </type>
-                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue">
+                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
                       <value>1</value>
                     </typedValue>
                   </org.pikater.core.ontology.subtrees.newOption.Value>
@@ -36,9 +36,9 @@
                 <values>
                   <org.pikater.core.ontology.subtrees.newOption.Value>
                     <type>
-                      <className>org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue</className>
+                      <className>org.pikater.core.ontology.subtrees.newOption.values.IntegerValue</className>
                     </type>
-                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue">
+                    <typedValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
                       <value>-2</value>
                     </typedValue>
                   </org.pikater.core.ontology.subtrees.newOption.Value>

@@ -62,8 +62,8 @@ public abstract class AbstractTableDBView
 	}
 	
 	/**
-	 * Returns a non-cached collection of uninitialized rows in ascending order defined
-	 * by the query constraints given in the argument.
+	 * Returns a non-cached (with the exception of a handful of special cases) collection
+	 * of uninitialized rows as defined by the query given in the argument.
 	 * Initialization of the rows will be performed automatically.
 	 * @return
 	 */

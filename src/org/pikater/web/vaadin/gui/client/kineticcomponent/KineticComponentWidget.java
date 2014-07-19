@@ -5,10 +5,10 @@ import org.pikater.shared.experiment.webformat.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator;
+import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator;
+import org.pikater.web.vaadin.gui.client.kineticengine.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.client.kineticengine.KineticShapeCreator.NodeRegisterType;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.KineticUndoRedoManager;
+import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator.GraphItemRegistration;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
@@ -168,7 +168,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			@Override
 			public void execute()
 			{
-				getShapeCreator().createBox(NodeRegisterType.AUTOMATIC, info);
+				getGraphItemCreator().createBox(GraphItemRegistration.AUTOMATIC, info);
 			}
 		});
 	}
@@ -335,9 +335,9 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 
 	@Override
-	public KineticShapeCreator getShapeCreator()
+	public GraphItemCreator getGraphItemCreator()
 	{
-		return state.getShapeCreator();
+		return state.getGraphItemCreator();
 	}
 	
 	@Override

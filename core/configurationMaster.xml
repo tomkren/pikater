@@ -19,7 +19,7 @@
         <agent type="org.pikater.core.agents.system.Agent_MetadataQueen" name="Freddie">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="AgentManager">
+        <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent">
         </agent>
 
         <!-- <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">

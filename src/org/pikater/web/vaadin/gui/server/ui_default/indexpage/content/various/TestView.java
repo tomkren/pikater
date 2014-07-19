@@ -49,7 +49,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 	
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
-		
+	
 	public void testJSCH()
 	{
 		addComponent(new SimpleConsoleComponent(new SSHSession(
@@ -118,7 +118,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 		}, new Date(), 1000);
 	}
 	
-	protected static void redirectToCustomServlet()
+	protected static void redirectToCustomServletWithoutChangingURL()
 	{
 		new Button.ClickListener()
 		{

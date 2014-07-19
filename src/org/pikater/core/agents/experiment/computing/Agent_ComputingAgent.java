@@ -8,6 +8,8 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
@@ -26,15 +28,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.pikater.core.AgentNames;
-import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
+import org.pikater.core.agents.experiment.computing.computing.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.computing.computing.ComputingAction;
 import org.pikater.core.agents.experiment.computing.computing.ComputingComminicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
@@ -44,7 +47,7 @@ import org.pikater.core.ontology.subtrees.task.Task;
 
 import weka.core.Instances;
 
-public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
+public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	/**
 	 * 
 	 */
@@ -77,7 +80,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 	public Instances label;
 	public DataInstances ontoLabel;
-	public int convId = 0;
 
 	protected String[] options;
 	public Task currentTask = null;
@@ -119,9 +121,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 
 	@Override
 	protected void setup() {
-
-		initDefault();
-
+		super.setup();
 		
         if (containsArgument(CLASS_NAME)) {
             className = getArgumentValue(CLASS_NAME);
@@ -158,8 +158,6 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		}
 		newAgent = false;
 
-		setEnabledO2ACommunication(true, 0);
-
 		MessageTemplate reqMsgTemplate = MessageTemplate
 				.and(MessageTemplate
 						.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
@@ -189,7 +187,7 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 		 */
 		
 		String wekaOptionsString = 
-				Options.exportToWeka(task.getAgent().getOptions());
+				NewOptionList.exportToWeka(task.getAgent().getOptions());
 		
 		options = wekaOptionsString.split("[ ]+");
 		currentTask = task;
@@ -293,6 +291,11 @@ public abstract class Agent_ComputingAgent extends Agent_AbstractExperiment {
 	}
 
 	public void terminate() {
+		try {
+			DFService.deregister(this);
+		} catch (FIPAException e) {
+			logError(e.getMessage(), e);
+		}
 		doDelete();
 	}
 }

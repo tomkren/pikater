@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.components.paging;
 
 import java.util.Arrays;
 
-import org.pikater.web.vaadin.gui.server.components.linklabel.LinkLabel;
+import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.Property;
@@ -116,10 +116,10 @@ public class PagingComponent extends HorizontalLayout
 	{
 		private static final long serialVersionUID = -595408596224035721L;
 		
-		private final LinkLabel page_previous;
+		private final Anchor page_previous;
 		private final ComboBox cb_selectedPage;
 		private final Label label_lastPage;
-		private final LinkLabel page_next;
+		private final Anchor page_next;
 		
 		public PagePicker()
 		{
@@ -127,7 +127,7 @@ public class PagingComponent extends HorizontalLayout
 			setSizeUndefined();
 			setSpacing(true);
 			
-			LinkLabel page_first = new LinkLabel("<< First", new MouseEvents.ClickListener()
+			Anchor page_first = new Anchor("<< First", new MouseEvents.ClickListener()
 			{
 				private static final long serialVersionUID = -3912177860445526917L;
 
@@ -141,7 +141,7 @@ public class PagingComponent extends HorizontalLayout
 					cb_selectedPage.setValue(1);
 				}
 			});
-			page_previous = new LinkLabel("< Previous", new MouseEvents.ClickListener()
+			page_previous = new Anchor("< Previous", new MouseEvents.ClickListener()
 			{
 				private static final long serialVersionUID = -5064772189847933893L;
 
@@ -187,7 +187,7 @@ public class PagingComponent extends HorizontalLayout
 			});
 			
 			this.label_lastPage = new Label();
-			page_next = new LinkLabel("Next >", new MouseEvents.ClickListener()
+			page_next = new Anchor("Next >", new MouseEvents.ClickListener()
 			{
 				private static final long serialVersionUID = -7651055555368147669L;
 
@@ -205,7 +205,7 @@ public class PagingComponent extends HorizontalLayout
 					
 				}
 			});
-			LinkLabel page_last = new LinkLabel("Last >>", new MouseEvents.ClickListener()
+			Anchor page_last = new Anchor("Last >>", new MouseEvents.ClickListener()
 			{
 				private static final long serialVersionUID = -3144174540771713139L;
 

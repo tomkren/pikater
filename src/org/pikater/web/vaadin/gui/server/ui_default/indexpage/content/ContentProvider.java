@@ -20,10 +20,9 @@ import com.vaadin.server.VaadinSession;
 
 public class ContentProvider
 {
-	public interface IWebFeatureSet
+	public interface IWebFeature
 	{
 		boolean accessAllowed(VaadinSession session);
-		boolean shouldOpenInSeperateTab();
 		String toMenuCaption();
 		String toNavigatorName();
 		Class<? extends IContentComponent> toComponentClass();
@@ -35,7 +34,7 @@ public class ContentProvider
 		String getCloseDialogMessage();
 	}
 	
-	public enum DefaultFeature implements IWebFeatureSet
+	public enum DefaultFeature implements IWebFeature
 	{
 		// IMPORTANT: always bind the default content with empty navigator name.
 		WELCOME("", WelcomeView.class),
@@ -65,12 +64,6 @@ public class ContentProvider
 		}
 		
 		@Override
-		public boolean shouldOpenInSeperateTab()
-		{
-			return false;
-		}
-		
-		@Override
 		public String toMenuCaption()
 		{
 			return null;
@@ -89,7 +82,7 @@ public class ContentProvider
 		}
 	}
 	
-	public enum AdminFeature implements IWebFeatureSet
+	public enum AdminFeature implements IWebFeature
 	{
 		// IMPORTANT: all navigator names should start with "admin". See {@link #getFeatureFromNavigatorName} below.
 		VIEW_USERS("adminAllUsers", UsersView.class),
@@ -130,13 +123,7 @@ public class ContentProvider
 		@Override
 		public boolean accessAllowed(VaadinSession session)
 		{
-			return ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
-		}
-		
-		@Override
-		public boolean shouldOpenInSeperateTab()
-		{
-			return false;
+			return ServerConfigurationInterface.avoidUsingDBForNow() ? true : ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
 		}
 		
 		@Override
@@ -152,13 +139,12 @@ public class ContentProvider
 		}
 	}
 	
-	public enum UserFeature implements IWebFeatureSet
+	public enum UserFeature implements IWebFeature
 	{
 		// IMPORTANT: all navigator names should start with "user". See {@link #getFeatureFromNavigatorName} below.
 		VIEW_PROFILE("userProfile", UserProfileView.class),
 		VIEW_DATASETS("userDatasets", UserDatasetsView.class),
 		VIEW_METHODS("userAgents", UserAgentsView.class),
-		EXPERIMENT_EDITOR(null, null), // TODO: display this as a button
 		VIEW_EXPERIMENTS("userExperiments", UserBatchesView.class);
 		
 		private final Class<? extends IContentComponent> mappedComponent;
@@ -184,12 +170,6 @@ public class ContentProvider
 		}
 		
 		@Override
-		public boolean shouldOpenInSeperateTab()
-		{
-			return this == EXPERIMENT_EDITOR;
-		}
-		
-		@Override
 		public String toMenuCaption()
 		{
 			switch(this)
@@ -200,8 +180,6 @@ public class ContentProvider
 					return "My datasets";
 				case VIEW_METHODS:
 					return "My agents";
-				case EXPERIMENT_EDITOR:
-					return "Go to experiment editor";
 				case VIEW_EXPERIMENTS:
 					return "My experiments";
 				default:
@@ -222,7 +200,7 @@ public class ContentProvider
 		}
 	}
 	
-	public static IWebFeatureSet getFeatureFromNavigatorName(String navigatorName)
+	public static IWebFeature getFeatureFromNavigatorName(String navigatorName)
 	{
 		if(navigatorName == null)
 		{
@@ -242,9 +220,9 @@ public class ContentProvider
 		}
 	}
 	
-	private static IWebFeatureSet getFeatureFromNavigatorName(String navigatorName, IWebFeatureSet[] features)
+	private static IWebFeature getFeatureFromNavigatorName(String navigatorName, IWebFeature[] features)
 	{
-		for(IWebFeatureSet feature : features)
+		for(IWebFeature feature : features)
 		{
 			if(feature.toNavigatorName().equalsIgnoreCase(navigatorName))
 			{

@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 import jade.content.Concept;

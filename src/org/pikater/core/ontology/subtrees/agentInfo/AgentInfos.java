@@ -6,11 +6,11 @@ import java.util.List;
 import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.restriction.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 import jade.content.Concept;
 
@@ -53,11 +53,11 @@ public class AgentInfos implements Concept {
 				Log.error(e.getMessage(), e);
 			}
 			
-			List<ITypedValue> typedValues = models.getModelIDsByAgentType(agentClass);
+			List<IValueData> typedValues = models.getModelIDsByAgentType(agentClass);
 			
-			Options options = agentInfoI.getOptions();
+			NewOptionList options = agentInfoI.getOptions();
 			NewOption optionModel = options.getOptionByName("model");
-			Value value = optionModel.convertToSingleValue();
+			Value value = optionModel.toSingleValue();
 			SetRestriction setRestriction = value.getType().getSetRestriction();
 			setRestriction.addAllValues(typedValues);
 		}
