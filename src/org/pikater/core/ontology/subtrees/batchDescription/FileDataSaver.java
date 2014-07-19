@@ -33,7 +33,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 	public List<NewOption> exportAllOptions() {
 		
 		NewOption nameOfFileOption = new NewOption(
-				new StringValue(getNameOfFile()), "nameOfFile");
+				 "nameOfFile",(getNameOfFile()));
 
 	    List<NewOption> options = new ArrayList<NewOption>();
 	    options.add(nameOfFileOption);

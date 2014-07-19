@@ -1,9 +1,9 @@
 package org.pikater.core.utilities.evolution.operators;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.utilities.evolution.individuals.BooleanIndividual;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
+import org.pikater.core.utilities.evolution.individuals.BooleanIndividual;
 
 /**
  *

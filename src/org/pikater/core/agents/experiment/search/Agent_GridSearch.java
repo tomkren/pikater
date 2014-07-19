@@ -5,11 +5,14 @@
 package org.pikater.core.agents.experiment.search;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.*;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.*;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
-import org.pikater.core.ontology.subtrees.search.searchItems.*;
+import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 import org.pikater.core.options.GridSearch_SearchBox;
 
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class Agent_GridSearch extends Agent_Search {
     boolean linearSteps = true;
     boolean logSteps = true;
     double logZero = 1.0E-8;
-    ArrayList<ITypedValue> values = null;
+    ArrayList<IValueData> values = null;
 
     @Override
     protected String getAgentType() {
@@ -65,8 +68,8 @@ public class Agent_GridSearch extends Agent_Search {
         
         for (int i = 0; i < values.size(); i++) {
             SearchSolution ss = new SearchSolution();
-            List<ITypedValue> v = new ArrayList<ITypedValue>();
-            for (ITypedValue s: values) { // values.get(i).split(",")
+            List<IValueData> v = new ArrayList<IValueData>();
+            for (IValueData s: values) { // values.get(i).split(",")
             	v.add(s);
             }
             ss.setValues(v);
@@ -78,18 +81,18 @@ public class Agent_GridSearch extends Agent_Search {
         return ret;
     }
 
-    private ArrayList<ITypedValue> generateValues() {
+    private ArrayList<IValueData> generateValues() {
         
-        ArrayList<ITypedValue> vals = new ArrayList<>();
+        ArrayList<IValueData> vals = new ArrayList<>();
         
-        ArrayList<ArrayList<ITypedValue>> valsForOpts = new ArrayList<ArrayList<ITypedValue>>();
+        ArrayList<ArrayList<IValueData>> valsForOpts = new ArrayList<>();
 
         for (SearchItem si : schema ) {
             Integer tries = si.getNumber_of_values_to_try();
             if (tries == 0) {
                 tries = defaultTries;
             }
-            ArrayList<ITypedValue> valsForItem = new ArrayList<>();
+            ArrayList<IValueData> valsForItem = new ArrayList<>();
             IntervalSearchItem searchItem= ((IntervalSearchItem) si);
             if (searchItem.getMin() instanceof BooleanValue)
             {
@@ -109,7 +112,7 @@ public class Agent_GridSearch extends Agent_Search {
 	                    if (linearSteps) {
 	                        double stepSize = 1.0 * (max - min) / (tries - 1);
 	                        for (int i = 0; i < tries; i++) {
-	                            ITypedValue add = new IntegerValue((int) Math.round(min + i * stepSize));
+                                IValueData add = new IntegerValue((int) Math.round(min + i * stepSize));
 	                            if (!valsForItem.contains(add)) {
 	                                valsForItem.add(add);
 	                            }
@@ -121,7 +124,7 @@ public class Agent_GridSearch extends Agent_Search {
 	                        double range = Math.log(max - normalization) - Math.log(min - normalization);
 	                        double stepSize = range / (tries - 1);
 	                        for (int i = 0; i < tries; i++) {
-	                            ITypedValue add = new IntegerValue((int) Math.round(Math.exp(start + i * stepSize) + normalization));
+                                IValueData add = new IntegerValue((int) Math.round(Math.exp(start + i * stepSize) + normalization));
 	                            if (!valsForItem.contains(add)) {
 	                                valsForItem.add(add);
 	                            }
@@ -137,7 +140,7 @@ public class Agent_GridSearch extends Agent_Search {
 	                if (linearSteps) {
 	                    double stepSize = 1.0 * (max - min) / (tries - 1);
 	                    for (int i = 0; i < tries; i++) {
-	                        ITypedValue add = new DoubleValue(min + i * stepSize);
+                            IValueData add = new DoubleValue(min + i * stepSize);
 	                        if (!valsForItem.contains(add)) {
 	                            valsForItem.add(add);
 	                        }
@@ -171,7 +174,7 @@ public class Agent_GridSearch extends Agent_Search {
         vals.addAll(valsForOpts.get(0));
         
         for (int i = 1; i < valsForOpts.size(); i++) {
-            ArrayList<ITypedValue> newVals = new ArrayList<ITypedValue>();
+            ArrayList<IValueData> newVals = new ArrayList<>();
             for (int j = 0; j < vals.size(); j++) {
             	for (int k = 0; k < valsForOpts.get(i).size(); k++) {
                     newVals.add(new StringValue(vals.get(j) + "," + valsForOpts.get(i).get(k)));
@@ -196,21 +199,21 @@ public class Agent_GridSearch extends Agent_Search {
     @Override
     protected void loadSearchOptions() { 
         
-        Options options = new Options(getSearchOptions());
+        NewOptionList options = new NewOptionList(getSearchOptions());
         
         if (options.containsOptionWithName("N")) {
         	NewOption optionN = options.getOptionByName("N");
-        	IntegerValue valueN = (IntegerValue) optionN.convertToSingleValue().getTypedValue();
+        	IntegerValue valueN = (IntegerValue) optionN.toSingleValue().getCurrentValue();
         	defaultTries = valueN.getValue();
         }
         if (options.containsOptionWithName("B")) {
         	NewOption optionB = options.getOptionByName("B");
-        	IntegerValue valueB = (IntegerValue) optionB.convertToSingleValue().getTypedValue();
+        	IntegerValue valueB = (IntegerValue) optionB.toSingleValue().getCurrentValue();
         	query_block_size = valueB.getValue();
         }
         if (options.containsOptionWithName("Z")) {
         	NewOption optionZ = options.getOptionByName("Z");
-        	IntegerValue valueZ = (IntegerValue) optionZ.convertToSingleValue().getTypedValue();
+        	IntegerValue valueZ = (IntegerValue) optionZ.toSingleValue().getCurrentValue();
         	logZero = valueZ.getValue();
         }
         //if (next.getName().equals("L")) {

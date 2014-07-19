@@ -124,13 +124,11 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	public List<NewOption> exportAllOptions() {
 		
 		NewOption agentTypeOption =
-				new NewOption(new StringValue(agentType), "agentType");
+				new NewOption("agentType",agentType);
 
-		NewOption modelOption = new NewOption(
-				new StringValue(model.getClass().getSimpleName()), "model");
+		NewOption modelOption = new NewOption( "model",model.getClass().getSimpleName());
 
-		NewOption evaluationMethodOption = new NewOption(
-				new StringValue(evaluationMethod.getType()), "evaluationMethod");
+		NewOption evaluationMethodOption = new NewOption( "evaluationMethod",evaluationMethod.getType());
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(agentTypeOption);

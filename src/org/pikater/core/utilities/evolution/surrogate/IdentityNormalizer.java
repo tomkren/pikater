@@ -5,9 +5,9 @@
 package org.pikater.core.utilities.evolution.surrogate;
 
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 
 /**
@@ -18,12 +18,12 @@ public class IdentityNormalizer extends ModelInputNormalizer {
 
     //TODO: not necessary now imho, remove
     @Override
-    public double normalizeFloat(ITypedValue dbl, IntervalSearchItem schema) {
+    public double normalizeFloat(IValueData dbl, IntervalSearchItem schema) {
         return ((FloatValue)dbl).getValue();
     }
 
     @Override
-    public double normalizeInt(ITypedValue n, IntervalSearchItem schema) {
+    public double normalizeInt(IValueData n, IntervalSearchItem schema) {
         return ((IntegerValue)n).getValue();
     }
     

@@ -4,9 +4,9 @@
  */
 package org.pikater.core.utilities.evolution.surrogate;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 
 /**
@@ -16,7 +16,7 @@ import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 public class Linear01Normalizer extends ModelInputNormalizer {
 
     @Override
-    public double normalizeFloat(ITypedValue dbl, IntervalSearchItem schema) {
+    public double normalizeFloat(IValueData dbl, IntervalSearchItem schema) {
         double min=((FloatValue)schema.getMin()).getValue();
         double range = ((FloatValue)schema.getMax()).getValue() - min;
         double val = ((FloatValue)dbl).getValue();
@@ -26,7 +26,7 @@ public class Linear01Normalizer extends ModelInputNormalizer {
     }
 
     @Override
-    public double normalizeInt(ITypedValue n, IntervalSearchItem schema) {
+    public double normalizeInt(IValueData n, IntervalSearchItem schema) {
         double min=((IntegerValue)schema.getMin()).getValue();
         double range = ((IntegerValue)schema.getMax()).getValue() - min;
         double val = ((IntegerValue)n).getValue();

@@ -1,6 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.individuals.Individual;
@@ -11,7 +11,7 @@ public class PolynomialMutationOperator implements Operator {
     private double mutRate;
     private final double ETA_M = 100;
 
-    public PolynomialMutationOperator(double mutationRate, double geneChangeProbability) {
+    public PolynomialMutationOperator(double mutationRate) {
         mutRate = mutationRate;
 
     }

@@ -1,17 +1,10 @@
 package xmlGenerator;
 
-import java.io.FileNotFoundException;
-
 import org.pikater.core.agents.system.Agent_GUIKlara;
-import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
-import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+
+import java.io.FileNotFoundException;
 
 
 public final class Input03 {
@@ -30,13 +23,9 @@ public final class Input03 {
 		comAgent1.setTestingData(fileDataSource);
 		comAgent1.setModel(new NewModel());
 		
-		NewOption optionEM1 = new NewOption(
-				new StringValue("CrossValidation"),
-				"evaluation_method");
+		NewOption optionEM1 = new NewOption("evaluation_method","CrossValidation");
 
-		NewOption optionOutput1 = new NewOption(
-				new StringValue("evaluation_only"),
-				"output");
+		NewOption optionOutput1 = new NewOption("output","evaluation_only");
 
 		CARecSearchComplex complex1 = new CARecSearchComplex();
 		complex1.setComputingAgent(comAgent1);
@@ -54,13 +43,9 @@ public final class Input03 {
 		comAgent2.setTestingData(computingDataSource1);
 		comAgent2.setModel(new NewModel());
 
-		NewOption optionEM2 = new NewOption(
-				new StringValue("evaluation_method"),
-				"CrossValidation");
+		NewOption optionEM2 = new NewOption("CrossValidation","evaluation_method");
 
-		NewOption optionOutput2 = new NewOption(
-				new StringValue("evaluation_only"),
-				"output");
+		NewOption optionOutput2 = new NewOption("output","evaluation_only");
 
 		CARecSearchComplex complex2 = new CARecSearchComplex();
 		complex2.setComputingAgent(comAgent2);

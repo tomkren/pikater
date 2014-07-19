@@ -46,8 +46,7 @@ public class Search extends DataProcessing {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption searchClassOption = new NewOption(
-				new StringValue(searchClass), "searchClass");
+		NewOption searchClassOption = new NewOption( "searchClass",searchClass);
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(searchClassOption);

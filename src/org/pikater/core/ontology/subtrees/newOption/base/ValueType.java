@@ -55,7 +55,7 @@ public class ValueType implements Concept
 	}
 	/**
 	 * Full constructor for internal use.
-	 * @param classs
+	 * @param defaultValue
 	 * @param rangeRestriction
 	 * @param setRestriction
 	 */

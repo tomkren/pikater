@@ -1,10 +1,9 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 
 /**
@@ -42,8 +41,7 @@ public class Recommend extends DataProcessing {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption recommenderClassOption = new NewOption(
-				new StringValue(recommenderClass), "recommenderClass");
+		NewOption recommenderClassOption = new NewOption("recommenderClass",recommenderClass);
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(recommenderClassOption);

@@ -2,7 +2,7 @@ package xmlGenerator;
 
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing;
+import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 
@@ -21,7 +21,7 @@ public final class Input10 {
 				"weather2.arff");
 
 		// PreProcessing
-		DataPreProcessing processing = new DataPreProcessing();
+		DataProcessing processing = new DataProcessing();
 		processing.addDataSources(fileDataSource1);
 		processing.addDataSources(fileDataSource2);
 
@@ -51,7 +51,7 @@ public final class Input10 {
 		
 		// Our requirements for the description are ready, lets create new
 		// computation description
-		List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
+		List<FileDataSaver> roots = new ArrayList<>();
 		roots.add(saverSunny);
 		roots.add(saverOvercast);
 		roots.add(saverRainy);

@@ -1,6 +1,6 @@
 package org.pikater.core.utilities.evolution.operators;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.utilities.evolution.individuals.ArrayIndividual;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;

@@ -1,16 +1,15 @@
 package org.pikater.core.ontology.subtrees.batchDescription.examples;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -32,13 +31,10 @@ public class SearchOnly {
         ca.setEvaluationMethod(new EvaluationMethod("CrossValidation"));
         //"whatever.mlp.is.in.MLP"
 
-        List<NewOption> options = new ArrayList<NewOption>();
-        NewOption lr = new NewOption(
-        		new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(0.0)),
-        		"L");
+        List<NewOption> options = new ArrayList<>();
+        NewOption lr = new NewOption("L",new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(0.0)));
         
-        NewOption hr = new NewOption(
-        		new IntegerValue(4), "H");
+        NewOption hr = new NewOption( "H",4);
  
         options.add(lr);
         options.add(hr);
@@ -63,10 +59,9 @@ public class SearchOnly {
         List<NewOption> searchParameters = new ArrayList<NewOption>();
         
         NewOption pr = new NewOption(
-        		new IntegerValue(50), "ea.popSize");
+        		 "ea.popSize",50);
 
-        NewOption ear = new NewOption(
-        		new DoubleValue(0.03), "ea.mutationRate");
+        NewOption ear = new NewOption( "ea.mutationRate",0.03);
 
         searchParameters.add(pr);
         searchParameters.add(ear);

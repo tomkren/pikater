@@ -26,8 +26,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption fileURIOption = new NewOption(
-				new StringValue(fileURI), "fileURI");
+		NewOption fileURIOption = new NewOption("fileURI",fileURI);
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(fileURIOption);

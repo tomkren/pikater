@@ -32,9 +32,9 @@ import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -92,26 +92,26 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	}
 	
 	//Create new options from solution with filled ? values (convert solution->options) 
-	private Options fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
-		Options res_options = new Options();
+	private NewOptionList fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
+        NewOptionList res_options = new NewOptionList();
 		List<NewOption> options_list = new ArrayList<NewOption>();
 		if(options==null){
 			return res_options;
 		}
 		//if no solution values to fill - return the option
 		if(solution.getValues() == null){
-			res_options.set(options);
+			res_options.setOptions(options);
 			return res_options;
 		}
-		java.util.Iterator<ITypedValue> sol_itr = solution.getValues().iterator();
+		java.util.Iterator<IValueData> sol_itr = solution.getValues().iterator();
 		
 		for (NewOption optionI : options) {
-			NewOption new_opt = optionI.cloneOption();
-			if(optionI.getIsMutable())
-				new_opt.setValues(null); //TODO: fillOptWithSolution(optionI, sol_itr));
+			NewOption new_opt = optionI.clone();
+			if(optionI.isMutable())
+				new_opt.setValuesWrapper(null); //TODO: fillOptWithSolution(optionI, sol_itr));
 			options_list.add(new_opt);
 		}
-		res_options.set(options_list);
+		res_options.setOptions(options_list);
 		return res_options;
 	}
 	
@@ -141,15 +141,15 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 				
 		Agent agent = new Agent();
         OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
-        Options options = new Options(optionEdge.getOptions());
+        NewOptionList options = new NewOptionList(optionEdge.getOptions());
 
         // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());
 		if (inputs.get("searchSolution") != null){
 			SearchSolution ss = (SearchSolution)inputs.get("searchSolution").getNext();
-			options =  fillOptionsWithSolution(options.getAll(), ss);
+			options =  fillOptionsWithSolution(options.getOptions(), ss);
 		}
-		agent.setOptions(options.getAll());			
+		agent.setOptions(options.getOptions());
 		
 		Data data = new Data();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();

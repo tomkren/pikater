@@ -2,13 +2,8 @@ package xmlGenerator;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
-import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 import java.io.FileNotFoundException;
@@ -29,19 +24,16 @@ public final class Input01 {
         evaluationMethod.setType("CrossValidation");
         
         //Create cross validation option                
-        NewOption optionF = new NewOption(
-        		new IntegerValue(8), "F"); 
+        NewOption optionF = new NewOption("F",8);
         
         evaluationMethod.addOption(optionF);
         
         
         //Create two options for single computing agent
-        NewOption optionS = new NewOption(
-        		new IntegerValue(1), "S"); 
+        NewOption optionS = new NewOption("S",1);
 
-        NewOption optionM = new NewOption(
-        		new IntegerValue(-2), "M");
-        
+        NewOption optionM = new NewOption("M",2);
+
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
@@ -63,7 +55,7 @@ public final class Input01 {
         saver.setDataSource(computingDataSource);
 
         //Our requirements for the description are ready, lets create new computation description
-        List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
+        List<FileDataSaver> roots = new ArrayList<>();
         roots.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();

@@ -17,6 +17,13 @@ public class QuestionMarkRange implements IValidatedValueData
 	 */
 	@Deprecated
 	public QuestionMarkRange() {}
+
+    public QuestionMarkRange(IValueData min, IValueData max)
+    {
+        this.min = min;
+        this.max = max;
+    }
+
 	public QuestionMarkRange(IValueData min, IValueData max, int countOfValuesToTry)
 	{
 		this.min = min;

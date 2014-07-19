@@ -1,13 +1,12 @@
 package org.pikater.core.ontology.subtrees.search.searchItems;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * User: Kuba
@@ -16,24 +15,24 @@ import java.util.Random;
  */
 public class IntervalSearchItem extends SearchItem {
     private static final long serialVersionUID = -8936246832263259542L;
-    private ITypedValue min;
-    private ITypedValue max;
-    public ITypedValue getMin() {
+    private IValueData min;
+    private IValueData max;
+    public IValueData getMin() {
         return min;
     }
-    public void setMin(ITypedValue min) {
+    public void setMin(IValueData min) {
         this.min = min;
     }
-    public ITypedValue getMax() {
+    public IValueData getMax() {
         return max;
     }
-    public void setMax(ITypedValue max) {
+    public void setMax(IValueData max) {
         this.max = max;
     }
 
         @Override
-    public List<ITypedValue> possibleValues() {
-        List<ITypedValue> posVals =new ArrayList<>();
+    public List<IValueData> possibleValues() {
+        List<IValueData> posVals =new ArrayList<>();
         if (min instanceof BooleanValue)
         {
             if (min.equals(max))
@@ -67,7 +66,7 @@ public class IntervalSearchItem extends SearchItem {
                 x = range;
             }
             for (int i = 0; i < x; i++) {
-                int vInt = (int) ( intMin + i	* (range / x));
+                int vInt = intMin + i	* (range / x);
                 posVals.add(new IntegerValue(vInt));
             }
         }

@@ -6,7 +6,6 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
@@ -20,23 +19,22 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
-
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.configuration.Arguments;
-import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
+import org.pikater.shared.logging.Verbosity;
 
 
 
@@ -119,7 +117,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                     // merge options with .opt file options
                     myAgentOntology.setOptions(getParameters());
 
-                    log("options: " + Options.exportToWeka(myAgentOntology.getOptions()), 2);
+                    log("options: " + NewOptionList.exportToWeka(myAgentOntology.getOptions()), 2);
 
                     Data data = rec.getData();
                     
@@ -145,7 +143,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         			log("********** Agent "
         					+ recommended_agent.getType()
         					+ " recommended. Options: "
-        					+ Options.exportToWeka(recommended_agent.getOptions())
+        					+ NewOptionList.exportToWeka(recommended_agent.getOptions())
         					+ "**********", Verbosity.MINIMAL);
 
             		// Prepare the content of inform message                       
@@ -193,12 +191,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						// ostatni optiony zustanou puvodni (= ze souboru)			
 
 						// copy the value
-                        o2I.setValues(o1CAJ.getValues().cloneValues());
-                        
-						if (o1CAJ.containsQuestionMark()){
-							// just in case the someone forgot to set opt to mutable
-							o2I.setIsMutable(true);
-						}
+                        o2I.setValuesWrapper(o1CAJ.getValuesWrapper().clone());
 					}
 				}
 				
@@ -293,7 +286,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	protected java.util.List<NewOption> getParameters(){
 		java.util.List<NewOption> optFileOptions =
-				this.getAgentInfo().getOptions().getAll();
+				this.getAgentInfo().getOptions().getOptions();
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	

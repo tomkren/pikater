@@ -14,7 +14,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import weka.core.Instances;
-import weka.gui.beans.WekaOffscreenChartRenderer;
+//TODO: add new weka to enable WekaOffscreenChartRenderer but fix RBFNetwork missing
+//import weka.gui.beans.WekaOffscreenChartRenderer;
 
 /**
  * This class can be used to generate a matrix of scatterplots for a dataset
@@ -48,7 +49,7 @@ public class SimpleVisualisator {
 	}
 
 	private void createScatteredPlot(List<Instances> instances,File plotFile) throws Exception{	
-		WekaOffscreenChartRenderer wocr=new WekaOffscreenChartRenderer();
+		//WekaOffscreenChartRenderer wocr=new WekaOffscreenChartRenderer();
 
 		String xAxis="";
 		String yAxis="";
@@ -71,7 +72,7 @@ public class SimpleVisualisator {
 			for(int y=0;y<data.numAttributes()-1;y++){
 				xAxis= data.attribute(x).name();
 				yAxis= data.attribute(y).name();
-				tiles[x][y]=wocr.renderXYScatterPlot(TILE_WIDTH, TILE_HEIGHT, instances, xAxis, yAxis, options);
+				//tiles[x][y]=wocr.renderXYScatterPlot(TILE_WIDTH, TILE_HEIGHT, instances, xAxis, yAxis, options);
 				titles[x][y]=data.attribute(x).name()+" vs "+data.attribute(y).name();
 			}
 		}

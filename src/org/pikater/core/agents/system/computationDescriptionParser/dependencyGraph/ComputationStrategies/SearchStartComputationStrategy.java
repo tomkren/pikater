@@ -16,14 +16,13 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionE
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.Values;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
@@ -112,15 +111,15 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		agent.setType(computationNode.getModelClass());
 		
 		OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
-	    Options options = new Options(optionEdge.getOptions());
-		agent.setOptions(options.getAll());
+	    NewOptionList options = new NewOptionList(optionEdge.getOptions());
+		agent.setOptions(options.getOptions());
 
 		return agent;
 	}
 
 
 	private void addOptionToSchema(NewOption opt, List schema){
-        Values values = (opt.getValues());
+        ValuesForOption values = (opt.getValuesWrapper());
 
 
         // TODO !!!!! OPRAVIT !!!!! jenom hack, prosel Input2 !!!!!
@@ -136,10 +135,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 //            opt.setNumber_of_values_to_try(3);
 //        }
 		for (Value value:values.getValues()) {
-            Boolean isMutable = value.getIsMutable();
-            if (!isMutable) continue;
-
-            ITypedValue typedValue = value.getTypedValue();
+            IValueData typedValue = value.getCurrentValue();
             if (typedValue instanceof QuestionMarkRange)
             {
                 QuestionMarkRange questionMarkRange = (QuestionMarkRange) typedValue;
@@ -164,14 +160,14 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	//Create schema of solutions from options (Convert options->schema)
 
 	private List convertOptionsToSchema(List<NewOption> options){
-		List<NewOption> new_schema = new ArrayList<NewOption>();
+		List<NewOption> new_schema = new ArrayList<>();
 
 		if(options==null)
 			return new_schema;
 		java.util.Iterator<NewOption> itr = options.iterator();
 		while (itr.hasNext()) {
-			NewOption opt = (NewOption) itr.next();
-			if(opt.getIsMutable())
+			NewOption opt = itr.next();
+			if(opt.isMutable())
 				addOptionToSchema(opt, new_schema);
 		}
 		return new_schema;

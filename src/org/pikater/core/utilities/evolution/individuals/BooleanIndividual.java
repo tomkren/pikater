@@ -1,8 +1,7 @@
 package org.pikater.core.utilities.evolution.individuals;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 
 import java.util.Arrays;
@@ -39,8 +38,8 @@ public class BooleanIndividual extends ArrayIndividual{
     }
 
     @Override
-    public void set(int n, ITypedValue o) {
-        genes[n] = ((BooleanValue) o ).getValue();
+    public void set(int n, IValueData o) {
+        genes[n] = ((BooleanValue) o.getValue()).getValue();
     }
 
     /**

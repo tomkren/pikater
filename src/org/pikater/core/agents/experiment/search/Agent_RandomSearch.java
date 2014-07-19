@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.Value;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.RandomSearch_SearchBox;
@@ -55,16 +54,16 @@ public class Agent_RandomSearch extends Agent_Search {
 		maximum_tries= 10;
 		
 		// find maximum tries in Options
-		Options options = new Options(getSearchOptions());
+		NewOptionList options = new NewOptionList(getSearchOptions());
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.getOptionByName("E");
-			FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();
+			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
 			final_error_rate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.getOptionByName("M");
-			IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getTypedValue();
+			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
 			maximum_tries = valueM.getValue(); 
 		}	
 		
@@ -92,7 +91,7 @@ public class Agent_RandomSearch extends Agent_Search {
 	
 	private SearchSolution genRandomSolution(){
 		// go through the solutions Vector, generate random values
-		List<ITypedValue> new_solution = new ArrayList<ITypedValue>();
+		List<IValueData> new_solution = new ArrayList<>();
 		for (SearchItem si : getSchema() ) {
 			new_solution.add(si.randomValue(rnd_gen));
 		}
@@ -105,7 +104,7 @@ public class Agent_RandomSearch extends Agent_Search {
 	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 		number_of_tries+=query_block_size;
 		
-		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
+		List<SearchSolution> solutions_list = new ArrayList<>();
 		//generate sequence of random solutions
 		for(int i = 0; i < query_block_size; i++){
 			solutions_list.add(genRandomSolution());

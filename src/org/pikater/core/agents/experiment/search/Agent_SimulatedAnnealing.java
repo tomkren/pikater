@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.SimulatedAnnealing_SearchBox;
@@ -75,22 +75,22 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		stability = 0.5;
 		final_error_rate = 0.01;
 		
-		Options options = new Options(getSearchOptions());
+		NewOptionList options = new NewOptionList(getSearchOptions());
 		
 		NewOption optionE = options.getOptionByName("E");
-		FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();
+		FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
 		final_error_rate = valueE.getValue(); 
 
 		NewOption optionM = options.getOptionByName("M");
-		IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getTypedValue();
+		IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
 		maximum_tries = valueM.getValue(); 
 
 		NewOption optionS = options.getOptionByName("S");
-		FloatValue valueS = (FloatValue) optionS.convertToSingleValue().getTypedValue();
+		FloatValue valueS = (FloatValue) optionS.toSingleValue().getCurrentValue();
 		stability = valueS.getValue(); 
 
 		NewOption optionT = options.getOptionByName("T");
-		FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getTypedValue();
+		FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
 		temperature = valueT.getValue(); 
 		
 	}
@@ -147,7 +147,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	//Neighbor function: Random solutions in case of beginning, or mutation of existing
 	private SearchSolution Neighbor(SearchSolution sol){
 
-		List<ITypedValue> new_solution = new ArrayList<ITypedValue>();
+		List<IValueData> new_solution = new ArrayList<IValueData>();
 		if(sol == null){
 			//Completely new solution
 			for (SearchItem si : getSchema() ) {
@@ -159,7 +159,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 			for (int i = 0; i < getSchema().size(); i++) {
 				
 				SearchItem si = getSchema().get(i);
-				ITypedValue val = sol.getValues().get(i);
+                IValueData val = sol.getValues().get(i);
 				
 				if(rnd_gen.nextDouble() > stability) {
 					val = si.randomValue(rnd_gen);

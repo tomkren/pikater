@@ -9,6 +9,5 @@ public interface IValueData extends Concept, ICloneable
 	public Object getValue();
 	public String toDisplayName();
 	public String exportToWeka();
-	@Override
 	public IValueData clone();
 }

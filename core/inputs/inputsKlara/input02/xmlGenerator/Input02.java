@@ -8,7 +8,8 @@ import java.util.List;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
+
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
@@ -24,12 +25,11 @@ public final class Input02 {
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
 
         //Create two options for single computing agent        
-        NewOption optionS = new NewOption(
-        		new IntegerValue(1), "S"); 
+        NewOption optionS = new NewOption("S",1);
         
-        NewOption optionB = new NewOption(
-        		new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(100.0), 5),
-        		"B");
+        NewOption optionB = new NewOption("B",
+        		new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(100.0), 5)
+        		);
 
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
@@ -44,8 +44,7 @@ public final class Input02 {
 		Search search = new Search();
         search.setSearchClass("Agent_ChooseXValues");
 		
-        NewOption optionF = new NewOption(
-        		new IntegerValue(10), "F"); 
+        NewOption optionF = new NewOption("F",10);
 		
 		CARecSearchComplex complex = new CARecSearchComplex();
 		complex.setComputingAgent(comAgent);

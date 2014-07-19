@@ -1,21 +1,20 @@
 package org.pikater.core.utilities.evolution.individuals;
 
-import java.util.Arrays;
-
-import org.pikater.core.ontology.subtrees.newOption.typedValue.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
-import org.pikater.core.utilities.evolution.RandomNumberGenerator;
-import org.pikater.core.utilities.evolution.surrogate.ModelInputNormalizer;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
-
+import org.pikater.core.utilities.evolution.RandomNumberGenerator;
+import org.pikater.core.utilities.evolution.surrogate.ModelInputNormalizer;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+
+import java.util.Arrays;
 
 /**
  *
@@ -24,11 +23,11 @@ import weka.core.Instances;
 public class SearchItemIndividual extends MultiobjectiveIndividual {
 
     SearchItem[] schema;
-    ITypedValue[] items;
+    IValueData[] items;
 
     public SearchItemIndividual(int n) {
         schema = new SearchItem[n];
-        items = new ITypedValue[n];
+        items = new IValueData[n];
     }
     
     public void setSchema(int n, SearchItem s) {
@@ -40,12 +39,12 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
     }
     
     @Override
-    public ITypedValue get(int n) {
+    public IValueData get(int n) {
         return items[n];
     }
 
     @Override
-    public void set(int n, ITypedValue o) {
+    public void set(int n, IValueData o) {
         items[n] = o;
     }
 
@@ -72,10 +71,10 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         SearchItemIndividual newSI = (SearchItemIndividual)super.clone();
         
         newSI.schema = schema;
-        newSI.items = new ITypedValue[items.length];
+        newSI.items = new IValueData[items.length];
         
         for (int i = 0; i < items.length; i++) {
-            newSI.items[i] = items[i].cloneValue();
+            newSI.items[i] = items[i].clone();
         }
         
         newSI.fitnessValue = fitnessValue;
@@ -100,7 +99,7 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
             if (schema[i] instanceof SetSItem) {
                 FastVector values = new FastVector();
                 
-                for (ITypedValue valueI : schema[i].possibleValues() ) {
+                for (IValueData valueI : schema[i].possibleValues() ) {
                     values.addElement(valueI);
                 }
                 attributes.addElement(new Attribute("a" + i, values));

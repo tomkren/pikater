@@ -1,6 +1,6 @@
 package org.pikater.core.utilities.evolution.individuals;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 /**
  * Represents all individual which acts as arrays of values. 
@@ -22,7 +22,7 @@ public abstract class ArrayIndividual extends Individual {
      * @param n the index on which the value shall be set
      * @param o the value which shall be set
      */
-    public abstract void set(int n, ITypedValue o);
+    public abstract void set(int n, IValueData o);
 
     /**
      * Makes a deep copy of the individual.
@@ -31,7 +31,7 @@ public abstract class ArrayIndividual extends Individual {
     @Override
     public Object clone() {
         try {
-            return (ArrayIndividual) super.clone();
+            return super.clone();
         }
         catch (Exception e) {
             e.printStackTrace();

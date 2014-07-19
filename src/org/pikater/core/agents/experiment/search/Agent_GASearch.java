@@ -2,11 +2,11 @@ package org.pikater.core.agents.experiment.search;
 
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.Options;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.GASearch_SearchBox;
@@ -165,36 +165,36 @@ public class Agent_GASearch extends Agent_Search {
 		tournament_size = 2;
 		
 		// find maximum tries in Options		
-		Options options = new Options(getSearchOptions());
+		NewOptionList options = new NewOptionList(getSearchOptions());
 		
 		if (options.containsOptionWithName("E")) {
 			NewOption optionE = options.getOptionByName("E");
-			FloatValue valueE = (FloatValue) optionE.convertToSingleValue().getTypedValue();
+			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
 			final_error_rate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
 			NewOption optionM = options.getOptionByName("M");
-			IntegerValue valueM = (IntegerValue) optionM.convertToSingleValue().getTypedValue();
+			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
 			maximum_generations = valueM.getValue(); 
 		}		
 		if (options.containsOptionWithName("T")) {
 			NewOption optionT = options.getOptionByName("T");
-			FloatValue valueT = (FloatValue) optionT.convertToSingleValue().getTypedValue();
+			FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
 			mut_prob = valueT.getValue(); 
 		}
 		if (options.containsOptionWithName("X")) {
 			NewOption optionX = options.getOptionByName("X");
-			FloatValue valueX = (FloatValue) optionX.convertToSingleValue().getTypedValue();
+			FloatValue valueX = (FloatValue) optionX.toSingleValue().getCurrentValue();
 			xover_prob = valueX.getValue(); 
 		}
 		if (options.containsOptionWithName("P")) {
 			NewOption optionP = options.getOptionByName("P");
-			IntegerValue valueP = (IntegerValue) optionP.convertToSingleValue().getTypedValue();
+			IntegerValue valueP = (IntegerValue) optionP.toSingleValue().getCurrentValue();
 			pop_size = valueP.getValue(); 
 		}
 		if (options.containsOptionWithName("S")) {
 			NewOption optionS = options.getOptionByName("S");
-			IntegerValue valueS = (IntegerValue) optionS.convertToSingleValue().getTypedValue();
+			IntegerValue valueS = (IntegerValue) optionS.toSingleValue().getCurrentValue();
 			tournament_size = valueS.getValue(); 
 		}
 
@@ -205,9 +205,9 @@ public class Agent_GASearch extends Agent_Search {
 	//new random options
 	private SearchSolution randomIndividual() {
 		
-		List<ITypedValue> new_solution = new ArrayList<>();
+		List<IValueData> new_solution = new ArrayList<>();
 		for (SearchItem si : getSchema() ) {
-			ITypedValue val = si.randomValue(rnd_gen);
+            IValueData val = si.randomValue(rnd_gen);
 			new_solution.add(val);
 		}		
 		SearchSolution res_sol = new SearchSolution();
@@ -232,12 +232,12 @@ public class Agent_GASearch extends Agent_Search {
 	
 	//Half uniform crossover
 	private void xoverIndividuals(SearchSolution sol1, SearchSolution sol2){
-		List<ITypedValue> new_solution1 = new ArrayList<>();
-		List<ITypedValue> new_solution2 = new ArrayList<>();
+		List<IValueData> new_solution1 = new ArrayList<>();
+		List<IValueData> new_solution2 = new ArrayList<>();
 		
 		for (int i = 0; i < new_solution1.size(); i++) {
-			ITypedValue val1 =  sol1.getValues().get(i);
-            ITypedValue val2 =  sol2.getValues().get(i);
+            IValueData val1 =  sol1.getValues().get(i);
+            IValueData val2 =  sol2.getValues().get(i);
 			if(rnd_gen.nextBoolean()){
 				//The same...
 				new_solution1.add(val1);
@@ -255,11 +255,11 @@ public class Agent_GASearch extends Agent_Search {
 	//mutation of the option
 	private void mutateIndividual(SearchSolution sol){
 		
-		List<ITypedValue> new_sol = new ArrayList<>();
+		List<IValueData> new_sol = new ArrayList<>();
 		for (int i = 0; i < getSchema().size(); i++ ) {
 			
 			SearchItem si = getSchema().get(i);
-            ITypedValue val = sol.getValues().get(i);
+            IValueData val = sol.getValues().get(i);
 			if(rnd_gen.nextDouble() < mut_prob)
 				val = si.randomValue(rnd_gen);
 			new_sol.add(val);
@@ -270,7 +270,7 @@ public class Agent_GASearch extends Agent_Search {
 	
 	//Clone options
 	private SearchSolution cloneSol(SearchSolution sol){
-		List<ITypedValue> new_solution = sol.getValues();
+		List<IValueData> new_solution = sol.getValues();
 		SearchSolution res_sol = new SearchSolution();
 		res_sol.setValues(new_solution);
 		return res_sol;

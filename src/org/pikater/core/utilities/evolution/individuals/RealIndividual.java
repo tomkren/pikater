@@ -1,7 +1,7 @@
 package org.pikater.core.utilities.evolution.individuals;
 
-import org.pikater.core.ontology.subtrees.newOption.typedValue.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import java.util.Arrays;
 
@@ -58,7 +58,7 @@ public class RealIndividual extends ArrayIndividual {
     }
 
     @Override
-    public void set(int n, ITypedValue o) {
+    public void set(int n, IValueData o) {
         Double d = (double)((FloatValue) o).getValue();
         d = Math.max(d, min);
         d = Math.min(d, max);

@@ -30,13 +30,11 @@ public class SimpleTraining {
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
-        List<NewOption> options = new ArrayList<NewOption>();
+        List<NewOption> options = new ArrayList<>();
 
-        NewOption lr = new NewOption(
-        		new DoubleValue(0.001), "L"); 
+        NewOption lr = new NewOption( "L",0.001);
         
-        NewOption hr = new NewOption(
-        		new IntegerValue(4), "H"); 
+        NewOption hr = new NewOption("H",4);
 
         options.add(lr);
         options.add(hr);

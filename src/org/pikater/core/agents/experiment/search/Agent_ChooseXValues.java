@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.ITypedValue;
-import org.pikater.core.ontology.subtrees.newOption.typedValue.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.options.ChooseXValue_SearchBox;
@@ -44,13 +44,13 @@ public class Agent_ChooseXValues extends Agent_Search {
 	}
 
 	//TODO: Something less recursive
-	private void generate(List<ITypedValue> cur_solution_part,
-			List<List<ITypedValue>> possible_solution_values, int beg_ind) {
+	private void generate(List<IValueData> cur_solution_part,
+			List<List<IValueData>> possible_solution_values, int beg_ind) {
 		
 		if (possible_solution_values.size()-beg_ind < 1) {//if we are at the end
 			
-			List<ITypedValue> vals = new ArrayList<ITypedValue>();
-			for (ITypedValue valI : cur_solution_part) {
+			List<IValueData> vals = new ArrayList<>();
+			for (IValueData valI : cur_solution_part) {
 				vals.add(valI);
 			}
 
@@ -62,7 +62,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 			return;
 		}
 		
-		List<ITypedValue> pos_vals = possible_solution_values.get(beg_ind);
+		List<IValueData> pos_vals = possible_solution_values.get(beg_ind);
 		for (int i = 0; i < pos_vals.size(); i++) {//For each possible value on the index beg_ind
 			cur_solution_part.add(pos_vals.get(i));//append the value to the part of the solution
 			
@@ -73,8 +73,8 @@ public class Agent_ChooseXValues extends Agent_Search {
 
 
 	private void generateSolutions_list(List<SearchItem> schema) {
-		List<List<ITypedValue>> possible_solutions =
-				new ArrayList<List<ITypedValue>>();
+		List<List<IValueData>> possible_solutions =
+				new ArrayList<List<IValueData>>();
 		
 		for (SearchItem searchItemI : schema) {
 			if (searchItemI.getNumber_of_values_to_try() == 0) {
@@ -82,7 +82,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 			}
 			possible_solutions.add(searchItemI.possibleValues());
 		}
-		generate(new ArrayList<ITypedValue>(), possible_solutions, 0);
+		generate(new ArrayList<IValueData>(), possible_solutions, 0);
 		n = solutions_list.size();
 	}
 
@@ -106,14 +106,14 @@ public class Agent_ChooseXValues extends Agent_Search {
 		for (NewOption next : search_options) {
 
 			if (next.getName().equals("N")){
-				IntegerValue value = (IntegerValue) next.convertToSingleValue().getTypedValue();
+				IntegerValue value = (IntegerValue) next.toSingleValue().getCurrentValue();
 				default_number_of_values_to_try = value.getValue();
 			}
 		}
 		List<SearchItem> schema = getSchema();
 		n = Integer.MAX_VALUE;
 		ni = 0;
-		solutions_list = new ArrayList<SearchSolution>();
+		solutions_list = new ArrayList<>();
 		generateSolutions_list(schema);
 		query_block_size = n;
 	}
