@@ -30,7 +30,7 @@
 
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
-                <argument key="sniffed" value="manager" sendOnlyValue="true" />
+                <argument key="sniffed" value="GUIKlaraAgent" sendOnlyValue="true" />
             </arguments>
         </agent>
 

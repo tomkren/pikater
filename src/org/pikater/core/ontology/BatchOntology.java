@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
@@ -24,7 +25,7 @@ public class BatchOntology extends BeanOntology {
         String optionPackage = NewOption.class.getPackage().getName();
         String restrictionPackage = IRestriction.class.getPackage().getName();
         String typePackage = ValueType.class.getPackage().getName();
-        String valuePackage = IValueData.class.getPackage().getName();
+        String valuePackage = BooleanValue.class.getPackage().getName();
 
         String methodPackage = EvaluationMethod.class.getPackage().getName();
         
