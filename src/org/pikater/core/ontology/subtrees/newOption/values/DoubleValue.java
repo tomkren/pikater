@@ -7,7 +7,7 @@ public class DoubleValue implements IComparableValueData
 {
 	private static final long serialVersionUID = 1276470189024492227L;
 
-	private Double value;
+	private double value;
 	
 	/**
 	 * Should only be used by JADE.
@@ -18,11 +18,17 @@ public class DoubleValue implements IComparableValueData
 		this.value = value;
 	}
 	
-	public Double getValue() {
+	public double getValue() {
 		return value;
 	}
 	public void setValue(double value) {
 		this.value = value;
+	}
+	
+	@Override
+	public Double hackValue()
+	{
+		return value;
 	}
 	
 	@Override
@@ -32,7 +38,8 @@ public class DoubleValue implements IComparableValueData
 	}
 
 	@Override
-	public String exportToWeka() {
+	public String exportToWeka()
+	{
 		
 		return String.valueOf(value);
 	}
@@ -46,6 +53,6 @@ public class DoubleValue implements IComparableValueData
 	@Override
 	public int compareTo(IComparableValueData o)
 	{
-		return value.compareTo((Double) o.getValue());
+		return hackValue().compareTo((Double) o.hackValue());
 	}
 }

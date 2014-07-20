@@ -6,7 +6,7 @@ import jade.content.Concept;
 
 public interface IValueData extends Concept, ICloneable
 {
-	public Object getValue();
+	public Object hackValue();
 	public String toDisplayName();
 	public String exportToWeka();
 	public IValueData clone();

@@ -6,7 +6,7 @@ public class BooleanValue implements IValueData
 {
 	private static final long serialVersionUID = 486219518827018753L;
 
-	private Boolean value;
+	private boolean value;
 	
 	/**
 	 * Should only be used by JADE.
@@ -17,12 +17,18 @@ public class BooleanValue implements IValueData
 		this.value = value;
 	}
 	
-	public Boolean getValue()
+	public boolean getValue()
 	{
 		return value;
 	}
 	public void setValue(boolean value) {
 		this.value = value;
+	}
+	
+	@Override
+	public Boolean hackValue()
+	{
+		return value;
 	}
 	
 	@Override

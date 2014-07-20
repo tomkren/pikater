@@ -7,7 +7,7 @@ public class FloatValue implements IComparableValueData
 {
 	private static final long serialVersionUID = -6154392916809467193L;
 	
-	private Float value;
+	private float value;
 	
 	/**
 	 * Should only be used by JADE.
@@ -18,11 +18,17 @@ public class FloatValue implements IComparableValueData
 		this.value = value;
 	}
 
-	public Float getValue() {
+	public float getValue() {
 		return value;
 	}
 	public void setValue(float value) {
 		this.value = value;
+	}
+	
+	@Override
+	public Float hackValue()
+	{
+		return value;
 	}
 	
 	@Override
@@ -45,6 +51,6 @@ public class FloatValue implements IComparableValueData
 	@Override
 	public int compareTo(IComparableValueData o)
 	{
-		return value.compareTo((Float) o.getValue());
+		return hackValue().compareTo((Float) o.hackValue());
 	}
 }

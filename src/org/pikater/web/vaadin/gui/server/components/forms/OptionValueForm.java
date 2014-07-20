@@ -266,7 +266,7 @@ public class OptionValueForm extends CustomFormLayout
 			String notificationIdentifier, final IOnNumericValueChange<N> valueChangeHandler)
 	{
 		// cast value
-		final N currentValue = (N) value.getCurrentValue().getValue();
+		final N currentValue = (N) value.getCurrentValue().hackValue();
 
 		// create & bind with the value type
 		if(value.getType().getSetRestriction() != null)
@@ -274,7 +274,7 @@ public class OptionValueForm extends CustomFormLayout
 			List<N> options = new ArrayList<N>();
 			for(IValueData possibleValue : value.getType().getSetRestriction().getValues())
 			{
-				options.add((N) possibleValue.getValue());
+				options.add((N) possibleValue.hackValue());
 			}
 			Collections.sort(options);
 			
@@ -299,8 +299,8 @@ public class OptionValueForm extends CustomFormLayout
 			N min = null, max = null;
 			if(value.getType().getRangeRestriction() != null)
 			{
-				min = (N) value.getType().getRangeRestriction().getMinValue().getValue();
-				max = (N) value.getType().getRangeRestriction().getMaxValue().getValue();
+				min = (N) value.getType().getRangeRestriction().getMinValue().hackValue();
+				max = (N) value.getType().getRangeRestriction().getMaxValue().hackValue();
 			}
 			final TextField tf_value = FormFieldFactory.getNumericField(caption, currentValue, min, max, true, false);
 			tf_value.setSizeFull();

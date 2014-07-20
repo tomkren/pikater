@@ -42,9 +42,9 @@ public class QuestionMarkSet implements IValidatedValueData
 	}
 	
 	@Override
-	public Object getValue()
+	public Object hackValue()
 	{
-		return getCountOfValuesToTry();
+		return null;
 	}
 	
 	@Override

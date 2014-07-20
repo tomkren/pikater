@@ -7,7 +7,7 @@ public class IntegerValue implements IComparableValueData
 {
 	private static final long serialVersionUID = -2925380308174903951L;
 
-	private Integer value;
+	private int value;
 
 	/**
 	 * Should only be used by JADE.
@@ -18,11 +18,17 @@ public class IntegerValue implements IComparableValueData
 		this.value = value;
 	}
 
-	public Integer getValue() {
+	public int getValue() {
 		return value;
 	}
 	public void setValue(int value) {
 		this.value = value;
+	}
+	
+	@Override
+	public Integer hackValue()
+	{
+		return value;
 	}
 	
 	@Override
@@ -46,6 +52,6 @@ public class IntegerValue implements IComparableValueData
 	@Override
 	public int compareTo(IComparableValueData o)
 	{
-		return value.compareTo((Integer) o.getValue());
+		return hackValue().compareTo((Integer) o.hackValue());
 	}
 }

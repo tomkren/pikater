@@ -9,7 +9,7 @@ public class NullValue implements IValueData
 	public NullValue() {}
 	
 	@Override
-	public Object getValue()
+	public Object hackValue()
 	{
 		return null;
 	}

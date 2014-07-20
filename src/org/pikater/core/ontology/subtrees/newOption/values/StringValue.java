@@ -29,6 +29,12 @@ public class StringValue implements IComparableValueData
 	}
 	
 	@Override
+	public String hackValue()
+	{
+		return value;
+	}
+	
+	@Override
 	public IValueData clone()
 	{
 		return new StringValue(value);
@@ -49,6 +55,6 @@ public class StringValue implements IComparableValueData
 	@Override
 	public int compareTo(IComparableValueData o)
 	{
-		return value.compareTo((String) o.getValue());
+		return hackValue().compareTo((String) o.hackValue());
 	}
 }

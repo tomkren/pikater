@@ -39,7 +39,7 @@ public class BooleanIndividual extends ArrayIndividual{
 
     @Override
     public void set(int n, IValueData o) {
-        genes[n] = ((BooleanValue) o.getValue()).getValue();
+        genes[n] = ((BooleanValue) o).getValue();
     }
 
     /**
