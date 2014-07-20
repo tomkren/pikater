@@ -7,9 +7,10 @@ import org.pikater.web.vaadin.MyResources;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionMode;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractComponent;
@@ -52,9 +53,9 @@ public class TabSheet extends CustomComponent
 		this.innerLayout.setSizeFull();
 		this.innerLayout.setStyleName("custom-tabsheet");
 		this.innerLayout.setBorderSpacing(0);
-		this.innerLayout.setRowVisible(Row.CENTER, false);
+		this.innerLayout.setRowInvisible(Row.CENTER, Row.SOUTH);
 		this.innerLayout.setComponent(Border.NORTH, this.tabBar);
-		this.innerLayout.setRowHeight(Row.SOUTH, DimensionMode.MAX);
+		this.innerLayout.setRowHeight(Row.SOUTH, new Dimension(DimensionMode.MAX));
 		
 		// this component's basic setup
 		setCompositionRoot(innerLayout);

@@ -12,11 +12,12 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxBrowserToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.UtilitiesToolbox;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionUnit;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents;
@@ -165,8 +166,8 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setComponent(Border.SOUTH, this.toolbox_util);
 		addRowStyleName(Row.SOUTH, "utilitiesToolboxSize");
 		
-		setRowHeight(Row.CENTER, DimensionMode.MAX);
-		setColumnWidth(Column.CENTER, 100, DimensionUnit.PCT);
+		setRowHeight(Row.CENTER, new Dimension(DimensionMode.MAX));
+		setColumnWidth(Column.CENTER, new Dimension(100, DimensionUnit.PCT));
 		setToolboxVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER, false);
 		setToolboxVisible(ExpEditorToolbox.UTILITIES, false);
 		
@@ -285,21 +286,42 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		switch(toolbox)
 		{
 			case METHOD_BROWSER:
-				setComponentVisible(toolbox.toComponentPosition(), visible);
-				if(visible && toolbox_boxOptions.isVisible())
+				if(visible)
 				{
-					setComponentVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER.toComponentPosition(), false);
+					setColumnVisible(Column.WEST);
+					if(toolbox_boxOptions.isVisible())
+					{
+						setToolboxVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER, false);
+					}
+				}
+				else
+				{
+					setColumnInvisible(Column.WEST, Column.CENTER);
 				}
 				break;
 			case METHOD_OPTION_MANAGER:
-				setComponentVisible(toolbox.toComponentPosition(), visible);
-				if(visible && toolbox_boxBrowser.isVisible())
+				if(visible)
 				{
-					setComponentVisible(ExpEditorToolbox.METHOD_BROWSER.toComponentPosition(), false);
+					setColumnVisible(Column.EAST);
+					if(toolbox_boxBrowser.isVisible())
+					{
+						setToolboxVisible(ExpEditorToolbox.METHOD_BROWSER, false);
+					}
+				}
+				else
+				{
+					setColumnInvisible(Column.EAST, Column.CENTER);
 				}
 				break;
 			case UTILITIES:
-				setComponentVisible(toolbox.toComponentPosition(), visible);
+				if(visible)
+				{
+					setRowVisible(Row.SOUTH);
+				}
+				else
+				{
+					setRowInvisible(Row.SOUTH, Row.CENTER);
+				}
 				break;
 			default:
 				throw new IllegalStateException("Unknown state: " + toolbox.name());

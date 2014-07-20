@@ -1,11 +1,10 @@
 package org.pikater.web.vaadin.gui.server.components.borderlayout;
 
 import org.pikater.web.vaadin.gui.client.extensions.AutoVerticalBorderLayoutExtensionClientRpc;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractComponent;
@@ -45,15 +44,15 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 	// CLIENT COMMANDS FORWARDED
 	
 	@Override
-	public void setRowHeight(Row row, DimensionMode dimMode)
+	public void setRowHeight(Row row, Dimension dimension)
 	{
-		extension.getClientRPC().setRowHeight(row, dimMode);
+		extension.getClientRPC().setRowHeight(row, dimension);
 	}
-	
+
 	@Override
-	public void setColumnWidth(final Column designatedColumn, double value, DimensionUnit unit)
+	public void setColumnWidth(Column designatedColumn, Dimension dimension)
 	{
-		extension.getClientRPC().setColumnWidth(designatedColumn, value, unit);
+		extension.getClientRPC().setColumnWidth(designatedColumn, dimension);
 	}
 	
 	@Override
@@ -81,9 +80,27 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 	}
 
 	@Override
-	public void setComponentVisible(Border border, boolean visible)
+	public void setRowInvisible(Row affectedRow, Row rowToTakeUpTheAffectedRowsSpace)
 	{
-		extension.getClientRPC().setComponentVisible(border, visible);
+		extension.getClientRPC().setRowInvisible(affectedRow, rowToTakeUpTheAffectedRowsSpace);
+	}
+
+	@Override
+	public void setRowVisible(Row affectedRow)
+	{
+		extension.getClientRPC().setRowVisible(affectedRow);
+	}
+
+	@Override
+	public void setColumnInvisible(Column affectedColumn, Column columnToTakeUpTheAffectedColumnsSpace)
+	{
+		extension.getClientRPC().setColumnInvisible(affectedColumn, columnToTakeUpTheAffectedColumnsSpace);
+	}
+
+	@Override
+	public void setColumnVisible(Column affectedColumn)
+	{
+		extension.getClientRPC().setColumnVisible(affectedColumn);
 	}
 	
 	@Override
@@ -105,14 +122,8 @@ public class AutoVerticalBorderLayout extends CustomLayout implements AutoVertic
 	}
 	
 	@Override
-	public void setRowVisible(Row row, boolean visible)
+	public void setFixedLayout(Dimension westDimension, Dimension centerDimension, Dimension eastDimension)
 	{
-		extension.getClientRPC().setRowVisible(row, visible);
-	}
-
-	@Override
-	public void setColumnVisible(Column column, boolean visible)
-	{
-		extension.getClientRPC().setColumnVisible(column, visible);
+		extension.getClientRPC().setFixedLayout(westDimension, centerDimension, eastDimension);
 	}
 }

@@ -1,20 +1,23 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayoutExtension;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionMode;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TableLayout;
 import com.google.gwt.user.client.ui.Widget;
-import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ServerConnector;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
+import com.vaadin.client.ui.customlayout.CustomLayoutConnector;
 import com.vaadin.shared.ui.Connect;
 
 @Connect(AutoVerticalBorderLayoutExtension.class)
@@ -33,12 +36,20 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 	
 	private Element encapsulatingTable = null;
 	
-	private Element firstRow = null;
-	private Element secondRow = null;
-	private Element thirdRow = null;
-	private Element firstColumn = null;
-	private Element secondColumn = null;
-	private Element thirdColumn = null;
+	private Element coll1 = null;
+	private Element coll2 = null;
+	private Element coll3 = null;
+	
+	private Element row1 = null;
+	private Element row2 = null;
+	private Element row3 = null;
+	
+	private Element cell1 = null;
+	private Element cell2 = null;
+	private Element cell3 = null;
+	
+	private final Map<Row, ItemInfo<Row>> rowInfo;
+	private final Map<Column, ItemInfo<Column>> columnInfo;
 	
 	/*
 	 * GENERAL IMPORTANT NOTE:
@@ -49,43 +60,54 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 
 	public AutoVerticalBorderLayoutExtensionConnector()
 	{
+		this.rowInfo = new HashMap<Row, ItemInfo<Row>>();
+		for(Row row : Row.values())
+		{
+			this.rowInfo.put(row, new ItemInfo<Row>());
+		}
+		this.columnInfo = new HashMap<Column, ItemInfo<Column>>();
+		for(Column column : Column.values())
+		{
+			this.columnInfo.put(column, new ItemInfo<Column>());
+		}
+		
 		registerRpc(AutoVerticalBorderLayoutExtensionClientRpc.class, new AutoVerticalBorderLayoutExtensionClientRpc()
 		{
 			private static final long serialVersionUID = 8760526187099873218L;
 			
 			@Override
-			public void setRowHeight(final Row designatedRow, final DimensionMode dimMode)
+			public void setRowHeight(final Row designatedRow, final Dimension dimension)
 			{
 				Scheduler.get().scheduleDeferred(new ScheduledCommand()
 				{
 					@Override
 				    public void execute()
 					{
-						if(dimMode == DimensionMode.MAX)
+						if(dimension.isSetToMax())
 						{
 							// set everything else to auto prior to setting the desired element to max
 							for(Row row : Row.values())
 							{
 								if(row != designatedRow)
 								{
-									getElementByRow(row).getStyle().setProperty("height", DimensionMode.AUTO.toString());
+									getElementByRow(row).getStyle().setProperty("height", new Dimension(DimensionMode.AUTO).dimension);
 								}
 							}
 						}
-						getElementByRow(designatedRow).getStyle().setProperty("height", dimMode.toString());
+						getElementByRow(designatedRow).getStyle().setProperty("height", dimension.dimension);
 					}
 				});
 			}
 			
 			@Override
-			public void setColumnWidth(final Column designatedColumn, final double value, final DimensionUnit unit)
+			public void setColumnWidth(final Column designatedColumn, final Dimension dimension)
 			{
 				Scheduler.get().scheduleDeferred(new ScheduledCommand()
 				{
 					@Override
 				    public void execute()
 					{
-						getElementByColumn(designatedColumn).getStyle().setWidth(value, unit.toGWTUnit());
+						getElementByColumn(designatedColumn).getStyle().setProperty("width", dimension.dimension);
 					}
 				});
 			}
@@ -141,46 +163,122 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					}
 				});
 			}
-
-			@Override
-			public void setRowVisible(final Row row, final boolean visible)
-			{
-				Scheduler.get().scheduleDeferred(new ScheduledCommand()
-				{
-					@Override
-				    public void execute()
-					{
-						setVisibility(getElementByRow(row), visible);
-					}
-				});
-			}
-
-			@Override
-			public void setColumnVisible(final Column column, final boolean visible)
-			{
-				Scheduler.get().scheduleDeferred(new ScheduledCommand()
-				{
-					@Override
-				    public void execute()
-					{
-						setVisibility(getElementByColumn(column), visible);
-					}
-				});
-			}
-
-			@Override
-			public void setComponentVisible(final Border border, final boolean visible)
-			{
-				Scheduler.get().scheduleDeferred(new ScheduledCommand()
-				{
-					@Override
-				    public void execute()
-					{
-						setVisibility(getElementByBorder(border), visible);
-					}
-				});
-			}
 			
+			@Override
+			public void setRowInvisible(final Row affectedRow, final Row rowToTakeUpTheAffectedRowsSpace)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						if(affectedRow != rowToTakeUpTheAffectedRowsSpace)
+						{
+							ItemInfo<Row> affectedRowInfo = rowInfo.get(affectedRow);
+							ItemInfo<Row> spacerInfo = rowInfo.get(rowToTakeUpTheAffectedRowsSpace);
+							if(affectedRowInfo.visible)
+							{
+								affectedRowInfo.spaceTakerForThisItem = rowToTakeUpTheAffectedRowsSpace;
+								affectedRowInfo.visible = false;
+								spacerInfo.span++;
+								
+								setVisibility(getElementByRow(affectedRow), false);
+								getElementByRow(rowToTakeUpTheAffectedRowsSpace).setAttribute("rowspan", String.valueOf(spacerInfo.span));
+							}
+							// else do nothing
+						}
+						else
+						{
+							throw new IllegalArgumentException("Row to take up the available space must be distinct from "
+									+ "the row being made invisible.");
+						}
+					}
+				});
+			}
+
+			@Override
+			public void setRowVisible(final Row affectedRow)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						ItemInfo<Row> affectedRowInfo = rowInfo.get(affectedRow);
+						ItemInfo<Row> spacerInfo = rowInfo.get(affectedRowInfo.spaceTakerForThisItem);
+						if(!affectedRowInfo.visible)
+						{
+							spacerInfo.span--;
+							getElementByRow(affectedRowInfo.spaceTakerForThisItem).setAttribute("rowspan", String.valueOf(spacerInfo.span));
+							
+							affectedRowInfo.spaceTakerForThisItem = null;
+							affectedRowInfo.visible = true;
+							
+							setVisibility(getElementByRow(affectedRow), true);
+						}
+						// else do nothing
+					}
+				});
+			}
+
+			@Override
+			public void setColumnInvisible(final Column affectedColumn, final Column columnToTakeUpTheAffectedColumnsSpace)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						if(affectedColumn != columnToTakeUpTheAffectedColumnsSpace)
+						{
+							ItemInfo<Column> affectedColumnInfo = columnInfo.get(affectedColumn);
+							ItemInfo<Column> spacerInfo = columnInfo.get(columnToTakeUpTheAffectedColumnsSpace);
+							if(affectedColumnInfo.visible)
+							{
+								affectedColumnInfo.spaceTakerForThisItem = columnToTakeUpTheAffectedColumnsSpace;
+								affectedColumnInfo.visible = false;
+								spacerInfo.span++;
+								
+								setVisibility(getElementByColumn(affectedColumn), false);
+								getElementByColumn(columnToTakeUpTheAffectedColumnsSpace).setAttribute("colspan", String.valueOf(spacerInfo.span));
+							}
+							// else do nothing
+						}
+						else
+						{
+							throw new IllegalArgumentException("Column to take up the available space must be distinct from "
+									+ "the column being made invisible.");
+						}
+					}
+				});
+			}
+
+			@Override
+			public void setColumnVisible(final Column affectedColumn)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						ItemInfo<Column> affectedColumnInfo = columnInfo.get(affectedColumn);
+						ItemInfo<Column> spacerInfo = columnInfo.get(affectedColumnInfo.spaceTakerForThisItem);
+						if(!affectedColumnInfo.visible)
+						{
+							spacerInfo.span--;
+							getElementByColumn(affectedColumnInfo.spaceTakerForThisItem).setAttribute("colspan", String.valueOf(spacerInfo.span));
+							
+							affectedColumnInfo.spaceTakerForThisItem = null;
+							affectedColumnInfo.visible = true;
+							
+							setVisibility(getElementByColumn(affectedColumn), true);
+						}
+						// else do nothing
+					}
+				});
+				
+			}
+
 			@Override
 			public void setBorderSpacing(final int pixels)
 			{
@@ -220,6 +318,22 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					}
 				});
 			}
+
+			@Override
+			public void setFixedLayout(final Dimension westDimension, final Dimension centerDimension, final Dimension eastDimension)
+			{
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
+				{
+					@Override
+				    public void execute()
+					{
+						encapsulatingTable.getStyle().setTableLayout(TableLayout.FIXED);
+						coll1.getStyle().setProperty("width", westDimension.dimension);
+						coll2.getStyle().setProperty("width", centerDimension.dimension);
+						coll3.getStyle().setProperty("width", eastDimension.dimension);
+					}
+				});
+			}
 		});
 	}
 	
@@ -229,7 +343,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 	@Override
 	protected void extend(ServerConnector target)
 	{
-		final Widget extendedWidget = ((ComponentConnector) target).getWidget();
+		final Widget extendedWidget = ((CustomLayoutConnector) target).getWidget();
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
@@ -239,19 +353,29 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 				encapsulatingTable = extendedWidget.getElement().getFirstChildElement();
 				checkElement(encapsulatingTable, null);
 				
-				firstRow = encapsulatingTable.getFirstChildElement().getFirstChildElement();
-				checkElement(firstRow, firstRowStyleName);
-				secondRow = firstRow.getNextSiblingElement();
-				checkElement(secondRow, secondRowStyleName);
-				thirdRow = secondRow.getNextSiblingElement();
-				checkElement(thirdRow, thirdRowStyleName);
+				Element colGroup = encapsulatingTable.getFirstChildElement();
+				checkElement(colGroup, null);
 				
-				firstColumn = secondRow.getFirstChildElement();
-				checkElement(firstColumn, firstColumnStyleName);
-				secondColumn = firstColumn.getNextSiblingElement();
-				checkElement(secondColumn, secondColumnStyleName);
-				thirdColumn = secondColumn.getNextSiblingElement();
-				checkElement(thirdColumn, thirdColumnStyleName);
+				coll1 = colGroup.getFirstChildElement();
+				checkElement(coll1, null);
+				coll2 = coll1.getNextSiblingElement();
+				checkElement(coll2, null);
+				coll3 = coll2.getNextSiblingElement();
+				checkElement(coll3, null);
+				
+				row1 = encapsulatingTable.getFirstChildElement().getNextSiblingElement().getFirstChildElement();
+				checkElement(row1, firstRowStyleName);
+				row2 = row1.getNextSiblingElement();
+				checkElement(row2, secondRowStyleName);
+				row3 = row2.getNextSiblingElement();
+				checkElement(row3, thirdRowStyleName);
+				
+				cell1 = row2.getFirstChildElement();
+				checkElement(cell1, firstColumnStyleName);
+				cell2 = cell1.getNextSiblingElement();
+				checkElement(cell2, secondColumnStyleName);
+				cell3 = cell2.getNextSiblingElement();
+				checkElement(cell3, thirdColumnStyleName);
 			}
 		});
 	}
@@ -270,6 +394,23 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 	}
 	
 	//---------------------------------------------------------------
+	// PRIVATE TYPES
+	
+	private class ItemInfo<T>
+	{
+		public boolean visible;
+		public int span;
+		public T spaceTakerForThisItem;
+		
+		public ItemInfo()
+		{
+			this.visible = true;
+			this.span = 1;
+			this.spaceTakerForThisItem = null;
+		}
+	}
+	
+	//---------------------------------------------------------------
 	// MISCELLANEOUS
 	
 	private Element getElementByRow(Row row)
@@ -277,11 +418,11 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 		switch(row)
 		{
 			case NORTH:
-				return firstRow;
+				return row1;
 			case CENTER:
-				return secondRow;
+				return row2;
 			case SOUTH:
-				return thirdRow;
+				return row3;
 			default:
 				throw new IllegalStateException("Unknown row: '" + row.name() + "'");
 		}
@@ -292,31 +433,13 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 		switch(column)
 		{
 			case WEST:
-				return firstColumn;
+				return cell1;
 			case CENTER:
-				return secondColumn;
+				return cell2;
 			case EAST:
-				return thirdColumn;
+				return cell3;
 			default:
 				throw new IllegalStateException("Unknown column: '" + column.name() + "'");
-		}
-	}
-	
-	private Element getElementByBorder(Border border)
-	{
-		switch(border)
-		{
-			case WEST:
-			case CENTER:
-			case EAST:
-				return getElementByColumn(border.toColumn());
-				
-			case NORTH:
-			case SOUTH:
-				return getElementByRow(border.toRow());
-			
-			default:
-				throw new IllegalStateException("Unknown border: '" + border.name() + "'");
 		}
 	}
 	

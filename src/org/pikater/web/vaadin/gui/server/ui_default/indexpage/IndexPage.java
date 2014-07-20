@@ -5,11 +5,12 @@ import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBor
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Border;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Column;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionMode;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.DimensionUnit;
-import org.pikater.web.vaadin.gui.shared.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
+import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionMode;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
+import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionUnit;
 
 import com.vaadin.annotations.StyleSheet;
 
@@ -31,12 +32,11 @@ public class IndexPage extends AutoVerticalBorderLayout
 		setCellSpacing(0);
 		setComponent(Border.NORTH, new BannerArea(this));
 		setComponent(Border.WEST, new LeftMenu(this));
-		setComponent(Border.CENTER, contentArea); 
-		setComponentVisible(Border.EAST, false);
-		setColumnWidth(Column.CENTER, 100, DimensionUnit.PCT);
-		
-		setRowVisible(Row.SOUTH, false);
-		setRowHeight(Row.CENTER, DimensionMode.MAX);
+		setComponent(Border.CENTER, contentArea);
+		setRowInvisible(Row.SOUTH, Row.CENTER);
+		setRowHeight(Row.CENTER, new Dimension(DimensionMode.MAX));
+		setColumnInvisible(Column.EAST, Column.CENTER);
+		setFixedLayout(new Dimension(200, DimensionUnit.PX), new Dimension(DimensionMode.AUTO), new Dimension(DimensionMode.AUTO));
 		
 		// display the content depicted by request URL or display default content if it is not defined
 		if(CustomConfiguredUI.isURIFragmentDefined()) // a browser refresh or bookmark
