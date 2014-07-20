@@ -22,8 +22,8 @@ public class BannerArea extends HorizontalLayout
 	public BannerArea(final IndexPage parentPage)
 	{
 		super();
-		setStyleName("bannerArea");
 		setSizeFull();
+		setStyleName("bannerArea");
 		
 		Image checkIcon = new Image(null, MyResources.img_checkIcon16);
 		this.lbl_loggedInAs = new Label("Logged in as:");
@@ -62,6 +62,7 @@ public class BannerArea extends HorizontalLayout
 		
 		Image banner = new Image(null, MyResources.img_banner);
 		banner.setStyleName("bannerArea-image");
+		
 		addComponent(banner);
 		addComponent(loginStatusComponent);
 		setComponentAlignment(banner, Alignment.MIDDLE_CENTER);

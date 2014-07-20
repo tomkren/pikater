@@ -57,6 +57,8 @@ public class DefaultUI extends CustomConfiguredUI
 	
 	private void displayIndexPage()
 	{
+		setPageCroppedAndHorizontallyCentered(true); // to make it look better
+		
 		// return new IndexPage for each UI unless you want all browser tabs to be synchronized and display the same content
 		setContent(new IndexPage());
 	}

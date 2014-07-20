@@ -66,6 +66,7 @@ public abstract class CustomConfiguredUI extends UI
 	// FIELDS & METHODS
 	
 	private final UniversalUIExtension universalUIExt = new UniversalUIExtension();
+	private final CssLayout topLayout = new CssLayout();
 	private final MyFancyNotifications notifications = new MyFancyNotifications();
 	
 	@Override
@@ -166,6 +167,7 @@ public abstract class CustomConfiguredUI extends UI
 	 */
 	private void displayApplicationSetupWizard()
 	{
+		setPageCroppedAndHorizontallyCentered(false);
 		setMyContent(new WelcomeTourWizard(new Button.ClickListener()
 		{
 			private static final long serialVersionUID = -8250998657726465300L;
@@ -223,12 +225,11 @@ public abstract class CustomConfiguredUI extends UI
 		}
 		else
 		{
-			CssLayout cssLayout = new CssLayout();
-			cssLayout.setStyleName("topLevelElement"); // don't set it to full size...
-			cssLayout.addComponent(content);
+			topLayout.removeAllComponents();
+			topLayout.addComponent(content);
 			content.setSizeFull();
-			cssLayout.addComponent(notifications); // always ensure that notifications component is added
-			super.setContent(cssLayout); // the method is overriden in these class - let's avoid an infinite loop
+			topLayout.addComponent(notifications); // always ensure that notifications component is added
+			super.setContent(topLayout); // the method is overriden in these class - let's avoid an infinite loop
 		}
 	}
 	
@@ -240,15 +241,6 @@ public abstract class CustomConfiguredUI extends UI
 		 */
 		setMyContent(content);
 	}
-	
-	//-----------------------------------------------------------
-	// SOME ABSTRACT INTERFACE TO IMPLEMENT BY CHILD UIs
-	
-	/**
-	 * Callback to the child indicating that it can start setting the UI as it wishes. Until
-	 * that time, it must not change the UI content in any way.
-	 */
-	protected abstract void displayChildContent();
 	
 	//-------------------------------------------------------------------
 	// AUTHENTICATION RELATED INTERFACE
@@ -311,7 +303,30 @@ public abstract class CustomConfiguredUI extends UI
 	}
 	
 	//-----------------------------------------------------------
+	// SOME ABSTRACT INTERFACE TO IMPLEMENT BY CHILD UIs
+	
+	/**
+	 * Callback to the child indicating that it can start setting the UI as it wishes. Until
+	 * that time, it must not change the UI content in any way.
+	 */
+	protected abstract void displayChildContent();
+	
+	//-----------------------------------------------------------
 	// PUBLIC INTERFACE - miscellaneous methods
+	
+	public void setPageCroppedAndHorizontallyCentered(boolean centered)
+	{
+		if(centered)
+		{
+			topLayout.setSizeUndefined();
+			topLayout.setStyleName("topLevelElement");
+		}
+		else
+		{
+			topLayout.removeStyleName("topLevelElement");
+			topLayout.setSizeFull();
+		}
+	}
 	
 	public UniversalUIExtension getUniversalUIExtension()
 	{

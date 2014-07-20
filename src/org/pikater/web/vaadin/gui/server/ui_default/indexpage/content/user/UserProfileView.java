@@ -21,6 +21,7 @@ public class UserProfileView extends CustomComponent implements IContentComponen
 		super();
 		
 		this.innerForm = new UserProfileForm();
+		this.innerForm.setSizeUndefined();
 		
 		setCompositionRoot(this.innerForm);
 	}

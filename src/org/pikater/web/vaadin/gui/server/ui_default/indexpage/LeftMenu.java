@@ -41,7 +41,7 @@ public class LeftMenu extends Panel
 	public LeftMenu(final IndexPage parent)
 	{
 		super();
-		setSizeFull();
+		setStyleName("leftMenu-container");
 		
 		this.idGenerator = new SimpleIDGenerator();
 		this.menuItemIDToFeature = new HashMap<Integer, IWebFeature>();

@@ -149,6 +149,8 @@ public class ExpEditorUI extends CustomConfiguredUI
 	
 	private void displayExperimentEditor()
 	{
+		setPageCroppedAndHorizontallyCentered(false);
+		
 		// simply create a new empty editor and let the user handle the rest
 		ExpEditor editor = new ExpEditor(isDebugModeActive());
 		// editor.loadExperimentIntoNewTab("test experiment", UniversalComputationDescription.getDummy());
