@@ -11,6 +11,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaAbstractCA;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
 import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
@@ -153,6 +154,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		List<Class<? extends Agent_AbstractExperiment>> allAgentClasses =
 				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
+
+		allAgentClasses.addAll(
+				getExperimmentAgentClasses(
+						Agent_DataProcessing.class));
+		allAgentClasses.remove(Agent_DataProcessing.class);
 		
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
