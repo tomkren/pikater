@@ -117,6 +117,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		private static final long serialVersionUID = 6214306716273574418L;
 		GetOptions get_option_action;
 		GetParameters get_next_parameters_action;
+		boolean not_understood = false;
+		
 		public RequestServer(Agent a) {
 			super(a, MessageTemplate
 					.and(	MessageTemplate
@@ -127,6 +129,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 											.MatchLanguage(codec.getName()),
 											MessageTemplate.MatchOntology(ontology
 													.getName())))));
+			
 			this.registerPrepareResultNotification(new Behaviour(a) {
 				/**
 				 * 
@@ -140,11 +143,15 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 				@Override
 				public void action() {
 					cont = false;
+					if (not_understood){
+						return;
+					}
 					if(get_option_action != null){
 						ACLMessage reply = getParameters((ACLMessage)getDataStore().get(REQUEST_KEY));
 						getDataStore().put(RESULT_NOTIFICATION_KEY, reply);
+						return;
 					}
-					if(get_next_parameters_action!=null){
+					else if(get_next_parameters_action!=null){
 						cont = true;
 						ACLMessage requestMsg = (ACLMessage)getDataStore().get(REQUEST_KEY);
 						if(queriesToProcess == 0){//skoncili jsme nebo zacali jeden cyklus query
@@ -214,14 +221,14 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 						}else{//Cekame na vypocty - odpovedi na QUERY
 							//TODO: FAILURE
 							//and protocol FIPANames.InteractionProtocol.FIPA_QUERY???
-							ACLMessage response = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+							ACLMessage response = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));													
 							if(response == null)
 								block();//elseif zadna zprava inform - cekej
 							else{
 								// System.out.println("!OK: Pars - Prisla evaluace");
 								//prisla evaluace - odpoved na QUERY
 								//prirad inform ke spravnemu query								
-								int id = Integer.parseInt(response.getConversationId().split("_")[2]);
+								int id = Integer.parseInt(response.getConversationId().split("_")[1]);
 								Result res;
 								try {
 									res = (Result)getContentManager().extractContent(response);
@@ -265,10 +272,13 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			try {
 				content = getContentManager().extractContent(request);
 
-				if (((Action) content).getAction() instanceof GetOptions) {			
+				if (((Action) content).getAction() instanceof GetOptions) {
+					not_understood = false;
 					get_option_action = (GetOptions) ((Action) content).getAction();
 					return null;
+					
 				} else if (((Action) content).getAction() instanceof GetParameters){
+					not_understood = false;
 					get_next_parameters_action = (GetParameters) ((Action) content).getAction();
 					//zacatek - nastavani optionu
 					search_options = get_next_parameters_action.getSearch_options();
@@ -283,6 +293,13 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					return agree; //or REFUSE, sometimes
 					//return null;
 				}
+				
+				not_understood = true;
+				ACLMessage not_understood = request.createReply();
+				not_understood.setPerformative(ACLMessage.NOT_UNDERSTOOD);
+				
+				return not_understood;
+				
 			} catch (UngroundedException e) {
 				e.printStackTrace();
 			} catch (CodecException e) {
