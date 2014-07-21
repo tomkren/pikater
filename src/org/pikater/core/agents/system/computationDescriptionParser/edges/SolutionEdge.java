@@ -9,13 +9,13 @@ import java.util.List;
  * Time: 11:12
  */
 public class SolutionEdge extends EdgeValue {
-    private List<SearchSolution> options;
+    private SearchSolution options;
 
-    public List<SearchSolution> getOptions() {
+    public SearchSolution getOptions() {
         return options;
     }
 
-    public void setOptions(List<SearchSolution> options) {
+    public void setOptions(SearchSolution options) {
         this.options = options;
     }
 }

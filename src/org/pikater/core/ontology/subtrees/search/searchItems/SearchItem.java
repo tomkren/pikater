@@ -11,6 +11,7 @@ public abstract class SearchItem implements Concept {
 	/**
 	 * Item in solution-schema
 	 */
+    private String name;
 	private static final long serialVersionUID = 3249399049389780447L;
 	private Integer number_of_values_to_try;
 	//Create random solution item
@@ -27,4 +28,12 @@ public abstract class SearchItem implements Concept {
 	public void setNumber_of_values_to_try(Integer numberOfValuesToTry) {
 		number_of_values_to_try = numberOfValuesToTry;
 	}
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
