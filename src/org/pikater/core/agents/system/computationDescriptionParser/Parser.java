@@ -20,7 +20,7 @@ import java.util.List;
 
 public class Parser {
     private ComputationGraph computationGraph=new ComputationGraph();
-    private HashMap<Concept,ComputationNode> alreadyProcessed=new HashMap<>();
+    private HashMap<Integer,ComputationNode> alreadyProcessed=new HashMap<>();
     private Agent_Manager agent = null;
 
     public Parser(Agent_Manager agent_) {
@@ -42,7 +42,7 @@ public class Parser {
             FileSaverNode saverNode=new FileSaverNode();
             saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),1,saverNode));
             computationGraph.addNode(saverNode);
-            alreadyProcessed.put(dataSaver,saverNode);
+            alreadyProcessed.put(dataSaver.getId(),saverNode);
             parseDataSourceDescription(dataSource, saverNode, "file");
         } else {
             agent.logError("Ontology Parser - Error unknown IDataSaver");
@@ -95,33 +95,13 @@ public class Parser {
 
     public void parseErrors(ErrorDescription errorDescription, ComputationNode child) {
         agent.log("Ontology Parser - IErrorProvider");
-        IErrorProvider errorProvider=errorDescription.getProvider();
+        ComputingAgent errorProvider=(ComputingAgent)errorDescription.getProvider();
 
-        ComputationNode errorNode=null;
-        //uncomment after the bug with references is fixed
-//        if (alreadyProcessed.containsKey(errorProvider))
-//        {
-//            errorNode=alreadyProcessed.get(errorProvider);
-//        }
-//        else  {
-//
-//            agent.log("Error provider was not parsed at the moment parseErrors was called");
-//            return;
-//        }
-
-    //hack -delete after reference bug is fixed
-        for (Concept c : alreadyProcessed.keySet())
-        {
-            if (c instanceof ComputingAgent)
-            {
-                ComputingAgent ca=(ComputingAgent)c;
-                if (ca.getAgentType().equals(((ComputingAgent)errorProvider).getAgentType()) )
-                {
-                    errorNode=alreadyProcessed.get(c);
-                    break;
-                }
-            }
+        if (!alreadyProcessed.containsKey(errorProvider.getId()))
+        {    agent.log("Error provider was not parsed at the moment parseErrors was called");
+            return;
         }
+        ComputationNode errorNode=alreadyProcessed.get(errorProvider.getId());
         StandardBuffer<ErrorEdge> buffer=new StandardBuffer<>(errorNode,child);
         errorNode.addBufferToOutput(errorDescription.getType(),buffer);
         child.addInput(errorDescription.getType(),buffer);
@@ -141,9 +121,9 @@ public class Parser {
     //Processes a node that is in the beginning of computation - reads file
     public void parseFileDataProvider(FileDataProvider file, ComputationNode child, String connectionName) {
         agent.log("Ontology Parser - FileDataProvider");
-        if (!alreadyProcessed.containsKey(file))
+        if (!alreadyProcessed.containsKey(file.getId()))
         {
-            alreadyProcessed.put(file, null);
+            alreadyProcessed.put(file.getId(), null);
             DataSourceEdge fileEdge=new DataSourceEdge();
             fileEdge.setFile(true);
             fileEdge.setDataSourceId(file.getFileURI());
@@ -157,15 +137,15 @@ public class Parser {
     {
         agent.log("Ontology Parser - Computing Agent Simple");
 
-        if (!alreadyProcessed.containsKey(computingAgent))
+        if (!alreadyProcessed.containsKey(computingAgent.getId()))
         {
             ModelComputationNode node= new ModelComputationNode();
             CAStartComputationStrategy strategy=new CAStartComputationStrategy(agent,node.getId(),1,node);
             node.setStartBehavior(strategy);
-            alreadyProcessed.put(computingAgent,node);
+            alreadyProcessed.put(computingAgent.getId(),node);
 
         }
-        ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent);
+        ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent.getId());
         computationGraph.addNode(computingNode);
         		
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;          
@@ -223,12 +203,12 @@ public class Parser {
     public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors,List<NewOption> childOptions) {
         agent.log("Ontology Parser - Search");
 
-        if (!alreadyProcessed.containsKey(search))
+        if (!alreadyProcessed.containsKey(search.getId()))
         {
-            alreadyProcessed.put(search, new SearchComputationNode());
+            alreadyProcessed.put(search.getId(), new SearchComputationNode());
 
         }
-        SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search);
+        SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search.getId());
         searchNode.setModelClass(search.getSearchClass());
 
         setMutableOptions(childOptions);
@@ -243,7 +223,7 @@ public class Parser {
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
         child.addInput("searchedoptions",searchBuffer);
         computationGraph.addNode(searchNode);
-        alreadyProcessed.put(search,searchNode);
+        alreadyProcessed.put(search.getId(),searchNode);
         addOptionsToInputs(searchNode, search.getOptions());
         for (ErrorDescription error:errors)
         {
@@ -261,7 +241,7 @@ public class Parser {
         recNode.addBufferToOutput("recommender",recBuffer);
         child.addInput("recommender",recBuffer);
         computationGraph.addNode(recNode);
-        alreadyProcessed.put(recommender,recNode);
+        alreadyProcessed.put(recommender.getId(),recNode);
         List<NewOption> options = recommender.getOptions();
 
         addOptionsToInputs(recNode, options);
