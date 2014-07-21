@@ -47,7 +47,7 @@ public final class Input02 {
 		comAgent.setModel(new NewModel());
 
 		Search search = new Search();
-        search.setSearchClass("Agent_ChooseXValues");
+        search.setSearchClass("Agent_RandomSearch");
 		
         
 		CARecSearchComplex complex = new CARecSearchComplex();
