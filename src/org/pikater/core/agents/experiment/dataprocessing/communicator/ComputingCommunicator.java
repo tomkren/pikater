@@ -1,4 +1,4 @@
-package org.pikater.core.agents.experiment.computing.computing;
+package org.pikater.core.agents.experiment.dataprocessing.communicator;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
@@ -25,7 +25,7 @@ import org.pikater.core.ontology.subtrees.management.SaveAgent;
 import org.pikater.core.ontology.subtrees.result.PartialResults;
 import org.pikater.core.ontology.subtrees.task.Task;
 
-public class ComputingComminicator {
+public class ComputingCommunicator {
 
 	public ACLMessage executeTask(Agent_ComputingAgent agent, ACLMessage req) {
 		ACLMessage resultMsg = req.createReply();

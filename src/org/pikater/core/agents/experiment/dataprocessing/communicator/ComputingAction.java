@@ -1,4 +1,4 @@
-package org.pikater.core.agents.experiment.computing.computing;
+package org.pikater.core.agents.experiment.dataprocessing.communicator;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
@@ -439,7 +439,7 @@ public class ComputingAction extends FSMBehaviour {
 							!agent.resurrected) {
 						
 						try {
-							ComputingComminicator communicator = new ComputingComminicator();
+							ComputingCommunicator communicator = new ComputingCommunicator();
 							String objectFilename = communicator.saveAgentToFile(agent);
 							eval.setObjectFilename(objectFilename);
 
