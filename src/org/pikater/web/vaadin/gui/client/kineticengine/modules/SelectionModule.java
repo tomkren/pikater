@@ -23,6 +23,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.MoveBoxesOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 @SuppressWarnings("deprecation")
@@ -185,14 +186,25 @@ public class SelectionModule implements IEngineModule
 	};
 	private final IEventListener selectionGroupDragEndHandler = new IEventListener()
 	{
+		/**
+		 * End of a drag operation.
+		 * Undo the effects of drag start and propagate the drag changes to selection items.
+		 */
 		@Override
 		public void handle(KineticEvent event)
 		{
 			GWTCursorManager.rollBackCursor(kineticEngine.getContext().getStageDOMElement());
 			
-			// end of a drag - undo the effects of drag start and propagate the drag changes to selection items
-			kineticEngine.moveSelected(getEdgesInBetween()); // propagate the selection group's position to the selected items
-			kineticEngine.fromBaseLinesToEdges(getEdgesInBetween()); // draws changes by default
+			// propagate the selection group's position to the selected items
+			kineticEngine.pushNewOperation(new MoveBoxesOperation(
+					kineticEngine,
+					getSelectedKineticNodes(),
+					getEdgesInBetween().toArray(new EdgeGraphItemClient[0])
+			));
+			
+			// draws changes by default
+			kineticEngine.fromBaseLinesToEdges(getEdgesInBetween());
+			
 			event.stopVerticalPropagation();
 		}
 	};

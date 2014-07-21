@@ -9,7 +9,7 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGra
 
 /**
  * Operation handling only the first item registration / deregistration. Item
- * removing/adding again is done in {@link DeleteSelectedOperation}. 
+ * removing/adding again is done in {@link DeleteSelectedBoxesOperation} which extends this class.
  */
 public final class ItemRegistrationOperation extends BiDiOperation
 {
@@ -44,7 +44,7 @@ public final class ItemRegistrationOperation extends BiDiOperation
 	public void undo()
 	{
 		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, edges);
-		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, boxes);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, boxes); // automatically deselects
 	}
 
 	@Override

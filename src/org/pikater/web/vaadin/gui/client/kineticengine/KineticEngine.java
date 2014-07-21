@@ -37,10 +37,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.TrackMouseModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.SelectionOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.DeleteSelectedOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.MoveBoxesOperation;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.SwapEdgeEndPointOperation;
 
 @SuppressWarnings("deprecation")
 public final class KineticEngine
@@ -339,8 +336,12 @@ public final class KineticEngine
 			}
 		}
 		
-		// and finally, put everything into the environment
-		registerCreated(false, guiBoxes.values().toArray(new BoxGraphItemClient[0]), edges.toArray(new EdgeGraphItemClient[0]));
+		// and finally, put everything into the environment but don't apply it to history so that the user can not erase the graph
+		new ItemRegistrationOperation(
+				this,
+				guiBoxes.values().toArray(new BoxGraphItemClient[0]),
+				edges.toArray(new EdgeGraphItemClient[0])
+		).firstExecution();
 	}
 	
 	// *****************************************************************************************************
@@ -364,42 +365,6 @@ public final class KineticEngine
 	
 	// *****************************************************************************************************
 	// IMPLEMENTATION INDEPENDENT PUBLIC INTERFACE
-	
-	/*
-	 * Undo/redo related wrapper routines.
-	 */
-	
-	public void registerCreated(boolean applyChangeToHistory, BoxGraphItemClient[] boxes, EdgeGraphItemClient[] edges) 
-	{
-		ItemRegistrationOperation operation = new ItemRegistrationOperation(this, boxes, edges);
-		if(applyChangeToHistory)
-		{
-			pushNewOperation(operation);
-		}
-		operation.firstExecution();
-	}
-	
-	public void deleteSelected()
-	{
-		DeleteSelectedOperation operation = new DeleteSelectedOperation(this);
-		pushNewOperation(operation);
-		operation.firstExecution();
-	}
-	
-	public void moveSelected(Set<EdgeGraphItemClient> edgesInBetween)
-	{
-		MoveBoxesOperation operation = new MoveBoxesOperation(this, selectionModule.getSelectedKineticNodes(),
-				edgesInBetween.toArray(new EdgeGraphItemClient[0]));
-		pushNewOperation(operation);
-		operation.firstExecution();
-	}
-	
-	public void swapEdgeEndpoint()
-	{
-		SwapEdgeEndPointOperation operation = new SwapEdgeEndPointOperation(this);
-		pushNewOperation(operation);
-		operation.firstExecution();
-	}
 	
 	/*
 	 * Box drag routines. 
@@ -545,6 +510,12 @@ public final class KineticEngine
 		return stage.getPointerPosition();
 	}
 	
+	public void pushNewOperation(BiDiOperation operation)
+	{
+		getContext().getHistoryManager().push(operation);
+		operation.firstExecution();
+	}
+	
 	public void reloadVisualStyle()
 	{
 		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
@@ -578,11 +549,6 @@ public final class KineticEngine
 	
 	// *****************************************************************************************************
 	// MISCELLANEOUS PRIVATE INTERFACE
-	
-	private void pushNewOperation(BiDiOperation operation)
-	{
-		getContext().getHistoryManager().push(operation);
-	}
 	
 	private void setFirstArgHigherZIndex(Node node1, Node node2)
 	{
