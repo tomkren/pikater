@@ -255,7 +255,6 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	            	);
 	            	
 	                newOpt.getValuesWrapper().addValue(new Value(questionMark));
-	                newOpt.setImmutable(true);
 	            }
 	            else {
 	            	Value valueI = optionI.toSingleValue();

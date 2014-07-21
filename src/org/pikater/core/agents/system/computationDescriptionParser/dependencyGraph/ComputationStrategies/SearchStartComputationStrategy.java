@@ -79,10 +79,9 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		msg.setOntology(SearchOntology.getInstance().getName());
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationId));
-
 		GetParameters gp = new GetParameters();
-		@SuppressWarnings("unchecked")
-		List<SearchItem> schema = convertOptionsToSchema(((OptionEdge)inputs.get("childoptions").getNext()).getOptions());
+        OptionEdge childOptions= (OptionEdge)inputs.get("childoptions").getNext();
+		List<SearchItem> schema = convertOptionsToSchema(childOptions.getOptions());
 		gp.setSchema(schema);
 		gp.setSearch_options((ArrayList<NewOption>)inputs.get("options").getNext());
 
@@ -120,20 +119,6 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 	private void addOptionToSchema(NewOption opt, List schema){
         ValuesForOption values = (opt.getValuesWrapper());
-
-
-        // TODO !!!!! OPRAVIT !!!!! jenom hack, prosel Input2 !!!!!
-        // No values propagated so far, remove the if after options are propagated from config
-        // zkopirovat do optionu z optionu, ktere o sobe posle agent
-        // pripadne od uzivatele
-//        if (opt.getData_type().equals("STRING")){
-//            opt.setData_type("INT");
-//            Interval range = new Interval();
-//            range.setMin(new Float(3));
-//            range.setMax(new Float(8));
-//            opt.setRange(range);
-//            opt.setNumber_of_values_to_try(3);
-//        }
 		for (Value value:values.getValues()) {
             IValueData typedValue = value.getCurrentValue();
             if (typedValue instanceof QuestionMarkRange)

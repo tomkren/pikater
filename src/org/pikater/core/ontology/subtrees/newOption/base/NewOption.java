@@ -1,22 +1,17 @@
 package org.pikater.core.ontology.subtrees.newOption.base;
 
+import com.thoughtworks.xstream.XStream;
 import jade.content.Concept;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.pikater.core.ontology.subtrees.newOption.RestrictionsForOption;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.*;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-import com.thoughtworks.xstream.XStream;
+import java.util.Arrays;
+import java.util.List;
 
 public class NewOption implements Concept
 {
@@ -24,7 +19,6 @@ public class NewOption implements Concept
 	
 	private String name;
 	private String description;
-	private boolean immutable;
 	
 	private ValuesForOption valuesWrapper;
 	private RestrictionsForOption valueRestrictions;
@@ -125,7 +119,6 @@ public class NewOption implements Concept
 	private NewOption(String name, ValuesForOption values, RestrictionsForOption restrictions)
 	{
 		this.name = name;
-		this.immutable = false;
 		this.valuesWrapper = values;
 		this.valueRestrictions = restrictions;
 	}
@@ -152,18 +145,25 @@ public class NewOption implements Concept
 
 	public boolean isImmutable()
 	{
-		return immutable;
+        for (Value value:getValuesWrapper().getValues()) {
+            IValueData typedValue = value.getCurrentValue();
+            if (typedValue instanceof QuestionMarkRange)
+            {
+               return false;
+            }
+            else if (typedValue instanceof QuestionMarkSet)
+            {
+                return false;
+            }
+        }
+        return true;
 	}
 
     public boolean isMutable()
     {
-        return !immutable;
+        return !isImmutable();
     }
 
-	public void setImmutable(boolean immutable)
-	{
-		this.immutable = immutable;
-	}
 
 	public ValuesForOption getValuesWrapper()
 	{
@@ -238,7 +238,6 @@ public class NewOption implements Concept
 	{
 		NewOption result = new NewOption(name, valuesWrapper.clone(), valueRestrictions.clone());
 		result.setDescription(getDescription());
-		result.setImmutable(this.isImmutable());
 		return result;
 	}
 	

@@ -1,7 +1,5 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
-import jade.content.Concept;
-
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
@@ -103,7 +101,7 @@ public class Parser {
         }
         ComputationNode errorNode=alreadyProcessed.get(errorProvider.getId());
         StandardBuffer<ErrorEdge> buffer=new StandardBuffer<>(errorNode,child);
-        errorNode.addBufferToOutput(errorDescription.getType(),buffer);
+        errorNode.addBufferToOutput(errorDescription.getType(), buffer);
         child.addInput(errorDescription.getType(),buffer);
         buffer.insert(new ErrorEdge(Float.MAX_VALUE));
     }
@@ -152,7 +150,7 @@ public class Parser {
         computingNode.setModelClass(computingAgentO.getAgentType());       
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         
-        ArrayList<NewOption> options=new ArrayList<NewOption>();
+        ArrayList<NewOption> options=new ArrayList<>();
         for (NewOption o:computingAgentO.getOptions())
         {
             options.add(o);
@@ -210,8 +208,6 @@ public class Parser {
         }
         SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search.getId());
         searchNode.setModelClass(search.getSearchClass());
-
-        setMutableOptions(childOptions);
         
         OptionEdge option=new OptionEdge();
         option.setOptions(childOptions);
@@ -275,13 +271,4 @@ public class Parser {
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         node.addInput("options",optionBuffer);
     }
-    
-    private void setMutableOptions(List<NewOption> childOptions){
-    	for (NewOption opt : childOptions){
-    		if (opt.getValuesWrapper().containsQuestionMark() ){
-    			opt.setImmutable(true);
-    		}
-    	}
-    }
-    
 }
