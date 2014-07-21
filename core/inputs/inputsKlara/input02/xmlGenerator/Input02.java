@@ -38,18 +38,21 @@ public final class Input02 {
 		comAgent.addOption(optionB);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
-		comAgent.setEvaluationMethod(new EvaluationMethod("Crossvalidation"));
+		
+		EvaluationMethod em = new EvaluationMethod("Crossvalidation");
+		NewOption optionF = new NewOption("F",10);
+		em.addOption(optionF);
+		
+		comAgent.setEvaluationMethod(em);
 		comAgent.setModel(new NewModel());
 
 		Search search = new Search();
         search.setSearchClass("Agent_ChooseXValues");
 		
-        NewOption optionF = new NewOption("F",10);
-		
+        
 		CARecSearchComplex complex = new CARecSearchComplex();
 		complex.setComputingAgent(comAgent);
 
-		complex.addOption(optionF);
         complex.setSearch(search);
 
         //Set error provider

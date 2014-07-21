@@ -1,10 +1,10 @@
 package org.pikater.core.ontology.subtrees.search;
 
-import jade.content.AgentAction;
+import jade.content.onto.basic.Action;
 
 import java.util.List;
 
-public class ExecuteParameters implements AgentAction{
+public class ExecuteParameters extends Action{
 	
 	/**
 	 * 
