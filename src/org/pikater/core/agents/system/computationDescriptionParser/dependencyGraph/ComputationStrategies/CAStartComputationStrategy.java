@@ -153,7 +153,14 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		
 		Data data = new Data();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
-		String testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();				
+		String testing = null;
+		if( inputs.get("testing") == null){
+			testing = training;							
+		}
+		else{
+			testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();
+		}
+		
 		data.setExternal_train_file_name(training);
 		data.setExternal_test_file_name(testing);
 		data.setTestFileName(getHashOfFile(training, 1));

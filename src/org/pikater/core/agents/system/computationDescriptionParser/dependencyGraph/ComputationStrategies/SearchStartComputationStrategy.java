@@ -79,6 +79,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		msg.setOntology(SearchOntology.getInstance().getName());
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationId));
+
 		GetParameters gp = new GetParameters();
         OptionEdge childOptions= (OptionEdge)inputs.get("childoptions").getNext();
 		List<SearchItem> schema = convertOptionsToSchema(childOptions.getOptions());
