@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -25,15 +26,15 @@ public final class Input02 {
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
 
         //Create two options for single computing agent        
-        NewOption optionS = new NewOption("S",1);
+        NewOption optionS = new NewOption("L",1);
         
-        NewOption optionB = new NewOption("B",
-        		new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(100.0), 5)
+        NewOption optionB = new NewOption("M",
+        		new QuestionMarkRange(new IntegerValue(2), new IntegerValue(10), 5)
         		);
 
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();
-		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
+		comAgent.setAgentType(Agent_WekaMultilayerPerceptronCA.class.getName());
 		comAgent.addOption(optionS);
 		comAgent.addOption(optionB);
 		comAgent.setTrainingData(fileDataSource);

@@ -28,9 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.pikater.core.AgentNames;
-import org.pikater.core.agents.experiment.computing.computing.Agent_DataProcessing;
-import org.pikater.core.agents.experiment.computing.computing.ComputingAction;
-import org.pikater.core.agents.experiment.computing.computing.ComputingComminicator;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
+import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingAction;
+import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -262,13 +262,13 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	
 	private ACLMessage respondToGetOptions(ACLMessage request, Concept concept) {
 		
-		ComputingComminicator communicator = new ComputingComminicator();
+		ComputingCommunicator communicator = new ComputingCommunicator();
 		return communicator.sendOptions(Agent_ComputingAgent.this, request);
 	}
 	
 	private ACLMessage respondExecuteTask(ACLMessage request, Action a) {
 		
-		ComputingComminicator communicator = new ComputingComminicator();
+		ComputingCommunicator communicator = new ComputingCommunicator();
 		return communicator.executeTask(this, request);
 	}
 

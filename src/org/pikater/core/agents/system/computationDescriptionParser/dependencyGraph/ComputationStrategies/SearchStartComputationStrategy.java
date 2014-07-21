@@ -126,6 +126,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
             {
                 QuestionMarkRange questionMarkRange = (QuestionMarkRange) typedValue;
                 IntervalSearchItem itm = new IntervalSearchItem();
+                itm.setName(opt.getName());
                 itm.setNumber_of_values_to_try(questionMarkRange.getCountOfValuesToTry());
                 itm.setMin(questionMarkRange.getMin());
                 itm.setMax(questionMarkRange.getMax());
@@ -135,6 +136,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
             {
                 QuestionMarkSet questionMarkSet = (QuestionMarkSet) typedValue;
                 SetSItem itm = new SetSItem();
+                itm.setName(opt.getName());
                 itm.setNumber_of_values_to_try(questionMarkSet.getCountOfValuesToTry());
                 itm.setSet(questionMarkSet.getValues());
                 schema.add(itm);

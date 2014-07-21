@@ -23,6 +23,11 @@ public class ValuesForOption implements Concept, Iterable<Value>
 	 */
 	@Deprecated
 	public ValuesForOption() {}
+    public ValuesForOption(Value value)
+    {
+        this.values=new ArrayList<>();
+        this.values.add(value);
+    }
 	public ValuesForOption(List<Value> values)
 	{
 		this.values = values;

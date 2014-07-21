@@ -112,8 +112,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		// evaluate classifier and print some statistics
 		Evaluation eval = new Evaluation(train);
-
-		log("Evaluation method: \t", 2);
+        log("Evaluation method: \t", 2);
 		
 		if (evaluation_method.getType().equals("CrossValidation") ){
 			
@@ -134,7 +133,9 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		}
 		else { // name = Standard
 			log("Standard weka evaluation.", 2);
-			eval.evaluateModel(getClassifierClass(), test);
+            Classifier classifier=getClassifierClass();
+            classifier.buildClassifier(train);
+			eval.evaluateModel(classifier, test);
 		}
 				
 		log("Error rate: " + eval.errorRate()+" ", 1);

@@ -92,11 +92,14 @@ public class Agent_RandomSearch extends Agent_Search {
 	private SearchSolution genRandomSolution(){
 		// go through the solutions Vector, generate random values
 		List<IValueData> new_solution = new ArrayList<>();
+        List<String> names = new ArrayList<>();
 		for (SearchItem si : getSchema() ) {
 			new_solution.add(si.randomValue(rnd_gen));
+            names.add(si.getName());
 		}
 		SearchSolution sol = new SearchSolution();
 		sol.setValues(new_solution);
+        sol.setNames(names);
 		return sol;
 	}
 		

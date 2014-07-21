@@ -26,6 +26,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
@@ -33,7 +34,9 @@ import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -94,7 +97,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	//Create new options from solution with filled ? values (convert solution->options) 
 	private NewOptionList fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
         NewOptionList res_options = new NewOptionList();
-		List<NewOption> options_list = new ArrayList<NewOption>();
+		List<NewOption> options_list = new ArrayList<>();
 		if(options==null){
 			return res_options;
 		}
@@ -103,37 +106,33 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 			res_options.setOptions(options);
 			return res_options;
 		}
-		java.util.Iterator<IValueData> sol_itr = solution.getValues().iterator();
-		
-		for (NewOption optionI : options) {
-			NewOption new_opt = optionI.clone();
-			if(optionI.isMutable())
-				new_opt.setValuesWrapper(null); //TODO: fillOptWithSolution(optionI, sol_itr));
-			options_list.add(new_opt);
-		}
+        for (NewOption option:options)
+        {
+            if (option.isImmutable())
+            {
+                options_list.add(option);
+            }
+            else
+            {
+                for (int i=0;i<solution.getValues().size();i++)
+                {
+                    String currentName=solution.getNames().get(i);
+                    if (currentName.equals(option.getName()))
+                    {
+                        IValueData currentValue= solution.getValues().get(i);
+                        NewOption clone=option.clone();
+                        clone.setValuesWrapper(new ValuesForOption(new Value(currentValue)));
+                        options_list.add(clone);
+                        break;
+                    }
+                }
+            }
+        }
+
 		res_options.setOptions(options_list);
 		return res_options;
 	}
-	
-	//Fill an option's ? with values in iterator
-	private String fillOptWithSolution(NewOption opt, java.util.Iterator<String> solution_itr){		
-		String res_values = "";
-		String[] values = new String[0]; //((String)opt.getUser_value()).split(",");
-		//TODO: Jakub
 
-		for (int i = 0; i < values.length; i++) {
-			if (values[i].equals("?")) {
-				res_values+=(String)solution_itr.next();
-			}else{
-				res_values+=values[i];
-			}
-			if (i < values.length-1){
-				res_values+=",";
-			}
-		}
-		
-		return res_values;
-	}
 	
 	private Task getTaskFromNode(){
 		
@@ -145,9 +144,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 
         // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());
-		if (inputs.get("searchSolution") != null){
-			SearchSolution ss = (SearchSolution)inputs.get("searchSolution").getNext();
-			options =  fillOptionsWithSolution(options.getOptions(), ss);
+		if (inputs.get("searchedoptions") != null){
+            SolutionEdge solutionEdge = (SolutionEdge)inputs.get("searchedoptions").getNext();
+			options =  fillOptionsWithSolution(options.getOptions(), solutionEdge.getOptions());
 		}
 		agent.setOptions(options.getOptions());
 		

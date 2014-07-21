@@ -34,6 +34,7 @@ import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
+import org.pikater.core.ontology.subtrees.search.SearchSolution;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -155,9 +156,13 @@ public class Agent_Manager extends PikaterAgent {
 								(SearchComputationNode) computationCollection.get(graphId)
 									.getProblemGraph().getNode(nodeId); 
 
-						SolutionEdge se = new SolutionEdge();
-						se.setOptions(ep.getSolutions());
-				    	searchNode.addToOutputAndProcess(se, "searchedoptions");						
+
+                        for (SearchSolution ss:ep.getSolutions())
+                        {
+                            SolutionEdge se = new SolutionEdge();
+                            se.setOptions(ss);
+                            searchNode.addToOutputAndProcess(se, "searchedoptions");
+                        }
 				    }
 					else{
 						logError("unknown message received.");
