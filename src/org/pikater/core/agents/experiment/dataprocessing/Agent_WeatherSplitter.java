@@ -1,4 +1,4 @@
-package org.pikater.core.agents.experiment.computing;
+package org.pikater.core.agents.experiment.dataprocessing;
 
 import jade.content.Concept;
 import jade.content.ContentException;
@@ -18,7 +18,6 @@ import jade.proto.AchieveREResponder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.agents.experiment.computing.computing.Agent_DataProcessing;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
