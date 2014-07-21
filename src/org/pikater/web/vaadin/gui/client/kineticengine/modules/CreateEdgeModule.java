@@ -16,7 +16,10 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemCl
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
 
 @SuppressWarnings("deprecation")
 public final class CreateEdgeModule implements IEngineModule
@@ -89,8 +92,22 @@ public final class CreateEdgeModule implements IEngineModule
 				{
 					newEdge.setEndpoint(EndPoint.TO, toEndPoint);
 					newEdge.edgeDrag_toEdge(true); // switches the edge's internal state and updates it, doesn't draw anything
-
 					selectionModule.onEdgeCreateOperation(newEdge);
+					
+					/*
+					 * Duplicate code from {@link ItemRegistrationModule}. Not so easy to do it 
+					 * with another way.
+					 */
+					EdgeGraphItemShared[] serializedEdges = EdgeGraphItemClient.toShared(newEdge);
+					if(serializedEdges.length == 0)
+					{
+						throw new IllegalStateException("Something weird is happening... Looks like we broke "
+								+ "some conditions for new edges in this module.");
+					}
+					else
+					{
+						kineticEngine.getContext().command_edgeSetChange(RegistrationOperation.REGISTER, serializedEdges);
+					}
 				}
 				else
 				{
@@ -176,11 +193,12 @@ public final class CreateEdgeModule implements IEngineModule
 				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseMoveHandler, EventType.Basic.MOUSEMOVE);
 				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseDownHandler, EventType.Basic.MOUSEDOWN);
 				
-				// register the new edge
-				kineticEngine.registerCreated(true, null, new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() });
+				// register the new edge and also draw the stage
+				kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, null, 
+						new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() }));
 				
-				// and display changes
-				kineticEngine.draw(parentBox.getComponentToDraw());
+				// and display changes - not needed at this point (done in the previous command)
+				// kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.stopVerticalPropagation();
 				event.setProcessed();

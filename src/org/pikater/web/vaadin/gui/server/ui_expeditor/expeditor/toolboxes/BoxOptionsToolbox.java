@@ -85,19 +85,18 @@ public class BoxOptionsToolbox extends Toolbox
 				break;
 				
 			case 1: // a single specific box type is selected
-				currentView.setEnabled(true);
 				if(context.getCurrentlyViewedBoxesDataSource() != selectedBoxesInformation[0])
 				{
-					String newBoxIdentification = String.format("%s@%s", 
-							BoxType.fromAgentInfo(selectedBoxesInformation[0]).name(),
-							selectedBoxesInformation[0].getName()
-					);
-					optionsOverview.getBoxIdentificationLabel().setValue(newBoxIdentification);
-					optionView.getBoxIdentificationLabel().setValue(newBoxIdentification);
-					
-					resetView();
 					context.setCurrentlyViewedBoxesDataSource(selectedBoxesInformation[0]);
+					currentView.setEnabled(true);
 					optionsOverview.refreshContent();
+					optionView.refreshContent();
+					resetView();
+				}
+				else
+				{
+					currentView.setEnabled(true);
+					currentView.refreshContent();
 				}
 				break;
 				
@@ -138,6 +137,11 @@ public class BoxOptionsToolbox extends Toolbox
 		{
 			this.currentlyViewedBoxesDataSource = null;
 			this.currentlyViewedOption = null;
+		}
+		
+		public String getCurrentlyViewedBoxesIdentification()
+		{
+			return String.format("%s@%s", BoxType.fromAgentInfo(currentlyViewedBoxesDataSource).name(), currentlyViewedBoxesDataSource.getName());
 		}
 
 		public AgentInfo getCurrentlyViewedBoxesDataSource()
@@ -198,6 +202,8 @@ public class BoxOptionsToolbox extends Toolbox
 		{
 			return boxIdentificationLabel;
 		}
+		
+		public abstract void refreshContent();
 	}
 	
 	private class OptionsOverview extends BoxOptionsToolboxView
@@ -226,8 +232,10 @@ public class BoxOptionsToolbox extends Toolbox
 			this.optionsLayout.setEnabled(enabled);
 		}
 		
-		protected void refreshContent()
+		@Override
+		public void refreshContent()
 		{
+			getBoxIdentificationLabel().setValue(getContext().getCurrentlyViewedBoxesIdentification());
 			this.optionsLayout.removeAllComponents();
 			for(final NewOption option : getContext().getCurrentlyViewedBoxesDataSource().getOptions())
 			{
@@ -303,6 +311,12 @@ public class BoxOptionsToolbox extends Toolbox
 			addComponent(btn_backToOverview);
 			addComponent(getBoxIdentificationLabel());
 			addComponent(hl_optionIndetification);
+		}
+		
+		@Override
+		public void refreshContent()
+		{
+			getBoxIdentificationLabel().setValue(getContext().getCurrentlyViewedBoxesIdentification());
 		}
 
 		private void setContentFromOption(NewOption option)

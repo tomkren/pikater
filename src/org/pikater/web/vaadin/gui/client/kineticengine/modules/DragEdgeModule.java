@@ -16,6 +16,8 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventListener;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.DeleteEdgeOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.SwapEdgeEndPointOperation;
 
 @SuppressWarnings("deprecation")
 public final class DragEdgeModule implements IEngineModule
@@ -144,7 +146,7 @@ public final class DragEdgeModule implements IEngineModule
 			// IMPORTANT: don't violate the call order
 			draggedEdge.edgeDrag_toEdge(false); // only switches the edge's internal state, doesn't update the edge or draws anything whatsoever
 			BoxGraphItemClient newEndpoint = kineticEngine.getHoveredBox();
-			if(newEndpoint != null)
+			if(newEndpoint != null) // edge was dragged onto a box
 			{
 				newEndpoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
 				BoxGraphItemClient originalEndpoint = draggedEdge.getEndPoint(draggedEdgeEndpoint); 
@@ -152,11 +154,16 @@ public final class DragEdgeModule implements IEngineModule
 				{
 					// IMPORTANT: don't violate the call order
 					selectionModule.onEdgeDragOperationFinished(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
-					kineticEngine.swapEdgeEndpoint(); // changes the endpoint, updates the edge but doesn't draw
+					kineticEngine.pushNewOperation(new SwapEdgeEndPointOperation(kineticEngine)); // changes the endpoint, updates the edge but doesn't draw
 				}
+				kineticEngine.draw(EngineComponent.STAGE);
+			}
+			else // edge was dragged off the previous box onto blank space
+			{
+				// delete it and also draw changes
+				kineticEngine.pushNewOperation(new DeleteEdgeOperation(kineticEngine, draggedEdge));
 			}
 			resetEdgeDraggingVars();
-			kineticEngine.draw(EngineComponent.STAGE);
 		}
 	};
 
@@ -201,8 +208,8 @@ public final class DragEdgeModule implements IEngineModule
 		if(graphItem instanceof EdgeGraphItemClient)
 		{
 			EdgeGraphItemClient edge = (EdgeGraphItemClient)graphItem;
-			setEdgeEventHandler(edge, EndPoint.FROM);
-			setEdgeEventHandler(edge, EndPoint.TO);
+			edge.getDragMark(EndPoint.FROM).addEventListener(new DragMarkMouseDownListener(edge, EndPoint.FROM), EventType.Basic.MOUSEDOWN.withName(moduleID));
+			edge.getDragMark(EndPoint.TO).addEventListener(new DragMarkMouseDownListener(edge, EndPoint.TO), EventType.Basic.MOUSEDOWN.withName(moduleID));
 		}
 		else if(graphItem instanceof BoxGraphItemClient)
 		{
@@ -237,11 +244,6 @@ public final class DragEdgeModule implements IEngineModule
 	
 	// **********************************************************************************************
 	// PRIVATE INTERFACE
-	
-	private void setEdgeEventHandler(EdgeGraphItemClient edge, EndPoint endPoint)
-	{
-		edge.getDragMark(endPoint).addEventListener(new DragMarkMouseDownListener(edge, endPoint), EventType.Basic.MOUSEDOWN.withName(moduleID));
-	}
 	
 	private void setEdgeBeingDragged(EdgeGraphItemClient edge, EndPoint endPoint)
 	{

@@ -8,6 +8,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.DeleteSelectedBoxesOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator.GraphItemRegistration;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
@@ -64,7 +65,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				switch (event.getNativeKeyCode())
 				{
 					case KeyCodes.KEY_BACKSPACE:
-						getEngine().deleteSelected();
+						getEngine().pushNewOperation(new DeleteSelectedBoxesOperation(getEngine()));
 						break;
 					case 90: // Z
 						if(GWTKeyboardManager.isControlKeyDown())

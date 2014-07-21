@@ -5,6 +5,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EdgeState;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EndPoint;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
 
 public class GraphItemCreator
 {
@@ -40,7 +41,7 @@ public class GraphItemCreator
 		result.reloadVisualStyles(false);
 		if(nrt == GraphItemRegistration.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(true, new BoxGraphItemClient[] { result }, null);
+			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, new BoxGraphItemClient[] { result }, null));
 		}
 	    return result;
 	}
@@ -66,7 +67,7 @@ public class GraphItemCreator
 		}
 		if(nrt == GraphItemRegistration.AUTOMATIC)
 		{
-			kineticEngine.registerCreated(true, null, new EdgeGraphItemClient[] { result });
+			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, null, new EdgeGraphItemClient[] { result }));
 		}
 		return result;
 	}

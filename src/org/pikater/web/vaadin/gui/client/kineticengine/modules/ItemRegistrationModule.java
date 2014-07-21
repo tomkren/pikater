@@ -74,8 +74,8 @@ public class ItemRegistrationModule implements IEngineModule
 	// PUBLIC TYPES AND INTERFACE TO PERFORM ALL ITEM REGISTRATION/UNREGISTRATION RELATED OPERATIONS
 	
 	/**
-	 * Does the operation corresponding to the arguments. The following things are
-	 * required to be done in the calling code:</br>
+	 * Does the operation corresponding to the arguments, doesn't handle edges in any way.
+	 * The following things are required to be done in the calling code:</br>
 	 * <ul>
 	 * <li> Proper initialization of the given items.
 	 * </ul> 
@@ -123,8 +123,8 @@ public class ItemRegistrationModule implements IEngineModule
 	}
 	
 	/**
-	 * Does the operation corresponding to the arguments. The following things are
-	 * required to be done in the calling code:</br>
+	 * Does the operation corresponding to the arguments, doesn't handle boxes in any way.
+	 * The following things are required to be done in the calling code:</br>
 	 * <ul>
 	 * <li> Proper initialization of the given items.
 	 * </ul>
@@ -139,8 +139,12 @@ public class ItemRegistrationModule implements IEngineModule
 		{
 			if(edge.isSelected())
 			{
-				// edges are assumed to have been deselected in the other "doOperation" method
-				throw new IllegalStateException("Can not register or deregister a selected edge. Deselect first.");
+				/*
+				 * Edges are assumed to have been deselected in 
+				 * {@link #doOperation(RegistrationOperation, boolean, BoxGraphItemClient...)} or
+				 * the calling code. 
+				 */
+				throw new IllegalStateException("Can not register a selected edge. Deselect first.");
 			}
 			if(edge.areBothEndsDefined())
 			{
