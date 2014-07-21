@@ -117,7 +117,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		private static final long serialVersionUID = 6214306716273574418L;
 		GetOptions get_option_action;
 		GetParameters get_next_parameters_action;
-		boolean not_understood = false;
 		
 		public RequestServer(Agent a) {
 			super(a, MessageTemplate
@@ -143,9 +142,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 				@Override
 				public void action() {
 					cont = false;
-					if (not_understood){
-						return;
-					}
 					if(get_option_action != null){
 						ACLMessage reply = getParameters((ACLMessage)getDataStore().get(REQUEST_KEY));
 						getDataStore().put(RESULT_NOTIFICATION_KEY, reply);
@@ -225,26 +221,30 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							if(response == null)
 								block();//elseif zadna zprava inform - cekej
 							else{
+								if (response.getConversationId().split("_").length <= 2){
+									// other informs than containing CA results (error)
+									return;
+								}
 								// System.out.println("!OK: Pars - Prisla evaluace");
 								//prisla evaluace - odpoved na QUERY
-								//prirad inform ke spravnemu query								
-								int id = Integer.parseInt(response.getConversationId().split("_")[1]);
+								//prirad inform ke spravnemu query
+								int id = Integer.parseInt(response.getConversationId().split("_")[2]);
 								Result res;
 								try {
 									res = (Result)getContentManager().extractContent(response);
 									Evaluation eval = (Evaluation) res.getValue();
 									List<Eval> named_evals = eval.getEvaluations();
 									evaluations[id]=namedEvalsToFitness(named_evals);
-								} catch (UngroundedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (CodecException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (OntologyException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+							} catch (UngroundedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (CodecException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (OntologyException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 								
 								queriesToProcess--;
                                                                 //System.out.println("OK: " + queriesToProcess + " queries remaining");
@@ -273,12 +273,10 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 				content = getContentManager().extractContent(request);
 
 				if (((Action) content).getAction() instanceof GetOptions) {
-					not_understood = false;
 					get_option_action = (GetOptions) ((Action) content).getAction();
 					return null;
 					
 				} else if (((Action) content).getAction() instanceof GetParameters){
-					not_understood = false;
 					get_next_parameters_action = (GetParameters) ((Action) content).getAction();
 					//zacatek - nastavani optionu
 					search_options = get_next_parameters_action.getSearch_options();
@@ -292,14 +290,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					agree.setContent(Integer.toString(query_block_size));
 					return agree; //or REFUSE, sometimes
 					//return null;
-				}
-				
-				not_understood = true;
-				ACLMessage not_understood = request.createReply();
-				not_understood.setPerformative(ACLMessage.NOT_UNDERSTOOD);
-				
-				return not_understood;
-				
+				}				
 			} catch (UngroundedException e) {
 				e.printStackTrace();
 			} catch (CodecException e) {
