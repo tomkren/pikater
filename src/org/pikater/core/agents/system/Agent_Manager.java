@@ -145,7 +145,7 @@ public class Agent_Manager extends PikaterAgent {
 					ContentElement content = getContentManager().extractContent(query);
 					if (((Action) content).getAction() instanceof ExecuteParameters) {
 						// manager received new options from search to execute
-						ExecuteParameters ep = (ExecuteParameters) content;
+						ExecuteParameters ep = (ExecuteParameters) (((Action) content).getAction());
 
 						// => fill CA's queue
 						String[] ids = query.getConversationId().split("_");
