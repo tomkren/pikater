@@ -90,7 +90,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				if (t.isSave_results()){
 					DataManagerService.saveResult(myAgent, t);
 				}
-				
+                node.computationFinished();
 				// fill the right queues in problem graph
                 //TODO: add after search strategy is completed
 //				if (t.getOutputByName(Task.InOutType.ERRORS) != null){

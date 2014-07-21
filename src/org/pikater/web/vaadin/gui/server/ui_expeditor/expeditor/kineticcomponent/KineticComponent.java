@@ -61,6 +61,8 @@ public class KineticComponent extends AbstractComponent
 	
 	/**
 	 * ID generator for boxes.
+	 * This generator never falls back and thus it is ensured that no two
+	 * boxes will have the same ID.
 	 */
 	private final SimpleIDGenerator boxIDGenerator;
 	
@@ -126,8 +128,6 @@ public class KineticComponent extends AbstractComponent
 			{
 				KineticComponent.this.absoluteLeft = absoluteX;
 				KineticComponent.this.absoluteTop = absoluteY;
-				
-				// MyNotifications.showInfo(null, "On load callback");
 			}
 			
 			@Override
@@ -141,14 +141,14 @@ public class KineticComponent extends AbstractComponent
 			public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
 			{
 				// TODO Auto-generated method stub
-				// MyNotifications.showInfo(null, "Boxes");
+				MyNotifications.showInfo(null, "Box set changed");
 			}
 
 			@Override
 			public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 			{
 				// TODO Auto-generated method stub
-				// MyNotifications.showInfo(null, "Edges");
+				MyNotifications.showInfo(null, "Edge set changed");
 			}
 			
 			@Override

@@ -54,6 +54,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	int computationId; 
 	int graphId;
 	ModelComputationNode computationNode;
+    NewOptionList options;
 	
 	public CAStartComputationStrategy (Agent_Manager manager, int computationId, 
 			int graphId, ModelComputationNode computationNode){
@@ -139,16 +140,19 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
 				
 		Agent agent = new Agent();
-        OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
-        NewOptionList options = new NewOptionList(optionEdge.getOptions());
-
+        if (options==null) {
+            OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
+            options = new NewOptionList(optionEdge.getOptions());
+        }
+        NewOptionList usedoptions=options;
         // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());
 		if (inputs.get("searchedoptions") != null){
+            inputs.get("options").block();
             SolutionEdge solutionEdge = (SolutionEdge)inputs.get("searchedoptions").getNext();
-			options =  fillOptionsWithSolution(options.getOptions(), solutionEdge.getOptions());
+            usedoptions =  fillOptionsWithSolution(options.getOptions(), solutionEdge.getOptions());
 		}
-		agent.setOptions(options.getOptions());
+		agent.setOptions(usedoptions.getOptions());
 		
 		Data data = new Data();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();

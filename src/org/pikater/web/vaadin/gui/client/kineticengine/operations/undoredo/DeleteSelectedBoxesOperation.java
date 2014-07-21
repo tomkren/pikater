@@ -8,13 +8,13 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.S
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 
-public class DeleteSelectedOperation extends BiDiOperation
+public class DeleteSelectedBoxesOperation extends BiDiOperation
 {
 	private final SelectionModule selectionModule;
 	private final ItemRegistrationModule itemRegistrationModule;
 	private final BoxGraphItemClient[] originalSelectedBoxes;
 	
-	public DeleteSelectedOperation(KineticEngine kineticState)
+	public DeleteSelectedBoxesOperation(KineticEngine kineticState)
 	{
 		super(kineticState);
 		
@@ -45,6 +45,6 @@ public class DeleteSelectedOperation extends BiDiOperation
 	@Override
 	public String toString()
 	{
-		return "DeleteSelectedOperation";
+		return "DeleteSelectionOperation";
 	}
 }
