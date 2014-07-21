@@ -1,5 +1,6 @@
 package org.pikater.core.ontology;
 
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -25,13 +26,13 @@ public class SearchOntology extends BeanOntology {
         try {
 
             String searchItemPackage = SearchItem.class.getPackage().getName();
-            
+            String boolPackage = BooleanValue.class.getPackage().getName();
             add(SearchSolution.class);
             add(ExecuteParameters.class);
             add(GetParameters.class);
 
             add(searchItemPackage);
-            
+            add(boolPackage);
             add(SearchItem.class);
             
 
