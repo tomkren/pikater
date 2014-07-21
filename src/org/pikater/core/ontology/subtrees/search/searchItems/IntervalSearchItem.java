@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.subtrees.search.searchItems;
 
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
@@ -53,6 +54,17 @@ public class IntervalSearchItem extends SearchItem {
             for (int i = 0; i < x; i++) {
                 float vFloat = floatMin + i * dv;
                 posVals.add(new FloatValue(vFloat));
+            }
+        }
+        else if (min instanceof DoubleValue)
+        {
+            double doubleMin=((DoubleValue)min).getValue();
+            double doubleMax=((DoubleValue)max).getValue();
+            int x = getNumber_of_values_to_try();
+            double dv = (doubleMax - doubleMin)/ (x - 1);
+            for (int i = 0; i < x; i++) {
+                double vFloat = doubleMin + i * dv;
+                posVals.add(new DoubleValue(vFloat));
             }
         }
             else if (min instanceof IntegerValue)
