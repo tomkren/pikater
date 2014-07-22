@@ -10,15 +10,24 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
@@ -31,14 +40,11 @@ import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.RecomendOntology;
+import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 
 public class Agent_Manager extends PikaterAgent {
@@ -69,6 +75,7 @@ public class Agent_Manager extends PikaterAgent {
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
+		ontologies.add(ResultOntology.getInstance());
 		
 		return ontologies;
 	}
