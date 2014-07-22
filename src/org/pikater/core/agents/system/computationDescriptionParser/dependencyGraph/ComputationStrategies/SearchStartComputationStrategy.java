@@ -72,13 +72,14 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		}
 		else{
 			// send results (errors) to search
+			ErrorEdge errorEdge = (ErrorEdge)(inputs.get("error").getNext());
+						
 			ACLMessage inform = new ACLMessage(ACLMessage.INFORM); 
-
-			Result result = new Result(null, evaluation);
-			
+			inform.setConversationId(graphId+"_"+computationNode.getId()+"_"+(errorEdge.getComputationId()).toString);
+			Result result = new Result(null, errorEdge.getEvaluation());			
 
 			try {
-				getContentManager().fillContent(inform, result);
+				myAgent.getContentManager().fillContent(inform, result);
 			} catch (CodecException e) {
 				myAgent.logError(e.getMessage(), e);
 				e.printStackTrace();
