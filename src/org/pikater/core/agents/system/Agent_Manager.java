@@ -59,6 +59,8 @@ public class Agent_Manager extends PikaterAgent {
 	public HashMap<Integer, ComputationCollectionItem> computationCollection =
 			new HashMap<Integer, ComputationCollectionItem>();
 	
+	public HashMap<String, ACLMessage> searchMessages =
+			new HashMap<String, ACLMessage>();
 	
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
@@ -148,7 +150,9 @@ public class Agent_Manager extends PikaterAgent {
 			
 			if (query != null) {
 				log(": a query message received from " + query.getSender().getName());
-
+				
+				searchMessages.put(query.getConversationId(), query);				
+				
 				try {
 					ContentElement content = getContentManager().extractContent(query);
 					if (((Action) content).getAction() instanceof ExecuteParameters) {
@@ -160,7 +164,7 @@ public class Agent_Manager extends PikaterAgent {
 						int graphId = Integer.parseInt(ids[0]);
 						int nodeId = Integer.parseInt(ids[1]);
 						int computationId = Integer.parseInt(ids[2]);
-						
+											
 						SearchComputationNode searchNode = 
 								(SearchComputationNode) computationCollection.get(graphId)
 									.getProblemGraph().getNode(nodeId); 

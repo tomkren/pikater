@@ -8,6 +8,7 @@ import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -16,6 +17,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
+import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
@@ -32,6 +34,10 @@ import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 
 
+
+
+
+import com.google.debugging.sourcemap.dev.protobuf.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,12 +81,20 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		else{
 			// send results (errors) to search
 			ErrorEdge errorEdge = (ErrorEdge)(inputs.get("error").getNext());
-						
-			ACLMessage inform = new ACLMessage(ACLMessage.INFORM); 
-			inform.setConversationId(graphId+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId()));
-			Result result = new Result(null, errorEdge.getEvaluation());			
+			
+			
+			String conversationID = graphId+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId());
+			ACLMessage query = myAgent.searchMessages.get(conversationID); 
+					
+			ACLMessage inform = query.createReply();
+			inform.setPerformative(ACLMessage.INFORM);
 
-			try {
+			try {			
+			
+				Action a = (Action)myAgent.getContentManager().extractContent(query);								
+				
+				Result result = new Result(a, errorEdge.getEvaluation());			
+
 				myAgent.getContentManager().fillContent(inform, result);
 			} catch (CodecException e) {
 				myAgent.logError(e.getMessage(), e);
@@ -91,6 +105,9 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 			}
 			
 			myAgent.send(inform);
+
+			computationNode.computationFinished();
+
 		}
 	
     }

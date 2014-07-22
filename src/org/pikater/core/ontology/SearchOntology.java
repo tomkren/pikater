@@ -5,6 +5,7 @@ import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
+import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -26,7 +27,8 @@ public class SearchOntology extends BeanOntology {
         try {
 
             String searchItemPackage = SearchItem.class.getPackage().getName();
-            String boolPackage = BooleanValue.class.getPackage().getName();
+            String boolPackage = BooleanValue.class.getPackage().getName();            
+            
             add(SearchSolution.class);
             add(ExecuteParameters.class);
             add(GetParameters.class);
@@ -34,7 +36,7 @@ public class SearchOntology extends BeanOntology {
             add(searchItemPackage);
             add(boolPackage);
             add(SearchItem.class);
-            
+            add(Evaluation.class);
 
         } catch (Exception e) {
             e.printStackTrace();
