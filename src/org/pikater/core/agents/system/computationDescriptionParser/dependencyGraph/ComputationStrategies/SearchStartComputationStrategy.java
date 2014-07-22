@@ -7,8 +7,6 @@ import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
-
-import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -17,7 +15,6 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
-import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
@@ -31,13 +28,6 @@ import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
-
-
-
-
-
-
-import com.google.debugging.sourcemap.dev.protobuf.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +46,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	Map<String,ComputationOutputBuffer> inputs;
     NewOptionList options;
     OptionEdge childOptions;
+    AID searchAID;
 
 	public SearchStartComputationStrategy (Agent_Manager manager, int computationId,
 			int graphId, SearchComputationNode computationNode){
@@ -67,9 +58,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 	public void execute(ComputationNode computation){
 		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
-		
-		Agent search = getSearchFromNode();
-		AID searchAID = myAgent.createAgent(search.getType());
+        if (searchAID==null) {
+            Agent search = getSearchFromNode();
+            myAgent.createAgent(search.getType());
+        }
 
 		inputs = computationNode.getInputs();
 		
