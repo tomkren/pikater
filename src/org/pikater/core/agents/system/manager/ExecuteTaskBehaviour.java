@@ -11,6 +11,7 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -90,6 +91,8 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				if (t.isSave_results()){
 					DataManagerService.saveResult(myAgent, t);
 				}
+                ErrorEdge errorEdge=new ErrorEdge(((Task)result.getValue()).getResult());
+                node.addToOutputAndProcess(errorEdge,"error");
                 node.computationFinished();
 				// fill the right queues in problem graph
                 //TODO: add after search strategy is completed

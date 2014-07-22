@@ -176,7 +176,7 @@
                                     <dataInputType>testingData</dataInputType>
                                 </testingData>
                             </provider>
-                            <type>RMSE</type>
+                            <type>error</type>
                         </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
                     </errors>
                     <search>
