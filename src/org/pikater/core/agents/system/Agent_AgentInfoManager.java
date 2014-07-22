@@ -17,6 +17,7 @@ import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
 import org.pikater.core.agents.system.agentInfoManager.AgentInfoManagerCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
@@ -53,6 +54,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AgentInfoOntology.getInstance());
+		ontologies.add(AgentManagementOntology.getInstance());
 
 		return ontologies;
 	}
@@ -133,7 +135,17 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		Map<String, AgentController> controlers = new HashMap<String, AgentController>();
 
+// TODO:
+//		List<AID> createdAIDs = new ArrayList<AID>();
+		
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
+				
+//			AID createdAID = createAgent(
+//					agentClassI.getName(), agentClassI.getName(), null);
+
+//			createdAIDs.add(createdAID);
+			
+
 			try {
 				PlatformController container = getContainerController();
 				AgentController agentControllerI = container.createNewAgent(
@@ -144,8 +156,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			} catch (ControllerException e) {
 				logError(e.getMessage(), e);
 			}
+
 		}
 		
+//		for (AID aidI : createdAIDs) {
+//			killAgent(aidI.getName());
+//		}
+
 		Thread shutDownAgents = new ShutDownAgents(controlers, this);
 		shutDownAgents.start();
 	}
