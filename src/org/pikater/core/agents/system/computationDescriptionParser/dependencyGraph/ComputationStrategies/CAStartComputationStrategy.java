@@ -53,10 +53,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	ModelComputationNode computationNode;
     NewOptionList options;
 	
-	public CAStartComputationStrategy (Agent_Manager manager, int computationId, 
+	public CAStartComputationStrategy (Agent_Manager manager, 
 			int graphId, ModelComputationNode computationNode){
 		myAgent = manager;
-		this.computationId = computationId;
         this.graphId = graphId;
         this.computationNode = computationNode;
 	}
@@ -158,6 +157,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		Task task = new Task();
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
+		task.setComputationId(computationId);
 		task.setAgent(agent);
 		task.setData(data);
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());

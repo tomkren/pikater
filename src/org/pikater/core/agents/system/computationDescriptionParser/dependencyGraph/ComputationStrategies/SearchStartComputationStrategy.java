@@ -3,6 +3,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
@@ -28,6 +29,7 @@ import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
+
 
 
 
@@ -63,14 +65,29 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 		inputs = computationNode.getInputs();
 		
-		if ( (ErrorEdge)inputs.get("error").getNext() == null){
+		if (inputs.get("error").isBlocked()){
 			// start new parameter search
-			myAgent.addBehaviour(new StartGettingParametersFromSearch(myAgent, originalRequest, prepareRequest(searchAID), this));			
+			myAgent.addBehaviour(new StartGettingParametersFromSearch(myAgent, originalRequest, prepareRequest(searchAID), this));
+			inputs.get("error").unblock();
 		}
 		else{
 			// send results (errors) to search
-			// ACLMessage inform = 
-			// myAgent.send(inform);
+			ACLMessage inform = new ACLMessage(ACLMessage.INFORM); 
+
+			Result result = new Result(null, evaluation);
+			
+
+			try {
+				getContentManager().fillContent(inform, result);
+			} catch (CodecException e) {
+				myAgent.logError(e.getMessage(), e);
+				e.printStackTrace();
+			} catch (OntologyException e) {
+				myAgent.logError(e.getMessage(), e);
+				e.printStackTrace();
+			}
+			
+			myAgent.send(inform);
 		}
 	
     }

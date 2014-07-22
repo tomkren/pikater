@@ -152,6 +152,8 @@ public class Agent_Manager extends PikaterAgent {
 						String[] ids = query.getConversationId().split("_");
 						int graphId = Integer.parseInt(ids[0]);
 						int nodeId = Integer.parseInt(ids[1]);
+						int computationId = Integer.parseInt(ids[2]);
+						
 						SearchComputationNode searchNode = 
 								(SearchComputationNode) computationCollection.get(graphId)
 									.getProblemGraph().getNode(nodeId); 
@@ -160,6 +162,7 @@ public class Agent_Manager extends PikaterAgent {
                         for (SearchSolution ss:ep.getSolutions())
                         {
                             SolutionEdge se = new SolutionEdge();
+                            se.setComputationID(computationId);
                             se.setOptions(ss);
                             searchNode.addToOutputAndProcess(se, "searchedoptions");
                         }
