@@ -40,7 +40,6 @@ import java.util.Map;
  */
 public class SearchStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
-	int computationId;
 	int graphId;
 	SearchComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
@@ -48,10 +47,9 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
     OptionEdge childOptions;
     AID searchAID;
 
-	public SearchStartComputationStrategy (Agent_Manager manager, int computationId,
+	public SearchStartComputationStrategy (Agent_Manager manager,
 			int graphId, SearchComputationNode computationNode){
 		myAgent = manager;
-		this.computationId = computationId;
         this.graphId = graphId;
         this.computationNode = computationNode;
 	}
@@ -77,7 +75,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 			
 			String conversationID = graphId+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId());
 			ACLMessage query = myAgent.searchMessages.get(conversationID); 
-					
+				
 			ACLMessage inform = query.createReply();
 			inform.setPerformative(ACLMessage.INFORM);
 
@@ -112,7 +110,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		msg.setLanguage(myAgent.getCodec().getName());
 		msg.setOntology(SearchOntology.getInstance().getName());
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationId));
+		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationNode.getId()));
 
 		GetParameters gp = new GetParameters();
         if (childOptions==null)
