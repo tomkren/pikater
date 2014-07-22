@@ -24,6 +24,10 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 		
         myAgent.log("StartGettingParametersFromSearch behavior created.", 2);
 	}
+
+	protected void handleAgree(ACLMessage agree) {
+		strategy.getComputationNode().computationFinished();
+	}
 			
 	protected void handleInform(ACLMessage inform) {
 		// sending of Options have been finished

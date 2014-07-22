@@ -104,7 +104,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 				e.printStackTrace();
 			}
 			
-			myAgent.send(inform);			
+			myAgent.send(inform);
+
+			computationNode.computationFinished();
+
 		}
 	
     }

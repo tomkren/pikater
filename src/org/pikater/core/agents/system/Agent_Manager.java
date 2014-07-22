@@ -164,9 +164,7 @@ public class Agent_Manager extends PikaterAgent {
 						int graphId = Integer.parseInt(ids[0]);
 						int nodeId = Integer.parseInt(ids[1]);
 						int computationId = Integer.parseInt(ids[2]);
-						
-						computationCollection.get(graphId).getProblemGraph().getNode(nodeId).computationFinished();
-						
+											
 						SearchComputationNode searchNode = 
 								(SearchComputationNode) computationCollection.get(graphId)
 									.getProblemGraph().getNode(nodeId); 
