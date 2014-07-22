@@ -115,13 +115,14 @@ public class ManagerAgentRequestResponder {
         KillAgent killAgent = (KillAgent) a.getAction();
 
         String agentName = killAgent.getName();
+/* 
         AID agentAID = new AID(agentName, false);
         
         managerAgent.log("Request to kill " + agentName + " agent");
         Ontology ontology = AgentManagementOntology.getInstance();
         Codec codec = managerAgent.getCodec();
         
-        
+      
         ACLMessage msgToAgent = request.createReply();
         msgToAgent.setPerformative(ACLMessage.REQUEST);
         msgToAgent.setLanguage(codec.getName());
@@ -132,11 +133,9 @@ public class ManagerAgentRequestResponder {
         	managerAgent.getContentManager().fillContent(msgToAgent, actionToAgent);
         	
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    managerAgent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    managerAgent.logError(e.getMessage(), e);
 		}
         
         String replyText = null;
@@ -145,15 +144,19 @@ public class ManagerAgentRequestResponder {
 			replyText = replyFromAgent.getContent();
 
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    managerAgent.logError(e.getMessage(), e);
 		}
 
 		managerAgent.log("Reply from " + agentName + " : " + replyText);
+*/
+        boolean isKilled = managerAgent._KillAgent(agentName);
 
-		
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
+        if (isKilled) {
+        	reply.setPerformative(ACLMessage.AGREE);
+        } else {
+        	reply.setPerformative(ACLMessage.FAILURE);
+        }
 		return reply;
 	}
 	

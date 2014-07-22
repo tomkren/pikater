@@ -29,9 +29,9 @@ import org.pikater.core.ontology.subtrees.management.SaveAgent;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Agent_ManagerAgent extends PikaterAgent {
 
@@ -40,7 +40,8 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	 */
 	private static final long serialVersionUID = 4898611781694963107L;
 
-	private Map<String, Integer> agentTypeAndCount = new HashMap<String, Integer>();
+	private Map<String, AgentController> agentsNames =
+			new HashMap<String, AgentController>();
 	private ManagerAgentRequestResponder responder =
 			new ManagerAgentRequestResponder(this);
 
@@ -169,6 +170,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	
 	private void doCreateAgent(String name, String type, PlatformController container, Argument[] args) throws ControllerException {
 		AgentController agent = container.createNewAgent(name, type, args);
+		agentsNames.put(name, agent);
 		agent.start();
 	}
 
@@ -196,5 +198,23 @@ public class Agent_ManagerAgent extends PikaterAgent {
 			}
 		}
 		return name;
+	}
+	
+	public boolean _KillAgent(String name) {
+		
+		if (! agentsNames.containsKey(name)) {
+			return false;
+		}
+		
+		AgentController agentController = agentsNames.get(name);
+		agentsNames.remove(name);
+		
+		try {
+			agentController.kill();
+		} catch (StaleProxyException e) {
+			logError(e.getMessage(), e);
+		}
+		
+		return true;
 	}
 }
