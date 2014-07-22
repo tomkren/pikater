@@ -100,7 +100,7 @@ public class Agent_Planner extends PikaterAgent {
 		registerWithDF(AgentNames.PLANNER);
 
 		// waiting to start ManagerAgent
-		doWait(3000);
+		doWait(5000);
 
 		initCPUCores();
 		
