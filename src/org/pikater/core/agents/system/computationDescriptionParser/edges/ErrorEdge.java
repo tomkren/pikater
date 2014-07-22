@@ -10,9 +10,11 @@ import org.pikater.core.ontology.subtrees.task.Evaluation;
  */
 public class ErrorEdge extends EdgeValue {
     private Evaluation evaluation;
+    private int computationId;
 
-    public ErrorEdge(Evaluation evaluation) {
+    public ErrorEdge(Evaluation evaluation,int computationId) {
         this.evaluation = evaluation;
+        this.computationId = computationId;
     }
 
     public Evaluation getEvaluation() {
@@ -21,5 +23,14 @@ public class ErrorEdge extends EdgeValue {
 
     public void setEvaluation(Evaluation evaluation) {
         this.evaluation = evaluation;
+    }
+
+    public int getComputationId() {
+        return computationId;
+    }
+
+    public void setComputationId(int computationId)
+    {
+        this.computationId=computationId;
     }
 }

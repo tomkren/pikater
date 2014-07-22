@@ -91,7 +91,8 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				if (t.isSave_results()){
 					DataManagerService.saveResult(myAgent, t);
 				}
-                ErrorEdge errorEdge=new ErrorEdge(((Task)result.getValue()).getResult());
+                Task task=(Task)result.getValue();
+                ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationId());
                 node.addToOutputAndProcess(errorEdge,"error");
                 node.computationFinished();
 				// fill the right queues in problem graph

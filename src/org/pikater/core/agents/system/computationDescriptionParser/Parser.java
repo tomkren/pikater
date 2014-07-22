@@ -103,7 +103,7 @@ public class Parser {
         StandardBuffer<ErrorEdge> buffer=new StandardBuffer<>(errorNode,child);
         errorNode.addBufferToOutput(errorDescription.getType(), buffer);
         child.addInput(errorDescription.getType(),buffer);
-        buffer.insert(new ErrorEdge(null));
+        buffer.block();
     }
 
     //This is the root of all parsing
