@@ -1,13 +1,16 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
+import java.util.List;
+
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogComponent;
 
 import com.vaadin.ui.PasswordField;
 
-public class ChangePasswordForm extends CustomFormLayout
+public abstract class ChangePasswordForm extends CustomFormLayout implements IDialogComponent
 {
 	private static final long serialVersionUID = 5179296189317359241L;
 
@@ -66,5 +69,14 @@ public class ChangePasswordForm extends CustomFormLayout
 	public String getChangedPassword()
 	{
 		return pf_newPassword.getValue();
+	}
+	
+	//--------------------------------------------------------------------
+	// METHODS DEFINING THIS FORM'S BEHAVIOUR AS A PART OF A DIALOG
+
+	@Override
+	public void addArgs(List<Object> arguments)
+	{
+		arguments.add(getChangedPassword());
 	}
 }

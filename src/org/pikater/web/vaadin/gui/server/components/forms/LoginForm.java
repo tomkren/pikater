@@ -1,12 +1,15 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
+import java.util.List;
+
 import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogResultPreparer;
 
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
-public class LoginForm extends CustomFormLayout
+public class LoginForm extends CustomFormLayout implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = -2356468027629344476L;
 	
@@ -38,5 +41,15 @@ public class LoginForm extends CustomFormLayout
 	public String getPassword()
 	{
 		return passwordField.getValue();
+	}
+	
+	//--------------------------------------------------------------------
+	// METHODS DEFINING THIS FORM'S BEHAVIOUR AS A PART OF A DIALOG
+
+	@Override
+	public void addArgs(List<Object> arguments)
+	{
+		arguments.add(getLogin());
+		arguments.add(getPassword());
 	}
 }

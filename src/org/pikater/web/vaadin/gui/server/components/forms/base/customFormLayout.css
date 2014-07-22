@@ -1,0 +1,6 @@
+@CHARSET "US-ASCII";
+
+.customFormLayout .v-formlayout-captioncell
+{
+	/* text-align: left; - probably looks even worse... */
+}

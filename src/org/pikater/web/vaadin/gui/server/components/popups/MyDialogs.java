@@ -10,10 +10,10 @@ import org.pikater.web.vaadin.gui.server.components.forms.ChangePasswordForm;
 import org.pikater.web.vaadin.gui.server.components.forms.CreateAccountForm;
 import org.pikater.web.vaadin.gui.server.components.forms.LoginForm;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
-import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.TextField;
 
 import de.steinwedel.messagebox.ButtonId;
@@ -73,7 +73,7 @@ public class MyDialogs
 	//----------------------------------------------------------------
 	// PUBLIC ROUTINES FOR DISPLAYING GENERAL USE DIALOGS
 	
-	public static void info(String title, String message)
+	public static MessageBox info(String title, String message)
 	{
 		MessageBox mb = MessageBox.showPlain(
 				Icon.INFO,
@@ -83,16 +83,18 @@ public class MyDialogs
 		);
 		setupMessageBox(mb, true);
 		bindActionsToKeyboard(mb, ButtonId.CLOSE, true);
+		return mb;
 	}
 	
-	public static void error(String title, String message)
+	public static MessageBox error(String title, String message)
 	{
 		MessageBox mb = MessageBox.showPlain(Icon.ERROR, title == null ? "Error" : title, message, ButtonId.OK);
 		setupMessageBox(mb, true);
 		bindActionsToKeyboard(mb, ButtonId.OK, true);
+		return mb;
 	}
 	
-	public static void confirm(String title, String message, IDialogResultHandler resultHandler)
+	public static MessageBox confirm(String title, String message, IDialogResultHandler resultHandler)
 	{
 		MyMessageBoxListener listener = MyMessageBoxListener.getDefault(resultHandler);
 		MessageBox mb = MessageBox.showPlain(
@@ -105,9 +107,10 @@ public class MyDialogs
 		listener.setParentBox(mb); // don't forget this!
 		setupMessageBox(mb, true);
 		bindActionsToKeyboard(mb, ButtonId.YES, true);
+		return mb;
 	}
 	
-	public static void textPrompt(String title, String inputLabel, final IDialogResultHandler resultHandler)
+	public static MessageBox textPrompt(String title, String inputLabel, final IDialogResultHandler resultHandler)
 	{
 		final TextField tf = new TextField();
 		tf.setInputPrompt("Enter value");
@@ -135,30 +138,27 @@ public class MyDialogs
 		listener.setParentBox(mb); // don't forget this!
 		setupMessageBox(mb, false);
 		bindActionsToKeyboard(mb, ButtonId.OK, true);
+		return mb;
 	}
 	
 	// -------------------------------------------------------------------------
 	// ROUTINES FOR DISPLAYING SPECIALIZED DIALOGS
 	
-	public static void loginDialog(final IDialogResultHandler resultHandler)
+	public static MessageBox loginDialog(final IDialogResultHandler resultHandler)
 	{
-		final LoginForm loginForm = new LoginForm();
-		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(loginForm, resultHandler)
+		LoginForm loginForm = new LoginForm();
+		MyComponentMessageBoxListenerWithExternalResultHandler<LoginForm> listener = 
+				new MyComponentMessageBoxListenerWithExternalResultHandler<LoginForm>(loginForm, resultHandler)
 		{
-			@Override
-			protected void addArgs(List<Object> arguments)
-			{
-				arguments.add(loginForm.getLogin());
-				arguments.add(loginForm.getPassword());
-			}
-			
 			@Override
 			protected boolean handleCustomButton(ButtonId button)
 			{
 				if(button == ButtonId.CUSTOM_1)
 				{
-					createAccountDialog(new IDialogResultHandler()
+					createAccountDialog(new CreateAccountForm()
 					{
+						private static final long serialVersionUID = 7554808434070423018L;
+
 						@Override
 						public boolean handleResult(Object[] args)
 						{
@@ -187,21 +187,12 @@ public class MyDialogs
 		setupMessageBox(mb, false);
 		bindActionsToKeyboard(mb, ButtonId.OK, false);
 		mb.getButton(ButtonId.CUSTOM_1).setCaption("Create account");
+		return mb;
 	}
 	
-	public static void createAccountDialog(final IDialogResultHandler resultHandler)
+	public static MessageBox createAccountDialog(CreateAccountForm caForm)
 	{
-		final CreateAccountForm caForm = new CreateAccountForm();
-		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(caForm, resultHandler)
-		{
-			@Override
-			protected void addArgs(List<Object> arguments)
-			{
-				arguments.add(caForm.getLogin());
-				arguments.add(caForm.getPassword());
-				arguments.add(caForm.getEmail());
-			}
-		};
+		MyComponentMessageBoxListener<CreateAccountForm> listener = new MyComponentMessageBoxListener<CreateAccountForm>(caForm);
 		MessageBox mb = MessageBox.showCustomized(
 				Icon.NONE,
 				"Create a new account",
@@ -212,19 +203,12 @@ public class MyDialogs
 		listener.setParentBox(mb); // don't forget this!
 		setupMessageBox(mb, false);
 		bindActionsToKeyboard(mb, ButtonId.OK, true);
+		return mb;
 	}
 	
-	public static void passwordChangeDialog(JPAUser currentUser, final IDialogResultHandler resultHandler)
+	public static MessageBox passwordChangeDialog(ChangePasswordForm cpForm)
 	{
-		final ChangePasswordForm cpForm = new ChangePasswordForm(currentUser);
-		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(cpForm, resultHandler)
-		{
-			@Override
-			protected void addArgs(List<Object> arguments)
-			{
-				arguments.add(cpForm.getChangedPassword());
-			}
-		};
+		MyComponentMessageBoxListener<ChangePasswordForm> listener = new MyComponentMessageBoxListener<ChangePasswordForm>(cpForm);
 		MessageBox mb = MessageBox.showCustomized(
 				Icon.NONE,
 				"Change password",
@@ -235,37 +219,65 @@ public class MyDialogs
 		listener.setParentBox(mb); // don't forget this!
 		setupMessageBox(mb, false);
 		bindActionsToKeyboard(mb, ButtonId.OK, true);
+		return mb;
 	}
 	
-	public static void saveExperimentDialog(final IDialogResultHandler resultHandler)
+	public static MessageBox saveExperimentDialog(SaveExperimentForm seForm)
 	{
-		final SaveExperimentForm seForm = new SaveExperimentForm();
-		MyFormMessageBoxListener listener = new MyFormMessageBoxListener(seForm, resultHandler)
-		{
-			@Override
-			protected void addArgs(List<Object> arguments)
-			{
-				arguments.add(seForm.getExperimentName());
-				arguments.add(seForm.getPriorityAssignedByUser());
-				arguments.add(seForm.getComputationEstimateInHours());
-				arguments.add(seForm.getSendEmailWhenFinished());
-				arguments.add(seForm.getExperimentNote());
-			}
-		};
+		MyComponentMessageBoxListener<SaveExperimentForm> listener = 
+				new MyComponentMessageBoxListener<SaveExperimentForm>(seForm);
 		MessageBox mb = MessageBox.showCustomized(
 				Icon.NONE,
 				"Save experiment from active tab",
 				seForm,
+				listener,
+				ButtonId.SAVE, ButtonId.CANCEL
+		);
+		listener.setParentBox(mb); // don't forget this!
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.SAVE, true);
+		return mb;
+	}
+	
+	public static <T extends Component & IDialogComponent> MessageBox loadExperimentDialog(T component)
+	{
+		MyComponentMessageBoxListener<T> listener = new MyComponentMessageBoxListener<T>(component);
+		MessageBox mb = MessageBox.showCustomized(
+				Icon.NONE,
+				"Choose experiment to load into a new tab",
+				component,
 				listener,
 				ButtonId.OK, ButtonId.CANCEL
 		);
 		listener.setParentBox(mb); // don't forget this!
 		setupMessageBox(mb, false);
 		bindActionsToKeyboard(mb, ButtonId.OK, true);
+		return mb;
 	}
 	
 	// -------------------------------------------------------------------------
-	// PUBLIC DIALOG RESULTS
+	// PUBLIC TYPES
+	
+	public static interface IDialogResultValidator
+	{
+		/**
+		 * This method is called when the "OK" button is clicked in the dialog. Use
+		 * it to indicate whether conditions are prepared for handling the dialog result. 
+		 * @return true if no errors will occur when dialog result is handled
+		 */
+		boolean isResultReadyToBeHandled();
+	}
+	
+	public static interface IDialogResultPreparer extends IDialogResultValidator
+	{
+		/**
+		 * This method is called to gather the dialog result arguments/variables before
+		 * being passed to {@link IDialogResultHandler#handleResult(Object[])}.</br>
+		 * Only called if the {@link #isResultReadyToBeHandled()} method returns true.
+		 * @param arguments the list to add arguments to
+		 */
+		void addArgs(List<Object> arguments);
+	}
 	
 	public static interface IDialogResultHandler
 	{
@@ -274,11 +286,15 @@ public class MyDialogs
 		 * @param args
 		 * @return true if the dialog is no longer needed and should close
 		 */
-		public boolean handleResult(Object[] args);
+		boolean handleResult(Object[] args);
+	}
+	
+	public static interface IDialogComponent extends IDialogResultPreparer, IDialogResultHandler
+	{
 	}
 	
 	// -------------------------------------------------------------------------
-	// SPECIAL INNER TYPE
+	// SPECIAL INNER TYPES
 
 	private abstract static class MyMessageBoxListener implements MessageBoxListener
 	{
@@ -343,8 +359,9 @@ public class MyDialogs
 		protected abstract boolean allowOKHandle();
 		
 		/**
-		 * This method is called after the {@link #allowOKHandle()} method.
-		 * Used to add arguments to the result handler passed to this listener.
+		 * This method is called to gather the dialog result arguments/variables before
+		 * being passed to {@link IDialogResultHandler#handleResult(Object[])}.</br>
+		 * Only called if the {@link IDialogComponent#isResultReadyToBeHandled()} method returns true.
 		 * @param arguments the list to add arguments to
 		 */
 		protected abstract void addArgs(List<Object> arguments);
@@ -380,21 +397,51 @@ public class MyDialogs
 		}
 	}
 	
-	private abstract static class MyFormMessageBoxListener extends MyMessageBoxListener
+	private static class MyComponentMessageBoxListenerWithExternalResultHandler<T extends Component & IDialogResultPreparer> extends MyMessageBoxListener
 	{
-		private final CustomFormLayout form; 
+		private final T component; 
 
-		public MyFormMessageBoxListener(CustomFormLayout form, IDialogResultHandler resultHandler)
+		public MyComponentMessageBoxListenerWithExternalResultHandler(T component, IDialogResultHandler externalResultHandler)
 		{
-			super(resultHandler);
+			super(externalResultHandler);
 			
-			this.form = form;
+			this.component = component;
 		}
 		
 		@Override
 		protected boolean allowOKHandle()
 		{
-			return form.isFormValidAndUpdated();
+			return component.isResultReadyToBeHandled();
+		}
+		
+		@Override
+		protected void addArgs(List<Object> arguments)
+		{
+			component.addArgs(arguments);
+		}
+	}
+	
+	private static class MyComponentMessageBoxListener<T extends Component & IDialogComponent> extends MyMessageBoxListener
+	{
+		private final T component; 
+
+		public MyComponentMessageBoxListener(T component)
+		{
+			super(component);
+			
+			this.component = component;
+		}
+		
+		@Override
+		protected boolean allowOKHandle()
+		{
+			return component.isResultReadyToBeHandled();
+		}
+		
+		@Override
+		protected void addArgs(List<Object> arguments)
+		{
+			component.addArgs(arguments);
 		}
 	}
 }
