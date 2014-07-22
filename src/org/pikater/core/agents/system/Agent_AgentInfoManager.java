@@ -140,8 +140,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
 				
-			AID createdAID = createAgent(
-					agentClassI.getName(), agentClassI.getName(), null);
+//			AID createdAID = createAgent(
+//					agentClassI.getName(), agentClassI.getName(), null);
 
 //			createdAIDs.add(createdAID);
 			
