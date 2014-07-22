@@ -13,7 +13,6 @@ import jade.domain.FIPAException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.EntityManagerFactoryInfo;
-import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;
@@ -235,7 +234,7 @@ public abstract class PikaterAgent extends Agent {
 	}
 	
 	public AID createAgent(String type, String name, Arguments options){
-		ManagerAgentCommunicator communicator=new ManagerAgentCommunicator(AgentNames.MANAGER_AGENT);
+		ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
 		return communicator.createAgent(this,type,null,null);
 	}
 	
@@ -246,4 +245,10 @@ public abstract class PikaterAgent extends Agent {
 	public AID createAgent(org.pikater.core.ontology.subtrees.management.Agent agent){
 		return createAgent(agent.getType(), agent.getName(), null ); // TODO agent.getOptions ... predelat optiony na argumenty
 	}
+	
+	public boolean killAgent(String agentName){
+		ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
+		return communicator.killAgent(this, agentName);
+	}
+	
 }

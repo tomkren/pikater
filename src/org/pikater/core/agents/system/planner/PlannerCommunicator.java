@@ -14,7 +14,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.configuration.Arguments;
@@ -61,8 +60,7 @@ public class PlannerCommunicator {
 		
 		String CAtype = task.getAgent().getType();
 
-		ManagerAgentCommunicator comm = new ManagerAgentCommunicator(
-				AgentNames.MANAGER_AGENT);
+		ManagerAgentCommunicator comm = new ManagerAgentCommunicator();
 
 		agent.log("Sending request to create CA " + CAtype);
 		AID caAID = comm.createAgent(agent, CAtype, CAtype,

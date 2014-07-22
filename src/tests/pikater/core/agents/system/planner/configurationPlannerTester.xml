@@ -15,12 +15,12 @@
 
         <agent type="tests.pikater.core.agents.system.planner.Agent_PlannerTester" name="PlannerTester">
         </agent>
-
+<!--
         <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
                 <argument key="sniffed" value="Planner" sendOnlyValue="true" />
             </arguments>
         </agent>
-
+-->
     </agents>
 </configuration>
