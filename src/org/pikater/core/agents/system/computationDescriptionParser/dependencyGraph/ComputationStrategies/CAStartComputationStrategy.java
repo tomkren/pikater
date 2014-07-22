@@ -48,7 +48,6 @@ import java.util.Map;
 public class CAStartComputationStrategy implements StartComputationStrategy{
 	
 	Agent_Manager myAgent;
-	int computationId; 
 	int graphId;
 	ModelComputationNode computationNode;
     NewOptionList options;
@@ -132,10 +131,12 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
         NewOptionList usedoptions=options;
         // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());
+        Task task = new Task();
 		if (inputs.get("searchedoptions") != null){
             inputs.get("options").block();
             SolutionEdge solutionEdge = (SolutionEdge)inputs.get("searchedoptions").getNext();
             usedoptions =  fillOptionsWithSolution(options.getOptions(), solutionEdge.getOptions());
+            task.setComputationId(solutionEdge.getComputationID());
 		}
 		agent.setOptions(usedoptions.getOptions());
 		
@@ -153,12 +154,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		data.setExternal_test_file_name(testing);
 		data.setTestFileName(getHashOfFile(training, 1));
 		data.setTrainFileName(getHashOfFile(testing, 1));
-		
-		Task task = new Task();
+
 		task.setSave_results(true);
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
-		task.setComputationId(computationId);
 		task.setAgent(agent);
 		task.setData(data);
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());
