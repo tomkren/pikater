@@ -155,6 +155,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		data.setTrainFileName(getHashOfFile(testing, 1));
 		
 		Task task = new Task();
+		task.setSave_results(true);
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
 		task.setComputationId(computationId);
