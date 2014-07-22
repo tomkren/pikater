@@ -112,12 +112,6 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	
     }
 
-
-	public void finished(){
-		// TODO mozna? Je tady neco potreba?
-	}
-	
-
 	private ACLMessage prepareRequest(AID receiver){
 		// prepare request for the search agent
 
