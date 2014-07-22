@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class SolutionEdge extends EdgeValue {
     private SearchSolution options;
+    private int computationID;
 
     public SearchSolution getOptions() {
         return options;
@@ -18,4 +19,12 @@ public class SolutionEdge extends EdgeValue {
     public void setOptions(SearchSolution options) {
         this.options = options;
     }
+
+	public int getComputationID() {
+		return computationID;
+	}
+
+	public void setComputationID(int computationID) {
+		this.computationID = computationID;
+	}
 }

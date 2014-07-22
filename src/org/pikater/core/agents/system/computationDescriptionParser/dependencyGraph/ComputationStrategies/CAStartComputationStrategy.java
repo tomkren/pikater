@@ -1,10 +1,5 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -16,7 +11,6 @@ import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
-
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
@@ -24,12 +18,11 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
+import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -39,9 +32,13 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
-import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Klara
@@ -56,10 +53,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	ModelComputationNode computationNode;
     NewOptionList options;
 	
-	public CAStartComputationStrategy (Agent_Manager manager, int computationId, 
+	public CAStartComputationStrategy (Agent_Manager manager, 
 			int graphId, ModelComputationNode computationNode){
 		myAgent = manager;
-		this.computationId = computationId;
         this.graphId = graphId;
         this.computationNode = computationNode;
 	}
@@ -67,18 +63,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	public void execute(ComputationNode computation){    	
 		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
 		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, this));    	
-    }		
-	
-	public void processError(ArrayList<Eval> errors){
-        for (Eval eval:errors)
-        {
-            if (computationNode.ContainsOutput(eval.getName()))
-            {
-                ErrorEdge ee = new ErrorEdge(eval.getValue());
-                computationNode.addToOutputAndProcess(ee, "errors");
-            }
-        }
-	}
+    }
 		
 	public void processValidation(String dataSourceName){
     	DataSourceEdge dse = new DataSourceEdge();
@@ -170,8 +155,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		data.setTrainFileName(getHashOfFile(testing, 1));
 		
 		Task task = new Task();
+		task.setSave_results(true);
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
+		task.setComputationId(computationId);
 		task.setAgent(agent);
 		task.setData(data);
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());

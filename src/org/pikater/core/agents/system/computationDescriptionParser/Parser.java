@@ -103,7 +103,7 @@ public class Parser {
         StandardBuffer<ErrorEdge> buffer=new StandardBuffer<>(errorNode,child);
         errorNode.addBufferToOutput(errorDescription.getType(), buffer);
         child.addInput(errorDescription.getType(),buffer);
-        buffer.insert(new ErrorEdge(Float.MAX_VALUE));
+        buffer.block();
     }
 
     //This is the root of all parsing
@@ -138,7 +138,7 @@ public class Parser {
         if (!alreadyProcessed.containsKey(computingAgent.getId()))
         {
             ModelComputationNode node= new ModelComputationNode();
-            CAStartComputationStrategy strategy=new CAStartComputationStrategy(agent,node.getId(),1,node);
+            CAStartComputationStrategy strategy=new CAStartComputationStrategy(agent,1,node);
             node.setStartBehavior(strategy);
             alreadyProcessed.put(computingAgent.getId(),node);
 

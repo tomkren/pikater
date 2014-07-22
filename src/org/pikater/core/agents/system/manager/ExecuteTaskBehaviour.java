@@ -11,6 +11,7 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -90,15 +91,10 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				if (t.isSave_results()){
 					DataManagerService.saveResult(myAgent, t);
 				}
+                Task task=(Task)result.getValue();
+                ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationId());
+                node.addToOutputAndProcess(errorEdge,"error");
                 node.computationFinished();
-				// fill the right queues in problem graph
-                //TODO: add after search strategy is completed
-//				if (t.getOutputByName(Task.InOutType.ERRORS) != null){
-//					@SuppressWarnings("unchecked")
-//					ArrayList<Eval> errors = (ArrayList<Eval>) t.getOutputByName(Task.InOutType.ERRORS);
-//
-//					strategy.processError(errors);
-//				}
 				     //TODO: what is this? just send labeled data?
 //				if (t.getOutputByName(Task.InOutType.VALIDATION) != null){
 //					String dataSourceName = (String) t.getOutputByName(Task.InOutType.VALIDATION);

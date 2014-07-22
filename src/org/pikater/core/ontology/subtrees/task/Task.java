@@ -71,6 +71,7 @@ public class Task implements Concept {
     // administrative:
     private int graphId;
     private int nodeId;
+    private int computationId;
 
     private ArrayList<TaskOutput> output; // list of outputs
 
@@ -167,5 +168,13 @@ public class Task implements Concept {
         }
         return null;
     }
+
+	public int getComputationId() {
+		return computationId;
+	}
+
+	public void setComputationId(int computationId) {
+		this.computationId = computationId;
+	}
 
 }

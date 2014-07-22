@@ -1,18 +1,17 @@
 package xmlGenerator;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 //Example: single datasource, search the space of parameters of single computation model
 // Save the results of the best iteration of search
@@ -27,7 +26,7 @@ public final class Input02 {
         NewOption optionS = new NewOption("L",0.5);
         
         NewOption optionB = new NewOption("M",
-        		new QuestionMarkRange(new DoubleValue(0), new DoubleValue(1), 5)
+        		new QuestionMarkRange(new DoubleValue(0), new DoubleValue(1), 20)
         		);
 
         //Create new computing agent, add options and datasource that we have created above
@@ -56,9 +55,9 @@ public final class Input02 {
 
         //Set error provider
         ErrorDescription errorDescription=new ErrorDescription();
-        errorDescription.setType("RMSE");
+        errorDescription.setType("error");
         errorDescription.setProvider(comAgent);
-        complex.setErrors(new ArrayList<ErrorDescription>(Arrays.asList( errorDescription)) );
+        complex.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
 
         // set DataSource
         // Note that the data provider is complex.
@@ -70,7 +69,7 @@ public final class Input02 {
         FileDataSaver saver = new FileDataSaver();
         saver.setDataSource(computingDataSource);
 
-        List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
+        List<FileDataSaver> roots = new ArrayList<>();
         roots.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();
