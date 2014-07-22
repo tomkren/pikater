@@ -75,7 +75,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 			ErrorEdge errorEdge = (ErrorEdge)(inputs.get("error").getNext());
 						
 			ACLMessage inform = new ACLMessage(ACLMessage.INFORM); 
-			inform.setConversationId(graphId+"_"+computationNode.getId()+"_"+(errorEdge.getComputationId()).toString);
+			inform.setConversationId(graphId+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId()));
 			Result result = new Result(null, errorEdge.getEvaluation());			
 
 			try {
