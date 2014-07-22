@@ -198,4 +198,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		return new_schema;
 	}
 
+    public SearchComputationNode getComputationNode() {
+        return computationNode;
+    }
 }
