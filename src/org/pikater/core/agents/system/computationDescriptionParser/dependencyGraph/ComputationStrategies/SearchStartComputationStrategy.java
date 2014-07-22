@@ -12,6 +12,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.ComputationOu
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.SearchOntology;
@@ -29,6 +30,7 @@ import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	int computationId;
 	int graphId;
 	SearchComputationNode computationNode;
-
+	Map<String,ComputationOutputBuffer> inputs;
 
 	public SearchStartComputationStrategy (Agent_Manager manager, int computationId,
 			int graphId, SearchComputationNode computationNode){
@@ -59,7 +61,18 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		Agent search = getSearchFromNode();
 		AID searchAID = myAgent.createAgent(search.getType());
 
-		myAgent.addBehaviour(new StartGettingParametersFromSearch(myAgent, originalRequest, prepareRequest(searchAID), this));
+		inputs = computationNode.getInputs();
+		
+		if ( (ErrorEdge)inputs.get("error").getNext() == null){
+			// start new parameter search
+			myAgent.addBehaviour(new StartGettingParametersFromSearch(myAgent, originalRequest, prepareRequest(searchAID), this));			
+		}
+		else{
+			// send results (errors) to search
+			// ACLMessage inform = 
+			// myAgent.send(inform);
+		}
+	
     }
 
 
@@ -70,8 +83,6 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 	private ACLMessage prepareRequest(AID receiver){
 		// prepare request for the search agent
-
-		Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
 
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(receiver);
