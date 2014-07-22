@@ -3,6 +3,13 @@ package org.pikater.core.agents.experiment.computing;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
+import org.pikater.core.ontology.subtrees.attribute.Instance;
+import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
+import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.RBFNetwork;
@@ -11,34 +18,25 @@ import weka.core.Instances;
 import java.util.Date;
 import java.util.Random;
 
-import org.pikater.core.ontology.subtrees.attribute.Instance;
-import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.task.Eval;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
-
 public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private static final long serialVersionUID = -3594051562022044000L;
 	
 	private String DURATION_SERVICE_REGRESSION = "DurationServiceRegression";
 	private String DurationServiceRegression_output_prefix = "  --d-- ";
-
 	
 	protected abstract Classifier getClassifierClass();
+    protected Classifier classifier;
 
 
 	@Override
 	public String getAgentType() {
 		
 		Classifier classifier = new RBFNetwork();
-		
+
 		return classifier.getClass().getName();
 	}
-	
+
 	@Override
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
@@ -48,15 +46,16 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		}
 		log("Training...", 2);
 		log("Options: " + getOptions());
-
-		if(getClassifierClass() == null)
+        classifier=getClassifierClass();
+		if(classifier == null)
 			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
 		if (options.length > 0) {
-			getClassifierClass().setOptions(options);
+            //this is destructive, the options array will be emptied
+			classifier.setOptions(options);
 		}
 		
 		long start = System.currentTimeMillis();
-		getClassifierClass().buildClassifier(train);
+		classifier.buildClassifier(train);
 		long end = System.currentTimeMillis();
 		long duration = end - start;
 		if (duration < 1) { duration = 1; } 
@@ -79,7 +78,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		log("start: " + new Date(start) + " : duration: " + duration, 2);
 		
 		state = states.TRAINED; // change agent state
-		options = getClassifierClass().getOptions();			
+		options = classifier.getOptions();
 
 		// write out net parameters
 		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){
@@ -127,14 +126,12 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 			
 			log(folds + "-fold cross validation.", 2);
 			eval.crossValidateModel(
-					getClassifierClass(),
+					classifier,
 					test,
 					folds, new Random(1));
 		}
 		else { // name = Standard
 			log("Standard weka evaluation.", 2);
-            Classifier classifier=getClassifierClass();
-            classifier.buildClassifier(train);
 			eval.evaluateModel(classifier, test);
 		}
 				
@@ -216,7 +213,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		double pre[] = new double[test.numInstances()];
 		for (int i = 0; i < test.numInstances(); i++) {
 			try {
-				pre[i] = getClassifierClass().classifyInstance(test.instance(i));
+				pre[i] = classifier.classifyInstance(test.instance(i));
 			} catch (Exception e) {
 				pre[i] = Integer.MAX_VALUE;
 			}
@@ -231,5 +228,4 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		return onto_test;
 	}
-
 }

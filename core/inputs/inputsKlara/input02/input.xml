@@ -28,12 +28,12 @@
                       <values type="java.util.Arrays$ArrayList">
                         <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
                           <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                            <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                              <value>1</value>
+                            <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <value>0.5</value>
                             </currentValue>
                             <type>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                <value>1</value>
+                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <value>0.5</value>
                               </defaultValue>
                             </type>
                           </org.pikater.core.ontology.subtrees.newOption.base.Value>
@@ -47,8 +47,8 @@
                             <types type="java.util.Arrays$ArrayList">
                               <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
                                 <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                    <value>1</value>
+                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                    <value>0.5</value>
                                   </defaultValue>
                                 </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                               </a>
@@ -66,21 +66,21 @@
                           <org.pikater.core.ontology.subtrees.newOption.base.Value>
                             <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                               <countOfValuesToTry>5</countOfValuesToTry>
-                              <min type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                <value>2</value>
+                              <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <value>0.0</value>
                               </min>
-                              <max type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                <value>10</value>
+                              <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <value>1.0</value>
                               </max>
                             </currentValue>
                             <type>
                               <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                                 <countOfValuesToTry>5</countOfValuesToTry>
-                                <min type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                  <value>2</value>
+                                <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>0.0</value>
                                 </min>
-                                <max type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                  <value>10</value>
+                                <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>1.0</value>
                                 </max>
                               </defaultValue>
                             </type>
@@ -97,11 +97,11 @@
                                 <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                                   <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                                     <countOfValuesToTry>5</countOfValuesToTry>
-                                    <min type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                      <value>2</value>
+                                    <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                      <value>0.0</value>
                                     </min>
-                                    <max type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                      <value>10</value>
+                                    <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                      <value>1.0</value>
                                     </max>
                                   </defaultValue>
                                 </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
@@ -200,12 +200,12 @@
                   <values type="java.util.Arrays$ArrayList">
                     <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
                       <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                        <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                          <value>1</value>
+                        <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                          <value>0.5</value>
                         </currentValue>
                         <type>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                            <value>1</value>
+                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <value>0.5</value>
                           </defaultValue>
                         </type>
                       </org.pikater.core.ontology.subtrees.newOption.base.Value>
@@ -219,8 +219,8 @@
                         <types type="java.util.Arrays$ArrayList">
                           <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
                             <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                <value>1</value>
+                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <value>0.5</value>
                               </defaultValue>
                             </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                           </a>
@@ -238,21 +238,21 @@
                       <org.pikater.core.ontology.subtrees.newOption.base.Value>
                         <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                           <countOfValuesToTry>5</countOfValuesToTry>
-                          <min type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                            <value>2</value>
+                          <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <value>0.0</value>
                           </min>
-                          <max type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                            <value>10</value>
+                          <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <value>1.0</value>
                           </max>
                         </currentValue>
                         <type>
                           <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                             <countOfValuesToTry>5</countOfValuesToTry>
-                            <min type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                              <value>2</value>
+                            <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <value>0.0</value>
                             </min>
-                            <max type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                              <value>10</value>
+                            <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <value>1.0</value>
                             </max>
                           </defaultValue>
                         </type>
@@ -269,11 +269,11 @@
                             <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                               <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                                 <countOfValuesToTry>5</countOfValuesToTry>
-                                <min type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                  <value>2</value>
+                                <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>0.0</value>
                                 </min>
-                                <max type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                  <value>10</value>
+                                <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>1.0</value>
                                 </max>
                               </defaultValue>
                             </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
