@@ -26,7 +26,7 @@ public final class Input02 {
         NewOption optionS = new NewOption("L",0.5);
         
         NewOption optionB = new NewOption("M",
-        		new QuestionMarkRange(new DoubleValue(0), new DoubleValue(1), 5)
+        		new QuestionMarkRange(new DoubleValue(0), new DoubleValue(1), 20)
         		);
 
         //Create new computing agent, add options and datasource that we have created above

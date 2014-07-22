@@ -48,6 +48,8 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	int graphId;
 	SearchComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
+    NewOptionList options;
+    OptionEdge childOptions;
 
 	public SearchStartComputationStrategy (Agent_Manager manager, int computationId,
 			int graphId, SearchComputationNode computationNode){
@@ -110,10 +112,14 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationId));
 
 		GetParameters gp = new GetParameters();
-        OptionEdge childOptions= (OptionEdge)inputs.get("childoptions").getNext();
+        if (childOptions==null)
+        {
+            childOptions = (OptionEdge)inputs.get("childoptions").getNext();
+            inputs.get("childoptions").block();
+        }
 		List<SearchItem> schema = convertOptionsToSchema(childOptions.getOptions());
 		gp.setSchema(schema);
-		gp.setSearch_options((ArrayList<NewOption>)inputs.get("options").getNext());
+		gp.setSearch_options(options.getOptions());
 
         Action a = new Action();
 		a.setAction(gp);
@@ -138,9 +144,11 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 		Agent agent = new Agent();
 		agent.setType(computationNode.getModelClass());
-		
-		OptionEdge optionEdge = (OptionEdge)inputs.get("options").getNext();
-	    NewOptionList options = new NewOptionList(optionEdge.getOptions());
+       if (options==null) {
+           OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
+           inputs.get("options").block();
+           options = new NewOptionList(optionEdge.getOptions());
+       }
 		agent.setOptions(options.getOptions());
 
 		return agent;

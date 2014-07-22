@@ -65,7 +65,7 @@
                         <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
                           <org.pikater.core.ontology.subtrees.newOption.base.Value>
                             <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                              <countOfValuesToTry>5</countOfValuesToTry>
+                              <countOfValuesToTry>20</countOfValuesToTry>
                               <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
                                 <value>0.0</value>
                               </min>
@@ -75,7 +75,7 @@
                             </currentValue>
                             <type>
                               <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                                <countOfValuesToTry>5</countOfValuesToTry>
+                                <countOfValuesToTry>20</countOfValuesToTry>
                                 <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
                                   <value>0.0</value>
                                 </min>
@@ -96,7 +96,7 @@
                               <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
                                 <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                                   <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                                    <countOfValuesToTry>5</countOfValuesToTry>
+                                    <countOfValuesToTry>20</countOfValuesToTry>
                                     <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
                                       <value>0.0</value>
                                     </min>
@@ -237,7 +237,7 @@
                     <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
                       <org.pikater.core.ontology.subtrees.newOption.base.Value>
                         <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                          <countOfValuesToTry>5</countOfValuesToTry>
+                          <countOfValuesToTry>20</countOfValuesToTry>
                           <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
                             <value>0.0</value>
                           </min>
@@ -247,7 +247,7 @@
                         </currentValue>
                         <type>
                           <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                            <countOfValuesToTry>5</countOfValuesToTry>
+                            <countOfValuesToTry>20</countOfValuesToTry>
                             <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
                               <value>0.0</value>
                             </min>
@@ -268,7 +268,7 @@
                           <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
                             <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                               <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                                <countOfValuesToTry>5</countOfValuesToTry>
+                                <countOfValuesToTry>20</countOfValuesToTry>
                                 <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
                                   <value>0.0</value>
                                 </min>
