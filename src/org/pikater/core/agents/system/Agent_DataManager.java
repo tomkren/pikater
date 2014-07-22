@@ -982,7 +982,7 @@ public class Agent_DataManager extends PikaterAgent {
 			JPAResult jparesult = new JPAResult();
 
 			jparesult.setAgentName(task.getAgent().getName());
-			jparesult.setOptions(options.exportXML());
+			jparesult.setOptions(options.exportXML().substring(0,254)); // XXX extend table? less verbose format?
 
 			float Error_rate = Float.MAX_VALUE;
 			float Kappa_statistic = Float.MAX_VALUE;
@@ -1060,9 +1060,9 @@ public class Agent_DataManager extends PikaterAgent {
 			jparesult.setNote(task.getNote());
 			log("JPA Result    "+jparesult.getErrorRate());
 			DAOs.resultDAO.storeEntity(jparesult);
-			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).info("Persisted JPAResult");
+			log("Persisted JPAResult");
 		} catch(Exception e) {
-			PikaterLogger.getLogger(Agent_DataManager.class.getCanonicalName()).error("Error in SaveResults", e);;
+			logError("Error in SaveResults", e);;
 		}
 
 		ACLMessage reply = request.createReply();
