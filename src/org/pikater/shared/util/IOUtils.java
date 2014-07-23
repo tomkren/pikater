@@ -1,5 +1,6 @@
 package org.pikater.shared.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -114,5 +115,62 @@ public class IOUtils
 		{
 			PikaterLogger.logThrowable(String.format("Could not write given content to file '%s' because of the below IO error:", filePath), e);
 		}
+	}
+	
+	/**
+	 * Creates a temporary file in the system defined temp directory, with no extension.
+	 * @param prefix
+	 * @return
+	 */
+	public static File createTemporaryFile(String prefix)
+	{
+	    return createTemporaryFile(prefix, "");
+	}
+	
+	/**
+	 * Creates a temporary file in the system defined temp directory, with
+	 * the given extension.
+	 * @param prefix
+	 * @param extension
+	 * @return
+	 */
+	public static File createTemporaryFile(String prefix, String extension)
+	{
+	    File file;
+	    try
+	    {
+	    	file = File.createTempFile(prefix + "_tmpfile_" + System.currentTimeMillis(), null);
+	    	file.deleteOnExit();
+	    	return file;
+	    }
+	    catch (IOException e)
+	    {
+	    	throw new IllegalStateException("Could not create a temporary file.", e);
+	    }
+	}
+	
+	/**
+	 * Creates a temporary file in the given directory, with given extension.
+	 * @param directory
+	 * @param prefix
+	 * @param extension must include a dot, e.g. ".jpg"
+	 * @return
+	 */
+	public static File createTemporaryFile(String directory, String prefix, String extension)
+	{
+	    File file;
+	    try
+	    {
+	    	file = new File(directory + System.getProperty("file.separator") + prefix + "_tmpfile_" + 
+	    			System.currentTimeMillis() + extension);
+	    	file.mkdirs(); 
+	    	file.createNewFile();
+	    	file.deleteOnExit();
+	    	return file;
+	    }
+	    catch (IOException e)
+	    {
+	    	throw new IllegalStateException("Could not create a temporary file.", e);
+	    }
 	}
 }

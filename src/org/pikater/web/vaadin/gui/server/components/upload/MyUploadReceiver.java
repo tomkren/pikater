@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.pikater.shared.util.IOUtils;
+
 import com.wcs.wcslib.vaadin.widget.multifileupload.receiver.UploadReceiver;
 
 /**
@@ -18,6 +20,7 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.receiver.UploadReceiver;
  * request timeout).
  * <li> Give the handler more information about the file. Pass {@link File}
  * instead of {@link InputStream}.
+ * <li> To use server-global implementation of creating temporary files.
  * </ul>
  * <font color="red">At the same time, doing so is a drawback for future Vaadin or plugin updates.
  * Newer versions (especially the plugin) may not support hacks like these.</font>
@@ -28,16 +31,16 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.receiver.UploadReceiver;
 public class MyUploadReceiver implements UploadReceiver
 {
 	/**
-	 * Original fields, kept intact.
+	 * One of the fields was removed, one remained.
 	 */
-	private static final String TEMPFILE_NAME_PREFIX = "upload_tmpfile_";
     private File file;
     
     //-------------------------------------------------------
     // ORIGINAL INTERFACE
     
     /**
-     * Original implementation, kept intact.
+     * Original implementation, internal creation of temporary files was outsourced,
+     * as stated in this class's javadoc.
      * Used to create an output stream to write pieces of uploaded file to.
      */
     @Override
@@ -45,11 +48,7 @@ public class MyUploadReceiver implements UploadReceiver
 	{
     	try
     	{
-    		if (file == null)
-    		{
-    			file = createTempFile();
-    			file.deleteOnExit();
-            }
+    		file = IOUtils.createTemporaryFile("upload");
             return new FileOutputStream(file);
         }
     	catch (final IOException e)
@@ -96,22 +95,6 @@ public class MyUploadReceiver implements UploadReceiver
 	//-------------------------------------------------------
     // INTERFACE ADDED BY US
 	
-	/**
-	 * Original implementation, made protected to allow overriding.
-	 */
-    protected File createTempFile()
-    {
-    	final String tempFileName = TEMPFILE_NAME_PREFIX + System.currentTimeMillis();
-    	try
-    	{
-    		return File.createTempFile(tempFileName, null);
-    	}
-    	catch (IOException e)
-    	{
-    		throw new RuntimeException(e);
-        }
-    }
-    
     /**
      * The method we are doing all this for. See this class's Javadoc.
      * @return
