@@ -45,7 +45,7 @@ public class DownloadRegistrar
 		}
 	}
 	
-	public static IDownloadResource downloadPicked(String token) 
+	public static IDownloadResource downloadPickedUp(String token) 
 	{
 		synchronized(lock_object)
 		{

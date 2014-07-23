@@ -22,7 +22,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 {
 	private static final long serialVersionUID = -4608720645535772140L;
 	
-	protected final ExternalAgentTableDBView underlyingDBView; 
+	protected final ExternalAgentTableDBView underlyingDBView;
 
 	public AgentsView()
 	{

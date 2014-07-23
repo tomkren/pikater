@@ -15,8 +15,8 @@ public class FileSaver_VirtualBox {
 		inputSlot.setDataType(SlotTypes.DATA_TYPE);
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_VirtualFileSaverBoxProvider.class);
-		agentInfo.setOntologyClass(FileDataSaver.class);
+		agentInfo.importAgentClass(Agent_VirtualFileSaverBoxProvider.class);
+		agentInfo.importOntologyClass(FileDataSaver.class);
 
 		agentInfo.setName("FileSaver");
 		agentInfo.setDescription("This box save data to Pikater database");

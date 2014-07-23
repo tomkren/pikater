@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -45,8 +44,8 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	@Override
 	protected AgentInfo getAgentInfo() {
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(this.getClass());
-		agentInfo.setOntologyClass(DataProcessing.class);
+		agentInfo.importAgentClass(this.getClass());
+		agentInfo.importOntologyClass(DataProcessing.class);
 	
 		agentInfo.setName("WeatherSplitter");
 		agentInfo.setDescription("splits weather data by prediction");
@@ -116,6 +115,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 				}
 			}
 		});
+		
 	}
 
 	private ACLMessage respondToExecute(ACLMessage request) throws ContentException, FIPAException {

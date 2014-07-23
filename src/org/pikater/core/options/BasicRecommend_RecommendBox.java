@@ -15,8 +15,8 @@ public class BasicRecommend_RecommendBox {
 		outputSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
 		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_Basic.class);
-		agentInfo.setOntologyClass(Recommend.class);
+		agentInfo.importAgentClass(Agent_Basic.class);
+		agentInfo.importOntologyClass(Recommend.class);
 	
 		agentInfo.setName("Basic Recommend");
 		agentInfo.setDescription("Basic Recommend");

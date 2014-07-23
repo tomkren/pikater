@@ -22,8 +22,8 @@ public class FileInput_VirtualBox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_VirtualFileInputBoxProvider.class);
-		agentInfo.setOntologyClass(FileDataProvider.class);
+		agentInfo.importAgentClass(Agent_VirtualFileInputBoxProvider.class);
+		agentInfo.importOntologyClass(FileDataProvider.class);
 	
 		agentInfo.setName("FileInput");
 		agentInfo.setDescription("This box provides a data source to other boxes.");

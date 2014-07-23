@@ -24,8 +24,8 @@ public class OneR_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaOneRCA.class);
-		agentInfo.setOntologyClass(ComputingAgent.class);
+		agentInfo.importAgentClass(Agent_WekaOneRCA.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("OneR");
 		agentInfo.setDescription("One R Method");
