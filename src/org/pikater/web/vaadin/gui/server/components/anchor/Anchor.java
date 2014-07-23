@@ -47,6 +47,12 @@ public class Anchor extends AbstractComponent implements AnchorClientRpc
 			}
 		});
 		getState().forwardClickToServer = true;
+		
+		/*
+		 * TODO: everything is working now but for the sake of nicer implementation... use
+		 * a default javascript function that does nothing but DOESN'T let the browser refresh
+		 * the page (href attribute is responsible for that and it needs some kind of an empty command).
+		 */
 	}
 	
 	/**

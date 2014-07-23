@@ -32,7 +32,7 @@ public class DynamicDownloadServlet extends HttpServlet
 		String token = req.getParameter("t");
 		if((token != null) && !token.isEmpty())
 		{
-			IDownloadResource resource = DownloadRegistrar.downloadPicked(token);
+			IDownloadResource resource = DownloadRegistrar.downloadPickedUp(token);
 			if(resource != null)
 			{
 				if(resource.getSize() > Integer.MAX_VALUE) // "HttpServletResponse.setContentLength()" only accepts int type

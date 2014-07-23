@@ -60,7 +60,7 @@ public class AnchorConnector extends AbstractComponentConnector
 		getWidget().setText(getState().text);
 		if(getState().forwardClickToServer)
 		{
-			getWidget().setHref("");
+			getWidget().getElement().removeAttribute("href");
 			if(clickHandlerRegistration == null)
 			{
 				clickHandlerRegistration = getWidget().addClickHandler(new ClickHandler()
@@ -85,7 +85,7 @@ public class AnchorConnector extends AbstractComponentConnector
 				clickHandlerRegistration.removeHandler();
 				clickHandlerRegistration = null;
 			}
-			getWidget().setHref(getState().hrefAttrContent);
+			getWidget().getElement().setAttribute("href", getState().hrefAttrContent);
 		}
 	}
 }
