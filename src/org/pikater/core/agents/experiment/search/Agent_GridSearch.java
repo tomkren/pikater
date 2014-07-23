@@ -5,7 +5,7 @@
 package org.pikater.core.agents.experiment.search;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.*;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
@@ -199,7 +199,7 @@ public class Agent_GridSearch extends Agent_Search {
     @Override
     protected void loadSearchOptions() { 
         
-        NewOptionList options = new NewOptionList(getSearchOptions());
+        NewOptions options = new NewOptions(getSearchOptions());
         
         if (options.containsOptionWithName("N")) {
         	NewOption optionN = options.getOptionByName("N");

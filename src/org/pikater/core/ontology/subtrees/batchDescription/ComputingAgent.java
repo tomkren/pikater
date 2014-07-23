@@ -4,7 +4,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
@@ -141,7 +141,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	@Override
 	public void importAllOptions(List<NewOption> options) {
 		
-		NewOptionList optionsOntol = new NewOptionList(options);
+		NewOptions optionsOntol = new NewOptions(options);
 
 		//import agentType
 		NewOption optAgentType = optionsOntol.getOptionByName("agentType");

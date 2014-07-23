@@ -10,17 +10,17 @@ import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-public class NewOptionList implements Concept, Iterable<NewOption>
+public class NewOptions implements Concept, Iterable<NewOption>
 {
 	private static final long serialVersionUID = -8578686409784032991L;
 	
 	private List<NewOption> options;
 	
-	public NewOptionList()
+	public NewOptions()
 	{
 		this.options = new ArrayList<NewOption>();
 	}
-	public NewOptionList(List<NewOption> list)
+	public NewOptions(List<NewOption> list)
 	{
 		setOptions(list);
 	}
@@ -61,7 +61,7 @@ public class NewOptionList implements Concept, Iterable<NewOption>
     }
     
     public String exportToWeka() {
-    	return NewOptionList.exportToWeka(options);
+    	return NewOptions.exportToWeka(options);
     }
     
 	public static String exportToWeka(List<NewOption> options) {
@@ -85,12 +85,12 @@ public class NewOptionList implements Concept, Iterable<NewOption>
 		return xml;
 	}
 	
-	public static NewOptionList importXML(String xml) {
+	public static NewOptions importXML(String xml) {
 
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 
-		NewOptionList optionsNew = (NewOptionList) xstream
+		NewOptions optionsNew = (NewOptions) xstream
 				.fromXML(xml);
 
 		return optionsNew;
