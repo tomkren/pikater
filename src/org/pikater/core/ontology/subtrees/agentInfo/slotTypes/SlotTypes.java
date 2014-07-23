@@ -7,4 +7,5 @@ public class SlotTypes {
 	public static String AGENT_TYPE = "AGENT_TYPE";
 	public static String SEARCH_TYPE = "SEARCH_TYPE";
 	public static String RECOMMEND_TYPE = "RECOMMEND_TYPE";
+	public static String EVALUATIONMETHOD_TYPE = "EVALUATIONMETHOD_TYPE";
 }

@@ -28,6 +28,10 @@ public abstract class AAA_SlotHelper {
 		inputValidationSlot.setSlotType(SlotTypes.DATA_TYPE);
 		inputValidationSlot.setDataType("validationData");
 		
+		Slot inputEvaluationMethodSlot = new Slot();
+		inputEvaluationMethodSlot.setDescription("Evaluation Method");
+		inputEvaluationMethodSlot.setSlotType(SlotTypes.EVALUATIONMETHOD_TYPE);
+		inputEvaluationMethodSlot.setDataType("evaluationMethod");
 		
 		List<Slot> inputSlots = new ArrayList<Slot>();
 		inputSlots.add(inputTrainingSlot);
@@ -40,7 +44,7 @@ public abstract class AAA_SlotHelper {
 	public static List<Slot> getCAOutputSlots() {
 		
 		Slot outputSlot = new Slot();
-		outputSlot.setDescription("data computed");
+		outputSlot.setDescription("Data computed");
 		outputSlot.setSlotType(SlotTypes.AGENT_TYPE);
 		outputSlot.setDataType("data");
 		
@@ -50,6 +54,18 @@ public abstract class AAA_SlotHelper {
 		return outputSlots;
 	}
 
+	public static List<Slot> getCEvaluationMethodOutputSlots() {
+		
+		Slot outputSlot = new Slot();
+		outputSlot.setDescription("Evaluation Method");
+		outputSlot.setSlotType(SlotTypes.EVALUATIONMETHOD_TYPE);
+		outputSlot.setDataType("evaluationMethod");
+		
+		List<Slot> outputSlots = new ArrayList<Slot>();
+		outputSlots.add(outputSlot);
+		
+		return outputSlots;
+	}
 
 	public static List<Slot> getSearcherOutputSlots() {
 
