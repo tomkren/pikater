@@ -40,7 +40,10 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 	protected void setup() {
 		super.setup();
 		initDefault();
+		
 		setEnabledO2ACommunication(true, 0);
+		
+		addAgentInfoBehaviour(getAgentInfo());
 	}
 	
 	public String saveArff(Instances i) {

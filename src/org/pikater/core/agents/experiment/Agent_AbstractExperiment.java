@@ -15,6 +15,7 @@ import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 
 public abstract class Agent_AbstractExperiment extends PikaterAgent {
@@ -46,9 +47,9 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 					Action a = (Action) getContentManager()
 							.extractContent(request);
 
-					if (a.getAction() instanceof GetComputerInfo) {
+					if (a.getAction() instanceof GetAgentInfo) {
 					
-						return respondToGetComputerInfo(request);
+						return respondToGetAgentInfo(request);
 					}
 
 				} catch (OntologyException e) {
@@ -67,12 +68,13 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 
 	}
 	
-	private ACLMessage respondToGetComputerInfo(ACLMessage request) {
+	private ACLMessage respondToGetAgentInfo(ACLMessage request) {
 		
 		AgentInfo agentInfo = getAgentInfo();
 		AID receiver = new AID(AgentNames.AGENTINFO_MANAGER, false);
 		
 		ACLMessage agentInfoMsg = request.createReply();
+		agentInfoMsg.setPerformative(ACLMessage.INFORM);
 		
         try {
 			getContentManager().fillContent(

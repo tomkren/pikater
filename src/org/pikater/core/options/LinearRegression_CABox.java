@@ -50,8 +50,8 @@ public class LinearRegression_CABox {
 		
 	
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaLinearRegression.class);
-		agentInfo.setOntologyClass(ComputingAgent.class);
+		agentInfo.importAgentClass(Agent_WekaLinearRegression.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("LinearRegression");
 		agentInfo.setDescription("Linear Regression");

@@ -27,8 +27,8 @@ public class RandomSearch_SearchBox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_RandomSearch.class);
-		agentInfo.setOntologyClass(Search.class);
+		agentInfo.importAgentClass(Agent_RandomSearch.class);
+		agentInfo.importOntologyClass(Search.class);
 	
 		agentInfo.setName("Random-Searcher");
 		agentInfo.setDescription("Selects and provides random values for its output parameters.");
