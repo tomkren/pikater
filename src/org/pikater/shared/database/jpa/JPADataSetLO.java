@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,13 +14,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.pikater.shared.database.exceptions.AttributeActionNotApplicableException;
+import org.pikater.shared.database.exceptions.AttributeNameNotFoundException;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
 
 
@@ -145,6 +144,36 @@ public class JPADataSetLO extends JPAAbstractEntity{
 		this.globalMetaData=updateValues.getGlobalMetaData();
 		this.hash=updateValues.getHash();
 		this.owner=updateValues.getOwner();		
+	}
+	
+	public double getAttributeMinValue(String attributeName) throws AttributeNameNotFoundException, AttributeActionNotApplicableException{
+		for(JPAAttributeMetaData md:getAttributeMetaData()){
+			if(md.getName().equals(attributeName)){
+				if(md instanceof JPAAttributeNumericalMetaData){
+					return ((JPAAttributeNumericalMetaData)md).getMin();
+				}else{
+					throw new AttributeActionNotApplicableException();
+				}
+			}
+		}
+		throw new AttributeNameNotFoundException();
+	}
+	
+	public double getAttributeMaxValue(String attributeName) throws AttributeNameNotFoundException, AttributeActionNotApplicableException{
+		for(JPAAttributeMetaData md:getAttributeMetaData()){
+			if(md.getName().equals(attributeName)){
+				if(md instanceof JPAAttributeNumericalMetaData){
+					return ((JPAAttributeNumericalMetaData)md).getMax();
+				}else{
+					throw new AttributeActionNotApplicableException();
+				}
+			}
+		}
+		throw new AttributeNameNotFoundException();
+	}
+	
+	public int getNumberOfAttributes(){
+		return this.getAttributeMetaData().size();
 	}
 	
 }
