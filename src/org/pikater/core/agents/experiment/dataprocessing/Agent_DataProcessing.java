@@ -22,7 +22,6 @@ import java.util.Random;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.core.AgentNames;
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.DataOntology;

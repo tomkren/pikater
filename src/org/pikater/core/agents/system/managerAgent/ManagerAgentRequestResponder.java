@@ -153,7 +153,8 @@ public class ManagerAgentRequestResponder {
 
 		ACLMessage reply = request.createReply();
         if (isKilled) {
-        	reply.setPerformative(ACLMessage.AGREE);
+        	reply.setPerformative(ACLMessage.INFORM);
+        	reply.setContent("OK");
         } else {
         	reply.setPerformative(ACLMessage.FAILURE);
         }

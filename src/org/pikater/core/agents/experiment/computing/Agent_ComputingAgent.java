@@ -168,7 +168,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		addBehaviour(new RequestServer(this, reqMsgTemplate));
 		addBehaviour(executionBehaviour = new ComputingAction(this));
 
-		sendAgentInfo(getAgentInfo());
+		addAgentInfoBehaviour(getAgentInfo());
 		
 	} // end setup
 
