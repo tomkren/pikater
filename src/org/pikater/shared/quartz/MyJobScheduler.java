@@ -7,12 +7,15 @@ import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import org.pikater.shared.PropertiesHandler;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.AbstractJobWithArgs;
 import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class MyJobScheduler extends PropertiesHandler
@@ -39,6 +42,9 @@ public class MyJobScheduler extends PropertiesHandler
 		this.quartzConf = openProperties(new File(quartzConfPath + "quartz-configuration.properties"));
 		this.scheduler = null;
 	}
+	
+	//--------------------------------------------------------
+	// SCHEDULER RELATED INTERFACE
 	
 	/**
 	 * Start the scheduler. No jobs will be defined after this call.
@@ -78,23 +84,23 @@ public class MyJobScheduler extends PropertiesHandler
 	}
 	
 	//--------------------------------------------------------
-	// JOB SCHEDULLING INTERFACE
+	// JOB SCHEDULLING/INTERRUPTING INTERFACE
 	
 	/**
 	 * Define a zero-argument job - build it, create it and schedule it.
 	 * @param clazz
 	 * @throws Throwable
 	 */
-	public void defineJob(Class<? extends ZeroArgJob> clazz) throws Throwable
+	public JobKey defineJob(Class<? extends ZeroArgJob> clazz) throws Throwable
 	{
-		defineJob(clazz, null);
+		return defineJob(clazz, null);
 	}
 
 	/**
 	 * Define an arbitrary job - build it, create it and schedule it.
 	 * @param jobClass
 	 */
-	public void defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Throwable
+	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Throwable
 	{
 		if(scheduler == null)
 		{
@@ -106,13 +112,36 @@ public class MyJobScheduler extends PropertiesHandler
 		}
 		else
 		{
+			// abstract job building
 			JobBuilder jobBuilder = newJob(jobClass);
 			JobDetail detail = jobBuilder.build();
+			
+			// pass arguments
 			AbstractJobWithArgs helperJobInstance = jobClass.newInstance();
 			helperJobInstance.buildJob(jobBuilder);
 			setArguments(detail, helperJobInstance, args);
 			
-			scheduler.scheduleJob(detail, helperJobInstance.getJobTrigger()); // tell quartz to schedule the job using our trigger
+			// tell quartz to schedule the job using our trigger
+			scheduler.scheduleJob(detail, helperJobInstance.getJobTrigger());
+			
+			// and return
+			return detail.getKey();
+		}
+	}
+	
+	/**
+	 * Interrupts the given job.
+	 * @param key
+	 */
+	public void interruptJob(JobKey key)
+	{
+		try
+		{
+			scheduler.interrupt(key);
+		}
+		catch (UnableToInterruptJobException e)
+		{
+			PikaterLogger.logThrowable("Could not interrupt job with key: " + key.toString(), e);
 		}
 	}
 	
