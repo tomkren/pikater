@@ -164,6 +164,14 @@ public abstract class ArffDataset {
 		}	
 	}
 	
+	public int getNumberOfInstances(){
+		if(dslo!=null){
+			return dslo.getGlobalMetaData().getNumberofInstances();
+		}else{
+			return -1;
+		}
+	}
+	
 	public void close() throws IOException{
 		arffStream.close();
 	}

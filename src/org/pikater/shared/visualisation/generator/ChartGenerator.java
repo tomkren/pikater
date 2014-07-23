@@ -27,7 +27,8 @@ public class ChartGenerator {
 	
 	public static interface IProgressListener
 	{
-		void updateProgress(int percentage);
+		void updateProgress(double percentage);
+		void finished();
 	}
 
 	/**
@@ -49,7 +50,15 @@ public class ChartGenerator {
 	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex) throws IOException{
 		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
-		generateSingleDatasetChart(input,svgr, XIndex, YIndex, ColorIndex);
+		generateSingleDatasetChart(input,svgr, XIndex, YIndex, ColorIndex,null);
+		svgr.end();
+		output.close();
+	}
+	
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex, IProgressListener listener) throws IOException{
+		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+		svgr.begin();
+		generateSingleDatasetChart(input,svgr, XIndex, YIndex, ColorIndex,listener);
 		svgr.end();
 		output.close();
 	}
@@ -73,7 +82,15 @@ public class ChartGenerator {
 	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName) throws IOException{
 		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
-		generateSingleDatasetChart(input,svgr, XName, YName, ColorName);
+		generateSingleDatasetChart(input,svgr, XName, YName, ColorName,null);
+		svgr.end();
+		output.close();
+	}
+	
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, IProgressListener listener) throws IOException{
+		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+		svgr.begin();
+		generateSingleDatasetChart(input,svgr, XName, YName, ColorName,listener);
 		svgr.end();
 		output.close();
 	}
@@ -97,13 +114,22 @@ public class ChartGenerator {
 	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex) throws IOException{
 		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
-		generateSingleDatasetChart(input,ir, XIndex, YIndex, ColorIndex);
+		generateSingleDatasetChart(input,ir, XIndex, YIndex, ColorIndex,null);
 		ir.end();
 		
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
 	}
 	
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex,IProgressListener listener) throws IOException{
+		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+		ir.begin();
+		generateSingleDatasetChart(input,ir, XIndex, YIndex, ColorIndex,listener);
+		ir.end();
+		
+		ImageIO.write(ir.getImage(), "PNG", output);
+		output.close();
+	}
 	
 	/**
 	 * Creates an <b>PNG</b> encoded chart for dataset for the {@link JPADataSetLO JPADataSetLO} object.
@@ -124,7 +150,17 @@ public class ChartGenerator {
 	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName) throws IOException{
 		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
-		generateSingleDatasetChart(input,ir, XName, YName, ColorName);
+		generateSingleDatasetChart(input,ir, XName, YName, ColorName,null);
+		ir.end();
+		
+		ImageIO.write(ir.getImage(), "PNG", output);
+		output.close();
+	}
+	
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, IProgressListener listener) throws IOException{
+		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
+		ir.begin();
+		generateSingleDatasetChart(input,ir, XName, YName, ColorName,listener);
 		ir.end();
 		
 		ImageIO.write(ir.getImage(), "PNG", output);
@@ -132,27 +168,28 @@ public class ChartGenerator {
 	}
 	
 	
-	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,int XIndex,int YIndex,int ColorIndex) throws IOException
+	
+	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,int XIndex,int YIndex,int ColorIndex, IProgressListener listener) throws IOException
 	{
 		SingleArffDataset dataset=new SingleArffDataset(
 				input,
 				XIndex, 
 				YIndex,
 				ColorIndex);
-		generateSingleDatasetChartFromDataset(dataset, renderer);
+		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
 	}
 	
-	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,String XName,String YName,String ColorName) throws IOException
+	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,String XName,String YName,String ColorName, IProgressListener listener) throws IOException
 	{
 		SingleArffDataset dataset=new SingleArffDataset(
 				input,
 				XName, 
 				YName,
 				ColorName);
-		generateSingleDatasetChartFromDataset(dataset, renderer);
+		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
 	}
 	
-	private static void generateSingleDatasetChartFromDataset(SingleArffDataset dataset,RendererInterface renderer) throws IOException{
+	private static void generateSingleDatasetChartFromDataset(SingleArffDataset dataset,RendererInterface renderer, IProgressListener listener) throws IOException{
 		Axis yAxis=dataset.getYAxis();
 		Axis xAxis=dataset.getXAxis();
 		Colorer colorer=dataset.getZColorer();
@@ -168,9 +205,22 @@ public class ChartGenerator {
 		sch.startChart();
 
 		ArffXYZPoint next=null;
-
+		
+		int instNum=dataset.getNumberOfInstances();
+		int lastPercentage=-1;
+		int percentage=0;
+		int count=0;
+		
 		while((next=dataset.getNext())!=null){
 			sch.renderPoint(next.getX(), next.getY(), next.getZ(), 15, colorer);
+			count++;
+			
+			percentage=100*count/instNum;
+			
+			if((listener!=null)&&(percentage>lastPercentage)){
+				listener.updateProgress(percentage/100.0);
+				lastPercentage=percentage;
+			}
 		}
 
 		dataset.close();
@@ -193,7 +243,15 @@ public class ChartGenerator {
 	public static void generateSVGMatrixDatasetChart(JPADataSetLO input,PrintStream output) throws IOException{
 		SVGRenderer svgr=new SVGRenderer(output, MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
 		svgr.begin();
-		generateMatrixDatasetChart(input,svgr);
+		generateMatrixDatasetChart(input,svgr,null);
+		svgr.end();
+		output.close();
+	}
+	
+	public static void generateSVGMatrixDatasetChart(JPADataSetLO input,PrintStream output,IProgressListener listener) throws IOException{
+		SVGRenderer svgr=new SVGRenderer(output, MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
+		svgr.begin();
+		generateMatrixDatasetChart(input,svgr,listener);
 		svgr.end();
 		output.close();
 	}
@@ -215,7 +273,7 @@ public class ChartGenerator {
 	public static void generatePNGMatrixDatasetChart(JPADataSetLO input,PrintStream output) throws IOException{
 		ImageRenderer ir=new ImageRenderer(MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
 		ir.begin();
-		generateMatrixDatasetChart(input,ir);
+		generateMatrixDatasetChart(input,ir,null);
 		ir.end();
 		
 		ImageIO.write(ir.getImage(), "PNG", output);
@@ -223,7 +281,18 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	private static void generateMatrixDatasetChart(JPADataSetLO input,RendererInterface renderer) throws IOException
+	public static void generatePNGMatrixDatasetChart(JPADataSetLO input,PrintStream output, IProgressListener listener) throws IOException{
+		ImageRenderer ir=new ImageRenderer(MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
+		ir.begin();
+		generateMatrixDatasetChart(input,ir, listener);
+		ir.end();
+		
+		ImageIO.write(ir.getImage(), "PNG", output);
+		
+		output.close();
+	}
+	
+	private static void generateMatrixDatasetChart(JPADataSetLO input,RendererInterface renderer, IProgressListener listener) throws IOException
 	{
 		MultipleArffDataset dataset=new MultipleArffDataset(input);
 
