@@ -32,8 +32,8 @@ public class CARecSearchComplex_VirtualBox {
 
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo
-				.setAgentClass(Agent_VirtualCARecSearchComplexBoxProvider.class);
-		agentInfo.setOntologyClass(CARecSearchComplex.class);
+				.importAgentClass(Agent_VirtualCARecSearchComplexBoxProvider.class);
+		agentInfo.importOntologyClass(CARecSearchComplex.class);
 
 		agentInfo.setName("Complex");
 		agentInfo.setDescription("Complex Box");

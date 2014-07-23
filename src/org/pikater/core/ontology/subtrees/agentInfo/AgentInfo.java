@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import com.thoughtworks.xstream.XStream;
@@ -24,7 +24,7 @@ public class AgentInfo implements Concept {
 	private String name;
 	private String description;
 
-	private NewOptionList options;
+	private NewOptions options;
 	
 	private List<Slot> inputSlots;
 	private List<Slot> outputSlots;
@@ -35,7 +35,7 @@ public class AgentInfo implements Concept {
 	public void setAgentClassName(String agentClassName) {
 		this.agentClassName = agentClassName;
 	}
-	public void setAgentClass(Class<?> agentClass) {
+	public void importAgentClass(Class<?> agentClass) {
 		this.agentClassName = agentClass.getName();
 	}
 
@@ -45,7 +45,7 @@ public class AgentInfo implements Concept {
 	public void setOntologyClassName(String ontologyClassName) {
 		this.ontologyClassName = ontologyClassName;
 	}
-	public void setOntologyClass(Class<?> ontologyClass) {
+	public void importOntologyClass(Class<?> ontologyClass) {
 		this.ontologyClassName = ontologyClass.getName();
 	}
 
@@ -63,17 +63,17 @@ public class AgentInfo implements Concept {
 		this.description = description;
 	}
 
-	public NewOptionList getOptions()
+	public NewOptions getOptions()
 	{
 		return options;
 	}
-	public void setOptions(NewOptionList options)
+	public void setOptions(NewOptions options)
 	{
 		this.options = options;
 	}
 	public void addOption(NewOption option) {
 		if (this.options == null) {
-			this.options = new NewOptionList();
+			this.options = new NewOptions();
 		}
 		this.options.addOption(option);
 	}

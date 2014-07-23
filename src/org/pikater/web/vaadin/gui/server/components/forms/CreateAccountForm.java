@@ -1,12 +1,15 @@
 package org.pikater.web.vaadin.gui.server.components.forms;
 
+import java.util.List;
+
 import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogComponent;
 
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
-public class CreateAccountForm extends CustomFormLayout
+public abstract class CreateAccountForm extends CustomFormLayout implements IDialogComponent
 {
 	private static final long serialVersionUID = 1751781460173551178L;
 	
@@ -46,5 +49,16 @@ public class CreateAccountForm extends CustomFormLayout
 	public String getEmail()
 	{
 		return emailField.getValue();
+	}
+	
+	//--------------------------------------------------------------------
+	// METHODS DEFINING THIS FORM'S BEHAVIOUR AS A PART OF A DIALOG
+
+	@Override
+	public void addArgs(List<Object> arguments)
+	{
+		arguments.add(getLogin());
+		arguments.add(getPassword());
+		arguments.add(getEmail());
 	}
 }

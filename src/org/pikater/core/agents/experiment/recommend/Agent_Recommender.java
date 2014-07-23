@@ -30,7 +30,7 @@ import org.pikater.core.ontology.RecomendOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.recomend.Recommend;
@@ -82,7 +82,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		addBehaviour(new RecommendBehaviour(this, mt));
 
 
-		sendAgentInfo(getAgentInfo());
+		addAgentInfoBehaviour(getAgentInfo());
 
     }
          
@@ -117,7 +117,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                     // merge options with .opt file options
                     myAgentOntology.setOptions(getParameters());
 
-                    log("options: " + NewOptionList.exportToWeka(myAgentOntology.getOptions()), 2);
+                    log("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()), 2);
 
                     Data data = rec.getData();
                     
@@ -143,7 +143,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         			log("********** Agent "
         					+ recommended_agent.getType()
         					+ " recommended. Options: "
-        					+ NewOptionList.exportToWeka(recommended_agent.getOptions())
+        					+ NewOptions.exportToWeka(recommended_agent.getOptions())
         					+ "**********", Verbosity.MINIMAL);
 
             		// Prepare the content of inform message                       

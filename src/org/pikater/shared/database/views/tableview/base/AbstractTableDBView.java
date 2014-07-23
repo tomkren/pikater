@@ -17,7 +17,8 @@ import org.pikater.shared.database.views.base.QueryResult;
 public abstract class AbstractTableDBView
 {
 	/**
-	 * Returns the enumeration of all columns this view defines.
+	 * Returns the enumeration of all columns this view defines, in
+	 * the order they will be displayed in GUI.
 	 * @see {@link org.pikater.shared.database.views.tableview.users.UsersTableDBView} - example
 	 * @return
 	 */

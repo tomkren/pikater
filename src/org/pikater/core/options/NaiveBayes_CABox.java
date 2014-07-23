@@ -27,8 +27,8 @@ public class NaiveBayes_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaNaiveBayesCA.class);
-		agentInfo.setOntologyClass(ComputingAgent.class);
+		agentInfo.importAgentClass(Agent_WekaNaiveBayesCA.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("NaiveBayes");
 		agentInfo.setDescription("Naive Bayes Method");

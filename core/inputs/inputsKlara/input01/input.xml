@@ -16,7 +16,6 @@
           <options>
             <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
               <name>S</name>
-              <immutable>false</immutable>
               <valuesWrapper>
                 <values type="java.util.Arrays$ArrayList">
                   <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
@@ -53,7 +52,6 @@
             </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
             <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
               <name>M</name>
-              <immutable>false</immutable>
               <valuesWrapper>
                 <values type="java.util.Arrays$ArrayList">
                   <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">

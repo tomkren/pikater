@@ -18,8 +18,8 @@ public class ChooseXValue_SearchBox {
 		optionN.setDescription("Number of values to try for each option");
 		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_ChooseXValues.class);
-		agentInfo.setOntologyClass(Search.class);
+		agentInfo.importAgentClass(Agent_ChooseXValues.class);
+		agentInfo.importOntologyClass(Search.class);
 	
 		agentInfo.setName("Choose X Values Agent");
 		agentInfo.setDescription("Search which Choose X Values");

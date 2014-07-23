@@ -23,14 +23,14 @@ import org.pikater.shared.database.utils.ResultFormatter;
 public class DatabaseTest {
 	
 	public void test(){
-		listDataSets();
-		listDataSetWithExclusion();
+		//listDataSets();
+		//listDataSetWithExclusion();
 		listResults();
-		listUserAndRoles();
-		listBatches();
-		listExperiments();
-		listFileMappings();
-		listAgentInfos();
+		//listUserAndRoles();
+		//listBatches();
+		//listExperiments();
+		//listFileMappings();
+		//listAgentInfos();
 	}
 	
 	public void listDataSets(){

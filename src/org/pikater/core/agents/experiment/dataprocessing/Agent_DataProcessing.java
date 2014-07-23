@@ -22,7 +22,6 @@ import java.util.Random;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.core.AgentNames;
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.DataOntology;
@@ -41,7 +40,10 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 	protected void setup() {
 		super.setup();
 		initDefault();
+		
 		setEnabledO2ACommunication(true, 0);
+		
+		addAgentInfoBehaviour(getAgentInfo());
 	}
 	
 	public String saveArff(Instances i) {

@@ -43,8 +43,10 @@ public class UserProfileForm extends CustomFormLayout
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				MyDialogs.passwordChangeDialog(currentUser, new MyDialogs.IDialogResultHandler()
+				MyDialogs.passwordChangeDialog(new ChangePasswordForm(currentUser)
 				{
+					private static final long serialVersionUID = -6536658886477204213L;
+
 					@Override
 					public boolean handleResult(Object[] args)
 					{

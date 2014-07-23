@@ -57,8 +57,8 @@ public class Perceptron_CABox {
 		
 		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaPerceptronCA.class);
-		agentInfo.setOntologyClass(ComputingAgent.class);
+		agentInfo.importAgentClass(Agent_WekaPerceptronCA.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("Perceptron");
 		agentInfo.setDescription("Perceptron Method");

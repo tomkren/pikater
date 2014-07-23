@@ -2,7 +2,7 @@ package org.pikater.core.agents.experiment.search;
 
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
@@ -318,7 +318,7 @@ public class Agent_EASearch extends Agent_Search {
         maxGeneration = 5;
         goalError = 0.02;
 
-        NewOptionList options = new NewOptionList(getSearchOptions());
+        NewOptions options = new NewOptions(getSearchOptions());
         
         if (options.containsOptionWithName("E")) {
 	        NewOption optionE = options.getOptionByName("E");

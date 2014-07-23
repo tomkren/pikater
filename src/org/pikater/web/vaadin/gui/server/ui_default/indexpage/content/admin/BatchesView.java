@@ -2,11 +2,11 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.batches.AllBatchesTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
-import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
+import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBView;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBView;
@@ -53,23 +53,23 @@ public class BatchesView extends ExpandableView
 	@Override
 	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()
 	{
-		return new BatchStep(this, null); 
+		return new BatchStep(this, new AllBatchesTableDBView()); 
 	}
 	
 	//----------------------------------------------------------------------------
 	// USED VIEW ROOTS
 	
-	protected class BatchDBViewRoot implements IDBViewRoot<BatchTableDBView>
+	public static class BatchDBViewRoot implements IDBViewRoot<AbstractBatchTableDBView>
 	{
-		private final BatchTableDBView dbView;
+		private final AbstractBatchTableDBView dbView;
 		
-		public BatchDBViewRoot(JPAUser user)
+		public BatchDBViewRoot(AbstractBatchTableDBView dbView)
 		{
-			this.dbView = new BatchTableDBView(user);
+			this.dbView = dbView;
 		}
 
 		@Override
-		public BatchTableDBView getUnderlyingDBView()
+		public AbstractBatchTableDBView getUnderlyingDBView()
 		{
 			return dbView;
 		}
@@ -83,7 +83,7 @@ public class BatchesView extends ExpandableView
 		@Override
 		public int getColumnSize(ITableColumn column)
 		{
-			BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
+			AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
 			switch(specificColumn)
 			{
 				case FINISHED:
@@ -186,7 +186,7 @@ public class BatchesView extends ExpandableView
 	{
 		private final DBTableLayout innerLayout;
 		
-		public BatchStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPAUser user)
+		public BatchStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, AbstractBatchTableDBView dbView)
 		{
 			super(parentWizard, false);
 			
@@ -197,7 +197,7 @@ public class BatchesView extends ExpandableView
 			// this.innerLayout.setCommitImmediately(false);
 			
 			// view setup
-			this.innerLayout.setView(new BatchDBViewRoot(user));
+			this.innerLayout.setView(new BatchDBViewRoot(dbView));
 		}
 
 		@Override

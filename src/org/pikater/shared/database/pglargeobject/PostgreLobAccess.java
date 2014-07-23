@@ -24,7 +24,7 @@ public class PostgreLobAccess {
 					new PostgreSQLConnectionProvider(
 							"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
 							"pikater",
-							"a").getConnection());
+							"SrapRoPy").getConnection());
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

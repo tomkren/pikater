@@ -71,8 +71,8 @@ public class EASearch_SearchBox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_EASearch.class);
-		agentInfo.setOntologyClass(Search.class);
+		agentInfo.importAgentClass(Agent_EASearch.class);
+		agentInfo.importOntologyClass(Search.class);
 	
 		agentInfo.setName("EASearch");
 		agentInfo.setDescription("Searcher using Evolution algorithm");

@@ -5,12 +5,23 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.pikater.shared.quartz.PikaterJobScheduler;
+import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.quartzjobs.DownloadTokenExpirationJob;
 
 public class DownloadRegistrar
 {
 	private static final Object lock_object = new Object();
-	private static final Map<UUID, IDownloadResource> uuidToResource = new HashMap<UUID, IDownloadResource>();
+	private static final Map<UUID, DownloadResource> uuidToResource = new HashMap<UUID, DownloadResource>();
+	
+	public static String issueDownloadURL(IDownloadResource resource)
+	{
+		synchronized(lock_object)
+		{
+			UUID newUUID = getNextUIID();
+			uuidToResource.put(newUUID, new DownloadResource(resource, false));
+			return createDownloadURL(newUUID);
+		}
+	}
 	
 	/**
 	 * Associates a download resource with a unique download URL.
@@ -22,16 +33,13 @@ public class DownloadRegistrar
 	{
 		synchronized(lock_object)
 		{
-			UUID newUUID;
-			while(uuidToResource.containsKey(newUUID = UUID.randomUUID()))
-			{
-			}
-			uuidToResource.put(newUUID, resource);
+			UUID newUUID = getNextUIID();
+			uuidToResource.put(newUUID, new DownloadResource(resource, true));
 			
 			try
 			{
 				PikaterJobScheduler.getJobScheduler().defineJob(DownloadTokenExpirationJob.class, new Object[] { newUUID, resource });
-				return "/Pikater/download?t=" + newUUID.toString();
+				return createDownloadURL(newUUID);
 			}
 			catch (Throwable e)
 			{
@@ -45,23 +53,23 @@ public class DownloadRegistrar
 		}
 	}
 	
-	public static IDownloadResource downloadPicked(String token) 
+	public static IDownloadResource downloadPickedUp(String token) 
 	{
 		synchronized(lock_object)
 		{
 			try
 			{
 				UUID uuid = UUID.fromString(token);
-				IDownloadResource result = uuidToResource.get(uuid);
-				if(result != null)
+				DownloadResource resource = uuidToResource.get(uuid);
+				if(resource.isAOneTimeDownload())
 				{
 					uuidToResource.remove(uuid);
 				}
-				return result;
+				return resource.getResource();
 			}
 			catch (Throwable t)
 			{
-				// no need to log this... invalid token is invalid token
+				// NullPointerException catcher - invalid token is invalid token => return null and don't log anything
 				return null;
 			}
 		}
@@ -71,11 +79,64 @@ public class DownloadRegistrar
 	{
 		synchronized(lock_object)
 		{
-			IDownloadResource result = uuidToResource.get(token);
-			if((result != null) && result.equals(resource))
+			DownloadResource result = uuidToResource.get(token);
+			if((result != null) && result.getResource().equals(resource))
 			{
 				uuidToResource.remove(token);
 			}
+		}
+	}
+	
+	//-----------------------------------------------------------------------------
+	// PRIVATE INTERFACE
+	
+	private static UUID getNextUIID()
+	{
+		UUID newUUID;
+		while(uuidToResource.containsKey(newUUID = UUID.randomUUID()))
+		{
+		}
+		return newUUID;
+	}
+	
+	/**
+	 * Common method to create a correct download URL that respects dynamic
+	 * application context paths.</br>
+	 * Context path can be defined (for example) as the name of the ".war"
+	 * file deployed to Tomcat, excluding the extension.
+	 * @param uuid
+	 * @return
+	 */
+	private static String createDownloadURL(UUID uuid)
+	{
+		return String.format("/%s/download?t=%s", 
+				ServerConfigurationInterface.getContext().getContextPath(),
+				uuid.toString()
+		);
+	}
+	
+	//-----------------------------------------------------------------------------
+	// PRIVATE TYPES
+	
+	private static class DownloadResource
+	{
+		private final IDownloadResource resource;
+		private final boolean isAOneTimeDownload;
+		
+		public DownloadResource(IDownloadResource resource, boolean isAOneTimeDownload)
+		{
+			this.resource = resource;
+			this.isAOneTimeDownload = isAOneTimeDownload;
+		}
+
+		public IDownloadResource getResource()
+		{
+			return resource;
+		}
+
+		public boolean isAOneTimeDownload()
+		{
+			return isAOneTimeDownload;
 		}
 	}
 }

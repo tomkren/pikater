@@ -5,8 +5,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogResultValidator;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -19,7 +21,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
-public abstract class CustomFormLayout extends VerticalLayout
+@StyleSheet("customFormLayout.css")
+public abstract class CustomFormLayout extends VerticalLayout implements IDialogResultValidator
 {
 	private static final long serialVersionUID = 4919466788832055328L;
 	
@@ -32,6 +35,7 @@ public abstract class CustomFormLayout extends VerticalLayout
 	{
 		super();
 		setSpacing(true);
+		setStyleName("customFormLayout");
 		
 		this.fLayout = new FormLayout();
 		addComponent(fLayout);
@@ -107,6 +111,12 @@ public abstract class CustomFormLayout extends VerticalLayout
 	public boolean isFormValidAndUpdated()
 	{
 		return isForm(true, true);
+	}
+	
+	@Override
+	public boolean isResultReadyToBeHandled()
+	{
+		return isFormValidAndUpdated();
 	}
 	
 	// --------------------------------------------------------------
@@ -216,13 +226,6 @@ public abstract class CustomFormLayout extends VerticalLayout
 		boolean onSubmit();
 	}
 
-	/*
-	protected class OnSubmitResult
-	{
-		public final boolean successful;
-	}
-	*/
-	
 	// --------------------------------------------------------------
 	// ABSTRACT INTERFACE 
 	

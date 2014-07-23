@@ -35,8 +35,8 @@ public class GridSearch_SearchBox {
 		
 		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_GridSearch.class);
-		agentInfo.setOntologyClass(Search.class);
+		agentInfo.importAgentClass(Agent_GridSearch.class);
+		agentInfo.importOntologyClass(Search.class);
 	
 		agentInfo.setName("GridSearch");
 		agentInfo.setDescription("GridSearch Description");

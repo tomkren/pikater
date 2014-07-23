@@ -30,6 +30,7 @@ public class DBTableLayout extends VerticalLayout
 		
 		this.chb_commit = new CheckBox("commit changes immediately", true); // table is, by default, immediate
 		this.chb_commit.setSizeUndefined();
+		this.chb_commit.setImmediate(true);
 		this.chb_commit.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -5325141700170503845L;
@@ -70,6 +71,15 @@ public class DBTableLayout extends VerticalLayout
 		addComponent(this.table);
 		addComponent(this.tablePagingControls);
 		addComponent(hl_btnInterface);
+	}
+	
+	@Override
+	public void setReadOnly(boolean readOnly)
+	{
+		super.setReadOnly(readOnly);
+		
+		chb_commit.setValue(readOnly); // hides or shows the "save" button
+		chb_commit.setVisible(!readOnly);
 	}
 	
 	public DBTable getTable()

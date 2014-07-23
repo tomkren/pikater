@@ -17,7 +17,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionE
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
@@ -43,7 +43,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	int graphId;
 	SearchComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
-    NewOptionList options;
+    NewOptions options;
     OptionEdge childOptions;
     AID searchAID;
 
@@ -148,7 +148,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
        if (options==null) {
            OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
            inputs.get("options").block();
-           options = new NewOptionList(optionEdge.getOptions());
+           options = new NewOptions(optionEdge.getOptions());
        }
 		agent.setOptions(options.getOptions());
 

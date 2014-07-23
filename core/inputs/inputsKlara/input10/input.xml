@@ -7,7 +7,7 @@
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>1</id>
           <options/>
           <errors/>
@@ -41,7 +41,7 @@
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>1</id>
           <options/>
           <errors/>
@@ -75,7 +75,7 @@
       <errors/>
       <dataSources/>
       <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataPreProcessing">
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>1</id>
           <options/>
           <errors/>

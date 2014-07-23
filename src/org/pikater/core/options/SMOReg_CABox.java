@@ -115,8 +115,8 @@ public class SMOReg_CABox  {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaSMOregCA.class);
-		agentInfo.setOntologyClass(ComputingAgent.class);
+		agentInfo.importAgentClass(Agent_WekaSMOregCA.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("SMO Reg");
 		agentInfo.setDescription("SMOReg Method");

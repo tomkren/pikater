@@ -26,7 +26,7 @@ import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
@@ -50,7 +50,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
 	int graphId;
 	ModelComputationNode computationNode;
-    NewOptionList options;
+    NewOptions options;
 	
 	public CAStartComputationStrategy (Agent_Manager manager, 
 			int graphId, ModelComputationNode computationNode){
@@ -80,8 +80,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	}
 	
 	//Create new options from solution with filled ? values (convert solution->options) 
-	private NewOptionList fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
-        NewOptionList res_options = new NewOptionList();
+	private NewOptions fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
+        NewOptions res_options = new NewOptions();
 		List<NewOption> options_list = new ArrayList<>();
 		if(options==null){
 			return res_options;
@@ -126,9 +126,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		Agent agent = new Agent();
         if (options==null) {
             OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
-            options = new NewOptionList(optionEdge.getOptions());
+            options = new NewOptions(optionEdge.getOptions());
         }
-        NewOptionList usedoptions=options;
+        NewOptions usedoptions=options;
         // TODO zbavit se Options -> list instead
         agent.setType(computationNode.getModelClass());
         Task task = new Task();
