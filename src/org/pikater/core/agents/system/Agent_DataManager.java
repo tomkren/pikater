@@ -982,7 +982,7 @@ public class Agent_DataManager extends PikaterAgent {
 			JPAResult jparesult = new JPAResult();
 
 			jparesult.setAgentName(task.getAgent().getName());
-			jparesult.setOptions(options.exportXML().substring(0,254)); // XXX extend table? less verbose format?
+			jparesult.setOptions(options.exportXML());
 
 			float Error_rate = Float.MAX_VALUE;
 			float Kappa_statistic = Float.MAX_VALUE;
