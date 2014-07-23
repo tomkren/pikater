@@ -202,7 +202,6 @@ public class PagingComponent extends HorizontalLayout
 						 */
 						cb_selectedPage.setValue(getCurrentlySelectedPage() + 1);
 					}
-					
 				}
 			});
 			Anchor page_last = new Anchor("Last >>", new MouseEvents.ClickListener()
