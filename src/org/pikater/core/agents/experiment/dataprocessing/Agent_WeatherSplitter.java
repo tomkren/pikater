@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.AgentManagementOntology;
+import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
@@ -88,7 +90,12 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	protected void setup() {
 		super.setup();
 
-		addBehaviour(new AchieveREResponder(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)) {
+		Ontology ontology = BatchOntology.getInstance();
+		MessageTemplate template = MessageTemplate.and(
+				MessageTemplate.MatchOntology(ontology.getName()),
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+
+		addBehaviour(new AchieveREResponder(this, template) {
 			private static final long serialVersionUID = 746138569142900592L;
 
 			@Override

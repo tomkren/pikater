@@ -82,7 +82,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		addBehaviour(new RecommendBehaviour(this, mt));
 
 
-		sendAgentInfo(getAgentInfo());
+		addAgentInfoBehaviour(getAgentInfo());
 
     }
          

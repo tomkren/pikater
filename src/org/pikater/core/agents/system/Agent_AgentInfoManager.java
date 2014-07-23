@@ -1,9 +1,7 @@
 package org.pikater.core.agents.system;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.pikater.core.AgentNames;
@@ -21,11 +19,13 @@ import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.reflections.Reflections;
 
+import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -38,10 +38,6 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.wrapper.AgentController;
-import jade.wrapper.ControllerException;
-import jade.wrapper.PlatformController;
-import jade.wrapper.StaleProxyException;
 
 public class Agent_AgentInfoManager extends PikaterAgent {
 
@@ -71,9 +67,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 		log("Agent " + getName() + " started");
 
-		MessageTemplate newAgentInfoTemplate = MessageTemplate.or(
-				MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-				MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+		MessageTemplate newAgentInfoTemplate =
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 
 		this.addBehaviour(new AchieveREResponder(this, newAgentInfoTemplate) {
 
@@ -105,10 +100,6 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					return respondToNewAgent(request, action);
 				}
 
-				if (action.getAction() instanceof AgentInfo) {
-					return respondToAgentInfo(request, action);
-				}
-
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
 
@@ -133,37 +124,18 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	private void wakeUpAgentInfo(
 			List<Class<? extends Agent_AbstractExperiment>> agentClasses) {
 		
-		Map<String, AgentController> controlers = new HashMap<String, AgentController>();
-
-// TODO:
-//		List<AID> createdAIDs = new ArrayList<AID>();
-		
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
-				
-//			AID createdAID = createAgent(
-//					agentClassI.getName(), agentClassI.getName(), null);
 
-//			createdAIDs.add(createdAID);
-			
-
-			try {
-				PlatformController container = getContainerController();
-				AgentController agentControllerI = container.createNewAgent(
-						agentClassI.getSimpleName(), agentClassI.getName(), null);
-				agentControllerI.start();
-				
-				controlers.put(agentClassI.getSimpleName(), agentControllerI);
-			} catch (ControllerException e) {
-				logError(e.getMessage(), e);
-			}
-
+			createAgent(
+					agentClassI.getName(), agentClassI.getName(), null);
 		}
 		
-//		for (AID aidI : createdAIDs) {
-//			killAgent(aidI.getName());
-//		}
-
-		Thread shutDownAgents = new ShutDownAgents(controlers, this);
+		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
+		
+			//getAgentInfo(this, agentClassI.getName());
+		}
+		
+		Thread shutDownAgents = new ShutDownAgents(this, agentClasses);
 		shutDownAgents.start();
 	}
 	
@@ -176,7 +148,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				getExperimmentAgentClasses(
 						Agent_DataProcessing.class));
 		allAgentClasses.remove(Agent_DataProcessing.class);
-		
+			
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
 						Agent_ComputingAgent.class));
@@ -187,12 +159,12 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				getExperimmentAgentClasses(
 						Agent_Search.class));
 		allAgentClasses.remove(Agent_Search.class);
-		
+	
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
 						Agent_Recommender.class));
 		allAgentClasses.remove(Agent_Recommender.class);
-		
+
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
 						Agent_VirtualBoxProvider.class));
@@ -267,28 +239,51 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	}
 
 	
-	protected ACLMessage respondToAgentInfo(ACLMessage request, Action action) {
-
-		AgentInfo agentInfo = (AgentInfo) action.getAction();
-
-		log("Agent " + getName() + ": recieved AgentInfo from "
-				+ agentInfo.getAgentClassName());
-
-		saveAgentInfo(agentInfo);
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(action, "OK");
-		try {
-			getContentManager().fillContent(reply, r);
-		} catch (CodecException e) {
-			logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+	private AgentInfo getAgentInfo(PikaterAgent agent, String agentName) {
+		
+		if (agent == null) {
+			throw new IllegalArgumentException(
+					"Argument agent can't be null");
+		}
+		if (agentName == null || agentName.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"Argument agentName can't be null or empty");
 		}
 
-		return reply;
+
+		AID agentRecieverAID = new AID(agentName, false);
+		Ontology ontology = AgentInfoOntology.getInstance();
+
+		ACLMessage getAgentInfomsg = new ACLMessage(ACLMessage.REQUEST);
+		getAgentInfomsg.addReceiver(agentRecieverAID);
+		getAgentInfomsg.setSender(agent.getAID());
+		getAgentInfomsg.setLanguage(agent.getCodec().getName());
+		getAgentInfomsg.setOntology(ontology.getName());
+
+		GetAgentInfo getAgentInfo = new GetAgentInfo();
+		
+		Action action = new Action(agent.getAID(), getAgentInfo);
+		
+		try {
+			agent.getContentManager().fillContent(getAgentInfomsg, action);
+			ACLMessage agentInfoMsg = FIPAService
+					.doFipaRequestClient(agent, getAgentInfomsg);
+
+			AgentInfo agentInfo = (AgentInfo) getContentManager()
+					.extractContent(agentInfoMsg);
+			return agentInfo;
+			
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (Codec.CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		}
+		
+		return null;
 	}
+	
 	
 	private void saveAgentInfo(AgentInfo agentInfo) {
 		
@@ -326,13 +321,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 class ShutDownAgents extends Thread {
 
-	private Map<String, AgentController> controlers;
+	private List<Class<? extends Agent_AbstractExperiment>> agentClasses;
 	private Agent_AgentInfoManager agent;
 
-	public ShutDownAgents(Map<String, AgentController> controlers,
-			Agent_AgentInfoManager agent) {
-		this.controlers = controlers;
+	public ShutDownAgents(Agent_AgentInfoManager agent,
+			List<Class<? extends Agent_AbstractExperiment>> agentClasses) {
 		this.agent = agent;
+		this.agentClasses = agentClasses;
 	}
 	
     public void run() {
@@ -345,15 +340,10 @@ class ShutDownAgents extends Thread {
 			agent.logError(e.getMessage(), e);
 		}
 		
-		for (String agentNameI : controlers.keySet()){
-
-			AgentController contorlerI = controlers.get(agentNameI);
-			try {
-				agent.log("Shut down: " + agentNameI);
-				contorlerI.kill();
-			} catch (StaleProxyException e) {
-				agent.logError(e.getMessage(), e);
-			}
+		for (Class<? extends Agent_AbstractExperiment> classI : agentClasses){
+			agent.log("Agent " + classI.getName() + " was killed");
+			agent.killAgent(classI.getName());
+			
 		}
     }
 

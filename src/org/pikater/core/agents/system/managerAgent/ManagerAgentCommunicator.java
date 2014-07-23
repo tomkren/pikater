@@ -81,6 +81,7 @@ public class ManagerAgentCommunicator {
 
 		ACLMessage msgKillA = new ACLMessage(ACLMessage.REQUEST);
 		msgKillA.addReceiver(agentManagerAID);
+		msgKillA.setSender(agentKiller.getAID());
 		msgKillA.setLanguage(agentKiller.getCodec().getName());
 		msgKillA.setOntology(ontology.getName());
 
@@ -94,7 +95,7 @@ public class ManagerAgentCommunicator {
 			ACLMessage msgRetursName = FIPAService
 					.doFipaRequestClient(agentKiller, msgKillA);
 
-			if (msgRetursName.getPerformative() == ACLMessage.AGREE) {
+			if (msgRetursName.getPerformative() == ACLMessage.INFORM) {
 				return true;
 			}
 			if (msgRetursName.getPerformative() == ACLMessage.FAILURE) {

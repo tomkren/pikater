@@ -5,12 +5,12 @@ import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
 
 
@@ -46,6 +46,7 @@ public class AgentInfoOntology extends BeanOntology {
             add(agentPackage);
 
             add(GetOptions.class);
+            add(GetAgentInfo.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
