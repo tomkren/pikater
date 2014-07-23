@@ -66,13 +66,37 @@ public class JPABatch extends JPAAbstractEntity{
 	public JPABatch(){}
 	
 	/**
-	 * A constructor to use from the GUI.
+	 * Creates an experiment to be saved (not executed).
 	 * @param name
 	 * @param note
 	 * @param xml
 	 * @param owner
 	 */
-	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority)
+	public JPABatch(String name, String note, String xml, JPAUser owner)
+	{
+		this.name=name;
+		this.note = note;
+		this.XML = xml;
+		this.owner=owner;
+		this.priority = 9; // TODO: this is probably just for tests - let's have some methods to easily access the defaults
+		
+		this.totalPriority=99; // TODO: this is probably just for tests - let's have some methods to easily access the defaults
+		this.created=new Date();
+		this.status=JPABatchStatus.CREATED;
+	}
+	
+	/**
+	 * Creates an experiment to be saved for execution.
+	 * @param name
+	 * @param note
+	 * @param xml
+	 * @param owner
+	 * @param userAssignedPriority
+	 * @param computationEstimateInHours
+	 * @param sendEmailAfterFinish
+	 */
+	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, 
+			int computationEstimateInHours, boolean sendEmailAfterFinish)
 	{
 		this.name=name;
 		this.note = note;
@@ -80,11 +104,13 @@ public class JPABatch extends JPAAbstractEntity{
 		this.owner=owner;
 		this.priority = userAssignedPriority;
 		
+		// TODO: include computation estimate and the boolean flag in the entity
+		
 		this.totalPriority=99; // TODO: this is probably just for tests
 		this.created=new Date();
-		this.status=JPABatchStatus.CREATED;
+		this.status=JPABatchStatus.WAITING;
 	}
-
+	
 	public void setName(String name){
 		this.name=name;
 	}
