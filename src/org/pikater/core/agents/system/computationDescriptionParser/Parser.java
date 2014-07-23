@@ -214,7 +214,7 @@ public class Parser {
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         searchNode.addInput("childoptions",optionBuffer);
 
-        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,searchNode.getId(),1,searchNode));
+        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,1,searchNode));
         StandardBuffer searchBuffer=new StandardBuffer(searchNode,child);
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
         child.addInput("searchedoptions",searchBuffer);

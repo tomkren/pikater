@@ -82,6 +82,9 @@ public class ComputationNode {
 
     public void addToOutputAndProcess(EdgeValue o, String outputName)
     {
+    	if (outputs.get(outputName)==null){
+    		return;
+    	}
         ArrayList<ComputationOutputBuffer<EdgeValue>> outs=outputs.get(outputName);
         for (ComputationOutputBuffer<EdgeValue> out:outs)
         {
