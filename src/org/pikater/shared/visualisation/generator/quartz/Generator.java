@@ -3,10 +3,10 @@ package org.pikater.shared.visualisation.generator.quartz;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.pikater.shared.visualisation.generator.ChartGenerator.IProgressListener;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
 
 public abstract class Generator {
-	protected IProgressListener listener;
+	protected IProgressDialogContextForJobs progressListener;
 	protected PrintStream output;
 	
 	protected int instNum;
@@ -14,8 +14,8 @@ public abstract class Generator {
 	protected int percentage=0;
 	protected int count=0;
 	
-	protected Generator(IProgressListener listener, PrintStream output){
-		this.listener=listener;
+	protected Generator(IProgressDialogContextForJobs progressListener, PrintStream output){
+		this.progressListener=progressListener;
 		this.output=output;
 	}
 	
@@ -27,15 +27,15 @@ public abstract class Generator {
 		
 		percentage=100*count/instNum;
 		
-		if((listener!=null)&&(percentage>lastPercentage)){
-			listener.updateProgress(percentage/100.0);
+		if((progressListener!=null)&&(percentage>lastPercentage)){
+			progressListener.updateProgress(percentage / new Float(100.0));
 			lastPercentage=percentage;
 		}
 	}
 	
 	protected void signalFinish(){
-		if(listener!=null){
-			listener.finished();
+		if(progressListener!=null){
+			progressListener.onTaskFinish();
 		}
 	}
 }

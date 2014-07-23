@@ -14,6 +14,7 @@ import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.TextField;
 
 import de.steinwedel.messagebox.ButtonId;
@@ -141,6 +142,48 @@ public class MyDialogs
 		return mb;
 	}
 	
+	public static ProgressMessageBox progressDialog(String title, final ProgressDialogEvents progressDialogEvents)
+	{
+		ProgressBar progress = new ProgressBar(0);
+		progress.setWidth("350px");
+		MyMessageBoxListener listener = new MyMessageBoxListener(null)
+		{
+			/*
+			 * IMPORTANT: the 'null' argument can easily cause errors if modifications are
+			 * made to the enclosing class.
+			 */
+			
+			@Override
+			protected boolean allowOKHandle()
+			{
+				return true;
+			}
+
+			@Override
+			protected void addArgs(List<Object> arguments)
+			{
+			}
+			
+			@Override
+			protected void handleClose()
+			{
+				progressDialogEvents.abortTask();
+				super.handleClose();
+			}
+		};
+		MessageBox mb = MessageBox.showCustomized(
+				Icon.INFO,
+				title == null ? "Progress" : title,
+				progress,
+				listener,
+				ButtonId.ABORT
+		);
+		listener.setParentBox(mb); // don't forget this!
+		progressDialogEvents.setMessageBox(mb); // don't forget this!
+		setupMessageBox(mb, false);
+		return new ProgressMessageBox(mb, progress, progressDialogEvents);
+	}
+	
 	// -------------------------------------------------------------------------
 	// ROUTINES FOR DISPLAYING SPECIALIZED DIALOGS
 	
@@ -256,7 +299,7 @@ public class MyDialogs
 	}
 	
 	// -------------------------------------------------------------------------
-	// PUBLIC TYPES
+	// PUBLIC TYPES - GENERAL DIALOG PREPARATION AND RESULT HANDLING
 	
 	public static interface IDialogResultValidator
 	{
@@ -291,6 +334,115 @@ public class MyDialogs
 	
 	public static interface IDialogComponent extends IDialogResultPreparer, IDialogResultHandler
 	{
+	}
+	
+	// -------------------------------------------------------------------------
+	// PUBLIC TYPES - PROGRESS BAR DIALOG
+	
+	public static interface IProgressListener
+	{
+		/**
+		 * Updates the associated dialog's progress bar. 
+		 * @param percentage value must be between 0.0 and 1.0
+		 */
+		void updateProgress(float percentage);
+	}
+	
+	public static interface IProgressDialogResult
+	{
+		/**
+		 * Called when the underlying task is finished and associated
+		 * progress dialog can close.
+		 * This method should only be called FROM THE TASK.
+		 */
+		void onTaskFinish();
+		
+		/**
+		 * Called when the underlying task fails (throws an exception
+		 * or times out) and associated progress dialog can close.
+		 * This method should only be called FROM THE TASK. 
+		 */
+		void onTaskFailed();
+	}
+	
+	public static interface IProgressDialogTask
+	{
+		/**
+		 * Signal used to start the underlying task.
+		 */
+		void startTask();
+		
+		/**
+		 * Signal used to abort the underlying task and close the
+		 * associated dialog.
+		 */
+		void abortTask();
+	}
+	
+	public static interface IProgressDialogContextForJobs extends IProgressListener, IProgressDialogResult
+	{
+	}
+	
+	public static abstract class ProgressDialogEvents implements IProgressDialogResult, IProgressDialogTask
+	{
+		private MessageBox messageBox;
+
+		/**
+		 * Get the parent message box. Although it is created shortly after this class,
+		 * there's no other way to propagate it in unimplemented methods of this class.
+		 * @return
+		 */
+		public MessageBox getMessageBox()
+		{
+			return messageBox;
+		}
+
+		/**
+		 * Do not use. It will get called automatically when you pass a new
+		 * instance of this class to progress dialog.
+		 * @param messageBox
+		 */
+		public void setMessageBox(MessageBox messageBox)
+		{
+			this.messageBox = messageBox;
+		}
+	}
+	
+	public static class ProgressMessageBox implements IProgressDialogContextForJobs
+	{
+		private final MessageBox mb;
+		private final ProgressBar progress;
+		private final ProgressDialogEvents events;
+		
+		public ProgressMessageBox(MessageBox mb, ProgressBar progress, ProgressDialogEvents events) 
+		{
+			this.mb = mb;
+			this.progress = progress;
+			this.events = events;
+		}
+		
+		public MessageBox getMessageBox()
+		{
+			return mb;
+		}
+		
+		@Override
+		public void updateProgress(float percentage)
+		{
+			this.progress.setValue(percentage);
+		}
+		
+		@Override
+		public void onTaskFinish()
+		{
+			events.onTaskFinish(); // simply forward
+		}
+		
+		@Override
+		public void onTaskFailed()
+		{
+			events.onTaskFailed(); // simply forward
+		}
 	}
 	
 	// -------------------------------------------------------------------------
@@ -340,7 +492,7 @@ public class MyDialogs
 				case CANCEL:
 				case CLOSE:
 				case NO:
-					parentBox.close();
+					handleClose();
 					break;
 					
 				default:
@@ -365,6 +517,14 @@ public class MyDialogs
 		 * @param arguments the list to add arguments to
 		 */
 		protected abstract void addArgs(List<Object> arguments);
+		
+		/**
+		 * Method to close the dialog when it's no longer needed.
+		 */
+		protected void handleClose()
+		{
+			parentBox.close();
+		}
 		
 		/**
 		 * The super implementation does nothing and is called for any button clicks that are not handled

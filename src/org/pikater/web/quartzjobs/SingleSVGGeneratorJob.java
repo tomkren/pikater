@@ -5,8 +5,8 @@ import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleOneTimeJob;
-import org.pikater.shared.visualisation.generator.ChartGenerator.IProgressListener;
 import org.pikater.shared.visualisation.generator.quartz.SingleSVGGenerator;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
@@ -25,7 +25,7 @@ public class SingleSVGGeneratorJob extends InterruptibleOneTimeJob {
 	public boolean argumentCorrect(int index, Object arg) {
 		switch(index){
 		case 0:
-			return arg instanceof IProgressListener;
+			return arg instanceof IProgressDialogContextForJobs;
 		case 1:
 			return arg instanceof JPADataSetLO;
 		case 2:
@@ -46,7 +46,7 @@ public class SingleSVGGeneratorJob extends InterruptibleOneTimeJob {
 
 	@Override
 	protected void execute() throws JobExecutionException {
-			IProgressListener listener=getArg(0);
+		IProgressDialogContextForJobs listener=getArg(0);
 			JPADataSetLO dslo=getArg(1);
 			try {
 				PrintStream output=new PrintStream((String)getArg(2));

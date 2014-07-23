@@ -19,18 +19,13 @@ import org.pikater.shared.visualisation.datasource.single.SingleArffDataset;
 import org.pikater.shared.visualisation.renderer.ImageRenderer;
 import org.pikater.shared.visualisation.renderer.RendererInterface;
 import org.pikater.shared.visualisation.renderer.SVGRenderer;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressListener;
 
 public class ChartGenerator {
 
 	public static int SINGLE_CHART_SIZE=1000;
 	public static int MATRIX_CHART_SIZE=2000;
 	
-	public static interface IProgressListener
-	{
-		void updateProgress(double percentage);
-		void finished();
-	}
-
 	/**
 	 * Creates an <b>SVG</b> encoded chart for dataset for the {@link JPADataSetLO JPADataSetLO} object.
 	 * <p>
@@ -218,7 +213,7 @@ public class ChartGenerator {
 			percentage=100*count/instNum;
 			
 			if((listener!=null)&&(percentage>lastPercentage)){
-				listener.updateProgress(percentage/100.0);
+				listener.updateProgress(percentage / new Float(100));
 				lastPercentage=percentage;
 			}
 		}

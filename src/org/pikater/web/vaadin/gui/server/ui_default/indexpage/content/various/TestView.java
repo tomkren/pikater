@@ -1,21 +1,33 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
+import org.pikater.shared.util.IOUtils;
+import org.pikater.web.quartzjobs.MatrixPNGGeneratorJob;
+import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.quartz.JobKey;
 
+import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.VerticalLayout;
 
 public class TestView extends VerticalLayout implements IContentComponent
@@ -27,7 +39,9 @@ public class TestView extends VerticalLayout implements IContentComponent
 		super();
 		setSizeFull();
 		
-		testJSCH();
+		// testJSCH();
+		// testAnchor();
+		testVisualization();
 	}
 
 	@Override
@@ -49,6 +63,83 @@ public class TestView extends VerticalLayout implements IContentComponent
 	
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
+	
+	public void testVisualization()
+	{
+		final JPADataSetLO iris = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
+		
+		addComponent(new Button("Start", new Button.ClickListener()
+		{
+			private static final long serialVersionUID = 4769508433785670365L;
+
+			@Override
+			public void buttonClick(ClickEvent event)
+			{
+				// create an image file to which the visualization module will generate the image
+				final File tmpFile = IOUtils.createTemporaryFile("visualization-generated", ".png");
+				
+				// then display progress dialog
+				MyDialogs.progressDialog("Vizualization progress...", new MyDialogs.ProgressDialogEvents()
+				{
+					private JobKey jobKey = null;
+					
+					@Override
+					public void onTaskFinish()
+					{
+						// TODO: display GUI including the generated image
+						// TODO: generated images should be accessible only for a specific user (that has the link) => download servlet
+					}
+					
+					@Override
+					public void onTaskFailed()
+					{
+						getMessageBox().close();
+						MyNotifications.showApplicationError();
+					}
+					
+					@Override
+					public void startTask()
+					{
+						// start the task and bind it with the progress dialog
+						try
+						{
+							jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
+							{
+								getMessageBox(),
+								iris,
+								tmpFile.getAbsolutePath()
+							});
+						}
+						catch (Throwable e)
+						{
+							throw new RuntimeException("Could not issue vizualization generation job.", e);
+						}
+					}
+					
+					@Override
+					public void abortTask()
+					{
+						PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
+					}
+				});
+			}
+		}));
+	}
+	
+	public void testAnchor()
+	{
+		addComponent(new Anchor("test1", new ClickListener() 
+		{
+			private static final long serialVersionUID = -485684054380631770L;
+
+			@Override
+			public void click(com.vaadin.event.MouseEvents.ClickEvent event)
+			{
+				MyNotifications.showInfo("Yay", "yay");
+			}
+		}));
+		addComponent(new Anchor("test2", "function() { alert(42); }"));
+	}
 	
 	public void testJSCH()
 	{
