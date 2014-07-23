@@ -33,8 +33,8 @@ public class NNge_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaNNgeCA.class); // some virtual-box provider agent
-		agentInfo.setOntologyClass(FileDataProvider.class);
+		agentInfo.importAgentClass(Agent_WekaNNgeCA.class); // some virtual-box provider agent
+		agentInfo.importOntologyClass(FileDataProvider.class);
 	
 		agentInfo.setName("NNge");
 		agentInfo.setDescription("NNge Method");

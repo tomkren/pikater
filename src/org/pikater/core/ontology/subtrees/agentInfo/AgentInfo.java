@@ -35,7 +35,7 @@ public class AgentInfo implements Concept {
 	public void setAgentClassName(String agentClassName) {
 		this.agentClassName = agentClassName;
 	}
-	public void setAgentClass(Class<?> agentClass) {
+	public void importAgentClass(Class<?> agentClass) {
 		this.agentClassName = agentClass.getName();
 	}
 
@@ -45,7 +45,7 @@ public class AgentInfo implements Concept {
 	public void setOntologyClassName(String ontologyClassName) {
 		this.ontologyClassName = ontologyClassName;
 	}
-	public void setOntologyClass(Class<?> ontologyClass) {
+	public void importOntologyClass(Class<?> ontologyClass) {
 		this.ontologyClassName = ontologyClass.getName();
 	}
 

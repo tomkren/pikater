@@ -132,7 +132,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
 		
-			//getAgentInfo(this, agentClassI.getName());
+			AgentInfo agentInfo = getAgentInfo(this, agentClassI.getName());
+			saveAgentInfo(agentInfo);
 		}
 		
 		Thread shutDownAgents = new ShutDownAgents(this, agentClasses);
@@ -148,13 +149,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				getExperimmentAgentClasses(
 						Agent_DataProcessing.class));
 		allAgentClasses.remove(Agent_DataProcessing.class);
-			
+
 		allAgentClasses.addAll(
-				getExperimmentAgentClasses(
+				getComputingAgentClasses(
 						Agent_ComputingAgent.class));
 		allAgentClasses.remove(Agent_ComputingAgent.class);
 		allAgentClasses.remove(Agent_WekaAbstractCA.class);
-		
+
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
 						Agent_Search.class));
@@ -188,6 +189,20 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return allClasses;
 	}
 	
+	private List<Class<? extends Agent_AbstractExperiment>> getComputingAgentClasses(
+			Class<? extends Agent_AbstractExperiment> agentClass) {
+		
+		String packageToSearch = agentClass.getPackage().getName();
+		Reflections reflections = new Reflections(packageToSearch);
+
+		Set<Class<? extends Agent_ComputingAgent>> allClassesSet = 
+		     reflections.getSubTypesOf(Agent_ComputingAgent.class);
+		 
+		List<Class<? extends Agent_AbstractExperiment>> allClasses =
+				new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
+
+		return allClasses;
+	}
 
 	private ACLMessage respondToGetAgentInfos(ACLMessage request, Action action) {
 
@@ -269,8 +284,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			ACLMessage agentInfoMsg = FIPAService
 					.doFipaRequestClient(agent, getAgentInfomsg);
 
-			AgentInfo agentInfo = (AgentInfo) getContentManager()
+			Action replyAction = (Action) getContentManager()
 					.extractContent(agentInfoMsg);
+			
+			AgentInfo agentInfo = (AgentInfo) replyAction.getAction();
+
 			return agentInfo;
 			
 		} catch (FIPAException e) {

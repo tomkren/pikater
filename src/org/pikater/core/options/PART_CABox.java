@@ -90,8 +90,8 @@ public class PART_CABox {
 		
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaPARTCA.class);
-		agentInfo.setOntologyClass(ComputingAgent.class);
+		agentInfo.importAgentClass(Agent_WekaPARTCA.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("PART");
 		agentInfo.setDescription("PART Method");

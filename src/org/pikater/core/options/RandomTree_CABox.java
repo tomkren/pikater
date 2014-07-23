@@ -45,8 +45,8 @@ public class RandomTree_CABox {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setAgentClass(Agent_WekaRandomTreeCA.class);
-		agentInfo.setOntologyClass(ComputingAgent.class);
+		agentInfo.importAgentClass(Agent_WekaRandomTreeCA.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("RandomTree");
 		agentInfo.setDescription("Random Tree Method");
