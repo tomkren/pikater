@@ -21,7 +21,7 @@ public class ChooseXValue_SearchBox {
 		agentInfo.importAgentClass(Agent_ChooseXValues.class);
 		agentInfo.importOntologyClass(Search.class);
 	
-		agentInfo.setName("Choose X Values Agent");
+		agentInfo.setName("ChooseX-Values");
 		agentInfo.setDescription("Search which Choose X Values");
 
 		agentInfo.addOption(optionN);

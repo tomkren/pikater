@@ -51,7 +51,7 @@ public class PikaterCoreInterface {
 		AgentInfos agentInfos = PikaterCoreInterface.getAgentInfos();
 
 		for (AgentInfo agentInfoI : agentInfos.getAgentInfos()) {
-			System.out.println("AgentInfo: " + agentInfoI.toString());
+			System.out.println("AgentInfo: " + agentInfoI.getName());
 		}
 
 		System.in.read();

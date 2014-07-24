@@ -17,7 +17,7 @@ public class CrossvalidationEvaluationMethod_VirtualBox {
 		optionF.setDescription("F");
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setName("Crossvalidation Evaluation Method");
+		agentInfo.setName("Crossvalidation");
 		agentInfo.setDescription("Evaluation Method");
 		agentInfo.addOption(optionF);
 		agentInfo.importAgentClass(CrossvalidationEvaluationMethod_VirtualBox.class);

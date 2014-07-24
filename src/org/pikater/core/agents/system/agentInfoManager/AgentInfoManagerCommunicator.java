@@ -80,6 +80,7 @@ public class AgentInfoManagerCommunicator {
 		Ontology ontology = AgentInfoOntology.getInstance();
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.setSender(agent.getAID());
 		request.addReceiver(receiver);
 		request.setLanguage(agent.getCodec().getName());
 		request.setOntology(ontology.getName());
@@ -96,9 +97,6 @@ public class AgentInfoManagerCommunicator {
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, request, 10000);
-			if (reply == null) {
-				return null;
-			}
 			
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage());

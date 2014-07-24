@@ -574,6 +574,7 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage respondToGetModels(ACLMessage request, Action a) {
 		//GetModels gm=(GetModels)a.getAction();
 		
+		
 		java.util.List<JPAModel> savedModels=DAOs.modelDAO.getAll();
 		
 		Models models = new Models();
@@ -588,6 +589,7 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 		
 		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
 
 		Result result = new Result(a, models);
 		try {

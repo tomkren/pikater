@@ -151,9 +151,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     				try {
     					getContentManager().fillContent(reply, result);
     				} catch (CodecException ce) {
-    					ce.printStackTrace();
+    					logError(ce.getMessage(), ce);
     				} catch (OntologyException oe) {
-    					oe.printStackTrace();
+    					logError(oe.getMessage(), oe);
     				}
 
     				performative = ACLMessage.INFORM;

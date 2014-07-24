@@ -9,7 +9,7 @@ public class StandardEvaluationMethod_VirtualBox {
 	public static AgentInfo get() {
 		
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setName("Standart Evaluation Method");
+		agentInfo.setName("Standart");
 		agentInfo.setDescription("Evaluation Method");
 		agentInfo.importAgentClass(Agent_VirtualBoxStandardEvaluationMethod.class);
 		agentInfo.importOntologyClass(EvaluationMethod.class);

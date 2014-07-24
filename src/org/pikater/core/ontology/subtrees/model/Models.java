@@ -17,10 +17,13 @@ public class Models implements Concept {
 
 	private List<Model> models;
 
+	public Models() {
+		this.models = new ArrayList<Model>(); 
+	}
+
 	public List<Model> getModels() {
 		return models;
 	}
-
 	public void setModels(List<Model> models) {
 		this.models = models;
 	}
