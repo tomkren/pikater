@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph;
 
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 
 /**
  * User: Kuba
@@ -10,6 +11,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 public class ModelComputationNode extends ComputationNode {
     private String modelClass;
     private EvaluationMethod evaluationMethod;
+    private IExpectedDuration expectedDuration;
 
     public ModelComputationNode() {
         super();
@@ -33,5 +35,13 @@ public class ModelComputationNode extends ComputationNode {
 
 	public void setEvaluationMethod(EvaluationMethod evaluationMethod) {
 		this.evaluationMethod = evaluationMethod;
+	}
+
+	public IExpectedDuration getExpectedDuration() {
+		return expectedDuration;
+	}
+
+	public void setExpectedDuration(IExpectedDuration expectedDuration) {
+		this.expectedDuration = expectedDuration;
 	}
 }
