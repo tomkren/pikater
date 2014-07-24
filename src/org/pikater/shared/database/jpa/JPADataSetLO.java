@@ -19,8 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.pikater.shared.database.exceptions.AttributeActionNotApplicableException;
-import org.pikater.shared.database.exceptions.AttributeNameNotFoundException;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
 
 
@@ -28,8 +26,10 @@ import org.pikater.shared.database.jpa.daos.DataSetDAO;
 @Table(name="DataSetLO")
 @NamedQueries({
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
+	@NamedQuery(name="DataSetLO.getAll.count",query="select count(dslo) from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getByID",query="select dslo from JPADataSetLO dslo where dslo.id=:id"),
 	@NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner"),
+	@NamedQuery(name="DataSetLO.getByOwner.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner"),
 	@NamedQuery(name="DataSetLO.getByOID",query="select dslo from JPADataSetLO dslo where dslo.OID=:oid"),
 	@NamedQuery(name="DataSetLO.getByHash",query="select dslo from JPADataSetLO dslo where dslo.hash=:hash"),
 	@NamedQuery(name="DataSetLO.getByDescription",query="select dslo from JPADataSetLO dslo where dslo.description=:description")
@@ -144,36 +144,6 @@ public class JPADataSetLO extends JPAAbstractEntity{
 		this.globalMetaData=updateValues.getGlobalMetaData();
 		this.hash=updateValues.getHash();
 		this.owner=updateValues.getOwner();		
-	}
-	
-	public double getAttributeMinValue(String attributeName) throws AttributeNameNotFoundException, AttributeActionNotApplicableException{
-		for(JPAAttributeMetaData md:getAttributeMetaData()){
-			if(md.getName().equals(attributeName)){
-				if(md instanceof JPAAttributeNumericalMetaData){
-					return ((JPAAttributeNumericalMetaData)md).getMin();
-				}else{
-					throw new AttributeActionNotApplicableException();
-				}
-			}
-		}
-		throw new AttributeNameNotFoundException();
-	}
-	
-	public double getAttributeMaxValue(String attributeName) throws AttributeNameNotFoundException, AttributeActionNotApplicableException{
-		for(JPAAttributeMetaData md:getAttributeMetaData()){
-			if(md.getName().equals(attributeName)){
-				if(md instanceof JPAAttributeNumericalMetaData){
-					return ((JPAAttributeNumericalMetaData)md).getMax();
-				}else{
-					throw new AttributeActionNotApplicableException();
-				}
-			}
-		}
-		throw new AttributeNameNotFoundException();
-	}
-	
-	public int getNumberOfAttributes(){
-		return this.getAttributeMetaData().size();
 	}
 	
 }

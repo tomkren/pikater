@@ -12,20 +12,28 @@ import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.views.base.SortOrder;
+import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
+import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 
 public class DatabaseTest {
 	
 	public void test(){
 		//listDataSets();
+		listExternalAgents();
 		//listDataSetWithExclusion();
-		listResults();
+		//listResults();
 		//listUserAndRoles();
 		//listBatches();
 		//listExperiments();
@@ -34,10 +42,20 @@ public class DatabaseTest {
 	}
 	
 	public void listDataSets(){
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll();
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll(0,5,DataSetTableDBView.Column.APPROVE,SortOrder.DESCENDING);
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated());
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+		}
+		p("------------");
+		p("");
+	}
+	
+	public void listExternalAgents(){
+		List<JPAExternalAgent> agents= DAOs.externalAgentDAO.getAll(0,5,ExternalAgentTableDBView.Column.AGENT_CLASS,SortOrder.DESCENDING);
+		p("No. of found DataSets: "+agents.size());
+		for(JPAExternalAgent ag:agents){
+			p(ag.getId()+". "+ag.getAgentClass()+"    "+ag.getOwner().getLogin()+"  "+ag.getCreated()+"   "+ag.getDescription()+" ");
 		}
 		p("------------");
 		p("");
@@ -95,7 +113,7 @@ public class DatabaseTest {
 		p("---------------------");
 		p("");
 		
-		List<JPAUser> users=DAOs.userDAO.getAll();
+		List<JPAUser> users=DAOs.userDAO.getAll(0, 5, UsersTableDBView.Column.RESET_PSWD, SortOrder.ASCENDING);
 		p("No. of Users in the system : "+users.size());
 		for(JPAUser r:users){
 			p(r.getId()+". "+r.getLogin()+" : "+r.getStatus()+" - "+r.getEmail()+"   "+r.getCreated().toString()+" : SB = "+r.hasPrivilege(PikaterPriviledge.SAVE_BOX)+" : SDS = "+r.hasPrivilege(PikaterPriviledge.SAVE_DATA_SET));
@@ -105,10 +123,15 @@ public class DatabaseTest {
 	}
 	
 	public void listBatches(){
-		List<JPABatch> batches=DAOs.batchDAO.getAll();
-		p("No. of Batches in the system : "+batches.size());
+		List<JPABatch> batches;//=DAOs.batchDAO.getAll();
+		
+		//batches=DAOs.batchDAO.getAll(0, 10,AbstractBatchTableDBView.Column.NAME);
+		JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin("klara")).getSingleResult();
+		//batches=DAOs.batchDAO.getByOwner(user, 0, 10,AbstractBatchTableDBView.Column.CREATED,SortOrder.ASCENDING);
+		batches=DAOs.batchDAO.getByOwnerAndStatus(user, JPABatchStatus.CREATED, 0, 10,AbstractBatchTableDBView.Column.CREATED,SortOrder.ASCENDING);
+		p("No. of Batches in the system : "+DAOs.batchDAO.getByOwnerAndStatusCount(user, JPABatchStatus.CREATED));
 		for(JPABatch b:batches){
-			p(b.getId()+". "+b.getName()+" : "+b.getCreated()+" - "+b.getFinished());
+			p(b.getOwner().getLogin()+":"+ b.getId()+". "+b.getName()+" : "+b.getCreated()+" - "+b.getFinished());
 		}
 		p("---------------------");
 		p("");

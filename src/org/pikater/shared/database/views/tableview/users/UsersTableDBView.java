@@ -1,12 +1,11 @@
 package org.pikater.shared.database.views.tableview.users;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.UserDAO;
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
@@ -17,7 +16,13 @@ public class UsersTableDBView extends AbstractTableDBView
 {
 	/**
 	 * Table headers will be presented in the order defined here, so
-	 * make sure to order them right :). 
+	 * make sure to order them right :).
+	 * <p>
+	 * This enum is used for create Criteria API query in the function
+	 * {@link UserDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}.
+	 * <p>
+	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}
+	 *  
 	 */
 	public enum Column implements ITableColumn
 	{
@@ -89,45 +94,15 @@ public class UsersTableDBView extends AbstractTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(final QueryConstraints constraints)
 	{
-		/*
-		 * IMPORTANT - as stated in Javadoc, the result collection should not be internally cached.
-		 */
-		
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-		
-		List<JPAUser> allUsers = DAOs.userDAO.getAll();
+		List<JPAUser> allUsers = DAOs.userDAO.getAll(constraints.getOffset(),constraints.getMaxResults(), constraints.getSortColumn(),constraints.getSortOrder());
+		int allUsersCount=DAOs.userDAO.getAllCount();
 		List<UsersTableDBRow> rows = new ArrayList<UsersTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allUsers.size());
-		for(JPAUser user : allUsers.subList(constraints.getOffset(), endIndex))
+		for(JPAUser user : allUsers)
 		{
 			rows.add(new UsersTableDBRow(user));
 		}
 		
-		Collections.sort(rows, new Comparator<UsersTableDBRow>()
-		{
-			@Override
-			public int compare(UsersTableDBRow o1, UsersTableDBRow o2)
-			{
-				Column sortColumn = (Column) constraints.getSortColumn();
-				switch(sortColumn)
-				{
-					case LOGIN:
-						return o1.user.getLogin().compareToIgnoreCase(o2.user.getLogin());
-					case EMAIL:
-						return o1.user.getEmail().compareToIgnoreCase(o2.user.getEmail());
-					case REGISTERED:
-						return o1.user.getCreated().compareTo(o2.user.getCreated());
-					case ADMIN:
-						return o1.user.isAdmin().compareTo(o2.user.isAdmin());
-					default:
-						// throw new IllegalStateException("Unknown column: " + sortColumn.name());
-						break; // do nothing
-				}
-				return 0;
-			}
-		});
-		
-		return new QueryResult(rows, allUsers.size());
+		return new QueryResult(rows, allUsersCount);
 	}
 }

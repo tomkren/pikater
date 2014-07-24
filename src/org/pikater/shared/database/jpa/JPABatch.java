@@ -29,9 +29,14 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 @Table(name="Batch")
 @NamedQueries({
 	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
+	@NamedQuery(name="Batch.getAll.count",query="select count(b) from JPABatch b"),
+	@NamedQuery(name="Batch.getAllNotStatus.count",query="select count(b) from JPABatch b where b.status <> :status"),
 	@NamedQuery(name="Batch.getByID",query="select b from JPABatch b where b.id=:id"),
 	@NamedQuery(name="Batch.getByStatus",query="select b from JPABatch b where b.status=:status"),
-	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner")
+	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner"),
+	@NamedQuery(name="Batch.getByOwner.count",query="select count(b) from JPABatch b where b.owner=:owner"),
+	@NamedQuery(name="Batch.getByOwnerAndStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status=:status"),
+	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status")
 })
 public class JPABatch extends JPAAbstractEntity{
 	@Id
@@ -66,37 +71,13 @@ public class JPABatch extends JPAAbstractEntity{
 	public JPABatch(){}
 	
 	/**
-	 * Creates an experiment to be saved (not executed).
+	 * A constructor to use from the GUI.
 	 * @param name
 	 * @param note
 	 * @param xml
 	 * @param owner
 	 */
-	public JPABatch(String name, String note, String xml, JPAUser owner)
-	{
-		this.name=name;
-		this.note = note;
-		this.XML = xml;
-		this.owner=owner;
-		this.priority = 9; // TODO: this is probably just for tests - let's have some methods to easily access the defaults
-		
-		this.totalPriority=99; // TODO: this is probably just for tests - let's have some methods to easily access the defaults
-		this.created=new Date();
-		this.status=JPABatchStatus.CREATED;
-	}
-	
-	/**
-	 * Creates an experiment to be saved for execution.
-	 * @param name
-	 * @param note
-	 * @param xml
-	 * @param owner
-	 * @param userAssignedPriority
-	 * @param computationEstimateInHours
-	 * @param sendEmailAfterFinish
-	 */
-	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, 
-			int computationEstimateInHours, boolean sendEmailAfterFinish)
+	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority)
 	{
 		this.name=name;
 		this.note = note;
@@ -104,13 +85,11 @@ public class JPABatch extends JPAAbstractEntity{
 		this.owner=owner;
 		this.priority = userAssignedPriority;
 		
-		// TODO: include computation estimate and the boolean flag in the entity
-		
 		this.totalPriority=99; // TODO: this is probably just for tests
 		this.created=new Date();
-		this.status=JPABatchStatus.WAITING;
+		this.status=JPABatchStatus.CREATED;
 	}
-	
+
 	public void setName(String name){
 		this.name=name;
 	}

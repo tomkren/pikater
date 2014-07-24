@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -39,18 +40,15 @@ public class AllBatchesTableDBView extends AbstractBatchTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-		
 		// TODO: only display SCHEDULED batches (don't include Status.CREATED)
-		
-		List<JPABatch> allBatches=DAOs.batchDAO.getAll();
+		List<JPABatch> allBatches=DAOs.batchDAO.getAllExcludeByStatus(constraints.getOffset(), constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),JPABatchStatus.CREATED);
+		int allBatchesCount=DAOs.batchDAO.getAllExcludedStatusCount(JPABatchStatus.CREATED);
 		List<BatchTableDBRow> rows = new ArrayList<BatchTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allBatches.size());
-		for(JPABatch batch : allBatches.subList(constraints.getOffset(), endIndex))
+		for(JPABatch batch : allBatches)
 		{
 			rows.add(new BatchTableDBRow(batch));
 		}
-		return new QueryResult(rows, allBatches.size());
+		return new QueryResult(rows, allBatchesCount);
 	}
 }

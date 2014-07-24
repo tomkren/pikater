@@ -7,6 +7,7 @@ import java.util.List;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -45,14 +46,14 @@ public class UserScheduledBatchesTableDBView extends UserBatchesTableDBView
 		
 		// TODO: only display SCHEDULED batches (don't include Status.CREATED)
 		
-		List<JPABatch> allBatches=DAOs.batchDAO.getByOwner(getOwner());
+		List<JPABatch> allBatches=DAOs.batchDAO.getByOwnerAndNotStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+		int count = DAOs.batchDAO.getByOwnerAndNotStatusCount(this.owner, JPABatchStatus.CREATED);
 		List<BatchTableDBRow> rows = new ArrayList<BatchTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allBatches.size());
-		for(JPABatch batch : allBatches.subList(constraints.getOffset(), endIndex))
+		for(JPABatch batch : allBatches)
 		{
 			rows.add(new BatchTableDBRow(batch));
 		}
-		return new QueryResult(rows, allBatches.size());
+		return new QueryResult(rows, count);
 	}
 }

@@ -13,7 +13,7 @@ import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
 public class UserBatchesTableDBView extends AbstractBatchTableDBView
 {
-	private final JPAUser owner;
+	protected final JPAUser owner;
 	
 	/**  
 	 * @param user the user whose batches to display
@@ -54,14 +54,14 @@ public class UserBatchesTableDBView extends AbstractBatchTableDBView
 	{
 		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
 		
-		List<JPABatch> allBatches=DAOs.batchDAO.getByOwner(getOwner());
+		List<JPABatch> allBatches=DAOs.batchDAO.getByOwner(this.owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+		int userBatchCount=DAOs.batchDAO.getByOwnerCount(owner);
 		List<BatchTableDBRow> rows = new ArrayList<BatchTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allBatches.size());
-		for(JPABatch batch : allBatches.subList(constraints.getOffset(), endIndex))
+		for(JPABatch batch : allBatches)
 		{
 			rows.add(new BatchTableDBRow(batch));
 		}
-		return new QueryResult(rows, allBatches.size());
+		return new QueryResult(rows, userBatchCount);
 	}
 }
