@@ -33,6 +33,10 @@ public class SetRestriction implements IRestriction
 	{
 		this.values = values;
 	}
+	public void addValues(List<IValueData> values)
+	{
+		this.values.addAll(values);
+	}
 	
 	@Override
 	public SetRestriction clone()

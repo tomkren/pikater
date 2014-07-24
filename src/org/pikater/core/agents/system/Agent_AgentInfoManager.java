@@ -213,8 +213,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				new AgentInfoManagerCommunicator(this);
 		
 		AgentInfos agenInfos = communicator.getAgentInfos();
-		//Models models = communicator.getAllModels();
-		//agenInfos.importModels(models);
+		Models models = communicator.getAllModels();
+		agenInfos.importModels(models);
 		
 		Result r = new Result(action, agenInfos);
 		try {

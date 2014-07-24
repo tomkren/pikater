@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 
 public abstract class AAA_SlotHelper {
@@ -59,13 +63,23 @@ public abstract class AAA_SlotHelper {
 
 	public static List<NewOption> getCAOptions() {
 		
+		List<IValueData> modelValues = new ArrayList<IValueData>();
+		modelValues.add(new StringValue("New model"));
+		
 		NewOption optModel = new NewOption(
 				"model",
-				NewModel.class.getSimpleName());
-		
+				new StringValue(NewModel.class.getSimpleName()),
+				new SetRestriction(modelValues));
+	
+
+		List<IValueData> durationValues = new ArrayList<IValueData>();
+		durationValues.add(new StringValue(ShortTimeDuration.class.getSimpleName()));
+		durationValues.add(new StringValue(LongTermDuration.class.getSimpleName()));
+
 		NewOption optDuration = new NewOption(
 				"duration",
-				LongTermDuration.class.getName());
+				new StringValue(LongTermDuration.class.getName()),
+				new SetRestriction(durationValues));
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(optModel);
