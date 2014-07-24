@@ -4,6 +4,7 @@ import jade.content.Concept;
 
 import org.pikater.core.ontology.messages.TaskOutput;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 
@@ -18,20 +19,20 @@ public class Task implements Concept {
     private String getResults;
     private String guiAgent;
     private boolean saveResults;
+    
     private int cpuCoreID;
+    private IExpectedDuration duration;
 
     public String getStart() {
         return start;
     }
-
-    public String getFinish() {
-        return finish;
-    }
-
     public void setStart(String start) {
         this.start = start;
     }
-
+    
+    public String getFinish() {
+        return finish;
+    }
     public void setFinish(String finish) {
         this.finish = finish;
     }
@@ -39,7 +40,6 @@ public class Task implements Concept {
     public String getSaveMode() {
         return saveMode;
     }
-
     public void setSaveMode(String saveMode) {
         this.saveMode = saveMode;
     }
@@ -47,7 +47,6 @@ public class Task implements Concept {
     public String getGetResults() {
         return getResults;
     }
-
     public void setGetResults(String getResults) {
         this.getResults = getResults;
     }
@@ -55,7 +54,6 @@ public class Task implements Concept {
     public String getGuiAgent() {
         return guiAgent;
     }
-
     public void setGuiAgent(String guiAgent) {
         this.guiAgent = guiAgent;
     }
@@ -63,12 +61,25 @@ public class Task implements Concept {
     public void setSaveResults(boolean saveResults) {
         this.saveResults = saveResults;
     }
-
     public boolean isSaveResults() {
         return saveResults;
     }
 
-    public enum InOutType {TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA};
+    public int getCpuCoreID() {
+		return cpuCoreID;
+	}
+	public void setCpuCoreID(int cpuCoreID) {
+		this.cpuCoreID = cpuCoreID;
+	}
+	
+    public IExpectedDuration getDuration() {
+		return duration;
+	}
+	public void setDuration(IExpectedDuration duration) {
+		this.duration = duration;
+	}
+
+	public enum InOutType {TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA};
 
     // administrative:
     private int graphId;
@@ -155,12 +166,7 @@ public class Task implements Concept {
     public void setOutput(ArrayList<TaskOutput> output) {
         this.output = output;
     }
-    public int getCpuCoreID() {
-		return cpuCoreID;
-	}
-	public void setCpuCoreID(int cpuCoreID) {
-		this.cpuCoreID = cpuCoreID;
-	}
+
 
 	public Object getOutputByName(InOutType name) {
         for (TaskOutput to: this.output){
