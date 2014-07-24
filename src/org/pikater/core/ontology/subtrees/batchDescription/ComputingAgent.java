@@ -54,6 +54,9 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		return model;
 	}
 	public void setModel(IModelDescription model) {
+    	if (model == null) {
+    		throw new IllegalArgumentException("Argument model can't be null");
+    	}
 		this.model = model;
 	}    
 
@@ -169,22 +172,22 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 		//import model
 		NewOption optModel = optionsOntol.getOptionByName("model");
-		if (optModel != null) {
-			Value value = optModel.toSingleValue();
-			if (value.getCurrentValue() instanceof StringValue) {
-				StringValue stringValue = (StringValue) value.getCurrentValue();
-				if (stringValue.getValue().equals(NewModel.class.getSimpleName())) {
-					this.model = new NewModel();
-				} else {
-					throw new IllegalStateException("Option doesn't contain correct value");
-				}
-			} else if (value.getCurrentValue() instanceof IntegerValue) {
-				IntegerValue integerValue = (IntegerValue) value.getCurrentValue();
-				this.model = new ModelDescription(integerValue.getValue());
+
+		Value value = optModel.toSingleValue();
+		if (value.getCurrentValue() instanceof StringValue) {
+			StringValue stringValue = (StringValue) value.getCurrentValue();
+			if (stringValue.getValue().equals(NewModel.class.getSimpleName())) {
+				this.model = new NewModel();
 			} else {
-				throw new IllegalStateException("Option doesn't contain correct type");
+				throw new IllegalStateException("Option doesn't contain correct value");
 			}
+		} else if (value.getCurrentValue() instanceof IntegerValue) {
+			IntegerValue integerValue = (IntegerValue) value.getCurrentValue();
+			this.model = new ModelDescription(integerValue.getValue());
+		} else {
+			throw new IllegalStateException("Option doesn't contain correct type");
 		}
+
 
 		//import duration
 		NewOption optDuration = optionsOntol.getOptionByName("duration");

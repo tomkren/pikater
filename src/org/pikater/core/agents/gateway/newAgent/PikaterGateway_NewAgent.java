@@ -9,7 +9,6 @@ import jade.wrapper.gateway.JadeGateway;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.gateway.Agent_PikaterGateway;
-import org.pikater.core.agents.gateway.newBatch.NewBatchInitiator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 
