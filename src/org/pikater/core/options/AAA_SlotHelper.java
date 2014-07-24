@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 
@@ -57,7 +59,17 @@ public abstract class AAA_SlotHelper {
 
 	public static List<NewOption> getCAOptions() {
 		
+		NewOption optModel = new NewOption(
+				"model",
+				NewModel.class.getSimpleName());
+		
+		NewOption optDuration = new NewOption(
+				"duration",
+				LongTermDuration.class.getName());
+		
 		List<NewOption> options = new ArrayList<NewOption>();
+		options.add(optModel);
+		options.add(optDuration);
 		
 		return options;
 	}

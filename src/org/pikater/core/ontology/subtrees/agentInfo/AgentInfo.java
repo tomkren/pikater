@@ -29,6 +29,12 @@ public class AgentInfo implements Concept {
 	private List<Slot> inputSlots;
 	private List<Slot> outputSlots;
 
+	public AgentInfo() {
+		this.options = new NewOptions();
+		this.inputSlots = new ArrayList<Slot>();
+		this.outputSlots = new ArrayList<Slot>();
+	}
+
 	public String getAgentClassName() {
 		return agentClassName;
 	}
@@ -73,13 +79,13 @@ public class AgentInfo implements Concept {
 	}
 	public void addOption(NewOption option) {
 		if (option == null) {
-			throw new IllegalArgumentException("Argument option cann't be null");
+			throw new IllegalArgumentException("Argument option can't be null");
 		}
 		this.options.addOption(option);
 	}
 	public void addOptions(List<NewOption> options) {
 		if (options == null) {
-			throw new IllegalArgumentException("Argument options cann't be null");
+			throw new IllegalArgumentException("Argument options can't be null");
 		}
 		this.options.addOptions(options);
 	}
@@ -91,8 +97,8 @@ public class AgentInfo implements Concept {
 		this.inputSlots = inputSlots;
 	}
 	public void addInputSlot(Slot inputSlot) {
-		if (this.inputSlots == null) {
-			this.inputSlots = new ArrayList<Slot>();
+		if (inputSlot == null) {
+			throw new IllegalArgumentException("Argument inputSlot can't be null");
 		}
 		this.inputSlots.add(inputSlot);
 	}
@@ -104,8 +110,8 @@ public class AgentInfo implements Concept {
 		this.outputSlots = outputSlots;
 	}
 	public void addOutputSlot(Slot outputSlot) {
-		if (this.outputSlots == null) {
-			this.outputSlots = new ArrayList<Slot>();
+		if (outputSlot == null) {
+			throw new IllegalArgumentException("Argument outputSlot can't be null");
 		}
 		this.outputSlots.add(outputSlot);
 	}
