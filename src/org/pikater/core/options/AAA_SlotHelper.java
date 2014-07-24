@@ -78,7 +78,7 @@ public abstract class AAA_SlotHelper {
 
 		NewOption optDuration = new NewOption(
 				"duration",
-				new StringValue(LongTermDuration.class.getName()),
+				new StringValue(LongTermDuration.class.getSimpleName()),
 				new SetRestriction(durationValues));
 		
 		List<NewOption> options = new ArrayList<NewOption>();
