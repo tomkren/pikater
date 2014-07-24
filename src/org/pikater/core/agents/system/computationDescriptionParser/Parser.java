@@ -149,6 +149,7 @@ public class Parser {
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;          
         computingNode.setModelClass(computingAgentO.getAgentType());       
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
+        computingNode.setExpectedDuration(computingAgentO.getDuration());
         
         ArrayList<NewOption> options=new ArrayList<>();
         for (NewOption o:computingAgentO.getOptions())

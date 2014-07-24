@@ -11,6 +11,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
+
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
@@ -23,6 +24,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.Solutio
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -155,11 +157,13 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		data.setTestFileName(getHashOfFile(training, 1));
 		data.setTrainFileName(getHashOfFile(testing, 1));
 
+		IExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setSave_results(true);
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
 		task.setAgent(agent);
 		task.setData(data);
+		task.setDuration(duration);
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());
 		
 		return task;
