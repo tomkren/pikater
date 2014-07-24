@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.model.IModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
@@ -138,15 +139,17 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	public List<NewOption> exportAllOptions() {
 		
 		NewOption agentTypeOption =
-				new NewOption("agentType",agentType);
+				new NewOption("agentType", agentType);
 
-		NewOption modelOption = new NewOption( "model",model.getClass().getSimpleName());
-
-		//NewOption evaluationMethodOption = new NewOption( "evaluationMethod",evaluationMethod.getType());
+		NewOption modelOption = new NewOption(
+				"model", model.getClass().getSimpleName());
+		NewOption expectedDurationOption = new NewOption(
+				"duration", duration.getClass().getName());
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(agentTypeOption);
 		options.add(modelOption);
+		options.add(expectedDurationOption);
 		options.addAll(this.options);
 		return options;
 	}
@@ -183,15 +186,21 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 			}
 		}
 
-		//import evaluationMethod
-		//NewOption optMethod = optionsOntol.getOptionByName("evaluationMethod");
-		//StringValue valueMethod = (StringValue)
-		//		optMethod.toSingleValue().getCurrentValue();
-		//this.evaluationMethod = new EvaluationMethod(
-		//		valueMethod.getValue() );
+		//import duration
+		NewOption optDuration = optionsOntol.getOptionByName("duration");
+		StringValue valueMethod = (StringValue)
+				optDuration.toSingleValue().getCurrentValue();
+		if (valueMethod.getValue().equals(LongTermDuration.class.getName())) {
+			this.duration = new LongTermDuration();
+		} else if (valueMethod.getValue().equals(ShortTimeDuration.class.getName()) ) {
+			this.duration = new ShortTimeDuration();
+		} else {
+			throw new IllegalStateException("Option doesn't contain correct type");
+		}
 		
 		options.remove(optAgentType);
 		options.remove(optModel);
+		options.remove(optDuration);
 		
 		this.options = options;
 		
