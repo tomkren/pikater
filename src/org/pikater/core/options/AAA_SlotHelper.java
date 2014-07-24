@@ -54,7 +54,7 @@ public abstract class AAA_SlotHelper {
 		return outputSlots;
 	}
 
-	public static List<Slot> getCEvaluationMethodOutputSlots() {
+	public static List<Slot> getEvaluationMethodOutputSlots() {
 		
 		Slot outputSlot = new Slot();
 		outputSlot.setDescription("Evaluation Method");

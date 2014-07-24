@@ -25,7 +25,7 @@ public class CrossvalidationEvaluationMethod_Box {
 		agentInfo.importOntologyClass(EvaluationMethod.class);
 				
 		agentInfo.setOutputSlots(
-				AAA_SlotHelper.getCEvaluationMethodOutputSlots());
+				AAA_SlotHelper.getEvaluationMethodOutputSlots());
 
 		return agentInfo;
 	}
