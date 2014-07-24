@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
@@ -18,6 +19,7 @@ import org.pikater.web.quartzjobs.MatrixPNGGeneratorJob;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.quartz.JobKey;
@@ -79,47 +81,48 @@ public class TestView extends VerticalLayout implements IContentComponent
 				final File tmpFile = IOUtils.createTemporaryFile("visualization-generated", ".png");
 				
 				// then display progress dialog
-				MyDialogs.progressDialog("Vizualization progress...", new MyDialogs.ProgressDialogEvents()
+				MyDialogs.progressDialog("Vizualization progress...", new MyDialogs.IProgressDialogHandler()
 				{
 					private JobKey jobKey = null;
+					
+					@Override
+					public void startTask(IProgressDialogTaskContext context) throws Throwable
+					{
+						// start the task and bind it with the progress dialog
+						jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
+						{
+							context,
+							iris,
+							tmpFile.getAbsolutePath()
+						});
+					}
+					
+					@Override
+					public void abortTask()
+					{
+						if(jobKey == null)
+						{
+							PikaterLogger.logThrowable("", new NullPointerException("Can not abort a task that has not started."));
+						}
+						else
+						{
+							try
+							{
+								PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
+							}
+							catch (Throwable t)
+							{
+								PikaterLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
+							}
+						}
+					}
 					
 					@Override
 					public void onTaskFinish()
 					{
 						// TODO: display GUI including the generated image
 						// TODO: generated images should be accessible only for a specific user (that has the link) => download servlet
-					}
-					
-					@Override
-					public void onTaskFailed()
-					{
-						getMessageBox().close();
-						MyNotifications.showApplicationError();
-					}
-					
-					@Override
-					public void startTask()
-					{
-						// start the task and bind it with the progress dialog
-						try
-						{
-							jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
-							{
-								getMessageBox(),
-								iris,
-								tmpFile.getAbsolutePath()
-							});
-						}
-						catch (Throwable e)
-						{
-							throw new RuntimeException("Could not issue vizualization generation job.", e);
-						}
-					}
-					
-					@Override
-					public void abortTask()
-					{
-						PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
+						// MyNotifications.showInfo("Job finished", "yay");
 					}
 				});
 			}

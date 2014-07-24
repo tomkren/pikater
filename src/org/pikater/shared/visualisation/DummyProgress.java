@@ -1,8 +1,8 @@
 package org.pikater.shared.visualisation;
 
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 
-public class DummyProgress implements IProgressDialogContextForJobs {
+public class DummyProgress implements IProgressDialogTaskContext {
 
 	@Override
 	public void updateProgress(float percentage) {

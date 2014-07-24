@@ -14,7 +14,7 @@ import org.pikater.shared.visualisation.datasource.single.ArffXYZPoint;
 import org.pikater.shared.visualisation.datasource.single.SingleArffDataset;
 import org.pikater.shared.visualisation.generator.ChartGenerator;
 import org.pikater.shared.visualisation.renderer.SVGRenderer;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 
 public class ComparisonSVGGenerator extends Generator {
 
@@ -22,7 +22,7 @@ public class ComparisonSVGGenerator extends Generator {
 	SingleArffDataset dataset2;
 	
 	
-	public ComparisonSVGGenerator(IProgressDialogContextForJobs progressListener,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,int XIndex1, int XIndex2, int YIndex1, int YIndex2,int ColorIndex1,int ColorIndex2){
+	public ComparisonSVGGenerator(IProgressDialogTaskContext progressListener,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,int XIndex1, int XIndex2, int YIndex1, int YIndex2,int ColorIndex1,int ColorIndex2){
 		super(progressListener,output);
 		
 		dataset1=new SingleArffDataset(dslo1, XIndex1, YIndex1, ColorIndex1);
@@ -32,7 +32,7 @@ public class ComparisonSVGGenerator extends Generator {
 	}
 	
 	
-	public ComparisonSVGGenerator(IProgressDialogContextForJobs progressHandler,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,String XName1, String XName2, String YName1, String YName2,String ColorName1,String ColorName2){
+	public ComparisonSVGGenerator(IProgressDialogTaskContext progressHandler,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,String XName1, String XName2, String YName1, String YName2,String ColorName1,String ColorName2){
 		super(progressHandler,output);
 		
 		dataset1=new SingleArffDataset(dslo1, XName1, YName1, ColorName1);
