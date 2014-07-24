@@ -12,19 +12,19 @@ import org.pikater.shared.visualisation.datasource.single.ArffXYZPoint;
 import org.pikater.shared.visualisation.datasource.single.SingleArffDataset;
 import org.pikater.shared.visualisation.generator.ChartGenerator;
 import org.pikater.shared.visualisation.renderer.SVGRenderer;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 
 public class SingleSVGGenerator extends Generator {
 
 	private SingleArffDataset dataset;
 	
-	public SingleSVGGenerator(IProgressDialogContextForJobs progressListener, JPADataSetLO dslo,PrintStream output, int XIndex, int YIndex, int ColorIndex){
+	public SingleSVGGenerator(IProgressDialogTaskContext progressListener, JPADataSetLO dslo,PrintStream output, int XIndex, int YIndex, int ColorIndex){
 		super(progressListener,output);
 		this.dataset=new SingleArffDataset(dslo, XIndex, YIndex, ColorIndex);
 		init();
 	}
 	
-	public SingleSVGGenerator(IProgressDialogContextForJobs progressListener, JPADataSetLO dslo,PrintStream output, String XName, String YName, String ColorName){
+	public SingleSVGGenerator(IProgressDialogTaskContext progressListener, JPADataSetLO dslo,PrintStream output, String XName, String YName, String ColorName){
 		super(progressListener,output);
 		this.dataset=new SingleArffDataset(dslo, XName, YName, ColorName);
 		init();

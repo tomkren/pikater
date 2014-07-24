@@ -3,10 +3,10 @@ package org.pikater.shared.visualisation.generator.quartz;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 
 public abstract class Generator {
-	protected IProgressDialogContextForJobs progressListener;
+	protected IProgressDialogTaskContext progressListener;
 	protected PrintStream output;
 	
 	protected int instNum;
@@ -14,7 +14,7 @@ public abstract class Generator {
 	protected int percentage=0;
 	protected int count=0;
 	
-	protected Generator(IProgressDialogContextForJobs progressListener, PrintStream output){
+	protected Generator(IProgressDialogTaskContext progressListener, PrintStream output){
 		this.progressListener=progressListener;
 		this.output=output;
 	}

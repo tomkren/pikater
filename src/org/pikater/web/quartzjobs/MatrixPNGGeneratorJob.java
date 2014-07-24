@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleOneTimeJob;
 import org.pikater.shared.visualisation.generator.quartz.MatrixPNGGenerator;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
@@ -21,7 +21,7 @@ public class MatrixPNGGeneratorJob extends InterruptibleOneTimeJob {
 	public boolean argumentCorrect(int index, Object arg) {
 		switch(index){
 		case 0:
-			return arg instanceof IProgressDialogContextForJobs;
+			return arg instanceof IProgressDialogTaskContext;
 		case 1:
 			return arg instanceof JPADataSetLO;
 		case 2:
@@ -41,7 +41,7 @@ public class MatrixPNGGeneratorJob extends InterruptibleOneTimeJob {
 	@Override
 	protected void execute() throws JobExecutionException
 	{
-		IProgressDialogContextForJobs listener=getArg(0);
+		IProgressDialogTaskContext listener=getArg(0);
 		JPADataSetLO dslo=getArg(1);
 		try {
 			PrintStream output=new PrintStream((String)getArg(2));

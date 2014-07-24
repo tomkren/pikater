@@ -10,14 +10,14 @@ import org.pikater.shared.visualisation.charts.MatrixChart;
 import org.pikater.shared.visualisation.datasource.multiple.MultipleArffDataset;
 import org.pikater.shared.visualisation.generator.ChartGenerator;
 import org.pikater.shared.visualisation.renderer.ImageRenderer;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogContextForJobs;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 
 public class MatrixPNGGenerator extends Generator {
 	
 	private JPADataSetLO dslo;
 	private MultipleArffDataset dataset;
 	
-	public MatrixPNGGenerator(IProgressDialogContextForJobs progressListener, JPADataSetLO dslo, PrintStream output){
+	public MatrixPNGGenerator(IProgressDialogTaskContext progressListener, JPADataSetLO dslo, PrintStream output){
 		super(progressListener,output);
 		this.dslo=dslo;
 		init();

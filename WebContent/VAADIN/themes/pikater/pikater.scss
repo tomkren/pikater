@@ -12,6 +12,12 @@
   /* Insert your theme rules here */
   /********************************/
   
+  /* Some popup/dialog related styles */
+  .progressDialog .v-verticallayout
+  {
+  	width: 100%;
+  }
+  
   /* Miscellaneous global styles */
   .maxWidth
   {

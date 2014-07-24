@@ -19,7 +19,7 @@ import org.pikater.shared.visualisation.datasource.single.SingleArffDataset;
 import org.pikater.shared.visualisation.renderer.ImageRenderer;
 import org.pikater.shared.visualisation.renderer.RendererInterface;
 import org.pikater.shared.visualisation.renderer.SVGRenderer;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressListener;
+import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 
 public class ChartGenerator {
 
@@ -50,7 +50,7 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex, IProgressListener listener) throws IOException{
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex, IProgressDialogTaskContext listener) throws IOException{
 		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
 		generateSingleDatasetChart(input,svgr, XIndex, YIndex, ColorIndex,listener);
@@ -82,7 +82,7 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, IProgressListener listener) throws IOException{
+	public static void generateSVGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, IProgressDialogTaskContext listener) throws IOException{
 		SVGRenderer svgr=new SVGRenderer(output, SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		svgr.begin();
 		generateSingleDatasetChart(input,svgr, XName, YName, ColorName,listener);
@@ -116,7 +116,7 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex,IProgressListener listener) throws IOException{
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,int XIndex,int YIndex,int ColorIndex,IProgressDialogTaskContext listener) throws IOException{
 		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
 		generateSingleDatasetChart(input,ir, XIndex, YIndex, ColorIndex,listener);
@@ -152,7 +152,7 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, IProgressListener listener) throws IOException{
+	public static void generatePNGSingleDatasetChart(JPADataSetLO input,PrintStream output,String XName,String YName,String ColorName, IProgressDialogTaskContext listener) throws IOException{
 		ImageRenderer ir=new ImageRenderer(SINGLE_CHART_SIZE, SINGLE_CHART_SIZE);
 		ir.begin();
 		generateSingleDatasetChart(input,ir, XName, YName, ColorName,listener);
@@ -164,7 +164,7 @@ public class ChartGenerator {
 	
 	
 	
-	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,int XIndex,int YIndex,int ColorIndex, IProgressListener listener) throws IOException
+	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,int XIndex,int YIndex,int ColorIndex, IProgressDialogTaskContext listener) throws IOException
 	{
 		SingleArffDataset dataset=new SingleArffDataset(
 				input,
@@ -174,7 +174,7 @@ public class ChartGenerator {
 		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
 	}
 	
-	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,String XName,String YName,String ColorName, IProgressListener listener) throws IOException
+	private static void generateSingleDatasetChart(JPADataSetLO input,RendererInterface renderer,String XName,String YName,String ColorName, IProgressDialogTaskContext listener) throws IOException
 	{
 		SingleArffDataset dataset=new SingleArffDataset(
 				input,
@@ -184,7 +184,7 @@ public class ChartGenerator {
 		generateSingleDatasetChartFromDataset(dataset, renderer, listener);
 	}
 	
-	private static void generateSingleDatasetChartFromDataset(SingleArffDataset dataset,RendererInterface renderer, IProgressListener listener) throws IOException{
+	private static void generateSingleDatasetChartFromDataset(SingleArffDataset dataset,RendererInterface renderer, IProgressDialogTaskContext listener) throws IOException{
 		Axis yAxis=dataset.getYAxis();
 		Axis xAxis=dataset.getXAxis();
 		Colorer colorer=dataset.getZColorer();
@@ -243,7 +243,7 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	public static void generateSVGMatrixDatasetChart(JPADataSetLO input,PrintStream output,IProgressListener listener) throws IOException{
+	public static void generateSVGMatrixDatasetChart(JPADataSetLO input,PrintStream output,IProgressDialogTaskContext listener) throws IOException{
 		SVGRenderer svgr=new SVGRenderer(output, MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
 		svgr.begin();
 		generateMatrixDatasetChart(input,svgr,listener);
@@ -276,7 +276,7 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	public static void generatePNGMatrixDatasetChart(JPADataSetLO input,PrintStream output, IProgressListener listener) throws IOException{
+	public static void generatePNGMatrixDatasetChart(JPADataSetLO input,PrintStream output, IProgressDialogTaskContext listener) throws IOException{
 		ImageRenderer ir=new ImageRenderer(MATRIX_CHART_SIZE, MATRIX_CHART_SIZE);
 		ir.begin();
 		generateMatrixDatasetChart(input,ir, listener);
@@ -287,7 +287,7 @@ public class ChartGenerator {
 		output.close();
 	}
 	
-	private static void generateMatrixDatasetChart(JPADataSetLO input,RendererInterface renderer, IProgressListener listener) throws IOException
+	private static void generateMatrixDatasetChart(JPADataSetLO input,RendererInterface renderer, IProgressDialogTaskContext listener) throws IOException
 	{
 		MultipleArffDataset dataset=new MultipleArffDataset(input);
 
