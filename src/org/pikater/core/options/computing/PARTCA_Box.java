@@ -104,7 +104,8 @@ public class PARTCA_Box {
 		agentInfo.addOption(optionB);
 		agentInfo.addOption(optionU);
 		agentInfo.addOption(optionQ);
-
+		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
+		
 		// Slots Definition
 		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
 		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());

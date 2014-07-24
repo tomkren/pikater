@@ -59,6 +59,10 @@ public class NewOptions implements Concept, Iterable<NewOption>
     {
         this.options.add(option);
     }
+    public void addOptions(List<NewOption> options)
+    {
+        this.options.addAll(options);
+    }
     
     public String exportToWeka() {
     	return NewOptions.exportToWeka(options);

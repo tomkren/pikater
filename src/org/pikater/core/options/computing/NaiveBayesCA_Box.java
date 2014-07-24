@@ -36,6 +36,7 @@ public class NaiveBayesCA_Box {
 
 		agentInfo.addOption(optionK);
 		agentInfo.addOption(optionD);
+		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
 		
 		// Slots Definition
 		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());

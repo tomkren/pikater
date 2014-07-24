@@ -68,7 +68,8 @@ public class PerceptronCA_Box {
 		agentInfo.addOption(optionN);
 		agentInfo.addOption(optionS);
 		agentInfo.addOption(optionC);
-
+		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
+		
 		//Slot Definition
 		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
 		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
