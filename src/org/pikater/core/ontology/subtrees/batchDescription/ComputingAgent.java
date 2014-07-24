@@ -128,12 +128,11 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 		NewOption modelOption = new NewOption( "model",model.getClass().getSimpleName());
 
-		NewOption evaluationMethodOption = new NewOption( "evaluationMethod",evaluationMethod.getType());
+		//NewOption evaluationMethodOption = new NewOption( "evaluationMethod",evaluationMethod.getType());
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(agentTypeOption);
 		options.add(modelOption);
-		options.add(evaluationMethodOption);
 		options.addAll(this.options);
 		return options;
 	}
@@ -171,15 +170,14 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		}
 
 		//import evaluationMethod
-		NewOption optMethod = optionsOntol.getOptionByName("evaluationMethod");
-		StringValue valueMethod = (StringValue)
-				optMethod.toSingleValue().getCurrentValue();
-		this.evaluationMethod = new EvaluationMethod(
-				valueMethod.getValue() );
+		//NewOption optMethod = optionsOntol.getOptionByName("evaluationMethod");
+		//StringValue valueMethod = (StringValue)
+		//		optMethod.toSingleValue().getCurrentValue();
+		//this.evaluationMethod = new EvaluationMethod(
+		//		valueMethod.getValue() );
 		
 		options.remove(optAgentType);
 		options.remove(optModel);
-		options.remove(optMethod);
 		
 		this.options = options;
 		
@@ -226,6 +224,15 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 			slots.add(validationDataC);
 		}
 		
+		if (evaluationMethod != null) {
+			DataSourceDescription evaluationMethodDataC = new DataSourceDescription();
+			evaluationMethodDataC.setDataInputType("evaluationMethod");
+			evaluationMethodDataC.setDataOutputType("evaluationMethod");
+			evaluationMethodDataC.setDataProvider(evaluationMethod);
+			slots.add(evaluationMethodDataC);
+
+		}
+		
 		return slots;
 	}
 	
@@ -246,7 +253,10 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		DataSourceDescription descriptinValidationData = 
 				descriptions.getDataSourceDescriptionIBynputType("validationData");
 		validationData = descriptinValidationData;
-				
+		
+		DataSourceDescription descriptinevaluationMethodData = 
+				descriptions.getDataSourceDescriptionIBynputType("evaluationMethod");
+		evaluationMethod = (EvaluationMethod) descriptinevaluationMethodData.getDataProvider();
 	}
 
 }

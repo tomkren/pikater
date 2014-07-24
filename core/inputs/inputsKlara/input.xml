@@ -115,6 +115,10 @@
                 </options>
                 <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
                 <evaluationMethod>
+                  <id>5</id>
+                  <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                  <errors/>
+                  <dataSources/>
                   <type>Crossvalidation</type>
                   <options>
                     <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
@@ -287,6 +291,10 @@
             </options>
             <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
             <evaluationMethod>
+              <id>5</id>
+              <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+              <errors/>
+              <dataSources/>
               <type>Crossvalidation</type>
               <options>
                 <org.pikater.core.ontology.subtrees.newOption.base.NewOption>

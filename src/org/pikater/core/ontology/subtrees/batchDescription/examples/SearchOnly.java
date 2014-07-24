@@ -31,8 +31,10 @@ public class SearchOnly {
         ca.setEvaluationMethod(new EvaluationMethod("CrossValidation"));
         //"whatever.mlp.is.in.MLP"
 
-        List<NewOption> options = new ArrayList<>();
-        NewOption lr = new NewOption("L",new QuestionMarkRange(new DoubleValue(0.0), new DoubleValue(0.0)));
+        List<NewOption> options = new ArrayList<NewOption>();
+        NewOption lr = new NewOption("L", 
+        		new QuestionMarkRange(
+        				new DoubleValue(0.0), new DoubleValue(0.0)));
         
         NewOption hr = new NewOption( "H",4);
  

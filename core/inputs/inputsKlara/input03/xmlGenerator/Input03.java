@@ -18,18 +18,16 @@ public final class Input03 {
         fileDataSource.setDataProvider(fileDataProvider);
 
 		ComputingAgent comAgent1 = new ComputingAgent();
-		//comAgent1.setModelClass("Agent_?????.class.getName()");
 		comAgent1.setTrainingData(fileDataSource);
 		comAgent1.setTestingData(fileDataSource);
 		comAgent1.setModel(new NewModel());
 		
-		NewOption optionEM1 = new NewOption("evaluation_method","CrossValidation");
 
 		NewOption optionOutput1 = new NewOption("output","evaluation_only");
 
 		CARecSearchComplex complex1 = new CARecSearchComplex();
 		complex1.setComputingAgent(comAgent1);
-		complex1.addOption(optionEM1);
+
 		complex1.addOption(optionOutput1);
 
 		DataSourceDescription computingDataSource1 = new DataSourceDescription();
@@ -38,18 +36,14 @@ public final class Input03 {
 
 
 		ComputingAgent comAgent2 = new ComputingAgent();
-		//comAgent2.setModelClass("Agent_?????.class.getName()");
 		comAgent2.setTrainingData(computingDataSource1);
 		comAgent2.setTestingData(computingDataSource1);
 		comAgent2.setModel(new NewModel());
-
-		NewOption optionEM2 = new NewOption("CrossValidation","evaluation_method");
 
 		NewOption optionOutput2 = new NewOption("output","evaluation_only");
 
 		CARecSearchComplex complex2 = new CARecSearchComplex();
 		complex2.setComputingAgent(comAgent2);
-		complex2.addOption(optionEM2);
 		complex2.addOption(optionOutput2);
 
 		DataSourceDescription computingDataSource2 = new DataSourceDescription();
@@ -69,7 +63,7 @@ public final class Input03 {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		System.out.println("Exporting Ontology input3 to Klara's input XML configuration file.");
+		System.out.println("Exporting Ontology input03 to Klara's input XML configuration file.");
 		
 		ComputationDescription comDescription = createDescription();
 
