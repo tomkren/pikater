@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -23,6 +25,10 @@ import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.Hash;
 import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.views.base.SortOrder;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 
 public class DataSetDAO extends AbstractDAO{
 
@@ -37,6 +43,89 @@ public class DataSetDAO extends AbstractDAO{
 		.getEntityManagerInstance()
 		.createNamedQuery("DataSetLO.getAll", JPADataSetLO.class)
 		.getResultList();
+	}
+	
+	public List<JPADataSetLO> getAll(int offset,int maxResultCount) {
+		return EntityManagerInstancesCreator
+		.getEntityManagerInstance()
+		.createNamedQuery("DataSetLO.getAll", JPADataSetLO.class)
+		.setFirstResult(offset)
+		.setMaxResults(maxResultCount)
+		.getResultList();
+	}
+	
+	private Path<Object> convertColumnToJPAParam(Root<JPADataSetLO> root,ITableColumn column){
+		switch((DataSetTableDBView.Column)column){
+		case CREATED:
+		case DESCRIPTION:
+		case SIZE:
+			return root.get(column.toString().toLowerCase());
+		case NUMBER_OF_INSTANCES:
+			return root.get("globalMetaData").get("numberofInstances");
+		case DEFAULT_TASK_TYPE:
+			return root.get("globalMetaData").get("defaultTaskType").get("name");
+		case OWNER:
+			return root.get("owner").get("login");
+		default:
+			return root.get("created");
+		}
+	}
+	
+	public List<JPADataSetLO> getAll(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder) {
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaBuilder cb=em.getCriteriaBuilder();
+		CriteriaQuery<JPADataSetLO> q=cb.createQuery(JPADataSetLO.class);
+		Root<JPADataSetLO> c=q.from(JPADataSetLO.class);
+		q.select(c);
+		switch (sortOrder) {
+		case ASCENDING:
+			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
+			break;
+		case DESCENDING:
+			q.orderBy(cb.desc(this.convertColumnToJPAParam(c, sortColumn)));
+			break;
+		default:
+			break;
+		}
+		
+		TypedQuery<JPADataSetLO> query=
+				em.createQuery(q)
+				.setFirstResult(offset)
+				.setMaxResults(maxResults);
+		return query.getResultList();
+	}
+	
+	public List<JPADataSetLO> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder) {
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaBuilder cb=em.getCriteriaBuilder();
+		CriteriaQuery<JPADataSetLO> q=cb.createQuery(JPADataSetLO.class);
+		Root<JPADataSetLO> c=q.from(JPADataSetLO.class);
+		q.select(c);
+		q.where(cb.equal(c.get("owner"), owner));
+		switch (sortOrder) {
+		case ASCENDING:
+			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
+			break;
+		case DESCENDING:
+			q.orderBy(cb.desc(this.convertColumnToJPAParam(c, sortColumn)));
+			break;
+		default:
+			break;
+		}
+		
+		TypedQuery<JPADataSetLO> query=
+				em.createQuery(q)
+				.setFirstResult(offset)
+				.setMaxResults(maxResults);
+		return query.getResultList();
+	}
+	
+	public int getAllCount(){
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("DataSetLO.getAll.count")
+				.getSingleResult())
+				.intValue();
 	}
 	
 	public List<JPADataSetLO> getAllExcludingHashes(List<String> hashesToBeExcluded){
@@ -65,6 +154,19 @@ public class DataSetDAO extends AbstractDAO{
 	
 	public List<JPADataSetLO> getByOwner(JPAUser user) {
 		return getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user);
+	}
+	
+	public List<JPADataSetLO> getByOwner(JPAUser user, int offset, int maxResultCount) {
+		return getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user,offset,maxResultCount);
+	}
+	
+	public int getByOwnerCount(JPAUser user){
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("DataSetLO.getByOwner.count")
+				.setParameter("owner", user)
+				.getSingleResult())
+				.intValue();
 	}
 	
 	public List<JPADataSetLO> getByOID(long oid) {
@@ -113,6 +215,21 @@ public class DataSetDAO extends AbstractDAO{
 				em
 				.createNamedQuery(queryName,JPADataSetLO.class)
 				.setParameter(paramName, param)
+				.getResultList();
+		}finally{
+			em.close();
+		}
+	}
+	
+	private List<JPADataSetLO> getByTypedNamedQuery(String queryName,String paramName,Object param, int offset, int maxResultCount){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return
+				em
+				.createNamedQuery(queryName,JPADataSetLO.class)
+				.setParameter(paramName, param)
+				.setFirstResult(offset)
+				.setMaxResults(maxResultCount)
 				.getResultList();
 		}finally{
 			em.close();

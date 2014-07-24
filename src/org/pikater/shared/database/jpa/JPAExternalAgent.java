@@ -21,8 +21,10 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 @Table(name="ExternalAgent")
 @NamedQueries({
 	@NamedQuery(name="ExternalAgent.getAll",query="select o from JPAExternalAgent o"),
+	@NamedQuery(name="ExternalAgent.getAll.count",query="select count(o) from JPAExternalAgent o"),
 	@NamedQuery(name="ExternalAgent.getByID",query="select o from JPAExternalAgent o where o.id=:id"),
 	@NamedQuery(name="ExternalAgent.getByOwner",query="select o from JPAExternalAgent o where o.owner=:owner"),
+	@NamedQuery(name="ExternalAgent.getByOwner.count",query="select count(o) from JPAExternalAgent o where o.owner=:owner"),
 	@NamedQuery(name="ExternalAgent.getByClass",query="select o from JPAExternalAgent o where o.agentClass=:class")
 })
 public class JPAExternalAgent extends JPAAbstractEntity{

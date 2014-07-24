@@ -7,11 +7,14 @@ import java.util.List;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.DataSetDAO;
+import org.pikater.shared.database.jpa.daos.UserDAO;
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
 
 /**
  * A generic view for tables displaying dataset information.  
@@ -45,6 +48,12 @@ public class DataSetTableDBView extends AbstractTableDBView
 	/**
 	 * Table headers will be presented in the order defined here, so
 	 * make sure to order them right :). 
+	 * <p>
+	 * This enum is used for create Criteria API query in functions
+	 * {@link DataSetDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
+	 * {@link DataSetDAO#getByOwner(JPAUser, int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}
+	 * <p>
+	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}
 	 */
 	public enum Column implements ITableColumn
 	{
@@ -124,23 +133,23 @@ public class DataSetTableDBView extends AbstractTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-		
 		List<JPADataSetLO> allDatasets;
+		int allDatasetCount=0;
 		
 		if(this.adminMode()){
-			allDatasets = DAOs.dataSetDAO.getAll();
+			allDatasets = DAOs.dataSetDAO.getAll(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			allDatasetCount=DAOs.dataSetDAO.getAllCount();
 		}else{
-			allDatasets = DAOs.dataSetDAO.getByOwner(owner);
+			allDatasets = DAOs.dataSetDAO.getByOwner(owner,constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			allDatasetCount=DAOs.dataSetDAO.getByOwnerCount(owner);
 		}
 		
 		List<DataSetTableDBRow> rows = new ArrayList<DataSetTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allDatasets.size());
-		for(JPADataSetLO dslo : allDatasets.subList(constraints.getOffset(), endIndex))
+		for(JPADataSetLO dslo : allDatasets)
 		{
 			rows.add(new DataSetTableDBRow(dslo));
 		}
-		return new QueryResult(rows, allDatasets.size());
+		return new QueryResult(rows, allDatasetCount);
 	}
 }

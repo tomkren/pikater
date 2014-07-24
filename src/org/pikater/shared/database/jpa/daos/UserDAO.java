@@ -3,13 +3,21 @@ package org.pikater.shared.database.jpa.daos;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.views.base.SortOrder;
+import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 
 public class UserDAO extends AbstractDAO {
 
@@ -24,6 +32,63 @@ public class UserDAO extends AbstractDAO {
 				.getEntityManagerInstance()
 				.createNamedQuery("User.getAll", JPAUser.class)
 				.getResultList();
+	}
+	
+	public List<JPAUser> getAll(int offset, int maxQuerySize){
+		TypedQuery<JPAUser> tq=EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("User.getAll", JPAUser.class);
+		tq.setFirstResult(offset);
+		tq.setMaxResults(maxQuerySize);
+		return tq.getResultList();
+	}
+	
+	private Path<Object> convertColumnToJPAParam(Root<JPAUser> root,ITableColumn column){
+		switch((UsersTableDBView.Column)column){
+		case LOGIN:
+		case STATUS:
+		case EMAIL:
+			return root.get(column.toString().toLowerCase());
+		case REGISTERED:
+			return root.get("created");
+		case MAX_PRIORITY:
+			return root.get("priorityMax");
+		case ADMIN:
+			return root.get("role").get("role");
+		default:
+			return root.get("login");
+		}
+	}
+	
+	public List<JPAUser> getAll(int offset, int maxResults, ITableColumn sortColumn,SortOrder order) {
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaBuilder cb=em.getCriteriaBuilder();
+		CriteriaQuery<JPAUser> q=cb.createQuery(JPAUser.class);
+		Root<JPAUser> c=q.from(JPAUser.class);
+		q.select(c);
+		switch (order) {
+		case ASCENDING:
+			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
+			break;
+		case DESCENDING:
+			q.orderBy(cb.desc(this.convertColumnToJPAParam(c, sortColumn)));
+			break;
+		default:
+			break;
+		}
+		
+		TypedQuery<JPAUser> query=
+				em.createQuery(q)
+				.setFirstResult(offset)
+				.setMaxResults(maxResults);
+		return query.getResultList();
+	}
+	
+	
+	public int getAllCount(){
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("User.getAll.count").getSingleResult()).intValue();
 	}
 
 	@Override

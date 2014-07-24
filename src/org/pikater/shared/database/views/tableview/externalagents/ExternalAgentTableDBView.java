@@ -7,6 +7,7 @@ import java.util.List;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.ExternalAgentDAO;
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
@@ -45,6 +46,12 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 	/**
 	 * Table headers will be presented in the order defined here, so
 	 * make sure to order them right :). 
+	 * <p>
+	 * This enum is used for create Criteria API query in functions
+	 * {@link ExternalAgentDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
+	 * {@link ExternalAgentDAO#getByOwner(JPAUser, int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}
+	 * <p>
+	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}
 	 */
 	public enum Column implements ITableColumn
 	{
@@ -111,23 +118,23 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-		
 		List<JPAExternalAgent> agents;
+		int agentCount=0;
 		
 		if(this.adminMode()){
-			agents = DAOs.externalAgentDAO.getAll();
+			agents = DAOs.externalAgentDAO.getAll(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			agentCount=DAOs.externalAgentDAO.getAllCount();
 		}else{
-			agents=DAOs.externalAgentDAO.getByOwner(owner);
+			agents=DAOs.externalAgentDAO.getByOwner(owner, constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			agentCount=DAOs.externalAgentDAO.getByOwnerCount(owner);
 		}
 		
 		List<ExternalAgentTableDBRow> rows = new ArrayList<ExternalAgentTableDBRow>();
 		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), agents.size());
-		for(JPAExternalAgent agent : agents.subList(constraints.getOffset(), endIndex))
+		for(JPAExternalAgent agent : agents)
 		{
 			rows.add(new ExternalAgentTableDBRow(agent));
 		}
-		return new QueryResult(rows, agents.size());
+		return new QueryResult(rows, agentCount);
 	}
 }
