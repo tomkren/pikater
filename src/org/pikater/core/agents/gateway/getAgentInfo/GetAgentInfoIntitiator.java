@@ -10,6 +10,7 @@ import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 import jade.content.onto.basic.Result;
 
+import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 
 public class GetAgentInfoIntitiator extends AchieveREInitiator {
@@ -47,14 +48,11 @@ public class GetAgentInfoIntitiator extends AchieveREInitiator {
 		try {
 			result = (Result) contentManager.extractContent(response);
 		} catch (UngroundedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.error(e.getMessage(), e);
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.error(e.getMessage(), e);
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.error(e.getMessage(), e);
 		}
 
 		AgentInfos agentInfos = null;
