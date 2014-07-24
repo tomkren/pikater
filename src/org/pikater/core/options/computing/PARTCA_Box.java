@@ -12,7 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class PARTCA_Box {
 	
@@ -104,11 +104,11 @@ public class PARTCA_Box {
 		agentInfo.addOption(optionB);
 		agentInfo.addOption(optionU);
 		agentInfo.addOption(optionQ);
-		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
+		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
 		
 		// Slots Definition
-		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
 
 		return agentInfo;
 	}

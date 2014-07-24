@@ -13,7 +13,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class SMORegCA_Box  {
 	
@@ -133,11 +133,11 @@ public class SMORegCA_Box  {
 		agentInfo.addOption(optionA);
 		agentInfo.addOption(optionP);
 		agentInfo.addOption(optionT);
-		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
+		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
 		
 		// Slots Definition
-		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
 
 		return agentInfo;
 	}

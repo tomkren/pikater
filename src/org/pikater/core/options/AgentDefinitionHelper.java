@@ -14,7 +14,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 
-public abstract class AAA_SlotHelper {
+public abstract class AgentDefinitionHelper {
 	
 	public static List<Slot> getCAInputSlots() {
 		

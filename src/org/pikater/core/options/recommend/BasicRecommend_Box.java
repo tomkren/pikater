@@ -5,7 +5,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class BasicRecommend_Box {
 
@@ -22,7 +22,7 @@ public class BasicRecommend_Box {
 		agentInfo.setName("Basic");
 		agentInfo.setDescription("Basic Recommend");
 
-		agentInfo.setOutputSlots(AAA_SlotHelper.getRecommendOutputSlots());
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getRecommendOutputSlots());
 		
 		return agentInfo;
 	}

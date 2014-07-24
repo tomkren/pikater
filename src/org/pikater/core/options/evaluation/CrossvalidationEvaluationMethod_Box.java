@@ -5,7 +5,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class CrossvalidationEvaluationMethod_Box {
 
@@ -25,7 +25,7 @@ public class CrossvalidationEvaluationMethod_Box {
 		agentInfo.importOntologyClass(EvaluationMethod.class);
 				
 		agentInfo.setOutputSlots(
-				AAA_SlotHelper.getEvaluationMethodOutputSlots());
+				AgentDefinitionHelper.getEvaluationMethodOutputSlots());
 
 		return agentInfo;
 	}

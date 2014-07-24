@@ -3,7 +3,7 @@ package org.pikater.core.options.recommend;
 import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class NMTopRecommender_Box {
 
@@ -17,7 +17,7 @@ public class NMTopRecommender_Box {
 		agentInfo.setDescription("NMTop Recommend");
 
 		//Slot Definition
-		agentInfo.setOutputSlots(AAA_SlotHelper.getRecommendOutputSlots());
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getRecommendOutputSlots());
 
 		return agentInfo;
 	}

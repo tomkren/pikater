@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class RandomSearch_Box {
 
@@ -38,7 +38,7 @@ public class RandomSearch_Box {
 		agentInfo.addOption(optionM);
 
 		//Slot Definition
-		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());		
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getSearcherOutputSlots());		
 
 		return agentInfo;
 	}

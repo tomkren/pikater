@@ -5,7 +5,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class NaiveBayesCA_Box {
 
@@ -36,11 +36,11 @@ public class NaiveBayesCA_Box {
 
 		agentInfo.addOption(optionK);
 		agentInfo.addOption(optionD);
-		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
+		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
 		
 		// Slots Definition
-		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
 
 		return agentInfo;
 	}

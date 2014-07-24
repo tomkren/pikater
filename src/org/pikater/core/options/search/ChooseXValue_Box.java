@@ -6,7 +6,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class ChooseXValue_Box {
 	
@@ -28,7 +28,7 @@ public class ChooseXValue_Box {
 		agentInfo.addOption(optionN);
 		
 		// Slot Definition
-		agentInfo.setOutputSlots(AAA_SlotHelper.getSearcherOutputSlots());
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getSearcherOutputSlots());
 
 		return agentInfo;
 	}

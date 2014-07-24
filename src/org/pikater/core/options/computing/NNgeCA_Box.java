@@ -6,7 +6,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AAA_SlotHelper;
+import org.pikater.core.options.AgentDefinitionHelper;
 
 public class NNgeCA_Box {
 	
@@ -42,11 +42,11 @@ public class NNgeCA_Box {
 
 		agentInfo.addOption(optionI);
 		agentInfo.addOption(optionG);
-		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
+		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
 
 		//Slot Definition
-		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AAA_SlotHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
+		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
 
 		return agentInfo;
 	}
