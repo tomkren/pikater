@@ -19,7 +19,7 @@ public class BasicRecommend_Box {
 		agentInfo.importAgentClass(Agent_Basic.class);
 		agentInfo.importOntologyClass(Recommend.class);
 	
-		agentInfo.setName("Basic Recommend");
+		agentInfo.setName("Basic");
 		agentInfo.setDescription("Basic Recommend");
 
 		agentInfo.setOutputSlots(AAA_SlotHelper.getRecommendOutputSlots());

@@ -13,7 +13,7 @@ public class NMTopRecommender_Box {
 		agentInfo.importAgentClass(Agent_NMTopRecommender.class);
 		agentInfo.importOntologyClass(Recommend.class);
 	
-		agentInfo.setName("NMTop Recommend");
+		agentInfo.setName("NMTop");
 		agentInfo.setDescription("NMTop Recommend");
 
 		//Slot Definition
