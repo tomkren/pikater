@@ -93,7 +93,7 @@ public class J48CA_Box {
 		agentInfo.addOption(optionS);
 		agentInfo.addOption(optionA);
 		agentInfo.addOption(optionQ);
-
+		agentInfo.addOptions(AAA_SlotHelper.getCAOptions());
 
 		//Slot Definition
 		agentInfo.setInputSlots(AAA_SlotHelper.getCAInputSlots());

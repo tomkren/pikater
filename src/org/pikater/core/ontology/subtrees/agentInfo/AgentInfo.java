@@ -72,12 +72,18 @@ public class AgentInfo implements Concept {
 		this.options = options;
 	}
 	public void addOption(NewOption option) {
-		if (this.options == null) {
-			this.options = new NewOptions();
+		if (option == null) {
+			throw new IllegalArgumentException("Argument option cann't be null");
 		}
 		this.options.addOption(option);
 	}
-
+	public void addOptions(List<NewOption> options) {
+		if (options == null) {
+			throw new IllegalArgumentException("Argument options cann't be null");
+		}
+		this.options.addOptions(options);
+	}
+	
 	public List<Slot> getInputSlots() {
 		return inputSlots;
 	}

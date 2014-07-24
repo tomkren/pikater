@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 
 public abstract class AAA_SlotHelper {
@@ -52,6 +53,13 @@ public abstract class AAA_SlotHelper {
 		outputSlots.add(outputSlot);
 		
 		return outputSlots;
+	}
+
+	public static List<NewOption> getCAOptions() {
+		
+		List<NewOption> options = new ArrayList<NewOption>();
+		
+		return options;
 	}
 
 	public static List<Slot> getEvaluationMethodOutputSlots() {
