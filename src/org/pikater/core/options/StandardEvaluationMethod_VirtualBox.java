@@ -2,7 +2,7 @@ package org.pikater.core.options;
 
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxStandardEvaluationMethod;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 
 public class StandardEvaluationMethod_VirtualBox {
 

@@ -1,13 +1,9 @@
-package org.pikater.core.ontology.subtrees.task;
+package org.pikater.core.ontology.subtrees.batchDescription;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
-import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.IDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;

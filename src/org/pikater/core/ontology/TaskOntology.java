@@ -3,6 +3,7 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
+import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.IModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.ModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
@@ -36,6 +37,7 @@ public class TaskOntology extends BeanOntology {
             add(IModelDescription.class);
             add(ModelDescription.class);
             add(NewModel.class);
+            add(EvaluationMethod.class);
             
             add(optionPackage);
             add(restrictionPackage);

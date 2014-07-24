@@ -1,6 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph;
 
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 
 /**
  * User: Kuba

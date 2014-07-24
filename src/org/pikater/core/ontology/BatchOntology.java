@@ -5,12 +5,12 @@ import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
 
 public class BatchOntology extends BeanOntology {
 
@@ -26,8 +26,6 @@ public class BatchOntology extends BeanOntology {
         String restrictionPackage = IRestriction.class.getPackage().getName();
         String typePackage = ValueType.class.getPackage().getName();
         String valuePackage = BooleanValue.class.getPackage().getName();
-
-        String methodPackage = EvaluationMethod.class.getPackage().getName();
         
         try {
             add(computingDescriptionPackage);
@@ -36,8 +34,6 @@ public class BatchOntology extends BeanOntology {
             add(restrictionPackage);
             add(typePackage);
             add(valuePackage);
-            
-            add(methodPackage);
 
         } catch (Exception e) {
             e.printStackTrace();

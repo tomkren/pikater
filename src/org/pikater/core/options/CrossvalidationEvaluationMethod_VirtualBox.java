@@ -1,7 +1,7 @@
 package org.pikater.core.options;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.task.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 
 public class CrossvalidationEvaluationMethod_VirtualBox {
 

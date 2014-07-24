@@ -1,7 +1,9 @@
 package org.pikater.core.ontology.subtrees.task;
 
 import jade.content.Concept;
+
 import org.pikater.core.ontology.messages.TaskOutput;
+import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 
