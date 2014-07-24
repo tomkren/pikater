@@ -4,6 +4,11 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.model.IModelDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
@@ -21,6 +26,8 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	private String agentType;
     private List<NewOption> options;
 	private IModelDescription model;
+	private IExpectedDuration duration;
+	
     private EvaluationMethod evaluationMethod;
     
 	private DataSourceDescription trainingData;
@@ -31,6 +38,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     	
     	this.options = new ArrayList<NewOption>();
     	this.model = new NewModel();
+    	this.duration = new LongTermDuration();
     	this.evaluationMethod = new EvaluationMethod();
     }
     
@@ -48,7 +56,14 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		this.model = model;
 	}    
 
-    public DataSourceDescription getTrainingData() {
+    public IExpectedDuration getDuration() {
+		return duration;
+	}
+	public void setDuration(IExpectedDuration duration) {
+		this.duration = duration;
+	}
+
+	public DataSourceDescription getTrainingData() {
         return trainingData;
     }
     public void setTrainingData(DataSourceDescription trainingData) {

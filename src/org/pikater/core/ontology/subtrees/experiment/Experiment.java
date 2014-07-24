@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.experiment;
 
-import org.pikater.core.ontology.subtrees.batchDescription.IModelDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.model.IModelDescription;
 
 import jade.content.Concept;
 

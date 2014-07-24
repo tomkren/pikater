@@ -4,9 +4,9 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.IModelDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.ModelDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.NewModel;
+import org.pikater.core.ontology.subtrees.batchDescription.model.IModelDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;

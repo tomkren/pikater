@@ -1,4 +1,5 @@
-package org.pikater.core.ontology.subtrees.batchDescription;
+package org.pikater.core.ontology.subtrees.batchDescription.model;
+
 
 public class NewModel implements IModelDescription {
 

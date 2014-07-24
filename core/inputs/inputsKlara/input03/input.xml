@@ -57,7 +57,8 @@
             <errors/>
             <dataSources/>
             <options/>
-            <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+            <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
+            <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
             <evaluationMethod>
               <id>4</id>
               <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
@@ -117,7 +118,8 @@
                   <errors/>
                   <dataSources/>
                   <options/>
-                  <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+                  <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
+                  <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
                   <evaluationMethod>
                     <id>7</id>
                     <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
@@ -202,7 +204,8 @@
                   <errors/>
                   <dataSources/>
                   <options/>
-                  <model type="org.pikater.core.ontology.subtrees.batchDescription.NewModel"/>
+                  <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
+                  <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
                   <evaluationMethod>
                     <id>7</id>
                     <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>

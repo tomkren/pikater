@@ -5,12 +5,12 @@ import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class BatchOntology extends BeanOntology {
 
@@ -21,6 +21,8 @@ public class BatchOntology extends BeanOntology {
 
         String computingDescriptionPackage = ComputationDescription.class.getPackage().getName();
         String batchPackage = Batch.class.getPackage().getName();
+        String shortTimeDurationPackage = ShortTimeDuration.class.getPackage().getName();
+        String modelPackage = NewModel.class.getPackage().getName();
         
         String optionPackage = NewOption.class.getPackage().getName();
         String restrictionPackage = IRestriction.class.getPackage().getName();
@@ -30,6 +32,9 @@ public class BatchOntology extends BeanOntology {
         try {
             add(computingDescriptionPackage);
             add(batchPackage);
+            add(shortTimeDurationPackage);
+            add(modelPackage);
+            
             add(optionPackage);
             add(restrictionPackage);
             add(typePackage);
