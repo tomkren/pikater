@@ -4,6 +4,7 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.model.IModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
@@ -31,6 +32,9 @@ public class ResultOntology extends BeanOntology {
         String taskPackage = Task.class.getPackage().getName();
         String dataPackage = Data.class.getPackage().getName();
         
+        String shortTimeDurationPackage = ShortTimeDuration.class.getPackage().getName();
+        String modelPackage = NewModel.class.getPackage().getName();
+        
         String optionPackage = NewOption.class.getPackage().getName();
         String restrictionPackage = IRestriction.class.getPackage().getName();
         String typePackage = ValueType.class.getPackage().getName();
@@ -46,9 +50,9 @@ public class ResultOntology extends BeanOntology {
         try {
             add(taskPackage);
             add(dataPackage);
-            add(IModelDescription.class);
-            add(ModelDescription.class);
-            add(NewModel.class);
+            
+            add(shortTimeDurationPackage);            
+            add(modelPackage);
             
             add(optionPackage);
             add(restrictionPackage);
