@@ -1,4 +1,4 @@
-package org.pikater.core.options;
+package org.pikater.core.options.search;
 
 import org.pikater.core.agents.experiment.search.Agent_GridSearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -7,9 +7,10 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.options.AAA_SlotHelper;
 
 
-public class GridSearch_SearchBox {
+public class GridSearch_Box {
 	
 	public static AgentInfo get() {
 		

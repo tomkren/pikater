@@ -3,7 +3,7 @@ package org.pikater.web.experiment_backup;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import org.pikater.core.options.RBFNetwork_CABox;
+import org.pikater.core.options.computing.RBFNetworkCA_Box;
 
 public class OptionContext
 {
@@ -35,7 +35,7 @@ public class OptionContext
 	
 	public static Package getSerializationPackage()
 	{
-		return RBFNetwork_CABox.class.getPackage();
+		return RBFNetworkCA_Box.class.getPackage();
 	}
 	
 	public static File[] getFilesToDeserialize()

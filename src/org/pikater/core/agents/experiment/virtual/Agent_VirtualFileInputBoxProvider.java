@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.virtual;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.FileInput_VirtualBox;
+import org.pikater.core.options.virtual.FileInput_Box;
 
 public class Agent_VirtualFileInputBoxProvider extends Agent_VirtualBoxProvider {
 
@@ -13,7 +13,7 @@ public class Agent_VirtualFileInputBoxProvider extends Agent_VirtualBoxProvider 
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return FileInput_VirtualBox.get();
+		return FileInput_Box.get();
 	}
 
 }

@@ -1,12 +1,13 @@
-package org.pikater.core.options;
+package org.pikater.core.options.evaluation;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class CrossvalidationEvaluationMethod_VirtualBox {
+public class CrossvalidationEvaluationMethod_Box {
 
 	public static AgentInfo get() {
 		
@@ -20,7 +21,7 @@ public class CrossvalidationEvaluationMethod_VirtualBox {
 		agentInfo.setName("Crossvalidation");
 		agentInfo.setDescription("Evaluation Method");
 		agentInfo.addOption(optionF);
-		agentInfo.importAgentClass(CrossvalidationEvaluationMethod_VirtualBox.class);
+		agentInfo.importAgentClass(CrossvalidationEvaluationMethod_Box.class);
 		agentInfo.importOntologyClass(EvaluationMethod.class);
 				
 		agentInfo.setOutputSlots(

@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.Perceptron_CABox;
+import org.pikater.core.options.computing.PerceptronCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.MultilayerPerceptron;
@@ -22,7 +22,7 @@ public class Agent_WekaPerceptronCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return Perceptron_CABox.get();
+		return PerceptronCA_Box.get();
 	}
 
 }

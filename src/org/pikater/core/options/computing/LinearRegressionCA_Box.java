@@ -1,4 +1,4 @@
-package org.pikater.core.options;
+package org.pikater.core.options.computing;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -8,8 +8,9 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestrictio
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class LinearRegression_CABox {
+public class LinearRegressionCA_Box {
 
 	public static AgentInfo get() {
 				

@@ -1,4 +1,0 @@
-SMO_MethodBox   -----    -E  float vs. integer?
-MultiLayerPerception ---- how to represent layers?
-
-C,G complexity constant SMO vs SMOReg

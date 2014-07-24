@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.NaiveBayes_CABox;
+import org.pikater.core.options.computing.NaiveBayesCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.NaiveBayes;
@@ -22,7 +22,7 @@ public class Agent_WekaNaiveBayesCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return NaiveBayes_CABox.get();
+		return NaiveBayesCA_Box.get();
 	}
 
 }

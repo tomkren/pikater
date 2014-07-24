@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.J48_CABox;
+import org.pikater.core.options.computing.J48CA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.J48;
@@ -22,7 +22,7 @@ public class Agent_WekaJ48 extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return J48_CABox.get();
+		return J48CA_Box.get();
 	}
 
 }

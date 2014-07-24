@@ -1,4 +1,4 @@
-package org.pikater.core.options;
+package org.pikater.core.options.virtual;
 
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualFileInputBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -8,7 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
-public class FileInput_VirtualBox {
+public class FileInput_Box {
 	
 	public static AgentInfo get() {
 

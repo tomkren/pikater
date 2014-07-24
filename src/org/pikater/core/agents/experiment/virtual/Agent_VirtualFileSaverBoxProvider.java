@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.virtual;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.FileSaver_VirtualBox;
+import org.pikater.core.options.virtual.FileSaver_Box;
 
 public class Agent_VirtualFileSaverBoxProvider extends Agent_VirtualBoxProvider {
 
@@ -13,7 +13,7 @@ public class Agent_VirtualFileSaverBoxProvider extends Agent_VirtualBoxProvider 
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return FileSaver_VirtualBox.get();
+		return FileSaver_Box.get();
 	}
 
 }

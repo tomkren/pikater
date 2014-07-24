@@ -1,10 +1,11 @@
-package org.pikater.core.options;
+package org.pikater.core.options.recommend;
 
 import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class NMTopRecommender_RecommendBox {
+public class NMTopRecommender_Box {
 
 	public static AgentInfo get() {
 

@@ -1,4 +1,4 @@
-package org.pikater.core.options;
+package org.pikater.core.options.search;
 
 import org.pikater.core.agents.experiment.search.Agent_GASearch;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -7,8 +7,9 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class GASearch_SearchBox {
+public class GASearch_Box {
 	
 	public static AgentInfo get() {
 

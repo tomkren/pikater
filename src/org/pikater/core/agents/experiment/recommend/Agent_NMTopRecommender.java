@@ -27,7 +27,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.options.NMTopRecommender_RecommendBox;
+import org.pikater.core.options.recommend.NMTopRecommender_Box;
 
 /**
  *
@@ -298,7 +298,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return NMTopRecommender_RecommendBox.get();
+		return NMTopRecommender_Box.get();
 	}
 
     private double distance(Metadata m1, Metadata m2) {

@@ -1,4 +1,4 @@
-package org.pikater.core.options;
+package org.pikater.core.options.computing;
 
 /*
 import org.pikater.core.dataStructures.options.OptionDefault;

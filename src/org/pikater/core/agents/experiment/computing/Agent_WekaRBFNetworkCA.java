@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.RBFNetwork_CABox;
+import org.pikater.core.options.computing.RBFNetworkCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.RBFNetwork;
@@ -23,7 +23,7 @@ public class Agent_WekaRBFNetworkCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return RBFNetwork_CABox.get();
+		return RBFNetworkCA_Box.get();
 	}
 
 

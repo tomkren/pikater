@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.PART_CABox;
+import org.pikater.core.options.computing.PARTCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.rules.PART;
@@ -22,7 +22,7 @@ public class Agent_WekaPARTCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 		
-		return PART_CABox.get();
+		return PARTCA_Box.get();
 	}
 
 }

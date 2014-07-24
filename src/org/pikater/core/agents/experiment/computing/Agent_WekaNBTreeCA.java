@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.NBTree_CABox;
+import org.pikater.core.options.computing.NBTreeCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.NBTree;
@@ -22,7 +22,7 @@ public class Agent_WekaNBTreeCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 		
-		return NBTree_CABox.get();
+		return NBTreeCA_Box.get();
 	}
 
 }

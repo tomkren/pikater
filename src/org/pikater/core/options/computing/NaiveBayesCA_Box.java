@@ -1,12 +1,13 @@
-package org.pikater.core.options;
+package org.pikater.core.options.computing;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaNaiveBayesCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class NaiveBayes_CABox {
+public class NaiveBayesCA_Box {
 
 	public static AgentInfo get() {
 

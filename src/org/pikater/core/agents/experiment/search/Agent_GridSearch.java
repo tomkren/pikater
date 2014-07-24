@@ -13,7 +13,7 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
-import org.pikater.core.options.GridSearch_SearchBox;
+import org.pikater.core.options.search.GridSearch_Box;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -45,7 +45,7 @@ public class Agent_GridSearch extends Agent_Search {
 	@Override
 	protected AgentInfo getAgentInfo() {
 		
-		return GridSearch_SearchBox.get();
+		return GridSearch_Box.get();
 	}
 
     @Override

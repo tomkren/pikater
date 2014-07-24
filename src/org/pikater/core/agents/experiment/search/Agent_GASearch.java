@@ -9,7 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.options.GASearch_SearchBox;
+import org.pikater.core.options.search.GASearch_Box;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class Agent_GASearch extends Agent_Search {
 	@Override
 	protected AgentInfo getAgentInfo() {
 		
-		return GASearch_SearchBox.get();
+		return GASearch_Box.get();
 	}
 
 	@Override

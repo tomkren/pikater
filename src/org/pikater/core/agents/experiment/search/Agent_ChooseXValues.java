@@ -9,7 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.options.ChooseXValue_SearchBox;
+import org.pikater.core.options.search.ChooseXValue_Box;
 
 public class Agent_ChooseXValues extends Agent_Search {
 	/*
@@ -31,7 +31,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return ChooseXValue_SearchBox.get();
+		return ChooseXValue_Box.get();
 	}
 
 	@Override

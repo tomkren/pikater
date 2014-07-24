@@ -1,12 +1,13 @@
-package org.pikater.core.options;
+package org.pikater.core.options.recommend;
 
 import org.pikater.core.agents.experiment.recommend.Agent_Basic;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class BasicRecommend_RecommendBox {
+public class BasicRecommend_Box {
 
 	public static AgentInfo get() {
 

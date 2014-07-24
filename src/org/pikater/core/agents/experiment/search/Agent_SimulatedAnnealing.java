@@ -12,7 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.options.SimulatedAnnealing_SearchBox;
+import org.pikater.core.options.search.SimulatedAnnealing_Box;
 
 public class Agent_SimulatedAnnealing extends Agent_Search {
 	/*
@@ -52,7 +52,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return SimulatedAnnealing_SearchBox.get();
+		return SimulatedAnnealing_Box.get();
 	}
 
 	@Override

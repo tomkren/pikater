@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.virtual;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.CARecSearchComplex_VirtualBox;
+import org.pikater.core.options.virtual.CARecSearchComplex_Box;
 
 public class Agent_VirtualCARecSearchComplexBoxProvider extends
 		Agent_VirtualBoxProvider {
@@ -14,7 +14,7 @@ public class Agent_VirtualCARecSearchComplexBoxProvider extends
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return CARecSearchComplex_VirtualBox.get();
+		return CARecSearchComplex_Box.get();
 	}
 
 }

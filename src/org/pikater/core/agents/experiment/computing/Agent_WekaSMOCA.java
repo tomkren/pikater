@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.SMO_CABox;
+import org.pikater.core.options.computing.SMOCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.SMO;
@@ -22,7 +22,7 @@ public class Agent_WekaSMOCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 		
-		return SMO_CABox.get();
+		return SMOCA_Box.get();
 	}
 
 }

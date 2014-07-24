@@ -10,7 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.options.EASearch_SearchBox;
+import org.pikater.core.options.search.EASearch_Box;
 import org.pikater.core.utilities.evolution.MergingReplacement;
 import org.pikater.core.utilities.evolution.Population;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
@@ -99,7 +99,7 @@ public class Agent_EASearch extends Agent_Search {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return EASearch_SearchBox.get();
+		return EASearch_Box.get();
 	}
 
     @Override

@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.OneR_CABox;
+import org.pikater.core.options.computing.OneRCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.rules.OneR;
@@ -22,7 +22,7 @@ public class Agent_WekaOneRCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return OneR_CABox.get();
+		return OneRCA_Box.get();
 	}
 
 }

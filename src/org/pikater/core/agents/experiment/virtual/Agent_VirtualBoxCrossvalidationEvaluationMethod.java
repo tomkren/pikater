@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.virtual;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.CrossvalidationEvaluationMethod_VirtualBox;
+import org.pikater.core.options.evaluation.CrossvalidationEvaluationMethod_Box;
 
 public class Agent_VirtualBoxCrossvalidationEvaluationMethod extends Agent_VirtualBoxProvider {
 
@@ -13,7 +13,7 @@ public class Agent_VirtualBoxCrossvalidationEvaluationMethod extends Agent_Virtu
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return CrossvalidationEvaluationMethod_VirtualBox.get();
+		return CrossvalidationEvaluationMethod_Box.get();
 	}
 
 

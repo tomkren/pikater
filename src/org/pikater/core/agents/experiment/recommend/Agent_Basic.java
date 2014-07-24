@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.options.BasicRecommend_RecommendBox;
+import org.pikater.core.options.recommend.BasicRecommend_Box;
 
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
@@ -31,7 +31,7 @@ public class Agent_Basic extends Agent_Recommender {
 	@Override
 	protected AgentInfo getAgentInfo() {
 
-		return BasicRecommend_RecommendBox.get();
+		return BasicRecommend_Box.get();
 	}
 
 	@Override

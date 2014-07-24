@@ -1,10 +1,11 @@
-package org.pikater.core.options;
+package org.pikater.core.options.evaluation;
 
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxStandardEvaluationMethod;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class StandardEvaluationMethod_VirtualBox {
+public class StandardEvaluationMethod_Box {
 
 	public static AgentInfo get() {
 		

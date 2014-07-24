@@ -1,4 +1,4 @@
-package org.pikater.core.options;
+package org.pikater.core.options.computing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,9 +19,10 @@ import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.options.AAA_SlotHelper;
 
 
-public class MultiLayerPerceptron_CABox {
+public class MultiLayerPerceptronCA_Box {
 	
 	public static AgentInfo get() {
 

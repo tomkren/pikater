@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.options.RandomTree_CABox;
+import org.pikater.core.options.computing.RandomTreeCA_Box;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.RandomTree;
@@ -22,7 +22,7 @@ public class Agent_WekaRandomTreeCA extends Agent_WekaAbstractCA {
 	@Override
 	protected AgentInfo getAgentInfo() {
 		
-		return RandomTree_CABox.get();
+		return RandomTreeCA_Box.get();
 	}
 
 }

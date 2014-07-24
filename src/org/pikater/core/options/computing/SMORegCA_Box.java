@@ -1,4 +1,4 @@
-package org.pikater.core.options;
+package org.pikater.core.options.computing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +13,9 @@ import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.options.AAA_SlotHelper;
 
-public class SMOReg_CABox  {
+public class SMORegCA_Box  {
 	
 	public static AgentInfo get() {
 
