@@ -35,6 +35,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -70,6 +71,7 @@ public class Agent_Manager extends PikaterAgent {
 	public List<Ontology> getOntologies() {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(RecomendOntology.getInstance());
 		ontologies.add(SearchOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
@@ -182,14 +184,11 @@ public class Agent_Manager extends PikaterAgent {
 						logError("unknown message received.");
 					}
 				} catch (UngroundedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logError(e1.getMessage(), e1);
 				} catch (CodecException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logError(e1.getMessage(), e1);
 				} catch (OntologyException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logError(e1.getMessage(), e1);
 				}
 			}
 			else {
@@ -224,13 +223,10 @@ public class Agent_Manager extends PikaterAgent {
 			getContentManager().fillContent(msgOut, content );
 		} catch (UngroundedException e) {
 			logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (CodecException e) {
 			logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		// go through every subscription

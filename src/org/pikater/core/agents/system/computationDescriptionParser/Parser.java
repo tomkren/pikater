@@ -9,6 +9,8 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSou
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.manager.ManagerCommunicator;
+import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
@@ -111,7 +113,11 @@ public class Parser {
     public void parseRoots(ComputationDescription comDescription) {
         agent.log("Ontology Parser - ComputationDescription");
 
-        this.priority = comDescription.getPriority();
+        ManagerCommunicator communicator = new ManagerCommunicator();
+        User user = communicator.loadUser(agent, 5856); //TODO:
+
+        this.priority = 10 * user.getPriorityMax() +
+        		comDescription.getPriority();        
 
         List<FileDataSaver> elements = comDescription.getRootElements();
         for (FileDataSaver fileSaverI : elements) {

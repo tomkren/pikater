@@ -402,6 +402,8 @@ public class Agent_DataManager extends PikaterAgent {
 		user.setLastLogin(userJPA.getLastLogin());
 		
 		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
 		Result result = new Result(a, user);
 		try {
 			getContentManager().fillContent(reply, result);
