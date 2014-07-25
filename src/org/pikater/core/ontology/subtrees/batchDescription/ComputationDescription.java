@@ -28,16 +28,35 @@ public class ComputationDescription implements Concept {
 
 	private static final long serialVersionUID = -7951850172320173523L;
 
-	private List<NewOption> globalOptions = new ArrayList<NewOption>();
-	private List<FileDataSaver> rootElements = new ArrayList<FileDataSaver>();
+	private int priority;
+	private List<NewOption> globalOptions;
+
+	private List<FileDataSaver> rootElements;
 	
+	public ComputationDescription() {
+		this.priority = 0;
+		this.globalOptions = new ArrayList<NewOption>();
+		this.rootElements = new ArrayList<FileDataSaver>();
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+	public void setPriority(int priority) {
+		if (priority < 0 || 9 < priority) {
+			throw new IllegalArgumentException(
+					"Argument priority have to be in the interval <0,9>");
+		}
+		this.priority = priority;
+	}
+
 	public List<NewOption> getGlobalOptions() {
 		return globalOptions;
 	}
-
 	public void setGlobalOptions(List<NewOption> globalOptions) {
 		if (globalOptions == null) {
-			throw new IllegalArgumentException("Argument globalOptions can't be null");
+			throw new IllegalArgumentException(
+					"Argument globalOptions can't be null");
 		}
 		this.globalOptions = globalOptions;
 	}
@@ -45,19 +64,19 @@ public class ComputationDescription implements Concept {
 	public List<FileDataSaver> getRootElements() {
 		return rootElements;
 	}
-
 	public void setRootElements(List<FileDataSaver> rootElements) {
 		
 		if (rootElements == null) {
-			throw new IllegalArgumentException("Argument rootElements can't be null");
+			throw new IllegalArgumentException(
+					"Argument rootElements can't be null");
 		}
 		this.rootElements = rootElements;
 	}
-
 	public void addRootElement(FileDataSaver rootElement) {
 		
 		if (rootElement == null) {
-			throw new IllegalArgumentException("Argument rootElement can't be null");
+			throw new IllegalArgumentException(
+					"Argument rootElement can't be null");
 		}
 		this.rootElements.add(rootElement);
 	}
@@ -100,6 +119,7 @@ public class ComputationDescription implements Concept {
 	public UniversalComputationDescription exportUniversalComputationDescription() {
 
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
+		uModel.setPriority(this.priority);
 		uModel.addGlobalOptions(new HashSet<NewOption>(this.getGlobalOptions()));
 
 		
@@ -176,6 +196,7 @@ public class ComputationDescription implements Concept {
 			UniversalComputationDescription uDescription) {
 
 		ComputationDescription description = new ComputationDescription();
+		description.setPriority(uDescription.getPriority());
 		description.setGlobalOptions(
 				new ArrayList<NewOption>(uDescription.getGlobalOptions()) );
 

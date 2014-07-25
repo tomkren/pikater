@@ -349,7 +349,7 @@ class ShutDownAgents extends Thread {
 	}
 	
     public void run() {
-    	
+ 	
 		try {
 			for (int i = 0; i < 30; i++) {
 				Thread.sleep(1000);
@@ -357,7 +357,7 @@ class ShutDownAgents extends Thread {
 		} catch (InterruptedException e) {
 			agent.logError(e.getMessage(), e);
 		}
-		
+	
 		for (Class<? extends Agent_AbstractExperiment> classI : agentClasses){
 			agent.log("Agent " + classI.getName() + " was killed");
 			agent.killAgent(classI.getName());
