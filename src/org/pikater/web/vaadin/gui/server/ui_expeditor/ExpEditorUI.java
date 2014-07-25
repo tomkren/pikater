@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.newOption.NewOptionList;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
@@ -92,7 +92,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 				}
 				agentInfo.setName(name);
 				
-				NewOptionList options = new NewOptionList();
+				NewOptions options = new NewOptions();
 				options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
 				options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
 						new IntegerValue(2),

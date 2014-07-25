@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.quartzjobs.DownloadTokenExpirationJob;
 
 public class DownloadRegistrar
@@ -100,19 +99,13 @@ public class DownloadRegistrar
 	}
 	
 	/**
-	 * Common method to create a correct download URL that respects dynamic
-	 * application context paths.</br>
-	 * Context path can be defined (for example) as the name of the ".war"
-	 * file deployed to Tomcat, excluding the extension.
+	 * Common method to create a download URL that the {@link DynamicDownloadServlet} accepts.
 	 * @param uuid
 	 * @return
 	 */
 	private static String createDownloadURL(UUID uuid)
 	{
-		return String.format("/%s/download?t=%s", 
-				ServerConfigurationInterface.getContext().getContextPath(),
-				uuid.toString()
-		);
+		return String.format("./download?t=%s", uuid.toString());
 	}
 	
 	//-----------------------------------------------------------------------------

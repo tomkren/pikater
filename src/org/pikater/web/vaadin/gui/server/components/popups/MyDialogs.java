@@ -508,7 +508,7 @@ public class MyDialogs
 		@Override
 		public void onTaskFinish()
 		{
-			this.box.getButton(ButtonId.ABORT).setCaption("Close");
+			this.box.getButton(ButtonId.ABORT).setCaption("Finished - click to open result");
 			this.box.getButton(ButtonId.ABORT).addClickListener(new Button.ClickListener()
 			{
 				private static final long serialVersionUID = 5823278457271773907L;
@@ -536,7 +536,7 @@ public class MyDialogs
 		@Override
 		public void onTaskFailed()
 		{
-			this.box.getButton(ButtonId.ABORT).setCaption("Close");
+			this.box.getButton(ButtonId.ABORT).setCaption("Failed - click to close");
 			this.box.getButton(ButtonId.ABORT).addClickListener(new Button.ClickListener()
 			{
 				private static final long serialVersionUID = 5823278457271773907L;
