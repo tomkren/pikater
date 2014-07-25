@@ -104,11 +104,11 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 			}
 
 		} catch (UngroundedException e) {
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		}
 		
 		// send subscription to the original agent after each received task
