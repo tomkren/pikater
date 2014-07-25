@@ -12,6 +12,7 @@ public class ModelComputationNode extends ComputationNode {
     private String modelClass;
     private EvaluationMethod evaluationMethod;
     private IExpectedDuration expectedDuration;
+    private int priority;
 
     public ModelComputationNode() {
         super();
@@ -44,4 +45,13 @@ public class ModelComputationNode extends ComputationNode {
 	public void setExpectedDuration(IExpectedDuration expectedDuration) {
 		this.expectedDuration = expectedDuration;
 	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	
 }

@@ -164,6 +164,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		task.setAgent(agent);
 		task.setData(data);
 		task.setDuration(duration);
+		task.setPriority(computationNode.getPriority());
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());
 		
 		return task;

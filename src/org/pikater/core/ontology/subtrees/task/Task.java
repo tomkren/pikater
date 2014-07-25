@@ -19,6 +19,7 @@ public class Task implements Concept {
     private String getResults;
     private String guiAgent;
     private boolean saveResults;
+    private int priority;
     
     private int cpuCoreID;
     private IExpectedDuration duration;
@@ -78,6 +79,14 @@ public class Task implements Concept {
 	public void setDuration(IExpectedDuration duration) {
 		this.duration = duration;
 	}
+
+	public int getPriority() {
+		return priority;
+	}
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
 
 	public enum InOutType {TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA};
 

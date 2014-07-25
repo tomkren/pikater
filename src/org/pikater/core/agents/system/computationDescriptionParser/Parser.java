@@ -20,6 +20,7 @@ public class Parser {
     private ComputationGraph computationGraph=new ComputationGraph();
     private HashMap<Integer,ComputationNode> alreadyProcessed=new HashMap<>();
     private Agent_Manager agent = null;
+    private int priority;
 
     public Parser(Agent_Manager agent_) {
         this.agent = agent_;
@@ -110,6 +111,8 @@ public class Parser {
     public void parseRoots(ComputationDescription comDescription) {
         agent.log("Ontology Parser - ComputationDescription");
 
+        this.priority = comDescription.getPriority();
+
         List<FileDataSaver> elements = comDescription.getRootElements();
         for (FileDataSaver fileSaverI : elements) {
         	this.parseRoot(fileSaverI);
@@ -150,6 +153,7 @@ public class Parser {
         computingNode.setModelClass(computingAgentO.getAgentType());       
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         computingNode.setExpectedDuration(computingAgentO.getDuration());
+        computingNode.setPriority(priority);
         
         ArrayList<NewOption> options=new ArrayList<>();
         for (NewOption o:computingAgentO.getOptions())
