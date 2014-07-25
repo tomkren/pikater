@@ -482,9 +482,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 			
 		return reply;
@@ -563,9 +563,9 @@ public class Agent_DataManager extends PikaterAgent {
 			try {
 				getContentManager().fillContent(reply, result);
 			} catch (CodecException e) {
-				logError(e.getMessage());
+				logError(e.getMessage(), e);
 			} catch (OntologyException e) {
-				logError(e.getMessage());
+				logError(e.getMessage(), e);
 			}
 		}
 		return reply;
@@ -645,9 +645,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 
 		return reply;
@@ -683,9 +683,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 
 		return reply;
@@ -741,9 +741,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 		
 		return reply;
@@ -782,8 +782,7 @@ public class Agent_DataManager extends PikaterAgent {
 				try {
 					DataTransferService.handleUploadConnection(serverSocket, hash);
 				} catch (IOException e) {
-					logError("Data upload failed");
-					e.printStackTrace();
+					logError("Data upload failed", e);
 				}
 			}
 		}));
@@ -1115,8 +1114,7 @@ public class Agent_DataManager extends PikaterAgent {
 			DAOs.dataSetDAO.updateEntity(dslo);
 			
 		} catch (NoResultException e1) {
-			logError("Dataset for ID "+dataSetID+" doesn't exist.");
-			e1.printStackTrace();
+			logError("Dataset for ID "+dataSetID+" doesn't exist.", e1);
 		}
 
 		ACLMessage reply = request.createReply();
@@ -1153,13 +1151,11 @@ public class Agent_DataManager extends PikaterAgent {
 			reply.setContentObject((new Integer(newDSLO.getId())));
 			log("Saved Dataset with ID: "+newDSLO.getId());
 		} catch (NoResultException e) {
-			logError("No user found with login: "+sd.getUserLogin());
+			logError("No user found with login: "+sd.getUserLogin(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
-			e.printStackTrace();
 		} catch (IOException e) {
-			logError("File can't be read.");
+			logError("File can't be read.", e);
 			reply.setPerformative(ACLMessage.FAILURE);
-			e.printStackTrace();
 		}
 
 		return reply;

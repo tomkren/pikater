@@ -75,11 +75,11 @@ public class ManagerCommunicator {
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
@@ -141,11 +141,11 @@ public class ManagerCommunicator {
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
@@ -188,16 +188,16 @@ public class ManagerCommunicator {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage());
+			agent.logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage());
+			agent.logError(oe.getMessage(), oe);
 		}
 
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		}
 
 	}
@@ -231,9 +231,9 @@ public class ManagerCommunicator {
 			agent.getContentManager().fillContent(msg, a);
 		
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage());
+			agent.logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage());
+			agent.logError(oe.getMessage(), oe);
 		}
 		
 		ACLMessage reply = null;
@@ -247,11 +247,11 @@ public class ManagerCommunicator {
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
