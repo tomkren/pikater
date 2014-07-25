@@ -7,9 +7,8 @@ import java.io.PrintStream;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.visualisation.charts.SingleChart;
 import org.pikater.shared.visualisation.charts.axis.Axis;
-import org.pikater.shared.visualisation.charts.axis.exception.AxisNotJoinableException;
 import org.pikater.shared.visualisation.charts.coloring.Colorer;
-import org.pikater.shared.visualisation.charts.coloring.exception.ColorerNotMergeableException;
+import org.pikater.shared.visualisation.charts.exception.ChartException;
 import org.pikater.shared.visualisation.datasource.single.ArffXYZPoint;
 import org.pikater.shared.visualisation.datasource.single.SingleArffDataset;
 import org.pikater.shared.visualisation.generator.ChartGenerator;
@@ -46,8 +45,7 @@ public class ComparisonSVGGenerator extends Generator {
 	}
 	
 	@Override
-	public void create() throws IOException {
-		
+	public void create() throws IOException, ChartException {
 		try{
 			SVGRenderer svgr=new SVGRenderer(output, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 			svgr.begin();
@@ -82,13 +80,11 @@ public class ComparisonSVGGenerator extends Generator {
 			}
 
 			svgr.end();
+
+		}finally{
 			output.close();
 			dataset1.close();
 			dataset2.close();
-			signalFinish();
-
-		}catch(AxisNotJoinableException | ColorerNotMergeableException e){
-			throw new IOException();
 		}
 	}
 

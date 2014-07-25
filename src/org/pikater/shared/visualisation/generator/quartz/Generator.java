@@ -32,10 +32,4 @@ public abstract class Generator {
 			lastPercentage=percentage;
 		}
 	}
-	
-	protected void signalFinish(){
-		if(progressListener!=null){
-			progressListener.onTaskFinish();
-		}
-	}
 }

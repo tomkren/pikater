@@ -59,7 +59,6 @@ public class MatrixPNGGenerator extends Generator {
 		ir.end();
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
-		signalFinish();
 	}
 	
 	

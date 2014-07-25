@@ -1,10 +1,12 @@
 package org.pikater.web.quartzjobs;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleOneTimeJob;
+import org.pikater.shared.visualisation.charts.exception.ChartException;
 import org.pikater.shared.visualisation.generator.quartz.ComparisonSVGGenerator;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
 import org.quartz.JobBuilder;
@@ -56,13 +58,14 @@ public class ComparisonSVGGeneratorJob extends InterruptibleOneTimeJob {
 		IProgressDialogTaskContext listener=getArg(0);
 		JPADataSetLO dslo1=getArg(1);
 		JPADataSetLO dslo2=getArg(2);
+		File file=new File((String)getArg(3));
 		
 		if(dslo1.getHash()==dslo2.getHash()){
 			throw new JobExecutionException("Why compare the dataset to itself?");
 		}
 		
 		try {
-			PrintStream output=new PrintStream((String)getArg(3));
+			PrintStream output=new PrintStream(file);
 			Object attrArg1=getArg(4);
 			Object attrArg2=getArg(5);
 			Object attrArg3=getArg(6);
@@ -85,16 +88,17 @@ public class ComparisonSVGGeneratorJob extends InterruptibleOneTimeJob {
 				csvgg=new ComparisonSVGGenerator(listener, output,dslo1,dslo2, (Integer)attrArg1,(Integer)attrArg2, (Integer)attrArg3,(Integer)attrArg4,(Integer)attrArg5, (Integer)attrArg6);
 			}else{
 				output.close();
-				throw new JobExecutionException();
+				listener.onTaskFailed();
+				return;
 			}
 
 			csvgg.create();
+			listener.onTaskFinish();
 			
-		} catch (IOException e) {
-			throw new JobExecutionException();
+		} catch (ChartException | IOException e) {
+			file.delete();
+			listener.onTaskFailed();
 		}
-
-
 	}
 
 }

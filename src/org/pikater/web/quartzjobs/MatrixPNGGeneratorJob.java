@@ -1,5 +1,6 @@
 package org.pikater.web.quartzjobs;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -43,13 +44,16 @@ public class MatrixPNGGeneratorJob extends InterruptibleOneTimeJob {
 	{
 		IProgressDialogTaskContext listener=getArg(0);
 		JPADataSetLO dslo=getArg(1);
+		File file=new File((String)getArg(2));
 		try {
-			PrintStream output=new PrintStream((String)getArg(2));
+			PrintStream output=new PrintStream(file);
 			MatrixPNGGenerator mpngg=new MatrixPNGGenerator(listener, dslo, output);
 			mpngg.create();
+			listener.onTaskFinish();
 		} catch (IOException e) {
-			throw new JobExecutionException();
-		}
+			file.delete();
+			listener.onTaskFailed();
+		}	
 
 	}
 

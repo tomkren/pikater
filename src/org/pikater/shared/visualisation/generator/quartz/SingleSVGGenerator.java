@@ -67,7 +67,6 @@ public class SingleSVGGenerator extends Generator {
 		
 		renderer.end();
 		output.close();
-		signalFinish();
 	}
 
 }

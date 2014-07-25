@@ -1,5 +1,6 @@
 package org.pikater.web.quartzjobs;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -48,8 +49,9 @@ public class SingleSVGGeneratorJob extends InterruptibleOneTimeJob {
 	protected void execute() throws JobExecutionException {
 		IProgressDialogTaskContext listener=getArg(0);
 			JPADataSetLO dslo=getArg(1);
+			File file=new File((String)getArg(2));
 			try {
-				PrintStream output=new PrintStream((String)getArg(2));
+				PrintStream output=new PrintStream(file);
 				Object attrArg1=getArg(3);
 				Object attrArg2=getArg(4);
 				Object attrArg3=getArg(5);
@@ -65,8 +67,10 @@ public class SingleSVGGeneratorJob extends InterruptibleOneTimeJob {
 				}
 				
 				ssvgg.create();
-				
+				listener.onTaskFinish();
 			} catch (IOException e) {
+				file.delete();
+				listener.onTaskFailed();
 				throw new JobExecutionException();
 			}
 

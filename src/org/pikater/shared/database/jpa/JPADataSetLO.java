@@ -19,6 +19,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.pikater.shared.database.exceptions.AttributeActionNotApplicableException;
+import org.pikater.shared.database.exceptions.AttributeNameNotFoundException;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
 
 
@@ -146,4 +148,34 @@ public class JPADataSetLO extends JPAAbstractEntity{
 		this.owner=updateValues.getOwner();		
 	}
 	
+	
+	public double getAttributeMinValue(String attributeName) throws AttributeNameNotFoundException, AttributeActionNotApplicableException{ 
+		for(JPAAttributeMetaData md:getAttributeMetaData()){ 
+			if(md.getName().equals(attributeName)){ 
+				if(md instanceof JPAAttributeNumericalMetaData){ 
+					return ((JPAAttributeNumericalMetaData)md).getMin(); 
+				}else{ 
+					throw new AttributeActionNotApplicableException(); 
+				} 
+			} 
+		} 
+		throw new AttributeNameNotFoundException(); 
+	} 
+
+	public double getAttributeMaxValue(String attributeName) throws AttributeNameNotFoundException, AttributeActionNotApplicableException{ 
+		for(JPAAttributeMetaData md:getAttributeMetaData()){ 
+			if(md.getName().equals(attributeName)){ 
+				if(md instanceof JPAAttributeNumericalMetaData){ 
+					return ((JPAAttributeNumericalMetaData)md).getMax(); 
+				}else{ 
+					throw new AttributeActionNotApplicableException(); 
+				} 
+			} 
+		} 
+		throw new AttributeNameNotFoundException(); 
+	} 
+
+	public int getNumberOfAttributes(){ 
+		return this.getAttributeMetaData().size(); 
+	} 	
 }
