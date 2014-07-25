@@ -1,6 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,6 +18,8 @@ import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.quartzjobs.MatrixPNGGeneratorJob;
+import org.pikater.web.servlets.download.DownloadRegistrar;
+import org.pikater.web.servlets.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
@@ -24,6 +28,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.quartz.JobKey;
 
+import com.google.common.net.MediaType;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
@@ -120,9 +125,34 @@ public class TestView extends VerticalLayout implements IContentComponent
 					@Override
 					public void onTaskFinish()
 					{
-						// TODO: display GUI including the generated image
-						// TODO: generated images should be accessible only for a specific user (that has the link) => download servlet
-						// MyNotifications.showInfo("Job finished", "yay");
+						String generatedImageURL = DownloadRegistrar.issueDownloadURL(new IDownloadResource()
+						{
+							@Override
+							public InputStream getStream() throws Throwable
+							{
+								return new FileInputStream(tmpFile);
+							}
+							
+							@Override
+							public long getSize()
+							{
+								return tmpFile.length();
+							}
+							
+							@Override
+							public String getMimeType()
+							{
+								return MediaType.PNG.toString();
+							}
+							
+							@Override
+							public String getFilename()
+							{
+								return tmpFile.getName();
+							}
+						});
+						
+						// TODO: call visualization UI with the proper url arguments
 					}
 				});
 			}

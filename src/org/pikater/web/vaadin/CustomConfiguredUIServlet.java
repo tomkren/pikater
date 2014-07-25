@@ -12,6 +12,7 @@ import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.request.HttpRequestUtils;
 import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.ExpEditorUI;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI;
 
 import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.RequestHandler;
@@ -49,7 +50,8 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 	public enum PikaterUI
 	{
 		INDEX_PAGE("index", DefaultUI.class),
-		EXP_EDITOR("expEditor", ExpEditorUI.class);
+		EXP_EDITOR("expEditor", ExpEditorUI.class),
+		DATASET_VISUALIZATION("dsVisual", VisualizationUI.class);
 
 		private final String mappedURL;
 		private final Class<? extends UI> mappedUI;
