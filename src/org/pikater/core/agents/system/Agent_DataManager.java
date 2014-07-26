@@ -526,21 +526,14 @@ public class Agent_DataManager extends PikaterAgent {
 
 		SaveModel sm=(SaveModel)a.getAction();
 		ACLMessage reply = request.createReply();
+		
+		int savedModelID=DAOs.resultDAO.setModelForResult(sm.getModel());
 
-		JPAResult creatorResult = DAOs.resultDAO.getByID(sm.getModel().getResultID(), EmptyResultAction.LOG_NULL);
-		if(creatorResult!=null){
-			JPAModel model=new JPAModel();
-			model.setAgentClassName(sm.getModel().getAgentClassName());
-			model.setCreated(new Date());
-			model.setCreatorResult(creatorResult);
-			model.setSerializedAgent(sm.getModel().getSerializedAgent());
-			DAOs.modelDAO.storeEntity(model);
-			creatorResult.setCreatedModel(model);
-			System.out.println("Saved Model ID: "+model.getId());
-			DAOs.resultDAO.updateEntity(creatorResult);
+		if(savedModelID!=-1){
+			System.out.println("Saved Model ID: "+savedModelID);
 			reply.setPerformative(ACLMessage.INFORM);
 		}else{
-			logError("No result found in the database for the given result ID in the model description");
+			logError("Couldn't be saved model for experiment ID "+sm.getModel().getResultID());
 			reply.setPerformative(ACLMessage.FAILURE);	
 		}	
 
@@ -718,34 +711,28 @@ public class Agent_DataManager extends PikaterAgent {
 		SaveExperiment saveExperiment = (SaveExperiment) a.getAction();
 		Experiment experiment = saveExperiment.getExperiment();
 		
-		int batchID = experiment.getBatchID();
-		JPABatch batch=DAOs.batchDAO.getByID(batchID);
 		
-		JPAExperiment jpaExperiment = new JPAExperiment();
-		jpaExperiment.setBatch(batch);
-		jpaExperiment.setStatus(experiment.getStatus());
-		
-		if(experiment.getModel() instanceof NewModel){
-			jpaExperiment.setModelStrategy(JPAModelStrategy.CREATION);
-			jpaExperiment.setUsedModel(null);
-		}
-		
-		DAOs.experimentDAO.storeEntity(jpaExperiment);
+		int savedID = DAOs.batchDAO.addExperimentToBatch(experiment);
 		
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
 		
-		SavedExperiment savedExperiment = new SavedExperiment();
-		savedExperiment.setSavedExperimentId(jpaExperiment.getId());
-		savedExperiment.setMessage("OK");
-		
-		Result result = new Result(a, savedExperiment);
-		try {
-			getContentManager().fillContent(reply, result);
-		} catch (CodecException e) {
-			logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+		if(savedID==-1){
+			reply.setPerformative(ACLMessage.FAILURE);
+		}else{
+			reply.setPerformative(ACLMessage.INFORM);
+
+			SavedExperiment savedExperiment = new SavedExperiment();
+			savedExperiment.setSavedExperimentId(savedID);
+			savedExperiment.setMessage("OK");
+
+			Result result = new Result(a, savedExperiment);
+			try {
+				getContentManager().fillContent(reply, result);
+			} catch (CodecException e) {
+				logError(e.getMessage());
+			} catch (OntologyException e) {
+				logError(e.getMessage());
+			}
 		}
 		
 		return reply;
@@ -980,7 +967,7 @@ public class Agent_DataManager extends PikaterAgent {
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
 		NewOptions options = new NewOptions(task.getAgent().getOptions());
-	
+		int experimentID=task.getComputationId();
 		try {
 			JPAResult jparesult = new JPAResult();
 
@@ -1055,15 +1042,17 @@ public class Agent_DataManager extends PikaterAgent {
 			// je to ono?
 			jparesult.setSerializedFileName(task.getResult().getObjectFilename());
 			// query += "\'" + res.getResult().getObject_filename() + "\', ";
-
-			// jparesult.setExperiment(TODO);
 			// query += "\'" + res.getId().getIdentificator() + "\',"; // TODO -
 			// pozor - neni jednoznacne, pouze pro jednoho managera
 			// query += "\'" + res.getProblem_name() + "\',";
 			jparesult.setNote(task.getNote());
 			log("JPA Result    "+jparesult.getErrorRate());
-			DAOs.resultDAO.storeEntity(jparesult);
-			log("Persisted JPAResult");
+			int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
+			if(resultID!=-1){
+				log("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
+			}else{
+				logError(request.toString()+ "Couldn't persist JPAResult for experiment ID \n"+experimentID);
+			}
 		} catch(Exception e) {
 			logError("Error in SaveResults", e);;
 		}

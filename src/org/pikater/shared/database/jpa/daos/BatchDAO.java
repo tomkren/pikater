@@ -9,8 +9,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
+import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
+import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.JPAModel;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
@@ -253,6 +258,45 @@ public class BatchDAO extends AbstractDAO {
 				.setParameter("owner", owner)
 				.getSingleResult())
 				.intValue();
+	}
+	
+	/**
+	 * 
+	 * @param experiment
+	 * @return the ID of the saved Experiment Entity, -1 when failed to save
+	 */
+	public int addExperimentToBatch(Experiment experiment){
+		int batchID=experiment.getBatchID();
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			JPABatch batch=em.find(JPABatch.class, batchID);
+			if(batch!=null){
+				JPAExperiment jpaExperiment;
+				
+				if(experiment.getModel() instanceof NewModel){
+					jpaExperiment=new JPAExperiment(batch);
+				}else if(experiment.getModel() instanceof ModelDescription){
+					int modelID=((ModelDescription)experiment.getModel()).getModelID();
+					JPAModel model=em.find(JPAModel.class, modelID);
+					jpaExperiment=new JPAExperiment(batch, model);
+				}else{
+					jpaExperiment=new JPAExperiment();
+				}
+				
+				jpaExperiment.setStatus(experiment.getStatus());
+				
+				em.persist(jpaExperiment);
+				batch.addExperiment(jpaExperiment);
+				em.getTransaction().commit();
+				return jpaExperiment.getId();
+			}else{
+				em.getTransaction().rollback();
+				return -1;
+			}
+		}finally{
+			em.close();
+		}
 	}
 	
 	private List<JPABatch> getByTypedNamedQuery(String queryName,String paramName,Object param){
