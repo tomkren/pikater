@@ -1,5 +1,5 @@
 <org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
-  <priority>0</priority>
+  <priority>6</priority>
   <globalOptions/>
   <rootElements>
     <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
