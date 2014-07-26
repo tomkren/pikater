@@ -73,6 +73,7 @@ public class ParserBehaviour extends AchieveREResponder {
     		
     		ManagerCommunicator communicator = new ManagerCommunicator();
     		Batch batch = communicator.loadBatch(agent, newBatch.getBatchId());
+    		
     		ComputationDescription comDescription = batch.getDescription();
     		int batchID = batch.getId();
     		
@@ -91,7 +92,7 @@ public class ParserBehaviour extends AchieveREResponder {
     		int batchID, ACLMessage request) {
     	
 		Parser parser = new Parser(agent);
-		parser.parseRoots(comDescription);
+		parser.parseRoots(comDescription, batchID);
 		
 		ComputationGraph computationGraph = parser.getComputationGraph();
         ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request);

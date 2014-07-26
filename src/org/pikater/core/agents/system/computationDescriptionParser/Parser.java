@@ -12,9 +12,10 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionE
 import org.pikater.core.agents.system.manager.ManagerCommunicator;
 import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.experiment.Experiment;
+import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,13 +29,13 @@ public class Parser {
         this.agent = agent_;
     }
 
-    public void parseRoot(IDataSaver dataSaver) {
+    public void parseRoot(IDataSaver dataSaver, int batchID) {
         agent.log("Ontology Parser - IDataSaver");
         //Ontology root is Leaf in Computation
-        parseSaver(dataSaver);
+        parseSaver(dataSaver, batchID);
     }
 
-    private void parseSaver(IDataSaver dataSaver) {
+    private void parseSaver(IDataSaver dataSaver, int batchID) {
         if (dataSaver instanceof FileDataSaver) {
             agent.log("Ontology Matched - FileDataSaver");
 
@@ -44,20 +45,22 @@ public class Parser {
             saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),1,saverNode));
             computationGraph.addNode(saverNode);
             alreadyProcessed.put(dataSaver.getId(),saverNode);
-            parseDataSourceDescription(dataSource, saverNode, "file");
+            parseDataSourceDescription(dataSource, batchID, saverNode, "file");
         } else {
             agent.logError("Ontology Parser - Error unknown IDataSaver");
         }
     }
 
-    private void parseDataSourceDescription(DataSourceDescription dataSource, ComputationNode child, String connectionName) {
+    private void parseDataSourceDescription(DataSourceDescription dataSource,
+    		int batchID, ComputationNode child, String connectionName) {
         agent.log("Ontology Parser - DataSourceDescription");
 
         IDataProvider dataProvider = dataSource.getDataProvider();
-        this.parseDataProvider(dataProvider, child, connectionName);
+        this.parseDataProvider(dataProvider, batchID, child, connectionName);
     }
         
-    public void parseDataProvider(IDataProvider dataProvider, ComputationNode child, String connectionName) {
+    public void parseDataProvider(IDataProvider dataProvider,
+    		int batchID, ComputationNode child, String connectionName) {
         agent.log("Ontology Parser - IDataProvider");
         ComputationNode parent;
         if (dataProvider instanceof FileDataProvider) {
@@ -70,14 +73,14 @@ public class Parser {
             agent.log("Ontology Matched - ComputingAgent");
 
             ComputingAgent computingAgent = (ComputingAgent) dataProvider;
-            parent=parseComputing(computingAgent);
+            parent=parseComputing(computingAgent, batchID);
         }
         else if (dataProvider instanceof CARecSearchComplex)
         {
             agent.log("Ontology Matched - CARecSearchComplex");
 
             CARecSearchComplex complex = (CARecSearchComplex) dataProvider;
-            parent=parseComplex(complex);
+            parent=parseComplex(complex, batchID);
         }
         else if (dataProvider instanceof DataProcessing) {
             agent.log("Ontology Matched - DataProcessing");
@@ -110,7 +113,7 @@ public class Parser {
     }
 
     //This is the root of all parsing
-    public void parseRoots(ComputationDescription comDescription) {
+    public void parseRoots(ComputationDescription comDescription, int batchID) {
         agent.log("Ontology Parser - ComputationDescription");
 
         ManagerCommunicator communicator = new ManagerCommunicator();
@@ -121,7 +124,7 @@ public class Parser {
 
         List<FileDataSaver> elements = comDescription.getRootElements();
         for (FileDataSaver fileSaverI : elements) {
-        	this.parseRoot(fileSaverI);
+        	this.parseRoot(fileSaverI, batchID);
         }
     }
 
@@ -140,14 +143,16 @@ public class Parser {
         }
     }
 
-    public ModelComputationNode parseComputing(IComputingAgent computingAgent)
+    public ModelComputationNode parseComputing(IComputingAgent computingAgent,
+    		int batchID)
     {
         agent.log("Ontology Parser - Computing Agent Simple");
 
         if (!alreadyProcessed.containsKey(computingAgent.getId()))
         {
-            ModelComputationNode node= new ModelComputationNode();
-            CAStartComputationStrategy strategy=new CAStartComputationStrategy(agent,1,node);
+            ModelComputationNode node = new ModelComputationNode();
+            CAStartComputationStrategy strategy =
+            		new CAStartComputationStrategy(agent, 1, node);
             node.setStartBehavior(strategy);
             alreadyProcessed.put(computingAgent.getId(),node);
 
@@ -161,18 +166,22 @@ public class Parser {
         computingNode.setExpectedDuration(computingAgentO.getDuration());
         computingNode.setPriority(priority);
         
-        ArrayList<NewOption> options=new ArrayList<>();
-        for (NewOption o:computingAgentO.getOptions())
-        {
-            options.add(o);
-        }
-        addOptionsToInputs(computingNode,options);
-        fillDataSources(computingAgentO,computingNode);
-                       
+        addOptionsToInputs(computingNode, computingAgentO.getOptions());
+        fillDataSources(computingAgentO, batchID, computingNode);
+        
+        // save Experiment
+        Experiment experiment = new Experiment();
+        experiment.setStatus(ExperimentStatuses.COMPUTING);
+        experiment.setBatchID(batchID);
+        
+        ManagerCommunicator communicator = new ManagerCommunicator();
+        int experimentID = communicator.saveExperiment(agent, experiment);
+        //agent.logError("" + experimentID);
+        
         return computingNode;
     }
 
-    public ComputationNode parseComplex(CARecSearchComplex complex) {
+    public ComputationNode parseComplex(CARecSearchComplex complex, int batchID) {
         agent.log("Ontology Parser - CARecSearchComplex");
 
         ComputationNode computingNode;
@@ -182,13 +191,13 @@ public class Parser {
         {
             CARecSearchComplex complexChild=(CARecSearchComplex)iComputingAgent;
             childOptions=complexChild.getOptions();
-            computingNode=parseComplex(complexChild);
+            computingNode=parseComplex(complexChild, batchID);
         }
         else
         {
             ComputingAgent ca=(ComputingAgent)iComputingAgent;
             childOptions=ca.getOptions();
-            computingNode=parseComputing(iComputingAgent);
+            computingNode=parseComputing(iComputingAgent, batchID);
         }
         addOptionsToInputs(computingNode,complex.getOptions());
 
@@ -198,7 +207,8 @@ public class Parser {
             parseRecommender(recommenderO, computingNode);
         }
         if ( iComputingAgent instanceof ComputingAgent) {
-            fillDataSources((ComputingAgent) iComputingAgent, computingNode);
+        	ComputingAgent computingAgent = (ComputingAgent) iComputingAgent;
+            fillDataSources(computingAgent, batchID, computingNode);
         }
 
         Search searchAgentO = complex.getSearch();
@@ -255,19 +265,20 @@ public class Parser {
         recNode.setRecommenderClass(recommender.getRecommenderClass());
     }
 
-    private void fillDataSources(ComputingAgent compAgent,ComputationNode node) {
+    private void fillDataSources(ComputingAgent compAgent,
+    		int batchID, ComputationNode node) {
         DataSourceDescription trainingData = compAgent.getTrainingData();
         DataSourceDescription testingData = compAgent.getTestingData();
         DataSourceDescription validationData = compAgent.getValidationData();
 
         if (trainingData!=null) {
-            parseDataSourceDescription(trainingData, node, "training");
+            parseDataSourceDescription(trainingData, batchID, node, "training");
         }
         if (testingData!=null) {
-            parseDataSourceDescription(testingData, node, "testing");
+            parseDataSourceDescription(testingData, batchID, node, "testing");
         }
         if (validationData!=null) {
-            parseDataSourceDescription(validationData, node, "validation");
+            parseDataSourceDescription(validationData, batchID, node, "validation");
         }
     }
     
