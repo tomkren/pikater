@@ -199,22 +199,4 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		}
 		return name;
 	}
-	
-	public boolean _KillAgent(String name) {
-		
-		if (! agentsNames.containsKey(name)) {
-			return false;
-		}
-		
-		AgentController agentController = agentsNames.get(name);
-		agentsNames.remove(name);
-		
-		try {
-			agentController.kill();
-		} catch (StaleProxyException e) {
-			logError(e.getMessage(), e);
-		}
-		
-		return true;
-	}
 }

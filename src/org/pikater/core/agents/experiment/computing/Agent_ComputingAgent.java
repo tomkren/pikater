@@ -286,14 +286,5 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		Date date = new Date();
 		return dateFormat.format(date);
 	}
-
-	public void terminate() {
-		try {
-			DFService.deregister(this);
-		} catch (FIPAException e) {
-			logError(e.getMessage(), e);
-		}
-		doDelete();
-	}
 }
 
