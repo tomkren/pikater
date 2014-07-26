@@ -221,7 +221,7 @@ public abstract class PikaterAgent extends Agent {
 	}
 
 	public void logError(String errorDescription, Exception exception) {
-		logger.logError(errorDescription, exception);
+		logger.logError(getLocalName()+": "+errorDescription, exception);
 	}
 	
 	public void logError(String errorDescription, Severity severity) {
