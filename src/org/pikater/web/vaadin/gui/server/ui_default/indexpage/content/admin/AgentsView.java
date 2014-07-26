@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -9,10 +10,11 @@ import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentT
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView.Column;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.servlets.download.DownloadRegistrar;
-import org.pikater.web.servlets.download.IDownloadResource;
+import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
+import org.pikater.web.servlets.download.resources.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -96,8 +98,14 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 		{
 			// download, don't run action
 			final ExternalAgentTableDBRow rowView = (ExternalAgentTableDBRow) row;
-			Page.getCurrent().setLocation(DownloadRegistrar.issueAOneTimeDownloadURL(new IDownloadResource()
+			final UUID agentDownloadResourceUUID = DownloadRegistrar.issueDownload(new IDownloadResource()
 			{
+				@Override
+				public DownloadLifespan getLifeSpan()
+				{
+					return DownloadLifespan.ONE_DOWNLOAD;
+				}
+				
 				@Override
 				public InputStream getStream()
 				{
@@ -121,11 +129,12 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 				{
 					return rowView.getAgent().getName();
 				}
-			}));
+			});
+			Page.getCurrent().setLocation(DownloadRegistrar.getDownloadURL(agentDownloadResourceUUID));
 		}
 		else if(specificColumn == Column.DELETE)
 		{
-			MyDialogs.confirm(null, String.format("Really delete agent '%s'?", agentName), new MyDialogs.IDialogResultHandler()
+			GeneralDialogs.confirm(null, String.format("Really delete agent '%s'?", agentName), new GeneralDialogs.IDialogResultHandler()
 			{
 				@Override
 				public boolean handleResult(Object[] args)

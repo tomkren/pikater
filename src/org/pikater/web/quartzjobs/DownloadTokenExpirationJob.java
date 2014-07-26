@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.pikater.shared.quartz.jobs.base.AbstractJobWithArgs;
 import org.pikater.web.servlets.download.DownloadRegistrar;
 import org.pikater.web.servlets.download.DynamicDownloadServlet;
-import org.pikater.web.servlets.download.IDownloadResource;
+import org.pikater.web.servlets.download.resources.IDownloadResource;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.Trigger;

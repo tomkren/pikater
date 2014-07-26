@@ -6,65 +6,124 @@ import java.util.UUID;
 
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.quartzjobs.DownloadTokenExpirationJob;
+import org.pikater.web.servlets.download.resources.IDownloadResource;
 
 public class DownloadRegistrar
 {
 	private static final Object lock_object = new Object();
-	private static final Map<UUID, DownloadResource> uuidToResource = new HashMap<UUID, DownloadResource>();
+	private static final Map<UUID, IDownloadResource> uuidToResource = new HashMap<UUID, IDownloadResource>();
 	
-	public static String issueDownloadURL(IDownloadResource resource)
+	public enum DownloadLifespan
+	{
+		ONE_DOWNLOAD,
+		INDETERMINATE
+	}
+	
+	/**
+	 * This is the base method for creating download URLs. First, a resource mapping needs
+	 * to be created, resource ID returned (which is what this method returns) and then
+	 * a download URL may be constructed with {@link #getDownloadURL(UUID)}.
+	 * @param resource
+	 * @param lifeSpan
+	 * @return
+	 */
+	public static UUID issueDownload(IDownloadResource resource)
 	{
 		synchronized(lock_object)
 		{
 			UUID newUUID = getNextUIID();
-			uuidToResource.put(newUUID, new DownloadResource(resource, false));
-			return createDownloadURL(newUUID);
+			uuidToResource.put(newUUID, resource);
+			if(resource.getLifeSpan() == DownloadLifespan.ONE_DOWNLOAD)
+			{
+				try
+				{
+					PikaterJobScheduler.getJobScheduler().defineJob(DownloadTokenExpirationJob.class, new Object[] { newUUID, resource });
+				}
+				catch (Throwable e)
+				{
+					/*
+					 * Send a runtime error that will be caught by the default error handler on Vaadin UI,
+					 * logged and client will see a notification of an error with 500 status code (internal
+					 * server error).
+					 */
+					throw new RuntimeException("Could not issue the current download expiration job.", e);
+				}
+			}
+			return newUUID;
 		}
 	}
 	
 	/**
-	 * Associates a download resource with a unique download URL.
-	 * @param resource the resource to associate
-	 * @return The download URL. Feed it to the {@link com.vaadin.server.Page#setLocation setLocation} method
-	 * and observe what happens :).
+	 * Returns whether a resource is mapped to the given ID. 
+	 * @param resourceID
+	 * @return
 	 */
-	public static String issueAOneTimeDownloadURL(IDownloadResource resource)
+	public static boolean isResourceRegistered(UUID resourceID)
 	{
-		synchronized(lock_object)
-		{
-			UUID newUUID = getNextUIID();
-			uuidToResource.put(newUUID, new DownloadResource(resource, true));
-			
-			try
-			{
-				PikaterJobScheduler.getJobScheduler().defineJob(DownloadTokenExpirationJob.class, new Object[] { newUUID, resource });
-				return createDownloadURL(newUUID);
-			}
-			catch (Throwable e)
-			{
-				/*
-				 * Send a runtime error that will be caught by the default error handler on Vaadin UI,
-				 * logged and client will see a notification of an error with 500 status code (internal
-				 * server error).
-				 */
-				throw new RuntimeException("Could not issue the current download expiration job.", e);
-			}
-		}
+		return uuidToResource.containsKey(resourceID); 
 	}
 	
-	public static IDownloadResource downloadPickedUp(String token) 
+	/**
+	 * Gets the downloadable resource associated with the given ID.
+	 * @param resourceID
+	 * @return
+	 */
+	public static IDownloadResource getResource(UUID resourceID)
+	{
+		return uuidToResource.get(resourceID); 
+	}
+	
+	/**
+	 * Creates a download URL for the given resource ID. The URL points to {@link DynamicDownloadServlet}.
+	 * @param uuid
+	 * @return
+	 */
+	public static String getDownloadURL(UUID uuid)
+	{
+		return String.format("./download?t=%s", exportIDToDownloadToken(uuid));
+	}
+	
+	/**
+	 * Exports a resource ID to download token (String), so it can be passed (for instance) to another UI
+	 * as an URL parameter.
+	 * @param uuid
+	 * @return
+	 */
+	public static String exportIDToDownloadToken(UUID uuid)
+	{
+		return uuid.toString();
+	}
+	
+	/**
+	 * Exports a download token into a resource ID so that (for example) download URLs
+	 * can be constructed from it.
+	 * @param uuid
+	 * @return
+	 */
+	public static UUID exportDownloadTokenToID(String downloadToken)
+	{
+		return UUID.fromString(downloadToken);
+	}
+	
+	/**
+	 * A method to be used by {@link DynamicDownloadServlet}, when a download
+	 * is requested.
+	 * @param token
+	 * @return
+	 */
+	public static IDownloadResource downloadPickedUp(String downloadToken) 
 	{
 		synchronized(lock_object)
 		{
 			try
 			{
-				UUID uuid = UUID.fromString(token);
-				DownloadResource resource = uuidToResource.get(uuid);
-				if(resource.isAOneTimeDownload())
+				UUID uuid = exportDownloadTokenToID(downloadToken);
+				IDownloadResource resource = uuidToResource.get(uuid);
+				if(resource.getLifeSpan() == DownloadLifespan.ONE_DOWNLOAD)
 				{
 					uuidToResource.remove(uuid);
 				}
-				return resource.getResource();
+				return resource;
 			}
 			catch (Throwable t)
 			{
@@ -74,12 +133,17 @@ public class DownloadRegistrar
 		}
 	}
 	
+	/**
+	 * Method to be used by expiration jobs, when a download expires.
+	 * @param token
+	 * @param resource
+	 */
 	public static void downloadExpired(UUID token, IDownloadResource resource) 
 	{
 		synchronized(lock_object)
 		{
-			DownloadResource result = uuidToResource.get(token);
-			if((result != null) && result.getResource().equals(resource))
+			IDownloadResource result = uuidToResource.get(token);
+			if((result != null) && result.equals(resource))
 			{
 				uuidToResource.remove(token);
 			}
@@ -96,40 +160,5 @@ public class DownloadRegistrar
 		{
 		}
 		return newUUID;
-	}
-	
-	/**
-	 * Common method to create a download URL that the {@link DynamicDownloadServlet} accepts.
-	 * @param uuid
-	 * @return
-	 */
-	private static String createDownloadURL(UUID uuid)
-	{
-		return String.format("./download?t=%s", uuid.toString());
-	}
-	
-	//-----------------------------------------------------------------------------
-	// PRIVATE TYPES
-	
-	private static class DownloadResource
-	{
-		private final IDownloadResource resource;
-		private final boolean isAOneTimeDownload;
-		
-		public DownloadResource(IDownloadResource resource, boolean isAOneTimeDownload)
-		{
-			this.resource = resource;
-			this.isAOneTimeDownload = isAOneTimeDownload;
-		}
-
-		public IDownloadResource getResource()
-		{
-			return resource;
-		}
-
-		public boolean isAOneTimeDownload()
-		{
-			return isAOneTimeDownload;
-		}
 	}
 }
