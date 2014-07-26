@@ -13,9 +13,9 @@ import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm.ExperimentSaveMode;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogComponent;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
@@ -320,7 +320,7 @@ public class Toolbar extends VerticalLayout
 			final UniversalComputationDescription uniFormat = activeComponent.exportExperiment();
 			if(uniFormat != null)
 			{
-				MyDialogs.saveExperimentDialog(new SaveExperimentForm(saveMode)
+				SpecialDialogs.saveExperimentDialog(new SaveExperimentForm(saveMode)
 				{
 					private static final long serialVersionUID = 4325393469281258100L;
 
@@ -368,7 +368,7 @@ public class Toolbar extends VerticalLayout
 	
 	private void loadArbitraryExperimentIntoANewTab()
 	{
-		MessageBox dialog = MyDialogs.loadExperimentDialog(new LoadExperimentComponent()
+		MessageBox dialog = SpecialDialogs.loadExperimentDialog(new LoadExperimentComponent()
 		{
 			private static final long serialVersionUID = -3405189166030944018L;
 

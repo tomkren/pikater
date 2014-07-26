@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.shared.util.ReflectionUtils;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
@@ -45,7 +45,7 @@ public class ContentArea extends Panel
 					IContentComponent currentView = (IContentComponent) event.getOldView();
 					if(currentView.hasUnsavedProgress())
 					{
-						MyDialogs.confirm("Navigate away?", currentView.getCloseDialogMessage(), new MyDialogs.IDialogResultHandler()
+						GeneralDialogs.confirm("Navigate away?", currentView.getCloseDialogMessage(), new GeneralDialogs.IDialogResultHandler()
 						{
 							@Override
 							public boolean handleResult(Object[] args)
@@ -97,7 +97,7 @@ public class ContentArea extends Panel
 		}
 		else
 		{
-			MyDialogs.error("Access denied", "Contact the administrators.");
+			GeneralDialogs.error("Access denied", "Contact the administrators.");
 		}
 	}
 	

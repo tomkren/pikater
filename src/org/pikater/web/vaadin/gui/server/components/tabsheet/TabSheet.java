@@ -6,7 +6,7 @@ import java.util.Map;
 import org.pikater.web.vaadin.MyResources;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
 import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
@@ -161,7 +161,7 @@ public class TabSheet extends CustomComponent
 				}
 				else // if not, give the user a chance to cancel the action
 				{
-					MyDialogs.confirm("Really close this tab?", "The content will be lost, if unsaved.", new MyDialogs.IDialogResultHandler()
+					GeneralDialogs.confirm("Really close this tab?", "The content will be lost, if unsaved.", new GeneralDialogs.IDialogResultHandler()
 					{
 						/*
 						 * If the user confirms, do the following: 

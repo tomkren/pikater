@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Property;
@@ -164,7 +164,7 @@ public class Step2UI extends VerticalLayout
 		if((selectedRowIDs != null) && !selectedRowIDs.isEmpty())
 		{
 			// prompt for the new value
-			MyDialogs.textPrompt("Specify a new value", column.name(), new MyDialogs.IDialogResultHandler()
+			GeneralDialogs.textPrompt("Specify a new value", column.name(), new GeneralDialogs.IDialogResultHandler()
 			{
 				@Override
 				public boolean handleResult(Object[] args)

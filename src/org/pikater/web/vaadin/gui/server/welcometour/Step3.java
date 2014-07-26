@@ -14,8 +14,8 @@ import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.pikater.PikaterSSHLauncher;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;
 import org.pikater.web.vaadin.gui.server.welcometour.Step3TableContainer;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
@@ -80,7 +80,7 @@ public class Step3 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 					if(!isPikaterLaunchedWithNoErrors(connectedNotLaunchedMasterServerIDs) 
 							|| !isPikaterLaunchedWithNoErrors(connectedNotLaunchedSlaveServerIDs)) // updates GUI accordingly 
 					{
-						MyDialogs.error(null, "Pikater could not be launched on some of the servers. Use the console to find out what went wrong.");
+						GeneralDialogs.error(null, "Pikater could not be launched on some of the servers. Use the console to find out what went wrong.");
 					}
 					tabSheet.getTab(defaultComponent).setEnabled(true);
 				}
@@ -103,7 +103,7 @@ public class Step3 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 					// first check that all the included servers are reachable
 					if(!areServersReachable(includedNotConnectedServerIDs, false)) // updates GUI accordingly
 					{
-						MyDialogs.error(null, "Pikater could not be launched on some of the servers. Use the console to find out what went wrong.");
+						GeneralDialogs.error(null, "Pikater could not be launched on some of the servers. Use the console to find out what went wrong.");
 					}
 					if(!getConnectedServerIDs().isEmpty())
 					{
@@ -231,7 +231,7 @@ public class Step3 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 		}
 		else
 		{
-			MyDialogs.error("Can not finish", "At least 1 master need to have pikater launched and "
+			GeneralDialogs.error("Can not finish", "At least 1 master need to have pikater launched and "
 					+ "connection to at least 1 slave (both the same topology) are needed to continue.");
 			return false;
 		}
