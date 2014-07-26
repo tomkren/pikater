@@ -41,19 +41,19 @@ public class ParserBehaviour extends AchieveREResponder {
     	try {
             concept = ((Action)(agent.getContentManager().extractContent(request))).getAction();
         } catch (UngroundedException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		}
            
 
     	ACLMessage reply = request.createReply();
     	
+    	/*
+    	 * ExecuteBatch is deprecated
+    	 */
     	if (concept instanceof ExecuteBatch) {
     		
     		ExecuteBatch executeExperiment =
@@ -67,6 +67,9 @@ public class ParserBehaviour extends AchieveREResponder {
             reply.setContent("OK");
         }
     	
+    	/*
+    	 * NewBatch inform
+    	 */
     	if (concept instanceof NewBatch) {
     		
     		NewBatch newBatch = (NewBatch) concept;
@@ -77,7 +80,7 @@ public class ParserBehaviour extends AchieveREResponder {
     		
     		respondToNewBatch(comDescription, request);
     		
-            reply.setPerformative(ACLMessage.CONFIRM);
+            reply.setPerformative(ACLMessage.INFORM);
             reply.setContent("OK");
     	}
    

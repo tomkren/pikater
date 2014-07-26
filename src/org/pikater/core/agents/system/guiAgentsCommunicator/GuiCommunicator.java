@@ -116,9 +116,9 @@ public class GuiCommunicator {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage());
+			agent.logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage());
+			agent.logError(oe.getMessage(), oe);
 		}
 
 		ACLMessage reply = null;
@@ -126,7 +126,7 @@ public class GuiCommunicator {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
 			agent.log("Reply to NewBatch: " + reply.getContent());
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		}
 		
 	}
