@@ -176,7 +176,8 @@ public class Parser {
         
         ManagerCommunicator communicator = new ManagerCommunicator();
         int experimentID = communicator.saveExperiment(agent, experiment);
-        //agent.logError("" + experimentID);
+        
+        computingNode.setExperimentID(experimentID);
         
         return computingNode;
     }

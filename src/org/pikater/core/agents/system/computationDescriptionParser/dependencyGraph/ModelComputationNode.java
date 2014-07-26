@@ -13,6 +13,7 @@ public class ModelComputationNode extends ComputationNode {
     private EvaluationMethod evaluationMethod;
     private IExpectedDuration expectedDuration;
     private int priority;
+    private int experimentID;
 
     public ModelComputationNode() {
         super();
@@ -52,6 +53,14 @@ public class ModelComputationNode extends ComputationNode {
 
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+
+	public int getExperimentID() {
+		return experimentID;
+	}
+
+	public void setExperimentID(int experimentID) {
+		this.experimentID = experimentID;
 	}
 	
 }
