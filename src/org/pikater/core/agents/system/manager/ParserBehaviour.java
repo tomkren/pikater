@@ -15,7 +15,6 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
 import org.pikater.core.ontology.subtrees.batch.Batch;
-import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;

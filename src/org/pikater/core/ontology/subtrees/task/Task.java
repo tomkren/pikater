@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.task;
 
 import jade.content.Concept;
 
-import org.pikater.core.ontology.messages.TaskOutput;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Data;

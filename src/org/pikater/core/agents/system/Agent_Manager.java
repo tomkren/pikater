@@ -108,9 +108,9 @@ public class Agent_Manager extends PikaterAgent {
 		
 		addBehaviour(new ParserBehaviour(this));
 				
-		addBehaviour (new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
+		addBehaviour(new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
 		
-		addBehaviour (new RequestServer(this)); // TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
+		addBehaviour(new RequestServer(this)); // TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
 		
 	} // end setup
 		
