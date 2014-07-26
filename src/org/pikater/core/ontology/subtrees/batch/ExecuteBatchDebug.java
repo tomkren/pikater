@@ -2,27 +2,32 @@ package org.pikater.core.ontology.subtrees.batch;
 
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
-import jade.content.AgentAction;
+public class ExecuteBatchDebug {
 
-public class ExecuteBatch implements AgentAction {
-
-	private static final long serialVersionUID = 1L;
 	private ComputationDescription description;
-
-	@Deprecated
-	public ExecuteBatch() {
-	}
+	private int batchID;
 	
-	public ExecuteBatch(ComputationDescription description) {
+	@Deprecated
+	public ExecuteBatchDebug() {}
+
+	public ExecuteBatchDebug(
+			ComputationDescription description, int batchID) {
 		this.description = description;
+		this.batchID = batchID;
 	}
 
 	public ComputationDescription getDescription() {
 		return description;
 	}
-
 	public void setDescription(ComputationDescription description) {
 		this.description = description;
 	}
-	
+
+	public int getBatchID() {
+		return batchID;
+	}
+	public void setBatchID(int batchID) {
+		this.batchID = batchID;
+	}
+
 }

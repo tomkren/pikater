@@ -16,6 +16,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
+import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
 import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
@@ -51,15 +52,15 @@ public class ParserBehaviour extends AchieveREResponder {
            
     	
     	/*
-    	 * ExecuteBatch is deprecated
+    	 * ExecuteBatchDebug is deprecated
     	 */
-    	if (concept instanceof ExecuteBatch) {
+    	if (concept instanceof ExecuteBatchDebug) {
     		
-    		ExecuteBatch executeExperiment =
-    				(ExecuteBatch) concept;
+    		ExecuteBatchDebug executeExperiment =
+    				(ExecuteBatchDebug) concept;
     		ComputationDescription comDescription =
 					executeExperiment.getDescription();
-    		int batchID = -1; // TODO:
+    		int batchID = executeExperiment.getBatchID();
     		
     		return respondToNewBatch(comDescription, batchID, request);
         }
