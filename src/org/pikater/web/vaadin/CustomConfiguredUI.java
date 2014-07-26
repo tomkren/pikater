@@ -8,8 +8,9 @@ import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.request.HttpRequestComponent;
 import org.pikater.web.request.HttpRequestUtils;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogResultHandler;
+import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultHandler;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyFancyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
@@ -260,7 +261,7 @@ public abstract class CustomConfiguredUI extends UI
 		setMyContent(new Label());
 		
 		// display the login dialog
-		MyDialogs.loginDialog(resultHandler);
+		SpecialDialogs.loginDialog(resultHandler);
 	}
 	
 	/**
@@ -341,6 +342,11 @@ public abstract class CustomConfiguredUI extends UI
 	public static String getBaseAppURLFromLastRequest()
 	{
 		return HttpRequestUtils.getPrefix(VaadinServletService.getCurrentServletRequest(), HttpRequestComponent.P4_APPCONTEXT);
+	}
+	
+	public static String getRedirectURLToUI(PikaterUI ui)
+	{
+		return CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + ui.getURLPattern();
 	}
 	
 	public static boolean isDebugModeActive()
