@@ -13,6 +13,8 @@ import java.util.ArrayList;
 public class Task implements Concept {
 
     private static final long serialVersionUID = -8242598855481511427L;
+    private int experimentID;
+    
     private String start;
     private String finish;
     private String saveMode;
@@ -22,9 +24,16 @@ public class Task implements Concept {
     private int priority;
     
     private int cpuCoreID;
-    private IExpectedDuration duration;
+    private IExpectedDuration expectedDuration;
 
-    public String getStart() {
+    public int getExperimentID() {
+		return experimentID;
+	}
+	public void setExperimentID(int experimentID) {
+		this.experimentID = experimentID;
+	}
+
+	public String getStart() {
         return start;
     }
     public void setStart(String start) {
@@ -73,11 +82,11 @@ public class Task implements Concept {
 		this.cpuCoreID = cpuCoreID;
 	}
 	
-    public IExpectedDuration getDuration() {
-		return duration;
+    public IExpectedDuration getExpectedDuration() {
+		return expectedDuration;
 	}
-	public void setDuration(IExpectedDuration duration) {
-		this.duration = duration;
+	public void setExpectedDuration(IExpectedDuration expectedDuration) {
+		this.expectedDuration = expectedDuration;
 	}
 
 	public int getPriority() {

@@ -91,7 +91,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 
 				// save results to the database										
 				if (t.isSave_results()){
-					//DataManagerService.saveResult(myAgent, t);
+					DataManagerService.saveResult(myAgent, t, t.getExperimentID());
 				}
                 Task task=(Task)result.getValue();
                 ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationId());
