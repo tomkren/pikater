@@ -175,7 +175,7 @@ public class Agent_DataManager extends PikaterAgent {
 			openDBConnection();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		}
 
 		File data = new File(dataFilesPath + "temp");

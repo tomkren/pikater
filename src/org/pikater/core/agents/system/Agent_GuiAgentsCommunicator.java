@@ -133,6 +133,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
             guiCommunicator.sendNewBatchInfoToManager(this, batchOwnerID, batchId);
             		
             
+            // send reply to User-GuiAgent
             ACLMessage reply = request.createReply();
             reply.setPerformative(ACLMessage.INFORM);
             reply.setContent("OK");
