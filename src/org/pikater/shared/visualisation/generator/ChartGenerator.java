@@ -19,7 +19,7 @@ import org.pikater.shared.visualisation.datasource.single.SingleArffDataset;
 import org.pikater.shared.visualisation.renderer.ImageRenderer;
 import org.pikater.shared.visualisation.renderer.RendererInterface;
 import org.pikater.shared.visualisation.renderer.SVGRenderer;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
 
 public class ChartGenerator {
 

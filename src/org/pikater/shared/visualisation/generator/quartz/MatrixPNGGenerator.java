@@ -10,7 +10,7 @@ import org.pikater.shared.visualisation.charts.MatrixChart;
 import org.pikater.shared.visualisation.datasource.multiple.MultipleArffDataset;
 import org.pikater.shared.visualisation.generator.ChartGenerator;
 import org.pikater.shared.visualisation.renderer.ImageRenderer;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
 
 public class MatrixPNGGenerator extends Generator {
 	

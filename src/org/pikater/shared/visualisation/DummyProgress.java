@@ -1,6 +1,7 @@
 package org.pikater.shared.visualisation;
 
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 
 public class DummyProgress implements IProgressDialogTaskContext {
 
@@ -14,7 +15,7 @@ public class DummyProgress implements IProgressDialogTaskContext {
 	}
 
 	@Override
-	public void onTaskFinish()
+	public void onTaskFinish(IProgressDialogTaskResult result)
 	{
 		// TODO Auto-generated method stub
 		

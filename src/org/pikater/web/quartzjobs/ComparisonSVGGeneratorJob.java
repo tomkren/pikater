@@ -7,8 +7,10 @@ import java.io.PrintStream;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleOneTimeJob;
 import org.pikater.shared.visualisation.charts.exception.ChartException;
+import org.pikater.shared.visualisation.generator.ChartGenerator;
 import org.pikater.shared.visualisation.generator.quartz.ComparisonSVGGenerator;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.ProgressDialogVisualizationTaskResult;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
@@ -93,7 +95,7 @@ public class ComparisonSVGGeneratorJob extends InterruptibleOneTimeJob {
 			}
 
 			csvgg.create();
-			listener.onTaskFinish();
+			listener.onTaskFinish(new ProgressDialogVisualizationTaskResult(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE));
 			
 		} catch (ChartException | IOException e) {
 			file.delete();
