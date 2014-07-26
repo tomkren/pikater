@@ -79,17 +79,19 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				// get the original task from msg
 				Result result = (Result) content;					
 				Task t = (Task)result.getValue();
-                ComputationCollectionItem computation= myAgent.getComputation(t.getGraphId());
-                ComputationNode node= computation.getProblemGraph().getNode(t.getNodeId());
+                ComputationCollectionItem computation =
+                		myAgent.getComputation(t.getGraphId());
+                ComputationNode node =
+                		computation.getProblemGraph().getNode(t.getNodeId());
                 if (node.ContainsOutput("file"))
                 {
-                    DataSourceEdge labeledData =new DataSourceEdge();
+                    DataSourceEdge labeledData = new DataSourceEdge();
                     node.addToOutputAndProcess(labeledData,"file");
                 }
 
 				// save results to the database										
 				if (t.isSave_results()){
-					DataManagerService.saveResult(myAgent, t);
+					//DataManagerService.saveResult(myAgent, t);
 				}
                 Task task=(Task)result.getValue();
                 ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationId());

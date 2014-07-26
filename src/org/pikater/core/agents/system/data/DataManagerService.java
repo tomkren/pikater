@@ -133,10 +133,11 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
-	public static void saveResult(PikaterAgent agent, Task t) {
+	public static void saveResult(PikaterAgent agent, Task task, int experimentID) {
 
-		SaveResults sr = new SaveResults();
-		sr.setTask(t);
+		SaveResults saveResults = new SaveResults();
+		saveResults.setTask(task);
+		saveResults.setExperimentID(experimentID);
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
@@ -146,7 +147,7 @@ public class DataManagerService extends FIPAService {
 
 		Action a = new Action();
 		a.setActor(agent.getAID());
-		a.setAction(sr);
+		a.setAction(saveResults);
 
 		try {
 			agent.getContentManager().fillContent(request, a);
@@ -155,13 +156,10 @@ public class DataManagerService extends FIPAService {
 
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 	}
@@ -185,7 +183,6 @@ public class DataManagerService extends FIPAService {
 			FIPAService.doFipaRequestClient(agent, request);
 		} catch (CodecException | OntologyException | FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 
@@ -210,13 +207,10 @@ public class DataManagerService extends FIPAService {
 
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 
@@ -243,13 +237,10 @@ public class DataManagerService extends FIPAService {
 
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -276,13 +267,10 @@ public class DataManagerService extends FIPAService {
 
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -320,13 +308,10 @@ public class DataManagerService extends FIPAService {
 
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -358,13 +343,10 @@ public class DataManagerService extends FIPAService {
 			return (ArrayList) r.getValue();
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return null;
@@ -392,13 +374,10 @@ public class DataManagerService extends FIPAService {
 
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 
@@ -423,13 +402,10 @@ public class DataManagerService extends FIPAService {
 
             } catch (CodecException e) {
     			agent.logError(e.getMessage(), e);
-                e.printStackTrace();
             } catch (OntologyException e) {
     			agent.logError(e.getMessage(), e);
-                e.printStackTrace();
             } catch (FIPAException e) {
     			agent.logError(e.getMessage(), e);
-                e.printStackTrace();
             }
 
         }
@@ -463,13 +439,10 @@ public class DataManagerService extends FIPAService {
 			return (ArrayList) r.getValue();
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return null;
@@ -492,7 +465,6 @@ public class DataManagerService extends FIPAService {
 			FIPAService.doFipaRequestClient(agent, request);
 		} catch (CodecException | OntologyException | FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 }
