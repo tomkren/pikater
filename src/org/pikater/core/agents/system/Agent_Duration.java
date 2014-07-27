@@ -83,7 +83,14 @@ public class Agent_Duration extends PikaterAgent {
 				log_LR_durations = true;
 			}
 		}		    	
-    	        
+    	
+		try {
+			Thread.sleep(30000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
         // create linear regression agent
         // send message to AgentManager to create an agent
         ManagerAgentCommunicator communicator=new ManagerAgentCommunicator();
