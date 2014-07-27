@@ -159,9 +159,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     				performative = ACLMessage.INFORM;
         		}
             } catch (OntologyException e) {
-                e.printStackTrace();
+            	logError(e.getMessage(), e);
             } catch (CodecException e) {
-                e.printStackTrace();
+            	logError(e.getMessage(), e);
 			}
 
             reply.setPerformative(performative);
@@ -237,11 +237,11 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 			return ((org.pikater.core.ontology.subtrees.management.Agent) r.getItems().get(0)).getOptions();
 
 		} catch (CodecException ce) {
-			ce.printStackTrace();
+			logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			oe.printStackTrace();
+			logError(oe.getMessage(), oe);
 		} catch (FIPAException fe) {
-			fe.printStackTrace();
+			logError(fe.getMessage(), fe);
 		}
 		return null;
 	}
@@ -269,7 +269,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 				Agents.add(aid);
 			}
 		} catch (FIPAException fe) {
-			fe.printStackTrace();
+			logError(fe.getMessage(), fe);
 			return null;
 		}
 		

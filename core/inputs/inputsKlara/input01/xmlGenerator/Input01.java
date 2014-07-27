@@ -55,10 +55,11 @@ public final class Input01 {
         saver.setDataSource(computingDataSource);
 
         //Our requirements for the description are ready, lets create new computation description
-        List<FileDataSaver> roots = new ArrayList<>();
+        List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
         roots.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();
+        comDescription.setPriority(3);
         comDescription.setRootElements(roots);
 
         return comDescription;

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.web.servlets.download.resources.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 @WebServlet(value = "/download", asyncSupported = true, loadOnStartup = 1)

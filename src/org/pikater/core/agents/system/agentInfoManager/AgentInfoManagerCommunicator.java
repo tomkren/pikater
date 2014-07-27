@@ -89,9 +89,9 @@ public class AgentInfoManagerCommunicator {
 			agent.getContentManager().fillContent(request,
 					new Action(receiver, new GetModels()));
 		} catch (CodecException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		}
 		
 		ACLMessage reply = null;
@@ -99,7 +99,7 @@ public class AgentInfoManagerCommunicator {
 			reply = FIPAService.doFipaRequestClient(agent, request, 10000);
 			
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		}
 
 		Models models = null;
@@ -109,11 +109,11 @@ public class AgentInfoManagerCommunicator {
 			models = (Models) r.getValue();
 	
 		} catch (UngroundedException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		}
 
 		return models;

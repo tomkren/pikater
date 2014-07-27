@@ -9,11 +9,12 @@ public class ExecuteBatch implements AgentAction {
 	private static final long serialVersionUID = 1L;
 	private ComputationDescription description;
 
+	@Deprecated
+	public ExecuteBatch() {
+	}
+	
 	public ExecuteBatch(ComputationDescription description) {
 		this.description = description;
-	}
-
-	public ExecuteBatch() {
 	}
 
 	public ComputationDescription getDescription() {

@@ -1,12 +1,22 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
+import java.util.List;
+
 import org.pikater.shared.XStreamHelper;
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.views.tableview.batches.UserSavedBatchesTableDBView;
+import org.pikater.shared.database.views.tableview.batches.UserScheduledBatchesTableDBView;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
+import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm.ExperimentSaveMode;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
@@ -22,7 +32,10 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+
+import de.steinwedel.messagebox.MessageBox;
 
 public class Toolbar extends VerticalLayout
 {
@@ -51,6 +64,27 @@ public class Toolbar extends VerticalLayout
 	}
 	
 	//---------------------------------------------------------------
+	// PUBLIC METHODS
+	
+	public void onTabSelectionChange(KineticComponent newActiveTabContent)
+	{
+		if(newActiveTabContent != null)
+		{
+			clickModeCB.select(newActiveTabContent.getState().clickMode.name());
+			clickModeCB.setEnabled(true);
+		}
+		else
+		{
+			clickModeCB.setEnabled(false);
+		}
+	}
+	
+	public void onClickModeAlteredOnClient(ClickMode newClickMode)
+	{
+		clickModeCB.select(newClickMode.name());
+	}
+	
+	//---------------------------------------------------------------
 	// INTERFACE BUILDING METHODS
 	
 	private void buildMenuBar(boolean debugMode)
@@ -61,19 +95,36 @@ public class Toolbar extends VerticalLayout
 		
 		MenuItem experimentMenuItem = menu.addItem("Experiment", null);
 		experimentMenuItem.setStyleName("expEditor-menu-topLevelItem");
-		experimentMenuItem.addItem("Save active tab...", new Command()
+		experimentMenuItem.addItem("Save experiment from active tab...", new Command()
 		{
 			private static final long serialVersionUID = -8383604249370403859L;
 
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				executeForNonNullActiveTab(new ActionForActiveKineticComponent()
+				executeForNonNullActiveTab(new IActiveKineticComponentAction()
 				{
 					@Override
 					public void doAction(KineticComponent activeComponent)
 					{
-						saveExperimentInActiveTab(activeComponent);
+						saveExperimentInActiveTab(activeComponent, ExperimentSaveMode.SAVE_FOR_LATER);
+					}
+				}, true);
+			}
+		});
+		experimentMenuItem.addItem("Schedule experiment from active tab...", new Command()
+		{
+			private static final long serialVersionUID = -8383604249370403859L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem)
+			{
+				executeForNonNullActiveTab(new IActiveKineticComponentAction()
+				{
+					@Override
+					public void doAction(KineticComponent activeComponent)
+					{
+						saveExperimentInActiveTab(activeComponent, ExperimentSaveMode.SAVE_FOR_EXECUTION);
 					}
 				}, true);
 			}
@@ -197,7 +248,7 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void valueChange(ValueChangeEvent event)
 			{
-				executeForNonNullActiveTab(new ActionForActiveKineticComponent()
+				executeForNonNullActiveTab(new IActiveKineticComponentAction()
 				{
 					@Override
 					public void doAction(KineticComponent activeComponent)
@@ -217,7 +268,7 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void valueChange(final ValueChangeEvent event)
 			{
-				executeForNonNullActiveTab(new ActionForActiveKineticComponent()
+				executeForNonNullActiveTab(new IActiveKineticComponentAction()
 				{
 					@Override
 					public void doAction(KineticComponent activeComponent)
@@ -242,30 +293,114 @@ public class Toolbar extends VerticalLayout
 	}
 	
 	//---------------------------------------------------------------
-	// PUBLIC METHODS
+	// UNTRIVIAL MENU ACTIONS (AFTER CHECKS)
 	
-	public void onTabSelectionChange(KineticComponent newActiveTabContent)
+	private void saveExperimentInActiveTab(KineticComponent activeComponent, final ExperimentSaveMode saveMode)
 	{
-		if(newActiveTabContent != null)
+		// first check for the right conditions
+		switch(saveMode)
 		{
-			clickModeCB.select(newActiveTabContent.getState().clickMode.name());
-			clickModeCB.setEnabled(true);
+			case SAVE_FOR_LATER:
+				if(!activeComponent.isContentModified())
+				{
+					MyNotifications.showInfo("Nothing to save", "Content is not modified.");
+					return;
+				}
+				break;
+			case SAVE_FOR_EXECUTION:
+				// TODO: validation
+				break;
+			default:
+				throw new IllegalStateException("Unknown state: " + saveMode.name());
 		}
-		else
+		
+		// and then actually do anything
+		try
 		{
-			clickModeCB.setEnabled(false);
+			final UniversalComputationDescription uniFormat = activeComponent.exportExperiment();
+			if(uniFormat != null)
+			{
+				SpecialDialogs.saveExperimentDialog(new SaveExperimentForm(saveMode)
+				{
+					private static final long serialVersionUID = 4325393469281258100L;
+
+					@Override
+					public boolean handleResult(Object[] args)
+					{
+						JPAUser experimentOwner = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+						String experimentXML = XStreamHelper.serializeToXML(uniFormat, 
+								XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
+						String name, note;
+						switch(saveMode)
+						{
+							case SAVE_FOR_LATER:
+								name = (String) args[0];
+								note = (String) args[1];
+								DAOs.batchDAO.storeEntity(new JPABatch(name, note, experimentXML, experimentOwner));  
+								return true;
+								
+							case SAVE_FOR_EXECUTION:
+								name = (String) args[0];
+								Integer userAssignedPriority = (Integer) args[1];
+								Integer computationEstimateInHours = (Integer) args[2];
+								Boolean sendEmailWhenFinished = (Boolean) args[3];
+								note = (String) args[4];
+								DAOs.batchDAO.storeEntity(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority,
+										computationEstimateInHours, sendEmailWhenFinished));
+								return true;
+							
+							default:
+								throw new IllegalStateException("Unknown state: " + saveMode.name());
+						}
+					}
+				});
+			}
+			else
+			{
+				throw new IllegalStateException("No experiment was received to save. This error is likely a result of other errors.");
+			}
+		}
+		catch (Throwable t)
+		{
+			MyNotifications.showApplicationError();
 		}
 	}
 	
-	public void onClickModeAlteredOnClient(ClickMode newClickMode)
+	private void loadArbitraryExperimentIntoANewTab()
 	{
-		clickModeCB.select(newClickMode.name());
+		MessageBox dialog = SpecialDialogs.loadExperimentDialog(new LoadExperimentComponent()
+		{
+			private static final long serialVersionUID = -3405189166030944018L;
+
+			@Override
+			public boolean handleResult(Object[] args)
+			{
+				JPABatch experimentToLoad = (JPABatch) args[0];
+				parentEditor.loadExperimentIntoNewTab(experimentToLoad.getName(), 
+						UniversalComputationDescription.fromXML(experimentToLoad.getXML())); 
+				return true;
+			}
+		});
+		dialog.setWidth("600px");
+	}
+	
+	private void setKineticBoxSize(int width)
+	{
+		parentEditor.getExtension().getClientRPC().command_setBoxSize(width);
+		executeForNonNullActiveTab(new IActiveKineticComponentAction()
+		{
+			@Override
+			public void doAction(KineticComponent activeComponent)
+			{
+				activeComponent.reloadVisualStyle();
+			}
+		}, false);
 	}
 	
 	//---------------------------------------------------------------
 	// MISCELLANEOUS PRIVATE INTERFACE
 	
-	private void executeForNonNullActiveTab(ActionForActiveKineticComponent action, boolean displayWarningIfNull)
+	private void executeForNonNullActiveTab(IActiveKineticComponentAction action, boolean displayWarningIfNull)
 	{
 		KineticComponent activeComponent = parentEditor.getActiveKineticComponent();
 		if(activeComponent != null)
@@ -281,79 +416,54 @@ public class Toolbar extends VerticalLayout
 	//---------------------------------------------------------------
 	// PRIVATE TYPES
 	
-	private interface ActionForActiveKineticComponent
+	private interface IActiveKineticComponentAction
 	{
 		void doAction(KineticComponent activeComponent);
 	}
 	
-	//---------------------------------------------------------------
-	// UNTRIVIAL MENU ACTIONS (AFTER CHECKS)
-	
-	private void saveExperimentInActiveTab(KineticComponent activeComponent)
+	private abstract class LoadExperimentComponent extends TabSheet implements IDialogComponent
 	{
-		if(activeComponent.isContentModified())
+		private static final long serialVersionUID = -7500075637433995569L;
+		
+		private JPABatch experimentToLoad;
+		
+		public LoadExperimentComponent()
 		{
-			try
-			{
-				final UniversalComputationDescription uniFormat = activeComponent.exportExperiment();
-				MyDialogs.saveExperimentDialog(new MyDialogs.IDialogResultHandler()
-				{
-					@Override
-					public boolean handleResult(Object[] args)
-					{
-						String name = (String) args[0];
-						Integer userAssignedPriority = (Integer) args[1];
-						Integer computationEstimateInHours = (Integer) args[2];
-						Boolean sendEmailWhenFinished = (Boolean) args[3];
-						String note = (String) args[4];
-						
-						String exportedExperiment = XStreamHelper.serializeToXML(uniFormat, 
-								XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
-						
-						// TODO: finish
-						
-						JPABatch newExpEntity = new JPABatch(
-								name,
-								note,
-								exportedExperiment,
-								ManageAuth.getUserEntity(VaadinSession.getCurrent()),
-								userAssignedPriority
-						);
-						DAOs.batchDAO.storeEntity(newExpEntity);
-						return true;
-					}
-				});
-			}
-			catch (Throwable t)
-			{
-				MyNotifications.showError(null, "Experiment could not be saved. Please, contact the administrators.");
-			}
+			super();
+			setStyleName("loadExperimentDialogContent");
+			
+			JPAUser currentUser = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+			
+			DBTableLayout savedExperimentsLayout = new DBTableLayout();
+			savedExperimentsLayout.setSizeFull();
+			savedExperimentsLayout.setReadOnly(true);
+			savedExperimentsLayout.getTable().setMultiSelect(false);
+			savedExperimentsLayout.setView(new BatchDBViewRoot(new UserSavedBatchesTableDBView(currentUser)));
+			
+			DBTableLayout scheduledExperimentsLayout = new DBTableLayout();
+			scheduledExperimentsLayout.setSizeFull();
+			scheduledExperimentsLayout.setReadOnly(true);
+			scheduledExperimentsLayout.getTable().setMultiSelect(false);
+			scheduledExperimentsLayout.setView(new BatchDBViewRoot(new UserScheduledBatchesTableDBView(currentUser)));
+			
+			addTab(savedExperimentsLayout, "Saved experiments");
+			addTab(scheduledExperimentsLayout, "Scheduled experiments");
+			
+			this.experimentToLoad = null;
 		}
-		else
+
+		@Override
+		public boolean isResultReadyToBeHandled()
 		{
-			MyNotifications.showWarning("Nothing to save", "The active tab's content is not modified.");
+			return experimentToLoad != null;
+		}
+		
+		@Override
+		public void addArgs(List<Object> arguments)
+		{
+			arguments.add(experimentToLoad);
 		}
 	}
-	
-	private void loadArbitraryExperimentIntoANewTab()
-	{
-		// TODO: dialog and experiment chooser
-		// parentEditor.loadExperimentIntoNewTab(tabCaption, experiment);
-	}
-	
-	private void setKineticBoxSize(int width)
-	{
-		parentEditor.getExtension().getClientRPC().command_setBoxSize(width);
-		executeForNonNullActiveTab(new ActionForActiveKineticComponent()
-		{
-			@Override
-			public void doAction(KineticComponent activeComponent)
-			{
-				activeComponent.reloadVisualStyle();
-			}
-		}, false);
-	}
-	
 	
 	
 	/*

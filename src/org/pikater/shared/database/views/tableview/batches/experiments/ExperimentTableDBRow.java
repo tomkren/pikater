@@ -32,11 +32,11 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 		 * First the read-only properties.
 		 */
 		case CREATED:
-			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getCreated().getTime()));
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getCreated()));
 		case STARTED:
-			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getStarted().getTime()));
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getStarted()));
 		case FINISHED:
-			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getFinished().getTime()));
+			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getFinished()));
 		case OWNER:
 			return new StringReadOnlyDBViewValue(experiment.getBatch()==null?"error":experiment.getBatch().getOwner().getLogin());
 		case STATUS:

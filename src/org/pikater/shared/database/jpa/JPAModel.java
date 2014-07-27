@@ -36,6 +36,10 @@ public class JPAModel extends JPAAbstractEntity{
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     
+    public JPAModel(){
+    	this.created=new Date();
+    }
+    
     public int getId() {
         return id;
     }

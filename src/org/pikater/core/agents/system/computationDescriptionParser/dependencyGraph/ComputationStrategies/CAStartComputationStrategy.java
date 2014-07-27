@@ -152,7 +152,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		
 		Data data = new Data();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
-		String testing = null;
+		String testing;
 		if( inputs.get("testing") == null){
 			testing = training;							
 		}
@@ -171,7 +171,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		task.setGraphId(graphId);
 		task.setAgent(agent);
 		task.setData(data);
-		task.setDuration(duration);
+		task.setExpectedDuration(duration);
+		task.setPriority(computationNode.getPriority());
+		task.setExperimentID(computationNode.getExperimentID());
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());
 		
 		return task;

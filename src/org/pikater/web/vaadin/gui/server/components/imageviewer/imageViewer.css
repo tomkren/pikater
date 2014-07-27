@@ -1,0 +1,21 @@
+@CHARSET "US-ASCII";
+
+.imageViewer
+{
+}
+
+.imageViewer-toolbar, .imageViewer-toolbar .v-panel-content 
+{
+	background-color: gray;
+}
+
+.imageViewer-toolbar .v-panel-content
+{
+	padding: 10px;
+}
+
+.imageViewer .v-imagescaler
+{
+	width: 100%;
+	height: 100%;
+}

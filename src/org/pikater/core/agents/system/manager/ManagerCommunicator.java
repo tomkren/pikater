@@ -17,8 +17,11 @@ import java.util.Date;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
+import org.pikater.core.ontology.subtrees.account.GetUser;
+import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.LoadBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
@@ -75,11 +78,11 @@ public class ManagerCommunicator {
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
@@ -141,11 +144,11 @@ public class ManagerCommunicator {
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
@@ -188,16 +191,16 @@ public class ManagerCommunicator {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage());
+			agent.logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage());
+			agent.logError(oe.getMessage(), oe);
 		}
 
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
+			agent.logError(e.getMessage(), e);
 		}
 
 	}
@@ -231,9 +234,9 @@ public class ManagerCommunicator {
 			agent.getContentManager().fillContent(msg, a);
 		
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage());
+			agent.logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage());
+			agent.logError(oe.getMessage(), oe);
 		}
 		
 		ACLMessage reply = null;
@@ -247,11 +250,11 @@ public class ManagerCommunicator {
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage());
+			agent.logError(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
@@ -265,4 +268,63 @@ public class ManagerCommunicator {
 		return null;
 	}
 	
+	public User loadUser(PikaterAgent agent, int userID) {
+		
+		GetUser getUser = new GetUser();
+		getUser.setUserID(userID);
+		
+		Ontology ontology = AccountOntology.getInstance();
+
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(agent.getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		
+		msg.setLanguage(agent.getCodec().getName());
+		msg.setOntology(ontology.getName());
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+		
+		Action a = new Action();
+		a.setAction(getUser);
+		a.setActor(agent.getAID());
+		
+		try {
+			// Let JADE convert from Java objects to string
+			agent.getContentManager().fillContent(msg, a);
+		
+		} catch (CodecException ce) {
+			agent.logError(ce.getMessage(), ce);
+		} catch (OntologyException oe) {
+			agent.logError(oe.getMessage(), oe);
+		}
+		
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(agent, msg);
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage());
+		}
+		
+		ContentElement content = null;
+		try {
+			content = agent.getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			agent.logError(e1.getMessage(), e1);
+		} catch (CodecException e1) {
+			agent.logError(e1.getMessage(), e1);
+		} catch (OntologyException e1) {
+			agent.logError(e1.getMessage(), e1);
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			User user = (User) result.getValue();
+			return user;
+		} else {
+			agent.logError("No Result ontology");
+		}
+		return null;
+	}
+
 }

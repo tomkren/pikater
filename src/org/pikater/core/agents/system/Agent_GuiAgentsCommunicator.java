@@ -66,13 +66,11 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 					}
 				
 				} catch (OntologyException e) {
-					e.printStackTrace();
-					logError("Problem extracting content: " + e.getMessage());
+					logError("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					e.printStackTrace();
-					logError("Codec problem: " + e.getMessage());
+					logError("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logError(e.getMessage(), e);
 				}
 	
 				ACLMessage failure = request.createReply();
@@ -130,36 +128,12 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
             log("BatchId: " + batchId + " saved");
 
             
-
-            //TODO: send only NewBatch
-            //GuiCommunicator guiCommunicator = new GuiCommunicator();
-            //guiCommunicator.sendNewBatchInfoToManager(this, batchOwnerID, batchId);
+            // send only NewBatch
+            GuiCommunicator guiCommunicator = new GuiCommunicator();
+            guiCommunicator.sendNewBatchInfoToManager(this, batchOwnerID, batchId);
+            		
             
-
-            AID receiver = new AID(AgentNames.MANAGER, false);		
-            Ontology ontology = BatchOntology.getInstance();
-            
-            ExecuteBatch execute = new ExecuteBatch();
-            execute.setDescription(compDescription);
-            
-            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-            msg.addReceiver(receiver);
-            msg.setLanguage(codec.getName());
-            msg.setOntology(ontology.getName());
-            try {
-    			getContentManager().fillContent(msg, new Action(receiver, execute));
-    			send(msg);
-    			
-    		} catch (CodecException e) {
-    			logError(e.getMessage());
-    			e.printStackTrace();
-    		} catch (OntologyException e) {
-    			logError(e.getMessage());
-    			e.printStackTrace();
-			}
-            //TODO: end
-//*/		
-            
+            // send reply to User-GuiAgent
             ACLMessage reply = request.createReply();
             reply.setPerformative(ACLMessage.INFORM);
             reply.setContent("OK");

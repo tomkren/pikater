@@ -7,9 +7,9 @@ import javax.persistence.EntityManager;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.ResultFormatter;
 
 public class ExperimentDAO extends AbstractDAO {
 
@@ -42,6 +42,32 @@ public class ExperimentDAO extends AbstractDAO {
 		return getByTypedNamedQuery("Experiment.getByStatus", "status", status);
 	}
 	
+	/**
+	 * Persists experiment's result and binds it to the experiment 
+	 * @param experimentID
+	 * @param result
+	 * @return The ID of the persisted result or -1 if error occured
+	 */
+	public int addResultToExperiment(int experimentID,JPAResult result){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			JPAExperiment exp=em.find(JPAExperiment.class, experimentID);
+			if(exp!=null){
+				result.setExperiment(exp);
+				em.persist(result);
+				exp.addResult(result);
+				em.getTransaction().commit();
+				return result.getId();
+			}else{
+				em.getTransaction().rollback();
+				return -1;
+			}
+		}finally{
+			em.close();
+		}
+	}
+	
 	private List<JPAExperiment> getByTypedNamedQuery(String queryName,String paramName,Object param){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -54,7 +80,6 @@ public class ExperimentDAO extends AbstractDAO {
 			em.close();
 		}
 	}
-	
 	
 	public void updateEntity(JPAExperiment changedEntity){
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();

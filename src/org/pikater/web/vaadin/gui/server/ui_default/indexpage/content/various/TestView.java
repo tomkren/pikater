@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,16 +17,25 @@ import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.quartzjobs.MatrixPNGGeneratorJob;
+import org.pikater.web.servlets.download.DownloadRegistrar;
+import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
+import org.pikater.web.servlets.download.resources.ImageDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogHandler;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI;
 import org.quartz.JobKey;
 
+import com.google.common.net.MediaType;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.JavaScript;
@@ -81,7 +91,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 				final File tmpFile = IOUtils.createTemporaryFile("visualization-generated", ".png");
 				
 				// then display progress dialog
-				MyDialogs.progressDialog("Vizualization progress...", new MyDialogs.IProgressDialogHandler()
+				ProgressDialog.show("Vizualization progress...", new IProgressDialogHandler()
 				{
 					private JobKey jobKey = null;
 					
@@ -118,11 +128,18 @@ public class TestView extends VerticalLayout implements IContentComponent
 					}
 					
 					@Override
-					public void onTaskFinish()
+					public void onTaskFinish(IProgressDialogTaskResult result)
 					{
-						// TODO: display GUI including the generated image
-						// TODO: generated images should be accessible only for a specific user (that has the link) => download servlet
-						// MyNotifications.showInfo("Job finished", "yay");
+						UUID generatedImageDownloadUUID = DownloadRegistrar.issueDownload(new ImageDownloadResource(
+								tmpFile,
+								DownloadLifespan.INDETERMINATE,
+								MediaType.PNG.toString(),
+								800,
+								800 // TODO:
+						));
+						
+						// TODO: open in a new tab...
+						Page.getCurrent().setLocation(VisualizationUI.getRedirectURLForResourceID(generatedImageDownloadUUID));
 					}
 				});
 			}

@@ -3,7 +3,7 @@ package org.pikater.shared.visualisation.generator.quartz;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
 
 public abstract class Generator {
 	protected IProgressDialogTaskContext progressListener;
@@ -30,12 +30,6 @@ public abstract class Generator {
 		if((progressListener!=null)&&(percentage>lastPercentage)){
 			progressListener.updateProgress(percentage / new Float(100.0));
 			lastPercentage=percentage;
-		}
-	}
-	
-	protected void signalFinish(){
-		if(progressListener!=null){
-			progressListener.onTaskFinish();
 		}
 	}
 }

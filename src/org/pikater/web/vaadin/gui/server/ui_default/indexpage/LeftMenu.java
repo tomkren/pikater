@@ -70,7 +70,7 @@ public class LeftMenu extends Panel
 		
 		// define additional menu item, that is not directly part of it (internally)
 		Anchor anchor = new Anchor("Open experiment editor", String.format("window.open('%s', '_blank');", 
-				CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + PikaterUI.EXP_EDITOR.getURLPattern()));
+				CustomConfiguredUI.getRedirectURLToUI(PikaterUI.EXP_EDITOR)));
 		anchor.setStyleName("v-tree-node-caption");
 		
 		// add leaf components

@@ -39,6 +39,10 @@ public class User implements Concept {
 	}
 
 	public void setPriorityMax(int priorityMax) {
+		if (priorityMax < 0 || 9 < priorityMax) {
+			throw new IllegalArgumentException(
+					"Argument priorityMax have to be in the interval <0,9>");
+		}
 		this.priorityMax = priorityMax;
 	}
 

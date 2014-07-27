@@ -5,8 +5,8 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -43,7 +43,7 @@ public class UserProfileForm extends CustomFormLayout
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				MyDialogs.passwordChangeDialog(new ChangePasswordForm(currentUser)
+				SpecialDialogs.passwordChangeDialog(new ChangePasswordForm(currentUser)
 				{
 					private static final long serialVersionUID = -6536658886477204213L;
 

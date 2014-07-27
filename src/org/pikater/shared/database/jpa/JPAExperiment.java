@@ -1,7 +1,6 @@
 package org.pikater.shared.database.jpa;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,11 +47,11 @@ public class JPAExperiment extends JPAAbstractEntity{
 	@OneToMany(cascade=CascadeType.PERSIST)
 	private List<JPAResult> results;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar created;
+	private Date created;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar started;
+	private Date started;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar finished;
+	private Date finished;
 
 	/**
 	 * Constructor for JPA Compatibility
@@ -66,7 +65,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 	 */
 	public JPAExperiment(JPABatch parentBatch){
 		this.setBatch(parentBatch);
-		this.created=GregorianCalendar.getInstance();
+		this.created=new Date();
 		this.modelStrategy=JPAModelStrategy.CREATION;
 	}
 	
@@ -78,7 +77,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 	 */
 	public JPAExperiment(JPABatch parentBatch,JPAModel model){
 		this.setBatch(parentBatch);
-		this.created=GregorianCalendar.getInstance();
+		this.created=new Date();
 		this.modelStrategy=JPAModelStrategy.EXISTING;
 		this.usedModel=model;
 	}
@@ -144,23 +143,23 @@ public class JPAExperiment extends JPAAbstractEntity{
 		this.results.add(result);
 	}
 
-	public Calendar getCreated() {
+	public Date getCreated() {
 		return created;
 	}
-	public void setCreated(Calendar created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
-	public Calendar getStarted() {
+	public Date getStarted() {
 		return started;
 	}
 
-	public void setStarted(Calendar started) {
+	public void setStarted(Date started) {
 		this.started = started;
 	}
-	public Calendar getFinished() {
+	public Date getFinished() {
 		return finished;
 	}
-	public void setFinished(Calendar finished) {
+	public void setFinished(Date finished) {
 		this.finished = finished;
 	}
 

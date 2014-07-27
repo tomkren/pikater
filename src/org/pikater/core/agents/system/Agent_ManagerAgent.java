@@ -111,13 +111,11 @@ public class Agent_ManagerAgent extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					e.printStackTrace();
-					logError("Problem extracting content: " + e.getMessage());
+					logError("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					e.printStackTrace();
-					logError("Codec problem: " + e.getMessage());
+					logError("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logError(e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
@@ -198,23 +196,5 @@ public class Agent_ManagerAgent extends PikaterAgent {
 			}
 		}
 		return name;
-	}
-	
-	public boolean _KillAgent(String name) {
-		
-		if (! agentsNames.containsKey(name)) {
-			return false;
-		}
-		
-		AgentController agentController = agentsNames.get(name);
-		agentsNames.remove(name);
-		
-		try {
-			agentController.kill();
-		} catch (StaleProxyException e) {
-			logError(e.getMessage(), e);
-		}
-		
-		return true;
 	}
 }

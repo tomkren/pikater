@@ -23,7 +23,7 @@ import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.messages.TaskOutput;
+
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
@@ -31,6 +31,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.core.ontology.subtrees.task.Task.InOutType;
 
 import weka.core.Attribute;

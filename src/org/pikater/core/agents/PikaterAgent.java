@@ -1,24 +1,24 @@
 package org.pikater.core.agents;
 
+import jade.content.Concept;
 import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
+import jade.content.onto.OntologyException;
+import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.orm.jpa.EntityManagerFactoryInfo;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
-import org.pikater.core.configuration.Argument;
-import org.pikater.core.configuration.Arguments;
-import org.pikater.shared.logging.Logger;
-import org.pikater.shared.logging.Severity;
-import org.pikater.shared.logging.Verbosity;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.NotUnderstoodException;
+import jade.domain.FIPAAgentManagement.RefuseException;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.proto.AchieveREResponder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,15 +27,24 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.configuration.Argument;
+import org.pikater.core.configuration.Arguments;
+import org.pikater.core.ontology.TerminationOntology;
+import org.pikater.core.ontology.subtrees.agent.TerminateSelf;
+import org.pikater.shared.logging.Logger;
+import org.pikater.shared.logging.Severity;
+import org.pikater.shared.logging.Verbosity;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.orm.jpa.EntityManagerFactoryInfo;
+
 /**
  * User: Kuba
  * Date: 25.8.13
  * Time: 9:38
  */
 public abstract class PikaterAgent extends Agent {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3427874121438630714L;
 
 	private final String DEFAULT_LOGGER_BEAN = "logger";
@@ -51,6 +60,7 @@ public abstract class PikaterAgent extends Agent {
 	protected EntityManagerFactory emf;
 	/** for the master node this is empty, slave node agents are named with this as the suffix */
 	protected String nodeName;
+	private boolean registeredToDF = false;
 
 	public Codec getCodec() {
 		return codec;
@@ -102,6 +112,7 @@ public abstract class PikaterAgent extends Agent {
 		// prefer to do this asynchronously using a behaviour.
 		try {
 			DFService.register(this, description);
+			registeredToDF = true;
 
 			StringBuilder sb = new StringBuilder("Successfully registered with DF; service types: ");
 			for (String st : ServiceTypes) {
@@ -160,6 +171,41 @@ public abstract class PikaterAgent extends Agent {
 		Object[] args = getArguments();
 		initDefault(args);
 	}
+	
+	private void addTerminationBehavior() {
+		MessageTemplate template = MessageTemplate.and(
+				MessageTemplate.MatchOntology(TerminationOntology.getInstance().getName()),
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+
+		addBehaviour(new AchieveREResponder(this, template) {
+			private static final long serialVersionUID = 8926769466268882841L;
+
+			@Override
+			protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+				try {
+					Concept action = ((Action) (getContentManager().extractContent(request))).getAction();
+					if (action instanceof TerminateSelf) {
+						addBehaviour(new OneShotBehaviour() {
+							private static final long serialVersionUID = -8265931114367756110L;
+
+							@Override
+							public void action() {
+								terminate();
+
+							}
+						});
+						ACLMessage res = request.createReply();
+						res.setPerformative(ACLMessage.INFORM);
+						return res;
+					} else {
+						throw new NotUnderstoodException("Unknown action requested");
+					}
+				} catch (CodecException | OntologyException e) {
+					throw new NotUnderstoodException("Unknown codec/ontology: " + e.getMessage());
+				}
+			}
+		});
+	}
 
 	public void initDefault(Object[] args) {
 		if (getName().contains("-")) {
@@ -184,6 +230,9 @@ public abstract class PikaterAgent extends Agent {
 		for (Ontology ontologyI : getOntologies() ) {
 			getContentManager().registerOntology(ontologyI);
 		}
+		getContentManager().registerOntology(TerminationOntology.getInstance());
+		
+		addTerminationBehavior();
 	}
 
 	private void parseArguments(Object[] args) {
@@ -221,7 +270,7 @@ public abstract class PikaterAgent extends Agent {
 	}
 
 	public void logError(String errorDescription, Exception exception) {
-		logger.logError(errorDescription, exception);
+		logger.logError(getLocalName()+": "+errorDescription, exception);
 	}
 	
 	public void logError(String errorDescription, Severity severity) {
@@ -251,4 +300,16 @@ public abstract class PikaterAgent extends Agent {
 		return communicator.killAgent(this, agentName);
 	}
 	
+	public void terminate() {
+		if (registeredToDF) {
+			try {
+				log("Deregistering from DF");
+				DFService.deregister(this);
+			} catch (FIPAException e) {
+				logError("Failed to deregister from DF", e);
+			}
+		}
+		log("Terminating");
+		doDelete();
+	}
 }

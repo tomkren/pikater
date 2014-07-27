@@ -37,6 +37,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -53,17 +54,14 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 public class Agent_Manager extends PikaterAgent {
 
 	private static final long serialVersionUID = -5140758757320827589L;
-	
-	
-	private final String NO_XML_OUTPUT ="no_xml_output";
-	private boolean no_xml_output = true;
-	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
+
+    protected Set<Subscription> subscriptions = new HashSet<>();
 	private int problem_i = 0;
 	public HashMap<Integer, ComputationCollectionItem> computationCollection =
-			new HashMap<Integer, ComputationCollectionItem>();
+			new HashMap<>();
 	
 	public HashMap<String, ACLMessage> searchMessages =
-			new HashMap<String, ACLMessage>();
+			new HashMap<>();
 	
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
@@ -72,7 +70,8 @@ public class Agent_Manager extends PikaterAgent {
 	@Override
 	public List<Ontology> getOntologies() {
 		
-		List<Ontology> ontologies = new ArrayList<Ontology>();
+		List<Ontology> ontologies = new ArrayList<>();
+		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(RecommendOntology.getInstance());
 		ontologies.add(SearchOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
@@ -91,16 +90,6 @@ public class Agent_Manager extends PikaterAgent {
     	initDefault();
 
     	registerWithDF(AgentNames.MANAGER);
-
-		if (containsArgument(NO_XML_OUTPUT)) {
-			if (isArgumentValueTrue(NO_XML_OUTPUT)){
-				no_xml_output = true;
-			}
-			else{
-				no_xml_output = false;
-			}
-		}
-
 		doWait(3000);
 				
 		MessageTemplate subscriptionTemplate = 
@@ -109,9 +98,9 @@ public class Agent_Manager extends PikaterAgent {
 		
 		addBehaviour(new ParserBehaviour(this));
 				
-		addBehaviour (new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
+		addBehaviour(new SubscriptionResponder(this, subscriptionTemplate, new subscriptionManager()));
 		
-		addBehaviour (new RequestServer(this)); // TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
+		addBehaviour(new RequestServer(this)); // TODO - prijimani zprav od Searche (pamatovat si id nodu), od Planera
 		
 	} // end setup
 		
@@ -185,14 +174,11 @@ public class Agent_Manager extends PikaterAgent {
 						logError("unknown message received.");
 					}
 				} catch (UngroundedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logError(e1.getMessage(), e1);
 				} catch (CodecException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logError(e1.getMessage(), e1);
 				} catch (OntologyException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logError(e1.getMessage(), e1);
 				}
 			}
 			else {
@@ -227,13 +213,10 @@ public class Agent_Manager extends PikaterAgent {
 			getContentManager().fillContent(msgOut, content );
 		} catch (UngroundedException e) {
 			logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (CodecException e) {
 			logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		// go through every subscription

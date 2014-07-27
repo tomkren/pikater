@@ -11,6 +11,7 @@ import jade.core.Agent;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
+import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
@@ -19,11 +20,12 @@ import jade.wrapper.ControllerException;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
+import org.pikater.core.ontology.TerminationOntology;
+import org.pikater.core.ontology.subtrees.agent.TerminateSelf;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
-import org.pikater.core.ontology.subtrees.management.KillYourself;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -109,55 +111,34 @@ public class ManagerAgentRequestResponder {
         return reply;
     }
 
-	public ACLMessage respondToKillAgent(ACLMessage request) throws OntologyException, CodecException {
-		
-        Action a = (Action) managerAgent.getContentManager().extractContent(request);
-        KillAgent killAgent = (KillAgent) a.getAction();
+	public ACLMessage respondToKillAgent(ACLMessage request) throws OntologyException, CodecException, FIPAException {
+		Action a = (Action) managerAgent.getContentManager().extractContent(request);
+		KillAgent killAgent = (KillAgent) a.getAction();
 
-        String agentName = killAgent.getName();
-/* 
-        AID agentAID = new AID(agentName, false);
-        
-        managerAgent.log("Request to kill " + agentName + " agent");
-        Ontology ontology = AgentManagementOntology.getInstance();
-        Codec codec = managerAgent.getCodec();
-        
-      
-        ACLMessage msgToAgent = request.createReply();
-        msgToAgent.setPerformative(ACLMessage.REQUEST);
-        msgToAgent.setLanguage(codec.getName());
-        msgToAgent.setOntology(ontology.getName());
-        
-        try {
-        	Action actionToAgent = new Action(agentAID, new KillYourself());
-        	managerAgent.getContentManager().fillContent(msgToAgent, actionToAgent);
-        	
-		} catch (CodecException e) {
-		    managerAgent.logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-		    managerAgent.logError(e.getMessage(), e);
-		}
-        
-        String replyText = null;
-        try {
-			ACLMessage replyFromAgent = FIPAService.doFipaRequestClient(managerAgent, msgToAgent, 10000);
-			replyText = replyFromAgent.getContent();
+		String agentName = killAgent.getName();
+		AID agentAID = new AID(agentName, false);
 
-		} catch (FIPAException e) {
-		    managerAgent.logError(e.getMessage(), e);
-		}
+		managerAgent.log("Request to kill " + agentName + " agent");
+		Ontology ontology = TerminationOntology.getInstance();
+		Codec codec = managerAgent.getCodec();
 
-		managerAgent.log("Reply from " + agentName + " : " + replyText);
-*/
-        boolean isKilled = managerAgent._KillAgent(agentName);
+		ACLMessage msgToAgent = new ACLMessage(ACLMessage.REQUEST);
+		msgToAgent.setLanguage(codec.getName());
+		msgToAgent.setOntology(ontology.getName());
+		msgToAgent.addReceiver(agentAID);
+
+		Action actionToAgent = new Action(agentAID, new TerminateSelf());
+		managerAgent.getContentManager().fillContent(msgToAgent, actionToAgent);
+
+		ACLMessage replyFromAgent = FIPAService.doFipaRequestClient(managerAgent, msgToAgent, 10000);
+		if (replyFromAgent == null)
+			throw new FailureException("Agent didn't terminate in within 10 sec: "+agentName);
+
+		managerAgent.log("Terminated " + agentName);
 
 		ACLMessage reply = request.createReply();
-        if (isKilled) {
-        	reply.setPerformative(ACLMessage.INFORM);
-        	reply.setContent("OK");
-        } else {
-        	reply.setPerformative(ACLMessage.FAILURE);
-        }
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK");
 		return reply;
 	}
 	

@@ -12,6 +12,11 @@ import org.pikater.shared.XStreamHelper;
 public class UniversalComputationDescription
 {
 	/**
+	 * Priority of Batch.
+	 */
+	private int priority;
+
+	/**
 	 * Top-level options for this computation.
 	 */
 	private final Set<NewOption> globalOptions;
@@ -44,6 +49,14 @@ public class UniversalComputationDescription
 	// ----------------------------------------------------------
 	// SOME BASIC INTERFACE
 
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	
 	public Set<NewOption> getGlobalOptions()
 	{
 		return globalOptions;

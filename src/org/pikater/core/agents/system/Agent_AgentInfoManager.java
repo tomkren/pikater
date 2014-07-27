@@ -213,8 +213,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				new AgentInfoManagerCommunicator(this);
 		
 		AgentInfos agenInfos = communicator.getAgentInfos();
-		Models models = communicator.getAllModels();
-		agenInfos.importModels(models);
+		//Models models = communicator.getAllModels();
+		//agenInfos.importModels(models);
 		
 		Result r = new Result(action, agenInfos);
 		try {
@@ -349,15 +349,7 @@ class ShutDownAgents extends Thread {
 	}
 	
     public void run() {
-    	
-		try {
-			for (int i = 0; i < 30; i++) {
-				Thread.sleep(1000);
-			}
-		} catch (InterruptedException e) {
-			agent.logError(e.getMessage(), e);
-		}
-		
+
 		for (Class<? extends Agent_AbstractExperiment> classI : agentClasses){
 			agent.log("Agent " + classI.getName() + " was killed");
 			agent.killAgent(classI.getName());

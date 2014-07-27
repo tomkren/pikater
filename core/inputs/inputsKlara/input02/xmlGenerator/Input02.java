@@ -23,7 +23,7 @@ public final class Input02 {
         DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
 
         //Create two options for single computing agent        
-        NewOption optionS = new NewOption("L",0.5);
+        NewOption optionS = new NewOption("L", 0.5);
         
         NewOption optionB = new NewOption("M",
         		new QuestionMarkRange(new DoubleValue(0), new DoubleValue(1), 20)
@@ -69,10 +69,11 @@ public final class Input02 {
         FileDataSaver saver = new FileDataSaver();
         saver.setDataSource(computingDataSource);
 
-        List<FileDataSaver> roots = new ArrayList<>();
+        List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
         roots.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();
+        comDescription.setPriority(6);
         comDescription.setRootElements(roots);
 
         return comDescription;

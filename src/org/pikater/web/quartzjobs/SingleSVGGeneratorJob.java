@@ -1,12 +1,15 @@
 package org.pikater.web.quartzjobs;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleOneTimeJob;
+import org.pikater.shared.visualisation.generator.ChartGenerator;
 import org.pikater.shared.visualisation.generator.quartz.SingleSVGGenerator;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.ProgressDialogVisualizationTaskResult;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
@@ -48,8 +51,9 @@ public class SingleSVGGeneratorJob extends InterruptibleOneTimeJob {
 	protected void execute() throws JobExecutionException {
 		IProgressDialogTaskContext listener=getArg(0);
 			JPADataSetLO dslo=getArg(1);
+			File file=new File((String)getArg(2));
 			try {
-				PrintStream output=new PrintStream((String)getArg(2));
+				PrintStream output=new PrintStream(file);
 				Object attrArg1=getArg(3);
 				Object attrArg2=getArg(4);
 				Object attrArg3=getArg(5);
@@ -65,8 +69,10 @@ public class SingleSVGGeneratorJob extends InterruptibleOneTimeJob {
 				}
 				
 				ssvgg.create();
-				
+				listener.onTaskFinish(new ProgressDialogVisualizationTaskResult(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE));
 			} catch (IOException e) {
+				file.delete();
+				listener.onTaskFailed();
 				throw new JobExecutionException();
 			}
 

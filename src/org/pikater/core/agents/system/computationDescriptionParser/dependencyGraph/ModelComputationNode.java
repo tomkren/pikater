@@ -11,6 +11,8 @@ import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDur
 public class ModelComputationNode extends ComputationNode {
     private EvaluationMethod evaluationMethod;
     private IExpectedDuration expectedDuration;
+    private int priority;
+    private int experimentID;
 
     public ModelComputationNode() {
         super();
@@ -35,4 +37,21 @@ public class ModelComputationNode extends ComputationNode {
 	public void setExpectedDuration(IExpectedDuration expectedDuration) {
 		this.expectedDuration = expectedDuration;
 	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
+	public int getExperimentID() {
+		return experimentID;
+	}
+
+	public void setExperimentID(int experimentID) {
+		this.experimentID = experimentID;
+	}
+	
 }

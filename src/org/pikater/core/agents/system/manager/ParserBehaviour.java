@@ -15,8 +15,9 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
 import org.pikater.core.ontology.subtrees.batch.Batch;
-import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
+import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
+import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 
 public class ParserBehaviour extends AchieveREResponder {
@@ -41,60 +42,74 @@ public class ParserBehaviour extends AchieveREResponder {
     	try {
             concept = ((Action)(agent.getContentManager().extractContent(request))).getAction();
         } catch (UngroundedException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		}
            
-
-    	ACLMessage reply = request.createReply();
     	
-    	if (concept instanceof ExecuteBatch) {
+    	/*
+    	 * ExecuteBatchDebug is deprecated
+    	 */
+    	if (concept instanceof ExecuteBatchDebug) {
     		
-    		ExecuteBatch executeExperiment =
-    				(ExecuteBatch) concept;
+    		ExecuteBatchDebug executeExperiment =
+    				(ExecuteBatchDebug) concept;
     		ComputationDescription comDescription =
 					executeExperiment.getDescription();
+    		int batchID = executeExperiment.getBatchID();
     		
-    		respondToNewBatch(comDescription, request);
-
-            reply.setPerformative(ACLMessage.CONFIRM);
-            reply.setContent("OK");
+    		return respondToNewBatch(comDescription, batchID, request);
         }
     	
+    	/*
+    	 * NewBatch inform
+    	 */
     	if (concept instanceof NewBatch) {
     		
     		NewBatch newBatch = (NewBatch) concept;
     		
     		ManagerCommunicator communicator = new ManagerCommunicator();
     		Batch batch = communicator.loadBatch(agent, newBatch.getBatchId());
+    		
     		ComputationDescription comDescription = batch.getDescription();
+    		int batchID = batch.getId();
     		
-    		respondToNewBatch(comDescription, request);
+    		return respondToNewBatch(comDescription, batchID, request);
     		
-            reply.setPerformative(ACLMessage.CONFIRM);
-            reply.setContent("OK");
     	}
    
-        return reply;
-
+		ACLMessage failure = request.createReply();
+		failure.setPerformative(ACLMessage.FAILURE);
+		agent.logError("Failure responding to request: " + request.getContent());
+		
+		return failure;
     }
     
-    private void respondToNewBatch(ComputationDescription comDescription, ACLMessage request) {
+    private ACLMessage respondToNewBatch(ComputationDescription comDescription,
+    		int batchID, ACLMessage request) {
     	
 		Parser parser = new Parser(agent);
-		parser.parseRoots(comDescription);
+		parser.parseRoots(comDescription, batchID);
 		
 		ComputationGraph computationGraph = parser.getComputationGraph();
         ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request);
-        agent.computationCollection.put(1,item);
-        //TODOStepan: change status to computing and log to database
+        agent.computationCollection.put(1, item);
+        
+        // change status to computing and log to database
+        ManagerCommunicator communicator = new ManagerCommunicator();
+        communicator.updateBatchStatus(agent, batchID, BatchStatuses.COMPUTING);
+        
 		computationGraph.startBatchComputation();
+		
+		
+    	ACLMessage reply = request.createReply();
+        reply.setPerformative(ACLMessage.INFORM);
+        reply.setContent("OK");
+        
+        return reply;
     }
     
 }

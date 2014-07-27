@@ -103,6 +103,12 @@ public class MyResources
 	// ----------------------------------------------------------------
 	// PUBLIC METHODS:
 	
+	/**
+	 * Returns a relative path of the desired resource, which is required to
+	 * be in the vaadin's static resource folder.
+	 * @param relativeResourcePath
+	 * @return
+	 */
 	public static String getVaadinRelativePathForResource(String relativeResourcePath)
 	{
 		return "./VAADIN/themes/pikater/" + relativeResourcePath;

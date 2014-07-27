@@ -6,7 +6,7 @@ import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -87,7 +87,7 @@ public class UsersView extends DBTableLayout implements IContentComponent, IDBVi
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 	{
 		String targetUserLogin = ((StringDBViewValue) row.getValueWrapper(UsersTableDBView.Column.LOGIN)).getValue();
-		MyDialogs.confirm(null, String.format("Really reset password for user '%s'?", targetUserLogin), new MyDialogs.IDialogResultHandler()
+		GeneralDialogs.confirm(null, String.format("Really reset password for user '%s'?", targetUserLogin), new GeneralDialogs.IDialogResultHandler()
 		{
 			@Override
 			public boolean handleResult(Object[] args)

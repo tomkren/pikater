@@ -2,7 +2,7 @@ package org.pikater.core.ontology.subtrees.task;
 
 import jade.content.Concept;
 
-import org.pikater.core.ontology.messages.TaskOutput;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
@@ -13,17 +13,27 @@ import java.util.ArrayList;
 public class Task implements Concept {
 
     private static final long serialVersionUID = -8242598855481511427L;
+    private int experimentID;
+    
     private String start;
     private String finish;
     private String saveMode;
     private String getResults;
     private String guiAgent;
     private boolean saveResults;
+    private int priority;
     
     private int cpuCoreID;
-    private IExpectedDuration duration;
+    private IExpectedDuration expectedDuration;
 
-    public String getStart() {
+    public int getExperimentID() {
+		return experimentID;
+	}
+	public void setExperimentID(int experimentID) {
+		this.experimentID = experimentID;
+	}
+
+	public String getStart() {
         return start;
     }
     public void setStart(String start) {
@@ -72,12 +82,20 @@ public class Task implements Concept {
 		this.cpuCoreID = cpuCoreID;
 	}
 	
-    public IExpectedDuration getDuration() {
-		return duration;
+    public IExpectedDuration getExpectedDuration() {
+		return expectedDuration;
 	}
-	public void setDuration(IExpectedDuration duration) {
-		this.duration = duration;
+	public void setExpectedDuration(IExpectedDuration expectedDuration) {
+		this.expectedDuration = expectedDuration;
 	}
+
+	public int getPriority() {
+		return priority;
+	}
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
 
 	public enum InOutType {TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA};
 

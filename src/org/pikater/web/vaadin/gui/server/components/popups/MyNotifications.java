@@ -7,6 +7,16 @@ import org.vaadin.alump.fancylayouts.FancyNotification;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.UI;
 
+/**
+ * This class define routines for displaying various kinds of notifications
+ * in OS X style.</br>
+ * Note that this class can not be used outside of Vaadin requests (threads
+ * processing them). The methods defined here work on a so called thread-local
+ * pattern.
+ * </br></br>
+ * TODO: is there a decent way to improve this? To get an instance of underlying
+ * UI based on something other than currently running thread?
+ */
 public class MyNotifications
 {
 	//----------------------------------------------------------------

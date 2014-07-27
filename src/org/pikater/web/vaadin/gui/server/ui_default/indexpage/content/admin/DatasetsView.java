@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
@@ -13,13 +14,14 @@ import org.pikater.shared.database.views.tableview.datasets.metadata.Categorical
 import org.pikater.shared.database.views.tableview.datasets.metadata.NumericalMetaDataTableDBView;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.servlets.download.DownloadRegistrar;
-import org.pikater.web.servlets.download.IDownloadResource;
+import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
+import org.pikater.web.servlets.download.resources.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbourWizardStep;
@@ -147,8 +149,14 @@ public class DatasetsView extends ExpandableView
 			{
 				// download, don't run action
 				final DataSetTableDBRow rowView = (DataSetTableDBRow) row;
-				Page.getCurrent().setLocation(DownloadRegistrar.issueAOneTimeDownloadURL(new IDownloadResource()
+				final UUID datasetDownloadResourceUI = DownloadRegistrar.issueDownload(new IDownloadResource()
 				{
+					@Override
+					public DownloadLifespan getLifeSpan()
+					{
+						return DownloadLifespan.ONE_DOWNLOAD;
+					}
+					
 					@Override
 					public InputStream getStream() throws Throwable
 					{
@@ -173,11 +181,12 @@ public class DatasetsView extends ExpandableView
 						// TODO:
 						return null;
 					}
-				}));
+				});
+				Page.getCurrent().setLocation(DownloadRegistrar.getDownloadURL(datasetDownloadResourceUI));
 			}
 			else if(specificColumn == Column.DELETE)
 			{
-				MyDialogs.confirm(null, "Really delete this dataset?", new MyDialogs.IDialogResultHandler()
+				GeneralDialogs.confirm(null, "Really delete this dataset?", new GeneralDialogs.IDialogResultHandler()
 				{
 					@Override
 					public boolean handleResult(Object[] args)

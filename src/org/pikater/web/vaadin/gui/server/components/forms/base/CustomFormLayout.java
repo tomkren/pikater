@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.vaadin.gui.server.components.popups.MyDialogs.IDialogResultValidator;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultValidator;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.Property;
