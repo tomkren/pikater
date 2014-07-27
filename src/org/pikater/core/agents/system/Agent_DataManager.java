@@ -924,34 +924,38 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetMetadata gm = (GetMetadata) a.getAction();
 
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "SELECT * FROM metadata WHERE internalfilename = '" + gm.getInternal_filename() + "'";
-
 		Metadata m = new Metadata();
-
-		ResultSet rs = stmt.executeQuery(query);
-
-		while (rs.next()) {
-			m.setAttributeType(rs.getString("attributeType"));
-			m.setDefaultTask(rs.getString("defaultTask"));
-			m.setExternalName(rs.getString("externalFilename"));
-			m.setInternalName(rs.getString("internalFilename"));
-			m.setMissingValues(rs.getBoolean("missingValues"));
-			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
-			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
-		}
-
-		log("Executing query: " + query);
-
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
+		log("Retrieving metadata for hash " + gm.getHash());
+		JPADataSetLO dslo= new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getHash())).getSingleResultWithNull();
+
+		if(dslo!=null){			
+			JPAFilemapping fm=new ResultFormatter<JPAFilemapping>(DAOs.filemappingDAO.getByInternalFilename(dslo.getHash())).getSingleResultWithNull();
+
+			m.setDefaultTask(dslo.getGlobalMetaData().getDefaultTaskType().getName());
+			m.setNumberOfInstances(dslo.getGlobalMetaData().getNumberofInstances());
+			m.setNumberOfAttributes(dslo.getNumberOfAttributes());
+			if(fm!=null){
+				m.setExternalName(fm.getExternalfilename()); //TODO: Deprecated, do we need this
+				m.setInternalName(fm.getInternalfilename()); //TODO: Deprecated, do we need this
+			}
+
+			boolean missing=false;
+			for(JPAAttributeMetaData jpaamd:dslo.getAttributeMetaData()){
+				missing=missing||(jpaamd.getRatioOfMissingValues()>0);
+			}
+			m.setMissingValues(missing);
+
+			//Deprecated m.setAttributeType(rs.getString("attributeType"));
+
+			reply.setPerformative(ACLMessage.INFORM);
+		}else{
+			reply.setPerformative(ACLMessage.FAILURE);
+		}
 
 		Result _result = new Result(a.getAction(), m);
 		getContentManager().fillContent(reply, _result);
 
-		db.close();
 		return reply;
 	}
 	
