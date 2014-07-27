@@ -17,14 +17,6 @@ public class Recommend extends DataProcessing {
     private List<NewOption> options = new ArrayList<NewOption>();
     private ErrorDescription errorDescription;
 
-    public String getRecommenderClass() {
-        return recommenderClass;
-    }
-
-    public void setRecommenderClass(String recommenderClass) {
-        this.recommenderClass = recommenderClass;
-    }
-
     public List<NewOption> getOptions() {
         return options;
     }
@@ -42,9 +34,9 @@ public class Recommend extends DataProcessing {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption recommenderClassOption = new NewOption("recommenderClass",recommenderClass);
+		NewOption recommenderClassOption = new NewOption("recommenderClass",getRecommenderClass());
 		
-		List<NewOption> options = new ArrayList<NewOption>();
+		List<NewOption> options = new ArrayList<>();
 		options.add(recommenderClassOption);
 		options.addAll(this.options);
 		return options;
@@ -89,5 +81,13 @@ public class Recommend extends DataProcessing {
 
     public void setErrorDescription(ErrorDescription errorDescription) {
         this.errorDescription = errorDescription;
+    }
+
+    public String getRecommenderClass() {
+        return recommenderClass;
+    }
+
+    public void setRecommenderClass(String recommenderClass) {
+        this.recommenderClass = recommenderClass;
     }
 }

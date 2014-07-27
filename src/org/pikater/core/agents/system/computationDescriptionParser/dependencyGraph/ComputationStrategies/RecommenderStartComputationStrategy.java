@@ -105,7 +105,8 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		
         OptionEdge oe = new OptionEdge();
         oe.setOptions(recommendedAgent.getOptions());
-		computationNode.addToOutputAndProcess(oe, "options", true);				
+		computationNode.addToOutputAndProcess(oe, "options", true);
+        computationNode.computationFinished();
     }
 
 	private ACLMessage prepareRequest(AID receiver){
