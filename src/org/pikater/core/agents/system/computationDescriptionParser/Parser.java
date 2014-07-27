@@ -6,10 +6,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.FileSavingStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.RecommenderStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.*;
 import org.pikater.core.agents.system.manager.ManagerCommunicator;
 import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -162,8 +159,14 @@ public class Parser {
         ModelComputationNode computingNode = (ModelComputationNode) alreadyProcessed.get(computingAgent.getId());
         computationGraph.addNode(computingNode);
         		
-        ComputingAgent computingAgentO = (ComputingAgent) computingAgent;          
-        // computingNode.setModelClass(computingAgentO.getAgentType());       
+        ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
+        String agentType=computingAgentO.getAgentType();
+
+        if (agentType!=null)
+        {
+            OneShotBuffer typeBuffer=new OneShotBuffer(new AgentTypeEdge(agentType));
+            typeBuffer.setTarget(computingNode);
+        }
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         computingNode.setExpectedDuration(computingAgentO.getDuration());
         computingNode.setPriority(priority);
