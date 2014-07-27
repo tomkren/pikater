@@ -55,6 +55,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 	RecommenderComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
     NewOptions options;
+    AID recommender;
 
     public RecommenderStartComputationStrategy (Agent_Manager manager,
 			int graphId, RecommenderComputationNode computationNode){
@@ -69,22 +70,21 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		inputs = computationNode.getInputs();
 		
 		// create recommender agent
-		AID recommender = myAgent.createAgent(computationNode.getRecommenderClass());
-		
+        if (recommender==null) {
+            recommender = myAgent.createAgent(computationNode.getRecommenderClass());
+        }
 
-		if (inputs.get("error").isBlocked()){
+        if (inputs.get("error").isBlocked()){
 			inputs.get("error").unblock();
 		}
 		
 		// send message to recommender
-		
 		ACLMessage inform;
 		try {
 			inform = FIPAService.doFipaRequestClient(myAgent, prepareRequest(recommender));
 			Result r = (Result) myAgent.getContentManager().extractContent(inform);
 			
 			recommendedAgent = (Agent) r.getItems().get(0);
-			
 		} catch (FIPAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
