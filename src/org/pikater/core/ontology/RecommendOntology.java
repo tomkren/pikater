@@ -21,6 +21,7 @@ public class RecommendOntology extends BeanOntology {
 
         try {
             add(Recommend.class);
+            add(org.pikater.core.ontology.subtrees.recomend.Recommend.class);
 
         } catch (Exception e) {
             e.printStackTrace();
