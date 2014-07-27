@@ -1,10 +1,16 @@
 package org.pikater.core.agents.system.manager;
 
+import jade.content.lang.Codec.CodecException;
+import jade.content.onto.OntologyException;
+import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
+import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 public class StartGettingParametersFromSearch extends AchieveREInitiator {
 
@@ -38,7 +44,22 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
         // send subscription to the original agent after each received task
         myAgent.sendSubscription(inform, msg);
         
+        
+        // get Evaluation from inform
+        try {			
 
+			Result r = (Result)myAgent.getContentManager().extractContent(inform);
+			ErrorEdge eo = new ErrorEdge((Evaluation)r.getItems().get(0), 0); // TODO! - search in search
+	        strategy.getComputationNode().addToOutputAndProcess(eo, "error", true);
+														
+		} catch (CodecException e) {
+			myAgent.logError(e.getMessage(), e);
+			e.printStackTrace();
+		} catch (OntologyException e) {
+			myAgent.logError(e.getMessage(), e);
+			e.printStackTrace();
+		}
+														
         /* prepare results, send them to GUI?, save to xml
 		 * prepareTaskResults(ACLMessage resultmsg, String problemID)
 		 *   - asi jenom pro searche?

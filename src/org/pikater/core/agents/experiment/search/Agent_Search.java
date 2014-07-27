@@ -46,8 +46,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	private List<NewOption> search_options = null;
 	private List<SearchItem> schema = null;
 	
-	private AID recommender;
-	
 	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
 	protected abstract boolean finished();
 	protected abstract void updateFinished(float[][] evaluations);
@@ -181,10 +179,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 								ACLMessage originalRequest =(ACLMessage)getDataStore().get(REQUEST_KEY); 
 								ACLMessage reply = originalRequest.createReply();
 								reply.setPerformative(ACLMessage.INFORM);
-								
-								if (recommender != null){
-									reply.addReceiver(recommender);
-								}
 								
 								try {			
 
