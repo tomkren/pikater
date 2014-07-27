@@ -14,23 +14,7 @@ public class Recommend extends DataProcessing {
 	private static final long serialVersionUID = -1204258141585020540L;
 
 	private String recommenderClass;
-    private List<NewOption> options = new ArrayList<NewOption>();
     private ErrorDescription errorDescription;
-
-    public String getRecommenderClass() {
-        return recommenderClass;
-    }
-
-    public void setRecommenderClass(String recommenderClass) {
-        this.recommenderClass = recommenderClass;
-    }
-
-    public List<NewOption> getOptions() {
-        return options;
-    }
-    public void setOptions(ArrayList<NewOption> options) {
-        this.options = options;
-    }
     public void addOption(NewOption option) {
 		
     	if (option == null) {
@@ -42,9 +26,9 @@ public class Recommend extends DataProcessing {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption recommenderClassOption = new NewOption("recommenderClass",recommenderClass);
+		NewOption recommenderClassOption = new NewOption("recommenderClass",getRecommenderClass());
 		
-		List<NewOption> options = new ArrayList<NewOption>();
+		List<NewOption> options = new ArrayList<>();
 		options.add(recommenderClassOption);
 		options.addAll(this.options);
 		return options;
@@ -61,7 +45,7 @@ public class Recommend extends DataProcessing {
 
 	@Override
 	public List<ErrorDescription> exportAllErrors() {
-		return new ArrayList<ErrorDescription>();
+		return new ArrayList<>();
 	}
 	@Override
 	public void importAllErrors(List<ErrorDescription> errors) {
@@ -89,5 +73,13 @@ public class Recommend extends DataProcessing {
 
     public void setErrorDescription(ErrorDescription errorDescription) {
         this.errorDescription = errorDescription;
+    }
+
+    public String getRecommenderClass() {
+        return recommenderClass;
+    }
+
+    public void setRecommenderClass(String recommenderClass) {
+        this.recommenderClass = recommenderClass;
     }
 }

@@ -20,7 +20,7 @@ public class DataProcessing implements IDataProvider {
 	private static final long serialVersionUID = -2418323249803736416L;
 
 	private int id = -1;
-	private List<NewOption> options =
+	protected List<NewOption> options =
 			new ArrayList<NewOption>();
     
 	private List<ErrorDescription> errors =
