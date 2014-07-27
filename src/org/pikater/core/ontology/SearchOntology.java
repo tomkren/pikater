@@ -1,7 +1,7 @@
 package org.pikater.core.ontology;
 
-import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.recomend.Recommend;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
