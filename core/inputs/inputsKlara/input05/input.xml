@@ -98,7 +98,7 @@
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <recommenderClass>Agent_Basic</recommenderClass>
+            <recommenderClass>org.pikater.core.agents.experiment.recommend.Agent_Basic</recommenderClass>
             <options/>
           </recommender>
           <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">

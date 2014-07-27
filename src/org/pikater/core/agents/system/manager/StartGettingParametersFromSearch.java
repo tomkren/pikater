@@ -50,7 +50,7 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 
 			Result r = (Result)myAgent.getContentManager().extractContent(inform);
 			ErrorEdge eo = new ErrorEdge((Evaluation)r.getItems().get(0), 0); // TODO! - search in search
-	        strategy.getComputationNode().addToOutputAndProcess(eo, "error", true);
+	        strategy.getComputationNode().addToOutputAndProcess(eo, "error");
 														
 		} catch (CodecException e) {
 			myAgent.logError(e.getMessage(), e);
