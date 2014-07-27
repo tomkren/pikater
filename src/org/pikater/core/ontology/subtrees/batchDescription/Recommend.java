@@ -15,6 +15,7 @@ public class Recommend extends DataProcessing {
 
 	private String recommenderClass;
     private List<NewOption> options = new ArrayList<NewOption>();
+    private ErrorDescription errorDescription;
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -82,4 +83,11 @@ public class Recommend extends DataProcessing {
 		}
 	}
 
+    public ErrorDescription getErrorDescription() {
+        return errorDescription;
+    }
+
+    public void setErrorDescription(ErrorDescription errorDescription) {
+        this.errorDescription = errorDescription;
+    }
 }

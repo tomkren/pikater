@@ -91,30 +91,26 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         gm.setResults_required(true);
 
         // 1. choose the nearest training data
-        List allMetadata = DataManagerService.getAllMetadata(this, gm);
+        java.util.List<Metadata> allMetadata = DataManagerService.getAllMetadata(this, gm);
 
         // set the min, max instances and attributes first
-        Iterator itr = allMetadata.iterator();
-        while (itr.hasNext()) {
-            Metadata next_md = (Metadata) itr.next();
+        for (Metadata metadataI : allMetadata) {
 
-            int na = next_md.getNumberOfAttributes();
+            int na = metadataI.getNumberOfAttributes();
             minAttributes = Math.min(minAttributes, na);
             maxAttributes = Math.max(maxAttributes, na);
 
-            int ni = next_md.getNumberOfInstances();
+            int ni = metadataI.getNumberOfInstances();
             minInstances = Math.min(ni, minInstances);
             maxInstances = Math.max(ni, maxInstances);
         }
 
         ArrayList<MetadataDistancePair> distances = new ArrayList<MetadataDistancePair>();
 
-        itr = allMetadata.iterator();
-        while (itr.hasNext()) {
-            Metadata next_md = (Metadata) itr.next();
-            double dNew = distance(metadata, next_md);
+        for (Metadata metadataI : allMetadata) {
 
-            distances.add(new MetadataDistancePair(next_md, dNew));
+            double dNew = distance(metadata, metadataI);
+            distances.add(new MetadataDistancePair(metadataI, dNew));
         }
 
         Collections.sort(distances);

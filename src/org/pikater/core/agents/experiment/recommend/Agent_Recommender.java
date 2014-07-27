@@ -26,7 +26,7 @@ import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.MetadataOntology;
-import org.pikater.core.ontology.RecomendOntology;
+import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
@@ -59,7 +59,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
 
-		ontologies.add(RecomendOntology.getInstance());
+		ontologies.add(RecommendOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		
@@ -73,7 +73,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         
         registerWithDF("Recommender");
         
-        Ontology ontology = RecomendOntology.getInstance();
+        Ontology ontology = RecommendOntology.getInstance();
         
         // receive request
         MessageTemplate mt = MessageTemplate.and(
@@ -159,9 +159,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     				performative = ACLMessage.INFORM;
         		}
             } catch (OntologyException e) {
-                e.printStackTrace();
+            	logError(e.getMessage(), e);
             } catch (CodecException e) {
-                e.printStackTrace();
+            	logError(e.getMessage(), e);
 			}
 
             reply.setPerformative(performative);
@@ -237,11 +237,11 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 			return ((org.pikater.core.ontology.subtrees.management.Agent) r.getItems().get(0)).getOptions();
 
 		} catch (CodecException ce) {
-			ce.printStackTrace();
+			logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			oe.printStackTrace();
+			logError(oe.getMessage(), oe);
 		} catch (FIPAException fe) {
-			fe.printStackTrace();
+			logError(fe.getMessage(), fe);
 		}
 		return null;
 	}
@@ -269,7 +269,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 				Agents.add(aid);
 			}
 		} catch (FIPAException fe) {
-			fe.printStackTrace();
+			logError(fe.getMessage(), fe);
 			return null;
 		}
 		

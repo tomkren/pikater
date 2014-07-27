@@ -6,12 +6,14 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
@@ -40,10 +42,11 @@ import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
-import org.pikater.core.ontology.RecomendOntology;
+import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 
@@ -51,17 +54,14 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 public class Agent_Manager extends PikaterAgent {
 
 	private static final long serialVersionUID = -5140758757320827589L;
-	
-	
-	private final String NO_XML_OUTPUT ="no_xml_output";
-	private boolean no_xml_output = true;
-	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
+
+    protected Set<Subscription> subscriptions = new HashSet<>();
 	private int problem_i = 0;
 	public HashMap<Integer, ComputationCollectionItem> computationCollection =
-			new HashMap<Integer, ComputationCollectionItem>();
+			new HashMap<>();
 	
 	public HashMap<String, ACLMessage> searchMessages =
-			new HashMap<String, ACLMessage>();
+			new HashMap<>();
 	
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
@@ -70,9 +70,9 @@ public class Agent_Manager extends PikaterAgent {
 	@Override
 	public List<Ontology> getOntologies() {
 		
-		List<Ontology> ontologies = new ArrayList<Ontology>();
+		List<Ontology> ontologies = new ArrayList<>();
 		ontologies.add(AccountOntology.getInstance());
-		ontologies.add(RecomendOntology.getInstance());
+		ontologies.add(RecommendOntology.getInstance());
 		ontologies.add(SearchOntology.getInstance());
 		ontologies.add(BatchOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
@@ -90,16 +90,6 @@ public class Agent_Manager extends PikaterAgent {
     	initDefault();
 
     	registerWithDF(AgentNames.MANAGER);
-
-		if (containsArgument(NO_XML_OUTPUT)) {
-			if (isArgumentValueTrue(NO_XML_OUTPUT)){
-				no_xml_output = true;
-			}
-			else{
-				no_xml_output = false;
-			}
-		}
-
 		doWait(3000);
 				
 		MessageTemplate subscriptionTemplate = 
@@ -243,6 +233,69 @@ public class Agent_Manager extends PikaterAgent {
 	} // end sendSubscription
 		
 
+	public String getHashOfFile(String nameOfFile, int userID) {
+		
+		TranslateFilename translate = new TranslateFilename();
+		translate.setExternalFilename(nameOfFile);
+		translate.setUserID(userID);
+
+		// create a request message
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+		msg.setLanguage(getCodec().getName());
+		msg.setOntology(FilenameTranslationOntology.getInstance().getName());
+		// We want to receive a reply in 30 secs
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
+
+		Action a = new Action();
+		a.setAction(translate);
+		a.setActor(getAID());
+
+		try {
+			getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			ce.printStackTrace();
+		} catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+
+
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(this, msg);
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ContentElement content = null;
+		String fileHash = null;
+
+		try {
+			content = getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			logError(e1.getMessage(), e1);
+		} catch (CodecException e1) {
+			logError(e1.getMessage(), e1);
+		} catch (OntologyException e1) {
+			logError(e1.getMessage(), e1);
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			fileHash = (String) result.getValue();
+		}
+		
+		return fileHash;
+	}
+
+	
 	public AID getAgentByType(String agentType) {
 		return (AID)getAgentByType(agentType, 1).get(0);
 	}

@@ -50,7 +50,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 			+ System.getProperty("file.separator");
 
 	@Override
-	public java.util.List<Ontology> getOntologies() {
+	public List<Ontology> getOntologies() {
 
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 
@@ -111,13 +111,11 @@ public class Agent_ManagerAgent extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					e.printStackTrace();
-					logError("Problem extracting content: " + e.getMessage());
+					logError("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					e.printStackTrace();
-					logError("Codec problem: " + e.getMessage());
+					logError("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logError(e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
@@ -159,7 +157,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				doCreateAgent(generatedName, type, container, args2);
 			}
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 			return null;
 		}
 

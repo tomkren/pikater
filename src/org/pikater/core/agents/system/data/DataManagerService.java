@@ -22,7 +22,7 @@ import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MetadataOntology;
-import org.pikater.core.ontology.RecomendOntology;
+import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
@@ -67,17 +67,14 @@ public class DataManagerService extends FIPAService {
 			agent.getContentManager().fillContent(request, a);
 		} catch (CodecException e1) {
 			agent.logError(e1.getMessage(), e1);
-			e1.printStackTrace();
 		} catch (OntologyException e1) {
 			agent.logError(e1.getMessage(), e1);
-			e1.printStackTrace();
 		}
 
 		try {
 			return FIPAService.doFipaRequestClient(agent, request).getContent();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return null;
@@ -121,13 +118,10 @@ public class DataManagerService extends FIPAService {
 			return (String) r.getValue();
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return null;
@@ -214,7 +208,7 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
-	public static List getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
+	public static java.util.List<Metadata> getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
@@ -232,7 +226,7 @@ public class DataManagerService extends FIPAService {
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
-			List allMetadata = (List) r.getValue();
+			java.util.List<Metadata> allMetadata = (java.util.List<Metadata>) r.getValue();
 			return allMetadata;
 
 		} catch (CodecException e) {
@@ -286,7 +280,7 @@ public class DataManagerService extends FIPAService {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
-		request.setOntology(RecomendOntology.getInstance().getName());
+		request.setOntology(RecommendOntology.getInstance().getName());
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 

@@ -2,6 +2,7 @@
 
 .imageViewer
 {
+	border: 1px solid gray;
 }
 
 .imageViewer-toolbar, .imageViewer-toolbar .v-panel-content 
@@ -9,13 +10,18 @@
 	background-color: gray;
 }
 
-.imageViewer-toolbar .v-panel-content
+.imageViewer-toolbar .v-panel-content /* container for toolbar */
 {
 	padding: 10px;
 }
 
-.imageViewer .v-imagescaler
+.imageViewer-toolbar .v-label /* text in toolbar */
 {
-	width: 100%;
-	height: 100%;
+	color: white;
+}
+
+.imageViewer .v-slot:nth-child(2) /* container for image scaler */
+{
+	padding: 5px;
+	overflow: scroll;
 }

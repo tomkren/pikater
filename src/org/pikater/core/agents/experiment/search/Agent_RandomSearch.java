@@ -114,5 +114,5 @@ public class Agent_RandomSearch extends Agent_Search {
 		}
 		return solutions_list;
 	}
-
+	
 }
