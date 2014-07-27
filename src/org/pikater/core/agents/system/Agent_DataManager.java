@@ -13,9 +13,7 @@ import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
-import jade.util.leap.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -69,7 +67,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.pikater.core.ontology.subtrees.account.GetUser;
 import org.pikater.core.ontology.subtrees.account.GetUserID;
@@ -472,7 +472,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		
-		java.util.List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
+		List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
 		
 		AgentInfos agentInfos = new AgentInfos();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
@@ -811,7 +811,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Statement stmt = db.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
 
-		ArrayList results = new ArrayList();
+		List<SavedResult> results = new ArrayList<SavedResult>();
 
 		while (rs.next()) {
 
@@ -890,7 +890,7 @@ public class Agent_DataManager extends PikaterAgent {
 			
 			String currentHash=dslo.getHash();
 			
-			java.util.List<JPADataSetLO> equalDataSets=DAOs.dataSetDAO.getByHash(currentHash);
+			List<JPADataSetLO> equalDataSets=DAOs.dataSetDAO.getByHash(currentHash);
 			log("Hash of new dataset: "+currentHash);
 			//we search for a dataset entry with the same hash and with already generated metadata
 			JPADataSetLO dsloWithMetaData=null;
@@ -960,11 +960,11 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		log("Agent_DataManager.respondToGetAllMetadata");
 
-		java.util.List<JPADataSetLO> datasets = null;
+		List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResults_required()) {
 			if (gm.getExceptions() != null) {
-				java.util.List<String> exHash = new java.util.LinkedList<String>();
+				List<String> exHash = new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
 					Metadata m = (Metadata) itr.next();
@@ -977,7 +977,7 @@ public class Agent_DataManager extends PikaterAgent {
 		} else {
 			if (gm.getExceptions() != null) {
 				
-				java.util.List<String> excludedHashes = new java.util.ArrayList<String>();
+				List<String> excludedHashes = new java.util.ArrayList<String>();
 				
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
@@ -992,14 +992,14 @@ public class Agent_DataManager extends PikaterAgent {
 			
 		}
 
-		List allMetadata = new ArrayList();
+		List<Metadata> allMetadata = new ArrayList<Metadata>();
 
 		for(JPADataSetLO dslo:datasets){
 			
 			//Getting the Global MetaData for the respond
 			JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
 			
-			java.util.List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
+			List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
 			for(JPAAttributeMetaData amd:attrMDs){
 				Metadata aM=new Metadata();
 				
@@ -1138,7 +1138,7 @@ public class Agent_DataManager extends PikaterAgent {
 		//GetModels gm=(GetModels)a.getAction();
 		
 		
-		java.util.List<JPAModel> savedModels=DAOs.modelDAO.getAll();
+		List<JPAModel> savedModels=DAOs.modelDAO.getAll();
 		
 		Models models = new Models();
 		for (JPAModel modelJPA : savedModels) {
@@ -1231,7 +1231,7 @@ public class Agent_DataManager extends PikaterAgent {
 		String hash = ((GetFile)a.getAction()).getHash();
 		log(new Date().toString()+" DataManager.GetFile");
 		
-		java.util.List<JPADataSetLO> dslos=DAOs.dataSetDAO.getByHash(hash);
+		List<JPADataSetLO> dslos=DAOs.dataSetDAO.getByHash(hash);
 		if(dslos.size()>0){
 			
 			try {
@@ -1288,7 +1288,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ResultSet rs = stmt.executeQuery(query);
 
-		List fileInfos = new ArrayList();
+		jade.util.leap.List fileInfos = new jade.util.leap.ArrayList();
 
 		while (rs.next()) {
 			Metadata m = new Metadata();
@@ -1415,7 +1415,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		java.util.List<JPAFilemapping> userFiles=DAOs.filemappingDAO.getByUserID(gf.getUserID());
 		
-		ArrayList files = new ArrayList();
+		ArrayList<String> files = new ArrayList<String>();
 
 		for(JPAFilemapping fm:userFiles){
 			files.add(fm.getExternalfilename());
