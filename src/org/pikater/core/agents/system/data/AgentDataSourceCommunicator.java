@@ -30,7 +30,7 @@ public class AgentDataSourceCommunicator {
     PikaterAgent initAgent;
     AID receiverAid;
 
-    public AgentDataSourceCommunicator(PikaterAgent initAgent,boolean localOnly) throws Exception {
+    public AgentDataSourceCommunicator(PikaterAgent initAgent, boolean localOnly) throws Exception {
         this.initAgent=initAgent;
         ServiceDescription sd = new ServiceDescription();
         sd.setType(AgentDataSource.SERVICE_TYPE);
@@ -50,7 +50,7 @@ public class AgentDataSourceCommunicator {
                 throw new Exception("No DataSourceAgent found");
             }
         } catch (FIPAException e) {
-            e.printStackTrace();
+        	initAgent.logError(e.getMessage(), e);
         }
     }
 
@@ -74,7 +74,7 @@ public class AgentDataSourceCommunicator {
             DataSourcePath result=(DataSourcePath)((Result)msg_reply.getContentObject()).getValue();
             return result.getPath();
         } catch (Codec.CodecException | UnreadableException | FIPAException | OntologyException e) {
-            e.printStackTrace();
+        	initAgent.logError(e.getMessage(), e);
         }
         return "failure";
     }
@@ -97,7 +97,7 @@ public class AgentDataSourceCommunicator {
             initAgent.getContentManager().fillContent(msg, a);
             initAgent.send(msg);
         } catch (Codec.CodecException | OntologyException e) {
-            e.printStackTrace();
+        	initAgent.logError(e.getMessage(), e);
         }
     }
 }
