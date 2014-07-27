@@ -1,13 +1,15 @@
 package org.pikater.web.vaadin;
 
+import java.io.IOException;
+
 import javax.servlet.annotation.WebServlet;
 
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.ServerConfigurationInterface;
-import org.pikater.web.request.HttpRequestComponent;
-import org.pikater.web.request.HttpRequestUtils;
+import org.pikater.web.requests.HttpRequestComponent;
+import org.pikater.web.requests.HttpRequestUtils;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
@@ -301,6 +303,23 @@ public abstract class CustomConfiguredUI extends UI
 	protected interface IAuthenticationSuccessful
 	{
 		void onSuccessfulAuth();
+	}
+	
+	//-----------------------------------------------------------
+	// PROTECTED CONVENIENCE INTERFACE
+	
+	protected void returnErrorCode(int errorCode)
+	{
+		try
+		{
+			VaadinServletService.getCurrentResponse().sendError(errorCode);
+		}
+		catch (IOException e)
+		{
+			PikaterLogger.logThrowable(String.format("UI could not be created but writing an error code of '%d' "
+					+ "to the response failed because of the following exception. Vaadin should have "
+					+ "defaulted to error code 500 instead.", errorCode), e);
+		}
 	}
 	
 	//-----------------------------------------------------------
