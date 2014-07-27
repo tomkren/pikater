@@ -11,7 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public class Search extends DataProcessing {
+public class Search extends DataProcessing implements IErrorProvider {
 
 	private static final long serialVersionUID = 7856131679884259768L;
 	
