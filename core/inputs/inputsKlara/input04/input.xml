@@ -104,6 +104,10 @@
           <recommender>
             <id>3</id>
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+            <errors defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+            <dataSources/>
+            <recommenderClass>org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender</recommenderClass>
+            <options/>
             <errors>
               <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
                 <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
@@ -183,9 +187,6 @@
                 <type>error</type>
               </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
             </errors>
-            <dataSources/>
-            <recommenderClass>org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender</recommenderClass>
-            <options/>
           </recommender>
           <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
             <id>4</id>

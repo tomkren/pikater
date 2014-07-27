@@ -15,7 +15,7 @@ import xmlGenerator.Input05;
 public class TestBatchDescription {
 
 	public static void test() {
-/*
+
 		testComputatingDescription(
 				SimpleTraining.createDescription(),
 				"SimpleTraining");
@@ -39,7 +39,7 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input04.createDescription(),
 				"Input04");
-	*/	
+		
 		testComputatingDescription(
 				Input05.createDescription(),
 				"Input05");
@@ -60,7 +60,7 @@ public class TestBatchDescription {
 
 		String xml1 = comDescription.exportXML();
 		String xml2 = comDescription2.exportXML();
-		
+/*		
 		try {
 			comDescription.exportXML("comDescription.xml");
 			comDescription2.exportXML("comDescription2.xml");
