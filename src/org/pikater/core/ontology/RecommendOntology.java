@@ -9,14 +9,14 @@ import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 /**
  * Created by Stepan on 18.6.14.
  */
-public class RecomendOntology extends BeanOntology {
+public class RecommendOntology extends BeanOntology {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5355736320938592917L;
 
-	private RecomendOntology() {
+	private RecommendOntology() {
         super("RecomendOntology");
 
         try {
@@ -27,7 +27,7 @@ public class RecomendOntology extends BeanOntology {
         }
     }
 
-    static RecomendOntology theInstance = new RecomendOntology();
+    static RecommendOntology theInstance = new RecommendOntology();
 
     public static Ontology getInstance() {
         return theInstance;

@@ -9,7 +9,6 @@ import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDur
  * Time: 15:52
  */
 public class ModelComputationNode extends ComputationNode {
-    private String modelClass;
     private EvaluationMethod evaluationMethod;
     private IExpectedDuration expectedDuration;
 
@@ -19,14 +18,6 @@ public class ModelComputationNode extends ComputationNode {
 
     public ModelComputationNode(StartComputationStrategy executeStrategy) {
         super(executeStrategy);
-    }
-
-    public String getModelClass() {
-        return modelClass;
-    }
-
-    public void setModelClass(String modelClass) {
-        this.modelClass = modelClass;
     }
 
 	public EvaluationMethod getEvaluationMethod() {

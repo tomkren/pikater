@@ -22,7 +22,7 @@ import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MetadataOntology;
-import org.pikater.core.ontology.RecomendOntology;
+import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
@@ -298,7 +298,7 @@ public class DataManagerService extends FIPAService {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
-		request.setOntology(RecomendOntology.getInstance().getName());
+		request.setOntology(RecommendOntology.getInstance().getName());
 		request.setLanguage(codec.getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 

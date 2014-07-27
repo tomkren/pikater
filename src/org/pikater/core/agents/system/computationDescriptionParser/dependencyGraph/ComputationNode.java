@@ -80,7 +80,13 @@ public class ComputationNode {
         outputs.get(outputName).add(buffer);
     }
 
+    
     public void addToOutputAndProcess(EdgeValue o, String outputName)
+    {
+    	addToOutputAndProcess(o, outputName, false);
+    }
+    
+    public void addToOutputAndProcess(EdgeValue o, String outputName, Boolean unblock)
     {
     	if (outputs.get(outputName)==null){
     		return;
@@ -88,6 +94,10 @@ public class ComputationNode {
         ArrayList<ComputationOutputBuffer<EdgeValue>> outs=outputs.get(outputName);
         for (ComputationOutputBuffer<EdgeValue> out:outs)
         {
+        	if (unblock)
+        	{
+        		out.unblock();
+        	}
             out.insert(o);
             if (out.size()==1)
             {
