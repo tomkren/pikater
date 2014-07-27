@@ -35,7 +35,6 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.ConnectionProvider;
@@ -85,7 +84,6 @@ import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
@@ -303,11 +301,24 @@ public class Agent_DataManager extends PikaterAgent {
 					/**
 					 * Files actions
 					 */
-					if (a.getAction() instanceof ImportFile) {
-						return respondToImportFile(request, a);
+					if (a.getAction() instanceof GetExternalAgentJar) {
+						return respondToGetExternalAgentJar(request, a);
+					}
+					if (a.getAction() instanceof PrepareFileUpload) {
+						return respondToPrepareFileUpload(request, a);
+					}
+
+					/**
+					 * Deprecated Files actions
+					 */
+					if (a.getAction() instanceof GetFile) {
+						return respondToGetFile(request, a);
 					}
 					if (a.getAction() instanceof GetFileInfo) {
 						return respondToGetFileInfo(request, a);
+					}
+					if (a.getAction() instanceof ImportFile) {
+						return respondToImportFile(request, a);
 					}
 					if (a.getAction() instanceof GetFiles) {
 						return respondToGetFiles(request, a);
@@ -315,15 +326,7 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof DeleteTempFiles) {
 						return respondToDeleteTempFiles(request);
 					}
-					if (a.getAction() instanceof GetFile) {
-						return respondToGetFile(request, a);
-					}
-					if (a.getAction() instanceof GetExternalAgentJar) {
-						return respondToGetExternalAgentJar(request, a);
-					}
-					if (a.getAction() instanceof PrepareFileUpload) {
-						return respondToPrepareFileUpload(request, a);
-					}
+
 
 				} catch (OntologyException e) {
 					e.printStackTrace();
@@ -519,82 +522,6 @@ public class Agent_DataManager extends PikaterAgent {
 
 		reply.setPerformative(ACLMessage.INFORM);
 		reply.setContent("OK");
-
-		return reply;
-	}
-
-	private ACLMessage respondToSaveModel(ACLMessage request, Action a) {
-
-		SaveModel sm=(SaveModel)a.getAction();
-		ACLMessage reply = request.createReply();
-		
-		int savedModelID=DAOs.resultDAO.setModelForResult(sm.getModel());
-
-		if(savedModelID!=-1){
-			System.out.println("Saved Model ID: "+savedModelID);
-			reply.setPerformative(ACLMessage.INFORM);
-		}else{
-			logError("Couldn't be saved model for experiment ID "+sm.getModel().getResultID());
-			reply.setPerformative(ACLMessage.FAILURE);	
-		}	
-
-		return reply;
-	}
-
-	private ACLMessage respondToGetModel(ACLMessage request, Action a) {
-		GetModel gm=(GetModel)a.getAction();
-		
-		JPAModel savedModel=DAOs.modelDAO.getByID(gm.getModelID());
-		ACLMessage reply = request.createReply();
-		if(savedModel==null){
-			reply.setPerformative(ACLMessage.FAILURE);
-		}else{
-			Model retrModel=new Model();
-			retrModel.setAgentClassName(savedModel.getAgentClassName());
-			retrModel.setResultID(savedModel.getCreatorResult().getId());
-			retrModel.setSerializedAgent(savedModel.getSerializedAgent());
-			reply.setPerformative(ACLMessage.INFORM);
-
-			Result result = new Result(a, retrModel);
-			try {
-				getContentManager().fillContent(reply, result);
-			} catch (CodecException e) {
-				logError(e.getMessage(), e);
-			} catch (OntologyException e) {
-				logError(e.getMessage(), e);
-			}
-		}
-		return reply;
-	}
-
-	private ACLMessage respondToGetModels(ACLMessage request, Action a) {
-		//GetModels gm=(GetModels)a.getAction();
-		
-		
-		java.util.List<JPAModel> savedModels=DAOs.modelDAO.getAll();
-		
-		Models models = new Models();
-		for (JPAModel modelJPA : savedModels) {
-			
-			Model retrModel = new Model();
-			retrModel.setAgentClassName(modelJPA.getAgentClassName());
-			retrModel.setResultID(modelJPA.getCreatorResult().getId());
-			retrModel.setSerializedAgent(modelJPA.getSerializedAgent());
-			
-			models.addModel(retrModel);
-		}
-		
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		Result result = new Result(a, models);
-		try {
-			getContentManager().fillContent(reply, result);
-		} catch (CodecException e) {
-			logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
-		}
 
 		return reply;
 	}
@@ -876,7 +803,372 @@ public class Agent_DataManager extends PikaterAgent {
 
 		return dateFormat.format(date);
     }
+	
+	private ACLMessage respondToLoadResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+		LoadResults lr = (LoadResults) a.getAction();
 
+		String query = "SELECT * FROM resultsExternal " + lr.asSQLCondition();
+		log(query);
+
+		openDBConnection();
+		Statement stmt = db.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+
+		ArrayList results = new ArrayList();
+
+		while (rs.next()) {
+
+			SavedResult sr = new SavedResult();
+
+			sr.setAgentType(rs.getString("agentType"));
+			sr.setAgentOptions(rs.getString("options"));
+			sr.setTrainFile(rs.getString("trainFileExt"));
+			sr.setTestFile(rs.getString("testFileExt"));
+			sr.setErrorRate(rs.getDouble("errorRate"));
+			sr.setKappaStatistic(rs.getDouble("kappaStatistic"));
+			sr.setMeanAbsError(rs.getDouble("meanAbsoluteError"));
+			sr.setRMSE(rs.getDouble("rootMeanSquaredError"));
+			sr.setRootRelativeSquaredError(rs.getDouble("rootRelativeSquaredError"));
+			sr.setRelativeAbsoluteError(rs.getDouble("relativeAbsoluteError"));
+			sr.setDate("nodate");
+
+			results.add(sr);
+		}
+
+		Result r = new Result(a.getAction(), results);
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		getContentManager().fillContent(reply, r);
+
+		db.close();
+		return reply;
+	}
+
+	private ACLMessage respondToSaveDatasetMessage(ACLMessage request, Action a){
+		SaveDataset sd=(SaveDataset)a.getAction();
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
+		
+		try {
+			JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin(sd.getUserLogin())).getSingleResult();
+			File sourceFile=new File(sd.getSourceFile());
+			
+			JPADataSetLO newDSLO=new JPADataSetLO();
+			newDSLO.setCreated(new Date());
+			newDSLO.setDescription(sd.getDescription());
+			newDSLO.setOwner(user);
+			//hash a OID will be set using DAO
+			DAOs.dataSetDAO.storeNewDataSet(sourceFile, newDSLO);
+			
+			JPAFilemapping fm=new JPAFilemapping();
+			fm.setExternalfilename(sourceFile.getName());
+			fm.setInternalfilename(newDSLO.getHash());
+			fm.setUser(user);
+			DAOs.filemappingDAO.storeEntity(fm);
+			reply.setContentObject((new Integer(newDSLO.getId())));
+			log("Saved Dataset with ID: "+newDSLO.getId());
+		} catch (NoResultException e) {
+			logError("No user found with login: "+sd.getUserLogin(), e);
+			reply.setPerformative(ACLMessage.FAILURE);
+		} catch (IOException e) {
+			logError("File can't be read.", e);
+			reply.setPerformative(ACLMessage.FAILURE);
+		}
+
+		return reply;
+	}
+
+	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
+		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
+		Metadata metadata = saveMetadata.getMetadata();
+		int dataSetID =saveMetadata.getDataSetID();
+		
+		JPADataSetLO dslo;
+		try {
+			dslo = DAOs.dataSetDAO.getByID(dataSetID,EmptyResultAction.THROW);
+			
+			
+			String currentHash=dslo.getHash();
+			
+			java.util.List<JPADataSetLO> equalDataSets=DAOs.dataSetDAO.getByHash(currentHash);
+			log("Hash of new dataset: "+currentHash);
+			//we search for a dataset entry with the same hash and with already generated metadata
+			JPADataSetLO dsloWithMetaData=null;
+			for(JPADataSetLO candidate : equalDataSets){
+				if((candidate.getAttributeMetaData()!=null)&&(candidate.getGlobalMetaData()!=null)){
+					dsloWithMetaData=candidate;
+					break;
+				}
+			}
+			
+			if(dsloWithMetaData==null){
+				JPAMetaDataReader readr=new JPAMetaDataReader(metadata);
+				dslo.setGlobalMetaData(readr.getJPAGlobalMetaData());
+				dslo.setAttributeMetaData(readr.getJPAAttributeMetaData());
+			}else{
+				dslo.setAttributeMetaData(dsloWithMetaData.getAttributeMetaData());
+				dslo.setGlobalMetaData(dsloWithMetaData.getGlobalMetaData());
+			}
+			DAOs.dataSetDAO.updateEntity(dslo);
+			
+		} catch (NoResultException e1) {
+			logError("Dataset for ID "+dataSetID+" doesn't exist.", e1);
+		}
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		return reply;
+	}
+	
+	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+		GetMetadata gm = (GetMetadata) a.getAction();
+
+		openDBConnection();
+		Statement stmt = db.createStatement();
+
+		String query = "SELECT * FROM metadata WHERE internalfilename = '" + gm.getInternal_filename() + "'";
+
+		Metadata m = new Metadata();
+
+		ResultSet rs = stmt.executeQuery(query);
+
+		while (rs.next()) {
+			m.setAttributeType(rs.getString("attributeType"));
+			m.setDefaultTask(rs.getString("defaultTask"));
+			m.setExternalName(rs.getString("externalFilename"));
+			m.setInternalName(rs.getString("internalFilename"));
+			m.setMissingValues(rs.getBoolean("missingValues"));
+			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
+			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
+		}
+
+		log("Executing query: " + query);
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		Result _result = new Result(a.getAction(), m);
+		getContentManager().fillContent(reply, _result);
+
+		db.close();
+		return reply;
+	}
+	
+	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+		GetAllMetadata gm = (GetAllMetadata) a.getAction();
+		
+		log("Agent_DataManager.respondToGetAllMetadata");
+
+		java.util.List<JPADataSetLO> datasets = null;
+		
+		if (gm.getResults_required()) {
+			if (gm.getExceptions() != null) {
+				java.util.List<String> exHash = new java.util.LinkedList<String>();
+				Iterator itr = gm.getExceptions().iterator();
+				while (itr.hasNext()) {
+					Metadata m = (Metadata) itr.next();
+					exHash.add(m.getInternalName());
+				}
+				datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
+			}else{
+				datasets = DAOs.dataSetDAO.getAllWithResults();
+			}
+		} else {
+			if (gm.getExceptions() != null) {
+				
+				java.util.List<String> excludedHashes = new java.util.ArrayList<String>();
+				
+				Iterator itr = gm.getExceptions().iterator();
+				while (itr.hasNext()) {
+					Metadata m = (Metadata) itr.next();
+					excludedHashes.add(m.getInternalName());
+				}
+				
+				datasets = DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
+			}else{
+				datasets = DAOs.dataSetDAO.getAll();
+			}
+			
+		}
+
+		List allMetadata = new ArrayList();
+
+		for(JPADataSetLO dslo:datasets){
+			
+			//Getting the Global MetaData for the respond
+			JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
+			
+			java.util.List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
+			for(JPAAttributeMetaData amd:attrMDs){
+				Metadata aM=new Metadata();
+				
+				
+				aM.setInternalName(dslo.getHash());
+				aM.setExternalName(dslo.getDescription());
+				
+				aM.setDefaultTask(gmd.getDefaultTaskType().getName());
+				aM.setNumberOfInstances(gmd.getNumberofInstances());
+				
+				aM.setMissingValues(amd.getRatioOfMissingValues()>0);
+				aM.setNumberOfAttributes(attrMDs.size());
+				
+				if(amd instanceof JPAAttributeNumericalMetaData){
+					aM.setAttributeType("Numerical");
+				}else if(amd instanceof JPAAttributeCategoricalMetaData){
+					aM.setAttributeType("Categorical");
+				}else{
+					aM.setAttributeType("Mixed");
+				}
+				
+				allMetadata.add(aM);
+			}
+			
+		}
+		
+		
+		/**
+		while (rs.next()) {
+			Metadata m = new Metadata();
+			m.setAttribute_type(rs.getString("attributeType"));
+			m.setDefault_task(rs.getString("defaultTask"));
+			m.setExternal_name(rs.getString("externalFilename"));
+			m.setInternal_name(rs.getString("internalFilename"));
+			m.setMissing_values(rs.getBoolean("missingValues"));
+			m.setNumber_of_attributes(rs.getInt("numberOfAttributes"));
+			m.setNumber_of_instances(rs.getInt("numberOfInstances"));
+
+			allMetadata.add(m);
+		}
+		**/
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		Result _result = new Result(a.getAction(), allMetadata);
+		getContentManager().fillContent(reply, _result);
+
+		return reply;
+	}
+	
+	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+		GetTheBestAgent g = (GetTheBestAgent) a.getAction();
+		String name = g.getNearest_file_name();
+
+		openDBConnection();
+		Statement stmt = db.createStatement();
+
+		String query = "SELECT * FROM results " + "WHERE dataFile =\'" + name + "\'" + " AND errorRate = (SELECT MIN(errorRate) FROM results " + "WHERE dataFile =\'" + name + "\')";
+		log("Executing query: " + query);
+
+		ResultSet rs = stmt.executeQuery(query);
+		if (!rs.isBeforeFirst()) {
+			ACLMessage reply = request.createReply();
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent("There are no results for this file in the database.");
+
+			db.close();
+			return reply;
+		}
+		rs.next();
+
+		NewOptions options = NewOptions.importXML(rs.getString("options"));
+		
+		Agent agent = new Agent();
+		agent.setName(rs.getString("agentName"));
+		agent.setType(rs.getString("agentType"));
+		agent.setOptions(options.getOptions());
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		Result _result = new Result(a.getAction(), agent);
+		getContentManager().fillContent(reply, _result);
+
+		db.close();
+		return reply;
+	}
+	
+
+	private ACLMessage respondToSaveModel(ACLMessage request, Action a) {
+
+		SaveModel sm=(SaveModel)a.getAction();
+		ACLMessage reply = request.createReply();
+		
+		int savedModelID=DAOs.resultDAO.setModelForResult(sm.getModel());
+
+		if(savedModelID!=-1){
+			System.out.println("Saved Model ID: "+savedModelID);
+			reply.setPerformative(ACLMessage.INFORM);
+		}else{
+			logError("Couldn't be saved model for experiment ID "+sm.getModel().getResultID());
+			reply.setPerformative(ACLMessage.FAILURE);	
+		}	
+
+		return reply;
+	}
+
+	private ACLMessage respondToGetModel(ACLMessage request, Action a) {
+		GetModel gm=(GetModel)a.getAction();
+		
+		JPAModel savedModel=DAOs.modelDAO.getByID(gm.getModelID());
+		ACLMessage reply = request.createReply();
+		if(savedModel==null){
+			reply.setPerformative(ACLMessage.FAILURE);
+		}else{
+			Model retrModel=new Model();
+			retrModel.setAgentClassName(savedModel.getAgentClassName());
+			retrModel.setResultID(savedModel.getCreatorResult().getId());
+			retrModel.setSerializedAgent(savedModel.getSerializedAgent());
+			reply.setPerformative(ACLMessage.INFORM);
+
+			Result result = new Result(a, retrModel);
+			try {
+				getContentManager().fillContent(reply, result);
+			} catch (CodecException e) {
+				logError(e.getMessage(), e);
+			} catch (OntologyException e) {
+				logError(e.getMessage(), e);
+			}
+		}
+		return reply;
+	}
+
+	private ACLMessage respondToGetModels(ACLMessage request, Action a) {
+		//GetModels gm=(GetModels)a.getAction();
+		
+		
+		java.util.List<JPAModel> savedModels=DAOs.modelDAO.getAll();
+		
+		Models models = new Models();
+		for (JPAModel modelJPA : savedModels) {
+			
+			Model retrModel = new Model();
+			retrModel.setAgentClassName(modelJPA.getAgentClassName());
+			retrModel.setResultID(modelJPA.getCreatorResult().getId());
+			retrModel.setSerializedAgent(modelJPA.getSerializedAgent());
+			
+			models.addModel(retrModel);
+		}
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		Result result = new Result(a, models);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return reply;
+	}
+	
 	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException, FailureException {
 		String type = ((GetExternalAgentJar)a.getAction()).getType();
 		log("getting JAR for agent type "+type);
@@ -907,6 +1199,37 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	@SuppressWarnings("serial")
+	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
+		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
+		log("respondToPrepareFileUpload");
+
+		final ServerSocket serverSocket = new ServerSocket();
+		serverSocket.setSoTimeout(15000);
+		serverSocket.bind(null);
+		log("Listening on port: " + serverSocket.getLocalPort());
+
+		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
+			@Override
+			public void action() {
+				try {
+					DataTransferService.handleUploadConnection(serverSocket, hash);
+				} catch (IOException e) {
+					logError("Data upload failed", e);
+				}
+			}
+		}));
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
+		return reply;
+	}
+
+	/************************************************************************************************
+	 * Obsolete methods
+	 * 
+	 */
 	private ACLMessage respondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException {
 		String hash = ((GetFile)a.getAction()).getHash();
 		log(new Date().toString()+" DataManager.GetFile");
@@ -956,10 +1279,42 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	/************************************************************************************************
-	 * Obsolete methods
-	 * 
-	 */
+	private ACLMessage respondToGetFileInfo(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+		GetFileInfo gfi = (GetFileInfo) a.getAction();
+
+		String query = "SELECT * FROM filemetadata WHERE " + gfi.toSQLCondition();
+
+		openDBConnection();
+		Statement stmt = db.createStatement();
+
+		log("Executing query: " + query);
+
+		ResultSet rs = stmt.executeQuery(query);
+
+		List fileInfos = new ArrayList();
+
+		while (rs.next()) {
+			Metadata m = new Metadata();
+			m.setAttributeType(rs.getString("attributeType"));
+			m.setDefaultTask(rs.getString("defaultTask"));
+			m.setExternalName(rs.getString("externalFilename"));
+			m.setInternalName(rs.getString("internalFilename"));
+			m.setMissingValues(rs.getBoolean("missingValues"));
+			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
+			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
+			fileInfos.add(m);
+		}
+
+		Result r = new Result(a.getAction(), fileInfos);
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		getContentManager().fillContent(reply, r);
+
+		db.close();
+		return reply;
+	}
+
 	private ACLMessage respondToImportFile(ACLMessage request, Action a) throws IOException, CodecException, OntologyException, SQLException, ClassNotFoundException {
 		ImportFile im = (ImportFile) a.getAction();
 
@@ -1056,261 +1411,6 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 	}
 
-	
-
-	
-
-	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
-		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
-		Metadata metadata = saveMetadata.getMetadata();
-		int dataSetID =saveMetadata.getDataSetID();
-		
-		JPADataSetLO dslo;
-		try {
-			dslo = DAOs.dataSetDAO.getByID(dataSetID,EmptyResultAction.THROW);
-			
-			
-			String currentHash=dslo.getHash();
-			
-			java.util.List<JPADataSetLO> equalDataSets=DAOs.dataSetDAO.getByHash(currentHash);
-			log("Hash of new dataset: "+currentHash);
-			//we search for a dataset entry with the same hash and with already generated metadata
-			JPADataSetLO dsloWithMetaData=null;
-			for(JPADataSetLO candidate : equalDataSets){
-				if((candidate.getAttributeMetaData()!=null)&&(candidate.getGlobalMetaData()!=null)){
-					dsloWithMetaData=candidate;
-					break;
-				}
-			}
-			
-			if(dsloWithMetaData==null){
-				JPAMetaDataReader readr=new JPAMetaDataReader(metadata);
-				dslo.setGlobalMetaData(readr.getJPAGlobalMetaData());
-				dslo.setAttributeMetaData(readr.getJPAAttributeMetaData());
-			}else{
-				dslo.setAttributeMetaData(dsloWithMetaData.getAttributeMetaData());
-				dslo.setGlobalMetaData(dsloWithMetaData.getGlobalMetaData());
-			}
-			DAOs.dataSetDAO.updateEntity(dslo);
-			
-		} catch (NoResultException e1) {
-			logError("Dataset for ID "+dataSetID+" doesn't exist.", e1);
-		}
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		return reply;
-	}
-	
-	
-	
-	private ACLMessage respondToSaveDatasetMessage(ACLMessage request, Action a){
-		SaveDataset sd=(SaveDataset)a.getAction();
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		
-		
-		try {
-			JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin(sd.getUserLogin())).getSingleResult();
-			File sourceFile=new File(sd.getSourceFile());
-			
-			JPADataSetLO newDSLO=new JPADataSetLO();
-			newDSLO.setCreated(new Date());
-			newDSLO.setDescription(sd.getDescription());
-			newDSLO.setOwner(user);
-			//hash a OID will be set using DAO
-			DAOs.dataSetDAO.storeNewDataSet(sourceFile, newDSLO);
-			
-			JPAFilemapping fm=new JPAFilemapping();
-			fm.setExternalfilename(sourceFile.getName());
-			fm.setInternalfilename(newDSLO.getHash());
-			fm.setUser(user);
-			DAOs.filemappingDAO.storeEntity(fm);
-			reply.setContentObject((new Integer(newDSLO.getId())));
-			log("Saved Dataset with ID: "+newDSLO.getId());
-		} catch (NoResultException e) {
-			logError("No user found with login: "+sd.getUserLogin(), e);
-			reply.setPerformative(ACLMessage.FAILURE);
-		} catch (IOException e) {
-			logError("File can't be read.", e);
-			reply.setPerformative(ACLMessage.FAILURE);
-		}
-
-		return reply;
-	}
-
-	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		GetAllMetadata gm = (GetAllMetadata) a.getAction();
-		
-		log("Agent_DataManager.respondToGetAllMetadata");
-
-		java.util.List<JPADataSetLO> datasets = null;
-		
-		if (gm.getResults_required()) {
-			if (gm.getExceptions() != null) {
-				java.util.List<String> exHash = new java.util.LinkedList<String>();
-				Iterator itr = gm.getExceptions().iterator();
-				while (itr.hasNext()) {
-					Metadata m = (Metadata) itr.next();
-					exHash.add(m.getInternalName());
-				}
-				datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
-			}else{
-				datasets = DAOs.dataSetDAO.getAllWithResults();
-			}
-		} else {
-			if (gm.getExceptions() != null) {
-				
-				java.util.List<String> excludedHashes = new java.util.ArrayList<String>();
-				
-				Iterator itr = gm.getExceptions().iterator();
-				while (itr.hasNext()) {
-					Metadata m = (Metadata) itr.next();
-					excludedHashes.add(m.getInternalName());
-				}
-				
-				datasets = DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
-			}else{
-				datasets = DAOs.dataSetDAO.getAll();
-			}
-			
-		}
-
-		List allMetadata = new ArrayList();
-
-		for(JPADataSetLO dslo:datasets){
-			
-			//Getting the Global MetaData for the respond
-			JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
-			
-			java.util.List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
-			for(JPAAttributeMetaData amd:attrMDs){
-				Metadata aM=new Metadata();
-				
-				
-				aM.setInternalName(dslo.getHash());
-				aM.setExternalName(dslo.getDescription());
-				
-				aM.setDefaultTask(gmd.getDefaultTaskType().getName());
-				aM.setNumberOfInstances(gmd.getNumberofInstances());
-				
-				aM.setMissingValues(amd.getRatioOfMissingValues()>0);
-				aM.setNumberOfAttributes(attrMDs.size());
-				
-				if(amd instanceof JPAAttributeNumericalMetaData){
-					aM.setAttributeType("Numerical");
-				}else if(amd instanceof JPAAttributeCategoricalMetaData){
-					aM.setAttributeType("Categorical");
-				}else{
-					aM.setAttributeType("Mixed");
-				}
-				
-				allMetadata.add(aM);
-			}
-			
-		}
-		
-		
-		/**
-		while (rs.next()) {
-			Metadata m = new Metadata();
-			m.setAttribute_type(rs.getString("attributeType"));
-			m.setDefault_task(rs.getString("defaultTask"));
-			m.setExternal_name(rs.getString("externalFilename"));
-			m.setInternal_name(rs.getString("internalFilename"));
-			m.setMissing_values(rs.getBoolean("missingValues"));
-			m.setNumber_of_attributes(rs.getInt("numberOfAttributes"));
-			m.setNumber_of_instances(rs.getInt("numberOfInstances"));
-
-			allMetadata.add(m);
-		}
-		**/
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		Result _result = new Result(a.getAction(), allMetadata);
-		getContentManager().fillContent(reply, _result);
-
-		return reply;
-	}
-
-	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		GetTheBestAgent g = (GetTheBestAgent) a.getAction();
-		String name = g.getNearest_file_name();
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "SELECT * FROM results " + "WHERE dataFile =\'" + name + "\'" + " AND errorRate = (SELECT MIN(errorRate) FROM results " + "WHERE dataFile =\'" + name + "\')";
-		log("Executing query: " + query);
-
-		ResultSet rs = stmt.executeQuery(query);
-		if (!rs.isBeforeFirst()) {
-			ACLMessage reply = request.createReply();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent("There are no results for this file in the database.");
-
-			db.close();
-			return reply;
-		}
-		rs.next();
-
-		NewOptions options = NewOptions.importXML(rs.getString("options"));
-		
-		Agent agent = new Agent();
-		agent.setName(rs.getString("agentName"));
-		agent.setType(rs.getString("agentType"));
-		agent.setOptions(options.getOptions());
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		Result _result = new Result(a.getAction(), agent);
-		getContentManager().fillContent(reply, _result);
-
-		db.close();
-		return reply;
-	}
-
-	private ACLMessage respondToGetFileInfo(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		GetFileInfo gfi = (GetFileInfo) a.getAction();
-
-		String query = "SELECT * FROM filemetadata WHERE " + gfi.toSQLCondition();
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		log("Executing query: " + query);
-
-		ResultSet rs = stmt.executeQuery(query);
-
-		List fileInfos = new ArrayList();
-
-		while (rs.next()) {
-			Metadata m = new Metadata();
-			m.setAttributeType(rs.getString("attributeType"));
-			m.setDefaultTask(rs.getString("defaultTask"));
-			m.setExternalName(rs.getString("externalFilename"));
-			m.setInternalName(rs.getString("internalFilename"));
-			m.setMissingValues(rs.getBoolean("missingValues"));
-			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
-			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
-			fileInfos.add(m);
-		}
-
-		Result r = new Result(a.getAction(), fileInfos);
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		getContentManager().fillContent(reply, r);
-
-		db.close();
-		return reply;
-	}
-
 	private ACLMessage respondToGetFiles(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		
 		log("DataManager . GetFiles");
@@ -1353,47 +1453,6 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToLoadResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		LoadResults lr = (LoadResults) a.getAction();
-
-		String query = "SELECT * FROM resultsExternal " + lr.asSQLCondition();
-		log(query);
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
-
-		ArrayList results = new ArrayList();
-
-		while (rs.next()) {
-
-			SavedResult sr = new SavedResult();
-
-			sr.setAgentType(rs.getString("agentType"));
-			sr.setAgentOptions(rs.getString("options"));
-			sr.setTrainFile(rs.getString("trainFileExt"));
-			sr.setTestFile(rs.getString("testFileExt"));
-			sr.setErrorRate(rs.getDouble("errorRate"));
-			sr.setKappaStatistic(rs.getDouble("kappaStatistic"));
-			sr.setMeanAbsError(rs.getDouble("meanAbsoluteError"));
-			sr.setRMSE(rs.getDouble("rootMeanSquaredError"));
-			sr.setRootRelativeSquaredError(rs.getDouble("rootRelativeSquaredError"));
-			sr.setRelativeAbsoluteError(rs.getDouble("relativeAbsoluteError"));
-			sr.setDate("nodate");
-
-			results.add(sr);
-		}
-
-		Result r = new Result(a.getAction(), results);
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		getContentManager().fillContent(reply, r);
-
-		db.close();
-		return reply;
-	}
-
 	private void openDBConnection() throws SQLException, ClassNotFoundException {
 		db = connectionProvider.getConnection();
 	}
@@ -1424,67 +1483,6 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 		// stmt.close();
 		db.close();
-	}
-
-	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		GetMetadata gm = (GetMetadata) a.getAction();
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "SELECT * FROM metadata WHERE internalfilename = '" + gm.getInternal_filename() + "'";
-
-		Metadata m = new Metadata();
-
-		ResultSet rs = stmt.executeQuery(query);
-
-		while (rs.next()) {
-			m.setAttributeType(rs.getString("attributeType"));
-			m.setDefaultTask(rs.getString("defaultTask"));
-			m.setExternalName(rs.getString("externalFilename"));
-			m.setInternalName(rs.getString("internalFilename"));
-			m.setMissingValues(rs.getBoolean("missingValues"));
-			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
-			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
-		}
-
-		log("Executing query: " + query);
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		Result _result = new Result(a.getAction(), m);
-		getContentManager().fillContent(reply, _result);
-
-		db.close();
-		return reply;
-	}
-
-	@SuppressWarnings("serial")
-	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
-		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
-		log("respondToPrepareFileUpload");
-
-		final ServerSocket serverSocket = new ServerSocket();
-		serverSocket.setSoTimeout(15000);
-		serverSocket.bind(null);
-		log("Listening on port: " + serverSocket.getLocalPort());
-
-		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
-			@Override
-			public void action() {
-				try {
-					DataTransferService.handleUploadConnection(serverSocket, hash);
-				} catch (IOException e) {
-					logError("Data upload failed", e);
-				}
-			}
-		}));
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
-		return reply;
 	}
 	
 	// Move file (src) to File/directory dest.
