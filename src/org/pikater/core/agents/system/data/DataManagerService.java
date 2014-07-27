@@ -67,17 +67,14 @@ public class DataManagerService extends FIPAService {
 			agent.getContentManager().fillContent(request, a);
 		} catch (CodecException e1) {
 			agent.logError(e1.getMessage(), e1);
-			e1.printStackTrace();
 		} catch (OntologyException e1) {
 			agent.logError(e1.getMessage(), e1);
-			e1.printStackTrace();
 		}
 
 		try {
 			return FIPAService.doFipaRequestClient(agent, request).getContent();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return null;
@@ -121,13 +118,10 @@ public class DataManagerService extends FIPAService {
 			return (String) r.getValue();
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return null;
