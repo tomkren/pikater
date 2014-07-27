@@ -9,7 +9,7 @@
 	<inherits name="com.wcs.wcslib.vaadin.widget.multifileupload.MultiFileUploadWidgetSet" />
     <inherits name="org.vaadin.alump.fancylayouts.gwt.FancyLayoutsWidgetset" />
     <inherits name="de.steinwedel.messagebox.WidgetSet" />
-    <inherits name="org.vaadin.peter.imagescaler.ImageScalerWidgetset" />
+    
 	
 	<!-- include the Java code from this package that is going to be translated to Javascript -->
 	<source path="client" />

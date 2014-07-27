@@ -15,7 +15,7 @@ public class Recommend extends DataProcessing {
 
 	private String recommenderClass;
     private List<NewOption> options = new ArrayList<NewOption>();
-    private IErrorProvider seachError;
+    private ErrorDescription errorDescription;
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -83,12 +83,11 @@ public class Recommend extends DataProcessing {
 		}
 	}
 
-	public IErrorProvider getSeachError() {
-		return seachError;
-	}
+    public ErrorDescription getErrorDescription() {
+        return errorDescription;
+    }
 
-	public void setSeachError(IErrorProvider seachError) {
-		this.seachError = seachError;
-	}
-
+    public void setErrorDescription(ErrorDescription errorDescription) {
+        this.errorDescription = errorDescription;
+    }
 }
