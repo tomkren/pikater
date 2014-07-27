@@ -214,7 +214,7 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
-	public static List getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
+	public static java.util.List<Metadata> getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
@@ -232,7 +232,7 @@ public class DataManagerService extends FIPAService {
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
-			List allMetadata = (List) r.getValue();
+			java.util.List<Metadata> allMetadata = (java.util.List<Metadata>) r.getValue();
 			return allMetadata;
 
 		} catch (CodecException e) {

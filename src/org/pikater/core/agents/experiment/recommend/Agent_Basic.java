@@ -1,5 +1,7 @@
 package org.pikater.core.agents.experiment.recommend;
 
+import java.util.List;
+
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -9,8 +11,6 @@ import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.options.recommend.BasicRecommend_Box;
 
-import jade.util.leap.Iterator;
-import jade.util.leap.List;
 
 public class Agent_Basic extends Agent_Recommender {
 	/**
@@ -47,12 +47,10 @@ public class Agent_Basic extends Agent_Recommender {
 		gm.setResults_required(true);
 
 		// 1. choose the nearest training data
-		List allMetadata = DataManagerService.getAllMetadata(this, gm);
+		List<Metadata> allMetadata = DataManagerService.getAllMetadata(this, gm);
 
 		// set the min, max instances and attributes first
-		Iterator itr = allMetadata.iterator();
-		while (itr.hasNext()) {
-			Metadata next_md = (Metadata) itr.next();
+		for (Metadata next_md : allMetadata) {
 
 			int na = next_md.getNumberOfAttributes();
 			if (na < minAttributes) {
@@ -78,9 +76,9 @@ public class Agent_Basic extends Agent_Recommender {
 		Metadata m_best = null;
 
 		double d_new;
-		itr = allMetadata.iterator();
-		while (itr.hasNext()) {
-			Metadata next_md = (Metadata) itr.next();
+
+		for (Metadata next_md : allMetadata) {
+
 			d_new = distance(metadata, next_md);
 			if (!next_md.getInternalName().equals(metadata.getInternalName())) {
 				if (d_new < d_best) {
@@ -121,11 +119,9 @@ public class Agent_Basic extends Agent_Recommender {
 		GetAllMetadata gm = new GetAllMetadata();
 		gm.setResults_required(false);
 	
-		List allMetadata = DataManagerService.getAllMetadata(this, gm);
+		List<Metadata> allMetadata = DataManagerService.getAllMetadata(this, gm);
 	
-		Iterator itr_colls = allMetadata.iterator();
-		while (itr_colls.hasNext()) {
-			Metadata next_coll = (Metadata) itr_colls.next();			
+		for (Metadata next_coll : allMetadata) {
 	
 			int na = next_coll.getNumberOfAttributes();
 			if (na < minAttributes) {
@@ -143,17 +139,13 @@ public class Agent_Basic extends Agent_Recommender {
 				maxInstances = ni;
 			}
 		}
-		
-		itr_colls = allMetadata.iterator();
 	
 		double d;
-		while (itr_colls.hasNext()) {
-			Metadata next_coll = (Metadata) itr_colls.next();			
+		for (Metadata next_coll : allMetadata) {
+
 			matrix +=next_coll.getExternalName() + ";";
-			Iterator itr_rows = allMetadata.iterator();
-			
-			while (itr_rows.hasNext()) {
-				Metadata next_row = (Metadata) itr_rows.next();
+
+			for (Metadata next_row : allMetadata) {
 				d = distance(next_coll, next_row);
 				matrix += String.format("%.10f", d);
 				matrix += ";";				
