@@ -13,7 +13,7 @@ public class Evaluation implements Concept {
 
 	private static final long serialVersionUID = 1319671908304254420L;
 
-	private java.util.List<Eval> evaluations;
+	private List<Eval> evaluations;
 	private Date start;
 	private String status;
 
@@ -60,13 +60,24 @@ public class Evaluation implements Concept {
 		this.object = object;
 	}
 
-	public java.util.List<Eval> getEvaluations() {
+	public List<Eval> getEvaluations() {
 		return evaluations;
 	}
 	public void setEvaluations(java.util.List<Eval> evaluations) {
 		this.evaluations = evaluations;
 	}
 
+	public Eval exportEvalByName(String evalName) {
+		
+		for (Eval evalI : getEvaluations()) {
+			if (evalI.getName().equals(evalName)) {
+				return evalI;
+			}
+		}
+		
+		return null;
+	}
+	
     public Date getStart() {
         return start;
     }

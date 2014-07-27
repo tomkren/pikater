@@ -115,6 +115,7 @@ import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.result.SavedResult;
 import org.pikater.core.ontology.subtrees.task.Eval;
+import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
@@ -246,7 +247,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToSaveExperiment(request, a);
 					}
 					if (a.getAction() instanceof UpdateExperimentStatus) {
-						return respondToUpdateBatchStatus(request, a);
+						return respondToUpdateExperimentStatus(request, a);
 					}
 					
 					/**
@@ -755,32 +756,126 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 	
-	@SuppressWarnings("serial")
-	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
-		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
-		log("respondToPrepareFileUpload");
+	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
+		
+		SaveResults saveResult = (SaveResults) a.getAction();
+		Task task = saveResult.getTask();
+		NewOptions options = new NewOptions(task.getAgent().getOptions());
+		int experimentID = task.getComputationId();
 
-		final ServerSocket serverSocket = new ServerSocket();
-		serverSocket.setSoTimeout(15000);
-		serverSocket.bind(null);
-		log("Listening on port: " + serverSocket.getLocalPort());
+		JPAResult jparesult = new JPAResult();
 
-		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
-			@Override
-			public void action() {
-				try {
-					DataTransferService.handleUploadConnection(serverSocket, hash);
-				} catch (IOException e) {
-					logError("Data upload failed", e);
-				}
-			}
-		}));
+		jparesult.setAgentName(task.getAgent().getName());
+		jparesult.setOptions(options.exportXML());
+
+		float errorRate = Float.MAX_VALUE;
+		float kappa_statistic = Float.MAX_VALUE;
+		float mean_absolute_error = Float.MAX_VALUE;
+		float root_mean_squared_error = Float.MAX_VALUE;
+		float relative_absolute_error = Float.MAX_VALUE; // percent
+		float root_relative_squared_error = Float.MAX_VALUE; // percent
+		
+		@SuppressWarnings("unused")
+		int duration = Integer.MAX_VALUE; // miliseconds
+		@SuppressWarnings("unused")
+		float durationLR = Float.MAX_VALUE;
+
+		
+		Evaluation evaluation = task.getResult();
+		
+		Eval errorRateEval =
+				evaluation.exportEvalByName("error_rate");
+		if (errorRateEval != null) {
+			errorRate = errorRateEval.getValue();
+		}
+
+		Eval kappaStatisticEval =
+				evaluation.exportEvalByName("kappa_statistic");
+		if (kappaStatisticEval != null) {
+			kappa_statistic = kappaStatisticEval.getValue();
+		}
+		
+		Eval meanAbsoluteEval =
+				evaluation.exportEvalByName("mean_absolute_error");
+		if (meanAbsoluteEval != null) {
+			mean_absolute_error = meanAbsoluteEval.getValue();
+		}
+		
+		Eval rootMeanSquaredEval =
+				evaluation.exportEvalByName("root_mean_squared_error");
+		if (rootMeanSquaredEval != null) {
+			root_mean_squared_error = rootMeanSquaredEval.getValue();
+		}
+
+		Eval relativeAbsoluteEval =
+				evaluation.exportEvalByName("relative_absolute_error");
+		if (relativeAbsoluteEval != null) {
+			relative_absolute_error = relativeAbsoluteEval.getValue();
+		}
+		
+		Eval rootRelativeSquaredEval =
+				evaluation.exportEvalByName("root_relative_squared_error");
+		if (rootRelativeSquaredEval != null) {
+			root_relative_squared_error = rootRelativeSquaredEval.getValue();
+		}
+		
+		Eval durationEval = evaluation.exportEvalByName("duration");
+		if (durationEval != null) {
+			duration = (int) durationEval.getValue();
+		}
+		
+		Eval durationLREval = evaluation.exportEvalByName("durationLR");
+		if (durationLREval != null) {
+			durationLR = (float) durationLREval.getValue();
+		}
+
+
+		String start = getDateTime();
+		String finish = getDateTime();
+		
+		if (task.getStart() != null) { start = task.getStart(); }
+		if (task.getFinish() != null){ finish = task.getFinish(); }
+		
+		jparesult.setErrorRate(errorRate);
+		jparesult.setKappaStatistic(kappa_statistic);
+		jparesult.setMeanAbsoluteError(mean_absolute_error);
+		jparesult.setRootMeanSquaredError(root_mean_squared_error);
+		jparesult.setRelativeAbsoluteError(relative_absolute_error);
+		jparesult.setRootRelativeSquaredError(root_relative_squared_error);
+		jparesult.setStart(new Date(Timestamp.valueOf(start).getTime()));
+		jparesult.setFinish(new Date(Timestamp.valueOf(finish).getTime()));
+
+		// v novem modelu tohle neni
+		// query += "\'" + duration + "\',";
+		// query += "\'" + durationLR + "\',";
+
+		// je to ono?
+		jparesult.setSerializedFileName(task.getResult().getObjectFilename());
+		// query += "\'" + res.getResult().getObject_filename() + "\', ";
+		// query += "\'" + res.getId().getIdentificator() + "\',"; // TODO -
+		// pozor - neni jednoznacne, pouze pro jednoho managera
+		// query += "\'" + res.getProblem_name() + "\',";
+		jparesult.setNote(task.getNote());
+		log("JPA Result    "+jparesult.getErrorRate());
+		int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
+		if(resultID!=-1){
+			log("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
+		} else {
+			logError(request.toString()+ "Couldn't persist JPAResult for experiment ID \n"+experimentID);
+		}
+
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
 		return reply;
 	}
+	
+	private String getDateTime() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+		Date date = new Date();
+
+		return dateFormat.format(date);
+    }
 
 	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException, FailureException {
 		String type = ((GetExternalAgentJar)a.getAction()).getType();
@@ -962,113 +1057,7 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	
-	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
-		
-		SaveResults saveResult = (SaveResults) a.getAction();
-		Task task = saveResult.getTask();
-		NewOptions options = new NewOptions(task.getAgent().getOptions());
-		int experimentID=task.getComputationId();
-		try {
-			JPAResult jparesult = new JPAResult();
 
-			jparesult.setAgentName(task.getAgent().getName());
-			jparesult.setOptions(options.exportXML());
-
-			float Error_rate = Float.MAX_VALUE;
-			float Kappa_statistic = Float.MAX_VALUE;
-			float Mean_absolute_error = Float.MAX_VALUE;
-			float Root_mean_squared_error = Float.MAX_VALUE;
-			float Relative_absolute_error = Float.MAX_VALUE; // percent
-			float Root_relative_squared_error = Float.MAX_VALUE; // percent
-			
-			@SuppressWarnings("unused")
-			int duration = Integer.MAX_VALUE; // miliseconds
-			@SuppressWarnings("unused")
-			float durationLR = Float.MAX_VALUE;
-
-			for ( Eval next_eval: task.getResult().getEvaluations() ) {
-
-				if (next_eval.getName().equals("error_rate")) {
-					Error_rate = next_eval.getValue();
-				}
-
-				if (next_eval.getName().equals("kappa_statistic")) {
-					Kappa_statistic = next_eval.getValue();
-				}
-
-				if (next_eval.getName().equals("mean_absolute_error")) {
-					Mean_absolute_error = next_eval.getValue();
-				}
-
-				if (next_eval.getName().equals("root_mean_squared_error")) {
-					Root_mean_squared_error = next_eval.getValue();
-				}
-
-				if (next_eval.getName().equals("relative_absolute_error")) {
-					Relative_absolute_error = next_eval.getValue();
-				}
-
-				if (next_eval.getName().equals("root_relative_squared_error")) {
-					Root_relative_squared_error = next_eval.getValue();
-				}
-
-				if (next_eval.getName().equals("duration")) {
-					duration = (int) next_eval.getValue();
-				}
-				if (next_eval.getName().equals("durationLR")) {
-					durationLR = (float) next_eval.getValue();
-				}
-			}
-
-			String start = getDateTime();
-			String finish = getDateTime();
-			
-			if (task.getStart() != null) { start = task.getStart(); }
-			if (task.getFinish() != null){ finish = task.getFinish(); }
-			
-			jparesult.setErrorRate(Error_rate);
-			jparesult.setKappaStatistic(Kappa_statistic);
-			jparesult.setMeanAbsoluteError(Mean_absolute_error);
-			jparesult.setRootMeanSquaredError(Root_mean_squared_error);
-			jparesult.setRelativeAbsoluteError(Relative_absolute_error);
-			jparesult.setRootRelativeSquaredError(Root_relative_squared_error);
-			jparesult.setStart(new Date(Timestamp.valueOf(start).getTime()));
-			jparesult.setFinish(new Date(Timestamp.valueOf(finish).getTime()));
-
-			// v novem modelu tohle neni
-			// query += "\'" + duration + "\',";
-			// query += "\'" + durationLR + "\',";
-
-			// je to ono?
-			jparesult.setSerializedFileName(task.getResult().getObjectFilename());
-			// query += "\'" + res.getResult().getObject_filename() + "\', ";
-			// query += "\'" + res.getId().getIdentificator() + "\',"; // TODO -
-			// pozor - neni jednoznacne, pouze pro jednoho managera
-			// query += "\'" + res.getProblem_name() + "\',";
-			jparesult.setNote(task.getNote());
-			log("JPA Result    "+jparesult.getErrorRate());
-			int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
-			if(resultID!=-1){
-				log("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
-			}else{
-				logError(request.toString()+ "Couldn't persist JPAResult for experiment ID \n"+experimentID);
-			}
-		} catch(Exception e) {
-			logError("Error in SaveResults", e);;
-		}
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		return reply;
-	}
-	
-	
-	private String getDateTime() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-		Date date = new Date();
-
-		return dateFormat.format(date);
-    }
 	
 
 	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
@@ -1471,6 +1460,33 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	@SuppressWarnings("serial")
+	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
+		final String hash = ((PrepareFileUpload)a.getAction()).getHash();
+		log("respondToPrepareFileUpload");
+
+		final ServerSocket serverSocket = new ServerSocket();
+		serverSocket.setSoTimeout(15000);
+		serverSocket.bind(null);
+		log("Listening on port: " + serverSocket.getLocalPort());
+
+		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
+			@Override
+			public void action() {
+				try {
+					DataTransferService.handleUploadConnection(serverSocket, hash);
+				} catch (IOException e) {
+					logError("Data upload failed", e);
+				}
+			}
+		}));
+
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
+		return reply;
+	}
+	
 	// Move file (src) to File/directory dest.
 	public static synchronized void move(File src, File dest) throws FileNotFoundException, IOException {
 		copy(src, dest);
