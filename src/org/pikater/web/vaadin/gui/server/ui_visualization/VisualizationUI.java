@@ -18,6 +18,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.shared.communication.PushMode;
+import com.vaadin.ui.Panel;
 
 @Title("Visualization")
 @Theme("pikater")
@@ -83,11 +84,15 @@ public class VisualizationUI extends CustomConfiguredUI
 		*/
 		
 		ImageDownloadResource resource = (ImageDownloadResource) DownloadRegistrar.getResource(matrixImageResourceID);
-		setContent(new ImageViewer(
+		ImageViewer viewer = new ImageViewer(
 				DownloadRegistrar.getDownloadURL(matrixImageResourceID),
 				resource.getImageWidth(),
 				resource.getImageHeight()
-		));
+		);
+		viewer.setWidth("800px");
+		viewer.setHeight("800px");
+		
+		setContent(new Panel(viewer));
 	}
 	
 	public static String getRedirectURLForResourceID(UUID resourceID)
