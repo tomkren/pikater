@@ -15,6 +15,16 @@ public class Recommend extends DataProcessing {
 
 	private String recommenderClass;
     private ErrorDescription errorDescription;
+
+    public List<NewOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<NewOption> options) {
+        this.options = options;
+    }
+
+    private List<NewOption> options;
     public void addOption(NewOption option) {
 		
     	if (option == null) {

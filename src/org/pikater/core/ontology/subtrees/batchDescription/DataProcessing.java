@@ -20,13 +20,13 @@ public class DataProcessing implements IDataProvider {
 	private static final long serialVersionUID = -2418323249803736416L;
 
 	private int id = -1;
-	protected List<NewOption> options =
-			new ArrayList<NewOption>();
+	private List<NewOption> options =
+			new ArrayList<>();
     
 	private List<ErrorDescription> errors =
-			new ArrayList<ErrorDescription>();
+			new ArrayList<>();
 	private List<DataSourceDescription> dataSources =
-			new ArrayList<DataSourceDescription>();
+			new ArrayList<>();
 
 	public int getId() {
 		return id;
