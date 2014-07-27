@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin;
+package org.pikater.web.sharedresources;
 
 import java.io.File;
 
@@ -7,7 +7,7 @@ import org.pikater.shared.util.IOUtils;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.ThemeResource;
 
-public class MyResources
+public class ThemeResources
 {
 	/*
 	 * GENERAL NOTES:

@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.tabsheet;
 
-import org.pikater.web.vaadin.MyResources;
+import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;
 
 import com.vaadin.event.MouseEvents.ClickListener;
@@ -23,7 +23,7 @@ public class TabSheetTabComponent extends Panel // something clickable
 		
 		this.label = new Label(caption);
 		this.label.setStyleName("custom-tabsheet-tabs-tab-label");
-		this.closeTabButton = new IconButton(MyResources.img_closeIcon16);
+		this.closeTabButton = new IconButton(ThemeResources.img_closeIcon16);
 		
 		HorizontalLayout innerLayout = new HorizontalLayout();
 		innerLayout.addComponent(label);

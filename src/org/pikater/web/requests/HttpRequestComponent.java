@@ -1,4 +1,4 @@
-package org.pikater.web.request;
+package org.pikater.web.requests;
 
 public enum HttpRequestComponent
 {

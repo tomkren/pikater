@@ -11,7 +11,7 @@ import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
-import org.pikater.web.vaadin.MyResources;
+import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.config.JadeTopologies;
 import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -81,7 +81,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		// *****************************************************************************************************
 		PikaterLogger.log(Level.INFO, "***** Reading basic application configuration files. *****");
 		
-		ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(MyResources.prop_appConf.getSourceFile()));
+		ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(ThemeResources.prop_appConf.getSourceFile()));
 		if(!ServerConfigurationInterface.getConfig().isValid())
 		{
 			PikaterLogger.log(Level.SEVERE, "Erros were encountered while parsing the application configuratio. All client "

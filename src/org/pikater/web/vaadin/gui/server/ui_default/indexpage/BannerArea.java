@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.MyResources;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
@@ -25,7 +25,7 @@ public class BannerArea extends HorizontalLayout
 		setSizeFull();
 		setStyleName("bannerArea");
 		
-		Image checkIcon = new Image(null, MyResources.img_checkIcon16);
+		Image checkIcon = new Image(null, ThemeResources.img_checkIcon16);
 		this.lbl_loggedInAs = new Label("Logged in as:");
 		this.lbl_accountName = new Label();
 		this.lbl_accountName.setStyleName("label-accountName");
@@ -60,7 +60,7 @@ public class BannerArea extends HorizontalLayout
 		loginStatusComponent.setComponentAlignment(loggedInAs, Alignment.MIDDLE_LEFT);
 		loginStatusComponent.setComponentAlignment(btn_logout, Alignment.MIDDLE_RIGHT);
 		
-		Image banner = new Image(null, MyResources.img_banner);
+		Image banner = new Image(null, ThemeResources.img_banner);
 		banner.setStyleName("bannerArea-image");
 		
 		addComponent(banner);

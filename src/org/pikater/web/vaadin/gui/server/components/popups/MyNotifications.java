@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.popups;
 
+import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.MyResources;
 import org.vaadin.alump.fancylayouts.FancyNotification;
 
 import com.vaadin.shared.ui.label.ContentMode;
@@ -24,22 +24,22 @@ public class MyNotifications
 	
 	public static void showSuccess(String title, String description)
 	{
-		getCurrentNotificationsManager().showNotification(null, title, description, MyResources.img_notificationSuccessIcon);
+		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationSuccessIcon);
 	}
 	
 	public static void showInfo(String title, String description)
 	{
-		getCurrentNotificationsManager().showNotification(null, title, description, MyResources.img_notificationInfoIcon);
+		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationInfoIcon);
 	}
 	
 	public static void showWarning(String title, String description)
 	{
-		getCurrentNotificationsManager().showNotification(null, title, description, MyResources.img_notificationWarnIcon);
+		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationWarnIcon);
 	}
 	
 	public static void showError(String title, String description)
 	{
-		getCurrentNotificationsManager().showNotification(null, title, description, MyResources.img_notificationErrorIcon);
+		getCurrentNotificationsManager().showNotification(null, title, description, ThemeResources.img_notificationErrorIcon);
 	}
 	
 	//----------------------------------------------------------------
@@ -47,7 +47,7 @@ public class MyNotifications
 	
 	public static void showApplicationError()
 	{
-		getCurrentNotificationsManager().showNotification(null, "Application error", "Please contact the administrators.", MyResources.img_notificationErrorIcon);
+		getCurrentNotificationsManager().showNotification(null, "Application error", "Please contact the administrators.", ThemeResources.img_notificationErrorIcon);
 	}
 	
 	//----------------------------------------------------------------

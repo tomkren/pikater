@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.toolbox;
 
-import org.pikater.web.vaadin.MyResources;
+import org.pikater.web.sharedresources.ThemeResources;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents;
@@ -28,7 +28,7 @@ public class Toolbox extends VerticalLayout
 		setSizeUndefined();
 		setSpacing(false);
 		
-		Image bar_minimizeIcon = new Image(null, MyResources.img_minimizeIcon16);
+		Image bar_minimizeIcon = new Image(null, ThemeResources.img_minimizeIcon16);
 		bar_minimizeIcon.setStyleName("toolbox-bar-buttons-min");
 		bar_minimizeIcon.addClickListener(minimizeAction);
 		

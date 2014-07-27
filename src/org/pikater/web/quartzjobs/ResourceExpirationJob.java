@@ -6,16 +6,16 @@ import static org.quartz.DateBuilder.*;
 import java.util.UUID;
 
 import org.pikater.shared.quartz.jobs.base.AbstractJobWithArgs;
-import org.pikater.web.servlets.download.DownloadRegistrar;
-import org.pikater.web.servlets.download.DynamicDownloadServlet;
-import org.pikater.web.servlets.download.resources.IDownloadResource;
+import org.pikater.web.servlets.DynamicDownloadServlet;
+import org.pikater.web.sharedresources.IRegistrarResource;
+import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 
-public class DownloadTokenExpirationJob extends AbstractJobWithArgs
+public class ResourceExpirationJob extends AbstractJobWithArgs
 {
-	public DownloadTokenExpirationJob()
+	public ResourceExpirationJob()
 	{
 		super(2);
 	}
@@ -28,7 +28,7 @@ public class DownloadTokenExpirationJob extends AbstractJobWithArgs
 			case 0:
 				return arg instanceof UUID;
 			case 1:
-				return arg instanceof IDownloadResource;
+				return arg instanceof IRegistrarResource;
 			default:
 				return false;
 		}
@@ -51,7 +51,7 @@ public class DownloadTokenExpirationJob extends AbstractJobWithArgs
 	protected void execute() throws JobExecutionException
 	{
 		UUID token = getArg(0);
-		IDownloadResource resource = getArg(1);
-		DownloadRegistrar.downloadExpired(token, resource);
+		IRegistrarResource resource = getArg(1);
+		ResourceRegistrar.expireOnFirstPickupResource(token, resource);
 	}
 }

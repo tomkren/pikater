@@ -1,10 +1,10 @@
-package org.pikater.web.servlets.download.resources;
+package org.pikater.web.sharedresources.download;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
+import org.pikater.web.sharedresources.ResourceExpiration;
 
 /**
  * A generic class wrapping files in downloadable resources.
@@ -12,20 +12,20 @@ import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
 public class FileDownloadResource implements IDownloadResource
 {
 	private final File file;
-	private final DownloadLifespan lifeSpan;
+	private final ResourceExpiration expiration;
 	private final String mimeType;
 	
-	public FileDownloadResource(File file, DownloadLifespan lifeSpan, String mimeType)
+	public FileDownloadResource(File file, ResourceExpiration expiration, String mimeType)
 	{
 		this.file = file;
-		this.lifeSpan = lifeSpan;
+		this.expiration = expiration;
 		this.mimeType = mimeType;
 	}
 	
 	@Override
-	public DownloadLifespan getLifeSpan()
+	public ResourceExpiration getLifeSpan()
 	{
-		return lifeSpan;
+		return expiration;
 	}
 
 	@Override
