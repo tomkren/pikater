@@ -1,5 +1,7 @@
 package tests.pikater.core.ontology.subtrees.batchDescription;
 
+import java.io.FileNotFoundException;
+
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
@@ -65,7 +67,7 @@ public class TestBatchDescription {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-*/
+//*/
 		if (xml1.equals(xml2)) {
 			System.out.println("OK - " + note);
 		} else {
