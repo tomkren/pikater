@@ -1,17 +1,10 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies;
 
-import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
-import jade.core.AID;
-import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
-
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
@@ -23,11 +16,9 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSou
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
-import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
-import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
@@ -39,7 +30,6 @@ import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -139,6 +129,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
         {
         	AgentTypeEdge agentTypeEdge = (AgentTypeEdge)input.getNext();
             agent.setType(agentTypeEdge.getAgentType());
+            input.block();
         }        
         
         Task task = new Task();
@@ -196,13 +187,11 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 
 		try {
 			myAgent.getContentManager().fillContent(request, a);
-		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
-		} catch (OntologyException e) {
+		} catch (CodecException | OntologyException e) {
 			myAgent.logError(e.getMessage(), e);
 		}
-		
-		return request;
+
+        return request;
 	}
 
 

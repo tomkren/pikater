@@ -1,15 +1,16 @@
 package org.pikater.web.vaadin.gui.server.components.imageviewer;
 
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
-import org.vaadin.peter.imagescaler.ImageScaler;
+import org.pikater.web.vaadin.gui.server.components.scalableimage.ScalableImage;
 
 import com.vaadin.annotations.StyleSheet;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.ui.Button;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
 /**
  * A image viewer for large images capable of zooming in and out.</br>
@@ -22,68 +23,47 @@ public class ImageViewer extends VerticalLayout
 {
 	private static final long serialVersionUID = 1080049714636026620L;
 	
-	private final ImageScaler scaler;
-	private int currentZoomLevel;
+	private final ScalableImage scaler;
 	
-	public ImageViewer(String imageURL, final int imageWidth, final int imageHeight)
+	public ImageViewer(String imageURL, int imageWidth, int imageHeight)
 	{
 		super();
 		setPrimaryStyleName("imageViewer");
 		
+		Label lbl_zoom = new Label("Zoom level (PCT):");
+		
+		Slider slider = new Slider(0, 2, 2);
+		slider.setWidth("200px");
+		slider.setImmediate(true);
+		slider.addValueChangeListener(new Property.ValueChangeListener()
+		{
+			private static final long serialVersionUID = 6756349322188831368L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event)
+			{
+				scaler.setScaleRatio((Double) event.getProperty().getValue());
+			}
+		});
+		
 		HorizontalLayout toolbar = new HorizontalLayout();
 		toolbar.setSizeUndefined();
 		toolbar.setSpacing(true);
-		toolbar.addComponent(new Button("Zoom in", new Button.ClickListener()
-		{
-			private static final long serialVersionUID = 821012519249414375L;
-
-			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				scaler.setWidth(String.valueOf(imageWidth + 500) + "px");
-			}
-		}));
-		toolbar.addComponent(new Button("Zoom out", new Button.ClickListener()
-		{
-			private static final long serialVersionUID = 821012519249414375L;
-
-			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				// TODO Auto-generated method stub
-			}
-		}));
-		toolbar.addComponent(new Button("Display original image size", new Button.ClickListener()
-		{
-			private static final long serialVersionUID = 821012519249414375L;
-
-			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				GeneralDialogs.info("Original size", "Width: " + scaler.getImageWidth() + "</br> Height: " + scaler.getImageHeight());
-			}
-		}));
+		toolbar.addComponent(lbl_zoom);
+		toolbar.addComponent(slider);
+		toolbar.setComponentAlignment(slider, Alignment.MIDDLE_LEFT);
 		
 		Panel toolbarContainer = new Panel();
 		toolbarContainer.setWidth("100%");
 		toolbarContainer.setStyleName("imageViewer-toolbar");
 		toolbarContainer.setContent(toolbar);
 		
-		this.scaler = new ImageScaler();
-		this.scaler.setImage(new ExternalResource(imageURL), imageWidth, imageHeight);
-		this.scaler.setWidth(String.valueOf(imageWidth) + "px");
-		this.scaler.setHeight(String.valueOf(imageHeight) + "px");
-		this.scaler.setRecalculateOnSizeChangeEnabled(true);
+		this.scaler = new ScalableImage(imageURL, imageWidth, imageHeight);
+		this.scaler.setSizeFull();
+		slider.setValue(new Double(0.5)); // zoom out to half of the image's size
 		
 		addComponent(toolbarContainer);
 		addComponent(this.scaler);
 		setExpandRatio(this.scaler, 1);
-		
-		this.currentZoomLevel = 1;
-	}
-	
-	public void setImageZoom(int positiveOrNegativePercentageOfOriginalSize)
-	{
-		// this.scaler.getImageHeight()
 	}
 }
