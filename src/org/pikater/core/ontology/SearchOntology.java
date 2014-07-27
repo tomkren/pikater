@@ -29,8 +29,7 @@ public class SearchOntology extends BeanOntology {
 
             String searchItemPackage = SearchItem.class.getPackage().getName();
             String boolPackage = BooleanValue.class.getPackage().getName();
-            String recOntology= Recommend.class.getPackage().getName();
-            
+
             add(SearchSolution.class);
             add(ExecuteParameters.class);
             add(GetParameters.class);
@@ -39,7 +38,6 @@ public class SearchOntology extends BeanOntology {
             add(boolPackage);
             add(SearchItem.class);
             add(Evaluation.class);
-            add(recOntology);
 
         } catch (Exception e) {
             e.printStackTrace();

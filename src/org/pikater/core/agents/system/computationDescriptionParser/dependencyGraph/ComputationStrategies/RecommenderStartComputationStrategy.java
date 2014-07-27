@@ -23,6 +23,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEd
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
+import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.SearchOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -117,7 +118,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		req.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
 		req.setLanguage(myAgent.getCodec().getName());
-		req.setOntology(SearchOntology.getInstance().getName());
+		req.setOntology(RecommendOntology.getInstance().getName());
 		// request.setReplyByDate(new Date(System.currentTimeMillis() + 200));
 		
 		Data data = new Data();
