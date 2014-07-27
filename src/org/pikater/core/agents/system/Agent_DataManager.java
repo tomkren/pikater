@@ -698,10 +698,7 @@ public class Agent_DataManager extends PikaterAgent {
 		float root_mean_squared_error = Float.MAX_VALUE;
 		float relative_absolute_error = Float.MAX_VALUE; // percent
 		float root_relative_squared_error = Float.MAX_VALUE; // percent
-		
-		@SuppressWarnings("unused")
 		int duration = Integer.MAX_VALUE; // miliseconds
-		@SuppressWarnings("unused")
 		float durationLR = Float.MAX_VALUE;
 
 		
@@ -766,12 +763,10 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setRootMeanSquaredError(root_mean_squared_error);
 		jparesult.setRelativeAbsoluteError(relative_absolute_error);
 		jparesult.setRootRelativeSquaredError(root_relative_squared_error);
+		jparesult.setDuration(duration);
+		jparesult.setDurationLR(durationLR);
 		jparesult.setStart(new Date(Timestamp.valueOf(start).getTime()));
 		jparesult.setFinish(new Date(Timestamp.valueOf(finish).getTime()));
-
-		// v novem modelu tohle neni
-		// query += "\'" + duration + "\',";
-		// query += "\'" + durationLR + "\',";
 
 		// je to ono?
 		jparesult.setSerializedFileName(task.getResult().getObjectFilename());

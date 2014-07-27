@@ -54,6 +54,8 @@ public class JPABatch extends JPAAbstractEntity{
 	private JPAUser owner;
 	private int priority;
 	private int totalPriority;
+	private int computationEstimateInHours;
+	private boolean sendEmailAfterFinish;
 	@Enumerated(EnumType.STRING)
 	private JPABatchStatus status;
 	
@@ -109,11 +111,8 @@ public class JPABatch extends JPAAbstractEntity{
 		this.XML = xml;
 		this.owner=owner;
 		this.priority = userAssignedPriority;
-
-
-		// TODO: include computation estimate and the boolean flag in the entity
-
-
+		this.computationEstimateInHours=computationEstimateInHours;
+		this.sendEmailAfterFinish=sendEmailAfterFinish;
 		this.totalPriority=99; // TODO: this is probably just for tests
 		this.created=new Date();
 		this.status=JPABatchStatus.WAITING;
@@ -161,6 +160,22 @@ public class JPABatch extends JPAAbstractEntity{
 		return this.totalPriority;
 	}
 	
+	public int getComputationEstimateInHours() {
+		return computationEstimateInHours;
+	}
+
+	public void setComputationEstimateInHours(int computationEstimateInHours) {
+		this.computationEstimateInHours = computationEstimateInHours;
+	}
+
+	public boolean isSendEmailAfterFinish() {
+		return sendEmailAfterFinish;
+	}
+
+	public void setSendEmailAfterFinish(boolean sendEmailAfterFinish) {
+		this.sendEmailAfterFinish = sendEmailAfterFinish;
+	}
+
 	public List<JPAExperiment> getExperiments() {
 		return experiments;
 	}
