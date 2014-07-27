@@ -276,6 +276,14 @@ public class Parser {
         computationGraph.addNode(recNode);
         alreadyProcessed.put(recommender.getId(),recNode);
 
+        DataSourceEdge ds=(DataSourceEdge) child.getInputs().get("training").getNext();
+        DataSourceEdge copy=new DataSourceEdge();
+        copy.setDataSourceId(ds.getDataSourceId());
+        copy.setFile(ds.isFile());
+        NeverEndingBuffer<DataSourceEdge> training=new NeverEndingBuffer<>(copy);
+        training.setTarget(recNode);
+        recNode.addInput("training",training);
+
         for (ErrorDescription error:recommender.getErrors()) {
             parseErrors(error, recNode);
         }
