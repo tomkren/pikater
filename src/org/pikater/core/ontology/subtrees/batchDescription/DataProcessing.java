@@ -21,12 +21,12 @@ public class DataProcessing implements IDataProvider {
 
 	private int id = -1;
 	private List<NewOption> options =
-			new ArrayList<NewOption>();
+			new ArrayList<>();
     
 	private List<ErrorDescription> errors =
-			new ArrayList<ErrorDescription>();
+			new ArrayList<>();
 	private List<DataSourceDescription> dataSources =
-			new ArrayList<DataSourceDescription>();
+			new ArrayList<>();
 
 	public int getId() {
 		return id;

@@ -48,7 +48,7 @@ public final class Input05 {
         ErrorDescription errorDescription=new ErrorDescription();
         errorDescription.setType("error");
         errorDescription.setProvider(comAgent);
-        complex.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
+        recommender.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
         
         // set DataSource
         // Note that the data provider is complex.

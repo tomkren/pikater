@@ -8,6 +8,7 @@ import org.pikater.shared.experiment.universalformat.UniversalComputationDescrip
 import xmlGenerator.Input01;
 import xmlGenerator.Input04;
 import xmlGenerator.Input03;
+import xmlGenerator.Input05;
 
 public class TestBatchDescription {
 
@@ -33,6 +34,14 @@ public class TestBatchDescription {
 				Input03.createDescription(),
 				"Input03");
 
+		testComputatingDescription(
+				Input04.createDescription(),
+				"Input04");
+		
+		testComputatingDescription(
+				Input05.createDescription(),
+				"Input05");
+		
 	}
 
 	private static void testComputatingDescription(

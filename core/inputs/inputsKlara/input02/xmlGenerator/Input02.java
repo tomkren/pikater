@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
+import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
@@ -45,7 +46,7 @@ public final class Input02 {
 		comAgent.setModel(new NewModel());
 
 		Search search = new Search();
-        search.setSearchClass("Agent_RandomSearch");
+        search.setSearchClass(Agent_RandomSearch.class.getName());
 		
         
 		CARecSearchComplex complex = new CARecSearchComplex();

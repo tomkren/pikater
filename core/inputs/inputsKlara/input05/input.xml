@@ -14,89 +14,89 @@
           <errors defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
           <dataSources/>
           <options/>
-          <errors>
-            <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
-              <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
-                <id>3</id>
-                <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
-                <errors/>
-                <dataSources/>
-                <options/>
-                <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
-                <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
-                <evaluationMethod>
-                  <id>5</id>
-                  <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
-                  <errors/>
-                  <dataSources/>
-                  <type>Crossvalidation</type>
-                  <options>
-                    <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                      <name>F</name>
-                      <valuesWrapper>
-                        <values type="java.util.Arrays$ArrayList">
-                          <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
-                            <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                              <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                <value>10</value>
-                              </currentValue>
-                              <type>
-                                <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                  <value>10</value>
-                                </defaultValue>
-                              </type>
-                            </org.pikater.core.ontology.subtrees.newOption.base.Value>
-                          </a>
-                        </values>
-                      </valuesWrapper>
-                      <valueRestrictions>
-                        <restrictions type="java.util.Arrays$ArrayList">
-                          <a type="org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction-array">
-                            <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                              <types type="java.util.Arrays$ArrayList">
-                                <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
-                                  <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                    <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                                      <value>10</value>
-                                    </defaultValue>
-                                  </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                </a>
-                              </types>
-                            </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                          </a>
-                        </restrictions>
-                      </valueRestrictions>
-                    </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                  </options>
-                </evaluationMethod>
-                <trainingData>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                  <dataInputType>trainingData</dataInputType>
-                </trainingData>
-                <testingData>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                  <dataInputType>testingData</dataInputType>
-                </testingData>
-              </provider>
-              <type>error</type>
-            </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
-          </errors>
+          <errors/>
           <recommender>
             <id>2</id>
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
-            <errors/>
+            <errors>
+              <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
+                <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+                  <id>3</id>
+                  <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                  <errors/>
+                  <dataSources/>
+                  <options/>
+                  <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
+                  <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
+                  <evaluationMethod>
+                    <id>5</id>
+                    <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                    <errors/>
+                    <dataSources/>
+                    <type>Crossvalidation</type>
+                    <options>
+                      <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                        <name>F</name>
+                        <valuesWrapper>
+                          <values type="java.util.Arrays$ArrayList">
+                            <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
+                              <org.pikater.core.ontology.subtrees.newOption.base.Value>
+                                <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                  <value>10</value>
+                                </currentValue>
+                                <type>
+                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                    <value>10</value>
+                                  </defaultValue>
+                                </type>
+                              </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                            </a>
+                          </values>
+                        </valuesWrapper>
+                        <valueRestrictions>
+                          <restrictions type="java.util.Arrays$ArrayList">
+                            <a type="org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction-array">
+                              <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                                <types type="java.util.Arrays$ArrayList">
+                                  <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
+                                    <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                      <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                        <value>10</value>
+                                      </defaultValue>
+                                    </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                  </a>
+                                </types>
+                              </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                            </a>
+                          </restrictions>
+                        </valueRestrictions>
+                      </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                    </options>
+                  </evaluationMethod>
+                  <trainingData>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                      <id>4</id>
+                      <options/>
+                      <errors/>
+                      <dataSources/>
+                      <fileURI>weather.arff</fileURI>
+                    </dataProvider>
+                    <dataInputType>trainingData</dataInputType>
+                  </trainingData>
+                  <testingData>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                      <id>4</id>
+                      <options/>
+                      <errors/>
+                      <dataSources/>
+                      <fileURI>weather.arff</fileURI>
+                    </dataProvider>
+                    <dataInputType>testingData</dataInputType>
+                  </testingData>
+                </provider>
+                <type>error</type>
+              </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
+            </errors>
             <dataSources/>
             <recommenderClass>org.pikater.core.agents.experiment.recommend.Agent_Basic</recommenderClass>
             <options/>

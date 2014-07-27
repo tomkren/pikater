@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -64,6 +65,7 @@ public class Agent_Duration extends PikaterAgent {
 		
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AgentManagementOntology.getInstance());
+		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(DurationOntology.getInstance());
 		
 		return ontologies;
@@ -85,7 +87,11 @@ public class Agent_Duration extends PikaterAgent {
         // create linear regression agent
         // send message to AgentManager to create an agent
         ManagerAgentCommunicator communicator=new ManagerAgentCommunicator();
-        aid=communicator.createAgent(this,"LinearRegression","DurationServiceRegression",null);
+        aid = communicator.createAgent(
+        		this,
+        		Agent_WekaLinearRegression.class.getName(),
+        		"DurationServiceRegression",
+        		null);
         		
 		// compute one LR (as the first one is usually longer) 
 		addBehaviour(new ExecuteTaskInitiator(this, createCFPmessage(aid, this, "dc7ce6dea5a75110486760cfac1051a5")));
