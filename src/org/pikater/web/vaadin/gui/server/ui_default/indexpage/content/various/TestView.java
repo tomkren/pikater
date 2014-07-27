@@ -22,11 +22,11 @@ import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
 import org.pikater.web.servlets.download.resources.ImageDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.ProgressDialogVisualizationTaskResult;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI;
@@ -130,12 +130,13 @@ public class TestView extends VerticalLayout implements IContentComponent
 					@Override
 					public void onTaskFinish(IProgressDialogTaskResult result)
 					{
+						ProgressDialogVisualizationTaskResult visTaskResult = (ProgressDialogVisualizationTaskResult) result;
 						UUID generatedImageDownloadUUID = DownloadRegistrar.issueDownload(new ImageDownloadResource(
 								tmpFile,
 								DownloadLifespan.INDETERMINATE,
 								MediaType.PNG.toString(),
-								800,
-								800 // TODO:
+								visTaskResult.getImageWidth(),
+								visTaskResult.getImageHeight()
 						));
 						
 						// TODO: open in a new tab...
