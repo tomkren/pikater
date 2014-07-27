@@ -166,6 +166,8 @@ public class Parser {
         {
             OneShotBuffer typeBuffer=new OneShotBuffer(new AgentTypeEdge(agentType));
             typeBuffer.setTarget(computingNode);
+            computingNode.addInput("agenttype",typeBuffer);
+
         }
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         computingNode.setExpectedDuration(computingAgentO.getDuration());
