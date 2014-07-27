@@ -14,7 +14,6 @@ public class Recommend extends DataProcessing {
 	private static final long serialVersionUID = -1204258141585020540L;
 
 	private String recommenderClass;
-    private ErrorDescription errorDescription;
 
     public Recommend() {
     	this.options = new ArrayList<>();
@@ -80,14 +79,6 @@ public class Recommend extends DataProcessing {
 			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		}
 	}
-
-    public ErrorDescription getErrorDescription() {
-        return errorDescription;
-    }
-
-    public void setErrorDescription(ErrorDescription errorDescription) {
-        this.errorDescription = errorDescription;
-    }
 
     public String getRecommenderClass() {
         return recommenderClass;

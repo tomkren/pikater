@@ -276,7 +276,9 @@ public class Parser {
         computationGraph.addNode(recNode);
         alreadyProcessed.put(recommender.getId(),recNode);
 
-        parseErrors(recommender.getErrorDescription(),recNode);
+        for (ErrorDescription error:recommender.getErrors()) {
+            parseErrors(error, recNode);
+        }
 
         List<NewOption> options = recommender.getOptions();
         addOptionsToInputs(recNode, options);
