@@ -329,16 +329,13 @@ public class Agent_DataManager extends PikaterAgent {
 
 
 				} catch (OntologyException e) {
-					e.printStackTrace();
-					logError("Problem extracting content: " + e.getMessage());
+					logError("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					e.printStackTrace();
-					logError("Codec problem: " + e.getMessage());
+					logError("Codec problem: " + e.getMessage(), e);
 				} catch (SQLException e) {
-					e.printStackTrace();
-					logError("SQL error: " + e.getMessage());
+					logError("SQL error: " + e.getMessage(), e);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logError(e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
@@ -374,9 +371,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logError(e.getMessage(), e);
 		}
 
 		return reply;
@@ -657,9 +654,9 @@ public class Agent_DataManager extends PikaterAgent {
 			try {
 				getContentManager().fillContent(reply, result);
 			} catch (CodecException e) {
-				logError(e.getMessage());
+				logError(e.getMessage(), e);
 			} catch (OntologyException e) {
-				logError(e.getMessage());
+				logError(e.getMessage(), e);
 			}
 		}
 		
