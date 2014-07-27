@@ -11,7 +11,6 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
@@ -124,9 +123,9 @@ public class Agent_Duration extends PikaterAgent {
                         return reply;
                     }
                 } catch (OntologyException e) {
-                    e.printStackTrace();
+                	Agent_Duration.this.logError(e.getMessage(), e);
                 } catch (CodecException e) {
-                    e.printStackTrace();
+                	Agent_Duration.this.logError(e.getMessage(), e);
                 }
 
                 ACLMessage failure = request.createReply();
@@ -276,10 +275,8 @@ public class Agent_Duration extends PikaterAgent {
 
 				} catch (CodecException exception) {
 					agent.logError(exception.getMessage(), exception);
-					exception.printStackTrace();
 				} catch (OntologyException exception) {
 					agent.logError(exception.getMessage(), exception);
-					exception.printStackTrace();
 				}
 				
 				accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);				
@@ -323,13 +320,10 @@ public class Agent_Duration extends PikaterAgent {
 				}				
 			} catch (UngroundedException e) {
 				agent.logError(e.getMessage(), e);
-				e.printStackTrace();
 			} catch (CodecException e) {
 				agent.logError(e.getMessage(), e);
-				e.printStackTrace();
 			} catch (OntologyException e) {
 				agent.logError(e.getMessage(), e);
-				e.printStackTrace();
 			}			
 		}			
 	} // end of call for proposal bahavior
@@ -389,10 +383,8 @@ public class Agent_Duration extends PikaterAgent {
 
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 				
 		return cfp;
