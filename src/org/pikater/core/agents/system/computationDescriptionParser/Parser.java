@@ -71,7 +71,7 @@ public class Parser {
             agent.log("Ontology Matched - ComputingAgent");
 
             ComputingAgent computingAgent = (ComputingAgent) dataProvider;
-            parent=parseComputing(computingAgent, batchID);
+            parent=parseComputing(computingAgent, batchID,true);
         }
         else if (dataProvider instanceof CARecSearchComplex)
         {
@@ -143,7 +143,7 @@ public class Parser {
     }
 
     public ModelComputationNode parseComputing(IComputingAgent computingAgent,
-    		int batchID)
+    		int batchID, Boolean addOptions)
     {
         agent.log("Ontology Parser - Computing Agent Simple");
 
@@ -170,8 +170,10 @@ public class Parser {
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         computingNode.setExpectedDuration(computingAgentO.getDuration());
         computingNode.setPriority(priority);
-        
-        addOptionsToInputs(computingNode, computingAgentO.getOptions());
+
+        if (addOptions) {
+            addOptionsToInputs(computingNode, computingAgentO.getOptions());
+        }
         fillDataSources(computingAgentO, batchID, computingNode);
         
         // save Experiment
@@ -193,6 +195,7 @@ public class Parser {
         ComputationNode computingNode;
         List<NewOption> childOptions;
         IComputingAgent iComputingAgent = complex.getComputingAgent();
+        Recommend recommenderO = complex.getRecommender();
         if (iComputingAgent instanceof CARecSearchComplex)
         {
             CARecSearchComplex complexChild=(CARecSearchComplex)iComputingAgent;
@@ -203,10 +206,8 @@ public class Parser {
         {
             ComputingAgent ca=(ComputingAgent)iComputingAgent;
             childOptions=ca.getOptions();
-            computingNode=parseComputing(iComputingAgent, batchID);
+            computingNode=parseComputing(iComputingAgent, batchID,recommenderO==null);
         }
-
-        Recommend recommenderO = complex.getRecommender();
         if (recommenderO!=null)
         {
             parseRecommender(recommenderO, computingNode);
