@@ -33,6 +33,9 @@ public class TestBatchDescription {
 				Input03.createDescription(),
 				"Input03");
 
+		testComputatingDescription(
+				Input04.createDescription(),
+				"Input04");
 	}
 
 	private static void testComputatingDescription(
