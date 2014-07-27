@@ -22,6 +22,7 @@ import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
@@ -48,8 +49,13 @@ public class DatabaseTest {
 	}
 	
 	public void addExperiment(){
+		JPAUser user=DAOs.userDAO.getByID(5856, EmptyResultAction.NULL);
+		JPABatch jpaBatch=new JPABatch("test_batch_1","For test purposes","<?xml version=\"1.0\"?><batch><nope/></batch>",user);
+
+		DAOs.batchDAO.storeEntity(jpaBatch);
+		
 		Experiment exp=new Experiment();
-		exp.setBatchID(62901);
+		exp.setBatchID(jpaBatch.getId());//62901);
 		exp.setStatus(ExperimentStatuses.WAITING.toString());
 		exp.setModel(new NewModel());
 		
@@ -59,7 +65,7 @@ public class DatabaseTest {
 		
 		int modelID=12345678;
 		Experiment exp2=new Experiment();
-		exp2.setBatchID(62901);
+		exp2.setBatchID(jpaBatch.getId());//62901);
 		exp2.setStatus(ExperimentStatuses.COMPUTING.toString());
 		ModelDescription md=new ModelDescription();
 		md.setModelID(modelID);
@@ -68,7 +74,7 @@ public class DatabaseTest {
 		int id2=DAOs.batchDAO.addExperimentToBatch(exp2);
 		System.out.println("Saved experiment with ID: "+id2);
 		
-		int experimentID=63152;
+		int experimentID=id1;//63152;
 		JPAResult jparesult=new JPAResult();
 		jparesult.setAgentName("DBtest");
 		jparesult.setNote("Example result from DB test");
@@ -78,7 +84,7 @@ public class DatabaseTest {
 		int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
 		System.out.println("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
 		
-		Model model=new Model(63303, "java.lang.Object", "<?xml version=\"1.0\"?><nope/>");
+		Model model=new Model(resultID, "java.lang.Object", "<?xml version=\"1.0\"?><model><nope/></model>");
 		modelID=DAOs.resultDAO.setModelForResult(model);
 		System.out.println("Saved model with ID: "+modelID);
 	}
