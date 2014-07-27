@@ -55,10 +55,8 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 	RecommenderComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
     NewOptions options;
-    OptionEdge childOptions;
-    AID searchAID;    
 
-	public RecommenderStartComputationStrategy (Agent_Manager manager,
+    public RecommenderStartComputationStrategy (Agent_Manager manager,
 			int graphId, RecommenderComputationNode computationNode){
 		myAgent = manager;
         this.graphId = graphId;
@@ -66,7 +64,6 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 	}
 
 	public void execute(ComputationNode computation){
-		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
 		Agent recommendedAgent = null;
 		
 		inputs = computationNode.getInputs();
@@ -124,7 +121,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		
 		Data data = new Data();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
-		String testing = null;
+		String testing;
 		if( inputs.get("testing") == null){
 			testing = training;							
 		}
@@ -149,13 +146,11 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		try {
 			myAgent.getContentManager().fillContent(req, a);
 			
-		} catch (CodecException ce) {
+		} catch (CodecException | OntologyException ce) {
 			ce.printStackTrace();
-		} catch (OntologyException oe) {
-			oe.printStackTrace();
 		}
-		
-		return req;
+
+        return req;
 	}
 
 	private Agent getRecommenderFromNode(){
@@ -172,50 +167,6 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		agent.setOptions(options.getOptions());
 
 		return agent;
-	}
-
-
-	private void addOptionToSchema(NewOption opt, List schema){
-        ValuesForOption values = (opt.getValuesWrapper());
-		for (Value value:values.getValues()) {
-            IValueData typedValue = value.getCurrentValue();
-            if (typedValue instanceof QuestionMarkRange)
-            {
-                QuestionMarkRange questionMarkRange = (QuestionMarkRange) typedValue;
-                IntervalSearchItem itm = new IntervalSearchItem();
-                itm.setName(opt.getName());
-                itm.setNumber_of_values_to_try(questionMarkRange.getCountOfValuesToTry());
-                itm.setMin(questionMarkRange.getMin());
-                itm.setMax(questionMarkRange.getMax());
-                schema.add(itm);
-            }
-            else if (typedValue instanceof QuestionMarkSet)
-            {
-                QuestionMarkSet questionMarkSet = (QuestionMarkSet) typedValue;
-                SetSItem itm = new SetSItem();
-                itm.setName(opt.getName());
-                itm.setNumber_of_values_to_try(questionMarkSet.getCountOfValuesToTry());
-                itm.setSet(questionMarkSet.getValues());
-                schema.add(itm);
-            }
-        }
-	}
-
-
-	//Create schema of solutions from options (Convert options->schema)
-
-	private List convertOptionsToSchema(List<NewOption> options){
-		List<NewOption> new_schema = new ArrayList<>();
-
-		if(options==null)
-			return new_schema;
-		java.util.Iterator<NewOption> itr = options.iterator();
-		while (itr.hasNext()) {
-			NewOption opt = itr.next();
-			if(opt.isMutable())
-				addOptionToSchema(opt, new_schema);
-		}
-		return new_schema;
 	}
 
     public RecommenderComputationNode getComputationNode() {
