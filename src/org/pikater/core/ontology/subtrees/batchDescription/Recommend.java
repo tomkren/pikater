@@ -15,6 +15,7 @@ public class Recommend extends DataProcessing {
 
 	private String recommenderClass;
     private List<NewOption> options = new ArrayList<NewOption>();
+    private IErrorProvider seachError;
 
     public String getRecommenderClass() {
         return recommenderClass;
@@ -80,6 +81,14 @@ public class Recommend extends DataProcessing {
 		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
 			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		}
+	}
+
+	public IErrorProvider getSeachError() {
+		return seachError;
+	}
+
+	public void setSeachError(IErrorProvider seachError) {
+		this.seachError = seachError;
 	}
 
 }

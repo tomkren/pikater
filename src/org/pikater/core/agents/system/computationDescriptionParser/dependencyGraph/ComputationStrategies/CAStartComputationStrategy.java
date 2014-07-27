@@ -18,6 +18,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.ComputationOu
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.edges.AgentTypeEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
@@ -126,13 +127,20 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		Map<String, ComputationOutputBuffer> inputs = computationNode.getInputs();
 				
 		Agent agent = new Agent();
-        if (options==null) {
-            OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
+		ComputationOutputBuffer optionBuffer=inputs.get("options");
+        if (!optionBuffer.isBlocked()) {
+            OptionEdge optionEdge = (OptionEdge) optionBuffer.getNext();
             options = new NewOptions(optionEdge.getOptions());
         }
         NewOptions usedoptions=options;
-        // TODO zbavit se Options -> list instead
-        agent.setType(computationNode.getModelClass());
+        
+        ComputationOutputBuffer input=inputs.get("agenttype");
+        if (!input.isBlocked())
+        {
+        	AgentTypeEdge agentTypeEdge = (AgentTypeEdge)input.getNext();
+            agent.setType(agentTypeEdge.getAgentType());
+        }        
+        
         Task task = new Task();
 		if (inputs.get("searchedoptions") != null){
             inputs.get("options").block();
@@ -154,8 +162,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		
 		data.setExternal_train_file_name(training);
 		data.setExternal_test_file_name(testing);
-		data.setTestFileName(getHashOfFile(training, 1));
-		data.setTrainFileName(getHashOfFile(testing, 1));
+		data.setTestFileName(myAgent.getHashOfFile(training, 1));
+		data.setTrainFileName(myAgent.getHashOfFile(testing, 1));
 
 		IExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setSave_results(true);
@@ -171,67 +179,6 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		return task;
 	}
 	
-	public String getHashOfFile(String nameOfFile, int userID) {
-		
-		TranslateFilename translate = new TranslateFilename();
-		translate.setExternalFilename(nameOfFile);
-		translate.setUserID(userID);
-
-		// create a request message
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.setSender(myAgent.getAID());
-		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
-		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-		msg.setLanguage(myAgent.getCodec().getName());
-		msg.setOntology(FilenameTranslationOntology.getInstance().getName());
-		// We want to receive a reply in 30 secs
-		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
-		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
-
-		Action a = new Action();
-		a.setAction(translate);
-		a.setActor(myAgent.getAID());
-
-		try {
-			myAgent.getContentManager().fillContent(msg, a);
-
-		} catch (CodecException ce) {
-			ce.printStackTrace();
-		} catch (OntologyException oe) {
-			oe.printStackTrace();
-		}
-
-
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(myAgent, msg);
-		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		ContentElement content = null;
-		String fileHash = null;
-
-		try {
-			content = myAgent.getContentManager().extractContent(reply);
-		} catch (UngroundedException e1) {
-			myAgent.logError(e1.getMessage(), e1);
-		} catch (CodecException e1) {
-			myAgent.logError(e1.getMessage(), e1);
-		} catch (OntologyException e1) {
-			myAgent.logError(e1.getMessage(), e1);
-		}
-
-		if (content instanceof Result) {
-			Result result = (Result) content;
-			
-			fileHash = (String) result.getValue();
-		}
-		
-		return fileHash;
-	}
 	
 	public ACLMessage execute2Message(ExecuteTask ex) {
 		// create ACLMessage from Execute ontology action

@@ -24,6 +24,7 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.FIPANames;
@@ -45,11 +46,18 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	private List<NewOption> search_options = null;
 	private List<SearchItem> schema = null;
 	
+	private AID recommender;
+	
 	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
 	protected abstract boolean finished();
 	protected abstract void updateFinished(float[][] evaluations);
 	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
+	// TODO: protected abstract Evaluation getBestEvaluation();
 	
+	
+	private Evaluation getBestEvaluation(){
+		return new Evaluation();
+	}
 	
 	@Override
 	public java.util.List<Ontology> getOntologies() {
@@ -101,13 +109,13 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 			if(e.getName().equals("error_rate")) {
 				res[0]=e.getValue();
-                        }
-                        if(e.getName().equals("root_mean_squared_error")) {
-                            res[1] = e.getValue();
-                        }
-                        if(e.getName().equals("kappa_statistic")) {
-                            res[2] = -e.getValue();
-                        }
+            }
+            if(e.getName().equals("root_mean_squared_error")) {
+                res[1] = e.getValue();
+            }
+            if(e.getName().equals("kappa_statistic")) {
+                res[2] = -e.getValue();
+            }
 		}
 		return res;
 	}
@@ -166,11 +174,34 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 								solutions_new = null;
 								evaluations = null;
 								cont = false;
-								ACLMessage reply = ((ACLMessage)getDataStore().get(REQUEST_KEY)).createReply();
-								reply.setPerformative(ACLMessage.INFORM);
-								//TODO: co se posila zpet?
-								reply.setContent("finished");
 								
+								// send the best error back to manager and 
+								// to a recommender, if recommender's present
+
+								ACLMessage originalRequest =(ACLMessage)getDataStore().get(REQUEST_KEY); 
+								ACLMessage reply = originalRequest.createReply();
+								reply.setPerformative(ACLMessage.INFORM);
+								
+								if (recommender != null){
+									reply.addReceiver(recommender);
+								}
+								
+								try {			
+
+									Action a = (Action)myAgent.getContentManager().extractContent(originalRequest);								
+																	
+									Result result = new Result(a, getBestEvaluation());			
+
+									getContentManager().fillContent(reply, result);
+									
+								} catch (CodecException e) {
+									logError(e.getMessage(), e);
+									e.printStackTrace();
+								} catch (OntologyException e) {
+									logError(e.getMessage(), e);
+									e.printStackTrace();
+								}
+																								
 								getDataStore().put(RESULT_NOTIFICATION_KEY, reply);
 							}else{
 								//nova vlna evaluaci - generovani query

@@ -161,7 +161,7 @@ public class Parser {
         computationGraph.addNode(computingNode);
         		
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;          
-        computingNode.setModelClass(computingAgentO.getAgentType());       
+        // computingNode.setModelClass(computingAgentO.getAgentType());       
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         computingNode.setExpectedDuration(computingAgentO.getDuration());
         computingNode.setPriority(priority);
