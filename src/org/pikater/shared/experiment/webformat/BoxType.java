@@ -9,17 +9,23 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.vaadin.MyResources;
+import org.pikater.web.sharedresources.ThemeResources;
 
 public enum BoxType
 {
-	INPUT(FileDataProvider.class, MyResources.relPath_IMG_boxInputIcon), // TODO: simple file icon
-	CHOOSE(Recommend.class, MyResources.relPath_IMG_boxRecommenderIcon),
-	COMPUTE(ComputingAgent.class, MyResources.relPath_IMG_boxComputingIcon),
-	SEARCH(Search.class, MyResources.relPath_IMG_boxSearcherIcon),
+	INPUT(FileDataProvider.class, ThemeResources.relPath_IMG_boxInputIcon), // TODO: simple file icon
+	CHOOSE(Recommend.class, ThemeResources.relPath_IMG_boxRecommenderIcon),
+	COMPUTE(ComputingAgent.class, ThemeResources.relPath_IMG_boxComputingIcon),
+	SEARCH(Search.class, ThemeResources.relPath_IMG_boxSearcherIcon),
 	// SAVE(FileDataSaver.class, MyResources.), // TODO: simple file icon
 	
-	MULTIBOX(BoxType.class, MyResources.relPath_IMG_boxWrapperIcon); // wrappers are never going to have their own ontologies anyway
+	/*
+	TROJKRABICKA
+	EVALUATION
+	DATAPROCESSING
+	*/
+	
+	MULTIBOX(BoxType.class, ThemeResources.relPath_IMG_boxWrapperIcon); // wrappers are never going to have their own ontologies anyway
 	
 	private final Class<?> mappedOntologyClass;
 	private final String pictureURL;
@@ -27,7 +33,7 @@ public enum BoxType
 	private BoxType(Class<?> mappedOntologyClass, String relativePicturePath)
 	{
 		this.mappedOntologyClass = mappedOntologyClass;
-		this.pictureURL = MyResources.getVaadinRelativePathForResource(relativePicturePath);
+		this.pictureURL = ThemeResources.getVaadinRelativePathForResource(relativePicturePath);
 	}
 	
 	public String toOntology()
