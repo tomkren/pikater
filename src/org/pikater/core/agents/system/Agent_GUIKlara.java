@@ -247,7 +247,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			getContentManager().fillContent(msg, new Action(receiver, executeBatch));
 			
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
-			String replyText = reply.getContent();
+			String replyText = ""; //reply.getContent();
 			
 			log("Reply: " + replyText);
 			
