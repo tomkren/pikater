@@ -71,24 +71,35 @@ public class ExpEditorUI extends CustomConfiguredUI
 				String name = null;
 				switch(type)
 				{
+					case CHOOSE:
+						name = "Klobása";
+						break;
 					case COMPUTE:
 						name = "Vepřová kýta";
+						break;
+					case DATAPROCESSING:
+						name = "Chleba";
+						break;
+					case EVALUATION:
+						name = "Bobkový list";
 						break;
 					case INPUT:
 						name = "Brambory";
 						break;
-					case CHOOSE:
-						name = "Klobása";
+					case MISCELLANEOUS:
+						name = "Pepř";
+						break;
+					case OUTPUT:
+						name = "Sůl";
 						break;
 					case SEARCH:
 						name = "Cibule";
 						break;
-					case MULTIBOX:
+					case TRIBOX:
 						name = "Protlak";
 						break;
 					default:
 						break;
-					
 				}
 				agentInfo.setName(name);
 				

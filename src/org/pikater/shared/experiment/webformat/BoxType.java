@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
+import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
+import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
+import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.shared.logging.PikaterLogger;
@@ -13,19 +17,15 @@ import org.pikater.web.sharedresources.ThemeResources;
 
 public enum BoxType
 {
-	INPUT(FileDataProvider.class, ThemeResources.relPath_IMG_boxInputIcon), // TODO: simple file icon
+	INPUT(FileDataProvider.class, ThemeResources.relPath_IMG_boxInputIcon),
+	DATAPROCESSING(DataProcessing.class, ThemeResources.relPath_IMG_boxDataProcessingIcon),
 	CHOOSE(Recommend.class, ThemeResources.relPath_IMG_boxRecommenderIcon),
-	COMPUTE(ComputingAgent.class, ThemeResources.relPath_IMG_boxComputingIcon),
 	SEARCH(Search.class, ThemeResources.relPath_IMG_boxSearcherIcon),
-	// SAVE(FileDataSaver.class, MyResources.), // TODO: simple file icon
-	
-	/*
-	TROJKRABICKA
-	EVALUATION
-	DATAPROCESSING
-	*/
-	
-	MULTIBOX(BoxType.class, ThemeResources.relPath_IMG_boxWrapperIcon); // wrappers are never going to have their own ontologies anyway
+	EVALUATION(EvaluationMethod.class, ThemeResources.relPath_IMG_boxEvaluationIcon),
+	COMPUTE(ComputingAgent.class, ThemeResources.relPath_IMG_boxComputingIcon),
+	TRIBOX(CARecSearchComplex.class, ThemeResources.relPath_IMG_boxWrapperIcon),
+	OUTPUT(FileDataSaver.class, ThemeResources.relPath_IMG_boxOutputIcon),
+	MISCELLANEOUS(BoxType.class, ThemeResources.relPath_IMG_boxMiscellaneousIcon);
 	
 	private final Class<?> mappedOntologyClass;
 	private final String pictureURL;
@@ -78,6 +78,6 @@ public enum BoxType
 				return result;
 			}
 		}
-		return null;
+		return BoxType.MISCELLANEOUS;
 	}
 }

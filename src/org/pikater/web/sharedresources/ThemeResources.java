@@ -44,12 +44,14 @@ public class ThemeResources
 	 * Boxes.
 	 */
 	public static final String relPath_IMG_boxInputIcon = "images/win8metroicons/boxes/icon-input-48x48.png";
+	public static final String relPath_IMG_boxOutputIcon = "images/win8metroicons/boxes/icon-output-48x48.png";
 	public static final String relPath_IMG_boxSearcherIcon = "images/win8metroicons/boxes/icon-searcher-48x48.png";
 	public static final String relPath_IMG_boxComputingIcon = "images/win8metroicons/boxes/icon-computing-48x48.png";
 	public static final String relPath_IMG_boxRecommenderIcon = "images/win8metroicons/boxes/icon-recommender-48x48.png";
-	public static final String relPath_IMG_boxMethodIcon = "images/win8metroicons/boxes/icon-method-48x48.png";
-	public static final String relPath_IMG_boxVizualizerIcon = "images/win8metroicons/boxes/icon-vizualizer-48x48.png";
 	public static final String relPath_IMG_boxWrapperIcon = "images/win8metroicons/boxes/icon-wrapper-48x48.png";
+	public static final String relPath_IMG_boxDataProcessingIcon = "images/win8metroicons/boxes/icon-dataprocessing-48x48.png";
+	public static final String relPath_IMG_boxEvaluationIcon = "images/win8metroicons/boxes/icon-evaluation-48x48.png";
+	public static final String relPath_IMG_boxMiscellaneousIcon = "images/win8metroicons/boxes/icon-miscellaneous-48x48.png";
 	
 	/*
 	 * Various.
@@ -78,17 +80,6 @@ public class ThemeResources
 	public static final ThemeResource img_notificationSuccessIcon = new ThemeResource(relPath_IMG_notificationSuccessIcon);
 	public static final ThemeResource img_notificationWarnIcon = new ThemeResource(relPath_IMG_notificationWarnIcon);
 	public static final ThemeResource img_notificationErrorIcon = new ThemeResource(relPath_IMG_notificationErrorIcon);
-	
-	/*
-	 * Boxes.
-	public static final ThemeResource img_boxInputIcon = new ThemeResource(relPath_IMG_boxInputIcon);
-	public static final ThemeResource img_boxSearcherIcon = new ThemeResource(relPath_IMG_boxSearcherIcon);
-	public static final ThemeResource img_boxComputingIcon = new ThemeResource(relPath_IMG_boxComputingIcon);
-	public static final ThemeResource img_boxRecommenderIcon = new ThemeResource(relPath_IMG_boxRecommenderIcon);
-	public static final ThemeResource img_boxMethodIcon = new ThemeResource(relPath_IMG_boxMethodIcon);
-	public static final ThemeResource img_boxVizualizerIcon = new ThemeResource(relPath_IMG_boxVizualizerIcon);
-	public static final ThemeResource img_boxWrapperIcon = new ThemeResource(relPath_IMG_boxWrapperIcon);
-	*/
 	
 	/*
 	 * Various.
