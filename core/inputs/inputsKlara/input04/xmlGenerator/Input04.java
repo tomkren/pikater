@@ -1,12 +1,11 @@
 package xmlGenerator;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
+import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
+import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -36,10 +35,10 @@ public final class Input04 {
 		comAgent.setModel(new NewModel());
 
 		Search search = new Search();
-        search.setSearchClass("Agent_RandomSearch");
+        search.setSearchClass(Agent_RandomSearch.class.getName());
 		
         Recommend recommender = new Recommend();
-        recommender.setRecommenderClass("Agent_NMTopRecommender");
+        recommender.setRecommenderClass(Agent_NMTopRecommender.class.getName());
         
         
 		CARecSearchComplex complex = new CARecSearchComplex();

@@ -190,7 +190,7 @@
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <searchClass>Agent_RandomSearch</searchClass>
+            <searchClass>org.pikater.core.agents.experiment.search.Agent_RandomSearch</searchClass>
             <options/>
           </search>
           <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">

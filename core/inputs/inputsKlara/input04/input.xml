@@ -17,107 +17,15 @@
           <errors>
             <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
               <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
-                <id>3</id>
+                <id>4</id>
                 <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                 <errors/>
                 <dataSources/>
-                <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
-                <options>
-                  <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                    <name>L</name>
-                    <valuesWrapper>
-                      <values type="java.util.Arrays$ArrayList">
-                        <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
-                          <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                            <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                              <value>0.5</value>
-                            </currentValue>
-                            <type>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                <value>0.5</value>
-                              </defaultValue>
-                            </type>
-                          </org.pikater.core.ontology.subtrees.newOption.base.Value>
-                        </a>
-                      </values>
-                    </valuesWrapper>
-                    <valueRestrictions>
-                      <restrictions type="java.util.Arrays$ArrayList">
-                        <a type="org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction-array">
-                          <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                            <types type="java.util.Arrays$ArrayList">
-                              <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
-                                <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                    <value>0.5</value>
-                                  </defaultValue>
-                                </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              </a>
-                            </types>
-                          </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                        </a>
-                      </restrictions>
-                    </valueRestrictions>
-                  </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                  <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                    <name>M</name>
-                    <valuesWrapper>
-                      <values type="java.util.Arrays$ArrayList">
-                        <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
-                          <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                            <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                              <countOfValuesToTry>20</countOfValuesToTry>
-                              <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                <value>0.0</value>
-                              </min>
-                              <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                <value>1.0</value>
-                              </max>
-                            </currentValue>
-                            <type>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                                <countOfValuesToTry>20</countOfValuesToTry>
-                                <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                  <value>0.0</value>
-                                </min>
-                                <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                  <value>1.0</value>
-                                </max>
-                              </defaultValue>
-                            </type>
-                          </org.pikater.core.ontology.subtrees.newOption.base.Value>
-                        </a>
-                      </values>
-                    </valuesWrapper>
-                    <valueRestrictions>
-                      <restrictions type="java.util.Arrays$ArrayList">
-                        <a type="org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction-array">
-                          <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                            <types type="java.util.Arrays$ArrayList">
-                              <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
-                                <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                                    <countOfValuesToTry>20</countOfValuesToTry>
-                                    <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                      <value>0.0</value>
-                                    </min>
-                                    <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                      <value>1.0</value>
-                                    </max>
-                                  </defaultValue>
-                                </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              </a>
-                            </types>
-                          </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                        </a>
-                      </restrictions>
-                    </valueRestrictions>
-                  </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                </options>
+                <options/>
                 <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
                 <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
                 <evaluationMethod>
-                  <id>5</id>
+                  <id>6</id>
                   <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                   <errors/>
                   <dataSources/>
@@ -163,7 +71,7 @@
                 </evaluationMethod>
                 <trainingData>
                   <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
+                    <id>5</id>
                     <options/>
                     <errors/>
                     <dataSources/>
@@ -173,7 +81,7 @@
                 </trainingData>
                 <testingData>
                   <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
+                    <id>5</id>
                     <options/>
                     <errors/>
                     <dataSources/>
@@ -190,111 +98,105 @@
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <searchClass>Agent_RandomSearch</searchClass>
+            <searchClass>org.pikater.core.agents.experiment.search.Agent_RandomSearch</searchClass>
             <options/>
           </search>
-          <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+          <recommender>
             <id>3</id>
+            <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+            <errors>
+              <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
+                <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+                  <id>4</id>
+                  <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                  <errors/>
+                  <dataSources/>
+                  <options/>
+                  <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
+                  <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
+                  <evaluationMethod>
+                    <id>6</id>
+                    <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
+                    <errors/>
+                    <dataSources/>
+                    <type>Crossvalidation</type>
+                    <options>
+                      <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                        <name>F</name>
+                        <valuesWrapper>
+                          <values type="java.util.Arrays$ArrayList">
+                            <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
+                              <org.pikater.core.ontology.subtrees.newOption.base.Value>
+                                <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                  <value>10</value>
+                                </currentValue>
+                                <type>
+                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                    <value>10</value>
+                                  </defaultValue>
+                                </type>
+                              </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                            </a>
+                          </values>
+                        </valuesWrapper>
+                        <valueRestrictions>
+                          <restrictions type="java.util.Arrays$ArrayList">
+                            <a type="org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction-array">
+                              <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                                <types type="java.util.Arrays$ArrayList">
+                                  <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
+                                    <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                      <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                        <value>10</value>
+                                      </defaultValue>
+                                    </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                  </a>
+                                </types>
+                              </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                            </a>
+                          </restrictions>
+                        </valueRestrictions>
+                      </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                    </options>
+                  </evaluationMethod>
+                  <trainingData>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                      <id>5</id>
+                      <options/>
+                      <errors/>
+                      <dataSources/>
+                      <fileURI>weather.arff</fileURI>
+                    </dataProvider>
+                    <dataInputType>trainingData</dataInputType>
+                  </trainingData>
+                  <testingData>
+                    <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+                      <id>5</id>
+                      <options/>
+                      <errors/>
+                      <dataSources/>
+                      <fileURI>weather.arff</fileURI>
+                    </dataProvider>
+                    <dataInputType>testingData</dataInputType>
+                  </testingData>
+                </provider>
+                <type>error</type>
+              </org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
+            </errors>
+            <dataSources/>
+            <recommenderClass>org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender</recommenderClass>
+            <options/>
+          </recommender>
+          <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
+            <id>4</id>
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
-            <options>
-              <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                <name>L</name>
-                <valuesWrapper>
-                  <values type="java.util.Arrays$ArrayList">
-                    <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
-                      <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                        <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                          <value>0.5</value>
-                        </currentValue>
-                        <type>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                            <value>0.5</value>
-                          </defaultValue>
-                        </type>
-                      </org.pikater.core.ontology.subtrees.newOption.base.Value>
-                    </a>
-                  </values>
-                </valuesWrapper>
-                <valueRestrictions>
-                  <restrictions type="java.util.Arrays$ArrayList">
-                    <a type="org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction-array">
-                      <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                        <types type="java.util.Arrays$ArrayList">
-                          <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
-                            <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                <value>0.5</value>
-                              </defaultValue>
-                            </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                          </a>
-                        </types>
-                      </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                    </a>
-                  </restrictions>
-                </valueRestrictions>
-              </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-              <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                <name>M</name>
-                <valuesWrapper>
-                  <values type="java.util.Arrays$ArrayList">
-                    <a type="org.pikater.core.ontology.subtrees.newOption.base.Value-array">
-                      <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                        <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                          <countOfValuesToTry>20</countOfValuesToTry>
-                          <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                            <value>0.0</value>
-                          </min>
-                          <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                            <value>1.0</value>
-                          </max>
-                        </currentValue>
-                        <type>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                            <countOfValuesToTry>20</countOfValuesToTry>
-                            <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                              <value>0.0</value>
-                            </min>
-                            <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                              <value>1.0</value>
-                            </max>
-                          </defaultValue>
-                        </type>
-                      </org.pikater.core.ontology.subtrees.newOption.base.Value>
-                    </a>
-                  </values>
-                </valuesWrapper>
-                <valueRestrictions>
-                  <restrictions type="java.util.Arrays$ArrayList">
-                    <a type="org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction-array">
-                      <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                        <types type="java.util.Arrays$ArrayList">
-                          <a type="org.pikater.core.ontology.subtrees.newOption.base.ValueType-array">
-                            <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                              <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
-                                <countOfValuesToTry>20</countOfValuesToTry>
-                                <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                  <value>0.0</value>
-                                </min>
-                                <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                  <value>1.0</value>
-                                </max>
-                              </defaultValue>
-                            </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                          </a>
-                        </types>
-                      </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                    </a>
-                  </restrictions>
-                </valueRestrictions>
-              </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-            </options>
+            <options/>
             <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
             <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
             <evaluationMethod>
-              <id>5</id>
+              <id>6</id>
               <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
               <errors/>
               <dataSources/>
@@ -340,7 +242,7 @@
             </evaluationMethod>
             <trainingData>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                <id>4</id>
+                <id>5</id>
                 <options/>
                 <errors/>
                 <dataSources/>
@@ -350,7 +252,7 @@
             </trainingData>
             <testingData>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                <id>4</id>
+                <id>5</id>
                 <options/>
                 <errors/>
                 <dataSources/>

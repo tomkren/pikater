@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
+import org.pikater.core.agents.experiment.recommend.Agent_Basic;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
@@ -36,7 +37,7 @@ public final class Input05 {
 		comAgent.setModel(new NewModel());
 
         Recommend recommender = new Recommend();
-        recommender.setRecommenderClass("Agent_Basic");
+        recommender.setRecommenderClass(Agent_Basic.class.getName());
         
         
 		CARecSearchComplex complex = new CARecSearchComplex();
