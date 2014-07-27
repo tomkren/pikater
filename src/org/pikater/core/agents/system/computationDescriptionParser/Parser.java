@@ -4,6 +4,7 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.FileSavingStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.RecommenderStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeValue;
@@ -98,6 +99,7 @@ public class Parser {
     }
 
     public void parseErrors(ErrorDescription errorDescription, ComputationNode child) {
+        if (errorDescription==null) return;
         agent.log("Ontology Parser - IErrorProvider");
         ComputingAgent errorProvider=(ComputingAgent)errorDescription.getProvider();
 
@@ -200,12 +202,15 @@ public class Parser {
             childOptions=ca.getOptions();
             computingNode=parseComputing(iComputingAgent, batchID);
         }
-        addOptionsToInputs(computingNode,complex.getOptions());
 
         Recommend recommenderO = complex.getRecommender();
         if (recommenderO!=null)
         {
             parseRecommender(recommenderO, computingNode);
+        }
+        else
+        {
+            addOptionsToInputs(computingNode,complex.getOptions());
         }
         if ( iComputingAgent instanceof ComputingAgent) {
         	ComputingAgent computingAgent = (ComputingAgent) iComputingAgent;
@@ -255,13 +260,21 @@ public class Parser {
         agent.log("Ontology Parser - Recommender");
 
         RecommenderComputationNode recNode=new RecommenderComputationNode();
+        RecommenderStartComputationStrategy recStrategy=new RecommenderStartComputationStrategy(agent,1,recNode);
+        recNode.setStartBehavior(recStrategy);
         StandardBuffer recBuffer=new StandardBuffer(recNode,child);
-        recNode.addBufferToOutput("recommender",recBuffer);
-        child.addInput("recommender",recBuffer);
+        recNode.addBufferToOutput("agenttype",recBuffer);
+        child.addInput("agenttype",recBuffer);
+
+        StandardBuffer<OptionEdge> optionsBuffer=new StandardBuffer<>(recNode,child);
+        recNode.addBufferToOutput("options",optionsBuffer);
+        child.addInput("options",optionsBuffer);
         computationGraph.addNode(recNode);
         alreadyProcessed.put(recommender.getId(),recNode);
-        List<NewOption> options = recommender.getOptions();
 
+        parseErrors(recommender.getErrorDescription(),recNode);
+
+        List<NewOption> options = recommender.getOptions();
         addOptionsToInputs(recNode, options);
         recNode.setRecommenderClass(recommender.getRecommenderClass());
     }
