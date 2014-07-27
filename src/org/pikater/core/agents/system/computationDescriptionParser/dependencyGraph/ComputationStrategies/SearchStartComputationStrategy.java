@@ -75,7 +75,8 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 			
 			String conversationID = graphId+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId());
 			ACLMessage query = myAgent.searchMessages.get(conversationID); 
-				
+			//remove from search messages, we wont need this anymore
+            myAgent.searchMessages.remove(conversationID);
 			ACLMessage inform = query.createReply();
 			inform.setPerformative(ACLMessage.INFORM);
 

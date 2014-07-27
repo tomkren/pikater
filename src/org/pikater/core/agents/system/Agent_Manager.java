@@ -51,17 +51,14 @@ import org.pikater.core.ontology.subtrees.search.SearchSolution;
 public class Agent_Manager extends PikaterAgent {
 
 	private static final long serialVersionUID = -5140758757320827589L;
-	
-	
-	private final String NO_XML_OUTPUT ="no_xml_output";
-	private boolean no_xml_output = true;
-	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
+
+    protected Set<Subscription> subscriptions = new HashSet<>();
 	private int problem_i = 0;
 	public HashMap<Integer, ComputationCollectionItem> computationCollection =
-			new HashMap<Integer, ComputationCollectionItem>();
+			new HashMap<>();
 	
 	public HashMap<String, ACLMessage> searchMessages =
-			new HashMap<String, ACLMessage>();
+			new HashMap<>();
 	
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
@@ -70,7 +67,7 @@ public class Agent_Manager extends PikaterAgent {
 	@Override
 	public List<Ontology> getOntologies() {
 		
-		List<Ontology> ontologies = new ArrayList<Ontology>();
+		List<Ontology> ontologies = new ArrayList<>();
 		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(RecomendOntology.getInstance());
 		ontologies.add(SearchOntology.getInstance());
@@ -90,16 +87,6 @@ public class Agent_Manager extends PikaterAgent {
     	initDefault();
 
     	registerWithDF(AgentNames.MANAGER);
-
-		if (containsArgument(NO_XML_OUTPUT)) {
-			if (isArgumentValueTrue(NO_XML_OUTPUT)){
-				no_xml_output = true;
-			}
-			else{
-				no_xml_output = false;
-			}
-		}
-
 		doWait(3000);
 				
 		MessageTemplate subscriptionTemplate = 
