@@ -1,19 +1,13 @@
 package org.pikater.core.options.computing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pikater.core.agents.experiment.computing.Agent_WekaJ48;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.options.AgentDefinitionHelper;
 
 public class J48CA_Box {
@@ -24,19 +18,10 @@ public class J48CA_Box {
 		optionU.setDescription("Use unpruned tree");
 		
 		
-		// TODO: why all these null values if the collection is used as a set restriction?
-		List<IValueData> valuesC = new ArrayList<IValueData>();
-		valuesC.add(new NullValue());
-		valuesC.add(new NullValue());
-		valuesC.add(new NullValue());
-		valuesC.add(new FloatValue(0.0001f));
-		valuesC.add(new FloatValue(0.1f));
-		valuesC.add(new FloatValue(0.2f));
-		valuesC.add(new FloatValue(0.25f));
-		valuesC.add(new FloatValue(0.3f));
-		valuesC.add(new FloatValue(0.4f));
-				
-		NewOption optionC = new NewOption("C", new FloatValue(0.25f), new SetRestriction(valuesC));
+		NewOption optionC = new NewOption("C", new FloatValue(0.25f), new RangeRestriction(
+				new FloatValue(0.0f),
+				new FloatValue(1.0f))
+		);
 		optionC.setDescription("Set confidence threshold for pruning. (Default: 0.25) (smaller values incur more pruning).");
 		
 		
