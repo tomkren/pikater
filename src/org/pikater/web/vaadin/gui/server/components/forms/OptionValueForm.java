@@ -16,6 +16,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.collections.BidiMap;
@@ -27,8 +28,10 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Button.ClickEvent;
 
 /**
  * This GUI component makes a best effort at displaying the given arguments,
@@ -39,20 +42,43 @@ public class OptionValueForm extends CustomFormLayout
 {
 	private static final long serialVersionUID = 2200291325058461983L;
 	
+	/**
+	 * The field contained within this form that holds the current value of
+	 * the given option's value type. 
+	 */
+	private AbstractField<? extends Object> field_value;
+	
+	/*
+	 * Programmatic variables.
+	 */
 	private final BidiMap<ValueType, String> typeToDisplayString;
 	private final Collection<AbstractField<Object>> typeSpecificFormFields;
 	
 	public OptionValueForm(Value value, TypeRestriction restriction)
 	{
 		super(null);
+		this.field_value = null;
 		this.typeToDisplayString = new BidiMap<ValueType, String>();
 		this.typeSpecificFormFields = new HashSet<AbstractField<Object>>();
 		
 		setupFields(value, restriction);
 	}
 	
-	//-------------------------------------------------------------------
-	// PRIVATE INTERFACE
+	@Override
+	public IOnSubmit getSubmitAction()
+	{
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void addValueSpecificField(String notificationDescription, AbstractField<? extends Object> field)
+	{
+		typeSpecificFormFields.add((AbstractField<Object>) field);
+		addField(notificationDescription, field);
+	}
+	
+	//---------------------------------------------------------------------------------------
+	// ROOT METHOD TO CREATE THE FORM - CREATES A TYPE FIELD AND CALLS OTHER METHODS
 	
 	private void setupFields(final Value value, TypeRestriction allowedTypes)
 	{
@@ -60,6 +86,10 @@ public class OptionValueForm extends CustomFormLayout
 		List<String> typeOptions = new ArrayList<String>();
 		for(ValueType type : allowedTypes.getTypes())
 		{
+			/*
+			 * IMPORTANT: this is assumed to check various things which are needed both here
+			 * and in other methods of this class.
+			 */
 			if(type.isValid())
 			{
 				String typeStr = null;
@@ -74,11 +104,11 @@ public class OptionValueForm extends CustomFormLayout
 					continue;
 				}
 				
-				if(type.getRangeRestriction() != null)
+				if(type.isRangeRestrictionDefined())
 				{
 					typeStr = typeStr + "[R]";
 				}
-				if(type.getSetRestriction() != null)
+				else if(type.isSetRestrictionDefined())
 				{
 					typeStr = typeStr + "[S]";
 				}
@@ -144,16 +174,16 @@ public class OptionValueForm extends CustomFormLayout
 				public void valueChange(ValueChangeEvent event)
 				{
 					// first get rid of the old fields
-					for(AbstractField<Object> field : typeSpecificFormFields) // TODO: actually use this collection in other methods
+					for(AbstractField<Object> field : typeSpecificFormFields)
 					{
 						removeField(field);
 					}
 					typeSpecificFormFields.clear();
 
-					// then change type
-					String newlySelectedType = (String) event.getProperty().getValue();
-					value.setType(typeToDisplayString.getKey(newlySelectedType));
-					value.setCurrentValue(typeToDisplayString.getKey(newlySelectedType).getDefaultValue().clone()); // don't forget this
+					// then change type and reset value to default
+					ValueType newlySelectedType = typeToDisplayString.getKey((String) event.getProperty().getValue());
+					value.setType(newlySelectedType);
+					value.setCurrentValue(newlySelectedType.getDefaultValue().clone());
 					
 					// and then create new fields from it
 					setupOtherFields(value);
@@ -163,29 +193,50 @@ public class OptionValueForm extends CustomFormLayout
 			
 			// create and setup other fields
 			setupOtherFields(value);
+			
+			// add a special button to reset value to default (default value of the currently selected type)
+			addCustomButtonInterface(new Button("Reset to default", new Button.ClickListener()
+			{
+				private static final long serialVersionUID = 838180535195566779L;
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public void buttonClick(ClickEvent event)
+				{
+					value.setCurrentValue(value.getType().getDefaultValue().clone());
+					if(field_value.getValue() instanceof String)
+					{
+						((AbstractField<String>) field_value).setValue(value.getCurrentValue().hackValue().toString());
+					}
+					else
+					{
+						((AbstractField<Object>) field_value).setValue(value.getCurrentValue().hackValue());
+					}
+				}
+			}));
 		}
 	}
+	
+	//---------------------------------------------------------------------------------------
+	// SECOND-LEVEL METHOD TO CREATE THE FORM - CREATES FIELDS IN TYPE-SPECIFIC MANNER
 	
 	/**
 	 * The {@link #setupFields(Value, TypeRestriction)} method ensures that the 
 	 * {@link Value#getCurrentValue()} doesn't return null for the argument and
-	 * thus, this method requires it.
+	 * thus, this method requires it.</br>
+	 * IMPORTANT: this method is required to set the {@link #field_value} field.
 	 * @param value
 	 */
 	private void setupOtherFields(final Value value)
 	{
-		// create value related form fields according to its type
+		// create form fields according to the given value type
 		Class<? extends IValueData> typeClass = value.getCurrentValue().getClass();
-		if(typeClass.equals(NullValue.class))
+		if(typeClass.equals(BooleanValue.class))
 		{
-			// these values can not be set and hence no field is created whatsoever
-		}
-		else if(typeClass.equals(BooleanValue.class))
-		{
-			// cast value
+			// first cast value
 			Boolean currentValue = ((BooleanValue) value.getCurrentValue()).getValue();
 			
-			// create the field & bind with the data source
+			// then create the field & bind with the data source
 			ComboBox cb_value = FormFieldFactory.getGeneralCheckField("Value:", currentValue, true, false);
 			cb_value.setSizeFull();
 			cb_value.addValueChangeListener(new Property.ValueChangeListener()
@@ -199,32 +250,51 @@ public class OptionValueForm extends CustomFormLayout
 				}
 			});
 			
-			// finalize
-			addField("value", cb_value);
+			// and finalize
+			addValueSpecificField("value", cb_value);
+			field_value = cb_value;
 		}
-		
-		else if(typeClass.equals(QuestionMarkRange.class))
+		else if(typeClass.equals(StringValue.class))
 		{
-			// TODO: range can be set by user or is it fixed?
-			
+			if(value.getType().isSetRestrictionDefined())
+			{
+				List<String> options = getSortedEnumerationForValue(value);
+				field_value = setupEnumeratedField(value, options, "Value:", "value", new IOnValueChange<String>()
+				{
+					@Override
+					public void valueChanged(String newValue)
+					{
+						value.setCurrentValue(new StringValue(newValue));
+					}
+				});
+			}
+			else
+			{
+				// first cast value
+				String currentValue = ((StringValue) value.getCurrentValue()).getValue();
+				
+				// then create the field & bind with the data source
+				TextField tf_value = FormFieldFactory.getGeneralTextField("Value:", null, currentValue, true, false);
+				tf_value.setSizeFull();
+				tf_value.addValueChangeListener(new Property.ValueChangeListener()
+				{
+					private static final long serialVersionUID = 3736100120428402858L;
+
+					@Override
+					public void valueChange(ValueChangeEvent event)
+					{
+						value.setCurrentValue(new StringValue((String) event.getProperty().getValue()));
+					}
+				});
+				
+				// and finalize
+				addValueSpecificField("value", tf_value);
+				field_value = tf_value;
+			}
 		}
-		else if(typeClass.equals(QuestionMarkSet.class))
+		else if(typeClass.equals(IntegerValue.class))
 		{
-			// TODO: set can be edited by user or is it fixed?
-			
-		}
-		else
-		{
-			setupNumericFieldFromValueType(typeClass, value, "Value:", "value");
-		}
-	}
-	
-	private void setupNumericFieldFromValueType(Class<? extends IValueData> typeClass, final Value value, String caption,
-			String notificationIdentifier)
-	{
-		if(typeClass.equals(IntegerValue.class))
-		{
-			setupNumericField(value, caption, notificationIdentifier, new IOnNumericValueChange<Integer>()
+			field_value = setupNumericField(value, "Value:", "value", new IOnValueChange<Integer>()
 			{
 				@Override
 				public void valueChanged(Integer number)
@@ -235,7 +305,7 @@ public class OptionValueForm extends CustomFormLayout
 		}
 		else if(typeClass.equals(FloatValue.class))
 		{
-			setupNumericField(value, caption, notificationIdentifier, new IOnNumericValueChange<Float>()
+			field_value = setupNumericField(value, "Value:", "value", new IOnValueChange<Float>()
 			{
 				@Override
 				public void valueChanged(Float number)
@@ -246,7 +316,7 @@ public class OptionValueForm extends CustomFormLayout
 		}
 		else if(typeClass.equals(DoubleValue.class))
 		{
-			setupNumericField(value, caption, notificationIdentifier, new IOnNumericValueChange<Double>()
+			field_value = setupNumericField(value, "Value:", "value", new IOnValueChange<Double>()
 			{
 				@Override
 				public void valueChanged(Double number)
@@ -255,49 +325,44 @@ public class OptionValueForm extends CustomFormLayout
 				}
 			});
 		}
+		else if(typeClass.equals(QuestionMarkRange.class))
+		{
+			// TODO: range can be set by user or is it fixed?
+		}
+		else if(typeClass.equals(QuestionMarkSet.class))
+		{
+			// TODO: set can be edited by user or is it fixed?
+		}
+		else if(typeClass.equals(NullValue.class))
+		{
+			// these values can not be set and hence no field is created whatsoever
+		}
 		else
 		{
-			throw new IllegalStateException(String.format("Unknown value type: '%s'", typeClass.getName()));
+			PikaterLogger.logThrowable("", new IllegalStateException(String.format("Unimplemented value type used: '%s'.", typeClass.getName())));
+			MyNotifications.showError("Application error", String.format("Unsupported type: '%s'", typeClass.getName()));
 		}
 	}
 	
+	//---------------------------------------------------------------------------------------
+	// THIRD-LEVEL METHODS TO CREATE THE ACTUAL FIELDS
+	
 	@SuppressWarnings("unchecked")
-	private <N extends Number & Comparable<? super N>> void setupNumericField(final Value value, String caption,
-			String notificationIdentifier, final IOnNumericValueChange<N> valueChangeHandler)
+	private <N extends Number & Comparable<? super N>> AbstractField<? extends Object> setupNumericField(final Value value, String caption,
+			String notificationIdentifier, final IOnValueChange<N> valueChangeHandler)
 	{
-		// cast value
+		// first cast value
 		final N currentValue = (N) value.getCurrentValue().hackValue();
-
+		
 		// create & bind with the value type
-		if(value.getType().getSetRestriction() != null)
+		if(value.getType().isSetRestrictionDefined())
 		{
-			List<N> options = new ArrayList<N>();
-			for(IValueData possibleValue : value.getType().getSetRestriction().getValues())
-			{
-				options.add((N) possibleValue.hackValue());
-			}
-			Collections.sort(options);
-			
-			final ComboBox cb_value = FormFieldFactory.getGeneralComboBox(caption, options, currentValue, true, false);
-			cb_value.setSizeFull();
-			cb_value.addValueChangeListener(new Property.ValueChangeListener()
-			{
-				private static final long serialVersionUID = -3938305148585892660L;
-
-				@Override
-				public void valueChange(ValueChangeEvent event)
-				{
-					valueChangeHandler.valueChanged((N) event.getProperty().getValue());
-				}
-			});
-
-			// finalize
-			addField(notificationIdentifier, cb_value);
+			return setupEnumeratedField(value, (List<N>) getSortedEnumerationForValue(value), caption, notificationIdentifier, valueChangeHandler);
 		}
 		else // whether range restriction is defined or not
 		{
 			N min = null, max = null;
-			if(value.getType().getRangeRestriction() != null)
+			if(value.getType().isRangeRestrictionDefined())
 			{
 				min = (N) value.getType().getRangeRestriction().getMinValue().hackValue();
 				max = (N) value.getType().getRangeRestriction().getMaxValue().hackValue();
@@ -327,21 +392,64 @@ public class OptionValueForm extends CustomFormLayout
 			});
 
 			// finalize
-			addField(notificationIdentifier, tf_value);
+			addValueSpecificField(notificationIdentifier, tf_value);
+			return tf_value;
 		}
 	}
-
-	@Override
-	public IOnSubmit getSubmitAction()
+	
+	@SuppressWarnings("unchecked")
+	private <O extends Object> AbstractField<? extends Object> setupEnumeratedField(Value value, List<O> options, String caption,
+			String notificationIdentifier, final IOnValueChange<O> valueChangeHandler)
 	{
-		return null;
+		// first cast value
+		final Object currentValue = value.getCurrentValue().hackValue();
+		
+		// then create the field
+		final ComboBox cb_value = FormFieldFactory.getGeneralComboBox(caption, options, currentValue, true, false);
+		cb_value.setSizeFull();
+		cb_value.addValueChangeListener(new Property.ValueChangeListener()
+		{
+			private static final long serialVersionUID = -3938305148585892660L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event)
+			{
+				valueChangeHandler.valueChanged((O) event.getProperty().getValue());
+			}
+		});
+
+		// and finalize
+		addValueSpecificField(notificationIdentifier, cb_value);
+		return cb_value;
+	}
+	
+	//-------------------------------------------------------------------
+	// MISCELLANEOUS FIELD RELATED INTERFACE
+	
+	@SuppressWarnings("unchecked")
+	private <O extends Object> List<O> getUnsortedEnumerationForValue(Value value)
+	{
+		List<O> options = new ArrayList<O>();
+		for(IValueData possibleValue : value.getType().getSetRestriction().getValues())
+		{
+			options.add((O) possibleValue.hackValue());
+		}
+		return options;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <OC extends Object & Comparable<? super OC>> List<OC> getSortedEnumerationForValue(Value value)
+	{
+		List<OC> options = (List<OC>) getUnsortedEnumerationForValue(value);
+		Collections.sort(options);
+		return options;
 	}
 	
 	//-------------------------------------------------------------------
 	// PRIVATE TYPES
-	
-	private interface IOnNumericValueChange<N extends Number & Comparable<? super N>>
+		
+	private interface IOnValueChange<O extends Object>
 	{
-		void valueChanged(N number);
+		void valueChanged(O object);
 	}
 }

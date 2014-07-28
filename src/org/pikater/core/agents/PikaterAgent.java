@@ -53,11 +53,11 @@ public abstract class PikaterAgent extends Agent {
 	protected final String DATAMODEL_BEAN = "dataModel";
 	protected Codec codec = new SLCodec();
 	protected String initBeansName = "Beans.xml";
-	protected ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
+	transient protected ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
 	protected Verbosity verbosity = Verbosity.NORMAL;
-	private Logger logger;
+	transient private Logger logger;
 	protected Arguments arguments = new Arguments(new HashMap<String, Argument>());
-	protected EntityManagerFactory emf;
+	transient protected EntityManagerFactory emf;
 	/** for the master node this is empty, slave node agents are named with this as the suffix */
 	protected String nodeName;
 	private boolean registeredToDF = false;

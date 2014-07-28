@@ -1,5 +1,7 @@
 package org.pikater.core.configuration;
 
+import jade.util.leap.Serializable;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +11,10 @@ import java.util.Map;
  * Date: 9.11.13
  * Time: 17:27
  */
-public class Arguments {
-    public Arguments(Map<String, Argument> arguments) {
+public class Arguments implements Serializable {
+	private static final long serialVersionUID = -6400109657193599321L;
+
+	public Arguments(Map<String, Argument> arguments) {
         this.arguments = arguments;
     }
 

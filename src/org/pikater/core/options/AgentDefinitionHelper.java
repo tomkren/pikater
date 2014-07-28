@@ -64,7 +64,7 @@ public abstract class AgentDefinitionHelper {
 	public static List<NewOption> getCAOptions() {
 		
 		List<IValueData> modelValues = new ArrayList<IValueData>();
-		modelValues.add(new StringValue("New model"));
+		modelValues.add(new StringValue(NewModel.class.getSimpleName()));
 		
 		NewOption optModel = new NewOption(
 				"model",
