@@ -687,10 +687,10 @@ public class Agent_DataManager extends PikaterAgent {
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
 		NewOptions options = new NewOptions(task.getAgent().getOptions());
-		int experimentID = task.getComputationId();
+		
+		int experimentID = saveResult.getExperimentID();
 
 		JPAResult jparesult = new JPAResult();
-
 		jparesult.setAgentName(task.getAgent().getName());
 		jparesult.setOptions(options.exportXML());
 
