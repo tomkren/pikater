@@ -47,7 +47,12 @@ public class MyNotifications
 	
 	public static void showApplicationError()
 	{
-		getCurrentNotificationsManager().showNotification(null, "Application error", "Please contact the administrators.", ThemeResources.img_notificationErrorIcon);
+		showApplicationError("Please contact the administrators.");
+	}
+	
+	public static void showApplicationError(String message)
+	{
+		getCurrentNotificationsManager().showNotification(null, "Application error", message, ThemeResources.img_notificationErrorIcon);
 	}
 	
 	//----------------------------------------------------------------
