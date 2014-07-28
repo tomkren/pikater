@@ -32,7 +32,7 @@ public class LinearRegressionCA_Box {
 
 		*/
 		
-		NewOption optionS = new NewOption("S", new IntegerValue(6), new RangeRestriction(
+		NewOption optionS = new NewOption("S", new IntegerValue(0), new RangeRestriction(
 				new IntegerValue(0),
 				new IntegerValue(2))
 		);

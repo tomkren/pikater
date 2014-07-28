@@ -21,8 +21,7 @@ public class EASearch_Box {
 		optionE.setDescription("Minimum error rate");
 		
 
-		// TODO: chyba
-		NewOption optionM = new NewOption("M", new FloatValue(0.1f), new RangeRestriction(
+		NewOption optionM = new NewOption("M", new IntegerValue(10), new RangeRestriction(
 				new IntegerValue(1),
 				new IntegerValue(1000))
 		); 
