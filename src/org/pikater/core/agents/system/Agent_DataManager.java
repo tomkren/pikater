@@ -342,7 +342,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: " + request.getContent());
+				logError("Failure responding to request: " + request.getConversationId());
 				return failure;
 			}
 
@@ -683,7 +683,6 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 	
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
-		
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
 		NewOptions options = new NewOptions(task.getAgent().getOptions());
@@ -781,10 +780,12 @@ public class Agent_DataManager extends PikaterAgent {
 		int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
 		if(resultID!=-1){
 			log("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
+			if (task.getResult().getObject() != null) {
+				saveResultModel(task, resultID);
+			}
 		} else {
-			logError(request.toString()+ "Couldn't persist JPAResult for experiment ID \n"+experimentID);
+			logError("Couldn't persist JPAResult for experiment ID \n"+experimentID);
 		}
-
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
@@ -873,6 +874,19 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 
 		return reply;
+	}
+
+	private void saveResultModel(Task task, int resultId) {
+		Model m = new Model();
+		m.setAgentClassName(task.getAgent().getType());
+		m.setResultID(resultId);
+		m.setSerializedAgent(task.getResult().getObject().toString());
+		int savedModelID=DAOs.resultDAO.setModelForResult(m);
+		if (savedModelID == -1) {
+			logError("Failed to persist model for result with ID "+resultId);
+		} else {
+			log("Persisted JPAModel "+savedModelID);
+		}
 	}
 
 	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
