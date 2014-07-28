@@ -7,7 +7,6 @@ import java.util.List;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 
@@ -26,7 +25,6 @@ public class SimpleTraining {
 
         ComputingAgent ca = new ComputingAgent();
         ca.setTrainingData(dsd);
-        ca.setModel(new NewModel());
         ca.setDuration(new ShortTimeDuration());
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"

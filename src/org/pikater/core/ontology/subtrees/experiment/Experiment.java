@@ -1,7 +1,5 @@
 package org.pikater.core.ontology.subtrees.experiment;
 
-import org.pikater.core.ontology.subtrees.batchDescription.model.IModelDescription;
-
 import jade.content.Concept;
 
 public class Experiment implements Concept {
@@ -15,7 +13,7 @@ public class Experiment implements Concept {
 	private String status;
 	private int batchID;
 	private int workflow;
-	private IModelDescription model;
+	private Integer model;
 
 	public int getId() {
 		return id;
@@ -45,10 +43,10 @@ public class Experiment implements Concept {
 		this.workflow = workflow;
 	}
 
-	public IModelDescription getModel() {
+	public Integer getModel() {
 		return model;
 	}
-	public void setModel(IModelDescription model) {
+	public void setModel(Integer model) {
 		this.model = model;
 	}
 

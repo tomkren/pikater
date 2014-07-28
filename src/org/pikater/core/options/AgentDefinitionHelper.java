@@ -7,9 +7,10 @@ import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
@@ -64,11 +65,13 @@ public abstract class AgentDefinitionHelper {
 	public static List<NewOption> getCAOptions() {
 		
 		List<IValueData> modelValues = new ArrayList<IValueData>();
-		modelValues.add(new StringValue(NewModel.class.getSimpleName()));
+		modelValues.add(new NullValue());
+		//modelValues.add(new IntegerValue(70704));
+		// TODO tady by mel byt seznam moznych ID modelu k vyberu (jako IntegerValue), volba muze zustat i null
 		
 		NewOption optModel = new NewOption(
 				"model",
-				new StringValue(NewModel.class.getSimpleName()),
+				new NullValue(),
 				new SetRestriction(modelValues));
 	
 

@@ -4,7 +4,6 @@ import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import java.io.FileNotFoundException;
@@ -32,7 +31,7 @@ public final class Input04 {
 		em.addOption(optionF);
 		
 		comAgent.setEvaluationMethod(em);
-		comAgent.setModel(new NewModel());
+		comAgent.setModel(null);
 
 		Search search = new Search();
         search.setSearchClass(Agent_RandomSearch.class.getName());

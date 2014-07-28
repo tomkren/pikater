@@ -114,7 +114,6 @@
                     </valueRestrictions>
                   </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                 </options>
-                <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
                 <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
                 <evaluationMethod>
                   <id>5</id>
@@ -291,7 +290,6 @@
                 </valueRestrictions>
               </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
             </options>
-            <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
             <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
             <evaluationMethod>
               <id>5</id>

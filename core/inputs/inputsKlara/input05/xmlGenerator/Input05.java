@@ -4,7 +4,6 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptr
 import org.pikater.core.agents.experiment.recommend.Agent_Basic;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
@@ -34,7 +33,6 @@ public final class Input05 {
 		em.addOption(optionF);
 		
 		comAgent.setEvaluationMethod(em);
-		comAgent.setModel(new NewModel());
 
         Recommend recommender = new Recommend();
         recommender.setRecommenderClass(Agent_Basic.class.getName());
