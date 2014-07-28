@@ -692,6 +692,8 @@ public class Agent_DataManager extends PikaterAgent {
 		JPAResult jparesult = new JPAResult();
 		jparesult.setAgentName(task.getAgent().getName());
 		jparesult.setOptions(options.exportXML());
+		logError("Saving result for hash: "+task.getData().getInternalTrainFileName());
+		jparesult.setSerializedFileName(task.getData().getInternalTrainFileName());
 
 		float errorRate = Float.MAX_VALUE;
 		float kappa_statistic = Float.MAX_VALUE;
@@ -769,8 +771,6 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setStart(new Date(Timestamp.valueOf(start).getTime()));
 		jparesult.setFinish(new Date(Timestamp.valueOf(finish).getTime()));
 
-		// je to ono?
-		jparesult.setSerializedFileName(task.getResult().getObjectFilename());
 		// query += "\'" + res.getResult().getObject_filename() + "\', ";
 		// query += "\'" + res.getId().getIdentificator() + "\',"; // TODO -
 		// pozor - neni jednoznacne, pouze pro jednoho managera
