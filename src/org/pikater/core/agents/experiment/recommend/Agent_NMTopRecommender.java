@@ -4,13 +4,11 @@
  */
 package org.pikater.core.agents.experiment.recommend;
 
-import jade.util.leap.Iterator;
-import jade.util.leap.LinkedList;
-import jade.util.leap.List;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -18,6 +16,7 @@ import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
@@ -91,11 +90,10 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         gm.setResults_required(true);
 
         // 1. choose the nearest training data
-        jade.util.leap.List allMetadata = DataManagerService.getAllMetadata(this, gm);
+        Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
 
         // set the min, max instances and attributes first
-        for (int i=0;i<allMetadata.size();i++) {
-        	Metadata metadataI=(Metadata)allMetadata.get(i);
+        for (Metadata metadataI : allMetadata.getMetadatas()) {
         	
             int na = metadataI.getNumberOfAttributes();
             minAttributes = Math.min(minAttributes, na);
@@ -108,8 +106,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         ArrayList<MetadataDistancePair> distances = new ArrayList<MetadataDistancePair>();
 
-        for (int i=0;i<allMetadata.size();i++) {
-        	Metadata metadataI=(Metadata)allMetadata.get(i);
+        for (Metadata metadataI : allMetadata.getMetadatas()) {
 
             double dNew = distance(metadata, metadataI);
             distances.add(new MetadataDistancePair(metadataI, dNew));
@@ -117,21 +114,19 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         Collections.sort(distances);
 
-        List agents = new LinkedList();
+        List<Agent> agents = new LinkedList<Agent>();
         for (int i = 0; i < M; i++) {
             log(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
-            List ag = DataManagerService.getTheBestAgents(this, distances.get(i).m.getInternalName(), N);
-            Iterator it = ag.iterator();
-            while (it.hasNext()) {
-                agents.add(it.next());
+            List<Agent> ag = DataManagerService.getTheBestAgents(this, distances.get(i).m.getInternalName(), N);
+            
+            for (Agent agentI : ag) {
+                agents.add(agentI);
             }
         }
 
         HashMap<String, Integer> counts = new HashMap<String, Integer>();
 
-        Iterator it = agents.iterator();
-        while (it.hasNext()) {
-            Agent a = (Agent) it.next();
+        for (Agent a : agents) {
 
             if (counts.containsKey(a.getType())) {
                 counts.put(a.getType(), counts.get(a.getType()) + 1);
@@ -154,17 +149,15 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         ArrayList<Agent> bestAgents = new ArrayList<Agent>();
 
-        it = agents.iterator();
-        while (it.hasNext()) {
-            Agent a = (Agent) it.next();
+        for (Agent a : agents) {
 
             if (a.getType().equals(bestAgentType)) {
                 bestAgents.add(a);
             }
         }
 
-        java.util.List<NewOption> optionSamples = getAgentOptions(bestAgentType);
-        java.util.List<NewOption> options = new java.util.ArrayList<NewOption>();
+        List<NewOption> optionSamples = getAgentOptions(bestAgentType);
+        List<NewOption> options = new java.util.ArrayList<NewOption>();
         
         for (NewOption optionI : optionSamples) {
 

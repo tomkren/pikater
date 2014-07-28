@@ -103,6 +103,7 @@ import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.model.GetModel;
 import org.pikater.core.ontology.subtrees.model.GetModels;
@@ -994,7 +995,7 @@ public class Agent_DataManager extends PikaterAgent {
 			logError("DataManager.Results  NOT Required");
 			if (gm.getExceptions() != null) {
 				
-				List<String> excludedHashes = new java.util.ArrayList<String>();
+				List<String> excludedHashes = new ArrayList<String>();
 				
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
@@ -1009,7 +1010,7 @@ public class Agent_DataManager extends PikaterAgent {
 			
 		}
 
-		jade.util.leap.List allMetadata = new jade.util.leap.ArrayList();
+		List<Metadata> allMetadata = new ArrayList<Metadata>();
 
 		if(datasets!=null){
 		for(JPADataSetLO dslo:datasets){
@@ -1019,7 +1020,7 @@ public class Agent_DataManager extends PikaterAgent {
 			
 			List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
 			for(JPAAttributeMetaData amd:attrMDs){
-				Metadata aM=new Metadata();
+				Metadata aM = new Metadata();
 				
 				
 				aM.setInternalName(dslo.getHash());
@@ -1064,7 +1065,10 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result _result = new Result(a.getAction(), allMetadata);
+		Metadatas metadatas = new Metadatas();
+		metadatas.setMetadatas(allMetadata);
+		
+		Result _result = new Result(a.getAction(), metadatas);
 		getContentManager().fillContent(reply, _result);
 
 		return reply;

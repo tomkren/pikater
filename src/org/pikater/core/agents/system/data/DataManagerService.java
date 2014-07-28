@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.data;
 
 import java.io.File;
+import java.util.List;
 
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -13,8 +14,6 @@ import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
@@ -31,10 +30,12 @@ import org.pikater.core.ontology.subtrees.file.GetFileInfo;
 import org.pikater.core.ontology.subtrees.file.GetFiles;
 import org.pikater.core.ontology.subtrees.file.ImportFile;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
+import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
@@ -208,7 +209,7 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
-	public static List getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
+	public static Metadatas getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
@@ -226,7 +227,7 @@ public class DataManagerService extends FIPAService {
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
-			List allMetadata = (List) r.getValue();
+			Metadatas allMetadata = (Metadatas) r.getValue();
 			return allMetadata;
 
 		} catch (CodecException e) {
@@ -269,16 +270,16 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 	
-        public static org.pikater.core.ontology.subtrees.management.Agent getTheBestAgent(PikaterAgent agent, String fileName) {
-        	List agents=getTheBestAgents(agent, fileName, 1);
-        	if((agents!=null)&&(agents.size()>0)){
-        		return (org.pikater.core.ontology.subtrees.management.Agent) agents.get(0);
-        	}else{
-        		return null;
-        	}
-        }
-        
-	public static List getTheBestAgents(PikaterAgent agent, String fileName, int number) {
+    public static Agent getTheBestAgent(PikaterAgent agent, String fileName) {
+    	List<Agent> agents=getTheBestAgents(agent, fileName, 1);
+    	if((agents!=null)&&(agents.size()>0)){
+    		return agents.get(0);
+    	}else{
+    		return null;
+    	}
+    }
+    
+	public static List<Agent> getTheBestAgents(PikaterAgent agent, String fileName, int number) {
 		GetTheBestAgent g = new GetTheBestAgent();
 		g.setNearest_file_name(fileName);
                 g.setNumberOfAgents(number);
@@ -302,7 +303,7 @@ public class DataManagerService extends FIPAService {
 			}
 
 			Result r = (Result) agent.getContentManager().extractContent(inform);
-			List bestAgents = (List) r.getValue();
+			List<Agent> bestAgents = (List<Agent>) r.getValue();
 			return bestAgents;
 
 		} catch (CodecException e) {
@@ -315,7 +316,7 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
-	public static ArrayList getFilesInfo(PikaterAgent agent, GetFileInfo gfi) {
+	public static jade.util.leap.ArrayList getFilesInfo(PikaterAgent agent, GetFileInfo gfi) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
@@ -333,13 +334,13 @@ public class DataManagerService extends FIPAService {
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
 			if (inform == null) {
-				return new ArrayList();
+				return new jade.util.leap.ArrayList();
 			}
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
 
-			return (ArrayList) r.getValue();
+			return (jade.util.leap.ArrayList) r.getValue();
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
@@ -409,7 +410,7 @@ public class DataManagerService extends FIPAService {
 
         }
 
-	public static ArrayList getFiles(PikaterAgent agent, int userID) {
+	public static jade.util.leap.ArrayList getFiles(PikaterAgent agent, int userID) {
 		GetFiles gfi = new GetFiles();
 		gfi.setUserID(userID);
 
@@ -435,7 +436,7 @@ public class DataManagerService extends FIPAService {
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
 
-			return (ArrayList) r.getValue();
+			return (jade.util.leap.ArrayList) r.getValue();
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
