@@ -28,7 +28,7 @@ public class RandomTreeCA_Box {
 		$ M int 1 1 r 0 100
 		**/
 		NewOption optionM = new NewOption("M", new IntegerValue(0), new RangeRestriction(
-				new IntegerValue(1),
+				new IntegerValue(0),
 				new IntegerValue(100))
 		);
 		optionM.setDescription("The minimum total weight of the instances in a leaf");
