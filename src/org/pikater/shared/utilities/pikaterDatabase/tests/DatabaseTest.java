@@ -84,7 +84,7 @@ public class DatabaseTest {
 		int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
 		System.out.println("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
 		
-		Model model=new Model(resultID, "java.lang.Object", "<?xml version=\"1.0\"?><model><nope/></model>");
+		Model model=new Model(resultID, "java.lang.Object", new byte[1]);
 		modelID=DAOs.resultDAO.setModelForResult(model);
 		System.out.println("Saved model with ID: "+modelID);
 	}

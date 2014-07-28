@@ -32,7 +32,7 @@ public class JPAModel extends JPAAbstractEntity{
 	private JPAResult creatorResult;
 	private String agentClassName;
     @Lob
-    private String serializedAgent;
+    private byte[] serializedAgent;
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     
@@ -60,11 +60,11 @@ public class JPAModel extends JPAAbstractEntity{
 		this.agentClassName = agentClassName;
 	}
 
-	public String getSerializedAgent() {
+	public byte[] getSerializedAgent() {
 		return serializedAgent;
 	}
 
-	public void setSerializedAgent(String serializedAgent) {
+	public void setSerializedAgent(byte[] serializedAgent) {
 		this.serializedAgent = serializedAgent;
 	}
 

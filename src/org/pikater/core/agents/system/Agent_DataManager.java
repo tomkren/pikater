@@ -880,7 +880,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Model m = new Model();
 		m.setAgentClassName(task.getAgent().getType());
 		m.setResultID(resultId);
-		m.setSerializedAgent(task.getResult().getObject().toString());
+		m.setSerializedAgent(task.getResult().getObject());
 		int savedModelID=DAOs.resultDAO.setModelForResult(m);
 		if (savedModelID == -1) {
 			logError("Failed to persist model for result with ID "+resultId);
