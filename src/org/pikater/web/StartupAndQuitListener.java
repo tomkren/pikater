@@ -1,5 +1,7 @@
 package org.pikater.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,11 +9,27 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.pikater.core.agents.gateway.PikaterCoreInterface;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.sharedresources.ThemeResources;
+import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.JadeTopologies;
 import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -69,10 +87,101 @@ public class StartupAndQuitListener implements ServletContextListener
 			}
 		});
 		
-		// TODO: delete this eventually (CustomConfiguredUI) handles it
-		if(!PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
+		// TODO: move this to CustomConfiguredUI eventually (upon exiting the app-launch wizard)
+		boolean initHere = true;
+		boolean coreAgentInfo = true;
+		if(initHere)
 		{
-			throw new IllegalStateException("Application won't serve until the above errors are fixed.");
+			// init scheduler
+			if(!PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
+			{
+				throw new IllegalStateException("Application won't serve until the above errors are fixed.");
+			}
+			
+			// init agent info
+			AgentInfoCollection agentInfoCollection = new AgentInfoCollection();
+			if(coreAgentInfo)
+			{
+				try
+				{
+					AgentInfos infos = PikaterCoreInterface.getAgentInfos();
+					for(AgentInfo info : infos.getAgentInfos())
+					{
+						agentInfoCollection.addDefinition(info);
+					}
+				}
+				catch (Exception e)
+				{
+					PikaterLogger.logThrowable("Can not fetch agent info collection from pikater core.", e);
+				}
+			}
+			else
+			{
+				for(BoxType type : BoxType.values())
+				{
+					if(type.toOntology() != null)
+					{
+						AgentInfo agentInfo = new AgentInfo();
+						agentInfo.setOntologyClassName(type.toOntology());
+						agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
+						
+						String name = null;
+						switch(type)
+						{
+							case CHOOSE:
+								name = "Klobása";
+								break;
+							case COMPUTE:
+								name = "Vepřová kýta";
+								break;
+							case DATAPROCESSING:
+								name = "Chleba";
+								break;
+							case EVALUATION:
+								name = "Bobkový list";
+								break;
+							case INPUT:
+								name = "Brambory";
+								break;
+							case MISCELLANEOUS:
+								name = "Pepř";
+								break;
+							case OUTPUT:
+								name = "Sůl";
+								break;
+							case SEARCH:
+								name = "Cibule";
+								break;
+							case TRIBOX:
+								name = "Protlak";
+								break;
+							default:
+								break;
+						}
+						agentInfo.setName(name);
+						
+						NewOptions options = new NewOptions();
+						options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
+						options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
+								new IntegerValue(2),
+								new IntegerValue(3),
+								new IntegerValue(5),
+								new IntegerValue(10))))
+						));
+						options.addOption(new NewOption("Double", new DoubleValue(1)));
+						options.addOption(new NewOption("Boolean", new BooleanValue(true)));
+						options.addOption(new NewOption("Float", new FloatValue(1)));
+						options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(
+								new IntegerValue(5), new IntegerValue(10), 3)));
+						options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(new ArrayList<IValueData>(Arrays.asList(
+								new IntegerValue(5), new IntegerValue(10))), 3)));
+						
+						agentInfo.setOptions(options);
+						agentInfoCollection.addDefinition(agentInfo);
+					}
+				}
+			}
+			ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, agentInfoCollection);
 		}
 		
 		// set parsed topologies to the application wide variable
@@ -84,7 +193,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(ThemeResources.prop_appConf.getSourceFile()));
 		if(!ServerConfigurationInterface.getConfig().isValid())
 		{
-			PikaterLogger.log(Level.SEVERE, "Erros were encountered while parsing the application configuratio. All client "
+			PikaterLogger.log(Level.SEVERE, "Errors were encountered while parsing the application configuration. All client "
 					+ "requests will result in 'Service temporarily unavailable'.");
 		}
 		else
