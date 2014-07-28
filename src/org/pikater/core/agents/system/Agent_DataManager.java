@@ -48,6 +48,7 @@ import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
+import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 import org.postgresql.PGConnection;
 
@@ -153,6 +154,7 @@ public class Agent_DataManager extends PikaterAgent {
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(ModelOntology.getInstance());
+		ontologies.add(RecommendOntology.getInstance());
 		
 		return ontologies;
 	}
@@ -921,8 +923,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 		Metadata m = new Metadata();
 		ACLMessage reply = request.createReply();
-		log("Retrieving metadata for hash " + gm.getHash());
-		JPADataSetLO dslo= new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getHash())).getSingleResultWithNull();
+		log("Retrieving metadata for hash " + gm.getInternal_filename());
+		JPADataSetLO dslo= new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getInternal_filename())).getSingleResultWithNull();
 
 		if(dslo!=null){			
 			JPAFilemapping fm=new ResultFormatter<JPAFilemapping>(DAOs.filemappingDAO.getByInternalFilename(dslo.getHash())).getSingleResultWithNull();
@@ -957,11 +959,12 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
 		
-		log("Agent_DataManager.respondToGetAllMetadata");
+		logError("Agent_DataManager.respondToGetAllMetadata");
 
 		List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResults_required()) {
+			logError("DataManager.ResultsRequired");
 			if (gm.getExceptions() != null) {
 				List<String> exHash = new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
@@ -974,6 +977,7 @@ public class Agent_DataManager extends PikaterAgent {
 				datasets = DAOs.dataSetDAO.getAllWithResults();
 			}
 		} else {
+			logError("DataManager.Results  NOT Required");
 			if (gm.getExceptions() != null) {
 				
 				List<String> excludedHashes = new java.util.ArrayList<String>();
@@ -991,8 +995,9 @@ public class Agent_DataManager extends PikaterAgent {
 			
 		}
 
-		List<Metadata> allMetadata = new ArrayList<Metadata>();
+		jade.util.leap.List allMetadata = new jade.util.leap.ArrayList();
 
+		if(datasets!=null){
 		for(JPADataSetLO dslo:datasets){
 			
 			//Getting the Global MetaData for the respond
@@ -1024,6 +1029,7 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 			
 		}
+		}
 		
 		
 		/**
@@ -1054,37 +1060,42 @@ public class Agent_DataManager extends PikaterAgent {
 		GetTheBestAgent g = (GetTheBestAgent) a.getAction();
 		String name = g.getNearest_file_name();
 
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "SELECT * FROM results " + "WHERE dataFile =\'" + name + "\'" + " AND errorRate = (SELECT MIN(errorRate) FROM results " + "WHERE dataFile =\'" + name + "\')";
-		log("Executing query: " + query);
-
-		ResultSet rs = stmt.executeQuery(query);
-		if (!rs.isBeforeFirst()) {
-			ACLMessage reply = request.createReply();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent("There are no results for this file in the database.");
-
-			db.close();
-			return reply;
-		}
-		rs.next();
-
-		NewOptions options = NewOptions.importXML(rs.getString("options"));
+		log("DataManager.GetTheBestAgent for datafile "+name);
 		
-		Agent agent = new Agent();
-		agent.setName(rs.getString("agentName"));
-		agent.setType(rs.getString("agentType"));
-		agent.setOptions(options.getOptions());
+		//TODO: querying based on the dataset (former serialized filename)
+		List<JPAResult> results =  DAOs.resultDAO.getByDataSetHash(name);
 
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
+		
+		if(results.size()>0){
+			
+			double errorRate=Double.MAX_VALUE;
+			JPAResult candidate=null;
+			boolean isFirst=true;
+			for(JPAResult result:results){				
+				if((isFirst)||(result.getErrorRate()<errorRate)){
+					errorRate=result.getErrorRate();
+					candidate=result;
+					isFirst=false;
+				}
+			}
+		
+			NewOptions options = NewOptions.importXML(candidate.getOptions());
+			
+			Agent agent = new Agent();
+			agent.setName(candidate.getAgentName());
+			agent.setType(""+candidate.getAgentTypeId());//TODO: do we should store agent type IDs or agent type names 
+			agent.setOptions(options.getOptions());
 
-		Result _result = new Result(a.getAction(), agent);
-		getContentManager().fillContent(reply, _result);
+			reply.setPerformative(ACLMessage.INFORM);
 
-		db.close();
+			Result _result = new Result(a.getAction(), agent);
+			getContentManager().fillContent(reply, _result);
+		}else{
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent("There are no results for this file in the database.");
+		}
+
 		return reply;
 	}
 	

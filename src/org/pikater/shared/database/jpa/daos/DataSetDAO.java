@@ -182,7 +182,7 @@ public class DataSetDAO extends AbstractDAO{
 	}
 	
 	public List<JPADataSetLO> getAllWithResults(){
-		return null;
+		return getAll(); //TODO: multiple query with results
 	}
 	
 	public List<JPADataSetLO> getAllWithResultsExcludingHashes(List<String> hashesToBeExcluded){

@@ -43,7 +43,7 @@ public class ResultDAO extends AbstractDAO {
 		return getByTypedNamedQuery("Result.getByExperiment", "experiment", experiment);
 	}
 	
-	public List<JPAResult> getByRole(String dataSetHash) {
+	public List<JPAResult> getByDataSetHash(String dataSetHash) {
 		return getByTypedNamedQuery("Result.getByDataSetHash", "hash", dataSetHash);
 	}
 	

@@ -208,7 +208,7 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
-	public static java.util.List<Metadata> getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
+	public static List getAllMetadata(PikaterAgent agent, GetAllMetadata gm) {
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
@@ -226,7 +226,7 @@ public class DataManagerService extends FIPAService {
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
-			java.util.List<Metadata> allMetadata = (java.util.List<Metadata>) r.getValue();
+			List allMetadata = (List) r.getValue();
 			return allMetadata;
 
 		} catch (CodecException e) {
@@ -270,7 +270,12 @@ public class DataManagerService extends FIPAService {
 	}
 	
         public static org.pikater.core.ontology.subtrees.management.Agent getTheBestAgent(PikaterAgent agent, String fileName) {
-            return (org.pikater.core.ontology.subtrees.management.Agent) getTheBestAgents(agent, fileName, 1).get(0);
+        	List agents=getTheBestAgents(agent, fileName, 1);
+        	if((agents!=null)&&(agents.size()>0)){
+        		return (org.pikater.core.ontology.subtrees.management.Agent) agents.get(0);
+        	}else{
+        		return null;
+        	}
         }
         
 	public static List getTheBestAgents(PikaterAgent agent, String fileName, int number) {
