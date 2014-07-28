@@ -91,11 +91,12 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         gm.setResults_required(true);
 
         // 1. choose the nearest training data
-        java.util.List<Metadata> allMetadata = DataManagerService.getAllMetadata(this, gm);
+        jade.util.leap.List allMetadata = DataManagerService.getAllMetadata(this, gm);
 
         // set the min, max instances and attributes first
-        for (Metadata metadataI : allMetadata) {
-
+        for (int i=0;i<allMetadata.size();i++) {
+        	Metadata metadataI=(Metadata)allMetadata.get(i);
+        	
             int na = metadataI.getNumberOfAttributes();
             minAttributes = Math.min(minAttributes, na);
             maxAttributes = Math.max(maxAttributes, na);
@@ -107,7 +108,8 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
         ArrayList<MetadataDistancePair> distances = new ArrayList<MetadataDistancePair>();
 
-        for (Metadata metadataI : allMetadata) {
+        for (int i=0;i<allMetadata.size();i++) {
+        	Metadata metadataI=(Metadata)allMetadata.get(i);
 
             double dNew = distance(metadata, metadataI);
             distances.add(new MetadataDistancePair(metadataI, dNew));
