@@ -6,6 +6,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestrictio
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class ValueType implements Concept
@@ -96,7 +97,21 @@ public class ValueType implements Concept
 		this.setRestriction = setRestriction;
 	}
 	
+	/*
+	 * Some convenience interface.
+	 */
+	public boolean isRangeRestrictionDefined()
+	{
+		return getRangeRestriction() != null;
+	}
+	public boolean isSetRestrictionDefined()
+	{
+		return getSetRestriction() != null;
+	}
+	
 	/**
+	 * The following conditions are checked (all of them are assumed in web package, so
+	 * don't change them lightly):
 	 * - Default value is set.
 	 * - At least one of range and set restrictions is not set.
 	 * - No restriction is set for question mark values.
@@ -109,20 +124,24 @@ public class ValueType implements Concept
 		{
 			return false;
 		}
-		else if((rangeRestriction != null) && (setRestriction != null))
+		else if(isRangeRestrictionDefined() && isSetRestrictionDefined())
 		{
 			return false;
 		}
 		else if (((defaultValue instanceof QuestionMarkRange) || (defaultValue instanceof QuestionMarkSet)) &&
-				((rangeRestriction != null) || (setRestriction != null)))
+				(isRangeRestrictionDefined() || isSetRestrictionDefined()))
 		{
 			return false;
 		}
-		else if((rangeRestriction != null) && !rangeRestriction.isValid())
+		else if ((defaultValue instanceof StringValue) && isRangeRestrictionDefined())
 		{
 			return false;
 		}
-		else if((setRestriction != null) && !setRestriction.isValid())
+		else if(isRangeRestrictionDefined() && !rangeRestriction.isValid())
+		{
+			return false;
+		}
+		else if(isSetRestrictionDefined() && !setRestriction.isValid())
 		{
 			return false;
 		}
