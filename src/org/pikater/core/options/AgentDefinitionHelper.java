@@ -63,17 +63,7 @@ public abstract class AgentDefinitionHelper {
 	}
 
 	public static List<NewOption> getCAOptions() {
-		
-		List<IValueData> modelValues = new ArrayList<IValueData>();
-		modelValues.add(new NullValue());
-		//modelValues.add(new IntegerValue(70704));
-		// TODO tady by mel byt seznam moznych ID modelu k vyberu (jako IntegerValue), volba muze zustat i null
-		
-		NewOption optModel = new NewOption(
-				"model",
-				new NullValue(),
-				new SetRestriction(modelValues));
-	
+		NewOption optModel = new NewOption("model", new NullValue()); // web si sam naplni
 
 		List<IValueData> durationValues = new ArrayList<IValueData>();
 		durationValues.add(new StringValue(ShortTimeDuration.class.getSimpleName()));
