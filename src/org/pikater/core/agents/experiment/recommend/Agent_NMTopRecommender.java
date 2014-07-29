@@ -14,6 +14,7 @@ import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
+import org.pikater.core.ontology.subtrees.management.Agents;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadatas;
@@ -117,10 +118,13 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         List<Agent> agents = new LinkedList<Agent>();
         for (int i = 0; i < M; i++) {
             log(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
-            List<Agent> ag = DataManagerService.getTheBestAgents(this, distances.get(i).m.getInternalName(), N);
+            Agents agentsOnt = DataManagerService.getNBestAgents(this, distances.get(i).m.getInternalName(), N);
             
-            for (Agent agentI : ag) {
-                agents.add(agentI);
+            if(agents!=null) {
+            
+	            for (Agent agentI : agentsOnt.getAgents()) {
+	                agents.add(agentI);
+	            }
             }
         }
 

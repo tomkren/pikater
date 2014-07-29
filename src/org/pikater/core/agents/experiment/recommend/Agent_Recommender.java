@@ -19,12 +19,14 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
+
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
@@ -33,7 +35,7 @@ import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
-import org.pikater.core.ontology.subtrees.recomend.Recommend;
+import org.pikater.core.ontology.subtrees.recommend.Recommend;
 import org.pikater.shared.logging.Verbosity;
 
 
@@ -61,6 +63,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 		ontologies.add(RecommendOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
+		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		
 		return ontologies;
@@ -142,8 +145,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						return reply;
 					}
 					
+					//TODO:
                     // fill options
-                	recommended_agent.setOptions(mergeOptions(recommended_agent.getOptions(), getAgentOptions(recommended_agent.getType()) ));
+                	//recommended_agent.setOptions(mergeOptions(recommended_agent.getOptions(), getAgentOptions(recommended_agent.getType()) ));
 
         			log("********** Agent "
         					+ recommended_agent.getType()

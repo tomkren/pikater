@@ -4,6 +4,11 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 
 public class AgentManagementOntology extends BeanOntology {
@@ -18,9 +23,20 @@ public class AgentManagementOntology extends BeanOntology {
 
         String createAgentPackage = CreateAgent.class.getPackage().getName();
         
+        String optionPackage = NewOption.class.getPackage().getName();
+        String restrictionPackage = IRestriction.class.getPackage().getName();
+        String typePackage = ValueType.class.getPackage().getName();
+        String valueDataPackage = IValueData.class.getPackage().getName();
+        String valuePackage = BooleanValue.class.getPackage().getName();
+        
         try {
             add(createAgentPackage);
 
+            add(optionPackage);
+            add(restrictionPackage);
+            add(typePackage);
+            add(valueDataPackage);
+            add(valuePackage);
         } catch (Exception e) {
             e.printStackTrace();
         }

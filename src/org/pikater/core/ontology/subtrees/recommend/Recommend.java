@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.recomend;
+package org.pikater.core.ontology.subtrees.recommend;
 
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.management.Agent;
