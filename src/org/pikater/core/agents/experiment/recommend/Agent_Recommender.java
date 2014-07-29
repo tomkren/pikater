@@ -22,6 +22,8 @@ import jade.util.leap.List;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
+import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
+import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.configuration.Arguments;
@@ -50,6 +52,8 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data data);
 	protected abstract String getAgentType();
     
+	public static Class<? extends Agent_ComputingAgent> DEFAULT_AGENT = Agent_WekaRBFNetworkCA.class;
+	
 	private org.pikater.core.ontology.subtrees.management.Agent myAgentOntology =
 			new org.pikater.core.ontology.subtrees.management.Agent();
 	
@@ -149,11 +153,11 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                     // fill options
                 	//recommended_agent.setOptions(mergeOptions(recommended_agent.getOptions(), getAgentOptions(recommended_agent.getType()) ));
 
-        			log("********** Agent "
-        					+ recommended_agent.getType()
-        					+ " recommended. Options: "
-        					+ NewOptions.exportToWeka(recommended_agent.getOptions())
-        					+ "**********", Verbosity.MINIMAL);
+        			//log("********** Agent "
+        				//	+ recommended_agent.getType()
+        				//	+ " recommended. Options: "
+        				//	+ NewOptions.exportToWeka(recommended_agent.getOptions())
+        				//	+ "**********", Verbosity.MINIMAL);
 
             		// Prepare the content of inform message                       
     				Result result = new Result(a, recommended_agent);

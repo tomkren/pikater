@@ -1,7 +1,5 @@
 package org.pikater.core.agents.experiment.recommend;
 
-import java.util.List;
-
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.shared.logging.Verbosity;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -104,14 +102,15 @@ public class Agent_Basic extends Agent_Recommender {
 					", options: " + wekaOptionString, Verbosity.MINIMAL);
 		}
 		else{
-			log("No results in database for file " + m_best.getExternalName());
-			return null;
+			agent=new org.pikater.core.ontology.subtrees.management.Agent();
+			agent.setType(Agent_Recommender.DEFAULT_AGENT.getName());
+			agent.setName(Agent_Recommender.DEFAULT_AGENT.getName());
+			log("No results in database for file " + m_best.getExternalName()+" ... Using default agent: "+agent.getType());
+			
 		}
+		
+		return agent;
 
-		agent.setName(null); // we want only the type, since the particular
-								// agent may not any longer exist				
-
-		return agent;		
 	}	         
 	
 	private String distanceMatrix() {

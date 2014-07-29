@@ -1020,9 +1020,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ACLMessage reply = request.createReply();
 		
+		Agents foundAgents=new Agents();
 		if(results.size()>0){
-			
-			Agents foundAgents=new Agents();
 			
 			
 			double errorRate=Double.MAX_VALUE;
@@ -1040,19 +1039,17 @@ public class Agent_DataManager extends PikaterAgent {
 			
 			Agent agent = new Agent();
 			agent.setName(candidate.getAgentName());
-			agent.setType(candidate.getAgentName());//TODO: do we should store agent type IDs or agent type names 
+			agent.setType(candidate.getAgentName()); 
 			agent.setOptions(options.getOptions());
 			
 			foundAgents.add(agent);
-
-			reply.setPerformative(ACLMessage.INFORM);
-
-			Result _result = new Result(a.getAction(), foundAgents);
-			getContentManager().fillContent(reply, _result);
-		}else{
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent("There are no results for this file in the database.");
 		}
+		
+		reply.setPerformative(ACLMessage.INFORM);
+
+		Result _result = new Result(a.getAction(), foundAgents);
+		getContentManager().fillContent(reply, _result);
+			
 
 		return reply;
 	}
