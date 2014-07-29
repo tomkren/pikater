@@ -36,6 +36,18 @@ public class TabSheetTabComponent extends Panel // something clickable
 		setContent(innerLayout);
 	}
 	
+	@Override
+	public String getCaption()
+	{
+		return label.getValue();
+	}
+	
+	@Override
+	public void setCaption(String caption)
+	{
+		label.setValue(caption);
+	}
+	
 	public boolean canCloseTab()
 	{
 		return true; // just some default implementation - override in subclasses
@@ -57,11 +69,6 @@ public class TabSheetTabComponent extends Panel // something clickable
 		{
 			invertSelection();
 		}
-	}
-	
-	protected Label getTabCaption()
-	{
-		return label;
 	}
 	
 	private void invertSelection()

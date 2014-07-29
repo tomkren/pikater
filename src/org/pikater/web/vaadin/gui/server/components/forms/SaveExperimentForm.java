@@ -10,10 +10,8 @@ import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.OptionGroup;
@@ -90,7 +88,9 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 		
 		// first create the fields
 		this.field_experimentName = FormFieldFactory.getGeneralTextField("Experiment name:", "Enter the name", null, false, false);
+		this.field_experimentName.setWidth("100%");
 		this.field_experimentNote = FormFieldFactory.getGeneralTextArea("Note:", "A short description for this experiment?", null, false, false);
+		this.field_experimentNote.setWidth("100%");
 		switch(saveMode)
 		{
 			case SAVE_FOR_LATER:
@@ -99,8 +99,8 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 					new SaveForLaterMode[] { SaveForLaterMode.SAVE_AS_NEW };
 				for(SaveForLaterMode mode : availableSaveForLaterModes)
 				{
-					Item itemID = this.field_saveForLaterMode.addItem(mode);
-					itemID.addItemProperty(mode.toItemPropertyID(), new ObjectProperty<String>(mode.toDisplayString()));
+					this.field_saveForLaterMode.addItem(mode);
+					this.field_saveForLaterMode.setItemCaption(mode, mode.toDisplayString());
 				}
 				this.field_saveForLaterMode.addValueChangeListener(new Property.ValueChangeListener()
 				{
@@ -124,8 +124,8 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 								
 							case SAVE_AS_NEW:
 							case SAVE_AS_NEW_AND_DELETE_PREVIOUS:
-								field_experimentName.setValue(null);
-								field_experimentNote.setValue(null);
+								field_experimentName.setValue("");
+								field_experimentNote.setValue("");
 								break;
 							default:
 								throw new IllegalStateException("Unknown state: " + mode.name());
@@ -149,7 +149,9 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 					userPriorityOptions.add(i);
 				}
 				this.field_priorityAssignedByUser = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
+				this.field_priorityAssignedByUser.setWidth("100%");
 				this.field_computationEstimateInHours = FormFieldFactory.getNumericField("Est. computation time (hours):", new Integer(1), 1, null, true, false);
+				this.field_computationEstimateInHours.setWidth("100%");
 				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("Send email when finished:", true, false, false);
 				break;
 				

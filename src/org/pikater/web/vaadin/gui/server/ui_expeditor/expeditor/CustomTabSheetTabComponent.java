@@ -14,6 +14,7 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 		super(caption);
 		
 		this.contentComponent = contentComponent;
+		this.contentComponent.setParentTab(this);
 	}
 	
 	@Override
@@ -31,16 +32,16 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 	{
 		if(modified)
 		{
-			if(!getTabCaption().getValue().startsWith("* "))
+			if(!getCaption().startsWith("* "))
 			{
-				getTabCaption().setValue("* " + getTabCaption().getValue());
+				setCaption("* " + getCaption());
 			}
 		}
 		else
 		{
-			if(getTabCaption().getValue().startsWith("* "))
+			if(getCaption().startsWith("* "))
 			{
-				getTabCaption().setValue(getTabCaption().getValue().substring(2));
+				setCaption(getCaption().substring(2));
 			}
 		}
 	}

@@ -169,6 +169,12 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	// *****************************************************************************************************
 	// COMMANDS FROM SERVER
 	
+	/*
+	 * IMPORTANT: don't call other commands from inside commands. Because we use
+	 * scheduler, the action are simply enqueued and hence any action called
+	 * will actually be performed after the current one finishes. 
+	 */
+	
 	@Override
 	public void command_createBox(final BoxInfo info)
 	{	
@@ -196,10 +202,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			{
 				if(experiment != null)
 				{
-					// first reset
-					command_resetKineticEnvironment();
-					
-					// and then load the experiment
 					getEngine().fromIntermediateFormat(experiment);
 				}
 				else
