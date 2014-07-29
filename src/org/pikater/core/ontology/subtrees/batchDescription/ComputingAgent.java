@@ -12,7 +12,6 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 
 /**
