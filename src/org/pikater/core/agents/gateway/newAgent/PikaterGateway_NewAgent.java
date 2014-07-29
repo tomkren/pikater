@@ -5,20 +5,19 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
-import jade.wrapper.gateway.JadeGateway;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.gateway.Agent_PikaterGateway;
+import org.pikater.core.agents.gateway.Initiator;
+import org.pikater.core.agents.gateway.PikaterGateway_General;
+import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 
 public class PikaterGateway_NewAgent {
 
-	public static void newAgent(Class<?> agentClass) throws Exception {
-
+	public static void newAgent(Class<?> agentClass) throws PikaterGatewayException {
 		try {
-	        JadeGateway.init(Agent_PikaterGateway.class.getName(), null);
-	        
 	        NewAgent newAgent = new NewAgent();
 	        newAgent.setAgentClassName(agentClass.getName());
 
@@ -28,18 +27,13 @@ public class PikaterGateway_NewAgent {
 					AgentNames.AGENTINFO_MANAGER, agentInfoOntology,
 					newAgent);
 
-			NewAgentInfoInitiator initiator = new NewAgentInfoInitiator(msg);
-			JadeGateway.execute(initiator, 10000);
+			Initiator initiator = new Initiator(msg);
+
+			PikaterGateway_General.generalRequest(initiator);
 			initiator.getOkResponse();
 
-			JadeGateway.shutdown();
-
-		} catch (CodecException | OntologyException e1) {
-			throw new Exception("Failed to make request");
-		} catch (ControllerException | InterruptedException e) {
-			Exception x = new Exception("JadeGateway.execute() failed");
-			x.setStackTrace(e.getStackTrace());
-			throw x;
+		} catch (ControllerException | CodecException | OntologyException e1) {
+			throw new PikaterGatewayException("Failed to make request");
 		}
 
 	}
