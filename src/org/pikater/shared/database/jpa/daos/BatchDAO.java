@@ -9,8 +9,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
-import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPABatch;
@@ -274,14 +272,12 @@ public class BatchDAO extends AbstractDAO {
 			if(batch!=null){
 				JPAExperiment jpaExperiment;
 				
-				if(experiment.getModel() instanceof NewModel){
+				if(experiment.getModel() == null){
 					jpaExperiment=new JPAExperiment(batch);
-				}else if(experiment.getModel() instanceof ModelDescription){
-					int modelID=((ModelDescription)experiment.getModel()).getModelID();
+				}else{
+					int modelID=experiment.getModel();
 					JPAModel model=em.find(JPAModel.class, modelID);
 					jpaExperiment=new JPAExperiment(batch, model);
-				}else{
-					jpaExperiment=new JPAExperiment();
 				}
 				
 				jpaExperiment.setStatus(experiment.getStatus());

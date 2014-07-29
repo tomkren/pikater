@@ -158,6 +158,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 
 		IExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setSave_results(true);
+		task.setSaveMode("message");
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
 		task.setAgent(agent);

@@ -12,7 +12,7 @@ public class WrapperBox extends AbstractBox
 	
 	public WrapperBox(BoxInfo boxConfig, AbstractBox... childBoxes)
 	{
-		super(boxConfig.displayName, "", boxConfig.pictureURL, BoxType.MULTIBOX); 
+		super(boxConfig.displayName, "", boxConfig.pictureURL, BoxType.TRIBOX); 
 		
 		this.childBoxes = Arrays.asList(childBoxes);
 	}

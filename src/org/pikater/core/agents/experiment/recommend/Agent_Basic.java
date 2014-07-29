@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.options.recommend.BasicRecommend_Box;
 
@@ -47,10 +48,10 @@ public class Agent_Basic extends Agent_Recommender {
 		gm.setResults_required(true);
 
 		// 1. choose the nearest training data
-		List<Metadata> allMetadata = DataManagerService.getAllMetadata(this, gm);
+		Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
 
 		// set the min, max instances and attributes first
-		for (Metadata next_md : allMetadata) {
+		for(Metadata next_md : allMetadata.getMetadatas()) {
 
 			int na = next_md.getNumberOfAttributes();
 			if (na < minAttributes) {
@@ -77,7 +78,7 @@ public class Agent_Basic extends Agent_Recommender {
 
 		double d_new;
 
-		for (Metadata next_md : allMetadata) {
+		for (Metadata next_md : allMetadata.getMetadatas()) {
 
 			d_new = distance(metadata, next_md);
 			if (!next_md.getInternalName().equals(metadata.getInternalName())) {
@@ -119,10 +120,10 @@ public class Agent_Basic extends Agent_Recommender {
 		GetAllMetadata gm = new GetAllMetadata();
 		gm.setResults_required(false);
 	
-		List<Metadata> allMetadata = DataManagerService.getAllMetadata(this, gm);
+		Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
 	
-		for (Metadata next_coll : allMetadata) {
-	
+		for(Metadata next_coll : allMetadata.getMetadatas()) {
+			
 			int na = next_coll.getNumberOfAttributes();
 			if (na < minAttributes) {
 				minAttributes = na;
@@ -141,11 +142,12 @@ public class Agent_Basic extends Agent_Recommender {
 		}
 	
 		double d;
-		for (Metadata next_coll : allMetadata) {
+		for(Metadata next_coll : allMetadata.getMetadatas()) {
 
 			matrix +=next_coll.getExternalName() + ";";
 
-			for (Metadata next_row : allMetadata) {
+			for(Metadata next_row : allMetadata.getMetadatas()) {
+				
 				d = distance(next_coll, next_row);
 				matrix += String.format("%.10f", d);
 				matrix += ";";				

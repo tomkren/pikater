@@ -48,6 +48,10 @@ public class JPAResult extends JPAAbstractEntity{
 	private double relativeAbsoluteError;
     @Column(nullable = false)
 	private double rootRelativeSquaredError;
+    @Column(nullable=false)
+    private int duration;
+    @Column(nullable=false)
+    private double durationLR;
     @Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date start;
@@ -139,7 +143,19 @@ public class JPAResult extends JPAAbstractEntity{
         this.rootRelativeSquaredError = rootRelativeSquaredError;
     }
 
-    public Date getStart() {
+    public int getDuration() {
+		return duration;
+	}
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	public double getDurationLR() {
+		return durationLR;
+	}
+	public void setDurationLR(double durationLR) {
+		this.durationLR = durationLR;
+	}
+	public Date getStart() {
         return start;
     }
 
@@ -200,6 +216,8 @@ public class JPAResult extends JPAAbstractEntity{
     	this.relativeAbsoluteError=updateValues.getRelativeAbsoluteError();
     	this.rootMeanSquaredError=updateValues.getRootMeanSquaredError();
     	this.rootRelativeSquaredError=updateValues.getRootRelativeSquaredError();
+    	this.duration=updateValues.getDuration();
+    	this.durationLR=updateValues.getDurationLR();
     	this.serializedFileName=updateValues.getSerializedFileName();
     	this.start=updateValues.getStart();
     	this.createdModel=updateValues.getCreatedModel();

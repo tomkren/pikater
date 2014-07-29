@@ -137,6 +137,11 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 					
 					org.pikater.core.ontology.subtrees.management.Agent recommended_agent = chooseBestAgent(rec.getData());
                     
+					if(recommended_agent==null){
+						reply.setPerformative(ACLMessage.FAILURE);
+						return reply;
+					}
+					
                     // fill options
                 	recommended_agent.setOptions(mergeOptions(recommended_agent.getOptions(), getAgentOptions(recommended_agent.getType()) ));
 

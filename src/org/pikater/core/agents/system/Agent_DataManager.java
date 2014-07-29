@@ -15,7 +15,6 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.util.leap.Iterator;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
@@ -33,10 +32,7 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
 import org.pikater.shared.database.utils.ResultFormatter;
-import org.pikater.shared.database.ConnectionProvider;
-import org.pikater.shared.utilities.logging.PikaterLogger;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
@@ -48,24 +44,13 @@ import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
+import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
-import org.postgresql.PGConnection;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -102,6 +87,7 @@ import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.model.GetModel;
 import org.pikater.core.ontology.subtrees.model.GetModels;
@@ -111,7 +97,6 @@ import org.pikater.core.ontology.subtrees.model.SaveModel;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
-import org.pikater.core.ontology.subtrees.result.SavedResult;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
@@ -121,12 +106,7 @@ import com.google.common.io.Files;
 
 public class Agent_DataManager extends PikaterAgent {
 
-	private final String DEFAULT_CONNECTION_PROVIDER = "defaultConnection";
-	private static final String CONNECTION_ARG_NAME = "connection";
-	private String connectionBean;
-	private ConnectionProvider connectionProvider;
 	private static final long serialVersionUID = 1L;
-	Connection db;
 
 	public static String dataFilesPath =
 			"core" + System.getProperty("file.separator") +
@@ -153,29 +133,15 @@ public class Agent_DataManager extends PikaterAgent {
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(ModelOntology.getInstance());
+		ontologies.add(RecommendOntology.getInstance());
 		
 		return ontologies;
 	}
 	
 	@Override
 	protected void setup() {
-		try {
-			initDefault();
-			registerWithDF();
-			
-			if (containsArgument(CONNECTION_ARG_NAME)) {
-				connectionBean = getArgumentValue(CONNECTION_ARG_NAME);
-			} else {
-				connectionBean = DEFAULT_CONNECTION_PROVIDER;
-			}
-			connectionProvider = (ConnectionProvider) context.getBean(connectionBean);
-
-			log("Connecting to " + connectionProvider.getConnectionInfo() + ".");
-			openDBConnection();
-
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-		}
+		initDefault();
+		registerWithDF();
 
 		File data = new File(dataFilesPath + "temp");
 		if (!data.exists()) {
@@ -255,7 +221,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToSaveResults(request, a);
 					}
 					if (a.getAction() instanceof LoadResults) {
-						return respondToLoadResults(request, a);
+						logError("Not Implemented");
 					}
 
 					/**
@@ -312,19 +278,19 @@ public class Agent_DataManager extends PikaterAgent {
 					 * Deprecated Files actions
 					 */
 					if (a.getAction() instanceof GetFile) {
-						return respondToGetFile(request, a);
+						logError("Not Implemented");
 					}
 					if (a.getAction() instanceof GetFileInfo) {
-						return respondToGetFileInfo(request, a);
+						logError("Not Implemented");
 					}
 					if (a.getAction() instanceof ImportFile) {
-						return respondToImportFile(request, a);
+						logError("Not Implemented");
 					}
 					if (a.getAction() instanceof GetFiles) {
-						return respondToGetFiles(request, a);
+						logError("Not Implemented");
 					}
 					if (a.getAction() instanceof DeleteTempFiles) {
-						return respondToDeleteTempFiles(request);
+						logError("Not Implemented");
 					}
 
 
@@ -332,15 +298,13 @@ public class Agent_DataManager extends PikaterAgent {
 					logError("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
 					logError("Codec problem: " + e.getMessage(), e);
-				} catch (SQLException e) {
-					logError("SQL error: " + e.getMessage(), e);
 				} catch (Exception e) {
 					logError(e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: " + request.getContent());
+				logError("Failure responding to request: " + request.getConversationId());
 				return failure;
 			}
 
@@ -681,16 +645,17 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 	
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
-		
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
 		NewOptions options = new NewOptions(task.getAgent().getOptions());
-		int experimentID = task.getComputationId();
+		
+		int experimentID = saveResult.getExperimentID();
 
 		JPAResult jparesult = new JPAResult();
-
 		jparesult.setAgentName(task.getAgent().getName());
 		jparesult.setOptions(options.exportXML());
+		log("Saving result for hash: "+task.getData().getInternalTrainFileName());
+		jparesult.setSerializedFileName(task.getData().getInternalTrainFileName());
 
 		float errorRate = Float.MAX_VALUE;
 		float kappa_statistic = Float.MAX_VALUE;
@@ -698,10 +663,7 @@ public class Agent_DataManager extends PikaterAgent {
 		float root_mean_squared_error = Float.MAX_VALUE;
 		float relative_absolute_error = Float.MAX_VALUE; // percent
 		float root_relative_squared_error = Float.MAX_VALUE; // percent
-		
-		@SuppressWarnings("unused")
 		int duration = Integer.MAX_VALUE; // miliseconds
-		@SuppressWarnings("unused")
 		float durationLR = Float.MAX_VALUE;
 
 		
@@ -752,13 +714,6 @@ public class Agent_DataManager extends PikaterAgent {
 		if (durationLREval != null) {
 			durationLR = (float) durationLREval.getValue();
 		}
-
-
-		String start = getDateTime();
-		String finish = getDateTime();
-		
-		if (task.getStart() != null) { start = task.getStart(); }
-		if (task.getFinish() != null){ finish = task.getFinish(); }
 		
 		jparesult.setErrorRate(errorRate);
 		jparesult.setKappaStatistic(kappa_statistic);
@@ -766,15 +721,29 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setRootMeanSquaredError(root_mean_squared_error);
 		jparesult.setRelativeAbsoluteError(relative_absolute_error);
 		jparesult.setRootRelativeSquaredError(root_relative_squared_error);
-		jparesult.setStart(new Date(Timestamp.valueOf(start).getTime()));
-		jparesult.setFinish(new Date(Timestamp.valueOf(finish).getTime()));
+		jparesult.setDuration(duration);
+		jparesult.setDurationLR(durationLR);
+		
+		Date start=new Date();
+		if(task.getStart()!=null){//TODO: retrieve result's start time and set date format
+			try {
+				start=new SimpleDateFormat("YYYY ").parse(task.getStart());
+			} catch (ParseException e) {
+				logError("Result start date in inappropriate format", e);
+			}
+		}
+		jparesult.setStart(start);
+		
+		Date finish=new Date();
+		if(task.getFinish()!=null){//TODO: retrieve result's finish time and set date format
+			try {
+				start=new SimpleDateFormat("YYYY ").parse(task.getFinish());
+			} catch (ParseException e) {
+				logError("Result finish date in inappropriate format", e);
+			}
+		}
+		jparesult.setFinish(finish);
 
-		// v novem modelu tohle neni
-		// query += "\'" + duration + "\',";
-		// query += "\'" + durationLR + "\',";
-
-		// je to ono?
-		jparesult.setSerializedFileName(task.getResult().getObjectFilename());
 		// query += "\'" + res.getResult().getObject_filename() + "\', ";
 		// query += "\'" + res.getId().getIdentificator() + "\',"; // TODO -
 		// pozor - neni jednoznacne, pouze pro jednoho managera
@@ -784,64 +753,18 @@ public class Agent_DataManager extends PikaterAgent {
 		int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
 		if(resultID!=-1){
 			log("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
+			if (task.getResult().getObject() != null) {
+				saveResultModel(task, resultID);
+			}
 		} else {
-			logError(request.toString()+ "Couldn't persist JPAResult for experiment ID \n"+experimentID);
+			logError("Couldn't persist JPAResult for experiment ID \n"+experimentID);
 		}
-
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		return reply;
 	}
 	
-	private String getDateTime() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-		Date date = new Date();
-
-		return dateFormat.format(date);
-    }
-	
-	private ACLMessage respondToLoadResults(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		LoadResults lr = (LoadResults) a.getAction();
-
-		String query = "SELECT * FROM resultsExternal " + lr.asSQLCondition();
-		log(query);
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
-
-		List<SavedResult> results = new ArrayList<SavedResult>();
-
-		while (rs.next()) {
-
-			SavedResult sr = new SavedResult();
-
-			sr.setAgentType(rs.getString("agentType"));
-			sr.setAgentOptions(rs.getString("options"));
-			sr.setTrainFile(rs.getString("trainFileExt"));
-			sr.setTestFile(rs.getString("testFileExt"));
-			sr.setErrorRate(rs.getDouble("errorRate"));
-			sr.setKappaStatistic(rs.getDouble("kappaStatistic"));
-			sr.setMeanAbsError(rs.getDouble("meanAbsoluteError"));
-			sr.setRMSE(rs.getDouble("rootMeanSquaredError"));
-			sr.setRootRelativeSquaredError(rs.getDouble("rootRelativeSquaredError"));
-			sr.setRelativeAbsoluteError(rs.getDouble("relativeAbsoluteError"));
-			sr.setDate("nodate");
-
-			results.add(sr);
-		}
-
-		Result r = new Result(a.getAction(), results);
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		getContentManager().fillContent(reply, r);
-
-		db.close();
-		return reply;
-	}
-
 	private ACLMessage respondToSaveDatasetMessage(ACLMessage request, Action a){
 		SaveDataset sd=(SaveDataset)a.getAction();
 
@@ -878,7 +801,20 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) throws SQLException, ClassNotFoundException {
+	private void saveResultModel(Task task, int resultId) {
+		Model m = new Model();
+		m.setAgentClassName(task.getAgent().getType());
+		m.setResultID(resultId);
+		m.setSerializedAgent(task.getResult().getObject());
+		int savedModelID=DAOs.resultDAO.setModelForResult(m);
+		if (savedModelID == -1) {
+			logError("Failed to persist model for result with ID "+resultId);
+		} else {
+			log("Persisted JPAModel "+savedModelID);
+		}
+	}
+
+	private ACLMessage respondToSaveMetadataMessage(ACLMessage request, Action a) {
 		SaveMetadata saveMetadata = (SaveMetadata) a.getAction();
 		Metadata metadata = saveMetadata.getMetadata();
 		int dataSetID =saveMetadata.getDataSetID();
@@ -921,48 +857,53 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 	
-	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage replyToGetMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
 		GetMetadata gm = (GetMetadata) a.getAction();
 
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "SELECT * FROM metadata WHERE internalfilename = '" + gm.getInternal_filename() + "'";
-
 		Metadata m = new Metadata();
-
-		ResultSet rs = stmt.executeQuery(query);
-
-		while (rs.next()) {
-			m.setAttributeType(rs.getString("attributeType"));
-			m.setDefaultTask(rs.getString("defaultTask"));
-			m.setExternalName(rs.getString("externalFilename"));
-			m.setInternalName(rs.getString("internalFilename"));
-			m.setMissingValues(rs.getBoolean("missingValues"));
-			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
-			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
-		}
-
-		log("Executing query: " + query);
-
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
+		log("Retrieving metadata for hash " + gm.getInternal_filename());
+		JPADataSetLO dslo= new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getInternal_filename())).getSingleResultWithNull();
+
+		if(dslo!=null){			
+			JPAFilemapping fm=new ResultFormatter<JPAFilemapping>(DAOs.filemappingDAO.getByInternalFilename(dslo.getHash())).getSingleResultWithNull();
+
+			m.setDefaultTask(dslo.getGlobalMetaData().getDefaultTaskType().getName());
+			m.setNumberOfInstances(dslo.getGlobalMetaData().getNumberofInstances());
+			m.setNumberOfAttributes(dslo.getNumberOfAttributes());
+			if(fm!=null){
+				m.setExternalName(fm.getExternalfilename()); //TODO: Deprecated, do we need this
+				m.setInternalName(fm.getInternalfilename()); //TODO: Deprecated, do we need this
+			}
+
+			boolean missing=false;
+			for(JPAAttributeMetaData jpaamd:dslo.getAttributeMetaData()){
+				missing=missing||(jpaamd.getRatioOfMissingValues()>0);
+			}
+			m.setMissingValues(missing);
+
+			//Deprecated m.setAttributeType(rs.getString("attributeType"));
+
+			reply.setPerformative(ACLMessage.INFORM);
+		}else{
+			reply.setPerformative(ACLMessage.FAILURE);
+		}
 
 		Result _result = new Result(a.getAction(), m);
 		getContentManager().fillContent(reply, _result);
 
-		db.close();
 		return reply;
 	}
 	
-	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
 		
-		log("Agent_DataManager.respondToGetAllMetadata");
+		logError("Agent_DataManager.respondToGetAllMetadata");
 
 		List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResults_required()) {
+			logError("DataManager.ResultsRequired");
 			if (gm.getExceptions() != null) {
 				List<String> exHash = new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
@@ -975,9 +916,10 @@ public class Agent_DataManager extends PikaterAgent {
 				datasets = DAOs.dataSetDAO.getAllWithResults();
 			}
 		} else {
+			logError("DataManager.Results  NOT Required");
 			if (gm.getExceptions() != null) {
 				
-				List<String> excludedHashes = new java.util.ArrayList<String>();
+				List<String> excludedHashes = new ArrayList<String>();
 				
 				Iterator itr = gm.getExceptions().iterator();
 				while (itr.hasNext()) {
@@ -994,6 +936,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		List<Metadata> allMetadata = new ArrayList<Metadata>();
 
+		if(datasets!=null){
 		for(JPADataSetLO dslo:datasets){
 			
 			//Getting the Global MetaData for the respond
@@ -1001,7 +944,7 @@ public class Agent_DataManager extends PikaterAgent {
 			
 			List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
 			for(JPAAttributeMetaData amd:attrMDs){
-				Metadata aM=new Metadata();
+				Metadata aM = new Metadata();
 				
 				
 				aM.setInternalName(dslo.getHash());
@@ -1025,6 +968,7 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 			
 		}
+		}
 		
 		
 		/**
@@ -1045,47 +989,55 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Result _result = new Result(a.getAction(), allMetadata);
+		Metadatas metadatas = new Metadatas();
+		metadatas.setMetadatas(allMetadata);
+		
+		Result _result = new Result(a.getAction(), metadatas);
 		getContentManager().fillContent(reply, _result);
 
 		return reply;
 	}
 	
-	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
+	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws ClassNotFoundException, CodecException, OntologyException {
 		GetTheBestAgent g = (GetTheBestAgent) a.getAction();
 		String name = g.getNearest_file_name();
 
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "SELECT * FROM results " + "WHERE dataFile =\'" + name + "\'" + " AND errorRate = (SELECT MIN(errorRate) FROM results " + "WHERE dataFile =\'" + name + "\')";
-		log("Executing query: " + query);
-
-		ResultSet rs = stmt.executeQuery(query);
-		if (!rs.isBeforeFirst()) {
-			ACLMessage reply = request.createReply();
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent("There are no results for this file in the database.");
-
-			db.close();
-			return reply;
-		}
-		rs.next();
-
-		NewOptions options = NewOptions.importXML(rs.getString("options"));
+		log("DataManager.GetTheBestAgent for datafile "+name);
 		
-		Agent agent = new Agent();
-		agent.setName(rs.getString("agentName"));
-		agent.setType(rs.getString("agentType"));
-		agent.setOptions(options.getOptions());
+		//TODO: querying based on the dataset (former serialized filename)
+		List<JPAResult> results =  DAOs.resultDAO.getByDataSetHash(name);
 
 		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
+		
+		if(results.size()>0){
+			
+			double errorRate=Double.MAX_VALUE;
+			JPAResult candidate=null;
+			boolean isFirst=true;
+			for(JPAResult result:results){				
+				if((isFirst)||(result.getErrorRate()<errorRate)){
+					errorRate=result.getErrorRate();
+					candidate=result;
+					isFirst=false;
+				}
+			}
+		
+			NewOptions options = NewOptions.importXML(candidate.getOptions());
+			
+			Agent agent = new Agent();
+			agent.setName(candidate.getAgentName());
+			agent.setType(""+candidate.getAgentTypeId());//TODO: do we should store agent type IDs or agent type names 
+			agent.setOptions(options.getOptions());
 
-		Result _result = new Result(a.getAction(), agent);
-		getContentManager().fillContent(reply, _result);
+			reply.setPerformative(ACLMessage.INFORM);
 
-		db.close();
+			Result _result = new Result(a.getAction(), agent);
+			getContentManager().fillContent(reply, _result);
+		}else{
+			reply.setPerformative(ACLMessage.FAILURE);
+			reply.setContent("There are no results for this file in the database.");
+		}
+
 		return reply;
 	}
 	
@@ -1166,7 +1118,7 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 	
-	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException, FailureException {
+	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws FailureException, CodecException, OntologyException {
 		String type = ((GetExternalAgentJar)a.getAction()).getType();
 		log("getting JAR for agent type "+type);
 		
@@ -1223,316 +1175,5 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
-	/************************************************************************************************
-	 * Obsolete methods
-	 * 
-	 */
-	private ACLMessage respondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException, SQLException {
-		String hash = ((GetFile)a.getAction()).getHash();
-		log(new Date().toString()+" DataManager.GetFile");
-		
-		List<JPADataSetLO> dslos=DAOs.dataSetDAO.getByHash(hash);
-		if(dslos.size()>0){
-			
-			try {
-				JPADataSetLO dslo=dslos.get(0);
-				log(new Date().toString()+" Found DSLO: "+dslo.getDescription()+" - "+dslo.getOID()+" - "+dslo.getHash());
-				openDBConnection();
-				PostgreLargeObjectReader reader = new PostgreLargeObjectReader((PGConnection)db,dslo.getOID());
-				log(reader.toString());
-				File temp = new File(dataFilesPath + "temp" + System.getProperty("file.separator") + hash);
-				FileOutputStream out = new FileOutputStream(temp);
-				try {
-					byte[] buf = new byte[100*1024];
-					int read;
-					while ((read = reader.read(buf, 0, buf.length)) > 0) {
-						out.write(buf, 0, read);
-					}
-					
-					File target=new File(dataFilesPath + hash);
-					log(new Date()+" Moving file to: "+target.getAbsolutePath());
-					if(temp.renameTo(target)){
-						log(new Date()+"File was successfully moved");
-					}else{
-						logError(new Date()+" Error while moving file with hash "+dslo.getHash()+" to new location "+target.getAbsolutePath());
-					}
-				} finally {
-					reader.close();
-					out.close();
-					db.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}else{
-			logError("DataSet file with hash "+hash+" not found.");
-		}
-		
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(a, "OK");
-		getContentManager().fillContent(reply, r);
-
-		return reply;
-	}
-
-	private ACLMessage respondToGetFileInfo(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		GetFileInfo gfi = (GetFileInfo) a.getAction();
-
-		String query = "SELECT * FROM filemetadata WHERE " + gfi.toSQLCondition();
-
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		log("Executing query: " + query);
-
-		ResultSet rs = stmt.executeQuery(query);
-
-		jade.util.leap.List fileInfos = new jade.util.leap.ArrayList();
-
-		while (rs.next()) {
-			Metadata m = new Metadata();
-			m.setAttributeType(rs.getString("attributeType"));
-			m.setDefaultTask(rs.getString("defaultTask"));
-			m.setExternalName(rs.getString("externalFilename"));
-			m.setInternalName(rs.getString("internalFilename"));
-			m.setMissingValues(rs.getBoolean("missingValues"));
-			m.setNumberOfAttributes(rs.getInt("numberOfAttributes"));
-			m.setNumberOfInstances(rs.getInt("numberOfInstances"));
-			fileInfos.add(m);
-		}
-
-		Result r = new Result(a.getAction(), fileInfos);
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		getContentManager().fillContent(reply, r);
-
-		db.close();
-		return reply;
-	}
-
-	private ACLMessage respondToImportFile(ACLMessage request, Action a) throws IOException, CodecException, OntologyException, SQLException, ClassNotFoundException {
-		ImportFile im = (ImportFile) a.getAction();
-
-		String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
-
-		if (im.isTempFile()) {
-
-			FileWriter fw = new FileWriter(pathPrefix + im.getExternalFilename());
-			fw.write(im.getFileContent());
-			fw.close();
-
-			ACLMessage reply = request.createReply();
-			reply.setPerformative(ACLMessage.INFORM);
-
-			Result r = new Result(im, pathPrefix + im.getExternalFilename());
-			getContentManager().fillContent(reply, r);
-
-			return reply;
-
-		}
-
-		if (im.getFileContent() == null) {
-			String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "core" + System.getProperty("file.separator");
-			path += "incoming" + System.getProperty("file.separator") + im.getExternalFilename();
-
-			String internalFilename = md5(path);
-
-			
-			/**
-			 * CREATE??? a new DataSet with empty metadata
-			 */
-			emptyMetadataToDB(internalFilename, im.getExternalFilename());
-
-			File f = new File(path);
-
-			if(DAOs.filemappingDAO.fileExists(internalFilename)){
-				f.delete();
-				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
-			}else{
-				JPAFilemapping fm=new JPAFilemapping();
-				fm.setUser(DAOs.userDAO.getByID(im.getUserID(),EmptyResultAction.LOG_NULL));
-				fm.setInternalfilename(internalFilename);
-				fm.setExternalfilename(im.getExternalFilename());
-				
-				DAOs.filemappingDAO.storeEntity(fm);
-
-				String newName = Agent_DataManager.dataFilesPath + internalFilename;
-				move(f, new File(newName));
-			}
-			
-			ACLMessage reply = request.createReply();
-			reply.setPerformative(ACLMessage.INFORM);
-
-			Result r = new Result(im, internalFilename);
-			getContentManager().fillContent(reply, r);
-
-			return reply;
-		} else {
-
-			String fileContent = im.getFileContent();
-			String fileName = im.getExternalFilename();
-			String internalFilename = DigestUtils.md5Hex(fileContent);
-
-			emptyMetadataToDB(internalFilename, fileName);
-
-
-			if(DAOs.filemappingDAO.fileExists(internalFilename)){
-				PikaterLogger.getLogger(Agent_DataManager.class).warn("File " + internalFilename + " already present in the database");
-			}else{
-				JPAFilemapping fm=new JPAFilemapping();
-				fm.setUser(DAOs.userDAO.getByID(im.getUserID(),EmptyResultAction.LOG_NULL));
-				fm.setInternalfilename(internalFilename);
-				fm.setExternalfilename(im.getExternalFilename());
-				
-				DAOs.filemappingDAO.storeEntity(fm);
-
-				String newName = Agent_DataManager.dataFilesPath + internalFilename;
-
-				FileWriter file = new FileWriter(newName);
-				file.write(fileContent);
-				file.close();
-
-				PikaterLogger.getLogger(Agent_DataManager.class).info("Created file: " + newName);
-			}
-
-			ACLMessage reply = request.createReply();
-			reply.setPerformative(ACLMessage.INFORM);
-
-			Result r = new Result(im, internalFilename);
-			getContentManager().fillContent(reply, r);
-
-			db.close();
-			return reply;
-		}
-	}
-
-	private ACLMessage respondToGetFiles(ACLMessage request, Action a) throws SQLException, ClassNotFoundException, CodecException, OntologyException {
-		
-		log("DataManager . GetFiles");
-		GetFiles gf = (GetFiles) a.getAction();
-
-		java.util.List<JPAFilemapping> userFiles=DAOs.filemappingDAO.getByUserID(gf.getUserID());
-		
-		ArrayList<String> files = new ArrayList<String>();
-
-		for(JPAFilemapping fm:userFiles){
-			files.add(fm.getExternalfilename());
-		}
-
-		Result r = new Result(a.getAction(), files);
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		getContentManager().fillContent(reply, r);
-
-		return reply;
-	}
-
-	private ACLMessage respondToDeleteTempFiles(ACLMessage request) {
-		String path = Agent_DataManager.dataFilesPath +
-				"temp" + System.getProperty("file.separator");
-
-		File tempDir = new File(path);
-		String[] files = tempDir.list();
-
-		if (files != null) {
-			for (String file : files) {
-				File d = new File(path + file);
-				d.delete();
-			}
-		}
-
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-
-		return reply;
-	}
-
-	private void openDBConnection() throws SQLException, ClassNotFoundException {
-		db = connectionProvider.getConnection();
-	}
-
-	private void emptyMetadataToDB(String internalFilename, String externalFilename) throws SQLException, ClassNotFoundException {
-		openDBConnection();
-		Statement stmt = db.createStatement();
-
-		String query = "SELECT COUNT(*) AS number FROM metadata WHERE internalFilename = \'" + internalFilename + "\'";
-		String query1 = "SELECT COUNT(*) AS number FROM jpafilemapping WHERE internalFilename = \'" + internalFilename + "\'";
-
-		log("Executing query " + query);
-		log("Executing query " + query1);
-
-		ResultSet rs = stmt.executeQuery(query);
-		rs.next();
-		int isInMetadata = rs.getInt("number");
-
-		ResultSet rs1 = stmt.executeQuery(query1);
-		rs1.next();
-		int isInFileMapping = rs1.getInt("number");
-
-		if (isInMetadata == 0 && isInFileMapping == 1) {
-			log("Executing query: " + query);
-			query = "INSERT into metadata (externalFilename, internalFilename, defaultTask, " + "attributeType, numberOfInstances, numberOfAttributes, missingValues)" + "VALUES (\'"
-					+ externalFilename + "\',\'" + internalFilename + "\', null, " + "null, 0, 0, false)";
-			stmt.executeUpdate(query);
-		}
-		// stmt.close();
-		db.close();
-	}
 	
-	// Move file (src) to File/directory dest.
-	public static synchronized void move(File src, File dest) throws FileNotFoundException, IOException {
-		copy(src, dest);
-		src.delete();
-	}
-
-	// Copy file (src) to File/directory dest.
-	public static synchronized void copy(File src, File dest) throws IOException {
-		InputStream in = new FileInputStream(src);
-		OutputStream out = new FileOutputStream(dest);
-
-		// Transfer bytes from in to out
-		byte[] buf = new byte[1024];
-		int len;
-		while ((len = in.read(buf)) > 0) {
-			out.write(buf, 0, len);
-		}
-		in.close();
-		out.close();
-	}
-
-	
-	private String md5(String path) {
-
-		StringBuffer sb = null;
-
-		try {
-			FileInputStream fs = new FileInputStream(path);
-			sb = new StringBuffer();
-
-			int ch;
-			while ((ch = fs.read()) != -1) {
-				sb.append((char) ch);
-			}
-			fs.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			logError("File not found: " + path + " -- " + e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			logError("Error reading file: " + path + " -- " + e.getMessage());
-		}
-
-		String md5 = DigestUtils.md5Hex(sb.toString());
-
-		log("MD5 hash of file " + path + " is " + md5);
-
-		return md5;
-	}
-	/*********************************************************************
-	 * End of obsolete methods
-	 */
 }

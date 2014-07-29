@@ -6,11 +6,11 @@ public class Model implements Concept {
 	private static final long serialVersionUID = 4882357602886884881L;
 	private int resultID;
 	private String agentClassName;
-	private String serializedAgent;
+	private byte[] serializedAgent;
 	
 	public Model(){}
 
-	public Model(int resultID, String agentClassName, String serializedAgent) {
+	public Model(int resultID, String agentClassName, byte[] serializedAgent) {
 		super();
 		this.resultID = resultID;
 		this.agentClassName = agentClassName;
@@ -33,11 +33,11 @@ public class Model implements Concept {
 		this.agentClassName = agentClassName;
 	}
 
-	public String getSerializedAgent() {
+	public byte[] getSerializedAgent() {
 		return serializedAgent;
 	}
 
-	public void setSerializedAgent(String serializedAgent) {
+	public void setSerializedAgent(byte[] serializedAgent) {
 		this.serializedAgent = serializedAgent;
 	}
 	

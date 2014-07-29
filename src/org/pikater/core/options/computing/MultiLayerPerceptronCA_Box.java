@@ -70,7 +70,7 @@ public class MultiLayerPerceptronCA_Box {
 		#  (Value should be between 0 - 100, Default = 0).
 		$ V int 1 1 r 0 100
 		**/
-		NewOption optionV = new NewOption("N", new IntegerValue(0), new RangeRestriction(
+		NewOption optionV = new NewOption("V", new IntegerValue(0), new RangeRestriction(
 				new IntegerValue(0),
 				new IntegerValue(100))
 		);

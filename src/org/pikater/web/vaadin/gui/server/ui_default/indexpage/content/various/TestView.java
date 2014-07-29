@@ -1,38 +1,22 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various;
 
-import java.io.File;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.ResultFormatter;
-import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.ssh.SSHSession;
 import org.pikater.shared.ssh.SSHSession.ISSHSessionNotificationHandler;
-import org.pikater.shared.util.IOUtils;
-import org.pikater.web.quartzjobs.MatrixPNGGeneratorJob;
-import org.pikater.web.servlets.download.DownloadRegistrar;
-import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
-import org.pikater.web.servlets.download.resources.ImageDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogHandler;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.ProgressDialogVisualizationTaskResult;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
-import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI;
-import org.quartz.JobKey;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.VisualizationArguments;
 
-import com.google.common.net.MediaType;
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
@@ -87,62 +71,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				// create an image file to which the visualization module will generate the image
-				final File tmpFile = IOUtils.createTemporaryFile("visualization-generated", ".png");
-				
-				// then display progress dialog
-				ProgressDialog.show("Vizualization progress...", new IProgressDialogHandler()
-				{
-					private JobKey jobKey = null;
-					
-					@Override
-					public void startTask(IProgressDialogTaskContext context) throws Throwable
-					{
-						// start the task and bind it with the progress dialog
-						jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
-						{
-							context,
-							iris,
-							tmpFile.getAbsolutePath()
-						});
-					}
-					
-					@Override
-					public void abortTask()
-					{
-						if(jobKey == null)
-						{
-							PikaterLogger.logThrowable("", new NullPointerException("Can not abort a task that has not started."));
-						}
-						else
-						{
-							try
-							{
-								PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
-							}
-							catch (Throwable t)
-							{
-								PikaterLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
-							}
-						}
-					}
-					
-					@Override
-					public void onTaskFinish(IProgressDialogTaskResult result)
-					{
-						ProgressDialogVisualizationTaskResult visTaskResult = (ProgressDialogVisualizationTaskResult) result;
-						UUID generatedImageDownloadUUID = DownloadRegistrar.issueDownload(new ImageDownloadResource(
-								tmpFile,
-								DownloadLifespan.INDETERMINATE,
-								MediaType.PNG.toString(),
-								visTaskResult.getImageWidth(),
-								visTaskResult.getImageHeight()
-						));
-						
-						// TODO: open in a new tab...
-						Page.getCurrent().setLocation(VisualizationUI.getRedirectURLForResourceID(generatedImageDownloadUUID));
-					}
-				});
+				Page.getCurrent().setLocation(new VisualizationArguments(iris).toRedirectURL());
 			}
 		}));
 	}

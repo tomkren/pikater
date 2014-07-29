@@ -7,9 +7,10 @@ import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
@@ -62,15 +63,7 @@ public abstract class AgentDefinitionHelper {
 	}
 
 	public static List<NewOption> getCAOptions() {
-		
-		List<IValueData> modelValues = new ArrayList<IValueData>();
-		modelValues.add(new StringValue("New model"));
-		
-		NewOption optModel = new NewOption(
-				"model",
-				new StringValue(NewModel.class.getSimpleName()),
-				new SetRestriction(modelValues));
-	
+		NewOption optModel = new NewOption("model", new NullValue()); // web si sam naplni
 
 		List<IValueData> durationValues = new ArrayList<IValueData>();
 		durationValues.add(new StringValue(ShortTimeDuration.class.getSimpleName()));

@@ -13,9 +13,9 @@ import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView.C
 import org.pikater.shared.database.views.tableview.datasets.metadata.CategoricalMetaDataTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.metadata.NumericalMetaDataTableDBView;
 import org.pikater.web.HttpContentType;
-import org.pikater.web.servlets.download.DownloadRegistrar;
-import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
-import org.pikater.web.servlets.download.resources.IDownloadResource;
+import org.pikater.web.sharedresources.ResourceExpiration;
+import org.pikater.web.sharedresources.ResourceRegistrar;
+import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTable;
@@ -31,6 +31,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
@@ -149,12 +150,12 @@ public class DatasetsView extends ExpandableView
 			{
 				// download, don't run action
 				final DataSetTableDBRow rowView = (DataSetTableDBRow) row;
-				final UUID datasetDownloadResourceUI = DownloadRegistrar.issueDownload(new IDownloadResource()
+				final UUID datasetDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 				{
 					@Override
-					public DownloadLifespan getLifeSpan()
+					public ResourceExpiration getLifeSpan()
 					{
-						return DownloadLifespan.ONE_DOWNLOAD;
+						return ResourceExpiration.ON_FIRST_PICKUP;
 					}
 					
 					@Override
@@ -182,7 +183,7 @@ public class DatasetsView extends ExpandableView
 						return null;
 					}
 				});
-				Page.getCurrent().setLocation(DownloadRegistrar.getDownloadURL(datasetDownloadResourceUI));
+				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(datasetDownloadResourceUI));
 			}
 			else if(specificColumn == Column.DELETE)
 			{

@@ -58,7 +58,6 @@
             <errors/>
             <dataSources/>
             <options/>
-            <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
             <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
             <evaluationMethod>
               <id>4</id>
@@ -119,7 +118,6 @@
                   <errors/>
                   <dataSources/>
                   <options/>
-                  <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
                   <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
                   <evaluationMethod>
                     <id>7</id>
@@ -205,7 +203,6 @@
                   <errors/>
                   <dataSources/>
                   <options/>
-                  <model type="org.pikater.core.ontology.subtrees.batchDescription.model.NewModel"/>
                   <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
                   <evaluationMethod>
                     <id>7</id>

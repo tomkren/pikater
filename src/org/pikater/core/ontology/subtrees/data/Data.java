@@ -26,6 +26,12 @@ public class Data implements Concept {
 
 	private int guiId; // not included in ontology
 
+	public String getInternalTrainFileName() {
+		return internalTrainFileName;
+	}
+	public void setInternalTrainFileName(String internalTrainFileName) {
+		this.internalTrainFileName = internalTrainFileName;
+	}
 	public String getLabelFileName() {
 		return labelFileName;
 	}

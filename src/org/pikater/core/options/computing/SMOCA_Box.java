@@ -127,7 +127,10 @@ public class SMOCA_Box {
 		# -V num
 		# Number of folds for cross-validation used to generate data for logistic models. (default -1, use training data)
 		**/
-		NewOption optionV = new NewOption("V", new IntegerValue(-1));
+		NewOption optionV = new NewOption("V", new IntegerValue(-1),new RangeRestriction(
+				new IntegerValue(-1),
+				new IntegerValue(Integer.MAX_VALUE))
+		);
 		optionV.setDescription("Number of folds for cross-validation used to generate data for logistic models. (default -1, use training data)");
 		
 		
@@ -135,7 +138,7 @@ public class SMOCA_Box {
 		# Random number seed for cross-validation. (default 1)
 		$ W int 1 1 r 1 MAXINT
 		**/
-		NewOption optionW = new NewOption("W", new IntegerValue(-1), new RangeRestriction(
+		NewOption optionW = new NewOption("W", new IntegerValue(1), new RangeRestriction(
 				new IntegerValue(1),
 				new IntegerValue(Integer.MAX_VALUE))
 		);

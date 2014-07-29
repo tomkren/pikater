@@ -7,37 +7,30 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.lang.acl.ACLMessage;
-import jade.proto.AchieveREInitiator;
 import jade.content.onto.basic.Result;
 
 import org.jfree.util.Log;
+import org.pikater.core.agents.gateway.Initiator;
+import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 
-public class GetAgentInfoIntitiator extends AchieveREInitiator {
-	/**
-	 * 
-	 */
+public class GetAgentInfoInitiator extends Initiator {
+	
 	private static final long serialVersionUID = -364766692797277164L;
 
-	private ACLMessage response;
-
-	public GetAgentInfoIntitiator(ACLMessage msg) {
-		super(null, msg);
-	}
-
-	public ACLMessage getResponse() {
-		return response;
+	public GetAgentInfoInitiator(ACLMessage msg){
+		super(msg);
 	}
 
 	public AgentInfos getAgentInfosResponse(Codec codec,
-			Ontology agentInfoOntology) throws Exception {
+			Ontology agentInfoOntology) throws PikaterGatewayException {
 
 		if (response == null)
-			throw new Exception("No response for Pikater agent action");
+			throw new PikaterGatewayException("No response for Pikater agent action");
 
 		if (ACLMessage.FAILURE == response.getPerformative()
 				|| ACLMessage.REFUSE == response.getPerformative())
-			throw new Exception("Pikater agent action failed or refused: "
+			throw new PikaterGatewayException("Pikater agent action failed or refused: "
 					+ response.getPerformative() + " " + response.getContent());
 
 		ContentManager contentManager = new ContentManager();
@@ -59,25 +52,10 @@ public class GetAgentInfoIntitiator extends AchieveREInitiator {
 		if (result.getValue() instanceof AgentInfos) {
 			agentInfos = (AgentInfos) result.getValue();
 		} else {
-			throw new Exception("Pikater agent action failed or refused: "
+			throw new PikaterGatewayException("Pikater agent action failed or refused: "
 					+ response.getPerformative() + " " + response.getContent());
 		}
 
 		return agentInfos;
-	}
-
-	@Override
-	protected void handleInform(ACLMessage inform) {
-		response = inform;
-	}
-
-	@Override
-	protected void handleRefuse(ACLMessage refuse) {
-		response = refuse;
-	}
-
-	@Override
-	protected void handleFailure(ACLMessage failure) {
-		response = failure;
 	}
 }

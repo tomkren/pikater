@@ -82,15 +82,6 @@ public class ManageAuth
 		{
 			ManageSession.clearAttribute(session, ManageSession.key_userUploads);
 			ManageSession.clearAttribute(session, ManageSession.key_userID);
-			
-			// Redirect from the page
-			// getUI().getPage().setLocation("/myapp/logoutpage.html");
-			
-			/*
-			 * Don't close the whole session to avoid redirecting to a logout page. Instead,
-			 * close all non-main UIs manually and reset the content 
-			 */
-			// getSession().getUIs()
 		}
 		else
 		{

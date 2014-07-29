@@ -1,11 +1,11 @@
-package org.pikater.web.quartzjobs;
+package org.pikater.web.quartzjobs.visualization;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.quartz.jobs.base.InterruptibleOneTimeJob;
+import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.pikater.shared.visualisation.generator.ChartGenerator;
 import org.pikater.shared.visualisation.generator.quartz.MatrixPNGGenerator;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
@@ -14,7 +14,7 @@ import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 
-public class MatrixPNGGeneratorJob extends InterruptibleOneTimeJob {
+public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob {
 
 	public MatrixPNGGeneratorJob(){
 		super(3);

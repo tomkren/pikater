@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 import org.pikater.core.ontology.subtrees.model.Model;
@@ -57,7 +55,6 @@ public class DatabaseTest {
 		Experiment exp=new Experiment();
 		exp.setBatchID(jpaBatch.getId());//62901);
 		exp.setStatus(ExperimentStatuses.WAITING.toString());
-		exp.setModel(new NewModel());
 		
 		int id1=DAOs.batchDAO.addExperimentToBatch(exp);
 		System.out.println("Saved experiment with ID: "+id1);
@@ -67,9 +64,7 @@ public class DatabaseTest {
 		Experiment exp2=new Experiment();
 		exp2.setBatchID(jpaBatch.getId());//62901);
 		exp2.setStatus(ExperimentStatuses.COMPUTING.toString());
-		ModelDescription md=new ModelDescription();
-		md.setModelID(modelID);
-		exp2.setModel(md);
+		exp2.setModel(modelID);
 		
 		int id2=DAOs.batchDAO.addExperimentToBatch(exp2);
 		System.out.println("Saved experiment with ID: "+id2);
@@ -84,7 +79,7 @@ public class DatabaseTest {
 		int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
 		System.out.println("Persisted JPAResult for experiment ID "+experimentID+" with ID: "+resultID);
 		
-		Model model=new Model(resultID, "java.lang.Object", "<?xml version=\"1.0\"?><model><nope/></model>");
+		Model model=new Model(resultID, "java.lang.Object", new byte[1]);
 		modelID=DAOs.resultDAO.setModelForResult(model);
 		System.out.println("Saved model with ID: "+modelID);
 	}

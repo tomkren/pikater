@@ -9,7 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.request.HttpRequestUtils;
+import org.pikater.web.requests.HttpRequestUtils;
+import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.ExpEditorUI;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI;
@@ -141,6 +142,7 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 				}
 			}
 		});
+    	ManageSession.initSessionStore(event.getSession());
     }
     
     @Override
@@ -154,9 +156,10 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
     	 * implementations of our UI objects extend this class. 
     	 */
     	
+    	ResourceRegistrar.expireSessionResources(event.getSession());
     	if(ManageAuth.isUserAuthenticated(event.getSession()))
     	{
-    		ManageAuth.logout(event.getSession()); // also detaches the session from {@link NoSessionStore}
+    		ManageAuth.logout(event.getSession());
     	}
     	
     	/*

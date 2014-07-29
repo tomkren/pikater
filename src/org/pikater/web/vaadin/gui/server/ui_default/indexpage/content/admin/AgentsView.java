@@ -9,9 +9,9 @@ import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentT
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView.Column;
 import org.pikater.web.HttpContentType;
-import org.pikater.web.servlets.download.DownloadRegistrar;
-import org.pikater.web.servlets.download.DownloadRegistrar.DownloadLifespan;
-import org.pikater.web.servlets.download.resources.IDownloadResource;
+import org.pikater.web.sharedresources.ResourceExpiration;
+import org.pikater.web.sharedresources.ResourceRegistrar;
+import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -19,6 +19,7 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentPro
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
+import com.vaadin.server.VaadinSession;
 
 public class AgentsView extends DBTableLayout implements IContentComponent, IDBViewRoot<ExternalAgentTableDBView>
 {
@@ -98,12 +99,12 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 		{
 			// download, don't run action
 			final ExternalAgentTableDBRow rowView = (ExternalAgentTableDBRow) row;
-			final UUID agentDownloadResourceUUID = DownloadRegistrar.issueDownload(new IDownloadResource()
+			final UUID agentDownloadResourceUUID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 			{
 				@Override
-				public DownloadLifespan getLifeSpan()
+				public ResourceExpiration getLifeSpan()
 				{
-					return DownloadLifespan.ONE_DOWNLOAD;
+					return ResourceExpiration.ON_FIRST_PICKUP;
 				}
 				
 				@Override
@@ -130,7 +131,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 					return rowView.getAgent().getName();
 				}
 			});
-			Page.getCurrent().setLocation(DownloadRegistrar.getDownloadURL(agentDownloadResourceUUID));
+			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(agentDownloadResourceUUID));
 		}
 		else if(specificColumn == Column.DELETE)
 		{

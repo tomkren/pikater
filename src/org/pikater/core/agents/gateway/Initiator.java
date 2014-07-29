@@ -1,17 +1,19 @@
-package org.pikater.core.agents.gateway.newBatch;
+package org.pikater.core.agents.gateway;
+
+import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
-public class NewBatchInitiator extends AchieveREInitiator {
+public class Initiator extends AchieveREInitiator {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -364766692797277164L;
 
-	private ACLMessage response;
+	protected ACLMessage response;
 
-	public NewBatchInitiator(ACLMessage msg) {
+	public Initiator(ACLMessage msg) {
 		super(null, msg);
 	}
 
@@ -22,15 +24,15 @@ public class NewBatchInitiator extends AchieveREInitiator {
     /** Returns the response message if response is OK, or returns a Exception. 
      * @throws Exception
      */
-    public ACLMessage getOkResponse() throws Exception {
+    public ACLMessage getOkResponse() throws PikaterGatewayException {
 
         if (response == null) {
-            throw new Exception("No response for Pikater agent action");
+            throw new PikaterGatewayException("No response for Pikater agent action");
         }
 
         if (ACLMessage.FAILURE == response.getPerformative() ||
         		ACLMessage.REFUSE == response.getPerformative()) {
-            throw new Exception("Pikater agent action failed or refused: "+response.getPerformative()+" " +response.getContent());
+            throw new PikaterGatewayException("Pikater agent action failed or refused: "+response.getPerformative()+" " +response.getContent());
         }
         return response;
     }

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.request.HttpRequestUtils;
+import org.pikater.web.requests.HttpRequestUtils;
 
 public abstract class AbstractFilter implements Filter
 {

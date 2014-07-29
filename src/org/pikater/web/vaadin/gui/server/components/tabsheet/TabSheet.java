@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.server.components.tabsheet;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.web.vaadin.MyResources;
+import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -118,7 +118,7 @@ public class TabSheet extends CustomComponent
 	
 	private AbstractComponent createAddTabComponent()
 	{
-		IconButton addTabButton = new IconButton(MyResources.img_plusIcon16);
+		IconButton addTabButton = new IconButton(ThemeResources.img_plusIcon16);
 		addTabButton.addClickListener(new com.vaadin.event.MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = -7054477583680936381L;

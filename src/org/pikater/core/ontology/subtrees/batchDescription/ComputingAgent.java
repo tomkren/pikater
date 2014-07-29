@@ -7,14 +7,12 @@ import java.util.List;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.model.IModelDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.model.ModelDescription;
-import org.pikater.core.ontology.subtrees.batchDescription.model.NewModel;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 
 /**
@@ -26,7 +24,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 	private String agentType;
     private List<NewOption> options;
-	private IModelDescription model;
+	private Integer model; // null = new model
 	private IExpectedDuration duration;
 	
     private EvaluationMethod evaluationMethod;
@@ -38,7 +36,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     public ComputingAgent() {
     	
     	this.options = new ArrayList<NewOption>();
-    	this.model = new NewModel();
+    	this.model = null;
     	this.duration = new LongTermDuration();
     	this.evaluationMethod = new EvaluationMethod();
     }
@@ -50,13 +48,10 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		this.agentType = agentType;
 	}
 
-	public IModelDescription getModel() {
+	public Integer getModel() {
 		return model;
 	}
-	public void setModel(IModelDescription model) {
-    	if (model == null) {
-    		throw new IllegalArgumentException("Argument model can't be null");
-    	}
+	public void setModel(Integer model) {
 		this.model = model;
 	}    
 
@@ -140,18 +135,18 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 	@Override
 	public List<NewOption> exportAllOptions() {
-		
+		List<NewOption> options = new ArrayList<NewOption>();
 		NewOption agentTypeOption =
 				new NewOption("agentType", agentType);
+		options.add(agentTypeOption);
 
-		NewOption modelOption = new NewOption(
-				"model", model.getClass().getSimpleName());
+		if (model != null) {
+			NewOption modelOption = new NewOption("model", model);
+			options.add(modelOption);
+		}
 		NewOption expectedDurationOption = new NewOption(
 				"duration", duration.getClass().getName());
 		
-		List<NewOption> options = new ArrayList<NewOption>();
-		options.add(agentTypeOption);
-		options.add(modelOption);
 		options.add(expectedDurationOption);
 		options.addAll(this.options);
 		return options;
@@ -173,19 +168,14 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		//import model
 		NewOption optModel = optionsOntol.getOptionByName("model");
 
-		Value value = optModel.toSingleValue();
-		if (value.getCurrentValue() instanceof StringValue) {
-			StringValue stringValue = (StringValue) value.getCurrentValue();
-			if (stringValue.getValue().equals(NewModel.class.getSimpleName())) {
-				this.model = new NewModel();
+		if (optModel != null) {
+			Value value = optModel.toSingleValue();
+			if (value.getCurrentValue() instanceof IntegerValue) {
+				IntegerValue integerValue = (IntegerValue) value.getCurrentValue();
+				this.model = integerValue.getValue();
 			} else {
-				throw new IllegalStateException("Option doesn't contain correct value");
-			}
-		} else if (value.getCurrentValue() instanceof IntegerValue) {
-			IntegerValue integerValue = (IntegerValue) value.getCurrentValue();
-			this.model = new ModelDescription(integerValue.getValue());
-		} else {
 			throw new IllegalStateException("Option doesn't contain correct type");
+			}
 		}
 
 

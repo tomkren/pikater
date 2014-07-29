@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.cellbrowser.cell;
 
-import org.pikater.web.vaadin.MyResources;
+import org.pikater.web.sharedresources.ThemeResources;
 
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.ui.AbstractComponent;
@@ -25,7 +25,7 @@ public class CellBrowserCell extends Panel
 		this.thisCellsSource = thisCellsSource;
 		
 		cellComponent.addStyleName("cellbrowser-cell-component");
-		Image nextIconComponent = new Image(null, MyResources.img_nextIcon16);
+		Image nextIconComponent = new Image(null, ThemeResources.img_nextIcon16);
 		nextIconComponent.setStyleName("cellbrowser-cell-image");
 		
 		innerLayout = new CustomLayout("cellBrowserCellLayout");
