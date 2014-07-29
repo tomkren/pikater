@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
@@ -20,6 +22,7 @@ public class DataProcessing implements IDataProvider {
 	private static final long serialVersionUID = -2418323249803736416L;
 
 	private int id = -1;
+	private String agentType;
 	private List<NewOption> options =
 			new ArrayList<>();
     
@@ -33,6 +36,13 @@ public class DataProcessing implements IDataProvider {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getAgentType() {
+		return agentType;
+	}
+	public void setAgentType(String agentType) {
+		this.agentType = agentType;
 	}
 
 	public List<NewOption> getOptions() {
@@ -66,31 +76,47 @@ public class DataProcessing implements IDataProvider {
 	
 	@Override
 	public List<NewOption> exportAllOptions() {
-		return getOptions();
+		
+		NewOption agentTypeOption = new NewOption("agentType", agentType);
+		
+		List<NewOption> optionsToExport = new ArrayList<NewOption>();
+		optionsToExport.addAll(this.options);
+		optionsToExport.add(agentTypeOption);
+		
+		return optionsToExport;
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
-		setOptions(options);
+		
+		NewOptions optionsToImport = new NewOptions(options);
+		NewOption agentTypeOption = optionsToImport.getOptionByName("agentType");
+
+		StringValue agentTypeValue = (StringValue) agentTypeOption.toSingleValue().getCurrentValue();
+		this.agentType = agentTypeValue.getValue();
+
+		options.remove(agentTypeOption);
+		
+		this.options = options;
 	}
 	
 	@Override
 	public List<ErrorDescription> exportAllErrors() {
-		return getErrors();
+		return this.errors;
 	}
 	@Override
 	public void importAllErrors(List<ErrorDescription> errors) {
-		setErrors(errors);
+		this.errors = errors;
 		
 	}
 	
 	@Override
 	public List<DataSourceDescription> exportAllDataSourceDescriptions() {		
-		return getDataSources();
+		return this.dataSources;
 	}
 	@Override
 	public void importAllDataSourceDescriptions(
 			List<DataSourceDescription> dataSourceDescriptions) {
-		getDataSources();
+		this.dataSources = dataSourceDescriptions;
 	}
 	
 	public int generateIDs(int lastUsedId) {
