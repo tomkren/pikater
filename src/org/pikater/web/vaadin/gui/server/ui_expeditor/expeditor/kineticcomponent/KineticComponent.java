@@ -2,6 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponen
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
@@ -21,6 +22,7 @@ import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClient
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
@@ -44,6 +46,11 @@ public class KineticComponent extends AbstractComponent
 	 * Constant reference to the parent editor component.
 	 */
 	private final ExpEditor parentEditor;
+	
+	/**
+	 * Reference to the tab containing this component.
+	 */
+	private CustomTabSheetTabComponent parentTab;
 	
 	//---------------------------------------------------------------
 	// EXPERIMENT RELATED FIELDS
@@ -98,6 +105,7 @@ public class KineticComponent extends AbstractComponent
 		 */
 		
 		this.parentEditor = parentEditor;
+		this.parentTab = null;
 		
 		this.boxIDGenerator = new SimpleIDGenerator();
 		this.boxIDToAgentInfo = new HashMap<String, AgentInfo>();
@@ -208,7 +216,22 @@ public class KineticComponent extends AbstractComponent
 				{
 					if(result != null)
 					{
-						exportedExperimentCallback.handleExperiment(result);
+						exportedExperimentCallback.handleExperiment(result, new IOnExperimentSaved()
+						{
+							@Override
+							public void experimentSaved(JPABatch newExperimentEntity)
+							{
+								if(newExperimentEntity.getId() == 0)
+								{
+									throw new IllegalStateException("The given new experiment has not been saved yet.");
+								}
+								else
+								{
+									previouslyLoadedExperimentID = newExperimentEntity.getId();
+									parentTab.setCaption(newExperimentEntity.getName());
+								}
+							}
+						});
 					}
 				}
 				finally
@@ -229,29 +252,13 @@ public class KineticComponent extends AbstractComponent
 	}
 	
 	//---------------------------------------------------------------
-	// CLIENT RPC RELATED INTERFACE & TYPES
-	
-	public void importExperiment(JPABatch experiment)
-	{
-		resetEnvironment();
-		try
-		{
-			UniversalComputationDescription uniFormat = UniversalComputationDescription.fromXML(experiment.getXML());
-			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
-			previouslyLoadedExperimentID = experiment.getId();
-		}
-		catch (ConversionException e)
-		{
-			PikaterLogger.logThrowable("", e);
-			MyNotifications.showError("Could not import experiment", "Please, contact the administrators.");
-		}
-	}
+	// EXPERIMENT IMPORT/EXPORT RELATED ROUTINES/TYPES
 	
 	/**
-	 * Used for saving experiments. The server has to issue an asynchronous command to the
-	 * client and wait for it to send response. The experiment from response is converted
-	 * into universal format and passed to the
-	 * {@link IOnExperimentReceivedFromClient#handleExperiment(UniversalComputationDescription)
+	 * Used BEFORE saving experiments.</br>
+	 * The server has to issue an asynchronous command to the client and wait for it to
+	 * send response. The experiment from response is converted into universal format
+	 * and passed to the {@link IOnExperimentReceivedFromClient#handleExperiment(UniversalComputationDescription)
 	 * handleExperiment(UniversalComputationDescription)} method.
 	 */
 	public static interface IOnExperimentReceivedFromClient
@@ -259,8 +266,40 @@ public class KineticComponent extends AbstractComponent
 		/**
 		 * Handle the exported experiment in this method.
 		 * @param exportedExperiment
+		 * @param experimentSavedCallback provide a callback for when the experiment is successfully saved
 		 */
-		void handleExperiment(UniversalComputationDescription exportedExperiment);
+		void handleExperiment(UniversalComputationDescription exportedExperiment, IOnExperimentSaved experimentSavedCallback);
+	}
+	
+	/**
+	 * Used AFTER saving experiments to keep this component's inner state in sync.
+	 */
+	public static interface IOnExperimentSaved
+	{
+		/**
+		 * Call this method when your experiment has successfully been saved.
+		 * @param newBatchID the ID of the newly saved experiment
+		 */
+		void experimentSaved(JPABatch newExperimentEntity);
+	}
+	
+	public void importExperiment(JPABatch experiment)
+	{
+		try
+		{
+			UniversalComputationDescription uniFormat = UniversalComputationDescription.fromXML(experiment.getXML());
+			
+			resetEnvironment(); // calls another client command which must precede this one:
+			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
+			
+			previouslyLoadedExperimentID = experiment.getId();
+			parentTab.setCaption(experiment.getName());
+		}
+		catch (ConversionException e)
+		{
+			PikaterLogger.logThrowable("", e);
+			MyNotifications.showError("Could not import experiment", "Please, contact the administrators.");
+		}
 	}
 	
 	public synchronized void exportExperiment(IOnExperimentReceivedFromClient callback)
@@ -281,6 +320,11 @@ public class KineticComponent extends AbstractComponent
 	
 	//---------------------------------------------------------------
 	// MISCELLANEOUS PUBLIC INTERFACE
+	
+	public void setParentTab(CustomTabSheetTabComponent parentTab)
+	{
+		this.parentTab = parentTab;
+	}
 	
 	public void createBox(AgentInfo info, int absX, int absY)
 	{
@@ -364,33 +408,54 @@ public class KineticComponent extends AbstractComponent
 		}
 		
 		UniversalComputationDescription result = new UniversalComputationDescription();
-		for(BoxInfo boxInfo : webFormat.leafBoxes.values())
+		for(Entry<String, BoxInfo> entry : webFormat.leafBoxes.entrySet())
 		{
-			AgentInfo agentInfo = boxIDToAgentInfo.get(boxInfo.boxID);
+			/*
+			 * Determine basic information and references.
+			 */
+			String webBoxID = entry.getKey();
+			BoxInfo webBox = entry.getValue();
+			AgentInfo agentInfo = boxIDToAgentInfo.get(webBoxID);
 			if(agentInfo == null)
 			{
 				throw new ConversionException(new IllegalStateException(String.format(
-						"No agent info was found for box ID '%s'. Double check for box leaks.", boxInfo.boxID)));
+						"No agent info was found for box '%s@%s'.", webBox.boxTypeName, webBox.displayName)));
 			}
 			
-			UniversalOntology ontologyInfo = new UniversalOntology();
+			/*
+			 * Transform box into its uni-format counterpart.
+			 */
+			
+			// create the master element
+			UniversalElement uniBox = new UniversalElement();
+			
+			// create FIRST of the 2 child objects
+			UniversalOntology uniBoxInfo = new UniversalOntology();
 			try
 			{
-				ontologyInfo.setType(Class.forName(agentInfo.getOntologyClassName()));
+				uniBoxInfo.setType(Class.forName(agentInfo.getOntologyClassName()));
 			}
 			catch (ClassNotFoundException e)
 			{
-				throw new ConversionException(new IllegalStateException(
-						"Could not convert '%s' to a class instance. Has the referenced class moved or been deleted?", e));
+				throw new ConversionException(new IllegalStateException(String.format(
+						"Could not convert '%s' to a class instance. Have changes been made to AgentInfo recently?",
+						agentInfo.getOntologyClassName()), e));
+			}
+			uniBoxInfo.setOptions(agentInfo.getOptions().getOptions());
+			for(String edgeToBoxWithID : webFormat.edges.get(webBoxID)) // transform edges
+			{
+				UniversalConnector connector = new UniversalConnector();
+				// TODO: connector.s
+				// ontologyInfo.addInputSlot();
 			}
 			
-			// TODO: wrapper boxes, errors, options...
+			// create SECOND of the 2 child objects
+			UniversalGui uniBoxPositionInfo = new UniversalGui(webBox.initialX, webBox.initialY);
 			
-			UniversalElement elem = new UniversalElement();
-			elem.setGUIInfo(new UniversalGui(boxInfo.initialX, boxInfo.initialY));
-			elem.setOntologyInfo(ontologyInfo);
-			
-			result.addElement(elem);
+			// glue it all together and register in the result uni-format
+			uniBox.setGUIInfo(uniBoxPositionInfo);
+			uniBox.setOntologyInfo(uniBoxInfo);
+			result.addElement(uniBox);
 		}
 		return result;
 	}

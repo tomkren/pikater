@@ -1,5 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
+import java.awt.Dialog;
 import java.util.List;
 
 import org.pikater.shared.XStreamHelper;
@@ -22,6 +23,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialog
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent.IOnExperimentSaved;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -327,13 +329,8 @@ public class Toolbar extends VerticalLayout
 				private String experimentXML;
 				
 				@Override
-				public void handleExperiment(final UniversalComputationDescription exportedExperiment)
+				public void handleExperiment(final UniversalComputationDescription exportedExperiment, final IOnExperimentSaved experimentSavedCallback)
 				{
-					/*
-					 * TODO:  
-					 * 4) When the saving is done, sync experiment ID once again (with the new)
-					 */
-					
 					final boolean sourceExperimentExists = activeComponent.getPreviouslyLoadedExperimentID() != null;
 					if(sourceExperimentExists)
 					{
@@ -344,15 +341,13 @@ public class Toolbar extends VerticalLayout
 						sourceExperiment = null;
 					}
 					final SaveExperimentForm seForm = new SaveExperimentForm(saveMode, sourceExperiment);
-					seForm.setWidth("600px");
-					SpecialDialogs.saveExperimentDialog(seForm, new DialogCommons.IDialogResultHandler()
+					MessageBox dialog = SpecialDialogs.saveExperimentDialog(seForm, new DialogCommons.IDialogResultHandler()
 					{
 						@Override
 						public boolean handleResult(Object[] args)
 						{
 							experimentOwner = ManageAuth.getUserEntity(VaadinSession.getCurrent());
-							experimentXML = XStreamHelper.serializeToXML(exportedExperiment, 
-									XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
+							experimentXML = exportedExperiment.toXML();
 							switch(saveMode)
 							{
 								case SAVE_FOR_LATER:
@@ -361,19 +356,19 @@ public class Toolbar extends VerticalLayout
 									switch(seForm.getSaveForLaterMode())
 									{
 										case SAVE_AS_NEW:
-											DAOs.batchDAO.storeEntity(new JPABatch(name, note, experimentXML, experimentOwner));
+											saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner), experimentSavedCallback);
 											break;
 										case OVERWRITE_PREVIOUS:
 											sourceExperiment.setName(name);
 											sourceExperiment.setNote(note);
 											sourceExperiment.setXML(experimentXML);
-											DAOs.batchDAO.updateEntity(sourceExperiment);
+											updateExperiment(sourceExperiment, experimentSavedCallback);
 											break;
 										case SAVE_AS_NEW_AND_DELETE_PREVIOUS:
-											DAOs.batchDAO.storeEntity(new JPABatch(name, note, experimentXML, experimentOwner));
+											saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner), experimentSavedCallback);
 											if(sourceExperimentExists)
 											{
-												// TODO: delete
+												// TODO: delete previous
 											}
 											break;
 										default:
@@ -381,24 +376,37 @@ public class Toolbar extends VerticalLayout
 									}
 									return true;
 								case SAVE_FOR_EXECUTION:
-									saveForExecution(args);
+									saveForExecution(args, experimentSavedCallback);
 									return true;
 								default:
 									throw new IllegalStateException("Unknown state: " + saveMode.name());
 							}
 						}
 					});
+					dialog.setWidth("400px");
 				}
 				
-				private void saveForExecution(Object[] args)
+				private void saveForExecution(Object[] args, IOnExperimentSaved experimentSavedCallback)
 				{
 					String name = (String) args[0];
 					Integer userAssignedPriority = (Integer) args[1];
 					Integer computationEstimateInHours = (Integer) args[2];
 					Boolean sendEmailWhenFinished = (Boolean) args[3];
 					String note = (String) args[4];
-					DAOs.batchDAO.storeEntity(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority,
-							computationEstimateInHours, sendEmailWhenFinished));
+					saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority,
+							computationEstimateInHours, sendEmailWhenFinished), experimentSavedCallback);
+				}
+				
+				private void saveExperiment(JPABatch newExperiment, IOnExperimentSaved experimentSavedCallback)
+				{
+					DAOs.batchDAO.storeEntity(newExperiment);
+					experimentSavedCallback.experimentSaved(newExperiment);
+				}
+				
+				private void updateExperiment(JPABatch experiment, IOnExperimentSaved experimentSavedCallback)
+				{
+					DAOs.batchDAO.updateEntity(experiment);
+					experimentSavedCallback.experimentSaved(experiment);
 				}
 			});
 		}
