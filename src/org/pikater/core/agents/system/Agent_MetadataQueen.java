@@ -15,8 +15,6 @@ import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.domain.FIPAException;
 import jade.domain.FIPAService;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
-import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
@@ -29,27 +27,18 @@ import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
-import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
-import org.pikater.core.ontology.subtrees.metadata.attributes.CategoricalAttributeMetadata;
-import org.pikater.core.ontology.subtrees.metadata.attributes.IntegerAttributeMetadata;
-import org.pikater.core.ontology.subtrees.metadata.attributes.RealAttributeMetadata;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
-import org.pikater.shared.database.utils.ResultFormatter;
 
 import weka.core.Instances;
-
-
-
 
 public class Agent_MetadataQueen extends PikaterAgent {
 
 	private static final long serialVersionUID = -1886699589066832983L;
-	
 	
 	@Override
 	public java.util.List<Ontology> getOntologies() {
@@ -58,7 +47,6 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		return ontologies;
 	}
 	
-
     @Override
     protected void setup() {
         initDefault();
@@ -70,21 +58,18 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
+			protected ACLMessage handleRequest(ACLMessage request) {
 				try {
 					Action a = (Action) getContentManager().extractContent(request);
-
 					if (a.getAction() instanceof NewDataset) {
 						return respondToNewDataset(request, a);
 					}
 				} catch (OntologyException e) {
-					e.printStackTrace();
-					logError("Problem extracting content: " + e.getMessage());
+					logError("Problem extracting content",e);
 				} catch (CodecException e) {
-					e.printStackTrace();
-					logError("Codec problem: " + e.getMessage());
+					logError("Codec problem",e);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logError("General Exception", e);
 				}
 
 				ACLMessage failure = request.createReply();
@@ -118,8 +103,6 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			fw.close();
 			}
 			
-			
-			
 			Metadata resultMetaData=this.readFile(file);
 		
 			this.sendSaveMetaDataRequest(resultMetaData, dataSetID);
@@ -129,15 +112,11 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		
 			return reply;	
 		} catch (NoResultException e) {
-			logError("DataSet with ID "+dataSetID+" not found  in the database");
-			e.printStackTrace();
+			logError("DataSet with ID "+dataSetID+" not found  in the database",e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError("IOError while accessing dataset", e);
 		}
         
-        
-		// TODO Auto-generated method stub
 		return null;
 	}
     
@@ -154,15 +133,13 @@ public class Agent_MetadataQueen extends PikaterAgent {
             log("Sending SaveMetaDataAction to DataManager");
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
             if (reply == null)
-                logError("Reply not received.");
+                logError("Reply not received");
             else
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("Ontology/codec error occurred: ",e);
         } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("FIPA error occurred",e);
         }
     }
   
@@ -179,15 +156,11 @@ public class Agent_MetadataQueen extends PikaterAgent {
         return msg;
     }
   
-  
-    
     private Metadata readFile(File file) throws FileNotFoundException, IOException{	
 			DataInstances data=new DataInstances();
 			data.fillWekaInstances(new Instances(new BufferedReader(new FileReader(file))));
 			MetadataReader reader=new MetadataReader();
 			return reader.computeMetadata(data);
 	}
-	
-    
-	
+
 }
