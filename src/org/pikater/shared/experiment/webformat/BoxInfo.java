@@ -24,8 +24,9 @@ public class BoxInfo implements Serializable
 	 */
 	public String pictureURL;
 
-    /** Keeps GWT and Vaadin happy */
-	protected BoxInfo()
+	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
+	@Deprecated
+	public BoxInfo()
 	{
 	}
 

@@ -66,17 +66,23 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				{
 					case KeyCodes.KEY_BACKSPACE:
 						getEngine().pushNewOperation(new DeleteSelectedBoxesOperation(getEngine()));
+						event.preventDefault();
+						event.stopPropagation();
 						break;
 					case 90: // Z
 						if(GWTKeyboardManager.isControlKeyDown())
 						{
 							getHistoryManager().undo();
+							event.preventDefault();
+							event.stopPropagation();
 						}
 						break;
 					case 89: // Y
 						if(GWTKeyboardManager.isControlKeyDown())
 						{
 							getHistoryManager().redo();
+							event.preventDefault();
+							event.stopPropagation();
 						}
 						break;
 					case 87: // W
@@ -84,6 +90,8 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 						{
 							// the click mode will really be changed on the server...
 							command_alterClickMode(getClickMode().getOther());
+							event.preventDefault();
+							event.stopPropagation();
 						}
 						break;
 					default:
@@ -275,7 +283,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		getServerRPC().response_sendExperimentToSave(experiment);
 		
 		// TODO: only do this if saving the experiment is successful?
-		getHistoryManager().clear();
+		// getHistoryManager().clear();
 	}
 	
 	/*

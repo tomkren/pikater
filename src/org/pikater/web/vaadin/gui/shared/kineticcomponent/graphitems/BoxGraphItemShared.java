@@ -8,7 +8,7 @@ public class BoxGraphItemShared implements Serializable
 	
 	public String boxID;
 	
-	/** Keeps GWT and Vaadin happy */
+	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
 	public BoxGraphItemShared()
 	{
 	}

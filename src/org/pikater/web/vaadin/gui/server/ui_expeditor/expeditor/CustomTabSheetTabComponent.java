@@ -14,7 +14,6 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 		super(caption);
 		
 		this.contentComponent = contentComponent;
-		this.contentComponent.setParentTab(this);
 	}
 	
 	@Override

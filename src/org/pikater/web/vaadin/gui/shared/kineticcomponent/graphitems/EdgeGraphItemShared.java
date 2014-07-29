@@ -9,7 +9,7 @@ public class EdgeGraphItemShared implements Serializable
 	public String fromBoxID;
 	public String toBoxID;
 	
-	/** Keeps GWT and Vaadin happy */
+	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
 	public EdgeGraphItemShared()
 	{
 	}
