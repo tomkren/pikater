@@ -3,7 +3,8 @@ package org.pikater.core.options.computing;
 import org.pikater.core.agents.experiment.computing.Agent_ZeroRCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.OptionsHelper;
+import org.pikater.core.options.SlotsHelper;
 
 public class ZeroRCA_Box {
 	
@@ -16,11 +17,11 @@ public class ZeroRCA_Box {
 		agentInfo.setName("ZeroR");
 		agentInfo.setDescription("Zero R Method");
 
-		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
 		
 		// Slots Definition
-		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
 		
 		return agentInfo;
 	}

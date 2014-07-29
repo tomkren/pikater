@@ -13,7 +13,8 @@ import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.OptionsHelper;
+import org.pikater.core.options.SlotsHelper;
 
 public class SMOCA_Box {
 	
@@ -165,11 +166,11 @@ public class SMOCA_Box {
 		agentInfo.addOption(optionM);
 		agentInfo.addOption(optionV);
 		agentInfo.addOption(optionW);
-		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
 
 		// Slots Definition
-		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
 
 		return agentInfo;
 	}

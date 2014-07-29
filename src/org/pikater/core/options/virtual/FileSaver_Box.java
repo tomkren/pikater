@@ -10,10 +10,6 @@ public class FileSaver_Box {
 
 	public static AgentInfo get() {
 
-		Slot inputSlot = new Slot();
-		inputSlot.setSlotType("data");
-		inputSlot.setDataType(SlotTypes.DATA_TYPE);
-
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.importAgentClass(Agent_VirtualFileSaverBoxProvider.class);
 		agentInfo.importOntologyClass(FileDataSaver.class);
@@ -21,6 +17,10 @@ public class FileSaver_Box {
 		agentInfo.setName("FileSaver");
 		agentInfo.setDescription("This box save data to Pikater database");
 
+		Slot inputSlot = new Slot();
+		inputSlot.setSlotType("data");
+		inputSlot.setDataType(SlotTypes.DATA_TYPE);
+		
 		agentInfo.addInputSlot(inputSlot);
 
 		return agentInfo;

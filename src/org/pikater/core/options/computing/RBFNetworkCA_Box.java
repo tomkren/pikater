@@ -7,7 +7,8 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.OptionsHelper;
+import org.pikater.core.options.SlotsHelper;
 
 public class RBFNetworkCA_Box {
 	
@@ -81,11 +82,11 @@ public class RBFNetworkCA_Box {
 		agentInfo.addOption(optionR);
 		agentInfo.addOption(optionS);
 		agentInfo.addOption(optionM);
-		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
 		
 		// Slots Definition
-		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
 
 		return agentInfo;
 	}

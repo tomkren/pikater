@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.SlotsHelper;
 
 
 public class GridSearch_Box {
@@ -47,7 +47,7 @@ public class GridSearch_Box {
 		agentInfo.addOption(optionZ);
 
 		//Slot Definition
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getSearcherOutputSlots());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());
 		
 		return agentInfo;
 	}

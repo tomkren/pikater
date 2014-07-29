@@ -8,7 +8,8 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestrictio
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.OptionsHelper;
+import org.pikater.core.options.SlotsHelper;
 
 public class J48CA_Box {
 	
@@ -78,11 +79,11 @@ public class J48CA_Box {
 		agentInfo.addOption(optionS);
 		agentInfo.addOption(optionA);
 		agentInfo.addOption(optionQ);
-		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
 
 		//Slot Definition
-		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
 
 		return agentInfo;
 	}
