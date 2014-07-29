@@ -89,7 +89,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		
 		// TODO: move this to CustomConfiguredUI eventually (upon exiting the app-launch wizard)
 		boolean initHere = true;
-		boolean coreAgentInfo = true;
+		boolean coreAgentInfo = false;
 		if(initHere)
 		{
 			// init scheduler
@@ -162,7 +162,7 @@ public class StartupAndQuitListener implements ServletContextListener
 						
 						NewOptions options = new NewOptions();
 						options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
-						options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
+						options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
 								new IntegerValue(2),
 								new IntegerValue(3),
 								new IntegerValue(5),

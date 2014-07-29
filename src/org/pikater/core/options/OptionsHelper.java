@@ -25,7 +25,7 @@ public class OptionsHelper
 		NewOption optDuration = new NewOption(
 				"duration",
 				new StringValue(LongTermDuration.class.getSimpleName()),
-				new SetRestriction(durationValues));
+				new SetRestriction(false, durationValues));
 		
 		return Arrays.asList(
 				optModel,

@@ -57,7 +57,7 @@ public class SMORegCA_Box  {
 		# Whether to 0=normalize/1=standardize/2=neither. (default 0=normalize)
 		$ N int 1 1 s 0, 1, 2
 		**/
-		NewOption optionN = new NewOption("N", new IntegerValue(1), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
+		NewOption optionN = new NewOption("N", new IntegerValue(1), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
 				new IntegerValue(0),
 				new IntegerValue(1),
 				new IntegerValue(2))))

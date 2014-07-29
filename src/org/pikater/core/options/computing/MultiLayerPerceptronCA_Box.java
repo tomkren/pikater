@@ -139,7 +139,7 @@ public class MultiLayerPerceptronCA_Box {
 				new IntegerValue(2),
 				new IntegerValue(10))
 		);
-		ValueType typeHs = new ValueType(new StringValue("a"), new SetRestriction(new ArrayList<IValueData>(
+		ValueType typeHs = new ValueType(new StringValue("a"), new SetRestriction(false, new ArrayList<IValueData>(
 				new ArrayList<IValueData>(Arrays.asList(
 						new StringValue("a"), new StringValue("i"),
 						new StringValue("o"), new StringValue("t")))))

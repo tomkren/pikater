@@ -13,6 +13,7 @@ public class SetRestriction implements IRestriction
 {
 	private static final long serialVersionUID = 611963641797046162L;
 
+	private boolean nullable;
 	private List<IValueData> values;
 
 	/**
@@ -20,11 +21,21 @@ public class SetRestriction implements IRestriction
 	 */
 	@Deprecated
 	public SetRestriction() {}
-	public SetRestriction(List<IValueData> values)
+	@SuppressWarnings("unchecked")
+	public SetRestriction(boolean nullable, List<? extends IValueData> values)
 	{
-		this.values = values;
+		this.nullable = nullable;
+		this.values = (List<IValueData>) values;
 	}
 
+	public boolean isNullable()
+	{
+		return nullable;
+	}
+	public void setNullable(boolean nullable)
+	{
+		this.nullable = nullable;
+	}
 	public List<IValueData> getValues()
 	{
 		return values;
@@ -33,6 +44,7 @@ public class SetRestriction implements IRestriction
 	{
 		this.values = values;
 	}
+	
 	public void addValues(List<IValueData> values)
 	{
 		this.values.addAll(values);
@@ -46,7 +58,7 @@ public class SetRestriction implements IRestriction
 		{
 			valuesCopied.add(value.clone());
 		}
-		return new SetRestriction(valuesCopied);
+		return new SetRestriction(nullable, valuesCopied);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -65,7 +77,6 @@ public class SetRestriction implements IRestriction
 			{
 				types.add((Class<IValueData>) value.getClass());
 			}
-			types.remove(NullValue.class);
 			return types.size() < 2;
 		}
 	}
