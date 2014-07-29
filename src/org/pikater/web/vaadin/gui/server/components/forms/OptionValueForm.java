@@ -14,8 +14,6 @@ import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.logging.PikaterLogger;
@@ -324,14 +322,6 @@ public class OptionValueForm extends CustomFormLayout
 					value.setCurrentValue(new DoubleValue(number));
 				}
 			});
-		}
-		else if(typeClass.equals(QuestionMarkRange.class))
-		{
-			// TODO: range can be set by user or is it fixed?
-		}
-		else if(typeClass.equals(QuestionMarkSet.class))
-		{
-			// TODO: set can be edited by user or is it fixed?
 		}
 		else if(typeClass.equals(NullValue.class))
 		{

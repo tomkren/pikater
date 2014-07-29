@@ -94,10 +94,10 @@ public class SpecialDialogs extends DialogCommons
 		return mb;
 	}
 
-	public static MessageBox saveExperimentDialog(SaveExperimentForm seForm)
+	public static MessageBox saveExperimentDialog(SaveExperimentForm seForm, IDialogResultHandler resultHandler)
 	{
-		MyComponentMessageBoxListener<SaveExperimentForm> listener = 
-				new MyComponentMessageBoxListener<SaveExperimentForm>(seForm);
+		MyComponentMessageBoxListenerWithExternalResultHandler<SaveExperimentForm> listener = 
+				new MyComponentMessageBoxListenerWithExternalResultHandler<SaveExperimentForm>(seForm, resultHandler);
 		MessageBox mb = MessageBox.showCustomized(
 				Icon.NONE,
 				"Save experiment from active tab",

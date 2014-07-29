@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
@@ -20,7 +21,6 @@ import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClient
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
@@ -38,23 +38,12 @@ public class KineticComponent extends AbstractComponent
 	private static final long serialVersionUID = -539901377528727478L;
 	
 	//---------------------------------------------------------------
-	// GUI RELATED FIELDS
+	// GUI COMPONENTS TO KEEP TRACK OF
 	
 	/**
 	 * Constant reference to the parent editor component.
 	 */
 	private final ExpEditor parentEditor;
-	
-	/**
-	 * Reference to the experiment editor tab linked to this content component.
-	 */
-	private CustomTabSheetTabComponent parentTab;
-	
-	/*
-	 * Dynamic information from the client side - absolute left corner position of the Kinetic stage.
-	 */
-	private int absoluteLeft;
-	private int absoluteTop;
 	
 	//---------------------------------------------------------------
 	// EXPERIMENT RELATED FIELDS
@@ -74,15 +63,27 @@ public class KineticComponent extends AbstractComponent
 	private final Map<String, AgentInfo> boxIDToAgentInfo;
 	
 	/**
-	 * Used for saving experiments. The server has to issue an asynchronous command to the
-	 * client and wait for an answer. The answer is stored in this field.
+	 * Reference to experiment last used in the {@link #importExperiment(UniversalComputationDescription)}
+	 * method.
 	 */
-	private ExperimentGraph graphExportedFromClient;
+	private Integer previouslyLoadedExperimentID;
+	
+	/**
+	 * Callback for exported experiments.
+	 * @see {@link IOnExperimentReceivedFromClient}   
+	 */
+	private IOnExperimentReceivedFromClient exportedExperimentCallback;
 	
 	//---------------------------------------------------------------
 	// OTHER PROGRAMMATIC FIELDS
 	
 	private boolean bindOptionsManagerWithSelectionChanges;
+	
+	/*
+	 * Dynamic information from the client side - absolute left corner position of the Kinetic stage.
+	 */
+	private int absoluteLeft;
+	private int absoluteTop;
 	
 	//---------------------------------------------------------------
 	// CONSTRUCTOR
@@ -98,14 +99,14 @@ public class KineticComponent extends AbstractComponent
 		
 		this.parentEditor = parentEditor;
 		
-		this.absoluteLeft = 0;
-		this.absoluteTop = 0;
-		
 		this.boxIDGenerator = new SimpleIDGenerator();
 		this.boxIDToAgentInfo = new HashMap<String, AgentInfo>();
-		this.graphExportedFromClient = null;
+		this.previouslyLoadedExperimentID = null;
+		this.exportedExperimentCallback = null;
 		
 		this.bindOptionsManagerWithSelectionChanges = areSelectionChangesBoundWithOptionsManagerByDefault();
+		this.absoluteLeft = 0;
+		this.absoluteTop = 0;
 		
 		/*
 		 * Register handlers for client commands.
@@ -115,12 +116,20 @@ public class KineticComponent extends AbstractComponent
 		{
 			private static final long serialVersionUID = -2769231541745495584L;
 			
+			/**
+			 * Currently unsupported.
+			 */
+			@Deprecated
 			@Override
 			public void command_setExperimentModified(boolean modified)
 			{
+				/*
 				getState().serverThinksThatSchemaIsModified = modified;
 				parentTab.setTabContentModified(modified);
 				parentEditor.getExtension().setKineticContentModified(KineticComponent.this, modified);
+				
+				MyNotifications.showInfo("Modification note", String.valueOf(modified));
+				*/
 			}
 
 			@Override
@@ -141,14 +150,14 @@ public class KineticComponent extends AbstractComponent
 			public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
 			{
 				// TODO Auto-generated method stub
-				MyNotifications.showInfo(null, "Box set changed");
+				// MyNotifications.showInfo(null, "Box set changed");
 			}
 
 			@Override
 			public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 			{
 				// TODO Auto-generated method stub
-				MyNotifications.showInfo(null, "Edge set changed");
+				// MyNotifications.showInfo(null, "Edge set changed");
 			}
 			
 			@Override
@@ -171,23 +180,41 @@ public class KineticComponent extends AbstractComponent
 						}
 					}
 					
+					// get the toolbox
 					BoxOptionsToolbox toolbox = (BoxOptionsToolbox) parentEditor.getToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
 					
-					// display the toolbox if there's a reason to
-					if(selectedBoxesInformation.length > 0)
+					// set the new content to it and display the toolbox if needed
+					if(toolbox.setContentFromSelectedBoxes(selectedBoxesInformation))
 					{
 						parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
 					}
-					
-					// and give the box options toolbox information to display
-					toolbox.setContentFromSelectedBoxes(selectedBoxesInformation);
 				}
 			}
 
 			@Override
 			public void response_sendExperimentToSave(ExperimentGraph experiment)
 			{
-				graphExportedFromClient = experiment;
+				UniversalComputationDescription result = null;
+				try
+				{
+					result = webToUni(experiment);
+				}
+				catch (ConversionException e)
+				{
+					PikaterLogger.logThrowable("Could not convert to universal format because of the error below.", e);
+				}
+				
+				try
+				{
+					if(result != null)
+					{
+						exportedExperimentCallback.handleExperiment(result);
+					}
+				}
+				finally
+				{
+					exportedExperimentCallback = null;
+				}
 			}
 		});
 	}
@@ -202,7 +229,58 @@ public class KineticComponent extends AbstractComponent
 	}
 	
 	//---------------------------------------------------------------
-	// CLIENT RPC RELATED INTERFACE
+	// CLIENT RPC RELATED INTERFACE & TYPES
+	
+	public void importExperiment(JPABatch experiment)
+	{
+		resetEnvironment();
+		try
+		{
+			UniversalComputationDescription uniFormat = UniversalComputationDescription.fromXML(experiment.getXML());
+			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
+			previouslyLoadedExperimentID = experiment.getId();
+		}
+		catch (ConversionException e)
+		{
+			PikaterLogger.logThrowable("", e);
+			MyNotifications.showError("Could not import experiment", "Please, contact the administrators.");
+		}
+	}
+	
+	/**
+	 * Used for saving experiments. The server has to issue an asynchronous command to the
+	 * client and wait for it to send response. The experiment from response is converted
+	 * into universal format and passed to the
+	 * {@link IOnExperimentReceivedFromClient#handleExperiment(UniversalComputationDescription)
+	 * handleExperiment(UniversalComputationDescription)} method.
+	 */
+	public static interface IOnExperimentReceivedFromClient
+	{
+		/**
+		 * Handle the exported experiment in this method.
+		 * @param exportedExperiment
+		 */
+		void handleExperiment(UniversalComputationDescription exportedExperiment);
+	}
+	
+	public synchronized void exportExperiment(IOnExperimentReceivedFromClient callback)
+	{
+		if(exportedExperimentCallback != null)
+		{
+			MyNotifications.showWarning("Export ignored", "Another call pending...");
+		}
+		else
+		{
+			// register callback
+			exportedExperimentCallback = callback;
+			
+			// send command to the client
+			getClientRPC().request_sendExperimentToSave();
+		}
+	}
+	
+	//---------------------------------------------------------------
+	// MISCELLANEOUS PUBLIC INTERFACE
 	
 	public void createBox(AgentInfo info, int absX, int absY)
 	{
@@ -213,67 +291,6 @@ public class KineticComponent extends AbstractComponent
 	{
 		getClientRPC().request_reloadVisualStyle();
 	}
-	
-	public void importExperiment(UniversalComputationDescription uniFormat)
-	{
-		resetEnvironment();
-		try
-		{
-			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
-		}
-		catch (ConversionException e)
-		{
-			PikaterLogger.logThrowable("", e);
-			MyNotifications.showError("Could not import experiment", "Please, contact the administrators.");
-		}
-	}
-	
-	public UniversalComputationDescription exportExperiment()
-	{
-		// send command to the client
-		getClientRPC().request_sendExperimentToSave();
-		
-		// wait for an answer
-		final int maxWaitTime = 30000; // 30 seconds
-		final int waitTimePerIteration = 1000; // 1 second
-		int timeWaited = 0;
-		while(graphExportedFromClient == null)
-		{
-			try
-			{
-				Thread.sleep(waitTimePerIteration); 
-			}
-			catch (InterruptedException e)
-			{
-				PikaterLogger.logThrowable("Thread was interrupted while waiting for client answer. Perhaps a request timeout?", e);
-				return null;
-			}
-			
-			timeWaited += waitTimePerIteration;
-			if(timeWaited == maxWaitTime)
-			{
-				throw new IllegalStateException("No graph was received from client. Request timed out.");
-			}
-		}
-		
-		// and finally, try to return what is promised
-		try
-		{
-			return webToUni(graphExportedFromClient);
-		}
-		catch (ConversionException e)
-		{
-			PikaterLogger.logThrowable("Could not convert to universal format because of the error below.", e);
-			return null;
-		}
-		finally
-		{
-			graphExportedFromClient = null;
-		}
-	}
-	
-	//---------------------------------------------------------------
-	// MISCELLANEOUS PUBLIC INTERFACE
 	
 	public boolean areSelectionChangesBoundWithOptionsManager()
 	{
@@ -290,14 +307,15 @@ public class KineticComponent extends AbstractComponent
 		this.bindOptionsManagerWithSelectionChanges = bindOptionsManagerWithSelectionChanges;
 	}
 	
-	public void setParentTab(CustomTabSheetTabComponent parentTab)
-	{
-		this.parentTab = parentTab;
-	}
-	
 	public boolean isContentModified()
 	{
-		return getState().serverThinksThatSchemaIsModified;
+		return true; // TODO: until problems with the "modified" status are resolved, always return true
+		// return getState().serverThinksThatSchemaIsModified;
+	}
+	
+	public Integer getPreviouslyLoadedExperimentID()
+	{
+		return previouslyLoadedExperimentID;
 	}
 	
 	//---------------------------------------------------------------

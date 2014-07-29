@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
@@ -256,10 +256,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		}
 	}
 	
-	public void loadExperimentIntoNewTab(String tabCaption, UniversalComputationDescription uniFormat)
+	public void loadExperimentIntoNewTab(JPABatch experiment)
 	{
-		addTab(tabCaption);
-		getActiveKineticComponent().importExperiment(uniFormat);
+		addTab(experiment.getName());
+		getActiveKineticComponent().importExperiment(experiment);
 	}
 	
 	public void openToolbox(ExpEditorToolbox toolbox)

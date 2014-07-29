@@ -3,18 +3,24 @@ package org.pikater.web.vaadin.gui.server.components.forms;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 
-public abstract class SaveExperimentForm extends CustomFormLayout implements IDialogComponent
+public class SaveExperimentForm extends CustomFormLayout implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = -692840139111911571L;
 	
@@ -24,40 +30,127 @@ public abstract class SaveExperimentForm extends CustomFormLayout implements IDi
 		SAVE_FOR_EXECUTION
 	}
 	
-	private final ExperimentSaveMode saveMode;
-	private final TextField experimentNameField;
-	private final ComboBox priorityAssignedByUserField;
-	private final TextField computationEstimateInHoursField;
-	private final ComboBox sendEmailWhenFinishedField;
-	private final TextArea experimentNoteField;
+	public enum SaveForLaterMode
+	{
+		SAVE_AS_NEW,
+		OVERWRITE_PREVIOUS,
+		SAVE_AS_NEW_AND_DELETE_PREVIOUS;
+		
+		public String toItemPropertyID()
+		{
+			switch(this)
+			{
+				case OVERWRITE_PREVIOUS:
+					return "op";
+				case SAVE_AS_NEW:
+					return "san";
+				case SAVE_AS_NEW_AND_DELETE_PREVIOUS:
+					return "sanadp";
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
+		}
+		
+		public String toDisplayString()
+		{
+			switch(this)
+			{
+				case SAVE_AS_NEW:
+					return "save as new";
+				case OVERWRITE_PREVIOUS:
+					return "overwrite previous";
+				case SAVE_AS_NEW_AND_DELETE_PREVIOUS:
+					return "save as new and delete previous";
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
+		}
+	}
 	
-	public SaveExperimentForm(ExperimentSaveMode saveMode)
+	/*
+	 * Declaration of fields.
+	 */
+	private final OptionGroup field_saveForLaterMode;
+	private final TextField field_experimentName;
+	private final ComboBox field_priorityAssignedByUser;
+	private final TextField field_computationEstimateInHours;
+	private final ComboBox field_sendEmailWhenFinished;
+	private final TextArea field_experimentNote;
+	
+	/*
+	 * Programmatic variables.
+	 */
+	private final ExperimentSaveMode saveMode;
+	
+	public SaveExperimentForm(ExperimentSaveMode saveMode, final JPABatch sourceExperiment)
 	{
 		super(null);
 		
-		JPAUser user = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+		this.saveMode = saveMode;
 		
 		// first create the fields
-		this.saveMode = saveMode;
-		this.experimentNameField = FormFieldFactory.getGeneralTextField("Experiment name:", "Enter the name", null, false, false);
-		this.experimentNoteField = FormFieldFactory.getGeneralTextArea("Note:", "A short description for this experiment?", null, false, false);
+		this.field_experimentName = FormFieldFactory.getGeneralTextField("Experiment name:", "Enter the name", null, false, false);
+		this.field_experimentNote = FormFieldFactory.getGeneralTextArea("Note:", "A short description for this experiment?", null, false, false);
 		switch(saveMode)
 		{
 			case SAVE_FOR_LATER:
-				this.priorityAssignedByUserField = null;
-				this.computationEstimateInHoursField = null;
-				this.sendEmailWhenFinishedField = null;
+				this.field_saveForLaterMode = FormFieldFactory.getGeneralOptionGroup("How to save:", true);
+				SaveForLaterMode[] availableSaveForLaterModes = sourceExperiment != null ? SaveForLaterMode.values() :
+					new SaveForLaterMode[] { SaveForLaterMode.SAVE_AS_NEW };
+				for(SaveForLaterMode mode : availableSaveForLaterModes)
+				{
+					Item itemID = this.field_saveForLaterMode.addItem(mode);
+					itemID.addItemProperty(mode.toItemPropertyID(), new ObjectProperty<String>(mode.toDisplayString()));
+				}
+				this.field_saveForLaterMode.addValueChangeListener(new Property.ValueChangeListener()
+				{
+					private static final long serialVersionUID = 3490632054167567196L;
+
+					@Override
+					public void valueChange(ValueChangeEvent event)
+					{
+						SaveForLaterMode mode = getSaveForLaterMode();
+						
+						// name and note fields need to be enabled/disabled as needed
+						switch(mode)
+						{
+							case OVERWRITE_PREVIOUS:
+								if(sourceExperiment != null)
+								{
+									field_experimentName.setValue(sourceExperiment.getName());
+									field_experimentNote.setValue(sourceExperiment.getNote());
+								}
+								break;
+								
+							case SAVE_AS_NEW:
+							case SAVE_AS_NEW_AND_DELETE_PREVIOUS:
+								field_experimentName.setValue(null);
+								field_experimentNote.setValue(null);
+								break;
+							default:
+								throw new IllegalStateException("Unknown state: " + mode.name());
+						}
+					}
+				});
+				this.field_saveForLaterMode.select(availableSaveForLaterModes[0]);
+				this.field_saveForLaterMode.setNewItemsAllowed(false);
+				this.field_saveForLaterMode.setNullSelectionAllowed(false);
+				this.field_priorityAssignedByUser = null;
+				this.field_computationEstimateInHours = null;
+				this.field_sendEmailWhenFinished = null;
 				break;
 				
 			case SAVE_FOR_EXECUTION:
+				this.field_saveForLaterMode = null;
+				JPAUser user = ManageAuth.getUserEntity(VaadinSession.getCurrent());
 				List<Integer> userPriorityOptions = new ArrayList<Integer>();
 				for(int i = 0; i <= user.getPriorityMax(); i++)
 				{
 					userPriorityOptions.add(i);
 				}
-				this.priorityAssignedByUserField = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
-				this.computationEstimateInHoursField = FormFieldFactory.getNumericField("Est. computation time (hours):", new Integer(1), 1, null, true, false);
-				this.sendEmailWhenFinishedField = FormFieldFactory.getGeneralCheckField("Send email when finished:", true, false, false);
+				this.field_priorityAssignedByUser = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
+				this.field_computationEstimateInHours = FormFieldFactory.getNumericField("Est. computation time (hours):", new Integer(1), 1, null, true, false);
+				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("Send email when finished:", true, false, false);
 				break;
 				
 			default:
@@ -65,14 +158,24 @@ public abstract class SaveExperimentForm extends CustomFormLayout implements IDi
 		}
 		
 		// and then add the fields with the right order
-		addField("name", experimentNameField);
-		if(saveMode == ExperimentSaveMode.SAVE_FOR_EXECUTION)
+		switch(saveMode)
 		{
-			addField("priority", priorityAssignedByUserField);
-			addField("computation estimate", computationEstimateInHoursField);
-			addField("email when finished", sendEmailWhenFinishedField);
+			case SAVE_FOR_LATER:
+				addField("how to save", field_saveForLaterMode);
+				addField("name", field_experimentName);
+				break;
+				
+			case SAVE_FOR_EXECUTION:
+				addField("name", field_experimentName);
+				addField("priority", field_priorityAssignedByUser);
+				addField("computation estimate", field_computationEstimateInHours);
+				addField("email when finished", field_sendEmailWhenFinished);
+				break;
+			
+			default:
+				throw new IllegalStateException("Unknown state: " + saveMode.name());
 		}
-		addField("note", experimentNoteField);
+		addField("note", field_experimentNote);
 	}
 
 	@Override
@@ -86,29 +189,41 @@ public abstract class SaveExperimentForm extends CustomFormLayout implements IDi
 		return saveMode;
 	}
 	
+	public SaveForLaterMode getSaveForLaterMode()
+	{
+		if(getSaveMode() == ExperimentSaveMode.SAVE_FOR_LATER)
+		{
+			return (SaveForLaterMode) field_saveForLaterMode.getValue();
+		}
+		else
+		{
+			throw new IllegalStateException("This form's mode is not set to: " + ExperimentSaveMode.SAVE_FOR_LATER.name());
+		}
+	}
+	
 	public String getExperimentName()
 	{
-		return experimentNameField.getValue();
+		return field_experimentName.getValue();
 	}
 	
 	public Integer getPriorityAssignedByUser()
 	{
-		return Integer.parseInt((String) priorityAssignedByUserField.getValue());
+		return Integer.parseInt((String) field_priorityAssignedByUser.getValue());
 	}
 	
 	public Integer getComputationEstimateInHours()
 	{
-		return Integer.parseInt(computationEstimateInHoursField.getValue());
+		return Integer.parseInt(field_computationEstimateInHours.getValue());
 	}
 	
 	public boolean getSendEmailWhenFinished()
 	{
-		return (Boolean) sendEmailWhenFinishedField.getConvertedValue();
+		return (Boolean) field_sendEmailWhenFinished.getConvertedValue();
 	}
 	
 	public String getExperimentNote()
 	{
-		return experimentNoteField.getValue();
+		return field_experimentNote.getValue();
 	}
 	
 	//--------------------------------------------------------------------
