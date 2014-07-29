@@ -898,12 +898,12 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
 		
-		logError("Agent_DataManager.respondToGetAllMetadata");
+		log("Agent_DataManager.respondToGetAllMetadata");
 
 		List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResults_required()) {
-			logError("DataManager.ResultsRequired");
+			log("DataManager.Results Required");
 			if (gm.getExceptions() != null) {
 				List<String> exHash = new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
@@ -916,7 +916,7 @@ public class Agent_DataManager extends PikaterAgent {
 				datasets = DAOs.dataSetDAO.getAllWithResults();
 			}
 		} else {
-			logError("DataManager.Results  NOT Required");
+			log("DataManager.Results NOT Required");
 			if (gm.getExceptions() != null) {
 				
 				List<String> excludedHashes = new ArrayList<String>();
