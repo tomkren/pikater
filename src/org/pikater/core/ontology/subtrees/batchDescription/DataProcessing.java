@@ -23,14 +23,17 @@ public class DataProcessing implements IDataProvider {
 
 	private int id = -1;
 	private String agentType;
-	private List<NewOption> options =
-			new ArrayList<>();
-    
-	private List<ErrorDescription> errors =
-			new ArrayList<>();
-	private List<DataSourceDescription> dataSources =
-			new ArrayList<>();
+	
+	private List<NewOption> options;
+	private List<ErrorDescription> errors;
+	private List<DataSourceDescription> dataSources;
 
+	public DataProcessing() {
+		this.options = new ArrayList<>();
+		this.errors = new ArrayList<>();
+		this.dataSources = new ArrayList<>();
+	}
+			
 	public int getId() {
 		return id;
 	}
