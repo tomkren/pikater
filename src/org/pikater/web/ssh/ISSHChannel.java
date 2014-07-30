@@ -1,4 +1,4 @@
-package org.pikater.shared.ssh;
+package org.pikater.web.ssh;
 
 public interface ISSHChannel
 {

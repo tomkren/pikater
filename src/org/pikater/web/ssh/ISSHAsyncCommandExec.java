@@ -1,4 +1,4 @@
-package org.pikater.shared.ssh;
+package org.pikater.web.ssh;
 
 import java.io.IOException;
 

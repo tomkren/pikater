@@ -1,8 +1,8 @@
-package org.pikater.shared.ssh;
+package org.pikater.web.ssh;
 
 import java.io.IOException;
 
-import org.pikater.shared.ssh.SSHBatchExecChannel.ISSHBatchChannelNotificationHandler;
+import org.pikater.web.ssh.SSHBatchExecChannel.ISSHBatchChannelNotificationHandler;
 
 import com.jcraft.jsch.JSchException;
 
