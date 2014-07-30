@@ -124,20 +124,4 @@ public class VisualizationUI extends CustomConfiguredUI
 					String.format("?%s=%s", VisualizationUI.PARAM_RESOURCE, ResourceRegistrar.fromResourceID(thisClassesResourceID));
 		}
 	}
-	
-	public static class VisualizationArgument
-	{
-		private final JPADataSetLO dataset;
-		private final String attrToCompare1;
-		private final String attrToCompare2;
-		private final String attrToCompareTo;
-		
-		public VisualizationArgument(JPADataSetLO dataset, String attrToCompare1, String attrToCompare2, String attrToCompareTo)
-		{
-			this.dataset = dataset;
-			this.attrToCompare1 = attrToCompare1;
-			this.attrToCompare2 = attrToCompare2;
-			this.attrToCompareTo = attrToCompareTo;
-		}
-	}
 }

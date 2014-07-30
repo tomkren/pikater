@@ -21,7 +21,7 @@ import de.steinwedel.messagebox.MessageBox;
 
 public class ProgressDialog extends DialogCommons
 {
-	public static ProgressDialogContext show(String title, final IProgressDialogHandler progressDialogEvents)
+	public static ProgressDialogContext show(String title, final IProgressDialogTaskHandler progressDialogEvents)
 	{
 		ProgressBar progress = new ProgressBar(0);
 		progress.setSizeFull();
@@ -98,53 +98,18 @@ public class ProgressDialog extends DialogCommons
 	// -------------------------------------------------------------------------
 	// PUBLIC TYPES - PROGRESS BAR DIALOG
 
-	public static interface IProgressDialogTaskResult
-	{
-	}
-
-	public static class ProgressDialogVisualizationTaskResult implements IProgressDialogTaskResult
-	{
-		private final int imageWidth;
-		private final int imageHeight;
-
-		public ProgressDialogVisualizationTaskResult(int imageWidth, int imageHeight)
-		{
-			this.imageWidth = imageWidth;
-			this.imageHeight = imageHeight;
-		}
-
-		public int getImageWidth()
-		{
-			return imageWidth;
-		}
-		public int getImageHeight()
-		{
-			return imageHeight;
-		}
-	}
-
-	public static interface IProgressDialogTaskContext
-	{
-		/**
-		 * Updates the associated dialog's progress bar. 
-		 * @param percentage value must be between 0.0 and 1.0
-		 */
-		void updateProgress(float percentage);
-
-		void onTaskFailed();
-		void onTaskFinish(IProgressDialogTaskResult result);
-	}
-
-	public static interface IProgressDialogHandler
+	public static interface IProgressDialogTaskHandler
 	{
 		/**
 		 * Signal used to start the underlying task.
 		 * <ul>
-		 * <li> Dialog is never created if an exception is thrown so
-		 * there is no need to even try to close it. 
+		 * <li> Dialog is never created if an exception is thrown so you don't have to
+		 * close it manually in such cases. 
 		 * </ul>
+		 * @param contextForTask provides progress and status callbacks
+		 * @throws Throwable
 		 */
-		void startTask(IProgressDialogTaskContext context) throws Throwable;
+		void startTask(IProgressDialogResultHandler contextForTask) throws Throwable;
 
 		/**
 		 * Signal used to abort the underlying task.
@@ -169,8 +134,22 @@ public class ProgressDialog extends DialogCommons
 		 */
 		void onTaskFinish(IProgressDialogTaskResult result);
 	}
+	
+	public static interface IProgressDialogResultHandler
+	{
+		/**
+		 * @param percentage value must be between 0.0 and 1.0
+		 */
+		void updateProgress(float percentage);
+		void failed();
+		void finished(IProgressDialogTaskResult result);
+	}
+	
+	public static interface IProgressDialogTaskResult
+	{
+	}
 
-	public static class ProgressDialogContext implements IProgressDialogTaskContext
+	public static class ProgressDialogContext implements IProgressDialogResultHandler
 	{
 		private static final int POLL_INTERVAL = 500;
 
@@ -190,15 +169,15 @@ public class ProgressDialog extends DialogCommons
 		/**
 		 * Case-dependent events to call.
 		 */
-		private final IProgressDialogHandler events;
+		private final IProgressDialogTaskHandler taskHandler;
 
-		public ProgressDialogContext(MessageBox box, ProgressBar progress, Label lbl_percentage, IProgressDialogHandler events) 
+		public ProgressDialogContext(MessageBox box, ProgressBar progress, Label lbl_percentage, IProgressDialogTaskHandler taskHandler) 
 		{
 			this.currentUI = UI.getCurrent();
 			this.box = box;
 			this.progress = progress;
 			this.lbl_percentage = lbl_percentage;
-			this.events = events;
+			this.taskHandler = taskHandler;
 
 			if(this.currentUI.getPollInterval() == -1) // polling is not set yet
 			{
@@ -229,7 +208,7 @@ public class ProgressDialog extends DialogCommons
 			 */
 			try
 			{
-				events.startTask(this);
+				taskHandler.startTask(this);
 			}
 			catch (Throwable e)
 			{
@@ -258,7 +237,7 @@ public class ProgressDialog extends DialogCommons
 		}
 
 		@Override
-		public void onTaskFinish(final IProgressDialogTaskResult result)
+		public void finished(final IProgressDialogTaskResult result)
 		{
 			executeInLock(new Runnable()
 			{
@@ -275,7 +254,7 @@ public class ProgressDialog extends DialogCommons
 						{
 							try
 							{
-								events.onTaskFinish(result); // simply forward
+								taskHandler.onTaskFinish(result); // simply forward
 							}
 							catch (Throwable t)
 							{
@@ -293,7 +272,7 @@ public class ProgressDialog extends DialogCommons
 		}
 
 		@Override
-		public void onTaskFailed()
+		public void failed()
 		{
 			executeInLock(new Runnable()
 			{

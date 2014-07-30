@@ -1,68 +1,108 @@
 package org.pikater.web.quartzjobs.visualization;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.ProgressDialogVisualizationTaskResult;
-import org.pikater.web.visualisation.generator.ChartGenerator;
-import org.pikater.web.visualisation.generator.quartz.MatrixPNGGenerator;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
+import org.pikater.web.visualisation.definition.AttrMapping;
+import org.pikater.web.visualisation.definition.ImageType;
+import org.pikater.web.visualisation.definition.result.VisualizeDatasetResult;
+import org.pikater.web.visualisation.definition.result.VisualizeDatasetSubresult;
+import org.pikater.web.visualisation.definition.task.IVisualizeDataset;
+import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.quartz.MatrixPNGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 
-public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob {
-
-	public MatrixPNGGeneratorJob(){
-		super(3);
+public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob implements IVisualizeDataset
+{
+	private IProgressDialogResultHandler context;
+	
+	public MatrixPNGGeneratorJob()
+	{
+		super(4);
 	}
 	
 	@Override
-	public boolean argumentCorrect(int index, Object arg) {
-		switch(index){
-		case 0:
-			return arg instanceof IProgressDialogTaskContext;
-		case 1:
-			return arg instanceof JPADataSetLO;
-		case 2:
-			return arg instanceof String;
-		default:
-			return false;
+	public boolean argumentCorrect(int index, Object arg)
+	{
+		switch(index)
+		{
+			case 0:
+				return arg instanceof JPADataSetLO;
+			case 1:
+				return arg instanceof String[];
+			case 2:
+				return arg instanceof String;
+			case 3:
+				return arg instanceof IProgressDialogResultHandler;
+			default:
+				return false;
 		}
-		
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder) {
+	public void buildJob(JobBuilder builder)
+	{
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void execute() throws JobExecutionException
 	{
-		IProgressDialogTaskContext listener=getArg(0);
-		JPADataSetLO dslo=getArg(1);
-		File file=new File((String)getArg(2));
-		try {
-			PrintStream output=new PrintStream(file);
-			MatrixPNGGenerator mpngg=new MatrixPNGGenerator(listener, dslo, output);
-			mpngg.create();
-			listener.onTaskFinish(new ProgressDialogVisualizationTaskResult(ChartGenerator.MATRIX_CHART_SIZE, ChartGenerator.MATRIX_CHART_SIZE));
-		} catch (IOException e) {
-			file.delete();
-			listener.onTaskFailed();
-		}	
-
+		JPADataSetLO dataset = getArg(0);
+		String[] attrs = getArg(1);
+		String attrTarget = getArg(2);
+		context = getArg(3);
+		visualizeDataset(dataset, attrs, attrTarget);
 	}
 
 	@Override
+	public void visualizeDataset(JPADataSetLO dataset, String[] attrs, String attrTarget)
+	{
+		VisualizeDatasetResult result = new VisualizeDatasetResult(context);
+		try
+		{
+			for(String attrY : attrs)
+			{
+				for(String attrX : attrs)
+				{
+					/*
+					 * TODO:
+					 * 1) perhaps a static field to denote which extension to use by default?
+					 * 2) ChartGenerator.MATRIX_CHART_SIZE is now obsolete
+					 * 3) If you wish, we can propagate the result type into your own code
+					 * where you could use setters.  
+					 */
+					
+					VisualizeDatasetSubresult imageResult = result.createSingleImageResult(
+							new AttrMapping(attrX, attrY, attrTarget),
+							ImageType.PNG,
+							ChartGenerator.SINGLE_CHART_SIZE,
+							ChartGenerator.SINGLE_CHART_SIZE
+					);
+					PrintStream output = new PrintStream(imageResult.getFile());
+					new MatrixPNGGenerator(result, dataset, output).create();
+				}
+			}
+			result.finished();
+		}
+		catch (Throwable t)
+		{
+			PikaterLogger.logThrowable("Job could not finish because of the following error:", t);
+			result.failed();
+		}
+	}
+	
+	@Override
 	public void interrupt() throws UnableToInterruptJobException
 	{
-		// TODO Auto-generated method stub
-		
+		/*
+		 * TODO: test whether Quartz automatically interrupts the jobs' threads
+		 * or we must do it ourselves.
+		 */
 	}
 }
