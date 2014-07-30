@@ -16,8 +16,12 @@ public class Search extends DataProcessing implements IErrorProvider {
 	private static final long serialVersionUID = 7856131679884259768L;
 	
 	private String searchClass;
-    private List<NewOption> options = new ArrayList<NewOption>();
+    private List<NewOption> options;
 
+    public Search() {
+    	this.options = new ArrayList<NewOption>();
+    }
+    
     public String getSearchClass() {
         return searchClass;
     }
@@ -29,7 +33,7 @@ public class Search extends DataProcessing implements IErrorProvider {
         return options;
     }
     
-    public void setOptions(ArrayList<NewOption> options) {
+    public void setOptions(List<NewOption> options) {
     	if (options == null) {
     		throw new NullPointerException("Argument options can't be null");
     	}
@@ -91,4 +95,13 @@ public class Search extends DataProcessing implements IErrorProvider {
 		}
 	}
 	
+	public Search clone() {
+		
+		NewOptions optionsOnt = new NewOptions(this.options);
+		
+		Search search = new Search();
+		search.setSearchClass(searchClass);
+		search.setOptions(optionsOnt.clone().getOptions());
+		return search;
+	}
 }

@@ -70,4 +70,12 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 		
 	}
 
+	public FileDataProvider clone() {
+		
+		FileDataProvider fileData = new FileDataProvider();
+		fileData.setFileURI(fileURI);
+		
+		return fileData;
+	}
+
 }

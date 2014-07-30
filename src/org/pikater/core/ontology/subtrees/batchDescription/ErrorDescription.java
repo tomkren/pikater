@@ -27,4 +27,12 @@ public class ErrorDescription implements Concept {
     public void setType(String type) {
         this.type = type;
     }
+    
+    public ErrorDescription clone() {
+    	
+    	ErrorDescription description = new ErrorDescription();
+    	description.setProvider(provider);
+    	description.setType(getType());
+    	return description;
+    }
 }

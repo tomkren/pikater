@@ -178,4 +178,29 @@ public class DataProcessing implements IDataProvider {
 		return this.getId() == element.getId();
 	}
 	
+	@Override
+	public DataProcessing clone() {
+		
+		List<NewOption> allOptionsCloned = new ArrayList<NewOption>();
+		for (NewOption optionI : exportAllOptions()) {
+			allOptionsCloned.add(optionI.clone());
+		}
+
+		List<ErrorDescription> errorsCloned = new ArrayList<ErrorDescription>();
+		for (ErrorDescription errorI : exportAllErrors()) {
+			errorsCloned.add(errorI.clone());
+		}
+
+		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
+		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions()) {
+			dataSourceCloned.add(dataSourceI.clone());
+		}
+		
+		DataProcessing dataProcessing = new DataProcessing();
+		dataProcessing.importAllOptions(allOptionsCloned);
+		dataProcessing.importAllErrors(errorsCloned);
+		dataProcessing.importAllDataSourceDescriptions(dataSourceCloned);
+		
+		return dataProcessing;
+	}
 }

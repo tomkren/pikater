@@ -4,4 +4,5 @@ import jade.content.Concept;
 
 public interface IExpectedDuration extends Concept {
 
+	public IExpectedDuration clone();
 }
