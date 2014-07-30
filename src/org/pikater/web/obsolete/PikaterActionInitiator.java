@@ -1,4 +1,4 @@
-package org.pikater.web.pikater;
+package org.pikater.web.obsolete;
 
 import javax.servlet.ServletException;
 

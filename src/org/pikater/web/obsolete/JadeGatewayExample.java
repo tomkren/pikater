@@ -1,4 +1,4 @@
-package org.pikater.web.servlets;
+package org.pikater.web.obsolete;
 
 import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.pikater.web.pikater.PikaterActionInitiator;
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.system.Agent_Mailing;

@@ -1,7 +1,6 @@
-package org.pikater.web.pikater;
+package org.pikater.web.ssh;
 
 import org.pikater.web.ExecSequence;
-import org.pikater.web.ssh.SSHSession;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent.MessageStyle;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem;

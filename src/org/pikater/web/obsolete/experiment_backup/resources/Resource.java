@@ -1,4 +1,4 @@
-package org.pikater.web.experiment_backup.resources;
+package org.pikater.web.obsolete.experiment_backup.resources;
 
 import org.pikater.shared.util.SimpleIDGenerator;
 

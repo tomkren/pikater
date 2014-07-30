@@ -13,7 +13,7 @@ import java.util.TreeSet;
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
 import org.pikater.web.config.ServerConfigurationInterface;
-import org.pikater.web.pikater.PikaterSSHLauncher;
+import org.pikater.web.ssh.PikaterSSHLauncher;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;

@@ -1,8 +1,8 @@
-package org.pikater.web.experiment_backup.slots;
+package org.pikater.web.obsolete.experiment_backup.slots;
 
 import java.util.Set;
 
-import org.pikater.web.experiment_backup.resources.Resource;
+import org.pikater.web.obsolete.experiment_backup.resources.Resource;
 
 public abstract class AbstractSlot
 {
