@@ -291,5 +291,13 @@ public class DataSetDAO extends AbstractDAO{
 			em.close();
 		}
 	}
+	
+	public void deleteDataSetEntity(JPADataSetLO datasetlo){
+		this.deleteDatasetByID(datasetlo.getId());
+	}
+	
+	public void deleteDatasetByID(int id){
+		this.deleteEntityByID(JPADataSetLO.class, id);
+	}
 
 }

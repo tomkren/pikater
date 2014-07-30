@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
+import org.pikater.shared.database.jpa.JPAExternalAgent;
+import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 
 public abstract class AbstractDAO
@@ -79,6 +81,64 @@ public abstract class AbstractDAO
 		}
 	}
 	
+	public void deleteEntity(JPAAbstractEntity entityToRemove){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			JPAAbstractEntity entity = em.find(entityToRemove.getClass(), entityToRemove.getId());
+			em.remove(entity);
+			em.getTransaction().commit();
+		}catch(Exception e){
+			logger.error("Can't remove JPA object", e);
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+	}
+	
+	protected <T extends JPAAbstractEntity> List<T> getByTypedNamedQuery(Class<T> entityClass,String queryName,String paramName,Object param){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return
+				em
+				.createNamedQuery(queryName,entityClass)
+				.setParameter(paramName, param)
+				.getResultList();
+		}finally{
+			em.close();
+		}
+	}
+	
+	protected <T extends JPAAbstractEntity> List<T> getByTypedNamedQuery(Class<T> entityClass,String queryName,String paramName,Object param, int offset,int maxResultSize){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return
+				em
+				.createNamedQuery(queryName,entityClass)
+				.setParameter(paramName, param)
+				.setMaxResults(maxResultSize)
+				.setFirstResult(offset)
+				.getResultList();
+		}finally{
+			em.close();
+		}
+	}
+	
+	
+	public void deleteEntityByID(Class<? extends JPAAbstractEntity> entityClass,int id){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			JPAAbstractEntity entity = em.find(entityClass, id);
+			em.remove(entity);
+			em.getTransaction().commit();
+		}catch(Exception e){
+			logger.error("Can't remove JPA object", e);
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+	}
 	
 	
 }

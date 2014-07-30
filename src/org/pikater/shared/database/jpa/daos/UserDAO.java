@@ -139,4 +139,12 @@ public class UserDAO extends AbstractDAO {
 		}
 	}
 	
+	public void deleteUserEntity(JPAUser user){
+		this.deleteUserByID(user.getId());
+	}
+	
+	public void deleteUserByID(int id){
+		this.deleteEntityByID(JPAUser.class, id);
+	}
+	
 }

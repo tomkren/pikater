@@ -338,4 +338,12 @@ public class BatchDAO extends AbstractDAO {
 			em.close();
 		}
 	}	
+	
+	public void deleteBatchEntity(JPABatch batch){
+		this.deleteBatchByID(batch.getId());
+	}
+	
+	public void deleteBatchByID(int id){
+		this.deleteEntityByID(JPABatch.class, id);
+	}
 }
