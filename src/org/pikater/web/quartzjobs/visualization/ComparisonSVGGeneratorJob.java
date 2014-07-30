@@ -6,11 +6,11 @@ import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
-import org.pikater.shared.visualisation.charts.exception.ChartException;
-import org.pikater.shared.visualisation.generator.ChartGenerator;
-import org.pikater.shared.visualisation.generator.quartz.ComparisonSVGGenerator;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.ProgressDialogVisualizationTaskResult;
+import org.pikater.web.visualisation.charts.exception.ChartException;
+import org.pikater.web.visualisation.generator.ChartGenerator;
+import org.pikater.web.visualisation.generator.quartz.ComparisonSVGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
