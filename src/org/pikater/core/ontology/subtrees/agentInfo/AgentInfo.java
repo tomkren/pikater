@@ -34,6 +34,59 @@ public class AgentInfo implements Concept {
 		this.inputSlots = new ArrayList<Slot>();
 		this.outputSlots = new ArrayList<Slot>();
 	}
+	
+	//---------------------------------------------------------
+	// CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
+	
+	/*
+	 * Only compare the {@link #agentClassName} and {@link #ontologyClassName}
+	 * fields.
+	 * Web package (namely {@link AgentInfoCollection} depends on this.
+	 */
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((agentClassName == null) ? 0 : agentClassName.hashCode());
+		result = prime
+				* result
+				+ ((ontologyClassName == null) ? 0 : ontologyClassName
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AgentInfo other = (AgentInfo) obj;
+		if (agentClassName == null)
+		{
+			if (other.agentClassName != null)
+				return false;
+		}
+		else if (!agentClassName.equals(other.agentClassName))
+			return false;
+		if (ontologyClassName == null)
+		{
+			if (other.ontologyClassName != null)
+				return false;
+		}
+		else if (!ontologyClassName.equals(other.ontologyClassName))
+			return false;
+		return true;
+	}
+	
+	//---------------------------------------------------------
+	// OTHER INTERFACE
 
 	public String getAgentClassName() {
 		return agentClassName;
@@ -119,11 +172,6 @@ public class AgentInfo implements Concept {
 	public boolean isOntologyType(Class<?> ontologyClass) {
 		
 		return this.ontologyClassName.equals(ontologyClass.getName());
-	}
-	
-	public boolean equals(AgentInfo agentInfo) {
-		
-		return this.getAgentClassName().equals(agentInfo.getAgentClassName());
 	}
 	
 	public String exportXML() {
