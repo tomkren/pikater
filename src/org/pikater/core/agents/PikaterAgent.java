@@ -208,6 +208,9 @@ public abstract class PikaterAgent extends Agent {
 	}
 
 	public void initDefault(Object[] args) {
+		if (context == null) {
+			context = new ClassPathXmlApplicationContext(initBeansName);
+		}
 		if (getName().contains("-")) {
 			nodeName = getLocalName().substring(getLocalName().lastIndexOf('-')+1);
 		}

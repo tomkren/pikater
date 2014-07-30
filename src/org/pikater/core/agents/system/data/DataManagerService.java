@@ -1,7 +1,6 @@
 package org.pikater.core.agents.system.data;
 
-import java.io.File;
-
+import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
@@ -14,12 +13,15 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
+import java.io.File;
+
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MetadataOntology;
+import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
@@ -37,6 +39,8 @@ import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.core.ontology.subtrees.metadata.UpdateMetadata;
+import org.pikater.core.ontology.subtrees.model.GetModel;
+import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.task.Task;
@@ -143,6 +147,40 @@ public class DataManagerService extends FIPAService {
 		} catch (CodecException | OntologyException | FIPAException e) {
 			agent.logError(e.getMessage(), e);
 		}
+	}
+
+	public static Model getModel(PikaterAgent agent, int model) {
+		agent.log("getting model " + model + " from DataManager");
+		GetModel act = new GetModel();
+		act.setModelID(model);
+
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		request.setOntology(ModelOntology.getInstance().getName());
+		request.setLanguage(codec.getName());
+		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		try {
+			agent.getContentManager().fillContent(request, new Action(agent.getAID(), act));
+			ACLMessage response = FIPAService.doFipaRequestClient(agent, request, 10000);
+			if (response == null) {
+				agent.logError("did not receive GetModel response for model "+model+" in time");
+				return null;
+			}
+
+			ContentElement content = agent.getContentManager().extractContent(response);
+			if (content instanceof Result) {
+				Result result = (Result) content;
+
+				if (result.getValue() instanceof Model) {
+					return (Model)result.getValue();
+				} else {
+					agent.logError("did not receive expected GetModel response for model "+model);
+				}
+			}
+		} catch (CodecException | OntologyException | FIPAException e) {
+			agent.logError("GetModel failure", e);
+		}
+		return null;
 	}
 
 	public static void saveMetadata(PikaterAgent agent, Metadata m) {
