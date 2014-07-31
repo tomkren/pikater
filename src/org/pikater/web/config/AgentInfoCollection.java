@@ -29,12 +29,20 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 		return boxes.add(info);
 	}
 	
-	public AgentInfo getUniqueByAgentName(String agentClassName)
+	/**
+	 * This method is guaranteed to return the request object or throw an exception
+	 * otherwise.
+	 * @param ontologyClassName
+	 * @param agentClassName
+	 * @return
+	 */
+	public AgentInfo getUnique(String ontologyClassName, String agentClassName)
 	{
 		List<AgentInfo> result = new ArrayList<AgentInfo>(); 
 		for(AgentInfo info : boxes)
 		{
-			if(info.getAgentClassName().equals(agentClassName))
+			if(info.getOntologyClassName().equals(ontologyClassName) && 
+					info.getAgentClassName().equals(agentClassName))
 			{
 				result.add(info);
 			}
@@ -42,11 +50,12 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 		switch(result.size())
 		{
 			case 0:
-				return null;
+				throw new IllegalStateException(String.format("No agent info was found for ontology class "
+						+ "name '%s' and agent class name '%s'.", ontologyClassName, agentClassName));
 			case 1:
 				return result.get(0);
 			default:
-				throw new IllegalStateException("Duplicate AgentInfo found by agent class name. Use ontology class name too to distinguish them.");
+				throw new IllegalStateException("Duplicate AgentInfo found by ontology and agent class names.");
 		}
 	}
 	

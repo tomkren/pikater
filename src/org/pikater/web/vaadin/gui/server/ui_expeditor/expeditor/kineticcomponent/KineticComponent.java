@@ -287,12 +287,20 @@ public class KineticComponent extends AbstractComponent
 	{
 		try
 		{
+			// first and foremost
+			resetEnvironment();
+			
+			// deserialization from XML should always be ok, as long as we don't change universal format
 			UniversalComputationDescription uniFormat = UniversalComputationDescription.fromXML(experiment.getXML());
 			
-			resetEnvironment(); // calls another client command which must precede this one:
+			// however, correct conversion to web format is not a simple matter (see the inside of the method)
+			// also updates server-side state
 			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
 			
+			// finish updating server-side state
 			previouslyLoadedExperimentID = experiment.getId();
+			
+			// and some final visual changes
 			parentTab.setCaption(experiment.getName());
 		}
 		catch (ConversionException e)
@@ -326,9 +334,9 @@ public class KineticComponent extends AbstractComponent
 		this.parentTab = parentTab;
 	}
 	
-	public void createBox(AgentInfo info, int absX, int absY)
+	public void createBoxAndSendItToClient(AgentInfo info, int absX, int absY)
 	{
-		getClientRPC().command_createBox(createBoxInfo(info, absX - absoluteLeft, absY - absoluteTop));
+		getClientRPC().command_createBox(createBoxAndUpdateState(info, absX - absoluteLeft, absY - absoluteTop));
 	}
 	
 	public void reloadVisualStyle()
@@ -370,161 +378,222 @@ public class KineticComponent extends AbstractComponent
 		return getRpcProxy(KineticComponentClientRpc.class);
 	}
 	
-	private BoxInfo createBoxInfo(AgentInfo info, int relX, int relY)
+	private BoxInfo createBoxAndUpdateState(AgentInfo info, int relX, int relY)
 	{
 		BoxType type = BoxType.fromAgentInfo(info);
 		String newBoxID = String.valueOf(boxIDGenerator.getAndIncrement());
-		boxIDToAgentInfo.put(newBoxID, info);
+		boxIDToAgentInfo.put(newBoxID, info.clone()); // agent info need to be cloned because options might be changed by user
 		return new BoxInfo(
 				newBoxID,
 				type.name(),
 				info.getName(),
 				relX,
 				relY,
-				type.toPictureURL()
+				ExpEditor.getBoxPictureURL(type)
 		);
 	}
 	
 	private void resetEnvironment()
 	{
-		getClientRPC().command_resetKineticEnvironment();
-		boxIDToAgentInfo.clear();
+		/*
+		 * Server side reset could be done in a response call from the client but
+		 * then we would have to wait for it before the current thread proceeds.
+		 * As such, NEVER reset server-side state from the client :).
+		 */
+		getClientRPC().command_resetKineticEnvironment(); // client side reset
+		boxIDToAgentInfo.clear(); // server side reset
 	}
 	
 	//---------------------------------------------------------------
 	// FORMAT CONVERSIONS
 	
+	/**
+	 * Converts web experiment format into universal experiment format.
+	 * This conversion is substantially simpler than its counterpart. It should always work.
+	 * @param webFormat
+	 * @return
+	 * @throws ConversionException
+	 */
 	private UniversalComputationDescription webToUni(ExperimentGraph webFormat) throws ConversionException
 	{
-		// first some checks
-		AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
-		if(webFormat == null)
+		try
 		{
-			throw new ConversionException(new NullPointerException("The argument web format is null."));
-		}
-		else if(agentInfoProvider == null)
-		{
-			throw new ConversionException(new NullPointerException("Agent information has not yet been received from pikater."));
-		}
-		
-		// create the result uni-format experiment
-		UniversalComputationDescription result = new UniversalComputationDescription();
-		
-		// create uni-format master elements for all boxes
-		Map<BoxInfo, UniversalElement> webBoxToUniBox = new HashMap<BoxInfo, UniversalElement>();
-		for(BoxInfo webBox : webFormat.leafBoxes.values())
-		{
-			UniversalElement uniBox = new UniversalElement();
-			uniBox.setOntologyInfo(new UniversalOntology()); // needed for real-time edge registration to work (see below)
-			webBoxToUniBox.put(webBox, uniBox);
-		}
-		
-		// traverse all boxes and pass all available/needed information to result uni-format
-		for(Entry<String, BoxInfo> entry : webFormat.leafBoxes.entrySet())
-		{
-			// determine basic information and references
-			String webBoxID = entry.getKey();
-			BoxInfo webBox = entry.getValue();
-			UniversalElement uniBox = webBoxToUniBox.get(webBox);
-			AgentInfo agentInfo = boxIDToAgentInfo.get(webBoxID);
-			if(agentInfo == null)
+			// first some checks
+			AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
+			if(webFormat == null)
 			{
-				throw new ConversionException(new IllegalStateException(String.format(
-						"No agent info was found for box '%s@%s'.", webBox.boxTypeName, webBox.displayName)));
+				throw new NullPointerException("The argument web format is null.");
 			}
-			
-			// create edge leading from the currently processed box (will be later added to all neighbour uni-boxes)
-			UniversalConnector connector = new UniversalConnector();
-			connector.setFromElement(uniBox);
-			
-			// create and initialize the FIRST of the 2 child objects
-			UniversalOntology uniBoxInfo = new UniversalOntology();
-			try
+			else if(agentInfoProvider == null)
 			{
-				uniBoxInfo.setOntologyClass(Class.forName(agentInfo.getOntologyClassName()));
+				throw new NullPointerException("Agent information has not yet been received from pikater.");
 			}
-			catch (ClassNotFoundException e)
-			{
-				throw new ConversionException(new IllegalStateException(String.format(
-						"Could not convert '%s' to a class instance. Have changes been made to AgentInfo recently?",
-						agentInfo.getOntologyClassName()), e));
-			}
-			uniBoxInfo.setOptions(agentInfo.getOptions().getOptions());
-			for(String neighbourWebBoxID : webFormat.edges.get(webBoxID)) // transform edges
-			{
-				UniversalElement neighbourUniBox = webBoxToUniBox.get(webFormat.leafBoxes.get(neighbourWebBoxID));
-				neighbourUniBox.getOntologyInfo().addInputSlot(connector);
-			}
-			
-			// create and initialize the SECOND of the 2 child objects
-			UniversalGui uniBoxPositionInfo = new UniversalGui(webBox.initialX, webBox.initialY);
-			
-			// glue it all together and register in the result uni-format
-			uniBox.setGUIInfo(uniBoxPositionInfo);
-			uniBox.setOntologyInfo(uniBoxInfo);
-			result.addElement(uniBox);
-		}
-		return result;
-	}
-	
-	private ExperimentGraph uniToWeb(UniversalComputationDescription uniFormat) throws ConversionException
-	{
-		// first some checks
-		AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
-		if(agentInfoProvider == null)
-		{
-			throw new ConversionException(new NullPointerException("Agent information has not yet been received from pikater."));
-		}
-		else if(uniFormat == null)
-		{
-			throw new ConversionException(new NullPointerException("The argument uni-format is null."));
-		}
-		
-		// and then onto the conversion
-		if(uniFormat.isGUICompatible())
-		{
-			ExperimentGraph webFormat = new ExperimentGraph();
 
-			// first convert all boxes
-			Map<UniversalElement, String> uniBoxToWebBoxID = new HashMap<UniversalElement, String>();
-			for(UniversalElement element : uniFormat.getAllElements())
+			// create the result uni-format experiment
+			UniversalComputationDescription result = new UniversalComputationDescription();
+
+			// create uni-format master elements for all boxes
+			Map<BoxInfo, UniversalElement> webBoxToUniBox = new HashMap<BoxInfo, UniversalElement>();
+			for(BoxInfo webBox : webFormat.leafBoxes.values())
 			{
-				// TODO: get by agent info
-				// AgentInfo agentInfo =  agentInfoProvider.getByOntologyClass(element.getOntologyInfo().getType());
-				AgentInfo agentInfo = null;
+				UniversalElement uniBox = new UniversalElement();
+				uniBox.setOntologyInfo(new UniversalOntology()); // needed for real-time edge registration to work (see below)
+				webBoxToUniBox.put(webBox, uniBox);
+			}
+
+			// traverse all boxes and pass all available/needed information to result uni-format
+			for(Entry<String, BoxInfo> entry : webFormat.leafBoxes.entrySet())
+			{
+				// determine basic information and references
+				String webBoxID = entry.getKey();
+				BoxInfo webBox = entry.getValue();
+				UniversalElement uniBox = webBoxToUniBox.get(webBox);
+				AgentInfo agentInfo = boxIDToAgentInfo.get(webBoxID);
 				if(agentInfo == null)
 				{
-					throw new ConversionException(new IllegalStateException(String.format(
-							"No agent info instance was found for ontology '%s'.", element.getOntologyInfo().getOntologyClass().getName())));
+					throw new IllegalStateException(String.format(
+							"No agent info was found for box '%s@%s'.", webBox.boxTypeName, webBox.displayName));
 				}
-				else
+
+				// create edge leading from the currently processed box (will be later added to all neighbour uni-boxes)
+				UniversalConnector connector = new UniversalConnector();
+				connector.setFromElement(uniBox);
+
+				// create and initialize the FIRST of the 2 child objects
+				UniversalOntology uniBoxInfo = new UniversalOntology();
+				try
 				{
-					BoxInfo info = createBoxInfo(agentInfo, element.getGUIInfo().x, element.getGUIInfo().y);
+					uniBoxInfo.setOntologyClass(Class.forName(agentInfo.getOntologyClassName()));
+					uniBoxInfo.setAgentClass(Class.forName(agentInfo.getAgentClassName()));
+				}
+				catch (ClassNotFoundException e)
+				{
+					throw new IllegalStateException(String.format(
+							"Could not convert '%s' to a class instance. Has it been hardcoded to an agent and renamed? "
+							+ "Or is the pikater core running in different version than web?", agentInfo.getOntologyClassName()
+							), e
+					);
+				}
+				uniBoxInfo.setOptions(agentInfo.getOptions());
+				for(String neighbourWebBoxID : webFormat.edges.get(webBoxID)) // transform edges
+				{
+					UniversalElement neighbourUniBox = webBoxToUniBox.get(webFormat.leafBoxes.get(neighbourWebBoxID));
+					neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+				}
+
+				// create and initialize the SECOND of the 2 child objects
+				UniversalGui uniBoxPositionInfo = new UniversalGui(webBox.initialX, webBox.initialY);
+
+				// glue it all together and register in the result uni-format
+				uniBox.setGUIInfo(uniBoxPositionInfo);
+				uniBox.setOntologyInfo(uniBoxInfo);
+				result.addElement(uniBox);
+			}
+			return result;
+		}
+		catch(Throwable t)
+		{
+			throw new ConversionException(t);
+		}
+	}
+
+	/**
+	 * Converts universal format experiments into web format experiments that are used
+	 * to do the actual loading in the client's kinetic environment.</br> 
+	 * This method is very sensitive to changes to (because of serialization to XML
+	 * and back):
+	 * <ul>
+	 * <li> Universal format.
+	 * <li> NewOption ontology. 
+	 * </ul>
+	 * These changes may cause exceptions when trying to convert (previously converted)
+	 * experiments back to web format.
+	 * @param uniFormat
+	 * @return
+	 * @throws ConversionException
+	 */
+	private ExperimentGraph uniToWeb(UniversalComputationDescription uniFormat) throws ConversionException
+	{
+		try
+		{
+			// first some checks
+			AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
+			if(agentInfoProvider == null)
+			{
+				throw new NullPointerException("Agent information has not yet been received from pikater.");
+			}
+			else if(uniFormat == null)
+			{
+				throw new NullPointerException("The argument uni-format is null.");
+			}
+			else if(!uniFormat.isGUICompatible())
+			{
+				throw new IllegalArgumentException(String.format(
+						"The universal format below is not fully compatible with the GUI (web) format.\n%s", uniFormat.toXML()));
+			}
+			else
+			{
+				// and then onto the conversion
+				ExperimentGraph webFormat = new ExperimentGraph();
+	
+				// first convert all boxes, set box positions
+				Map<UniversalElement, String> uniBoxToWebBoxID = new HashMap<UniversalElement, String>();
+				for(UniversalElement element : uniFormat.getAllElements())
+				{
+					// determine agent info instance
+					AgentInfo agentInfo = null;
+					try
+					{
+						// guarantees the correct result object or an exception
+						agentInfo = agentInfoProvider.getUnique(
+								element.getOntologyInfo().getOntologyClass().getName(),
+								element.getOntologyInfo().getAgentClass().getName()
+						);
+					}
+					catch (Throwable t)
+					{
+						throw new IllegalStateException(String.format(
+								"No agent info instance was found for ontology '%s'.", element.getOntologyInfo().getOntologyClass().getName()));
+					}
+					
+					// create web-format box and link it to uni-format box
+					BoxInfo info = createBoxAndUpdateState(agentInfo, element.getGUIInfo().x, element.getGUIInfo().y);
 					String convertedBoxID = webFormat.addLeafBoxAndReturnID(info);
 					uniBoxToWebBoxID.put(element, convertedBoxID);
 				}
-			}
-			
-			// then convert all edges
-			for(UniversalElement element : uniFormat.getAllElements())
-			{
-				for(UniversalConnector edge : element.getOntologyInfo().getInputSlots())
+				
+				// then convert all edges
+				for(UniversalElement element : uniFormat.getAllElements())
 				{
-					webFormat.connect(
-							uniBoxToWebBoxID.get(edge.getFromElement()),
-							uniBoxToWebBoxID.get(element)
-					);
+					for(UniversalConnector edge : element.getOntologyInfo().getInputSlots())
+					{
+						webFormat.connect(
+								uniBoxToWebBoxID.get(edge.getFromElement()),
+								uniBoxToWebBoxID.get(element)
+						);
+					}
 				}
+				
+				/*
+				 * TODO later:
+				 * - use input slots in AgentInfo and detect box types can be mutually connected by an edge
+				 * - make the conversion smarter - best effort to display old experiments whether they're still compatible or not
+				 */
+				
+				// and finally, options... THIS IS THE TRICKY PART
+				for(UniversalElement element : uniFormat.getAllElements())
+				{
+					AgentInfo agentInfo = boxIDToAgentInfo.get(uniBoxToWebBoxID.get(element));
+					agentInfo.getOptions().mergeWith(element.getOntologyInfo().getOptions());
+				}
+				
+				// conversion is finished, return:
+				return webFormat;
 			}
-			
-			// TODO: wrapper boxes, options & stuff
-			
-			return webFormat;
 		}
-		else
+		catch (Throwable t)
 		{
-			throw new ConversionException(new IllegalArgumentException(String.format(
-					"The universal format below is not fully compatible with the GUI (web) format.\n%s", uniFormat.toXML())));
+			throw new ConversionException(t);
 		}
 	}
 }
