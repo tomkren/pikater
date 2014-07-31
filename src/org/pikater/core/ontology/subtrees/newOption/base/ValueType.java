@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData; 
 
 public class ValueType implements Concept, IValidated
 {
@@ -109,6 +109,60 @@ public class ValueType implements Concept, IValidated
 		return getSetRestriction() != null;
 	}
 	
+	/* -------------------------------------------------------------
+	 * CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
+	 * - generate again when you change local fields or their types
+	 * - required in {@link org.pikater.web.vaadin.gui.server.components.forms.OptionValueForm}
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((defaultValue == null) ? 0 : defaultValue.hashCode());
+		result = prime
+				* result
+				+ ((rangeRestriction == null) ? 0 : rangeRestriction.hashCode());
+		result = prime * result
+				+ ((setRestriction == null) ? 0 : setRestriction.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ValueType other = (ValueType) obj;
+		if (defaultValue == null)
+		{
+			if (other.defaultValue != null)
+				return false;
+		}
+		else if (!defaultValue.equals(other.defaultValue))
+			return false;
+		if (rangeRestriction == null)
+		{
+			if (other.rangeRestriction != null)
+				return false;
+		}
+		else if (!rangeRestriction.equals(other.rangeRestriction))
+			return false;
+		if (setRestriction == null)
+		{
+			if (other.setRestriction != null)
+				return false;
+		}
+		else if (!setRestriction.equals(other.setRestriction))
+			return false;
+		return true;
+	}
+	//-------------------------------------------------------------
+	// OTHER INHERITED INTERFACE
 	/**
 	 * The following conditions are checked (all of them are assumed in web package, so
 	 * don't change them lightly):

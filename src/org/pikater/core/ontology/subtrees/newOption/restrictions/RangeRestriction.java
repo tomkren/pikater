@@ -40,6 +40,50 @@ public class RangeRestriction implements IRestriction
 		this.maxValue = maxValue;
 	}
 	
+	/* -------------------------------------------------------------
+	 * CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
+	 * - generate again when you change local fields or their types
+	 * - required in {@link org.pikater.web.vaadin.gui.server.components.forms.OptionValueForm}
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((maxValue == null) ? 0 : maxValue.hashCode());
+		result = prime * result
+				+ ((minValue == null) ? 0 : minValue.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RangeRestriction other = (RangeRestriction) obj;
+		if (maxValue == null)
+		{
+			if (other.maxValue != null)
+				return false;
+		}
+		else if (!maxValue.equals(other.maxValue))
+			return false;
+		if (minValue == null)
+		{
+			if (other.minValue != null)
+				return false;
+		}
+		else if (!minValue.equals(other.minValue))
+			return false;
+		return true;
+	}
+	//-------------------------------------------------------------
+	// OTHER INHERITED INTERFACE
 	@Override
 	public boolean isValid()
 	{
