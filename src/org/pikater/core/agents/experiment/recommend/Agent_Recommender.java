@@ -118,7 +118,15 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         		Action a = (Action) getContentManager().extractContent(request);
 
                 if (a.getAction() instanceof Recommend) {
-                    Recommend rec = (Recommend) a.getAction();
+ 
+					if (finished()){
+						log("Recommendation finished.");
+						reply.setPerformative(ACLMessage.INFORM);					
+						reply.setContent("finished");
+						return reply;
+					}
+                	
+                	Recommend rec = (Recommend) a.getAction();
                     myAgentOntology = rec.getRecommender();
                     
                     // merge options with .opt file options
@@ -148,13 +156,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						reply.setPerformative(ACLMessage.FAILURE);
 						return reply;
 					}
-
-					reply.setPerformative(ACLMessage.INFORM);
-					
-					if (finished()){
-						reply.setContent("finished");
-						return reply;
-					}
 					
 					//TODO:
                     // fill options
@@ -168,6 +169,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
             		// Prepare the content of inform message                       
     				Result result = new Result(a, recommended_agent);
+					reply.setPerformative(ACLMessage.INFORM);					
     				
     				updateFinished();
     				
