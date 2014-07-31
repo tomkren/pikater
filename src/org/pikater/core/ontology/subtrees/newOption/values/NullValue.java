@@ -13,19 +13,16 @@ public class NullValue implements IValueData
 	{
 		return null;
 	}
-
 	@Override
 	public String exportToWeka()
 	{
 		return "";
 	}
-	
 	@Override
 	public String toDisplayName()
 	{
 		return "NONE";
 	}
-	
 	@Override
 	public IValueData clone()
 	{

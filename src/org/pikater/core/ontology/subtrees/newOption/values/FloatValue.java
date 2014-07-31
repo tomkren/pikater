@@ -30,19 +30,16 @@ public class FloatValue implements IComparableValueData
 	{
 		return value;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
 		return new FloatValue(value);
 	}
-
 	@Override
-	public String exportToWeka() {
-		
+	public String exportToWeka()
+	{
 		return String.valueOf(value);
 	}
-	
 	@Override
 	public String toDisplayName()
 	{

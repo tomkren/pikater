@@ -61,25 +61,21 @@ public class QuestionMarkRange implements IValidatedValueData
 	{
 		return null;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
 		return new QuestionMarkRange(min.clone(), max.clone(), countOfValuesToTry);
 	}
-	
 	@Override
 	public String exportToWeka()
 	{
 		return "?";
 	}
-	
 	@Override
 	public String toDisplayName()
 	{
 		return "QuestionMarkRange";
 	}
-	
 	@Override
 	public boolean isValid()
 	{

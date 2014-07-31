@@ -33,25 +33,21 @@ public class StringValue implements IComparableValueData
 	{
 		return value;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
 		return new StringValue(value);
 	}
-	
 	@Override
 	public String exportToWeka()
 	{
 		return value;
 	}
-	
 	@Override
 	public String toDisplayName()
 	{
 		return "Text";
 	}
-	
 	@Override
 	public int compareTo(IComparableValueData o)
 	{

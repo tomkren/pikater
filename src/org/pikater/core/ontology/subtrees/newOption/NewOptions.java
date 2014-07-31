@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
+import org.pikater.core.ontology.subtrees.newOption.base.IMergeable;
+import org.pikater.core.ontology.subtrees.newOption.base.IWekaItem;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import com.thoughtworks.xstream.XStream;
 
 import jade.content.Concept;
 
-public class NewOptions implements Concept, Iterable<NewOption>
+public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, Iterable<NewOption>
 {
 	private static final long serialVersionUID = -8578686409784032991L;
 	
@@ -32,12 +35,6 @@ public class NewOptions implements Concept, Iterable<NewOption>
 	public void setOptions(List<NewOption> list)
 	{
 		this.options = list;
-	}
-	
-	@Override
-	public Iterator<NewOption> iterator()
-	{
-		return options.iterator();
 	}
 
 	public boolean containsOptionWithName(String optionName)
@@ -63,32 +60,6 @@ public class NewOptions implements Concept, Iterable<NewOption>
     {
         this.options.addAll(options);
     }
-    
-    public String exportToWeka() {
-    	return NewOptions.exportToWeka(options);
-    }
-    
-    public NewOptions clone() {
-    	
-    	NewOptions optionsOnt = new NewOptions();
-    	for (NewOption optionI : this.options) {
-    		optionsOnt.addOption(optionI.clone());
-    	}
-    	
-    	return optionsOnt;
-    }
-    
-	public static String exportToWeka(List<NewOption> options) {
-		
-		String wekaString = "";
-		
-		for (NewOption optionI : options) {
-			wekaString += optionI.exportToWeka() + " ";
-		}
-		
-		return wekaString;
-	}
-	
 	public String exportXML() {
 
 		XStream xstream = new XStream();
@@ -98,7 +69,6 @@ public class NewOptions implements Concept, Iterable<NewOption>
 
 		return xml;
 	}
-	
 	public static NewOptions importXML(String xml) {
 
 		XStream xstream = new XStream();
@@ -108,5 +78,52 @@ public class NewOptions implements Concept, Iterable<NewOption>
 				.fromXML(xml);
 
 		return optionsNew;
+	}
+    
+    @Override
+    public NewOptions clone()
+    {
+    	NewOptions result = new NewOptions();
+    	for (NewOption optionI : options)
+    	{
+    		result.addOption(optionI.clone());
+    	}
+    	return result;
+    }
+    @Override
+	public void mergeWith(IMergeable other)
+	{
+    	NewOptions otherOptionsWrapper = (NewOptions) other; 
+    	for(NewOption optionInOther : otherOptionsWrapper.getOptions())
+		{
+			NewOption optionLocal = getOptionByName(optionInOther.getName());
+			if(optionLocal == null)
+			{
+				throw new IllegalArgumentException("Could not merge option with name: " + optionInOther.getName());
+			}
+			else
+			{
+				optionLocal.mergeWith(optionInOther);
+			}
+		}
+	}
+	@Override
+	public Iterator<NewOption> iterator()
+	{
+		return options.iterator();
+	}
+    @Override
+    public String exportToWeka()
+    {
+    	return NewOptions.exportToWeka(options);
+    }
+	public static String exportToWeka(List<NewOption> options)
+	{
+		String wekaString = "";
+		for (NewOption optionI : options)
+		{
+			wekaString += optionI.exportToWeka() + " ";
+		}
+		return wekaString;
 	}
 }

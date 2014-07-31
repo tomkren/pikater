@@ -30,25 +30,21 @@ public class IntegerValue implements IComparableValueData
 	{
 		return value;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
 		return new IntegerValue(value);
 	}
-	
 	@Override
 	public String exportToWeka() {
 		
 		return String.valueOf(value);
 	}
-	
 	@Override
 	public String toDisplayName()
 	{
 		return "Integer";
 	}
-	
 	@Override
 	public int compareTo(IComparableValueData o)
 	{

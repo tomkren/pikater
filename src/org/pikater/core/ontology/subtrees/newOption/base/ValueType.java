@@ -9,7 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-public class ValueType implements Concept
+public class ValueType implements Concept, IValidated
 {
 	private static final long serialVersionUID = -4658896847448815807L;
 
@@ -118,6 +118,7 @@ public class ValueType implements Concept
 	 * - If a restriction is set, it needs to be valid.
 	 * @return 
 	 */
+	@Override
 	public boolean isValid()
 	{
 		if(defaultValue == null)
@@ -150,7 +151,6 @@ public class ValueType implements Concept
 			return true;
 		}
 	}
-	
 	@Override
 	public ValueType clone()
 	{

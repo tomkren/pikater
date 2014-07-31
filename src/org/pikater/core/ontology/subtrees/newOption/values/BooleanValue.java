@@ -21,7 +21,8 @@ public class BooleanValue implements IValueData
 	{
 		return value;
 	}
-	public void setValue(boolean value) {
+	public void setValue(boolean value) 
+	{
 		this.value = value;
 	}
 	
@@ -30,19 +31,17 @@ public class BooleanValue implements IValueData
 	{
 		return value;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
 		return new BooleanValue(value);
 	}
-	
 	@Override
-	public String exportToWeka() {
+	public String exportToWeka()
+	{
 		
 		return String.valueOf(value);
 	}
-	
 	@Override
 	public String toDisplayName()
 	{

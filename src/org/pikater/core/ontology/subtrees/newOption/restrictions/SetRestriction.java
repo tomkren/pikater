@@ -60,7 +60,6 @@ public class SetRestriction implements IRestriction
 		}
 		return new SetRestriction(nullable, valuesCopied);
 	}
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isValid()
@@ -80,7 +79,6 @@ public class SetRestriction implements IRestriction
 			return types.size() < 2;
 		}
 	}
-
 	@Override
 	public boolean isValidAgainst(Object obj)
 	{

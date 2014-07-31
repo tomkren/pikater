@@ -57,7 +57,6 @@ public class RangeRestriction implements IRestriction
 			return true;
 		}
 	}
-	
 	@Override
 	public boolean isValidAgainst(Object obj)
 	{
@@ -73,7 +72,6 @@ public class RangeRestriction implements IRestriction
 			return false;
 		}
 	}
-	
 	@Override
 	public RangeRestriction clone()
 	{

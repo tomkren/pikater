@@ -46,7 +46,6 @@ public class QuestionMarkSet implements IValidatedValueData
 	{
 		return null;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
@@ -57,19 +56,16 @@ public class QuestionMarkSet implements IValidatedValueData
 		}
 		return new QuestionMarkSet(valuesCopied, countOfValuesToTry);
 	}
-	
 	@Override
 	public String exportToWeka()
 	{
 		return "?";
 	}
-	
 	@Override
 	public String toDisplayName()
 	{
 		return "QuestionMarkSet";
 	}
-	
 	@Override
 	public boolean isValid()
 	{

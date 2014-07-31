@@ -1,13 +1,13 @@
 package org.pikater.core.ontology.subtrees.newOption.values.interfaces;
 
-import org.pikater.core.ontology.subtrees.newOption.ICloneable;
+import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
+import org.pikater.core.ontology.subtrees.newOption.base.IWekaItem;
 
 import jade.content.Concept;
 
-public interface IValueData extends Concept, ICloneable
+public interface IValueData extends Concept, ICloneable, IWekaItem
 {
 	public Object hackValue();
 	public String toDisplayName();
-	public String exportToWeka();
 	public IValueData clone();
 }

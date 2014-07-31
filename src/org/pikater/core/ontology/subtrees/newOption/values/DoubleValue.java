@@ -30,26 +30,22 @@ public class DoubleValue implements IComparableValueData
 	{
 		return value;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
 		return new DoubleValue(value);
 	}
-
 	@Override
 	public String exportToWeka()
 	{
 		
 		return String.valueOf(value);
 	}
-	
 	@Override
 	public String toDisplayName()
 	{
 		return "Double";
 	}
-	
 	@Override
 	public int compareTo(IComparableValueData o)
 	{
