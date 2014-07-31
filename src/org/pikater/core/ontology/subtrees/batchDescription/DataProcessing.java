@@ -206,4 +206,17 @@ public class DataProcessing implements IDataProvider {
 		
 		return dataProcessing;
 	}
+
+	@Override
+	public void cloneDataSources() {
+		
+		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
+		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions()) {
+			dataSourceCloned.add(dataSourceI.clone());
+		}
+		
+		importAllDataSourceDescriptions(dataSourceCloned);
+	}
+	
+	
 }
