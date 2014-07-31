@@ -201,9 +201,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									Action a = (Action)myAgent.getContentManager().extractContent(originalRequest);								
 									
 									Evaluation evaluation = new Evaluation();
-									float[][] f = new float[solutions_new.size()][3];
-									f[0][0] = updateFinished(evaluations);
-									evaluation.setEvaluations(fitnessToNamedEvals(f[0]));
+									float[] f = new float[3];
+									f[0] = updateFinished(evaluations);
+									evaluation.setEvaluations(fitnessToNamedEvals(f));
 									
 									Result result = new Result(a, evaluation);			
 
