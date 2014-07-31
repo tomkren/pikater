@@ -273,10 +273,15 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		comAgentColone.setDuration(this.duration.clone());
 		comAgentColone.setEvaluationMethod(this.evaluationMethod.clone());
 
-		comAgentColone.setTrainingData(this.trainingData.clone());
-		comAgentColone.setTestingData(this.testingData.clone());
-		comAgentColone.setValidationData(this.validationData.clone());
-		
+		if (this.trainingData != null) {
+			comAgentColone.setTrainingData(this.trainingData.clone());
+		}
+		if (this.testingData != null) {
+			comAgentColone.setTestingData(this.testingData.clone());
+		}
+		if (this.validationData != null) {
+			comAgentColone.setValidationData(this.validationData.clone());
+		}
 		return comAgentColone;
 	}
 	

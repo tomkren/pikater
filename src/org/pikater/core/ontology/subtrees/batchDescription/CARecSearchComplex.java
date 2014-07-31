@@ -148,9 +148,15 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		ErrorDescriptions errorsOnt = new ErrorDescriptions(this.errors);
 		complex.setErrors(errorsOnt.clone().getErrors());
 		
-		complex.setSearch(this.search.clone());
-		complex.setRecommender(this.recommender.clone());
-		complex.setComputingAgent(this.computingAgent.clone());
+		if (this.search != null) {
+			complex.setSearch(this.search.clone());
+		}
+		if (this.recommender != null) {
+			complex.setRecommender(this.recommender.clone());
+		}
+		if (this.computingAgent != null) {
+			complex.setComputingAgent(this.computingAgent.clone());
+		}
 		return complex;
 	}
 	
