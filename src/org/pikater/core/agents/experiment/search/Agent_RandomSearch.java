@@ -99,7 +99,6 @@ public class Agent_RandomSearch extends Agent_Search {
 		}
 		SearchSolution sol = new SearchSolution();
 		sol.setValues(new_solution);
-        sol.setNames(names);
 		return sol;
 	}
 		
