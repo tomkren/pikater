@@ -40,7 +40,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	private Codec codec = new SLCodec();
 	private Ontology ontology = SearchOntology.getInstance();
 	
-	protected int query_block_size = 1;
+	protected int query_block_size = 1;	
 
 	private String conversationID;	
 	private List<NewOption> search_options = null;
@@ -48,14 +48,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	
 	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
 	protected abstract boolean finished();
-	protected abstract void updateFinished(float[][] evaluations);
+	// protected abstract float updateFinished(float[][] evaluations);
 	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
-	// TODO: protected abstract Evaluation getBestEvaluation();
 	
-	
-	private Evaluation getBestEvaluation(){
-		return new Evaluation();
-	}
 	
 	@Override
 	public java.util.List<Ontology> getOntologies() {
@@ -66,6 +61,11 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		ontologies.add(AgentInfoOntology.getInstance());
 		
 		return ontologies;
+	}
+	
+	
+	protected float updateFinished(float[][] evaluations){
+		return 1;
 	}
 	
 	protected void setup() {
@@ -117,7 +117,28 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		}
 		return res;
 	}
+
 	
+	private List<Eval> fitnessToNamedEvals(float[] fitness) {
+		List<Eval> evals = new ArrayList<>();
+		
+		Eval ev = new Eval();
+		ev.setName("error_rate");
+		ev.setValue(fitness[0]);
+		evals.add(ev);
+		
+		Eval ev1 = new Eval();
+		ev1.setName("root_mean_squared_error");			
+		ev1.setValue(fitness[1]);				
+		evals.add(ev1);
+		
+		Eval ev2 = new Eval();
+		ev2.setName("kappa_statistic");
+		ev2.setValue(fitness[2]);
+		evals.add(ev2);
+		
+		return evals;
+	}
 	
 	private class RequestServer extends AchieveREResponder {
 		private static final long serialVersionUID = 6214306716273574418L;
@@ -183,8 +204,13 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 								try {			
 
 									Action a = (Action)myAgent.getContentManager().extractContent(originalRequest);								
-																	
-									Result result = new Result(a, getBestEvaluation());			
+									
+									Evaluation evaluation = new Evaluation();
+									float[][] f = new float[solutions_new.size()][3];
+									f[0][0] = updateFinished(evaluations);
+									evaluation.setEvaluations(fitnessToNamedEvals(f[0]));
+									
+									Result result = new Result(a, evaluation);			
 
 									getContentManager().fillContent(reply, result);
 									
