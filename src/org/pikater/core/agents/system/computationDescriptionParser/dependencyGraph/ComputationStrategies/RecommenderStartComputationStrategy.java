@@ -139,9 +139,9 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		Recommend recommend = new Recommend();
 		recommend.setData(data);
 		recommend.setRecommender(getRecommenderFromNode());
-//        if (inputs.get("error").hasNext()) {
-//            recommend.setPreviousError(((ErrorEdge) inputs.get("error").getNext()).getEvaluation());
-//        }
+        if (inputs.get("error").hasNext()) {
+            recommend.setPreviousError(((ErrorEdge) inputs.get("error").getNext()).getEvaluation());
+        }
 
 		Action a = new Action();
 		a.setAction(recommend);
