@@ -83,7 +83,12 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		ACLMessage inform;
 		try {
 			inform = FIPAService.doFipaRequestClient(myAgent, prepareRequest(recommender));
-			Result r = (Result) myAgent.getContentManager().extractContent(inform);
+			if (inform.getContent().equals("finished")){
+				this.computationNode.computationFinished();
+				return;
+			}
+			
+			Result r = (Result) myAgent.getContentManager().extractContent(inform);			
 			
 			recommendedAgent = (Agent) r.getItems().get(0);
 		} catch (FIPAException e) {

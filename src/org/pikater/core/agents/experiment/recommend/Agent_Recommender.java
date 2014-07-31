@@ -50,6 +50,8 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data data);
 	protected abstract String getAgentType();
+	protected abstract boolean finished();
+	protected abstract void updateFinished();
     
 	public static Class<? extends Agent_ComputingAgent> DEFAULT_AGENT = Agent_WekaRBFNetworkCA.class;
 	
@@ -111,7 +113,6 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         	throws NotUnderstoodException, RefuseException {
         	
         	ACLMessage reply = request.createReply();
-            Integer performative = ACLMessage.FAILURE;
             
         	try {        		
         		Action a = (Action) getContentManager().extractContent(request);
@@ -147,6 +148,13 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 						reply.setPerformative(ACLMessage.FAILURE);
 						return reply;
 					}
+
+					reply.setPerformative(ACLMessage.INFORM);
+					
+					if (finished()){
+						reply.setContent("finished");
+						return reply;
+					}
 					
 					//TODO:
                     // fill options
@@ -160,23 +168,22 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
             		// Prepare the content of inform message                       
     				Result result = new Result(a, recommended_agent);
+    				
+    				updateFinished();
+    				
     				try {
     					getContentManager().fillContent(reply, result);
     				} catch (CodecException ce) {
     					logError(ce.getMessage(), ce);
     				} catch (OntologyException oe) {
     					logError(oe.getMessage(), oe);
-    				}
-
-    				performative = ACLMessage.INFORM;
+    				}    				
         		}
             } catch (OntologyException e) {
             	logError(e.getMessage(), e);
             } catch (CodecException e) {
             	logError(e.getMessage(), e);
 			}
-
-            reply.setPerformative(performative);
 
             return reply;
         }

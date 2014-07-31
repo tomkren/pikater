@@ -21,7 +21,9 @@ public class Agent_Basic extends Agent_Recommender {
 	private double maxAttributes = Integer.MIN_VALUE;
 	private double minInstances = Integer.MAX_VALUE;
 	private double maxInstances = Integer.MIN_VALUE;
-		
+	
+	private boolean done = false;
+	
 	@Override
 	protected String getAgentType(){
 		return "BasicRecommender";
@@ -34,7 +36,7 @@ public class Agent_Basic extends Agent_Recommender {
 	}
 
 	@Override
-	protected org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data data){
+	protected org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data data){		
 		// in data there are already metadata filled in 
 		// return agent with (partially/not at all) filled options
 		
@@ -217,6 +219,17 @@ public class Agent_Basic extends Agent_Recommender {
 			return 0;
 		}
 		return 1;
+	}
+
+
+	@Override
+	protected boolean finished() {
+		return done;
+	}
+
+	@Override
+	protected void updateFinished() {
+		done = true;
 	}
 	
 }
