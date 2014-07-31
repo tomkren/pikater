@@ -28,4 +28,7 @@ public interface IComputationElement extends Concept {
 	//public void importUniversalOntology(UniversalOntology uOntology);
 	
 	public boolean equalsElement(IComputationElement element);
+	
+	public IComputationElement clone();
+	public void cloneDataSources();
 }
