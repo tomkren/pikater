@@ -64,7 +64,7 @@ public class BoxCellBrowser extends CustomComponent
 						public AbstractComponent getComponentForSource(CellBrowserCellSource source)
 						{
 							BoxType type = (BoxType) source.source;
-							int boxCountForThisType = ServerConfigurationInterface.getKnownAgents().getByType(type).size();
+							int boxCountForThisType = ServerConfigurationInterface.getKnownAgents().getListByType(type).size();
 							return new Label(String.format("%s (%d)", type.name(), boxCountForThisType));
 						}
 					};
@@ -79,7 +79,7 @@ public class BoxCellBrowser extends CustomComponent
 						public CustomOrderSet<CellBrowserCellSource> getSourceObjects()
 						{
 							Collection<CellBrowserCellSource> unsortedObjects = new ArrayList<CellBrowserCellSource>();
-							for(AgentInfo info : ServerConfigurationInterface.getKnownAgents().getByType((BoxType) value))
+							for(AgentInfo info : ServerConfigurationInterface.getKnownAgents().getListByType((BoxType) value))
 							{
 								unsortedObjects.add(new CellBrowserCellSource(info));
 							}

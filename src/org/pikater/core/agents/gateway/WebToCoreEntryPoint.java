@@ -14,39 +14,45 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.ResultFormatter;
 
-public class PikaterCoreInterface {
+public class WebToCoreEntryPoint {
 
-	/*
-	 * Public interface Returns the ontology AgentInfos which contains the
-	 * agentInfo of all in the Pikater known agents
+	/**
+	 * Gets required and relevant information about all agents used in the core
+	 * system that can act as "boxes" in web's experiment editor.
+	 * @return
+	 * @throws PikaterGatewayException
 	 */
 	public static AgentInfos getAgentInfos() throws PikaterGatewayException {
 		return PikaterGateway_GetAgentInfo.getAgentInfos();
 	}
 
-	/*
-	 * Public interface Send the information to PikaterCore by using the
-	 * NewBatch ontology which contains only ID-batch, that the new Batch was
-	 * saved into the database.
+	/**
+	 * Notifies the core system about a new scheduled batch. The batch was
+	 * scheduled by a user on the website. 
+	 * @param IDNewBatch ID of the newly scheduled batch
+	 * @throws PikaterGatewayException
 	 */
-	public static void newBatch(int IDNewBatch) throws PikaterGatewayException {
+	public static void notify_newBatch(int IDNewBatch) throws PikaterGatewayException {
 		PikaterGateway_NewBatch.newBatch(IDNewBatch);
 	}
 
-	/*
-	 * Public interface Send the information to PikaterCore by using the
-	 * NewAgent ontology which contains only agent className.
+	/**
+	 * Notifies the core system about a new user-uploaded agent.
+	 * TODO: should validity be checked for on the web (before passing the information
+	 * to core)?
+	 * @param agentClass class representation of the uploaded jar's agent 
+	 * @throws PikaterGatewayException
 	 */
-	public static void newAgent(Class<?> agentClass) throws PikaterGatewayException {
+	public static void notify_newAgent(Class<?> agentClass) throws PikaterGatewayException {
 		PikaterGateway_NewAgent.newAgent(agentClass);
 	}
 
-	/*
-	 * Public interface Send the information to PikaterCore by using the
-	 * NewDataset ontology which contains only ID-dataset, that the new Dataset
-	 * was saved into the database.
+	/**
+	 * Notifies the core system about a new user-uploaded dataset. 
+	 * @param IDnewDataset
+	 * @throws PikaterGatewayException
 	 */
-	public static void newDataset(int IDnewDataset) throws PikaterGatewayException {
+	public static void notify_newDataset(int IDnewDataset) throws PikaterGatewayException {
 		PikaterGateway_NewDataset.newDataset(IDnewDataset);
 	}
 
@@ -57,7 +63,7 @@ public class PikaterCoreInterface {
 
 		PikaterGateway_General.MASTER_PORT=2100;
 		
-		AgentInfos agentInfos = PikaterCoreInterface.getAgentInfos();
+		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfos();
 
 		for (AgentInfo agentInfoI : agentInfos.getAgentInfos()) {
 			System.out.println("AgentInfo: " + agentInfoI.getName());
@@ -69,7 +75,7 @@ public class PikaterCoreInterface {
 		System.out.println("Dataset uploaded with ID : "+init.getId());
 		System.out.println("Demanding metadata computation...");
 		try{
-			PikaterCoreInterface.newDataset(init.getId());
+			WebToCoreEntryPoint.notify_newDataset(init.getId());
 			System.out.println("Metadata computation finished");
 			
 		}catch(PikaterGatewayException pgwe){

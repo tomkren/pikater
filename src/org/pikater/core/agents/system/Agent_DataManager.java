@@ -106,7 +106,6 @@ import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.postgresql.PGConnection;
 
 import com.google.common.io.Files;
 

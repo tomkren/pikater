@@ -8,9 +8,15 @@ import org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 public class UniversalOntology {
-	private Class<?> type;
+	
 	private int id;
+	private Class<?> ontologyClass;
+	private Class<?> agentClass;
 
+	/**
+	 * List of edges that lead to the {@link UniversalElement element} containing
+	 * this instance.
+	 */
 	private final Collection<UniversalConnector> inputSlots;
 
 	private final Collection<ErrorDescription> errors;
@@ -30,12 +36,22 @@ public class UniversalOntology {
 		this.id = id;
 	}
 
-	public Class<?> getType() {
-		return type;
+	public Class<?> getOntologyClass() {
+		return ontologyClass;
 	}
 
-	public void setType(Class<?> type) {
-		this.type = type;
+	public void setOntologyClass(Class<?> type) {
+		this.ontologyClass = type;
+	}
+	
+	public Class<?> getAgentClass()
+	{
+		return agentClass;
+	}
+
+	public void setAgentClass(Class<?> agentClass)
+	{
+		this.agentClass = agentClass;
 	}
 
 	public Collection<NewOption> getOptions() {

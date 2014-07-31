@@ -38,7 +38,7 @@ public class BoxBrowserToolbox extends Toolbox
 			vLayout.setStyleName("boxBrowserToolbox-accordion-content");
 			
 			Map<String, DragAndDropWrapper> boxNameToComponentMapping = new HashMap<String, DragAndDropWrapper>();
-			for(AgentInfo agentInfo : ServerConfigurationInterface.getKnownAgents().getByType(type))
+			for(AgentInfo agentInfo : ServerConfigurationInterface.getKnownAgents().getListByType(type))
 			{
 				Label lbl = new Label(agentInfo.getName());
 				lbl.setSizeUndefined();

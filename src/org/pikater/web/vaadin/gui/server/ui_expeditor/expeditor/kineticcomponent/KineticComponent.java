@@ -407,14 +407,25 @@ public class KineticComponent extends AbstractComponent
 			throw new ConversionException(new NullPointerException("Agent information has not yet been received from pikater."));
 		}
 		
+		// create the result uni-format experiment
 		UniversalComputationDescription result = new UniversalComputationDescription();
+		
+		// create uni-format master elements for all boxes
+		Map<BoxInfo, UniversalElement> webBoxToUniBox = new HashMap<BoxInfo, UniversalElement>();
+		for(BoxInfo webBox : webFormat.leafBoxes.values())
+		{
+			UniversalElement uniBox = new UniversalElement();
+			uniBox.setOntologyInfo(new UniversalOntology()); // needed for real-time edge registration to work (see below)
+			webBoxToUniBox.put(webBox, uniBox);
+		}
+		
+		// traverse all boxes and pass all available/needed information to result uni-format
 		for(Entry<String, BoxInfo> entry : webFormat.leafBoxes.entrySet())
 		{
-			/*
-			 * Determine basic information and references.
-			 */
+			// determine basic information and references
 			String webBoxID = entry.getKey();
 			BoxInfo webBox = entry.getValue();
+			UniversalElement uniBox = webBoxToUniBox.get(webBox);
 			AgentInfo agentInfo = boxIDToAgentInfo.get(webBoxID);
 			if(agentInfo == null)
 			{
@@ -422,18 +433,15 @@ public class KineticComponent extends AbstractComponent
 						"No agent info was found for box '%s@%s'.", webBox.boxTypeName, webBox.displayName)));
 			}
 			
-			/*
-			 * Transform box into its uni-format counterpart.
-			 */
+			// create edge leading from the currently processed box (will be later added to all neighbour uni-boxes)
+			UniversalConnector connector = new UniversalConnector();
+			connector.setFromElement(uniBox);
 			
-			// create the master element
-			UniversalElement uniBox = new UniversalElement();
-			
-			// create FIRST of the 2 child objects
+			// create and initialize the FIRST of the 2 child objects
 			UniversalOntology uniBoxInfo = new UniversalOntology();
 			try
 			{
-				uniBoxInfo.setType(Class.forName(agentInfo.getOntologyClassName()));
+				uniBoxInfo.setOntologyClass(Class.forName(agentInfo.getOntologyClassName()));
 			}
 			catch (ClassNotFoundException e)
 			{
@@ -442,14 +450,13 @@ public class KineticComponent extends AbstractComponent
 						agentInfo.getOntologyClassName()), e));
 			}
 			uniBoxInfo.setOptions(agentInfo.getOptions().getOptions());
-			for(String edgeToBoxWithID : webFormat.edges.get(webBoxID)) // transform edges
+			for(String neighbourWebBoxID : webFormat.edges.get(webBoxID)) // transform edges
 			{
-				UniversalConnector connector = new UniversalConnector();
-				// TODO: connector.s
-				// ontologyInfo.addInputSlot();
+				UniversalElement neighbourUniBox = webBoxToUniBox.get(webFormat.leafBoxes.get(neighbourWebBoxID));
+				neighbourUniBox.getOntologyInfo().addInputSlot(connector);
 			}
 			
-			// create SECOND of the 2 child objects
+			// create and initialize the SECOND of the 2 child objects
 			UniversalGui uniBoxPositionInfo = new UniversalGui(webBox.initialX, webBox.initialY);
 			
 			// glue it all together and register in the result uni-format
@@ -464,13 +471,13 @@ public class KineticComponent extends AbstractComponent
 	{
 		// first some checks
 		AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
-		if(uniFormat == null)
-		{
-			throw new ConversionException(new NullPointerException("The argument universal format is null."));
-		}
-		else if(agentInfoProvider == null)
+		if(agentInfoProvider == null)
 		{
 			throw new ConversionException(new NullPointerException("Agent information has not yet been received from pikater."));
+		}
+		else if(uniFormat == null)
+		{
+			throw new ConversionException(new NullPointerException("The argument uni-format is null."));
 		}
 		
 		// and then onto the conversion
@@ -482,11 +489,13 @@ public class KineticComponent extends AbstractComponent
 			Map<UniversalElement, String> uniBoxToWebBoxID = new HashMap<UniversalElement, String>();
 			for(UniversalElement element : uniFormat.getAllElements())
 			{
-				AgentInfo agentInfo =  agentInfoProvider.getByOntologyClass(element.getOntologyInfo().getType());
+				// TODO: get by agent info
+				// AgentInfo agentInfo =  agentInfoProvider.getByOntologyClass(element.getOntologyInfo().getType());
+				AgentInfo agentInfo = null;
 				if(agentInfo == null)
 				{
 					throw new ConversionException(new IllegalStateException(String.format(
-							"No agent info instance was found for ontology '%s'.", element.getOntologyInfo().getType().getName())));
+							"No agent info instance was found for ontology '%s'.", element.getOntologyInfo().getOntologyClass().getName())));
 				}
 				else
 				{
