@@ -193,8 +193,12 @@ public class Agent_GridSearch extends Agent_Search {
         return vals;
     }
 
+     
+    // TODO
     @Override
-    protected void updateFinished(float[][] evaluations) {}
+    protected float updateFinished(float[][] evaluations) {
+    	return 1;
+    }
 
     @Override
     protected void loadSearchOptions() { 

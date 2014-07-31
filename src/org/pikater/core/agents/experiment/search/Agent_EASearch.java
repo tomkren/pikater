@@ -240,14 +240,13 @@ public class Agent_EASearch extends Agent_Search {
     }
     
     @Override
-    protected void updateFinished(float[][] evaluations) {
-        
+    protected float updateFinished(float[][] evaluations) {        
         //assign evaluations to the population as fitnesses		
         if (evaluations == null) {
             for (int i = 0; i < popSize; i++) {
                 offspring.get(i).setFitnessValue(1);
             }
-            return;
+            return (float) bestError;
         }
         
         //initial generation -- evaluate the random population
@@ -260,7 +259,7 @@ public class Agent_EASearch extends Agent_Search {
                 }
                 archive.add((SearchItemIndividual)parents.get(i));
             }
-            return;
+            return (float) bestError;
         }
         
         for (int i = 0; i < evaluations.length; i++) {
@@ -307,6 +306,8 @@ public class Agent_EASearch extends Agent_Search {
 
         parents.clear();
         parents.addAll(selected);
+        
+        return (float) bestError;
     }
 
     @Override

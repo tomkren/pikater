@@ -1,12 +1,15 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ErrorDescriptions {
 
 	private List<ErrorDescription> errors;
 
-	public ErrorDescriptions() {}
+	public ErrorDescriptions() {
+		this.errors = new ArrayList<ErrorDescription>();
+	}
 	
 	public ErrorDescriptions(List<ErrorDescription> errors) {
 		this.errors = errors; 

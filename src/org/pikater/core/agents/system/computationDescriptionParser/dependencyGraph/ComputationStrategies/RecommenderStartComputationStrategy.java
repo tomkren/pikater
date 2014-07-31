@@ -83,7 +83,12 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		ACLMessage inform;
 		try {
 			inform = FIPAService.doFipaRequestClient(myAgent, prepareRequest(recommender));
-			Result r = (Result) myAgent.getContentManager().extractContent(inform);
+			if (inform.getContent().equals("finished")){
+				this.computationNode.computationFinished();
+				return;
+			}
+			
+			Result r = (Result) myAgent.getContentManager().extractContent(inform);			
 			
 			recommendedAgent = (Agent) r.getItems().get(0);
 		} catch (FIPAException e) {
@@ -136,11 +141,13 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		data.setTestFileName(myAgent.getHashOfFile(training, 1));
 		data.setTrainFileName(myAgent.getHashOfFile(testing, 1));
 
-		
 		Recommend recommend = new Recommend();
 		recommend.setData(data);
 		recommend.setRecommender(getRecommenderFromNode());
-		
+        if (inputs.get("error").hasNext()) {
+            recommend.setPreviousError(((ErrorEdge) inputs.get("error").getNext()).getEvaluation());
+        }
+
 		Action a = new Action();
 		a.setAction(recommend);
 		a.setActor(myAgent.getAID());

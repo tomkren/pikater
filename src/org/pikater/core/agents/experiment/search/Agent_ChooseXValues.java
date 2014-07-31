@@ -118,9 +118,10 @@ public class Agent_ChooseXValues extends Agent_Search {
 		query_block_size = n;
 	}
 
-	@Override
-	protected void updateFinished(float[][] evaluations) {
-		//???
+	// TODO
+	@Override	
+	protected float updateFinished(float[][] evaluations) {
+		return 1;
 	}
 
 }

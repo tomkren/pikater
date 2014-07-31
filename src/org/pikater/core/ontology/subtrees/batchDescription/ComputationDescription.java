@@ -126,7 +126,31 @@ public class ComputationDescription implements Concept {
 		return elements;
 	}
 	
-	
+	public void gene() {
+		
+		int lastUsedNumber = -1;
+		for (FileDataSaver fileSaverI : rootElements) {
+			lastUsedNumber = fileSaverI.generateIDs(lastUsedNumber);
+		}
+		
+		List<IComputationElement> fifo = new ArrayList<IComputationElement>();
+		
+		for (FileDataSaver saverI : getRootElements()) {
+			fifo.add(saverI);
+		}
+
+		while (! fifo.isEmpty()) {
+
+			IComputationElement dataProcessing = fifo.get(0);
+			fifo.remove(0);
+			
+			dataProcessing.clone();
+			
+			fifo.addAll(notNullElements(dataProcessing) );
+			
+		}
+
+	}
 	
 	public UniversalComputationDescription exportUniversalComputationDescription() {
 
@@ -284,6 +308,7 @@ public class ComputationDescription implements Concept {
 	public String exportXML() {
 
 		generateIDs();
+		gene();
 		
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.NO_REFERENCES);
