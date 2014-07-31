@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
@@ -129,7 +130,7 @@ public class DataProcessing implements IDataProvider {
 		} catch (ClassNotFoundException e) {
 			Log.error("Class " + agentType + " not found");
 		}
-		ontologyInfo.setOptions(exportAllOptions());
+		ontologyInfo.setOptions(new NewOptions(exportAllOptions()));
 		ontologyInfo.setErrors(exportAllErrors());
 		//ontologyInfo.addInputSlots(null);
 		
@@ -166,8 +167,7 @@ public class DataProcessing implements IDataProvider {
 		} else {
 			dataProcess.setAgentType(uOntology.getAgentClass().getName());	
 		}
-		dataProcess.importAllOptions(
-				new ArrayList<NewOption>(uOntology.getOptions()));
+		dataProcess.importAllOptions(uOntology.getOptions().getOptions());
 		dataProcess.importAllErrors(
 				new ArrayList<ErrorDescription>(uOntology.getErrors()));
 		
