@@ -120,7 +120,7 @@ public class SMORegCA_Box  {
 		agentInfo.importAgentClass(Agent_WekaSMOregCA.class);
 		agentInfo.importOntologyClass(ComputingAgent.class);
 	
-		agentInfo.setName("SMO Reg");
+		agentInfo.setName("SMO-Reg");
 		agentInfo.setDescription("SMOReg Method");
 
 		agentInfo.addOption(optionS);

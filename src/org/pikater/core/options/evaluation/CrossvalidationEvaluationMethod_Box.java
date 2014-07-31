@@ -18,7 +18,7 @@ public class CrossvalidationEvaluationMethod_Box {
 		optionF.setDescription("F");
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.setName("Crossvalidation");
+		agentInfo.setName("EM_XValidation");
 		agentInfo.setDescription("Evaluation Method");
 		agentInfo.addOption(optionF);
 		agentInfo.importAgentClass(CrossvalidationEvaluationMethod_Box.class);

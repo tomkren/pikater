@@ -39,7 +39,7 @@ public class GridSearch_Box {
 		agentInfo.importAgentClass(Agent_GridSearch.class);
 		agentInfo.importOntologyClass(Search.class);
 	
-		agentInfo.setName("GridSearch");
+		agentInfo.setName("Grid");
 		agentInfo.setDescription("GridSearch Description");
 		
 		agentInfo.addOption(optionB);

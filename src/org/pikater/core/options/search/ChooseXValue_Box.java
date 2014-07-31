@@ -22,7 +22,7 @@ public class ChooseXValue_Box {
 		agentInfo.importAgentClass(Agent_ChooseXValues.class);
 		agentInfo.importOntologyClass(Search.class);
 	
-		agentInfo.setName("ChooseX-Values");
+		agentInfo.setName("ValueChoosing");
 		agentInfo.setDescription("Search which Choose X Values");
 
 		agentInfo.addOption(optionN);

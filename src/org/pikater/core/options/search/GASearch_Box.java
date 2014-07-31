@@ -58,7 +58,7 @@ public class GASearch_Box {
 		agentInfo.importAgentClass(Agent_GASearch.class);
 		agentInfo.importOntologyClass(Search.class);
 	
-		agentInfo.setName("GASearch");
+		agentInfo.setName("GeneticAlg");
 		agentInfo.setDescription("Searcher using Genetic algorithm");
 
 		agentInfo.addOption(optionE);

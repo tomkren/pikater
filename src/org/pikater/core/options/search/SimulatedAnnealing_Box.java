@@ -45,7 +45,7 @@ public class SimulatedAnnealing_Box {
 		agentInfo.importAgentClass(Agent_SimulatedAnnealing.class);
 		agentInfo.importOntologyClass(Search.class);
 	
-		agentInfo.setName("SimulatedAnnealing-Searcher");
+		agentInfo.setName("SimulatedAnnealing");
 		agentInfo.setDescription("Searches defined parameters and provides them in output slots. Simulated annealing is used for searching.");
 
 		agentInfo.addOption(optionE);
