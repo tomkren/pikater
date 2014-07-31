@@ -78,7 +78,7 @@ public class DataSourceDescription implements Concept {
 		DataSourceDescription dataSource = new DataSourceDescription();
 		dataSource.setDataInputType(this.getDataInputType());
 		dataSource.setDataOutputType(this.getDataOutputType());
-		dataSource.setDataProvider(getDataProvider());
+		dataSource.setDataProvider(getDataProvider().clone());
 		return dataSource;
 	}
 

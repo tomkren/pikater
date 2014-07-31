@@ -240,7 +240,7 @@ public class Parser {
 
         }
         SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search.getId());
-        searchNode.setModelClass(search.getSearchClass());
+        searchNode.setModelClass(search.getAgentType());
         
         OptionEdge option=new OptionEdge();
         option.setOptions(childOptions);
@@ -292,7 +292,7 @@ public class Parser {
 
         List<NewOption> options = recommender.getOptions();
         addOptionsToInputs(recNode, options);
-        recNode.setRecommenderClass(recommender.getRecommenderClass());
+        recNode.setRecommenderClass(recommender.getAgentType());
     }
 
     private void fillDataSources(ComputingAgent compAgent,

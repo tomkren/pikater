@@ -34,7 +34,7 @@ public final class Input10 {
 		// Save Sunny data
 		FileDataSaver saverSunny = new FileDataSaver();
 		saverSunny.setDataSource(dataSourceSunny);
-/*
+
 		DataSourceDescription dataSourceOvercast = new DataSourceDescription();
 		dataSourceOvercast.setDataOutputType("Data-Overcast");
 		dataSourceOvercast.setDataProvider(processing);
@@ -55,7 +55,7 @@ public final class Input10 {
 		// computation description
 		List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
 		roots.add(saverSunny);
-//		roots.add(saverOvercast);
+		roots.add(saverOvercast);
 //		roots.add(saverRainy);
 
 		ComputationDescription comDescription = new ComputationDescription();

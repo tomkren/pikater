@@ -10,6 +10,7 @@
       <dataSource>
         <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>1</id>
+          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing</agentType>
           <options/>
           <errors/>
           <dataSources>
@@ -44,6 +45,7 @@
       <dataSource>
         <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>1</id>
+          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing</agentType>
           <options/>
           <errors/>
           <dataSources>
@@ -68,40 +70,6 @@
           </dataSources>
         </dataProvider>
         <dataOutputType>Data-Overcast</dataOutputType>
-      </dataSource>
-    </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
-      <id>1</id>
-      <options/>
-      <errors/>
-      <dataSources/>
-      <dataSource>
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
-          <id>1</id>
-          <options/>
-          <errors/>
-          <dataSources>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                <id>2</id>
-                <options/>
-                <errors/>
-                <dataSources/>
-                <fileURI>weather.arff</fileURI>
-              </dataProvider>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                <id>3</id>
-                <options/>
-                <errors/>
-                <dataSources/>
-                <fileURI>weather2.arff</fileURI>
-              </dataProvider>
-            </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-          </dataSources>
-        </dataProvider>
-        <dataOutputType>Data-Rainy</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>

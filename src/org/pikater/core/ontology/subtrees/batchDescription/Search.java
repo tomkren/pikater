@@ -22,11 +22,11 @@ public class Search extends DataProcessing implements IErrorProvider {
     	this.options = new ArrayList<NewOption>();
     }
     
-    public String getSearchClass() {
+    public String getAgentType() {
         return searchClass;
     }
-    public void setSearchClass(String searchClass) {
-        this.searchClass = searchClass;
+	public void setAgentType(String agentType) {
+        this.searchClass = agentType;
     }
 
     public List<NewOption> getOptions() {
@@ -100,7 +100,7 @@ public class Search extends DataProcessing implements IErrorProvider {
 		NewOptions optionsOnt = new NewOptions(this.options);
 		
 		Search search = new Search();
-		search.setSearchClass(searchClass);
+		search.setAgentType(searchClass);
 		search.setOptions(optionsOnt.clone().getOptions());
 		return search;
 	}
