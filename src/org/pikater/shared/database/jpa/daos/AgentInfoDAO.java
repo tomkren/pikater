@@ -83,4 +83,12 @@ public class AgentInfoDAO extends AbstractDAO{
 			em.close();
 		}
 	}
+	
+	public void deleteAgentInfoEntity(JPAAgentInfo agentinfo){
+		this.deleteAgentInfoByID(agentinfo.getId());
+	}
+	
+	public void deleteAgentInfoByID(int id){
+		this.deleteEntityByID(JPAAgentInfo.class, id);
+	}
 }

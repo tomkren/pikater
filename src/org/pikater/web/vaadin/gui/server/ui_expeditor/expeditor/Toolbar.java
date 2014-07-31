@@ -1,11 +1,14 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
+import java.awt.Dialog;
 import java.util.List;
 
 import org.pikater.shared.XStreamHelper;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.UserSavedBatchesTableDBView;
 import org.pikater.shared.database.views.tableview.batches.UserScheduledBatchesTableDBView;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
@@ -14,11 +17,13 @@ import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLay
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm.ExperimentSaveMode;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent.IOnExperimentSaved;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -295,7 +300,7 @@ public class Toolbar extends VerticalLayout
 	//---------------------------------------------------------------
 	// UNTRIVIAL MENU ACTIONS (AFTER CHECKS)
 	
-	private void saveExperimentInActiveTab(KineticComponent activeComponent, final ExperimentSaveMode saveMode)
+	private void saveExperimentInActiveTab(final KineticComponent activeComponent, final ExperimentSaveMode saveMode)
 	{
 		// first check for the right conditions
 		switch(saveMode)
@@ -317,48 +322,93 @@ public class Toolbar extends VerticalLayout
 		// and then actually do anything
 		try
 		{
-			final UniversalComputationDescription uniFormat = activeComponent.exportExperiment();
-			if(uniFormat != null)
+			activeComponent.exportExperiment(new KineticComponent.IOnExperimentReceivedFromClient()
 			{
-				SpecialDialogs.saveExperimentDialog(new SaveExperimentForm(saveMode)
+				private JPAUser experimentOwner;
+				private JPABatch sourceExperiment;
+				private String experimentXML;
+				
+				@Override
+				public void handleExperiment(final UniversalComputationDescription exportedExperiment, final IOnExperimentSaved experimentSavedCallback)
 				{
-					private static final long serialVersionUID = 4325393469281258100L;
-
-					@Override
-					public boolean handleResult(Object[] args)
+					final boolean sourceExperimentExists = activeComponent.getPreviouslyLoadedExperimentID() != null;
+					if(sourceExperimentExists)
 					{
-						JPAUser experimentOwner = ManageAuth.getUserEntity(VaadinSession.getCurrent());
-						String experimentXML = XStreamHelper.serializeToXML(uniFormat, 
-								XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
-						String name, note;
-						switch(saveMode)
-						{
-							case SAVE_FOR_LATER:
-								name = (String) args[0];
-								note = (String) args[1];
-								DAOs.batchDAO.storeEntity(new JPABatch(name, note, experimentXML, experimentOwner));  
-								return true;
-								
-							case SAVE_FOR_EXECUTION:
-								name = (String) args[0];
-								Integer userAssignedPriority = (Integer) args[1];
-								Integer computationEstimateInHours = (Integer) args[2];
-								Boolean sendEmailWhenFinished = (Boolean) args[3];
-								note = (String) args[4];
-								DAOs.batchDAO.storeEntity(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority,
-										computationEstimateInHours, sendEmailWhenFinished));
-								return true;
-							
-							default:
-								throw new IllegalStateException("Unknown state: " + saveMode.name());
-						}
+						sourceExperiment = DAOs.batchDAO.getByID(activeComponent.getPreviouslyLoadedExperimentID());
 					}
-				});
-			}
-			else
-			{
-				throw new IllegalStateException("No experiment was received to save. This error is likely a result of other errors.");
-			}
+					else
+					{
+						sourceExperiment = null;
+					}
+					final SaveExperimentForm seForm = new SaveExperimentForm(saveMode, sourceExperiment);
+					MessageBox dialog = SpecialDialogs.saveExperimentDialog(seForm, new DialogCommons.IDialogResultHandler()
+					{
+						@Override
+						public boolean handleResult(Object[] args)
+						{
+							experimentOwner = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+							experimentXML = exportedExperiment.toXML();
+							switch(saveMode)
+							{
+								case SAVE_FOR_LATER:
+									String name = (String) args[0];
+									String note = (String) args[1];
+									switch(seForm.getSaveForLaterMode())
+									{
+										case SAVE_AS_NEW:
+											saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner), experimentSavedCallback);
+											break;
+										case OVERWRITE_PREVIOUS:
+											sourceExperiment.setName(name);
+											sourceExperiment.setNote(note);
+											sourceExperiment.setXML(experimentXML);
+											updateExperiment(sourceExperiment, experimentSavedCallback);
+											break;
+										case SAVE_AS_NEW_AND_DELETE_PREVIOUS:
+											saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner), experimentSavedCallback);
+											if(sourceExperimentExists)
+											{
+												// TODO: delete previous
+											}
+											break;
+										default:
+											throw new IllegalStateException("Unknown state: " + seForm.getSaveForLaterMode().name());
+									}
+									return true;
+								case SAVE_FOR_EXECUTION:
+									saveForExecution(args, experimentSavedCallback);
+									return true;
+								default:
+									throw new IllegalStateException("Unknown state: " + saveMode.name());
+							}
+						}
+					});
+					dialog.setWidth("400px");
+				}
+				
+				private void saveForExecution(Object[] args, IOnExperimentSaved experimentSavedCallback)
+				{
+					String name = (String) args[0];
+					Integer userAssignedPriority = (Integer) args[1];
+					Integer computationEstimateInHours = (Integer) args[2];
+					Boolean sendEmailWhenFinished = (Boolean) args[3];
+					String note = (String) args[4];
+					saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority,
+							computationEstimateInHours, sendEmailWhenFinished), experimentSavedCallback);
+				}
+				
+				private void saveExperiment(JPABatch newExperiment, IOnExperimentSaved experimentSavedCallback)
+				{
+					DAOs.batchDAO.storeEntity(newExperiment);
+					experimentSavedCallback.experimentSaved(newExperiment);
+				}
+				
+				private void updateExperiment(JPABatch experiment, IOnExperimentSaved experimentSavedCallback)
+				{
+					DAOs.batchDAO.updateEntity(experiment);
+					experimentSavedCallback.experimentSaved(experiment);
+				}
+			});
 		}
 		catch (Throwable t)
 		{
@@ -375,9 +425,7 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public boolean handleResult(Object[] args)
 			{
-				JPABatch experimentToLoad = (JPABatch) args[0];
-				parentEditor.loadExperimentIntoNewTab(experimentToLoad.getName(), 
-						UniversalComputationDescription.fromXML(experimentToLoad.getXML())); 
+				parentEditor.loadExperimentIntoNewTab((JPABatch) args[0]); 
 				return true;
 			}
 		});
@@ -434,16 +482,58 @@ public class Toolbar extends VerticalLayout
 			
 			JPAUser currentUser = ManageAuth.getUserEntity(VaadinSession.getCurrent());
 			
-			DBTableLayout savedExperimentsLayout = new DBTableLayout();
+			final DBTableLayout savedExperimentsLayout = new DBTableLayout();
 			savedExperimentsLayout.setSizeFull();
 			savedExperimentsLayout.setReadOnly(true);
-			savedExperimentsLayout.getTable().setMultiSelect(false);
+			savedExperimentsLayout.getTable().setMultiSelect(false); // required below
+			savedExperimentsLayout.getTable().addValueChangeListener(new ValueChangeListener()
+			{
+				private static final long serialVersionUID = -2896004727434158169L;
+
+				@Override
+				public void valueChange(ValueChangeEvent event)
+				{
+					/*
+					 * Table in 'savedExperimentsLayout' is required to have multi-select disabled.
+					 */
+					AbstractTableRowDBView[] selectedRowViews = savedExperimentsLayout.getTable().getViewsOfSelectedRows();
+					if(selectedRowViews.length == 0)
+					{
+						experimentToLoad = null;
+					}
+					else
+					{
+						experimentToLoad = ((BatchTableDBRow) selectedRowViews[0]).getBatch();
+					}
+				}
+			});
 			savedExperimentsLayout.setView(new BatchDBViewRoot(new UserSavedBatchesTableDBView(currentUser)));
 			
-			DBTableLayout scheduledExperimentsLayout = new DBTableLayout();
+			final DBTableLayout scheduledExperimentsLayout = new DBTableLayout();
 			scheduledExperimentsLayout.setSizeFull();
 			scheduledExperimentsLayout.setReadOnly(true);
-			scheduledExperimentsLayout.getTable().setMultiSelect(false);
+			scheduledExperimentsLayout.getTable().setMultiSelect(false); // required below
+			scheduledExperimentsLayout.getTable().addValueChangeListener(new ValueChangeListener()
+			{
+				private static final long serialVersionUID = 5024393452584477476L;
+
+				@Override
+				public void valueChange(ValueChangeEvent event)
+				{
+					/*
+					 * Table in 'scheduledExperimentsLayout' is required to have multi-select disabled.
+					 */
+					AbstractTableRowDBView[] selectedRowViews = scheduledExperimentsLayout.getTable().getViewsOfSelectedRows();
+					if(selectedRowViews.length == 0)
+					{
+						experimentToLoad = null;
+					}
+					else
+					{
+						experimentToLoad = ((BatchTableDBRow) selectedRowViews[0]).getBatch();
+					}
+				}
+			});
 			scheduledExperimentsLayout.setView(new BatchDBViewRoot(new UserScheduledBatchesTableDBView(currentUser)));
 			
 			addTab(savedExperimentsLayout, "Saved experiments");

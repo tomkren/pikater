@@ -47,7 +47,7 @@ public class Dimension implements Serializable
 	
 	public String dimension;
 	
-	/** Keeps GWT and Vaadin happy */
+	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
 	@Deprecated
 	public Dimension()
 	{

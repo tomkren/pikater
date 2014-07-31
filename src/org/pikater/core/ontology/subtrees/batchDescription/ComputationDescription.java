@@ -105,16 +105,28 @@ public class ComputationDescription implements Concept {
 				dataProcessing.setId(id);
 				id++;
 				
-				for (DataSourceDescription descrI : dataProcessing.exportAllDataSourceDescriptions()) {
-					
-					if (descrI.getDataProvider() != null) {
-						fifo.add(descrI.getDataProvider());
-					}
-				}
+				fifo.addAll( notNullElements(dataProcessing) );
 			}
 		}
 
 	}
+	
+	private List<IComputationElement> notNullElements(IComputationElement dataProcessing) {
+		
+		List<IComputationElement> elements = new ArrayList<IComputationElement>();
+		
+		for (DataSourceDescription descrI : dataProcessing.exportAllDataSourceDescriptions()) {
+			
+			IDataProvider dataProviderI = descrI.getDataProvider();
+			if ( dataProviderI != null) {
+				elements.add(descrI.getDataProvider());				
+			}
+		}
+		
+		return elements;
+	}
+	
+	
 	
 	public UniversalComputationDescription exportUniversalComputationDescription() {
 

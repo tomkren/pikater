@@ -16,6 +16,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.core.ontology.AgentInfoOntology;
@@ -23,7 +24,6 @@ import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
-
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
@@ -49,39 +49,33 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		agentInfo.importOntologyClass(DataProcessing.class);
 	
 		agentInfo.setName("WeatherSplitter");
-		agentInfo.setDescription("splits weather data by prediction");
+		agentInfo.setDescription("Splits weather data by prediction.");
 
 		Slot i1 = new Slot();
-		i1.setDescription("first weather input");
 		i1.setSlotType(SlotTypes.DATA_TYPE);
-		i1.setDataType("data");
+		i1.setDataType("firstInput");
+		i1.setDescription("First weather input.");
 		Slot i2 = new Slot();
-		i2.setDescription("second weather input");
 		i2.setSlotType(SlotTypes.DATA_TYPE);
-		i2.setDataType("data");
-		ArrayList<Slot> inputSlots = new ArrayList<>();
-		inputSlots.add(i1);
-		inputSlots.add(i2);
-		agentInfo.setInputSlots(inputSlots);
+		i2.setDataType("secondInput");
+		i2.setDescription("Second weather input.");
+		
+		agentInfo.setInputSlots(Arrays.asList(i1, i2));
 
 		Slot o_sunny = new Slot();
-		o_sunny.setDescription("sunny output");
 		o_sunny.setSlotType(SlotTypes.DATA_TYPE);
-		o_sunny.setDataType("data");
+		o_sunny.setDataType("sunnyOutput");
+		o_sunny.setDescription("Sunny output.");
 		Slot o_overcast = new Slot();
-		o_overcast.setDescription("overcast output");
 		o_overcast.setSlotType(SlotTypes.DATA_TYPE);
-		o_overcast.setDataType("data");
+		o_overcast.setDataType("overcastOutput");
+		o_overcast.setDescription("Overcast output.");
 		Slot o_rainy = new Slot();
-		o_rainy.setDescription("rainy output");
 		o_rainy.setSlotType(SlotTypes.DATA_TYPE);
-		o_rainy.setDataType("data");
+		o_rainy.setDataType("rainyOutput");
+		o_rainy.setDescription("Rainy output.");
 
-		ArrayList<Slot> outputSlots = new ArrayList<>();
-		outputSlots.add(o_sunny);
-		outputSlots.add(o_overcast);
-		outputSlots.add(o_rainy);
-		agentInfo.setOutputSlots(outputSlots);
+		agentInfo.setOutputSlots(Arrays.asList(o_sunny, o_overcast, o_rainy));
 
 		return agentInfo;
 	}

@@ -12,15 +12,6 @@ public class FileInput_Box {
 	
 	public static AgentInfo get() {
 
-		NewOption optionIN = new NewOption("File", new StringValue("inputFile.ARFF"));
-		optionIN.setDescription("File name");
-		
-
-		Slot outputSlot = new Slot();
-		outputSlot.setSlotType("input");
-		outputSlot.setDataType(SlotTypes.DATA_TYPE);
-
-
 		AgentInfo agentInfo = new AgentInfo();
 		agentInfo.importAgentClass(Agent_VirtualFileInputBoxProvider.class);
 		agentInfo.importOntologyClass(FileDataProvider.class);
@@ -28,7 +19,15 @@ public class FileInput_Box {
 		agentInfo.setName("FileInput");
 		agentInfo.setDescription("This box provides a data source to other boxes.");
 
+		NewOption optionIN = new NewOption("File", new StringValue("inputFile.ARFF"));
+		optionIN.setDescription("File name");
+		
 		agentInfo.addOption(optionIN);
+		
+		Slot outputSlot = new Slot();
+		outputSlot.setSlotType("input");
+		outputSlot.setDataType(SlotTypes.DATA_TYPE);
+		
 		agentInfo.addOutputSlot(outputSlot);
 
 		return agentInfo;

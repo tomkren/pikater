@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.managerAgent;
 
 import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
@@ -11,10 +12,13 @@ import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
+import org.pikater.core.ontology.subtrees.management.LoadAgent;
+import org.pikater.core.ontology.subtrees.model.Model;
 
 /**
  * Created with IntelliJ IDEA. User: Kuba Date: 25.8.13 Time: 9:21 To change
@@ -113,4 +117,28 @@ public class ManagerAgentCommunicator {
 		return false;
 	}
 	
+	public static void loadAgent(PikaterAgent agent, int modelId) {
+		Model m = DataManagerService.getModel(agent, 70704);
+		agent.log("got model, agent size "+m.getSerializedAgent().length+", result ID "+m.getResultID());
+
+		LoadAgent act = new LoadAgent();
+		act.setObject(m.getSerializedAgent());
+		act.setFilename(m.getAgentClassName());
+
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.addReceiver(new AID(AgentNames.MANAGER_AGENT, false));
+		request.setOntology(AgentManagementOntology.getInstance().getName());
+		request.setLanguage(agent.getCodec().getName());
+		try {
+			agent.getContentManager().fillContent(request, new Action(agent.getAID(), act));
+			ACLMessage response = FIPAService.doFipaRequestClient(agent, request, 10000);
+			if (response == null) {
+				agent.logError("did not receive LoadAgent response for model "+modelId+" in time");
+			} else {
+				agent.log("LoadAgent for model "+ modelId +" finished");
+			}
+		} catch (CodecException | OntologyException | FIPAException e) {
+			agent.logError("LoadAgent service failure", e);
+		}
+	}
 }

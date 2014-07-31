@@ -13,7 +13,8 @@ import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.OptionsHelper;
+import org.pikater.core.options.SlotsHelper;
 
 public class SMOCA_Box {
 	
@@ -56,7 +57,7 @@ public class SMOCA_Box {
 		# Whether to 0=normalize/1=standardize/2=neither. (default 0=normalize)
 		$ N int 1 1 s 0, 1, 2
 		**/
-		NewOption optionN = new NewOption("N", new IntegerValue(1), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
+		NewOption optionN = new NewOption("N", new IntegerValue(1), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
 				new IntegerValue(0),
 				new IntegerValue(1),
 				new IntegerValue(2))))
@@ -165,11 +166,11 @@ public class SMOCA_Box {
 		agentInfo.addOption(optionM);
 		agentInfo.addOption(optionV);
 		agentInfo.addOption(optionW);
-		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
 
 		// Slots Definition
-		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
 
 		return agentInfo;
 	}

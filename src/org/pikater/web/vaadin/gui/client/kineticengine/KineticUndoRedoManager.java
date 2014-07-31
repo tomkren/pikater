@@ -35,7 +35,7 @@ public class KineticUndoRedoManager
 				this.undoStack.addAll(history.undoStack);
 				this.redoStack.addAll(history.redoStack);
 				
-				alterStateIf(!undoStack.isEmpty());
+				// notifyExperimentModifiedIf(!undoStack.isEmpty());
 			}
 		}
 	}
@@ -45,12 +45,12 @@ public class KineticUndoRedoManager
 		undoStack.clear();
 		redoStack.clear();
 		
-		alterStateIf(undoStack.isEmpty());
+		// alterStateIf(undoStack.isEmpty());
 	}
 	
 	public void push(BiDiOperation operation)
 	{
-		alterStateIf(undoStack.isEmpty());
+		// alterStateIf(undoStack.isEmpty());
 		
 		undoStack.push(operation);
 		redoStack.clear();
@@ -64,7 +64,7 @@ public class KineticUndoRedoManager
 			redoStack.push(op);
 			op.undo();
 			
-			alterStateIf(undoStack.isEmpty());
+			// alterStateIf(undoStack.isEmpty());
 		}
 	}
 	
@@ -74,13 +74,13 @@ public class KineticUndoRedoManager
 		{
 			undoStack.pop().undo();
 			
-			alterStateIf(undoStack.isEmpty());
+			// alterStateIf(undoStack.isEmpty());
 		}
 	}
 	
 	public void redo()
 	{
-		alterStateIf(undoStack.isEmpty());
+		// alterStateIf(undoStack.isEmpty());
 		
 		if(!redoStack.isEmpty())
 		{
@@ -90,11 +90,24 @@ public class KineticUndoRedoManager
 		}
 	}
 	
-	private void alterStateIf(boolean condition)
+	//---------------------------------------------------------------
+	// INTERFACE FOR SHARING THE "MODIFIED" STATUS WITH THE SERVER
+	
+	@SuppressWarnings("unused")
+	private void notifyExperimentModifiedIf(boolean condition)
 	{
 		if(condition)
 		{
-			widget.command_setExperimentModified(!condition);
+			widget.command_setExperimentModified(true);
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void notifyExperimentNotModifiedIf(boolean condition)
+	{
+		if(condition)
+		{
+			widget.command_setExperimentModified(false);
 		}
 	}
 }

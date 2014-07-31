@@ -1,5 +1,6 @@
 package org.pikater.core.ontology.subtrees.management;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -18,6 +19,10 @@ public class Agent implements Concept, Cloneable {
 	private String type;
 	private List<NewOption> options;
 	private byte[] object;
+	
+	public Agent(){
+		this.options=new ArrayList<NewOption>();
+	}
 
 	// Methods required to use this class to represent the OPTIONS role
 	public List<NewOption> getOptions() {

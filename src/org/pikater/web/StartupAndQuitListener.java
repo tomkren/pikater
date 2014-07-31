@@ -9,7 +9,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.pikater.core.agents.gateway.PikaterCoreInterface;
+import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -104,7 +104,7 @@ public class StartupAndQuitListener implements ServletContextListener
 			{
 				try
 				{
-					AgentInfos infos = PikaterCoreInterface.getAgentInfos();
+					AgentInfos infos = WebToCoreEntryPoint.getAgentInfos();
 					for(AgentInfo info : infos.getAgentInfos())
 					{
 						agentInfoCollection.addDefinition(info);
@@ -119,66 +119,63 @@ public class StartupAndQuitListener implements ServletContextListener
 			{
 				for(BoxType type : BoxType.values())
 				{
-					if(type.toOntology() != null)
+					AgentInfo agentInfo = new AgentInfo();
+					agentInfo.setOntologyClassName(type.toOntologyClass().getName());
+					agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
+					
+					String name = null;
+					switch(type)
 					{
-						AgentInfo agentInfo = new AgentInfo();
-						agentInfo.setOntologyClassName(type.toOntology());
-						agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
-						
-						String name = null;
-						switch(type)
-						{
-							case CHOOSE:
-								name = "Klobása";
-								break;
-							case COMPUTE:
-								name = "Vepřová kýta";
-								break;
-							case DATAPROCESSING:
-								name = "Chleba";
-								break;
-							case EVALUATION:
-								name = "Bobkový list";
-								break;
-							case INPUT:
-								name = "Brambory";
-								break;
-							case MISCELLANEOUS:
-								name = "Pepř";
-								break;
-							case OUTPUT:
-								name = "Sůl";
-								break;
-							case SEARCH:
-								name = "Cibule";
-								break;
-							case TRIBOX:
-								name = "Protlak";
-								break;
-							default:
-								break;
-						}
-						agentInfo.setName(name);
-						
-						NewOptions options = new NewOptions();
-						options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
-						options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(new ArrayList<IValueData>(Arrays.asList(
-								new IntegerValue(2),
-								new IntegerValue(3),
-								new IntegerValue(5),
-								new IntegerValue(10))))
-						));
-						options.addOption(new NewOption("Double", new DoubleValue(1)));
-						options.addOption(new NewOption("Boolean", new BooleanValue(true)));
-						options.addOption(new NewOption("Float", new FloatValue(1)));
-						options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(
-								new IntegerValue(5), new IntegerValue(10), 3)));
-						options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(new ArrayList<IValueData>(Arrays.asList(
-								new IntegerValue(5), new IntegerValue(10))), 3)));
-						
-						agentInfo.setOptions(options);
-						agentInfoCollection.addDefinition(agentInfo);
+						case CHOOSE:
+							name = "Klobása";
+							break;
+						case COMPUTE:
+							name = "Vepřová kýta";
+							break;
+						case DATAPROCESSING:
+							name = "Chleba";
+							break;
+						case EVALUATION:
+							name = "Bobkový list";
+							break;
+						case INPUT:
+							name = "Brambory";
+							break;
+						case MISCELLANEOUS:
+							name = "Pepř";
+							break;
+						case OUTPUT:
+							name = "Sůl";
+							break;
+						case SEARCH:
+							name = "Cibule";
+							break;
+						case TRIBOX:
+							name = "Protlak";
+							break;
+						default:
+							break;
 					}
+					agentInfo.setName(name);
+					
+					NewOptions options = new NewOptions();
+					options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
+					options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
+							new IntegerValue(2),
+							new IntegerValue(3),
+							new IntegerValue(5),
+							new IntegerValue(10))))
+					));
+					options.addOption(new NewOption("Double", new DoubleValue(1)));
+					options.addOption(new NewOption("Boolean", new BooleanValue(true)));
+					options.addOption(new NewOption("Float", new FloatValue(1)));
+					options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(
+							new IntegerValue(5), new IntegerValue(10), 3)));
+					options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(new ArrayList<IValueData>(Arrays.asList(
+							new IntegerValue(5), new IntegerValue(10))), 3)));
+					
+					agentInfo.setOptions(options);
+					agentInfoCollection.addDefinition(agentInfo);
 				}
 			}
 			ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, agentInfoCollection);

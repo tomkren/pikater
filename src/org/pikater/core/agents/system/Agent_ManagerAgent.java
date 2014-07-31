@@ -21,6 +21,7 @@ import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DataOntology;
+import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
@@ -56,6 +57,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
+		ontologies.add(ModelOntology.getInstance());
 
 		return ontologies;
 	}
@@ -172,7 +174,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 		agent.start();
 	}
 
-	private String generateName(String name) {
+	public String generateName(String name) {
 		if (nodeName != null && !nodeName.isEmpty()) {
 			name = name + "-" + nodeName;
 		}

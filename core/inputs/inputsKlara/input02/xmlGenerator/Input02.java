@@ -45,7 +45,7 @@ public final class Input02 {
 		comAgent.setModel(null);
 
 		Search search = new Search();
-        search.setSearchClass(Agent_RandomSearch.class.getName());
+        search.setAgentType(Agent_RandomSearch.class.getName());
 		
         
 		CARecSearchComplex complex = new CARecSearchComplex();

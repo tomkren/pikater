@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.SlotsHelper;
 
 public class GASearch_Box {
 	
@@ -70,7 +70,7 @@ public class GASearch_Box {
 
 
 		//Slot Definition
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getSearcherOutputSlots());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());
 
 		return agentInfo;
 	}

@@ -68,7 +68,12 @@ public class BoxOptionsToolbox extends Toolbox
 		setContentFromSelectedBoxes(new AgentInfo[0]);
 	}
 	
-	public void setContentFromSelectedBoxes(AgentInfo[] selectedBoxesInformation)
+	/**
+	 * Resets the content of this toolbox according to the given resources.
+	 * @param selectedBoxesInformation
+	 * @return whether the new content needs to be displayed
+	 */
+	public boolean setContentFromSelectedBoxes(AgentInfo[] selectedBoxesInformation)
 	{
 		/*
 		 * Batch options managing could be supported in future:
@@ -82,7 +87,7 @@ public class BoxOptionsToolbox extends Toolbox
 			case 0: // nothing is selected
 				currentView.getBoxIdentificationLabel().setValue("none");
 				currentView.setEnabled(false);
-				break;
+				return false;
 				
 			case 1: // a single specific box type is selected
 				if(context.getCurrentlyViewedBoxesDataSource() != selectedBoxesInformation[0])
@@ -98,12 +103,12 @@ public class BoxOptionsToolbox extends Toolbox
 					currentView.setEnabled(true);
 					currentView.refreshContent();
 				}
-				break;
+				return true;
 				
 			default: // multiple specific box types are selected
 				currentView.getBoxIdentificationLabel().setValue("multiple");
 				currentView.setEnabled(false);
-				break;
+				return false;
 		}
 	}
 	
@@ -269,6 +274,14 @@ public class BoxOptionsToolbox extends Toolbox
 				optionBar.setExpandRatio(btn_editOption, 1);
 				
 				this.optionsLayout.addComponent(optionBar);
+			}
+			if(this.optionsLayout.getComponentCount() == 0) // no options are defined
+			{
+				Label lbl_noOptionsDefined = new Label("None are defined");
+				lbl_noOptionsDefined.setSizeFull();
+				lbl_noOptionsDefined.setHeight("25px");
+				lbl_noOptionsDefined.setStyleName("optionBar");
+				this.optionsLayout.addComponent(lbl_noOptionsDefined);
 			}
 		}
 	}

@@ -7,4 +7,8 @@ public class LongTermDuration implements IExpectedDuration {
 	 */
 	private static final long serialVersionUID = -8807836640125534973L;
 
+	public LongTermDuration clone() {
+		return new LongTermDuration();
+	}
+
 }

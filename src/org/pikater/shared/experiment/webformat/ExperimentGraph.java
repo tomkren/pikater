@@ -23,9 +23,7 @@ public class ExperimentGraph implements Serializable
 	// ------------------------------------------------------------------
 	// CONSTRUCTOR
 
-	/**
-	 * Default constructor keeps GWT and Vaadin happy.
-	 */
+	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
 	public ExperimentGraph()
 	{
 		this.leafBoxes = new HashMap<String, BoxInfo>();

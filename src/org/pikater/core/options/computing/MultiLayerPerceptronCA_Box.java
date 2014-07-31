@@ -19,7 +19,8 @@ import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.OptionsHelper;
+import org.pikater.core.options.SlotsHelper;
 
 
 public class MultiLayerPerceptronCA_Box {
@@ -138,7 +139,7 @@ public class MultiLayerPerceptronCA_Box {
 				new IntegerValue(2),
 				new IntegerValue(10))
 		);
-		ValueType typeHs = new ValueType(new StringValue("a"), new SetRestriction(new ArrayList<IValueData>(
+		ValueType typeHs = new ValueType(new StringValue("a"), new SetRestriction(false, new ArrayList<IValueData>(
 				new ArrayList<IValueData>(Arrays.asList(
 						new StringValue("a"), new StringValue("i"),
 						new StringValue("o"), new StringValue("t")))))
@@ -169,9 +170,10 @@ public class MultiLayerPerceptronCA_Box {
 		optionC.setDescription("Normalizing a numeric class will NOT be done");
 
 
+		// TODO: not used
 		Slot outputSlot = new Slot();
-		outputSlot.setSlotType("input");
-		outputSlot.setDataType(SlotTypes.DATA_TYPE);
+		outputSlot.setSlotType(SlotTypes.DATA_TYPE);
+		outputSlot.setDataType("input");
 
 
 		AgentInfo agentInfo = new AgentInfo();
@@ -193,11 +195,11 @@ public class MultiLayerPerceptronCA_Box {
 		agentInfo.addOption(optionM);
 		agentInfo.addOption(optionL);
 		agentInfo.addOption(optionH);
-		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
 
 		// Slots Definition
-		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
 
 		return agentInfo;
 	}

@@ -12,6 +12,7 @@ import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -66,6 +67,14 @@ public class FormFieldFactory
 	{
 		ComboBox result = getGeneralComboBox(caption, Arrays.asList(Boolean.TRUE, Boolean.FALSE), initialState, required, readOnly);
 		result.setConverter(StringToBooleanConverter.class); // TODO: is this even necessary?
+		return result;
+	}
+	
+	public static OptionGroup getGeneralOptionGroup(String caption, boolean required)
+	{
+		OptionGroup result = new OptionGroup(caption);
+		result.setImmediate(true);
+		result.setRequired(required);
 		return result;
 	}
 	

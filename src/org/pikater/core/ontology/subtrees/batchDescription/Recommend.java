@@ -23,6 +23,13 @@ public class Recommend extends DataProcessing {
 	public Recommend() {
     	this.options = new ArrayList<>();
     }
+
+    public String getAgentType() {	
+        return recommenderClass;
+    }
+    public void setAgentType(String recommenderClass) {
+        this.recommenderClass = recommenderClass;
+    }
     
     public List<NewOption> getOptions() {
         return options;
@@ -48,7 +55,7 @@ public class Recommend extends DataProcessing {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption recommenderClassOption = new NewOption("recommenderClass",getRecommenderClass());
+		NewOption recommenderClassOption = new NewOption("recommenderClass", getAgentType());
 		
 		List<NewOption> options = new ArrayList<>();
 		options.add(recommenderClassOption);
@@ -95,11 +102,16 @@ public class Recommend extends DataProcessing {
 		}
 	}
 
-    public String getRecommenderClass() {
-        return recommenderClass;
-    }
+	public Recommend clone() {
+		
+		Recommend recommend = new Recommend();
+		recommend.setAgentType(this.recommenderClass);
+		NewOptions optionsOnt = new NewOptions(this.options);
+		recommend.setOptions(optionsOnt.clone().getOptions());
+		ErrorDescriptions errorOnt = new ErrorDescriptions(this.errors);
+		recommend.setErrors(errorOnt.clone().getErrors());
+		
+		return recommend;
+	}
 
-    public void setRecommenderClass(String recommenderClass) {
-        this.recommenderClass = recommenderClass;
-    }
 }

@@ -6,9 +6,9 @@ import java.nio.channels.IllegalSelectorException;
 
 import org.fusesource.jansi.HtmlAnsiOutputStream;
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.shared.ssh.SSHBatchExecChannel.ISSHBatchChannelNotificationHandler;
-import org.pikater.shared.ssh.SSHRemoteExec;
-import org.pikater.shared.ssh.SSHSession;
+import org.pikater.web.ssh.SSHRemoteExec;
+import org.pikater.web.ssh.SSHSession;
+import org.pikater.web.ssh.SSHBatchExecChannel.ISSHBatchChannelNotificationHandler;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.jcraft.jsch.JSchException;
@@ -138,7 +138,7 @@ public class SimpleConsoleComponent extends VerticalLayout
 	 * Use this method, when you're NOT interested in the response. If you ARE, use {@link #execSync} instead.
 	 * @param command Navigate to the referenced execSync method to display more information about this parameter.
 	 * @return True, if the commands were sent to the command output stream successfully, otherwise false and corresponding errors are logged.
-	 * @see org.pikater.shared.ssh.SSHRemoteExec#execSync(String command)
+	 * @see org.pikater.web.ssh.SSHRemoteExec#execSync(String command)
 	 */
 	public boolean execAsync(String commands)
 	{

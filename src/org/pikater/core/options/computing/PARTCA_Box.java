@@ -11,8 +11,8 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.options.AgentDefinitionHelper;
+import org.pikater.core.options.OptionsHelper;
+import org.pikater.core.options.SlotsHelper;
 
 public class PARTCA_Box {
 	
@@ -23,12 +23,15 @@ public class PARTCA_Box {
 		# $ C float 1 1 r 0.0001 0.4 
 		$ C float 1 1 s null, 0.0001, 0.1, 0.2, 0.25, 0.3, 0.4, 0.5
 		**/
-		NewOption optionC = new NewOption("C", new FloatValue(0.25f), new SetRestriction(Arrays.asList(
-				new NullValue(), new FloatValue(0.0001f),
-				new FloatValue(0.1f), new FloatValue(0.2f),
-				new FloatValue(0.25f), new FloatValue(0.3f),
-				new FloatValue(0.4f), new FloatValue(0.5f)))
-		);
+		NewOption optionC = new NewOption("C", new FloatValue(0.25f), new SetRestriction(true, Arrays.asList(
+				new FloatValue(0.0001f),
+				new FloatValue(0.1f),
+				new FloatValue(0.2f),
+				new FloatValue(0.25f),
+				new FloatValue(0.3f),
+				new FloatValue(0.4f),
+				new FloatValue(0.5f))
+		));
 		optionC.setDescription("Set the number of folder to use in the computing of the mutual information");
 		
 		
@@ -55,10 +58,12 @@ public class PARTCA_Box {
 		# Set number of folds for reduced error pruning. One fold is used as the pruning set. (Default: 3)
 		$ N int 1 1 s null, 1, 2, 3, 4, 5
 		**/
-		NewOption optionN = new NewOption("N", new IntegerValue(3), new SetRestriction(Arrays.asList(
-				new NullValue(), new IntegerValue(1),
-				new IntegerValue(2), new IntegerValue(3),
-				new IntegerValue(4), new IntegerValue(5)
+		NewOption optionN = new NewOption("N", new IntegerValue(3), new SetRestriction(true, Arrays.asList(
+				new IntegerValue(1),
+				new IntegerValue(2),
+				new IntegerValue(3),
+				new IntegerValue(4),
+				new IntegerValue(5)
 		)));
 		optionN.setDescription("Set the number of folder to use in the computing of the mutual information");
 
@@ -104,11 +109,11 @@ public class PARTCA_Box {
 		agentInfo.addOption(optionB);
 		agentInfo.addOption(optionU);
 		agentInfo.addOption(optionQ);
-		agentInfo.addOptions(AgentDefinitionHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
 		
 		// Slots Definition
-		agentInfo.setInputSlots(AgentDefinitionHelper.getCAInputSlots());
-		agentInfo.setOutputSlots(AgentDefinitionHelper.getCAOutputSlots());
+		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
+		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
 
 		return agentInfo;
 	}

@@ -10,13 +10,11 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 
 public class ExternalAgentDAO extends AbstractDAO {
@@ -135,13 +133,13 @@ public class ExternalAgentDAO extends AbstractDAO {
 	@Override
 	public JPAExternalAgent getByID(int ID, EmptyResultAction era) {
 		return new CustomActionResultFormatter<JPAExternalAgent>(
-				getByTypedNamedQuery("ExternalAgent.getByID", "id", ID),
+				getByTypedNamedQuery(JPAExternalAgent.class,"ExternalAgent.getByID", "id", ID),
 				era)
 				.getSingleResultWithNull();
 	}
 	
 	public List<JPAExternalAgent> getByOwner(JPAUser user) {
-		return getByTypedNamedQuery("ExternalAgent.getByOwner", "owner", user);
+		return getByTypedNamedQuery(JPAExternalAgent.class,"ExternalAgent.getByOwner", "owner", user);
 	}
 	
 	public int getByOwnerCount(JPAUser user){
@@ -154,36 +152,15 @@ public class ExternalAgentDAO extends AbstractDAO {
 	}
 	
 	public List<JPAExternalAgent> getByOwner(JPAUser user,int offset,int maxResultSize){
-		return getByTypedNamedQuery("ExternalAgent.getByOwner", "owner", user,offset,maxResultSize);
+		return getByTypedNamedQuery(JPAExternalAgent.class,"ExternalAgent.getByOwner", "owner", user,offset,maxResultSize);
 	}
 	
-	private List<JPAExternalAgent> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAExternalAgent.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
+	public void deleteExternalAgentEntity(JPAExternalAgent externalAgent){
+		this.deleteExternalAgentByID(externalAgent.getId());
 	}
 	
-	
-	private List<JPAExternalAgent> getByTypedNamedQuery(String queryName,String paramName,Object param, int offset,int maxResultSize){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAExternalAgent.class)
-				.setParameter(paramName, param)
-				.setMaxResults(maxResultSize)
-				.setFirstResult(offset)
-				.getResultList();
-		}finally{
-			em.close();
-		}
+	public void deleteExternalAgentByID(int id){
+		this.deleteEntityByID(JPAExternalAgent.class, id);
 	}
 	
 }

@@ -6,15 +6,18 @@ import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
-import org.pikater.shared.visualisation.generator.ChartGenerator;
-import org.pikater.shared.visualisation.generator.quartz.SingleSVGGenerator;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskContext;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.ProgressDialogVisualizationTaskResult;
+import org.pikater.web.visualisation.definition.result.VisualizeDatasetResult;
+import org.pikater.web.visualisation.implementation.generator.quartz.SingleSVGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 
-public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob {
+/**
+ * This should now be obsolete in favor of the other 2 jobs.
+ */
+@Deprecated
+public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob
+{
 
 	public SingleSVGGeneratorJob() {
 		super(6);
@@ -28,7 +31,7 @@ public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob {
 	public boolean argumentCorrect(int index, Object arg) {
 		switch(index){
 		case 0:
-			return arg instanceof IProgressDialogTaskContext;
+			return arg instanceof VisualizeDatasetResult;
 		case 1:
 			return arg instanceof JPADataSetLO;
 		case 2:
@@ -49,7 +52,8 @@ public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob {
 
 	@Override
 	protected void execute() throws JobExecutionException {
-		IProgressDialogTaskContext listener=getArg(0);
+		
+		VisualizeDatasetResult listener=getArg(0);
 			JPADataSetLO dslo=getArg(1);
 			File file=new File((String)getArg(2));
 			try {
@@ -69,10 +73,10 @@ public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob {
 				}
 				
 				ssvgg.create();
-				listener.onTaskFinish(new ProgressDialogVisualizationTaskResult(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE));
+				listener.finished();
 			} catch (IOException e) {
 				file.delete();
-				listener.onTaskFailed();
+				listener.failed();
 				throw new JobExecutionException();
 			}
 

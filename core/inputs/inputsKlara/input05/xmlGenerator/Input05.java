@@ -35,7 +35,7 @@ public final class Input05 {
 		comAgent.setEvaluationMethod(em);
 
         Recommend recommender = new Recommend();
-        recommender.setRecommenderClass(Agent_Basic.class.getName());
+        recommender.setAgentType(Agent_Basic.class.getName());
         
         
 		CARecSearchComplex complex = new CARecSearchComplex();

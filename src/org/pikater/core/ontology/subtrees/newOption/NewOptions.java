@@ -68,6 +68,16 @@ public class NewOptions implements Concept, Iterable<NewOption>
     	return NewOptions.exportToWeka(options);
     }
     
+    public NewOptions clone() {
+    	
+    	NewOptions optionsOnt = new NewOptions();
+    	for (NewOption optionI : this.options) {
+    		optionsOnt.addOption(optionI.clone());
+    	}
+    	
+    	return optionsOnt;
+    }
+    
 	public static String exportToWeka(List<NewOption> options) {
 		
 		String wekaString = "";

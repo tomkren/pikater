@@ -5,4 +5,5 @@ package org.pikater.core.ontology.subtrees.batchDescription;
  */
 public interface IComputingAgent extends IComputationElement {
 	
+	public IComputingAgent clone();
 }

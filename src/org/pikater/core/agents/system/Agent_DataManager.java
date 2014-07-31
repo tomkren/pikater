@@ -32,12 +32,15 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
+import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
 import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
@@ -48,6 +51,7 @@ import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.text.ParseException;
@@ -83,7 +87,7 @@ import org.pikater.core.ontology.subtrees.file.ImportFile;
 import org.pikater.core.ontology.subtrees.file.PrepareFileUpload;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.management.Agent;
-import org.pikater.core.ontology.subtrees.management.GetTheBestAgent;
+import org.pikater.core.ontology.subtrees.management.Agents;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
@@ -95,6 +99,7 @@ import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.model.SaveModel;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
 import org.pikater.core.ontology.subtrees.result.LoadResults;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -125,6 +130,7 @@ public class Agent_DataManager extends PikaterAgent {
 		java.util.List<Ontology> ontologies =
 				new java.util.ArrayList<Ontology>();
 		ontologies.add(AccountOntology.getInstance());
+		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(ResultOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
 		ontologies.add(FilenameTranslationOntology.getInstance());
@@ -243,7 +249,7 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof GetAllMetadata) {
 						return respondToGetAllMetadata(request, a);
 					}
-					if (a.getAction() instanceof GetTheBestAgent) {
+					if (a.getAction() instanceof GetMultipleBestAgents) {
 						return respondToGetTheBestAgent(request, a);
 					}
 					
@@ -274,12 +280,15 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToPrepareFileUpload(request, a);
 					}
 
+					
+					if (a.getAction() instanceof GetFile) {
+						logError("Not Implemented Getfile");
+						return respondToGetFile(request, a);
+					}
+					
 					/**
 					 * Deprecated Files actions
 					 */
-					if (a.getAction() instanceof GetFile) {
-						logError("Not Implemented");
-					}
 					if (a.getAction() instanceof GetFileInfo) {
 						logError("Not Implemented");
 					}
@@ -652,7 +661,8 @@ public class Agent_DataManager extends PikaterAgent {
 		int experimentID = saveResult.getExperimentID();
 
 		JPAResult jparesult = new JPAResult();
-		jparesult.setAgentName(task.getAgent().getName());
+		jparesult.setAgentName(task.getAgent().getType());
+		log("Adding result for Agent Type: "+task.getAgent().getType());
 		jparesult.setOptions(options.exportXML());
 		log("Saving result for hash: "+task.getData().getInternalTrainFileName());
 		jparesult.setSerializedFileName(task.getData().getInternalTrainFileName());
@@ -898,12 +908,12 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
 		
-		logError("Agent_DataManager.respondToGetAllMetadata");
+		log("Agent_DataManager.respondToGetAllMetadata");
 
 		List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResults_required()) {
-			logError("DataManager.ResultsRequired");
+			log("DataManager.Results Required");
 			if (gm.getExceptions() != null) {
 				List<String> exHash = new java.util.LinkedList<String>();
 				Iterator itr = gm.getExceptions().iterator();
@@ -916,7 +926,7 @@ public class Agent_DataManager extends PikaterAgent {
 				datasets = DAOs.dataSetDAO.getAllWithResults();
 			}
 		} else {
-			logError("DataManager.Results  NOT Required");
+			log("DataManager.Results NOT Required");
 			if (gm.getExceptions() != null) {
 				
 				List<String> excludedHashes = new ArrayList<String>();
@@ -999,17 +1009,19 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 	
 	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws ClassNotFoundException, CodecException, OntologyException {
-		GetTheBestAgent g = (GetTheBestAgent) a.getAction();
-		String name = g.getNearest_file_name();
+		GetMultipleBestAgents g = (GetMultipleBestAgents) a.getAction();
+		String name = g.getNearestInternalFileName();
 
 		log("DataManager.GetTheBestAgent for datafile "+name);
 		
-		//TODO: querying based on the dataset (former serialized filename)
+		//TODO: querying for multiple agents , count from aclmessage GetMultipleBestAgents.numberofagents
 		List<JPAResult> results =  DAOs.resultDAO.getByDataSetHash(name);
 
 		ACLMessage reply = request.createReply();
 		
+		Agents foundAgents=new Agents();
 		if(results.size()>0){
+			
 			
 			double errorRate=Double.MAX_VALUE;
 			JPAResult candidate=null;
@@ -1026,17 +1038,17 @@ public class Agent_DataManager extends PikaterAgent {
 			
 			Agent agent = new Agent();
 			agent.setName(candidate.getAgentName());
-			agent.setType(""+candidate.getAgentTypeId());//TODO: do we should store agent type IDs or agent type names 
+			agent.setType(candidate.getAgentName()); 
 			agent.setOptions(options.getOptions());
-
-			reply.setPerformative(ACLMessage.INFORM);
-
-			Result _result = new Result(a.getAction(), agent);
-			getContentManager().fillContent(reply, _result);
-		}else{
-			reply.setPerformative(ACLMessage.FAILURE);
-			reply.setContent("There are no results for this file in the database.");
+			
+			foundAgents.add(agent);
 		}
+		
+		reply.setPerformative(ACLMessage.INFORM);
+
+		Result _result = new Result(a.getAction(), foundAgents);
+		getContentManager().fillContent(reply, _result);
+			
 
 		return reply;
 	}
@@ -1174,6 +1186,56 @@ public class Agent_DataManager extends PikaterAgent {
 		reply.setContent(Integer.toString(serverSocket.getLocalPort()));
 		return reply;
 	}
+	
+	
+	private ACLMessage respondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException {
+		String hash = ((GetFile)a.getAction()).getHash();
+		log(new Date().toString()+" DataManager.GetFile");
+
+		List<JPADataSetLO> dslos=DAOs.dataSetDAO.getByHash(hash);
+		if(dslos.size()>0){
+
+			try {
+				JPADataSetLO dslo=dslos.get(0);
+				log(new Date().toString()+" Found DSLO: "+dslo.getDescription()+" - "+dslo.getOID()+" - "+dslo.getHash());
+
+				PostgreLargeObjectReader reader = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
+				log(reader.toString());
+				File temp = new File(dataFilesPath + "temp" + System.getProperty("file.separator") + hash);
+				FileOutputStream out = new FileOutputStream(temp);
+				try {
+					byte[] buf = new byte[100*1024];
+					int read;
+					while ((read = reader.read(buf, 0, buf.length)) > 0) {
+						out.write(buf, 0, read);
+					}
+
+					File target=new File(dataFilesPath + hash);
+					log(new Date()+" Moving file to: "+target.getAbsolutePath());
+					if(temp.renameTo(target)){
+						log(new Date()+"File was successfully moved");
+					}else{
+						logError(new Date()+" Error while moving file with hash "+dslo.getHash()+" to new location "+target.getAbsolutePath());
+					}
+				} finally {
+					reader.close();
+					out.close();
+
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			logError("DataSet file with hash "+hash+" not found.");
+		}
+
+ACLMessage reply = request.createReply();
+reply.setPerformative(ACLMessage.INFORM);
+Result r = new Result(a, "OK");
+getContentManager().fillContent(reply, r);
+
+return reply;
+}
 
 	
 }

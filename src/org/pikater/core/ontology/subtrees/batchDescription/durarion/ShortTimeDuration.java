@@ -7,4 +7,8 @@ public class ShortTimeDuration implements IExpectedDuration {
 	 */
 	private static final long serialVersionUID = 6104642830981636337L;
 
+	public ShortTimeDuration clone() {
+		return new ShortTimeDuration();
+	}
+	
 }

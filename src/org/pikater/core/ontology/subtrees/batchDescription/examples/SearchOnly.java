@@ -54,7 +54,7 @@ public class SearchOnly {
         crsc.setErrors(eds);
 
         Search sa = new Search();
-        sa.setSearchClass("whatever.ea.is.in.EA");
+        sa.setAgentType("whatever.ea.is.in.EA");
 
         List<NewOption> searchParameters = new ArrayList<NewOption>();
         

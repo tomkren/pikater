@@ -96,4 +96,12 @@ public class ExperimentDAO extends AbstractDAO {
 		}
 	}
 	
+	public void deleteExperimentEntity(JPAExperiment experiment){
+		this.deleteExperimentByID(experiment.getId());
+	}
+	
+	public void deleteExperimentByID(int id){
+		this.deleteEntityByID(JPAExperiment.class, id);
+	}
+	
 }

@@ -1,5 +1,11 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -30,7 +36,9 @@ public class BoxBrowserToolbox extends Toolbox
 			VerticalLayout vLayout = new VerticalLayout();
 			vLayout.setSizeFull();
 			vLayout.setStyleName("boxBrowserToolbox-accordion-content");
-			for(AgentInfo agentInfo : ServerConfigurationInterface.getKnownAgents().getByType(type))
+			
+			Map<String, DragAndDropWrapper> boxNameToComponentMapping = new HashMap<String, DragAndDropWrapper>();
+			for(AgentInfo agentInfo : ServerConfigurationInterface.getKnownAgents().getListByType(type))
 			{
 				Label lbl = new Label(agentInfo.getName());
 				lbl.setSizeUndefined();
@@ -42,7 +50,15 @@ public class BoxBrowserToolbox extends Toolbox
 				dndWrapper.setDragStartMode(DragStartMode.COMPONENT);
 				dndWrapper.setData(agentInfo);
 				
-				vLayout.addComponent(dndWrapper);
+				boxNameToComponentMapping.put(agentInfo.getName(), dndWrapper);
+			}
+			
+			// sort box names and add the component representing them in the sorted order
+			List<String> sortedBoxNames = new ArrayList<String>(boxNameToComponentMapping.keySet()); 
+			Collections.sort(sortedBoxNames);
+			for(String boxName : sortedBoxNames)
+			{
+				vLayout.addComponent(boxNameToComponentMapping.get(boxName));
 			}
 			
 			// Tab newTab = content.addTab(vLayout, type.name());

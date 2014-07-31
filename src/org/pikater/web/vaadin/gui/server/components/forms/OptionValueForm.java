@@ -14,8 +14,6 @@ import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.logging.PikaterLogger;
@@ -325,20 +323,13 @@ public class OptionValueForm extends CustomFormLayout
 				}
 			});
 		}
-		else if(typeClass.equals(QuestionMarkRange.class))
-		{
-			// TODO: range can be set by user or is it fixed?
-		}
-		else if(typeClass.equals(QuestionMarkSet.class))
-		{
-			// TODO: set can be edited by user or is it fixed?
-		}
 		else if(typeClass.equals(NullValue.class))
 		{
 			// these values can not be set and hence no field is created whatsoever
 		}
 		else
 		{
+			// TODO: question mark values
 			PikaterLogger.logThrowable("", new IllegalStateException(String.format("Unimplemented value type used: '%s'.", typeClass.getName())));
 			MyNotifications.showError("Application error", String.format("Unsupported type: '%s'", typeClass.getName()));
 		}

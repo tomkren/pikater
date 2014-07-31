@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
@@ -20,19 +22,30 @@ public class DataProcessing implements IDataProvider {
 	private static final long serialVersionUID = -2418323249803736416L;
 
 	private int id = -1;
-	private List<NewOption> options =
-			new ArrayList<>();
-    
-	private List<ErrorDescription> errors =
-			new ArrayList<>();
-	private List<DataSourceDescription> dataSources =
-			new ArrayList<>();
+	private String agentType;
+	
+	private List<NewOption> options;
+	private List<ErrorDescription> errors;
+	private List<DataSourceDescription> dataSources;
 
+	public DataProcessing() {
+		this.options = new ArrayList<>();
+		this.errors = new ArrayList<>();
+		this.dataSources = new ArrayList<>();
+	}
+			
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getAgentType() {
+		return agentType;
+	}
+	public void setAgentType(String agentType) {
+		this.agentType = agentType;
 	}
 
 	public List<NewOption> getOptions() {
@@ -66,31 +79,47 @@ public class DataProcessing implements IDataProvider {
 	
 	@Override
 	public List<NewOption> exportAllOptions() {
-		return getOptions();
+		
+		NewOption agentTypeOption = new NewOption("agentType", agentType);
+		
+		List<NewOption> optionsToExport = new ArrayList<NewOption>();
+		optionsToExport.addAll(this.options);
+		optionsToExport.add(agentTypeOption);
+		
+		return optionsToExport;
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
-		setOptions(options);
+		
+		NewOptions optionsToImport = new NewOptions(options);
+		NewOption agentTypeOption = optionsToImport.getOptionByName("agentType");
+
+		StringValue agentTypeValue = (StringValue) agentTypeOption.toSingleValue().getCurrentValue();
+		this.agentType = agentTypeValue.getValue();
+
+		options.remove(agentTypeOption);
+		
+		this.options = options;
 	}
 	
 	@Override
 	public List<ErrorDescription> exportAllErrors() {
-		return getErrors();
+		return this.errors;
 	}
 	@Override
 	public void importAllErrors(List<ErrorDescription> errors) {
-		setErrors(errors);
+		this.errors = errors;
 		
 	}
 	
 	@Override
 	public List<DataSourceDescription> exportAllDataSourceDescriptions() {		
-		return getDataSources();
+		return this.dataSources;
 	}
 	@Override
 	public void importAllDataSourceDescriptions(
 			List<DataSourceDescription> dataSourceDescriptions) {
-		getDataSources();
+		this.dataSources = dataSourceDescriptions;
 	}
 	
 	public int generateIDs(int lastUsedId) {
@@ -105,7 +134,8 @@ public class DataProcessing implements IDataProvider {
 		
 		UniversalOntology ontologyInfo = new UniversalOntology();
 		ontologyInfo.setId(getId());
-		ontologyInfo.setType(getClass());
+		ontologyInfo.setOntologyClass(getClass());
+		// TODO: ontologyInfo.setAgentClass(agentClass);
 		ontologyInfo.setOptions(exportAllOptions());
 		ontologyInfo.setErrors(exportAllErrors());
 		//ontologyInfo.addInputSlots(null);
@@ -116,7 +146,7 @@ public class DataProcessing implements IDataProvider {
 		
 		Constructor<?> cons = null;
 		try {
-			cons = uOntology.getType().getConstructor();
+			cons = uOntology.getOntologyClass().getConstructor();
 		} catch (NoSuchMethodException e) {
 			Log.error(e.getMessage(), e);
 		} catch (SecurityException e) {
@@ -152,4 +182,29 @@ public class DataProcessing implements IDataProvider {
 		return this.getId() == element.getId();
 	}
 	
+	@Override
+	public DataProcessing clone() {
+		
+		List<NewOption> allOptionsCloned = new ArrayList<NewOption>();
+		for (NewOption optionI : exportAllOptions()) {
+			allOptionsCloned.add(optionI.clone());
+		}
+
+		List<ErrorDescription> errorsCloned = new ArrayList<ErrorDescription>();
+		for (ErrorDescription errorI : exportAllErrors()) {
+			errorsCloned.add(errorI.clone());
+		}
+
+		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
+		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions()) {
+			dataSourceCloned.add(dataSourceI.clone());
+		}
+		
+		DataProcessing dataProcessing = new DataProcessing();
+		dataProcessing.importAllOptions(allOptionsCloned);
+		dataProcessing.importAllErrors(errorsCloned);
+		dataProcessing.importAllDataSourceDescriptions(dataSourceCloned);
+		
+		return dataProcessing;
+	}
 }

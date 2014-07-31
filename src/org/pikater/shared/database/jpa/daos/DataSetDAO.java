@@ -186,7 +186,7 @@ public class DataSetDAO extends AbstractDAO{
 	}
 	
 	public List<JPADataSetLO> getAllWithResultsExcludingHashes(List<String> hashesToBeExcluded){
-		return null;
+		return getAllExcludingHashes(hashesToBeExcluded); //TODO: multiple query with results
 	}
 	
 	public void storeNewDataSet(File dataset,JPADataSetLO initialData) throws IOException{
@@ -290,6 +290,14 @@ public class DataSetDAO extends AbstractDAO{
 		}finally{
 			em.close();
 		}
+	}
+	
+	public void deleteDataSetEntity(JPADataSetLO datasetlo){
+		this.deleteDatasetByID(datasetlo.getId());
+	}
+	
+	public void deleteDatasetByID(int id){
+		this.deleteEntityByID(JPADataSetLO.class, id);
 	}
 
 }

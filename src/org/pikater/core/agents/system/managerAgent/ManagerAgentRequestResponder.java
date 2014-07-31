@@ -170,12 +170,13 @@ public class ManagerAgentRequestResponder {
         managerAgent.log("Resurrected agent : " + newAgent);
         // TODO kdyz se ozivuje 2x ten samej -> chyba
 
+        String agentName = managerAgent.generateName(la.getFilename());
 
         if (newAgent != null){
             // get a container controller for creating new agents
 
             ContainerController container = managerAgent.getContainerController();
-            AgentController controller = container.acceptNewAgent(la.getFilename(), newAgent);
+            AgentController controller = container.acceptNewAgent(agentName, newAgent);
             controller.start();
 
         }
@@ -183,7 +184,7 @@ public class ManagerAgentRequestResponder {
             throw new ControllerException("Agent not created.");
         }
 
-        managerAgent.log("Loaded agent:   " + la.getFilename());
+        managerAgent.log("Loaded agent:   " + agentName);
 
         jade.lang.acl.ACLMessage reply;
 
@@ -198,7 +199,7 @@ public class ManagerAgentRequestResponder {
             jade.lang.acl.ACLMessage first_message = new jade.lang.acl.ACLMessage(jade.lang.acl.ACLMessage.REQUEST);
             first_message.setLanguage(managerAgent.getCodec().getName());
             first_message.setOntology(ontology.getName());
-            first_message.addReceiver(new AID(la.getFilename(), AID.ISLOCALNAME));
+            first_message.addReceiver(new AID(agentName, AID.ISLOCALNAME));
             first_message.clearAllReplyTo();
             first_message.addReplyTo(request.getSender());
             first_message.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);

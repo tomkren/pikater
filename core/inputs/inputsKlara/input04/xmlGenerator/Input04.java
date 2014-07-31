@@ -34,10 +34,10 @@ public final class Input04 {
 		comAgent.setModel(null);
 
 		Search search = new Search();
-        search.setSearchClass(Agent_RandomSearch.class.getName());
+        search.setAgentType(Agent_RandomSearch.class.getName());
 		
         Recommend recommender = new Recommend();
-        recommender.setRecommenderClass(Agent_NMTopRecommender.class.getName());
+        recommender.setAgentType(Agent_NMTopRecommender.class.getName());
         
         
 		CARecSearchComplex complex = new CARecSearchComplex();

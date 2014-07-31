@@ -90,5 +90,13 @@ public class ResultDAO extends AbstractDAO {
 		}finally{
 			em.close();
 		}
-	}	
+	}
+	
+	public void deleteResultByEntity(JPAResult result){
+		this.deleteResultByID(result.getId());
+	}
+	
+	public void deleteResultByID(int id){
+		this.deleteEntityByID(JPAResult.class, id);
+	}
 }

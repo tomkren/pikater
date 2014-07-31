@@ -73,4 +73,13 @@ public class DataSourceDescription implements Concept {
     	return connector;
     }
 
+	public DataSourceDescription clone() {
+		
+		DataSourceDescription dataSource = new DataSourceDescription();
+		dataSource.setDataInputType(this.getDataInputType());
+		dataSource.setDataOutputType(this.getDataOutputType());
+		dataSource.setDataProvider(getDataProvider().clone());
+		return dataSource;
+	}
+
 }

@@ -34,9 +34,10 @@ import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 public class DatabaseTest {
 	
 	public void test(){
+		//removeResult();
 		//listDataSets();
-		addExperiment();
-		//listExternalAgents();
+		//addExperiment();
+		listExternalAgents();
 		//listDataSetWithExclusion();
 		//listResults();
 		//listUserAndRoles();
@@ -44,6 +45,16 @@ public class DatabaseTest {
 		//listExperiments();
 		//listFileMappings();
 		//listAgentInfos();
+	}
+	
+	public void removeResult(){
+		int resultId=76453;
+		System.out.println("Deleting result no.: "+resultId);
+		//option1 : DAOs.resultDAO.deleteResultEntityByID(resultId);
+		
+		//option2:
+		JPAResult res1= DAOs.resultDAO.getByID(resultId);
+		DAOs.resultDAO.deleteEntity(res1);
 	}
 	
 	public void addExperiment(){
