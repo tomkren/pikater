@@ -1,7 +1,11 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheet;
@@ -21,10 +25,10 @@ import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension.DimensionUnit;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents;
+import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.event.MouseEvents.ClickEvent;
 
 @StyleSheet("expEditor.css")
 public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwner
@@ -185,9 +189,17 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 			});
 		}
 		
+		// export all box images into a collection
+		List<String> allPictureURLs = new ArrayList<String>();
+		for(BoxType type : BoxType.values())
+		{
+			allPictureURLs.add(getBoxPictureURL(type));
+		}
+		
+		// extend this component and load all images in GWT (cache in browser)
 		this.extension = new ExpEditorExtension();
 		this.extension.extend(this);
-		this.extension.getClientRPC().command_loadBoxPictures(BoxType.getAllPictureURLs());
+		this.extension.getClientRPC().command_loadBoxPictures(allPictureURLs.toArray(new String[0]));
 	}
 	
 	@Override
@@ -204,6 +216,44 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	
 	// -------------------------------------------------------------
 	// PUBLIC INTERFACE
+	
+	public static String getBoxPictureURL(BoxType type)
+	{
+		String imgRelativePath;
+		switch(type)
+		{
+			case CHOOSE:
+				imgRelativePath = ThemeResources.relPath_IMG_boxRecommenderIcon;
+				break;
+			case COMPUTE:
+				imgRelativePath = ThemeResources.relPath_IMG_boxComputingIcon;
+				break;
+			case DATAPROCESSING:
+				imgRelativePath = ThemeResources.relPath_IMG_boxDataProcessingIcon;
+				break;
+			case EVALUATION:
+				imgRelativePath = ThemeResources.relPath_IMG_boxEvaluationIcon;
+				break;
+			case INPUT:
+				imgRelativePath = ThemeResources.relPath_IMG_boxInputIcon;
+				break;
+			case MISCELLANEOUS:
+				imgRelativePath = ThemeResources.relPath_IMG_boxMiscellaneousIcon;
+				break;
+			case OUTPUT:
+				imgRelativePath = ThemeResources.relPath_IMG_boxOutputIcon;
+				break;
+			case SEARCH:
+				imgRelativePath = ThemeResources.relPath_IMG_boxSearcherIcon;
+				break;
+			case TRIBOX:
+				imgRelativePath = ThemeResources.relPath_IMG_boxWrapperIcon;
+				break;
+			default:
+				throw new IllegalStateException("The following BoxType doesn't have image defined: " + type.name());
+		}
+		return ThemeResources.getVaadinRelativePathForResource(imgRelativePath);
+	}
 	
 	public ExpEditorExtension getExtension()
 	{
