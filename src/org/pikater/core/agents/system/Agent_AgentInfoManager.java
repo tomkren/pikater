@@ -22,7 +22,6 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
-import org.pikater.core.ontology.subtrees.model.Models;
 import org.reflections.Reflections;
 
 import jade.content.lang.Codec;
@@ -110,7 +109,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		});
 		
 
-		initializationAgentInfo();
+		//initializationAgentInfo();
 
 	}
 

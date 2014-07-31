@@ -2,7 +2,6 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 import java.util.ArrayList;
 import java.util.List;
