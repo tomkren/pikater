@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import com.thoughtworks.xstream.XStream;
@@ -11,11 +12,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AgentInfo implements Concept {
-
-	/**
-	 * 
-	 */
+public class AgentInfo implements Concept, ICloneable
+{
 	private static final long serialVersionUID = 5587052921037796722L;
 
 	private String agentClassName;
@@ -24,17 +22,17 @@ public class AgentInfo implements Concept {
 	private String name;
 	private String description;
 
-	private NewOptions options;
-	
 	private List<Slot> inputSlots;
 	private List<Slot> outputSlots;
+	
+	private NewOptions options;
 
 	public AgentInfo() {
-		this.options = new NewOptions();
 		this.inputSlots = new ArrayList<Slot>();
 		this.outputSlots = new ArrayList<Slot>();
+		this.options = new NewOptions();
 	}
-	
+
 	//---------------------------------------------------------
 	// CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
 	
@@ -86,50 +84,76 @@ public class AgentInfo implements Concept {
 	}
 	
 	//---------------------------------------------------------
-	// OTHER INTERFACE
-
+	// REQUIRED GETTERS/SETTERS
+	
 	public String getAgentClassName() {
 		return agentClassName;
 	}
 	public void setAgentClassName(String agentClassName) {
 		this.agentClassName = agentClassName;
 	}
-	public void importAgentClass(Class<?> agentClass) {
-		this.agentClassName = agentClass.getName();
-	}
-
 	public String getOntologyClassName() {
 		return ontologyClassName;
 	}
 	public void setOntologyClassName(String ontologyClassName) {
 		this.ontologyClassName = ontologyClassName;
 	}
-	public void importOntologyClass(Class<?> ontologyClass) {
-		this.ontologyClassName = ontologyClass.getName();
-	}
-
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public NewOptions getOptions()
-	{
+	public List<Slot> getInputSlots() {
+		return inputSlots;
+	}
+	public void setInputSlots(List<Slot> inputSlots) {
+		this.inputSlots = inputSlots;
+	}
+	public List<Slot> getOutputSlots() {
+		return outputSlots;
+	}
+	public void setOutputSlots(List<Slot> outputSlots) {
+		this.outputSlots = outputSlots;
+	}
+	public NewOptions getOptions() {
 		return options;
 	}
-	public void setOptions(NewOptions options)
-	{
+	public void setOptions(NewOptions options) {
 		this.options = options;
 	}
+	
+	//---------------------------------------------------------
+	// OTHER INTERFACE
+	
+	@Override
+	public AgentInfo clone()
+	{
+		AgentInfo result = new AgentInfo();
+		result.setOntologyClassName(ontologyClassName);
+		result.setAgentClassName(agentClassName);
+		result.setName(name);
+		result.setDescription(description);
+		result.setInputSlots(inputSlots);
+		result.setOutputSlots(outputSlots);
+		result.setOptions(options.clone());
+		return result;
+	}
+
+	public void importAgentClass(Class<?> agentClass) {
+		this.agentClassName = agentClass.getName();
+	}
+
+	public void importOntologyClass(Class<?> ontologyClass) {
+		this.ontologyClassName = ontologyClass.getName();
+	}
+
 	public void addOption(NewOption option) {
 		if (option == null) {
 			throw new IllegalArgumentException("Argument option can't be null");
@@ -143,24 +167,11 @@ public class AgentInfo implements Concept {
 		this.options.addOptions(options);
 	}
 	
-	public List<Slot> getInputSlots() {
-		return inputSlots;
-	}
-	public void setInputSlots(List<Slot> inputSlots) {
-		this.inputSlots = inputSlots;
-	}
 	public void addInputSlot(Slot inputSlot) {
 		if (inputSlot == null) {
 			throw new IllegalArgumentException("Argument inputSlot can't be null");
 		}
 		this.inputSlots.add(inputSlot);
-	}
-
-	public List<Slot> getOutputSlots() {
-		return outputSlots;
-	}
-	public void setOutputSlots(List<Slot> outputSlots) {
-		this.outputSlots = outputSlots;
 	}
 	public void addOutputSlot(Slot outputSlot) {
 		if (outputSlot == null) {
@@ -191,6 +202,5 @@ public class AgentInfo implements Concept {
 		
 		return agentInfo;
 	}
-	
 	
 }
