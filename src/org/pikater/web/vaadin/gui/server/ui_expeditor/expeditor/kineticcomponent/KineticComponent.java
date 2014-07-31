@@ -475,10 +475,14 @@ public class KineticComponent extends AbstractComponent
 					);
 				}
 				uniBoxInfo.setOptions(agentInfo.getOptions());
-				for(String neighbourWebBoxID : webFormat.edges.get(webBoxID)) // transform edges
+				if(webFormat.edgesDefinedFor(webBoxID))
 				{
-					UniversalElement neighbourUniBox = webBoxToUniBox.get(webFormat.leafBoxes.get(neighbourWebBoxID));
-					neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+					// transform edges
+					for(String neighbourWebBoxID : webFormat.edges.get(webBoxID))
+					{
+						UniversalElement neighbourUniBox = webBoxToUniBox.get(webFormat.leafBoxes.get(neighbourWebBoxID));
+						neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+					}
 				}
 
 				// create and initialize the SECOND of the 2 child objects

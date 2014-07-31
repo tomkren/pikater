@@ -39,6 +39,11 @@ public class ExperimentGraph implements Serializable
 		return info.boxID;
 	}
 	
+	public boolean edgesDefinedFor(String boxID)
+	{
+		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty(); 
+	}
+	
 	/*
 	public Integer addWrapperBoxAndReturnID(UniversalGui guiInfo, AbstractBox... childBoxes) 
 	{
