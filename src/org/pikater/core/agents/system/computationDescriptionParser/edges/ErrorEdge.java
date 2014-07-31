@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
 
+import jade.content.Concept;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 /**
@@ -8,7 +9,7 @@ import org.pikater.core.ontology.subtrees.task.Evaluation;
  * Date: 10.5.2014
  * Time: 13:33
  */
-public class ErrorEdge extends EdgeValue {
+public class ErrorEdge extends EdgeValue  {
     private Evaluation evaluation;
     private int computationId;
 
