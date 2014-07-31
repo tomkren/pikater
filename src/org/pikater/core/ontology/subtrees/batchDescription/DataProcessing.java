@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.shared.experiment.universalformat.UniversalOntology;
 
 /**
@@ -79,26 +77,13 @@ public class DataProcessing implements IDataProvider {
 	
 	@Override
 	public List<NewOption> exportAllOptions() {
-		
-		NewOption agentTypeOption = new NewOption("agentType", agentType);
-		
-		List<NewOption> optionsToExport = new ArrayList<NewOption>();
-		optionsToExport.addAll(this.options);
-		optionsToExport.add(agentTypeOption);
-		
-		return optionsToExport;
+		return this.options;
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
-		
-		NewOptions optionsToImport = new NewOptions(options);
-		NewOption agentTypeOption = optionsToImport.getOptionByName("agentType");
-
-		StringValue agentTypeValue = (StringValue) agentTypeOption.toSingleValue().getCurrentValue();
-		this.agentType = agentTypeValue.getValue();
-
-		options.remove(agentTypeOption);
-		
+		if (options == null) {
+			throw new IllegalArgumentException("Argument options can't be null");
+		}
 		this.options = options;
 	}
 	

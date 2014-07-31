@@ -77,7 +77,6 @@ public class Agent_Basic extends Agent_Recommender {
 		double d_new;
 
 		for (Metadata next_md : allMetadata.getMetadatas()) {
-
 			d_new = distance(metadata, next_md);
 			if (!next_md.getInternalName().equals(metadata.getInternalName())) {
 				if (d_new < d_best) {
@@ -85,7 +84,7 @@ public class Agent_Basic extends Agent_Recommender {
 					m_best = next_md;
 				}
 			}
-			sb.append("    " + next_md.getExternalName() + " d: " + d_new + "\n");
+			sb.append("    " + next_md.getExternalName() + " distance: " + d_new + "\n");
 		}
         log(sb.toString());
 		
