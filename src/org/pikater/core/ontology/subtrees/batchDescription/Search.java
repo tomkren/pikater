@@ -87,6 +87,7 @@ public class Search extends DataProcessing implements IErrorProvider {
 		NewOptions optionsOnt = new NewOptions(this.options);
 		
 		Search search = new Search();
+		search.setId(this.getId());
 		search.setAgentType(searchClass);
 		search.setOptions(optionsOnt.clone().getOptions());
 		return search;

@@ -88,6 +88,7 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 		NewOptions optionsOnt = new NewOptions(this.options);
 		
 		EvaluationMethod evaluation = new EvaluationMethod();
+		evaluation.setId(this.getId());
 		evaluation.setType(type);
 		evaluation.setOptions(optionsOnt.clone().getOptions());
 		

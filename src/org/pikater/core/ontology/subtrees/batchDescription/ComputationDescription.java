@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
@@ -144,9 +145,9 @@ public class ComputationDescription implements Concept {
 			IComputationElement dataProcessing = fifo.get(0);
 			fifo.remove(0);
 			
-			dataProcessing.clone();
+			dataProcessing.cloneDataSources();//.clone();
 			
-			fifo.addAll(notNullElements(dataProcessing) );
+			//fifo.addAll(notNullElements(dataProcessing) );
 			
 		}
 
@@ -156,8 +157,8 @@ public class ComputationDescription implements Concept {
 
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
 		uModel.setPriority(this.priority);
-		uModel.addGlobalOptions(new HashSet<NewOption>(this.getGlobalOptions()));
-
+		NewOptions optionsOnt = new NewOptions(this.getGlobalOptions());
+		uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
 		
 		// map - id x ontology
 		Map<Integer, UniversalOntology> finishedtUniOntologys =
@@ -307,8 +308,8 @@ public class ComputationDescription implements Concept {
 
 	public String exportXML() {
 
-		generateIDs();
-		gene();
+		//generateIDs();
+		//gene();
 		
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.NO_REFERENCES);

@@ -265,6 +265,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	public ComputingAgent clone() {
 		
 		ComputingAgent comAgentColone = new ComputingAgent();
+		comAgentColone.setId(this.getId());
 		comAgentColone.setAgentType(this.agentType);
 		NewOptions optionsOnt = new NewOptions(this.options);
 		comAgentColone.setOptions(optionsOnt.clone().getOptions());

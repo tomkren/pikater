@@ -199,6 +199,8 @@ public class DataProcessing implements IDataProvider {
 		}
 		
 		DataProcessing dataProcessing = new DataProcessing();
+		dataProcessing.setId(this.id);
+		dataProcessing.setAgentType(this.agentType);
 		dataProcessing.importAllOptions(allOptionsCloned);
 		dataProcessing.importAllErrors(errorsCloned);
 		dataProcessing.importAllDataSourceDescriptions(dataSourceCloned);

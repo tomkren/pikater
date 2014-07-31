@@ -54,9 +54,9 @@ public final class Input10 {
 		// Our requirements for the description are ready, lets create new
 		// computation description
 		List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
-		roots.add(saverSunny);
-		roots.add(saverOvercast);
-//		roots.add(saverRainy);
+		roots.add(saverSunny.clone());
+		roots.add(saverOvercast.clone());
+		roots.add(saverRainy.clone());
 
 		ComputationDescription comDescription = new ComputationDescription();
 		comDescription.setRootElements(roots);

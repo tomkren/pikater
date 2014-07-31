@@ -143,6 +143,7 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 	public CARecSearchComplex clone() {
 		
 		CARecSearchComplex complex = new CARecSearchComplex();
+		complex.setId(this.getId());
 		NewOptions optionsOnt = new NewOptions(this.options);
 		complex.setOptions(optionsOnt.clone().getOptions());
 		ErrorDescriptions errorsOnt = new ErrorDescriptions(this.errors);

@@ -54,31 +54,37 @@ public class TestBatchDescription {
 
 	private static void testComputatingDescription(
 			ComputationDescription comDescription, String note) {
-		
+	
 		comDescription.generateIDs();
-		
+		comDescription.gene();
+
 		UniversalComputationDescription udescriptinSimpleTraining =
 				comDescription.exportUniversalComputationDescription();
-		
+
 		ComputationDescription comDescription2 =
 				ComputationDescription.importUniversalComputationDescription(
 						udescriptinSimpleTraining);
-
+//		comDescription2.generateIDs();
+//		comDescription2.gene();
+//*/
 		String xml1 = comDescription.exportXML();
 		String xml2 = comDescription2.exportXML();
-/*
+
 		try {
 			comDescription.exportXML("comDescription.xml");
 			comDescription2.exportXML("comDescription2.xml");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-//*/
+
+
+//*		
 		if (xml1.equals(xml2)) {
 			System.out.println("OK - " + note);
 		} else {
 			System.out.println("Error - " + note);
 		}
+//*/
 	}
 
 }
