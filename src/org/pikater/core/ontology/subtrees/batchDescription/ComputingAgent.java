@@ -135,9 +135,6 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	@Override
 	public List<NewOption> exportAllOptions() {
 		List<NewOption> options = new ArrayList<NewOption>();
-		NewOption agentTypeOption =
-				new NewOption("agentType", agentType);
-		options.add(agentTypeOption);
 
 		if (model != null) {
 			NewOption modelOption = new NewOption("model", model);
@@ -155,14 +152,6 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	public void importAllOptions(List<NewOption> options) {
 		
 		NewOptions optionsOntol = new NewOptions(options);
-
-		//import agentType
-		NewOption optAgentType = optionsOntol.getOptionByName("agentType");
-		if (optAgentType != null) {
-			StringValue valueAgentType = (StringValue)
-					optAgentType.toSingleValue().getCurrentValue(); 
-			this.agentType = valueAgentType.getValue();
-		}
 
 		//import model
 		NewOption optModel = optionsOntol.getOptionByName("model");
@@ -190,7 +179,6 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 			throw new IllegalStateException("Option doesn't contain correct type");
 		}
 		
-		options.remove(optAgentType);
 		options.remove(optModel);
 		options.remove(optDuration);
 		
