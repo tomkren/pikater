@@ -48,26 +48,14 @@ public class Search extends DataProcessing implements IErrorProvider {
     }
 
 	@Override
-	public List<NewOption> exportAllOptions() {
-		
-		NewOption searchClassOption = new NewOption( "searchClass",searchClass);
-		
-		List<NewOption> options = new ArrayList<NewOption>();
-		options.add(searchClassOption);
-		options.addAll(this.options);
-		
-		return options;
+	public List<NewOption> exportAllOptions() {		
+		return this.options;
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
-		
-		NewOptions optionsOnt = new NewOptions(options);
-		
-		NewOption optSearchClass = optionsOnt.getOptionByName("searchClass");
-		StringValue value = (StringValue) optSearchClass.toSingleValue().getCurrentValue();
-		this.searchClass = value.getValue();
-
-		options.remove(optSearchClass);
+		if (options == null) {
+			throw new IllegalArgumentException("Argument options is not null");
+		}
 		this.options = options;
 	}
 	

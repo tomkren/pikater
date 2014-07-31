@@ -13,8 +13,6 @@ public class SearchSolution implements Concept {
 	 */
 	private static final long serialVersionUID = 5183991490097709263L;
 	private List<IValueData> values;
-    //IMPROVEMENT? encapsulate name and values together
-    private List<String> names;
 	public List<IValueData> getValues() {
 		if(values!=null)
 			return values;
@@ -35,14 +33,4 @@ public class SearchSolution implements Concept {
 			start = false;
 		}
 	}
-
-    public List<String> getNames() {
-        if(names!=null)
-            return names;
-        return new ArrayList<>();
-    }
-
-    public void setNames(List<String> names) {
-        this.names = names;
-    }
 }

@@ -135,7 +135,15 @@ public class DataProcessing implements IDataProvider {
 		UniversalOntology ontologyInfo = new UniversalOntology();
 		ontologyInfo.setId(getId());
 		ontologyInfo.setOntologyClass(getClass());
-		// TODO: ontologyInfo.setAgentClass(agentClass);
+		try {
+			if (this.getAgentType() == null) {
+				ontologyInfo.setAgentClass(null);
+			} else {
+				ontologyInfo.setAgentClass(Class.forName(this.getAgentType()));
+			}
+		} catch (ClassNotFoundException e) {
+			Log.error("Class " + agentType + " not found");
+		}
 		ontologyInfo.setOptions(exportAllOptions());
 		ontologyInfo.setErrors(exportAllErrors());
 		//ontologyInfo.addInputSlots(null);
@@ -168,6 +176,11 @@ public class DataProcessing implements IDataProvider {
 		
 		DataProcessing dataProcess = (DataProcessing) object;
 		dataProcess.setId(uOntology.getId());
+		if (uOntology.getAgentClass() == null) {
+			dataProcess.setAgentType(null);
+		} else {
+			dataProcess.setAgentType(uOntology.getAgentClass().getName());	
+		}
 		dataProcess.importAllOptions(
 				new ArrayList<NewOption>(uOntology.getOptions()));
 		dataProcess.importAllErrors(
@@ -207,4 +220,17 @@ public class DataProcessing implements IDataProvider {
 		
 		return dataProcessing;
 	}
+
+	@Override
+	public void cloneDataSources() {
+		
+		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
+		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions()) {
+			dataSourceCloned.add(dataSourceI.clone());
+		}
+		
+		importAllDataSourceDescriptions(dataSourceCloned);
+	}
+	
+	
 }

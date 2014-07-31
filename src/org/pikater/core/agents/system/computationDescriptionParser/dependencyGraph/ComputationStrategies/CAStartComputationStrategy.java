@@ -24,6 +24,8 @@ import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -84,6 +86,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 			res_options.setOptions(options);
 			return res_options;
 		}
+        int currentSearchOptionNr=0;
         for (NewOption option:options)
         {
             if (option.isImmutable())
@@ -92,16 +95,15 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
             }
             else
             {
-                for (int i=0;i<solution.getValues().size();i++)
-                {
-                    String currentName=solution.getNames().get(i);
-                    if (currentName.equals(option.getName()))
+                for (Value value:option.getValuesWrapper().getValues()) {
+                    IValueData typedValue = value.getCurrentValue();
+                    if (typedValue instanceof QuestionMarkRange || typedValue instanceof QuestionMarkSet)
                     {
-                        IValueData currentValue= solution.getValues().get(i);
+                        IValueData currentValue= solution.getValues().get(currentSearchOptionNr);
                         NewOption clone=option.clone();
                         clone.setValuesWrapper(new ValuesForOption(new Value(currentValue)));
                         options_list.add(clone);
-                        break;
+                        currentSearchOptionNr++;
                     }
                 }
             }
