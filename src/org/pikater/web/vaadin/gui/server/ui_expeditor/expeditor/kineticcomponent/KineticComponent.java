@@ -9,8 +9,6 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
-import org.pikater.shared.experiment.universalformat.UniversalGui;
-import org.pikater.shared.experiment.universalformat.UniversalOntology;
 import org.pikater.shared.experiment.webformat.BoxInfo;
 import org.pikater.shared.experiment.webformat.BoxType;
 import org.pikater.shared.experiment.webformat.ExperimentGraph;
@@ -437,8 +435,8 @@ public class KineticComponent extends AbstractComponent
 			for(BoxInfo webBox : webFormat.leafBoxes.values())
 			{
 				UniversalElement uniBox = new UniversalElement();
-				uniBox.setOntologyInfo(new UniversalOntology()); // needed for real-time edge registration to work (see below)
 				webBoxToUniBox.put(webBox, uniBox);
+				result.addElement(uniBox);
 			}
 
 			// traverse all boxes and pass all available/needed information to result uni-format
@@ -459,12 +457,11 @@ public class KineticComponent extends AbstractComponent
 				UniversalConnector connector = new UniversalConnector();
 				connector.setFromElement(uniBox);
 
-				// create and initialize the FIRST of the 2 child objects
-				UniversalOntology uniBoxInfo = new UniversalOntology();
+				// initialize the FIRST of the 2 child objects
 				try
 				{
-					uniBoxInfo.setOntologyClass(Class.forName(agentInfo.getOntologyClassName()));
-					uniBoxInfo.setAgentClass(Class.forName(agentInfo.getAgentClassName()));
+					uniBox.getOntologyInfo().setOntologyClass(Class.forName(agentInfo.getOntologyClassName()));
+					uniBox.getOntologyInfo().setAgentClass(Class.forName(agentInfo.getAgentClassName()));
 				}
 				catch (ClassNotFoundException e)
 				{
@@ -474,7 +471,7 @@ public class KineticComponent extends AbstractComponent
 							), e
 					);
 				}
-				uniBoxInfo.setOptions(agentInfo.getOptions());
+				uniBox.getOntologyInfo().setOptions(agentInfo.getOptions());
 				if(webFormat.edgesDefinedFor(webBoxID))
 				{
 					// transform edges
@@ -485,13 +482,9 @@ public class KineticComponent extends AbstractComponent
 					}
 				}
 
-				// create and initialize the SECOND of the 2 child objects
-				UniversalGui uniBoxPositionInfo = new UniversalGui(webBox.initialX, webBox.initialY);
-
-				// glue it all together and register in the result uni-format
-				uniBox.setGUIInfo(uniBoxPositionInfo);
-				uniBox.setOntologyInfo(uniBoxInfo);
-				result.addElement(uniBox);
+				// initialize the SECOND of the 2 child objects
+				uniBox.getGuiInfo().setX(webBox.initialX);
+				uniBox.getGuiInfo().setY(webBox.initialY);
 			}
 			return result;
 		}
@@ -561,7 +554,7 @@ public class KineticComponent extends AbstractComponent
 					}
 					
 					// create web-format box and link it to uni-format box
-					BoxInfo info = createBoxAndUpdateState(agentInfo, element.getGUIInfo().x, element.getGUIInfo().y);
+					BoxInfo info = createBoxAndUpdateState(agentInfo, element.getGuiInfo().getX(), element.getGuiInfo().getY());
 					String convertedBoxID = webFormat.addLeafBoxAndReturnID(info);
 					uniBoxToWebBoxID.put(element, convertedBoxID);
 				}

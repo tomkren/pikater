@@ -5,36 +5,31 @@ public class UniversalElement
 	private UniversalOntology ontologyInfo;
 	private UniversalGui guiInfo;
 	
+	public UniversalElement()
+	{
+		this.ontologyInfo = new UniversalOntology();
+		this.guiInfo = new UniversalGui();
+	}
+
 	public UniversalOntology getOntologyInfo()
 	{
 		return ontologyInfo;
 	}
-	
-	public boolean isOntologyDefined()
+	public void setOntologyInfo(UniversalOntology ontologyInfo)
 	{
-		return ontologyInfo != null;
-	}
-	
-	public void setOntologyInfo(UniversalOntology ontologyInfo) 
-	{
-		if (ontologyInfo == null)
-		{
-			throw new NullPointerException("Argument can't be null.");
-		}
 		this.ontologyInfo = ontologyInfo;
 	}
-
-	public UniversalGui getGUIInfo()
+	public UniversalGui getGuiInfo()
 	{
 		return guiInfo;
 	}
-	
-	public void setGUIInfo(UniversalGui guiInfo)
+	public void setGuiInfo(UniversalGui guiInfo)
 	{
-		if(guiInfo == null)
-		{
-			throw new NullPointerException("Argument can't be null.");
-		}
 		this.guiInfo = guiInfo;
+	}
+	
+	public boolean isOntologyDefined()
+	{
+		return this.ontologyInfo != null;
 	}
 }

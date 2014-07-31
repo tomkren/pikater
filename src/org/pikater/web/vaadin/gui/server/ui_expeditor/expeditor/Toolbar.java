@@ -1,9 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
-import java.awt.Dialog;
 import java.util.List;
 
-import org.pikater.shared.XStreamHelper;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -265,7 +263,7 @@ public class Toolbar extends VerticalLayout
 		});
 		clickModeCB.setEnabled(false);
 		
-		CheckBox chb_openOptions = new CheckBox("Bind options manager with selection changes", KineticComponent.areSelectionChangesBoundWithOptionsManagerByDefault());
+		CheckBox chb_openOptions = new CheckBox("bind options manager with selection changes", KineticComponent.areSelectionChangesBoundWithOptionsManagerByDefault());
 		chb_openOptions.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -7751913095102968151L;

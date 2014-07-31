@@ -113,7 +113,7 @@ public class UniversalComputationDescription
 	{
 		for (UniversalElement elementI : this.rootElements)
 		{
-			if (elementI.getGUIInfo() == null)
+			if (elementI.getGuiInfo() == null)
 			{
 				return false;
 			}
@@ -206,20 +206,17 @@ public class UniversalComputationDescription
 	{
 		UniversalComputationDescription result = new UniversalComputationDescription();
 		
-		UniversalOntology ontologyInfo1 = new UniversalOntology();
 		UniversalElement element1 = new UniversalElement();
-		element1.setGUIInfo(new UniversalGui(10, 10));
-		element1.setOntologyInfo(ontologyInfo1);
+		element1.getGuiInfo().setX(10);
+		element1.getGuiInfo().setY(10);
 		
-		UniversalOntology ontologyInfo2 = new UniversalOntology();
 		UniversalElement element2 = new UniversalElement();
-		element2.setGUIInfo(new UniversalGui(500, 10));
-		element2.setOntologyInfo(ontologyInfo2);
+		element2.getGuiInfo().setX(500);
+		element2.getGuiInfo().setY(10);
 		
-		UniversalOntology ontologyInfo3 = new UniversalOntology();
 		UniversalElement element3 = new UniversalElement();
-		element3.setGUIInfo(new UniversalGui(400, 300));
-		element3.setOntologyInfo(ontologyInfo3);
+		element3.getGuiInfo().setX(400);
+		element3.getGuiInfo().setY(300);
 		
 		result.addElement(element1);
 		result.addElement(element2);

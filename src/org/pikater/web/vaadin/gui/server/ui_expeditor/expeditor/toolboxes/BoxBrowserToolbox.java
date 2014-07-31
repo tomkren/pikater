@@ -47,6 +47,7 @@ public class BoxBrowserToolbox extends Toolbox
 				DragAndDropWrapper dndWrapper = new DragAndDropWrapper(lbl);
 				dndWrapper.setSizeFull();
 				dndWrapper.setStyleName("boxBrowserToolbox-accordion-content-draggable");
+				dndWrapper.setDescription(agentInfo.getDescription());
 				dndWrapper.setDragStartMode(DragStartMode.COMPONENT);
 				dndWrapper.setData(agentInfo);
 				
@@ -62,7 +63,7 @@ public class BoxBrowserToolbox extends Toolbox
 			}
 			
 			// Tab newTab = content.addTab(vLayout, type.name());
-			content.addTab(vLayout, type.name());
+			content.addTab(vLayout, String.format("%s (%d)", type.name(), vLayout.getComponentCount()));
 		}
 		
 		setToolboxContent(content);
