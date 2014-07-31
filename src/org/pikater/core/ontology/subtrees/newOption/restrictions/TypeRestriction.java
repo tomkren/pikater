@@ -41,13 +41,11 @@ public class TypeRestriction implements IRestriction
 		}
 		return new TypeRestriction(typesCopied);
 	}
-	
 	@Override
 	public boolean isValid()
 	{
 		return (types != null) && !types.isEmpty();
 	}
-	
 	@Override
 	public boolean isValidAgainst(Object obj)
 	{

@@ -25,30 +25,55 @@ public class IntegerValue implements IComparableValueData
 		this.value = value;
 	}
 	
+	/* -------------------------------------------------------------
+	 * CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
+	 * - generate again when you change local fields or their types
+	 * - required in {@link org.pikater.web.vaadin.gui.server.components.forms.OptionValueForm}
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + value;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		IntegerValue other = (IntegerValue) obj;
+		if (value != other.value)
+			return false;
+		return true;
+	}
+	//-------------------------------------------------------------
+	// OTHER INHERITED INTERFACE
 	@Override
 	public Integer hackValue()
 	{
 		return value;
 	}
-	
 	@Override
 	public IValueData clone()
 	{
 		return new IntegerValue(value);
 	}
-	
 	@Override
 	public String exportToWeka() {
 		
 		return String.valueOf(value);
 	}
-	
 	@Override
 	public String toDisplayName()
 	{
 		return "Integer";
 	}
-	
 	@Override
 	public int compareTo(IComparableValueData o)
 	{

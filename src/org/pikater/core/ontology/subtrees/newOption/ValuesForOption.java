@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.base.IValidated;
+import org.pikater.core.ontology.subtrees.newOption.base.IWekaItem;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
@@ -12,7 +14,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData
 
 import jade.content.Concept;
 
-public class ValuesForOption implements Concept, Iterable<Value>
+public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable<Value>
 {
 	private static final long serialVersionUID = -3600291732186684079L;
 
@@ -40,25 +42,18 @@ public class ValuesForOption implements Concept, Iterable<Value>
 		this.values = values;
 	}
 	
-	@Override
-	public Iterator<Value> iterator()
+	public void addValue(Value value)
 	{
-		return values.iterator();
-	}
-	
-	public void addValue(Value value) {
 		this.values.add(value);
 	}
-	public Value getValue(int index)
+	public Value returnByIndex(int index)
 	{
 		return values.get(index);
 	}
-	
 	public int size()
 	{
 		return values.size();
 	}
-	
 	public boolean containsQuestionMark()
 	{
 		for (Value valueI : values)
@@ -72,6 +67,17 @@ public class ValuesForOption implements Concept, Iterable<Value>
 		return false;
 	}
 	
+	@Override
+	public ValuesForOption clone()
+	{
+		List<Value> valuesCopied = new ArrayList<Value>();
+		for(Value value : values)
+		{
+			valuesCopied.add(value.clone());
+		}
+		return new ValuesForOption(valuesCopied);
+	}
+	@Override
 	public boolean isValid()
 	{
 		for(Value value : values)
@@ -83,7 +89,7 @@ public class ValuesForOption implements Concept, Iterable<Value>
 		}
 		return true;
 	}
-	
+	@Override
 	public String exportToWeka()
 	{
 		String result = "";
@@ -96,15 +102,9 @@ public class ValuesForOption implements Concept, Iterable<Value>
 		}
 		return result;
 	}
-	
 	@Override
-	public ValuesForOption clone()
+	public Iterator<Value> iterator()
 	{
-		List<Value> valuesCopied = new ArrayList<Value>();
-		for(Value value : values)
-		{
-			valuesCopied.add(value.clone());
-		}
-		return new ValuesForOption(valuesCopied);
+		return values.iterator();
 	}
 }

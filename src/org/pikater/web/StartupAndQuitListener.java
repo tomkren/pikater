@@ -89,7 +89,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		
 		// TODO: move this to CustomConfiguredUI eventually (upon exiting the app-launch wizard)
 		boolean initHere = true;
-		boolean coreAgentInfo = true;
+		boolean coreAgentInfo = false;
 		if(initHere)
 		{
 			// init scheduler
@@ -121,6 +121,7 @@ public class StartupAndQuitListener implements ServletContextListener
 				{
 					AgentInfo agentInfo = new AgentInfo();
 					agentInfo.setOntologyClassName(type.toOntologyClass().getName());
+					agentInfo.setAgentClassName(this.getClass().getName());
 					agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
 					
 					String name = null;

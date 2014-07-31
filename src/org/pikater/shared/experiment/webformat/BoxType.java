@@ -1,8 +1,5 @@
 package org.pikater.shared.experiment.webformat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
@@ -13,47 +10,29 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.web.sharedresources.ThemeResources;
 
 public enum BoxType
 {
-	INPUT(FileDataProvider.class, ThemeResources.relPath_IMG_boxInputIcon),
-	DATAPROCESSING(DataProcessing.class, ThemeResources.relPath_IMG_boxDataProcessingIcon),
-	CHOOSE(Recommend.class, ThemeResources.relPath_IMG_boxRecommenderIcon),
-	SEARCH(Search.class, ThemeResources.relPath_IMG_boxSearcherIcon),
-	EVALUATION(EvaluationMethod.class, ThemeResources.relPath_IMG_boxEvaluationIcon),
-	COMPUTE(ComputingAgent.class, ThemeResources.relPath_IMG_boxComputingIcon),
-	TRIBOX(CARecSearchComplex.class, ThemeResources.relPath_IMG_boxWrapperIcon),
-	OUTPUT(FileDataSaver.class, ThemeResources.relPath_IMG_boxOutputIcon),
-	MISCELLANEOUS(BoxType.class, ThemeResources.relPath_IMG_boxMiscellaneousIcon);
+	INPUT(FileDataProvider.class),
+	DATAPROCESSING(DataProcessing.class),
+	CHOOSE(Recommend.class),
+	SEARCH(Search.class),
+	EVALUATION(EvaluationMethod.class),
+	COMPUTE(ComputingAgent.class),
+	TRIBOX(CARecSearchComplex.class),
+	OUTPUT(FileDataSaver.class),
+	MISCELLANEOUS(BoxType.class);
 	
 	private final Class<?> mappedOntologyClass;
-	private final String pictureURL;
 	
-	private BoxType(Class<?> mappedOntologyClass, String relativePicturePath)
+	private BoxType(Class<?> mappedOntologyClass)
 	{
 		this.mappedOntologyClass = mappedOntologyClass;
-		this.pictureURL = ThemeResources.getVaadinRelativePathForResource(relativePicturePath);
 	}
 	
 	public Class<?> toOntologyClass()
 	{
 		return mappedOntologyClass;
-	}
-	
-	public String toPictureURL()
-	{
-		return pictureURL;
-	}
-	
-	public static String[] getAllPictureURLs()
-	{
-		List<String> result = new ArrayList<String>();
-		for(BoxType type : values())
-		{
-			result.add(type.toPictureURL());
-		}
-		return result.toArray(new String[0]);
 	}
 	
 	public static BoxType fromAgentInfo(AgentInfo info)

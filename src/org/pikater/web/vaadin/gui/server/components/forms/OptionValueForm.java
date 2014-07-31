@@ -331,7 +331,7 @@ public class OptionValueForm extends CustomFormLayout
 		{
 			// TODO: question mark values
 			PikaterLogger.logThrowable("", new IllegalStateException(String.format("Unimplemented value type used: '%s'.", typeClass.getName())));
-			MyNotifications.showError("Application error", String.format("Unsupported type: '%s'", typeClass.getName()));
+			MyNotifications.showWarning("Unsupported option type", typeClass.getSimpleName());
 		}
 	}
 	

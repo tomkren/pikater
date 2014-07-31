@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
+package org.pikater.web.obsolete;
 
 import java.util.ArrayList;
 import java.util.Collection;

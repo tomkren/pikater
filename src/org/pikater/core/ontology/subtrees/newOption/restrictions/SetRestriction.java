@@ -50,6 +50,43 @@ public class SetRestriction implements IRestriction
 		this.values.addAll(values);
 	}
 	
+	/* -------------------------------------------------------------
+	 * CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
+	 * - generate again when you change local fields or their types
+	 * - required in {@link org.pikater.web.vaadin.gui.server.components.forms.OptionValueForm}
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (nullable ? 1231 : 1237);
+		result = prime * result + ((values == null) ? 0 : values.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SetRestriction other = (SetRestriction) obj;
+		if (nullable != other.nullable)
+			return false;
+		if (values == null)
+		{
+			if (other.values != null)
+				return false;
+		}
+		else if (!values.equals(other.values))
+			return false;
+		return true;
+	}
+	//-------------------------------------------------------------
+	// OTHER INHERITED INTERFACE
 	@Override
 	public SetRestriction clone()
 	{
@@ -60,7 +97,6 @@ public class SetRestriction implements IRestriction
 		}
 		return new SetRestriction(nullable, valuesCopied);
 	}
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isValid()
@@ -80,7 +116,6 @@ public class SetRestriction implements IRestriction
 			return types.size() < 2;
 		}
 	}
-
 	@Override
 	public boolean isValidAgainst(Object obj)
 	{

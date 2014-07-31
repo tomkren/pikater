@@ -1,6 +1,7 @@
 package org.pikater.core.ontology.subtrees.newOption.values.interfaces;
 
-public interface IValidatedValueData extends IValueData
+import org.pikater.core.ontology.subtrees.newOption.base.IValidated;
+
+public interface IValidatedValueData extends IValidated, IValueData
 {
-	public boolean isValid();
 }

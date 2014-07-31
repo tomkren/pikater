@@ -119,7 +119,7 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	}
 	
 	@Override
-	protected void updateFinished(float[][] evaluations) {
+	protected float updateFinished(float[][] evaluations) {
 		float new_evaluation;
 		
 		if (evaluations == null){
@@ -142,6 +142,8 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		//System.out.println(", e1:"+ new_evaluation+", acceptance: "+ acc+" ,.5->1:"+ acceptanceProb(1-0.5,temperature)+" ,1->.5:"+ acceptanceProb(0.5-1,temperature));
 		//Decrease temperature
 		Cooling();
+		
+		return (float) best_error_rate;
 	}
 	
 	//Neighbor function: Random solutions in case of beginning, or mutation of existing

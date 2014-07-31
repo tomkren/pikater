@@ -136,7 +136,7 @@ public class Agent_GASearch extends Agent_Search {
 	}
 
 	@Override
-	protected void updateFinished(float[][] evaluations) {
+	protected float updateFinished(float[][] evaluations) {
 		//assign evaluations to the population as fitnesses		
 		if(evaluations == null){
 			for(int i = 0; i < pop_size; i++){
@@ -152,7 +152,8 @@ public class Agent_GASearch extends Agent_Search {
 				}
 			}
 		}
-
+		
+		return (float) best_error_rate;
 	}
 
 	@Override

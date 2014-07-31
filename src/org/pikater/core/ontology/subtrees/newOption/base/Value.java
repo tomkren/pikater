@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-public class Value implements Concept
+public class Value implements Concept, IValidated
 {
 	private static final long serialVersionUID = 4778874898115080831L;
 
@@ -113,6 +113,7 @@ public class Value implements Concept
 	 * - Restrictions: if registered type has a restriction, type binding and validity is checked against it.
 	 * @return
 	 */
+	@Override
 	public boolean isValid()
 	{
 		// this implementation safely assumes that the current and default values are not null
@@ -137,7 +138,6 @@ public class Value implements Concept
 			return true;
 		}
 	}
-
 	@Override
 	public Value clone()
 	{
