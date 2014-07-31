@@ -37,7 +37,7 @@ public class KineticDnDWrapper extends DragAndDropWrapper
 				AgentInfo agentInfo = (AgentInfo) ((AbstractComponent) transferable.getDraggedComponent()).getData();
 				
 				// issue the creation command to the client:
-				kineticComponent.createBox(agentInfo, details.getMouseEvent().getClientX(), details.getMouseEvent().getClientY());
+				kineticComponent.createBoxAndSendItToClient(agentInfo, details.getMouseEvent().getClientX(), details.getMouseEvent().getClientY());
 			}
 		});
 	}
