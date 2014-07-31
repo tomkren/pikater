@@ -36,9 +36,9 @@ public enum BoxType
 		this.pictureURL = ThemeResources.getVaadinRelativePathForResource(relativePicturePath);
 	}
 	
-	public String toOntology()
+	public Class<?> toOntologyClass()
 	{
-		return mappedOntologyClass.getName();
+		return mappedOntologyClass;
 	}
 	
 	public String toPictureURL()
