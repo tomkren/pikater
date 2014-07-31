@@ -164,7 +164,7 @@ public class Parser {
 
         if (agentType!=null)
         {
-            OneShotBuffer typeBuffer=new OneShotBuffer(new AgentTypeEdge(agentType));
+            NeverEndingBuffer typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType));
             typeBuffer.setTarget(computingNode);
             computingNode.addInput("agenttype",typeBuffer);
 

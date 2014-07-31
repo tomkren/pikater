@@ -46,6 +46,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	int graphId;
 	ModelComputationNode computationNode;
     NewOptions options;
+    AgentTypeEdge agentTypeEdge;
 	
 	public CAStartComputationStrategy (Agent_Manager manager, 
 			int graphId, ModelComputationNode computationNode){
@@ -129,10 +130,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
         ComputationOutputBuffer input=inputs.get("agenttype");
         if (!input.isBlocked())
         {
-        	AgentTypeEdge agentTypeEdge = (AgentTypeEdge)input.getNext();
-            agent.setType(agentTypeEdge.getAgentType());
+        	agentTypeEdge = (AgentTypeEdge)input.getNext();
             input.block();
-        }        
+        }
+        agent.setType(agentTypeEdge.getAgentType());
         
         Task task = new Task();
 		if (inputs.get("searchedoptions") != null){
