@@ -54,13 +54,7 @@ public class Recommend extends DataProcessing {
     
 	@Override
 	public List<NewOption> exportAllOptions() {
-		
-		NewOption recommenderClassOption = new NewOption("recommenderClass", getAgentType());
-		
-		List<NewOption> options = new ArrayList<>();
-		options.add(recommenderClassOption);
-		options.addAll(this.options);
-		return options;
+		return this.options;
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
@@ -68,16 +62,7 @@ public class Recommend extends DataProcessing {
     	if (options == null) {
     		throw new IllegalArgumentException("Argument options can't be null");
     	}
-    	
-    	NewOptions importedOptions = new NewOptions(options);
-    	NewOption recommenderClassOption =
-    			importedOptions.getOptionByName("recommenderClass");
-    	
-    	StringValue recValue = (StringValue) recommenderClassOption.toSingleValue().getCurrentValue();
-    	this.recommenderClass = recValue.getValue();
-    	
-    	options.remove(recommenderClassOption);
-    	
+ 
 		this.options = options;
 	}
 

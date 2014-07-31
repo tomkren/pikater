@@ -48,6 +48,7 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input10.createDescription(),
 				"Input10");
+//*/
 	}
 
 	private static void testComputatingDescription(
