@@ -89,7 +89,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		
 		// TODO: move this to CustomConfiguredUI eventually (upon exiting the app-launch wizard)
 		boolean initHere = true;
-		boolean coreAgentInfo = false;
+		boolean coreAgentInfo = true;
 		if(initHere)
 		{
 			// init scheduler
@@ -133,16 +133,16 @@ public class StartupAndQuitListener implements ServletContextListener
 						case COMPUTE:
 							name = "Vepřová kýta";
 							break;
-						case DATAPROCESSING:
+						case PROCESS_DATA:
 							name = "Chleba";
 							break;
-						case EVALUATION:
+						case OPTION:
 							name = "Bobkový list";
 							break;
 						case INPUT:
 							name = "Brambory";
 							break;
-						case MISCELLANEOUS:
+						case MISC:
 							name = "Pepř";
 							break;
 						case OUTPUT:
@@ -151,7 +151,7 @@ public class StartupAndQuitListener implements ServletContextListener
 						case SEARCH:
 							name = "Cibule";
 							break;
-						case TRIBOX:
+						case COMPOSITE:
 							name = "Protlak";
 							break;
 						default:

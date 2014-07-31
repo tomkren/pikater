@@ -14,14 +14,14 @@ import org.pikater.shared.logging.PikaterLogger;
 public enum BoxType
 {
 	INPUT(FileDataProvider.class),
-	DATAPROCESSING(DataProcessing.class),
+	PROCESS_DATA(DataProcessing.class),
 	CHOOSE(Recommend.class),
 	SEARCH(Search.class),
-	EVALUATION(EvaluationMethod.class),
+	OPTION(EvaluationMethod.class),
 	COMPUTE(ComputingAgent.class),
-	TRIBOX(CARecSearchComplex.class),
 	OUTPUT(FileDataSaver.class),
-	MISCELLANEOUS(BoxType.class);
+	COMPOSITE(CARecSearchComplex.class),
+	MISC(BoxType.class);
 	
 	private final Class<?> mappedOntologyClass;
 	
@@ -57,6 +57,6 @@ public enum BoxType
 				return result;
 			}
 		}
-		return BoxType.MISCELLANEOUS;
+		return BoxType.MISC;
 	}
 }

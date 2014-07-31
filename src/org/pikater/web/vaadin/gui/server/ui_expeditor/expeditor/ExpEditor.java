@@ -46,7 +46,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 			switch(this)
 			{
 				case METHOD_BROWSER:
-					return "Available methods";
+					return "Available components";
 				case METHOD_OPTION_MANAGER:
 					return "Method options";
 				case UTILITIES:
@@ -228,16 +228,16 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 			case COMPUTE:
 				imgRelativePath = ThemeResources.relPath_IMG_boxComputingIcon;
 				break;
-			case DATAPROCESSING:
+			case PROCESS_DATA:
 				imgRelativePath = ThemeResources.relPath_IMG_boxDataProcessingIcon;
 				break;
-			case EVALUATION:
+			case OPTION:
 				imgRelativePath = ThemeResources.relPath_IMG_boxEvaluationIcon;
 				break;
 			case INPUT:
 				imgRelativePath = ThemeResources.relPath_IMG_boxInputIcon;
 				break;
-			case MISCELLANEOUS:
+			case MISC:
 				imgRelativePath = ThemeResources.relPath_IMG_boxMiscellaneousIcon;
 				break;
 			case OUTPUT:
@@ -246,7 +246,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 			case SEARCH:
 				imgRelativePath = ThemeResources.relPath_IMG_boxSearcherIcon;
 				break;
-			case TRIBOX:
+			case COMPOSITE:
 				imgRelativePath = ThemeResources.relPath_IMG_boxWrapperIcon;
 				break;
 			default:
