@@ -48,7 +48,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 	
 	protected abstract List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations); //returns List of Options
 	protected abstract boolean finished();
-	// protected abstract float updateFinished(float[][] evaluations);
+	protected abstract float updateFinished(float[][] evaluations);
 	protected abstract void loadSearchOptions(); // load the appropriate options before sending the first parameters
 	
 	
@@ -61,11 +61,6 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		ontologies.add(AgentInfoOntology.getInstance());
 		
 		return ontologies;
-	}
-	
-	
-	protected float updateFinished(float[][] evaluations){
-		return 1;
 	}
 	
 	protected void setup() {
