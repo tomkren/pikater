@@ -134,7 +134,8 @@ public class DataProcessing implements IDataProvider {
 		
 		UniversalOntology ontologyInfo = new UniversalOntology();
 		ontologyInfo.setId(getId());
-		ontologyInfo.setType(getClass());
+		ontologyInfo.setOntologyClass(getClass());
+		// TODO: ontologyInfo.setAgentClass(agentClass);
 		ontologyInfo.setOptions(exportAllOptions());
 		ontologyInfo.setErrors(exportAllErrors());
 		//ontologyInfo.addInputSlots(null);
@@ -145,7 +146,7 @@ public class DataProcessing implements IDataProvider {
 		
 		Constructor<?> cons = null;
 		try {
-			cons = uOntology.getType().getConstructor();
+			cons = uOntology.getOntologyClass().getConstructor();
 		} catch (NoSuchMethodException e) {
 			Log.error(e.getMessage(), e);
 		} catch (SecurityException e) {

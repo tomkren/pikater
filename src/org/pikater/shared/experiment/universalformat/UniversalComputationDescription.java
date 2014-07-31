@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.XStreamHelper;
+import org.pikater.shared.experiment.webformat.BoxType;
 
 public class UniversalComputationDescription
 {
@@ -90,7 +90,7 @@ public class UniversalComputationDescription
 		else
 		{
 			allElements.add(element);
-			if (element.getOntologyInfo().getType() == FileDataSaver.class)
+			if (BoxType.fromOntologyClass(element.getOntologyInfo().getOntologyClass()) == BoxType.OUTPUT)
 			{
 				rootElements.add(element);
 			}
