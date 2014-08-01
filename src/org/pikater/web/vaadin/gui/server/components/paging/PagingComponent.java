@@ -49,7 +49,6 @@ public class PagingComponent extends HorizontalLayout
 			public void valueChange(ValueChangeEvent event)
 			{
 				context.onPageSizeChanged((Integer) event.getProperty().getValue());
-				reset();
 			}
 		});
 		
@@ -82,9 +81,19 @@ public class PagingComponent extends HorizontalLayout
 		return (getCurrentlySelectedPage() - 1) * getPageSize();
 	}
 	
-	public void reset()
+	/**
+	 * Sets currently viewed page to the given page.
+	 * @param page
+	 * @param spawnEvents if true, calls {@link IPagedComponent#onPageChanged(int)}.
+	 */
+	public void setPage(int page, boolean spawnEvents)
 	{
-		pagePicker.reset();
+		pagePicker.setPage(page, spawnEvents); // simply forward
+	}
+	
+	public void updatePageCount(int itemCountAcrossAllPages)
+	{
+		pagePicker.setPageCount((int) Math.ceil(itemCountAcrossAllPages / getPageSize()));
 	}
 	
 	// -------------------------------------------------------------
@@ -93,23 +102,20 @@ public class PagingComponent extends HorizontalLayout
 	public interface IPagedComponent
 	{
 		/**
-		 * Gets the sum of all items across all pages.
-		 * @return
-		 */
-		int getAllItemsCount();
-		
-		/**
-		 * Callback for when user sets a different page size.
-		 * @param itemsPerPage
-		 */
-		void onPageSizeChanged(int itemsPerPage);
-		
-		/**
-		 * Callback for when user selects another page.</br>
-		 * <font color="red">RED ALERT: </font> do not EVER call {@link #reset()} as a result of this call. 
+		 * Callback for when user selects another page. When this method finishes,
+		 * {@link #getAllItemsCount} is called to update the paging component further.</br>
+		 * <font color="red">RED ALERT: </font> do not EVER update paging in this method.
+		 * The component updates itself as needed.
 		 * @param itemsPerPage
 		 */
 		void onPageChanged(int page);
+		
+		/**
+		 * Callback for when user sets a different page size. Paging is not updated
+		 * by default, you must do it yourselves if you wish to react upon this event. 
+		 * @param itemsPerPage
+		 */
+		void onPageSizeChanged(int itemsPerPage);
 	}
 	
 	private class PagePicker extends HorizontalLayout
@@ -134,11 +140,7 @@ public class PagingComponent extends HorizontalLayout
 				@Override
 				public void click(ClickEvent event)
 				{
-					/*
-					 * Don't call {@link #userSelectedPage(int page)} in here... it will get called
-					 * via the value change listener. See below. 
-					 */
-					cb_selectedPage.setValue(1);
+					setPage(1, true);
 				}
 			});
 			page_previous = new Anchor("< Previous", new MouseEvents.ClickListener()
@@ -150,11 +152,7 @@ public class PagingComponent extends HorizontalLayout
 				{
 					if(!isFirstPageSelected())
 					{
-						/*
-						 * Don't call {@link #userSelectedPage(int page)} in here... it will get called
-						 * via the value change listener. See below. 
-						 */
-						cb_selectedPage.setValue(getCurrentlySelectedPage() - 1);
+						setPage(getCurrentlySelectedPage() - 1, true);
 					}
 				}
 			});
@@ -167,7 +165,7 @@ public class PagingComponent extends HorizontalLayout
 			this.cb_selectedPage.setTextInputAllowed(false);
 			this.cb_selectedPage.setScrollToSelectedItem(true);
 			this.cb_selectedPage.setImmediate(true);
-			this.cb_selectedPage.setData(true);
+			this.cb_selectedPage.setData(false); // disable events until init is more or less complete
 			this.cb_selectedPage.addValueChangeListener(new Property.ValueChangeListener()
 			{
 				private static final long serialVersionUID = 1709427468483026288L;
@@ -180,11 +178,26 @@ public class PagingComponent extends HorizontalLayout
 						Integer selectedPage = (Integer) event.getProperty().getValue();
 						if(selectedPage != null) // just a safety check... selected page should not be null
 						{
-							userSelectedPage(selectedPage);
+							// just a safety check... should never happen though
+							if((selectedPage < 1) || (selectedPage > getLastPage()))
+							{
+								throw new IndexOutOfBoundsException();
+							}
+							else
+							{
+								// select the new page and update visual style
+								setPage(selectedPage, false);
+								
+								// notify the owner
+								context.onPageChanged(selectedPage);
+							}
 						}
 					}
 				}
 			});
+			this.cb_selectedPage.addItem(1);
+			this.cb_selectedPage.select(1);
+			this.cb_selectedPage.setData(true); // enable events when init is more or less complete
 			
 			this.label_lastPage = new Label();
 			page_next = new Anchor("Next >", new MouseEvents.ClickListener()
@@ -196,14 +209,11 @@ public class PagingComponent extends HorizontalLayout
 				{
 					if(!isLastPageSelected())
 					{
-						/*
-						 * Don't call {@link #userSelectedPage(int page)} in here... it will get called
-						 * via the value change listener. See above. 
-						 */
-						cb_selectedPage.setValue(getCurrentlySelectedPage() + 1);
+						setPage(getCurrentlySelectedPage() + 1, true);
 					}
 				}
 			});
+			this.label_lastPage.setValue(String.valueOf(1));
 			Anchor page_last = new Anchor("Last >>", new MouseEvents.ClickListener()
 			{
 				private static final long serialVersionUID = -3144174540771713139L;
@@ -211,15 +221,11 @@ public class PagingComponent extends HorizontalLayout
 				@Override
 				public void click(ClickEvent event)
 				{
-					/*
-					 * Don't call {@link #userSelectedPage(int page)} in here... it will get called
-					 * via the value change listener. See below. 
-					 */
-					cb_selectedPage.setValue(getLastPage());
+					setPage(getLastPage(), true);
 				}
 			});
 			
-			reset(1); // initializes the picker to provide correct initial information for the first database query
+			afterChecks();
 			
 			PagePicker.this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 			addComponent(page_first);
@@ -242,35 +248,63 @@ public class PagingComponent extends HorizontalLayout
 			return (Integer) cb_selectedPage.getValue();
 		}
 		
-		public void reset()
-		{
-			double allItemsCount = context.getAllItemsCount();
-			double pageSize = getPageSize();
-			int pagesNeeded = (int) Math.ceil(allItemsCount / pageSize); 
-			reset(pagesNeeded == 0 ? 1 : pagesNeeded);
-		}
-		
-		// ---------------------------------------------------
-		// PRIVATE INTERFACE
-		
 		/**
-		 * This method is reserved for user-originated changes. Make sure not to call it otherwise.
+		 * Sets currently viewed page to the given page. Needs to be used AFTER
+		 * {@link #setPageCount(int)}.
 		 * @param page
+		 * @param spawnEvents if true, calls {@link IPagedComponent#onPageChanged(int)}.
 		 */
-		private void userSelectedPage(int page)
+		public void setPage(int page, boolean spawnEvents)
 		{
 			// just a safety check... should never happen though
 			if((page < 1) || (page > getLastPage()))
 			{
 				throw new IndexOutOfBoundsException();
 			}
-			
-			cb_selectedPage.select(page);
-			context.onPageChanged(page);
-			afterChecks();
+			else if(spawnEvents)
+			{
+				cb_selectedPage.setValue(page);
+			}
+			else
+			{
+				cb_selectedPage.select(page);
+				afterChecks();
+			}
 		}
 		
-		private void reset(int pages)
+		public void setPageCount(final int pageCount)
+		{
+			if(pageCount < 1)
+			{
+				throw new IllegalArgumentException("Page count must be non-zero integer positive number.");
+			}
+			else
+			{
+				label_lastPage.setValue(String.valueOf(pageCount));
+				updateWithoutSpawningEvents(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						int currentlySelectedPage = getCurrentlySelectedPage();
+						
+						// TODO: make this more efficient - only add/remove what's needed to be added/removed
+						cb_selectedPage.removeAllItems();
+						for(int i = 1; i <= pageCount; i++)
+						{
+							cb_selectedPage.addItem(i);
+						}
+						cb_selectedPage.select(currentlySelectedPage > getLastPage() ? getLastPage() : currentlySelectedPage);
+					}
+				});
+				afterChecks();
+			}
+		}
+		
+		// ---------------------------------------------------
+		// PRIVATE INTERFACE
+		
+		private void updateWithoutSpawningEvents(Runnable updateAction)
 		{
 			/*
 			 * Manipulating with the combobox's items triggers value change event, which
@@ -278,17 +312,14 @@ public class PagingComponent extends HorizontalLayout
 			 * event 'knows' not to call it and set the application data field to 'false'.
 			 */
 			cb_selectedPage.setData(false);
-			cb_selectedPage.removeAllItems();
-			for(int i = 1; i <= pages; i++)
-			{
-				cb_selectedPage.addItem(i);
-			}
-			cb_selectedPage.select(1);
+			updateAction.run();
 			cb_selectedPage.setData(true);
-			
-			// and finally:
-			label_lastPage.setValue(String.valueOf(pages));
-			afterChecks();
+		}
+		
+		private void afterChecks()
+		{
+			page_previous.setEnabled(!isFirstPageSelected());
+			page_next.setEnabled(!isLastPageSelected());
 		}
 		
 		private boolean isFirstPageSelected()
@@ -299,12 +330,6 @@ public class PagingComponent extends HorizontalLayout
 		private boolean isLastPageSelected()
 		{
 			return getCurrentlySelectedPage() == getLastPage();
-		}
-		
-		private void afterChecks()
-		{
-			page_previous.setEnabled(!isFirstPageSelected());
-			page_next.setEnabled(!isLastPageSelected());
 		}
 	}
 }

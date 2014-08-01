@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.pikater.shared.database.views.base.QueryConstraints;
+import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -22,6 +23,8 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	
 	private final DBTableContainer tableContainer;
 	private final PagingComponent pagingControls;
+	private ITableColumn currentSortColumn;
+	private SortOrder currentSortOrder;
 
 	public DBTable()
 	{
@@ -36,11 +39,10 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		setSortEnabled(true);
 		setStyleName("dbTable");
 		
-		// first setup the paging controls, otherwise NullPointerException occurs
+		// don't violate the call order
 		this.pagingControls = new PagingComponent(this);
-		
-		// then setup the container
 		this.tableContainer = new DBTableContainer(this);
+		this.currentSortColumn = null;
 	}
 	
 	//-------------------------------------------------------------------
@@ -49,30 +51,35 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	@Override
 	public void setSortContainerPropertyId(Object propertyId)
 	{
-		ITableColumn column = (ITableColumn) propertyId;
-		if(propertyId == null)
+		ITableColumn newSortColumn = (ITableColumn) propertyId;
+		if(newSortColumn == null)
 		{
 			throw new NullPointerException("Can not set null sort column. A column to sort with must always be set.");
 		}
-		else if(!column.getColumnType().isSortable())
+		else if(!newSortColumn.getColumnType().isSortable())
 		{
-			throw new IllegalArgumentException(String.format("The '%s' column is not sortable.", column.getDisplayName()));
+			throw new IllegalArgumentException(String.format("The '%s' column is not sortable.", newSortColumn.getDisplayName()));
 		}
 		
-		Object lastSortPropertyID = getSortContainerPropertyId();
 		/*
 		 * The new sort column has to be set now since the {@link #rebuildContainerRowIndex()} method
 		 * depends on it.
 		 */
-		super.setSortContainerPropertyId(propertyId);
-		if((lastSortPropertyID == null) || !lastSortPropertyID.equals(propertyId))
+		if(newSortColumn != currentSortColumn)
 		{
-			/*
-			 * Container row cache needs to be constructed before the Sortable interface is called. Vaadin
-			 * doesn't do it, buggy little mischief...
-			 */
-			rebuildContainerRowIndex(true);
+			currentSortColumn = newSortColumn;
+			currentSortOrder = SortOrder.ASCENDING;
 		}
+		else
+		{
+			currentSortOrder = currentSortOrder.invert();
+		}
+		
+		/*
+		 * Container row cache needs to be constructed before the Sortable interface is called. Vaadin
+		 * doesn't do it, buggy little mischief...
+		 */
+		resetPaging(); // requires the above call (so that the subsequent database query is correct)
 	}
 	
 	//-------------------------------------------------------------------
@@ -82,8 +89,8 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	public QueryConstraints getQuery()
 	{
 		return new QueryConstraints(
-				(ITableColumn) getSortContainerPropertyId(),
-				tableContainer.getCurrentSortOrder(),
+				currentSortColumn,
+				currentSortOrder,
 				pagingControls.getOverallOffset(),
 				pagingControls.getPageSize()
 		);
@@ -92,26 +99,26 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	//-------------------------------------------------------------------
 	// INHERITED PAGING RELATED INTERFACE
 	
-	@Override
-	public int getAllItemsCount()
-	{
-		return tableContainer.getUnconstrainedQueryResultsCount();
-	}
-
-	@Override
-	public void onPageSizeChanged(int itemsPerPage)
-	{
-		rebuildContainerRowIndex(true);
-		refreshRowCache();
-	}
-
+	/* 
+	 * Setting page length is important because otherwise, Vaadin table will
+	 * display a fixed number of rows whether there are enough items to
+	 * populate them or not.
+	 * This assumes that the container respects the maximum number of results
+	 * determined by paging.
+	 */
+	
 	@Override
 	public void onPageChanged(int page)
 	{
-		rebuildContainerRowIndex(false);
-		refreshRowCache();
+		rebuildRowCache();
 	}
 	
+	@Override
+	public void onPageSizeChanged(int itemsPerPage)
+	{
+		resetPaging();
+	}
+
 	//-------------------------------------------------------------------
 	// OTHER INHERITED INTERFACE
 	
@@ -136,7 +143,6 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	 */
 	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
-		// first all kinds of setting things up:
 		for(ITableColumn column : viewRoot.getUnderlyingDBView().getColumns())
 		{
 			setColumnHeader(column, column.getDisplayName());
@@ -209,30 +215,16 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	//-------------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	/**
-	 * Does a couple of things:
-	 * <ul>
-	 * <li> Sets the table to display exactly the number of items that were fetched from the database. As a
-	 * side effect, refreshes the container's row index, just as the name of this method suggests.
-	 * <li> Updates the underlying paging component accordingly.
-	 * <li> 
-	 * </ul> 
-	 */
-	private void rebuildContainerRowIndex(boolean resetPagePicker)
+	private void resetPaging()
 	{
-		/* 
-		 * Setting page lenth is important because otherwise, Vaadin table will
-		 * display a fixed number of rows whether there are enough items to
-		 * populate them or not.
-		 */
+		pagingControls.setPage(1, false);
+		rebuildRowCache();
+		pagingControls.updatePageCount(tableContainer.getUnconstrainedQueryResultsCount());
+	}
+	
+	private void rebuildRowCache()
+	{
 		setPageLength(tableContainer.getItemIds().size());
-		
-		/*
-		 * Additionally, paging controls may need to be reset (first page set and total amount of pages updated).
-		 */
-		if(resetPagePicker)
-		{
-			pagingControls.reset();
-		}
+		refreshRowCache();
 	}
 }
