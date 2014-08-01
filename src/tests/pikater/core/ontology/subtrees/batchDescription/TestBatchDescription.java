@@ -12,12 +12,13 @@ import xmlGenerator.Input02;
 import xmlGenerator.Input04;
 import xmlGenerator.Input03;
 import xmlGenerator.Input05;
+import xmlGenerator.Input06;
 import xmlGenerator.Input10;
 
 public class TestBatchDescription {
 
 	public static void test() {
-
+//*
 		testComputatingDescription(
 				SimpleTraining.createDescription(),
 				"SimpleTraining");
@@ -47,8 +48,13 @@ public class TestBatchDescription {
 				"Input05");
 
 		testComputatingDescription(
+				Input06.createDescription(),
+				"Input06");
+	
+		testComputatingDescription(
 				Input10.createDescription(),
 				"Input10");
+
 	}
 
 	private static void testComputatingDescription(
@@ -71,14 +77,13 @@ public class TestBatchDescription {
 			e.printStackTrace();
 		}
 
-
-//*		
+	
 		if (xml1.equals(xml2)) {
 			System.out.println("OK - " + note);
 		} else {
 			System.out.println("Error - " + note);
 		}
-//*/
+
 	}
 
 }

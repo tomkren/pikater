@@ -21,7 +21,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 	private static final long serialVersionUID = 2127755171666013125L;
 
-	private String agentType;
+//	private String agentType;
     private List<NewOption> options;
 	private Integer model; // null = new model
 	private IExpectedDuration duration;
@@ -39,14 +39,14 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     	this.duration = new LongTermDuration();
     	this.evaluationMethod = new EvaluationMethod();
     }
-    
+/*    
     public String getAgentType() {
 		return agentType;
 	}
 	public void setAgentType(String agentType) {
 		this.agentType = agentType;
 	}
-
+*/
 	public Integer getModel() {
 		return model;
 	}
@@ -266,7 +266,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		ComputingAgent comAgentColone = new ComputingAgent();
 		comAgentColone.setId(this.getId());
-		comAgentColone.setAgentType(this.agentType);
+		comAgentColone.setAgentType(this.getAgentType());
 		NewOptions optionsOnt = new NewOptions(this.options);
 		comAgentColone.setOptions(optionsOnt.clone().getOptions());
 		comAgentColone.setModel(this.model);

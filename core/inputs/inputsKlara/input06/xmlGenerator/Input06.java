@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -38,7 +39,7 @@ public final class Input06 {
         
         DataProcessing dp = new DataProcessing();
 		dp.setDataSources(dataSources);
-		dp.setAgentType("Agent_WeatherSplitter");
+		dp.setAgentType(Agent_WeatherSplitter.class.getName());
 
 		// Data processed by dp are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();
@@ -54,9 +55,13 @@ public final class Input06 {
 		comAgent.setTestingData(computingDataSource);
 		comAgent.setEvaluationMethod(evaluationMethod);
 		
+		DataSourceDescription computingAgentDataSource = new DataSourceDescription();
+		computingAgentDataSource.setDataOutputType("DataCA");
+		computingAgentDataSource.setDataProvider(comAgent);
+
         //Save labeled data
         FileDataSaver saver = new FileDataSaver();
-        saver.setDataSource(computingDataSource);
+        saver.setDataSource(computingAgentDataSource);
 
         //Our requirements for the description are ready, lets create new computation description
         List<FileDataSaver> roots = new ArrayList<FileDataSaver>();

@@ -1,6 +1,6 @@
 package xmlGenerator;
 
-import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
+import org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
@@ -23,7 +23,7 @@ public final class Input10 {
 
 		// PreProcessing
 		DataProcessing processing = new DataProcessing();
-		processing.setAgentType(Agent_DataProcessing.class.getName());
+		processing.setAgentType(Agent_WeatherSplitter.class.getName());
 		processing.addDataSources(fileDataSource1);
 		processing.addDataSources(fileDataSource2);
 
