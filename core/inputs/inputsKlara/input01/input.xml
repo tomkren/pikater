@@ -10,10 +10,10 @@
       <dataSource>
         <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
           <id>1</id>
-          <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
           <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
           <errors/>
           <dataSources/>
+          <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
           <options>
             <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
               <name>S</name>
@@ -117,49 +117,27 @@
             </options>
           </evaluationMethod>
           <trainingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
               <id>2</id>
-              <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
               <options/>
               <errors/>
-              <dataSources>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              </dataSources>
+              <dataSources/>
+              <fileURI>weather.arff</fileURI>
             </dataProvider>
-            <dataOutputType>Data</dataOutputType>
             <dataInputType>trainingData</dataInputType>
           </trainingData>
           <testingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
               <id>2</id>
-              <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
               <options/>
               <errors/>
-              <dataSources>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              </dataSources>
+              <dataSources/>
+              <fileURI>weather.arff</fileURI>
             </dataProvider>
-            <dataOutputType>Data</dataOutputType>
             <dataInputType>testingData</dataInputType>
           </testingData>
         </dataProvider>
-        <dataOutputType>DataCA</dataOutputType>
+        <dataOutputType>Data</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>

@@ -18,10 +18,10 @@
             <org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription>
               <provider type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
                 <id>3</id>
-                <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
                 <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                 <errors/>
                 <dataSources/>
+                <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
                 <options>
                   <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                     <name>L</name>
@@ -194,10 +194,10 @@
           </search>
           <computingAgent type="org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent">
             <id>3</id>
-            <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
+            <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA</agentType>
             <options>
               <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                 <name>L</name>

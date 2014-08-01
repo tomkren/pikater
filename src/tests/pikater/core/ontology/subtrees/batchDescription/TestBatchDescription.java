@@ -18,7 +18,7 @@ import xmlGenerator.Input10;
 public class TestBatchDescription {
 
 	public static void test() {
-//*
+
 		testComputatingDescription(
 				SimpleTraining.createDescription(),
 				"SimpleTraining");
