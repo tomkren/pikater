@@ -1,6 +1,5 @@
 package org.pikater.web.quartzjobs.visualization;
 
-import java.io.File;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
@@ -11,23 +10,22 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.pikater.web.visualisation.definition.AttrComparisons;
 import org.pikater.web.visualisation.definition.AttrMapping;
 import org.pikater.web.visualisation.definition.ImageType;
-import org.pikater.web.visualisation.definition.result.VisualizeDatasetComparisonResult;
-import org.pikater.web.visualisation.definition.result.VisualizeDatasetSubresult;
-import org.pikater.web.visualisation.definition.task.IVisualizeDatasetComparison;
+import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
+import org.pikater.web.visualisation.definition.result.DSVisTwoSubresult;
+import org.pikater.web.visualisation.definition.task.IDSVisTwo;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 
-public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob implements IVisualizeDatasetComparison
+public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo
 {
 	private IProgressDialogResultHandler context;
 	
 	public ComparisonSVGGeneratorJob()
 	{
-		super(10);
+		super(4);
 	}
 
 	@Override
@@ -58,15 +56,15 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 	{
 		JPADataSetLO dataset1 = getArg(0);
 		JPADataSetLO dataset2 = getArg(1);
-		AttrComparisons attrsToCompare = getArg(2);
+		AttrComparisons comparisonList = getArg(2);
 		context = getArg(3);
-		visualizeDatasetComparison(dataset1, dataset2, attrsToCompare);
+		visualizeDatasetComparison(dataset1, dataset2, comparisonList);
 	}
 
 	@Override
-	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare)
+	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList)
 	{
-		VisualizeDatasetComparisonResult result = new VisualizeDatasetComparisonResult(context);
+		DSVisTwoResult result = new DSVisTwoResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		try
 		{
 			if(dataset1.getHash() == dataset2.getHash())
@@ -75,44 +73,29 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 			}
 			else
 			{
+				// TODO: download datasets first
+				
 				int count=0;
-				for(Tuple<AttrMapping, AttrMapping> tuple : attrsToCompare){
-					
-					/**
-					 * TODO: image results for comparison
-					 
-					VisualizeDatasetSubresult imageResult = result.createSingleImageResult(
-							new AttrMapping(tuple.getValue1().getAttrX(), tuple.getValue1().getAttrY(), tuple.getValue1().getAttrTarget()),
-							ImageType.SVG,
-							ChartGenerator.SINGLE_CHART_SIZE,
-							ChartGenerator.SINGLE_CHART_SIZE
-					);
+				for(Tuple<AttrMapping, AttrMapping> attrsToCompare : comparisonList)
+				{
+					DSVisTwoSubresult imageResult = result.createSingleImageResult(attrsToCompare, ImageType.SVG);
 					PrintStream output = new PrintStream(imageResult.getFile());
-					**/
-					
-					//just for compilation without errors
-					PrintStream output = new PrintStream(new File("core/datasets/visual"));
-					
-					//TODO: progress update for multiple image tiles
 					new ComparisonSVGGenerator(
 							null,
 							output,
 							dataset1,
 							dataset2,
-							tuple.getValue1().getAttrX(),
-							tuple.getValue2().getAttrX(),
-							tuple.getValue1().getAttrY(),
-							tuple.getValue2().getAttrY(),
-							tuple.getValue1().getAttrTarget(),
-							tuple.getValue2().getAttrTarget()
+							attrsToCompare.getValue1().getAttrX(),
+							attrsToCompare.getValue2().getAttrX(),
+							attrsToCompare.getValue1().getAttrY(),
+							attrsToCompare.getValue2().getAttrY(),
+							attrsToCompare.getValue1().getAttrTarget(),
+							attrsToCompare.getValue2().getAttrTarget()
 							).create();
-					
 					count++;
-					result.updateProgress(100*count/attrsToCompare.size());
+					result.updateProgress(100*count/comparisonList.size());
 				}
-				
 				result.finished();
-				
 			}
 		}
 		catch (Throwable t)

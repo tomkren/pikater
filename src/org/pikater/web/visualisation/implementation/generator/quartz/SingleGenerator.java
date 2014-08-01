@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.web.visualisation.definition.result.AbstractDatasetVisualizationResult;
+import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.charts.SingleChart;
 import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
@@ -16,13 +16,13 @@ public abstract class SingleGenerator extends Generator {
 
 	protected SingleArffDataset dataset;
 	
-	public SingleGenerator(AbstractDatasetVisualizationResult progressListener, JPADataSetLO dslo,PrintStream output, int XIndex, int YIndex, int ColorIndex){
+	public SingleGenerator(AbstractDSVisResult progressListener, JPADataSetLO dslo,PrintStream output, int XIndex, int YIndex, int ColorIndex){
 		super(progressListener,output);
 		this.dataset=new SingleArffDataset(dslo, XIndex, YIndex, ColorIndex);
 		init();
 	}
 	
-	public SingleGenerator(AbstractDatasetVisualizationResult progressListener, JPADataSetLO dslo,PrintStream output, String XName, String YName, String ColorName){
+	public SingleGenerator(AbstractDSVisResult progressListener, JPADataSetLO dslo,PrintStream output, String XName, String YName, String ColorName){
 		super(progressListener,output);
 		this.dataset=new SingleArffDataset(dslo, XName, YName, ColorName);
 		init();

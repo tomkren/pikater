@@ -6,7 +6,7 @@ import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
-import org.pikater.web.visualisation.definition.result.VisualizeDatasetResult;
+import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.implementation.generator.quartz.SingleSVGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
@@ -31,7 +31,7 @@ public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob
 	public boolean argumentCorrect(int index, Object arg) {
 		switch(index){
 		case 0:
-			return arg instanceof VisualizeDatasetResult;
+			return arg instanceof DSVisOneResult;
 		case 1:
 			return arg instanceof JPADataSetLO;
 		case 2:
@@ -53,7 +53,7 @@ public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob
 	@Override
 	protected void execute() throws JobExecutionException {
 		
-		VisualizeDatasetResult listener=getArg(0);
+		DSVisOneResult listener=getArg(0);
 			JPADataSetLO dslo=getArg(1);
 			File file=new File((String)getArg(2));
 			try {

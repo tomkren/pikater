@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.web.visualisation.definition.result.AbstractDatasetVisualizationResult;
+import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.charts.ComparisonChart;
 import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
@@ -18,14 +18,14 @@ public abstract class ComparisonGenerator extends Generator {
 	protected SingleArffDataset dataset1;
 	protected SingleArffDataset dataset2;
 	
-	public ComparisonGenerator(AbstractDatasetVisualizationResult progressListener,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,int XIndex1, int XIndex2, int YIndex1, int YIndex2,int ColorIndex1,int ColorIndex2){
+	public ComparisonGenerator(AbstractDSVisResult progressListener,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,int XIndex1, int XIndex2, int YIndex1, int YIndex2,int ColorIndex1,int ColorIndex2){
 		super(progressListener,output);
 		dataset1=new SingleArffDataset(dslo1, XIndex1, YIndex1, ColorIndex1);
 		dataset2=new SingleArffDataset(dslo2, XIndex2, YIndex2, ColorIndex2);
 		init();
 	}
 	
-	public ComparisonGenerator(AbstractDatasetVisualizationResult progressHandler,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,String XName1, String XName2, String YName1, String YName2,String ColorName1,String ColorName2){
+	public ComparisonGenerator(AbstractDSVisResult progressHandler,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,String XName1, String XName2, String YName1, String YName2,String ColorName1,String ColorName2){
 		super(progressHandler,output);
 		dataset1=new SingleArffDataset(dslo1, XName1, YName1, ColorName1);
 		dataset2=new SingleArffDataset(dslo2, XName2, YName2, ColorName2);

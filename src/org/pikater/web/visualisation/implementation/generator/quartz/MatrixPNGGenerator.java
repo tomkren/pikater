@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import javax.imageio.ImageIO;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.web.visualisation.definition.result.AbstractDatasetVisualizationResult;
+import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.charts.MatrixChart;
 import org.pikater.web.visualisation.implementation.datasource.multiple.MultipleArffDataset;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
@@ -17,7 +17,7 @@ public class MatrixPNGGenerator extends Generator {
 	private JPADataSetLO dslo;
 	private MultipleArffDataset dataset;
 	
-	public MatrixPNGGenerator(AbstractDatasetVisualizationResult progressListener, JPADataSetLO dslo, PrintStream output){
+	public MatrixPNGGenerator(AbstractDSVisResult progressListener, JPADataSetLO dslo, PrintStream output){
 		super(progressListener,output);
 		this.dslo=dslo;
 		init();

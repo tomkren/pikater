@@ -9,8 +9,8 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
-import org.pikater.web.visualisation.definition.result.VisualizeDatasetResult;
-import org.pikater.web.visualisation.definition.result.VisualizeDatasetSubresult;
+import org.pikater.web.visualisation.definition.result.DSVisOneResult;
+import org.pikater.web.visualisation.definition.result.DSVisOneSubresult;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Panel;
@@ -55,8 +55,8 @@ public class SingleDatasetVisualizer extends VerticalLayout
 			@Override
 			public void onTaskFinish(IProgressDialogTaskResult result)
 			{
-				VisualizeDatasetResult visTaskResult = (VisualizeDatasetResult) result;
-				for(VisualizeDatasetSubresult singleImageResult : visTaskResult)
+				DSVisOneResult visTaskResult = (DSVisOneResult) result;
+				for(DSVisOneSubresult singleImageResult : visTaskResult)
 				{
 					// TODO: do not actually try to display this... 
 					
@@ -64,8 +64,8 @@ public class SingleDatasetVisualizer extends VerticalLayout
 							singleImageResult.getFile(),
 							ResourceExpiration.ON_SESSION_END,
 							singleImageResult.getImageType().toMimeType(),
-							singleImageResult.getImageWidth(),
-							singleImageResult.getImageHeight()
+							visTaskResult.getImageWidth(),
+							visTaskResult.getImageHeight()
 					);
 					ImageViewer viewer = new ImageViewer(
 							ResourceRegistrar.getDownloadURL(ResourceRegistrar.registerResource(VaadinSession.getCurrent(), resource)),

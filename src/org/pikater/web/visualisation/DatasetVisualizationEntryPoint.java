@@ -7,11 +7,11 @@ import org.pikater.web.quartzjobs.visualization.ComparisonSVGGeneratorJob;
 import org.pikater.web.quartzjobs.visualization.MatrixPNGGeneratorJob;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.visualisation.definition.AttrComparisons;
-import org.pikater.web.visualisation.definition.task.IVisualizeDataset;
-import org.pikater.web.visualisation.definition.task.IVisualizeDatasetComparison;
+import org.pikater.web.visualisation.definition.task.IDSVisOne;
+import org.pikater.web.visualisation.definition.task.IDSVisTwo;
 import org.quartz.JobKey;
 
-public class DatasetVisualizationEntryPoint implements IVisualizeDataset, IVisualizeDatasetComparison
+public class DatasetVisualizationEntryPoint implements IDSVisOne, IDSVisTwo
 {
 	private final IProgressDialogResultHandler context;
 	private JobKey jobKey;

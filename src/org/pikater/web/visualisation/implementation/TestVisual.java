@@ -9,12 +9,12 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
-import org.pikater.web.visualisation.definition.result.VisualizeDatasetResult;
+import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.implementation.charts.axis.exception.AxisNotJoinableException;
 import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
+import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonPNGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.MatrixPNGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.SingleSVGGenerator;
 
@@ -22,7 +22,7 @@ public class TestVisual {
 
 	public static void main(String[] args) throws IOException, AxisNotJoinableException, ColorerNotMergeableException {
 		
-		VisualizeDatasetResult dummyResult = new VisualizeDatasetResult(new IProgressDialogResultHandler()
+		DSVisOneResult dummyResult = new DSVisOneResult(new IProgressDialogResultHandler()
 		{
 			@Override
 			public void updateProgress(float percentage)
@@ -41,7 +41,7 @@ public class TestVisual {
 			{
 				// TODO Auto-generated method stub
 			}
-		});
+		}, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		
 		long time=0;
 		JPADataSetLO iris1=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
