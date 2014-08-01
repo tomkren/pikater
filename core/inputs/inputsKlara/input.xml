@@ -1,34 +1,34 @@
-<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription id="1">
+<org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription>
   <priority>0</priority>
-  <globalOptions id="2"/>
-  <rootElements id="3">
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="4">
+  <globalOptions/>
+  <rootElements>
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
       <id>0</id>
-      <options id="5"/>
-      <errors id="6"/>
-      <dataSources id="7"/>
-      <dataSource id="8">
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="9">
+      <options/>
+      <errors/>
+      <dataSources/>
+      <dataSource>
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>3</id>
-          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing</agentType>
-          <options id="10"/>
-          <errors id="11"/>
-          <dataSources id="12">
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="13">
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="14">
+          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
+          <options/>
+          <errors/>
+          <dataSources>
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                 <id>4</id>
-                <options id="15"/>
-                <errors id="16"/>
-                <dataSources id="17"/>
+                <options/>
+                <errors/>
+                <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="18">
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="19">
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                 <id>5</id>
-                <options id="20"/>
-                <errors id="21"/>
-                <dataSources id="22"/>
+                <options/>
+                <errors/>
+                <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
@@ -37,33 +37,33 @@
         <dataOutputType>Data-Sunny</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="23">
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
       <id>1</id>
-      <options id="24"/>
-      <errors id="25"/>
-      <dataSources id="26"/>
-      <dataSource id="27">
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="28">
+      <options/>
+      <errors/>
+      <dataSources/>
+      <dataSource>
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>3</id>
-          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing</agentType>
-          <options id="29"/>
-          <errors id="30"/>
-          <dataSources id="31">
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="32">
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="33">
+          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
+          <options/>
+          <errors/>
+          <dataSources>
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                 <id>4</id>
-                <options id="34"/>
-                <errors id="35"/>
-                <dataSources id="36"/>
+                <options/>
+                <errors/>
+                <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="37">
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="38">
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                 <id>5</id>
-                <options id="39"/>
-                <errors id="40"/>
-                <dataSources id="41"/>
+                <options/>
+                <errors/>
+                <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
@@ -72,33 +72,33 @@
         <dataOutputType>Data-Overcast</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
-    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver id="42">
+    <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
       <id>2</id>
-      <options id="43"/>
-      <errors id="44"/>
-      <dataSources id="45"/>
-      <dataSource id="46">
-        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing" id="47">
+      <options/>
+      <errors/>
+      <dataSources/>
+      <dataSource>
+        <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
           <id>3</id>
-          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing</agentType>
-          <options id="48"/>
-          <errors id="49"/>
-          <dataSources id="50">
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="51">
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="52">
+          <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
+          <options/>
+          <errors/>
+          <dataSources>
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                 <id>4</id>
-                <options id="53"/>
-                <errors id="54"/>
-                <dataSources id="55"/>
+                <options/>
+                <errors/>
+                <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription id="56">
-              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider" id="57">
+            <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
+              <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
                 <id>5</id>
-                <options id="58"/>
-                <errors id="59"/>
-                <dataSources id="60"/>
+                <options/>
+                <errors/>
+                <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
