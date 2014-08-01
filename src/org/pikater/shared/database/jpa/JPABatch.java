@@ -21,7 +21,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 
@@ -205,21 +204,12 @@ public class JPABatch extends JPAAbstractEntity{
 	public void setStatus(JPABatchStatus status) {
 		this.status = status;
 	}
+	/**
+	 * Sets the status of the batch to the desired value
+	 * @param status String representation of JPABatchStatus object
+	 */
 	public void setStatus(String status) {
-
-		if ( status.equals(BatchStatuses.CREATED) ) {
-			this.status = JPABatchStatus.CREATED;
-		} else if ( status.equals(BatchStatuses.WAITING) ) {
-			this.status = JPABatchStatus.WAITING;
-		} else if ( status.equals(BatchStatuses.COMPUTING) ) {
-			this.status = JPABatchStatus.STARTED;
-		} else if ( status.equals(BatchStatuses.FINISHED) ) {
-			this.status = JPABatchStatus.FINISHED;
-		} else if ( status.equals(BatchStatuses.FAILED) ) {
-			this.status = JPABatchStatus.FAILED;
-		} else {
-			throw new IllegalArgumentException("Batch status is not valid");
-		}
+		this.setStatus(JPABatchStatus.valueOf(status));
 	}
 
 	@Transient

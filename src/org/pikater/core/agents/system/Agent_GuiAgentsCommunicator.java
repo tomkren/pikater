@@ -22,8 +22,8 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
-import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 	
@@ -117,7 +117,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
             Batch batch = new Batch();
             batch.setName(batchName);
             batch.setNote(batchNote);
-            batch.setStatus(BatchStatuses.WAITING);
+            batch.setStatus(JPABatchStatus.WAITING.name());
             batch.setPriority(batchPriority);
             batch.setOwnerID(batchOwnerID);
             batch.setDescription(compDescription);

@@ -17,8 +17,8 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
-import org.pikater.core.ontology.subtrees.batch.batchStatuses.BatchStatuses;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 public class ParserBehaviour extends AchieveREResponder {
 	
@@ -100,7 +100,7 @@ public class ParserBehaviour extends AchieveREResponder {
         
         // change status to computing and log to database
         ManagerCommunicator communicator = new ManagerCommunicator();
-        communicator.updateBatchStatus(agent, batchID, BatchStatuses.COMPUTING);
+        communicator.updateBatchStatus(agent, batchID, JPABatchStatus.COMPUTING.name());
         
 		computationGraph.startBatchComputation();
 		
