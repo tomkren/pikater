@@ -18,10 +18,21 @@ public class SingleChart extends Chart{
 	
 	public SingleChart(int width,int height,int offsetx, int offsety,RendererInterface renderer,Axis horizontalAxis,Axis verticalAxis){
 		super(width, height, offsetx, offsety, renderer, horizontalAxis, verticalAxis);
+		initDefaults();
 	}
 
 	public SingleChart(int width,int height,RendererInterface renderer,Axis horizontalAxis, Axis verticalAxis){
 		this(width,height,0,0,renderer,horizontalAxis,verticalAxis);
+		initDefaults();
+	}
+	
+	private void initDefaults(){
+		this.setMargin(50);
+		this.setLabelSize(150);
+		this.setBackGroundColor(Color.getHSBColor(0.0f, 0.0f, 0.95f));
+		this.setHorizontalCaptionColor(Color.GRAY);
+		this.setVerticalCaptionColor(Color.GRAY);
+		this.setCaptionSize(35);
 	}
 
 	private void renderHorizontalCaption(String caption){

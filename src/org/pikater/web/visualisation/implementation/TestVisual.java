@@ -14,6 +14,7 @@ import org.pikater.web.visualisation.implementation.charts.axis.exception.AxisNo
 import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
 import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.MatrixPNGGenerator;
+import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.SingleSVGGenerator;
 
 public class TestVisual {
@@ -60,13 +61,13 @@ public class TestVisual {
 		List<JPADataSetLO> datasets = DAOs.dataSetDAO.getAll();
 		
 		for(JPADataSetLO dataset : datasets){
-			
+			/**
 			System.out.println("Generating SVG Comparison Chart for: " +dataset.getDescription()+" and "+dataset.getDescription());
 			time=System.currentTimeMillis();
 			ComparisonSVGGenerator csvgg=new ComparisonSVGGenerator(dummyResult,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2_comp.svg"),dataset, dataset, 0, 0, 1, 1, 2, 2);
 			csvgg.create();
 			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
-			
+			**/
 			System.out.println("Generating SVG Single Chart for: " +dataset.getDescription());
 			time=System.currentTimeMillis();
 			
@@ -75,12 +76,22 @@ public class TestVisual {
 			
 			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
 			
+			System.out.println("Generating PNG Single Chart for: " +dataset.getDescription());
+			time=System.currentTimeMillis();
+			
+			SinglePNGGenerator spngg=new SinglePNGGenerator(dummyResult, dataset,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2s.png"), 0, 1, 2);
+			spngg.create();
+			
+			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
+			
+			/**
 			System.out.println("Generating PNG Matrix Chart for: " +dataset.getDescription());
 			time=System.currentTimeMillis();
 			MatrixPNGGenerator mpngg=new MatrixPNGGenerator(dummyResult, dataset, new PrintStream("core/datasets/visual/"+dataset.getDescription()+".png"));
 			mpngg.create();
 			
 			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
+			**/
 			
 		}
 	}

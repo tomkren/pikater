@@ -12,7 +12,7 @@ import org.pikater.web.visualisation.definition.result.VisualizeDatasetResult;
 import org.pikater.web.visualisation.definition.result.VisualizeDatasetSubresult;
 import org.pikater.web.visualisation.definition.task.IVisualizeDataset;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.MatrixPNGGenerator;
+import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
@@ -66,6 +66,7 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 		VisualizeDatasetResult result = new VisualizeDatasetResult(context);
 		try
 		{
+			int count=0;
 			for(String attrY : attrs)
 			{
 				for(String attrX : attrs)
@@ -76,7 +77,11 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 					 * 2) ChartGenerator.MATRIX_CHART_SIZE is now obsolete
 					 * 3) If you wish, we can propagate the result type into your own code
 					 * where you could use setters.  
-					 */
+					 */			
+					/*
+					 * TODO: is this version OK? we retrieve dataset from DB multiple times (for each subchart)
+					 *       but we only store one bitmap in memory for each cycle 
+					 **/
 					
 					VisualizeDatasetSubresult imageResult = result.createSingleImageResult(
 							new AttrMapping(attrX, attrY, attrTarget),
@@ -85,7 +90,11 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 							ChartGenerator.SINGLE_CHART_SIZE
 					);
 					PrintStream output = new PrintStream(imageResult.getFile());
-					new MatrixPNGGenerator(result, dataset, output).create();
+					//TODO: progress update for multiple image tiles
+					new SinglePNGGenerator(null, dataset, output, attrX, attrY,attrs[attrs.length-1]).create();
+					count++;
+					result.updateProgress(100*count/attrs.length/attrs.length);
+					
 				}
 			}
 			result.finished();
