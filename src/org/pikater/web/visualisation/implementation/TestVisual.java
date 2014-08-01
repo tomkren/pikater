@@ -12,6 +12,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.pikater.web.visualisation.definition.result.VisualizeDatasetResult;
 import org.pikater.web.visualisation.implementation.charts.axis.exception.AxisNotJoinableException;
 import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
+import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonPNGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.MatrixPNGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
@@ -55,6 +56,13 @@ public class TestVisual {
 		//ChartGenerator.generateSVGComparisonDatasetChart(iris, iris,new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), attr1, attr1, attr2, attr2,attr3, attr3);
 		ComparisonSVGGenerator csvggiris=new ComparisonSVGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), iris1, iris2, attr1, attr1, attr2, attr2, attr3, attr3);
 		csvggiris.create();
+		System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
+		
+		System.out.println("Generating PNG Comparison Chart for: " +iris1.getDescription()+" and "+iris2.getDescription());
+		time=System.currentTimeMillis();
+		//ChartGenerator.generateSVGComparisonDatasetChart(iris, iris,new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), attr1, attr1, attr2, attr2,attr3, attr3);
+		ComparisonPNGGenerator cpnggiris=new ComparisonPNGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.png"), iris1, iris2, attr1, attr1, attr2, attr2, attr3, attr3);
+		cpnggiris.create();
 		System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
 		
 		

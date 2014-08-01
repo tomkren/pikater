@@ -1,90 +1,37 @@
 package org.pikater.web.visualisation.implementation.generator.quartz;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.visualisation.definition.result.AbstractDatasetVisualizationResult;
-import org.pikater.web.visualisation.implementation.charts.SingleChart;
-import org.pikater.web.visualisation.implementation.charts.axis.Axis;
-import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
 import org.pikater.web.visualisation.implementation.charts.exception.ChartException;
-import org.pikater.web.visualisation.implementation.datasource.single.ArffXYZPoint;
-import org.pikater.web.visualisation.implementation.datasource.single.SingleArffDataset;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
 import org.pikater.web.visualisation.implementation.renderer.SVGRenderer;
 
-public class ComparisonSVGGenerator extends Generator {
+public class ComparisonSVGGenerator extends ComparisonGenerator {
 
-	SingleArffDataset dataset1;
-	SingleArffDataset dataset2;
-	
-	
 	public ComparisonSVGGenerator(AbstractDatasetVisualizationResult progressListener,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,int XIndex1, int XIndex2, int YIndex1, int YIndex2,int ColorIndex1,int ColorIndex2){
-		super(progressListener,output);
-		
-		dataset1=new SingleArffDataset(dslo1, XIndex1, YIndex1, ColorIndex1);
-		dataset2=new SingleArffDataset(dslo2, XIndex2, YIndex2, ColorIndex2);
-		
-		init();
+		super(progressListener, output, dslo1, dslo2, XIndex1, XIndex2, YIndex1, YIndex2, ColorIndex1, ColorIndex2);
+		initRenderer();
 	}
 	
-	
-	public ComparisonSVGGenerator(AbstractDatasetVisualizationResult progressHandler,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,String XName1, String XName2, String YName1, String YName2,String ColorName1,String ColorName2){
-		super(progressHandler,output);
-		
-		dataset1=new SingleArffDataset(dslo1, XName1, YName1, ColorName1);
-		dataset2=new SingleArffDataset(dslo2, XName2, YName2, ColorName2);
-		
-		init();
+	public ComparisonSVGGenerator(AbstractDatasetVisualizationResult progressLstener,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,String XName1, String XName2, String YName1, String YName2,String ColorName1,String ColorName2){
+		super(progressLstener, output, dslo1, dslo2, XName1, XName2, YName1, YName2, ColorName1, ColorName2);
+		initRenderer();
 	}
 	
-	private void init(){
-		this.instNum=dataset1.getNumberOfInstances()+dataset2.getNumberOfInstances();
+	private void initRenderer(){
+		renderer=new SVGRenderer(output, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 	}
+	
 	
 	@Override
 	public void create() throws IOException, ChartException {
 		try{
-			SVGRenderer svgr=new SVGRenderer(output, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
-			svgr.begin();
-
-			Axis yAxis=Axis.join(dataset1.getYAxis(), dataset2.getYAxis());
-			Axis xAxis=Axis.join(dataset1.getXAxis(), dataset2.getXAxis());
-			Colorer colorer1=dataset1.getZColorer();
-			Colorer colorer2=dataset2.getZColorer();
-
-			Colorer colorer=colorer1.merge(colorer2);
-
-			SingleChart sch=new SingleChart(ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE, svgr, xAxis, yAxis);
-			sch.setMargin(50);
-			sch.setLabelSize(150);
-			sch.setBackGroundColor(Color.getHSBColor(0.0f, 0.0f, 0.95f));
-			sch.setHorizontalCaptionColor(Color.GRAY);
-			sch.setVerticalCaptionColor(Color.GRAY);
-			sch.setCaptionSize(35);
-
-			sch.startChart();
-
-			ArffXYZPoint next=null;
-
-			while((next=dataset1.getNext())!=null){
-				sch.renderPoint(next.getX(), next.getY(), next.getZ(), 17, colorer);
-				signalOneProcessedRow();
-			}
-
-			while((next=dataset2.getNext())!=null){
-				sch.renderPoint(next.getX(), next.getY(), next.getZ(), 12, colorer);
-				signalOneProcessedRow();
-			}
-
-			svgr.end();
-
+			super.create();
 		}finally{
 			output.close();
-			dataset1.close();
-			dataset2.close();
 		}
 	}
 

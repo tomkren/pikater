@@ -11,12 +11,10 @@ import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
 import org.pikater.web.visualisation.implementation.datasource.single.ArffXYZPoint;
 import org.pikater.web.visualisation.implementation.datasource.single.SingleArffDataset;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
-import org.pikater.web.visualisation.implementation.renderer.RendererInterface;
 
-public class SingleGenerator extends Generator {
+public abstract class SingleGenerator extends Generator {
 
 	protected SingleArffDataset dataset;
-	protected RendererInterface renderer;
 	
 	public SingleGenerator(AbstractDatasetVisualizationResult progressListener, JPADataSetLO dslo,PrintStream output, int XIndex, int YIndex, int ColorIndex){
 		super(progressListener,output);

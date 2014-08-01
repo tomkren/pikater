@@ -1,12 +1,22 @@
 package org.pikater.web.quartzjobs.visualization;
 
+import java.io.File;
+import java.io.PrintStream;
+
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
+import org.pikater.shared.util.Tuple;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.visualisation.definition.AttrComparisons;
+import org.pikater.web.visualisation.definition.AttrMapping;
+import org.pikater.web.visualisation.definition.ImageType;
 import org.pikater.web.visualisation.definition.result.VisualizeDatasetComparisonResult;
+import org.pikater.web.visualisation.definition.result.VisualizeDatasetSubresult;
 import org.pikater.web.visualisation.definition.task.IVisualizeDatasetComparison;
+import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
+import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
+import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
@@ -65,41 +75,44 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 			}
 			else
 			{
-				// TODO:
-				
-				/*
-				File file = new File((String) getArg(3));
-				
-				PrintStream output=new PrintStream(file);
-				Object attrArg1=getArg(4);
-				Object attrArg2=getArg(5);
-				Object attrArg3=getArg(6);
-				Object attrArg4=getArg(7);
-				Object attrArg5=getArg(8);
-				Object attrArg6=getArg(9);
-
-				ComparisonSVGGenerator csvgg;
-				if(
-						(attrArg1 instanceof String)&&(attrArg2 instanceof String)&&(attrArg3 instanceof String)&&
-						(attrArg4 instanceof String)&&(attrArg5 instanceof String)&&(attrArg6 instanceof String)
-						)
-				{
-					csvgg=new ComparisonSVGGenerator(listener, output,dslo1,dslo2, (String)attrArg1,(String)attrArg2, (String)attrArg3,(String)attrArg4,(String)attrArg5, (String)attrArg6);
-				}else if(
-						(attrArg1 instanceof Integer)&&(attrArg2 instanceof Integer)&&(attrArg3 instanceof Integer)&&
-						(attrArg4 instanceof Integer)&&(attrArg5 instanceof Integer)&&(attrArg6 instanceof Integer)
-						)
-				{
-					csvgg=new ComparisonSVGGenerator(listener, output,dslo1,dslo2, (Integer)attrArg1,(Integer)attrArg2, (Integer)attrArg3,(Integer)attrArg4,(Integer)attrArg5, (Integer)attrArg6);
-				}else{
-					output.close();
-					listener.failed();
-					return;
+				int count=0;
+				for(Tuple<AttrMapping, AttrMapping> tuple : attrsToCompare){
+					
+					/**
+					 * TODO: image results for comparison
+					 
+					VisualizeDatasetSubresult imageResult = result.createSingleImageResult(
+							new AttrMapping(tuple.getValue1().getAttrX(), tuple.getValue1().getAttrY(), tuple.getValue1().getAttrTarget()),
+							ImageType.SVG,
+							ChartGenerator.SINGLE_CHART_SIZE,
+							ChartGenerator.SINGLE_CHART_SIZE
+					);
+					PrintStream output = new PrintStream(imageResult.getFile());
+					**/
+					
+					//just for compilation without errors
+					PrintStream output = new PrintStream(new File("core/datasets/visual"));
+					
+					//TODO: progress update for multiple image tiles
+					new ComparisonSVGGenerator(
+							null,
+							output,
+							dataset1,
+							dataset2,
+							tuple.getValue1().getAttrX(),
+							tuple.getValue2().getAttrX(),
+							tuple.getValue1().getAttrY(),
+							tuple.getValue2().getAttrY(),
+							tuple.getValue1().getAttrTarget(),
+							tuple.getValue2().getAttrTarget()
+							).create();
+					
+					count++;
+					result.updateProgress(100*count/attrsToCompare.size());
 				}
-
-				csvgg.create();
+				
 				result.finished();
-				*/
+				
 			}
 		}
 		catch (Throwable t)
