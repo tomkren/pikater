@@ -300,24 +300,6 @@ public class Toolbar extends VerticalLayout
 	
 	private void saveExperimentInActiveTab(final KineticComponent activeComponent, final ExperimentSaveMode saveMode)
 	{
-		// first check for the right conditions
-		switch(saveMode)
-		{
-			case SAVE_FOR_LATER:
-				if(!activeComponent.isContentModified())
-				{
-					MyNotifications.showInfo("Nothing to save", "Content is not modified.");
-					return;
-				}
-				break;
-			case SAVE_FOR_EXECUTION:
-				// TODO: validation
-				break;
-			default:
-				throw new IllegalStateException("Unknown state: " + saveMode.name());
-		}
-		
-		// and then actually do anything
 		try
 		{
 			activeComponent.exportExperiment(new KineticComponent.IOnExperimentReceivedFromClient()
@@ -329,6 +311,28 @@ public class Toolbar extends VerticalLayout
 				@Override
 				public void handleExperiment(final UniversalComputationDescription exportedExperiment, final IOnExperimentSaved experimentSavedCallback)
 				{
+					// first check for the right conditions
+					switch(saveMode)
+					{
+						case SAVE_FOR_LATER:
+							if(!activeComponent.isContentModified())
+							{
+								MyNotifications.showInfo("Nothing to save", "Content is not modified.");
+								return;
+							}
+							break;
+						case SAVE_FOR_EXECUTION:
+							if(!exportedExperiment.isValid())
+							{
+								MyNotifications.showInfo("Experiment not valid", "Can not schedule it.");
+								return;
+							}
+							break;
+						default:
+							throw new IllegalStateException("Unknown state: " + saveMode.name());
+					}
+					
+					// and then actually do something
 					final boolean sourceExperimentExists = activeComponent.getPreviouslyLoadedExperimentID() != null;
 					if(sourceExperimentExists)
 					{
@@ -366,7 +370,7 @@ public class Toolbar extends VerticalLayout
 											saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner), experimentSavedCallback);
 											if(sourceExperimentExists)
 											{
-												// TODO: delete previous
+												DAOs.batchDAO.deleteBatchEntity(sourceExperiment);
 											}
 											break;
 										default:

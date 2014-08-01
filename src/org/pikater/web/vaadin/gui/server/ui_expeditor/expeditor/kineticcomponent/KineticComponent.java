@@ -573,8 +573,9 @@ public class KineticComponent extends AbstractComponent
 				
 				/*
 				 * TODO later:
-				 * - use input slots in AgentInfo and detect box types can be mutually connected by an edge
-				 * - make the conversion smarter - best effort to display old experiments whether they're still compatible or not
+				 * Experiment XMLs need to be fully alliased to allow injecting other types (beside
+				 * the original). Experiment XMLs would then be pretty much "standardized" while
+				 * the universal format objects could be fluid as the water :).
 				 */
 				
 				// and finally, options... THIS IS THE TRICKY PART

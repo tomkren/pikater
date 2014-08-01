@@ -121,6 +121,17 @@ public class UniversalComputationDescription
 		return true;
 	}
 	
+	/**
+	 * Determines whether this experiment is ready to be scheduled and should not
+	 * end up with needless errors.
+	 * @return
+	 */
+	public boolean isValid()
+	{
+		// TODO:
+		return true;
+	}
+	
 	// ----------------------------------------------------------
 	// MANIPULATION WITH WRAPPERS
 

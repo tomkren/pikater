@@ -53,7 +53,6 @@ public abstract class AbstractBatchTableDBView extends AbstractTableDBView
 				case STATUS:
 					return DBViewValueType.STRING;
 					
-				// TODO: these should be editable?
 				case PRIORITY:
 				case MAX_PRIORITY:
 					return DBViewValueType.STRING;
