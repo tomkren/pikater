@@ -49,14 +49,10 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input10.createDescription(),
 				"Input10");
-//*/
 	}
 
 	private static void testComputatingDescription(
 			ComputationDescription comDescription, String note) {
-	
-		comDescription.generateIDs();
-		comDescription.gene();
 
 		UniversalComputationDescription udescriptinSimpleTraining =
 				comDescription.exportUniversalComputationDescription();
@@ -64,9 +60,7 @@ public class TestBatchDescription {
 		ComputationDescription comDescription2 =
 				ComputationDescription.importUniversalComputationDescription(
 						udescriptinSimpleTraining);
-//		comDescription2.generateIDs();
-//		comDescription2.gene();
-//*/
+
 		String xml1 = comDescription.exportXML();
 		String xml2 = comDescription2.exportXML();
 

@@ -111,7 +111,7 @@ public class DataProcessing implements IDataProvider {
 	public int generateIDs(int lastUsedId) {
 		
 		if (this.getId() == -1) {
-			this.setId(lastUsedId++);
+			this.setId(++lastUsedId);
 		}
 		return lastUsedId;
 	}

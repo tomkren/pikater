@@ -50,13 +50,13 @@ public final class Input10 {
 		// Save Overcast data
 		FileDataSaver saverRainy = new FileDataSaver();
 		saverRainy.setDataSource(dataSourceRainy);
-//*/		
+		
 		// Our requirements for the description are ready, lets create new
 		// computation description
 		List<FileDataSaver> roots = new ArrayList<FileDataSaver>();
-		roots.add(saverSunny.clone());
-		roots.add(saverOvercast.clone());
-		roots.add(saverRainy.clone());
+		roots.add(saverSunny);
+		roots.add(saverOvercast);
+		roots.add(saverRainy);
 
 		ComputationDescription comDescription = new ComputationDescription();
 		comDescription.setRootElements(roots);
