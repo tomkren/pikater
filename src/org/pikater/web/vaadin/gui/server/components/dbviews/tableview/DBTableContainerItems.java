@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.pikater.shared.database.views.base.QueryResult;
-import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.util.SimpleIDGenerator;
 
@@ -15,13 +14,11 @@ public class DBTableContainerItems implements ICommitable
 	private final Map<Integer, DBTableItem> rows;
 	
 	private QueryResult lastQueryResult;
-	private SortOrder currentSortOrder;
 	
 	public DBTableContainerItems(DBTable parentTable)
 	{
 		this.parentTable = parentTable;
 		this.rows = new HashMap<Integer, DBTableItem>();
-		resetSortOrder();
 	}
 	
 	@Override
@@ -49,7 +46,6 @@ public class DBTableContainerItems implements ICommitable
 		}
 		
 		// and finally:
-		resetSortOrder();
 		lastQueryResult = queryResult;
 	}
 	
@@ -73,38 +69,8 @@ public class DBTableContainerItems implements ICommitable
 		return lastQueryResult.getAllResultsCount();
 	}
 	
-	public SortOrder getCurrentSortOrder()
-	{
-		return currentSortOrder;
-	}
-	
 	//-----------------------------------------------
 	// SORT INTERFACE - REFER TO THE CONTAINER.SORTABLE INTERFACE JAVADOC WHEN IMPLEMENTING
-	
-	public void setSortOrder(boolean ascending)
-	{
-		if(SimpleIDGenerator.getFirstID() != 0)
-		{
-			throw new IllegalStateException("The sorting algorithm requires the first ID of SimpleIDGenerator to be '0'.");
-		}
-		
-		SortOrder newSortOrder = ascending ? SortOrder.ASCENDING : SortOrder.DESCENDING;
-		if(this.currentSortOrder != newSortOrder)
-		{
-			// linear order reverse
-			int switchCount = rows.size() / 2;
-			for(int i = 0; i < switchCount; i++)
-			{
-				// swap values
-				DBTableItem tmp = rows.get(i);
-				int otherIndex = rows.size() - i - 1; // this is where the 'SimpleIDGenerator.getFirstID() != 0' condition comes into play
-				rows.put(i, rows.get(otherIndex));
-				rows.put(otherIndex, tmp);
-			}
-		}
-		
-		this.currentSortOrder = newSortOrder; 
-	}
 	
 	public Object getFirstItemID()
 	{
@@ -178,13 +144,5 @@ public class DBTableContainerItems implements ICommitable
 		{
 			return itemId.equals(getLastItemID());
 		}
-	}
-	
-	//-----------------------------------------------
-	// PRIVATE INTERFACE
-	
-	private void resetSortOrder()
-	{
-		this.currentSortOrder = SortOrder.ASCENDING;
 	}
 }

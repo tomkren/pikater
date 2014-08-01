@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
-import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
@@ -175,7 +174,10 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 
 	public void sort(Object[] propertyId, boolean[] ascending)
 	{
-		rows.setSortOrder(ascending[0]); // only look at the primary column sort order
+		/*
+		 * This is executed AFTER rebuilding the row cache by which time we
+		 * already need the new sort order => do nothing in here.
+		 */
 	}
 
 	//-----------------------------------------------------------
@@ -255,6 +257,11 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	
 	private IDBViewRoot<? extends AbstractTableDBView> viewRoot;
 	
+	public IDBViewRoot<? extends AbstractTableDBView> getViewRoot()
+	{
+		return viewRoot;
+	}
+	
 	public void setViewRoot(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
 		this.viewRoot = viewRoot;		
@@ -263,16 +270,6 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	public DBTable getParentTable()
 	{
 		return parentTable;
-	}
-	
-	public IDBViewRoot<? extends AbstractTableDBView> getViewRoot()
-	{
-		return viewRoot;
-	}
-	
-	public SortOrder getCurrentSortOrder()
-	{
-		return rows.getCurrentSortOrder();
 	}
 	
 	public int getUnconstrainedQueryResultsCount()

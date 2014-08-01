@@ -49,7 +49,7 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(batch.getOwner().getLogin());
 		case STATUS:
 			return new StringReadOnlyDBViewValue(batch.getStatus().name());
-		case NOTE: //TODO: make it editable (note for me)
+		case NOTE:
 			return new StringReadOnlyDBViewValue(batch.getNote());
 			
 		default:
