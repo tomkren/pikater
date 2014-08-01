@@ -84,11 +84,6 @@ public class ComputationDescription implements Concept {
 
 	public void generateIDs() {
 		
-//		int lastUsedNumber = -1;
-//		for (FileDataSaver fileSaverI : rootElements) {
-//			lastUsedNumber = fileSaverI.generateIDs(lastUsedNumber);
-//		}
-		
 		List<IComputationElement> fifo = new ArrayList<IComputationElement>();
 		
 		for (FileDataSaver saverI : getRootElements()) {
@@ -145,7 +140,7 @@ public class ComputationDescription implements Concept {
 			IComputationElement dataProcessing = fifo.get(0);
 			fifo.remove(0);
 			
-			dataProcessing.cloneDataSources();//.clone();
+			dataProcessing.cloneDataSources();
 			
 			fifo.addAll(notNullElements(dataProcessing) );
 			
@@ -315,7 +310,7 @@ public class ComputationDescription implements Concept {
 		gene();
 		
 		XStream xstream = new XStream();
-		xstream.setMode(XStream.ID_REFERENCES);
+		xstream.setMode(XStream.NO_REFERENCES);
 
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;
@@ -350,7 +345,7 @@ public class ComputationDescription implements Concept {
 	public static ComputationDescription importXML(String xml) {
 
 		XStream xstream = new XStream();
-		xstream.setMode(XStream.ID_REFERENCES);
+		xstream.setMode(XStream.NO_REFERENCES);
 		
 		// Class<ComputationDescription> descriptionOntology =
 		// org.pikater.core.ontology.description.ComputationDescription.class;
