@@ -4,6 +4,7 @@ import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
@@ -18,12 +19,18 @@ import java.io.File;
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_DataManager;
+import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
 import org.pikater.core.ontology.subtrees.file.GetFile;
@@ -339,6 +346,80 @@ public class DataManagerService extends FIPAService {
 			agent.logError(e.getMessage(), e);
 		}
 	}
+	
+	public AgentInfos getAgentInfos(PikaterAgent agent) {
+		
+		if (agent == null) {
+			throw new IllegalArgumentException(
+					"Argument agent can't be null");
+		}
+
+		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		Ontology ontology = AgentInfoOntology.getInstance();
+
+		ACLMessage getAgentInfomsg = new ACLMessage(ACLMessage.REQUEST);
+		getAgentInfomsg.addReceiver(receiver);
+		getAgentInfomsg.setSender(agent.getAID());
+		getAgentInfomsg.setLanguage(agent.getCodec().getName());
+		getAgentInfomsg.setOntology(ontology.getName());
+
+		GetAgentInfos getAgentInfos = new GetAgentInfos();
+		
+		Action action = new Action(agent.getAID(), getAgentInfos);
+		
+		try {
+			agent.getContentManager().fillContent(getAgentInfomsg, action);
+			ACLMessage agentInfoMsg = FIPAService
+					.doFipaRequestClient(agent, getAgentInfomsg);
+
+			Result replyResult = (Result) agent.getContentManager()
+					.extractContent(agentInfoMsg);
+			
+			AgentInfos agentInfos = (AgentInfos) replyResult.getValue();
+
+			return agentInfos;
+			
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (Codec.CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		}
+		
+		return null;
+	}
+	
+	public void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo) {
+		
+		SaveAgentInfo saveAgentInfo = new SaveAgentInfo();
+		saveAgentInfo.setAgentInfo(agentInfo);
+		
+		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		Ontology ontology = AgentInfoOntology.getInstance();
+		
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.addReceiver(receiver);
+		request.setLanguage(agent.getCodec().getName());
+		request.setOntology(ontology.getName());
+	        
+		try {
+			agent.getContentManager().fillContent(request,
+					new Action(receiver, saveAgentInfo));
+		} catch (CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		}
+		
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(agent, request, 10000);
+		} catch (FIPAException e) {
+		}
+
+	}
+	
 	
 	@Deprecated
 	public static jade.util.leap.ArrayList getFilesInfo(PikaterAgent agent,

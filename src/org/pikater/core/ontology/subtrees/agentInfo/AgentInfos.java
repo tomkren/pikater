@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
+import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -23,24 +24,39 @@ public class AgentInfos implements Concept {
 
 	private List<AgentInfo> agentInfos;
 
+	public AgentInfos() {
+		agentInfos = new ArrayList<AgentInfo>();
+	}
+	
 	public List<AgentInfo> getAgentInfos() {
-		if (this.agentInfos == null) {
-			return new ArrayList<AgentInfo>();
-		}
 		return agentInfos;
 	}
 
 	public void setAgentInfos(List<AgentInfo> agentInfos) {
+		if (agentInfos == null) {
+			throw new IllegalArgumentException("Argument agentInfos can't be null");
+		}
+
 		this.agentInfos = agentInfos;
 	}
 
 	public void addAgentInfo(AgentInfo agentInfo) {
-		if (this.agentInfos == null) {
-			this.agentInfos = new ArrayList<AgentInfo>();
+		if (agentInfo == null) {
+			throw new IllegalArgumentException("Argument agentInfo can't be null");
 		}
 		this.agentInfos.add(agentInfo);
 	}
 
+	public boolean contains(Class<? extends Agent_AbstractExperiment> agent) {
+		for (AgentInfo agentInfoI : this.agentInfos) {
+			
+			if ( agentInfoI.getAgentClassName().equals(agent.getName()) ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	public void importModels(Models models) {
 		
