@@ -33,7 +33,7 @@ import org.pikater.core.options.recommend.NMTopRecommender_Box;
  *
  * @author Martin Pilat
  */
-public abstract class Agent_NMTopRecommender extends Agent_Recommender {
+public class Agent_NMTopRecommender extends Agent_Recommender {
 
     /**
 	 * 
