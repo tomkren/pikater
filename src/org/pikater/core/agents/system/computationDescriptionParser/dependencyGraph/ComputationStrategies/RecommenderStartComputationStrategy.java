@@ -25,7 +25,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.Solutio
 import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.SearchOntology;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
@@ -126,7 +126,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		req.setOntology(RecommendOntology.getInstance().getName());
 		// request.setReplyByDate(new Date(System.currentTimeMillis() + 200));
 		
-		Data data = new Data();
+		Data_ data = new Data_();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
 		String testing;
 		if( inputs.get("testing") == null){

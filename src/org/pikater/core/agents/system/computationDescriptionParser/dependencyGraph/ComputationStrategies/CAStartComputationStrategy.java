@@ -18,7 +18,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.Solutio
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
@@ -144,7 +144,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		}
 		agent.setOptions(usedoptions.getOptions());
 		
-		Data data = new Data();
+		Data_ data = new Data_();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
 		String testing;
 		if( inputs.get("testing") == null){

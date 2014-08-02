@@ -24,7 +24,7 @@ import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -156,7 +156,7 @@ public class ComputingAction extends FSMBehaviour {
 
 				eval = new Evaluation();
 				success = true;
-				Data data = executeAction.getTask().getData();
+				Data_ data = executeAction.getTask().getData();
 				output = data.getOutput();
 				mode = data.getMode();
 

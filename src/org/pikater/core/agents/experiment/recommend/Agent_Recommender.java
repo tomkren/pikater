@@ -31,7 +31,7 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.RecommendOntology;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -48,7 +48,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	 */
 	private static final long serialVersionUID = 1314060594137998065L;
 
-	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data data);
+	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data_ data);
 	protected abstract String getAgentType();
 	protected abstract boolean finished();
 	protected abstract void updateFinished();
@@ -134,7 +134,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
                     log("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()), 2);
 
-                    Data data = rec.getData();
+                    Data_ data = rec.getData();
                     
                     // Get metadata:
 					Metadata metadata = null;    

@@ -5,7 +5,7 @@ import jade.content.Concept;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.management.Agent;
 
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public class Task implements Concept {
 
     // setting the task:
     private Agent agent;
-    private Data data;
+    private Data_ data;
     private EvaluationMethod evaluation_method; // e.g. cross validation
 
     // further settings
@@ -136,10 +136,10 @@ public class Task implements Concept {
     public void setAgent(Agent agent) {
         this.agent = agent;
     }
-    public Data getData() {
+    public Data_ getData() {
         return data;
     }
-    public void setData(Data data) {
+    public void setData(Data_ data) {
         this.data = data;
     }
     public EvaluationMethod getEvaluationMethod() {

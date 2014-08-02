@@ -18,7 +18,7 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
@@ -72,7 +72,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         agent.setOptions(options); 
     	//agent.setOptions(options); //S,M
     	
-    	Data data = new Data();
+    	Data_ data = new Data_();
     	data.setExternal_test_file_name("weather.arff");
     	data.setTestFileName("28c7b9febbecff6ce207bcde29fc0eb8");
     	data.setExternal_train_file_name("weather.arff");
@@ -125,7 +125,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         agent.setOptions(options); 
     	//agent.setOptions(options); //S,M
     	
-    	Data data = new Data();
+    	Data_ data = new Data_();
     	data.setExternal_test_file_name("weather.arff");
     	data.setTestFileName("28c7b9febbecff6ce207bcde29fc0eb8");
     	data.setExternal_train_file_name("weather.arff");

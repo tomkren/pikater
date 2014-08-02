@@ -3,7 +3,7 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
@@ -22,7 +22,7 @@ public class ExperimentOntology extends BeanOntology {
         String experimentPackage = Experiment.class.getPackage().getName();
 
         String taskPackage = Task.class.getPackage().getName();
-        String dataPackage = Data.class.getPackage().getName();
+        String dataPackage = Data_.class.getPackage().getName();
         
         String optionPackage = NewOption.class.getPackage().getName();
         String restrictionPackage = IRestriction.class.getPackage().getName();

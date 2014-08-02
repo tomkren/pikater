@@ -5,7 +5,7 @@ import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
@@ -21,7 +21,7 @@ public class TaskOntology extends BeanOntology {
         super("TaskOntology");
 
         String taskPackage = Task.class.getPackage().getName();
-        String dataPackage = Data.class.getPackage().getName();
+        String dataPackage = Data_.class.getPackage().getName();
         String durationPackage = LongTermDuration.class.getPackage().getName();
         
         String optionPackage = NewOption.class.getPackage().getName();

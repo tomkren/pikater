@@ -61,7 +61,7 @@ public class WebToCoreEntryPoint {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		PikaterGateway_General.MASTER_PORT=2100;
+		PikaterGateway_General.MASTER_PORT=1099;
 		
 		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfos();
 

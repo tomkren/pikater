@@ -32,7 +32,7 @@ import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Data_;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -361,7 +361,7 @@ public class Agent_Duration extends PikaterAgent {
 		ag.setType("LinearRegression");
 		ag.setOptions(new ArrayList<NewOption>());
 
-		Data d = new Data();
+		Data_ d = new Data_();
 		d.setTestFileName("xxx");
 		d.setTrainFileName(filename);
 		d.setExternal_test_file_name("xxx");
