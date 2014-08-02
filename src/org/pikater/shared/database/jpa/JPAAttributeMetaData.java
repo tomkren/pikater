@@ -24,13 +24,10 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 	private double ratioOfMissingValues;
 	private boolean isTarget;
 	private String name;
-	/**
-	 * TODO: DB schema change
-	private String type;
 	private double classEntropy;
-	private int order;
-	private String attributeType; @see {@link JPAGlobalMetaData} 
-	**/
+	private double entropy;
+	private int attrOrder;
+
 	
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;
@@ -53,6 +50,29 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public double getClassEntropy() {
+		return classEntropy;
+	}
+	public void setClassEntropy(double classEntropy) {
+		this.classEntropy = classEntropy;
+	}
+
+	public int getOrder() {
+		return attrOrder;
+	}
+
+	public void setOrder(int order) {
+		this.attrOrder = order;
+	}
+
+	public double getEntropy() {
+		return entropy;
+	}
+
+	public void setEntropy(double entropy) {
+		this.entropy = entropy;
 	}
 
 	@Override

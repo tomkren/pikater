@@ -46,6 +46,8 @@ public class JPAMetaDataReader {
 			JPAGlobalMetaData globMD=new JPAGlobalMetaData();
 			globMD.setNumberofInstances(md.getNumberOfInstances());
 			globMD.setDefaultTaskType(DAOs.taskTypeDAO.createOrGetByName(md.getDefaultTask()));
+			globMD.setAttributeType(md.getAttributeType());
+			globMD.setLinearRegressionDuration(md.getLinearRegressionDuration());
 			return globMD;
 		}
 		
@@ -61,54 +63,50 @@ public class JPAMetaDataReader {
 	            if(attName==null){
 	            	attName="attr_"+i;
 	            }
+	            JPAAttributeMetaData jpaam=new JPAAttributeMetaData() {};
+	            
 	            if(att instanceof CategoricalAttributeMetadata){
 	            	int numberOfCategories=((CategoricalAttributeMetadata)att).getNumberOfCategories();
-	            	JPAAttributeCategoricalMetaData attrCat=new JPAAttributeCategoricalMetaData();
-	            	attrCat.setNumberOfCategories(numberOfCategories);
-	            	attrCat.setRatioOfMissingValues(att.getRatioOfMissingValues());
-	            	attrCat.setTarget(att.isIsTarget());
-	            	attrCat.setName(attName);
-	            	attrs.add(attrCat);
+	            	jpaam=new JPAAttributeCategoricalMetaData();
+	            	((JPAAttributeCategoricalMetaData)jpaam).setNumberOfCategories(numberOfCategories);
+	            	
 	            }else if(att instanceof RealAttributeMetadata){
 	            	RealAttributeMetadata ram= ((RealAttributeMetadata)att);
 	            	
-	            	JPAAttributeNumericalMetaData numericalAttributeMetaData=new JPAAttributeNumericalMetaData();
-	            	numericalAttributeMetaData.setAvarage(ram.getAvg());
-	            	numericalAttributeMetaData.setClassEntropy(ram.getAttributeClassEntropy());
-	            	numericalAttributeMetaData.setMax(ram.getMax());
-	            	numericalAttributeMetaData.setMedian(ram.getMedian());
-	            	numericalAttributeMetaData.setMin(ram.getMin());
+	            	jpaam=new JPAAttributeNumericalMetaData();
+	            	((JPAAttributeNumericalMetaData)jpaam).setAvarage(ram.getAvg());
+	            	((JPAAttributeNumericalMetaData)jpaam).setMax(ram.getMax());
+	            	((JPAAttributeNumericalMetaData)jpaam).setMedian(ram.getMedian());
+	            	((JPAAttributeNumericalMetaData)jpaam).setMin(ram.getMin());
 	            	///IMPORTANT!!!!   Getting mode value is not implemented yet!!!
-	            	numericalAttributeMetaData.setMode(Double.NaN);
+	            	((JPAAttributeNumericalMetaData)jpaam).setMode(Double.NaN);
+	            	((JPAAttributeNumericalMetaData)jpaam).setReal(true);
+	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getStandardDeviation());
 	            	
-	            	numericalAttributeMetaData.setReal(true);
-	            	numericalAttributeMetaData.setVariance(ram.getStandardDeviation());
-	            	numericalAttributeMetaData.setTarget(att.isIsTarget());
-	            	numericalAttributeMetaData.setRatioOfMissingValues(att.getRatioOfMissingValues());
-	            	numericalAttributeMetaData.setName(attName);
-	            	attrs.add(numericalAttributeMetaData);
 	            }else if(att instanceof IntegerAttributeMetadata){
 	            	IntegerAttributeMetadata ram= ((IntegerAttributeMetadata)att);
 	            	
-	            	JPAAttributeNumericalMetaData numericalAttributeMetaData=new JPAAttributeNumericalMetaData();
-	            	numericalAttributeMetaData.setAvarage(ram.getAvg());
-	            	numericalAttributeMetaData.setClassEntropy(ram.getAttributeClassEntropy());
-	            	numericalAttributeMetaData.setMax(ram.getMax());
-	            	numericalAttributeMetaData.setMedian(ram.getMedian());
-	            	numericalAttributeMetaData.setMin(ram.getMin());
+	            	jpaam=new JPAAttributeNumericalMetaData();
+	            	((JPAAttributeNumericalMetaData)jpaam).setAvarage(ram.getAvg());
+	            	((JPAAttributeNumericalMetaData)jpaam).setMax(ram.getMax());
+	            	((JPAAttributeNumericalMetaData)jpaam).setMedian(ram.getMedian());
+	            	((JPAAttributeNumericalMetaData)jpaam).setMin(ram.getMin());
 	            	///IMPORTANT!!!!   Getting mode value is not implemented yet!!!
-	            	numericalAttributeMetaData.setMode(Double.NaN);
-	            	
-	            	numericalAttributeMetaData.setReal(false);
-	            	numericalAttributeMetaData.setVariance(ram.getStandardDeviation());
-	            	
-	            	numericalAttributeMetaData.setTarget(att.isIsTarget());
-	            	numericalAttributeMetaData.setRatioOfMissingValues(att.getRatioOfMissingValues());
-	            	numericalAttributeMetaData.setName(attName);
-	            	attrs.add(numericalAttributeMetaData);
+	            	((JPAAttributeNumericalMetaData)jpaam).setMode(Double.NaN);
+	            	((JPAAttributeNumericalMetaData)jpaam).setReal(false);
+	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getStandardDeviation());
 	            }else{
 	            	System.out.println(att.toString());
 	            }
+	            
+	            jpaam.setRatioOfMissingValues(att.getRatioOfMissingValues());
+            	jpaam.setTarget(att.isIsTarget());
+            	jpaam.setName(attName);
+	            jpaam.setClassEntropy(att.getAttributeClassEntropy());
+	            jpaam.setEntropy(att.getEntropy());
+	            jpaam.setOrder(att.getOrder());
+	            
+	            attrs.add(jpaam);
 	        }
 			
 			return attrs;

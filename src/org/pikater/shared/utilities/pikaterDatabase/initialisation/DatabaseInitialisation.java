@@ -42,10 +42,10 @@ public class DatabaseInitialisation {
 	
 	private void init() throws UserNotFoundException, FileNotFoundException, IOException, SQLException, ParseException{
 		
-		DatabaseTest dbTest=new DatabaseTest();
+		//DatabaseTest dbTest=new DatabaseTest();
 		
-		//this.createRolesAndUsers();
-		dbTest.listUserAndRoles();
+		this.createRolesAndUsers();
+		//dbTest.listUserAndRoles();
 		/**
 		this.createSampleResult();
 		dbTest.listResults();
@@ -60,8 +60,8 @@ public class DatabaseInitialisation {
 		dbTest.listBatches();
 		**/
 		
-		addExternalAgent("core/ext_agents/org_pikater_external_ExternalWekaAgent.jar", "ExternalTestingAgent", "Testing agent from JAR");
-		listExternalAgents();
+		//addExternalAgent("core/ext_agents/org_pikater_external_ExternalWekaAgent.jar", "ExternalTestingAgent", "Testing agent from JAR");
+		//listExternalAgents();
 	}
 	
 	
@@ -90,7 +90,8 @@ public class DatabaseInitialisation {
 				
 				JPADataSetLO newDSLO=new JPADataSetLO(owner,datasetI.getName());
 				//hash a OID will be set using DAO
-				DAOs.dataSetDAO.storeNewDataSet(datasetI, newDSLO);
+				//DAOs.dataSetDAO.storeNewDataSet(datasetI, newDSLO);
+				DAOs.dataSetDAO.storeNewDataSet(datasetI, datasetI.getName(), "stepan");
 				
 				System.out.println("--------------------");
 				System.out.println();

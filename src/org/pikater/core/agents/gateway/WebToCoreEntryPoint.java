@@ -1,6 +1,7 @@
 package org.pikater.core.agents.gateway;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
@@ -56,12 +57,26 @@ public class WebToCoreEntryPoint {
 		PikaterGateway_NewDataset.newDataset(IDnewDataset);
 	}
 
+	
+	public static void uploadDataset(String filename,String user,String description) throws IOException{
+		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename),description,user);
+		System.out.println("Dataset uploaded with ID : "+id);
+		System.out.println("Demanding metadata computation...");
+		try{
+			WebToCoreEntryPoint.notify_newDataset(id);
+			System.out.println("Metadata computation finished");
+			
+		}catch(PikaterGatewayException pgwe){
+			System.err.println("Error during metadata computation");
+		}
+	}
+	
 	/*
 	 * Test
 	 */
 	public static void main(String[] args) throws Exception {
 
-		PikaterGateway_General.MASTER_PORT=1099;
+		PikaterGateway_General.MASTER_PORT=2100;//1099;
 		
 		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfos();
 
@@ -69,18 +84,12 @@ public class WebToCoreEntryPoint {
 			System.out.println("AgentInfo: " + agentInfoI.getName());
 		}
 
-		JPAUser owner=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin("sp")).getSingleResultWithNull();
-		JPADataSetLO init= new JPADataSetLO(owner, "ionosphere");
-		DAOs.dataSetDAO.storeNewDataSet(new File("core/datasets/ionosphere.arff"),init);
-		System.out.println("Dataset uploaded with ID : "+init.getId());
-		System.out.println("Demanding metadata computation...");
-		try{
-			WebToCoreEntryPoint.notify_newDataset(init.getId());
-			System.out.println("Metadata computation finished");
-			
-		}catch(PikaterGatewayException pgwe){
-			System.err.println("Error during metadata computation");
-		}
+		WebToCoreEntryPoint.uploadDataset("core/datasets/weather.arff", "sp", "weather");
+		WebToCoreEntryPoint.uploadDataset("core/datasets/iris.arff", "sp", "iris");
+		WebToCoreEntryPoint.uploadDataset("core/datasets/glass.arff", "sp", "glass");
+		WebToCoreEntryPoint.uploadDataset("core/datasets/autos.arff", "sp", "autos");
+		WebToCoreEntryPoint.uploadDataset("core/datasets/mushroom.arff", "sp", "mushroom");
+		WebToCoreEntryPoint.uploadDataset("core/datasets/ionosphere.arff", "sp", "ionosphere");
 		
 	}
 }

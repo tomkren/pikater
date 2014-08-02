@@ -27,19 +27,11 @@ public class JPAGlobalMetaData extends JPAAbstractEntity{
 	@ManyToOne
 	private JPATaskType defaultTaskType;
 	private int numberofInstances;
-	/**
-	 * TODO: DB schema change
-	 * private String attributeType;
-	 */
+	private String attributeType;
+	private int linearRegressionDuration;
 	
-
 	public JPAGlobalMetaData(){
 		super();
-	}
-	
-	public JPAGlobalMetaData(int numberOfInstances,JPATaskType defaultTaskType){
-		this.numberofInstances=numberOfInstances;
-		this.defaultTaskType=defaultTaskType;
 	}
 	
 	public JPATaskType getDefaultTaskType() {
@@ -54,6 +46,21 @@ public class JPAGlobalMetaData extends JPAAbstractEntity{
 	public void setNumberofInstances(int numberofInstances) {
 		this.numberofInstances = numberofInstances;
 	}
+	public String getAttributeType() {
+		return attributeType;
+	}
+
+	public void setAttributeType(String attributeType) {
+		this.attributeType = attributeType;
+	}
+	public int getLinearRegressionDuration() {
+		return linearRegressionDuration;
+	}
+
+	public void setLinearRegressionDuration(int linearRegressionDuration) {
+		this.linearRegressionDuration = linearRegressionDuration;
+	}
+	
 	@Transient
 	public static final String EntityName = "GlobalMetaData";
 
@@ -62,6 +69,8 @@ public class JPAGlobalMetaData extends JPAAbstractEntity{
 		JPAGlobalMetaData updatedValues=(JPAGlobalMetaData)newValues;
 		this.defaultTaskType=updatedValues.getDefaultTaskType();
 		this.numberofInstances=updatedValues.getNumberofInstances();
+		this.linearRegressionDuration=updatedValues.getLinearRegressionDuration();
+		this.attributeType=updatedValues.getAttributeType();
 	}
 	
 	

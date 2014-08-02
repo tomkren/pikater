@@ -73,7 +73,6 @@ import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
@@ -109,6 +108,7 @@ import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 
 import com.google.common.io.Files;
@@ -567,7 +567,7 @@ public class Agent_DataManager extends PikaterAgent {
 		Batch batch = new Batch();
 		batch.setId(batchJPA.getId());
 		batch.setName(batchJPA.getName());
-		batch.setStatus(batchJPA.getStatus().toString()); //TODO:
+		batch.setStatus(batchJPA.getStatus().name());
 		batch.setOwnerID(batchJPA.getOwner().getId());
 		batch.setPriority(batchJPA.getPriority());
 		batch.setDescription(compDescription);
@@ -671,10 +671,10 @@ public class Agent_DataManager extends PikaterAgent {
 		log("Saving result for hash: "+task.getDatas().exportInternalTrainFileName());
 		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
 		
-		/**
-		 * TODO: add field for output hash in entity
-		 * again, it needs DB schema change, should be done in the night
-		 */
+		for(TaskOutput output : task.getOutput()){
+			jparesult.getOutputs().add(output.getName());
+			log("Adding output "+output.getName()+" to result for train dataset "+task.getDatas().exportInternalTrainFileName());
+		}
 
 		float errorRate = Float.MAX_VALUE;
 		float kappa_statistic = Float.MAX_VALUE;
@@ -792,23 +792,11 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		
 		try {
-			JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin(sd.getUserLogin())).getSingleResult();
-			File sourceFile=new File(sd.getSourceFile());
 			
-			JPADataSetLO newDSLO=new JPADataSetLO();
-			newDSLO.setCreated(new Date());
-			newDSLO.setDescription(sd.getDescription());
-			newDSLO.setOwner(user);
-			//hash a OID will be set using DAO
-			DAOs.dataSetDAO.storeNewDataSet(sourceFile, newDSLO);
+			int jpadsloID=DAOs.dataSetDAO.storeNewDataSet(new File(sd.getSourceFile()), sd.getDescription(), sd.getUserLogin());
 			
-			JPAFilemapping fm=new JPAFilemapping();
-			fm.setExternalfilename(sourceFile.getName());
-			fm.setInternalfilename(newDSLO.getHash());
-			fm.setUser(user);
-			DAOs.filemappingDAO.storeEntity(fm);
-			reply.setContentObject((new Integer(newDSLO.getId())));
-			log("Saved Dataset with ID: "+newDSLO.getId());
+			reply.setContentObject((new Integer(jpadsloID)));
+			log("Saved Dataset with ID: "+jpadsloID);
 		} catch (NoResultException e) {
 			logError("No user found with login: "+sd.getUserLogin(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
@@ -885,24 +873,7 @@ public class Agent_DataManager extends PikaterAgent {
 		JPADataSetLO dslo= new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getInternal_filename())).getSingleResultWithNull();
 
 		if(dslo!=null){			
-			JPAFilemapping fm=new ResultFormatter<JPAFilemapping>(DAOs.filemappingDAO.getByInternalFilename(dslo.getHash())).getSingleResultWithNull();
-
-			m.setDefaultTask(dslo.getGlobalMetaData().getDefaultTaskType().getName());
-			m.setNumberOfInstances(dslo.getGlobalMetaData().getNumberofInstances());
-			m.setNumberOfAttributes(dslo.getNumberOfAttributes());
-			if(fm!=null){
-				m.setExternalName(fm.getExternalfilename()); //TODO: Deprecated, do we need this
-				m.setInternalName(fm.getInternalfilename()); //TODO: Deprecated, do we need this
-			}
-
-			boolean missing=false;
-			for(JPAAttributeMetaData jpaamd:dslo.getAttributeMetaData()){
-				missing=missing||(jpaamd.getRatioOfMissingValues()>0);
-			}
-			m.setMissingValues(missing);
-
-			//Deprecated m.setAttributeType(rs.getString("attributeType"));
-
+			m=this.convertJPADatasetToOntologyMetadata(dslo);
 			reply.setPerformative(ACLMessage.INFORM);
 		}else{
 			reply.setPerformative(ACLMessage.FAILURE);
@@ -912,6 +883,83 @@ public class Agent_DataManager extends PikaterAgent {
 		getContentManager().fillContent(reply, _result);
 
 		return reply;
+	}
+	
+	private AttributeMetadata convertJPAAttributeMetadataToOntologyMetadata(JPAAttributeMetaData amd){
+		AttributeMetadata attributeMetadata;
+
+		if(amd instanceof JPAAttributeNumericalMetaData){
+
+			JPAAttributeNumericalMetaData jpaAttrnum=(JPAAttributeNumericalMetaData)amd;
+
+			attributeMetadata=new NumericalAttributeMetadata();
+
+			((NumericalAttributeMetadata)attributeMetadata).setAvg(jpaAttrnum.getAvarage());
+			((NumericalAttributeMetadata)attributeMetadata).setMax(jpaAttrnum.getMax());
+			((NumericalAttributeMetadata)attributeMetadata).setMin(jpaAttrnum.getMin());
+			((NumericalAttributeMetadata)attributeMetadata).setMedian(jpaAttrnum.getMedian());
+			((NumericalAttributeMetadata)attributeMetadata).setStandardDeviation(jpaAttrnum.getVariance());
+
+		}else if(amd instanceof JPAAttributeCategoricalMetaData){
+			JPAAttributeCategoricalMetaData jpaAttrCat=(JPAAttributeCategoricalMetaData)amd;
+
+			attributeMetadata=new CategoricalAttributeMetadata();
+
+			((CategoricalAttributeMetadata)attributeMetadata).setNumberOfCategories(jpaAttrCat.getNumberOfCategories());
+
+		}else{
+			attributeMetadata=new AttributeMetadata();
+		}
+
+		attributeMetadata.setRatioOfMissingValues(amd.getRatioOfMissingValues());
+		attributeMetadata.setIsTarget(amd.isTarget());
+		attributeMetadata.setName(amd.getName());
+		attributeMetadata.setAttributeClassEntropy(amd.getClassEntropy());
+		attributeMetadata.setEntropy(amd.getEntropy());
+		attributeMetadata.setOrder(amd.getOrder());
+		
+		return attributeMetadata;
+	}
+	
+	private Metadata convertJPADatasetToOntologyMetadata(JPADataSetLO dslo){
+		JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
+
+		Metadata globalMetaData = new Metadata();
+		
+		JPAFilemapping fm=new ResultFormatter<JPAFilemapping>(DAOs.filemappingDAO.getByInternalFilename(dslo.getHash())).getSingleResultWithNull();
+		
+		if(fm!=null){
+			globalMetaData.setExternalName(fm.getExternalfilename());
+			globalMetaData.setInternalName(fm.getInternalfilename());
+		}else{
+			globalMetaData.setInternalName(dslo.getHash());
+			globalMetaData.setExternalName(dslo.getDescription());
+		}
+
+
+		globalMetaData.setDefaultTask(gmd.getDefaultTaskType().getName());
+		globalMetaData.setNumberOfInstances(gmd.getNumberofInstances());
+		globalMetaData.setNumberOfAttributes(dslo.getNumberOfAttributes());
+
+		globalMetaData.setAttributeType(gmd.getAttributeType());
+		globalMetaData.setLinearRegressionDuration(gmd.getLinearRegressionDuration());
+		
+		List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
+
+		boolean missingValues=false;
+
+		for(JPAAttributeMetaData amd:attrMDs){
+			AttributeMetadata attributeMetadata=this.convertJPAAttributeMetadataToOntologyMetadata(amd);
+			
+			missingValues = missingValues || (amd.getRatioOfMissingValues()>0);
+
+			globalMetaData.getAttributeMetadataList().add(attributeMetadata);
+		}
+
+		globalMetaData.setMissingValues(missingValues);
+		
+		return globalMetaData;
+
 	}
 	
 	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
@@ -957,104 +1005,10 @@ public class Agent_DataManager extends PikaterAgent {
 
 		if(datasets!=null){
 			for(JPADataSetLO dslo:datasets){
-
-				//Getting the Global MetaData for the respond
-				JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
-
-				Metadata globalMetaData = new Metadata();
-
-				globalMetaData.setInternalName(dslo.getHash());
-				globalMetaData.setExternalName(dslo.getDescription());
-
-				globalMetaData.setDefaultTask(gmd.getDefaultTaskType().getName());
-				globalMetaData.setNumberOfInstances(gmd.getNumberofInstances());
-
-				List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
-				globalMetaData.setNumberOfAttributes(attrMDs.size());
-
-				boolean missingValues=false;
-				String type="";
-
-				for(JPAAttributeMetaData amd:attrMDs){
-
-					AttributeMetadata attributeMetadata;
-
-					if(amd instanceof JPAAttributeNumericalMetaData){
-
-						JPAAttributeNumericalMetaData jpaAttrnum=(JPAAttributeNumericalMetaData)amd;
-
-						attributeMetadata=new NumericalAttributeMetadata();
-
-						((NumericalAttributeMetadata)attributeMetadata).setAvg(jpaAttrnum.getAvarage());
-						((NumericalAttributeMetadata)attributeMetadata).setMax(jpaAttrnum.getMax());
-						((NumericalAttributeMetadata)attributeMetadata).setMin(jpaAttrnum.getMin());
-						((NumericalAttributeMetadata)attributeMetadata).setMedian(jpaAttrnum.getMedian());
-						((NumericalAttributeMetadata)attributeMetadata).setStandardDeviation(jpaAttrnum.getVariance());
-
-					}else if(amd instanceof JPAAttributeCategoricalMetaData){
-						JPAAttributeCategoricalMetaData jpaAttrCat=(JPAAttributeCategoricalMetaData)amd;
-
-						attributeMetadata=new CategoricalAttributeMetadata();
-
-						((CategoricalAttributeMetadata)attributeMetadata).setNumberOfCategories(jpaAttrCat.getNumberOfCategories());
-
-					}else{
-						attributeMetadata=new AttributeMetadata();
-					}
-
-					if(amd instanceof JPAAttributeNumericalMetaData){
-						//TODO: move classentropy to JPAAttrubuteMetadata
-						attributeMetadata.setAttributeClassEntropy(((JPAAttributeNumericalMetaData)amd).getClassEntropy());
-					}
-
-					attributeMetadata.setRatioOfMissingValues(amd.getRatioOfMissingValues());
-					attributeMetadata.setIsTarget(amd.isTarget());
-					attributeMetadata.setName(amd.getName());
-
-
-					/**
-					 * TODO: add missing fields to entities
-					 * DB schema change is needed - adding fields 'entropy','order' to JPAAttributeMetadata - , commit should be done in the night
-
-					attributeMetadata.setEntropy();
-					attributeMetadata.setOrder()
-
-					 */
-					missingValues = missingValues || (amd.getRatioOfMissingValues()>0);
-
-					globalMetaData.getAttributeMetadataList().add(attributeMetadata);
-
-				}
-
-				/**
-				 * TODO: set multivariate if different attribute types exists in dataset
-				 * needs DB schema change - adding 'type' field to JPAGlobalMetadata or JPAAttributeMetadata -, commit should be done in the night
-				globalMetaData.setAttributeType(attributeType);
-				 * 
-				 */
-
-				globalMetaData.setMissingValues(missingValues);
-
+				Metadata globalMetaData=this.convertJPADatasetToOntologyMetadata(dslo);
 				allMetadata.add(globalMetaData);
-
 			}
 		}
-		
-		
-		/**
-		while (rs.next()) {
-			Metadata m = new Metadata();
-			m.setAttribute_type(rs.getString("attributeType"));
-			m.setDefault_task(rs.getString("defaultTask"));
-			m.setExternal_name(rs.getString("externalFilename"));
-			m.setInternal_name(rs.getString("internalFilename"));
-			m.setMissing_values(rs.getBoolean("missingValues"));
-			m.setNumber_of_attributes(rs.getInt("numberOfAttributes"));
-			m.setNumber_of_instances(rs.getInt("numberOfInstances"));
-
-			allMetadata.add(m);
-		}
-		**/
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
