@@ -173,7 +173,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				getExperimmentAgentClasses(
 						Agent_Recommender.class));
 		allAgentClasses.remove(Agent_Recommender.class);
-*/
+//*/
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
 						Agent_VirtualBoxProvider.class));

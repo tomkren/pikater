@@ -28,7 +28,6 @@ import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
