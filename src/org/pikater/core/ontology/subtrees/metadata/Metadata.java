@@ -19,7 +19,7 @@ public class Metadata implements Concept {
 	private int numberOfAttributes = -1;
 	private boolean missingValues;
 	private String defaultTask; // Classification, Regression, Clustering
-	private String attributeType; // Categorical, Numerical, Mixed
+	private String attributeType; // Categorical, Numerical, Mixed, Multivariate
 	private int linearRegressionDuration; // ms
 	private List<AttributeMetadata> attributeMetadataList = new ArrayList<AttributeMetadata>();
 
@@ -108,12 +108,14 @@ public class Metadata implements Concept {
 		this.numberOfAttributes = numberOfAttributes;
 	}
 
+	
 	public boolean getMissingValues() {
 		return missingValues;
 	}
 	public void setMissingValues(boolean missingValues) {
 		this.missingValues = missingValues;
 	}
+	
 
 	public String getDefaultTask() {
 		return defaultTask;

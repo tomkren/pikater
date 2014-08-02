@@ -90,12 +90,16 @@ public class Agent_Basic extends Agent_Recommender {
 		}
         log(sb.toString());
 		
-		log("Nearest file: " + m_best.getExternalName(), Verbosity.MINIMAL);
-		String nearestInternalName = m_best.getInternalName();
-
-		// 2. find the agent with the lowest error_rate
-		org.pikater.core.ontology.subtrees.management.Agent agent = DataManagerService
-				.getTheBestAgent(this, nearestInternalName);
+		log("Nearest file: " + ((m_best!=null)?m_best.getExternalName():"only original file has results"), Verbosity.MINIMAL);
+		
+		
+		org.pikater.core.ontology.subtrees.management.Agent agent = null;
+		
+		if(m_best!=null){
+			String nearestInternalName = m_best.getInternalName();
+			// 2. find the agent with the lowest error_rate
+			agent = DataManagerService.getTheBestAgent(this, nearestInternalName);
+		}
 		
 		if (agent != null){
 			String wekaOptionString = NewOptions.exportToWeka(agent.getOptions()); 
@@ -106,7 +110,7 @@ public class Agent_Basic extends Agent_Recommender {
 			agent=new org.pikater.core.ontology.subtrees.management.Agent();
 			agent.setType(Agent_Recommender.DEFAULT_AGENT.getName());
 			agent.setName(Agent_Recommender.DEFAULT_AGENT.getName());
-			log("No results in database for file " + m_best.getExternalName()+" ... Using default agent: "+agent.getType());
+			log("No results in database for file " + ((m_best!=null)?m_best.getExternalName():"no file")+" ... Using default agent: "+agent.getType());
 			
 		}
 		

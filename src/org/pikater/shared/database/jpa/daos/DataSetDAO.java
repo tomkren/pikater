@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.eclipse.persistence.jpa.JpaCache;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
@@ -20,6 +21,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
+import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
@@ -182,11 +184,37 @@ public class DataSetDAO extends AbstractDAO{
 	}
 	
 	public List<JPADataSetLO> getAllWithResults(){
-		return getAll(); //TODO: multiple query with results
+		return EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("DataSetLO.getAllWithResults", JPADataSetLO.class)
+				.getResultList();
 	}
 	
 	public List<JPADataSetLO> getAllWithResultsExcludingHashes(List<String> hashesToBeExcluded){
-		return getAllExcludingHashes(hashesToBeExcluded); //TODO: multiple query with results
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaBuilder cb= em.getCriteriaBuilder();
+		
+		CriteriaQuery<JPADataSetLO> cq=cb.createQuery(JPADataSetLO.class);
+		Root<JPADataSetLO> r=cq.from(JPADataSetLO.class);
+		
+		Predicate p=cb.conjunction();
+		for(String exHash:hashesToBeExcluded){
+			p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
+		}
+		
+		Subquery<JPAResult> subquery=cq.subquery(JPAResult.class);
+		Root<JPAResult> sqroot=subquery.from(JPAResult.class);
+		
+		subquery=subquery.where(cb.equal(sqroot.get("serializedFileName"), r.get("hash")));
+		
+		p=cb.and(p, cb.exists(subquery));
+		
+		
+		cq=cq.where(p);
+		
+		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
+		
+		return res;
 	}
 	
 	public void storeNewDataSet(File dataset,JPADataSetLO initialData) throws IOException{

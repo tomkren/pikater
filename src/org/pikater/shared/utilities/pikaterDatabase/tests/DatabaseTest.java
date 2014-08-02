@@ -35,9 +35,10 @@ public class DatabaseTest {
 	
 	public void test(){
 		//removeResult();
+		listDataSetsWithResults();
 		//listDataSets();
 		//addExperiment();
-		listExternalAgents();
+		//listExternalAgents();
 		//listDataSetWithExclusion();
 		//listResults();
 		//listUserAndRoles();
@@ -47,6 +48,20 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void listDataSetsWithResults() {
+		//List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllWithResults();
+		List<String> exlist=new ArrayList<String>();
+		exlist.add("28c7b9febbecff6ce207bcde29fc0eb8");
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exlist);
+		p("No. of found DataSets: "+dslos.size());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+		}
+		p("------------");
+		p("");
+		
+	}
+
 	public void removeResult(){
 		int resultId=76453;
 		System.out.println("Deleting result no.: "+resultId);

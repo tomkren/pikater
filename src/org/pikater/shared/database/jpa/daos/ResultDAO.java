@@ -47,6 +47,16 @@ public class ResultDAO extends AbstractDAO {
 		return getByTypedNamedQuery("Result.getByDataSetHash", "hash", dataSetHash);
 	}
 	
+	public List<JPAResult> getResultsByDataSetHashAscendingUponErrorRate(String dataSetHash,int count){
+	    return this.getByTypedNamedQuery(
+	    		JPAResult.class,
+	    		"Result.getByDataSetHashErrorAscending",
+	    		"hash",
+	    		dataSetHash,
+	    		0,
+	    		count);
+	}
+	
 	/**
 	 * Persists a model for the specific result
 	 * <p>

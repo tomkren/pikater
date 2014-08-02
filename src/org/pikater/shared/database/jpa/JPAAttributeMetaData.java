@@ -24,6 +24,13 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 	private double ratioOfMissingValues;
 	private boolean isTarget;
 	private String name;
+	/**
+	 * TODO: DB schema change
+	private String type;
+	private double classEntropy;
+	private int order;
+	private String attributeType; @see {@link JPAGlobalMetaData} 
+	**/
 	
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;

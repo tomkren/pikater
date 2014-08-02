@@ -29,6 +29,7 @@ import org.pikater.shared.database.jpa.daos.DataSetDAO;
 @NamedQueries({
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getAll.count",query="select count(dslo) from JPADataSetLO dslo"),
+	@NamedQuery(name="DataSetLO.getAllWithResults",query="select dslo from JPADataSetLO dslo where exists (select r from JPAResult r where r.serializedFileName = dslo.hash) "),
 	@NamedQuery(name="DataSetLO.getByID",query="select dslo from JPADataSetLO dslo where dslo.id=:id"),
 	@NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner"),
 	@NamedQuery(name="DataSetLO.getByOwner.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner"),

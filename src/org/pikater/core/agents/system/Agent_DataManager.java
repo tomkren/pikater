@@ -93,6 +93,9 @@ import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadatas;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
+import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
+import org.pikater.core.ontology.subtrees.metadata.attributes.CategoricalAttributeMetadata;
+import org.pikater.core.ontology.subtrees.metadata.attributes.NumericalAttributeMetadata;
 import org.pikater.core.ontology.subtrees.model.GetModel;
 import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Model;
@@ -666,6 +669,11 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setOptions(options.exportXML());
 		log("Saving result for hash: "+task.getData().getInternalTrainFileName());
 		jparesult.setSerializedFileName(task.getData().getInternalTrainFileName());
+		
+		/**
+		 * TODO: add field for output hash in entity
+		 * again, it needs DB schema change, should be done in the night
+		 */
 
 		float errorRate = Float.MAX_VALUE;
 		float kappa_statistic = Float.MAX_VALUE;
@@ -947,37 +955,88 @@ public class Agent_DataManager extends PikaterAgent {
 		List<Metadata> allMetadata = new ArrayList<Metadata>();
 
 		if(datasets!=null){
-		for(JPADataSetLO dslo:datasets){
-			
-			//Getting the Global MetaData for the respond
-			JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
-			
-			List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
-			for(JPAAttributeMetaData amd:attrMDs){
-				Metadata aM = new Metadata();
-				
-				
-				aM.setInternalName(dslo.getHash());
-				aM.setExternalName(dslo.getDescription());
-				
-				aM.setDefaultTask(gmd.getDefaultTaskType().getName());
-				aM.setNumberOfInstances(gmd.getNumberofInstances());
-				
-				aM.setMissingValues(amd.getRatioOfMissingValues()>0);
-				aM.setNumberOfAttributes(attrMDs.size());
-				
-				if(amd instanceof JPAAttributeNumericalMetaData){
-					aM.setAttributeType("Numerical");
-				}else if(amd instanceof JPAAttributeCategoricalMetaData){
-					aM.setAttributeType("Categorical");
-				}else{
-					aM.setAttributeType("Mixed");
+			for(JPADataSetLO dslo:datasets){
+
+				//Getting the Global MetaData for the respond
+				JPAGlobalMetaData gmd=dslo.getGlobalMetaData();
+
+				Metadata globalMetaData = new Metadata();
+
+				globalMetaData.setInternalName(dslo.getHash());
+				globalMetaData.setExternalName(dslo.getDescription());
+
+				globalMetaData.setDefaultTask(gmd.getDefaultTaskType().getName());
+				globalMetaData.setNumberOfInstances(gmd.getNumberofInstances());
+
+				List<JPAAttributeMetaData> attrMDs = dslo.getAttributeMetaData();
+				globalMetaData.setNumberOfAttributes(attrMDs.size());
+
+				boolean missingValues=false;
+				String type="";
+
+				for(JPAAttributeMetaData amd:attrMDs){
+
+					AttributeMetadata attributeMetadata;
+
+					if(amd instanceof JPAAttributeNumericalMetaData){
+
+						JPAAttributeNumericalMetaData jpaAttrnum=(JPAAttributeNumericalMetaData)amd;
+
+						attributeMetadata=new NumericalAttributeMetadata();
+
+						((NumericalAttributeMetadata)attributeMetadata).setAvg(jpaAttrnum.getAvarage());
+						((NumericalAttributeMetadata)attributeMetadata).setMax(jpaAttrnum.getMax());
+						((NumericalAttributeMetadata)attributeMetadata).setMin(jpaAttrnum.getMin());
+						((NumericalAttributeMetadata)attributeMetadata).setMedian(jpaAttrnum.getMedian());
+						((NumericalAttributeMetadata)attributeMetadata).setStandardDeviation(jpaAttrnum.getVariance());
+
+					}else if(amd instanceof JPAAttributeCategoricalMetaData){
+						JPAAttributeCategoricalMetaData jpaAttrCat=(JPAAttributeCategoricalMetaData)amd;
+
+						attributeMetadata=new CategoricalAttributeMetadata();
+
+						((CategoricalAttributeMetadata)attributeMetadata).setNumberOfCategories(jpaAttrCat.getNumberOfCategories());
+
+					}else{
+						attributeMetadata=new AttributeMetadata();
+					}
+
+					if(amd instanceof JPAAttributeNumericalMetaData){
+						//TODO: move classentropy to JPAAttrubuteMetadata
+						attributeMetadata.setAttributeClassEntropy(((JPAAttributeNumericalMetaData)amd).getClassEntropy());
+					}
+
+					attributeMetadata.setRatioOfMissingValues(amd.getRatioOfMissingValues());
+					attributeMetadata.setIsTarget(amd.isTarget());
+					attributeMetadata.setName(amd.getName());
+
+
+					/**
+					 * TODO: add missing fields to entities
+					 * DB schema change is needed - adding fields 'entropy','order' to JPAAttributeMetadata - , commit should be done in the night
+
+					attributeMetadata.setEntropy();
+					attributeMetadata.setOrder()
+
+					 */
+					missingValues = missingValues || (amd.getRatioOfMissingValues()>0);
+
+					globalMetaData.getAttributeMetadataList().add(attributeMetadata);
+
 				}
-				
-				allMetadata.add(aM);
+
+				/**
+				 * TODO: set multivariate if different attribute types exists in dataset
+				 * needs DB schema change - adding 'type' field to JPAGlobalMetadata or JPAAttributeMetadata -, commit should be done in the night
+				globalMetaData.setAttributeType(attributeType);
+				 * 
+				 */
+
+				globalMetaData.setMissingValues(missingValues);
+
+				allMetadata.add(globalMetaData);
+
 			}
-			
-		}
 		}
 		
 		
@@ -1010,38 +1069,27 @@ public class Agent_DataManager extends PikaterAgent {
 	
 	private ACLMessage respondToGetTheBestAgent(ACLMessage request, Action a) throws ClassNotFoundException, CodecException, OntologyException {
 		GetMultipleBestAgents g = (GetMultipleBestAgents) a.getAction();
-		String name = g.getNearestInternalFileName();
+		String datasethash = g.getNearestInternalFileName();
+		int count = g.getNumberOfAgents();
 
-		log("DataManager.GetTheBestAgent for datafile "+name);
+		log("DataManager.GetTheBestAgent for datafile "+datasethash);
 		
-		//TODO: querying for multiple agents , count from aclmessage GetMultipleBestAgents.numberofagents
-		List<JPAResult> results =  DAOs.resultDAO.getByDataSetHash(name);
+		List<JPAResult> results =  DAOs.resultDAO.getResultsByDataSetHashAscendingUponErrorRate(datasethash, count);
 
 		ACLMessage reply = request.createReply();
 		
 		Agents foundAgents=new Agents();
 		if(results.size()>0){
 			
-			
-			double errorRate=Double.MAX_VALUE;
-			JPAResult candidate=null;
-			boolean isFirst=true;
-			for(JPAResult result:results){				
-				if((isFirst)||(result.getErrorRate()<errorRate)){
-					errorRate=result.getErrorRate();
-					candidate=result;
-					isFirst=false;
-				}
-			}
-		
-			NewOptions options = NewOptions.importXML(candidate.getOptions());
-			
-			Agent agent = new Agent();
-			agent.setName(candidate.getAgentName());
-			agent.setType(candidate.getAgentName()); 
-			agent.setOptions(options.getOptions());
-			
-			foundAgents.add(agent);
+			for(JPAResult result : results){
+				NewOptions options = NewOptions.importXML(result.getOptions());
+				
+				Agent agent = new Agent();
+				agent.setName(result.getAgentName());
+				agent.setType(result.getAgentName()); 
+				agent.setOptions(options.getOptions());
+				foundAgents.add(agent);
+			}	
 		}
 		
 		reply.setPerformative(ACLMessage.INFORM);
