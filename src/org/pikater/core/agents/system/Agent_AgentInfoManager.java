@@ -14,6 +14,7 @@ import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
 import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
 import org.pikater.core.agents.system.agentInfoManager.AgentInfoManagerCommunicator;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
@@ -21,7 +22,6 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.reflections.Reflections;
 
 import jade.content.lang.Codec;
@@ -109,15 +109,24 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		});
 		
 
-		//initializationAgentInfo();
+		initializationAgentInfo();
 
 	}
 
 	private void initializationAgentInfo() {
-		List<Class<? extends Agent_AbstractExperiment>> classes =
+		List<Class<? extends Agent_AbstractExperiment>> agentClasses =
 				getAllExperimmentAgentClasses();
 		
-		wakeUpAgentInfo(classes);
+		DataManagerService service = new DataManagerService();
+		AgentInfos savedAgentInfos = service.getAgentInfos(this);
+		
+		List<Class<? extends Agent_AbstractExperiment>> notSavedAgentClasses =
+				notSavedClasses(agentClasses, savedAgentInfos);
+		
+		wakeUpAgentInfo(notSavedAgentClasses);
+		
+		Thread shutDownAgents = new ShutDownAgents(this, notSavedAgentClasses);
+		shutDownAgents.start();
 	}
 
 	private void wakeUpAgentInfo(
@@ -130,13 +139,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		}
 		
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
-		
+			
 			AgentInfo agentInfo = getAgentInfo(this, agentClassI.getName());
-			saveAgentInfo(agentInfo);
+			
+			DataManagerService service = new DataManagerService();
+			service.saveAgentInfo(this, agentInfo);
 		}
 		
-		Thread shutDownAgents = new ShutDownAgents(this, agentClasses);
-		shutDownAgents.start();
 	}
 	
 	private List<Class<? extends Agent_AbstractExperiment>> getAllExperimmentAgentClasses() {
@@ -159,7 +168,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				getExperimmentAgentClasses(
 						Agent_Search.class));
 		allAgentClasses.remove(Agent_Search.class);
-	
+
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
 						Agent_Recommender.class));
@@ -203,6 +212,22 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return allClasses;
 	}
 
+	private List<Class<? extends Agent_AbstractExperiment>> notSavedClasses(
+			List<Class<? extends Agent_AbstractExperiment>> agentClasses,
+			AgentInfos savedAgentInfos) {
+		
+		List<Class<? extends Agent_AbstractExperiment>> notSavedAgents =
+				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
+		
+		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
+			
+			if (! savedAgentInfos.contains(agentClassI)) {
+				notSavedAgents.add(agentClassI);
+			}
+		}
+		return notSavedAgents;
+	}
+	
 	private ACLMessage respondToGetAgentInfos(ACLMessage request, Action action) {
 
 		ACLMessage reply = request.createReply();
@@ -252,8 +277,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return reply;
 	}
 
-	
-	private AgentInfo getAgentInfo(PikaterAgent agent, String agentName) {
+	public AgentInfo getAgentInfo(PikaterAgent agent, String agentName) {
 		
 		if (agent == null) {
 			throw new IllegalArgumentException(
@@ -283,7 +307,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			ACLMessage agentInfoMsg = FIPAService
 					.doFipaRequestClient(agent, getAgentInfomsg);
 
-			Action replyAction = (Action) getContentManager()
+			Action replyAction = (Action) agent.getContentManager()
 					.extractContent(agentInfoMsg);
 			
 			AgentInfo agentInfo = (AgentInfo) replyAction.getAction();
@@ -300,37 +324,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		return null;
 	}
-	
-	
-	private void saveAgentInfo(AgentInfo agentInfo) {
-		
-		SaveAgentInfo saveAgentInfo = new SaveAgentInfo();
-		saveAgentInfo.setAgentInfo(agentInfo);
-		
-		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
-		Ontology ontology = AgentInfoOntology.getInstance();
-		
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(receiver);
-		request.setLanguage(getCodec().getName());
-		request.setOntology(ontology.getName());
-	        
-		try {
-			getContentManager().fillContent(request,
-					new Action(receiver, saveAgentInfo));
-		} catch (CodecException e) {
-			logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
-		}
-		
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(this, request, 10000);
-		} catch (FIPAException e) {
-		}
 
-	}
 
 }
 

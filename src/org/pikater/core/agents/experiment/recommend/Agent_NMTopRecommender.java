@@ -33,7 +33,7 @@ import org.pikater.core.options.recommend.NMTopRecommender_Box;
  *
  * @author Martin Pilat
  */
-public abstract class Agent_NMTopRecommender extends Agent_Recommender {
+public class Agent_NMTopRecommender extends Agent_Recommender {
 
     /**
 	 * 
@@ -50,6 +50,17 @@ public abstract class Agent_NMTopRecommender extends Agent_Recommender {
 	private boolean done = false;
 
     
+    @Override
+    protected String getAgentType() {
+        return "NMTopRecommender";
+    }
+
+	@Override
+	protected AgentInfo getAgentInfo() {
+
+		return NMTopRecommender_Box.get();
+	}
+	
     class MetadataDistancePair implements Comparable<MetadataDistancePair> {
 
         Metadata m;
@@ -289,16 +300,6 @@ public abstract class Agent_NMTopRecommender extends Agent_Recommender {
         return agent;
     }
 
-    @Override
-    protected String getAgentType() {
-        return "NMTopRecommender";
-    }
-
-	@Override
-	protected AgentInfo getAgentInfo() {
-
-		return NMTopRecommender_Box.get();
-	}
 
     private double distance(Metadata m1, Metadata m2) {
 
