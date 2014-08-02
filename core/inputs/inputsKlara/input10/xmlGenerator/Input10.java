@@ -24,11 +24,11 @@ public final class Input10 {
         
 		// Specify a datasource
 		DataSourceDescription fileDataSource1 = new DataSourceDescription();
-		fileDataSource1.setDataInputType("weather1");
+		fileDataSource1.setDataInputType("firstInput");
 		fileDataSource1.setDataProvider(fileDataProvider);
 
 		DataSourceDescription fileDataSource2 = new DataSourceDescription();
-		fileDataSource2.setDataInputType("weather2");
+		fileDataSource2.setDataInputType("secondInput");
 		fileDataSource2.setDataProvider(fileDataProvider2);
 
 		// PreProcessing

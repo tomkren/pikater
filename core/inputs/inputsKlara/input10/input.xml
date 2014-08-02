@@ -22,7 +22,7 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
-              <dataInputType>weather1</dataInputType>
+              <dataInputType>firstInput</dataInputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
             <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -32,7 +32,7 @@
                 <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
-              <dataInputType>weather2</dataInputType>
+              <dataInputType>secondInput</dataInputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
@@ -59,7 +59,7 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
-              <dataInputType>weather1</dataInputType>
+              <dataInputType>firstInput</dataInputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
             <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -69,7 +69,7 @@
                 <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
-              <dataInputType>weather2</dataInputType>
+              <dataInputType>secondInput</dataInputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
@@ -96,7 +96,7 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
-              <dataInputType>weather1</dataInputType>
+              <dataInputType>firstInput</dataInputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
             <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -106,7 +106,7 @@
                 <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
-              <dataInputType>weather2</dataInputType>
+              <dataInputType>secondInput</dataInputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
