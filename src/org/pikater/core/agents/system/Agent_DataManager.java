@@ -73,6 +73,7 @@ import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
@@ -667,8 +668,8 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setAgentName(task.getAgent().getType());
 		log("Adding result for Agent Type: "+task.getAgent().getType());
 		jparesult.setOptions(options.exportXML());
-		log("Saving result for hash: "+task.getData().getInternalTrainFileName());
-		jparesult.setSerializedFileName(task.getData().getInternalTrainFileName());
+		log("Saving result for hash: "+task.getDatas().exportInternalTrainFileName());
+		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
 		
 		/**
 		 * TODO: add field for output hash in entity

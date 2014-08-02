@@ -24,7 +24,8 @@ import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.system.data.AgentDataSource;
 import org.pikater.core.agents.system.data.AgentDataSourceCommunicator;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.data.Data_;
+import org.pikater.core.ontology.subtrees.data.Datas;
+import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.task.Eval;
@@ -156,11 +157,11 @@ public class ComputingAction extends FSMBehaviour {
 
 				eval = new Evaluation();
 				success = true;
-				Data_ data = executeAction.getTask().getData();
+				Datas data = executeAction.getTask().getDatas();
 				output = data.getOutput();
 				mode = data.getMode();
 
-				trainFn = data.getTrainFileName();
+				trainFn = data.exportInternalTrainFileName();
 				AchieveREInitiator getTrainBehaviour = (AchieveREInitiator)
 						((ComputingAction) parent).getState(GETTRAINDATA_STATE);
 
@@ -175,7 +176,7 @@ public class ComputingAction extends FSMBehaviour {
 				}
 
 				if (!mode.equals("train_only")) {
-					testFn = data.getTestFileName();
+					testFn = data.exportInternalTestFileName();
 					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETTESTDATA_STATE);
 					
@@ -190,8 +191,8 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 
-				if (data.getLabelFileName() != null) {
-					labelFn = data.getLabelFileName();
+				if (data.exportData(DataTypes.VALID_DATA) != null) {
+					labelFn = data.exportInternalValidFileName();
 					AchieveREInitiator getLabelBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETLABELDATA_STATE);
 					

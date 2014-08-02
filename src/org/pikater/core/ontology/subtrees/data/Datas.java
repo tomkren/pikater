@@ -3,6 +3,9 @@ package org.pikater.core.ontology.subtrees.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.data.types.DataTypes;
+import org.pikater.core.ontology.subtrees.metadata.Metadata;
+
 import jade.content.Concept;
 
 public class Datas implements Concept {
@@ -13,6 +16,7 @@ public class Datas implements Concept {
 	private static final long serialVersionUID = -3792833251974572524L;
 	
 	private List<Data> datas;
+	private Metadata metadata;
 	
 	private String output = "evaluation_only"; // "predictions"
 	private String mode = "train_test"; // test_only, train_test, train_only
@@ -42,6 +46,13 @@ public class Datas implements Concept {
 		return null;
 	}
 
+	public Metadata getMetadata() {
+		return metadata;
+	}
+	public void setMetadata(Metadata metadata) {
+		this.metadata = metadata;
+	}
+
 	public String getOutput() {
 		return output;
 	}
@@ -56,4 +67,100 @@ public class Datas implements Concept {
 		this.mode = mode;
 	}
 	
+	
+	public void importInternalTrainFileName(String internalTrainFileName) {
+		Data trainData = exportData(DataTypes.TRAIN_DATA);
+		if (trainData == null) {
+			trainData = new Data("",
+					internalTrainFileName,
+					DataTypes.TRAIN_DATA
+					);
+			addData(trainData);
+		} else {
+			trainData.setInternalFileName(internalTrainFileName);
+		}
+	}
+	public String exportInternalTrainFileName() {
+		return exportData(DataTypes.TRAIN_DATA).getInternalFileName();
+	}
+
+	public void importExternalTrainFileName(String externalTrainFileName) {
+		Data trainData = exportData(DataTypes.TRAIN_DATA);
+		if (trainData == null) {
+			trainData = new Data(externalTrainFileName,
+					"",
+					DataTypes.TRAIN_DATA
+					);
+			addData(trainData);
+		} else {
+			trainData.setExternalFileName(externalTrainFileName);
+		}
+	}
+	public String exportExternalTrainFileName() {
+		return exportData(DataTypes.TRAIN_DATA).getExternalFileName();
+	}
+	
+	public void importInternalTestFileName(String internalTestFileName) {
+		Data testData = exportData(DataTypes.TEST_DATA);
+		if (testData == null) {
+			testData = new Data("",
+					internalTestFileName,
+					DataTypes.TEST_DATA
+					);
+			addData(testData);
+		} else {
+			testData.setInternalFileName(internalTestFileName);
+		}
+	}
+	public String exportInternalTestFileName() {
+		return exportData(DataTypes.TEST_DATA).getInternalFileName();
+	}
+
+	public void importExternalTestFileName(String externalTestFileName) {
+		Data testData = exportData(DataTypes.TEST_DATA);
+		if (testData == null) {
+			testData = new Data(externalTestFileName,
+					"",
+					DataTypes.TEST_DATA
+					);
+			addData(testData);
+		} else {
+			testData.setExternalFileName(externalTestFileName);
+		}
+	}
+	public String exportExternalTestFileName() {
+		return exportData(DataTypes.TEST_DATA).getExternalFileName();
+	}
+	
+	public void importInternalValidFileName(String internalValidFileName) {
+		Data validData = exportData(DataTypes.VALID_DATA);
+		if (validData == null) {
+			validData = new Data("",
+					internalValidFileName,
+					DataTypes.VALID_DATA
+					);
+			addData(validData);
+		} else {
+			validData.setInternalFileName(internalValidFileName);
+		}
+	}
+	public String exportInternalValidFileName() {
+		return exportData(DataTypes.VALID_DATA).getInternalFileName();
+	}
+
+	public void importExternalValidFileName(String externalValidFileName) {
+		Data validData = exportData(DataTypes.VALID_DATA);
+		if (validData == null) {
+			validData = new Data(externalValidFileName,
+					"",
+					DataTypes.VALID_DATA
+					);
+			addData(validData);
+		} else {
+			validData.setExternalFileName(externalValidFileName);
+		}
+	}
+	public String exportExternalValidFileName() {
+		return exportData(DataTypes.VALID_DATA).getExternalFileName();
+	}
 }

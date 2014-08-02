@@ -16,8 +16,12 @@ public final class Input06 {
 
 	public static ComputationDescription createDescription() {
 		
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI("weather.arff");
+        
         //Specify a datasource
-        DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
+        DataSourceDescription fileDataSource = new DataSourceDescription();
+        fileDataSource.setDataProvider(fileDataProvider);
 
         //Create validation method for a computing agent
         EvaluationMethod evaluationMethod = new EvaluationMethod();
@@ -76,11 +80,11 @@ public final class Input06 {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		System.out.println("Exporting Ontology input01 to Klara's input XML configuration file.");
+		System.out.println("Exporting Ontology input06 to Klara's input XML configuration file.");
 
 		ComputationDescription comDescription = createDescription();
 		
-		String fileName = Agent_GUIKlara.filePath + "input01"
+		String fileName = Agent_GUIKlara.filePath + "input06"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 

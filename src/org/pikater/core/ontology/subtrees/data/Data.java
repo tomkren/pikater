@@ -17,6 +17,8 @@ public class Data implements Concept {
 	
 	private Metadata metadata;
 
+	public Data() {}
+	
 	public Data(String internalFileName, String externalFileName,
 			String dataType) {
 		this.internalFileName = internalFileName;

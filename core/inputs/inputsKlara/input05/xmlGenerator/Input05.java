@@ -1,12 +1,9 @@
 package xmlGenerator;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.experiment.recommend.Agent_Basic;
 import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -19,8 +16,12 @@ public final class Input05 {
 
 	public static ComputationDescription createDescription() {
 		
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI("weather.arff");
+        
         //Specify a datasource
-        DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
+        DataSourceDescription fileDataSource = new DataSourceDescription();
+        fileDataSource.setDataProvider(fileDataProvider);
         
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();

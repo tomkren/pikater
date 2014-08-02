@@ -31,7 +31,7 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.RecommendOntology;
-import org.pikater.core.ontology.subtrees.data.Data_;
+import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -48,7 +48,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	 */
 	private static final long serialVersionUID = 1314060594137998065L;
 
-	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Data_ data);
+	protected abstract org.pikater.core.ontology.subtrees.management.Agent chooseBestAgent(Datas data);
 	protected abstract String getAgentType();
 	protected abstract boolean finished();
 	protected abstract void updateFinished();
@@ -134,23 +134,23 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
                     log("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()), 2);
 
-                    Data_ data = rec.getData();
+                    Datas datas = rec.getDatas();
                     
                     // Get metadata:
 					Metadata metadata = null;    
 					
 					// if metatada are not yet in ontology		
-					if (rec.getData().getMetadata() == null) {
+					if (rec.getDatas().getMetadata() == null) {
 						// or fetch them from database:
 						GetMetadata gm = new GetMetadata();
-						gm.setInternal_filename(rec.getData().getTestFileName());
+						gm.setInternal_filename(rec.getDatas().exportInternalTestFileName());
 						metadata = DataManagerService.getMetadata(agent, gm);
-						data.setMetadata(metadata);
+						datas.setMetadata(metadata);
 					}                            			
 
 					// else TODO - overit, jestli jsou metadata OK, pripadne vygenerovat
 					
-					org.pikater.core.ontology.subtrees.management.Agent recommended_agent = chooseBestAgent(rec.getData());
+					org.pikater.core.ontology.subtrees.management.Agent recommended_agent = chooseBestAgent(rec.getDatas());
                     
 					if(recommended_agent==null){
 						reply.setPerformative(ACLMessage.FAILURE);

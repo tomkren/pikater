@@ -5,6 +5,7 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
+
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
@@ -18,7 +19,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.Solutio
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
-import org.pikater.core.ontology.subtrees.data.Data_;
+import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
@@ -144,7 +145,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		}
 		agent.setOptions(usedoptions.getOptions());
 		
-		Data_ data = new Data_();
+		Datas datas = new Datas();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
 		String testing;
 		if( inputs.get("testing") == null){
@@ -154,10 +155,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 			testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();
 		}
 		
-		data.setExternal_train_file_name(training);
-		data.setExternal_test_file_name(testing);
-		data.setTestFileName(myAgent.getHashOfFile(training, 1));
-		data.setTrainFileName(myAgent.getHashOfFile(testing, 1));
+		datas.importExternalTrainFileName(training);
+		datas.importInternalTrainFileName(myAgent.getHashOfFile(training, 1));
+		datas.importExternalTestFileName(testing);
+		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, 1));
 
 		IExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setSave_results(true);
@@ -165,7 +166,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		task.setNodeId(computationNode.getId());
 		task.setGraphId(graphId);
 		task.setAgent(agent);
-		task.setData(data);
+		task.setDatas(datas);
 		task.setExpectedDuration(duration);
 		task.setPriority(computationNode.getPriority());
 		task.setExperimentID(computationNode.getExperimentID());

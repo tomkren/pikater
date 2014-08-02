@@ -18,7 +18,9 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.data.Data_;
+import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Datas;
+import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
@@ -72,20 +74,24 @@ public class Agent_PlannerTester extends PikaterAgent {
         agent.setOptions(options); 
     	//agent.setOptions(options); //S,M
     	
-    	Data_ data = new Data_();
-    	data.setExternal_test_file_name("weather.arff");
-    	data.setTestFileName("28c7b9febbecff6ce207bcde29fc0eb8");
-    	data.setExternal_train_file_name("weather.arff");
-    	data.setTrainFileName("28c7b9febbecff6ce207bcde29fc0eb8");
-    	data.setMode("train_test");
-    	data.setOutput("evaluation_only");
+    	Datas datas = new Datas();
+    	datas.addData(
+    			new Data("weather.arff",
+    					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					DataTypes.TEST_DATA) );
+    	datas.addData(
+    			new Data("weather.arff",
+    					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					DataTypes.TRAIN_DATA) );
+    	datas.setMode("train_test");
+    	datas.setOutput("evaluation_only");
     	
     	EvaluationMethod method = new EvaluationMethod();
     	method.setType("CrossValidation");
 
     	Task task = new Task();
     	task.setAgent(agent);
-    	task.setData(data);
+    	task.setDatas(datas);
     	task.setEvaluationMethod(method);
     	
         ExecuteTask executeTask = new ExecuteTask();
@@ -125,20 +131,24 @@ public class Agent_PlannerTester extends PikaterAgent {
         agent.setOptions(options); 
     	//agent.setOptions(options); //S,M
     	
-    	Data_ data = new Data_();
-    	data.setExternal_test_file_name("weather.arff");
-    	data.setTestFileName("28c7b9febbecff6ce207bcde29fc0eb8");
-    	data.setExternal_train_file_name("weather.arff");
-    	data.setTrainFileName("28c7b9febbecff6ce207bcde29fc0eb8");
-    	data.setMode("train_test");
-    	data.setOutput("evaluation_only");
+    	Datas datas = new Datas();
+    	datas.addData(
+    			new Data("weather.arff",
+    					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					DataTypes.TEST_DATA) );
+    	datas.addData(
+    			new Data("weather.arff",
+    					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					DataTypes.TRAIN_DATA) );
+    	datas.setMode("train_test");
+    	datas.setOutput("evaluation_only");
     	
     	EvaluationMethod method = new EvaluationMethod();
     	method.setType("CrossValidation");
 
     	Task task = new Task();
     	task.setAgent(agent);
-    	task.setData(data);
+    	task.setDatas(datas);
     	task.setEvaluationMethod(method);
     	
         ExecuteTask executeTask = new ExecuteTask();
