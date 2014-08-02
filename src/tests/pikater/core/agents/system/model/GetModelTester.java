@@ -1,4 +1,4 @@
-package org.pikater.core.agents.util;
+package tests.pikater.core.agents.system.model;
 
 import jade.content.onto.Ontology;
 

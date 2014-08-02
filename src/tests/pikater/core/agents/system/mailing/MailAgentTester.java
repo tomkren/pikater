@@ -1,4 +1,4 @@
-package tests.pikater.core.agents.system;
+package tests.pikater.core.agents.system.mailing;
 
 import java.util.ArrayList;
 import java.util.List;
