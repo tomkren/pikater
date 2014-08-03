@@ -17,6 +17,7 @@ public class Agent implements Concept, Cloneable {
 	
 	private String name;
 	private String type;
+	private Integer model; // null = new model
 	private List<NewOption> options;
 	private byte[] object;
 	
@@ -69,8 +70,17 @@ public class Agent implements Concept, Cloneable {
 		agent.setObject(object);
 		agent.setOptions(options);
 		agent.setType(type);
+		agent.setModel(model);
 
 		return agent;
+	}
+
+	public Integer getModel() {
+		return model;
+	}
+
+	public void setModel(Integer model) {
+		this.model = model;
 	}
 
 }
