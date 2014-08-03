@@ -40,7 +40,7 @@ public class Parser {
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
             FileSaverNode saverNode=new FileSaverNode();
-            saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),1,saverNode));
+            saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),batchID,saverNode));
             computationGraph.addNode(saverNode);
             alreadyProcessed.put(dataSaver.getId(),saverNode);
             parseDataSourceDescription(dataSource, batchID, saverNode, "file");
@@ -151,7 +151,7 @@ public class Parser {
         {
             ModelComputationNode node = new ModelComputationNode();
             CAStartComputationStrategy strategy =
-            		new CAStartComputationStrategy(agent, 1, node);
+            		new CAStartComputationStrategy(agent, batchID, node);
             node.setStartBehavior(strategy);
             alreadyProcessed.put(computingAgent.getId(),node);
 
@@ -212,7 +212,7 @@ public class Parser {
         }
         if (recommenderO!=null)
         {
-            parseRecommender(recommenderO, computingNode);
+            parseRecommender(recommenderO, computingNode,batchID);
         }
         else
         {
@@ -226,12 +226,12 @@ public class Parser {
         Search searchAgentO = complex.getSearch();
         if (searchAgentO!=null)
         {
-            return parseSearch(searchAgentO, computingNode, complex.getErrors(),childOptions);
+            return parseSearch(searchAgentO, computingNode, complex.getErrors(),childOptions,batchID);
         }
         return computingNode;
     }
 
-    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors,List<NewOption> childOptions) {
+    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors,List<NewOption> childOptions, int batchId) {
         agent.log("Ontology Parser - Search");
 
         if (!alreadyProcessed.containsKey(search.getId()))
@@ -247,7 +247,7 @@ public class Parser {
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         searchNode.addInput("childoptions",optionBuffer);
 
-        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,1,searchNode));
+        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,batchId,searchNode));
         StandardBuffer searchBuffer=new StandardBuffer(searchNode,child);
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
         child.addInput("searchedoptions",searchBuffer);
@@ -262,11 +262,11 @@ public class Parser {
         return searchNode;
     }
 
-    public void parseRecommender(Recommend recommender, ComputationNode child) {
+    public void parseRecommender(Recommend recommender, ComputationNode child, int batchId) {
         agent.log("Ontology Parser - Recommender");
 
         RecommenderComputationNode recNode=new RecommenderComputationNode();
-        RecommenderStartComputationStrategy recStrategy=new RecommenderStartComputationStrategy(agent,1,recNode);
+        RecommenderStartComputationStrategy recStrategy=new RecommenderStartComputationStrategy(agent,batchId,recNode);
         recNode.setStartBehavior(recStrategy);
         StandardBuffer recBuffer=new StandardBuffer(recNode,child);
         recNode.addBufferToOutput("agenttype",recBuffer);

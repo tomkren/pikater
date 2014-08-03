@@ -26,7 +26,6 @@ public class ParserBehaviour extends AchieveREResponder {
 	
 	private Agent_Manager agent;
 
-
     public ParserBehaviour(Agent_Manager agent_Manager) {
     	super(agent_Manager, MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
     	
@@ -96,7 +95,7 @@ public class ParserBehaviour extends AchieveREResponder {
 		
 		ComputationGraph computationGraph = parser.getComputationGraph();
         ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request);
-        agent.computationCollection.put(1, item);
+        agent.addComputation(item);
         
         // change status to computing and log to database
         ManagerCommunicator communicator = new ManagerCommunicator();
