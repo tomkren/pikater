@@ -26,6 +26,17 @@ public class DataSourceDescription implements Concept {
         return dataProvider;
     }
     public void setDataProvider(IDataProvider dataProvider) {
+    	
+    	if (dataProvider instanceof FileDataProvider) {
+    		this.setDataOutputType("fileData");
+    		
+    	} else if (dataProvider instanceof ComputingAgent) {
+    		this.setDataOutputType("computedData");
+    		
+    	} else if (dataProvider instanceof CARecSearchComplex) {
+    		this.setDataOutputType("computedData");
+    	}
+    	
         this.dataProvider = dataProvider;
     }
 

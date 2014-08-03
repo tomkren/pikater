@@ -25,7 +25,7 @@ public class FileInput_Box {
 		agentInfo.addOption(optionIN);
 		
 		Slot outputSlot = new Slot();
-		outputSlot.setSlotType("input");
+		outputSlot.setSlotType("fileData");
 		outputSlot.setDataType(SlotTypes.DATA_TYPE);
 		
 		agentInfo.addOutputSlot(outputSlot);

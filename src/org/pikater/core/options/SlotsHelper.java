@@ -9,7 +9,35 @@ import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 public abstract class SlotsHelper
 {
 	//-------------------------------------------------------
-	// LISTS OF SLOTS
+	// INDIVIDUAL SLOT DEFINITIONS
+	
+	public static List<Slot> getSlots_CARecSearchComplexIntput()
+	{
+		Slot recomedSlot = new Slot();
+		recomedSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
+		recomedSlot.setDataType("recommend");
+		recomedSlot.setDescription("Recommends an agent to use (its name).");
+		
+		Slot comAgentSlot = new Slot();
+		comAgentSlot.setSlotType(SlotTypes.AGENT_TYPE);
+		comAgentSlot.setDataType("computedData");
+		comAgentSlot.setDescription("Data computed by an agent.");
+		
+		Slot searchSlot = new Slot();
+		searchSlot.setSlotType(SlotTypes.SEARCH_TYPE);
+		searchSlot.setDataType("search");
+		searchSlot.setDescription("Parameters produced by search.");
+		
+		return Arrays.asList(
+				recomedSlot,
+				comAgentSlot,
+				searchSlot);
+	}
+	
+	public static List<Slot> getSlots_CARecSearchComplexOutput()
+	{
+		return getSlots_CAOutput();
+	}
 	
 	public static List<Slot> getSlots_CAInput()
 	{
@@ -25,70 +53,63 @@ public abstract class SlotsHelper
 		inputValidationSlot.setSlotType(SlotTypes.DATA_TYPE);
 		inputValidationSlot.setDataType("validationData");
 
+		Slot evaluationMethodSlot = new Slot();
+		evaluationMethodSlot.setSlotType(SlotTypes.EVALUATIONMETHOD_TYPE);
+		evaluationMethodSlot.setDataType("evaluationMethod");
+		
 		return Arrays.asList(
 				inputTrainingSlot,
 				inputTestingSlot,
 				inputValidationSlot,
-				getSlot_EvaluationMethod()
+				evaluationMethodSlot
 		);
 	}
 
 	public static List<Slot> getSlots_CAOutput()
 	{
-		return Arrays.asList(getSlot_ComputedData());
+		Slot comAgentSlot = new Slot();
+		comAgentSlot.setSlotType(SlotTypes.AGENT_TYPE);
+		comAgentSlot.setDataType("computedData");
+		comAgentSlot.setDescription("Data computed by an agent.");
+		
+		return Arrays.asList(comAgentSlot);
 	}
 
 	public static List<Slot> getSlots_EvaluationMethodOutput()
 	{
-		return Arrays.asList(getSlot_EvaluationMethod());
+		return Arrays.asList(getSlot_EvaluationMethodOutput());
 	}
 
 	public static List<Slot> getSlots_SearchOutput()
 	{
-		return Arrays.asList(getSlot_ParametersProducedBySearch());
+		Slot searchSlot = new Slot();
+		searchSlot.setSlotType(SlotTypes.SEARCH_TYPE);
+		searchSlot.setDataType("search");
+		searchSlot.setDescription("Parameters produced by search.");
+		
+		return Arrays.asList(searchSlot);
 	}
 
 	public static List<Slot> getSlots_RecommendOutput()
 	{
-		return Arrays.asList(getSlot_RecommendedAgent());
+		Slot recomedSlot = new Slot();
+		recomedSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
+		recomedSlot.setDataType("recommend");
+		recomedSlot.setDescription("Recommends an agent to use (its name).");
+		
+		return Arrays.asList(recomedSlot);
 	}
 	
-	//-------------------------------------------------------
-	// INDIVIDUAL SLOT DEFINITIONS
-	
-	public static Slot getSlot_EvaluationMethod()
+	public static Slot getSlot_EvaluationMethodOutput()
 	{
-		Slot result = new Slot();
-		result.setSlotType(SlotTypes.EVALUATIONMETHOD_TYPE);
-		result.setDataType("evaluationMethod");
-		return result;
+		Slot evaluationMethodSlot = new Slot();
+		evaluationMethodSlot.setSlotType(SlotTypes.EVALUATIONMETHOD_TYPE);
+		evaluationMethodSlot.setDataType("evaluationMethod");
+		return evaluationMethodSlot;
 	}
 	
-	public static Slot getSlot_RecommendedAgent()
-	{
-		Slot result = new Slot();
-		result.setDataType(SlotTypes.RECOMMEND_TYPE);
-		result.setDataType("recommend");
-		result.setDescription("Recommends an agent to use (its name).");
-		return result;
-	}
 	
-	public static Slot getSlot_ParametersProducedBySearch()
-	{
-		Slot result = new Slot();
-		result.setSlotType(SlotTypes.SEARCH_TYPE);
-		result.setDataType("parameters");
-		result.setDescription("Parameters produced by search.");
-		return result;
-	}
 	
-	public static Slot getSlot_ComputedData()
-	{
-		Slot result = new Slot();
-		result.setSlotType(SlotTypes.AGENT_TYPE);
-		result.setDataType("computedData");
-		result.setDescription("Data computed by an agent.");
-		return result;
-	}
+
 
 }
