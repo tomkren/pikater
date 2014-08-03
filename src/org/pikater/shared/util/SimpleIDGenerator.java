@@ -21,6 +21,6 @@ public class SimpleIDGenerator implements Serializable
 	
 	public static Integer getFirstID()
 	{
-		return 0;
+		return 0; // this is required by some of the referencing code
 	}
 }

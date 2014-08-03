@@ -68,7 +68,7 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 		DSVisOneResult result = new DSVisOneResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		try
 		{
-			File downloadedDataset = PostgreLobAccess.downloadFileFromDB(dataset.getOID());
+			// File downloadedDataset = PostgreLobAccess.downloadFileFromDB(dataset.getOID());
 			
 			int count=0;
 			for(String attrY : attrs)
