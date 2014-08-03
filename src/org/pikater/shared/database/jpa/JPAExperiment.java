@@ -20,7 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 
@@ -66,6 +65,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 	public JPAExperiment(JPABatch parentBatch){
 		this.setBatch(parentBatch);
 		this.created=new Date();
+		this.started=this.created;
 		this.modelStrategy=JPAModelStrategy.CREATION;
 	}
 	
@@ -78,6 +78,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 	public JPAExperiment(JPABatch parentBatch,JPAModel model){
 		this.setBatch(parentBatch);
 		this.created=new Date();
+		this.started=this.created;
 		this.modelStrategy=JPAModelStrategy.EXISTING;
 		this.usedModel=model;
 	}
@@ -93,18 +94,7 @@ public class JPAExperiment extends JPAAbstractEntity{
 		this.status = status;
 	}
 	public void setStatus(String status) {
-
-		if ( status.equals(ExperimentStatuses.WAITING) ) {
-			this.status = JPAExperimentStatus.WAITING;
-		} else if ( status.equals(ExperimentStatuses.COMPUTING) ) {
-			this.status = JPAExperimentStatus.STARTED;
-		} else if ( status.equals(ExperimentStatuses.FINISHED) ) {
-			this.status = JPAExperimentStatus.FINISHED;
-		} else if ( status.equals(ExperimentStatuses.FAILED) ) {
-			this.status = JPAExperimentStatus.FAILED;
-		} else {
-			throw new IllegalArgumentException("Experiment status is not valid");
-		}
+		this.setStatus(JPAExperimentStatus.valueOf(status));
 	}
 	
 	public JPABatch getBatch() {

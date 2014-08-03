@@ -7,6 +7,7 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -33,6 +34,7 @@ import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -172,6 +174,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		task.setPriority(computationNode.getPriority());
 		task.setExperimentID(computationNode.getExperimentID());
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());
+		task.setStart(Agent_DataManager.getPikaterDateString(new Date()));
 		
 		return task;
 	}

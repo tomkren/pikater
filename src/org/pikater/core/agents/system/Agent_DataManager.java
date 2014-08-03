@@ -32,6 +32,8 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.ResultFormatter;
@@ -54,8 +56,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -595,7 +595,14 @@ public class Agent_DataManager extends PikaterAgent {
 		UpdateBatchStatus updateBatchStatus = (UpdateBatchStatus) a.getAction();
 		
 		JPABatch batchJPA = DAOs.batchDAO.getByID(updateBatchStatus.getBatchID());
-		batchJPA.setStatus(updateBatchStatus.getStatus());
+		JPABatchStatus batchStatus=JPABatchStatus.valueOf(updateBatchStatus.getStatus());
+		switch(batchStatus){
+			case COMPUTING: batchJPA.setStarted(new Date()); break;
+			case FAILED:
+			case FINISHED: batchJPA.setFinished(new Date()); break;
+			default: break;
+		}
+		batchJPA.setStatus(batchStatus);
 		DAOs.batchDAO.updateEntity(batchJPA);
 		
 		ACLMessage reply = request.createReply();
@@ -613,7 +620,10 @@ public class Agent_DataManager extends PikaterAgent {
 		SaveExperiment saveExperiment = (SaveExperiment) a.getAction();
 		Experiment experiment = saveExperiment.getExperiment();
 		
-		
+		/**TODO: Parser sends SaveExperiment message, when experiment is
+		* created and computation has begun
+		* DAO now sets current date for created and started, but maybe the created can be ommited...
+		* */
 		int savedID = DAOs.batchDAO.addExperimentToBatch(experiment);
 		
 		ACLMessage reply = request.createReply();
@@ -642,12 +652,21 @@ public class Agent_DataManager extends PikaterAgent {
 
 	protected ACLMessage respondToUpdateExperimentStatus(ACLMessage request, Action a) {
 
-		log("respondToUpdateExperimentStatus");
+		logError("respondToUpdateExperimentStatus");
 		
 		UpdateExperimentStatus updateExperimentStatus = (UpdateExperimentStatus) a.getAction();
 		
 		JPAExperiment experimentJPA = DAOs.experimentDAO.getByID(updateExperimentStatus.getExperimentID());
-		experimentJPA.setStatus(updateExperimentStatus.getStatus());
+		JPAExperimentStatus experimentStatus=JPAExperimentStatus.valueOf(updateExperimentStatus.getStatus());
+		switch(experimentStatus){
+			case COMPUTING: experimentJPA.setStarted(new Date()); break;
+			case FAILED:
+			case FINISHED:
+				experimentJPA.setFinished(new Date());
+				break;
+			default: break;
+		}
+		
 		DAOs.experimentDAO.updateEntity(experimentJPA);
 		
 		ACLMessage reply = request.createReply();
@@ -744,29 +763,17 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setDurationLR(durationLR);
 		
 		Date start=new Date();
-		if(task.getStart()!=null){//TODO: retrieve result's start time and set date format
-			try {
-				start=new SimpleDateFormat("YYYY ").parse(task.getStart());
-			} catch (ParseException e) {
-				logError("Result start date in inappropriate format", e);
-			}
+		if(task.getStart()!=null){
+			start=Agent_DataManager.getDateFromPikaterDateString(task.getStart());
+		}else{
+			logError("Result start date isn't set. Using current DateTime");
 		}
 		jparesult.setStart(start);
-		
+		log("Start Date set: "+start.toString());
 		Date finish=new Date();
-		if(task.getFinish()!=null){//TODO: retrieve result's finish time and set date format
-			try {
-				start=new SimpleDateFormat("YYYY ").parse(task.getFinish());
-			} catch (ParseException e) {
-				logError("Result finish date in inappropriate format", e);
-			}
-		}
 		jparesult.setFinish(finish);
+		log("Finish Date set: "+finish.toString());
 
-		// query += "\'" + res.getResult().getObject_filename() + "\', ";
-		// query += "\'" + res.getId().getIdentificator() + "\',"; // TODO -
-		// pozor - neni jednoznacne, pouze pro jednoho managera
-		// query += "\'" + res.getProblem_name() + "\',";
 		jparesult.setNote(task.getNote());
 		log("JPA Result    "+jparesult.getErrorRate());
 		int resultID=DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
@@ -1239,6 +1246,19 @@ getContentManager().fillContent(reply, r);
 
 return reply;
 }
+	
+	public static String getPikaterDateString(Date date){
+		return ""+date.getTime();
+	}
+	
+	public static Date getDateFromPikaterDateString(String dateString){
+		try {
+			long millis=Long.parseLong(dateString);
+			return new Date(millis);
+		} catch (NumberFormatException e) {
+			return new Date();
+		}
+	}
 
 	
 }

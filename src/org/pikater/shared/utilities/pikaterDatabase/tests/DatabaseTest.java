@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
-import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
@@ -24,6 +23,7 @@ import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
@@ -80,7 +80,7 @@ public class DatabaseTest {
 		
 		Experiment exp=new Experiment();
 		exp.setBatchID(jpaBatch.getId());//62901);
-		exp.setStatus(ExperimentStatuses.WAITING.toString());
+		exp.setStatus(JPAExperimentStatus.WAITING.name());
 		
 		int id1=DAOs.batchDAO.addExperimentToBatch(exp);
 		System.out.println("Saved experiment with ID: "+id1);
@@ -89,7 +89,7 @@ public class DatabaseTest {
 		int modelID=12345678;
 		Experiment exp2=new Experiment();
 		exp2.setBatchID(jpaBatch.getId());//62901);
-		exp2.setStatus(ExperimentStatuses.COMPUTING.toString());
+		exp2.setStatus(JPAExperimentStatus.COMPUTING.name());
 		exp2.setModel(modelID);
 		
 		int id2=DAOs.batchDAO.addExperimentToBatch(exp2);

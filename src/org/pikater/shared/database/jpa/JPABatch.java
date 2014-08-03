@@ -64,6 +64,8 @@ public class JPABatch extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 	@Temporal(TemporalType.TIMESTAMP)
+	private Date started;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date finished;
 	
 	/**
@@ -192,6 +194,14 @@ public class JPABatch extends JPAAbstractEntity{
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+	public Date getStarted() {
+		return started;
+	}
+
+	public void setStarted(Date started) {
+		this.started = started;
+	}
+
 	public Date getFinished() {
 		return finished;
 	}
@@ -220,6 +230,7 @@ public class JPABatch extends JPAAbstractEntity{
 		JPABatch updateValues=(JPABatch)newValues;
 		this.created=updateValues.getCreated();
 		this.experiments=updateValues.getExperiments();
+		this.started=updateValues.getStarted();
 		this.finished=updateValues.getFinished();
 		this.name=updateValues.getName();
 		this.note=updateValues.getNote();

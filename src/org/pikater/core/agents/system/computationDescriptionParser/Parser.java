@@ -11,8 +11,8 @@ import org.pikater.core.agents.system.manager.ManagerCommunicator;
 import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
-import org.pikater.core.ontology.subtrees.experiment.experimentStatuses.ExperimentStatuses;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -181,7 +181,7 @@ public class Parser {
         
         // save Experiment
         Experiment experiment = new Experiment();
-        experiment.setStatus(ExperimentStatuses.COMPUTING);
+        experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
         experiment.setBatchID(batchID);
         
         ManagerCommunicator communicator = new ManagerCommunicator();
