@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.Agents;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;
@@ -97,7 +97,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
     }
 
     @Override
-    protected Agent chooseBestAgent(Data data) {
+    protected Agent chooseBestAgent(Datas data) {
 
         Metadata metadata = data.getMetadata();
 

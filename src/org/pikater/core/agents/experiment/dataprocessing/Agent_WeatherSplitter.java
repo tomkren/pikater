@@ -28,6 +28,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
+import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
@@ -84,7 +85,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	protected void setup() {
 		super.setup();
 
-		Ontology ontology = BatchOntology.getInstance();
+		Ontology ontology = TaskOntology.getInstance();
 		MessageTemplate template = MessageTemplate.and(
 				MessageTemplate.MatchOntology(ontology.getName()),
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
@@ -136,7 +137,8 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	
 	private List<DataInstances> getDataForTask(Task t) throws FIPAException {
 		List<DataInstances> res = new ArrayList<>();
-		for (String fname : t.getData().getDataFileNames()) {
+		for (Data dataI : t.getDatas().getDatas()) {
+			String fname = dataI.getInternalFileName();
 			ACLMessage request = makeGetDataRequest(fname);
 			log("sending getData for "+fname);
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
@@ -148,9 +150,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 
 	private Task performTask(Task t) throws FIPAException {
 		log("getting data");
-		if (t.getData().getDataFileNames().size() != 2) {
-			throw new IllegalArgumentException("Expecting exactly 2 data inputs, got "+t.getData().getDataFileNames().size());
-		}
+
 		List<DataInstances> weatherData = getDataForTask(t);
 		log("processing data");
 		ArrayList<TaskOutput> outputs = processData(weatherData);

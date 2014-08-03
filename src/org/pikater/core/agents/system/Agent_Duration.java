@@ -33,6 +33,8 @@ import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Datas;
+import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -360,13 +362,11 @@ public class Agent_Duration extends PikaterAgent {
 				new org.pikater.core.ontology.subtrees.management.Agent();
 		ag.setType("LinearRegression");
 		ag.setOptions(new ArrayList<NewOption>());
-
-		Data d = new Data();
-		d.setTestFileName("xxx");
-		d.setTrainFileName(filename);
-		d.setExternal_test_file_name("xxx");
-		d.setExternal_train_file_name("xxx");
-		d.setMode("train_only");
+		
+		Datas datas = new Datas();
+		datas.addData(new Data(filename, "xxx", DataTypes.TRAIN_DATA));
+		datas.addData(new Data("xxx", "xxx", DataTypes.TEST_DATA));
+		datas.setMode("train_only");
 		
 		Task t = new Task();
 		Id _id = new Id();
@@ -374,7 +374,7 @@ public class Agent_Duration extends PikaterAgent {
 		id++;
 		
 		t.setAgent(ag);
-		t.setData(d);
+		t.setDatas(datas);
 		
 		EvaluationMethod em = new EvaluationMethod();
 		em.setType("Standard"); // TODO don't evaluate at all

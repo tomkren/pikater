@@ -15,8 +15,12 @@ public final class Input01 {
 
 	public static ComputationDescription createDescription() {
 		
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI("weather.arff");
+        
         //Specify a datasource
-        DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
+        DataSourceDescription fileDataSource = new DataSourceDescription();
+        fileDataSource.setDataProvider(fileDataProvider);
 
         //Create validation method for a computing agent
         EvaluationMethod evaluationMethod = new EvaluationMethod();

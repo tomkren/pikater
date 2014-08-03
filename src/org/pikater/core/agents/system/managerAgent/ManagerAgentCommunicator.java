@@ -117,8 +117,8 @@ public class ManagerAgentCommunicator {
 		return false;
 	}
 	
-	public static void loadAgent(PikaterAgent agent, int modelId) {
-		Model m = DataManagerService.getModel(agent, 70704);
+	public static AID loadAgent(PikaterAgent agent, int modelId) {
+		Model m = DataManagerService.getModel(agent, modelId);
 		agent.log("got model, agent size "+m.getSerializedAgent().length+", result ID "+m.getResultID());
 
 		LoadAgent act = new LoadAgent();
@@ -135,10 +135,12 @@ public class ManagerAgentCommunicator {
 			if (response == null) {
 				agent.logError("did not receive LoadAgent response for model "+modelId+" in time");
 			} else {
-				agent.log("LoadAgent for model "+ modelId +" finished");
+				agent.log("LoadAgent for model "+ modelId +" finished, AID="+response.getContent());
+				return new AID(response.getContent(), AID.ISLOCALNAME);
 			}
 		} catch (CodecException | OntologyException | FIPAException e) {
 			agent.logError("LoadAgent service failure", e);
 		}
+		throw new IllegalStateException("LoadAgent for model "+modelId+" failed");
 	}
 }

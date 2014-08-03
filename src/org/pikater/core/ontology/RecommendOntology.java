@@ -5,6 +5,7 @@ import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.Agents;
+import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
@@ -33,6 +34,8 @@ public class RecommendOntology extends BeanOntology {
         String valueDataPackage = IValueData.class.getPackage().getName();
         String valuePackage = BooleanValue.class.getPackage().getName();
         
+        String metaDataPackage=AttributeMetadata.class.getPackage().getName();
+        
         
         try {
 
@@ -47,6 +50,9 @@ public class RecommendOntology extends BeanOntology {
             add(typePackage);
             add(valueDataPackage);
             add(valuePackage);
+            
+            add(metaDataPackage);
+            
             
         } catch (Exception e) {
             e.printStackTrace();

@@ -17,8 +17,12 @@ public final class Input04 {
 
 	public static ComputationDescription createDescription() {
 		
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI("weather.arff");
+        
         //Specify a datasource
-        DataSourceDescription fileDataSource=new DataSourceDescription("weather.arff");
+        DataSourceDescription fileDataSource = new DataSourceDescription();
+        fileDataSource.setDataProvider(fileDataProvider);
         
         //Create new computing agent, add options and datasource that we have created above
 		ComputingAgent comAgent = new ComputingAgent();

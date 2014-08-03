@@ -5,6 +5,7 @@ import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 
 import java.io.FileNotFoundException;
@@ -15,11 +16,20 @@ public final class Input10 {
 
 	public static ComputationDescription createDescription() {
 		
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI("weather.arff");
+        
+        FileDataProvider fileDataProvider2 = new FileDataProvider();
+        fileDataProvider2.setFileURI("weather2.arff");
+        
 		// Specify a datasource
-		DataSourceDescription fileDataSource1 = new DataSourceDescription(
-				"weather.arff");
-		DataSourceDescription fileDataSource2 = new DataSourceDescription(
-				"weather2.arff");
+		DataSourceDescription fileDataSource1 = new DataSourceDescription();
+		fileDataSource1.setDataInputType("firstInput");
+		fileDataSource1.setDataProvider(fileDataProvider);
+
+		DataSourceDescription fileDataSource2 = new DataSourceDescription();
+		fileDataSource2.setDataInputType("secondInput");
+		fileDataSource2.setDataProvider(fileDataProvider2);
 
 		// PreProcessing
 		DataProcessing processing = new DataProcessing();

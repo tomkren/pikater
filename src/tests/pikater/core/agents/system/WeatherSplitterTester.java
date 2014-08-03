@@ -16,6 +16,7 @@ import java.util.List;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -37,13 +38,22 @@ public class WeatherSplitterTester extends PikaterAgent {
 		AID receiver = new AID("splitter", false);
 
 		ExecuteTask ex = new ExecuteTask();
-		Data data = new Data();
-		ArrayList<String> inputs = new ArrayList<>();
-		inputs.add("28c7b9febbecff6ce207bcde29fc0eb8");
-		inputs.add("28c7b9febbecff6ce207bcde29fc0eb8"); // same file twice for testing
-		data.setDataFileNames(inputs);
+		Datas datas = new Datas();
+		datas.addData(
+				new Data(
+						"28c7b9febbecff6ce207bcde29fc0eb8",
+						"weather.arff",
+						"weather1"
+						));
+		datas.addData(
+				new Data(
+						"28c7b9febbecff6ce207bcde29fc0eb8",
+						"weather.arff",
+						"weather2"
+						));		
+
 		Task task = new Task();
-		task.setData(data);
+		task.setDatas(datas);
 		ex.setTask(task);
 		
 		try {

@@ -123,7 +123,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
 				logError("Failure responding to request: "
-						+ request.getContent());
+						+ request.getContent().substring(0, 2048));
 				return failure;
 			}
 		});

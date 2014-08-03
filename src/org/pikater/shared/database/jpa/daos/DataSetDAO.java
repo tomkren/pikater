@@ -3,6 +3,7 @@ package org.pikater.shared.database.jpa.daos;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -20,6 +21,7 @@ import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -217,23 +219,46 @@ public class DataSetDAO extends AbstractDAO{
 		return res;
 	}
 	
-	public void storeNewDataSet(File dataset,JPADataSetLO initialData) throws IOException{
+	/**
+	 * TODO: make it transactional
+	 * Stores a new dataset from file to the database and creates the corresponding {@link JPADataSetLO} and {@link JPAFilemapping} objects.
+	 * @param sourceFile
+	 * @param initialData
+	 * @return ID of the new {@link JPADataSetLO} object
+	 * @throws IOException
+	 */
+	public int storeNewDataSet(File sourceFile,String description,String userlogin) throws IOException{
+		
+		JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin(userlogin)).getSingleResult();
+		
+		JPADataSetLO newDSLO=new JPADataSetLO();
+		newDSLO.setCreated(new Date());
+		newDSLO.setDescription(description);
+		newDSLO.setOwner(user);
+		
 		long oid = -1;
-		String hash = Hash.getMD5Hash(dataset);
+		String hash = Hash.getMD5Hash(sourceFile);
 		List<JPADataSetLO> sameHashDS = DAOs.dataSetDAO.getByHash(hash);
 		if (sameHashDS.size() > 0) {
 			oid = sameHashDS.get(0).getOID();
 		} else {
 			try {
-				oid = PostgreLobAccess.saveFileToDB(dataset);
+				oid = PostgreLobAccess.saveFileToDB(sourceFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		initialData.setHash(hash);
-		initialData.setOID(oid);
-		initialData.setSize(dataset.length());
-		storeEntity(initialData);
+		JPAFilemapping fm=new JPAFilemapping();
+		fm.setExternalfilename(sourceFile.getName());
+		fm.setInternalfilename(hash);
+		fm.setUser(user);
+		DAOs.filemappingDAO.storeEntity(fm);
+		newDSLO.setHash(hash);
+		newDSLO.setOID(oid);
+		newDSLO.setSize(sourceFile.length());
+		storeEntity(newDSLO);
+		
+		return newDSLO.getId();
 	}
 		
 	private List<JPADataSetLO> getByTypedNamedQuery(String queryName,String paramName,Object param){

@@ -15,34 +15,17 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.RecommenderComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.AgentTypeEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
-import org.pikater.core.agents.system.manager.StartGettingParametersFromSearch;
 import org.pikater.core.ontology.RecommendOntology;
-import org.pikater.core.ontology.SearchOntology;
-import org.pikater.core.ontology.subtrees.data.Data;
+import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.ValuesForOption;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.recommend.Recommend;
-import org.pikater.core.ontology.subtrees.search.GetParameters;
-import org.pikater.core.ontology.subtrees.search.SearchSolution;
-import org.pikater.core.ontology.subtrees.search.searchItems.IntervalSearchItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,17 +75,13 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			
 			recommendedAgent = (Agent) r.getItems().get(0);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		} catch (UngroundedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			myAgent.logError(e.getMessage(), e);
 		}
 		
 		// fill in the queues of CA
@@ -126,7 +105,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		req.setOntology(RecommendOntology.getInstance().getName());
 		// request.setReplyByDate(new Date(System.currentTimeMillis() + 200));
 		
-		Data data = new Data();
+		Datas datas = new Datas();
 		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
 		String testing;
 		if( inputs.get("testing") == null){
@@ -136,13 +115,13 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();
 		}
 		
-		data.setExternal_train_file_name(training);
-		data.setExternal_test_file_name(testing);
-		data.setTestFileName(myAgent.getHashOfFile(training, 1));
-		data.setTrainFileName(myAgent.getHashOfFile(testing, 1));
+		datas.importExternalTrainFileName(training);
+		datas.importExternalTestFileName(testing);
+		datas.importInternalTrainFileName(myAgent.getHashOfFile(training, 1));
+		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, 1));
 
 		Recommend recommend = new Recommend();
-		recommend.setData(data);
+		recommend.setDatas(datas);
 		recommend.setRecommender(getRecommenderFromNode());
         if (inputs.get("error").hasNext()) {
             recommend.setPreviousError(((ErrorEdge) inputs.get("error").getNext()).getEvaluation());
@@ -156,7 +135,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			myAgent.getContentManager().fillContent(req, a);
 			
 		} catch (CodecException | OntologyException ce) {
-			ce.printStackTrace();
+			myAgent.logError(ce.getMessage(), ce);
 		}
 
         return req;

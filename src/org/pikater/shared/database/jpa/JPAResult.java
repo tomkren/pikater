@@ -1,6 +1,8 @@
 package org.pikater.shared.database.jpa;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,10 +62,15 @@ public class JPAResult extends JPAAbstractEntity{
 	private Date finish;
 	private String serializedFileName;
 	private String note;
+	private List<String> outputs;
     @ManyToOne
     private JPAExperiment experiment;
     @OneToOne
     private JPAModel createdModel;
+    
+    public JPAResult(){
+    	this.outputs=new ArrayList<String>();
+    }
     
 	public int getId() {
         return id;
@@ -198,6 +205,9 @@ public class JPAResult extends JPAAbstractEntity{
 	}
 	public void setCreatedModel(JPAModel createdModel) {
 		this.createdModel = createdModel;
+	}
+	public List<String> getOutputs() {
+		return outputs;
 	}
 	@Transient
 	public static final String EntityName = "Result";

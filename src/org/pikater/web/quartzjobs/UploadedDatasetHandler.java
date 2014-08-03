@@ -2,10 +2,9 @@ package org.pikater.web.quartzjobs;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
-import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.JPAFilemapping;
+import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
+import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.utils.DataSetConverter;
@@ -61,27 +60,19 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		try {
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
 			
-			JPADataSetLO newDSLO=new JPADataSetLO();
-			newDSLO.setCreated(new Date());
-			newDSLO.setDescription(description);
-			newDSLO.setOwner(owner);
-			//hash a OID will be set using DAO
-			DAOs.dataSetDAO.storeNewDataSet(convertedFile, newDSLO);
-			
-			JPAFilemapping fm=new JPAFilemapping();
-			fm.setExternalfilename(convertedFile.getName());
-			fm.setInternalfilename(newDSLO.getHash());
-			fm.setUser(owner);
-			DAOs.filemappingDAO.storeEntity(fm);
+			int datasetID=DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getLogin());
 			
 			//TODO: Notify Pikater that new dataset was uploaded, to compute the metadata
-			// TODO: approve the dataset if owner has sufficient rights
+			WebToCoreEntryPoint.notify_newDataset(datasetID);
+			//TODO: approve the dataset if owner has sufficient rights
 			
 		} catch (IOException e) {
 			throw new JobExecutionException(e);
 		} catch (DataSetConverterCellException e){
 			throw new JobExecutionException(e);
 		} catch (DataSetConverterException e) {
+			throw new JobExecutionException(e);
+		} catch (PikaterGatewayException e) {
 			throw new JobExecutionException(e);
 		} finally{
 			if(uploadedFile.exists()){

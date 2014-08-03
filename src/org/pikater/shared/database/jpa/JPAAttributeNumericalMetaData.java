@@ -16,7 +16,6 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 	private double max;
 	private double mode;
 	private double median;
-	private double classEntropy;
 	private double variance;
 	private double avarage;
 
@@ -49,12 +48,6 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 	}
 	public void setMedian(double median) {
 		this.median = median;
-	}
-	public double getClassEntropy() {
-		return classEntropy;
-	}
-	public void setClassEntropy(double classEntropy) {
-		this.classEntropy = classEntropy;
 	}
 	public double getVariance() {
 		return variance;
