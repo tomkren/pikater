@@ -1,0 +1,19 @@
+@CHARSET "US-ASCII";
+
+.myWizard
+{
+}
+
+.myWizard-step-content
+{
+	padding: 15px;
+}
+
+.myDynamicWizard
+{
+}
+
+.myDynamicWizard .v-slot-step-caption
+{
+	margin-right: 25px;
+}

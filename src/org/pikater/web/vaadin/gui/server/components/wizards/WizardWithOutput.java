@@ -11,7 +11,7 @@ import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Button;
 
-@StyleSheet("wizard.css")
+@StyleSheet("wizards.css")
 public class WizardWithOutput<T extends IWizardCommon> extends Wizard
 {
 	private static final long serialVersionUID = -673702186069757491L;
