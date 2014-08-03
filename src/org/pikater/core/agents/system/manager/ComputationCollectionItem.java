@@ -7,6 +7,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 public class ComputationCollectionItem {
 	private ComputationGraph problemGraph;
 	private ACLMessage message;
+    private int computationId;
 
     public ComputationCollectionItem(ComputationGraph problemGraph, ACLMessage message) {
         this.problemGraph=problemGraph;
@@ -25,5 +26,13 @@ public class ComputationCollectionItem {
 	}
 	public void setMessage(ACLMessage message) {
 		this.message = message;
-	}		
+	}
+
+    public int getComputationId() {
+        return computationId;
+    }
+
+    public void setComputationId(int computationId) {
+        this.computationId = computationId;
+    }
 }

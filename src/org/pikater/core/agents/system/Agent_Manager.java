@@ -11,44 +11,28 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.domain.FIPAService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
-import org.pikater.core.ontology.AccountOntology;
-import org.pikater.core.ontology.AgentManagementOntology;
-import org.pikater.core.ontology.BatchOntology;
-import org.pikater.core.ontology.ExperimentOntology;
-import org.pikater.core.ontology.FilenameTranslationOntology;
-import org.pikater.core.ontology.RecommendOntology;
-import org.pikater.core.ontology.ResultOntology;
-import org.pikater.core.ontology.SearchOntology;
-import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.*;
 import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
+
+import java.util.*;
 
 
 public class Agent_Manager extends PikaterAgent {
@@ -56,8 +40,7 @@ public class Agent_Manager extends PikaterAgent {
 	private static final long serialVersionUID = -5140758757320827589L;
 
     protected Set<Subscription> subscriptions = new HashSet<>();
-	private int problem_i = 0;
-	public HashMap<Integer, ComputationCollectionItem> computationCollection =
+	protected HashMap<Integer, ComputationCollectionItem> computationCollection =
 			new HashMap<>();
 	
 	public HashMap<String, ACLMessage> searchMessages =
@@ -66,7 +49,11 @@ public class Agent_Manager extends PikaterAgent {
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
 	}
-	
+    public void addComputation(ComputationCollectionItem item)
+    {
+        computationCollection.put(item.getComputationId(),item);
+    }
+
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -335,25 +322,4 @@ public class Agent_Manager extends PikaterAgent {
 		return Agents;
 		
 	} // end getAgentByType
-		
-	
-	private String getXMLValue(float value) {
-		if (value < 0) {
-			return "NA";
-		}
-		return Double.toString(value);
-	}
-
-	
-    private String getDateTimeXML() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
-    
-
-	protected String generateProblemID() {		
-		return Integer.toString(problem_i++);
-	}
-	
 }
