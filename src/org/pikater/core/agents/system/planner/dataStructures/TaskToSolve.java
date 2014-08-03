@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system.planner;
+package org.pikater.core.agents.system.planner.dataStructures;
 
 import org.pikater.core.ontology.subtrees.task.Task;
 
