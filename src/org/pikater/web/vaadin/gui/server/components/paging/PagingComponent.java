@@ -93,7 +93,10 @@ public class PagingComponent extends HorizontalLayout
 	
 	public void updatePageCount(int itemCountAcrossAllPages)
 	{
-		pagePicker.setPageCount((int) Math.ceil(itemCountAcrossAllPages / getPageSize()));
+		double itemCount = itemCountAcrossAllPages;
+		double pageSize = getPageSize();
+		int pagesNeeded = (int) Math.ceil(itemCount / pageSize); // this needs to be a double division, not an integer division
+		pagePicker.setPageCount(pagesNeeded == 0 ? 1 : pagesNeeded);
 	}
 	
 	// -------------------------------------------------------------
