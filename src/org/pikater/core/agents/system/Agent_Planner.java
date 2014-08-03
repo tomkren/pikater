@@ -31,6 +31,7 @@ import org.pikater.core.agents.system.planner.CPUCore;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.TaskToSolve;
 import org.pikater.core.ontology.AgentManagementOntology;
+import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
@@ -58,6 +59,7 @@ public class Agent_Planner extends PikaterAgent {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
+		ontologies.add(ModelOntology.getInstance());
 		return ontologies;
 	}
 

@@ -52,20 +52,33 @@ public class PlannerCommunicator {
 
 		return foundAgents;
 	}
+	
+	/** Request creation or loading of a CA */
+	public AID prepareCA(Task task, AID agentManagerAID) {
+		ManagerAgentCommunicator comm = new ManagerAgentCommunicator();
+		AID caAID;
+
+		if (task.getAgent().getModel() != null) {
+			// TODO FIXME ve tride loadAgent je AID agentManagera natvrdo, agentManagerAID se nepouzije
+			caAID = ManagerAgentCommunicator.loadAgent(agent, task.getAgent().getModel());
+			agent.log("CA model " + task.getAgent().getModel() + " resurrected");
+		} else {
+			String CAtype = task.getAgent().getType();
+			agent.log("Sending request to create CA " + CAtype);
+			caAID = comm.createAgent(agent, CAtype, CAtype, new Arguments());
+			// TODO FIXME ve tride createAgent je AID agentManagera natvrdo, agentManagerAID se nepouzije
+			//agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
+			agent.log("CA " + CAtype + " created");
+		}
+		return caAID;
+	}
 
 	public void sendExecuteTask(Task task, AID agentManagerAID) {
 
 		ExecuteTask executeTask = new ExecuteTask();
 		executeTask.setTask(task);
 		
-		String CAtype = task.getAgent().getType();
-
-		ManagerAgentCommunicator comm = new ManagerAgentCommunicator();
-
-		agent.log("Sending request to create CA " + CAtype);
-		AID caAID = comm.createAgent(agent, CAtype, CAtype,
-				new Arguments());
-		agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
+		AID caAID = prepareCA(task, agentManagerAID);
 
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(caAID);
