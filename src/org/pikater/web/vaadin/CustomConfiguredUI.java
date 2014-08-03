@@ -192,10 +192,7 @@ public abstract class CustomConfiguredUI extends UI
 				 */
 				
 				// initialize and start the job scheduler
-				if(!PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class)))
-				{
-					throw new IllegalStateException("Application won't serve until the above errors are fixed.");
-				}
+				PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
 				
 				/*
 				 * Update UI. 
@@ -310,9 +307,14 @@ public abstract class CustomConfiguredUI extends UI
 	
 	protected void returnErrorCode(int errorCode)
 	{
+		returnErrorCode(errorCode, "");
+	}
+	
+	protected void returnErrorCode(int errorCode, String message)
+	{
 		try
 		{
-			VaadinServletService.getCurrentResponse().sendError(errorCode);
+			VaadinServletService.getCurrentResponse().sendError(errorCode, message);
 		}
 		catch (IOException e)
 		{
