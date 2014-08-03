@@ -1,33 +1,17 @@
-package org.pikater.web.vaadin.gui.server.ui_visualization;
+package org.pikater.web.vaadin.gui.server.ui_visualization.components;
 
-import java.io.File;
-import java.util.UUID;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisTwoUIArgs;
 
-import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.shared.util.IOUtils;
-import org.pikater.web.quartzjobs.visualization.MatrixPNGGeneratorJob;
-import org.pikater.web.sharedresources.ResourceExpiration;
-import org.pikater.web.sharedresources.ResourceRegistrar;
-import org.pikater.web.sharedresources.download.ImageDownloadResource;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskHandler;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
-import org.quartz.JobKey;
-
-import com.google.common.net.MediaType;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 public class CompareDatasetsVisualizer extends VerticalLayout
 {
+	private static final long serialVersionUID = 3682122092659178186L;
 
-	public CompareDatasetsVisualizer(JPADataSetLO dataset1, JPADataSetLO dataset2)
+	public CompareDatasetsVisualizer(DSVisTwoUIArgs arguments)
 	{
 		super();
-		
 	}
 	
 	private void generateDatasetComparison()

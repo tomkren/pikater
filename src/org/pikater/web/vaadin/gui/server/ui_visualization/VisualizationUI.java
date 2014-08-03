@@ -4,12 +4,16 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.sharedresources.IRegistrarResource;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
+import org.pikater.web.vaadin.gui.server.IUIArguments;
+import org.pikater.web.vaadin.gui.server.ui_visualization.components.CompareDatasetsVisualizer;
+import org.pikater.web.vaadin.gui.server.ui_visualization.components.SingleDatasetVisualizer;
+import org.pikater.web.visualisation.definition.result.DSVisOneResult;
+import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
@@ -21,13 +25,14 @@ import com.vaadin.shared.communication.PushMode;
 @Title("Visualization")
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
+@SuppressWarnings("rawtypes")
 public class VisualizationUI extends CustomConfiguredUI
 {
 	private static final long serialVersionUID = -8917289148464357783L;
 	public static final String PARAM_RESOURCE = "res";
 	
-	private VisualizationArguments arguments = null;
-
+	private DSVisUIArgs arguments = null;
+	
 	@Override
 	protected void init(VaadinRequest request)
 	{
@@ -37,8 +42,8 @@ public class VisualizationUI extends CustomConfiguredUI
 		try
 		{
 			UUID resourceID = ResourceRegistrar.toResourceID(request.getParameter(PARAM_RESOURCE)); 
-			arguments = (VisualizationArguments) ResourceRegistrar.getResource(resourceID);
-			arguments.getClass(); // spawn a null pointer exception is resource is not defined
+			arguments = (DSVisUIArgs) ResourceRegistrar.getResource(resourceID);
+			arguments.getClass(); // spawn a null pointer exception if resource is not defined
 		}
 		catch(Throwable t)
 		{
@@ -59,69 +64,65 @@ public class VisualizationUI extends CustomConfiguredUI
 	@Override
 	protected void displayChildContent()
 	{
-		if(arguments.isOnlyOneDatasetDefined())
+		if(arguments instanceof DSVisOneUIArgs)
 		{
-			setContent(new SingleDatasetVisualizer(arguments.getArg1()));
+			setContent(new SingleDatasetVisualizer((DSVisOneUIArgs) arguments));
+		}
+		else if(arguments instanceof DSVisTwoUIArgs)
+		{
+			setContent(new CompareDatasetsVisualizer((DSVisTwoUIArgs) arguments));
 		}
 		else
 		{
-			setContent(new CompareDatasetsVisualizer(arguments.getArg1(), arguments.getArg2()));
+			returnErrorCode(HttpServletResponse.SC_NOT_IMPLEMENTED, "Unknown arguments object was received: " + arguments.getClass().getSimpleName());
 		}
 	}
 	
 	//-------------------------------------------------------------------------------
 	// SPECIAL TYPES
 	
-	public static class VisualizationArguments implements IRegistrarResource
+	public abstract static class DSVisUIArgs<T> implements IUIArguments, IRegistrarResource
 	{
-		private final JPADataSetLO arg1;
-		private final JPADataSetLO arg2; 
+		private final T generatedResult;
 		
-		/**
-		 * Tells the UI to visualize a single dataset.
-		 * @param arg1
-		 */
-		public VisualizationArguments(JPADataSetLO arg1)
+		public DSVisUIArgs(T generatedResult)
 		{
-			this(arg1, null);
-		}
-		
-		/**
-		 * Tells the UI to compare the two datasets.
-		 * @param arg1
-		 */
-		public VisualizationArguments(JPADataSetLO arg1, JPADataSetLO arg2)
-		{
-			this.arg1 = arg1;
-			this.arg2 = arg2;
-		}
-		
-		public JPADataSetLO getArg1()
-		{
-			return arg1;
+			this.generatedResult = generatedResult;
 		}
 
-		public JPADataSetLO getArg2()
+		public T getGeneratedResult()
 		{
-			return arg2;
+			return generatedResult;
 		}
 		
-		public boolean isOnlyOneDatasetDefined()
-		{
-			return (arg1 != null) && (arg2 == null);
-		}
-
 		@Override
 		public ResourceExpiration getLifeSpan()
 		{
 			return ResourceExpiration.ON_SESSION_END;
 		}
 		
+		@Override
 		public String toRedirectURL()
 		{
 			UUID thisClassesResourceID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), this);
 			return CustomConfiguredUI.getRedirectURLToUI(PikaterUI.DATASET_VISUALIZATION) +
 					String.format("?%s=%s", VisualizationUI.PARAM_RESOURCE, ResourceRegistrar.fromResourceID(thisClassesResourceID));
+		}
+	}
+	
+	public static class DSVisOneUIArgs extends DSVisUIArgs<DSVisOneResult> 
+	{
+		public DSVisOneUIArgs(DSVisOneResult generatedResult)
+		{
+			super(generatedResult);
+		}
+	}
+	
+	public static class DSVisTwoUIArgs extends DSVisUIArgs<DSVisTwoResult> 
+	{
+		public DSVisTwoUIArgs(DSVisTwoResult generatedResult)
+		{
+			super(generatedResult);
 		}
 	}
 }
