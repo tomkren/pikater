@@ -209,9 +209,8 @@ public class ManagerAgentRequestResponder {
             managerAgent.send(first_message);
         }
         reply = request.createReply();
-        reply.setContent("Agent "+newAgent.getLocalName()+" resurected.");
+        reply.setContent(newAgent.getLocalName());
         reply.setPerformative(jade.lang.acl.ACLMessage.INFORM);
-
 
         return reply;
     }

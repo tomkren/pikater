@@ -28,7 +28,7 @@ public class LoadModelTester extends PikaterAgent {
 		initDefault();
 
 		log("doing request");
-		ManagerAgentCommunicator.loadAgent(this, 70704);
+		ManagerAgentCommunicator.loadAgent(this, 83554);
 		log("load returned");
 
 		log("LoadModelTester ending");
