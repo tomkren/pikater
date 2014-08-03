@@ -135,6 +135,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
             input.block();
         }
         agent.setType(agentTypeEdge.getAgentType());
+        agent.setModel(agentTypeEdge.getModel());
         
         Task task = new Task();
 		if (inputs.get("searchedoptions") != null){

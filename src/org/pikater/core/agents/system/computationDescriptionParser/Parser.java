@@ -160,11 +160,12 @@ public class Parser {
         computationGraph.addNode(computingNode);
         		
         ComputingAgent computingAgentO = (ComputingAgent) computingAgent;
-        String agentType=computingAgentO.getAgentType();
+        String agentType = computingAgentO.getAgentType();
+        Integer model = computingAgentO.getModel();
 
         if (agentType!=null)
         {
-            NeverEndingBuffer typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType));
+            NeverEndingBuffer typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType, model));
             typeBuffer.setTarget(computingNode);
             computingNode.addInput("agenttype",typeBuffer);
 
