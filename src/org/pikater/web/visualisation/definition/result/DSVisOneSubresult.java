@@ -3,7 +3,7 @@ package org.pikater.web.visualisation.definition.result;
 import org.pikater.web.visualisation.definition.AttrMapping;
 import org.pikater.web.visualisation.definition.ImageType;
 
-public class DSVisOneSubresult extends AbstractDSVisSubresult
+public class DSVisOneSubresult extends AbstractDSVisSubresult<String>
 {
 	private final AttrMapping attrInfo;
 
@@ -17,5 +17,17 @@ public class DSVisOneSubresult extends AbstractDSVisSubresult
 	public AttrMapping getAttrInfo()
 	{
 		return attrInfo;
+	}
+
+	@Override
+	public String toLeftIndex()
+	{
+		return attrInfo.getAttrY();
+	}
+
+	@Override
+	public String toTopIndex()
+	{
+		return attrInfo.getAttrX();
 	}
 }
