@@ -9,9 +9,10 @@ public class ComputationCollectionItem {
 	private ACLMessage message;
     private int computationId;
 
-    public ComputationCollectionItem(ComputationGraph problemGraph, ACLMessage message) {
+    public ComputationCollectionItem(ComputationGraph problemGraph, ACLMessage message, int batchId) {
         this.problemGraph=problemGraph;
         this.message=message;
+        computationId=batchId;
     }
 
     public ComputationGraph getProblemGraph() {
