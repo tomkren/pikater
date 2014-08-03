@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
@@ -43,6 +42,16 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 
 	private static final long serialVersionUID = 4679962419249103511L;
 
+	@Override
+	public List<Ontology> getOntologies() {
+		List<Ontology> ontologies = new ArrayList<>();
+		ontologies.add(TaskOntology.getInstance());
+		ontologies.add(AgentInfoOntology.getInstance());
+		ontologies.add(ExperimentOntology.getInstance());
+		ontologies.add(DataOntology.getInstance());
+		return ontologies;
+	}
+	
 	@Override
 	protected AgentInfo getAgentInfo() {
 		AgentInfo agentInfo = new AgentInfo();
@@ -208,14 +217,5 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		res.setType(InOutType.DATA);
 		return res;
 	}
-
-	@Override
-	public List<Ontology> getOntologies() {
-		List<Ontology> ontologies = new ArrayList<>();
-		ontologies.add(TaskOntology.getInstance());
-		ontologies.add(AgentInfoOntology.getInstance());
-		ontologies.add(ExperimentOntology.getInstance());
-		ontologies.add(DataOntology.getInstance());
-		return ontologies;
-	}
+	
 }
