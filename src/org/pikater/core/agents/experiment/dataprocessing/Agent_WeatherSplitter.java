@@ -85,7 +85,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	protected void setup() {
 		super.setup();
 
-		Ontology ontology = BatchOntology.getInstance();
+		Ontology ontology = TaskOntology.getInstance();
 		MessageTemplate template = MessageTemplate.and(
 				MessageTemplate.MatchOntology(ontology.getName()),
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
