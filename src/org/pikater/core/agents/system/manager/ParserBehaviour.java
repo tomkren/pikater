@@ -94,7 +94,7 @@ public class ParserBehaviour extends AchieveREResponder {
 		parser.parseRoots(comDescription, batchID);
 		
 		ComputationGraph computationGraph = parser.getComputationGraph();
-        ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request);
+        ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request,batchID);
         agent.addComputation(item);
         
         // change status to computing and log to database
