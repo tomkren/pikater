@@ -29,7 +29,7 @@ import com.vaadin.shared.communication.PushMode;
 public class VisualizationUI extends CustomConfiguredUI
 {
 	private static final long serialVersionUID = -8917289148464357783L;
-	public static final String PARAM_RESOURCE = "res";
+	private static final String PARAM_RESOURCE = "res";
 	
 	private DSVisUIArgs arguments = null;
 	

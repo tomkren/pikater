@@ -1,6 +1,10 @@
-package org.pikater.web.config;
+package org.pikater.web.obsolete;
 
 import javax.servlet.ServletContext;
+
+import org.pikater.web.config.JadeTopologies;
+import org.pikater.web.config.ServerConfiguration;
+import org.pikater.web.config.ServerConfigurationInterface;
 
 /**
  * A wrapper class for all getters/setters of any server variables.
