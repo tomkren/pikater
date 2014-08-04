@@ -770,7 +770,13 @@ public class Agent_DataManager extends PikaterAgent {
 		}
 		jparesult.setStart(start);
 		log("Start Date set: "+start.toString());
+		
 		Date finish=new Date();
+		if(task.getFinish()!=null){
+			finish=Agent_DataManager.getDateFromPikaterDateString(task.getFinish());
+		}else{
+			logError("Result finish date isn't set. Using current DateTime");
+		}
 		jparesult.setFinish(finish);
 		log("Finish Date set: "+finish.toString());
 
@@ -1249,6 +1255,10 @@ return reply;
 	
 	public static String getPikaterDateString(Date date){
 		return ""+date.getTime();
+	}
+	
+	public static String getCurrentPikaterDateString(){
+		return Agent_DataManager.getPikaterDateString(new Date());
 	}
 	
 	public static Date getDateFromPikaterDateString(String dateString){

@@ -153,6 +153,7 @@ public class Agent_Planner extends PikaterAgent {
 		}
 		
 		Task finishedTask = (Task) result.getValue();
+		finishedTask.setFinish(Agent_DataManager.getCurrentPikaterDateString());
 		
 		CPUCore cpuCore = new CPUCore(
 				finishedTaskMsg.getSender(), finishedTask.getCpuCoreID());
@@ -192,6 +193,7 @@ public class Agent_Planner extends PikaterAgent {
 
 		TaskToSolve task = waitingToStartComputingTasks.
 				removeTaskWithHighestPriority();
+		task.getTask().setStart(Agent_DataManager.getCurrentPikaterDateString());
 
 		List<Object> recommendLocalitons = this.distributedData.
 				recommendCountingLocality(task);
