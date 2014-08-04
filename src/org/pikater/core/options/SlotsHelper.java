@@ -14,7 +14,7 @@ public abstract class SlotsHelper
 	public static List<Slot> getSlots_CARecSearchComplexIntput()
 	{
 		Slot recomedSlot = new Slot();
-		recomedSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
+		recomedSlot.setSlotType(SlotTypes.RECOMMEND_TYPE);
 		recomedSlot.setDataType("recommend");
 		recomedSlot.setDescription("Recommends an agent to use (its name).");
 		
@@ -93,7 +93,7 @@ public abstract class SlotsHelper
 	public static List<Slot> getSlots_RecommendOutput()
 	{
 		Slot recomedSlot = new Slot();
-		recomedSlot.setDataType(SlotTypes.RECOMMEND_TYPE);
+		recomedSlot.setSlotType(SlotTypes.RECOMMEND_TYPE);
 		recomedSlot.setDataType("recommend");
 		recomedSlot.setDescription("Recommends an agent to use (its name).");
 		
