@@ -60,6 +60,7 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 	private long size;
+	private boolean approved;
 	
 	/**Constructor for JPA compatibility**/
 	public JPADataSetLO(){}
@@ -135,6 +136,14 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	public void setSize(long size) {
 		this.size = size;
 	}
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
 	@Transient
 	public static final String EntityName = "DataSetLO";
 	@Override
@@ -146,7 +155,8 @@ public class JPADataSetLO extends JPAAbstractEntity{
 		this.description=updateValues.getDescription();
 		this.globalMetaData=updateValues.getGlobalMetaData();
 		this.hash=updateValues.getHash();
-		this.owner=updateValues.getOwner();		
+		this.owner=updateValues.getOwner();	
+		this.approved=updateValues.isApproved();
 	}
 	
 	

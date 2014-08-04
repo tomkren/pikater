@@ -36,7 +36,9 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 		// MODE,
 		MEDIAN,
 		VARIANCE,
-		RATIO_OF_MISSING_VALUES;
+		RATIO_OF_MISSING_VALUES,
+		ENTROPY,
+		CLASS_ENTROPY;
 
 		@Override
 		public String getDisplayName()
@@ -61,6 +63,8 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 				case MEDIAN:
 				case VARIANCE:
 				case RATIO_OF_MISSING_VALUES:
+				case ENTROPY:
+				case CLASS_ENTROPY:
 					return DBViewValueType.STRING;
 				default:
 					throw new IllegalStateException("Unknown state: " + name());

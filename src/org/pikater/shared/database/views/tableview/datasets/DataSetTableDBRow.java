@@ -60,9 +60,8 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 			{
 				@Override
 				public boolean isEnabled()
-				{
-					// TODO: whether this dataset is already approved 
-					return true;
+				{ 
+					return !dataset.isApproved();
 				}
 				
 				@Override

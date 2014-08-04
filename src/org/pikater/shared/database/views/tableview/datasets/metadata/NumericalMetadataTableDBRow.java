@@ -52,6 +52,10 @@ public class NumericalMetadataTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getRatioOfMissingValues()));
 		case VARIANCE:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getVariance()));
+		case ENTROPY:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getEntropy()));
+		case CLASS_ENTROPY:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrNum.getClassEntropy()));
 
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

@@ -30,7 +30,9 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 		NAME,
 		IS_TARGET,
 		CATEGORY_COUNT,
-		RATIO_OF_MISSING_VALUES;
+		RATIO_OF_MISSING_VALUES,
+		ENTROPY,
+		CLASS_ENTROPY;
 
 		@Override
 		public String getDisplayName()
@@ -49,6 +51,8 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 				case NAME:
 				case CATEGORY_COUNT:
 				case RATIO_OF_MISSING_VALUES:
+				case ENTROPY:
+				case CLASS_ENTROPY:
 					return DBViewValueType.STRING;
 				
 				default:

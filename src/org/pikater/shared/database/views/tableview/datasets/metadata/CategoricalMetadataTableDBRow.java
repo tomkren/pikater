@@ -38,6 +38,10 @@ public class CategoricalMetadataTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getRatioOfMissingValues()));
 		case CATEGORY_COUNT:
 			return new StringReadOnlyDBViewValue(LocaleUtils.formatInteger(currentLocale,attrCat.getNumberOfCategories()));
+		case ENTROPY:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getEntropy()));
+		case CLASS_ENTROPY:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale,attrCat.getClassEntropy()));
 		
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
