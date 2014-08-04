@@ -67,7 +67,7 @@ public abstract class AbstractTableRowDBView
 	public abstract AbstractDBViewValue<? extends Object> initValueWrapper(ITableColumn column);
 	
 	/**
-	 * Stores all row changes to the database.
+	 * Stores all changes to this row to the database.
 	 */
 	public abstract void commitRow();
 }

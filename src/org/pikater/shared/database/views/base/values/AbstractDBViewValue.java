@@ -100,7 +100,7 @@ public abstract class AbstractDBViewValue<T extends Object>
 	protected abstract void updateEntities(T newValue);
 	
 	/**
-	 * Called to store changes made by {@link #updateEntities} to database.
+	 * Called to store changes made by {@link #updateEntities(Object)} to database.
 	 */
 	protected abstract void commitEntities();
 }

@@ -61,7 +61,7 @@ public abstract class NamedActionDBViewValue extends AbstractDBViewValue<String>
 	
 	/**
 	 * Execute this action and appropriately update all related entities. However, do
-	 * not store anything to database yet - {@link #commitChanges} is responsible for that. 
+	 * not store anything to database yet - {@link #commitEntities()} is responsible for that. 
 	 */
 	protected abstract void updateEntities();
 }
