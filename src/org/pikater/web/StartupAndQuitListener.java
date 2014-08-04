@@ -88,6 +88,14 @@ public class StartupAndQuitListener implements ServletContextListener
 			ServerConfigurationInterface.setField(ServerConfItem.JADE_TOPOLOGIES, new JadeTopologies());
 			IOUtils.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
 
+			announceCheckOrAction("reading & parsing application configuration file");
+			ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(ThemeResources.prop_appConf.getSourceFile()));
+			if(!ServerConfigurationInterface.getConfig().isValid())
+			{
+				throw new IllegalStateException(String.format("Configuration file '%s' is not valid. Double check it.", 
+						ThemeResources.prop_appConf.getSourceFile().getAbsolutePath()));
+			}
+			
 			announceCheckOrAction("database connection");
 			/*
 			if(!ServerConfigurationInterface.avoidUsingDBForNow() && !PostgreLobAccess.isDatabaseConnected())
@@ -100,7 +108,6 @@ public class StartupAndQuitListener implements ServletContextListener
 			// TODO: move this to CustomConfiguredUI eventually (upon exiting the app-launch wizard)
 			announceCheckOrAction("getting known agents from core & initializing task scheduler");
 			boolean initHere = true;
-			boolean coreAgentInfo = false;
 			if(initHere)
 			{
 				// init scheduler
@@ -108,7 +115,7 @@ public class StartupAndQuitListener implements ServletContextListener
 
 				// init agent info
 				AgentInfoCollection agentInfoCollection = new AgentInfoCollection();
-				if(coreAgentInfo)
+				if(!ServerConfigurationInterface.getConfig().useDummyBoxes)
 				{
 					try
 					{
@@ -188,14 +195,6 @@ public class StartupAndQuitListener implements ServletContextListener
 					}
 				}
 				ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, agentInfoCollection);
-			}
-
-			announceCheckOrAction("reading & parsing application configuration file");
-			ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(ThemeResources.prop_appConf.getSourceFile()));
-			if(!ServerConfigurationInterface.getConfig().isValid())
-			{
-				throw new IllegalStateException(String.format("Configuration file '%s' is not valid. Double check it.", 
-						ThemeResources.prop_appConf.getSourceFile().getAbsolutePath()));
 			}
 			
 			PikaterLogger.log(Level.INFO, "\n**********************************************************\n"
