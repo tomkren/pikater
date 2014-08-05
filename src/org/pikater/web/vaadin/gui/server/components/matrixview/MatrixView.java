@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.matrixview;
 
-import org.pikater.web.vaadin.gui.server.components.flowlayout.FlowLayout;
-import org.pikater.web.vaadin.gui.server.components.flowlayout.FlowLayout.LayoutOrientation;
+import org.pikater.web.vaadin.gui.server.components.flowlayout.HorizontalFlowLayout;
+import org.pikater.web.vaadin.gui.server.components.flowlayout.VerticalFlowLayout;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickEvent;
@@ -35,7 +35,7 @@ public class MatrixView<I extends Object> extends VerticalLayout
 	 * Components to keep track of.
 	 */
 	
-	private final FlowLayout content;
+	private final HorizontalFlowLayout content;
 	private HeaderComponent selectedHeader_leftIndex;
 	private HeaderComponent selectedHeader_topIndex;
 	
@@ -56,14 +56,14 @@ public class MatrixView<I extends Object> extends VerticalLayout
 		 * Setup the UI.
 		 */
 		
-		this.content = new FlowLayout();
+		this.content = new HorizontalFlowLayout(null); // TODO: use the style provider and don't use external css
 		content.setSizeFull();
 		content.addStyleName("main-subcomponent");
 		content.addStyleName("content");
 		updateContent();
 		
 		// first row
-		FlowLayout fLayout_indexTop = new FlowLayout();
+		HorizontalFlowLayout fLayout_indexTop = new HorizontalFlowLayout(null); // TODO: use the style provider and don't use external css
 		fLayout_indexTop.setSizeFull();
 		fLayout_indexTop.addStyleName("topHeaders");
 		fLayout_indexTop.addStyleName("main-subcomponent");
@@ -140,7 +140,7 @@ public class MatrixView<I extends Object> extends VerticalLayout
 		firstRow.setExpandRatio(fLayout_indexTop, 1);
 		
 		// second row
-		FlowLayout fLayout_indexLeft = new FlowLayout(LayoutOrientation.VERTICAL);
+		VerticalFlowLayout fLayout_indexLeft = new VerticalFlowLayout(null); // TODO: use the style provider and don't use external css
 		fLayout_indexLeft.addStyleName("leftHeaders");
 		fLayout_indexLeft.addStyleName("main-subcomponent");
 		for(I indexLeft : dataSource.getLeftIndexSet())
