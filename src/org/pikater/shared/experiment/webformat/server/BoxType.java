@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment.webformat;
+package org.pikater.shared.experiment.webformat.server;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex;

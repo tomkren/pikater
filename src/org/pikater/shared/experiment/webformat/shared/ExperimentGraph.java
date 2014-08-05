@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment.webformat;
+package org.pikater.shared.experiment.webformat.shared;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class ExperimentGraph implements Serializable
 	/**
 	 * The 1:1 map containing all the boxes.
 	 */
-	public Map<String, BoxInfo> leafBoxes;
+	public Map<String, BoxInfoClient> leafBoxes;
 	
 	/**
 	 * Collection of oriented edges between boxes, sorted by the "from end point".
@@ -26,14 +26,14 @@ public class ExperimentGraph implements Serializable
 	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
 	public ExperimentGraph()
 	{
-		this.leafBoxes = new HashMap<String, BoxInfo>();
+		this.leafBoxes = new HashMap<String, BoxInfoClient>();
 		this.edges = new HashMap<String, Set<String>>();
 	}
 	
 	// ------------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
-	public String addLeafBoxAndReturnID(BoxInfo info)
+	public String addLeafBoxAndReturnID(BoxInfoClient info)
 	{
 		leafBoxes.put(info.boxID, info);
 		return info.boxID;

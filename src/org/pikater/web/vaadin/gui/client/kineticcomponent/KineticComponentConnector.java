@@ -4,8 +4,8 @@ import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
 
-import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
+import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 import com.vaadin.client.communication.StateChangeEvent;
@@ -38,7 +38,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 			 */
 			
 			@Override
-			public void command_createBox(BoxInfo info)
+			public void command_createBox(BoxInfoClient info)
 			{
 				getWidget().command_createBox(info);
 			}

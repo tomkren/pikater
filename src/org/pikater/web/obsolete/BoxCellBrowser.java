@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Comparator;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.shared.experiment.webformat.server.BoxType;
+import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
 import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowser;
@@ -122,7 +122,7 @@ public class BoxCellBrowser extends CustomComponent
 				}
 				else
 				{
-					return (value instanceof BoxInfo);
+					return (value instanceof BoxInfoClient);
 				}
 			}
 		};

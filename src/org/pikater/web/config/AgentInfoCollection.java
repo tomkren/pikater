@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.shared.experiment.webformat.server.BoxType;
 
 public class AgentInfoCollection implements Iterable<AgentInfo>
 {

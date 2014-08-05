@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
+import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
@@ -176,7 +176,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 */
 	
 	@Override
-	public void command_createBox(final BoxInfo info)
+	public void command_createBox(final BoxInfoClient info)
 	{	
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{

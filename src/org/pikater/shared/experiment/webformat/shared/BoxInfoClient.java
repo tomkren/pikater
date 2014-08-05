@@ -1,8 +1,8 @@
-package org.pikater.shared.experiment.webformat;
+package org.pikater.shared.experiment.webformat.shared;
 
 import java.io.Serializable;
 
-public class BoxInfo implements Serializable
+public class BoxInfoClient implements Serializable
 {
 	private static final long serialVersionUID = 3875674558654733345L;
 	
@@ -26,7 +26,7 @@ public class BoxInfo implements Serializable
 
 	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
 	@Deprecated
-	public BoxInfo()
+	public BoxInfoClient()
 	{
 	}
 
@@ -38,7 +38,7 @@ public class BoxInfo implements Serializable
 	 * @param initialY
 	 * @param pictureURL
      */
-	public BoxInfo(String boxID, String boxTypeName, String displayName, int initialX, int initialY, String pictureURL)
+	public BoxInfoClient(String boxID, String boxTypeName, String displayName, int initialX, int initialY, String pictureURL)
 	{
 		this.boxID = boxID;
 		this.boxTypeName = boxTypeName;

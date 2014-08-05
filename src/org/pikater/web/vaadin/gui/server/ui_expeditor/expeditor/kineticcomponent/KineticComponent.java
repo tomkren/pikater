@@ -9,9 +9,10 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
-import org.pikater.shared.experiment.webformat.BoxInfo;
-import org.pikater.shared.experiment.webformat.BoxType;
-import org.pikater.shared.experiment.webformat.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
+import org.pikater.shared.experiment.webformat.server.BoxType;
+import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
+import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.AgentInfoCollection;
@@ -23,7 +24,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
@@ -61,11 +62,10 @@ public class KineticComponent extends AbstractComponent
 	private final SimpleIDGenerator boxIDGenerator;
 	
 	/**
-	 * The dynamic mapping between boxes and agent information. Only a portion of agent information
-	 * is sent to the client (+ some added value), wrapped in BoxInfo instance.
-	 * This field is the base for all format conversions and some other commands.
+	 * The dynamic mapping of box IDs to box information providers. This field is
+	 * the base for all format conversions and some other commands.
 	 */
-	private final Map<String, AgentInfo> boxIDToAgentInfo;
+	private final Map<String, BoxInfoServer> boxIDToAgentInfo;
 	
 	/**
 	 * Reference to experiment last used in the {@link #importExperiment(UniversalComputationDescription)}
@@ -106,7 +106,7 @@ public class KineticComponent extends AbstractComponent
 		this.parentTab = null;
 		
 		this.boxIDGenerator = new SimpleIDGenerator();
-		this.boxIDToAgentInfo = new HashMap<String, AgentInfo>();
+		this.boxIDToAgentInfo = new HashMap<String, BoxInfoServer>();
 		this.previouslyLoadedExperimentID = null;
 		this.exportedExperimentCallback = null;
 		
@@ -155,14 +155,12 @@ public class KineticComponent extends AbstractComponent
 			@Override
 			public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
 			{
-				// TODO Auto-generated method stub
 				// MyNotifications.showInfo(null, "Box set changed");
 			}
 
 			@Override
 			public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 			{
-				// TODO Auto-generated method stub
 				// MyNotifications.showInfo(null, "Edge set changed");
 			}
 			
@@ -172,7 +170,7 @@ public class KineticComponent extends AbstractComponent
 				if(bindOptionsManagerWithSelectionChanges)
 				{
 					// convert to agent information array
-					AgentInfo[] selectedBoxesInformation = new AgentInfo[selectedBoxesIDs.length];
+					BoxInfoServer[] selectedBoxesInformation = new BoxInfoServer[selectedBoxesIDs.length];
 					for(int i = 0; i < selectedBoxesIDs.length; i++)
 					{
 						if(boxIDToAgentInfo.containsKey(selectedBoxesIDs[i]))
@@ -187,12 +185,12 @@ public class KineticComponent extends AbstractComponent
 					}
 					
 					// get the toolbox
-					BoxOptionsToolbox toolbox = (BoxOptionsToolbox) parentEditor.getToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+					BoxManagerToolbox toolbox = (BoxManagerToolbox) parentEditor.getToolbox(ExpEditorToolbox.BOX_MANAGER);
 					
 					// set the new content to it and display the toolbox if needed
 					if(toolbox.setContentFromSelectedBoxes(selectedBoxesInformation))
 					{
-						parentEditor.openToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+						parentEditor.openToolbox(ExpEditorToolbox.BOX_MANAGER);
 					}
 				}
 			}
@@ -376,12 +374,12 @@ public class KineticComponent extends AbstractComponent
 		return getRpcProxy(KineticComponentClientRpc.class);
 	}
 	
-	private BoxInfo createBoxAndUpdateState(AgentInfo info, int relX, int relY)
+	private BoxInfoClient createBoxAndUpdateState(AgentInfo info, int relX, int relY)
 	{
 		BoxType type = BoxType.fromAgentInfo(info);
 		String newBoxID = String.valueOf(boxIDGenerator.getAndIncrement());
-		boxIDToAgentInfo.put(newBoxID, info.clone()); // agent info need to be cloned because options might be changed by user
-		return new BoxInfo(
+		boxIDToAgentInfo.put(newBoxID, new BoxInfoServer(info.clone())); // agent info needs to be cloned because options may be changed by user later
+		return new BoxInfoClient(
 				newBoxID,
 				type.name(),
 				info.getName(),
@@ -431,8 +429,8 @@ public class KineticComponent extends AbstractComponent
 			UniversalComputationDescription result = new UniversalComputationDescription();
 
 			// create uni-format master elements for all boxes
-			Map<BoxInfo, UniversalElement> webBoxToUniBox = new HashMap<BoxInfo, UniversalElement>();
-			for(BoxInfo webBox : webFormat.leafBoxes.values())
+			Map<BoxInfoClient, UniversalElement> webBoxToUniBox = new HashMap<BoxInfoClient, UniversalElement>();
+			for(BoxInfoClient webBox : webFormat.leafBoxes.values())
 			{
 				UniversalElement uniBox = new UniversalElement();
 				webBoxToUniBox.put(webBox, uniBox);
@@ -440,14 +438,14 @@ public class KineticComponent extends AbstractComponent
 			}
 
 			// traverse all boxes and pass all available/needed information to result uni-format
-			for(Entry<String, BoxInfo> entry : webFormat.leafBoxes.entrySet())
+			for(Entry<String, BoxInfoClient> entry : webFormat.leafBoxes.entrySet())
 			{
 				// determine basic information and references
 				String webBoxID = entry.getKey();
-				BoxInfo webBox = entry.getValue();
+				BoxInfoClient webBox = entry.getValue();
 				UniversalElement uniBox = webBoxToUniBox.get(webBox);
-				AgentInfo agentInfo = boxIDToAgentInfo.get(webBoxID);
-				if(agentInfo == null)
+				BoxInfoServer boxInfo = boxIDToAgentInfo.get(webBoxID);
+				if(boxInfo == null)
 				{
 					throw new IllegalStateException(String.format(
 							"No agent info was found for box '%s@%s'.", webBox.boxTypeName, webBox.displayName));
@@ -456,22 +454,24 @@ public class KineticComponent extends AbstractComponent
 				// create edge leading from the currently processed box (will be later added to all neighbour uni-boxes)
 				UniversalConnector connector = new UniversalConnector();
 				connector.setFromElement(uniBox);
+				
+				// TODO: connectors need to be created for each connected slot...
 
 				// initialize the FIRST of the 2 child objects
 				try
 				{
-					uniBox.getOntologyInfo().setOntologyClass(Class.forName(agentInfo.getOntologyClassName()));
-					uniBox.getOntologyInfo().setAgentClass(Class.forName(agentInfo.getAgentClassName()));
+					uniBox.getOntologyInfo().setOntologyClass(Class.forName(boxInfo.getAssociatedAgent().getOntologyClassName()));
+					uniBox.getOntologyInfo().setAgentClass(Class.forName(boxInfo.getAssociatedAgent().getAgentClassName()));
 				}
 				catch (ClassNotFoundException e)
 				{
 					throw new IllegalStateException(String.format(
 							"Could not convert '%s' to a class instance. Has it been hardcoded to an agent and renamed? "
-							+ "Or is the pikater core running in different version than web?", agentInfo.getOntologyClassName()
+							+ "Or is the pikater core running in different version than web?", boxInfo.getAssociatedAgent().getOntologyClassName()
 							), e
 					);
 				}
-				uniBox.getOntologyInfo().setOptions(agentInfo.getOptions());
+				uniBox.getOntologyInfo().setOptions(boxInfo.getAssociatedAgent().getOptions());
 				if(webFormat.edgesDefinedFor(webBoxID))
 				{
 					// transform edges
@@ -497,8 +497,8 @@ public class KineticComponent extends AbstractComponent
 	/**
 	 * Converts universal format experiments into web format experiments that are used
 	 * to do the actual loading in the client's kinetic environment.</br> 
-	 * This method is very sensitive to changes to (because of serialization to XML
-	 * and back):
+	 * This method is very sensitive to changes (because of serialization to XML
+	 * and back) to:
 	 * <ul>
 	 * <li> Universal format.
 	 * <li> NewOption ontology. 
@@ -554,7 +554,7 @@ public class KineticComponent extends AbstractComponent
 					}
 					
 					// create web-format box and link it to uni-format box
-					BoxInfo info = createBoxAndUpdateState(agentInfo, element.getGuiInfo().getX(), element.getGuiInfo().getY());
+					BoxInfoClient info = createBoxAndUpdateState(agentInfo, element.getGuiInfo().getX(), element.getGuiInfo().getY());
 					String convertedBoxID = webFormat.addLeafBoxAndReturnID(info);
 					uniBoxToWebBoxID.put(element, convertedBoxID);
 				}
@@ -568,6 +568,8 @@ public class KineticComponent extends AbstractComponent
 								uniBoxToWebBoxID.get(edge.getFromElement()),
 								uniBoxToWebBoxID.get(element)
 						);
+						
+						// TODO: update internal state (connect slots)
 					}
 				}
 				
@@ -581,8 +583,8 @@ public class KineticComponent extends AbstractComponent
 				// and finally, options... THIS IS THE TRICKY PART
 				for(UniversalElement element : uniFormat.getAllElements())
 				{
-					AgentInfo agentInfo = boxIDToAgentInfo.get(uniBoxToWebBoxID.get(element));
-					agentInfo.getOptions().mergeWith(element.getOntologyInfo().getOptions());
+					BoxInfoServer boxInfo = boxIDToAgentInfo.get(uniBoxToWebBoxID.get(element));
+					boxInfo.getAssociatedAgent().getOptions().mergeWith(element.getOntologyInfo().getOptions());
 				}
 				
 				// conversion is finished, return:

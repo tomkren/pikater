@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import org.pikater.shared.experiment.webformat.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;

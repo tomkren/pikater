@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.kineticengine;
 
-import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EdgeState;
@@ -34,7 +34,7 @@ public class GraphItemCreator
 	/**
 	 * Creates a fully initialized box, if registered automatically. Only use this method when creating boxes in the GUI.
 	 */
-	public BoxGraphItemClient createBox(GraphItemRegistration nrt, BoxInfo info)
+	public BoxGraphItemClient createBox(GraphItemRegistration nrt, BoxInfoClient info)
 	{
 		BoxGraphItemClient result = new BoxGraphItemClient(kineticEngine, info);
 		result.applyUserSettings();
