@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
@@ -40,10 +41,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	private static final boolean DEBUG_MODE = true;
 	private BufferedReader bufferedConsole=null;
 
-	public static String filePath = "core"
-			+ System.getProperty("file.separator") + "inputs"
-			+ System.getProperty("file.separator") + "inputsKlara"
-			+ System.getProperty("file.separator");
+	private String filePath = CoreConfiguration.INPUTS_KLARA_PATH;
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -317,11 +315,8 @@ public class Agent_GUIKlara extends PikaterAgent {
         	AID dataManager = new AID(AgentNames.DATA_MANAGER, false);
     		Ontology ontology = DataOntology.getInstance();
     		SaveDataset sd = new SaveDataset();
-            //sd.setUserLogin("stepan");
     		sd.setUserLogin(username);
-            //sd.setSourceFile("core/klaraguiagent/inputdataset/weather.arff");
     		sd.setSourceFile(filename);
-            //sd.setDescription("Favourite Weather");
     		sd.setDescription(description);
             ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
             request.addReceiver(dataManager);
@@ -339,14 +334,11 @@ public class Agent_GUIKlara extends PikaterAgent {
             	return (Integer)reply.getContentObject();
             }
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("Ontology/codec error occurred: "+e.getMessage(), e);
         } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("FIPA error occurred: "+e.getMessage(), e);
         } catch (UnreadableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logError(e.getMessage(), e);
 		}
 		return -1;
 	}
@@ -371,11 +363,9 @@ public class Agent_GUIKlara extends PikaterAgent {
             else
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
         } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("Ontology/codec error occurred: "+e.getMessage(), e);
         } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage());
-            e.printStackTrace();
+            logError("FIPA error occurred: "+e.getMessage(), e);
         }
 	}
 	

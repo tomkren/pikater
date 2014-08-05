@@ -1,7 +1,7 @@
 package xmlGenerator;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
-import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
@@ -74,7 +74,7 @@ public final class Input01_model {
 
 		ComputationDescription comDescription = createDescription();
 		
-		String fileName = Agent_GUIKlara.filePath + "input01"
+		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input01"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 

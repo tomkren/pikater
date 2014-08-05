@@ -8,6 +8,10 @@ public class CoreConfiguration {
 			System.getProperty("file.separator") + 
 			"configurationMaster.xml";
 	
+	public static String INPUTS_KLARA_PATH = "core"
+			+ System.getProperty("file.separator") + "inputs"
+			+ System.getProperty("file.separator") + "inputsKlara"
+			+ System.getProperty("file.separator");
 	public static String DATA_FILES_PATH =
 			"core" + System.getProperty("file.separator") +
 			"data" + System.getProperty("file.separator") +

@@ -2,6 +2,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 
 import java.util.HashMap;
 
+import org.pikater.core.CoreConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,8 +18,9 @@ public class ComputationGraph {
     
     public ComputationGraph()
     {
-        String initBeansName = "Beans.xml";
-        ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
+        String initBeansName = CoreConfiguration.BEANS_CONFIG_FILE;
+        @SuppressWarnings("resource")
+		ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
         GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
         id=generator.getAndAllocateGUID();
     }

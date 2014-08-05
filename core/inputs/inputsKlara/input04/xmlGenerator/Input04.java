@@ -1,8 +1,8 @@
 package xmlGenerator;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
-import org.pikater.core.agents.system.Agent_GUIKlara;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
@@ -89,7 +89,7 @@ public final class Input04 {
 
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = Agent_GUIKlara.filePath + "input04"
+		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input04"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 
