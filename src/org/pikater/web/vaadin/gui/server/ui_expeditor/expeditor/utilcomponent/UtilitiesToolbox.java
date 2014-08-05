@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.utilcomponent;
 
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 

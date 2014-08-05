@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxbrowser;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 
