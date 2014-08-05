@@ -4,8 +4,8 @@ import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.communication.RpcProxy;
 
-import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
-import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
+import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 import com.vaadin.client.communication.StateChangeEvent;
@@ -44,7 +44,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 			}
 
 			@Override
-			public void command_receiveExperimentToLoad(ExperimentGraph experiment)
+			public void command_receiveExperimentToLoad(ExperimentGraphClient experiment)
 			{
 				getWidget().command_receiveExperimentToLoad(experiment);
 			}
@@ -53,12 +53,6 @@ public class KineticComponentConnector extends AbstractComponentConnector
 			public void command_resetKineticEnvironment()
 			{
 				getWidget().command_resetKineticEnvironment();
-			}
-
-			@Override
-			public void request_sendExperimentToSave()
-			{
-				getWidget().request_sendExperimentToSave();
 			}
 
 			@Override

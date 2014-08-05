@@ -10,11 +10,8 @@ import org.pikater.shared.experiment.universalformat.UniversalComputationDescrip
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
-import org.pikater.shared.experiment.webformat.server.BoxType;
-import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
-import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.server.ExperimentGraphServer;
 import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClientRpc;
@@ -55,29 +52,16 @@ public class KineticComponent extends AbstractComponent
 	// EXPERIMENT RELATED FIELDS
 	
 	/**
-	 * ID generator for boxes.
-	 * This generator never falls back and thus it is ensured that no two
-	 * boxes will have the same ID.
-	 */
-	private final SimpleIDGenerator boxIDGenerator;
-	
-	/**
 	 * The dynamic mapping of box IDs to box information providers. This field is
 	 * the base for all format conversions and some other commands.
 	 */
-	private final Map<String, BoxInfoServer> boxIDToAgentInfo;
+	private ExperimentGraphServer experimentGraph;
 	
 	/**
 	 * Reference to experiment last used in the {@link #importExperiment(UniversalComputationDescription)}
 	 * method.
 	 */
 	private Integer previouslyLoadedExperimentID;
-	
-	/**
-	 * Callback for exported experiments.
-	 * @see {@link IOnExperimentReceivedFromClient}   
-	 */
-	private IOnExperimentReceivedFromClient exportedExperimentCallback;
 	
 	//---------------------------------------------------------------
 	// OTHER PROGRAMMATIC FIELDS
@@ -105,10 +89,8 @@ public class KineticComponent extends AbstractComponent
 		this.parentEditor = parentEditor;
 		this.parentTab = null;
 		
-		this.boxIDGenerator = new SimpleIDGenerator();
-		this.boxIDToAgentInfo = new HashMap<String, BoxInfoServer>();
+		this.experimentGraph = new ExperimentGraphServer();
 		this.previouslyLoadedExperimentID = null;
-		this.exportedExperimentCallback = null;
 		
 		this.bindOptionsManagerWithSelectionChanges = areSelectionChangesBoundWithOptionsManagerByDefault();
 		this.absoluteLeft = 0;
@@ -155,17 +137,19 @@ public class KineticComponent extends AbstractComponent
 			@Override
 			public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
 			{
+				// TODO: register things
 				// MyNotifications.showInfo(null, "Box set changed");
 			}
 
 			@Override
 			public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 			{
+				// TODO: register things
 				// MyNotifications.showInfo(null, "Edge set changed");
 			}
 			
 			@Override
-			public void command_selectionChange(String[] selectedBoxesIDs)
+			public void command_selectionChange(Integer[] selectedBoxesIDs)
 			{
 				if(bindOptionsManagerWithSelectionChanges)
 				{
@@ -173,14 +157,14 @@ public class KineticComponent extends AbstractComponent
 					BoxInfoServer[] selectedBoxesInformation = new BoxInfoServer[selectedBoxesIDs.length];
 					for(int i = 0; i < selectedBoxesIDs.length; i++)
 					{
-						if(boxIDToAgentInfo.containsKey(selectedBoxesIDs[i]))
+						if(experimentGraph.containsBox(selectedBoxesIDs[i]))
 						{
-							selectedBoxesInformation[i] = boxIDToAgentInfo.get(selectedBoxesIDs[i]);
+							selectedBoxesInformation[i] = experimentGraph.getBox(selectedBoxesIDs[i]);
 						}
 						else
 						{
 							throw new IllegalStateException(String.format("Kinetic state out of sync. "
-									+ "No agent info was found for box ID '%s'.", selectedBoxesIDs[i]));
+									+ "No agent info was found for box ID '%d'.", selectedBoxesIDs[i]));
 						}
 					}
 					
@@ -192,47 +176,6 @@ public class KineticComponent extends AbstractComponent
 					{
 						parentEditor.openToolbox(ExpEditorToolbox.BOX_MANAGER);
 					}
-				}
-			}
-
-			@Override
-			public void response_sendExperimentToSave(ExperimentGraph experiment)
-			{
-				UniversalComputationDescription result = null;
-				try
-				{
-					result = webToUni(experiment);
-				}
-				catch (ConversionException e)
-				{
-					PikaterLogger.logThrowable("Could not convert to universal format because of the error below.", e);
-				}
-				
-				try
-				{
-					if(result != null)
-					{
-						exportedExperimentCallback.handleExperiment(result, new IOnExperimentSaved()
-						{
-							@Override
-							public void experimentSaved(JPABatch newExperimentEntity)
-							{
-								if(newExperimentEntity.getId() == 0)
-								{
-									throw new IllegalStateException("The given new experiment has not been saved yet.");
-								}
-								else
-								{
-									previouslyLoadedExperimentID = newExperimentEntity.getId();
-									parentTab.setCaption(newExperimentEntity.getName());
-								}
-							}
-						});
-					}
-				}
-				finally
-				{
-					exportedExperimentCallback = null;
 				}
 			}
 		});
@@ -251,29 +194,26 @@ public class KineticComponent extends AbstractComponent
 	// EXPERIMENT IMPORT/EXPORT RELATED ROUTINES/TYPES
 	
 	/**
-	 * Used BEFORE saving experiments.</br>
-	 * The server has to issue an asynchronous command to the client and wait for it to
-	 * send response. The experiment from response is converted into universal format
-	 * and passed to the {@link IOnExperimentReceivedFromClient#handleExperiment(UniversalComputationDescription)
-	 * handleExperiment(UniversalComputationDescription)} method.
+	 * Used BEFORE saving experiments to database.</br> 
 	 */
-	public static interface IOnExperimentReceivedFromClient
+	public static interface IOnExperimentExported
 	{
 		/**
 		 * Handle the exported experiment in this method.
 		 * @param exportedExperiment
-		 * @param experimentSavedCallback provide a callback for when the experiment is successfully saved
+		 * @param experimentSavedCallback callback for when the experiment is successfully saved to database
 		 */
 		void handleExperiment(UniversalComputationDescription exportedExperiment, IOnExperimentSaved experimentSavedCallback);
 	}
 	
 	/**
-	 * Used AFTER saving experiments to keep this component's inner state in sync.
+	 * Used AFTER saving experiments to database to keep this component's inner state in sync.
 	 */
 	public static interface IOnExperimentSaved
 	{
 		/**
-		 * Call this method when your experiment has successfully been saved.
+		 * Call this method when your experiment has successfully been saved to database to keep
+		 * the component in consistent state.
 		 * @param newBatchID the ID of the newly saved experiment
 		 */
 		void experimentSaved(JPABatch newExperimentEntity);
@@ -283,15 +223,17 @@ public class KineticComponent extends AbstractComponent
 	{
 		try
 		{
-			// first and foremost
+			// first and foremost, reset current state (both server and client)
 			resetEnvironment();
 			
-			// deserialization from XML should always be ok, as long as we don't change universal format
+			// transform to universal format
 			UniversalComputationDescription uniFormat = UniversalComputationDescription.fromXML(experiment.getXML());
 			
-			// however, correct conversion to web format is not a simple matter (see the inside of the method)
-			// also updates server-side state
-			getClientRPC().command_receiveExperimentToLoad(uniToWeb(uniFormat));
+			// transform universal format to server format and store the result
+			experimentGraph = uniToWeb(uniFormat);
+			
+			// transform to client format and send it to the client
+			getClientRPC().command_receiveExperimentToLoad(experimentGraph.toClientFormat());
 			
 			// finish updating server-side state
 			previouslyLoadedExperimentID = experiment.getId();
@@ -306,19 +248,32 @@ public class KineticComponent extends AbstractComponent
 		}
 	}
 	
-	public synchronized void exportExperiment(IOnExperimentReceivedFromClient callback)
+	public void exportExperiment(IOnExperimentExported exportCallback)
 	{
-		if(exportedExperimentCallback != null)
+		try
 		{
-			MyNotifications.showWarning("Export ignored", "Another call pending...");
+			UniversalComputationDescription result = webToUni(experimentGraph);
+			exportCallback.handleExperiment(result, new IOnExperimentSaved()
+			{
+				@Override
+				public void experimentSaved(JPABatch newExperimentEntity)
+				{
+					if(newExperimentEntity.getId() == 0)
+					{
+						throw new IllegalStateException("The given new experiment has not been saved yet.");
+					}
+					else
+					{
+						previouslyLoadedExperimentID = newExperimentEntity.getId();
+						parentTab.setCaption(newExperimentEntity.getName());
+					}
+				}
+			});
 		}
-		else
+		catch (ConversionException e)
 		{
-			// register callback
-			exportedExperimentCallback = callback;
-			
-			// send command to the client
-			getClientRPC().request_sendExperimentToSave();
+			PikaterLogger.logThrowable("", e);
+			MyNotifications.showError("Could not export experiment", "Please, contact the administrators.");
 		}
 	}
 	
@@ -330,14 +285,9 @@ public class KineticComponent extends AbstractComponent
 		this.parentTab = parentTab;
 	}
 	
-	public void createBoxAndSendItToClient(AgentInfo info, int absX, int absY)
+	public Integer getPreviouslyLoadedExperimentID()
 	{
-		getClientRPC().command_createBox(createBoxAndUpdateState(info, absX - absoluteLeft, absY - absoluteTop));
-	}
-	
-	public void reloadVisualStyle()
-	{
-		getClientRPC().request_reloadVisualStyle();
+		return previouslyLoadedExperimentID;
 	}
 	
 	public boolean areSelectionChangesBoundWithOptionsManager()
@@ -355,39 +305,34 @@ public class KineticComponent extends AbstractComponent
 		this.bindOptionsManagerWithSelectionChanges = bindOptionsManagerWithSelectionChanges;
 	}
 	
+	@Deprecated
 	public boolean isContentModified()
 	{
 		return true; // TODO: until problems with the "modified" status are resolved, always return true
 		// return getState().serverThinksThatSchemaIsModified;
 	}
 	
-	public Integer getPreviouslyLoadedExperimentID()
+	public BoxInfoServer createBox(AgentInfo info, int absX, int absY, boolean sendToClient)
 	{
-		return previouslyLoadedExperimentID;
+		BoxInfoServer result = experimentGraph.addBox(new BoxInfoServer(
+				info.clone(), // agent info needs to be cloned because options may be changed by user later
+				absX - absoluteLeft,
+				absY - absoluteTop
+		));
+		if(sendToClient)
+		{
+			getClientRPC().command_createBox(result.toClientFormat());
+		}
+		return result;
+	}
+	
+	public void reloadVisualStyle()
+	{
+		getClientRPC().request_reloadVisualStyle();
 	}
 	
 	//---------------------------------------------------------------
 	// MISCELLANEOUS PRIVATE INTERFACE
-	
-	private KineticComponentClientRpc getClientRPC()
-	{
-		return getRpcProxy(KineticComponentClientRpc.class);
-	}
-	
-	private BoxInfoClient createBoxAndUpdateState(AgentInfo info, int relX, int relY)
-	{
-		BoxType type = BoxType.fromAgentInfo(info);
-		String newBoxID = String.valueOf(boxIDGenerator.getAndIncrement());
-		boxIDToAgentInfo.put(newBoxID, new BoxInfoServer(info.clone())); // agent info needs to be cloned because options may be changed by user later
-		return new BoxInfoClient(
-				newBoxID,
-				type.name(),
-				info.getName(),
-				relX,
-				relY,
-				ExpEditor.getBoxPictureURL(type)
-		);
-	}
 	
 	private void resetEnvironment()
 	{
@@ -396,8 +341,18 @@ public class KineticComponent extends AbstractComponent
 		 * then we would have to wait for it before the current thread proceeds.
 		 * As such, NEVER reset server-side state from the client :).
 		 */
-		getClientRPC().command_resetKineticEnvironment(); // client side reset
-		boxIDToAgentInfo.clear(); // server side reset
+		
+		// client side reset
+		getClientRPC().command_resetKineticEnvironment();
+		
+		// server side reset
+		experimentGraph.clear();
+		experimentGraph = null;
+	}
+	
+	private KineticComponentClientRpc getClientRPC()
+	{
+		return getRpcProxy(KineticComponentClientRpc.class);
 	}
 	
 	//---------------------------------------------------------------
@@ -410,7 +365,7 @@ public class KineticComponent extends AbstractComponent
 	 * @return
 	 * @throws ConversionException
 	 */
-	private UniversalComputationDescription webToUni(ExperimentGraph webFormat) throws ConversionException
+	private static UniversalComputationDescription webToUni(ExperimentGraphServer webFormat) throws ConversionException
 	{
 		try
 		{
@@ -429,8 +384,8 @@ public class KineticComponent extends AbstractComponent
 			UniversalComputationDescription result = new UniversalComputationDescription();
 
 			// create uni-format master elements for all boxes
-			Map<BoxInfoClient, UniversalElement> webBoxToUniBox = new HashMap<BoxInfoClient, UniversalElement>();
-			for(BoxInfoClient webBox : webFormat.leafBoxes.values())
+			Map<BoxInfoServer, UniversalElement> webBoxToUniBox = new HashMap<BoxInfoServer, UniversalElement>();
+			for(BoxInfoServer webBox : webFormat.leafBoxes.values())
 			{
 				UniversalElement uniBox = new UniversalElement();
 				webBoxToUniBox.put(webBox, uniBox);
@@ -438,18 +393,12 @@ public class KineticComponent extends AbstractComponent
 			}
 
 			// traverse all boxes and pass all available/needed information to result uni-format
-			for(Entry<String, BoxInfoClient> entry : webFormat.leafBoxes.entrySet())
+			for(Entry<Integer, BoxInfoServer> entry : webFormat.leafBoxes.entrySet())
 			{
 				// determine basic information and references
-				String webBoxID = entry.getKey();
-				BoxInfoClient webBox = entry.getValue();
+				Integer webBoxID = entry.getKey();
+				BoxInfoServer webBox = entry.getValue();
 				UniversalElement uniBox = webBoxToUniBox.get(webBox);
-				BoxInfoServer boxInfo = boxIDToAgentInfo.get(webBoxID);
-				if(boxInfo == null)
-				{
-					throw new IllegalStateException(String.format(
-							"No agent info was found for box '%s@%s'.", webBox.boxTypeName, webBox.displayName));
-				}
 
 				// create edge leading from the currently processed box (will be later added to all neighbour uni-boxes)
 				UniversalConnector connector = new UniversalConnector();
@@ -460,22 +409,22 @@ public class KineticComponent extends AbstractComponent
 				// initialize the FIRST of the 2 child objects
 				try
 				{
-					uniBox.getOntologyInfo().setOntologyClass(Class.forName(boxInfo.getAssociatedAgent().getOntologyClassName()));
-					uniBox.getOntologyInfo().setAgentClass(Class.forName(boxInfo.getAssociatedAgent().getAgentClassName()));
+					uniBox.getOntologyInfo().setOntologyClass(Class.forName(webBox.getAssociatedAgent().getOntologyClassName()));
+					uniBox.getOntologyInfo().setAgentClass(Class.forName(webBox.getAssociatedAgent().getAgentClassName()));
 				}
 				catch (ClassNotFoundException e)
 				{
 					throw new IllegalStateException(String.format(
 							"Could not convert '%s' to a class instance. Has it been hardcoded to an agent and renamed? "
-							+ "Or is the pikater core running in different version than web?", boxInfo.getAssociatedAgent().getOntologyClassName()
+							+ "Or is the pikater core running in different version than web?", webBox.getAssociatedAgent().getOntologyClassName()
 							), e
 					);
 				}
-				uniBox.getOntologyInfo().setOptions(boxInfo.getAssociatedAgent().getOptions());
+				uniBox.getOntologyInfo().setOptions(webBox.getAssociatedAgent().getOptions());
 				if(webFormat.edgesDefinedFor(webBoxID))
 				{
 					// transform edges
-					for(String neighbourWebBoxID : webFormat.edges.get(webBoxID))
+					for(Integer neighbourWebBoxID : webFormat.edges.get(webBoxID))
 					{
 						UniversalElement neighbourUniBox = webBoxToUniBox.get(webFormat.leafBoxes.get(neighbourWebBoxID));
 						neighbourUniBox.getOntologyInfo().addInputSlot(connector);
@@ -483,8 +432,8 @@ public class KineticComponent extends AbstractComponent
 				}
 
 				// initialize the SECOND of the 2 child objects
-				uniBox.getGuiInfo().setX(webBox.initialX);
-				uniBox.getGuiInfo().setY(webBox.initialY);
+				uniBox.getGuiInfo().setX(webBox.getPosX());
+				uniBox.getGuiInfo().setY(webBox.getPosY());
 			}
 			return result;
 		}
@@ -509,7 +458,7 @@ public class KineticComponent extends AbstractComponent
 	 * @return
 	 * @throws ConversionException
 	 */
-	private ExperimentGraph uniToWeb(UniversalComputationDescription uniFormat) throws ConversionException
+	private static ExperimentGraphServer uniToWeb(UniversalComputationDescription uniFormat) throws ConversionException
 	{
 		try
 		{
@@ -531,10 +480,10 @@ public class KineticComponent extends AbstractComponent
 			else
 			{
 				// and then onto the conversion
-				ExperimentGraph webFormat = new ExperimentGraph();
+				ExperimentGraphServer webFormat = new ExperimentGraphServer();
 	
 				// first convert all boxes, set box positions
-				Map<UniversalElement, String> uniBoxToWebBoxID = new HashMap<UniversalElement, String>();
+				Map<UniversalElement, Integer> uniBoxToWebBoxID = new HashMap<UniversalElement, Integer>();
 				for(UniversalElement element : uniFormat.getAllElements())
 				{
 					// determine agent info instance
@@ -554,9 +503,8 @@ public class KineticComponent extends AbstractComponent
 					}
 					
 					// create web-format box and link it to uni-format box
-					BoxInfoClient info = createBoxAndUpdateState(agentInfo, element.getGuiInfo().getX(), element.getGuiInfo().getY());
-					String convertedBoxID = webFormat.addLeafBoxAndReturnID(info);
-					uniBoxToWebBoxID.put(element, convertedBoxID);
+					BoxInfoServer webBox = webFormat.addBox(new BoxInfoServer(agentInfo, element.getGuiInfo().getX(), element.getGuiInfo().getY()));
+					uniBoxToWebBoxID.put(element, webBox.getID());
 				}
 				
 				// then convert all edges
@@ -583,7 +531,7 @@ public class KineticComponent extends AbstractComponent
 				// and finally, options... THIS IS THE TRICKY PART
 				for(UniversalElement element : uniFormat.getAllElements())
 				{
-					BoxInfoServer boxInfo = boxIDToAgentInfo.get(uniBoxToWebBoxID.get(element));
+					BoxInfoServer boxInfo = webFormat.getBox(uniBoxToWebBoxID.get(element));
 					boxInfo.getAssociatedAgent().getOptions().mergeWith(element.getOntologyInfo().getOptions());
 				}
 				

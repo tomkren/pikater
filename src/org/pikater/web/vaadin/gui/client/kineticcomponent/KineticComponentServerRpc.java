@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticUndoRedoManager;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
@@ -25,8 +24,5 @@ public interface KineticComponentServerRpc extends ServerRpc
 	// experiment graph related commands
 	void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes);
 	void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges);
-	void command_selectionChange(String[] selectedBoxesAgentIDs);
-	
-	// responses
-	void response_sendExperimentToSave(ExperimentGraph experiment);
+	void command_selectionChange(Integer[] selectedBoxesAgentIDs);
 }

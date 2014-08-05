@@ -21,20 +21,19 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator.GraphItemRegistration;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
-import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.CreateEdgeModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule;
-import org.pikater.web.vaadin.gui.client.kineticengine.modules.TrackMouseModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.SelectionOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.TrackMouseModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
@@ -282,9 +281,10 @@ public final class KineticEngine
 	// *****************************************************************************************************
 	// SERIALIZATION/DESERIALIZATION INTERFACE
 	
-	public ExperimentGraph toIntermediateFormat()
+	/*
+	public AbstractExperimentGraph toIntermediateFormat()
 	{
-		ExperimentGraph result = new ExperimentGraph();
+		AbstractExperimentGraph result = new AbstractExperimentGraph();
 		
 		// first convert all boxes
 		Map<BoxGraphItemClient, String> boxToWebFormatID = new HashMap<BoxGraphItemClient, String>();
@@ -314,22 +314,23 @@ public final class KineticEngine
 		
 		return result;
 	}
+	*/
 	
-	public void fromIntermediateFormat(ExperimentGraph experiment)
+	public void fromIntermediateFormat(ExperimentGraphClient experiment)
 	{
 		// first convert all boxes
-		Map<String, BoxGraphItemClient> guiBoxes = new HashMap<String, BoxGraphItemClient>();
-		for(String leafBoxID : experiment.leafBoxes.keySet())
+		Map<Integer, BoxGraphItemClient> guiBoxes = new HashMap<Integer, BoxGraphItemClient>();
+		for(Integer leafBoxID : experiment.leafBoxes.keySet())
 		{
 			guiBoxes.put(leafBoxID, getContext().getGraphItemCreator().createBox(GraphItemRegistration.MANUAL, experiment.leafBoxes.get(leafBoxID)));
 		}
 		
 		// then convert all edges
 		List<EdgeGraphItemClient> edges = new ArrayList<EdgeGraphItemClient>();
-		for(Entry<String, Set<String>> entry : experiment.edges.entrySet())
+		for(Entry<Integer, Set<Integer>> entry : experiment.edges.entrySet())
 		{
 			BoxGraphItemClient fromBox = guiBoxes.get(entry.getKey());
-			for(String toLeafBoxID : entry.getValue())
+			for(Integer toLeafBoxID : entry.getValue())
 			{
 				BoxGraphItemClient toBox = guiBoxes.get(toLeafBoxID);
 				edges.add(getContext().getGraphItemCreator().createEdge(GraphItemRegistration.MANUAL, fromBox, toBox));

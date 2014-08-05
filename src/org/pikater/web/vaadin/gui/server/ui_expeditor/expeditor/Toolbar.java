@@ -302,7 +302,7 @@ public class Toolbar extends VerticalLayout
 	{
 		try
 		{
-			activeComponent.exportExperiment(new KineticComponent.IOnExperimentReceivedFromClient()
+			activeComponent.exportExperiment(new KineticComponent.IOnExperimentExported()
 			{
 				private JPAUser experimentOwner;
 				private JPABatch sourceExperiment;

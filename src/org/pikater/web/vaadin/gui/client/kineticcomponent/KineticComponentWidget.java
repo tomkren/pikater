@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
-import org.pikater.shared.experiment.webformat.shared.ExperimentGraph;
+import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
+import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
@@ -193,7 +193,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 * resets the environment.
 	 */
 	@Override
-	public void command_receiveExperimentToLoad(final ExperimentGraph experiment)
+	public void command_receiveExperimentToLoad(final ExperimentGraphClient experiment)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -239,19 +239,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		});
 	}
 	
-	@Override
-	public void request_sendExperimentToSave()
-	{
-		Scheduler.get().scheduleDeferred(new ScheduledCommand()
-		{
-			@Override
-			public void execute()
-			{
-				response_sendExperimentToSave(getEngine().toIntermediateFormat());
-			}
-		});
-	}
-	
 	// *****************************************************************************************************
 	// COMMANDS TO SERVER - SIMPLE FORWARDING
 	
@@ -274,18 +261,9 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public void command_selectionChange(String[] selectedBoxesAgentIDs)
+	public void command_selectionChange(Integer[] selectedBoxesAgentIDs)
 	{
 		getServerRPC().command_selectionChange(selectedBoxesAgentIDs);
-	}
-	
-	@Override
-	public void response_sendExperimentToSave(ExperimentGraph experiment)
-	{
-		getServerRPC().response_sendExperimentToSave(experiment);
-		
-		// TODO: only do this if saving the experiment is successful?
-		// getHistoryManager().clear();
 	}
 	
 	/*

@@ -10,13 +10,18 @@ public class SimpleIDGenerator implements Serializable
 
 	public SimpleIDGenerator()
 	{
-		this.currentID = getFirstID();
+		reset();
 	}
 	
 	public Integer getAndIncrement()
 	{
 		currentID++;
 		return currentID - 1;
+	}
+	
+	public void reset()
+	{
+		currentID = getFirstID();
 	}
 	
 	public static Integer getFirstID()
