@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebListener;
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
@@ -23,7 +25,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
@@ -189,8 +191,14 @@ public class StartupAndQuitListener implements ServletContextListener
 								new IntegerValue(5), new IntegerValue(10), 3)));
 						options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(new ArrayList<IValueData>(Arrays.asList(
 								new IntegerValue(5), new IntegerValue(10))), 3)));
+						
+						Slot testSlot = new Slot();
+						testSlot.setDataType("pokus");
+						testSlot.setSlotType(SlotTypes.DATA_TYPE);
+						testSlot.setDescription("A general test slot.");
 
 						agentInfo.setOptions(options);
+						agentInfo.setInputSlots(Arrays.asList(testSlot));
 						agentInfoCollection.addDefinition(agentInfo);
 					}
 				}

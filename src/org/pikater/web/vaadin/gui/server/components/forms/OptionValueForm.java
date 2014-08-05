@@ -193,7 +193,7 @@ public class OptionValueForm extends CustomFormLayout
 			setupOtherFields(value);
 			
 			// add a special button to reset value to default (default value of the currently selected type)
-			addCustomButtonInterface(new Button("Reset to default", new Button.ClickListener()
+			addCustomButtonInterface(new Button("Reset value", new Button.ClickListener()
 			{
 				private static final long serialVersionUID = 838180535195566779L;
 

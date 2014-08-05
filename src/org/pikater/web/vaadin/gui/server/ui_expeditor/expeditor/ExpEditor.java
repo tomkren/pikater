@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.experiment.webformat.BoxType;
+import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheet;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxbrowser.BoxBrowserToolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticDnDWrapper;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxBrowserToolbox;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.BoxOptionsToolbox;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.toolboxes.UtilitiesToolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.utilcomponent.UtilitiesToolbox;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
@@ -37,18 +37,18 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	
 	public enum ExpEditorToolbox
 	{
-		METHOD_BROWSER,
-		METHOD_OPTION_MANAGER,
+		BOX_BROWSER,
+		BOX_MANAGER,
 		UTILITIES;
 		
 		public String toDisplayName()
 		{
 			switch(this)
 			{
-				case METHOD_BROWSER:
-					return "Available components";
-				case METHOD_OPTION_MANAGER:
-					return "Method options";
+				case BOX_BROWSER:
+					return "Available boxes";
+				case BOX_MANAGER:
+					return "Box manager";
 				case UTILITIES:
 					return "Utilities";
 				default:
@@ -60,9 +60,9 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		{
 			switch(this)
 			{
-				case METHOD_BROWSER:
+				case BOX_BROWSER:
 					return Border.WEST;
-				case METHOD_OPTION_MANAGER:
+				case BOX_MANAGER:
 					return Border.EAST;
 				case UTILITIES:
 					return Border.SOUTH;
@@ -75,9 +75,9 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		{
 			switch(this)
 			{
-				case METHOD_BROWSER:
+				case BOX_BROWSER:
 					return KeyCode.ARROW_LEFT;
-				case METHOD_OPTION_MANAGER:
+				case BOX_MANAGER:
 					return KeyCode.ARROW_RIGHT;
 				case UTILITIES:
 					return KeyCode.ARROW_DOWN;
@@ -93,7 +93,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	private final Toolbar toolbar; // NORTH
 	private final BoxBrowserToolbox toolbox_boxBrowser; // WEST
 	private final TabSheet experimentTabs; // CENTER
-	private final BoxOptionsToolbox toolbox_boxOptions; // EAST
+	private final BoxManagerToolbox toolbox_boxManager; // EAST
 	private final UtilitiesToolbox toolbox_util; // SOUTH
 	
 	// -------------------------------------------------------------
@@ -120,14 +120,14 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setComponent(Border.NORTH, this.toolbar);
 		
 		// WEST COMPONENT INIT
-		this.toolbox_boxBrowser = new BoxBrowserToolbox(ExpEditorToolbox.METHOD_BROWSER.toDisplayName(), new MouseEvents.ClickListener()
+		this.toolbox_boxBrowser = new BoxBrowserToolbox(ExpEditorToolbox.BOX_BROWSER.toDisplayName(), new MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = 812989325500737028L;
 
 			@Override
 			public void click(ClickEvent event)
 			{
-				minimizeToolbox(ExpEditorToolbox.METHOD_BROWSER);
+				minimizeToolbox(ExpEditorToolbox.BOX_BROWSER);
 			}
 		});
 		this.toolbox_boxBrowser.setStyleName("boxBrowserToolbox");
@@ -141,19 +141,19 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setComponent(Border.CENTER, this.experimentTabs);
 		
 		// EAST COMPONENT INIT
-		this.toolbox_boxOptions = new BoxOptionsToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER.toDisplayName(), new MouseEvents.ClickListener()
+		this.toolbox_boxManager = new BoxManagerToolbox(ExpEditorToolbox.BOX_MANAGER.toDisplayName(), new MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = 1236473439175631916L;
 
 			@Override
 			public void click(ClickEvent event)
 			{
-				minimizeToolbox(ExpEditorToolbox.METHOD_OPTION_MANAGER);
+				minimizeToolbox(ExpEditorToolbox.BOX_MANAGER);
 			}
 		});
-		this.toolbox_boxOptions.setStyleName("boxOptionsToolbox");
-		setComponent(Border.EAST, this.toolbox_boxOptions);
-		addColumnStyleName(Column.EAST, "boxOptionsToolboxSize");
+		this.toolbox_boxManager.setStyleName("boxManagerToolbox");
+		setComponent(Border.EAST, this.toolbox_boxManager);
+		addColumnStyleName(Column.EAST, "boxManagerToolboxSize");
 		
 		// SOUTH COMPONENT INIT
 		this.toolbox_util = new UtilitiesToolbox(ExpEditorToolbox.UTILITIES.toDisplayName(), new MouseEvents.ClickListener()
@@ -172,7 +172,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		
 		setRowHeight(Row.CENTER, new Dimension(DimensionMode.MAX));
 		setColumnWidth(Column.CENTER, new Dimension(100, DimensionUnit.PCT));
-		setToolboxVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER, false);
+		setToolboxVisible(ExpEditorToolbox.BOX_MANAGER, false);
 		setToolboxVisible(ExpEditorToolbox.UTILITIES, false);
 		
 		for(final ExpEditorToolbox toolbox : ExpEditorToolbox.values())
@@ -269,10 +269,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	{
 		switch(toolbox)
 		{
-			case METHOD_BROWSER:
+			case BOX_BROWSER:
 				return toolbox_boxBrowser;
-			case METHOD_OPTION_MANAGER:
-				return toolbox_boxOptions;
+			case BOX_MANAGER:
+				return toolbox_boxManager;
 			case UTILITIES:
 				return toolbox_util;
 			default:
@@ -335,13 +335,13 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	{
 		switch(toolbox)
 		{
-			case METHOD_BROWSER:
+			case BOX_BROWSER:
 				if(visible)
 				{
 					setColumnVisible(Column.WEST);
-					if(toolbox_boxOptions.isVisible())
+					if(toolbox_boxManager.isVisible())
 					{
-						setToolboxVisible(ExpEditorToolbox.METHOD_OPTION_MANAGER, false);
+						setToolboxVisible(ExpEditorToolbox.BOX_MANAGER, false);
 					}
 				}
 				else
@@ -349,13 +349,13 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 					setColumnInvisible(Column.WEST, Column.CENTER);
 				}
 				break;
-			case METHOD_OPTION_MANAGER:
+			case BOX_MANAGER:
 				if(visible)
 				{
 					setColumnVisible(Column.EAST);
 					if(toolbox_boxBrowser.isVisible())
 					{
-						setToolboxVisible(ExpEditorToolbox.METHOD_BROWSER, false);
+						setToolboxVisible(ExpEditorToolbox.BOX_BROWSER, false);
 					}
 				}
 				else

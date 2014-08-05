@@ -18,7 +18,6 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
-import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -239,6 +238,10 @@ public class DatasetsView extends ExpandableView
 					return 125;
 				case RATIO_OF_MISSING_VALUES:
 					return 175;
+				case CLASS_ENTROPY:
+					return 100;
+				case ENTROPY:
+					return 100;
 				default:
 					throw new IllegalStateException(String.format("No sizing information found for column '%s'", specificColumn.name()));
 			}
@@ -289,6 +292,10 @@ public class DatasetsView extends ExpandableView
 					return 75;
 				case RATIO_OF_MISSING_VALUES:
 					return 175;
+				case CLASS_ENTROPY:
+					return 100;
+				case ENTROPY:
+					return 100;
 				default:
 					throw new IllegalStateException(String.format("No sizing information found for column '%s'", specificColumn.name()));
 			}
@@ -366,19 +373,21 @@ public class DatasetsView extends ExpandableView
 			this.innerLayout.setSpacing(true);
 			this.innerLayout.setStyleName("datasetDetailView");
 			
-			DBTable categoricalMetadataTable = createTable("Categorical columns:");
+			DBTableLayout categoricalMetadataTable = createTable("Categorical columns:");
 			categoricalMetadataTable.setView(new CategoricalMetadataDBViewRoot(new CategoricalMetaDataTableDBView(dataset)));
+			categoricalMetadataTable.setReadOnly(true);
 			
-			DBTable numericalMetadataTable = createTable("Numerical columns:");
+			DBTableLayout numericalMetadataTable = createTable("Numerical columns:");
 			numericalMetadataTable.setView(new NumericalMetadataDBViewRoot(new NumericalMetaDataTableDBView(dataset)));
+			numericalMetadataTable.setReadOnly(true);
 			
 			this.innerLayout.addComponent(categoricalMetadataTable);
 			this.innerLayout.addComponent(numericalMetadataTable);
 		}
 		
-		private DBTable createTable(String caption)
+		private DBTableLayout createTable(String caption)
 		{
-			DBTable resultTable = new DBTable();
+			DBTableLayout resultTable = new DBTableLayout();
 			resultTable.setCaption(caption);
 			resultTable.setSizeUndefined();
 			return resultTable;

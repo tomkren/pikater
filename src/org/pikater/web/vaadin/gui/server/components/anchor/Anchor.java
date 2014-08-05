@@ -30,7 +30,8 @@ public class Anchor extends AbstractComponent implements AnchorClientRpc
 	public Anchor(String caption, final ClickListener listener)
 	{
 		super();
-		setPrimaryStyleName("v-widget v-label anchor");
+		setPrimaryStyleName("v-widget anchor");
+		addStyleName("v-label");
 		setValue(caption);
 		
 		registerRpc(new AnchorServerRpc()

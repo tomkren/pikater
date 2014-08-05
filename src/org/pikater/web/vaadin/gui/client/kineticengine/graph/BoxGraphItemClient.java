@@ -19,7 +19,7 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.shared.experiment.webformat.BoxInfo;
+import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
@@ -69,12 +69,12 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 	/**
 	 * Reference to an external box information received from the server.
 	 */
-	private final BoxInfo info;
+	private final BoxInfoClient info;
 	
 	/**
 	 * Regular constructor.
 	 */
-	public BoxGraphItemClient(KineticEngine kineticEngine, BoxInfo info)
+	public BoxGraphItemClient(KineticEngine kineticEngine, BoxInfoClient info)
 	{
 		super(kineticEngine);
 		
@@ -89,13 +89,16 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		
 		final double componentSpace = 13; // in pixels
 		
+		// kinetic's image shape somehow doesn't always return the image's size, so try to use gwt image instead
+		com.google.gwt.user.client.ui.Image gwtImageWidget = new com.google.gwt.user.client.ui.Image(info.pictureURL);
+		
 		// setup the box's icon
-		icon = Kinetic.createImage(new Vector2d(componentSpace, componentSpace), new com.google.gwt.user.client.ui.Image(info.pictureURL));
+		icon = Kinetic.createImage(new Vector2d(componentSpace, componentSpace), gwtImageWidget); 
 		icon.setDraggable(false);
 		icon.setStroke(Colour.black);
 		icon.setStrokeWidth(2);
 		
-		double textOffset_left = componentSpace + icon.getWidth() + componentSpace / 2;
+		double textOffset_left = componentSpace + gwtImageWidget.getWidth() + componentSpace / 2;
 		
 		// box type text label
 		title = Kinetic.createText(new Vector2d(textOffset_left, componentSpace), info.boxTypeName);
@@ -103,7 +106,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		title.setFontStyle(FontStyle.BOLD);
 		
 		// box display name label
-		name = Kinetic.createText(new Vector2d(textOffset_left, componentSpace + icon.getHeight() / 2), info.displayName);
+		name = Kinetic.createText(new Vector2d(textOffset_left, componentSpace + gwtImageWidget.getHeight() / 2), info.displayName);
 		name.setDraggable(false);
 		name.setFontStyle(FontStyle.ITALIC);
 		
@@ -252,7 +255,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		return result;
 	}
 	
-	public BoxInfo getInfo()
+	public BoxInfoClient getInfo()
 	{
 		return info;
 	}

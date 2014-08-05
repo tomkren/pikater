@@ -95,6 +95,11 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 	// --------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
+	public void addCustomButtonInterface(Component component)
+	{
+		buttonInterface.addComponent(component);
+	}
+	
 	/**
 	 * At least one field's value is updated.
 	 * @return
@@ -156,11 +161,6 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 			fieldInfo.remove(field);
 			fLayout.removeComponent(field);
 		}
-	}
-	
-	protected void addCustomButtonInterface(Component component)
-	{
-		buttonInterface.addComponent(component);
 	}
 	
 	protected synchronized void updateActionButton()
