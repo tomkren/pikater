@@ -154,10 +154,6 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		List<Class<? extends Agent_AbstractExperiment>> allAgentClasses =
 				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
-
-		DataManagerService service = new DataManagerService();
-		ExternalAgentNames externalAgentNames =
-				service.getExternalAgentNames(this);
 				
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
@@ -185,12 +181,15 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 						Agent_VirtualBoxProvider.class));
 		allAgentClasses.remove(Agent_VirtualBoxProvider.class);
 		
-		
 		List<AgentClass> agentClasses = new ArrayList<AgentClass>();
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : allAgentClasses) {
 			agentClasses.add(new AgentClass(agentClassI.getName()));
 		}
 		
+		
+		DataManagerService service = new DataManagerService();
+		ExternalAgentNames externalAgentNames =
+				service.getExternalAgentNames(this);
 		//TODO: Honza
 		//agentClasses.addAll( externalAgentNames.getAgentNames());
 

@@ -6,12 +6,13 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
-import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
+import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.DataOntology;
@@ -46,7 +47,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 			return false;
 		}
 		
-		String path = Agent_DataManager.dataFilesPath + relativeFileName;
+		String path = CoreConfiguration.DATA_FILES_PATH + relativeFileName;
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
@@ -64,7 +65,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 
 	@Override
 	protected String getAgentType() {
-		return "ARFFReader";
+		return AgentNames.ARFF_READER;
 	}
 
 	@Override
@@ -121,12 +122,12 @@ public class Agent_ARFFReader extends PikaterAgent {
 			try {
 				getContentManager().fillContent(msgOut, result);
 			} catch (CodecException ce) {
-				ce.printStackTrace();
+				logError(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				oe.printStackTrace();
+				logError(oe.getMessage(), oe);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		}
 		return msgOut;
 	} // end SendData
@@ -134,8 +135,11 @@ public class Agent_ARFFReader extends PikaterAgent {
 	private class GetDataResponder extends AchieveREResponder {
 		private static final long serialVersionUID = 4340928332826216394L;
 
-		public GetDataResponder(Agent a, MessageTemplate mt) {
-			super(a, mt);
+		private PikaterAgent agent;
+		
+		public GetDataResponder(PikaterAgent agent, MessageTemplate mt) {
+			super(agent, mt);
+			this.agent = agent;
 		}
 
 		@Override
@@ -154,9 +158,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 					return sendData(request);
 				}
 			} catch (CodecException ce) {
-				ce.printStackTrace();
+				agent.logError(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				oe.printStackTrace();
+				agent.logError(oe.getMessage(), oe);
 			}
 
 			ACLMessage notUnderstood = request.createReply();

@@ -7,7 +7,6 @@ import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
-import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.tableview.datasets.obsolete.DataSetView;
 import org.pikater.shared.database.views.tableview.datasets.obsolete.MetaDataView;
 import org.pikater.shared.database.views.tableview.datasets.obsolete.ViewColumns;

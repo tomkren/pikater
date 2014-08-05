@@ -12,8 +12,6 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
-import org.pikater.core.ontology.subtrees.task.Eval;
-import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.options.search.RandomSearch_Box;
 
 public class Agent_RandomSearch extends Agent_Search {
@@ -25,8 +23,6 @@ public class Agent_RandomSearch extends Agent_Search {
 	
 	private int maximum_tries;
 	private float final_error_rate;
-	
-	private float[] bestFitness;
 	
 	protected Random rnd_gen = new Random(1);
 

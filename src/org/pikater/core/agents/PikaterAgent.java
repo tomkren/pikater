@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;
@@ -52,7 +53,7 @@ public abstract class PikaterAgent extends Agent {
 	private final String VERBOSITY_ARG = "verbosity";
 	protected final String DATAMODEL_BEAN = "dataModel";
 	protected Codec codec = new SLCodec();
-	protected String initBeansName = "Beans.xml";
+	protected String initBeansName = CoreConfiguration.BEANS_CONFIG_FILE;
 	transient protected ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
 	protected Verbosity verbosity = Verbosity.NORMAL;
 	transient private Logger logger;

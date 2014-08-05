@@ -1,7 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
-import java.util.List;
 
 /**
  * User: Klara

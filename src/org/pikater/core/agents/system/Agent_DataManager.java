@@ -37,6 +37,8 @@ import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
@@ -119,17 +121,6 @@ import com.google.common.io.Files;
 public class Agent_DataManager extends PikaterAgent {
 
 	private static final long serialVersionUID = 1L;
-
-	public static String dataFilesPath =
-			"core" + System.getProperty("file.separator") +
-			"data" + System.getProperty("file.separator") +
-			"files" + System.getProperty("file.separator");
-	public static String datasetsPath =
-			"core" + System.getProperty("file.separator") +
-			"data" + System.getProperty("file.separator");
-	public static String externalAgentJarsPath =
-			"core" + System.getProperty("file.separator") +
-			"ext_agents" + System.getProperty("file.separator");
 	
 	@Override
 	public java.util.List<Ontology> getOntologies() {
@@ -156,13 +147,13 @@ public class Agent_DataManager extends PikaterAgent {
 		initDefault();
 		registerWithDF();
 
-		File data = new File(dataFilesPath + "temp");
+		File data = new File(CoreConfiguration.DATA_FILES_PATH + "temp");
 		if (!data.exists()) {
-			log("Creating directory: " + Agent_DataManager.dataFilesPath);
+			log("Creating directory: " + CoreConfiguration.DATA_FILES_PATH);
 			if (data.mkdirs()) {
-				log("Succesfully created directory: " + dataFilesPath);
+				log("Succesfully created directory: " + CoreConfiguration.DATA_FILES_PATH);
 			} else {
-				logError("Error creating directory: " + dataFilesPath);
+				logError("Error creating directory: " + CoreConfiguration.DATA_FILES_PATH);
 			}
 		}
 
@@ -416,7 +407,8 @@ public class Agent_DataManager extends PikaterAgent {
 			if(files.size() > 0) {
 				translatedName = files.get(0).getInternalfilename();
 			} else {
-				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.DATA_FILES_PATH +
+						"temp" + System.getProperty("file.separator");
 
 				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
@@ -433,7 +425,8 @@ public class Agent_DataManager extends PikaterAgent {
 			if(files.size() > 0) {
 				translatedName = files.get(0).getExternalfilename();
 			} else {
-				String pathPrefix = dataFilesPath + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.DATA_FILES_PATH +
+						"temp" + System.getProperty("file.separator");
 
 				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
@@ -735,47 +728,47 @@ public class Agent_DataManager extends PikaterAgent {
 		Evaluation evaluation = task.getResult();
 		
 		Eval errorRateEval =
-				evaluation.exportEvalByName("error_rate");
+				evaluation.exportEvalByName(CoreConstants.ERROR_RATE);
 		if (errorRateEval != null) {
 			errorRate = errorRateEval.getValue();
 		}
 
 		Eval kappaStatisticEval =
-				evaluation.exportEvalByName("kappa_statistic");
+				evaluation.exportEvalByName(CoreConstants.KAPPA_STATISTIC);
 		if (kappaStatisticEval != null) {
 			kappa_statistic = kappaStatisticEval.getValue();
 		}
 		
 		Eval meanAbsoluteEval =
-				evaluation.exportEvalByName("mean_absolute_error");
+				evaluation.exportEvalByName(CoreConstants.MEAN_ABSOLUTE_ERROR);
 		if (meanAbsoluteEval != null) {
 			mean_absolute_error = meanAbsoluteEval.getValue();
 		}
 		
 		Eval rootMeanSquaredEval =
-				evaluation.exportEvalByName("root_mean_squared_error");
+				evaluation.exportEvalByName(CoreConstants.ROOT_MEAN_SQUARED_ERROR);
 		if (rootMeanSquaredEval != null) {
 			root_mean_squared_error = rootMeanSquaredEval.getValue();
 		}
 
 		Eval relativeAbsoluteEval =
-				evaluation.exportEvalByName("relative_absolute_error");
+				evaluation.exportEvalByName(CoreConstants.RELATIVE_ABSOLUTE_ERROR);
 		if (relativeAbsoluteEval != null) {
 			relative_absolute_error = relativeAbsoluteEval.getValue();
 		}
 		
 		Eval rootRelativeSquaredEval =
-				evaluation.exportEvalByName("root_relative_squared_error");
+				evaluation.exportEvalByName(CoreConstants.ROOT_RELATIVE_SQUARED_ERROR);
 		if (rootRelativeSquaredEval != null) {
 			root_relative_squared_error = rootRelativeSquaredEval.getValue();
 		}
 		
-		Eval durationEval = evaluation.exportEvalByName("duration");
+		Eval durationEval = evaluation.exportEvalByName(CoreConstants.DURATION);
 		if (durationEval != null) {
 			duration = (int) durationEval.getValue();
 		}
 		
-		Eval durationLREval = evaluation.exportEvalByName("durationLR");
+		Eval durationLREval = evaluation.exportEvalByName(CoreConstants.DURATIONLR);
 		if (durationLREval != null) {
 			durationLR = (float) durationLREval.getValue();
 		}
@@ -1183,7 +1176,7 @@ public class Agent_DataManager extends PikaterAgent {
 			throw new FailureException("Agent jar for type "+type+" not found in DB");
 		}else{
 			String jarname = type.replace(".", "_")+".jar";
-			String jarpath = externalAgentJarsPath+jarname;
+			String jarpath = CoreConfiguration.EXTERNAL_AGENT_JARS_PATH + jarname;
 
 			File dest = new File(jarpath);
 			File tmp = new File(jarpath+".tmp");
@@ -1244,7 +1237,9 @@ public class Agent_DataManager extends PikaterAgent {
 
 				PostgreLargeObjectReader reader = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
 				log(reader.toString());
-				File temp = new File(dataFilesPath + "temp" + System.getProperty("file.separator") + hash);
+				File temp = new File(CoreConfiguration.DATA_FILES_PATH + "temp" +
+						System.getProperty("file.separator") + hash);
+				
 				FileOutputStream out = new FileOutputStream(temp);
 				try {
 					byte[] buf = new byte[100*1024];
@@ -1253,7 +1248,7 @@ public class Agent_DataManager extends PikaterAgent {
 						out.write(buf, 0, read);
 					}
 
-					File target=new File(dataFilesPath + hash);
+					File target=new File(CoreConfiguration.DATA_FILES_PATH + hash);
 					log(new Date()+" Moving file to: "+target.getAbsolutePath());
 					if(temp.renameTo(target)){
 						log(new Date()+"File was successfully moved");

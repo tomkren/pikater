@@ -3,6 +3,7 @@ package org.pikater.core.agents.experiment.search;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.SearchOntology;
@@ -24,7 +25,6 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.FIPANames;
@@ -100,13 +100,13 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		
 		for (Eval e : named_evals) {
 
-			if(e.getName().equals("error_rate")) {
+			if(e.getName().equals(CoreConstants.ERROR_RATE)) {
 				res[0]=e.getValue();
             }
-            if(e.getName().equals("root_mean_squared_error")) {
+            if(e.getName().equals(CoreConstants.ROOT_MEAN_SQUARED_ERROR)) {
                 res[1] = e.getValue();
             }
-            if(e.getName().equals("kappa_statistic")) {
+            if(e.getName().equals(CoreConstants.KAPPA_STATISTIC)) {
                 res[2] = -e.getValue();
             }
 		}
@@ -118,17 +118,17 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		List<Eval> evals = new ArrayList<>();
 		
 		Eval ev = new Eval();
-		ev.setName("error_rate");
+		ev.setName(CoreConstants.ERROR_RATE);
 		ev.setValue(fitness[0]);
 		evals.add(ev);
 		
 		Eval ev1 = new Eval();
-		ev1.setName("root_mean_squared_error");			
+		ev1.setName(CoreConstants.ROOT_MEAN_SQUARED_ERROR);			
 		ev1.setValue(fitness[1]);				
 		evals.add(ev1);
 		
 		Eval ev2 = new Eval();
-		ev2.setName("kappa_statistic");
+		ev2.setName(CoreConstants.KAPPA_STATISTIC);
 		ev2.setValue(fitness[2]);
 		evals.add(ev2);
 		
@@ -211,10 +211,8 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									
 								} catch (CodecException e) {
 									logError(e.getMessage(), e);
-									e.printStackTrace();
 								} catch (OntologyException e) {
 									logError(e.getMessage(), e);
-									e.printStackTrace();
 								}
 																								
 								getDataStore().put(RESULT_NOTIFICATION_KEY, reply);
@@ -249,11 +247,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									try {
 										getContentManager().fillContent(query, action);
 									} catch (CodecException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+										logError(e.getMessage(), e);
 									} catch (OntologyException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+										logError(e.getMessage(), e);
 									}
 									myAgent.send(query);
 
@@ -266,7 +262,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 							ACLMessage response = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));													
 							if(response == null)
 								block();//elseif zadna zprava inform - cekej
-							else{
+							else {
 								if (response.getConversationId().split("_").length <= 2){
 									// other informs than containing CA results (error)
 									return;
@@ -281,19 +277,14 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									Evaluation eval = (Evaluation) res.getValue();
 									List<Eval> named_evals = eval.getEvaluations();
 									evaluations[id]=namedEvalsToFitness(named_evals);
-							} catch (UngroundedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (CodecException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (OntologyException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-								
-								queriesToProcess--;
-                                                                //System.out.println("OK: " + queriesToProcess + " queries remaining");
+								} catch (UngroundedException e) {
+									logError(e.getMessage(), e);
+								} catch (CodecException e) {
+									logError(e.getMessage(), e);
+								} catch (OntologyException e) {
+									logError(e.getMessage(), e);
+								}
+									queriesToProcess--;
 							}
 						}
 					}
@@ -338,11 +329,11 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					//return null;
 				}				
 			} catch (UngroundedException e) {
-				e.printStackTrace();
+				logError(e.getMessage(), e);
 			} catch (CodecException e) {
-				e.printStackTrace();
+				logError(e.getMessage(), e);
 			} catch (OntologyException e) {
-				e.printStackTrace();
+				logError(e.getMessage(), e);
 			}
 			throw new NotUnderstoodException("Not understood");
 		}
@@ -371,15 +362,15 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			getContentManager().fillContent(reply, result);
 			
 		} catch (ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
 		} catch (CodecException e) {
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
 		} catch (OntologyException e) {
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
 		}

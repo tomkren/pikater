@@ -14,6 +14,7 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 import jade.wrapper.StaleProxyException;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentRequestResponder;
 import org.pikater.core.agents.PikaterAgent;
@@ -46,10 +47,6 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	private ManagerAgentRequestResponder responder =
 			new ManagerAgentRequestResponder(this);
 
-	public static String saveDirectoryPath = "core"
-			+ System.getProperty("file.separator") + "saved"
-			+ System.getProperty("file.separator");
-
 	@Override
 	public List<Ontology> getOntologies() {
 
@@ -66,7 +63,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		File data = new File(saveDirectoryPath);
+		File data = new File(CoreConfiguration.SAVED_PATH);
 		if (!data.exists()) {
 			log("Creating directory saved");
 			if (data.mkdirs()) {

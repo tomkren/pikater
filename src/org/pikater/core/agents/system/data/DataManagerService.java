@@ -17,8 +17,8 @@ import jade.lang.acl.ACLMessage;
 import java.io.File;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
@@ -137,7 +137,7 @@ public class DataManagerService extends FIPAService {
 	 */
 	public static void ensureCached(PikaterAgent agent, String filename) {
 		agent.log("making sure file " + filename + " is present");
-		if (new File(Agent_DataManager.dataFilesPath + filename).exists())
+		if (new File(CoreConfiguration.DATA_FILES_PATH + filename).exists())
 			return;
 		agent.log("getting file " + filename + " from dataManager");
 		GetFile gf = new GetFile();

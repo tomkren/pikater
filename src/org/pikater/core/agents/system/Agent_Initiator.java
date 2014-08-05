@@ -7,6 +7,7 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.configuration.AgentConfiguration;
 import org.pikater.core.configuration.Argument;
@@ -23,8 +24,7 @@ public class Agent_Initiator extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
 
-	private String fileName = "core" + System.getProperty("file.separator")
-			+ "configurationMaster.xml";
+    String fileName = CoreConfiguration.CONFIGURATION_MASTER_FILE;
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -57,7 +57,7 @@ public class Agent_Initiator extends PikaterAgent {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			this.logError(e.getMessage(), e);
 		}
 
 		addBehaviour(new TickerBehaviour(this, 60000) {
@@ -90,8 +90,7 @@ public class Agent_Initiator extends PikaterAgent {
 			// provide agent time to register with DF etc.
 			doWait(300);
 		} catch (ControllerException e) {
-			System.err.println("Exception while adding agent: " + e);
-			e.printStackTrace();
+			logError("Exception while adding agent", e);
 			return false;
 		}
 		return true;

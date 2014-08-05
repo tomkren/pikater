@@ -15,7 +15,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import org.eclipse.persistence.jpa.JpaCache;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -32,7 +31,6 @@ import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
-import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 
 public class DataSetDAO extends AbstractDAO{
 

@@ -31,8 +31,6 @@ import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
-import org.pikater.core.ontology.subtrees.model.Model;
-import org.pikater.core.ontology.subtrees.model.SaveModel;
 import org.pikater.shared.database.utils.DataSetConverter;
 
 

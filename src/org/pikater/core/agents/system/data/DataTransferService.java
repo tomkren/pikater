@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import org.pikater.core.agents.system.Agent_DataManager;
+import org.pikater.core.CoreConfiguration;
 
 import jade.domain.FIPAService;
 
@@ -21,9 +21,9 @@ public class DataTransferService extends FIPAService {
 		try (
 			Socket socket = new Socket(host, port);
 		) {
-			Path temp = Paths.get(Agent_DataManager.dataFilesPath + "temp" + System.getProperty("file.separator") + hash);
+			Path temp = Paths.get(CoreConfiguration.DATA_FILES_PATH + "temp" + System.getProperty("file.separator") + hash);
 			Files.copy(socket.getInputStream(), temp, StandardCopyOption.REPLACE_EXISTING);
-			Files.move(temp, Paths.get(Agent_DataManager.dataFilesPath + hash), StandardCopyOption.ATOMIC_MOVE);
+			Files.move(temp, Paths.get(CoreConfiguration.DATA_FILES_PATH + hash), StandardCopyOption.ATOMIC_MOVE);
 
 			//System.out.println("Data loaded");
 		}
@@ -42,7 +42,7 @@ public class DataTransferService extends FIPAService {
 
 			//System.out.println("Sending data to "+socket.getRemoteSocketAddress());
 
-			Files.copy(Paths.get(Agent_DataManager.dataFilesPath + hash), socket.getOutputStream());
+			Files.copy(Paths.get(CoreConfiguration.DATA_FILES_PATH + hash), socket.getOutputStream());
 
 			serverSocket.close();
 		} finally {

@@ -1,7 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser.edges;
 
 
-import jade.content.Concept;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
 
 /**

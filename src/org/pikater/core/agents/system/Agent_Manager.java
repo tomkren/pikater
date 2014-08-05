@@ -21,6 +21,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
+
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
@@ -190,6 +191,7 @@ public class Agent_Manager extends PikaterAgent {
             return;
         }
 		// Prepare the subscription message to the request originator
+		@SuppressWarnings("unused")
 		ACLMessage msgOut = originalMessage.createReply();
 		msgOut.setPerformative(result.getPerformative());
 		
@@ -246,9 +248,9 @@ public class Agent_Manager extends PikaterAgent {
 			getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			ce.printStackTrace();
+			logError(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			oe.printStackTrace();
+			logError(oe.getMessage(), oe);
 		}
 
 
@@ -256,8 +258,7 @@ public class Agent_Manager extends PikaterAgent {
 		try {
 			reply = FIPAService.doFipaRequestClient(this, msg);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logError(e.getMessage(), e);
 		}
 		
 		ContentElement content = null;
@@ -288,10 +289,9 @@ public class Agent_Manager extends PikaterAgent {
 	}
 
 	
-	public List getAgentByType(String agentType, int n) {
-		// returns list of AIDs
+	public List<AID> getAgentByType(String agentType, int n) {
 		
-		List Agents = new ArrayList(); // List of AIDs
+		List<AID> Agents = new ArrayList<AID>(); // List of AIDs
 		
 		// Make the list of agents of given type
 		DFAgentDescription template = new DFAgentDescription();
@@ -315,7 +315,7 @@ public class Agent_Manager extends PikaterAgent {
 				Agents.add(aid);
 			}
 		} catch (FIPAException fe) {
-			fe.printStackTrace();
+			logError(fe.getMessage(), fe);
 			return null;
 		}
 		

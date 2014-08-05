@@ -7,6 +7,7 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
+
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
@@ -20,6 +21,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 	private static final long serialVersionUID = -2044738642107219180L;
 
 	private Agent_Manager myAgent;
+	@SuppressWarnings("unused")
 	private CAStartComputationStrategy strategy;
 	private ACLMessage msg; // original message sent by whoever wants to
 	 						// compute the task (either search agent or 

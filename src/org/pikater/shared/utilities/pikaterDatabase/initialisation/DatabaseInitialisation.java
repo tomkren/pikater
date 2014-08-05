@@ -34,7 +34,6 @@ import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.Hash;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.util.DateUtils;
-import org.pikater.shared.utilities.pikaterDatabase.tests.DatabaseTest;
 
 public class DatabaseInitialisation {
 	

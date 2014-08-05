@@ -1,7 +1,7 @@
 package org.pikater.core.ontology;
 
+import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.recommend.Recommend;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.GetParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
@@ -40,7 +40,7 @@ public class SearchOntology extends BeanOntology {
             add(Evaluation.class);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e.getMessage(), e);
         }
     }
 

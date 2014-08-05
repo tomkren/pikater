@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
@@ -20,6 +22,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.core.ontology.MetadataOntology;
@@ -41,8 +44,8 @@ public class Agent_MetadataQueen extends PikaterAgent {
 	private static final long serialVersionUID = -1886699589066832983L;
 	
 	@Override
-	public java.util.List<Ontology> getOntologies() {
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+	public List<Ontology> getOntologies() {
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(MetadataOntology.getInstance());		
 		return ontologies;
 	}
@@ -91,7 +94,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			JPADataSetLO dslo= DAOs.dataSetDAO.getByID(dataSetID, EmptyResultAction.THROW);
 			PostgreLargeObjectReader plor = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
 			
-			File file=new File("core/freddie/"+dslo.getHash());
+			File file=new File(CoreConfiguration.FREDDIE_PATH + dslo.getHash());
 			if(!file.exists()){
 			FileWriter fw=new FileWriter(file);
 			

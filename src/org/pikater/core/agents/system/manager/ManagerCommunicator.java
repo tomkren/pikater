@@ -196,6 +196,7 @@ public class ManagerCommunicator {
 			agent.logError(oe.getMessage(), oe);
 		}
 
+		@SuppressWarnings("unused")
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);

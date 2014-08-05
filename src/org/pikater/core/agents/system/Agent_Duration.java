@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.agents.PikaterAgent;
@@ -60,7 +61,7 @@ public class Agent_Duration extends PikaterAgent {
     
     @Override
     protected String getAgentType(){
-    	return "Duration";
+    	return AgentNames.DURATION;
     }
     
 	public List<Ontology> getOntologies() {
@@ -89,29 +90,34 @@ public class Agent_Duration extends PikaterAgent {
 		try {
 			Thread.sleep(30000);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logError(e1.getMessage(), e1);
 		}
 		
         // create linear regression agent
         // send message to AgentManager to create an agent
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator();
+        ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
         aid = communicator.createAgent(
         		this,
         		Agent_WekaLinearRegression.class.getName(),
-        		"DurationServiceRegression",
+        		AgentNames.DURATION_SERVICE,
         		null);
         		
-		// compute one LR (as the first one is usually longer) 
-		addBehaviour(new ExecuteTaskInitiator(this, createCFPmessage(aid, this, "dc7ce6dea5a75110486760cfac1051a5")));
+		// compute one LR (as the first one is usually longer)
+        String durationDataset = CoreConstants.DURATION_DATASET_INTERNAL_NAME;
+        ACLMessage durationMsg = createCFPmessage(aid, this, durationDataset);
+		addBehaviour(new ExecuteTaskInitiator(this, durationMsg));
+		
 		doWait(2000);
 		
         addBehaviour(new TestBehaviour(this, t));			  
         
         Ontology ontology = DurationOntology.getInstance();
-        MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchOntology(ontology.getName()), MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+        MessageTemplate memplate = MessageTemplate.and(
+        		MessageTemplate.MatchOntology(
+        				ontology.getName()),
+        				MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
-        addBehaviour(new AchieveREResponder(this, mt) {
+        addBehaviour(new AchieveREResponder(this, memplate) {
 
             private static final long serialVersionUID = 1L;
 
@@ -199,7 +205,7 @@ public class Agent_Duration extends PikaterAgent {
     		
 	    	}
 	    	catch (Exception e){
-	    		e.printStackTrace();
+	    		logError(e.getMessage(), e);
 	    	}
 
     	}
@@ -219,8 +225,11 @@ public class Agent_Duration extends PikaterAgent {
 		}
 
 		protected void onTick() {
-			  // compute linear regression on random (but the same) dataset
-			  addBehaviour(new ExecuteTaskInitiator(agent, createCFPmessage(aid, agent, "dc7ce6dea5a75110486760cfac1051a5")));			  
+			// compute linear regression on random (but the same) dataset
+
+			String durationDataset = CoreConstants.DURATION_DATASET_INTERNAL_NAME;
+	        ACLMessage durationMsg = createCFPmessage(aid, agent, durationDataset);
+			addBehaviour(new ExecuteTaskInitiator(agent, durationMsg));			  
 		} 
     }
     
@@ -308,19 +317,19 @@ public class Agent_Duration extends PikaterAgent {
 				if (content instanceof Result) {
 					Result result = (Result) content;					
 					jade.util.leap.List tasks = (jade.util.leap.List)result.getValue();
-					Task t = (Task) tasks.get(0);
+					Task task = (Task) tasks.get(0);
 					
 					if (durations.size() > 1000000) { // over 270 hours
 						durations.remove(0);
 					}
 					
 					// save the duration of the computation to the list
-					Evaluation evaluation = (Evaluation)t.getResult();
+					Evaluation evaluation = (Evaluation)task.getResult();
 					List<Eval> ev = evaluation.getEvaluations();
 					
 					Duration d = new Duration();
 					for (Eval eval : ev) {
-						if(eval.getName().equals("duration")){
+						if(eval.getName().equals(CoreConstants.DURATION)){
 							d.setDurationMiliseconds((int)eval.getValue());
 						}
 					}
@@ -360,36 +369,36 @@ public class Agent_Duration extends PikaterAgent {
 
 		org.pikater.core.ontology.subtrees.management.Agent ag =
 				new org.pikater.core.ontology.subtrees.management.Agent();
-		ag.setType("LinearRegression");
+		ag.setType(Agent_WekaLinearRegression.class.getName());
 		ag.setOptions(new ArrayList<NewOption>());
 		
 		Datas datas = new Datas();
 		datas.addData(new Data(filename, "xxx", DataTypes.TRAIN_DATA));
 		datas.addData(new Data("xxx", "xxx", DataTypes.TEST_DATA));
-		datas.setMode("train_only");
+		datas.setMode(CoreConstants.MODE_TRAIN_ONLY);
 		
-		Task t = new Task();
+		Task task = new Task();
 		Id _id = new Id();
 		_id.setIdentificator(Integer.toString(id));
 		id++;
 		
-		t.setAgent(ag);
-		t.setDatas(datas);
+		task.setAgent(ag);
+		task.setDatas(datas);
 		
-		EvaluationMethod em = new EvaluationMethod();
-		em.setType("Standard"); // TODO don't evaluate at all
+		EvaluationMethod evaluationMethod = new EvaluationMethod();
+		evaluationMethod.setType(CoreConstants.EVAL_METHOD_STANDARD); // TODO don't evaluate at all
 		
-		t.setEvaluationMethod(em);
+		task.setEvaluationMethod(evaluationMethod);
 		
-		t.setGetResults("after_each_computation");
-		t.setSaveResults(false);
+		task.setGetResults(CoreConstants.RESULT_AFTER);
+		task.setSaveResults(false);
 
-		ExecuteTask ex = new ExecuteTask();
-		ex.setTask(t);
+		ExecuteTask executeTask = new ExecuteTask();
+		executeTask.setTask(task);
 		
 		try {
 			Action a = new Action();
-			a.setAction(ex);
+			a.setAction(executeTask);
 			a.setActor(this.getAID());
 										
 			getContentManager().fillContent(cfp, a);

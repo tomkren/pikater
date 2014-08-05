@@ -22,8 +22,8 @@ import java.util.Random;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
-import org.pikater.core.agents.system.Agent_DataManager;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
@@ -55,7 +55,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 			saver.writeBatch();
 			byte[] bout = out.toByteArray();
 			String md5 = DigestUtils.md5Hex(bout);
-			Files.write(bout, new File(Agent_DataManager.dataFilesPath + md5));
+			Files.write(bout, new File(CoreConfiguration.DATA_FILES_PATH + md5));
 			return md5;
 		} catch (IOException e) {
 			logError("Failed to write results", e);
@@ -87,11 +87,11 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 				}
 			}
 		} catch (UngroundedException e) {
-			logError("", e);
+			logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			logError("", e);
+			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError("", e);
+			logError(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -147,13 +147,13 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 			getContentManager().fillContent(msgOut, a);
 
 		} catch (FIPAException fe) {
-			logError("", fe);
+			logError(fe.getMessage(), fe);
 			return null;
 		} catch (CodecException e) {
-			logError("", e);
+			logError(e.getMessage(), e);
 			return null;
 		} catch (OntologyException e) {
-			logError("", e);
+			logError(e.getMessage(), e);
 			return null;
 		}
 		return msgOut;

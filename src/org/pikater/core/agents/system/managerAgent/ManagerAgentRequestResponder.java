@@ -17,6 +17,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.ControllerException;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -76,7 +77,7 @@ public class ManagerAgentRequestResponder {
         // save serialized object to file
         byte [] object = sa.getAgent().getObject();
         ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(Agent_ManagerAgent.saveDirectoryPath + filename + ".model"));
+                new FileOutputStream(CoreConfiguration.SAVED_PATH + filename + ".model"));
 
 
         oos.writeObject(toObject(object));
@@ -156,8 +157,8 @@ public class ManagerAgentRequestResponder {
         else {
 
             // read agent from file
-            String filename = Agent_ManagerAgent.saveDirectoryPath
-            		+ la.getFilename() + ".model";
+            String filename = CoreConfiguration.SAVED_PATH +
+            		la.getFilename() + ".model";
 
             //Construct the ObjectInputStream object
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename));
@@ -218,7 +219,9 @@ public class ManagerAgentRequestResponder {
     public ACLMessage respondToGetComputerInfo(ACLMessage request) throws OntologyException, CodecException {
     	
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
-        GetComputerInfo getComputerInfo = (GetComputerInfo) a.getAction();
+        
+        @SuppressWarnings("unused")
+		GetComputerInfo getComputerInfo = (GetComputerInfo) a.getAction();
 
         managerAgent.log("Request to get ComputerInfo");
         Ontology ontology = AgentManagementOntology.getInstance();
@@ -241,11 +244,9 @@ public class ManagerAgentRequestResponder {
         try {
         	managerAgent.getContentManager().fillContent(reply, result);	
 		} catch (CodecException e) {
-			managerAgent.log(e.getMessage());
-			e.printStackTrace();
+			managerAgent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			managerAgent.log(e.getMessage());
-			e.printStackTrace();
+			managerAgent.logError(e.getMessage(), e);
 		}
         
         return reply;

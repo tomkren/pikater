@@ -16,7 +16,6 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
-import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 
 public abstract class Agent_AbstractExperiment extends PikaterAgent {
 

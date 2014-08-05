@@ -4,6 +4,8 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
+import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
@@ -24,7 +26,6 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private static final long serialVersionUID = -3594051562022044000L;
 	
-	private String DURATION_SERVICE_REGRESSION = "DurationServiceRegression";
 	private String DurationServiceRegression_output_prefix = "  --d-- ";
 	
 	protected abstract Classifier getClassifierClass();
@@ -43,7 +44,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
 						
-		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){
+		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
 				log(DurationServiceRegression_output_prefix, 2);
 		}
 		log("Training...", 2);
@@ -74,7 +75,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		d.setValue(duration);
 		evals.add(d);
 
-		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){
+		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
 			log(DurationServiceRegression_output_prefix, 2);
 		}
 		log("start: " + new Date(start) + " : duration: " + duration, 2);
@@ -83,7 +84,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		options = classifier.getOptions();
 
 		// write out net parameters
-		if (getLocalName().equals(DURATION_SERVICE_REGRESSION)){
+		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
                 log(DurationServiceRegression_output_prefix+getOptions(),2);
 		}
 		else{
@@ -115,7 +116,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		Evaluation eval = new Evaluation(train);
         log("Evaluation method: \t", 2);
 		
-		if (evaluation_method.getType().equals("CrossValidation") ){
+		if (evaluation_method.getType().equals(CoreConstants.EVAL_METHOD_CROSSVALIDATION) ){
 			
 			int folds = 5; // TODO read default value from file (if necessary)
 			if (evaluation_method.getOptions() != null) {
@@ -155,12 +156,12 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		java.util.List<Eval> evaluations = evaluation.getEvaluations();
 		//List evaluations = new ArrayList();
 		Eval ev = new Eval();
-		ev.setName("error_rate");
+		ev.setName(CoreConstants.ERROR_RATE);
 		ev.setValue((float) eval.errorRate());
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName("kappa_statistic");
+		ev.setName(CoreConstants.KAPPA_STATISTIC);
 		try {
 			ev.setValue((float) eval.kappa());
 		} catch (Exception e) {
@@ -169,7 +170,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName("mean_absolute_error");
+		ev.setName(CoreConstants.MEAN_ABSOLUTE_ERROR);
 		try {
 			ev.setValue((float) eval.meanAbsoluteError());
 		} catch (Exception e) {
@@ -178,7 +179,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName("relative_absolute_error");
+		ev.setName(CoreConstants.RELATIVE_ABSOLUTE_ERROR);
 		try {
 			ev.setValue((float) eval.relativeAbsoluteError());
 		} catch (Exception e) {
@@ -187,7 +188,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName("root_mean_squared_error");
+		ev.setName(CoreConstants.ROOT_MEAN_SQUARED_ERROR);
 		try {
 			ev.setValue((float) eval.rootMeanSquaredError());
 		} catch (Exception e) {
@@ -196,7 +197,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName("root_relative_squared_error");
+		ev.setName(CoreConstants.ROOT_RELATIVE_SQUARED_ERROR);
 		try {
 			ev.setValue((float) eval.rootRelativeSquaredError());
 		} catch (Exception e) {

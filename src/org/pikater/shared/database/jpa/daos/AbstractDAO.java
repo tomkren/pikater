@@ -6,10 +6,7 @@ import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
-import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
-import org.pikater.shared.database.jpa.JPAExternalAgent;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 
 public abstract class AbstractDAO

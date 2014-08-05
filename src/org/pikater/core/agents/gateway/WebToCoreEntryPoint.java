@@ -10,10 +10,7 @@ import org.pikater.core.agents.gateway.newBatch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.utils.ResultFormatter;
 
 public class WebToCoreEntryPoint {
 
