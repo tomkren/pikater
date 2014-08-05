@@ -17,9 +17,11 @@ import org.pikater.core.agents.system.agentInfoManager.AgentInfoManagerCommunica
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
+import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.reflections.Reflections;
@@ -114,13 +116,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	}
 
 	private void initializationAgentInfo() {
-		List<Class<? extends Agent_AbstractExperiment>> agentClasses =
+		List<AgentClass> agentClasses =
 				getAllExperimmentAgentClasses();
 		
 		DataManagerService service = new DataManagerService();
 		AgentInfos savedAgentInfos = service.getAgentInfos(this);
 		
-		List<Class<? extends Agent_AbstractExperiment>> notSavedAgentClasses =
+		List<AgentClass> notSavedAgentClasses =
 				notSavedClasses(agentClasses, savedAgentInfos);
 		
 		wakeUpAgentInfo(notSavedAgentClasses);
@@ -130,17 +132,17 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	}
 
 	private void wakeUpAgentInfo(
-			List<Class<? extends Agent_AbstractExperiment>> agentClasses) {
+			List<AgentClass> agentClasses) {
 		
-		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
+		for (AgentClass agentClassI : agentClasses) {
 
 			createAgent(
-					agentClassI.getName(), agentClassI.getName(), null);
+					agentClassI.getAgentClass(), agentClassI.getAgentClass(), null);
 		}
 		
-		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
+		for (AgentClass agentClassI : agentClasses) {
 			
-			AgentInfo agentInfo = getAgentInfo(this, agentClassI.getName());
+			AgentInfo agentInfo = getAgentInfo(this, agentClassI.getAgentClass());
 			
 			DataManagerService service = new DataManagerService();
 			service.saveAgentInfo(this, agentInfo);
@@ -148,11 +150,15 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 	}
 	
-	private List<Class<? extends Agent_AbstractExperiment>> getAllExperimmentAgentClasses() {
+	private List<AgentClass> getAllExperimmentAgentClasses() {
 		
 		List<Class<? extends Agent_AbstractExperiment>> allAgentClasses =
 				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
 
+		DataManagerService service = new DataManagerService();
+		ExternalAgentNames externalAgentNames =
+				service.getExternalAgentNames(this);
+				
 		allAgentClasses.addAll(
 				getExperimmentAgentClasses(
 						Agent_DataProcessing.class));
@@ -179,7 +185,16 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 						Agent_VirtualBoxProvider.class));
 		allAgentClasses.remove(Agent_VirtualBoxProvider.class);
 		
-		return allAgentClasses;
+		
+		List<AgentClass> agentClasses = new ArrayList<AgentClass>();
+		for (Class<? extends Agent_AbstractExperiment> agentClassI : allAgentClasses) {
+			agentClasses.add(new AgentClass(agentClassI.getName()));
+		}
+		
+		//TODO: Honza
+		//agentClasses.addAll( externalAgentNames.getAgentNames());
+
+		return agentClasses;
 	}
 	
 	private List<Class<? extends Agent_AbstractExperiment>> getExperimmentAgentClasses(
@@ -212,14 +227,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return allClasses;
 	}
 
-	private List<Class<? extends Agent_AbstractExperiment>> notSavedClasses(
-			List<Class<? extends Agent_AbstractExperiment>> agentClasses,
+	private List<AgentClass> notSavedClasses(
+			List<AgentClass> agentClasses,
 			AgentInfos savedAgentInfos) {
 		
-		List<Class<? extends Agent_AbstractExperiment>> notSavedAgents =
-				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
+		List<AgentClass> notSavedAgents = new ArrayList<AgentClass>();
 		
-		for (Class<? extends Agent_AbstractExperiment> agentClassI : agentClasses) {
+		for (AgentClass agentClassI : agentClasses) {
 			
 			if (! savedAgentInfos.contains(agentClassI)) {
 				notSavedAgents.add(agentClassI);
@@ -258,16 +272,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		NewAgent newAgent = (NewAgent)action.getAction();
 		String agentClassName = newAgent.getAgentClassName();
 		
-		Class<? extends Agent_AbstractExperiment> agentClass = null;
-		try {
-			agentClass = (Class<? extends Agent_AbstractExperiment>) Class.forName(agentClassName);
-		} catch (ClassNotFoundException e) {
-			logError(e.getMessage(), e);
-		}
-		
-		List<Class<? extends Agent_AbstractExperiment>> classes =
-				new ArrayList<Class<? extends Agent_AbstractExperiment>>();
-		classes.add(agentClass);
+		List<AgentClass> classes = new ArrayList<AgentClass>();
+		classes.add(new AgentClass(agentClassName));
 		
 		wakeUpAgentInfo(classes);
 
@@ -332,20 +338,20 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 class ShutDownAgents extends Thread {
 
-	private List<Class<? extends Agent_AbstractExperiment>> agentClasses;
+	private List<AgentClass> agentClasses;
 	private Agent_AgentInfoManager agent;
 
 	public ShutDownAgents(Agent_AgentInfoManager agent,
-			List<Class<? extends Agent_AbstractExperiment>> agentClasses) {
+			List<AgentClass> agentClasses) {
 		this.agent = agent;
 		this.agentClasses = agentClasses;
 	}
 	
     public void run() {
 
-		for (Class<? extends Agent_AbstractExperiment> classI : agentClasses){
-			agent.log("Agent " + classI.getName() + " was killed");
-			agent.killAgent(classI.getName());
+		for (AgentClass classI : agentClasses){
+			agent.log("Agent " + classI.getAgentClass() + " was killed");
+			agent.killAgent(classI.getAgentClass());
 			
 		}
     }

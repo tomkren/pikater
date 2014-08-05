@@ -30,6 +30,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
@@ -401,9 +402,9 @@ public class DataManagerService extends FIPAService {
 		getAgentInfomsg.setLanguage(agent.getCodec().getName());
 		getAgentInfomsg.setOntology(ontology.getName());
 
-		GetAgentInfos getAgentInfos = new GetAgentInfos();
+		GetExternalAgentNames getExternalAgentNames = new GetExternalAgentNames();
 		
-		Action action = new Action(agent.getAID(), getAgentInfos);
+		Action action = new Action(agent.getAID(), getExternalAgentNames);
 		
 		try {
 			agent.getContentManager().fillContent(getAgentInfomsg, action);

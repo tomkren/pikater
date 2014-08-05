@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jfree.util.Log;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
+import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -47,10 +48,10 @@ public class AgentInfos implements Concept {
 		this.agentInfos.add(agentInfo);
 	}
 
-	public boolean contains(Class<? extends Agent_AbstractExperiment> agent) {
+	public boolean contains(AgentClass agentClass) {
 		for (AgentInfo agentInfoI : this.agentInfos) {
 			
-			if ( agentInfoI.getAgentClassName().equals(agent.getName()) ) {
+			if ( agentInfoI.getAgentClassName().equals(agentClass.getAgentClass()) ) {
 				return true;
 			}
 		}

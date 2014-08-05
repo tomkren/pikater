@@ -3,6 +3,7 @@ package org.pikater.core.ontology;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
+import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.model.Model;
@@ -45,6 +46,8 @@ public class AgentInfoOntology extends BeanOntology {
             add(agentPackage);
 
             add(GetOptions.class);
+            add(AgentClass.class);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

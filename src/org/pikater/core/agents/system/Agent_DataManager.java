@@ -63,6 +63,7 @@ import java.util.List;
 import org.pikater.core.ontology.subtrees.account.GetUser;
 import org.pikater.core.ontology.subtrees.account.GetUserID;
 import org.pikater.core.ontology.subtrees.account.User;
+import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
@@ -482,9 +483,10 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		List<JPAExternalAgent> externalAgents = DAOs.externalAgentDAO.getAll();
 
-		List<String> agentNames = new ArrayList<String>();
+		List<AgentClass> agentNames = new ArrayList<AgentClass>();
 		for (JPAExternalAgent JPAAgentI : externalAgents) {
-			agentNames.add(JPAAgentI.getAgentClass());
+			agentNames.add(
+					new AgentClass (JPAAgentI.getAgentClass()) );
 		}
 		ExternalAgentNames externalAgentNames = new ExternalAgentNames(agentNames);
 		
