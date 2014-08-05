@@ -28,6 +28,7 @@ import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
@@ -389,6 +390,45 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 	
+	public ExternalAgentNames getExternalAgentNames(PikaterAgent agent) {
+
+		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		Ontology ontology = AgentInfoOntology.getInstance();
+
+		ACLMessage getAgentInfomsg = new ACLMessage(ACLMessage.REQUEST);
+		getAgentInfomsg.addReceiver(receiver);
+		getAgentInfomsg.setSender(agent.getAID());
+		getAgentInfomsg.setLanguage(agent.getCodec().getName());
+		getAgentInfomsg.setOntology(ontology.getName());
+
+		GetAgentInfos getAgentInfos = new GetAgentInfos();
+		
+		Action action = new Action(agent.getAID(), getAgentInfos);
+		
+		try {
+			agent.getContentManager().fillContent(getAgentInfomsg, action);
+			ACLMessage agentInfoMsg = FIPAService
+					.doFipaRequestClient(agent, getAgentInfomsg);
+
+			Result replyResult = (Result) agent.getContentManager()
+					.extractContent(agentInfoMsg);
+			
+			ExternalAgentNames externalAgentNames =
+					(ExternalAgentNames) replyResult.getValue();
+
+			return externalAgentNames;
+			
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (Codec.CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		}
+		
+		return null;
+	}
+	
 	public void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo) {
 		
 		SaveAgentInfo saveAgentInfo = new SaveAgentInfo();
@@ -411,9 +451,8 @@ public class DataManagerService extends FIPAService {
 			agent.logError(e.getMessage(), e);
 		}
 		
-		ACLMessage reply = null;
 		try {
-			reply = FIPAService.doFipaRequestClient(agent, request, 10000);
+			FIPAService.doFipaRequestClient(agent, request, 10000);
 		} catch (FIPAException e) {
 		}
 
