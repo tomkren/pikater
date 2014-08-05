@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.kineticengine;
 
-import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
+import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EdgeState;

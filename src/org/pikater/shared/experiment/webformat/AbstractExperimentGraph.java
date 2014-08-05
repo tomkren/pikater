@@ -1,4 +1,4 @@
-package org.pikater.shared.experiment.webformat.shared;
+package org.pikater.shared.experiment.webformat;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -6,40 +6,66 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ExperimentGraph implements Serializable
+import org.pikater.shared.util.SimpleIDGenerator;
+
+public class AbstractExperimentGraph<B extends IBoxInfo<Integer>> implements Serializable
 {
 	private static final long serialVersionUID = -1340889786809747684L;
+	
+	/**
+	 * ID generator for boxes. 
+	 */
+	public SimpleIDGenerator boxIDGenerator;
 
 	/**
 	 * The 1:1 map containing all the boxes.
 	 */
-	public Map<String, BoxInfoClient> leafBoxes;
+	public Map<Integer, B> leafBoxes;
 	
 	/**
 	 * Collection of oriented edges between boxes, sorted by the "from end point".
 	 */
-	public Map<String, Set<String>> edges;
+	public Map<Integer, Set<Integer>> edges;
 	
 	// ------------------------------------------------------------------
 	// CONSTRUCTOR
 
 	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
-	public ExperimentGraph()
+	public AbstractExperimentGraph()
 	{
-		this.leafBoxes = new HashMap<String, BoxInfoClient>();
-		this.edges = new HashMap<String, Set<String>>();
+		this.boxIDGenerator = new SimpleIDGenerator();
+		this.leafBoxes = new HashMap<Integer, B>();
+		this.edges = new HashMap<Integer, Set<Integer>>();
 	}
 	
 	// ------------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
-	public String addLeafBoxAndReturnID(BoxInfoClient info)
+	public void clear()
 	{
-		leafBoxes.put(info.boxID, info);
-		return info.boxID;
+		leafBoxes.clear();
+		edges.clear();
+		boxIDGenerator.reset();
 	}
 	
-	public boolean edgesDefinedFor(String boxID)
+	public boolean containsBox(Integer boxID)
+	{
+		return leafBoxes.containsKey(boxID);
+	}
+	
+	public B getBox(Integer boxID)
+	{
+		return leafBoxes.get(boxID);
+	}
+	
+	public B addBox(B box)
+	{
+		box.setID(boxIDGenerator.getAndIncrement());
+		leafBoxes.put(box.getID(), box);
+		return box;
+	}
+	
+	public boolean edgesDefinedFor(Integer boxID)
 	{
 		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty(); 
 	}
@@ -55,12 +81,12 @@ public class ExperimentGraph implements Serializable
 	}
 	*/
 	
-	public void connect(String fromBoxKey, String toBoxKey)
+	public void connect(Integer fromBoxKey, Integer toBoxKey)
 	{
 		interboxConnectionAction(fromBoxKey, toBoxKey, true);
 	}
 	
-	public void disconnect(String fromBoxKey, String toBoxKey)
+	public void disconnect(Integer fromBoxKey, Integer toBoxKey)
 	{
 		interboxConnectionAction(fromBoxKey, toBoxKey, false);
 	}
@@ -68,7 +94,7 @@ public class ExperimentGraph implements Serializable
 	// ------------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	private void interboxConnectionAction(String fromBoxKey, String toBoxKey, boolean connect)
+	private void interboxConnectionAction(Integer fromBoxKey, Integer toBoxKey, boolean connect)
 	{
 		/*
 		 * Let this method have a transaction-like manner and only alter the data when
@@ -108,7 +134,7 @@ public class ExperimentGraph implements Serializable
 			// add edge
 			if(!edges.containsKey(fromBoxKey))
 			{
-				edges.put(fromBoxKey, new HashSet<String>());
+				edges.put(fromBoxKey, new HashSet<Integer>());
 			}
 			edges.get(fromBoxKey).add(toBoxKey);
 		}

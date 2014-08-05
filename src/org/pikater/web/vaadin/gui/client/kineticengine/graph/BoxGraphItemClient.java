@@ -19,7 +19,7 @@ import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.shared.experiment.webformat.shared.BoxInfoClient;
+import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
@@ -112,7 +112,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		
 		// create the group, bind it all together
 	    this.container = Kinetic.createGroup(new Vector2d(info.initialX, info.initialY), 0);
-		this.container.setID(info.boxID);
+		this.container.setID(String.valueOf(info.boxID));
 		this.container.add(rectangle);
 		this.container.add(icon);
 		this.container.add(title);

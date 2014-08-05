@@ -5,16 +5,59 @@ import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.shared.experiment.webformat.IBoxInfo;
+import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
-public class BoxInfoServer
+public class BoxInfoServer implements IBoxInfo<Integer>
 {
+	private Integer generatedUniqueID;
+	private int posX;
+	private int posY;
+	
+	private final BoxType boxType;
 	private final AgentInfo associatedAgent;
 	private final Map<Slot, BoxSlotConnection> slotConnections;
 	
-	public BoxInfoServer(AgentInfo associatedAgent)
+	public BoxInfoServer(AgentInfo associatedAgent, int posX, int posY)
 	{
+		this.posX = posX;
+		this.posY = posY;
+		this.boxType = BoxType.fromAgentInfo(associatedAgent);
 		this.associatedAgent = associatedAgent;
 		this.slotConnections = new HashMap<Slot, BoxSlotConnection>();
+	}
+	
+	@Override
+	public Integer getID()
+	{
+		return generatedUniqueID;
+	}
+	
+	@Override
+	public void setID(Integer id)
+	{
+		generatedUniqueID = id;
+	}
+	
+	public int getPosX()
+	{
+		return posX;
+	}
+
+	public void setPosX(int posX)
+	{
+		this.posX = posX;
+	}
+	
+	public int getPosY()
+	{
+		return posY;
+	}
+
+	public void setPosY(int posY)
+	{
+		this.posY = posY;
 	}
 	
 	public AgentInfo getAssociatedAgent()
@@ -22,14 +65,9 @@ public class BoxInfoServer
 		return associatedAgent;
 	}
 	
-	public void connect(Slot localSlot, BoxSlotConnection externalSlot)
+	public BoxType getBoxType()
 	{
-		// TODO:
-	}
-	
-	public void disconnect(Slot localSlot)
-	{
-		// TODO:
+		return boxType;
 	}
 	
 	public boolean isLocalSlotConnected(Slot slot)
@@ -42,5 +80,27 @@ public class BoxInfoServer
 		{
 			throw new IllegalArgumentException("The given slot does NOT belong to this box.");
 		}
+	}
+	
+	public void connect(Slot localSlot, BoxSlotConnection externalSlot)
+	{
+		// TODO:
+	}
+	
+	public void disconnect(Slot localSlot)
+	{
+		// TODO:
+	}
+	
+	public BoxInfoClient toClientFormat()
+	{
+		return new BoxInfoClient(
+				generatedUniqueID,
+				boxType.name(),
+				associatedAgent.getName(),
+				posX,
+				posY,
+				ExpEditor.getBoxPictureURL(boxType)
+		);
 	}
 }

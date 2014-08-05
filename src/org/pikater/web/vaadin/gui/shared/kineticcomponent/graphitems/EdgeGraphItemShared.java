@@ -6,15 +6,15 @@ public class EdgeGraphItemShared implements Serializable
 {
 	private static final long serialVersionUID = 4411734178488130587L;
 	
-	public String fromBoxID;
-	public String toBoxID;
+	public Integer fromBoxID;
+	public Integer toBoxID;
 	
 	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
 	public EdgeGraphItemShared()
 	{
 	}
 
-	public EdgeGraphItemShared(String fromBoxID, String toBoxID)
+	public EdgeGraphItemShared(Integer fromBoxID, Integer toBoxID)
 	{
 		this.fromBoxID = fromBoxID;
 		this.toBoxID = toBoxID;

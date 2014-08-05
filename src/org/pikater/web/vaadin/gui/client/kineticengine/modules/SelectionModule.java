@@ -280,11 +280,11 @@ public class SelectionModule implements IEngineModule
 		}
 		if(aBoxInverted && notifyServer)
 		{
-			String[] selectedBoxesIDs = new String[selectedBoxes.size()];
+			Integer[] selectedBoxesIDs = new Integer[selectedBoxes.size()];
 			int index = 0;
 			for(BoxGraphItemClient box : selectedBoxes)
 			{
-				selectedBoxesIDs[index] = box.getInfo().boxID;
+				selectedBoxesIDs[index] = box.getInfo().getID();
 				index++;
 			}
 			kineticEngine.getContext().command_selectionChange(selectedBoxesIDs);

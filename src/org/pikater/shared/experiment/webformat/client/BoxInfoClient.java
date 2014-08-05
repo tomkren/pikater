@@ -1,15 +1,17 @@
-package org.pikater.shared.experiment.webformat.shared;
+package org.pikater.shared.experiment.webformat.client;
 
 import java.io.Serializable;
 
-public class BoxInfoClient implements Serializable
+import org.pikater.shared.experiment.webformat.IBoxInfo;
+
+public class BoxInfoClient implements Serializable, IBoxInfo<Integer>
 {
 	private static final long serialVersionUID = 3875674558654733345L;
 	
 	/*
 	 * General info.
 	 */
-	public String boxID;
+	public Integer boxID;
 	public String boxTypeName;
 	public String displayName;
 	
@@ -38,7 +40,7 @@ public class BoxInfoClient implements Serializable
 	 * @param initialY
 	 * @param pictureURL
      */
-	public BoxInfoClient(String boxID, String boxTypeName, String displayName, int initialX, int initialY, String pictureURL)
+	public BoxInfoClient(Integer boxID, String boxTypeName, String displayName, int initialX, int initialY, String pictureURL)
 	{
 		this.boxID = boxID;
 		this.boxTypeName = boxTypeName;
@@ -46,5 +48,17 @@ public class BoxInfoClient implements Serializable
 		this.initialX = initialX;
 		this.initialY = initialY;
 		this.pictureURL = pictureURL;
+	}
+
+	@Override
+	public Integer getID()
+	{
+		return boxID;
+	}
+
+	@Override
+	public void setID(Integer id)
+	{
+		this.boxID = id;
 	}
 }
