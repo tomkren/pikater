@@ -195,7 +195,7 @@ public final class CreateEdgeModule implements IEngineModule
 				
 				// register the new edge and also draw the stage
 				kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, null, 
-						new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() }));
+						new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() }, true));
 				
 				// and display changes - not needed at this point (done in the previous command)
 				// kineticEngine.draw(parentBox.getComponentToDraw());

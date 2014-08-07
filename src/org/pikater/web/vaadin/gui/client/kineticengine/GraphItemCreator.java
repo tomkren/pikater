@@ -41,7 +41,7 @@ public class GraphItemCreator
 		result.reloadVisualStyles(false);
 		if(nrt == GraphItemRegistration.AUTOMATIC)
 		{
-			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, new BoxGraphItemClient[] { result }, null));
+			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, new BoxGraphItemClient[] { result }, null, true));
 		}
 	    return result;
 	}
@@ -67,7 +67,7 @@ public class GraphItemCreator
 		}
 		if(nrt == GraphItemRegistration.AUTOMATIC)
 		{
-			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, null, new EdgeGraphItemClient[] { result }));
+			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, null, new EdgeGraphItemClient[] { result }, true));
 		}
 		return result;
 	}

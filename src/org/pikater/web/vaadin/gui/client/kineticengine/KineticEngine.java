@@ -341,7 +341,8 @@ public final class KineticEngine
 		new ItemRegistrationOperation(
 				this,
 				guiBoxes.values().toArray(new BoxGraphItemClient[0]),
-				edges.toArray(new EdgeGraphItemClient[0])
+				edges.toArray(new EdgeGraphItemClient[0]),
+				false
 		).firstExecution();
 	}
 	
