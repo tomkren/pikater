@@ -39,25 +39,26 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 		{
 			return this.name();
 		}
-
-		@Override
-		public DBViewValueType getColumnType()
+	}
+	
+	@Override
+	public DBViewValueType getTypeForColumn(ITableColumn column)
+	{
+		Column specificColumn = (Column) column;
+		switch(specificColumn)
 		{
-			switch(this)
-			{
-				case IS_TARGET:
-					return DBViewValueType.BOOLEAN;
-					
-				case NAME:
-				case CATEGORY_COUNT:
-				case RATIO_OF_MISSING_VALUES:
-				case ENTROPY:
-				case CLASS_ENTROPY:
-					return DBViewValueType.STRING;
+			case IS_TARGET:
+				return DBViewValueType.BOOLEAN;
 				
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
+			case NAME:
+			case CATEGORY_COUNT:
+			case RATIO_OF_MISSING_VALUES:
+			case ENTROPY:
+			case CLASS_ENTROPY:
+				return DBViewValueType.STRING;
+			
+			default:
+				throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
 

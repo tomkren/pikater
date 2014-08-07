@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
+import org.pikater.shared.database.views.base.values.DBViewValueType;
 
 /**
  * Database table view designed to work well with Vaadin's table {@link com.vaadin.data.Container}.
@@ -24,12 +25,20 @@ public abstract class AbstractTableDBView
 	 */
 	public abstract ITableColumn[] getColumns();
 	
+	/**
+	 * Maps a column of the current view to a type that determines, how the value
+	 * is going to be displayed in GUI.
+	 * @param column
+	 * @return
+	 */
+	public abstract DBViewValueType getTypeForColumn(ITableColumn column);
+	
 	public Collection<ITableColumn> getSortableColumns()
 	{
 		HashSet<ITableColumn> result = new HashSet<ITableColumn>();
 		for(ITableColumn column : getColumns())
 		{
-			if(column.getColumnType().isSortable())
+			if(getTypeForColumn(column).isSortable())
 			{
 				result.add(column);
 			}

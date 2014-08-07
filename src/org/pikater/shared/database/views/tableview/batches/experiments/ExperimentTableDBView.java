@@ -61,27 +61,28 @@ public class ExperimentTableDBView extends AbstractTableDBView
 		{
 			return this.name();
 		}
-
-		@Override
-		public DBViewValueType getColumnType()
+	}
+	
+	@Override
+	public DBViewValueType getTypeForColumn(ITableColumn column)
+	{
+		Column specificColumn = (Column) column;
+		switch(specificColumn)
 		{
-			switch(this)
-			{
-				case OWNER:
-				case CREATED:
-				case STARTED:
-				case FINISHED:
-				case STATUS:
-				case MODEL_STRATEGY:
-					return DBViewValueType.STRING;
-					
-				case MODEL:
-				case RESULTS:
-					return DBViewValueType.NAMED_ACTION;
-					
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
+			case OWNER:
+			case CREATED:
+			case STARTED:
+			case FINISHED:
+			case STATUS:
+			case MODEL_STRATEGY:
+				return DBViewValueType.STRING;
+				
+			case MODEL:
+			case RESULTS:
+				return DBViewValueType.NAMED_ACTION;
+				
+			default:
+				throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
 

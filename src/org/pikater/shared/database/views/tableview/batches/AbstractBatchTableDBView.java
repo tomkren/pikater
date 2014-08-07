@@ -39,27 +39,28 @@ public abstract class AbstractBatchTableDBView extends AbstractTableDBView
 		{
 			return this.name();
 		}
-
-		@Override
-		public DBViewValueType getColumnType()
+	}
+	
+	@Override
+	public DBViewValueType getTypeForColumn(ITableColumn column)
+	{
+		Column specificColumn = (Column) column;
+		switch(specificColumn)
 		{
-			switch(this)
-			{
-				case OWNER:
-				case NAME:
-				case NOTE:
-				case CREATED:
-				case FINISHED:
-				case STATUS:
-					return DBViewValueType.STRING;
-					
-				case PRIORITY:
-				case MAX_PRIORITY:
-					return DBViewValueType.STRING;
-					
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
+			case OWNER:
+			case NAME:
+			case NOTE:
+			case CREATED:
+			case FINISHED:
+			case STATUS:
+				return DBViewValueType.STRING;
+				
+			case PRIORITY:
+			case MAX_PRIORITY:
+				return DBViewValueType.STRING; // TODO: some of these must be editable to conform to specification (only for scheduled batches)
+				
+			default:
+				throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
 }

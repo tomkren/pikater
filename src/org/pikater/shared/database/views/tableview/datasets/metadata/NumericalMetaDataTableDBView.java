@@ -45,30 +45,31 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 		{
 			return this.name();
 		}
-
-		@Override
-		public DBViewValueType getColumnType()
+	}
+	
+	@Override
+	public DBViewValueType getTypeForColumn(ITableColumn column)
+	{
+		Column specificColumn = (Column) column;
+		switch(specificColumn)
 		{
-			switch(this)
-			{
-				case NAME:
-					return DBViewValueType.STRING;
-				case IS_REAL:
-				case IS_TARGET:
-					return DBViewValueType.BOOLEAN;
-				case MINIMUM:
-				case MAXIMUM:
-				case AVERAGE:
-				// case MODE:
-				case MEDIAN:
-				case VARIANCE:
-				case RATIO_OF_MISSING_VALUES:
-				case ENTROPY:
-				case CLASS_ENTROPY:
-					return DBViewValueType.STRING;
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
+			case NAME:
+				return DBViewValueType.STRING;
+			case IS_REAL:
+			case IS_TARGET:
+				return DBViewValueType.BOOLEAN;
+			case MINIMUM:
+			case MAXIMUM:
+			case AVERAGE:
+			// case MODE:
+			case MEDIAN:
+			case VARIANCE:
+			case RATIO_OF_MISSING_VALUES:
+			case ENTROPY:
+			case CLASS_ENTROPY:
+				return DBViewValueType.STRING;
+			default:
+				throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
 

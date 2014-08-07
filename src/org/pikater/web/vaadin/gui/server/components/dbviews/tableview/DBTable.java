@@ -56,7 +56,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		{
 			throw new NullPointerException("Can not set null sort column. A column to sort with must always be set.");
 		}
-		else if(!newSortColumn.getColumnType().isSortable())
+		else if(!tableContainer.getViewRoot().getUnderlyingDBView().getTypeForColumn(newSortColumn).isSortable())
 		{
 			throw new IllegalArgumentException(String.format("The '%s' column is not sortable.", newSortColumn.getDisplayName()));
 		}
@@ -141,7 +141,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	 * The most important method. Without this, the table is but an empty shell.
 	 * @param viewRoot
 	 */
-	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
+	public void setView(final IDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
 		for(ITableColumn column : viewRoot.getUnderlyingDBView().getColumns())
 		{
@@ -158,7 +158,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 			public void headerClick(HeaderClickEvent event)
 			{
 				ITableColumn column = (ITableColumn) event.getPropertyId();
-				if(column.getColumnType().isSortable())
+				if(viewRoot.getUnderlyingDBView().getTypeForColumn(column).isSortable())
 				{
 					setSortContainerPropertyId(event.getPropertyId()); // Vaadin will not do this by itself... doh
 				}
