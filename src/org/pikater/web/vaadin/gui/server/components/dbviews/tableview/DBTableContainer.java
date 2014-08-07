@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
-import org.pikater.shared.database.views.base.values.DBViewValueType;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.base.values.StringDBViewValue;
@@ -201,8 +200,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	
 	public static Class<? extends Object> getPresentationType(DBTableContainer container, ITableColumn column)
 	{
-		DBViewValueType columnType = container.getViewRoot().getUnderlyingDBView().getTypeForColumn(column); 
-		switch(columnType)
+		switch(column.getColumnType())
 		{
 			case BOOLEAN:
 				return CheckBox.class;
@@ -217,7 +215,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 				return Button.class;
 			
 			default:
-				throw new IllegalStateException("Unknown state: " + columnType.name());
+				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());
 		}
 	}
 	
@@ -225,8 +223,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	public static Property<? extends Object> getProperty(DBTableContainer container, ITableColumn column, AbstractTableRowDBView row, 
 			AbstractDBViewValue<? extends Object> value)
 	{
-		DBViewValueType columnType = container.getViewRoot().getUnderlyingDBView().getTypeForColumn(column);
-		switch(columnType)
+		switch(column.getColumnType())
 		{
 			case BOOLEAN:
 				DBTableItemPropertyCheck newProperty1 = new DBTableItemPropertyCheck(container.getParentTable(), (BooleanDBViewValue) value);
@@ -249,7 +246,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 				return newProperty4;
 				
 			default:
-				throw new IllegalStateException("Unknown state: " + columnType.name());
+				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());
 		}
 	}
 	
