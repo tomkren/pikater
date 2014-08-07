@@ -81,7 +81,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 				return 150; // TODO: set tooltip
 			case DESCRIPTION:
 				return 250;
-			case APPROVE:
+			case APPROVED:
 			case DOWNLOAD:
 			case DELETE:
 				return 100;

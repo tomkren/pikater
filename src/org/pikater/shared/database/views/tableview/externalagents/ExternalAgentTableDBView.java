@@ -63,7 +63,7 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 		NAME,
 		AGENT_CLASS,
 		DESCRIPTION,
-		APPROVE,
+		APPROVED,
 		DOWNLOAD,
 		DELETE;
 
@@ -85,7 +85,9 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 				case CREATED:
 					return DBViewValueType.STRING;
 					
-				case APPROVE:
+				case APPROVED:
+					return DBViewValueType.BOOLEAN;
+					
 				case DOWNLOAD:
 				case DELETE:
 					return DBViewValueType.NAMED_ACTION;
@@ -105,7 +107,7 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 		}
 		else
 		{
-			return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVE)).toArray(new ITableColumn[0]);
+			return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVED)).toArray(new ITableColumn[0]);
 		}
 	}
 	

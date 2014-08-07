@@ -2,6 +2,7 @@ package org.pikater.shared.database.views.tableview.externalagents;
 
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
@@ -45,18 +46,11 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 		/*
 		 * And then custom actions.
 		 */
-		case APPROVE:
-			return new NamedActionDBViewValue("Approve")
+		case APPROVED:
+			return new BooleanDBViewValue(false) // TODO: agent.isApproved
 			{
 				@Override
-				public boolean isEnabled()
-				{
-					// TODO: whether agent is approved or not
-					return true;
-				}
-				
-				@Override
-				protected void updateEntities()
+				protected void updateEntities(Boolean newValue)
 				{
 					// TODO Auto-generated method stub
 				}

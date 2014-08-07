@@ -132,7 +132,7 @@ public class DatasetsView extends ExpandableView
 				case DESCRIPTION:
 					return 300;
 					
-				case APPROVE:
+				case APPROVED:
 				case DOWNLOAD:
 				case DELETE:
 					return 100;
