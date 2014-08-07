@@ -12,6 +12,9 @@ import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
+/**
+ * A view displaying all saved (not scheduled) experiments for the given user.
+ */
 public class UserSavedBatchesTableDBView extends UserBatchesTableDBView
 {
 	/**  

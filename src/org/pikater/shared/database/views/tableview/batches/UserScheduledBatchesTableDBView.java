@@ -12,6 +12,9 @@ import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
+/**
+ * A view displaying all scheduled (whether waiting, started or finished) experiments for the given user.
+ */
 public class UserScheduledBatchesTableDBView extends UserBatchesTableDBView
 {
 	/**  

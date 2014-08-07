@@ -11,6 +11,9 @@ import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
+/**
+ * A view displaying all experiments for the given user.
+ */
 public class UserBatchesTableDBView extends AbstractBatchTableDBView
 {
 	protected final JPAUser owner;
@@ -39,7 +42,8 @@ public class UserBatchesTableDBView extends AbstractBatchTableDBView
 				Column.MAX_PRIORITY,
 				Column.CREATED,
 				Column.NAME,
-				Column.NOTE
+				Column.NOTE,
+				Column.ABORT
 		).toArray(new ITableColumn[0]);
 	}
 	
