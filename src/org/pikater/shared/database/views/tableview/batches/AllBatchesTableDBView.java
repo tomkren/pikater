@@ -12,7 +12,7 @@ import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 
 /**
- * A view for scheduled (whether waiting, started or finished) experiments.
+ * A view displaying all batches (admin mode).
  */
 public class AllBatchesTableDBView extends AbstractBatchTableDBView
 {
@@ -27,7 +27,8 @@ public class AllBatchesTableDBView extends AbstractBatchTableDBView
 				Column.CREATED,
 				Column.OWNER,
 				Column.NAME,
-				Column.NOTE
+				Column.NOTE,
+				Column.ABORT
 		).toArray(new ITableColumn[0]);
 	}
 	

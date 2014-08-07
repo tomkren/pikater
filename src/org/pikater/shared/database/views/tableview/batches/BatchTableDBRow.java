@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -51,6 +52,27 @@ public class BatchTableDBRow extends AbstractTableRowDBView {
 			return new StringReadOnlyDBViewValue(batch.getStatus().name());
 		case NOTE:
 			return new StringReadOnlyDBViewValue(batch.getNote());
+		case ABORT:
+			return new NamedActionDBViewValue("Abort")
+			{
+				@Override
+				protected void commitEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				public boolean isEnabled()
+				{
+					return true; // TODO: experiment is scheduled or being executed
+				}
+			};
 			
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

@@ -32,7 +32,8 @@ public abstract class AbstractBatchTableDBView extends AbstractTableDBView
 		CREATED,
 		OWNER,
 		NAME,
-		NOTE; // this should be last because of potentially long text
+		NOTE, // this should be last because of potentially long text
+		ABORT;
 
 		@Override
 		public String getDisplayName()
@@ -57,6 +58,9 @@ public abstract class AbstractBatchTableDBView extends AbstractTableDBView
 				case PRIORITY:
 				case MAX_PRIORITY:
 					return DBViewValueType.STRING;
+					
+				case ABORT:
+					return DBViewValueType.NAMED_ACTION;
 					
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
