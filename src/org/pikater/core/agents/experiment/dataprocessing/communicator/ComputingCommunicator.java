@@ -64,7 +64,7 @@ public class ComputingCommunicator {
 				msgOut.addReceiver(gui_agents[i].getName());
 			}
 		} catch (FIPAException fe) {
-			fe.printStackTrace();
+			agent.logError(fe.getMessage(), fe);
 		}
 
 		msgOut.setConversationId("partial-results");
@@ -78,9 +78,9 @@ public class ComputingCommunicator {
 		try {
 			agent.getContentManager().fillContent(msgOut, content);
 		} catch (CodecException e) {
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		}
 
 		agent.send(msgOut);
@@ -100,13 +100,13 @@ public class ComputingCommunicator {
 				agent.getContentManager().fillContent(msgOut, result);
 
 			} catch (CodecException ce) {
-				agent.logError("", ce);
+				agent.logError(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError("", oe);
+				agent.logError(oe.getMessage(), oe);
 			}
 
 		} catch (Exception e) {
-			agent.logError("", e);
+			agent.logError(e.getMessage(), e);
 		}
 
 		return msgOut;

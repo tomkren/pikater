@@ -17,7 +17,7 @@ public abstract class AgentNames {
 	public static String VIRTUAL_BOX_PROVIDER = "VirtualBoxProvider";
 	public static String FREDDIE = "Freddie";
 	public static String MAILING = "Mailing";
-	public static String DURATION = "duration";
+	public static String DURATION = "Duration";
 	public static String DURATION_SERVICE = "DurationServiceRegression";
 
 }

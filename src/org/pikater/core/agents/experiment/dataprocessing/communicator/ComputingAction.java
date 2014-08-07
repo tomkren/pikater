@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.system.data.AgentDataSource;
@@ -175,7 +176,7 @@ public class ComputingAction extends FSMBehaviour {
 					getTrainBehaviour.reset(null);
 				}
 
-				if (!mode.equals("train_only")) {
+				if (!mode.equals(CoreConstants.MODE_TRAIN_ONLY)) {
 					testFn = data.exportInternalTestFileName();
 					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETTESTDATA_STATE);
@@ -365,10 +366,10 @@ public class ComputingAction extends FSMBehaviour {
 						EvaluationMethod evaluation_method = executeAction
 								.getTask().getEvaluationMethod();
 
-						if (!mode.equals("train_only")) {
+						if (!mode.equals(CoreConstants.MODE_TRAIN_ONLY)) {
 							agent.evaluateCA(evaluation_method, eval);
 
-							if (output.equals("predictions")) {
+							if (output.equals(CoreConstants.OUTPUT_PREDICTION)) {
 								DataInstances di = new DataInstances();
 								di.fillWekaInstances(agent.test);
 								DataInstances labeledTest = agent
@@ -498,7 +499,7 @@ public class ComputingAction extends FSMBehaviour {
 
 				if (agent.currentTask.getGetResults() != null
 						&& agent.currentTask.getGetResults().equals(
-								"after_each_task")) {
+								CoreConstants.RESULT_AFTER_EACH_TASK)) {
 					resultMsg.addReceiver(new AID(agent.currentTask
 							.getGuiAgent(), false));
 				}
