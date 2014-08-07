@@ -48,4 +48,9 @@ public class WaitingTasksQueues {
 		return null;
 	}
 
+	public int getNumberOfTasksInQueue() {
+		return shortTimeDurationQueue.size() +
+				longTermDurationQueue.size();
+	}
+	
 }

@@ -7,11 +7,11 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
@@ -19,12 +19,12 @@ import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 
 public class CPUCoresStructure {
 
-	private Map <CPUCore, TaskToSolve> computingCores;
-	private List<CPUCore> untappedCores;
+	private volatile Map <CPUCore, TaskToSolve> busyCores;
+	private volatile List<CPUCore> untappedCores;
 	
 	public CPUCoresStructure() {
 		
-		this.computingCores = new HashMap<CPUCore, TaskToSolve>();
+		this.busyCores = new HashMap<CPUCore, TaskToSolve>();
 		this.untappedCores = new ArrayList<CPUCore>();
 	}
 	
@@ -44,19 +44,25 @@ public class CPUCoresStructure {
 		if (result.length == 0) {
 			return;
 		}
-	
-		AID managerAgentAID = new AID(AgentNames.MANAGER_AGENT, false);
 		
-		PlannerCommunicator comminicator = new PlannerCommunicator(agent);
-		ComputerInfo computerInfo =
-				comminicator.getComputerInfo(managerAgentAID);
-		int numberOfCores = computerInfo.getNumberOfCores();
-		
-		for (int i = 0; i < numberOfCores; i++) {
+		List<DFAgentDescription> descriptions =
+				new ArrayList<DFAgentDescription>(Arrays.asList(result));
+		for (DFAgentDescription descriptionI : descriptions) {
 			
-			CPUCore cpuCore = new CPUCore(managerAgentAID, i);
-			untappedCores.add(cpuCore);
+			AID managerAgentAID = descriptionI.getName();
+			
+			PlannerCommunicator comminicator = new PlannerCommunicator(agent);
+			ComputerInfo computerInfo =
+					comminicator.getComputerInfo(managerAgentAID);
+			int numberOfCores = computerInfo.getNumberOfCores();
+			
+			for (int i = 0; i < numberOfCores; i++) {
+				
+				CPUCore cpuCore = new CPUCore(managerAgentAID, i);
+				untappedCores.add(cpuCore);
+			}
 		}
+		
 	}
 	
 	public TaskToSolve setCPUCoreAsFree(CPUCore cpuCore) {
@@ -65,12 +71,13 @@ public class CPUCoresStructure {
 			throw new IllegalArgumentException("Argument cpuCore can't be null");
 		}
 		
-		TaskToSolve taskToSolve = this.computingCores.get(cpuCore);
+		TaskToSolve taskToSolve = this.busyCores.get(cpuCore);
 		if (taskToSolve == null) {
 			throw new IllegalStateException("Structure doesn't contain "
 					+ "any task for argument cpuCore");
 		}
 		
+		this.busyCores.remove(cpuCore);
 		this.untappedCores.add(cpuCore);
 		
 		return taskToSolve;
@@ -88,7 +95,7 @@ public class CPUCoresStructure {
 			throw new IllegalStateException("SelectedCore is not member of untappedCores");
 		}
 		
-		this.computingCores.put(selectedCore, task);
+		this.busyCores.put(selectedCore, task);
 		this.untappedCores.remove(selectedCore);
 	}
 	
@@ -108,7 +115,7 @@ public class CPUCoresStructure {
 	
 	public TaskToSolve getComputingTask(int taskID) {
 	
-		for (TaskToSolve taskToSolveI : computingCores.values()) {
+		for (TaskToSolve taskToSolveI : busyCores.values()) {
 			if (taskToSolveI.getTask().getGraphId() == taskID) {
 				return taskToSolveI;
 			}
@@ -116,5 +123,11 @@ public class CPUCoresStructure {
 		return null;
 	}
 
+	public int getNumOfBusyCores() {
+		return busyCores.size();
+	}
+	public int getNumOfUntappedCores() {
+		return untappedCores.size();
+	}
 	
 }

@@ -7,8 +7,8 @@ import jade.core.AID;
 
 public class CPUCore {
 
-	private AID aID;
-	private int coreID;
+	private volatile AID aID;
+	private volatile int coreID;
 	
 	public CPUCore (AID aID, int coreID) {
 		this.aID = aID;
