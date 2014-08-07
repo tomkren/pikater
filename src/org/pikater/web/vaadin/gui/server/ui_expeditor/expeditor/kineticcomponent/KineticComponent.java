@@ -14,6 +14,7 @@ import org.pikater.shared.experiment.webformat.server.ExperimentGraphServer;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
+
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClientRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
@@ -134,18 +135,44 @@ public class KineticComponent extends AbstractComponent
 				KineticComponent.this.parentEditor.getToolbar().onClickModeAlteredOnClient(newClickMode);
 			}
 			
+			/**
+			 * This is assumed to only be invoked when the user creates a box (no edges are thus
+			 * yet attached).
+			 */
 			@Override
 			public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
 			{
-				// TODO: register things
-				// MyNotifications.showInfo(null, "Box set changed");
+				for(BoxGraphItemShared boxShared : boxes)
+				{
+					experimentGraph.getBox(boxShared.getID()).setRegistered(opKind == RegistrationOperation.REGISTER);
+				}
+				
+				// TODO: pozice boxů se musí přenášet na server
 			}
-
+			
+			/**
+			 * This is assumed to only be invoked when the user creates an edge. If it is unregistered,
+			 * boxes should not be affected because {@link #command_boxSetChange()}.
+			 */
 			@Override
 			public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 			{
-				// TODO: register things
-				// MyNotifications.showInfo(null, "Edge set changed");
+				if(opKind == RegistrationOperation.REGISTER)
+				{
+					for(EdgeGraphItemShared edge : edges)
+					{
+						// does all kinds of checks and throws exceptions
+						experimentGraph.connect(edge.fromBoxID, edge.toBoxID);
+					}
+				}
+				else
+				{
+					for(EdgeGraphItemShared edge : edges)
+					{
+						// does all kinds of checks and throws exceptions
+						experimentGraph.disconnect(edge.fromBoxID, edge.toBoxID); // this will invalidate any actual slot connections
+					}
+				}
 			}
 			
 			@Override
@@ -253,6 +280,13 @@ public class KineticComponent extends AbstractComponent
 		try
 		{
 			UniversalComputationDescription result = webToUni(experimentGraph);
+			
+			/*
+			// test case - redirect the same experiment into a new tab and test the conversion cycle
+			JPABatch newBatch = new JPABatch("poliket", "bla bla", result.toXML(), null);
+			parentEditor.loadExperimentIntoNewTab(newBatch);
+			*/
+			
 			exportCallback.handleExperiment(result, new IOnExperimentSaved()
 			{
 				@Override
@@ -383,22 +417,25 @@ public class KineticComponent extends AbstractComponent
 			// create the result uni-format experiment
 			UniversalComputationDescription result = new UniversalComputationDescription();
 
-			// create uni-format master elements for all boxes
+			// create uni-format master elements for all boxes that are registered
+			// from now on, only iterate this collection
 			Map<BoxInfoServer, UniversalElement> webBoxToUniBox = new HashMap<BoxInfoServer, UniversalElement>();
 			for(BoxInfoServer webBox : webFormat.leafBoxes.values())
 			{
-				UniversalElement uniBox = new UniversalElement();
-				webBoxToUniBox.put(webBox, uniBox);
-				result.addElement(uniBox);
+				if(webBox.isRegistered())
+				{
+					UniversalElement uniBox = new UniversalElement();
+					webBoxToUniBox.put(webBox, uniBox);
+					result.addElement(uniBox);
+				}
 			}
 
 			// traverse all boxes and pass all available/needed information to result uni-format
-			for(Entry<Integer, BoxInfoServer> entry : webFormat.leafBoxes.entrySet())
+			for(Entry<BoxInfoServer, UniversalElement> entry : webBoxToUniBox.entrySet())
 			{
 				// determine basic information and references
-				Integer webBoxID = entry.getKey();
-				BoxInfoServer webBox = entry.getValue();
-				UniversalElement uniBox = webBoxToUniBox.get(webBox);
+				BoxInfoServer webBox = entry.getKey();
+				UniversalElement uniBox = entry.getValue();
 
 				// create edge leading from the currently processed box (will be later added to all neighbour uni-boxes)
 				UniversalConnector connector = new UniversalConnector();
@@ -421,13 +458,21 @@ public class KineticComponent extends AbstractComponent
 					);
 				}
 				uniBox.getOntologyInfo().setOptions(webBox.getAssociatedAgent().getOptions());
-				if(webFormat.edgesDefinedFor(webBoxID))
+				if(webFormat.edgesDefinedFor(webBox.getID()))
 				{
-					// transform edges
-					for(Integer neighbourWebBoxID : webFormat.edges.get(webBoxID))
+					// transform edges, if they're "valid"
+					for(Integer neighbourWebBoxID : webFormat.edges.get(webBox.getID()))
 					{
 						UniversalElement neighbourUniBox = webBoxToUniBox.get(webFormat.leafBoxes.get(neighbourWebBoxID));
-						neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+						if(neighbourUniBox == null)
+						{
+							// edge leads to an unknown or unregistered box
+							throw new IllegalStateException("Can not transform an edge with an unregistered endpoint.");
+						}
+						else
+						{
+							neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+						}
 					}
 				}
 
@@ -517,7 +562,7 @@ public class KineticComponent extends AbstractComponent
 								uniBoxToWebBoxID.get(element)
 						);
 						
-						// TODO: update internal state (connect slots)
+						// TODO: update internal state (connected slots)
 					}
 				}
 				

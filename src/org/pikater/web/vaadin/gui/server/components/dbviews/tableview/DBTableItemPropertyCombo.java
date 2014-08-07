@@ -14,11 +14,13 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 	public DBTableItemPropertyCombo(final DBTable parentTable, final RepresentativeDBViewValue valueWrapper)
 	{
 		this.comboBox = new ComboBox(null, valueWrapper.getValues());
+		this.comboBox.setWidth("100%");
 		this.comboBox.setValue(valueWrapper.getValue());
 		this.comboBox.setNullSelectionAllowed(false);
 		this.comboBox.setTextInputAllowed(false);
 		this.comboBox.setNewItemsAllowed(false);
 		this.comboBox.setImmediate(true);
+		this.comboBox.setReadOnly(valueWrapper.isReadOnly());
 		this.comboBox.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -6175606221977226773L;

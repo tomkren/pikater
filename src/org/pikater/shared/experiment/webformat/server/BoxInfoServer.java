@@ -14,6 +14,7 @@ public class BoxInfoServer implements IBoxInfo<Integer>
 	private Integer generatedUniqueID;
 	private int posX;
 	private int posY;
+	private boolean registered;
 	
 	private final BoxType boxType;
 	private final AgentInfo associatedAgent;
@@ -23,6 +24,7 @@ public class BoxInfoServer implements IBoxInfo<Integer>
 	{
 		this.posX = posX;
 		this.posY = posY;
+		this.registered = true;
 		this.boxType = BoxType.fromAgentInfo(associatedAgent);
 		this.associatedAgent = associatedAgent;
 		this.slotConnections = new HashMap<Slot, BoxSlotConnection>();
@@ -60,6 +62,16 @@ public class BoxInfoServer implements IBoxInfo<Integer>
 		this.posY = posY;
 	}
 	
+	public boolean isRegistered()
+	{
+		return registered;
+	}
+
+	public void setRegistered(boolean registered)
+	{
+		this.registered = registered;
+	}
+	
 	public AgentInfo getAssociatedAgent()
 	{
 		return associatedAgent;
@@ -90,6 +102,11 @@ public class BoxInfoServer implements IBoxInfo<Integer>
 	public void disconnect(Slot localSlot)
 	{
 		// TODO:
+	}
+	
+	public boolean isValid()
+	{
+		return true; // TODO
 	}
 	
 	public BoxInfoClient toClientFormat()

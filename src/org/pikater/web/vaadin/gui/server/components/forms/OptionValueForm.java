@@ -27,6 +27,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
@@ -235,9 +236,9 @@ public class OptionValueForm extends CustomFormLayout
 			Boolean currentValue = ((BooleanValue) value.getCurrentValue()).getValue();
 			
 			// then create the field & bind with the data source
-			ComboBox cb_value = FormFieldFactory.getGeneralCheckField("Value:", currentValue, true, false);
-			cb_value.setSizeFull();
-			cb_value.addValueChangeListener(new Property.ValueChangeListener()
+			CheckBox chb_value = FormFieldFactory.getGeneralCheckField("value", currentValue, false);
+			chb_value.setSizeFull();
+			chb_value.addValueChangeListener(new Property.ValueChangeListener()
 			{
 				private static final long serialVersionUID = 3736100120428402858L;
 
@@ -249,8 +250,8 @@ public class OptionValueForm extends CustomFormLayout
 			});
 			
 			// and finalize
-			addValueSpecificField("value", cb_value);
-			field_value = cb_value;
+			addValueSpecificField("value", chb_value);
+			field_value = chb_value;
 		}
 		else if(typeClass.equals(StringValue.class))
 		{
