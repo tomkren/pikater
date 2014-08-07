@@ -100,6 +100,9 @@ public class CPUCoresStructure {
 			throw new IllegalArgumentException("Argument task can't be null");
 		}
 		
+		if (untappedCores.isEmpty()) {
+			return null;
+		}
 		return untappedCores.get(0);
 	}
 	

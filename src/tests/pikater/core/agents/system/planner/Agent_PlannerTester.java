@@ -15,11 +15,13 @@ import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaJ48;
+import org.pikater.core.agents.experiment.computing.Agent_WekaNBTreeCA;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
@@ -55,8 +57,12 @@ public class Agent_PlannerTester extends PikaterAgent {
 		doWait(6000);
 		
         sendTask();
-//        doWait(600);
-        sendTask2();
+        sendTask2();        
+        sendTask3();
+
+        sendTask();
+        sendTask2();        
+        sendTask3();
         
         log("PlannerTester ending");
         doDelete();
@@ -164,6 +170,68 @@ public class Agent_PlannerTester extends PikaterAgent {
     	task.setDatas(datas);
     	task.setEvaluationMethod(method);
     	task.setExpectedDuration(new LongTermDuration());
+    	
+        ExecuteTask executeTask = new ExecuteTask();
+        executeTask.setTask(task);
+        
+        try {
+        	
+            ACLMessage request = makeActionRequest(receiver, executeTask);
+            //send(request);
+            log("Sending test request to Planner");
+            send(request);
+/* 
+            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 100000);
+            if (reply == null)
+                logError("Reply not received.");
+            else
+                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+*/
+        } catch (CodecException | OntologyException e) {
+            logError("Ontology/codec error occurred: "+e.getMessage(), e);
+        }
+
+    }
+    
+    protected void sendTask3() {
+    	
+        AID receiver = new AID(AgentNames.PLANNER, false);
+    	
+		NewOption optionC = new NewOption("C", new FloatValue(0.25f));
+		List<NewOption> options = new ArrayList<NewOption>();
+		options.add(optionC);
+		
+    	Agent agent = new Agent();
+    	agent.setName(Agent_WekaNBTreeCA.class.getSimpleName());
+    	agent.setType(Agent_WekaNBTreeCA.class.getName());
+        agent.setOptions(options); 
+    	//agent.setOptions(options); //S,M
+    	
+    	Datas datas = new Datas();
+    	datas.addData(
+    			new Data(
+    					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					"weather.arff",
+    					DataTypes.TEST_DATA) );
+    	datas.addData(
+    			new Data(
+    					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					"weather.arff",
+    					DataTypes.TRAIN_DATA) );
+    	datas.setMode(CoreConstants.MODE_TRAIN_TEST);
+    	datas.setOutput(CoreConstants.OUTPUT_EVALUATION_ONLY);
+    	
+        NewOption optionF = new NewOption("F", 8);
+        
+    	EvaluationMethod method = new EvaluationMethod();
+    	method.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+    	method.addOption(optionF);
+    	
+    	Task task = new Task();
+    	task.setAgent(agent);
+    	task.setDatas(datas);
+    	task.setEvaluationMethod(method);
+    	task.setExpectedDuration(new ShortTimeDuration());
     	
         ExecuteTask executeTask = new ExecuteTask();
         executeTask.setTask(task);
