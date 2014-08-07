@@ -4,12 +4,14 @@ import org.pikater.shared.database.views.base.values.StringDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.AbstractComponent;
 
 public class UsersView extends DBTableLayout implements IContentComponent, IDBViewRoot<UsersTableDBView>
 {
@@ -50,8 +52,13 @@ public class UsersView extends DBTableLayout implements IContentComponent, IDBVi
 	}
 
 	@Override
-	public void onCellCreate(ITableColumn column, Object component)
+	public void onCellCreate(ITableColumn column, AbstractComponent component)
 	{
+		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
+		if(specificColumn == Column.MAX_PRIORITY)
+		{
+			component.setDescription("The higher, the better.");
+		}
 	}
 
 	@Override

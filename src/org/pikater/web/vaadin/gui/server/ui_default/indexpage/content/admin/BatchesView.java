@@ -19,6 +19,7 @@ import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSte
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbourWizardStep;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 
 public class BatchesView extends ExpandableView
@@ -75,7 +76,7 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, Object component)
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
 		{
 			// TODO: set tooltip to NOTE
 		}
@@ -125,7 +126,7 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, Object component)
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
 		{
 			// TODO Auto-generated method stub
 		}
@@ -160,7 +161,7 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, Object component)
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
 		{
 			// TODO Auto-generated method stub
 		}

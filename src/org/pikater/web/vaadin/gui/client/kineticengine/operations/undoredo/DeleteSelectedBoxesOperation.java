@@ -32,14 +32,14 @@ public class DeleteSelectedBoxesOperation extends BiDiOperation
 	@Override
 	public void undo()
 	{
-		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, originalSelectedBoxes);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, true, originalSelectedBoxes);
 		selectionModule.doSelectionRelatedOperation(SelectionOperation.SELECTION, true, true, originalSelectedBoxes);
 	}
 	
 	@Override
 	public void redo()
 	{
-		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, originalSelectedBoxes); // automatically deselects
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, true, originalSelectedBoxes); // automatically deselects
 	}
 
 	@Override

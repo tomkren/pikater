@@ -8,13 +8,11 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
-import org.pikater.shared.database.jpa.daos.UserDAO;
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
 
 /**
  * A generic view for tables displaying dataset information.  
@@ -66,7 +64,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 		DEFAULT_TASK_TYPE,
 		SIZE,
 		DESCRIPTION,
-		APPROVE,
+		APPROVED,
 		DOWNLOAD,
 		DELETE;
 
@@ -95,7 +93,9 @@ public class DataSetTableDBView extends AbstractTableDBView
 				case DESCRIPTION:
 					return DBViewValueType.STRING;
 					
-				case APPROVE:
+				case APPROVED:
+					return DBViewValueType.BOOLEAN;
+					
 				case DOWNLOAD:
 				case DELETE:
 					return DBViewValueType.NAMED_ACTION;
@@ -113,7 +113,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 			}
 			else
 			{
-				return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVE));
+				return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVED));
 			}
 		}
 	}

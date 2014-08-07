@@ -34,17 +34,6 @@ public enum DBViewValueType
 	 */
 	NAMED_ACTION;
 	
-	public Class<? extends Object> getResultJavaType()
-	{
-		switch(this)
-		{
-			case BOOLEAN:
-				return Boolean.class;
-			default:
-				return String.class;
-		}
-	}
-	
 	public boolean isSortable()
 	{
 		return (this == STRING) || (this == BOOLEAN); 

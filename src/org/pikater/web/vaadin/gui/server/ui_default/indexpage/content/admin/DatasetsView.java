@@ -31,6 +31,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
@@ -98,7 +99,7 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, Object component)
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
 		{
 			DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
 			if(specificColumn == Column.DESCRIPTION)
@@ -131,7 +132,7 @@ public class DatasetsView extends ExpandableView
 				case DESCRIPTION:
 					return 300;
 					
-				case APPROVE:
+				case APPROVED:
 				case DOWNLOAD:
 				case DELETE:
 					return 100;
@@ -220,7 +221,7 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, Object component)
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
 		{
 		}
 
@@ -269,7 +270,7 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, Object component)
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
 		{
 		}
 

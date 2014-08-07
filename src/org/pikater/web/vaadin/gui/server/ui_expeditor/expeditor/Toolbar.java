@@ -10,6 +10,7 @@ import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.UserSavedBatchesTableDBView;
 import org.pikater.shared.database.views.tableview.batches.UserScheduledBatchesTableDBView;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
@@ -392,11 +393,9 @@ public class Toolbar extends VerticalLayout
 				{
 					String name = (String) args[0];
 					Integer userAssignedPriority = (Integer) args[1];
-					Integer computationEstimateInHours = (Integer) args[2];
-					Boolean sendEmailWhenFinished = (Boolean) args[3];
-					String note = (String) args[4];
-					saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority,
-							computationEstimateInHours, sendEmailWhenFinished), experimentSavedCallback);
+					Boolean sendEmailWhenFinished = (Boolean) args[2];
+					String note = (String) args[3];
+					saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority, sendEmailWhenFinished), experimentSavedCallback);
 				}
 				
 				private void saveExperiment(JPABatch newExperiment, IOnExperimentSaved experimentSavedCallback)
@@ -414,6 +413,7 @@ public class Toolbar extends VerticalLayout
 		}
 		catch (Throwable t)
 		{
+			PikaterLogger.logThrowable("Could not save experiment", t);
 			MyNotifications.showApplicationError();
 		}
 	}

@@ -104,15 +104,13 @@ public class JPABatch extends JPAAbstractEntity{
 	 * @param computationEstimateInHours
 	 * @param sendEmailAfterFinish
 	 */
-	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, 
-			int computationEstimateInHours, boolean sendEmailAfterFinish)
+	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, boolean sendEmailAfterFinish)
 	{
 		this.name=name;
 		this.note = note;
 		this.XML = xml;
 		this.owner=owner;
 		this.priority = userAssignedPriority;
-		this.computationEstimateInHours=computationEstimateInHours;
 		this.sendEmailAfterFinish=sendEmailAfterFinish;
 		this.totalPriority=99; // TODO: this is probably just for tests
 		this.created=new Date();

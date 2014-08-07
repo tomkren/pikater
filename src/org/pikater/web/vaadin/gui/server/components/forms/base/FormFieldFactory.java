@@ -1,16 +1,15 @@
 package org.pikater.web.vaadin.gui.server.components.forms.base;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.RequiredValidator;
 
-import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.PasswordField;
@@ -63,10 +62,12 @@ public class FormFieldFactory
 		return result;
 	}
 	
-	public static ComboBox getGeneralCheckField(String caption, boolean initialState, boolean required, boolean readOnly)
+	public static CheckBox getGeneralCheckField(String caption, boolean initialState, boolean readOnly)
 	{
-		ComboBox result = getGeneralComboBox(caption, Arrays.asList(Boolean.TRUE, Boolean.FALSE), initialState, required, readOnly);
-		result.setConverter(StringToBooleanConverter.class); // TODO: is this even necessary?
+		CheckBox result = new CheckBox(caption, initialState);
+		result.setReadOnly(readOnly);
+		// ComboBox result = getGeneralComboBox(caption, Arrays.asList(Boolean.TRUE, Boolean.FALSE), initialState, required, readOnly);
+		// result.setConverter(StringToBooleanConverter.class); // TODO: is this even necessary?
 		return result;
 	}
 	

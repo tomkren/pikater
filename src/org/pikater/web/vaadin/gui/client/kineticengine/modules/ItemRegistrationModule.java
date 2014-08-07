@@ -83,7 +83,7 @@ public class ItemRegistrationModule implements IEngineModule
 	 * @param drawOnFinish
 	 * @param boxes
 	 */
-	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, BoxGraphItemClient... boxes)
+	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, BoxGraphItemClient... boxes)
 	{
 		// first deselect provided boxes, if necessary
 		if(opKind == RegistrationOperation.UNREGISTER)
@@ -110,7 +110,7 @@ public class ItemRegistrationModule implements IEngineModule
 		}
 		
 		// send info to the server
-		if(boxes.length != 0)
+		if((boxes.length != 0) && notifyServer)
 		{
 			kineticEngine.getContext().command_boxSetChange(opKind, BoxGraphItemClient.toShared(boxes));
 		}
@@ -132,7 +132,7 @@ public class ItemRegistrationModule implements IEngineModule
 	 * @param drawOnFinish
 	 * @param edges
 	 */
-	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, EdgeGraphItemClient... edges)
+	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, EdgeGraphItemClient... edges)
 	{
 		boolean visible = opKind == RegistrationOperation.REGISTER;
 		for(EdgeGraphItemClient edge : edges)
@@ -163,7 +163,7 @@ public class ItemRegistrationModule implements IEngineModule
 		}
 		
 		// send info to the server
-		if(edges.length != 0)
+		if((edges.length != 0) && notifyServer)
 		{
 			EdgeGraphItemShared[] serializedEdges = EdgeGraphItemClient.toShared(edges);
 			if(serializedEdges.length > 0)

@@ -20,6 +20,7 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentPro
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.AbstractComponent;
 
 public class AgentsView extends DBTableLayout implements IContentComponent, IDBViewRoot<ExternalAgentTableDBView>
 {
@@ -60,7 +61,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 	}
 
 	@Override
-	public void onCellCreate(ITableColumn column, Object component)
+	public void onCellCreate(ITableColumn column, AbstractComponent component)
 	{
 	}
 
@@ -80,7 +81,7 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 				return 150; // TODO: set tooltip
 			case DESCRIPTION:
 				return 250;
-			case APPROVE:
+			case APPROVED:
 			case DOWNLOAD:
 			case DELETE:
 				return 100;

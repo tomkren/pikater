@@ -35,7 +35,7 @@ public class DeleteEdgeOperation extends BiDiOperation
 	@Override
 	public void undo()
 	{
-		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, !edgeSelectedOriginally, edgeToRemove);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, !edgeSelectedOriginally, true, edgeToRemove);
 		if(edgeSelectedOriginally)
 		{
 			// select both endpoints (and thus the edge also)
@@ -53,7 +53,7 @@ public class DeleteEdgeOperation extends BiDiOperation
 			selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, 
 					edgeToRemove.getEndPoint(EndPoint.FROM), edgeToRemove.getEndPoint(EndPoint.TO)); 
 		}
-		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, edgeToRemove);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, true, edgeToRemove);
 	}
 
 	@Override

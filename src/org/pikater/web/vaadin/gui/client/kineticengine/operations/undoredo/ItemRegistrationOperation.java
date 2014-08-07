@@ -16,14 +16,16 @@ public final class ItemRegistrationOperation extends BiDiOperation
 	private final BoxGraphItemClient[] boxes;
 	private final EdgeGraphItemClient[] edges;
 	private final ItemRegistrationModule itemRegistrationModule;
+	private final boolean notifyServer;
 	
-	public ItemRegistrationOperation(KineticEngine kineticEngine, BoxGraphItemClient[] boxes, EdgeGraphItemClient[] edges)
+	public ItemRegistrationOperation(KineticEngine kineticEngine, BoxGraphItemClient[] boxes, EdgeGraphItemClient[] edges, boolean notifyServer)
 	{
 		super(kineticEngine);
 		
 		this.boxes = boxes == null ? new BoxGraphItemClient[0] : boxes;
 		this.edges = edges == null ? new EdgeGraphItemClient[0] : edges;
 		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
+		this.notifyServer = notifyServer;
 	}
 	
 	@Override
@@ -43,15 +45,15 @@ public final class ItemRegistrationOperation extends BiDiOperation
 	@Override
 	public void undo()
 	{
-		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, edges);
-		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, boxes); // automatically deselects
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, notifyServer, edges);
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, notifyServer, boxes); // automatically deselects
 	}
 
 	@Override
 	public void redo()
 	{
-		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, boxes);
-		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, edges);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, notifyServer, boxes);
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, notifyServer, edges);
 	}
 
 	@Override

@@ -264,7 +264,7 @@ public class DatabaseInitialisation {
 
 		JPAUser stepan=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin("stepan")).getSingleResultWithNull();
 		
-		JPABatch batch = new JPABatch("Stepan", "Stepan's batch of experiments - school project", "<dummy></dummy>", stepan, stepan.getPriorityMax(), 5, true);
+		JPABatch batch = new JPABatch("Stepan", "Stepan's batch of experiments - school project", "<dummy></dummy>", stepan, stepan.getPriorityMax(), true);
 		batch.addExperiment(experiment);
 
 		DAOs.batchDAO.storeEntity(batch);
