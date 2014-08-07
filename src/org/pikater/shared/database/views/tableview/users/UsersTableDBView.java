@@ -51,32 +51,31 @@ public class UsersTableDBView extends AbstractTableDBView
 		{
 			return this.name();
 		}
-	}
-	
-	@Override
-	public DBViewValueType getTypeForColumn(ITableColumn column)
-	{
-		Column specificColumn = (Column) column;
-		switch(specificColumn)
+
+		@Override
+		public DBViewValueType getColumnType()
 		{
-			case LOGIN:
-			case EMAIL:
-			case REGISTERED:
-				return DBViewValueType.STRING;
-				
-			case STATUS:
-			case MAX_PRIORITY:
-				return DBViewValueType.REPRESENTATIVE;
-				
-			case ADMIN:
-				return DBViewValueType.BOOLEAN;
-				
-			case RESET_PSWD:
-			case DELETE:
-				return DBViewValueType.NAMED_ACTION;
-				
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+			switch(this)
+			{
+				case LOGIN:
+				case EMAIL:
+				case REGISTERED:
+					return DBViewValueType.STRING;
+					
+				case STATUS:
+				case MAX_PRIORITY:
+					return DBViewValueType.REPRESENTATIVE;
+					
+				case ADMIN:
+					return DBViewValueType.BOOLEAN;
+					
+				case RESET_PSWD:
+				case DELETE:
+					return DBViewValueType.NAMED_ACTION;
+					
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
 		}
 	}
 	

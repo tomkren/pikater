@@ -8,11 +8,13 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
+import org.pikater.shared.database.jpa.daos.UserDAO;
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
 
 /**
  * A generic view for tables displaying dataset information.  
@@ -80,6 +82,29 @@ public class DataSetTableDBView extends AbstractTableDBView
 			}
 		}
 
+		@Override
+		public DBViewValueType getColumnType()
+		{
+			switch(this)
+			{
+				case OWNER:
+				case CREATED:
+				case NUMBER_OF_INSTANCES:
+				case DEFAULT_TASK_TYPE:
+				case SIZE:
+				case DESCRIPTION:
+					return DBViewValueType.STRING;
+					
+				case APPROVE:
+				case DOWNLOAD:
+				case DELETE:
+					return DBViewValueType.NAMED_ACTION;
+					
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
+		}
+		
 		public static EnumSet<Column> getColumns(boolean adminMode)
 		{
 			if(adminMode)
@@ -90,30 +115,6 @@ public class DataSetTableDBView extends AbstractTableDBView
 			{
 				return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVE));
 			}
-		}
-	}
-	
-	@Override
-	public DBViewValueType getTypeForColumn(ITableColumn column)
-	{
-		Column specificColumn = (Column) column;
-		switch(specificColumn)
-		{
-			case OWNER:
-			case CREATED:
-			case NUMBER_OF_INSTANCES:
-			case DEFAULT_TASK_TYPE:
-			case SIZE:
-			case DESCRIPTION:
-				return DBViewValueType.STRING;
-				
-			case APPROVE:
-			case DOWNLOAD:
-			case DELETE:
-				return DBViewValueType.NAMED_ACTION;
-				
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
 		}
 	}
 

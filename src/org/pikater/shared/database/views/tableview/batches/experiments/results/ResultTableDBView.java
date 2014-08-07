@@ -67,36 +67,35 @@ public class ResultTableDBView extends AbstractTableDBView
 		{
 			return this.name();
 		}
-	}
-	
-	@Override
-	public DBViewValueType getTypeForColumn(ITableColumn column)
-	{
-		Column specificColumn = (Column) column;
-		switch(specificColumn)
+
+		@Override
+		public DBViewValueType getColumnType()
 		{
-			case OWNER:
-	
-			case AGENT_NAME:
-			case NOTE:
-			case WEKA_OPTIONS:
-			
-			case ERROR_RATE:
-			case KAPPA_STATISTIC:
-			case MEAN_ABSOLUTE_ERROR:
-			case RELATIVE_ABSOLUTE_ERROR:
-			case ROOT_MEAN_SQUARED_ERROR:
-			case ROOT_RELATIVE_SQUARED_ERROR:
+			switch(this)
+			{
+				case OWNER:
+		
+				case AGENT_NAME:
+				case NOTE:
+				case WEKA_OPTIONS:
 				
-			case STARTED:
-			case FINISHED:
-				return DBViewValueType.STRING;
-			
-			case CREATED_MODEL:
-				return DBViewValueType.NAMED_ACTION;
+				case ERROR_RATE:
+				case KAPPA_STATISTIC:
+				case MEAN_ABSOLUTE_ERROR:
+				case RELATIVE_ABSOLUTE_ERROR:
+				case ROOT_MEAN_SQUARED_ERROR:
+				case ROOT_RELATIVE_SQUARED_ERROR:
+					
+				case STARTED:
+				case FINISHED:
+					return DBViewValueType.STRING;
 				
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+				case CREATED_MODEL:
+					return DBViewValueType.NAMED_ACTION;
+					
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
 		}
 	}
 

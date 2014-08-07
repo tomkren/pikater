@@ -72,28 +72,27 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 		{
 			return this.name();
 		}
-	}
-	
-	@Override
-	public DBViewValueType getTypeForColumn(ITableColumn column)
-	{
-		Column specificColumn = (Column) column;
-		switch(specificColumn)
+
+		@Override
+		public DBViewValueType getColumnType()
 		{
-			case OWNER:
-			case NAME:
-			case AGENT_CLASS:
-			case DESCRIPTION:
-			case CREATED:
-				return DBViewValueType.STRING;
-				
-			case APPROVE:
-			case DOWNLOAD:
-			case DELETE:
-				return DBViewValueType.NAMED_ACTION;
-				
-			default:
-				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+			switch(this)
+			{
+				case OWNER:
+				case NAME:
+				case AGENT_CLASS:
+				case DESCRIPTION:
+				case CREATED:
+					return DBViewValueType.STRING;
+					
+				case APPROVE:
+				case DOWNLOAD:
+				case DELETE:
+					return DBViewValueType.NAMED_ACTION;
+					
+				default:
+					throw new IllegalStateException("Unknown state: " + name());
+			}
 		}
 	}
 
