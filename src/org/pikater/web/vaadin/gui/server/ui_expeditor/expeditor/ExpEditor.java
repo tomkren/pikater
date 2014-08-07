@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.webformat.server.BoxType;
+import org.pikater.shared.experiment.webformat.server.ExperimentGraphServer;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
@@ -13,6 +14,7 @@ import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponen
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxbrowser.BoxBrowserToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IBoxManagerToolboxContext;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticDnDWrapper;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.utilcomponent.UtilitiesToolbox;
@@ -101,11 +103,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	
 	private final ExpEditorExtension extension;
 	
-	/*
-	 * TODO: 
-	 * - custom D&D component to mark the "drop place" visually? 
-	 */
-	
 	public ExpEditor(boolean debugMode)
 	{
 		super();
@@ -141,7 +138,15 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setComponent(Border.CENTER, this.experimentTabs);
 		
 		// EAST COMPONENT INIT
-		this.toolbox_boxManager = new BoxManagerToolbox(ExpEditorToolbox.BOX_MANAGER.toDisplayName(), new MouseEvents.ClickListener()
+		IBoxManagerToolboxContext contextForBoxManager = new IBoxManagerToolboxContext()
+		{
+			@Override
+			public ExperimentGraphServer getCurrentGraph()
+			{
+				return getActiveKineticComponent().getExperimentGraph();
+			}
+		};
+		this.toolbox_boxManager = new BoxManagerToolbox(contextForBoxManager, ExpEditorToolbox.BOX_MANAGER.toDisplayName(), new MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = 1236473439175631916L;
 
