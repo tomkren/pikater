@@ -28,6 +28,8 @@ import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.systemLoad.GetSystemLoad;
+import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
@@ -36,9 +38,9 @@ public class Agent_Planner extends PikaterAgent {
 	
 	private static final long serialVersionUID = 820846175393846627L;
 
-	private WaitingTasksQueues waitingToStartComputingTasks =
+	private volatile WaitingTasksQueues waitingToStartComputingTasks =
 			new WaitingTasksQueues();
-	private CPUCoresStructure cpuCoresStructure =
+	private volatile CPUCoresStructure cpuCoresStructure =
 			new CPUCoresStructure();
 	private DistributedData distributedData =
 			new DistributedData();
@@ -95,7 +97,11 @@ public class Agent_Planner extends PikaterAgent {
 					if (a.getAction() instanceof ExecuteTask) {
 						return respondToExecuteTask(request, a);
 					}
-
+					
+					if (a.getAction() instanceof GetSystemLoad) {
+						return respondToGetSystemLoad(request, a);
+					}
+					
 				} catch (OntologyException e) {
 					logError("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
@@ -138,6 +144,41 @@ public class Agent_Planner extends PikaterAgent {
 		return null;
 	}
 
+	protected ACLMessage respondToGetSystemLoad(ACLMessage request, Action a) {
+
+		SystemLoad systemLoad = getSystemLoad();
+		
+		ACLMessage msgSystemLoad = request.createReply();
+		msgSystemLoad.setPerformative(ACLMessage.INFORM);
+		msgSystemLoad.setLanguage(new SLCodec().getName());
+		msgSystemLoad.setOntology(TaskOntology.getInstance().getName());
+		
+		Result executeResult = new Result(a, systemLoad);
+		try {
+			getContentManager().fillContent(msgSystemLoad, executeResult);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+		
+		return msgSystemLoad;
+	}
+	
+	private SystemLoad getSystemLoad() {
+		
+		SystemLoad systemLoad = new SystemLoad();
+		systemLoad.setNumberOfBusyCores(
+				cpuCoresStructure.getNumOfBusyCores());
+		systemLoad.setNumberOfUntappedCores(
+				cpuCoresStructure.getNumOfUntappedCores());
+		systemLoad.setNumberOfTasksInQueue(
+				waitingToStartComputingTasks.getNumberOfTasksInQueue());
+		systemLoad.print();
+		
+		return systemLoad;
+	}
+	
 	public void respondToFinishedTask(ACLMessage finishedTaskMsg) {
 
 		Result result = null;
@@ -191,33 +232,38 @@ public class Agent_Planner extends PikaterAgent {
 
 	private void plan() {
 
-		TaskToSolve task = waitingToStartComputingTasks.
+		getSystemLoad();
+		
+		TaskToSolve taskToSolve = waitingToStartComputingTasks.
 				removeTaskWithHighestPriority();
 		
 		// test if some task is available
-		if (task == null) {
+		if (taskToSolve == null) {
 			//this.logError("Any task available");
 			return;
 		}
 		
-		task.getTask().setStart(Agent_DataManager.getCurrentPikaterDateString());
+		Task task = taskToSolve.getTask();
+		task.setStart(Agent_DataManager.getCurrentPikaterDateString());
 
 		List<Object> recommendLocalitons = this.distributedData.
-				recommendCountingLocality(task);
+				recommendCountingLocality(taskToSolve);
 		CPUCore selectedCore = this.cpuCoresStructure.
-				getTheBestCPUCoreForTask(task, recommendLocalitons);
+				getTheBestCPUCoreForTask(taskToSolve, recommendLocalitons);
 
 		// test if some core is available
 		if (selectedCore == null) {
 			//this.logError("Any core available");
-			this.waitingToStartComputingTasks.addTask(task);
+			this.waitingToStartComputingTasks.addTask(taskToSolve);
 			return;
 		}
 		
-		this.cpuCoresStructure.setCPUCoreAsBusy(selectedCore, task);
+		
+		task.setCpuCoreID(selectedCore.getCoreID());
+		this.cpuCoresStructure.setCPUCoreAsBusy(selectedCore, taskToSolve);
 
 		PlannerCommunicator communicator = new PlannerCommunicator(this);
-		communicator.sendExecuteTask(task.getTask(), selectedCore.getAID());
+		communicator.sendExecuteTask(task, selectedCore.getAID());
 	}
 
 

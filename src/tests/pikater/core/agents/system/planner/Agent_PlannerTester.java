@@ -15,7 +15,6 @@ import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaJ48;
-import org.pikater.core.agents.experiment.computing.Agent_WekaNBTreeCA;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
@@ -56,13 +55,27 @@ public class Agent_PlannerTester extends PikaterAgent {
 		// waiting to start ManagerAgent
 		doWait(6000);
 		
-        sendTask();
-        sendTask2();        
-        sendTask3();
-
-        sendTask();
-        sendTask2();        
-        sendTask3();
+		for (int i = 0; i < 1; i++) { 
+	        sendTask();
+	        /*
+	        try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			*/
+	        sendTask2();
+	        /*
+	        try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			*/
+	        sendTask3();
+		}
         
         log("PlannerTester ending");
         doDelete();
@@ -202,8 +215,8 @@ public class Agent_PlannerTester extends PikaterAgent {
 		options.add(optionC);
 		
     	Agent agent = new Agent();
-    	agent.setName(Agent_WekaNBTreeCA.class.getSimpleName());
-    	agent.setType(Agent_WekaNBTreeCA.class.getName());
+    	agent.setName(Agent_WekaJ48.class.getSimpleName());
+    	agent.setType(Agent_WekaJ48.class.getName());
         agent.setOptions(options); 
     	//agent.setOptions(options); //S,M
     	
