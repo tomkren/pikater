@@ -13,6 +13,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextArea;
@@ -71,8 +72,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 	private final OptionGroup field_saveForLaterMode;
 	private final TextField field_experimentName;
 	private final ComboBox field_priorityAssignedByUser;
-	private final TextField field_computationEstimateInHours;
-	private final ComboBox field_sendEmailWhenFinished;
+	private final CheckBox field_sendEmailWhenFinished;
 	private final TextArea field_experimentNote;
 	
 	/*
@@ -136,7 +136,6 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 				this.field_saveForLaterMode.setNewItemsAllowed(false);
 				this.field_saveForLaterMode.setNullSelectionAllowed(false);
 				this.field_priorityAssignedByUser = null;
-				this.field_computationEstimateInHours = null;
 				this.field_sendEmailWhenFinished = null;
 				break;
 				
@@ -150,9 +149,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 				}
 				this.field_priorityAssignedByUser = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
 				this.field_priorityAssignedByUser.setWidth("100%");
-				this.field_computationEstimateInHours = FormFieldFactory.getNumericField("Est. computation time (hours):", new Integer(1), 1, null, true, false);
-				this.field_computationEstimateInHours.setWidth("100%");
-				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("Send email when finished:", true, false, false);
+				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("send email when finished", true, false);
 				break;
 				
 			default:
@@ -165,19 +162,19 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 			case SAVE_FOR_LATER:
 				addField("how to save", field_saveForLaterMode);
 				addField("name", field_experimentName);
+				addField("note", field_experimentNote);
 				break;
 				
 			case SAVE_FOR_EXECUTION:
 				addField("name", field_experimentName);
 				addField("priority", field_priorityAssignedByUser);
-				addField("computation estimate", field_computationEstimateInHours);
+				addField("note", field_experimentNote);
 				addField("email when finished", field_sendEmailWhenFinished);
 				break;
 			
 			default:
 				throw new IllegalStateException("Unknown state: " + saveMode.name());
 		}
-		addField("note", field_experimentNote);
 	}
 
 	@Override
@@ -213,11 +210,6 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 		return Integer.parseInt((String) field_priorityAssignedByUser.getValue());
 	}
 	
-	public Integer getComputationEstimateInHours()
-	{
-		return Integer.parseInt(field_computationEstimateInHours.getValue());
-	}
-	
 	public boolean getSendEmailWhenFinished()
 	{
 		return (Boolean) field_sendEmailWhenFinished.getConvertedValue();
@@ -243,7 +235,6 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 			case SAVE_FOR_EXECUTION: // full information needs to be provided
 				arguments.add(getExperimentName());
 				arguments.add(getPriorityAssignedByUser());
-				arguments.add(getComputationEstimateInHours());
 				arguments.add(getSendEmailWhenFinished());
 				arguments.add(getExperimentNote());
 				break;
