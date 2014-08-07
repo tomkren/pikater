@@ -34,4 +34,9 @@ public class Slot implements Concept {
 	public String getDescription() {
 		return this.description;
 	}
+	
+	public boolean isCompatibleWith(Slot otherSlot)
+	{
+		return slotType.equals(otherSlot.slotType);
+	}
 }
