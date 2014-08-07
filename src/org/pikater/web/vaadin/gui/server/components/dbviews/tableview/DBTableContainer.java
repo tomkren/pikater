@@ -6,8 +6,10 @@ import java.util.Set;
 
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
+import org.pikater.shared.database.views.base.values.DBViewValueType;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
+import org.pikater.shared.database.views.base.values.StringDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -20,6 +22,7 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.TextField;
 
 public class DBTableContainer implements Container.Sortable, ICommitable
 {
@@ -46,7 +49,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Class<? extends Object> getType(Object propertyId)
 	{
-		return getPresentationType((ITableColumn) propertyId);
+		return getPresentationType(this, (ITableColumn) propertyId);
 	}
 	
 	/**
@@ -196,24 +199,25 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	//-----------------------------------------------------------
 	// VIEW TYPE TO PRESENTATION TYPE BINDING METHODS
 	
-	public static Class<? extends Object> getPresentationType(ITableColumn column)
+	public static Class<? extends Object> getPresentationType(DBTableContainer container, ITableColumn column)
 	{
-		switch(column.getColumnType())
+		DBViewValueType columnType = container.getViewRoot().getUnderlyingDBView().getTypeForColumn(column); 
+		switch(columnType)
 		{
 			case BOOLEAN:
 				return CheckBox.class;
 			
 			case STRING:
-				return column.getColumnType().getResultJavaType(); // simply forward the type declaration
+				return TextField.class;
 			
 			case REPRESENTATIVE:
-				return ComboBox.class; // override the type declaration
+				return ComboBox.class;
 				
 			case NAMED_ACTION:
 				return Button.class;
 			
 			default:
-				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());
+				throw new IllegalStateException("Unknown state: " + columnType.name());
 		}
 	}
 	
@@ -221,25 +225,31 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	public static Property<? extends Object> getProperty(DBTableContainer container, ITableColumn column, AbstractTableRowDBView row, 
 			AbstractDBViewValue<? extends Object> value)
 	{
-		switch(column.getColumnType())
+		DBViewValueType columnType = container.getViewRoot().getUnderlyingDBView().getTypeForColumn(column);
+		switch(columnType)
 		{
 			case BOOLEAN:
-				return new DBTableItemPropertyCheck(container.getParentTable(), (BooleanDBViewValue) value);
+				DBTableItemPropertyCheck newProperty1 = new DBTableItemPropertyCheck(container.getParentTable(), (BooleanDBViewValue) value);
+				container.getViewRoot().onCellCreate(column, newProperty1.getValue());
+				return newProperty1;
 				
 			case STRING:
-				return new DBTableItemPropertyGeneric<Object>(container, column, (AbstractDBViewValue<Object>) value);
+				DBTableItemPropertyText newProperty2 = new DBTableItemPropertyText(container.getParentTable(), (StringDBViewValue) value);
+				container.getViewRoot().onCellCreate(column, newProperty2.getValue());
+				return newProperty2;
 			
 			case REPRESENTATIVE:
-				DBTableItemPropertyCombo result1 = new DBTableItemPropertyCombo(container.getParentTable(), (RepresentativeDBViewValue) value);
-				result1.getValue().setWidth("100%");
-				container.getViewRoot().onCellCreate(column, result1.getValue());
-				return result1;
+				DBTableItemPropertyCombo newProperty3 = new DBTableItemPropertyCombo(container.getParentTable(), (RepresentativeDBViewValue) value);
+				container.getViewRoot().onCellCreate(column, newProperty3.getValue());
+				return newProperty3;
 				
 			case NAMED_ACTION:
-				return new DBTableItemPropertyAction(container, column, row, (NamedActionDBViewValue) value);
+				DBTableItemPropertyAction newProperty4 = new DBTableItemPropertyAction(container, column, row, (NamedActionDBViewValue) value);
+				container.getViewRoot().onCellCreate(column, newProperty4.getValue());
+				return newProperty4;
 				
 			default:
-				throw new IllegalStateException("Unknown state: " + column.getColumnType().name());
+				throw new IllegalStateException("Unknown state: " + columnType.name());
 		}
 	}
 	
