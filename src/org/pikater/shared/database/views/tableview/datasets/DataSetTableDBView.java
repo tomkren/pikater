@@ -75,6 +75,8 @@ public class DataSetTableDBView extends AbstractTableDBView
 			{
 				case NUMBER_OF_INSTANCES:
 					return "INSTANCES";
+				case DEFAULT_TASK_TYPE:
+					return "TASK_TYPE";
 				default:
 					return this.name();	
 			}
