@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -24,7 +25,7 @@ public final class Input01_model {
 
         //Create validation method for a computing agent
         EvaluationMethod evaluationMethod = new EvaluationMethod();
-        evaluationMethod.setType("CrossValidation");
+        evaluationMethod.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
         
         //Create cross validation option                
         NewOption optionF = new NewOption("F",8);
@@ -44,7 +45,7 @@ public final class Input01_model {
 		comAgent.addOption(optionM);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
-		comAgent.setEvaluationMethod(new EvaluationMethod("CrossValidation"));
+		comAgent.setEvaluationMethod(new EvaluationMethod(CoreConstants.EVAL_METHOD_CROSSVALIDATION));
 		comAgent.setEvaluationMethod(evaluationMethod);
 		comAgent.setModel(83304);
 

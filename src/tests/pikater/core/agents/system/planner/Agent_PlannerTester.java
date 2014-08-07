@@ -12,12 +12,14 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaJ48;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
@@ -76,23 +78,29 @@ public class Agent_PlannerTester extends PikaterAgent {
     	
     	Datas datas = new Datas();
     	datas.addData(
-    			new Data("weather.arff",
+    			new Data(
     					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					"weather.arff",
     					DataTypes.TEST_DATA) );
     	datas.addData(
-    			new Data("weather.arff",
+    			new Data(
     					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					"weather.arff",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode("train_test");
-    	datas.setOutput("evaluation_only");
+    	datas.setMode(CoreConstants.MODE_TRAIN_TEST);
+    	datas.setOutput(CoreConstants.OUTPUT_EVALUATION_ONLY);
+    	
+        NewOption optionF = new NewOption("F", 8);
     	
     	EvaluationMethod method = new EvaluationMethod();
-    	method.setType("CrossValidation");
+    	method.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+    	method.addOption(optionF);
 
     	Task task = new Task();
     	task.setAgent(agent);
     	task.setDatas(datas);
     	task.setEvaluationMethod(method);
+    	task.setExpectedDuration(new LongTermDuration());
     	
         ExecuteTask executeTask = new ExecuteTask();
         executeTask.setTask(task);
@@ -133,23 +141,29 @@ public class Agent_PlannerTester extends PikaterAgent {
     	
     	Datas datas = new Datas();
     	datas.addData(
-    			new Data("weather.arff",
+    			new Data(
     					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					"weather.arff",
     					DataTypes.TEST_DATA) );
     	datas.addData(
-    			new Data("weather.arff",
+    			new Data(
     					"28c7b9febbecff6ce207bcde29fc0eb8",
+    					"weather.arff",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode("train_test");
-    	datas.setOutput("evaluation_only");
+    	datas.setMode(CoreConstants.MODE_TRAIN_TEST);
+    	datas.setOutput(CoreConstants.OUTPUT_EVALUATION_ONLY);
     	
+        NewOption optionF = new NewOption("F", 8);
+        
     	EvaluationMethod method = new EvaluationMethod();
-    	method.setType("CrossValidation");
-
+    	method.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+    	method.addOption(optionF);
+    	
     	Task task = new Task();
     	task.setAgent(agent);
     	task.setDatas(datas);
     	task.setEvaluationMethod(method);
+    	task.setExpectedDuration(new LongTermDuration());
     	
         ExecuteTask executeTask = new ExecuteTask();
         executeTask.setTask(task);
@@ -169,7 +183,6 @@ public class Agent_PlannerTester extends PikaterAgent {
 */
         } catch (CodecException | OntologyException e) {
             logError("Ontology/codec error occurred: "+e.getMessage(), e);
-            e.printStackTrace();
         }
 
     }

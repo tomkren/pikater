@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
@@ -12,7 +13,7 @@ public final class Input03 {
 	public static ComputationDescription createDescription() {
 		
         FileDataProvider fileDataProvider = new FileDataProvider();
-        fileDataProvider.setFileURI("?????.arff");
+        fileDataProvider.setFileURI("weather.arff");
 
         DataSourceDescription fileDataSource = new DataSourceDescription();
         fileDataSource.setDataProvider(fileDataProvider);
@@ -21,8 +22,8 @@ public final class Input03 {
 		comAgent1.setTrainingData(fileDataSource);
 		comAgent1.setTestingData(fileDataSource);
 		
-
-		NewOption optionOutput1 = new NewOption("output","evaluation_only");
+		NewOption optionOutput1 = new NewOption(
+				CoreConstants.OUTPUT, CoreConstants.OUTPUT_EVALUATION_ONLY); 
 
 		CARecSearchComplex complex1 = new CARecSearchComplex();
 		complex1.setComputingAgent(comAgent1);
@@ -39,7 +40,8 @@ public final class Input03 {
 		comAgent2.setTestingData(computingDataSource1);
 		comAgent2.setModel(null);
 
-		NewOption optionOutput2 = new NewOption("output","evaluation_only");
+		NewOption optionOutput2 = new NewOption(
+				CoreConstants.OUTPUT, CoreConstants.OUTPUT_EVALUATION_ONLY);
 
 		CARecSearchComplex complex2 = new CARecSearchComplex();
 		complex2.setComputingAgent(comAgent2);

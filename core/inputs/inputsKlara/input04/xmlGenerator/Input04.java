@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -30,8 +31,9 @@ public final class Input04 {
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
 		
-		EvaluationMethod em = new EvaluationMethod("Crossvalidation");
-		NewOption optionF = new NewOption("F",10);
+		NewOption optionF = new NewOption("F", 10);
+		
+		EvaluationMethod em = new EvaluationMethod(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
 		em.addOption(optionF);
 		
 		comAgent.setEvaluationMethod(em);

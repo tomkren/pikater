@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -41,8 +42,9 @@ public final class Input02 {
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
 		
-		EvaluationMethod em = new EvaluationMethod("Crossvalidation");
 		NewOption optionF = new NewOption("F",10);
+		
+		EvaluationMethod em = new EvaluationMethod(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
 		em.addOption(optionF);
 		
 		comAgent.setEvaluationMethod(em);

@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -25,7 +26,7 @@ public final class Input06 {
 
         //Create validation method for a computing agent
         EvaluationMethod evaluationMethod = new EvaluationMethod();
-        evaluationMethod.setType("CrossValidation");
+        evaluationMethod.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
         
         //Create cross validation option                
         NewOption optionF = new NewOption("F",8);
