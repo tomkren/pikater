@@ -21,8 +21,6 @@ public class WaitingTasksQueues {
 		longTermDurationQueue = new PriorityQueue<TaskToSolve>(10, comparator);
 	}
 	
-	Queue<TaskToSolve> queue = new PriorityQueue<TaskToSolve>();
-	
 	public void addTask(TaskToSolve taskToSolve) {
 		
 		IExpectedDuration expectedDuration =

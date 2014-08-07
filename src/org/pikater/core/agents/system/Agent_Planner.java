@@ -164,7 +164,7 @@ public class Agent_Planner extends PikaterAgent {
 		synchronized(Agent_Planner.class) {
 			this.cpuCoresStructure.setCPUCoreAsFree(cpuCore);
 			this.distributedData.saveLocationOfData(finishedTask);
-			//plan();
+			plan();
 		}
 		
 		/////
@@ -193,6 +193,13 @@ public class Agent_Planner extends PikaterAgent {
 
 		TaskToSolve task = waitingToStartComputingTasks.
 				removeTaskWithHighestPriority();
+		
+		// test if some task is available
+		if (task == null) {
+			//this.logError("Any task available");
+			return;
+		}
+		
 		task.getTask().setStart(Agent_DataManager.getCurrentPikaterDateString());
 
 		List<Object> recommendLocalitons = this.distributedData.
@@ -200,6 +207,13 @@ public class Agent_Planner extends PikaterAgent {
 		CPUCore selectedCore = this.cpuCoresStructure.
 				getTheBestCPUCoreForTask(task, recommendLocalitons);
 
+		// test if some core is available
+		if (selectedCore == null) {
+			//this.logError("Any core available");
+			this.waitingToStartComputingTasks.addTask(task);
+			return;
+		}
+		
 		this.cpuCoresStructure.setCPUCoreAsBusy(selectedCore, task);
 
 		PlannerCommunicator communicator = new PlannerCommunicator(this);
