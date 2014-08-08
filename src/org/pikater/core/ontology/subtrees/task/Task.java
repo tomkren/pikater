@@ -25,7 +25,6 @@ public class Task implements Concept {
 
 	private int batchID;
 	private int experimentID;
-	private int cpuCoreID;
 
 	// setting the task:
 	private Agent agent;
@@ -82,13 +81,6 @@ public class Task implements Concept {
 	}
 	public void setExperimentID(int experimentID) {
 		this.experimentID = experimentID;
-	}
-
-	public int getCpuCoreID() {
-		return cpuCoreID;
-	}
-	public void setCpuCoreID(int cpuCoreID) {
-		this.cpuCoreID = cpuCoreID;
 	}
 
 	public Agent getAgent() {
@@ -198,4 +190,12 @@ public class Task implements Concept {
 		return null;
 	}
 
+	public boolean equalsTask(Task task) {
+		boolean equals =
+				getGraphID() == task.getGraphID() &&
+				getNodeID() == task.getNodeID() &&
+				getComputationID() == task.getComputationID();
+		return equals;
+	}
+	
 }

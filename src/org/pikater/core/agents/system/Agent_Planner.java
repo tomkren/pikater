@@ -202,12 +202,11 @@ public class Agent_Planner extends PikaterAgent {
 		
 		Task finishedTask = (Task) result.getValue();
 		finishedTask.setFinish(Agent_DataManager.getCurrentPikaterDateString());
-		
-		CPUCore cpuCore = new CPUCore(
-				finishedTaskMsg.getSender(), finishedTask.getCpuCoreID());
 
-		TaskToSolve taskToSolve = cpuCoresStructure.getComputingTask(
-				finishedTask.getGraphID());
+		CPUCore cpuCore = cpuCoresStructure.
+				getCPUCoreOfComputingTask(finishedTask);
+		TaskToSolve taskToSolve = cpuCoresStructure.
+				getTaskToSolveOfComputingTask(finishedTask);
 
 		try {
 			lock.lock();
@@ -268,7 +267,7 @@ public class Agent_Planner extends PikaterAgent {
 		}
 		
 		
-		task.setCpuCoreID(selectedCore.getCoreID());
+		//task.setCpuCoreID(selectedCore.getCoreID());
 		this.cpuCoresStructure.setCPUCoreAsBusy(selectedCore, taskToSolve);
 
 		PlannerCommunicator communicator = new PlannerCommunicator(this);

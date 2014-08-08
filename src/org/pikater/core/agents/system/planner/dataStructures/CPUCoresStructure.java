@@ -16,6 +16,7 @@ import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 public class CPUCoresStructure {
 
@@ -112,6 +113,36 @@ public class CPUCoresStructure {
 			return null;
 		}
 		return untappedCores.get(0);
+	}
+	
+	public CPUCore getCPUCoreOfComputingTask(Task task) {
+		
+		List<CPUCore> cpuCores = new ArrayList<CPUCore>();
+		cpuCores.addAll(busyCores.keySet());
+		for (CPUCore cpuCoreI : cpuCores) {
+			TaskToSolve taskToSolveI = busyCores.get(cpuCoreI);
+			Task taskI = taskToSolveI.getTask();
+			
+			if (taskI.equalsTask(task)) {
+				return cpuCoreI;
+			}
+		}
+		return null;
+	}
+
+	public TaskToSolve getTaskToSolveOfComputingTask(Task task) {
+		
+		List<CPUCore> cpuCores = new ArrayList<CPUCore>();
+		cpuCores.addAll(busyCores.keySet());
+		for (CPUCore cpuCoreI : cpuCores) {
+			TaskToSolve taskToSolveI = busyCores.get(cpuCoreI);
+			Task taskI = taskToSolveI.getTask();
+			
+			if (taskI.equalsTask(task)) {
+				return taskToSolveI;
+			}
+		}
+		return null;
 	}
 	
 	public TaskToSolve getComputingTask(int taskID) {
