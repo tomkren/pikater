@@ -134,8 +134,10 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		try {
 			myAgent.getContentManager().fillContent(req, a);
 			
-		} catch (CodecException | OntologyException ce) {
+		} catch (CodecException ce) {
 			myAgent.logError(ce.getMessage(), ce);
+		} catch (OntologyException ce) {
+			myAgent.logError(ce.getMessage(), ce);			
 		}
 
         return req;

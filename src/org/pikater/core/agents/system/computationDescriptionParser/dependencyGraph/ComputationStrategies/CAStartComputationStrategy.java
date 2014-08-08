@@ -79,7 +79,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	//Create new options from solution with filled ? values (convert solution->options) 
 	private NewOptions fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
         NewOptions res_options = new NewOptions();
-		List<NewOption> options_list = new ArrayList<>();
+		List<NewOption> options_list = new ArrayList<NewOption>();
 		if(options==null){
 			return res_options;
 		}
@@ -193,7 +193,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 
 		try {
 			myAgent.getContentManager().fillContent(request, a);
-		} catch (CodecException | OntologyException e) {
+		} catch (CodecException e) {
+			myAgent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
 			myAgent.logError(e.getMessage(), e);
 		}
 

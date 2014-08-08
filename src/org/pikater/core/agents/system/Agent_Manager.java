@@ -40,12 +40,12 @@ public class Agent_Manager extends PikaterAgent {
 
 	private static final long serialVersionUID = -5140758757320827589L;
 
-    protected Set<Subscription> subscriptions = new HashSet<>();
+    protected Set<Subscription> subscriptions = new HashSet<Subscription>();
 	protected HashMap<Integer, ComputationCollectionItem> computationCollection =
-			new HashMap<>();
+			new HashMap<Integer, ComputationCollectionItem>();
 	
 	public HashMap<String, ACLMessage> searchMessages =
-			new HashMap<>();
+			new HashMap<String, ACLMessage>();
 	
 	public ComputationCollectionItem getComputation(Integer id){
 		return computationCollection.get(id);
@@ -58,7 +58,7 @@ public class Agent_Manager extends PikaterAgent {
 	@Override
 	public List<Ontology> getOntologies() {
 		
-		List<Ontology> ontologies = new ArrayList<>();
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(AccountOntology.getInstance());
 		ontologies.add(RecommendOntology.getInstance());
 		ontologies.add(SearchOntology.getInstance());

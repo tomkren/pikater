@@ -10,7 +10,7 @@ import java.util.LinkedList;
  * Time: 12:07
  */
 public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
-    LinkedList<E> buffer=new LinkedList<>();
+    LinkedList<E> buffer=new LinkedList<E>();
 
     public StandardBuffer(ComputationNode source, ComputationNode target) {
            super(source,target);

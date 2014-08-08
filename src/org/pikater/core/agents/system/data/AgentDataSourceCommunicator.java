@@ -73,9 +73,18 @@ public class AgentDataSourceCommunicator {
             ACLMessage msg_reply = FIPAService.doFipaRequestClient(initAgent, msg);
             DataSourcePath result=(DataSourcePath)((Result)msg_reply.getContentObject()).getValue();
             return result.getPath();
-        } catch (Codec.CodecException | UnreadableException | FIPAException | OntologyException e) {
+        } catch (Codec.CodecException e) {
+        	initAgent.logError(e.getMessage(), e);
+        } catch (UnreadableException e) {
+        	initAgent.logError(e.getMessage(), e);
+        } catch (FIPAException e) {
+        	initAgent.logError(e.getMessage(), e);
+        } catch (OntologyException e) {
         	initAgent.logError(e.getMessage(), e);
         }
+ 
+ 
+ 
         return "failure";
     }
 
@@ -96,7 +105,9 @@ public class AgentDataSourceCommunicator {
         try {
             initAgent.getContentManager().fillContent(msg, a);
             initAgent.send(msg);
-        } catch (Codec.CodecException | OntologyException e) {
+        } catch (Codec.CodecException e) {
+        	initAgent.logError(e.getMessage(), e);
+        } catch (OntologyException e) {
         	initAgent.logError(e.getMessage(), e);
         }
     }

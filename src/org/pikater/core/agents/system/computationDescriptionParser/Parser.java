@@ -19,7 +19,7 @@ import java.util.List;
 
 public class Parser {
     private ComputationGraph computationGraph=new ComputationGraph();
-    private HashMap<Integer,ComputationNode> alreadyProcessed=new HashMap<>();
+    private HashMap<Integer,ComputationNode> alreadyProcessed=new HashMap<Integer,ComputationNode>();
     private Agent_Manager agent = null;
     private int priority;
 
@@ -90,7 +90,7 @@ public class Parser {
             return;
         }
         //handle parent - set him as file receiver
-        ComputationOutputBuffer<EdgeValue> fileBuffer=new StandardBuffer<>(parent,child);
+        ComputationOutputBuffer<EdgeValue> fileBuffer=new StandardBuffer<EdgeValue>(parent,child);
         parent.addBufferToOutput(connectionName,fileBuffer);
         child.addInput(connectionName,fileBuffer);
     }
@@ -105,7 +105,7 @@ public class Parser {
             return;
         }
         ComputationNode errorNode=alreadyProcessed.get(errorProvider.getId());
-        StandardBuffer<ErrorEdge> buffer=new StandardBuffer<>(errorNode,child);
+        StandardBuffer<ErrorEdge> buffer=new StandardBuffer<ErrorEdge>(errorNode,child);
         errorNode.addBufferToOutput(errorDescription.getType(), buffer);
         child.addInput(errorDescription.getType(),buffer);
         buffer.block();
@@ -273,7 +273,7 @@ public class Parser {
         recNode.addBufferToOutput("agenttype",recBuffer);
         child.addInput("agenttype",recBuffer);
 
-        StandardBuffer<OptionEdge> optionsBuffer=new StandardBuffer<>(recNode,child);
+        StandardBuffer<OptionEdge> optionsBuffer=new StandardBuffer<OptionEdge>(recNode,child);
         recNode.addBufferToOutput("options",optionsBuffer);
         child.addInput("options",optionsBuffer);
         computationGraph.addNode(recNode);
@@ -283,7 +283,7 @@ public class Parser {
         DataSourceEdge copy=new DataSourceEdge();
         copy.setDataSourceId(ds.getDataSourceId());
         copy.setFile(ds.isFile());
-        NeverEndingBuffer<DataSourceEdge> training=new NeverEndingBuffer<>(copy);
+        NeverEndingBuffer<DataSourceEdge> training=new NeverEndingBuffer<DataSourceEdge>(copy);
         training.setTarget(recNode);
         recNode.addInput("training",training);
 

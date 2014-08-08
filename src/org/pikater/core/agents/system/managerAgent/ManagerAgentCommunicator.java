@@ -138,7 +138,11 @@ public class ManagerAgentCommunicator {
 				agent.log("LoadAgent for model "+ modelId +" finished, AID="+response.getContent());
 				return new AID(response.getContent(), AID.ISLOCALNAME);
 			}
-		} catch (CodecException | OntologyException | FIPAException e) {
+		} catch (CodecException e) {
+			agent.logError("LoadAgent service failure", e);
+		} catch (OntologyException e) {
+			agent.logError("LoadAgent service failure", e);
+		} catch (FIPAException e) {
 			agent.logError("LoadAgent service failure", e);
 		}
 		throw new IllegalStateException("LoadAgent for model "+modelId+" failed");

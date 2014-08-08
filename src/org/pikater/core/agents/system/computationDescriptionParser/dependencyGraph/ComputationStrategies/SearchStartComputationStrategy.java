@@ -187,7 +187,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	//Create schema of solutions from options (Convert options->schema)
 
 	private List convertOptionsToSchema(List<NewOption> options){
-		List<NewOption> new_schema = new ArrayList<>();
+		List<NewOption> new_schema = new ArrayList<NewOption>();
 
 		if(options==null)
 			return new_schema;

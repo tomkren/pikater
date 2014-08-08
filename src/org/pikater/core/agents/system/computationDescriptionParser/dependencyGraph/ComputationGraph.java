@@ -12,7 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Time: 21:27
  */
 public class ComputationGraph {
-    private HashMap<Integer,ComputationNode> nodes=new HashMap<>();
+    private HashMap<Integer,ComputationNode> nodes=new HashMap<Integer,ComputationNode>();
 
     private int id;
     
