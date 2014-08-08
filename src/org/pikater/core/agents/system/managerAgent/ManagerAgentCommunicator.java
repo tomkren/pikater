@@ -25,11 +25,14 @@ import org.pikater.core.ontology.subtrees.model.Model;
  * this template use File | Settings | File Templates.
  */
 public class ManagerAgentCommunicator {
-
 	public AID createAgent(PikaterAgent agent,
 			String type, String name, Arguments options) {
+		return createAgent(agent, type, name, options, new AID(AgentNames.MANAGER_AGENT, false));
+	}
 
-		AID agentManagerAID = new AID(AgentNames.MANAGER_AGENT, false);
+	public AID createAgent(PikaterAgent agent,
+			String type, String name, Arguments options, AID agentManagerAID) {
+
 		Ontology ontology = AgentManagementOntology.getInstance();
 
 		ACLMessage msgCreateA = new ACLMessage(ACLMessage.REQUEST);
@@ -118,6 +121,10 @@ public class ManagerAgentCommunicator {
 	}
 	
 	public static AID loadAgent(PikaterAgent agent, int modelId) {
+		return loadAgent(agent, modelId, new AID(AgentNames.MANAGER_AGENT, false));
+	}
+	
+	public static AID loadAgent(PikaterAgent agent, int modelId, AID manager) {
 		Model m = DataManagerService.getModel(agent, modelId);
 		agent.log("got model, agent size "+m.getSerializedAgent().length+", result ID "+m.getResultID());
 
@@ -126,7 +133,7 @@ public class ManagerAgentCommunicator {
 		act.setFilename(m.getAgentClassName());
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID(AgentNames.MANAGER_AGENT, false));
+		request.addReceiver(manager);
 		request.setOntology(AgentManagementOntology.getInstance().getName());
 		request.setLanguage(agent.getCodec().getName());
 		try {

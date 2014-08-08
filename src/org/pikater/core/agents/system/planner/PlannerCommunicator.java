@@ -59,14 +59,12 @@ public class PlannerCommunicator {
 		AID caAID;
 
 		if (task.getAgent().getModel() != null) {
-			// TODO FIXME ve tride loadAgent je AID agentManagera natvrdo, agentManagerAID se nepouzije
-			caAID = ManagerAgentCommunicator.loadAgent(agent, task.getAgent().getModel());
+			caAID = ManagerAgentCommunicator.loadAgent(agent, task.getAgent().getModel(), agentManagerAID);
 			agent.log("CA model " + task.getAgent().getModel() + " resurrected");
 		} else {
 			String CAtype = task.getAgent().getType();
 			agent.log("Sending request to create CA " + CAtype);
-			caAID = comm.createAgent(agent, CAtype, CAtype, new Arguments());
-			// TODO FIXME ve tride createAgent je AID agentManagera natvrdo, agentManagerAID se nepouzije
+			caAID = comm.createAgent(agent, CAtype, CAtype, new Arguments(), agentManagerAID);
 			//agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
 			agent.log("CA " + CAtype + " created");
 		}
