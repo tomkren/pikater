@@ -34,8 +34,9 @@ import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 public class DatabaseTest {
 	
 	public void test(){
+		listVisibleAndApprovedDatasets();
 		//removeResult();
-		listDataSetsWithResults();
+		//listDataSetsWithResults();
 		//listDataSets();
 		//addExperiment();
 		//listExternalAgents();
@@ -48,6 +49,34 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void listVisibleAndApprovedDatasets() {
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllVisible(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
+		p("No. of found visible DataSets: "+dslos.size());
+		p("No. of all visible DataSets: "+DAOs.dataSetDAO.getAllVisibleCount());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+		}
+		p("------------");
+		p("");
+		
+		dslos= DAOs.dataSetDAO.getAllVisibleApproved(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
+		p("No. of found visible and approved DataSets: "+dslos.size());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+		}
+		p("------------");
+		p("");
+		
+		dslos= DAOs.dataSetDAO.getByOwnerVisible(DAOs.userDAO.getByLogin("sp").get(0),0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
+		p("No. of found visible DataSets for user sp: "+dslos.size());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+		}
+		p("------------");
+		p("");
+		
+	}
+
 	private void listDataSetsWithResults() {
 		//List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllWithResults();
 		List<String> exlist=new ArrayList<String>();

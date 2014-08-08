@@ -2,6 +2,7 @@ package org.pikater.shared.database.views.tableview.datasets;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
@@ -62,13 +63,17 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				@Override
 				protected void updateEntities(Boolean newValue)
 				{
-					// TODO Auto-generated method stub
+					dataset.setApproved(!dataset.isApproved());
 				}
-				
+				/**
+				 * TODO: pikater core will see all datasets (visible restrictions are only in getAll, getByOwner methords
+				 * which are used by web)
+				 * I added DatasetDAO#getAllVisibleApproved which will maybe be useful in input box, to generate list from which user can select input dataset)
+				 */
 				@Override
 				protected void commitEntities()
 				{
-					// TODO Auto-generated method stub
+					DAOs.dataSetDAO.updateEntity(dataset);
 				}
 			};
 		case DOWNLOAD:
@@ -96,18 +101,19 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				@Override
 				public boolean isEnabled()
 				{
-					return true;
+					return dataset.isVisible();
 				}
 				
 				@Override
 				protected void updateEntities()
 				{
+					dataset.setVisible(false);
 				}
 				
 				@Override
 				protected void commitEntities()
 				{
-					// TODO: don't really delete but "hide" instead?
+					DAOs.dataSetDAO.updateEntity(dataset);
 				}
 			};
 
