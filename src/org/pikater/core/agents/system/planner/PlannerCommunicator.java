@@ -90,11 +90,9 @@ public class PlannerCommunicator {
 		try {
 			agent.getContentManager().fillContent(msg, executeAction);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		}
 
 		agent.addBehaviour(new OneTaskComputingCABehaviour(agent, msg));
@@ -116,11 +114,9 @@ public class PlannerCommunicator {
 		try {
 			agent.getContentManager().fillContent(msg, executeAction);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		}
 
 		ACLMessage reply = null;
@@ -138,14 +134,11 @@ public class PlannerCommunicator {
 			return computerInfo;
 			
 		} catch (UngroundedException e) {
-			agent.log(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.log(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.log(e.getMessage());
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		}
 		
 		return null;

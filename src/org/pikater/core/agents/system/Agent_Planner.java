@@ -32,6 +32,7 @@ import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.systemLoad.GetSystemLoad;
 import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
+import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 
@@ -103,6 +104,10 @@ public class Agent_Planner extends PikaterAgent {
 					
 					if (a.getAction() instanceof GetSystemLoad) {
 						return respondToGetSystemLoad(request, a);
+					}
+					
+					if (a.getAction() instanceof KillTasks) {
+						return respondToKillTasks(request, a);
 					}
 					
 				} catch (OntologyException e) {
@@ -240,6 +245,11 @@ public class Agent_Planner extends PikaterAgent {
 		//reply.setContent("OK - FinishedTask msg recieved");
 	}
 
+	private ACLMessage respondToKillTasks(ACLMessage request, Action a) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	private void plan() {
 		
 		TaskToSolve taskToSolve = waitingToStartComputingTasks.
