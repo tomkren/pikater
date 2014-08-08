@@ -22,6 +22,9 @@
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent">
         </agent>
 
+        <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent1">
+        </agent>
+
         <!-- <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
             <arguments>
                 <argument key="sniffed" value="Manager" sendOnlyValue="true" />

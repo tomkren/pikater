@@ -38,7 +38,7 @@ public class CPUCore {
 
          CPUCore rhs = (CPUCore) obj;
          return new EqualsBuilder().
-             append(aID.getHap(), rhs.getAID().getHap()).
+             append(aID.getHap(), rhs.getAID().getName()). //getHap()).
              append(coreID, rhs.getCoreID()).
              isEquals();
      }
