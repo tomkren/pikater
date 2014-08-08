@@ -24,6 +24,7 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
+import org.pikater.shared.database.utils.ResultExporter;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
@@ -34,7 +35,8 @@ import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 public class DatabaseTest {
 	
 	public void test(){
-		listVisibleAndApprovedDatasets();
+		exportResults();
+		//listVisibleAndApprovedDatasets();
 		//removeResult();
 		//listDataSetsWithResults();
 		//listDataSets();
@@ -49,6 +51,13 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void exportResults() {
+		JPABatch batch=DAOs.batchDAO.getByID(87801, EmptyResultAction.NULL);
+		ResultExporter exp=new ResultExporter(System.err);
+		exp.export(batch);
+		exp.flush();
+	}
+
 	private void listVisibleAndApprovedDatasets() {
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllVisible(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
 		p("No. of found visible DataSets: "+dslos.size());
