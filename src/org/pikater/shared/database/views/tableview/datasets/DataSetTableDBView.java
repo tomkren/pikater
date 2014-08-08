@@ -139,11 +139,11 @@ public class DataSetTableDBView extends AbstractTableDBView
 		int allDatasetCount=0;
 		
 		if(this.adminMode()){
-			allDatasets = DAOs.dataSetDAO.getAll(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allDatasetCount=DAOs.dataSetDAO.getAllCount();
+			allDatasets = DAOs.dataSetDAO.getAllVisible(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			allDatasetCount=DAOs.dataSetDAO.getAllVisibleCount();
 		}else{
-			allDatasets = DAOs.dataSetDAO.getByOwner(owner,constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allDatasetCount=DAOs.dataSetDAO.getByOwnerCount(owner);
+			allDatasets = DAOs.dataSetDAO.getByOwnerVisible(owner,constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			allDatasetCount=DAOs.dataSetDAO.getByOwnerVisibleCount(owner);
 		}
 		
 		List<DataSetTableDBRow> rows = new ArrayList<DataSetTableDBRow>();

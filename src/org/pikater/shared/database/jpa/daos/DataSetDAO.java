@@ -74,11 +74,38 @@ public class DataSetDAO extends AbstractDAO{
 	}
 	
 	public List<JPADataSetLO> getAll(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder) {
+		return this.getAll(offset, maxResults, sortColumn, sortOrder, true, false);
+	}
+	
+	public List<JPADataSetLO> getAllVisible(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder) {
+		return this.getAll(offset, maxResults, sortColumn, sortOrder, false, false);
+	}
+	
+	public List<JPADataSetLO> getAllVisibleApproved(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder) {
+		return this.getAll(offset, maxResults, sortColumn, sortOrder, false, true);
+	}
+	
+	/**
+	 * Returns a list of all datasets available in the database. The result include invisible datasets if the last parameter is set to true. 
+	 * @param offset the position from which the elements are returned
+	 * @param maxResults maximum number of retrieved elements
+	 * @param sortColumn column upon which the result is sorted
+	 * @param sortOrder ascending or descending order of sorting
+	 * @param includeDeleted false to retrieve only visible datasets, true to retrieve all items
+	 * @return the list of all visible datasets
+	 */
+	public List<JPADataSetLO> getAll(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder,boolean includeDeleted,boolean justApproved) {
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb=em.getCriteriaBuilder();
 		CriteriaQuery<JPADataSetLO> q=cb.createQuery(JPADataSetLO.class);
 		Root<JPADataSetLO> c=q.from(JPADataSetLO.class);
 		q.select(c);
+		if(!includeDeleted){
+			q.where(cb.equal(c.get("visible"), true));
+		}
+		if(justApproved){
+			q.where(cb.equal(c.get("approved"), true));
+		}
 		switch (sortOrder) {
 		case ASCENDING:
 			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
@@ -98,12 +125,23 @@ public class DataSetDAO extends AbstractDAO{
 	}
 	
 	public List<JPADataSetLO> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder) {
+		return this.getByOwner(owner, offset, maxResults, sortColumn, sortOrder,true);
+	}
+	
+	public List<JPADataSetLO> getByOwnerVisible(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder) {
+		return this.getByOwner(owner, offset, maxResults, sortColumn, sortOrder,false);
+	}
+	
+	public List<JPADataSetLO> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder, boolean includeDeleted) {
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb=em.getCriteriaBuilder();
 		CriteriaQuery<JPADataSetLO> q=cb.createQuery(JPADataSetLO.class);
 		Root<JPADataSetLO> c=q.from(JPADataSetLO.class);
 		q.select(c);
 		q.where(cb.equal(c.get("owner"), owner));
+		if(!includeDeleted){
+			q.where(cb.equal(c.get("visible"), true));
+		}
 		switch (sortOrder) {
 		case ASCENDING:
 			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
@@ -126,6 +164,14 @@ public class DataSetDAO extends AbstractDAO{
 		return ((Long)EntityManagerInstancesCreator
 				.getEntityManagerInstance()
 				.createNamedQuery("DataSetLO.getAll.count")
+				.getSingleResult())
+				.intValue();
+	}
+	
+	public int getAllVisibleCount(){
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("DataSetLO.getAllVisible.count")
 				.getSingleResult())
 				.intValue();
 	}
@@ -166,6 +212,15 @@ public class DataSetDAO extends AbstractDAO{
 		return ((Long)EntityManagerInstancesCreator
 				.getEntityManagerInstance()
 				.createNamedQuery("DataSetLO.getByOwner.count")
+				.setParameter("owner", user)
+				.getSingleResult())
+				.intValue();
+	}
+	
+	public int getByOwnerVisibleCount(JPAUser user){
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("DataSetLO.getByOwnerVisible.count")
 				.setParameter("owner", user)
 				.getSingleResult())
 				.intValue();

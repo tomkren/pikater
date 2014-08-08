@@ -29,10 +29,12 @@ import org.pikater.shared.database.jpa.daos.DataSetDAO;
 @NamedQueries({
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getAll.count",query="select count(dslo) from JPADataSetLO dslo"),
+	@NamedQuery(name="DataSetLO.getAllVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getAllWithResults",query="select dslo from JPADataSetLO dslo where exists (select r from JPAResult r where r.serializedFileName = dslo.hash) "),
 	@NamedQuery(name="DataSetLO.getByID",query="select dslo from JPADataSetLO dslo where dslo.id=:id"),
 	@NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner"),
 	@NamedQuery(name="DataSetLO.getByOwner.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner"),
+	@NamedQuery(name="DataSetLO.getByOwnerVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner and dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getByOID",query="select dslo from JPADataSetLO dslo where dslo.OID=:oid"),
 	@NamedQuery(name="DataSetLO.getByHash",query="select dslo from JPADataSetLO dslo where dslo.hash=:hash"),
 	@NamedQuery(name="DataSetLO.getByDescription",query="select dslo from JPADataSetLO dslo where dslo.description=:description")
@@ -61,9 +63,12 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	private Date created;
 	private long size;
 	private boolean approved;
+	private boolean visible;
 	
 	/**Constructor for JPA compatibility**/
-	public JPADataSetLO(){}
+	public JPADataSetLO(){
+		this.visible=true;
+	}
 	
 	/**
 	 * Cretes a new JPA Entity insance of dataset.
@@ -72,6 +77,7 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	 * @param owner JPAUser owner of the DataSet
 	 */
 	public JPADataSetLO(JPAUser owner){
+		this();
 		this.setOwner(owner);
 		this.setCreated(new Date());
 	}
@@ -144,6 +150,13 @@ public class JPADataSetLO extends JPAAbstractEntity{
 		this.approved = approved;
 	}
 
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
 	@Transient
 	public static final String EntityName = "DataSetLO";
 	@Override
