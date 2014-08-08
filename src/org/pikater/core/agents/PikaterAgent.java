@@ -78,7 +78,7 @@ public abstract class PikaterAgent extends Agent {
 	}
 
 	protected boolean registerWithDF(String service) {
-		List<String> st = new ArrayList<>();
+		List<String> st = new ArrayList<String>();
 		st.add(service);
 		return registerWithDF(st);
 	}
@@ -201,8 +201,10 @@ public abstract class PikaterAgent extends Agent {
 					} else {
 						throw new NotUnderstoodException("Unknown action requested");
 					}
-				} catch (CodecException | OntologyException e) {
-					throw new NotUnderstoodException("Unknown codec/ontology: " + e.getMessage());
+				} catch (CodecException e) {
+					throw new NotUnderstoodException("Unknown codec: " + e.getMessage());
+				} catch (OntologyException e) {
+					throw new NotUnderstoodException("Unknown ontology: " + e.getMessage());
 				}
 			}
 		});

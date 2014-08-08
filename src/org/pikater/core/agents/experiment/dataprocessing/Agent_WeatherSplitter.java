@@ -110,8 +110,10 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 						return respondToExecute(request);
 					else
 						throw new RefuseException("Invalid action requested");
-				} catch (CodecException | OntologyException e) {
-					throw new FailureException("Unknown codec/ontology: " + e.getMessage());
+				} catch (CodecException e) {
+					throw new FailureException("Unknown codec: " + e.getMessage());
+				} catch (OntologyException e) {
+					throw new FailureException("Unknown ontology: " + e.getMessage());
 				} catch (ContentException e) {
 					throw new FailureException("Content problem: " + e.getMessage());
 				} catch (FIPAException e) {
@@ -131,7 +133,10 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		try {
 			content = (ExecuteTask) ((Action)getContentManager().extractContent(request)).getAction();
 			performed = performTask(content.getTask());
-		} catch (CodecException | OntologyException e) {
+		} catch (CodecException e) {
+			logError("Failed to extract task", e);
+			throw e;
+		} catch (OntologyException e) {
 			logError("Failed to extract task", e);
 			throw e;
 		}
