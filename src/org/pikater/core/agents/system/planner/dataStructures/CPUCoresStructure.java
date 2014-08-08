@@ -47,6 +47,7 @@ public class CPUCoresStructure {
 		
 		List<DFAgentDescription> descriptions =
 				new ArrayList<DFAgentDescription>(Arrays.asList(result));
+
 		for (DFAgentDescription descriptionI : descriptions) {
 			
 			AID managerAgentAID = descriptionI.getName();
