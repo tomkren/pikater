@@ -82,9 +82,9 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				Result result = (Result) content;					
 				Task t = (Task)result.getValue();
                 ComputationCollectionItem computation =
-                		myAgent.getComputation(t.getGraphId());
+                		myAgent.getComputation(t.getGraphID());
                 ComputationNode node =
-                		computation.getProblemGraph().getNode(t.getNodeId());
+                		computation.getProblemGraph().getNode(t.getNodeID());
                 if (node.ContainsOutput("file"))
                 {
                     DataSourceEdge labeledData = new DataSourceEdge();
@@ -92,11 +92,11 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                 }
 
 				// save results to the database										
-				if (t.isSave_results()){
+				if (t.getSaveResults()){
 					DataManagerService.saveResult(myAgent, t, t.getExperimentID());
 				}
                 Task task=(Task)result.getValue();
-                ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationId());
+                ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationID());
                 node.addToOutputAndProcess(errorEdge,"error");
                 node.computationFinished();
 				     //TODO: what is this? just send labeled data?

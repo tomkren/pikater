@@ -117,7 +117,7 @@ public class CPUCoresStructure {
 	public TaskToSolve getComputingTask(int taskID) {
 	
 		for (TaskToSolve taskToSolveI : busyCores.values()) {
-			if (taskToSolveI.getTask().getGraphId() == taskID) {
+			if (taskToSolveI.getTask().getGraphID() == taskID) {
 				return taskToSolveI;
 			}
 		}

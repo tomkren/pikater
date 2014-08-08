@@ -142,7 +142,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
             inputs.get("options").block();
             SolutionEdge solutionEdge = (SolutionEdge)inputs.get("searchedoptions").getNext();
             usedoptions =  fillOptionsWithSolution(options.getOptions(), solutionEdge.getOptions());
-            task.setComputationId(solutionEdge.getComputationID());
+            task.setComputationID(solutionEdge.getComputationID());
 		}
 		agent.setOptions(usedoptions.getOptions());
 		
@@ -162,10 +162,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, 1));
 
 		IExpectedDuration duration = computationNode.getExpectedDuration();
-		task.setSave_results(true);
+		task.setSaveResults(true);
 		task.setSaveMode("message");
-		task.setNodeId(computationNode.getId());
-		task.setGraphId(graphId);
+		task.setNodeID(computationNode.getId());
+		task.setGraphID(graphId);
 		task.setAgent(agent);
 		task.setDatas(datas);
 		task.setExpectedDuration(duration);
