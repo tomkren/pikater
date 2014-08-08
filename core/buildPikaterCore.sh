@@ -3,4 +3,4 @@
 dir="`dirname $0`/.."
 cd "$dir"
 
-ant -buildfile buildCore.xml build;
+ant -buildfile build-core.xml build;

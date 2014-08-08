@@ -50,34 +50,34 @@ public class WaitingTasksQueues {
 	}
 
 	public void removeTasks(int batchID) {
-		
+
 		Comparator<TaskToSolve> comparator = new PlannerComparator();
 
 		PriorityQueue<TaskToSolve> newShortTimeDurationQueue =
-				 new PriorityQueue<TaskToSolve>(10, comparator);
-        while (!shortTimeDurationQueue.isEmpty()) {
-        	TaskToSolve taskToSolveI = shortTimeDurationQueue.remove();
-        	Task taskI = taskToSolveI.getTask();
-        	
-        	if (taskI.getBatchID() != batchID) {
-        		newShortTimeDurationQueue.add(taskToSolveI);
-        	}
-        }
+				new PriorityQueue<TaskToSolve>(10, comparator);
+		while (!shortTimeDurationQueue.isEmpty()) {
+			TaskToSolve taskToSolveI = shortTimeDurationQueue.remove();
+			Task taskI = taskToSolveI.getTask();
+
+			if (taskI.getBatchID() != batchID) {
+				newShortTimeDurationQueue.add(taskToSolveI);
+			}
+		}
 		shortTimeDurationQueue = newShortTimeDurationQueue;
-		
+
 		PriorityQueue<TaskToSolve> newLongTermDurationQueue =
-				 new PriorityQueue<TaskToSolve>(10, comparator);
-        while (!longTermDurationQueue.isEmpty()) {
-       	TaskToSolve taskToSolveI = longTermDurationQueue.remove();
-       	Task taskI = taskToSolveI.getTask();
-       	
-	       	if (taskI.getBatchID() != batchID) {
-	       		newLongTermDurationQueue.add(taskToSolveI);
-	       	}
-       }
-       longTermDurationQueue = newLongTermDurationQueue;
+				new PriorityQueue<TaskToSolve>(10, comparator);
+		while (!longTermDurationQueue.isEmpty()) {
+			TaskToSolve taskToSolveI = longTermDurationQueue.remove();
+			Task taskI = taskToSolveI.getTask();
+
+			if (taskI.getBatchID() != batchID) {
+				newLongTermDurationQueue.add(taskToSolveI);
+			}
+		}
+		longTermDurationQueue = newLongTermDurationQueue;
 	}
-	
+
 	public int getNumberOfTasksInQueue() {
 		return shortTimeDurationQueue.size() +
 				longTermDurationQueue.size();
