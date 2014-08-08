@@ -13,6 +13,9 @@
         <agent type="org.pikater.core.agents.system.Agent_DataManager" name="DataManager">
         </agent>
 
+        <agent type="org.pikater.core.agents.system.Agent_MetadataQueen" name="Freddie">
+        </agent>
+
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent">
         </agent>
 
@@ -29,6 +32,9 @@
         <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara">
         </agent>
         -->
+
+        <agent type="org.pikater.core.agents.system.Agent_AgentInfoManager" name="AgentInfoManager">
+        </agent>
 
     </agents>
 </configuration>
