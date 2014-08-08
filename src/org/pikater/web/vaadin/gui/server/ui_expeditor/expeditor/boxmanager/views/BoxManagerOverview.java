@@ -158,7 +158,7 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 	
 	private Component createSlotRow(Slot slot, Button actionButton)
 	{
-		boolean isSlotConnected = getContext().getCurrentBoxDataSource().isLocalSlotConnected(slot);
+		boolean isSlotConnected = getContext().getCurrentGraph().getSlotConnections().isSlotConnectedToAValidEndpoint(slot);
 		LedIndicator ledComponent = new LedIndicator(isSlotConnected ? LedIndicatorTheme.GREEN : LedIndicatorTheme.RED, new MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = -4691336564643469439L;
