@@ -28,6 +28,7 @@ import org.pikater.core.ontology.subtrees.task.Task;
 public class ComputingCommunicator {
 
 	public ACLMessage executeTask(Agent_ComputingAgent agent, ACLMessage req) {
+		
 		ACLMessage resultMsg = req.createReply();
 		if (agent.acceptTask()) {
 			resultMsg.setPerformative(ACLMessage.AGREE);
