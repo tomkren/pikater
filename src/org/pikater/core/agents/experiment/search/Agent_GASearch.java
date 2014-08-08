@@ -206,7 +206,7 @@ public class Agent_GASearch extends Agent_Search {
 	//new random options
 	private SearchSolution randomIndividual() {
 		
-		List<IValueData> new_solution = new ArrayList<>();
+		List<IValueData> new_solution = new ArrayList<IValueData>();
 		for (SearchItem si : getSchema() ) {
             IValueData val = si.randomValue(rnd_gen);
 			new_solution.add(val);
@@ -233,8 +233,8 @@ public class Agent_GASearch extends Agent_Search {
 	
 	//Half uniform crossover
 	private void xoverIndividuals(SearchSolution sol1, SearchSolution sol2){
-		List<IValueData> new_solution1 = new ArrayList<>();
-		List<IValueData> new_solution2 = new ArrayList<>();
+		List<IValueData> new_solution1 = new ArrayList<IValueData>();
+		List<IValueData> new_solution2 = new ArrayList<IValueData>();
 		
 		for (int i = 0; i < new_solution1.size(); i++) {
             IValueData val1 =  sol1.getValues().get(i);
@@ -256,7 +256,7 @@ public class Agent_GASearch extends Agent_Search {
 	//mutation of the option
 	private void mutateIndividual(SearchSolution sol){
 		
-		List<IValueData> new_sol = new ArrayList<>();
+		List<IValueData> new_sol = new ArrayList<IValueData>();
 		for (int i = 0; i < getSchema().size(); i++ ) {
 			
 			SearchItem si = getSchema().get(i);

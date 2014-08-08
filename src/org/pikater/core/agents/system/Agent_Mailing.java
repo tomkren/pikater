@@ -57,10 +57,14 @@ public class Agent_Mailing extends PikaterAgent {
                         return respondToSendEmailAction(request);
                     else
                         throw new RefuseException("Invalid action requested");
-                } catch (CodecException | OntologyException e) {
+                } catch (OntologyException e) {
                 	Agent_Mailing.this.logError(e.getMessage(), e);
-                    throw new NotUnderstoodException("Unknown codec/ontology: "+e.getMessage());
+                    throw new NotUnderstoodException("Unknown ontology: "+e.getMessage());
+                } catch (CodecException e) {
+                	Agent_Mailing.this.logError(e.getMessage(), e);
+                    throw new NotUnderstoodException("Unknown codec: "+e.getMessage());
                 }
+          
             }
         });
     }

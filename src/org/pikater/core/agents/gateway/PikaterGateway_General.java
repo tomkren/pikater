@@ -33,7 +33,11 @@ public class PikaterGateway_General {
 		JadeGateway.execute(initiator, 10000);
 
 		JadeGateway.shutdown();
-		} catch (ControllerException | InterruptedException e) {
+		} catch (ControllerException e) {
+			PikaterGatewayException x = new PikaterGatewayException("JadeGateway.execute() failed");
+			x.setStackTrace(e.getStackTrace());
+			throw x;
+		} catch (InterruptedException e) {
 			PikaterGatewayException x = new PikaterGatewayException("JadeGateway.execute() failed");
 			x.setStackTrace(e.getStackTrace());
 			throw x;

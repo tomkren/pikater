@@ -44,7 +44,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 
 	@Override
 	public List<Ontology> getOntologies() {
-		List<Ontology> ontologies = new ArrayList<>();
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
@@ -150,7 +150,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	}
 	
 	private List<DataInstances> getDataForTask(Task t) throws FIPAException {
-		List<DataInstances> res = new ArrayList<>();
+		List<DataInstances> res = new ArrayList<DataInstances>();
 		for (Data dataI : t.getDatas().getDatas()) {
 			String fname = dataI.getInternalFileName();
 			ACLMessage request = makeGetDataRequest(fname);
@@ -183,7 +183,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	}
 
 	private ArrayList<TaskOutput> processData(List<DataInstances> weatherData) {
-		ArrayList<TaskOutput> res = new ArrayList<>();
+		ArrayList<TaskOutput> res = new ArrayList<TaskOutput>();
 		Instances input = mergeInputs(weatherData);
 		
 		Instances sunny = new Instances(input, 0);

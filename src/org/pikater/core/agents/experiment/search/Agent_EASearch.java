@@ -226,7 +226,7 @@ public class Agent_EASearch extends Agent_Search {
         List<SearchSolution> ret = new ArrayList<SearchSolution>();
         for (Individual i : pop.getSortedIndividuals()) {
             SearchItemIndividual si = (SearchItemIndividual)i;
-            List<IValueData> vals = new ArrayList<>();
+            List<IValueData> vals = new ArrayList<IValueData>();
             
             for (int j = 0; j < si.length(); j++) {
                 vals.add(si.get(j));

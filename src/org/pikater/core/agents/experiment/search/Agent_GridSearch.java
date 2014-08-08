@@ -83,16 +83,16 @@ public class Agent_GridSearch extends Agent_Search {
 
     private ArrayList<IValueData> generateValues() {
         
-        ArrayList<IValueData> vals = new ArrayList<>();
+        ArrayList<IValueData> vals = new ArrayList<IValueData>();
         
-        ArrayList<ArrayList<IValueData>> valsForOpts = new ArrayList<>();
+        ArrayList<ArrayList<IValueData>> valsForOpts = new ArrayList<ArrayList<IValueData>>();
 
         for (SearchItem si : schema ) {
             Integer tries = si.getNumber_of_values_to_try();
             if (tries == 0) {
                 tries = defaultTries;
             }
-            ArrayList<IValueData> valsForItem = new ArrayList<>();
+            ArrayList<IValueData> valsForItem = new ArrayList<IValueData>();
             IntervalSearchItem searchItem= ((IntervalSearchItem) si);
             if (searchItem.getMin() instanceof BooleanValue)
             {
@@ -174,7 +174,7 @@ public class Agent_GridSearch extends Agent_Search {
         vals.addAll(valsForOpts.get(0));
         
         for (int i = 1; i < valsForOpts.size(); i++) {
-            ArrayList<IValueData> newVals = new ArrayList<>();
+            ArrayList<IValueData> newVals = new ArrayList<IValueData>();
             for (int j = 0; j < vals.size(); j++) {
             	for (int k = 0; k < valsForOpts.get(i).size(); k++) {
                     newVals.add(new StringValue(vals.get(j) + "," + valsForOpts.get(i).get(k)));

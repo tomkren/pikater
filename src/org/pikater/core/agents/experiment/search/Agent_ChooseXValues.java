@@ -49,7 +49,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 		
 		if (possible_solution_values.size()-beg_ind < 1) {//if we are at the end
 			
-			List<IValueData> vals = new ArrayList<>();
+			List<IValueData> vals = new ArrayList<IValueData>();
 			for (IValueData valI : cur_solution_part) {
 				vals.add(valI);
 			}
@@ -113,7 +113,7 @@ public class Agent_ChooseXValues extends Agent_Search {
 		List<SearchItem> schema = getSchema();
 		n = Integer.MAX_VALUE;
 		ni = 0;
-		solutions_list = new ArrayList<>();
+		solutions_list = new ArrayList<SearchSolution>();
 		generateSolutions_list(schema);
 		query_block_size = n;
 	}

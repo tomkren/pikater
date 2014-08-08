@@ -93,8 +93,8 @@ public class Agent_RandomSearch extends Agent_Search {
 	
 	private SearchSolution genRandomSolution(){
 		// go through the solutions Vector, generate random values
-		List<IValueData> new_solution = new ArrayList<>();
-        List<String> names = new ArrayList<>();
+		List<IValueData> new_solution = new ArrayList<IValueData>();
+        List<String> names = new ArrayList<String>();
 		for (SearchItem si : getSchema() ) {
 			new_solution.add(si.randomValue(rnd_gen));
             names.add(si.getName());
@@ -108,7 +108,7 @@ public class Agent_RandomSearch extends Agent_Search {
 	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 		number_of_tries+=query_block_size;
 		
-		List<SearchSolution> solutions_list = new ArrayList<>();
+		List<SearchSolution> solutions_list = new ArrayList<SearchSolution>();
 		//generate sequence of random solutions
 		for(int i = 0; i < query_block_size; i++){
 			solutions_list.add(genRandomSolution());

@@ -32,7 +32,11 @@ public class PikaterGateway_NewAgent {
 			PikaterGateway_General.generalRequest(initiator);
 			initiator.getOkResponse();
 
-		} catch (ControllerException | CodecException | OntologyException e1) {
+		} catch (ControllerException e1) {
+			throw new PikaterGatewayException("Failed to make request");
+		} catch (CodecException e1) {
+			throw new PikaterGatewayException("Failed to make request");
+		} catch (OntologyException e1) {
 			throw new PikaterGatewayException("Failed to make request");
 		}
 

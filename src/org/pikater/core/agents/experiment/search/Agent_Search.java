@@ -115,7 +115,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 	
 	private List<Eval> fitnessToNamedEvals(float[] fitness) {
-		List<Eval> evals = new ArrayList<>();
+		List<Eval> evals = new ArrayList<Eval>();
 		
 		Eval ev = new Eval();
 		ev.setName(CoreConstants.ERROR_RATE);
