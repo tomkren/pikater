@@ -246,8 +246,22 @@ public class Agent_Planner extends PikaterAgent {
 	}
 
 	private ACLMessage respondToKillTasks(ACLMessage request, Action a) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		KillTasks killTasks = (KillTasks) a.getAction();
+		int batchID = killTasks.getBatchID();
+		
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			logError(e.getMessage(), e);
+		}
+			this.waitingToStartComputingTasks.removeTasks(batchID);
+		lock.unlock();
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK");
+		return reply;
 	}
 	
 	private void plan() {

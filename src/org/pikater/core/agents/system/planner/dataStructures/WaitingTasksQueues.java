@@ -3,6 +3,7 @@ package org.pikater.core.agents.system.planner.dataStructures;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -48,6 +49,35 @@ public class WaitingTasksQueues {
 		return null;
 	}
 
+	public void removeTasks(int batchID) {
+		
+		Comparator<TaskToSolve> comparator = new PlannerComparator();
+
+		PriorityQueue<TaskToSolve> newShortTimeDurationQueue =
+				 new PriorityQueue<TaskToSolve>(10, comparator);
+        while (!shortTimeDurationQueue.isEmpty()) {
+        	TaskToSolve taskToSolveI = shortTimeDurationQueue.remove();
+        	Task taskI = taskToSolveI.getTask();
+        	
+        	if (taskI.getBatchID() != batchID) {
+        		newShortTimeDurationQueue.add(taskToSolveI);
+        	}
+        }
+		shortTimeDurationQueue = newShortTimeDurationQueue;
+		
+		PriorityQueue<TaskToSolve> newLongTermDurationQueue =
+				 new PriorityQueue<TaskToSolve>(10, comparator);
+        while (!longTermDurationQueue.isEmpty()) {
+       	TaskToSolve taskToSolveI = longTermDurationQueue.remove();
+       	Task taskI = taskToSolveI.getTask();
+       	
+	       	if (taskI.getBatchID() != batchID) {
+	       		newLongTermDurationQueue.add(taskToSolveI);
+	       	}
+       }
+       longTermDurationQueue = newLongTermDurationQueue;
+	}
+	
 	public int getNumberOfTasksInQueue() {
 		return shortTimeDurationQueue.size() +
 				longTermDurationQueue.size();
