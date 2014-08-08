@@ -247,7 +247,6 @@ public class Agent_Planner extends PikaterAgent {
 		
 		// test if some task is available
 		if (taskToSolve == null) {
-			//this.logError("Any task available");
 			return;
 		}
 		
@@ -261,13 +260,10 @@ public class Agent_Planner extends PikaterAgent {
 
 		// test if some core is available
 		if (selectedCore == null) {
-			//this.logError("Any core available");
 			this.waitingToStartComputingTasks.addTask(taskToSolve);
 			return;
 		}
 		
-		
-		//task.setCpuCoreID(selectedCore.getCoreID());
 		this.cpuCoresStructure.setCPUCoreAsBusy(selectedCore, taskToSolve);
 
 		PlannerCommunicator communicator = new PlannerCommunicator(this);
