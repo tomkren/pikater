@@ -25,6 +25,7 @@
 	<classpathentry kind="lib" path="libraries/mysql-connector-java-5.1.18-bin.jar"/>
 	<classpathentry kind="lib" path="libraries/remoteExperimentServer.jar"/>
 	<classpathentry kind="lib" path="libraries/servlet.jar"/>
+	<classpathentry kind="lib" path="libraries/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="libraries/sqltool.jar"/>
 	<classpathentry kind="lib" path="libraries/swtgraphics2d.jar"/>
 	<classpathentry kind="lib" path="libraries/weka.jar"/>
