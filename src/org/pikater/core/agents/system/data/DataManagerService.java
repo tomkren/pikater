@@ -152,7 +152,11 @@ public class DataManagerService extends FIPAService {
 			agent.getContentManager().fillContent(request,
 					new Action(agent.getAID(), gf));
 			FIPAService.doFipaRequestClient(agent, request);
-		} catch (CodecException | OntologyException | FIPAException e) {
+		} catch (CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
 		}
 	}
@@ -185,7 +189,11 @@ public class DataManagerService extends FIPAService {
 					agent.logError("did not receive expected GetModel response for model "+model);
 				}
 			}
-		} catch (CodecException | OntologyException | FIPAException e) {
+		} catch (CodecException e) {
+			agent.logError("GetModel failure", e);
+		} catch (OntologyException e) {
+			agent.logError("GetModel failure", e);
+		} catch (FIPAException e) {
 			agent.logError("GetModel failure", e);
 		}
 		return null;
@@ -343,7 +351,11 @@ public class DataManagerService extends FIPAService {
 			agent.getContentManager().fillContent(request,
 					new Action(agent.getAID(), act));
 			FIPAService.doFipaRequestClient(agent, request);
-		} catch (CodecException | OntologyException | FIPAException e) {
+		} catch (CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);			
+		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
 		}
 	}

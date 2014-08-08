@@ -333,8 +333,10 @@ public class Agent_GUIKlara extends PikaterAgent {
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
             	return (Integer)reply.getContentObject();
             }
-        } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage(), e);
+        } catch (CodecException e) {
+            logError("Codec error occurred: "+e.getMessage(), e);
+        } catch (OntologyException e) {
+            logError("Ontology error occurred: "+e.getMessage(), e);
         } catch (FIPAException e) {
             logError("FIPA error occurred: "+e.getMessage(), e);
         } catch (UnreadableException e) {

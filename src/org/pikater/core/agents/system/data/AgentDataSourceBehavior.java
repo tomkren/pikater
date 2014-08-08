@@ -102,11 +102,11 @@ import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
             }
 
         } catch (UngroundedException e) {
-            e.printStackTrace();
+        	dsAgent.logError(e.getMessage(), e);
         } catch (OntologyException e) {
-            e.printStackTrace();
+        	dsAgent.logError(e.getMessage(), e);
         } catch (Codec.CodecException e) {
-            e.printStackTrace();
+        	dsAgent.logError(e.getMessage(), e);
         }
     }
 }
