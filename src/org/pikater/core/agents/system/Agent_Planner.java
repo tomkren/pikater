@@ -23,6 +23,7 @@ import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
 import org.pikater.core.agents.system.planner.dataStructures.DistributedData;
+import org.pikater.core.agents.system.planner.dataStructures.Lock;
 import org.pikater.core.agents.system.planner.dataStructures.TaskToSolve;
 import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -38,9 +39,11 @@ public class Agent_Planner extends PikaterAgent {
 	
 	private static final long serialVersionUID = 820846175393846627L;
 
-	private volatile WaitingTasksQueues waitingToStartComputingTasks =
+	private volatile Lock lock = new Lock();
+	
+	private WaitingTasksQueues waitingToStartComputingTasks =
 			new WaitingTasksQueues();
-	private volatile CPUCoresStructure cpuCoresStructure =
+	private CPUCoresStructure cpuCoresStructure =
 			new CPUCoresStructure();
 	private DistributedData distributedData =
 			new DistributedData();
@@ -131,10 +134,14 @@ public class Agent_Planner extends PikaterAgent {
 				executeTask.getTask(), a, request);
 		
 		
-		synchronized(Agent_Planner.class) {
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			logError(e.getMessage(), e);
+		}
 			waitingToStartComputingTasks.addTask(taskToSolve);
 			plan();
-		}
+		lock.unlock();
 
 		//TODO:
 		ACLMessage reply = request.createReply();
@@ -202,11 +209,15 @@ public class Agent_Planner extends PikaterAgent {
 		TaskToSolve taskToSolve = cpuCoresStructure.getComputingTask(
 				finishedTask.getGraphId());
 
-		synchronized(Agent_Planner.class) {
+		try {
+			lock.lock();
+		} catch (InterruptedException e1) {
+			logError(e1.getMessage(), e1);
+		}
 			this.cpuCoresStructure.setCPUCoreAsFree(cpuCore);
 			this.distributedData.saveLocationOfData(finishedTask);
 			plan();
-		}
+		lock.unlock();
 		
 		/////
 		ACLMessage msgToManager = taskToSolve.getMsg().createReply();
@@ -231,8 +242,6 @@ public class Agent_Planner extends PikaterAgent {
 	}
 
 	private void plan() {
-
-		getSystemLoad();
 		
 		TaskToSolve taskToSolve = waitingToStartComputingTasks.
 				removeTaskWithHighestPriority();
@@ -264,6 +273,8 @@ public class Agent_Planner extends PikaterAgent {
 
 		PlannerCommunicator communicator = new PlannerCommunicator(this);
 		communicator.sendExecuteTask(task, selectedCore.getAID());
+		
+		getSystemLoad();
 	}
 
 

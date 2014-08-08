@@ -19,8 +19,8 @@ import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 
 public class CPUCoresStructure {
 
-	private volatile Map <CPUCore, TaskToSolve> busyCores;
-	private volatile List<CPUCore> untappedCores;
+	private Map <CPUCore, TaskToSolve> busyCores;
+	private List<CPUCore> untappedCores;
 	
 	public CPUCoresStructure() {
 		
@@ -107,7 +107,7 @@ public class CPUCoresStructure {
 			throw new IllegalArgumentException("Argument task can't be null");
 		}
 		
-		if (untappedCores.isEmpty()) {
+		if (untappedCores.size() == 0) {
 			return null;
 		}
 		return untappedCores.get(0);

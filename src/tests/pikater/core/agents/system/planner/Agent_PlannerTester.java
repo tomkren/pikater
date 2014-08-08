@@ -55,25 +55,9 @@ public class Agent_PlannerTester extends PikaterAgent {
 		// waiting to start ManagerAgent
 		doWait(6000);
 		
-		for (int i = 0; i < 1; i++) { 
+		for (int i = 0; i < 10; i++) { 
 	        sendTask();
-	        /*
-	        try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			*/
 	        sendTask2();
-	        /*
-	        try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
 	        sendTask3();
 		}
         
@@ -139,7 +123,6 @@ public class Agent_PlannerTester extends PikaterAgent {
 */
         } catch (CodecException | OntologyException e) {
             logError("Ontology/codec error occurred: "+e.getMessage(), e);
-            e.printStackTrace();
         }
 
     }

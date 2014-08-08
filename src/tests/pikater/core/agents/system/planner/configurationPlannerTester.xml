@@ -12,10 +12,10 @@
 
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent">
         </agent>
-
+<!--
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent1">
         </agent>
-
+-->
         <agent type="tests.pikater.core.agents.system.planner.Agent_PlannerTester" name="PlannerTester">
         </agent>
 <!--

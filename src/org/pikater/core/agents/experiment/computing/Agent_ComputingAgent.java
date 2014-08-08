@@ -245,9 +245,9 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 
 			} catch (CodecException ce) {
-				ce.printStackTrace();
+				Agent_ComputingAgent.this.logError(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				oe.printStackTrace();
+				Agent_ComputingAgent.this.logError(oe.getMessage(), oe);
 			}
 			
 			return resultMsg;
