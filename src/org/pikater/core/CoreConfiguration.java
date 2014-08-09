@@ -16,9 +16,6 @@ public class CoreConfiguration {
 			"core" + System.getProperty("file.separator") +
 			"data" + System.getProperty("file.separator") +
 			"files" + System.getProperty("file.separator");
-	public static String DATA_SETS_PATH =
-			"core" + System.getProperty("file.separator") +
-			"data" + System.getProperty("file.separator");
 	public static String EXTERNAL_AGENT_JARS_PATH =
 			"core" + System.getProperty("file.separator") +
 			"ext_agents" + System.getProperty("file.separator");
