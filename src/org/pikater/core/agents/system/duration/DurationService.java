@@ -19,6 +19,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
+import org.pikater.core.ontology.subtrees.duration.SetDuration;
 
 public class DurationService extends FIPAService {
 
@@ -38,22 +39,17 @@ public class DurationService extends FIPAService {
 
 		try {
 			agent.getContentManager().fillContent(request, a);
-		} catch (CodecException e1) {
-			agent.logError(e1.getMessage(), e1);
-			e1.printStackTrace();
-		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage(), e1);
-			e1.printStackTrace();
+		} catch (CodecException | OntologyException e) {
+			agent.logError(e.getMessage(), e);
 		}
 
-		Duration duration = gd.getDuration();
-		duration.setLR_duration(-1);
+		Duration duration=new Duration();
+		
 		try {
 			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
 
 			// get Duration from the received message
-			ContentElement content = agent.getContentManager().extractContent(
-					reply);
+			ContentElement content = agent.getContentManager().extractContent(reply);
 
 			duration = (Duration) (((Result) content).getValue());
 
