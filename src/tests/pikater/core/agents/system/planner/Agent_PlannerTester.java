@@ -183,8 +183,10 @@ public class Agent_PlannerTester extends PikaterAgent {
             else
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
 */
-        } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage(), e);
+        } catch (CodecException e) {
+            logError("Codec error occurred: "+e.getMessage(), e);
+        } catch (OntologyException e) {
+            logError("Ontology error occurred: "+e.getMessage(), e);
         }
 
     }
@@ -245,8 +247,10 @@ public class Agent_PlannerTester extends PikaterAgent {
             else
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
 */
-        } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage(), e);
+        } catch (CodecException e) {
+            logError("Codec error occurred: "+e.getMessage(), e);
+        } catch (OntologyException e) {
+            logError("Ontology error occurred: "+e.getMessage(), e);
         }
 
     }

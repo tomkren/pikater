@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.jfree.util.Log;
 import org.pikater.core.CoreConfiguration;
 
 import jade.domain.FIPAService;
@@ -26,6 +27,9 @@ public class DataTransferService extends FIPAService {
 			Files.move(temp, Paths.get(CoreConfiguration.DATA_FILES_PATH + hash), StandardCopyOption.ATOMIC_MOVE);
 
 			//System.out.println("Data loaded");
+		}
+		catch (Exception e) {
+			Log.error("Error - DataTransferService");
 		}
 	}
 	
