@@ -33,7 +33,7 @@ public class IntervalSearchItem extends SearchItem {
 
         @Override
     public List<IValueData> possibleValues() {
-        List<IValueData> posVals =new ArrayList<>();
+        List<IValueData> posVals =new ArrayList<IValueData>();
         if (min instanceof BooleanValue)
         {
             if (min.equals(max))

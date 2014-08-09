@@ -20,7 +20,8 @@ public class Recommend extends DataProcessing {
    
 
 	public Recommend() {
-    	this.options = new ArrayList<>();
+    	this.options = new ArrayList<NewOption>();
+    	this.errors = new ArrayList<ErrorDescription>();
     }
 
     public String getAgentType() {	

@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import org.jfree.util.Log;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Kuba
@@ -21,14 +23,14 @@ public class PropertiesConfigurationProvider implements ConfigurationProvider {
             configuration.load(new FileInputStream(propertiesPath));
         }
         catch (IOException e) {
-            System.out.print(e.getMessage());
+            Log.error(e.getMessage(), e);
         }
     }
 
     @Override
     public Configuration getConfiguration() {
         int agentNumber=1;
-        List<AgentConfiguration> agentConfigurations=new ArrayList<>();
+        List<AgentConfiguration> agentConfigurations=new ArrayList<AgentConfiguration>();
         AgentConfiguration agentConfig=getAgentConfiguration(agentNumber);
         while (agentConfig!=null)
         {
@@ -50,7 +52,7 @@ public class PropertiesConfigurationProvider implements ConfigurationProvider {
             return null;
         }
         String agentType=configuration.getProperty(agentTypeKey);
-        List<Argument> arguments=new ArrayList<>();
+        List<Argument> arguments=new ArrayList<Argument>();
         int argNumber=1;
         String argKey=configuration.getProperty(getArgumentKeyKey(agentNumber,argNumber));
         while (argKey!=null)

@@ -15,7 +15,7 @@ public class Entropy {
     {
         double n=values.size();
         double result=0;
-        Map<Object,Integer> hash=new HashMap<>();
+        Map<Object,Integer> hash=new HashMap<Object,Integer>();
         for (Object o:values)
         {
             if (hash.containsKey(o))

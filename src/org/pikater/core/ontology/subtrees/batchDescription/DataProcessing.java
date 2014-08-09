@@ -25,9 +25,9 @@ public class DataProcessing implements IDataProvider {
 	private List<DataSourceDescription> dataSources;
 
 	public DataProcessing() {
-		this.options = new ArrayList<>();
-		this.errors = new ArrayList<>();
-		this.dataSources = new ArrayList<>();
+		this.options = new ArrayList<NewOption>();
+		this.errors = new ArrayList<ErrorDescription>();
+		this.dataSources = new ArrayList<DataSourceDescription>();
 	}
 			
 	public int getId() {

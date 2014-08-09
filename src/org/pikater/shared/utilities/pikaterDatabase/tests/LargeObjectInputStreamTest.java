@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 
+import org.jfree.util.Log;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 
 public class LargeObjectInputStreamTest {
@@ -29,10 +30,10 @@ public class LargeObjectInputStreamTest {
 			fos.close();
 			is.close();
 			
-			
-		} catch (SQLException  | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SQLException e) {
+			Log.error(e.getMessage(), e);
+		} catch (IOException e) {
+			Log.error(e.getMessage(), e);
 		}
 
 	}

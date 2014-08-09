@@ -50,12 +50,12 @@ public class MailAgentTester extends PikaterAgent {
                 logError("Reply not received.");
             else
                 log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
-        } catch (CodecException | OntologyException e) {
-            logError("Ontology/codec error occurred: "+e.getMessage(), e);
-            e.printStackTrace();
+        } catch (CodecException e) {
+            logError("Codec error occurred: "+e.getMessage(), e);
+        } catch (OntologyException e) {
+            logError("Ontology error occurred: "+e.getMessage(), e);
         } catch (FIPAException e) {
             logError("FIPA error occurred: "+e.getMessage(), e);
-            e.printStackTrace();
         }
 
         log("MailAgentTester ending");

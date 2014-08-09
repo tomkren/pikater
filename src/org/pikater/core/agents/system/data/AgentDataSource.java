@@ -30,7 +30,7 @@ public class AgentDataSource extends PikaterAgent {
             "core" + System.getProperty("file.separator") +
                     "data" + System.getProperty("file.separator") +
                     "dataSources" + System.getProperty("file.separator");
-    private HashSet<String> ownedDataSources=new HashSet<>();
+    private HashSet<String> ownedDataSources=new HashSet<String>();
     public static String SERVICE_TYPE ="AgentDataSource";
 
 	@Override

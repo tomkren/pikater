@@ -27,7 +27,7 @@ public class SetSItem extends SearchItem {
 	public  List<IValueData> possibleValues() {
 		
 		if (set.size() > getNumber_of_values_to_try() ){
-            List<IValueData> posVals =new ArrayList<>();
+            List<IValueData> posVals =new ArrayList<IValueData>();
 			for(int i = 0; i < getNumber_of_values_to_try(); i++)
 				posVals.add(set.get(i));
 			return posVals;

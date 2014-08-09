@@ -27,7 +27,7 @@ public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable
 	public ValuesForOption() {}
     public ValuesForOption(Value value)
     {
-        this.values=new ArrayList<>();
+        this.values=new ArrayList<Value>();
         this.values.add(value);
     }
 	public ValuesForOption(List<Value> values)

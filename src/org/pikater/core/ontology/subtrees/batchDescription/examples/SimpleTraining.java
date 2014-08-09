@@ -29,7 +29,7 @@ public class SimpleTraining {
         ca.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
         //"whatever.mlp.is.in.MLP"
 
-        List<NewOption> options = new ArrayList<>();
+        List<NewOption> options = new ArrayList<NewOption>();
 
         NewOption lr = new NewOption( "L",0.001);
         

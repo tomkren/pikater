@@ -16,7 +16,7 @@ public class SearchSolution implements Concept {
 	public List<IValueData> getValues() {
 		if(values!=null)
 			return values;
-		return new ArrayList<>();
+		return new ArrayList<IValueData>();
 	}
 
 	public void setValues(List<IValueData> values) {

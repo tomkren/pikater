@@ -105,8 +105,8 @@ public class MetadataReader {
     
     private void countEntropies(DataInstances data,AttributeMetadata metadata,int attributeNumber)
     {
-        List<Object> values=new ArrayList<>();     
-        List<Object> classValues=new ArrayList<>();        
+        List<Object> values=new ArrayList<Object>();     
+        List<Object> classValues=new ArrayList<Object>();        
 
 		for (Instance instanceI : data.getInstances()) {
 		List<Boolean> missingList = instanceI.getMissing();
@@ -132,7 +132,7 @@ public class MetadataReader {
     
     private void setNumericalAttributeProperties(DataInstances data,AttributeMetadata metadata,int attributeNumber)
     {
-        List<Double> values=new ArrayList<>();        
+        List<Double> values=new ArrayList<Double>();        
         NumericalAttributeMetadata met=(NumericalAttributeMetadata)metadata;
         
 		for (Instance instanceI : data.getInstances()) {

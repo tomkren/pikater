@@ -28,7 +28,7 @@ public class XmlConfigurationProvider implements ConfigurationProvider {
 
     @Override
     public Configuration getConfiguration() {
-        List<AgentConfiguration> agentConfigurations=new ArrayList<>();
+        List<AgentConfiguration> agentConfigurations=new ArrayList<AgentConfiguration>();
         try {
 
             File fXmlFile = new File(filePath);
@@ -67,7 +67,7 @@ public class XmlConfigurationProvider implements ConfigurationProvider {
 
     private List<Argument> getArguments(Element agentElement)
     {
-        List<Argument> arguments=new ArrayList<>();
+        List<Argument> arguments=new ArrayList<Argument>();
         NodeList argumentsNodeList= agentElement.getElementsByTagName("argument");
         for (int argNr=0;argNr<argumentsNodeList.getLength();argNr++)
         {

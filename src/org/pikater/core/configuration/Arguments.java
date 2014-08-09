@@ -20,7 +20,7 @@ public class Arguments implements Serializable {
 
     public Arguments()
     {
-        arguments=new HashMap<>();
+        arguments = new HashMap<String, Argument>();
     }
 
     protected Map<String,Argument> arguments;
