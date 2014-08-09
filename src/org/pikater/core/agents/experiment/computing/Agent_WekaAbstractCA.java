@@ -35,7 +35,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	@Override
 	public String getAgentType() {
 		
-		Classifier classifier = new RBFNetwork();
+		Classifier classifier = new RBFNetwork();//TODO: get method and sets the classifier???
 
 		return classifier.getClass().getName();
 	}
@@ -78,6 +78,8 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
 			log(DurationServiceRegression_output_prefix, 2);
 		}
+		this.lastStartDate=new Date(start);
+		this.lastDuration=duration;
 		log("start: " + new Date(start) + " : duration: " + duration, 2);
 		
 		state = states.TRAINED; // change agent state

@@ -9,11 +9,14 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.behaviours.Behaviour;
 import jade.domain.FIPANames;
+import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
+import jade.proto.ContractNetResponder;
+import jade.proto.SSContractNetResponder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,6 +34,7 @@ import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingA
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
+import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
@@ -93,6 +97,17 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 	private boolean newAgent = true;
 	public boolean resurrected = false;
+	
+	protected long lastDuration;
+	protected Date lastStartDate;
+
+	public long getLastDuration() {
+		return lastDuration;
+	}
+
+	public Date getLastStartDate() {
+		return lastStartDate;
+	}
 
 	public abstract Date train(Evaluation evaluation) throws Exception;
 
@@ -112,6 +127,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
 		ontologies.add(DataOntology.getInstance());
+		ontologies.add(DurationOntology.getInstance());
 		
 		return ontologies;
 	}
@@ -155,15 +171,29 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		}
 		newAgent = false;
 
-		MessageTemplate reqMsgTemplate = MessageTemplate
-				.and(MessageTemplate
-						.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-						MessageTemplate.and(MessageTemplate
-								.MatchPerformative(ACLMessage.REQUEST),
-								MessageTemplate.MatchOntology(
-										TaskOntology.getInstance().getName())));
+		MessageTemplate reqMsgTemplate = 
+					MessageTemplate.and(
+							MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+							MessageTemplate.and(
+								MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+								MessageTemplate.MatchOntology(TaskOntology.getInstance().getName()
+												)
+							)
+					);
+		
+		MessageTemplate cfpMsgTemplate = 
+				MessageTemplate.and(
+						MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
+						MessageTemplate.and(
+							MessageTemplate.MatchPerformative(ACLMessage.CFP),
+							MessageTemplate.MatchOntology(TaskOntology.getInstance().getName()
+											)
+						)
+				);
+	
 
 		addBehaviour(new RequestServer(this, reqMsgTemplate));
+		addBehaviour(new CFPResponder(this, cfpMsgTemplate));
 		addBehaviour(executionBehaviour = new ComputingAction(this));
 		
 	} // end setup
@@ -220,20 +250,16 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		
 		public RequestServer(Agent_ComputingAgent agent, MessageTemplate mt) {
 			super(agent, mt);
+			
 		}
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1074564968341084444L;
 
 		@Override
 		protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
-			
 			ACLMessage resultMsg = request.createReply();
 			try {
 				Action a = (Action) getContentManager().extractContent(request);
-
 					
 					if (a.getAction() instanceof GetOptions) {
 						return respondToGetOptions(request, a);
@@ -252,6 +278,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 			
 			return resultMsg;
 		}
+		
 
 	}
 	
@@ -267,6 +294,22 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		return communicator.executeTask(this, request);
 	}
 
+	protected class CFPResponder extends ContractNetResponder{
+		private static final long serialVersionUID = -7855318009388214053L;
+
+		public CFPResponder(jade.core.Agent a, MessageTemplate mt) {
+			super(a, mt);
+		}
+
+		@Override
+		protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException,
+				FailureException, NotUnderstoodException {
+			ComputingCommunicator communicator = new ComputingCommunicator();
+			return communicator.executeDurationTask((Agent_ComputingAgent)this.getAgent(), cfp);
+		}
+		
+	}
+	
 	public byte[] getAgentObject() throws IOException {
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();

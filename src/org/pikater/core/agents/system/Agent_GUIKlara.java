@@ -5,6 +5,7 @@ import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
+import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -23,14 +24,19 @@ import java.util.List;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.duration.DurationService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
+import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
+import org.pikater.core.ontology.subtrees.duration.Duration;
+import org.pikater.core.ontology.subtrees.duration.GetDuration;
+import org.pikater.core.ontology.subtrees.duration.SetDuration;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 import org.pikater.shared.database.utils.DataSetConverter;
 
@@ -51,6 +57,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		ontologies.add(DataOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
+		ontologies.add(DurationOntology.getInstance());
 		
 		//for test purposes
 		ontologies.add(ModelOntology.getInstance());
@@ -160,13 +167,15 @@ public class Agent_GUIKlara extends PikaterAgent {
 						" Help             --help\n" +
 						" Shutdown         --shutdown\n" +
 						" Add dataset      --add-dataset [username] [description] <path>\n" +
+						" Get duration     --dura\n"+
 						" For test purposes --test "+
 						" Run Experiment   --run <file.xml>\n"
 						);
 			
 			} else if (input.startsWith("--shutdown")) {
 				break;
-	
+			} else if(input.startsWith("--dura")){
+				printDurationAgentResponse();
 			} else if (input.startsWith("--run")) {
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
@@ -178,6 +187,11 @@ public class Agent_GUIKlara extends PikaterAgent {
 			}
 		}
 
+	}
+
+	private void printDurationAgentResponse() {
+		Duration dur = DurationService.getDuration(this, new GetDuration());
+		log("Last Duration info - Start "+(dur.getStart()!=null? dur.getStart().toString() : "no data  ")+":"+ dur.getDurationMiliseconds()+" ms , LR: "+dur.getLR_duration());
 	}
 
 	private void runFile(String fileName) throws FileNotFoundException {

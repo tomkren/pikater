@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
+import org.pikater.core.agents.experiment.computing.Agent_WekaDurationLinearRegression;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.agents.PikaterAgent;
@@ -38,6 +39,7 @@ import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
+import org.pikater.core.ontology.subtrees.duration.SetDuration;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.task.Eval;
 import org.pikater.core.ontology.subtrees.task.Evaluation;
@@ -56,6 +58,8 @@ public class Agent_Duration extends PikaterAgent {
     int t = 10000; //ms
     AID aid = null;
     int id = 0;
+    
+    Duration lastDuration;
     
     boolean log_LR_durations = false;
     
@@ -86,19 +90,13 @@ public class Agent_Duration extends PikaterAgent {
 				log_LR_durations = true;
 			}
 		}		    	
-    	
-		try {
-			Thread.sleep(30000);
-		} catch (InterruptedException e1) {
-			logError(e1.getMessage(), e1);
-		}
 		
         // create linear regression agent
         // send message to AgentManager to create an agent
         ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
         aid = communicator.createAgent(
         		this,
-        		Agent_WekaLinearRegression.class.getName(),
+        		Agent_WekaDurationLinearRegression.class.getName(),
         		AgentNames.DURATION_SERVICE,
         		null);
         		
@@ -128,17 +126,35 @@ public class Agent_Duration extends PikaterAgent {
                 try {
                     Action a = (Action) getContentManager().extractContent(request);
 
-                    if (a.getAction() instanceof GetDuration) {
-                        GetDuration gd = (GetDuration) a.getAction();
+                    if (a.getAction() instanceof SetDuration) {
+                        SetDuration sd = (SetDuration) a.getAction();
                         
                         ACLMessage reply = request.createReply();
                         reply.setPerformative(ACLMessage.INFORM);
                         
-                        Duration duration = gd.getDuration();
+                        Duration duration = sd.getDuration();
+                        durations.add(duration);
+ 
                         duration.setLR_duration(
                         		countDuration(duration.getStart(), duration.getDurationMiliseconds()));
-                        		
-                        Result r = new Result(gd, duration);                        
+                        
+                        lastDuration=duration;
+                        
+                        Result r = new Result(sd, duration);                        
+						getContentManager().fillContent(reply, r);												
+
+                        return reply;
+                    }
+                    
+                    if (a.getAction() instanceof GetDuration) {
+                    	GetDuration gd = (GetDuration) a.getAction();
+                        
+                    	gd.setDuration(lastDuration);
+                    	
+                        ACLMessage reply = request.createReply();
+                        reply.setPerformative(ACLMessage.INFORM);
+                        
+                        Result r = new Result(gd,lastDuration);                        
 						getContentManager().fillContent(reply, r);												
 
                         return reply;
@@ -156,7 +172,7 @@ public class Agent_Duration extends PikaterAgent {
         });
     }
     
-    private float countDuration(Date _start, int duration){    	
+    private float countDuration(Date _start, long duration){    	
     	if (duration >= Integer.MAX_VALUE){
     		return Integer.MAX_VALUE;
     	}    	
@@ -265,6 +281,15 @@ public class Agent_Duration extends PikaterAgent {
 			}
 		}
 		
+		/**
+		 * TODO:
+		 * Several Computing agents sent their duration values, and the Duration agent
+		 * chose the best one.
+		 * However, in this version a I couldn't change the asynchronous behaviour of computing agent
+		 * which probably is my fault  
+		 */
+		
+		/**
 		protected void handleAllResponses(Vector responses, Vector acceptances) {
 			// Evaluate proposals.
 			int bestProposal = Integer.MAX_VALUE;
@@ -307,6 +332,7 @@ public class Agent_Duration extends PikaterAgent {
 			}						
 			// TODO - if there is no proposer...
 		}
+		**/
 				
 		protected void handleInform(ACLMessage inform) {
             log("Agent "+inform.getSender().getName() + " successfully performed the requested action", 2);
@@ -335,7 +361,7 @@ public class Agent_Duration extends PikaterAgent {
 					}
 					d.setStart(evaluation.getStart());
 					durations.add(d);
-					
+					logError(d.getStart() + " - " + d.getDurationMiliseconds());
 					if (log_LR_durations){
 						// write duration into a file:
 						log(d.getStart() + " - " + d.getDurationMiliseconds());
@@ -365,7 +391,7 @@ public class Agent_Duration extends PikaterAgent {
 		cfp.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 
 		// We want to receive a reply in 10 secs
-		cfp.setReplyByDate(new java.util.Date(System.currentTimeMillis() + 10000));
+		//cfp.setReplyByDate(new java.util.Date(System.currentTimeMillis() + 10000));
 
 		org.pikater.core.ontology.subtrees.management.Agent ag =
 				new org.pikater.core.ontology.subtrees.management.Agent();

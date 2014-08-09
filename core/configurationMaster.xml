@@ -17,29 +17,33 @@
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_MetadataQueen" name="Freddie">
-        </agent>
+        </agent> -->
 
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent">
         </agent>
-
+ 
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent1">
-        </agent>
-
-        <!-- <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
-            <arguments>
-                <argument key="sniffed" value="Manager" sendOnlyValue="true" />
-            </arguments>
-        </agent>
-        -->
+        </agent> 
 
         <agent type="org.pikater.core.agents.system.Agent_GuiAgentsCommunicator" name="GuiAgentsCommunicator">
         </agent>
-
+ 
         <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_AgentInfoManager" name="AgentInfoManager">
+        </agent> 
+        
+        <agent type="org.pikater.core.agents.system.Agent_Duration" name="Duration">
         </agent>
+        <!--
+        <agent type="jade.tools.sniffer.Sniffer" name="sniffrik">
+            <arguments>
+               <argument key="sniffed-1" value="Manager" sendOnlyValue="true" />
+                <argument key="sniffed" value="Duration" sendOnlyValue="true" />
+            </arguments>
+        </agent>
+         -->
 
     </agents>
 </configuration>

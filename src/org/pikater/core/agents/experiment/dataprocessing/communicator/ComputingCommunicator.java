@@ -19,7 +19,10 @@ import java.io.IOException;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
+import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.duration.Duration;
+import org.pikater.core.ontology.subtrees.duration.SetDuration;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
 import org.pikater.core.ontology.subtrees.result.PartialResults;
@@ -45,6 +48,51 @@ public class ComputingCommunicator {
 			resultMsg.setContent("(Computing agent overloaded)");
 		}
 		return resultMsg;
+	}
+	
+	public ACLMessage executeDurationTask(Agent_ComputingAgent agent, ACLMessage req) {
+		
+		ACLMessage resultMsg = req.createReply();
+		if (agent.acceptTask()) {
+			resultMsg.setPerformative(ACLMessage.PROPOSE);
+			agent.taskFIFO.addFirst(req);
+
+			if (agent.taskFIFO.size() == 1) {
+				if (!agent.executionBehaviour.isRunnable()) {
+					agent.executionBehaviour.restart();
+				}
+			}	
+
+		} else {
+			resultMsg.setPerformative(ACLMessage.REFUSE);
+			resultMsg.setContent("(Computing agent overloaded)");
+		}
+		return resultMsg;
+	}
+	
+	public void sendLastDuration(Agent_ComputingAgent agent){
+		SetDuration gd=new SetDuration();
+		Duration duration=new Duration();
+		duration.setStart(agent.getLastStartDate());
+		duration.setDurationMiliseconds(agent.getLastDuration());
+		
+		gd.setDuration(duration);
+		
+		ACLMessage durationMessage=new ACLMessage(ACLMessage.REQUEST);
+		durationMessage.setOntology(DurationOntology.getInstance().getName());
+		durationMessage.addReceiver(new AID(AgentNames.DURATION,false));
+		durationMessage.setLanguage(agent.getCodec().getName());
+		
+		Action a =new Action();
+		a.setAction(gd);
+		a.setActor(agent.getAID());
+		
+		try {
+			agent.getContentManager().fillContent(durationMessage, a);
+		} catch (CodecException | OntologyException e) {
+			agent.logError("Codec/Ontology exception in Computing Communicator", e);
+		}
+		agent.send(durationMessage);
 	}
 	
 	/*

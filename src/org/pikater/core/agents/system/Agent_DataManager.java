@@ -58,6 +58,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URI;
+import java.nio.file.CopyOption;
+import java.nio.file.FileSystem;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.nio.file.WatchEvent.Kind;
+import java.nio.file.WatchEvent.Modifier;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -283,7 +294,6 @@ public class Agent_DataManager extends PikaterAgent {
 
 					
 					if (a.getAction() instanceof GetFile) {
-						logError("Not Implemented Getfile");
 						return respondToGetFile(request, a);
 					}
 					
@@ -1239,6 +1249,7 @@ public class Agent_DataManager extends PikaterAgent {
 				log(reader.toString());
 				File temp = new File(CoreConfiguration.DATA_FILES_PATH + "temp" +
 						System.getProperty("file.separator") + hash);
+				File target=new File(CoreConfiguration.DATA_FILES_PATH + hash);
 				
 				FileOutputStream out = new FileOutputStream(temp);
 				try {
@@ -1248,13 +1259,15 @@ public class Agent_DataManager extends PikaterAgent {
 						out.write(buf, 0, read);
 					}
 
-					File target=new File(CoreConfiguration.DATA_FILES_PATH + hash);
 					log(new Date()+" Moving file to: "+target.getAbsolutePath());
-					if(temp.renameTo(target)){
+					try{
+						java.nio.file.Files.move(temp.toPath(), target.toPath(),(CopyOption)StandardCopyOption.REPLACE_EXISTING);
 						log(new Date()+"File was successfully moved");
-					}else{
-						logError(new Date()+" Error while moving file with hash "+dslo.getHash()+" to new location "+target.getAbsolutePath());
+					}catch(IOException ioe){
+						logError(new Date()+"Error while moving file with hash "+dslo.getHash()+" to new location "+target.getAbsolutePath());
 					}
+				} catch(IOException ioe){
+					logError("Error while downloading file with hash "+hash+" from database", ioe);
 				} finally {
 					reader.close();
 					out.close();
