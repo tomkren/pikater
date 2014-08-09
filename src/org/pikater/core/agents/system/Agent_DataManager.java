@@ -283,7 +283,6 @@ public class Agent_DataManager extends PikaterAgent {
 
 					
 					if (a.getAction() instanceof GetFile) {
-						logError("Not Implemented Getfile");
 						return respondToGetFile(request, a);
 					}
 					
