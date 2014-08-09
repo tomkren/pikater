@@ -1,8 +1,5 @@
 package org.pikater.core.agents.system;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
@@ -10,19 +7,24 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
+import jade.core.AID;
+import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
-import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
-import org.pikater.core.agents.system.planner.dataStructures.DistributedData;
+import org.pikater.core.agents.system.planner.dataStructures.DataRegistry;
 import org.pikater.core.agents.system.planner.dataStructures.Lock;
 import org.pikater.core.agents.system.planner.dataStructures.TaskToSolve;
 import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
@@ -46,8 +48,7 @@ public class Agent_Planner extends PikaterAgent {
 			new WaitingTasksQueues();
 	private CPUCoresStructure cpuCoresStructure =
 			new CPUCoresStructure();
-	private DistributedData distributedData =
-			new DistributedData();
+	private DataRegistry dataRegistry = new DataRegistry(cpuCoresStructure);
 	
 	@Override
 	public List<Ontology> getOntologies() {
@@ -218,8 +219,8 @@ public class Agent_Planner extends PikaterAgent {
 		} catch (InterruptedException e1) {
 			logError(e1.getMessage(), e1);
 		}
-			this.cpuCoresStructure.setCPUCoreAsFree(cpuCore);
-			this.distributedData.saveLocationOfData(finishedTask);
+			cpuCoresStructure.setCPUCoreAsFree(cpuCore);
+			dataRegistry.saveDataLocation(finishedTask, nodeName(cpuCore.getAID()));
 			plan();
 		lock.unlock();
 		
@@ -243,6 +244,15 @@ public class Agent_Planner extends PikaterAgent {
 		//ACLMessage reply = finishedTaskMsg.createReply();
 		//reply.setPerformative(ACLMessage.INFORM);
 		//reply.setContent("OK - FinishedTask msg recieved");
+	}
+
+	private static String nodeName(AID aid) {
+		String name = aid.getLocalName();
+		if (name.contains("-")) {
+			return name.substring(name.lastIndexOf('-')+1);
+		} else {
+			return null;
+		}
 	}
 
 	private ACLMessage respondToKillTasks(ACLMessage request, Action a) {
@@ -277,10 +287,10 @@ public class Agent_Planner extends PikaterAgent {
 		Task task = taskToSolve.getTask();
 		task.setStart(Agent_DataManager.getCurrentPikaterDateString());
 
-		List<Object> recommendLocalitons = this.distributedData.
-				recommendCountingLocality(taskToSolve);
-		CPUCore selectedCore = this.cpuCoresStructure.
-				getTheBestCPUCoreForTask(taskToSolve, recommendLocalitons);
+		Set<String> dataLocations = dataRegistry.
+				getDataLocations(taskToSolve);
+		CPUCore selectedCore = cpuCoresStructure.
+				getTheBestCPUCoreForTask(taskToSolve, dataLocations);
 
 		// test if some core is available
 		if (selectedCore == null) {
@@ -295,6 +305,4 @@ public class Agent_Planner extends PikaterAgent {
 		
 		getSystemLoad();
 	}
-
-
 }

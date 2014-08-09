@@ -9,8 +9,10 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.agents.system.Agent_Planner;
@@ -19,18 +21,11 @@ import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class CPUCoresStructure {
-
-	private Map <CPUCore, TaskToSolve> busyCores;
-	private List<CPUCore> untappedCores;
-	
-	public CPUCoresStructure() {
-		
-		this.busyCores = new HashMap<CPUCore, TaskToSolve>();
-		this.untappedCores = new ArrayList<CPUCore>();
-	}
+	private Map <CPUCore, TaskToSolve> busyCores = new HashMap<CPUCore, TaskToSolve>();
+	private List<CPUCore> untappedCores = new ArrayList<CPUCore>();
+	private Set<String> nodes = new HashSet<>();
 	
 	public void initCPUCores(Agent_Planner agent) {
-
 		 DFAgentDescription template = new DFAgentDescription();
 		 ServiceDescription sd = new ServiceDescription();
 		 sd.setType(Agent_ManagerAgent.class.getName());
@@ -103,7 +98,7 @@ public class CPUCoresStructure {
 	
 	// TODO: improve selection
 	public CPUCore getTheBestCPUCoreForTask(TaskToSolve task,
-			List<Object> recommendLocalitons) {
+			Set<String> dataLocations) {
 		
 		if (task == null) {
 			throw new IllegalArgumentException("Argument task can't be null");
@@ -161,5 +156,8 @@ public class CPUCoresStructure {
 	public int getNumOfUntappedCores() {
 		return untappedCores.size();
 	}
-	
+
+	public Set<String> getNodes() {
+		return nodes;
+	}
 }
