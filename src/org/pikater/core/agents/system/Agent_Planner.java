@@ -8,7 +8,9 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
+import jade.domain.FIPAException;
 import jade.domain.FIPANames;
+import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
@@ -29,13 +32,16 @@ import org.pikater.core.agents.system.planner.dataStructures.Lock;
 import org.pikater.core.agents.system.planner.dataStructures.TaskToSolve;
 import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
 import org.pikater.core.ontology.AgentManagementOntology;
+import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.systemLoad.GetSystemLoad;
 import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
 
 public class Agent_Planner extends PikaterAgent {
@@ -53,6 +59,7 @@ public class Agent_Planner extends PikaterAgent {
 	@Override
 	public List<Ontology> getOntologies() {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
+		ontologies.add(DataOntology.getInstance());
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(ModelOntology.getInstance());
@@ -220,7 +227,9 @@ public class Agent_Planner extends PikaterAgent {
 			logError(e1.getMessage(), e1);
 		}
 			cpuCoresStructure.setCPUCoreAsFree(cpuCore);
-			dataRegistry.saveDataLocation(finishedTask, nodeName(cpuCore.getAID()));
+			String node = nodeName(cpuCore.getAID());
+			dataRegistry.saveDataLocation(finishedTask, node);
+			saveDataToDB(finishedTask, node);
 			plan();
 		lock.unlock();
 		
@@ -244,6 +253,41 @@ public class Agent_Planner extends PikaterAgent {
 		//ACLMessage reply = finishedTaskMsg.createReply();
 		//reply.setPerformative(ACLMessage.INFORM);
 		//reply.setContent("OK - FinishedTask msg recieved");
+	}
+
+	private void saveDataToDB(Task task, String node) {
+		// TODO nemusely by se ukladat vsechny data...  zrejme by tohle melo byt ve FileSavingStrategy, tam ale neprobublaji zadne informace o vystupech, v pripade input02 se dokonce vubec nespousti
+		String dataManagerName = AgentNames.DATA_MANAGER;
+		if (node != null) {
+			dataManagerName += "-";
+			dataManagerName += node;
+		}
+		AID dataManager = new AID(dataManagerName, false);
+		Ontology ontology = DataOntology.getInstance();
+		
+		for (TaskOutput t : task.getOutput()) {
+			log("requesting save of data "+t.getName());
+			SaveDataset sd = new SaveDataset();
+			sd.setUserLogin("stepan"); // TODO odnekud splasit skutecneho usera k tasku (planovac ho musi znat)
+			sd.setSourceFile(CoreConfiguration.DATA_FILES_PATH+System.getProperty("file.separator")+t.getName());
+			sd.setDescription("Output from batch "+task.getBatchID()+ " ("+t.getType().toString()+")");
+			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+			request.addReceiver(dataManager);
+			request.setLanguage(getCodec().getName());
+			request.setOntology(ontology.getName());
+			ACLMessage reply = null;
+			try {
+				// TODO kdy maji vzniknout metadata?
+				getContentManager().fillContent(request, new Action(dataManager, sd));
+				reply = FIPAService.doFipaRequestClient(this, request, 10000);
+				if (reply == null) {
+					logError("Failed to save output data in DB - reply not received.");
+				}
+			} catch (CodecException | OntologyException | FIPAException e) {
+				logError("Failed to save output data in DB", e);
+			}
+			log("saved output to DB: "+t.getName());
+		}
 	}
 
 	private static String nodeName(AID aid) {

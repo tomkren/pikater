@@ -9,7 +9,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +22,6 @@ import org.pikater.core.ontology.subtrees.task.Task;
 public class CPUCoresStructure {
 	private Map <CPUCore, TaskToSolve> busyCores = new HashMap<CPUCore, TaskToSolve>();
 	private List<CPUCore> untappedCores = new ArrayList<CPUCore>();
-	private Set<String> nodes = new HashSet<>();
 	
 	public void initCPUCores(Agent_Planner agent) {
 		 DFAgentDescription template = new DFAgentDescription();
@@ -155,9 +153,5 @@ public class CPUCoresStructure {
 	}
 	public int getNumOfUntappedCores() {
 		return untappedCores.size();
-	}
-
-	public Set<String> getNodes() {
-		return nodes;
 	}
 }
