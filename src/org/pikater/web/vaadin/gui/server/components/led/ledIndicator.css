@@ -28,23 +28,23 @@
 {
 	background-color: red;
 	
-	box-shadow: black 0 0 5px 0, inset darkred 0 0 5px;
-    -webkit-box-shadow: black 0 0 5px 0, inset darkred 0 0 5px;
-    -moz-box-shadow: black 0 0 5px 0, inset darkred 0 0 5px;
+	box-shadow: black 0 0 5px 0, inset darkred 0 0 3px;
+    -webkit-box-shadow: black 0 0 5px 0, inset darkred 0 0 3px;
+    -moz-box-shadow: black 0 0 5px 0, inset darkred 0 0 3px;
 }
 
 .ledIndicator .themeGreen
 {
 	background-color: lime;
 	
-    box-shadow: black 0 0 5px 0, inset darkgreen 0 0 5px;
-    -webkit-box-shadow: black 0 0 5px 0, inset darkgreen 0 0 5px;
-    -moz-box-shadow: black 0 0 5px 0, inset darkgreen 0 0 5px;
+    box-shadow: black 0 0 5px 0, inset darkgreen 0 0 3px;
+    -webkit-box-shadow: black 0 0 5px 0, inset darkgreen 0 0 3px;
+    -moz-box-shadow: black 0 0 5px 0, inset darkgreen 0 0 3px;
 }
 
-.themeRed:hover, .themeGreen:hover
+.ledIndicator .themeGreen.hoverEnabled:hover, .ledIndicator .themeRed.hoverEnabled:hover
 {
-    box-shadow: yellow 0 0 5px 0, inset yellow 0 0 5px;
-    -webkit-box-shadow: yellow 0 0 5px 0, inset yellow 0 0 5px;
-    -moz-box-shadow: yellow 0 0 5px 0, inset yellow 0 0 5px;
+    box-shadow: yellow 0 0 5px 0, inset yellow 0 0 3px;
+    -webkit-box-shadow: yellow 0 0 5px 0, inset yellow 0 0 3px;
+    -moz-box-shadow: yellow 0 0 5px 0, inset yellow 0 0 3px;
 }
