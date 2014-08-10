@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.XStreamHelper;
+import org.pikater.shared.util.SimpleIDGenerator;
 
 public class UniversalComputationDescription
 {
@@ -31,19 +32,25 @@ public class UniversalComputationDescription
 	 * Contains all elements added to this computation.
 	 */
 	private final Set<UniversalElement> allElements;
+	
+	/**
+	 * ID generator for {@link UniversalOntology} instances within {@link UniversalElement}.
+	 */
+	private final SimpleIDGenerator idGenerator;
 
 	/**
 	 * Default wrapper for top-level elements. All elements and wrappers either have this
 	 * wrapper as a parent or another. 
 	 */
-	private final UniversalGuiWrapper defaultWrapper;
+	// private final UniversalGuiWrapper defaultWrapper;
 	
 	public UniversalComputationDescription()
 	{
 		this.globalOptions = new HashSet<NewOption>();
 		this.rootElements = new HashSet<UniversalElement>();
 		this.allElements = new HashSet<UniversalElement>();
-		this.defaultWrapper = new UniversalGuiWrapper(null);
+		// this.defaultWrapper = new UniversalGuiWrapper(null);
+		this.idGenerator = new SimpleIDGenerator();
 	}
 	
 	// ----------------------------------------------------------
@@ -90,7 +97,8 @@ public class UniversalComputationDescription
 		else
 		{
 			allElements.add(element);
-			if (element.getOntologyInfo().getOntologyClass() == FileDataSaver.class)
+			element.getOntologyInfo().setId(idGenerator.getAndIncrement());
+			if (element.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
 			//if (BoxType.fromOntologyClass(element.getOntologyInfo().getOntologyClass()) == BoxType.OUTPUT)
 			{
 				rootElements.add(element);
@@ -111,7 +119,7 @@ public class UniversalComputationDescription
 	 */
 	public boolean isGUICompatible()
 	{
-		for (UniversalElement elementI : this.rootElements)
+		for (UniversalElement elementI : this.allElements)
 		{
 			if (elementI.getGuiInfo() == null)
 			{
@@ -128,7 +136,8 @@ public class UniversalComputationDescription
 	 */
 	public boolean isValid()
 	{
-		// TODO:
+		// TODO: all kinds of consistency checks
+		// TODO: connector.validate()
 		return true;
 	}
 	
