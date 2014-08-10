@@ -43,14 +43,6 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	// INHERITED INTERFACE
 	
 	@Override
-	public void clear()
-	{
-		leafBoxes.clear();
-		edges.clear();
-		boxIDGenerator.reset();
-	}
-	
-	@Override
 	public boolean containsBox(Integer boxID)
 	{
 		return leafBoxes.containsKey(boxID);
@@ -68,6 +60,20 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 		box.setID(boxIDGenerator.getAndIncrement());
 		leafBoxes.put(box.getID(), box);
 		return box;
+	}
+	
+	@Override
+	public void clear()
+	{
+		leafBoxes.clear();
+		edges.clear();
+		boxIDGenerator.reset();
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		return leafBoxes.isEmpty();
 	}
 	
 	@Override

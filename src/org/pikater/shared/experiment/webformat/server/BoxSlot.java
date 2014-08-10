@@ -7,7 +7,19 @@ public class BoxSlot
 	public static enum SlotType
 	{
 		INPUT,
-		OUTPUT
+		OUTPUT;
+		
+		public SlotType getOther()
+		{
+			if(this == INPUT)
+			{
+				return OUTPUT;
+			}
+			else
+			{
+				return INPUT;
+			}
+		}
 	}
 	
 	private final BoxInfoServer parentBox;
@@ -65,18 +77,20 @@ public class BoxSlot
 	//---------------------------------------------------------
 	// COMPARISON INTERFACE - GENERATED WITH ECLIPSE
 	
+	/*
+	 * NOT NEEDED AFTER ALL BUT KEPT FOR NEEDY TIMES
+	 * 1) Equals comparisons were removed because they're unwanted and could
+	 * potentially cause bugs. Instance comparison is sufficient for us 
+	 * in this case.
+	 * 2) Since we use validation as null checks before using instances
+	 * of this class in collections, we don't have to do check again
+	 * in here.
+	 */
+	
+	/*
 	@Override
 	public boolean equals(Object obj)
 	{
-		/*
-		 * 1) Equals comparisons were removed because they're unwanted and could
-		 * potentially cause bugs. Instance comparison is sufficient for us 
-		 * in this case.
-		 * 2) Since we use validation as null checks before using instances
-		 * of this class in collections, we don't have to do check again
-		 * in here.
-		 */
-		
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -90,4 +104,5 @@ public class BoxSlot
 		}
 		return true;
 	}
+	*/
 }

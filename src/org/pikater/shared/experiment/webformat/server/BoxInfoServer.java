@@ -44,7 +44,7 @@ public class BoxInfoServer implements IBoxInfo<Integer>
 	@Override
 	public void setID(Integer id)
 	{
-		if(generatedUniqueID != null)
+		if(generatedUniqueID == null)
 		{
 			generatedUniqueID = id;
 		}
