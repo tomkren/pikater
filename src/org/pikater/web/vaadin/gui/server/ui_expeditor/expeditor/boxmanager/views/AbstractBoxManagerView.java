@@ -3,6 +3,7 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.view
 import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
+import org.vaadin.jouni.dom.Dom;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -13,6 +14,8 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	
 	private final IContextForViews context;
 	private final Label boxIdentificationLabel;
+	private final Dom boxIdentificationExtension;
+	
 	private S currentSource;
 	
 	public AbstractBoxManagerView(IContextForViews context)
@@ -33,6 +36,7 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 		};
 		this.boxIdentificationLabel.setSizeUndefined();
 		this.boxIdentificationLabel.setStyleName("emphasizedLabel");
+		this.boxIdentificationExtension = new Dom(this.boxIdentificationLabel);
 		
 		this.currentSource = null;
 	}
@@ -95,6 +99,11 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	protected Label getBoxIdentificatinComponent()
 	{
 		return boxIdentificationLabel;
+	}
+	
+	protected Dom getBoxIdentificationExtension()
+	{
+		return boxIdentificationExtension;
 	}
 	
 	protected S getCurrentSource()

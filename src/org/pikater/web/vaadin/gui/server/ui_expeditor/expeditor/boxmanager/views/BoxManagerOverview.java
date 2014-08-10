@@ -1,20 +1,23 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
+import org.pikater.shared.experiment.webformat.server.BoxSlot;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.components.flowlayout.HorizontalFlowLayout;
 import org.pikater.web.vaadin.gui.server.components.flowlayout.IFlowLayoutStyleProvider;
 import org.pikater.web.vaadin.gui.server.components.flowlayout.VerticalFlowLayout;
 import org.pikater.web.vaadin.gui.server.components.led.LedIndicator;
 import org.pikater.web.vaadin.gui.server.components.led.LedIndicatorTheme;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxHighlightExtension;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerView;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
 
-import com.vaadin.event.MouseEvents;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -124,7 +127,44 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 		return vLayout_slots;
 	}
 	
-	private Component createLabeledRow(String label, String description, Button actionButton)
+	private Component createSlotRow(final Slot slot, Button actionButton)
+	{
+		Set<BoxSlot> connectedEndpoints = getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().getConnectedAndValidEndpointsForSlot(slot);
+		boolean isSlotConnected = !connectedEndpoints.isEmpty();
+		LedIndicator ledComponent = new LedIndicator(getIndicatorTheme(isSlotConnected));
+		ledComponent.setDescription(isSlotConnected ? "Slot IS connected." : "Slot is NOT connected.");
+		
+		HorizontalFlowLayout fLayout = (HorizontalFlowLayout) createLabeledRow(slot.getDataType(), slot.getDescription(), actionButton);
+		fLayout.addComponentAsFirst(ledComponent);
+		if(isSlotConnected)
+		{
+			new BoxHighlightExtension( // mouse over and mouse out events
+					getContext().getCurrentComponent().getConnectorId(),
+					endpointSetToIDArray(connectedEndpoints)
+			).extend(fLayout);
+		}
+		return fLayout;
+	}
+	
+	private Integer[] endpointSetToIDArray(Set<BoxSlot> list)
+	{
+		List<Integer> result = new ArrayList<Integer>();
+		for(BoxSlot endPoint : list)
+		{
+			result.add(endPoint.getParentBox().getID());
+		}
+		return result.toArray(new Integer[0]);
+	}
+	
+	private LedIndicatorTheme getIndicatorTheme(boolean slotHasAValidConnection)
+	{
+		return slotHasAValidConnection ? LedIndicatorTheme.GREEN : LedIndicatorTheme.RED;
+	}
+	
+	//---------------------------------------------------------------------------
+	// SOME UI CONSTRUCTION METHODS
+	
+	public static Component createLabeledRow(String label, String description, Button actionButton)
 	{
 		HorizontalFlowLayout fLayout = new HorizontalFlowLayout(new IFlowLayoutStyleProvider()
 		{
@@ -142,7 +182,7 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 				}
 			}
 		});
-		fLayout.setStyleName("listItem"); // size is determined in css
+		fLayout.setStyleName("listItem"); // size is determined in CSS
 		
 		Label lbl_option = new Label(label);
 		lbl_option.setSizeUndefined();
@@ -156,32 +196,11 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 		return fLayout;
 	}
 	
-	private Component createSlotRow(Slot slot, Button actionButton)
-	{
-		boolean isSlotConnected = getContext().getCurrentGraph().getSlotConnections().isSlotConnectedToAValidEndpoint(slot);
-		LedIndicator ledComponent = new LedIndicator(isSlotConnected ? LedIndicatorTheme.GREEN : LedIndicatorTheme.RED, new MouseEvents.ClickListener()
-		{
-			private static final long serialVersionUID = -4691336564643469439L;
-
-			@Override
-			public void click(com.vaadin.event.MouseEvents.ClickEvent event)
-			{
-				// TODO Auto-generated method stub
-			}
-		});
-		ledComponent.setDescription(isSlotConnected ? "Slot IS connected. Click to highlight the connected slot's box." :
-			"Slot is NOT connected.");
-		
-		HorizontalFlowLayout fLayout = (HorizontalFlowLayout) createLabeledRow(slot.getDataType(), slot.getDescription(), actionButton);
-		fLayout.addComponentAsFirst(ledComponent);
-		return fLayout;
-	}
-	
-	private void correctEmptyLayout(AbstractOrderedLayout layout)
+	public static void correctEmptyLayout(AbstractOrderedLayout layout)
 	{
 		if(layout.getComponentCount() == 0) // no slots are defined
 		{
-			layout.addComponent(createLabeledRow("None are defined", null, null));
+			layout.addComponent(createLabeledRow("None", null, null));
 		}
 	}
 }

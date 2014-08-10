@@ -5,8 +5,9 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views
 
 public interface IContextForViews extends IBoxManagerToolboxContext
 {
-	BoxInfoServer getCurrentBoxDataSource();
 	AbstractBoxManagerView<?> getView(BoxManagerView view);
 	void setView(AbstractBoxManagerView<?> view);
 	void resetView();
+	
+	BoxInfoServer getCurrentBoxDataSource();
 }
