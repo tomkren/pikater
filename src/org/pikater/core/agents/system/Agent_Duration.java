@@ -34,6 +34,7 @@ import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standart;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
@@ -412,7 +413,7 @@ public class Agent_Duration extends PikaterAgent {
 		task.setDatas(datas);
 		
 		EvaluationMethod evaluationMethod = new EvaluationMethod();
-		evaluationMethod.setAgentType(CoreConstants.EVAL_METHOD_STANDARD); // TODO don't evaluate at all
+		evaluationMethod.setAgentType(Standart.class.getName()); // TODO don't evaluate at all
 		
 		task.setEvaluationMethod(evaluationMethod);
 		

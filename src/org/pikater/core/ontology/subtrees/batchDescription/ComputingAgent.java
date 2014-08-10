@@ -7,6 +7,7 @@ import java.util.List;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
@@ -38,7 +39,8 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     	this.options = new ArrayList<NewOption>();
     	this.model = null;
     	this.duration = new LongTermDuration();
-    	this.evaluationMethod = new EvaluationMethod();
+    	this.evaluationMethod =
+    			new EvaluationMethod(CrossValidation.class.getName());
     }
     
     public String getAgentType() {

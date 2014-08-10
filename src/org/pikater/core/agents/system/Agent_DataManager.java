@@ -58,17 +58,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.URI;
 import java.nio.file.CopyOption;
-import java.nio.file.FileSystem;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
-import java.nio.file.WatchEvent.Kind;
-import java.nio.file.WatchEvent.Modifier;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -587,6 +578,10 @@ public class Agent_DataManager extends PikaterAgent {
 		LoadBatch loadBatch = (LoadBatch) a.getAction();
 		
 		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
+		
+		System.out.println("--------------------------------------------");
+		System.out.println(loadBatch.getBatchID());
+		System.out.println(batchJPA.getXML());
 		
         UniversalComputationDescription uDescription =
         		UniversalComputationDescription.fromXML(batchJPA.getXML());

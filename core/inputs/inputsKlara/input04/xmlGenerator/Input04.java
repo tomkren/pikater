@@ -5,6 +5,7 @@ import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.recommend.Agent_NMTopRecommender;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import java.io.FileNotFoundException;
@@ -33,7 +34,8 @@ public final class Input04 {
 		
 		NewOption optionF = new NewOption("F", 10);
 		
-		EvaluationMethod em = new EvaluationMethod(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+		EvaluationMethod em =
+				new EvaluationMethod(CrossValidation.class.getName());
 		em.addOption(optionF);
 		
 		comAgent.setEvaluationMethod(em);

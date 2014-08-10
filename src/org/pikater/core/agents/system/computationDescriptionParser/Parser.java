@@ -114,7 +114,7 @@ public class Parser {
     //This is the root of all parsing
     public void parseRoots(ComputationDescription comDescription, int batchID) {
         agent.log("Ontology Parser - ComputationDescription");
-
+        
         ManagerCommunicator communicator = new ManagerCommunicator();
         User user = communicator.loadUser(agent, 5856); //TODO:
 

@@ -4,8 +4,8 @@ public class CoreConstants {
 
 	public static String DURATION_DATASET_INTERNAL_NAME = "dc7ce6dea5a75110486760cfac1051a5";
 
-	public static String EVAL_METHOD_STANDARD = "Standard";
-	public static String EVAL_METHOD_CROSSVALIDATION = "CrossValidation";
+//	public static String EVAL_METHOD_STANDARD = "Standard";
+//	public static String EVAL_METHOD_CROSSVALIDATION = "CrossValidation";
 	
 	//train_only, test_only, train_test
 	public static String MODE_TRAIN_ONLY = "train_only";

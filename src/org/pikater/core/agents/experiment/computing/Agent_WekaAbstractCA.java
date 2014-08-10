@@ -8,6 +8,7 @@ import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -118,7 +119,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		Evaluation eval = new Evaluation(train);
         log("Evaluation method: \t", 2);
 		
-		if (evaluation_method.getAgentType().equals(CoreConstants.EVAL_METHOD_CROSSVALIDATION) ){
+		if (evaluation_method.getAgentType().equals(CrossValidation.class.getName()) ){
 			
 			int folds = 5; // TODO read default value from file (if necessary)
 			if (evaluation_method.getOptions() != null) {
