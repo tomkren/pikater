@@ -32,4 +32,22 @@ public class UniversalConnector
 	{
 		this.fromElement = fromElement;
 	}
+	
+	public boolean isFullySpecified()
+	{
+		return (inputDataType != null) && (outputDataType != null); 
+	}
+	
+	public void validate()
+	{
+		if(fromElement == null)
+		{
+			throw new IllegalStateException("From element is not defined.");
+		}
+		else if(((inputDataType != null) && (outputDataType == null)) ||
+				((inputDataType == null) && (outputDataType != null)))
+		{
+			throw new IllegalStateException("One of the data types is not defined.");
+		}
+	}
 }
