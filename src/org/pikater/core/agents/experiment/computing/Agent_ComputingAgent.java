@@ -16,7 +16,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 import jade.proto.ContractNetResponder;
-import jade.proto.SSContractNetResponder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
