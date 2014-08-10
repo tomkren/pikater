@@ -146,7 +146,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		options.add(modelOption);
 		
 		NewOption expectedDurationOption = new NewOption(
-				"duration", duration.getClass().getName());
+				"duration", duration.getClass().getSimpleName());
 		
 		options.add(expectedDurationOption);
 		options.addAll(this.options);
@@ -178,9 +178,9 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		NewOption optDuration = optionsOntol.getOptionByName("duration");
 		StringValue valueMethod = (StringValue)
 				optDuration.toSingleValue().getCurrentValue();
-		if (valueMethod.getValue().equals(LongTermDuration.class.getName())) {
+		if (valueMethod.getValue().equals(LongTermDuration.class.getSimpleName())) {
 			this.duration = new LongTermDuration();
-		} else if (valueMethod.getValue().equals(ShortTimeDuration.class.getName()) ) {
+		} else if (valueMethod.getValue().equals(ShortTimeDuration.class.getSimpleName()) ) {
 			this.duration = new ShortTimeDuration();
 		} else {
 			throw new IllegalStateException("Option doesn't contain correct type");
