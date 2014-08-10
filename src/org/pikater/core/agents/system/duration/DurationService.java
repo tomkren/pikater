@@ -54,16 +54,13 @@ public class DurationService extends FIPAService {
 			duration = (Duration) (((Result) content).getValue());
 
 		} catch (FIPAException e) {
-			e.printStackTrace();
+			agent.logError(e.getMessage(), e);
 		} catch (UngroundedException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (CodecException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		} catch (OntologyException e) {
 			agent.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return duration;
