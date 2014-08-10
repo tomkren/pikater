@@ -579,10 +579,6 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		JPABatch batchJPA = DAOs.batchDAO.getByID(loadBatch.getBatchID());
 		
-		System.out.println("--------------------------------------------");
-		System.out.println(loadBatch.getBatchID());
-		System.out.println(batchJPA.getXML());
-		
         UniversalComputationDescription uDescription =
         		UniversalComputationDescription.fromXML(batchJPA.getXML());
 
