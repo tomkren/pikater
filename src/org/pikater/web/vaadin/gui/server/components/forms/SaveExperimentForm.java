@@ -64,6 +64,18 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 					throw new IllegalStateException("Unknown state: " + name());
 			}
 		}
+		
+		public static SaveForLaterMode[] getAvailableByContext(JPABatch sourceExperiment)
+		{
+			if((sourceExperiment == null) || sourceExperiment.isScheduled())
+			{
+				return new SaveForLaterMode[] { SaveForLaterMode.SAVE_AS_NEW };
+			}
+			else 
+			{
+				return SaveForLaterMode.values();
+			}
+		}
 	}
 	
 	/*
@@ -95,8 +107,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 		{
 			case SAVE_FOR_LATER:
 				this.field_saveForLaterMode = FormFieldFactory.getGeneralOptionGroup("How to save:", true);
-				SaveForLaterMode[] availableSaveForLaterModes = sourceExperiment != null ? SaveForLaterMode.values() :
-					new SaveForLaterMode[] { SaveForLaterMode.SAVE_AS_NEW };
+				SaveForLaterMode[] availableSaveForLaterModes = SaveForLaterMode.getAvailableByContext(sourceExperiment);
 				for(SaveForLaterMode mode : availableSaveForLaterModes)
 				{
 					this.field_saveForLaterMode.addItem(mode);

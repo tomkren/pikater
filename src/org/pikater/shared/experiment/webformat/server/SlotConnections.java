@@ -12,27 +12,20 @@ import org.pikater.shared.experiment.webformat.server.BoxSlot.SlotType;
 /**
  * Maps all slots (input/output; all boxes) to connected slots, wrapped in a special
  * class. It is required that all mentioned slots are represented by exactly one
- * {@link Slot} instance in the whole web application.</br>
- * This implementation defines an important term: INSTANCE ENDPOINT. It is an instance
- * of {@link BoxSlot} that was used in the {@link SlotConnections#connect(BoxSlot, BoxSlot)}
- * method to connect slots. Some methods of this class require INSTANCE ENDPOINTS while
- * others require just ANY {@link BoxSlot} instance. Read Javadocs carefully, when you
- * implement or use this class.</br>
+ * {@link Slot} instance in the whole web application. 
  */
 public class SlotConnections
 {
 	/**
-	 * Context for this class providing a method to determine whether
-	 * a slot connection is currently valid (whether an edge exists
-	 * between the endpoint boxes).
+	 * Context for this class providing some additional interface.
 	 */
 	private final ISlotConnectionsContext<Integer, BoxInfoServer> context;
 	
 	/**
 	 * A special field that lets us avoid indexing connections by
 	 * {@link BoxSlot} and specifying additional arguments (beside
-	 * {@link Slot slots}) to methods of this class. Let's keep usage
-	 * of this class simple :).</br>
+	 * {@link Slot slots}) to methods of this class. Let the usage be
+	 * simple :).</br>
 	 * This field requires the same condition as {@link #connectionMap}. 
 	 */
 	private final Map<Slot, BoxSlot> slotToBoxSlot;
@@ -64,8 +57,8 @@ public class SlotConnections
 	/**
 	 * Connects the given 2 slots, if possible. Throws exceptions otherwise.</br>
 	 * No need to distinguish between input/output endpoints.</br> 
-	 * @param endPoint1 can be arbitrary {@link BoxSlot} instance
-	 * @param endPoint2 can be arbitrary {@link BoxSlot} instance
+	 * @param endPoint1
+	 * @param endPoint2
 	 */
 	public void connect(BoxSlot endPoint1, BoxSlot endPoint2)
 	{
@@ -83,8 +76,16 @@ public class SlotConnections
 		}
 		else
 		{
-			oneWayConnect(endPoint1, endPoint2);
-			oneWayConnect(endPoint2, endPoint1);
+			BoxSlot ep1 = slotToBoxSlot.get(endPoint1.getChildSlot());
+			BoxSlot ep2 = slotToBoxSlot.get(endPoint2.getChildSlot());
+			oneWayConnect(
+					ep1 != null ? ep1 : endPoint1,
+					ep2 != null ? ep2 : endPoint2
+			);
+			oneWayConnect(
+					ep2 != null ? ep2 : endPoint2,
+					ep1 != null ? ep1 : endPoint1
+			);
 		}
 	}
 	
@@ -120,20 +121,9 @@ public class SlotConnections
 	}
 	
 	/**
-	 * Determines whether the given slot is connected to the given endpoint. 
-	 * @param slot
-	 * @param endpoint must be INSTANCE ENDPOINT
-	 * @return
-	 */
-	public boolean isSlotConnectedToEndpoint(Slot slot, BoxSlot endpoint)
-	{
-		return getConnectedAndValidEndpointsForSlot(slot).contains(endpoint);
-	}
-	
-	/**
 	 * Gets the list of endpoints that can be connected to the given endpoint. 
-	 * @param endpoint can be arbitrary {@link BoxSlot} instance
-	 * @return INSTANCE ENDPOINTS if connections already exist, new instances otherwise
+	 * @param endpoint
+	 * @return
 	 */
 	public Set<BoxSlot> getCandidateEndpointsForEndpoint(BoxSlot endpoint)
 	{
@@ -149,14 +139,7 @@ public class SlotConnections
 				if(otherSlot.isCompatibleWith(endpoint.getChildSlot()))
 				{
 					BoxSlot endpointToAdd = slotToBoxSlot.get(otherSlot);
-					if(endpointToAdd == null)
-					{
-						result.add(new BoxSlot(otherBox, otherSlot));
-					}
-					else
-					{
-						result.add(endpointToAdd);
-					}
+					result.add(endpointToAdd == null ? new BoxSlot(otherBox, otherSlot) : endpointToAdd);
 				}
 			}
 		}

@@ -116,7 +116,10 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 			
 			CheckBox chb_endpoint = FormFieldFactory.getGeneralCheckField(
 					null,
-					getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().isSlotConnectedToEndpoint(getCurrentSource(), endpoint),
+					getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().areSlotsConnected(
+							getCurrentSource(),
+							endpoint.getChildSlot()
+					),
 					false
 			);
 			chb_endpoint.addValueChangeListener(new Property.ValueChangeListener()

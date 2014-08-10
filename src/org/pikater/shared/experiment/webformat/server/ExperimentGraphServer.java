@@ -283,7 +283,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				{
 					UniversalElement uniBox = new UniversalElement();
 					webBoxToUniBox.put(webBox, uniBox);
-					result.addElement(uniBox);
 				}
 			}
 
@@ -366,6 +365,11 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 						}
 					}
 				}
+			}
+			
+			for(UniversalElement element : webBoxToUniBox.values())
+			{
+				result.addElement(element);
 			}
 			return result;
 		}
