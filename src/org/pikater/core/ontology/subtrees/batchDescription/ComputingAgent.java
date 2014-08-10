@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
 
@@ -136,10 +137,14 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	public List<NewOption> exportAllOptions() {
 		List<NewOption> options = new ArrayList<NewOption>();
 
-		if (model != null) {
-			NewOption modelOption = new NewOption("model", model);
-			options.add(modelOption);
+		NewOption modelOption = null;
+		if (model == null) {
+			modelOption = new NewOption("model", new NullValue());
+		} else {
+			modelOption = new NewOption("model", model);
 		}
+		options.add(modelOption);
+		
 		NewOption expectedDurationOption = new NewOption(
 				"duration", duration.getClass().getName());
 		
@@ -161,6 +166,8 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 			if (value.getCurrentValue() instanceof IntegerValue) {
 				IntegerValue integerValue = (IntegerValue) value.getCurrentValue();
 				this.model = integerValue.getValue();
+			} else if (value.getCurrentValue() instanceof NullValue) {
+				this.model = null;
 			} else {
 			throw new IllegalStateException("Option doesn't contain correct type");
 			}
