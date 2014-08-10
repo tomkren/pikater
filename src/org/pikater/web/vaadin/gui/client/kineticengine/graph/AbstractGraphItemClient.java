@@ -28,21 +28,27 @@ public abstract class AbstractGraphItemClient implements IKineticShapeWrapper
 	{
 		SELECTED,
 		NOT_SELECTED,
-		HIGHLIGHTED,
-		NOT_HIGHLIGHTED;
+		HIGHLIGHTED_EDGE,
+		NOT_HIGHLIGHTED_EDGE,
+		HIGHLIGHTED_SLOT,
+		NOT_HIGHLIGHTED_SLOT;
 		
 		public VisualStyle getComplementStyle()
 		{
 			switch(this)
 			{
-				case HIGHLIGHTED:
-					return NOT_HIGHLIGHTED;
-				case NOT_HIGHLIGHTED:
-					return HIGHLIGHTED;
-				case NOT_SELECTED:
-					return SELECTED;
+				case HIGHLIGHTED_EDGE:
+					return NOT_HIGHLIGHTED_EDGE;
+				case NOT_HIGHLIGHTED_EDGE:
+					return HIGHLIGHTED_EDGE;
+				case HIGHLIGHTED_SLOT:
+					return NOT_HIGHLIGHTED_SLOT;
+				case NOT_HIGHLIGHTED_SLOT:
+					return HIGHLIGHTED_SLOT;
 				case SELECTED:
 					return NOT_SELECTED;
+				case NOT_SELECTED:
+					return SELECTED;
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
@@ -52,7 +58,8 @@ public abstract class AbstractGraphItemClient implements IKineticShapeWrapper
 		{
 			List<VisualStyle> result = new ArrayList<AbstractGraphItemClient.VisualStyle>();
 			result.add(NOT_SELECTED);
-			result.add(NOT_HIGHLIGHTED);
+			result.add(NOT_HIGHLIGHTED_EDGE);
+			result.add(NOT_HIGHLIGHTED_SLOT);
 			return result;
 		}
 	}

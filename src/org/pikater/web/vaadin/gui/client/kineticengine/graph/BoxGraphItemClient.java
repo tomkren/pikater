@@ -23,6 +23,7 @@ import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.KineticBoxColourScheme;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 
 @SuppressWarnings("deprecation")
@@ -97,6 +98,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		icon.setDraggable(false);
 		icon.setStroke(Colour.black);
 		icon.setStrokeWidth(2);
+		icon.setListening(false);
 		
 		double textOffset_left = componentSpace + gwtImageWidget.getWidth() + componentSpace / 2;
 		
@@ -104,11 +106,13 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		title = Kinetic.createText(new Vector2d(textOffset_left, componentSpace), info.boxTypeName);
 		title.setDraggable(false);
 		title.setFontStyle(FontStyle.BOLD);
+		title.setListening(false);
 		
 		// box display name label
 		name = Kinetic.createText(new Vector2d(textOffset_left, componentSpace + gwtImageWidget.getHeight() / 2), info.displayName);
 		name.setDraggable(false);
 		name.setFontStyle(FontStyle.ITALIC);
+		name.setListening(false);
 		
 		// create the group, bind it all together
 	    this.container = Kinetic.createGroup(new Vector2d(info.initialX, info.initialY), 0);
@@ -174,24 +178,39 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		{
 			case SELECTED:
 				container.setDraggable(false);
-				rectangle.setStroke(Colour.gold);
+				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
 				rectangle.setStrokeWidth(3);
 				break;
 			case NOT_SELECTED:
 				container.setDraggable(true);
-				rectangle.setStroke(Colour.black);
+				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
 				rectangle.setStrokeWidth(2);
 				break;
 				
-			case HIGHLIGHTED:
-				rectangle.setStroke(Colour.red);
+			case HIGHLIGHTED_EDGE:
+				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
 				rectangle.setStrokeWidth(3);
 				break;
-			case NOT_HIGHLIGHTED:
-				rectangle.setStroke(Colour.black);
+			case NOT_HIGHLIGHTED_EDGE:
+				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
 				rectangle.setStrokeWidth(2);
 				break;
-
+			
+			case HIGHLIGHTED_SLOT:
+				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStrokeWidth(3);
+				break;
+			case NOT_HIGHLIGHTED_SLOT:
+				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStrokeWidth(2);
+				break;
+			
 			default:
 				throw new IllegalStateException("Unknown state: " + style.name());
 		}

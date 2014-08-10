@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
@@ -17,7 +18,7 @@ import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.ConversionException;
 
-public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoServer>
+public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoServer>, ISlotConnectionsContext<Integer, BoxInfoServer>
 {
 	/**
 	 * ID generator for boxes. 
@@ -51,32 +52,54 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 		this.boxIDGenerator = new SimpleIDGenerator();
 		this.leafBoxes = new HashMap<Integer, BoxInfoServer>();
 		this.edges = new HashMap<Integer, Set<Integer>>();
-		this.slotConnections = new SlotConnections(new ISlotConnectionsContext<Integer>()
-		{
-			@Override
-			public boolean edgeExistsBetween(Integer fromBoxID, Integer toBoxID)
-			{
-				if(!containsBox(fromBoxID) || !containsBox(toBoxID))
-				{
-					throw new IllegalStateException("There seems to be a BIG problem somewhere...");
-				}
-				else
-				{
-					return (edges.get(fromBoxID) != null) && edges.get(fromBoxID).contains(toBoxID); 
-				}
-			}
-		});
+		this.slotConnections = new SlotConnections(this);
 	}
 	
 	// ------------------------------------------------------------------
 	// INHERITED INTERFACE
 	
 	@Override
-	public void clear()
+	public Set<BoxInfoServer> getFromNeighbours(Integer boxID)
 	{
-		leafBoxes.clear();
-		edges.clear();
-		boxIDGenerator.reset();
+		Set<BoxInfoServer> result = new HashSet<BoxInfoServer>();
+		if(edgesDefinedFor(boxID))
+		{
+			for(Integer otherBoxID : edges.get(boxID))
+			{
+				if(edgeExistsBetween(boxID, otherBoxID))
+				{
+					result.add(getBox(otherBoxID));
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public Set<BoxInfoServer> getToNeighbours(Integer boxID)
+	{
+		Set<BoxInfoServer> result = new HashSet<BoxInfoServer>();
+		for(BoxInfoServer otherBox : leafBoxes.values())
+		{
+			if(edgeExistsBetween(otherBox.getID(), boxID))
+			{
+				result.add(otherBox);
+			}
+		}
+		return result;
+	}
+	
+	@Override
+	public boolean edgeExistsBetween(Integer fromBoxID, Integer toBoxID)
+	{
+		if(!containsBox(fromBoxID) || !containsBox(toBoxID))
+		{
+			throw new IllegalStateException("There seems to be a BIG problem somewhere...");
+		}
+		else
+		{
+			return (edges.get(fromBoxID) != null) && edges.get(fromBoxID).contains(toBoxID); 
+		}
 	}
 	
 	@Override
@@ -100,9 +123,23 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	}
 	
 	@Override
+	public void clear()
+	{
+		leafBoxes.clear();
+		edges.clear();
+		boxIDGenerator.reset();
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		return leafBoxes.isEmpty();
+	}
+	
+	@Override
 	public boolean edgesDefinedFor(Integer boxID)
 	{
-		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty(); 
+		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty();
 	}
 	
 	@Override
@@ -125,8 +162,8 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 		return slotConnections;
 	}
 	
-	/** NOT USED AT ALL
-	 * 
+	/**
+	 * NOT USED AT ALL
 	 */
 	@Deprecated
 	public boolean isValid()
@@ -146,6 +183,60 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 			}
 		}
 		return true;
+	}
+	
+	// ------------------------------------------------------------------
+	// PRIVATE INTERFACE
+
+	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey, boolean connect)
+	{
+		/*
+		 * Let this method have a transaction-like manner and only alter the data when
+		 * everything has been checked and approved.
+		 */
+
+		// first, all kinds of checks before actually doing anything significant
+		if((fromBoxKey == null) || (toBoxKey == null)) // boxes have not been added to the structure
+		{
+			throw new IllegalArgumentException("Cannot add this edge because at least one of the boxes was not added to the structure. "
+					+ "Call the 'addBox()' method first and try again.");
+		}
+		if(!leafBoxes.containsKey(fromBoxKey) || !leafBoxes.containsKey(toBoxKey))
+		{
+			throw new IllegalArgumentException("One of the supplied box keys represents a wrapper box. Cannot add edges to wrapper boxes.");
+		}
+		if(connect) // we want to connect the boxes
+		{
+			if((edges.get(fromBoxKey) != null) && edges.get(fromBoxKey).contains(toBoxKey)) // an edge already exists
+			{
+				throw new IllegalStateException("Cannot add an edge from box '" + String.valueOf(fromBoxKey) + "' to box '" +
+						String.valueOf(toBoxKey) + "': they are already connected.");
+			}
+		}
+		else // we want to disconnect the boxes
+		{
+			if((edges.get(fromBoxKey) == null) || !edges.get(fromBoxKey).contains(toBoxKey)) // the edge doesn't exist
+			{
+				throw new IllegalStateException("Cannot remove the edge from box '" + String.valueOf(fromBoxKey) + "' to box '" +
+						String.valueOf(toBoxKey) + "': they are not connected.");
+			}
+		}
+
+		// and finally, let's add or remove the edge
+		if(connect)
+		{
+			// add edge
+			if(!edges.containsKey(fromBoxKey))
+			{
+				edges.put(fromBoxKey, new HashSet<Integer>());
+			}
+			edges.get(fromBoxKey).add(toBoxKey);
+		}
+		else
+		{
+			// remove edge
+			edges.get(fromBoxKey).remove(toBoxKey);
+		}
 	}
 	
 	//---------------------------------------------------------------
@@ -202,14 +293,11 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				// determine basic information and references
 				BoxInfoServer webBox = entry.getKey();
 				UniversalElement uniBox = entry.getValue();
-
-				// create edge leading from the currently processed box (will be later added to all neighbour uni-boxes)
-				UniversalConnector connector = new UniversalConnector();
-				connector.setFromElement(uniBox);
-
-				// TODO: connectors need to be created for each connected slot...
-
-				// initialize the FIRST of the 2 child objects
+				
+				/*
+				 * Set the static stuff.
+				 */
+				
 				try
 				{
 					uniBox.getOntologyInfo().setOntologyClass(Class.forName(webBox.getAssociatedAgent().getOntologyClassName()));
@@ -221,30 +309,63 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 							"Could not convert '%s' to a class instance. Has it been hardcoded to an agent and renamed? "
 									+ "Or is the pikater core running in different version than web?", webBox.getAssociatedAgent().getOntologyClassName()
 							), e
-							);
+					);
 				}
 				uniBox.getOntologyInfo().setOptions(webBox.getAssociatedAgent().getOptions());
-				if(edgesDefinedFor(webBox.getID()))
+				
+				/*
+				 * Set the dynamic stuff.
+				 */
+				
+				// position
+				uniBox.getGuiInfo().setX(webBox.getPosX());
+				uniBox.getGuiInfo().setY(webBox.getPosY());
+				
+				// edges
+				if(edgesDefinedFor(webBox.getID())) // these edges are all valid (currently registered)
 				{
-					// transform edges, if they're "valid"
-					for(Integer neighbourWebBoxID : edges.get(webBox.getID()))
+					for(Integer neighbourWebBoxID : edges.get(webBox.getID())) // these edges are all valid (currently registered)
 					{
+						BoxInfoServer neighbourWebBox = getBox(neighbourWebBoxID);
 						UniversalElement neighbourUniBox = webBoxToUniBox.get(leafBoxes.get(neighbourWebBoxID));
 						if(neighbourUniBox == null)
 						{
 							// edge leads to an unknown or unregistered box
-							throw new IllegalStateException("Can not transform an edge with an unregistered endpoint.");
+							throw new IllegalStateException("Can not transform an edge with an unknown/unregistered endpoint.");
 						}
 						else
 						{
-							neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+							/*
+							 * SERIALIZATION SCHEME:
+							 * - edge: A (uniBox; webBox) -> B (neighbourUniBox, neighbourWebBox)
+							 * - connector: outputDataType (output slot) -> inputDataType (input slot)
+							 */
+							
+							for(Slot outputSlot : webBox.getAssociatedAgent().getOutputSlots())
+							{
+								for(Slot inputSlot : neighbourWebBox.getAssociatedAgent().getInputSlots())
+								{
+									if(slotConnections.areSlotsConnected(inputSlot, outputSlot))
+									{
+										// remember the edge, with exact slot connection
+										UniversalConnector connector = new UniversalConnector();
+										connector.setFromElement(uniBox);
+										connector.setOutputDataType(outputSlot.getDataType());
+										connector.setInputDataType(inputSlot.getDataType());
+										neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+									}
+								}
+							}
+							if(neighbourUniBox.getOntologyInfo().getInputSlots().isEmpty()) // no slot connections are defined
+							{
+								// at least remember the edge, with no slot connections whatsoever
+								UniversalConnector connector = new UniversalConnector();
+								connector.setFromElement(uniBox);
+								neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+							}
 						}
 					}
 				}
-
-				// initialize the SECOND of the 2 child objects
-				uniBox.getGuiInfo().setX(webBox.getPosX());
-				uniBox.getGuiInfo().setY(webBox.getPosY());
 			}
 			return result;
 		}
@@ -283,6 +404,10 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 			{
 				throw new NullPointerException("The argument uni-format is null.");
 			}
+			else if(!uniFormat.isValid())
+			{
+				throw new NullPointerException("The argument uni-format is not valid.");
+			}
 			else if(!uniFormat.isGUICompatible())
 			{
 				throw new IllegalArgumentException(String.format(
@@ -290,6 +415,10 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 			}
 			else
 			{
+				/*
+				 * IMPORTANT: from this point, we assume that the argument universal format is valid.
+				 */
+				
 				// and then onto the conversion
 				ExperimentGraphServer webFormat = new ExperimentGraphServer();
 
@@ -317,27 +446,45 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 					BoxInfoServer webBox = webFormat.addBox(new BoxInfoServer(agentInfo, element.getGuiInfo().getX(), element.getGuiInfo().getY()));
 					uniBoxToWebBoxID.put(element, webBox.getID());
 				}
-
+				
 				// then convert all edges
 				for(UniversalElement element : uniFormat.getAllElements())
 				{
 					for(UniversalConnector edge : element.getOntologyInfo().getInputSlots())
 					{
-						webFormat.connect(
-								uniBoxToWebBoxID.get(edge.getFromElement()),
-								uniBoxToWebBoxID.get(element)
+						/*
+						 * SERIALIZATION SCHEME:
+						 * - edge: A (edge.getFromElement(); fromBox) -> B (element, toBox)
+						 * - connector: outputDataType (output slot) -> inputDataType (input slot)
+						 */
+						
+						// connect boxes
+						BoxInfoServer fromBox = webFormat.getBox(uniBoxToWebBoxID.get(edge.getFromElement()));
+						BoxInfoServer toBox = webFormat.getBox(uniBoxToWebBoxID.get(element));
+						if(!webFormat.edgeExistsBetween(fromBox.getID(), toBox.getID())) // protection against multiple slot connections through the same edge
+						{
+							webFormat.connect(fromBox.getID(), toBox.getID());
+						}
+						
+						// also connect slots if needed
+						if((edge.getInputDataType() != null) && (edge.getOutputDataType() != null))
+						{
+							Slot fromBoxSlot = fromBox.getAssociatedAgent().fetchOutputSlotByDataType(edge.getOutputDataType());
+							Slot toBoxSlot = toBox.getAssociatedAgent().fetchInputSlotByDataType(edge.getInputDataType());
+							if((fromBoxSlot == null) || (toBoxSlot == null))
+							{
+								throw new IllegalStateException("Could not find a slot by name in resolved agent info. Invalid binding.");
+							}
+							else
+							{
+								webFormat.getSlotConnections().connect(
+										new BoxSlot(fromBox, fromBoxSlot),
+										new BoxSlot(toBox, toBoxSlot)
 								);
-
-						// TODO: update internal state (connected slots)
+							}
+						}
 					}
 				}
-
-				/*
-				 * TODO later:
-				 * Experiment XMLs need to be fully aliased to allow injecting other types (beside
-				 * the original). Experiment XMLs would then be pretty much "standardized" while
-				 * the universal format objects could be fluid as the water :).
-				 */
 
 				// and finally, options... THIS IS THE TRICKY PART
 				for(UniversalElement element : uniFormat.getAllElements())
@@ -353,60 +500,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 		catch (Throwable t)
 		{
 			throw new ConversionException(t);
-		}
-	}
-
-	// ------------------------------------------------------------------
-	// PRIVATE INTERFACE
-
-	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey, boolean connect)
-	{
-		/*
-		 * Let this method have a transaction-like manner and only alter the data when
-		 * everything has been checked and approved.
-		 */
-
-		// first, all kinds of checks before actually doing anything significant
-		if((fromBoxKey == null) || (toBoxKey == null)) // boxes have not been added to the structure
-		{
-			throw new IllegalArgumentException("Cannot add this edge because at least one of the boxes was not added to the structure. "
-					+ "Call the 'addBox()' method first and try again.");
-		}
-		if(!leafBoxes.containsKey(fromBoxKey) || !leafBoxes.containsKey(toBoxKey))
-		{
-			throw new IllegalArgumentException("One of the supplied box keys represents a wrapper box. Cannot add edges to wrapper boxes.");
-		}
-		if(connect) // we want to connect the boxes
-		{
-			if((edges.get(fromBoxKey) != null) && edges.get(fromBoxKey).contains(toBoxKey)) // an edge already exists
-			{
-				throw new IllegalStateException("Cannot add an edge from box '" + String.valueOf(fromBoxKey) + "' to box '" +
-						String.valueOf(toBoxKey) + "': they are already connected.");
-			}
-		}
-		else // we want to disconnect the boxes
-		{
-			if((edges.get(fromBoxKey) == null) || !edges.get(fromBoxKey).contains(toBoxKey)) // the edge doesn't exist
-			{
-				throw new IllegalStateException("Cannot remove the edge from box '" + String.valueOf(fromBoxKey) + "' to box '" +
-						String.valueOf(toBoxKey) + "': they are not connected.");
-			}
-		}
-
-		// and finally, let's add or remove the edge
-		if(connect)
-		{
-			// add edge
-			if(!edges.containsKey(fromBoxKey))
-			{
-				edges.put(fromBoxKey, new HashSet<Integer>());
-			}
-			edges.get(fromBoxKey).add(toBoxKey);
-		}
-		else
-		{
-			// remove edge
-			edges.get(fromBoxKey).remove(toBoxKey);
 		}
 	}
 }

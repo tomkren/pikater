@@ -26,6 +26,7 @@ import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator.GraphItemRegistration;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.CreateEdgeModule;
@@ -365,6 +366,43 @@ public final class KineticEngine
 		fillRectangle.setSize(newSize);
 	}
 	
+	/**
+	 * Highlight boxes only for a single stage repaint.
+	 * @param boxIDs
+	 */
+	public void highlightUntilNextRepaint(Integer[] boxIDs)
+	{
+		for(Integer id : boxIDs)
+		{
+			BoxGraphItemClient box = itemRegistrationModule.getBoxByID(id);
+			box.setVisualStyle(VisualStyle.HIGHLIGHTED_SLOT);
+		}
+		draw(EngineComponent.LAYER_BOXES);
+		for(Integer id : boxIDs)
+		{
+			BoxGraphItemClient box = itemRegistrationModule.getBoxByID(id);
+			box.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_SLOT);
+		}
+	}
+	
+	public void cancelSelection()
+	{
+		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, true, false, selectionModule.getSelectedBoxes());
+	}
+	
+	public void reloadVisualStyle()
+	{
+		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
+		{
+			box.applyUserSettings();
+			for(EdgeGraphItemClient edge : box.connectedEdges)
+			{
+				edge.applyUserSettings();
+			}
+		}
+		draw(EngineComponent.STAGE);
+	}
+	
 	// *****************************************************************************************************
 	// IMPLEMENTATION INDEPENDENT PUBLIC INTERFACE
 	
@@ -516,19 +554,6 @@ public final class KineticEngine
 	{
 		getContext().getHistoryManager().push(operation);
 		operation.firstExecution();
-	}
-	
-	public void reloadVisualStyle()
-	{
-		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
-		{
-			box.applyUserSettings();
-			for(EdgeGraphItemClient edge : box.connectedEdges)
-			{
-				edge.applyUserSettings();
-			}
-		}
-		draw(EngineComponent.STAGE);
 	}
 	
 	public void draw(EngineComponent component)

@@ -166,13 +166,17 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 				arrow.setStroke(Colour.black);
 				break;
 				
-			case HIGHLIGHTED:
+			case HIGHLIGHTED_EDGE:
 				arrow.setStroke(Colour.red);
 				break;
-			case NOT_HIGHLIGHTED:
+			case NOT_HIGHLIGHTED_EDGE:
 				arrow.setStroke(Colour.black);
 				break;
 			
+			case HIGHLIGHTED_SLOT:
+			case NOT_HIGHLIGHTED_SLOT:
+				break;
+				
 			default:
 				throw new IllegalStateException("Unknown state: " + style.name());
 		}

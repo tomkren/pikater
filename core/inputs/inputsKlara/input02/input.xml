@@ -120,7 +120,7 @@
                   <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                   <errors/>
                   <dataSources/>
-                  <type>Crossvalidation</type>
+                  <type>CrossValidation</type>
                   <options>
                     <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                       <name>F</name>
@@ -168,6 +168,7 @@
                     <dataSources/>
                     <fileURI>weather.arff</fileURI>
                   </dataProvider>
+                  <dataOutputType>fileData</dataOutputType>
                   <dataInputType>trainingData</dataInputType>
                 </trainingData>
                 <testingData>
@@ -178,6 +179,7 @@
                     <dataSources/>
                     <fileURI>weather.arff</fileURI>
                   </dataProvider>
+                  <dataOutputType>fileData</dataOutputType>
                   <dataInputType>testingData</dataInputType>
                 </testingData>
               </provider>
@@ -284,7 +286,7 @@
               <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
               <errors/>
               <dataSources/>
-              <type>Crossvalidation</type>
+              <type>CrossValidation</type>
               <options>
                 <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                   <name>F</name>
@@ -326,6 +328,7 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
+              <dataOutputType>fileData</dataOutputType>
               <dataInputType>trainingData</dataInputType>
             </trainingData>
             <testingData>
@@ -336,11 +339,12 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
+              <dataOutputType>fileData</dataOutputType>
               <dataInputType>testingData</dataInputType>
             </testingData>
           </computingAgent>
         </dataProvider>
-        <dataOutputType>Data</dataOutputType>
+        <dataOutputType>computedData</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>

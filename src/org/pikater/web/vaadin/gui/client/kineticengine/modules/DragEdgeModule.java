@@ -83,7 +83,7 @@ public final class DragEdgeModule implements IEngineModule
 		{
 			if(isAnEdgeBeingDragged() && !isStaticEndpointForThisDrag(parentBox))
 			{
-				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED);
+				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
 				kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.setProcessed();
@@ -103,7 +103,7 @@ public final class DragEdgeModule implements IEngineModule
 		{
 			if(isAnEdgeBeingDragged())
 			{
-				parentBox.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
+				parentBox.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
 				kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.setProcessed();
@@ -148,7 +148,7 @@ public final class DragEdgeModule implements IEngineModule
 			BoxGraphItemClient newEndpoint = kineticEngine.getHoveredBox();
 			if(newEndpoint != null) // edge was dragged onto a box
 			{
-				newEndpoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
+				newEndpoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
 				BoxGraphItemClient originalEndpoint = draggedEdge.getEndPoint(draggedEdgeEndpoint); 
 				if(newEndpoint != originalEndpoint) // now we know for sure we are going to change the endpoint
 				{

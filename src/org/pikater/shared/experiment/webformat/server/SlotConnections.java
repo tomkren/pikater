@@ -1,6 +1,5 @@
 package org.pikater.shared.experiment.webformat.server;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,10 +7,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.shared.experiment.webformat.server.BoxSlot.SlotType;
 
 /**
  * Maps all slots (input/output; all boxes) to connected slots, wrapped in a special
- * class.
+ * class. It is required that all mentioned slots are represented by exactly one
+ * {@link Slot} instance in the whole web application.</br>
+ * This implementation defines an important term: INSTANCE ENDPOINT. It is an instance
+ * of {@link BoxSlot} that was used in the {@link SlotConnections#connect(BoxSlot, BoxSlot)}
+ * method to connect slots. Some methods of this class require INSTANCE ENDPOINTS while
+ * others require just ANY {@link BoxSlot} instance. Read Javadocs carefully, when you
+ * implement or use this class.</br>
  */
 public class SlotConnections
 {
@@ -20,7 +26,7 @@ public class SlotConnections
 	 * a slot connection is currently valid (whether an edge exists
 	 * between the endpoint boxes).
 	 */
-	private final ISlotConnectionsContext<Integer> context;
+	private final ISlotConnectionsContext<Integer, BoxInfoServer> context;
 	
 	/**
 	 * A special field that lets us avoid indexing connections by
@@ -39,7 +45,7 @@ public class SlotConnections
 	 * methods defined, otherwise the Map will not compare keys by instance.
 	 * <li> {@link BoxSlot} should not be used as key in this collection,
 	 * because equals & hashCode methods would be required for it, which in
-	 * turn require the same methods on subtypes. And so on, so forth.
+	 * turn require the same methods on subtypes.
 	 * </ul>  
 	 */
 	private final Map<Slot, Set<BoxSlot>> connectionMap;
@@ -48,7 +54,7 @@ public class SlotConnections
 	 * Ctor.
 	 * @param context
 	 */
-	public SlotConnections(ISlotConnectionsContext<Integer> context)
+	public SlotConnections(ISlotConnectionsContext<Integer, BoxInfoServer> context)
 	{
 		this.context = context;
 		this.slotToBoxSlot = new HashMap<Slot, BoxSlot>();
@@ -57,9 +63,9 @@ public class SlotConnections
 	
 	/**
 	 * Connects the given 2 slots, if possible. Throws exceptions otherwise.</br>
-	 * No need to distinguish between input/output endpoints.
-	 * @param endPoint1
-	 * @param endPoint2
+	 * No need to distinguish between input/output endpoints.</br> 
+	 * @param endPoint1 can be arbitrary {@link BoxSlot} instance
+	 * @param endPoint2 can be arbitrary {@link BoxSlot} instance
 	 */
 	public void connect(BoxSlot endPoint1, BoxSlot endPoint2)
 	{
@@ -104,9 +110,62 @@ public class SlotConnections
 		}
 	}
 	
-	public List<BoxSlot> getConnectedAndValidEndpointsForSlot(Slot slot)
+	public boolean areSlotsConnected(Slot slot1, Slot slot2)
 	{
-		List<BoxSlot> result = new ArrayList<BoxSlot>();
+		if(connectionExistsFor(slot1) && connectionExistsFor(slot2))
+		{
+			return connectionMap.get(slot1).contains(slotToBoxSlot.get(slot2));
+		}
+		return false;
+	}
+	
+	/**
+	 * Determines whether the given slot is connected to the given endpoint. 
+	 * @param slot
+	 * @param endpoint must be INSTANCE ENDPOINT
+	 * @return
+	 */
+	public boolean isSlotConnectedToEndpoint(Slot slot, BoxSlot endpoint)
+	{
+		return getConnectedAndValidEndpointsForSlot(slot).contains(endpoint);
+	}
+	
+	/**
+	 * Gets the list of endpoints that can be connected to the given endpoint. 
+	 * @param endpoint can be arbitrary {@link BoxSlot} instance
+	 * @return INSTANCE ENDPOINTS if connections already exist, new instances otherwise
+	 */
+	public Set<BoxSlot> getCandidateEndpointsForEndpoint(BoxSlot endpoint)
+	{
+		Set<BoxSlot> result = new HashSet<BoxSlot>();
+		Set<BoxInfoServer> otherBoxes = endpoint.getChildSlotsType() == SlotType.INPUT ?
+				context.getToNeighbours(endpoint.getParentBox().getID()) : context.getFromNeighbours(endpoint.getParentBox().getID());
+		for(BoxInfoServer otherBox : otherBoxes)
+		{
+			List<Slot> slotCollection = endpoint.getChildSlotsType() == SlotType.INPUT ? 
+					otherBox.getAssociatedAgent().getOutputSlots() : otherBox.getAssociatedAgent().getInputSlots();
+			for(Slot otherSlot : slotCollection)
+			{
+				if(otherSlot.isCompatibleWith(endpoint.getChildSlot()))
+				{
+					BoxSlot endpointToAdd = slotToBoxSlot.get(otherSlot);
+					if(endpointToAdd == null)
+					{
+						result.add(new BoxSlot(otherBox, otherSlot));
+					}
+					else
+					{
+						result.add(endpointToAdd);
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public Set<BoxSlot> getConnectedAndValidEndpointsForSlot(Slot slot)
+	{
+		Set<BoxSlot> result = new HashSet<BoxSlot>();
 		if(connectionExistsFor(slot))
 		{
 			for(BoxSlot endPoint : connectionMap.get(slot))
@@ -120,7 +179,7 @@ public class SlotConnections
 				}
 				else
 				{
-					toBoxID = slotToBoxSlot.get(slot).getParentBox().getID();
+					fromBoxID = slotToBoxSlot.get(slot).getParentBox().getID();
 					toBoxID = endPoint.getParentBox().getID();
 				}
 				if(context.edgeExistsBetween(fromBoxID, toBoxID))
@@ -158,6 +217,11 @@ public class SlotConnections
 		}
 	}
 	
+	/**
+	 * Connects the given endpoints in the defined direction.
+	 * @param from can be arbitrary {@link BoxSlot} instance
+	 * @param to can be arbitrary {@link BoxSlot} instance
+	 */
 	private void oneWayConnect(BoxSlot from, BoxSlot to)
 	{
 		/*

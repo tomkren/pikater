@@ -2,6 +2,8 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
 import java.util.List;
 
+import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
+import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -395,7 +397,19 @@ public class Toolbar extends VerticalLayout
 					Integer userAssignedPriority = (Integer) args[1];
 					Boolean sendEmailWhenFinished = (Boolean) args[2];
 					String note = (String) args[3];
-					saveExperiment(new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority, sendEmailWhenFinished), experimentSavedCallback);
+					
+					JPABatch newExperiment = new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority, sendEmailWhenFinished);
+					saveExperiment(newExperiment, experimentSavedCallback);
+					try
+					{
+						WebToCoreEntryPoint.notify_newBatch(newExperiment.getId());
+					}
+					catch (PikaterGatewayException e)
+					{
+						// TODO: delete the newly saved batch
+						PikaterLogger.logThrowable("Could not send notification about a new batch to core.", e);
+						MyNotifications.showError("Failed", "Saved but not scheduled.");
+					}
 				}
 				
 				private void saveExperiment(JPABatch newExperiment, IOnExperimentSaved experimentSavedCallback)

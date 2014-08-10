@@ -12,6 +12,11 @@ public class LedIndicator extends Panel
 	private static final long serialVersionUID = 1770927441412413922L;
 	
 	private final Anchor actualLed;
+	
+	public LedIndicator(LedIndicatorTheme theme)
+	{
+		this(theme, null);
+	}
 
 	public LedIndicator(LedIndicatorTheme theme, ClickListener listener)
 	{
@@ -22,9 +27,23 @@ public class LedIndicator extends Panel
 		this.actualLed.removeStyleName("v-label");
 		
 		setSizeUndefined();
-		setStyleName("ledIndicator");
-		setTheme(theme);
 		setContent(actualLed);
+		
+		setTheme(theme);
+		setStyleName("ledIndicator");
+		setHoverEnabled(listener != null);
+	}
+	
+	public void setHoverEnabled(boolean enabled)
+	{
+		if(enabled)
+		{
+			actualLed.addStyleName("hoverEnabled");
+		}
+		else
+		{
+			actualLed.removeStyleName("hoverEnabled");
+		}
 	}
 	
 	public void setTheme(LedIndicatorTheme theme)

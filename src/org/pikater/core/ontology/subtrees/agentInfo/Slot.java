@@ -37,6 +37,7 @@ public class Slot implements Concept {
 	
 	public boolean isCompatibleWith(Slot otherSlot)
 	{
-		return slotType.equals(otherSlot.slotType);
+		return true; // TODO: a hack around...
+		// return slotType.equals(otherSlot.slotType);
 	}
 }
