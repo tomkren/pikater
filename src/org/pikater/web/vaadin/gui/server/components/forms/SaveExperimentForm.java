@@ -207,7 +207,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 	
 	public Integer getPriorityAssignedByUser()
 	{
-		return Integer.parseInt((String) field_priorityAssignedByUser.getValue());
+		return (Integer) field_priorityAssignedByUser.getValue();
 	}
 	
 	public boolean getSendEmailWhenFinished()

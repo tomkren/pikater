@@ -15,6 +15,7 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.IKineticComponent;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
@@ -23,7 +24,7 @@ import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractComponent;
 
 @JavaScript(value = "kinetic-v4.7.3-dev.js")
-public class KineticComponent extends AbstractComponent
+public class KineticComponent extends AbstractComponent implements IKineticComponent
 {
 	private static final long serialVersionUID = -539901377528727478L;
 	
@@ -137,6 +138,7 @@ public class KineticComponent extends AbstractComponent
 				{
 					experimentGraph.getBox(boxShared.getID()).setRegistered(opKind == RegistrationOperation.REGISTER);
 				}
+				// TODO: update box manager views (could delete a box that is connected with the current one via a slot)
 			}
 			
 			/**
@@ -162,6 +164,7 @@ public class KineticComponent extends AbstractComponent
 						experimentGraph.disconnect(edge.fromBoxID, edge.toBoxID); // this will invalidate any actual slot connections
 					}
 				}
+				// TODO: update box manager views (could delete an edge that allows a slot connection)
 			}
 			
 			@Override
@@ -207,6 +210,54 @@ public class KineticComponent extends AbstractComponent
 	}
 	
 	//---------------------------------------------------------------
+	// BOTH SERVER AND CLIENT KINETIC COMPONENT INTERFACE
+	
+	/*
+	 * Simply forward calls to client.
+	 */
+	
+	@Override
+	public void highlightBoxes(Integer[] boxIDs)
+	{
+		getClientRPC().highlightBoxes(boxIDs);
+	}
+
+	@Override
+	public void cancelBoxHighlight()
+	{
+		getClientRPC().cancelBoxHighlight();
+	}
+	
+	@Override
+	public void cancelSelection()
+	{
+		getClientRPC().cancelSelection();
+	}
+
+	@Override
+	public void resetEnvironment()
+	{
+		/*
+		 * Server side reset could be done in a response call from the client but
+		 * then we would have to wait for it before the current thread proceeds.
+		 * As such, NEVER reset server-side state from the client :).
+		 */
+		
+		// client side reset
+		getClientRPC().resetEnvironment();
+		
+		// server side reset
+		experimentGraph.clear();
+		experimentGraph = null;
+	}
+	
+	@Override
+	public void reloadVisualStyle()
+	{
+		getClientRPC().reloadVisualStyle();
+	}
+	
+	//---------------------------------------------------------------
 	// EXPERIMENT IMPORT/EXPORT RELATED ROUTINES/TYPES
 	
 	/**
@@ -249,7 +300,7 @@ public class KineticComponent extends AbstractComponent
 			experimentGraph = ExperimentGraphServer.fromUniversalFormat(uniFormat);
 			
 			// transform to client format and send it to the client
-			getClientRPC().command_receiveExperimentToLoad(experimentGraph.toClientFormat());
+			getClientRPC().receiveExperimentToLoad(experimentGraph.toClientFormat());
 			
 			// finish updating server-side state
 			previouslyLoadedExperimentID = experiment.getId();
@@ -349,34 +400,13 @@ public class KineticComponent extends AbstractComponent
 		));
 		if(sendToClient)
 		{
-			getClientRPC().command_createBox(result.toClientFormat());
+			getClientRPC().createBox(result.toClientFormat());
 		}
 		return result;
 	}
 	
-	public void reloadVisualStyle()
-	{
-		getClientRPC().request_reloadVisualStyle();
-	}
-	
 	//---------------------------------------------------------------
 	// MISCELLANEOUS PRIVATE INTERFACE
-	
-	private void resetEnvironment()
-	{
-		/*
-		 * Server side reset could be done in a response call from the client but
-		 * then we would have to wait for it before the current thread proceeds.
-		 * As such, NEVER reset server-side state from the client :).
-		 */
-		
-		// client side reset
-		getClientRPC().command_resetKineticEnvironment();
-		
-		// server side reset
-		experimentGraph.clear();
-		experimentGraph = null;
-	}
 	
 	private KineticComponentClientRpc getClientRPC()
 	{

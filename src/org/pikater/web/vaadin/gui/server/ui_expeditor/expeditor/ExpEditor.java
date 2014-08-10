@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
 import org.pikater.shared.experiment.webformat.server.BoxType;
-import org.pikater.shared.experiment.webformat.server.ExperimentGraphServer;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
@@ -141,9 +141,9 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		IBoxManagerToolboxContext contextForBoxManager = new IBoxManagerToolboxContext()
 		{
 			@Override
-			public ExperimentGraphServer getCurrentGraph()
+			public KineticComponent getCurrentComponent()
 			{
-				return getActiveKineticComponent().getExperimentGraph();
+				return getActiveKineticComponent();
 			}
 		};
 		this.toolbox_boxManager = new BoxManagerToolbox(contextForBoxManager, ExpEditorToolbox.BOX_MANAGER.toDisplayName(), new MouseEvents.ClickListener()
@@ -205,6 +205,9 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		this.extension = new ExpEditorExtension();
 		this.extension.extend(this);
 		this.extension.getClientRPC().command_loadBoxPictures(allPictureURLs.toArray(new String[0]));
+		
+		// display an empty experiment by default
+		// addEmptyTab();
 	}
 	
 	@Override
@@ -216,6 +219,8 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	@Override
 	public void onTabSelectionChange()
 	{
+		getActiveKineticComponent().cancelSelection();
+		((BoxManagerToolbox) getToolbox(ExpEditorToolbox.BOX_MANAGER)).setContentFromSelectedBoxes(new BoxInfoServer[0]);
 		toolbar.onTabSelectionChange(getActiveKineticComponent());
 	}
 	

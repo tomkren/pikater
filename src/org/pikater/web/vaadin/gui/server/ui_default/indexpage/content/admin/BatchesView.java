@@ -98,6 +98,8 @@ public class BatchesView extends ExpandableView
 					return 100;
 				case NOTE:
 					return 200;
+				case ABORT:
+					return 100;
 				default:
 					throw new IllegalStateException("Unknown state: " + specificColumn.name());
 			}
