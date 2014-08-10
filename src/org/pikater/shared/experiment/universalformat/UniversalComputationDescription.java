@@ -38,18 +38,11 @@ public class UniversalComputationDescription
 	 */
 	private final SimpleIDGenerator idGenerator;
 
-	/**
-	 * Default wrapper for top-level elements. All elements and wrappers either have this
-	 * wrapper as a parent or another. 
-	 */
-	// private final UniversalGuiWrapper defaultWrapper;
-	
 	public UniversalComputationDescription()
 	{
 		this.globalOptions = new HashSet<NewOption>();
 		this.rootElements = new HashSet<UniversalElement>();
 		this.allElements = new HashSet<UniversalElement>();
-		// this.defaultWrapper = new UniversalGuiWrapper(null);
 		this.idGenerator = new SimpleIDGenerator();
 	}
 	
@@ -96,20 +89,14 @@ public class UniversalComputationDescription
 		}
 		else
 		{
-			allElements.add(element);
 			element.getOntologyInfo().setId(idGenerator.getAndIncrement());
-			if (element.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
+			
 			//if (BoxType.fromOntologyClass(element.getOntologyInfo().getOntologyClass()) == BoxType.OUTPUT)
+			if (element.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
 			{
 				rootElements.add(element);
 			}
-			// TODO: change data structures when wrappers are really needed
-			/*
-			if (element.getParentWrapper() == null)
-			{
-				defaultWrapper.addElements(element);
-			}
-			*/
+			allElements.add(element);
 		}
 	}
 	
@@ -139,110 +126,6 @@ public class UniversalComputationDescription
 		// TODO: all kinds of consistency checks
 		// TODO: connector.validate()
 		return true;
-	}
-	
-	// ----------------------------------------------------------
-	// MANIPULATION WITH WRAPPERS
-
-	/**
-	 * Creates a new {@link UniversalGuiWrapper} and moves all the listed arguments inside it.
-	 * REQUIREMENT: argument wrappers and elements must have identical direct parent ({@link UniversalGuiWrapper}).
-	 */
-	/*
-	public void insertIntoGuiWrapper(ArrayList<UniversalGuiWrapper> wrappers, ArrayList<UniversalElement> elements)
-	{
-		if (((wrappers == null) || wrappers.isEmpty()) && ((elements == null) || elements.isEmpty()))
-		{
-			throw new IllegalArgumentException("No wrappers or elements to construct the new wrapper from were received.");
-		}
-
-		UniversalGuiWrapper parent = null;
-
-		if (guiWrappers != null && (!guiWrappers.isEmpty()))
-		{
-			parent = this.getParentWrapperOf(guiWrappers.get(0));
-		}
-		else
-		{
-			parent = this.getParentWrapperOf(elements.get(0));
-		}
-
-		for (UniversalGuiWrapper wrapperI : guiWrappers)
-		{
-			UniversalGuiWrapper parentI = this.getParentWrapperOf(wrapperI);
-			if (parentI != parent)
-			{
-				throw new IllegalArgumentException(
-						"GuiWrappers and elements are not "
-								+ "in the same UniversalGuiWrapper");
-			}
-		}
-
-		for (UniversalElement elementI : elements)
-		{
-			UniversalGuiWrapper parentI = this.getParentWrapperOf(elementI);
-			if (parentI != parent)
-			{
-				throw new IllegalArgumentException(
-						"GuiWrappers and elements are not "
-								+ "in the same UniversalGuiWrapper");
-			}
-		}
-
-		UniversalGuiWrapper newWrapper = new UniversalGuiWrapper();
-		newWrapper.addElements(elements);
-		newWrapper.addWrappers(guiWrappers);
-
-		parent.replaceByWrapper(newWrapper);
-	}
-
-    public void replaceByWrapper(UniversalGuiWrapper wrapper)
-    {
-    	childElements.removeAll(wrapper.getChildWrappers());
-    	childWrappers.removeAll(wrapper.getChildWrappers());
-    	childWrappers.add(wrapper);
-    }
-	
-    // this has be implemented in a completely different way
-    public UniversalGuiWrapper getParentWrapper(UniversalElement element) {
-
-    	if (this.elements.contains(element)) {
-    		return this;
-    	} else {
-
-    		for (UniversalGuiWrapper wrapperI : guiWrappers) {
-    			UniversalGuiWrapper result =
-    					wrapperI.getParentWrapper(element);
-    			if ( result != null ) {
-    				return result;
-    			}
-    		}
-    		return null;
-    	}
-    }
-	*/
-	
-	public static UniversalComputationDescription getDummy()
-	{
-		UniversalComputationDescription result = new UniversalComputationDescription();
-		
-		UniversalElement element1 = new UniversalElement();
-		element1.getGuiInfo().setX(10);
-		element1.getGuiInfo().setY(10);
-		
-		UniversalElement element2 = new UniversalElement();
-		element2.getGuiInfo().setX(500);
-		element2.getGuiInfo().setY(10);
-		
-		UniversalElement element3 = new UniversalElement();
-		element3.getGuiInfo().setX(400);
-		element3.getGuiInfo().setY(300);
-		
-		result.addElement(element1);
-		result.addElement(element2);
-		result.addElement(element3);
-		
-		return result;
 	}
 	
 	public String toXML()
