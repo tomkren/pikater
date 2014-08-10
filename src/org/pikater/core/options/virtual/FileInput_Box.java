@@ -19,7 +19,7 @@ public class FileInput_Box {
 		agentInfo.setName("FileInput");
 		agentInfo.setDescription("This box provides a data source to other boxes.");
 
-		NewOption optionIN = new NewOption("File", new StringValue("inputFile.ARFF"));
+		NewOption optionIN = new NewOption("fileURI", new StringValue("inputFile.ARFF"));
 		optionIN.setDescription("File name");
 		
 		agentInfo.addOption(optionIN);
