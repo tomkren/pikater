@@ -2,6 +2,7 @@ package org.pikater.core.options.evaluation;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
@@ -21,7 +22,7 @@ public class CrossvalidationEvaluationMethod_Box {
 		agentInfo.setName("EM_XValidation");
 		agentInfo.setDescription("Evaluation Method");
 		agentInfo.addOption(optionF);
-		agentInfo.importAgentClass(CrossvalidationEvaluationMethod_Box.class);
+		agentInfo.importAgentClass(CrossValidation.class);
 		agentInfo.importOntologyClass(EvaluationMethod.class);
 				
 		agentInfo.setOutputSlots(
