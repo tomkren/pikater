@@ -31,25 +31,10 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 		
 	@Override
 	public List<NewOption> exportAllOptions() {
-		
-		NewOption nameOfFileOption = new NewOption(
-				 "nameOfFile",(getNameOfFile()));
-
-	    List<NewOption> options = new ArrayList<NewOption>();
-	    options.add(nameOfFileOption);
-
-	    return options;
+	    return new ArrayList<NewOption>();
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
-		
-		NewOptions optinsOnt = new NewOptions(options);
-		
-		NewOption optionFile = optinsOnt.getOptionByName("nameOfFile");
-		StringValue value = (StringValue)
-				optionFile.toSingleValue().getCurrentValue();
-		this.nameOfFile = value.getValue();
-		
 	}
 	
 	@Override
