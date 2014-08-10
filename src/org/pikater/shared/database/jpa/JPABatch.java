@@ -219,6 +219,11 @@ public class JPABatch extends JPAAbstractEntity{
 	public void setStatus(String status) {
 		this.setStatus(JPABatchStatus.valueOf(status));
 	}
+	
+	public boolean isScheduled()
+	{
+		return getStatus() != JPABatchStatus.CREATED;
+	}
 
 	@Transient
 	public static final String EntityName = "Batch";
