@@ -84,10 +84,10 @@ public final class CreateEdgeModule implements IEngineModule
 		public void finishOperation(BoxGraphItemClient toEndPoint)
 		{
 			// IMPORTANT: don't violate the call order
-			fromEndPoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
+			fromEndPoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
 			if(toEndPoint != null)
 			{
-				toEndPoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
+				toEndPoint.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
 				if(fromEndPoint.isNotConnectedTo(toEndPoint))
 				{
 					newEdge.setEndpoint(EndPoint.TO, toEndPoint);
@@ -186,7 +186,7 @@ public final class CreateEdgeModule implements IEngineModule
 				 */
 				
 				edgeCreationContext.startOperation(parentBox);
-				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED);
+				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
 				
 				// register the required handlers
 				kineticEngine.removeFillRectangleHandlers();
@@ -217,7 +217,7 @@ public final class CreateEdgeModule implements IEngineModule
 		{
 			if(edgeCreationContext.isAnEdgeBeingCreated() && (parentBox != edgeCreationContext.getFromEndPoint()))
 			{
-				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED);
+				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
 				kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.stopVerticalPropagation();
@@ -237,7 +237,7 @@ public final class CreateEdgeModule implements IEngineModule
 		{
 			if(edgeCreationContext.isAnEdgeBeingCreated() && (parentBox != edgeCreationContext.getFromEndPoint()))
 			{
-				parentBox.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED);
+				parentBox.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
 				kineticEngine.draw(parentBox.getComponentToDraw());
 				
 				event.stopVerticalPropagation();

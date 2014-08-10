@@ -38,27 +38,45 @@ public class KineticComponentConnector extends AbstractComponentConnector
 			 */
 			
 			@Override
-			public void command_createBox(BoxInfoClient info)
+			public void highlightBoxes(Integer[] boxIDs)
 			{
-				getWidget().command_createBox(info);
+				getWidget().highlightBoxes(boxIDs);
 			}
 
 			@Override
-			public void command_receiveExperimentToLoad(ExperimentGraphClient experiment)
+			public void cancelBoxHighlight()
 			{
-				getWidget().command_receiveExperimentToLoad(experiment);
+				getWidget().cancelBoxHighlight();
+			}
+			
+			@Override
+			public void cancelSelection()
+			{
+				getWidget().cancelSelection();
 			}
 
 			@Override
-			public void command_resetKineticEnvironment()
+			public void resetEnvironment()
 			{
-				getWidget().command_resetKineticEnvironment();
+				getWidget().resetEnvironment();
+			}
+			
+			@Override
+			public void receiveExperimentToLoad(ExperimentGraphClient experiment)
+			{
+				getWidget().receiveExperimentToLoad(experiment);
+			}
+			
+			@Override
+			public void createBox(BoxInfoClient info)
+			{
+				getWidget().createBox(info);
 			}
 
 			@Override
-			public void request_reloadVisualStyle()
+			public void reloadVisualStyle()
 			{
-				getWidget().request_reloadVisualStyle();
+				getWidget().reloadVisualStyle();
 			}
 		});
 	}

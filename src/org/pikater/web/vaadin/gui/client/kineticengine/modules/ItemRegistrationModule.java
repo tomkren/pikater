@@ -1,6 +1,8 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.modules;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
@@ -31,7 +33,7 @@ public class ItemRegistrationModule implements IEngineModule
 	/**
 	 * A self-explanatory variable.
 	 */
-	private final Set<BoxGraphItemClient> allRegisteredBoxes;
+	private final Map<Integer, BoxGraphItemClient> allRegisteredBoxes;
 	
 	/**
 	 * Constructor.
@@ -41,7 +43,7 @@ public class ItemRegistrationModule implements IEngineModule
 	{
 		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = engine;
-		this.allRegisteredBoxes = new HashSet<BoxGraphItemClient>();
+		this.allRegisteredBoxes = new HashMap<Integer, BoxGraphItemClient>();
 	}
 	
 	// **********************************************************************************************
@@ -97,7 +99,7 @@ public class ItemRegistrationModule implements IEngineModule
 			for(BoxGraphItemClient box : boxes)
 			{
 				box.setVisibleInKinetic(true);
-				allRegisteredBoxes.add(box);
+				allRegisteredBoxes.put(box.getInfo().getID(), box);
 			}
 		}
 		else
@@ -105,7 +107,7 @@ public class ItemRegistrationModule implements IEngineModule
 			for(BoxGraphItemClient box : boxes)
 			{
 				box.setVisibleInKinetic(false);
-				allRegisteredBoxes.remove(box);
+				allRegisteredBoxes.remove(box.getInfo().getID());
 			}
 		}
 		
@@ -190,7 +192,7 @@ public class ItemRegistrationModule implements IEngineModule
 		
 		// then destroy edges
 		Set<EdgeGraphItemClient> destroyedEdges = new HashSet<EdgeGraphItemClient>();
-		for(BoxGraphItemClient box : allRegisteredBoxes)
+		for(BoxGraphItemClient box : allRegisteredBoxes.values())
 		{
 			for(EdgeGraphItemClient edge : box.connectedEdges)
 			{
@@ -216,7 +218,7 @@ public class ItemRegistrationModule implements IEngineModule
 		// kineticEngine.getContext().command_itemSetChange(RegistrationOperation.UNREGISTER, EdgeGraphItemShared.fromArray(destroyedEdges.toArray(new EdgeGraphItemClient[0])));
 
 		// destroy boxes
-		for(BoxGraphItemClient box : allRegisteredBoxes)
+		for(BoxGraphItemClient box : allRegisteredBoxes.values())
 		{
 			box.destroy();
 		}
@@ -228,8 +230,13 @@ public class ItemRegistrationModule implements IEngineModule
 	// *****************************************************************************************************
 	// OTHER PUBLIC INTERFACE
 	
+	public BoxGraphItemClient getBoxByID(Integer id)
+	{
+		return allRegisteredBoxes.get(id);
+	}
+	
 	public BoxGraphItemClient[] getRegisteredBoxes()
 	{
-		return allRegisteredBoxes.toArray(new BoxGraphItemClient[0]);
+		return allRegisteredBoxes.values().toArray(new BoxGraphItemClient[0]);
 	}
 }

@@ -176,44 +176,46 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	 */
 	
 	@Override
-	public void command_createBox(final BoxInfoClient info)
-	{	
-		Scheduler.get().scheduleDeferred(new ScheduledCommand()
-		{
-			@Override
-			public void execute()
-			{
-				getGraphItemCreator().createBox(GraphItemRegistration.AUTOMATIC, info);
-			}
-		});
-	}
-	
-	/**
-	 * Loads the provided experiment into the kinetic environment encapsulated by this widget. If null,
-	 * resets the environment.
-	 */
-	@Override
-	public void command_receiveExperimentToLoad(final ExperimentGraphClient experiment)
+	public void highlightBoxes(final Integer[] boxIDs)
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			@Override
 			public void execute()
 			{
-				if(experiment != null)
-				{
-					getEngine().fromIntermediateFormat(experiment);
-				}
-				else
-				{
-					command_resetKineticEnvironment();
-				}
+				getEngine().highlightUntilNextRepaint(boxIDs);
+			}
+		});
+	}
+
+	@Override
+	public void cancelBoxHighlight()
+	{
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+			public void execute()
+			{
+				getEngine().draw(EngineComponent.LAYER_BOXES);
 			}
 		});
 	}
 	
 	@Override
-	public void command_resetKineticEnvironment()
+	public void cancelSelection()
+	{
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+			public void execute()
+			{
+				getEngine().cancelSelection();
+			}
+		});
+	}
+
+	@Override
+	public void resetEnvironment()
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -227,7 +229,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	}
 	
 	@Override
-	public void request_reloadVisualStyle()
+	public void reloadVisualStyle()
 	{
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -235,6 +237,43 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			public void execute()
 			{
 				getEngine().reloadVisualStyle();
+			}
+		});
+	}
+	
+	/**
+	 * Loads the provided experiment into the kinetic environment encapsulated by this widget. If null,
+	 * resets the environment.
+	 */
+	@Override
+	public void receiveExperimentToLoad(final ExperimentGraphClient experiment)
+	{
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+			public void execute()
+			{
+				if(experiment != null)
+				{
+					getEngine().fromIntermediateFormat(experiment);
+				}
+				else
+				{
+					resetEnvironment(); // in this case we don't mind calling other command
+				}
+			}
+		});
+	}
+	
+	@Override
+	public void createBox(final BoxInfoClient info)
+	{	
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			@Override
+			public void execute()
+			{
+				getGraphItemCreator().createBox(GraphItemRegistration.AUTOMATIC, info);
 			}
 		});
 	}
