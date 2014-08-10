@@ -192,13 +192,19 @@ public class StartupAndQuitListener implements ServletContextListener
 						options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(new ArrayList<IValueData>(Arrays.asList(
 								new IntegerValue(5), new IntegerValue(10))), 3)));
 						
-						Slot testSlot = new Slot();
-						testSlot.setDataType("pokus");
-						testSlot.setSlotType(SlotTypes.DATA_TYPE);
-						testSlot.setDescription("A general test slot.");
+						Slot slotInput_test = new Slot();
+						slotInput_test.setDataType("pokus");
+						slotInput_test.setSlotType(SlotTypes.DATA_TYPE);
+						slotInput_test.setDescription("A general test input slot.");
+						
+						Slot slotOutput_test = new Slot();
+						slotOutput_test.setDataType("pokus");
+						slotOutput_test.setSlotType(SlotTypes.DATA_TYPE);
+						slotOutput_test.setDescription("A general test output slot.");
 
 						agentInfo.setOptions(options);
-						agentInfo.setInputSlots(Arrays.asList(testSlot));
+						agentInfo.setInputSlots(Arrays.asList(slotInput_test));
+						agentInfo.setOutputSlots(Arrays.asList(slotOutput_test));
 						agentInfoCollection.addDefinition(agentInfo);
 					}
 				}
