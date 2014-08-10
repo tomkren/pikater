@@ -11,16 +11,16 @@ import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 
 	private static final long serialVersionUID = -9024769565945696142L;
-	private String type;
-
+	
+	private String agentType;
 	private List<NewOption> options;
 
 	public EvaluationMethod() {
-		this.type = "Standard";
+		this.agentType = "Standard";
 		this.options = new ArrayList<NewOption>();
 	}
 	public EvaluationMethod(String type) {
-		this.type = type;
+		this.agentType = type;
 		this.options = new ArrayList<NewOption>();
 	}
 
@@ -35,34 +35,19 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
         this.options.add(option);
     }
 
-	public String getType() {
-		return type;
+	public String getAgentType() {
+		return agentType;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setAgentType(String type) {
+		this.agentType = type;
 	}
 	
 	@Override
 	public List<NewOption> exportAllOptions() {
-
-		NewOption typeOption =
-				new NewOption("type",type);
-		
-		List<NewOption> options = new ArrayList<NewOption>();
-		options.add(typeOption);
-		options.addAll(this.options);
-		return options;
+		return this.options;
 	}
 	@Override
 	public void importAllOptions(List<NewOption> options) {
-		
-		NewOptions optionsOntol = new NewOptions(options);
-		NewOption optMethod = optionsOntol.getOptionByName("type");
-		StringValue valueMethod = (StringValue)
-				optMethod.toSingleValue().getCurrentValue();
-		this.type = valueMethod.getValue();
-		
-		options.remove(optMethod);
 		this.options = options;
 	}
 	
@@ -89,7 +74,7 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 		
 		EvaluationMethod evaluation = new EvaluationMethod();
 		evaluation.setId(this.getId());
-		evaluation.setType(type);
+		evaluation.setAgentType(this.getAgentType());
 		evaluation.setOptions(optionsOnt.clone().getOptions());
 		
 		return evaluation;

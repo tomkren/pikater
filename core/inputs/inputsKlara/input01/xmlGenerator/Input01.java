@@ -24,8 +24,8 @@ public final class Input01 {
         fileDataSource.setDataProvider(fileDataProvider);
 
         //Create validation method for a computing agent
-        EvaluationMethod evaluationMethod = new EvaluationMethod();
-        evaluationMethod.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+        EvaluationMethod evaluationMethod =
+        		new EvaluationMethod(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
         
         //Create cross validation option                
         NewOption optionF = new NewOption("F",8);

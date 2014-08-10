@@ -412,7 +412,7 @@ public class Agent_Duration extends PikaterAgent {
 		task.setDatas(datas);
 		
 		EvaluationMethod evaluationMethod = new EvaluationMethod();
-		evaluationMethod.setType(CoreConstants.EVAL_METHOD_STANDARD); // TODO don't evaluate at all
+		evaluationMethod.setAgentType(CoreConstants.EVAL_METHOD_STANDARD); // TODO don't evaluate at all
 		
 		task.setEvaluationMethod(evaluationMethod);
 		

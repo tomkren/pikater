@@ -43,7 +43,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	@Override
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
-						
+		
 		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
 				log(DurationServiceRegression_output_prefix, 2);
 		}
@@ -118,7 +118,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		Evaluation eval = new Evaluation(train);
         log("Evaluation method: \t", 2);
 		
-		if (evaluation_method.getType().equals(CoreConstants.EVAL_METHOD_CROSSVALIDATION) ){
+		if (evaluation_method.getAgentType().equals(CoreConstants.EVAL_METHOD_CROSSVALIDATION) ){
 			
 			int folds = 5; // TODO read default value from file (if necessary)
 			if (evaluation_method.getOptions() != null) {

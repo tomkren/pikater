@@ -55,7 +55,7 @@ public class Agent_PlannerTester extends PikaterAgent {
 		// waiting to start ManagerAgent
 		doWait(6000);
 		
-		for (int i = 0; i < 20; i++) { 
+		for (int i = 0; i < 50; i++) { 
 	        sendTask();
 	        sendTask2();
 	        sendTask3();
@@ -96,7 +96,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         NewOption optionF = new NewOption("F", 8);
     	
     	EvaluationMethod method = new EvaluationMethod();
-    	method.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+    	method.setAgentType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
     	method.addOption(optionF);
 
     	Task task = new Task();
@@ -158,7 +158,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         NewOption optionF = new NewOption("F", 8);
         
     	EvaluationMethod method = new EvaluationMethod();
-    	method.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+    	method.setAgentType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
     	method.addOption(optionF);
     	
     	Task task = new Task();
@@ -220,7 +220,7 @@ public class Agent_PlannerTester extends PikaterAgent {
         NewOption optionF = new NewOption("F", 8);
         
     	EvaluationMethod method = new EvaluationMethod();
-    	method.setType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
+    	method.setAgentType(CoreConstants.EVAL_METHOD_CROSSVALIDATION);
     	method.addOption(optionF);
     	
     	Task task = new Task();
