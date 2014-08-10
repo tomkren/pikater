@@ -180,6 +180,30 @@ public class AgentInfo implements Concept, ICloneable
 		this.outputSlots.add(outputSlot);
 	}
 	
+	public Slot fetchInputSlotByDataType(String dataType)
+	{
+		for(Slot slot : inputSlots)
+		{
+			if(slot.getDataType().equals(dataType))
+			{
+				return slot;
+			}
+		}
+		return null;
+	}
+	
+	public Slot fetchOutputSlotByDataType(String dataType)
+	{
+		for(Slot slot : outputSlots)
+		{
+			if(slot.getDataType().equals(dataType))
+			{
+				return slot;
+			}
+		}
+		return null;
+	}
+	
 	public boolean isOntologyType(Class<?> ontologyClass) {
 		
 		return this.ontologyClassName.equals(ontologyClass.getName());
