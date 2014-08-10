@@ -5,8 +5,6 @@ import java.util.Arrays;
 
 import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
@@ -168,12 +166,6 @@ public class MultiLayerPerceptronCA_Box {
 		**/
 		NewOption optionC = new NewOption("C", new BooleanValue(false)); 
 		optionC.setDescription("Normalizing a numeric class will NOT be done");
-
-
-		// TODO: not used
-		Slot outputSlot = new Slot();
-		outputSlot.setSlotType(SlotTypes.DATA_TYPE);
-		outputSlot.setDataType("input");
 
 
 		AgentInfo agentInfo = new AgentInfo();

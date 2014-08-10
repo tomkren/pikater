@@ -18,8 +18,8 @@ public class FileSaver_Box {
 		agentInfo.setDescription("This box save data to Pikater database");
 
 		Slot inputSlot = new Slot();
-		inputSlot.setSlotType("data");
-		inputSlot.setDataType(SlotTypes.DATA_TYPE);
+		inputSlot.setSlotType(SlotTypes.DATA_TYPE);
+		inputSlot.setDataType("data");
 		
 		agentInfo.addInputSlot(inputSlot);
 
