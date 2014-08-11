@@ -31,6 +31,7 @@ import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.RecommendOntology;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
@@ -160,14 +161,19 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 					//TODO:
                     // fill options
-                	//recommended_agent.setOptions(mergeOptions(recommended_agent.getOptions(), getAgentOptions(recommended_agent.getType()) ));
-
-        			//log("********** Agent "
-        				//	+ recommended_agent.getType()
-        				//	+ " recommended. Options: "
-        				//	+ NewOptions.exportToWeka(recommended_agent.getOptions())
-        				//	+ "**********", Verbosity.MINIMAL);
-
+/*
+					DataManagerService service = new DataManagerService();
+					agent.logError(recommended_agent.getType());
+					AgentInfo agentInfo = service.getAgentInfo(agent, recommended_agent.getType());
+					NewOptions optionsOnt = agentInfo.getOptions();
+					java.util.List<NewOption> options = optionsOnt.getOptions();
+					
+					java.util.List<NewOption> recommendedAgentOptions = recommended_agent.getOptions();
+					
+					java.util.List<NewOption> mergedOptions =
+							mergeOptions(options, recommendedAgentOptions);
+					recommended_agent.setOptions(mergedOptions);
+*/					
             		// Prepare the content of inform message                       
     				Result result = new Result(a, recommended_agent);
 					reply.setPerformative(ACLMessage.INFORM);					
