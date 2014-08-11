@@ -1,5 +1,7 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph;
 
+import org.pikater.core.agents.experiment.search.Agent_Search;
+
 /**
  * User: Kuba
  * Date: 18.5.2014
@@ -7,7 +9,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
  */
 public class SearchComputationNode extends ComputationNode {
     private String modelClass;
-    private String defaultPackagePrefix="org.pikater.core.agents.experiment.search.";
+    private String defaultPackagePrefix= Agent_Search.class.getPackage().getName() + ".";
 
     
 	public SearchComputationNode(StartComputationStrategy executeStrategy) {

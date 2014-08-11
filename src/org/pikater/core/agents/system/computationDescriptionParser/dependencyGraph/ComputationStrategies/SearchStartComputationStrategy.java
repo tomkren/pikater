@@ -58,7 +58,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
         if (searchAID==null) {
             Agent search = getSearchFromNode();
-            searchAID= myAgent.createAgent(search.getType());
+            searchAID= myAgent.createAgent(search.getType(), search.getName(), null);
         }
 
 		inputs = computationNode.getInputs();
@@ -145,6 +145,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		Map<String,ComputationOutputBuffer> inputs = computationNode.getInputs();
 
 		Agent agent = new Agent();
+//		agent.setName(computationNode.);
 		agent.setType(computationNode.getModelClass());
        if (options==null) {
            OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
