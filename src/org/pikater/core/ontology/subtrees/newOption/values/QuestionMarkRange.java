@@ -9,8 +9,8 @@ public class QuestionMarkRange implements IValidatedValueData
 	private static final long serialVersionUID = 4064649544713291827L;
 
 	private int countOfValuesToTry;
-	private IComparableValueData min;
-	private IComparableValueData max;
+	private IValueData min;
+	private IValueData max;
 	
 	/**
 	 * Should only be used by JADE.
@@ -18,13 +18,13 @@ public class QuestionMarkRange implements IValidatedValueData
 	@Deprecated
 	public QuestionMarkRange() {}
 
-    public QuestionMarkRange(IComparableValueData min, IComparableValueData max)
+    public QuestionMarkRange(IValueData min, IValueData max)
     {
         this.min = min;
         this.max = max;
     }
 
-	public QuestionMarkRange(IComparableValueData min, IComparableValueData max, int countOfValuesToTry)
+	public QuestionMarkRange(IValueData min, IValueData max, int countOfValuesToTry)
 	{
 		this.min = min;
 		this.max = max;
@@ -39,19 +39,19 @@ public class QuestionMarkRange implements IValidatedValueData
 	{
 		this.countOfValuesToTry = countOfValuesToTry;
 	}
-	public IComparableValueData getMin()
+	public IValueData getMin()
 	{
 		return min;
 	}
-	public void setMin(IComparableValueData min)
+	public void setMin(IValueData min)
 	{
 		this.min = min;
 	}
-	public IComparableValueData getMax()
+	public IValueData getMax()
 	{
 		return max;
 	}
-	public void setMax(IComparableValueData max)
+	public void setMax(IValueData max)
 	{
 		this.max = max;
 	}
@@ -109,7 +109,7 @@ public class QuestionMarkRange implements IValidatedValueData
 	@Override
 	public IValueData clone()
 	{
-		return new QuestionMarkRange((IComparableValueData) min.clone(), (IComparableValueData) max.clone(), countOfValuesToTry);
+		return new QuestionMarkRange(min.clone(), max.clone(), countOfValuesToTry);
 	}
 	@Override
 	public String exportToWeka()
@@ -128,7 +128,7 @@ public class QuestionMarkRange implements IValidatedValueData
 		{
 			return false;
 		}
-		else if(min.compareTo(max) > 0)
+		else if(!(min instanceof IComparableValueData) || ((IComparableValueData) min).compareTo((IComparableValueData) max) > 0)
 		{
 			return false;
 		}

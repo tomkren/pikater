@@ -116,20 +116,20 @@ public class Value implements Concept, IValidated
 	@Override
 	public boolean isValid()
 	{
-		// this implementation safely assumes that the current value is not null
-		if((currentValue instanceof IValidatedValueData) && !((IValidatedValueData) currentValue).isValid())
+		// this implementation safely assumes that the current and default values are not null
+		if(!type.isValid() || !type.getDefaultValue().getClass().equals(currentValue.getClass()))
 		{
 			return false;
 		}
-		else if(!type.isValid() || !type.getDefaultValue().getClass().equals(currentValue.getClass()))
+		else if((type.getRangeRestriction() != null) && !type.getRangeRestriction().isValidAgainst(currentValue))
 		{
 			return false;
 		}
-		else if(type.isRangeRestrictionDefined() && !type.getRangeRestriction().isValidAgainst(currentValue))
+		else if((type.getSetRestriction() != null) && !type.getSetRestriction().isValidAgainst(currentValue))
 		{
 			return false;
 		}
-		else if(type.isSetRestrictionDefined() && !type.getSetRestriction().isValidAgainst(currentValue))
+		else if((currentValue instanceof IValidatedValueData) && !((IValidatedValueData) currentValue).isValid())
 		{
 			return false;
 		}

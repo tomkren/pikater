@@ -4,8 +4,6 @@ import jade.content.Concept;
 
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
@@ -185,14 +183,12 @@ public class ValueType implements Concept, IValidated
 		{
 			return false;
 		}
-		else if (((defaultValue instanceof StringValue) || (defaultValue instanceof BooleanValue) ||
-				(defaultValue instanceof NullValue) || (defaultValue instanceof QuestionMarkSet)) 
-				&& isRangeRestrictionDefined())
+		else if (((defaultValue instanceof QuestionMarkRange) || (defaultValue instanceof QuestionMarkSet)) &&
+				(isRangeRestrictionDefined() || isSetRestrictionDefined()))
 		{
 			return false;
 		}
-		else if (((defaultValue instanceof BooleanValue) || (defaultValue instanceof NullValue) ||
-				(defaultValue instanceof QuestionMarkRange)) && isSetRestrictionDefined())
+		else if ((defaultValue instanceof StringValue) && isRangeRestrictionDefined())
 		{
 			return false;
 		}
@@ -201,14 +197,6 @@ public class ValueType implements Concept, IValidated
 			return false;
 		}
 		else if(isSetRestrictionDefined() && !setRestriction.isValid())
-		{
-			return false;
-		}
-		else if(isRangeRestrictionDefined() && !getRangeRestriction().isValidAgainst(defaultValue))
-		{
-			return false;
-		}
-		else if(isSetRestrictionDefined() && !getSetRestriction().isValidAgainst(defaultValue))
 		{
 			return false;
 		}
