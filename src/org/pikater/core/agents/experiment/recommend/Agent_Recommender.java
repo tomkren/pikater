@@ -6,19 +6,14 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.content.onto.basic.Result;
 import jade.core.AID;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.FIPAException;
-import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.util.leap.ArrayList;
-import jade.util.leap.List;
+
+import java.util.List;
+import java.util.ArrayList;
 
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
@@ -37,7 +32,6 @@ import org.pikater.core.ontology.subtrees.metadata.GetMetadata;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.option.GetOptions;
 import org.pikater.core.ontology.subtrees.recommend.Recommend;
 
 
@@ -62,10 +56,10 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 
     @Override
-	public java.util.List<Ontology> getOntologies() {
+	public List<Ontology> getOntologies() {
 		
-		java.util.List<Ontology> ontologies =
-				new java.util.ArrayList<Ontology>();
+		List<Ontology> ontologies =
+				new ArrayList<Ontology>();
 
 		ontologies.add(RecommendOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
@@ -162,15 +156,12 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 					//TODO:
                     // fill options
 /*
-					DataManagerService service = new DataManagerService();
 					agent.logError(recommended_agent.getType());
-					AgentInfo agentInfo = service.getAgentInfo(agent, recommended_agent.getType());
-					NewOptions optionsOnt = agentInfo.getOptions();
-					java.util.List<NewOption> options = optionsOnt.getOptions();
+					List<NewOption> options = getAgentOptions(recommended_agent.getType());
 					
-					java.util.List<NewOption> recommendedAgentOptions = recommended_agent.getOptions();
+					List<NewOption> recommendedAgentOptions = recommended_agent.getOptions();
 					
-					java.util.List<NewOption> mergedOptions =
+					List<NewOption> mergedOptions =
 							mergeOptions(options, recommendedAgentOptions);
 					recommended_agent.setOptions(mergedOptions);
 */					
@@ -198,9 +189,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         }
     }				        
     
-	private java.util.List<NewOption> mergeOptions(java.util.List<NewOption> o1_CA, java.util.List<NewOption> o2) {
+	private List<NewOption> mergeOptions(List<NewOption> o1_CA, List<NewOption> o2) {
 		
-		java.util.List<NewOption> new_options = new java.util.ArrayList<NewOption>();
+		List<NewOption> new_options = new ArrayList<NewOption>();
 		if (o1_CA != null) {
 
 			// if this type of agent has got some options
@@ -230,14 +221,24 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		}
 		return new_options;
 	}
+
+	public List<NewOption> getAgentOptions(String agentType) {
+		
+		DataManagerService service = new DataManagerService();
+		AgentInfo agentInfo = service.getAgentInfo(this, agentType);
+		NewOptions optionsOnt = agentInfo.getOptions();
+
+		return optionsOnt.getOptions();
+	}
 	
-	protected java.util.List<NewOption> getAgentOptions(String agentType) {
+/*
+	protected List<NewOption> getAgentOptions(String agentType) {
 
 		Ontology ontology = AgentInfoOntology.getInstance();
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		// find an agent according to type
-		List agents = getAgentsByType(agentType);
+		jade.util.leap.List agents = getAgentsByType(agentType);
 		request.addReceiver((AID)agents.get(0));
 
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -274,9 +275,9 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		return null;
 	}
 
-	public List getAgentsByType(String agentType) {				
+	public jade.util.leap.List getAgentsByType(String agentType) {				
 		
-		List Agents = new ArrayList(); // List of AIDs
+		jade.util.leap.List Agents = new jade.util.leap.ArrayList(); // List of AIDs
 		
 		// Make the list of agents of given type
 		DFAgentDescription template = new DFAgentDescription();
@@ -304,7 +305,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		return Agents;
 		
 	} // end getAgentsByType
-
+*/
 	
 	public AID createAgent(String type, String name, Arguments arguments) {
         ManagerAgentCommunicator communicator=new ManagerAgentCommunicator();
@@ -312,8 +313,8 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
         return aid;
 	}
 	
-	protected java.util.List<NewOption> getParameters(){
-		java.util.List<NewOption> optFileOptions =
+	protected List<NewOption> getParameters(){
+		List<NewOption> optFileOptions =
 				this.getAgentInfo().getOptions().getOptions();
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
