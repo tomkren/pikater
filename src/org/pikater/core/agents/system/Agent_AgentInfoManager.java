@@ -23,6 +23,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo2;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.reflections.Reflections;
 
@@ -93,6 +94,10 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					logError(e.getMessage(), e);
 				}
 
+				if (action.getAction() instanceof GetAgentInfo2) {
+					return respondToGetAgentInfo(request, action);
+				}
+				
 				if (action.getAction() instanceof GetAgentInfos) {
 					return respondToGetAgentInfos(request, action);
 				}
@@ -238,6 +243,32 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			}
 		}
 		return notSavedAgents;
+	}
+	
+	private ACLMessage respondToGetAgentInfo(ACLMessage request, Action action) {
+		
+		GetAgentInfo2 getAgentInfo = (GetAgentInfo2)action.getAction();
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		AgentInfoManagerCommunicator communicator =
+				new AgentInfoManagerCommunicator(this);
+		
+		AgentInfo agenInfo = communicator.getAgentInfo("TODO");
+		//Models models = communicator.getAllModels();
+		//agenInfos.importModels(models);
+		
+		Result r = new Result(action, agenInfo);
+		try {
+			getContentManager().fillContent(reply, r);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return reply;		
 	}
 	
 	private ACLMessage respondToGetAgentInfos(ACLMessage request, Action action) {

@@ -12,21 +12,28 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.AgentNames;
-import org.pikater.core.agents.system.Agent_AgentInfoManager;
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Models;
 
 public class AgentInfoManagerCommunicator {
 
-	private Agent_AgentInfoManager agent;
+	private PikaterAgent agent;
 	
-	public AgentInfoManagerCommunicator(Agent_AgentInfoManager agent) {
+	public AgentInfoManagerCommunicator(PikaterAgent agent) {
 		this.agent = agent;
 	}
 
+	public AgentInfo getAgentInfo(String agentClassName) {
+		//TODO:
+		return null;
+	}
+	
 	public AgentInfos getAgentInfos() {
 		
 		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
