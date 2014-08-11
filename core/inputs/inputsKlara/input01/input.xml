@@ -82,7 +82,7 @@
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <type>CrossValidation</type>
+            <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
             <options>
               <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                 <name>F</name>

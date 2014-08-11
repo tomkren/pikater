@@ -1,7 +1,6 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.agents.experiment.search.Agent_RandomSearch;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
