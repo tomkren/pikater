@@ -15,7 +15,7 @@ import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
 
 public abstract class Agent_AbstractExperiment extends PikaterAgent {
 
@@ -46,7 +46,7 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 					Action a = (Action) getContentManager()
 							.extractContent(request);
 
-					if (a.getAction() instanceof GetAgentInfo) {
+					if (a.getAction() instanceof GetYourAgentInfo) {
 					
 						return respondToGetAgentInfo(request);
 					}

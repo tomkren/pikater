@@ -22,8 +22,8 @@ import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo2;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.reflections.Reflections;
 
@@ -94,7 +94,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					logError(e.getMessage(), e);
 				}
 
-				if (action.getAction() instanceof GetAgentInfo2) {
+				if (action.getAction() instanceof GetAgentInfo) {
 					return respondToGetAgentInfo(request, action);
 				}
 				
@@ -247,7 +247,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	
 	private ACLMessage respondToGetAgentInfo(ACLMessage request, Action action) {
 		
-		GetAgentInfo2 getAgentInfo = (GetAgentInfo2)action.getAction();
+		GetAgentInfo getAgentInfo = (GetAgentInfo)action.getAction();
 		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
@@ -333,7 +333,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		getAgentInfomsg.setLanguage(agent.getCodec().getName());
 		getAgentInfomsg.setOntology(ontology.getName());
 
-		GetAgentInfo getAgentInfo = new GetAgentInfo();
+		GetYourAgentInfo getAgentInfo = new GetYourAgentInfo();
 		
 		Action action = new Action(agent.getAID(), getAgentInfo);
 		

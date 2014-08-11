@@ -16,7 +16,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Models;
