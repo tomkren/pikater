@@ -13,7 +13,6 @@ import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
 import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
-import org.pikater.core.agents.system.agentInfoManager.AgentInfoManagerCommunicator;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -255,8 +254,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		DataManagerService service = new DataManagerService();
 		AgentInfo agenInfo = service.getAgentInfo(this, agentClassName);
-		
-		//Models models = communicator.getAllModels();
+		 
+		//Models models = service.getAllModels();
 		//agenInfos.importModels(models);
 		
 		Result r = new Result(action, agenInfo);
