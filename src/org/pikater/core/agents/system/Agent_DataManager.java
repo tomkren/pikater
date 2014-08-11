@@ -1069,8 +1069,10 @@ public class Agent_DataManager extends PikaterAgent {
 
 		if(datasets!=null){
 			for(JPADataSetLO dslo:datasets){
-				Metadata globalMetaData=this.convertJPADatasetToOntologyMetadata(dslo);
-				allMetadata.add(globalMetaData);
+				if(dslo.getGlobalMetaData()!=null){
+					Metadata globalMetaData=this.convertJPADatasetToOntologyMetadata(dslo);
+					allMetadata.add(globalMetaData);
+				}
 			}
 		}
 
