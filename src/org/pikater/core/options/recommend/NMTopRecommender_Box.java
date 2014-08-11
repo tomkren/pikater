@@ -19,6 +19,7 @@ public class NMTopRecommender_Box {
 
 		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 		
+		//Slot Definition
 		agentInfo.setOutputSlots(SlotsHelper.getSlots_RecommendOutput());
 
 		return agentInfo;
