@@ -18,6 +18,7 @@ public class ZeroRCA_Box {
 		agentInfo.setDescription("Zero R Method");
 
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 		
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());

@@ -13,7 +13,6 @@ import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.recommend.Agent_Recommender;
 import org.pikater.core.agents.experiment.search.Agent_Search;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualBoxProvider;
-import org.pikater.core.agents.system.agentInfoManager.AgentInfoManagerCommunicator;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -22,6 +21,7 @@ import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.reflections.Reflections;
@@ -93,6 +93,10 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					logError(e.getMessage(), e);
 				}
 
+				if (action.getAction() instanceof GetAgentInfo) {
+					return respondToGetAgentInfo(request, action);
+				}
+				
 				if (action.getAction() instanceof GetAgentInfos) {
 					return respondToGetAgentInfos(request, action);
 				}
@@ -240,15 +244,40 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return notSavedAgents;
 	}
 	
+	private ACLMessage respondToGetAgentInfo(ACLMessage request, Action action) {
+		
+		GetAgentInfo getAgentInfo = (GetAgentInfo)action.getAction();
+		String agentClassName = getAgentInfo.getAgentClassName();
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
+		DataManagerService service = new DataManagerService();
+		AgentInfo agenInfo = service.getAgentInfo(this, agentClassName);
+		 
+		//Models models = service.getAllModels();
+		//agenInfos.importModels(models);
+		
+		Result r = new Result(action, agenInfo);
+		try {
+			getContentManager().fillContent(reply, r);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return reply;		
+	}
+	
 	private ACLMessage respondToGetAgentInfos(ACLMessage request, Action action) {
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		AgentInfoManagerCommunicator communicator =
-				new AgentInfoManagerCommunicator(this);
+		DataManagerService communicator = new DataManagerService();
+		AgentInfos agenInfos = communicator.getAgentInfos(this);
 		
-		AgentInfos agenInfos = communicator.getAgentInfos();
 		//Models models = communicator.getAllModels();
 		//agenInfos.importModels(models);
 		
@@ -302,7 +331,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		getAgentInfomsg.setLanguage(agent.getCodec().getName());
 		getAgentInfomsg.setOntology(ontology.getName());
 
-		GetAgentInfo getAgentInfo = new GetAgentInfo();
+		GetYourAgentInfo getAgentInfo = new GetYourAgentInfo();
 		
 		Action action = new Action(agent.getAID(), getAgentInfo);
 		

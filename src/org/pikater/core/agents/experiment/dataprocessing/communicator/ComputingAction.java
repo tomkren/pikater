@@ -507,12 +507,11 @@ public class ComputingAction extends FSMBehaviour {
 				agent.currentTask.setFinish(agent.getDateTime());
 
 				agent.send(resultMsg);
-
+				
 				if (agent.taskFIFO.size() > 0) {
 					agent.executionBehaviour.restart();
 				} else {
-					agent.log("CA terminating");
-					agent.terminate();
+					agent.taskFinished();
 				}
 
 			}

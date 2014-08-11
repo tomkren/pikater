@@ -8,6 +8,7 @@ public class CoreConstants {
 //	public static String EVAL_METHOD_CROSSVALIDATION = "CrossValidation";
 	
 	//train_only, test_only, train_test
+	public static String MODE = "mode";
 	public static String MODE_TRAIN_ONLY = "train_only";
 	public static String MODE_TEST_ONLY = "test_only";
 	public static String MODE_TRAIN_TEST = "train_test";
@@ -16,6 +17,7 @@ public class CoreConstants {
 	public static String OUTPUT_EVALUATION_ONLY = "evaluation_only";
 	public static String OUTPUT_PREDICTION = "predictions";
 	
+	public static String RESULT = "result";
 	public static String RESULT_AFTER = "after_each_computation";
 	public static String RESULT_AFTER_EACH_TASK = "after_each_task";
 	

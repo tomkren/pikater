@@ -135,6 +135,7 @@ public class SMORegCA_Box  {
 		agentInfo.addOption(optionP);
 		agentInfo.addOption(optionT);
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 		
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());

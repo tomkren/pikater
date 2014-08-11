@@ -44,6 +44,7 @@ public class NNgeCA_Box {
 		agentInfo.addOption(optionI);
 		agentInfo.addOption(optionG);
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 
 		//Slot Definition
 		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());

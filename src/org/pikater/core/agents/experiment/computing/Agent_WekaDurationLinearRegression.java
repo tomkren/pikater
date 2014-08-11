@@ -17,4 +17,9 @@ public class Agent_WekaDurationLinearRegression extends
 		cc.sendLastDuration(this);
 		return date;
 	}
+	
+	@Override	
+	public void taskFinished() {
+	}
+	
 }

@@ -33,7 +33,8 @@ public class OneRCA_Box {
 		agentInfo.setDescription("One R Method");
 
 		agentInfo.addOption(optionB);
-		agentInfo.addOptions(OptionsHelper.getCAOptions());		
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
