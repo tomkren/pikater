@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.XStreamHelper;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 
 public class UniversalComputationDescription
@@ -123,8 +124,42 @@ public class UniversalComputationDescription
 	 */
 	public boolean isValid()
 	{
-		// TODO: all kinds of consistency checks
-		// TODO: connector.validate()
+		for(UniversalElement rootElem : rootElements)
+		{
+			if(!rootElem.getOntologyInfo().getOntologyClass().equals(FileDataSaver.class))
+			{
+				PikaterLogger.logThrowable("Invalid element processing", new IllegalStateException("Some root elements are not file savers."));
+				return false;
+			}
+		}
+		for(UniversalElement element : allElements)
+		{
+			for(UniversalConnector connector : element.getOntologyInfo().getInputSlots())
+			{
+				if(connector.getFromElement() == null)
+				{
+					PikaterLogger.logThrowable("Required information not defined", new IllegalStateException("Some connectors don't have the 'fromElement' field defined."));
+					return false;
+				}
+				else if(!allElements.contains(connector.getFromElement()))
+				{
+					PikaterLogger.logThrowable("Invalid element binding", new IllegalStateException("Some connectors' 'fromElement' fields are not registered in the root class."));
+					return false;
+				}
+				else
+				{
+					try
+					{
+						connector.validate();
+					}
+					catch (Throwable t)
+					{
+						PikaterLogger.logThrowable("Invalid connector", t);
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 	
