@@ -53,6 +53,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
         classifier=getClassifierClass();
 		if(classifier == null)
 			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
+		
 		if (options.length > 0) {
             //this is destructive, the options array will be emptied
 			classifier.setOptions(options);

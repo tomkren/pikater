@@ -60,6 +60,14 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
     {
         this.options.addAll(options);
     }
+
+    public void removeOptionByName(String optionName)
+    {
+    	NewOption option = getOptionByName(optionName);
+    	this.options.remove(option);
+    }
+
+    
 	public String exportXML() {
 
 		XStream xstream = new XStream();
