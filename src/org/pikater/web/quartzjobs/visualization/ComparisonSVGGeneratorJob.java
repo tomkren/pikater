@@ -1,8 +1,10 @@
 package org.pikater.web.quartzjobs.visualization;
 
+import java.io.File;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.pikater.shared.util.Tuple;
@@ -73,7 +75,11 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 			}
 			else
 			{
-				// TODO: download datasets first
+				//TODO: check whether metadata are computed: exception or compute now?
+				
+				
+				File datasetCachedFile1 = PostgreLobAccess.downloadFileFromDB(dataset1.getOID());
+				File datasetCachedFile2=PostgreLobAccess.downloadFileFromDB(dataset2.getOID());
 				
 				int count=0;
 				for(Tuple<AttrMapping, AttrMapping> attrsToCompare : comparisonList)
@@ -85,6 +91,8 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 							output,
 							dataset1,
 							dataset2,
+							datasetCachedFile1,
+							datasetCachedFile2,
 							attrsToCompare.getValue1().getAttrX(),
 							attrsToCompare.getValue2().getAttrX(),
 							attrsToCompare.getValue1().getAttrY(),

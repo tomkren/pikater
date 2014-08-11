@@ -82,7 +82,7 @@ public class PostgreLobAccess
         	
     		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         	int length;
-            while ((length = dbInput.read(buffer, 0, DEFAULT_BUFFER_SIZE)) >= 0)
+            while ((length = dbInput.read(buffer, 0, DEFAULT_BUFFER_SIZE)) > 0)
             {
                 hddOutput.write(buffer, 0, length);
             }

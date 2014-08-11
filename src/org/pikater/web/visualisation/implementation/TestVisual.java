@@ -1,11 +1,13 @@
 package org.pikater.web.visualisation.implementation;
 
 import java.util.List;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
@@ -45,7 +47,7 @@ public class TestVisual {
 		
 		long time=0;
 		JPADataSetLO iris1=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
-		JPADataSetLO iris2=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris2")).getSingleResultWithNull();
+		JPADataSetLO iris2=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
 		
 		String attr1="sepallength";
 		String attr2="petallength";
@@ -53,54 +55,35 @@ public class TestVisual {
 		
 		System.out.println("Generating SVG Comparison Chart for: " +iris1.getDescription()+" and "+iris2.getDescription());
 		time=System.currentTimeMillis();
-		//ChartGenerator.generateSVGComparisonDatasetChart(iris, iris,new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), attr1, attr1, attr2, attr2,attr3, attr3);
-		ComparisonSVGGenerator csvggiris=new ComparisonSVGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), iris1, iris2, attr1, attr1, attr2, attr2, attr3, attr3);
-		csvggiris.create();
+		try{
+			File iris1file=PostgreLobAccess.downloadFileFromDB(iris1.getOID());
+			File iris2file=PostgreLobAccess.downloadFileFromDB(iris2.getOID());
+			System.out.println("Iris 1 temp file: "+iris1file.getAbsolutePath());
+			System.out.println("Iris 2 temp file: "+iris2file.getAbsolutePath());
+			ComparisonSVGGenerator csvggiris=new ComparisonSVGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), iris1, iris2, iris1file, iris2file, attr1, attr1, attr2, attr2, attr3, attr3);
+			csvggiris.create();
+		}catch(Throwable t){}
 		System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
-		
-		System.out.println("Generating PNG Comparison Chart for: " +iris1.getDescription()+" and "+iris2.getDescription());
-		time=System.currentTimeMillis();
-		//ChartGenerator.generateSVGComparisonDatasetChart(iris, iris,new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), attr1, attr1, attr2, attr2,attr3, attr3);
-		ComparisonPNGGenerator cpnggiris=new ComparisonPNGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.png"), iris1, iris2, attr1, attr1, attr2, attr2, attr3, attr3);
-		cpnggiris.create();
-		System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
-		
+	
 		
 		List<JPADataSetLO> datasets = DAOs.dataSetDAO.getAll();
 		
 		for(JPADataSetLO dataset : datasets){
-			/**
-			System.out.println("Generating SVG Comparison Chart for: " +dataset.getDescription()+" and "+dataset.getDescription());
-			time=System.currentTimeMillis();
-			ComparisonSVGGenerator csvgg=new ComparisonSVGGenerator(dummyResult,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2_comp.svg"),dataset, dataset, 0, 0, 1, 1, 2, 2);
-			csvgg.create();
-			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
-			**/
-			System.out.println("Generating SVG Single Chart for: " +dataset.getDescription());
-			time=System.currentTimeMillis();
-			
-			SingleSVGGenerator ssvgg=new SingleSVGGenerator(dummyResult, dataset,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2s.svg"), 0, 1, 2);
-			ssvgg.create();
-			
-			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
 			
 			System.out.println("Generating PNG Single Chart for: " +dataset.getDescription());
 			time=System.currentTimeMillis();
 			
-			SinglePNGGenerator spngg=new SinglePNGGenerator(dummyResult, dataset,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2s.png"), 0, 1, 2);
-			spngg.create();
-			
+			File temp;
+			try {
+				temp = PostgreLobAccess.downloadFileFromDB(dataset.getOID());
+				System.out.println("Dataset downloaded to "+temp.getAbsolutePath());
+				SinglePNGGenerator spngg=new SinglePNGGenerator(dummyResult, dataset,temp,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2s.png"), 0, 1, 2);
+				spngg.create();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
 			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
-			
-			/**
-			System.out.println("Generating PNG Matrix Chart for: " +dataset.getDescription());
-			time=System.currentTimeMillis();
-			MatrixPNGGenerator mpngg=new MatrixPNGGenerator(dummyResult, dataset, new PrintStream("core/datasets/visual/"+dataset.getDescription()+".png"));
-			mpngg.create();
-			
-			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
-			**/
-			
+			break;
 		}
 	}
 }

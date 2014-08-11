@@ -1,5 +1,6 @@
 package org.pikater.web.visualisation.implementation.generator.quartz;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -28,6 +29,18 @@ public abstract class SingleGenerator extends Generator {
 		init();
 	}
 	
+	public SingleGenerator(AbstractDSVisResult progressListener, JPADataSetLO dslo, File datasetCachedFile, PrintStream output, int XIndex, int YIndex, int ColorIndex){
+		super(progressListener,output);
+		this.dataset=new SingleArffDataset(dslo, datasetCachedFile, XIndex, YIndex, ColorIndex);
+		init();
+	}
+	
+	public SingleGenerator(AbstractDSVisResult progressListener, JPADataSetLO dslo,File datasetCachedFile, PrintStream output, String XName, String YName, String ColorName){
+		super(progressListener,output);
+		this.dataset=new SingleArffDataset(dslo, datasetCachedFile, XName, YName, ColorName);
+		init();
+	}
+
 	private void init(){
 		this.instNum=dataset.getNumberOfInstances();
 	}

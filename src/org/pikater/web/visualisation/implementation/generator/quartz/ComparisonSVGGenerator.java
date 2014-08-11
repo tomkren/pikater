@@ -1,5 +1,6 @@
 package org.pikater.web.visualisation.implementation.generator.quartz;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -21,6 +22,16 @@ public class ComparisonSVGGenerator extends ComparisonGenerator {
 		initRenderer();
 	}
 	
+	public ComparisonSVGGenerator(AbstractDSVisResult progressLstener, PrintStream output,
+			JPADataSetLO dslo1, JPADataSetLO dslo2,
+			File datasetCachedFile1, File datasetCachedFile2, String XName1,
+			String XName2, String YName1, String YName2, String ColorName1,
+			String ColorName2)
+	{
+		super(progressLstener, output, dslo1, dslo2, datasetCachedFile1, datasetCachedFile2, XName1, XName2, YName1, YName2, ColorName1, ColorName2);
+		initRenderer();
+	}
+
 	private void initRenderer(){
 		renderer=new SVGRenderer(output, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 	}

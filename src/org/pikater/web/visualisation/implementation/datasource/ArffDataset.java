@@ -1,6 +1,9 @@
 package org.pikater.web.visualisation.implementation.datasource;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,6 +41,16 @@ public abstract class ArffDataset {
 		this.dslo=source;
 		initFromJPA();
 	}
+	
+	protected ArffDataset(JPADataSetLO dslo,File cacheFile){
+		this.dslo=dslo;
+		try {
+			this.arffStream=new FileInputStream(cacheFile);
+		} catch (FileNotFoundException e) {
+			this.arffStream=null;
+		}
+		init();
+	}
 
 	private void initFromJPA() {
 		try {
@@ -48,7 +61,7 @@ public abstract class ArffDataset {
 			e.printStackTrace();
 		}
 	}
-
+	
 	ArffReader arffReader=null;
 	Instances data=null;
 	protected boolean datasetInitialized=false;

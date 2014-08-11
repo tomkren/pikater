@@ -1,5 +1,6 @@
 package org.pikater.web.visualisation.implementation.generator.quartz;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -29,6 +30,13 @@ public abstract class ComparisonGenerator extends Generator {
 		super(progressHandler,output);
 		dataset1=new SingleArffDataset(dslo1, XName1, YName1, ColorName1);
 		dataset2=new SingleArffDataset(dslo2, XName2, YName2, ColorName2);
+		init();
+	}
+	
+	public ComparisonGenerator(AbstractDSVisResult progressHandler,PrintStream output,JPADataSetLO dslo1,JPADataSetLO dslo2,File datasetCachedFile1,File datasetCachedFile2,String XName1, String XName2, String YName1, String YName2,String ColorName1,String ColorName2){
+		super(progressHandler,output);
+		dataset1=new SingleArffDataset(dslo1,datasetCachedFile1, XName1, YName1, ColorName1);
+		dataset2=new SingleArffDataset(dslo2,datasetCachedFile2, XName2, YName2, ColorName2);
 		init();
 	}
 	

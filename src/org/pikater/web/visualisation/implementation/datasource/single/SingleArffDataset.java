@@ -1,5 +1,6 @@
 package org.pikater.web.visualisation.implementation.datasource.single;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -75,6 +76,42 @@ public class SingleArffDataset extends ArffDataset{
 	}
 	
 	/**
+	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
+	 * Dataset should be pre-cached to file datasetCachedFile and the JPA entity is used only for accessing metadata
+	 * @param dslo The JPADataSetLO entity of the dataset
+	 * @param datasetCachedFile
+	 * @param stream
+	 * @param XIndex
+	 * @param YIndex
+	 * @param ColorIndex
+	 */
+	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile,int XIndex,int YIndex,int ColorIndex){
+		super(dslo,datasetCachedFile);
+
+		this.attrXIndex=XIndex;
+		this.attrYIndex=YIndex;
+		this.attrColorIndex=ColorIndex;
+	}
+	
+	/**
+	 * Creates a new Dataset for an ARFF dataset stored using {@link JPADataSetLO} object, that can be used for {@link SingleChart} generation
+	 * Dataset should be pre-cached to file datasetCachedFile and the JPA entity is used only for accessing metadata
+	 * @param dslo The JPADataSetLO entity of the dataset
+	 * @param datasetCachedFile
+	 * @param XName
+	 * @param YName
+	 * @param ColorName
+	 */
+	public SingleArffDataset(JPADataSetLO dslo, File datasetCachedFile,
+			String XName, String YName, String ColorName) {
+		super(dslo,datasetCachedFile);
+		
+		this.attrXIndex=this.translateAttributeNameToIndex(XName);
+		this.attrYIndex=this.translateAttributeNameToIndex(YName);
+		this.attrColorIndex=this.translateAttributeNameToIndex(ColorName);
+	}
+
+	/**
 	 * Returns the point for the next instance of the original dataset. To retrieve the correct X,Y,Z values
 	 * indexes of attributes are used.
 	 * @return the next point from the dataset
@@ -87,10 +124,6 @@ public class SingleArffDataset extends ArffDataset{
 					currentInstance.value(this.attrYIndex),
 					currentInstance.value(this.attrColorIndex)
 					);
-			//System.out.println("Nominal: "+data.attribute(this.attrYIndex).isNominal());
-			//System.out.println("String: "+data.attribute(this.attrYIndex).isString());
-			//System.out.println("Numeric: "+data.attribute(this.attrYIndex).isNumeric());
-			//System.out.println(data.attribute(this.attrYIndex).value((int)inst.value(this.attrYIndex)));
 			return nextPoint;
 		}else{
 			return null;
