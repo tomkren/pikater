@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingAction;
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingCommunicator;
@@ -210,8 +211,13 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		 * current_task.
 		 */
 		
+		NewOptions taskOptions = new NewOptions(task.getAgent().getOptions());
+		taskOptions.removeOptionByName(CoreConstants.MODE);
+		taskOptions.removeOptionByName(CoreConstants.OUTPUT);
+		taskOptions.removeOptionByName(CoreConstants.RESULT);
+		
 		String wekaOptionsString = 
-				NewOptions.exportToWeka(task.getAgent().getOptions());
+				taskOptions.exportToWeka();
 		
 		options = wekaOptionsString.split("[ ]+");
 		currentTask = task;
