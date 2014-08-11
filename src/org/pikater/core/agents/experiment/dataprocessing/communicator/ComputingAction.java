@@ -508,11 +508,13 @@ public class ComputingAction extends FSMBehaviour {
 
 				agent.send(resultMsg);
 
+				agent.logError(agent.getAID().getName());
+				
+				
 				if (agent.taskFIFO.size() > 0) {
 					agent.executionBehaviour.restart();
 				} else {
-					agent.log("CA terminating");
-					agent.terminate();
+					agent.taskFinished();
 				}
 
 			}

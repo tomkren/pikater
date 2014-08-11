@@ -19,7 +19,6 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
-import org.pikater.core.ontology.subtrees.duration.SetDuration;
 
 public class DurationService extends FIPAService {
 
