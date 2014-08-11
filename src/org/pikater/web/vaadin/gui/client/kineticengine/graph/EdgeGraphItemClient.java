@@ -21,8 +21,9 @@ import net.edzard.kinetic.Vector2d;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
-public class EdgeGraphItemClient extends AbstractGraphItemClient
+public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSettings>
 {
 	// **********************************************************************************************
 	// INNER KINETIC COMPONENTS
@@ -150,7 +151,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient
 	// INHERITED INTERFACE
 	
 	@Override
-	public void applyUserSettings()
+	public void applyUserSettings(KineticBoxSettings settings)
 	{
 	}
 

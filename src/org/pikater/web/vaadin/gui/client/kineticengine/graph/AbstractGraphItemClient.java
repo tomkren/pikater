@@ -6,7 +6,7 @@ import java.util.List;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 
-public abstract class AbstractGraphItemClient implements IKineticShapeWrapper
+public abstract class AbstractGraphItemClient<S extends IGraphItemSettings> implements IKineticShapeWrapper
 {
 	/**
 	 * The engine to register and call back to.
@@ -184,9 +184,9 @@ public abstract class AbstractGraphItemClient implements IKineticShapeWrapper
 	// ABSTRACT INTERFACE
 	
 	/**
-	 * Used when a global setting (common for all instance of an item) changes.
+	 * Used when a global setting (common for all instances of an item) changes.
 	 */
-	public abstract void applyUserSettings();
+	public abstract void applyUserSettings(S settings);
 	
 	/**
 	 * Method called to change the visual style of inner components and accept some changes.

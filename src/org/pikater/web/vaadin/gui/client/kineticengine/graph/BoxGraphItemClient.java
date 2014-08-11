@@ -20,14 +20,13 @@ import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
 import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.KineticBoxColourScheme;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
 @SuppressWarnings("deprecation")
-public class BoxGraphItemClient extends AbstractGraphItemClient
+public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettings>
 {
 	// **********************************************************************************************
 	// INNER KINETIC COMPONENTS
@@ -84,35 +83,28 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 		this.connectedEdges = new HashSet<EdgeGraphItemClient>();
 		
 		// setup master rectangle
-		rectangle = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
-		rectangle.setDraggable(false);
-		rectangle.setCornerRadius(15);
-		
-		final double componentSpace = 13; // in pixels
-		
-		// kinetic's image shape somehow doesn't always return the image's size, so try to use gwt image instead
-		com.google.gwt.user.client.ui.Image gwtImageWidget = new com.google.gwt.user.client.ui.Image(info.pictureURL);
+		this.rectangle = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
+		this.rectangle.setCornerRadius(15);
+		this.rectangle.setDraggable(false);
 		
 		// setup the box's icon
-		icon = Kinetic.createImage(new Vector2d(componentSpace, componentSpace), gwtImageWidget); 
-		icon.setDraggable(false);
-		icon.setStroke(Colour.black);
-		icon.setStrokeWidth(2);
-		icon.setListening(false);
-		
-		double textOffset_left = componentSpace + gwtImageWidget.getWidth() + componentSpace / 2;
+		this.icon = Kinetic.createImage(Vector2d.origin, new com.google.gwt.user.client.ui.Image(info.pictureURL)); 
+		this.icon.setStroke(Colour.black);
+		this.icon.setStrokeWidth(2);
+		this.icon.setDraggable(false);
+		this.icon.setListening(false);
 		
 		// box type text label
-		title = Kinetic.createText(new Vector2d(textOffset_left, componentSpace), info.boxTypeName);
-		title.setDraggable(false);
-		title.setFontStyle(FontStyle.BOLD);
-		title.setListening(false);
+		this.title = Kinetic.createText(Vector2d.origin, info.boxTypeName);
+		this.title.setFontStyle(FontStyle.BOLD);
+		this.title.setDraggable(false);
+		this.title.setListening(false);
 		
 		// box display name label
-		name = Kinetic.createText(new Vector2d(textOffset_left, componentSpace + gwtImageWidget.getHeight() / 2), info.displayName);
-		name.setDraggable(false);
-		name.setFontStyle(FontStyle.ITALIC);
-		name.setListening(false);
+		this.name = Kinetic.createText(Vector2d.origin, info.displayName);
+		this.name.setFontStyle(FontStyle.ITALIC);
+		this.name.setDraggable(false);
+		this.name.setListening(false);
 		
 		// create the group, bind it all together
 	    this.container = Kinetic.createGroup(new Vector2d(info.initialX, info.initialY), 0);
@@ -156,19 +148,46 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 	// INHERITED INTERFACE
 	
 	@Override
-	public void applyUserSettings()
+	public void applyUserSettings(KineticBoxSettings settings)
 	{
 		/*
 		 * Set sizes.
 		 */
 		
-		final Vector2d boxSize = GWTKineticSettings.getCurrentBoxSize();
-		final Vector2d textSize = new Vector2d(boxSize.x - title.getPosition().x - 10, icon.getHeight());
+		final int componentSpace = 13; // in pixels
+		final Vector2d boxSize = new Vector2d(settings.getBoxWidth(), settings.getBoxHeight());
+		final double textHeight = settings.getIconHeight() / 2;
 		
-		rectangle.setSize(boxSize);
-		// icon already has size set from the constructor
-		title.setSize(textSize);
-		name.setSize(textSize);
+		if(settings.isIconsVisible())
+		{
+			this.icon.show();
+			
+			final double textOffset_left = componentSpace + settings.getIconWidth() + (componentSpace >> 1);
+			final Vector2d textSize = new Vector2d(boxSize.x - textOffset_left - componentSpace, textHeight);
+			
+			this.icon.setPosition(new Vector2d(componentSpace, componentSpace));
+			this.title.setPosition(new Vector2d(textOffset_left, componentSpace));
+			this.name.setPosition(new Vector2d(textOffset_left, componentSpace + textSize.y));
+			
+			this.rectangle.setSize(boxSize);
+			this.title.setSize(textSize);
+			this.name.setSize(textSize);
+		}
+		else
+		{
+			this.icon.hide();
+			
+			final Vector2d textSize = new Vector2d(boxSize.x - (componentSpace << 1), textHeight);
+			
+			this.title.setPosition(new Vector2d(componentSpace, componentSpace));
+			this.name.setPosition(new Vector2d(componentSpace, componentSpace + textSize.y));
+			
+			this.rectangle.setSize(boxSize);
+			this.title.setSize(textSize);
+			this.name.setSize(textSize);
+		}
+		
+		this.container.setScale(new Vector2d(settings.getScale(), settings.getScale()));
 	}
 	
 	@Override
@@ -179,35 +198,35 @@ public class BoxGraphItemClient extends AbstractGraphItemClient
 			case SELECTED:
 				container.setDraggable(false);
 				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
-				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxSettings.getColor(style));
 				rectangle.setStrokeWidth(3);
 				break;
 			case NOT_SELECTED:
 				container.setDraggable(true);
 				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
-				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxSettings.getColor(style));
 				rectangle.setStrokeWidth(2);
 				break;
 				
 			case HIGHLIGHTED_EDGE:
 				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
-				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxSettings.getColor(style));
 				rectangle.setStrokeWidth(3);
 				break;
 			case NOT_HIGHLIGHTED_EDGE:
 				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
-				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxSettings.getColor(style));
 				rectangle.setStrokeWidth(2);
 				break;
 			
 			case HIGHLIGHTED_SLOT:
 				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
-				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxSettings.getColor(style));
 				rectangle.setStrokeWidth(3);
 				break;
 			case NOT_HIGHLIGHTED_SLOT:
 				// rectangle.setFill(KineticBoxColourScheme.getColor(style));
-				rectangle.setStroke(KineticBoxColourScheme.getColor(style));
+				rectangle.setStroke(KineticBoxSettings.getColor(style));
 				rectangle.setStrokeWidth(2);
 				break;
 			

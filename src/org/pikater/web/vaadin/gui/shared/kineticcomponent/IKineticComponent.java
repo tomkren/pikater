@@ -6,5 +6,4 @@ public interface IKineticComponent
 	void cancelBoxHighlight();
 	void cancelSelection();
 	void resetEnvironment();
-	void reloadVisualStyle();
 }

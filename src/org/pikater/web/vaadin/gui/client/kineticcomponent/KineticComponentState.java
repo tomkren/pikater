@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
 import com.vaadin.shared.AbstractComponentState;
 
@@ -22,6 +23,9 @@ public class KineticComponentState extends AbstractComponentState
 	 * Toolbar settings.
 	 */
 	public ClickMode clickMode;
+	public boolean boxManagerBoundWithSelection;
+	public boolean box_iconsVisible;
+	public double box_scale;
 	
 	/*
 	 * Other programmatic fields shared. 
@@ -31,11 +35,38 @@ public class KineticComponentState extends AbstractComponentState
 	public KineticComponentState()
 	{
 		this.clickMode = getDefaultClickMode();
+		this.boxManagerBoundWithSelection = getBoxManagerBoundWithSelectionByDefault();
+		this.box_iconsVisible = getBoxIconsVisibleByDefault();
+		this.box_scale = getDefaultScale();
+		
 		this.serverThinksThatSchemaIsModified = false;
 	}
+	
+	public KineticBoxSettings toSettingsClass()
+	{
+		return new KineticBoxSettings(box_iconsVisible, box_scale);
+	}
+	
+	//----------------------------------------------------
+	// DEFAULT VALUE DECLARATION
 	
 	public static ClickMode getDefaultClickMode()
 	{
 		return ClickMode.SELECTION;
+	}
+	
+	public static boolean getBoxManagerBoundWithSelectionByDefault()
+	{
+		return true;
+	}
+	
+	public static boolean getBoxIconsVisibleByDefault()
+	{
+		return true;
+	}
+	
+	public static double getDefaultScale()
+	{
+		return 1;
 	}
 }

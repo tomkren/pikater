@@ -37,7 +37,7 @@ public class GraphItemCreator
 	public BoxGraphItemClient createBox(GraphItemRegistration nrt, BoxInfoClient info)
 	{
 		BoxGraphItemClient result = new BoxGraphItemClient(kineticEngine, info);
-		result.applyUserSettings();
+		result.applyUserSettings(kineticEngine.getBoxSettings());
 		result.reloadVisualStyles(false);
 		if(nrt == GraphItemRegistration.AUTOMATIC)
 		{
@@ -52,7 +52,7 @@ public class GraphItemCreator
 	public EdgeGraphItemClient createEdge(GraphItemRegistration nrt, BoxGraphItemClient fromBox, BoxGraphItemClient toBox)
 	{
 		EdgeGraphItemClient result = new EdgeGraphItemClient(kineticEngine);
-		result.applyUserSettings();
+		result.applyUserSettings(kineticEngine.getBoxSettings());
 		result.reloadVisualStyles(false);
 		result.setEndpoint(EndPoint.FROM, fromBox);
 		result.setEndpoint(EndPoint.TO, toBox);

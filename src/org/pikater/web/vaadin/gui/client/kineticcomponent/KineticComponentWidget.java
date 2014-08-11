@@ -228,19 +228,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		});
 	}
 	
-	@Override
-	public void reloadVisualStyle()
-	{
-		Scheduler.get().scheduleDeferred(new ScheduledCommand()
-		{
-			@Override
-			public void execute()
-			{
-				getEngine().reloadVisualStyle();
-			}
-		});
-	}
-	
 	/**
 	 * Loads the provided experiment into the kinetic environment encapsulated by this widget. If null,
 	 * resets the environment.

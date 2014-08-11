@@ -10,5 +10,4 @@ public interface KineticComponentClientRpc extends ClientRpc, IKineticComponent
 {
 	void receiveExperimentToLoad(ExperimentGraphClient experiment);
 	void createBox(BoxInfoClient info);
-	void reloadVisualStyle();
 }

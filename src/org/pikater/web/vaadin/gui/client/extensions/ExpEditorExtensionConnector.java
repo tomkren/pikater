@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKineticSettings;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditorExtension;
 
 import com.google.gwt.user.client.Window;
@@ -34,12 +33,6 @@ public class ExpEditorExtensionConnector extends AbstractExtensionConnector
 				{
 					imageWidgets[i] = new Image(pictureURLs[i]);
 				}
-			}
-
-			@Override
-			public void command_setBoxSize(int percent)
-			{
-				GWTKineticSettings.setBoxSize(percent);
 			}
 
 			@Override

@@ -5,13 +5,13 @@ import org.pikater.shared.experiment.webformat.server.BoxSlot;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
-import org.pikater.web.vaadin.gui.server.components.flowlayout.HorizontalFlowLayout;
-import org.pikater.web.vaadin.gui.server.components.flowlayout.IFlowLayoutStyleProvider;
-import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
+import org.pikater.web.vaadin.gui.server.layouts.formlayout.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxHighlightExtension;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerView;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.KineticBoxColourScheme;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -159,7 +159,7 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 		{
 			getBoxIdentificationExtension().getStyle().setProperty(
 					"background-color",
-					KineticBoxColourScheme.getColor(VisualStyle.SELECTED).toString()
+					KineticBoxSettings.getColor(VisualStyle.SELECTED).toString()
 			);
 		}
 		else

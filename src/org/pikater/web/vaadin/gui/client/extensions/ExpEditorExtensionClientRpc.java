@@ -14,12 +14,6 @@ public interface ExpEditorExtensionClientRpc extends ClientRpc
 	void command_loadBoxPictures(String[] pictureURLs);
 	
 	/**
-	 * Command to change the size of boxes on the client.
-	 * @param percent the percentage of width of the browser's viewport
-	 */
-	void command_setBoxSize(int percent);
-	
-	/**
 	 * Called everytime the modified content set changes. Useful to
 	 * handle close events and let the user confirm leaving unsaved
 	 * content behind.

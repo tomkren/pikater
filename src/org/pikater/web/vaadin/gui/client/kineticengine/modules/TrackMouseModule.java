@@ -85,7 +85,7 @@ public final class TrackMouseModule implements IEngineModule
 	}
 
 	@Override
-	public void attachHandlers(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient<?> graphItem)
 	{
 		if(graphItem instanceof BoxGraphItemClient)
 		{

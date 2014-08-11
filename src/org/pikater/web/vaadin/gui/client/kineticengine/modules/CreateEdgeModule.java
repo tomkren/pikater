@@ -302,7 +302,7 @@ public final class CreateEdgeModule implements IEngineModule
 	}
 	
 	@Override
-	public void attachHandlers(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient<?> graphItem)
 	{
 		if(graphItem instanceof BoxGraphItemClient)
 		{

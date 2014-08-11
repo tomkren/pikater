@@ -38,6 +38,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.TrackMouseModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
 @SuppressWarnings("deprecation")
 public final class KineticEngine
@@ -99,16 +100,21 @@ public final class KineticEngine
 	 */
 	private final Map<String, Set<IEngineModule>> modulesForGraphItem;
 	
+	/**
+	 * The wrapper class providing contextual information and server communication.
+	 */
+	private KineticComponentWidget context;
+	
 	/*
 	 * Individual plugins that will be used a lot in this class:
 	 */
 	private final ItemRegistrationModule itemRegistrationModule;
 	private final SelectionModule selectionModule;
 	
-	/**
-	 * The wrapper class providing contextual information and server communication.
+	/*
+	 * References to graph item visual settings.
 	 */
-	private KineticComponentWidget context;
+	private KineticBoxSettings settings_box;
 	
 	/**
 	 * All the event handlers of the engine.
@@ -277,6 +283,7 @@ public final class KineticEngine
 		}
 		
 		this.context = null;
+		this.settings_box = null;
 	}
 	
 	// *****************************************************************************************************
@@ -390,17 +397,19 @@ public final class KineticEngine
 		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, true, false, selectionModule.getSelectedBoxes());
 	}
 	
-	public void reloadVisualStyle()
+	public void reloadBoxVisualStyle(KineticBoxSettings settings)
 	{
 		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
 		{
-			box.applyUserSettings();
+			box.applyUserSettings(settings);
 			for(EdgeGraphItemClient edge : box.connectedEdges)
 			{
-				edge.applyUserSettings();
+				edge.applyUserSettings(null);
 			}
 		}
-		draw(EngineComponent.STAGE);
+		draw(EngineComponent.STAGE); // selection...
+		
+		this.settings_box = settings;
 	}
 	
 	// *****************************************************************************************************
@@ -466,7 +475,7 @@ public final class KineticEngine
 		}
 	}
 	
-	public void attachModuleHandlersTo(AbstractGraphItemClient graphItem)
+	public void attachModuleHandlersTo(AbstractGraphItemClient<?> graphItem)
 	{
 		for(IEngineModule module : modulesForGraphItem.get(GWTMisc.getSimpleName(graphItem.getClass())))
 		{
@@ -516,6 +525,11 @@ public final class KineticEngine
 		// and do the rest
 		this.fillRectangle.setSize(this.stage.getSize());
 		this.context = context;
+	}
+	
+	public KineticBoxSettings getBoxSettings()
+	{
+		return settings_box;
 	}
 	
 	public Container getContainer(EngineComponent component)

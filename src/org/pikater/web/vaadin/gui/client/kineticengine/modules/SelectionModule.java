@@ -144,7 +144,7 @@ public class SelectionModule implements IEngineModule
 	}
 
 	@Override
-	public void attachHandlers(AbstractGraphItemClient graphItem)
+	public void attachHandlers(AbstractGraphItemClient<?> graphItem)
 	{
 		if(graphItem instanceof BoxGraphItemClient)
 		{
@@ -217,7 +217,7 @@ public class SelectionModule implements IEngineModule
 		SELECTION,
 		DESELECTION;
 		
-		public static SelectionOperation getInvertSelectionOperation(AbstractGraphItemClient graphItem)
+		public static SelectionOperation getInvertSelectionOperation(AbstractGraphItemClient<?> graphItem)
 		{
 			return graphItem.isSelected() ? DESELECTION : SELECTION;
 		}

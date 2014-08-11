@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.client.extensions;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentConnector;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxHighlightExtension;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.KineticBoxColourScheme;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -30,7 +30,7 @@ public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 			public void onMouseOver(MouseOverEvent event)
 			{
 				extendedWidget.getElement().getStyle().setBackgroundColor(
-						KineticBoxColourScheme.getColor(VisualStyle.HIGHLIGHTED_SLOT).toString()
+						KineticBoxSettings.getColor(VisualStyle.HIGHLIGHTED_SLOT).toString()
 				);
 				
 				KineticComponentConnector kineticConnector = (KineticComponentConnector) getConnection().getConnector(getState().kineticConnectorID, 0);

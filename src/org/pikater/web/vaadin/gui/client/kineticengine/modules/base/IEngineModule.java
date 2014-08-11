@@ -7,5 +7,5 @@ public interface IEngineModule
 	public String getModuleID();
 	public void createModuleCrossReferences();
 	public String[] getGraphItemTypesToAttachHandlersTo();
-	public void attachHandlers(AbstractGraphItemClient graphItem);
+	public void attachHandlers(AbstractGraphItemClient<?> graphItem);
 }

@@ -72,12 +72,6 @@ public class KineticComponentConnector extends AbstractComponentConnector
 			{
 				getWidget().createBox(info);
 			}
-
-			@Override
-			public void reloadVisualStyle()
-			{
-				getWidget().reloadVisualStyle();
-			}
 		});
 	}
 	
@@ -143,5 +137,7 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	public void onStateChanged(StateChangeEvent stateChangeEvent)
 	{
 		super.onStateChanged(stateChangeEvent);
+		
+		getWidget().getEngine().reloadBoxVisualStyle(getState().toSettingsClass());
 	}
 }
