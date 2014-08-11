@@ -44,18 +44,20 @@ public abstract class AbstractFieldProviderForValue
 	protected <N extends Number & Comparable<? super N>> AbstractField<? extends Object> createNumericField(final Value value, String caption,
 			final IOnValueChange<N> valueChangeHandler)
 	{
+		// TODO: generalize this so that we don't need to hack our own code
+		
 		// first cast value
 		final N currentValue = (N) value.getCurrentValue().hackValue();
 
 		// create & bind with the value type
 		if(value.getType().isSetRestrictionDefined())
 		{
-			return createEnumeratedField(value, (List<N>) getSortedEnumerationForValue(value), caption, valueChangeHandler);
+			return createEnumeratedField(currentValue, (List<N>) getSortedEnumerationForValue(value), caption, valueChangeHandler);
 		}
 		else // whether range restriction is defined or not
 		{
 			N min = null, max = null;
-			if(value.getType().isRangeRestrictionDefined())
+			if(value.getType().isRangeRestrictionDefined()) // TODO: these may NOT be defined
 			{
 				min = (N) value.getType().getRangeRestriction().getMinValue().hackValue();
 				max = (N) value.getType().getRangeRestriction().getMaxValue().hackValue();
@@ -88,13 +90,11 @@ public abstract class AbstractFieldProviderForValue
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <O extends Object> AbstractField<? extends Object> createEnumeratedField(Value value, List<O> options, String caption,
+	protected <O extends Object> AbstractField<? extends Object> createEnumeratedField(O currentValue, List<O> options, String caption,
 			final IOnValueChange<O> valueChangeHandler)
 	{
-		// first cast value
-		final Object currentValue = value.getCurrentValue().hackValue();
-
-		// then create the field
+		// TODO: why the "Object" in the argument? O instead? String?
+		
 		final ComboBox cb_value = FormFieldFactory.getGeneralComboBox(caption, options, currentValue, true, false);
 		cb_value.setSizeFull();
 		cb_value.addValueChangeListener(new Property.ValueChangeListener()
@@ -108,6 +108,23 @@ public abstract class AbstractFieldProviderForValue
 			}
 		});
 		return cb_value;
+	}
+	
+	protected TextField createGeneralTextField(String currentValue, String caption, final IOnValueChange<String> valueChangeHandler)
+	{
+		TextField tf_value = FormFieldFactory.getGeneralTextField("Value:", null, currentValue, true, false);
+		tf_value.setSizeFull();
+		tf_value.addValueChangeListener(new Property.ValueChangeListener()
+		{
+			private static final long serialVersionUID = -6565459293274644984L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event)
+			{
+				valueChangeHandler.valueChanged((String) event.getProperty().getValue());
+			}
+		});
+		return tf_value;
 	}
 
 	@SuppressWarnings("unchecked")

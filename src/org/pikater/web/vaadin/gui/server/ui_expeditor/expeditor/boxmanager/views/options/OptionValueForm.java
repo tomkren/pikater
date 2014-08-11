@@ -16,6 +16,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.collections.BidiMap;
@@ -228,6 +229,17 @@ public class OptionValueForm extends CustomFormLayout
 			}
 		}
 		
+		// then validate the value if need be
+		if(value.getCurrentValue() instanceof IValidatedValueData) // currently only QMR & QMS
+		{
+			if(! ((IValidatedValueData) value.getCurrentValue()).isValid())
+			{
+				PikaterLogger.logThrowable("", new IllegalStateException("Invalid value received."));
+				MyNotifications.showWarning(null, "Invalid value received.");
+				return;
+			}
+		}
+		
 		// then get the appropriate field provider according to the given value type
 		Class<? extends IValueData> typeClass = value.getCurrentValue().getClass();
 		if(typeClass.equals(BooleanValue.class))
@@ -270,7 +282,7 @@ public class OptionValueForm extends CustomFormLayout
 			return;
 		}
 		
-		// generate fields and register them
+		// and finally, generate fields and register them
 		typeSpecificFieldProvider.generateFields(value);
 		for(Entry<String, AbstractField<? extends Object>> entry : typeSpecificFieldProvider.getGeneratedFields().entrySet())
 		{
