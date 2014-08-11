@@ -1,14 +1,13 @@
 package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class RangeRestriction implements IRestriction
 {
 	private static final long serialVersionUID = -9196397486608350955L;
 
-	private IValueData minValue;
-	private IValueData maxValue;
+	private IComparableValueData minValue;
+	private IComparableValueData maxValue;
 	
 	/**
 	 * Should only be used by JADE.
@@ -17,25 +16,25 @@ public class RangeRestriction implements IRestriction
 	public RangeRestriction()
 	{
 	}
-	public RangeRestriction(IValueData minValue, IValueData maxValue)
+	public RangeRestriction(IComparableValueData minValue, IComparableValueData maxValue)
 	{
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 	}
 
-	public IValueData getMinValue()
+	public IComparableValueData getMinValue()
 	{
 		return minValue;
 	}
-	public void setMinValue(IValueData minValue)
+	public void setMinValue(IComparableValueData minValue)
 	{
 		this.minValue = minValue;
 	}
-	public IValueData getMaxValue()
+	public IComparableValueData getMaxValue()
 	{
 		return maxValue;
 	}
-	public void setMaxValue(IValueData maxValue)
+	public void setMaxValue(IComparableValueData maxValue)
 	{
 		this.maxValue = maxValue;
 	}
@@ -91,8 +90,7 @@ public class RangeRestriction implements IRestriction
 		{
 			return false;
 		}
-		else if (!(minValue instanceof IComparableValueData) || 
-				(((IComparableValueData) minValue).compareTo((IComparableValueData) maxValue) > 0))
+		else if(minValue.compareTo(maxValue) > 0)
 		{
 			return false;
 		}
@@ -106,10 +104,8 @@ public class RangeRestriction implements IRestriction
 	{
 		if(isValid() && obj.getClass().equals(minValue.getClass()))
 		{
-			IComparableValueData minComp = (IComparableValueData) minValue; 
-			IComparableValueData maxComp = (IComparableValueData) maxValue;
 			IComparableValueData valueComp = (IComparableValueData) obj;
-			return (minComp.compareTo(valueComp) <= 0) && (valueComp.compareTo(maxComp) <= 0); 
+			return (minValue.compareTo(valueComp) <= 0) && (valueComp.compareTo(maxValue) <= 0); 
 		}
 		else
 		{
@@ -119,6 +115,6 @@ public class RangeRestriction implements IRestriction
 	@Override
 	public RangeRestriction clone()
 	{
-		return new RangeRestriction(minValue.clone(), maxValue.clone());
+		return new RangeRestriction((IComparableValueData) minValue.clone(), (IComparableValueData) maxValue.clone());
 	}
 }
