@@ -15,12 +15,12 @@ public abstract class SlotsHelper
 	{
 		Slot recomedSlot = new Slot();
 		recomedSlot.setSlotType(SlotTypes.RECOMMEND_TYPE);
-		recomedSlot.setDataType("recommend");
+		recomedSlot.setDataType("recommender");
 		recomedSlot.setDescription("Recommends an agent to use (its name).");
 		
 		Slot comAgentSlot = new Slot();
 		comAgentSlot.setSlotType(SlotTypes.AGENT_TYPE);
-		comAgentSlot.setDataType("computedData");
+		comAgentSlot.setDataType("computingAgent");
 		comAgentSlot.setDescription("Data computed by an agent.");
 		
 		Slot searchSlot = new Slot();
