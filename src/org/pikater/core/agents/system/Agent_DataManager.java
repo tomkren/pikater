@@ -71,6 +71,7 @@ import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
@@ -192,6 +193,9 @@ public class Agent_DataManager extends PikaterAgent {
 					 */
 					if (a.getAction() instanceof SaveAgentInfo) {
 						return respondToSaveAgentInfo(request, a);
+					}
+					if (a.getAction() instanceof GetAgentInfo) {
+						return respondToGetAgentInfo(request, a);
 					}
 					if (a.getAction() instanceof GetAgentInfos) {
 						return respondToGetAgentInfos(request, a);
@@ -444,6 +448,32 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	protected ACLMessage respondToGetAgentInfo(ACLMessage request, Action a) {
+		
+		GetAgentInfo getAgentInfo = (GetAgentInfo) a.getAction();
+		String agentClass = getAgentInfo.getAgentClassName();
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		
+		List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getByAgentClass(agentClass);
+		JPAAgentInfo agentInfoJPA = agentInfoList.get(0);
+		
+		AgentInfo agentInfo = AgentInfo.importXML(agentInfoJPA.getInformationXML());		
+
+		Result result = new Result(a, agentInfo);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+			
+		return reply;
+
+	}
+	
 	protected ACLMessage respondToGetAgentInfos(ACLMessage request, Action a) {
 		
 		ACLMessage reply = request.createReply();

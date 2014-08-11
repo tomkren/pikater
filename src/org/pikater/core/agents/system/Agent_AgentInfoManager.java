@@ -248,14 +248,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	private ACLMessage respondToGetAgentInfo(ACLMessage request, Action action) {
 		
 		GetAgentInfo getAgentInfo = (GetAgentInfo)action.getAction();
+		String agentClassName = getAgentInfo.getAgentClassName();
 		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-
-		AgentInfoManagerCommunicator communicator =
-				new AgentInfoManagerCommunicator(this);
 		
-		AgentInfo agenInfo = communicator.getAgentInfo("TODO");
+		DataManagerService service = new DataManagerService();
+		AgentInfo agenInfo = service.getAgentInfo(this, agentClassName);
+		
 		//Models models = communicator.getAllModels();
 		//agenInfos.importModels(models);
 		
@@ -276,10 +276,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		AgentInfoManagerCommunicator communicator =
-				new AgentInfoManagerCommunicator(this);
+		DataManagerService communicator = new DataManagerService();
+		AgentInfos agenInfos = communicator.getAgentInfos(this);
 		
-		AgentInfos agenInfos = communicator.getAgentInfos();
 		//Models models = communicator.getAllModels();
 		//agenInfos.importModels(models);
 		

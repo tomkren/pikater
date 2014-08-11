@@ -29,6 +29,7 @@ import org.pikater.core.ontology.ResultOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
@@ -358,6 +359,50 @@ public class DataManagerService extends FIPAService {
 		} catch (FIPAException e) {
 			agent.logError(e.getMessage(), e);
 		}
+	}
+	
+	public AgentInfo getAgentInfo(PikaterAgent agent, String agentClassName) {
+		
+		if (agent == null) {
+			throw new IllegalArgumentException(
+					"Argument agent can't be null");
+		}
+
+		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		Ontology ontology = AgentInfoOntology.getInstance();
+
+		ACLMessage getAgentInfomsg = new ACLMessage(ACLMessage.REQUEST);
+		getAgentInfomsg.addReceiver(receiver);
+		getAgentInfomsg.setSender(agent.getAID());
+		getAgentInfomsg.setLanguage(agent.getCodec().getName());
+		getAgentInfomsg.setOntology(ontology.getName());
+
+		GetAgentInfo getAgentInfo = new GetAgentInfo();
+		getAgentInfo.setAgentClassName(agentClassName);
+		
+		Action action = new Action(agent.getAID(), getAgentInfo);
+		
+		try {
+			agent.getContentManager().fillContent(getAgentInfomsg, action);
+			ACLMessage agentInfoMsg = FIPAService
+					.doFipaRequestClient(agent, getAgentInfomsg);
+
+			Result replyResult = (Result) agent.getContentManager()
+					.extractContent(agentInfoMsg);
+			
+			AgentInfo agentInfo = (AgentInfo) replyResult.getValue();
+
+			return agentInfo;
+			
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (Codec.CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		}
+		
+		return null;
 	}
 	
 	public AgentInfos getAgentInfos(PikaterAgent agent) {

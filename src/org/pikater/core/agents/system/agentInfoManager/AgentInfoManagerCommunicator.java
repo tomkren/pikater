@@ -14,10 +14,6 @@ import jade.lang.acl.ACLMessage;
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.model.GetModels;
 import org.pikater.core.ontology.subtrees.model.Models;
 
@@ -27,58 +23,6 @@ public class AgentInfoManagerCommunicator {
 	
 	public AgentInfoManagerCommunicator(PikaterAgent agent) {
 		this.agent = agent;
-	}
-
-	public AgentInfo getAgentInfo(String agentClassName) {
-		//TODO:
-		return null;
-	}
-	
-	public AgentInfos getAgentInfos() {
-		
-		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
-		Ontology ontology = AgentInfoOntology.getInstance();
-		
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(receiver);
-		request.setLanguage(agent.getCodec().getName());
-		request.setOntology(ontology.getName());
-	        
-		try {
-			agent.getContentManager().fillContent(request,
-					new Action(receiver, new GetAgentInfos()));
-		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
-		}
-		
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(agent, request, 10000);
-			if (reply == null) {
-				return null;
-			}
-			
-		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
-		}
-
-		AgentInfos agentInfos = null;
-		try {
-			Result r = (Result) agent.getContentManager().extractContent(reply);
-	
-			agentInfos = (AgentInfos) r.getValue();
-	
-		} catch (UngroundedException e) {
-			agent.logError(e.getMessage(), e);
-		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
-		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
-		}
-
-		return agentInfos;
 	}
 
 	public Models getAllModels() {
