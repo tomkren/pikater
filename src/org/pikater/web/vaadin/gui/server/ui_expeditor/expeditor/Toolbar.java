@@ -14,6 +14,7 @@ import org.pikater.shared.database.views.tableview.batches.UserScheduledBatchesT
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm.ExperimentSaveMode;
@@ -21,12 +22,14 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
+import org.pikater.web.vaadin.gui.server.layouts.verticalgroupLayout.VerticalGroupLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent.IOnExperimentSaved;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
+import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinSession;
@@ -36,6 +39,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Slider;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.TabSheet;
@@ -60,10 +64,10 @@ public class Toolbar extends VerticalLayout
 	public Toolbar(ExpEditor parentEditor, boolean debugMode)
 	{
 		super();
-		setSpacing(true);
 		setSizeFull();
 		
 		this.parentEditor = parentEditor;
+		this.clickModeCB = null;
 		
 		buildMenuBar(debugMode);
 		buildToolbar();
@@ -97,10 +101,10 @@ public class Toolbar extends VerticalLayout
 	{
 		MenuBar menu = new MenuBar();
 		menu.setSizeFull();
-		menu.setStyleName("expEditor-menu");
+		menu.setStyleName("menu");
 		
 		MenuItem experimentMenuItem = menu.addItem("Experiment", null);
-		experimentMenuItem.setStyleName("expEditor-menu-topLevelItem");
+		experimentMenuItem.setStyleName("menu-topLevelItem");
 		experimentMenuItem.addItem("Save experiment from active tab...", new Command()
 		{
 			private static final long serialVersionUID = -8383604249370403859L;
@@ -146,6 +150,7 @@ public class Toolbar extends VerticalLayout
 			}
 		});
 		
+		/*
 		MenuItem settingsMenuItem = menu.addItem("Settings", null);
 		settingsMenuItem.setStyleName("expEditor-menu-topLevelItem");
 		MenuItem shapeSizeMenuItem = settingsMenuItem.addItem("Shape size (%)", null);
@@ -187,9 +192,10 @@ public class Toolbar extends VerticalLayout
 				setKineticBoxSize(-1);
 			}
 		});
+		*/
 		
 		MenuItem viewMenuItem = menu.addItem("View", null);
-		viewMenuItem.setStyleName("expEditor-menu-topLevelItem");
+		viewMenuItem.setStyleName("menu-topLevelItem");
 		viewMenuItem.addItem("Go full screen (only FF, Chrome & Opera)", new Command()
 		{
 			private static final long serialVersionUID = 4109313735302030716L;
@@ -219,7 +225,7 @@ public class Toolbar extends VerticalLayout
 		if(debugMode)
 		{
 			MenuItem debugMenuItem = menu.addItem("Debug", null);
-			debugMenuItem.setStyleName("expEditor-menu-topLevelItem");
+			debugMenuItem.setStyleName("menu-topLevelItem");
 			debugMenuItem.addItem("Show debug window", new Command()
 			{
 				private static final long serialVersionUID = 4109313735302030716L;
@@ -238,16 +244,76 @@ public class Toolbar extends VerticalLayout
 	
 	private void buildToolbar()
 	{
-		Label clickModeLbl = new Label("Click effect:");
-		clickModeCB = new ComboBox();
+		/*
+		 * Create visual style group layout.
+		 */
+		
+		CheckBox chb_allowBoxIcons = new CheckBox("box icons visible", KineticComponentState.getBoxIconsVisibleByDefault());
+		chb_allowBoxIcons.addValueChangeListener(new ValueChangeListener()
+		{
+			private static final long serialVersionUID = -7751913095102968151L;
+
+			@Override
+			public void valueChange(final ValueChangeEvent event)
+			{
+				executeForNonNullActiveTab(new IActiveKineticComponentAction()
+				{
+					@Override
+					public void doAction(KineticComponent activeComponent)
+					{
+						activeComponent.getState().box_iconsVisible = (Boolean) event.getProperty().getValue();
+					}
+				}, true);
+			}
+		});
+		
+		Slider slider_boxSize = new Slider(0, 2, 2);
+		slider_boxSize.setWidth("200px");
+		slider_boxSize.setImmediate(true);
+		slider_boxSize.setValue(KineticComponentState.getDefaultScale());
+		slider_boxSize.addValueChangeListener(new Property.ValueChangeListener()
+		{
+			private static final long serialVersionUID = 6756349322188831368L;
+
+			@Override
+			public void valueChange(final ValueChangeEvent event)
+			{
+				executeForNonNullActiveTab(new IActiveKineticComponentAction()
+				{
+					@Override
+					public void doAction(KineticComponent activeComponent)
+					{
+						activeComponent.getState().box_scale = (Double) event.getProperty().getValue();
+					}
+				}, true);
+			}
+		});
+		
+		HorizontalLayout hLayout_slider = new HorizontalLayout();
+		hLayout_slider.setSpacing(true);
+		hLayout_slider.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+		hLayout_slider.addComponent(new Label("Box size (%):"));
+		hLayout_slider.addComponent(slider_boxSize);
+		
+		VerticalGroupLayout groupLayout_visualStyle = new VerticalGroupLayout();
+		groupLayout_visualStyle.setHeight("100%");
+		groupLayout_visualStyle.setInnerLayout("Visual style:", new VerticalLayout());
+		groupLayout_visualStyle.getInnerLayout().addComponent(hLayout_slider);
+		groupLayout_visualStyle.getInnerLayout().addComponent(chb_allowBoxIcons);
+		
+		/*
+		 * Create various settings group layout.
+		 */
+		
+		this.clickModeCB = new ComboBox();
 		for(ClickMode clickMode : ClickMode.values())
 		{
-			clickModeCB.addItem(clickMode.name());
+			this.clickModeCB.addItem(clickMode.name());
 		}
-		clickModeCB.setImmediate(true);
-		clickModeCB.setNullSelectionAllowed(false);
-		clickModeCB.setTextInputAllowed(false);
-		clickModeCB.addValueChangeListener(new ValueChangeListener()
+		this.clickModeCB.setImmediate(true);
+		this.clickModeCB.setNullSelectionAllowed(false);
+		this.clickModeCB.setTextInputAllowed(false);
+		this.clickModeCB.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -5032992287714560567L;
 
@@ -264,10 +330,11 @@ public class Toolbar extends VerticalLayout
 				}, true);
 			}
 		});
-		clickModeCB.setEnabled(false);
+		this.clickModeCB.setEnabled(false);
 		
-		CheckBox chb_openOptions = new CheckBox("bind options manager with selection changes", KineticComponent.areSelectionChangesBoundWithOptionsManagerByDefault());
-		chb_openOptions.addValueChangeListener(new ValueChangeListener()
+		CheckBox chb_bindSelectionWithBoxManager = new CheckBox("bind box manager with selection changes", 
+				KineticComponentState.getBoxManagerBoundWithSelectionByDefault());
+		chb_bindSelectionWithBoxManager.addValueChangeListener(new ValueChangeListener()
 		{
 			private static final long serialVersionUID = -7751913095102968151L;
 
@@ -279,21 +346,29 @@ public class Toolbar extends VerticalLayout
 					@Override
 					public void doAction(KineticComponent activeComponent)
 					{
-						activeComponent.setBindOptionsManagerWithSelectionChanges((Boolean) event.getProperty().getValue());
+						activeComponent.getState().boxManagerBoundWithSelection = (Boolean) event.getProperty().getValue();
 					}
 				}, true);
 			}
 		});
 		
+		HorizontalLayout hLayout_boxClickMode = new HorizontalLayout();
+		hLayout_boxClickMode.setSpacing(true);
+		hLayout_boxClickMode.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+		hLayout_boxClickMode.addComponent(new Label("Box click mode:"));
+		hLayout_boxClickMode.addComponent(this.clickModeCB);
+		
+		VerticalGroupLayout groupLayout_variousSettings = new VerticalGroupLayout();
+		groupLayout_variousSettings.setHeight("100%");
+		groupLayout_variousSettings.setInnerLayout("Various settings:", new VerticalLayout());
+		groupLayout_variousSettings.getInnerLayout().addComponent(hLayout_boxClickMode);
+		groupLayout_variousSettings.getInnerLayout().addComponent(chb_bindSelectionWithBoxManager);
+		
 		HorizontalLayout toolbarLayout = new HorizontalLayout();
-		toolbarLayout.setStyleName("expEditor-toolbar");
-		toolbarLayout.setCaption("Instance specific settings and actions:");
+		toolbarLayout.setStyleName("toolbar");
 		toolbarLayout.setSpacing(true);
-		toolbarLayout.addComponent(clickModeLbl);
-		toolbarLayout.addComponent(clickModeCB);
-		toolbarLayout.setComponentAlignment(clickModeLbl, Alignment.MIDDLE_LEFT);
-		toolbarLayout.addComponent(chb_openOptions);
-		toolbarLayout.setComponentAlignment(chb_openOptions, Alignment.MIDDLE_LEFT);
+		toolbarLayout.addComponent(groupLayout_visualStyle);
+		toolbarLayout.addComponent(groupLayout_variousSettings);
 		
 		addComponent(toolbarLayout);
 	}
@@ -446,19 +521,6 @@ public class Toolbar extends VerticalLayout
 			}
 		});
 		dialog.setWidth("600px");
-	}
-	
-	private void setKineticBoxSize(int width)
-	{
-		parentEditor.getExtension().getClientRPC().command_setBoxSize(width);
-		executeForNonNullActiveTab(new IActiveKineticComponentAction()
-		{
-			@Override
-			public void doAction(KineticComponent activeComponent)
-			{
-				activeComponent.reloadVisualStyle();
-			}
-		}, false);
 	}
 	
 	//---------------------------------------------------------------

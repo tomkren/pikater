@@ -59,8 +59,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	//---------------------------------------------------------------
 	// OTHER PROGRAMMATIC FIELDS
 	
-	private boolean bindOptionsManagerWithSelectionChanges;
-	
 	/*
 	 * Dynamic information from the client side - absolute left corner position of the Kinetic stage.
 	 */
@@ -85,7 +83,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		this.experimentGraph = new ExperimentGraphServer();
 		this.previouslyLoadedExperimentID = null;
 		
-		this.bindOptionsManagerWithSelectionChanges = areSelectionChangesBoundWithOptionsManagerByDefault();
 		this.absoluteLeft = 0;
 		this.absoluteTop = 0;
 		
@@ -170,7 +167,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			@Override
 			public void command_selectionChange(Integer[] selectedBoxesIDs)
 			{
-				if(bindOptionsManagerWithSelectionChanges)
+				if(getState().boxManagerBoundWithSelection)
 				{
 					// convert to agent information array
 					BoxInfoServer[] selectedBoxesInformation = new BoxInfoServer[selectedBoxesIDs.length];
@@ -249,12 +246,6 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		// server side reset
 		experimentGraph.clear();
 		experimentGraph = null;
-	}
-	
-	@Override
-	public void reloadVisualStyle()
-	{
-		getClientRPC().reloadVisualStyle();
 	}
 	
 	//---------------------------------------------------------------
@@ -364,26 +355,11 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		return previouslyLoadedExperimentID;
 	}
 	
-	public boolean areSelectionChangesBoundWithOptionsManager()
-	{
-		return bindOptionsManagerWithSelectionChanges;
-	}
-	
-	public static boolean areSelectionChangesBoundWithOptionsManagerByDefault()
-	{
-		return true;
-	}
-	
 	public void setParentTab(CustomTabSheetTabComponent parentTab)
 	{
 		this.parentTab = parentTab;
 	}
 
-	public void setBindOptionsManagerWithSelectionChanges(boolean bindOptionsManagerWithSelectionChanges)
-	{
-		this.bindOptionsManagerWithSelectionChanges = bindOptionsManagerWithSelectionChanges;
-	}
-	
 	@Deprecated
 	public boolean isContentModified()
 	{

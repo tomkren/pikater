@@ -9,27 +9,26 @@
 	overflow: scroll;
 }
 
-.expEditor-menu
+.expEditor .top-interface
+{
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+}
+
+.expEditor .menu
 {
 }
 
-.v-slot-expEditor-toolbar
-{
-	padding-left: 10px; /* override Vaadin's styles not to display the toolbar at the browser viewport */
-}
-
-.expEditor-toolbar /* HorizontalLayout representing the toolbar itself */
-{
-	padding-left: 5px;
-	padding-top: 5px;
-	padding-bottom: 10px;
-}
-
-.expEditor-menu .v-menubar-menuitem-expEditor-menu-topLevelItem, .v-slot-expEditor-toolbar .v-captiontext
+.expEditor .menu .v-menubar-menuitem-menu-topLevelItem
 {
 	/* override Vaadin's menu bar's top-level menu items */
 	font-size: 14px;
 	font-weight: bold;
+}
+
+.expEditor .toolbar /* HorizontalLayout representing the toolbar itself */
+{
+	padding: 5px 10px 5px 10px;
 }
 
 .loadExperimentDialogContent

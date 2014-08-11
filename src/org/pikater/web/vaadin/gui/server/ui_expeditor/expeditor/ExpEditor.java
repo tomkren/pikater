@@ -7,11 +7,11 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
 import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.sharedresources.ThemeResources;
-import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
-import org.pikater.web.vaadin.gui.server.components.tabsheet.ITabSheetOwner;
-import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheet;
-import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
+import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.layouts.tabsheet.ITabSheetOwner;
+import org.pikater.web.vaadin.gui.server.layouts.tabsheet.TabSheet;
+import org.pikater.web.vaadin.gui.server.layouts.tabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxbrowser.BoxBrowserToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IBoxManagerToolboxContext;
@@ -113,7 +113,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		// NORTH COMPONENT INIT
 		this.toolbar = new Toolbar(this, debugMode);
 		this.toolbar.setSizeFull();
-		this.toolbar.setStyleName("displayBorder");
+		this.toolbar.setStyleName("top-interface");
 		setComponent(Border.NORTH, this.toolbar);
 		
 		// WEST COMPONENT INIT
