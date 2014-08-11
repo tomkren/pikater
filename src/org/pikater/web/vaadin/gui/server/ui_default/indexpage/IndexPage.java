@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
+import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.DefaultFeature;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;

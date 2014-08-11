@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.forms.base;
+package org.pikater.web.vaadin.gui.server.layouts.formlayout;
 
 import java.util.HashMap;
 import java.util.Iterator;

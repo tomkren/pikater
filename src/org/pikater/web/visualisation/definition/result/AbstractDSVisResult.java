@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.pikater.web.vaadin.gui.server.components.matrixview.IMatrixDataSource;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.visualisation.definition.SubresultIndexer;
 
 public abstract class AbstractDSVisResult<I extends Object & Comparable<? super I>, R extends AbstractDSVisSubresult<I>> implements 

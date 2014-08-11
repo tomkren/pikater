@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.cellbrowser;
+package org.pikater.web.vaadin.gui.server.layouts.cellbrowser;
 
 import java.io.Serializable;
 

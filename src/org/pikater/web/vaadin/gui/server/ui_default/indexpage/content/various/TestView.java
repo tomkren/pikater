@@ -18,12 +18,12 @@ import org.pikater.web.ssh.SSHSession;
 import org.pikater.web.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
-import org.pikater.web.vaadin.gui.server.components.matrixview.IMatrixDataSource;
-import org.pikater.web.vaadin.gui.server.components.matrixview.MatrixView;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
 import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
@@ -122,7 +122,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 	
 	public void testMatrixViewer()
 	{
-		MatrixView<String> matrix = new MatrixView<String>(new IMatrixDataSource<String, Component>()
+		MatrixLayout<String> matrix = new MatrixLayout<String>(new IMatrixDataSource<String, Component>()
 		{
 			@Override
 			public Collection<String> getLeftIndexSet()

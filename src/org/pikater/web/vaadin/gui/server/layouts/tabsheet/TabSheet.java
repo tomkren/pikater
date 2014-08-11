@@ -1,12 +1,12 @@
-package org.pikater.web.vaadin.gui.server.components.tabsheet;
+package org.pikater.web.vaadin.gui.server.layouts.tabsheet;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.web.sharedresources.ThemeResources;
-import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
+import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
 import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;

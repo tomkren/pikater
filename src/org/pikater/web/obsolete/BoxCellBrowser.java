@@ -9,11 +9,11 @@ import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.config.ServerConfigurationInterface;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowser;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.ICellBrowserTreeViewModel;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.ICellBrowserCellProvider;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowser.CellBrowserDragSelection;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCellSource;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.CellBrowser;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.ICellBrowserCellProvider;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.ICellBrowserTreeViewModel;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.CellBrowser.CellBrowserDragSelection;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.CellBrowserCellSource;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.CustomComponent;

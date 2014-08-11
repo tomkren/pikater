@@ -1,9 +1,9 @@
-package org.pikater.web.vaadin.gui.server.components.cellbrowser;
+package org.pikater.web.vaadin.gui.server.layouts.cellbrowser;
 
 import java.io.Serializable;
 
 import org.pikater.shared.util.collections.CustomOrderSet;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCellSource;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.CellBrowserCellSource;
 
 import com.vaadin.ui.AbstractComponent;
 

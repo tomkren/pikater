@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.borderlayout;
+package org.pikater.web.vaadin.gui.server.layouts.borderlayout;
 
 import org.pikater.web.vaadin.gui.client.extensions.AutoVerticalBorderLayoutExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.extensions.AutoVerticalBorderLayoutExtensionServerRpc;

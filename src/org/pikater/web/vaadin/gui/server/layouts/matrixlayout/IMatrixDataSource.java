@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.matrixview;
+package org.pikater.web.vaadin.gui.server.layouts.matrixlayout;
 
 import java.util.Collection;
 

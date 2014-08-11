@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.client.extensions;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pikater.web.vaadin.gui.server.components.borderlayout.AutoVerticalBorderLayoutExtension;
+import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayoutExtension;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
 import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;

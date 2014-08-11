@@ -11,11 +11,11 @@ import org.pikater.web.quartzjobs.UploadedAgentHandler;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
-import org.pikater.web.vaadin.gui.server.components.forms.base.CustomFormLayout;
-import org.pikater.web.vaadin.gui.server.components.forms.base.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
+import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
+import org.pikater.web.vaadin.gui.server.layouts.formlayout.FormFieldFactory;
 
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;

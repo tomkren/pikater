@@ -1,7 +1,7 @@
-package org.pikater.web.vaadin.gui.server.components.matrixview;
+package org.pikater.web.vaadin.gui.server.layouts.matrixlayout;
 
-import org.pikater.web.vaadin.gui.server.components.flowlayout.HorizontalFlowLayout;
-import org.pikater.web.vaadin.gui.server.components.flowlayout.VerticalFlowLayout;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.VerticalFlowLayout;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickEvent;
@@ -13,8 +13,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
-@StyleSheet("matrixView.css")
-public class MatrixView<I extends Object> extends VerticalLayout
+@StyleSheet("matrixLayout.css")
+public class MatrixLayout<I extends Object> extends VerticalLayout
 {
 	private static final long serialVersionUID = -4102353757340619486L;
 	
@@ -39,7 +39,7 @@ public class MatrixView<I extends Object> extends VerticalLayout
 	private HeaderComponent selectedHeader_leftIndex;
 	private HeaderComponent selectedHeader_topIndex;
 	
-	public MatrixView(IMatrixDataSource<I, ? extends Component> dataSource)
+	public MatrixLayout(IMatrixDataSource<I, ? extends Component> dataSource)
 	{
 		super();
 		setPrimaryStyleName("matrixView");

@@ -2,8 +2,8 @@ package org.pikater.web.vaadin.gui.server.ui_visualization.components;
 
 import java.util.Collection;
 
-import org.pikater.web.vaadin.gui.server.components.matrixview.IMatrixDataSource;
-import org.pikater.web.vaadin.gui.server.components.matrixview.MatrixView;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisSubresult;
 import org.pikater.web.visualisation.definition.result.DSVisOneSubresult;
@@ -20,7 +20,7 @@ public class SingleDatasetVisualizer extends Panel
 		super();
 		
 		final IMatrixDataSource<String, DSVisOneSubresult> resultMatrixView = arguments.getGeneratedResult().toMatrixView();
-		MatrixView<String> matrixView = new MatrixView<String>(new IMatrixDataSource<String, ChartThumbnail>()
+		MatrixLayout<String> matrixView = new MatrixLayout<String>(new IMatrixDataSource<String, ChartThumbnail>()
 		{
 			@Override
 			public Collection<String> getLeftIndexSet()

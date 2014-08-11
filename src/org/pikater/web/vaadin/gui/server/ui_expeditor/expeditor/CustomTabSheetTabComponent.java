@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
-import org.pikater.web.vaadin.gui.server.components.tabsheet.TabSheetTabComponent;
+import org.pikater.web.vaadin.gui.server.layouts.tabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 public class CustomTabSheetTabComponent extends TabSheetTabComponent

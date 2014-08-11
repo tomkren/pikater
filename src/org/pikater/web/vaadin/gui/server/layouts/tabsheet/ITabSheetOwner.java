@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.tabsheet;
+package org.pikater.web.vaadin.gui.server.layouts.tabsheet;
 
 public interface ITabSheetOwner
 {

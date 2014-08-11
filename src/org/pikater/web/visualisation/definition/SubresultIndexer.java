@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.pikater.shared.util.Tuple;
 import org.pikater.shared.util.collections.CustomOrderSet;
-import org.pikater.web.vaadin.gui.server.components.matrixview.IMatrixDataSource;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisSubresult;
 
 public class SubresultIndexer<I extends Object & Comparable<? super I>, R extends AbstractDSVisSubresult<I>> implements

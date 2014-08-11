@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager;
 
 import org.pikater.web.vaadin.gui.client.extensions.BoxHighlightExtensionSharedState;
-import org.pikater.web.vaadin.gui.server.components.flowlayout.HorizontalFlowLayout;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
 
 import com.vaadin.server.AbstractExtension;
 

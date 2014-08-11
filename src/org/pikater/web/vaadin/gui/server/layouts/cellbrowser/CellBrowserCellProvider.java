@@ -1,13 +1,13 @@
-package org.pikater.web.vaadin.gui.server.components.cellbrowser;
+package org.pikater.web.vaadin.gui.server.layouts.cellbrowser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.CellBrowser.CellBrowserDragSelection;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCell;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCellSource;
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.DraggableCellBrowserCell;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.CellBrowser.CellBrowserDragSelection;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.CellBrowserCell;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.CellBrowserCellSource;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.DraggableCellBrowserCell;
 
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.ui.AbstractComponent;

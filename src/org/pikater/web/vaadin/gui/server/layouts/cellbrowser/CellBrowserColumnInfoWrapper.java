@@ -1,8 +1,8 @@
-package org.pikater.web.vaadin.gui.server.components.cellbrowser;
+package org.pikater.web.vaadin.gui.server.layouts.cellbrowser;
 
 import java.io.Serializable;
 
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCell;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.CellBrowserCell;
 
 public class CellBrowserColumnInfoWrapper implements Serializable
 {

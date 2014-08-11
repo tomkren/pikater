@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
-import org.pikater.web.vaadin.gui.server.components.cellbrowser.cell.CellBrowserCellExtension;
+import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.CellBrowserCellExtension;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Widget;

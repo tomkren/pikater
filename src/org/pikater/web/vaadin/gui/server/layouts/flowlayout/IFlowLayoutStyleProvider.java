@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.components.flowlayout;
+package org.pikater.web.vaadin.gui.server.layouts.flowlayout;
 
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 
