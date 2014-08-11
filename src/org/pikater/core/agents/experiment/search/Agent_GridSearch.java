@@ -206,17 +206,17 @@ public class Agent_GridSearch extends Agent_Search {
         NewOptions options = new NewOptions(getSearchOptions());
         
         if (options.containsOptionWithName("N")) {
-        	NewOption optionN = options.getOptionByName("N");
+        	NewOption optionN = options.fetchOptionByName("N");
         	IntegerValue valueN = (IntegerValue) optionN.toSingleValue().getCurrentValue();
         	defaultTries = valueN.getValue();
         }
         if (options.containsOptionWithName("B")) {
-        	NewOption optionB = options.getOptionByName("B");
+        	NewOption optionB = options.fetchOptionByName("B");
         	IntegerValue valueB = (IntegerValue) optionB.toSingleValue().getCurrentValue();
         	query_block_size = valueB.getValue();
         }
         if (options.containsOptionWithName("Z")) {
-        	NewOption optionZ = options.getOptionByName("Z");
+        	NewOption optionZ = options.fetchOptionByName("Z");
         	IntegerValue valueZ = (IntegerValue) optionZ.toSingleValue().getCurrentValue();
         	logZero = valueZ.getValue();
         }

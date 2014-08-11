@@ -169,32 +169,32 @@ public class Agent_GASearch extends Agent_Search {
 		NewOptions options = new NewOptions(getSearchOptions());
 		
 		if (options.containsOptionWithName("E")) {
-			NewOption optionE = options.getOptionByName("E");
+			NewOption optionE = options.fetchOptionByName("E");
 			FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
 			final_error_rate = valueE.getValue(); 
 		}
 		if (options.containsOptionWithName("M")) {
-			NewOption optionM = options.getOptionByName("M");
+			NewOption optionM = options.fetchOptionByName("M");
 			IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
 			maximum_generations = valueM.getValue(); 
 		}		
 		if (options.containsOptionWithName("T")) {
-			NewOption optionT = options.getOptionByName("T");
+			NewOption optionT = options.fetchOptionByName("T");
 			FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
 			mut_prob = valueT.getValue(); 
 		}
 		if (options.containsOptionWithName("X")) {
-			NewOption optionX = options.getOptionByName("X");
+			NewOption optionX = options.fetchOptionByName("X");
 			FloatValue valueX = (FloatValue) optionX.toSingleValue().getCurrentValue();
 			xover_prob = valueX.getValue(); 
 		}
 		if (options.containsOptionWithName("P")) {
-			NewOption optionP = options.getOptionByName("P");
+			NewOption optionP = options.fetchOptionByName("P");
 			IntegerValue valueP = (IntegerValue) optionP.toSingleValue().getCurrentValue();
 			pop_size = valueP.getValue(); 
 		}
 		if (options.containsOptionWithName("S")) {
-			NewOption optionS = options.getOptionByName("S");
+			NewOption optionS = options.fetchOptionByName("S");
 			IntegerValue valueS = (IntegerValue) optionS.toSingleValue().getCurrentValue();
 			tournament_size = valueS.getValue(); 
 		}

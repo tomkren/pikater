@@ -77,19 +77,19 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 		
 		NewOptions options = new NewOptions(getSearchOptions());
 		
-		NewOption optionE = options.getOptionByName("E");
+		NewOption optionE = options.fetchOptionByName("E");
 		FloatValue valueE = (FloatValue) optionE.toSingleValue().getCurrentValue();
 		final_error_rate = valueE.getValue(); 
 
-		NewOption optionM = options.getOptionByName("M");
+		NewOption optionM = options.fetchOptionByName("M");
 		IntegerValue valueM = (IntegerValue) optionM.toSingleValue().getCurrentValue();
 		maximum_tries = valueM.getValue(); 
 
-		NewOption optionS = options.getOptionByName("S");
+		NewOption optionS = options.fetchOptionByName("S");
 		FloatValue valueS = (FloatValue) optionS.toSingleValue().getCurrentValue();
 		stability = valueS.getValue(); 
 
-		NewOption optionT = options.getOptionByName("T");
+		NewOption optionT = options.fetchOptionByName("T");
 		FloatValue valueT = (FloatValue) optionT.toSingleValue().getCurrentValue();
 		temperature = valueT.getValue(); 
 		

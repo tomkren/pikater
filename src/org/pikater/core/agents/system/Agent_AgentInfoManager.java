@@ -190,11 +190,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			agentClasses.add(new AgentClass(agentClassI.getName()));
 		}
 		
-		
+		//TODO: Honza
 		DataManagerService service = new DataManagerService();
 		ExternalAgentNames externalAgentNames =
 				service.getExternalAgentNames(this);
-		agentClasses.addAll(externalAgentNames.getAgentNames());
+		//agentClasses.addAll(externalAgentNames.getAgentNames());
 
 		return agentClasses;
 	}

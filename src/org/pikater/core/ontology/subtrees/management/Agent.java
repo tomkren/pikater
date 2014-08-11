@@ -60,7 +60,7 @@ public class Agent implements Concept, Cloneable {
 	}
 	public NewOption getOptionByName(String name) {
 		NewOptions option = new NewOptions(getOptions());
-		return option.getOptionByName(name);
+		return option.fetchOptionByName(name);
 	}
 
 	public Object clone() {

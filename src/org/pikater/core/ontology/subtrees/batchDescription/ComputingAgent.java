@@ -161,7 +161,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		NewOptions optionsOntol = new NewOptions(options);
 
 		//import model
-		NewOption optModel = optionsOntol.getOptionByName("model");
+		NewOption optModel = optionsOntol.fetchOptionByName("model");
 
 		if (optModel != null) {
 			Value value = optModel.toSingleValue();
@@ -177,7 +177,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 
 		//import duration
-		NewOption optDuration = optionsOntol.getOptionByName("duration");
+		NewOption optDuration = optionsOntol.fetchOptionByName("duration");
 		StringValue valueMethod = (StringValue)
 				optDuration.toSingleValue().getCurrentValue();
 		if (valueMethod.getValue().equals(LongTermDuration.class.getSimpleName())) {

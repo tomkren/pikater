@@ -33,7 +33,7 @@ public class RestrictionsForOption implements Concept, ICloneable, IValidated
 		this.restrictions = restrictions;
 	}
 	
-	public TypeRestriction getByIndex(int index)
+	public TypeRestriction fetchByIndex(int index)
 	{
 		return restrictions.get(index);
 	}

@@ -39,9 +39,9 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
 
 	public boolean containsOptionWithName(String optionName)
 	{
-        return getOptionByName(optionName) != null;
+        return fetchOptionByName(optionName) != null;
 	}
-    public NewOption getOptionByName(String optionName)
+    public NewOption fetchOptionByName(String optionName)
     {
         for (NewOption option : options)
         {
@@ -63,7 +63,7 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
 
     public void removeOptionByName(String optionName)
     {
-    	NewOption option = getOptionByName(optionName);
+    	NewOption option = fetchOptionByName(optionName);
     	this.options.remove(option);
     }
 
@@ -104,7 +104,7 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
     	NewOptions otherOptionsWrapper = (NewOptions) other; 
     	for(NewOption optionInOther : otherOptionsWrapper.getOptions())
 		{
-			NewOption optionLocal = getOptionByName(optionInOther.getName());
+			NewOption optionLocal = fetchOptionByName(optionInOther.getName());
 			if(optionLocal == null)
 			{
 				throw new IllegalArgumentException("Could not merge option with name: " + optionInOther.getName());

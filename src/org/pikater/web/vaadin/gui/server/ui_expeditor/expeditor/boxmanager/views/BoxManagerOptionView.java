@@ -58,7 +58,7 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption>
 		link_optionName.setDescription(getCurrentSource().getDescription());
 
 		Value value = getCurrentSource().toSingleValue();
-		TypeRestriction restriction = getCurrentSource().getValueRestrictionForIndex(0); 
+		TypeRestriction restriction = getCurrentSource().fetchValueRestrictionForIndex(0); 
 
 		if(currentForm != null)
 		{

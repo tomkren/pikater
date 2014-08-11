@@ -196,9 +196,9 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 			throw new IllegalStateException("This option can not be converted to a single value.");
 		}
 	}
-	public TypeRestriction getValueRestrictionForIndex(int index)
+	public TypeRestriction fetchValueRestrictionForIndex(int index)
 	{
-		return valueRestrictions.getByIndex(index);
+		return valueRestrictions.fetchByIndex(index);
 	}
 	public String computeDataType()
 	{
@@ -238,7 +238,7 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 		{
 			for(int i = 0; i < valuesWrapper.size(); i++)
 			{
-				if(!valueRestrictions.getByIndex(i).getTypes().contains(
+				if(!valueRestrictions.fetchByIndex(i).getTypes().contains(
 						valuesWrapper.returnByIndex(i).getType()))
 				{
 					return false;

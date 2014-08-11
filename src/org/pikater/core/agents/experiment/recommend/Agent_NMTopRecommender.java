@@ -232,7 +232,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 	
 	            if (stdDev > 0) {
 	            	
-	            	TypeRestriction typeRestriction = optionI.getValueRestrictions().getByIndex(0);
+	            	TypeRestriction typeRestriction = optionI.getValueRestrictions().fetchByIndex(0);
 	            	ValueType type = typeRestriction.getTypes().get(0);
 	            	
 	            	RangeRestriction rangeRestriction = type.getRangeRestriction();

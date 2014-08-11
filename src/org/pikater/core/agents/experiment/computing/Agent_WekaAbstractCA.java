@@ -126,7 +126,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 			if (evaluation_method.getOptions() != null) {
 				
 				NewOptions options = new NewOptions(evaluation_method.getOptions());
-				NewOption optionF = options.getOptionByName("F");
+				NewOption optionF = options.fetchOptionByName("F");
 				IntegerValue valueF = (IntegerValue) optionF.toSingleValue().getCurrentValue();
 				folds = valueF.getValue();
 			}
