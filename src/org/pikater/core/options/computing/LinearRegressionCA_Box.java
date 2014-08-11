@@ -61,7 +61,8 @@ public class LinearRegressionCA_Box {
 		agentInfo.addOption(optionS);
 		agentInfo.addOption(optionC);
 		agentInfo.addOption(optionR);
-		agentInfo.addOptions(OptionsHelper.getCAOptions());		
+		agentInfo.addOptions(OptionsHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 	
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());

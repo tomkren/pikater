@@ -17,6 +17,7 @@ public class NBTreeCA_Box {
 		agentInfo.setName("NBTree");
 		agentInfo.setDescription("NBTree Method");
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
+		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
