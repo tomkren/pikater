@@ -507,9 +507,6 @@ public class ComputingAction extends FSMBehaviour {
 				agent.currentTask.setFinish(agent.getDateTime());
 
 				agent.send(resultMsg);
-
-				agent.logError(agent.getAID().getName());
-				
 				
 				if (agent.taskFIFO.size() > 0) {
 					agent.executionBehaviour.restart();
