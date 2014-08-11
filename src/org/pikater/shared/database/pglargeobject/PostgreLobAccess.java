@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.jfree.util.Log;
 import org.pikater.shared.database.PostgreSQLConnectionProvider;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.IOUtils;
@@ -30,13 +29,9 @@ public class PostgreLobAccess
 					"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
 					"pikater", "SrapRoPy").getConnection());
 		}
-		catch (ClassNotFoundException e)
+		catch (ClassNotFoundException | SQLException e)
 		{
-			Log.error(e.getMessage(), e);
-		}
-		catch (SQLException e)
-		{
-			Log.error(e.getMessage(), e);
+			PikaterLogger.logThrowable("Can't establish connection to Database", e);
 		}
 	}
 

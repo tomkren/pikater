@@ -35,7 +35,8 @@ import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 public class DatabaseTest {
 	
 	public void test(){
-		exportResults();
+		testDBConnection();
+		//exportResults();
 		//listVisibleAndApprovedDatasets();
 		//removeResult();
 		//listDataSetsWithResults();
@@ -51,6 +52,10 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void testDBConnection() {
+		System.out.println("Database connected: "+DAOs.userDAO.testDatabaseConenctivity());		
+	}
+
 	private void exportResults() {
 		JPABatch batch=DAOs.batchDAO.getByID(87801, EmptyResultAction.NULL);
 		ResultExporter exp=new ResultExporter(System.err);
