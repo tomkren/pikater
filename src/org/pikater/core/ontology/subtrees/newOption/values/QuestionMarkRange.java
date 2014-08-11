@@ -124,14 +124,17 @@ public class QuestionMarkRange implements IValidatedValueData
 	@Override
 	public boolean isValid()
 	{
-		if((min == null) || (max == null) || !min.getClass().equals(max.getClass()))
+		if((min == null) && (max == null))
 		{
 			return false;
 		}
-		else if(min.compareTo(max) > 0)
+		else if((min != null) && (max != null) && (!min.getClass().equals(max.getClass()) || (min.compareTo(max) > 0))) 
 		{
 			return false;
 		}
-		return (countOfValuesToTry > 0);
+		else
+		{
+			return countOfValuesToTry > 0;
+		}
 	}
 }

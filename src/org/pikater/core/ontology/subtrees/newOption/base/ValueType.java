@@ -177,6 +177,12 @@ public class ValueType implements Concept, IValidated
 	@Override
 	public boolean isValid()
 	{
+		// TODO: QMR -> range restriction defined
+		// TODO: QMS -> set restriction defined
+		
+		// TODO: IRangedValueData extends IComparableValueData - adds a "isValidAgainst(RangeRestriction restriction)"
+		// TODO: IEnumeratedValueData - likewise
+		
 		if(defaultValue == null)
 		{
 			return false;
@@ -196,19 +202,11 @@ public class ValueType implements Concept, IValidated
 		{
 			return false;
 		}
-		else if(isRangeRestrictionDefined() && !rangeRestriction.isValid())
+		else if(isRangeRestrictionDefined() && (!rangeRestriction.isValid() || !rangeRestriction.isValidAgainst(defaultValue))) // TODO: doesn't work for QMR & QMS - min & max must be checked
 		{
 			return false;
 		}
-		else if(isSetRestrictionDefined() && !setRestriction.isValid())
-		{
-			return false;
-		}
-		else if(isRangeRestrictionDefined() && !getRangeRestriction().isValidAgainst(defaultValue))
-		{
-			return false;
-		}
-		else if(isSetRestrictionDefined() && !getSetRestriction().isValidAgainst(defaultValue))
+		else if(isSetRestrictionDefined() && (!setRestriction.isValid() || !setRestriction.isValidAgainst(defaultValue))) // TODO:
 		{
 			return false;
 		}
