@@ -169,8 +169,8 @@ public class MultiLayerPerceptronCA_Box {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.importAgentClass(ComputingAgent.class);
-		agentInfo.importOntologyClass(Agent_WekaPerceptronCA.class);
+		agentInfo.importAgentClass(Agent_WekaPerceptronCA.class);
+		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("MultiLayerPerceptron");
 		agentInfo.setDescription("Multi-layer perceptron method");
