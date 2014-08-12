@@ -8,7 +8,8 @@ public class DoubleValueProvider extends AbstractFieldProviderForValue
 	@Override
 	protected void doGenerateFields(final Value value)
 	{
-		addField("value", createNumericField(value, "Value:", new IOnValueChange<Double>()
+		IFieldContext<Double> context = getFieldContextFrom(value); 
+		addField("value", createNumericField("Value:", context, new IOnValueChange<Double>()
 		{
 			@Override
 			public void valueChanged(Double number)

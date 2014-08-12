@@ -2,14 +2,17 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.view
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator.NumberConstant;
-import org.pikater.web.vaadin.gui.server.layouts.formlayout.FormFieldFactory;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -23,7 +26,7 @@ public abstract class AbstractFieldProviderForValue
 	
 	public AbstractFieldProviderForValue()
 	{
-		this.generatedFields = new HashMap<String, AbstractField<? extends Object>>();
+		this.generatedFields = new LinkedHashMap<String, AbstractField<? extends Object>>(); // LinkedHashMap keeps insertion order
 	}
 	
 	public void generateFields(Value value)
@@ -37,33 +40,44 @@ public abstract class AbstractFieldProviderForValue
 		return generatedFields;
 	}
 	
+	//---------------------------------------------------
+	// ABSTRACT INTERFACE
+		
+	protected abstract void doGenerateFields(Value value);
+	
 	//--------------------------------------------------------------------------
-	// MAIN FIELD CONSTRUCTION ROUTINES, CONVENIENCE INTERFACE & TYPES
+	// MAIN FIELD CONSTRUCTION ROUTINES
 	
 	@SuppressWarnings("unchecked")
-	protected <N extends Number & Comparable<? super N>> AbstractField<? extends Object> createNumericField(final Value value, String caption,
+	protected <N extends Number & Comparable<? super N>> AbstractField<? extends Object> createNumericField(String caption, final IFieldContext<N> context, 
 			final IOnValueChange<N> valueChangeHandler)
 	{
-		// TODO: generalize this so that we don't need to hack our own code
-		
-		// first cast value
-		final N currentValue = (N) value.getCurrentValue().hackValue();
-
 		// create & bind with the value type
-		if(value.getType().isSetRestrictionDefined())
+		if(context.getSetRestriction() != null)
 		{
-			return createEnumeratedField(currentValue, (List<N>) getSortedEnumerationForValue(value), caption, valueChangeHandler);
+			return createEnumeratedField(
+					context.getCurrentValue(),
+					(List<N>) getSortedEnumerationForValue(context.getSetRestriction().getValues()),
+					caption,
+					valueChangeHandler
+			);
 		}
 		else // whether range restriction is defined or not
 		{
 			N min = null, max = null;
-			if(value.getType().isRangeRestrictionDefined()) // TODO: these may NOT be defined
+			if(context.getRangeRestriction() != null)
 			{
-				min = (N) value.getType().getRangeRestriction().getMinValue().hackValue();
-				max = (N) value.getType().getRangeRestriction().getMaxValue().hackValue();
+				if(context.getRangeRestriction().getMinValue() != null)
+				{
+					min = (N) context.getRangeRestriction().getMinValue().hackValue(); 
+				}
+				if(context.getRangeRestriction().getMaxValue() != null)
+				{
+					max = (N) context.getRangeRestriction().getMaxValue().hackValue(); 
+				}
 			}
-			final TextField tf_value = FormFieldFactory.getNumericField(caption, currentValue, min, max, true, false);
-			tf_value.setSizeFull();
+			TextField tf_value = FormFieldFactory.getNumericField(caption, context.getCurrentValue(), min, max, true, false);
+			tf_value.setWidth("100%");
 			tf_value.addValueChangeListener(new Property.ValueChangeListener()
 			{
 				private static final long serialVersionUID = 3736100120428402858L;
@@ -71,11 +85,11 @@ public abstract class AbstractFieldProviderForValue
 				@Override
 				public void valueChange(ValueChangeEvent event)
 				{
-					NumberConstant numberParser = NumberConstant.fromNumberClass(currentValue.getClass());
+					NumberConstant numberParser = NumberConstant.fromNumberClass(context.getCurrentValue().getClass());
 					Number parsedNumber;
 					try
 					{
-						parsedNumber = numberParser.parse(tf_value.getValue());
+						parsedNumber = numberParser.parse((String) event.getProperty().getValue());
 					}
 					catch(Throwable t)
 					{
@@ -93,10 +107,8 @@ public abstract class AbstractFieldProviderForValue
 	protected <O extends Object> AbstractField<? extends Object> createEnumeratedField(O currentValue, List<O> options, String caption,
 			final IOnValueChange<O> valueChangeHandler)
 	{
-		// TODO: why the "Object" in the argument? O instead? String?
-		
 		final ComboBox cb_value = FormFieldFactory.getGeneralComboBox(caption, options, currentValue, true, false);
-		cb_value.setSizeFull();
+		cb_value.setWidth("100%");
 		cb_value.addValueChangeListener(new Property.ValueChangeListener()
 		{
 			private static final long serialVersionUID = -3938305148585892660L;
@@ -110,28 +122,87 @@ public abstract class AbstractFieldProviderForValue
 		return cb_value;
 	}
 	
-	protected TextField createGeneralTextField(String currentValue, String caption, final IOnValueChange<String> valueChangeHandler)
+	protected AbstractField<? extends Object> createTextField(String caption, final IFieldContext<String> context, final IOnValueChange<String> valueChangeHandler)
 	{
-		TextField tf_value = FormFieldFactory.getGeneralTextField("Value:", null, currentValue, true, false);
-		tf_value.setSizeFull();
-		tf_value.addValueChangeListener(new Property.ValueChangeListener()
+		if(context.getSetRestriction() != null)
 		{
-			private static final long serialVersionUID = -6565459293274644984L;
+			List<String> options = getSortedEnumerationForValue(context.getSetRestriction().getValues());
+			return createEnumeratedField(context.getCurrentValue(), options, "Value:", valueChangeHandler);
+		}
+		else
+		{
+			if(context.getRangeRestriction() != null)
+			{
+				// TODO: range restriction
+				throw new IllegalStateException("Ranged field is not yet implemented for strings.");
+			}
+			else
+			{
+				TextField tf_value = FormFieldFactory.getGeneralTextField(caption, null, context.getCurrentValue(), true, false);
+				tf_value.setWidth("100%");
+				tf_value.addValueChangeListener(new Property.ValueChangeListener()
+				{
+					private static final long serialVersionUID = -6565459293274644984L;
+
+					@Override
+					public void valueChange(ValueChangeEvent event)
+					{
+						valueChangeHandler.valueChanged((String) event.getProperty().getValue());
+					}
+				});
+				return tf_value;
+			}
+		}
+	}
+	
+	protected AbstractField<? extends Object> createAttemptsField(final int defaultCountOfValuesToTry, final IOnValueChange<Integer> valueChangeHandler)
+	{
+		return createNumericField("Attempts:", new IFieldContext<Integer>()
+		{
+			@Override
+			public Integer getCurrentValue()
+			{
+				return defaultCountOfValuesToTry;
+			}
+			
+			@Override
+			public RangeRestriction getRangeRestriction()
+			{
+				// let agents handle corner cases, this implementation strives for a high level of abstraction
+				return new RangeRestriction(new IntegerValue(1), null);
+			}
 
 			@Override
-			public void valueChange(ValueChangeEvent event)
+			public SetRestriction getSetRestriction()
 			{
-				valueChangeHandler.valueChanged((String) event.getProperty().getValue());
+				return null;
 			}
-		});
-		return tf_value;
+		}, valueChangeHandler);
 	}
+	
+	//--------------------------------------------------------------------------
+	// SPECIAL TYPES
+	
+	protected interface IFieldContext<O extends Object>
+	{
+		O getCurrentValue();
+		SetRestriction getSetRestriction();
+		RangeRestriction getRangeRestriction();
+	}
+	
+	protected interface IOnValueChange<O extends Object>
+	{
+		void valueChanged(O object);
+	}
+	
+	//--------------------------------------------------------------------------
+	// CONVENIENCE INTERFACE
 
 	@SuppressWarnings("unchecked")
-	protected <O extends Object> List<O> getUnsortedEnumerationForValue(Value value)
+	protected <O extends Object> List<O> getUnsortedEnumerationForValue(List<IValueData> values)
 	{
 		List<O> options = new ArrayList<O>();
-		for(IValueData possibleValue : value.getType().getSetRestriction().getValues())
+		for(IValueData possibleValue : values)
 		{
 			options.add((O) possibleValue.hackValue());
 		}
@@ -139,25 +210,45 @@ public abstract class AbstractFieldProviderForValue
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <OC extends Object & Comparable<? super OC>> List<OC> getSortedEnumerationForValue(Value value)
+	protected <OC extends Object & Comparable<? super OC>> List<OC> getSortedEnumerationForValue(List<IValueData> values)
 	{
-		List<OC> options = (List<OC>) getUnsortedEnumerationForValue(value);
+		List<OC> options = (List<OC>) getUnsortedEnumerationForValue(values);
 		Collections.sort(options);
 		return options;
+	}
+	
+	protected <O extends Object> IFieldContext<O> getFieldContextFrom(final O currentValue, final Value value)
+	{
+		return new IFieldContext<O>()
+		{
+			@Override
+			public O getCurrentValue()
+			{
+				return currentValue;
+			}
+			
+			@Override
+			public RangeRestriction getRangeRestriction()
+			{
+				return value.getType().getRangeRestriction();
+			}
+
+			@Override
+			public SetRestriction getSetRestriction()
+			{
+				return value.getType().getSetRestriction();
+			}
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <O extends Object> IFieldContext<O> getFieldContextFrom(final Value value)
+	{
+		return getFieldContextFrom((O) value.getCurrentValue().hackValue(), value);
 	}
 	
 	protected void addField(String notificationDescription, AbstractField<? extends Object> field)
 	{
 		generatedFields.put(notificationDescription, field);
 	}
-	
-	protected interface IOnValueChange<O extends Object>
-	{
-		void valueChanged(O object);
-	}
-
-	//---------------------------------------------------
-	// ABSTRACT INTERFACE
-	
-	protected abstract void doGenerateFields(Value value);
 }

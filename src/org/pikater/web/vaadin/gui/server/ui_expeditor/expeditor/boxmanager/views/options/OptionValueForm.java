@@ -20,9 +20,9 @@ import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidated
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.collections.BidiMap;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
-import org.pikater.web.vaadin.gui.server.layouts.formlayout.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.BooleanValueProvider;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.DoubleValueProvider;
