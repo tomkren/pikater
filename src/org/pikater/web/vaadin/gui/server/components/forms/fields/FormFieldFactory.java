@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.layouts.formlayout;
+package org.pikater.web.vaadin.gui.server.components.forms.fields;
 
 import java.util.Collection;
 
@@ -9,7 +9,6 @@ import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.ui.AbstractTextField;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.PasswordField;
@@ -62,20 +61,17 @@ public class FormFieldFactory
 		return result;
 	}
 	
-	public static CheckBox getGeneralCheckField(String caption, boolean initialState, boolean readOnly)
+	public static CustomFormCheckBox getGeneralCheckField(String componentCaption, String checkBoxCaption, boolean initialState, boolean readOnly)
 	{
-		CheckBox result = new CheckBox(caption, initialState);
-		result.setReadOnly(readOnly);
-		// ComboBox result = getGeneralComboBox(caption, Arrays.asList(Boolean.TRUE, Boolean.FALSE), initialState, required, readOnly);
-		// result.setConverter(StringToBooleanConverter.class); // TODO: is this even necessary?
-		return result;
+		return new CustomFormCheckBox(componentCaption, checkBoxCaption, initialState, readOnly);
 	}
 	
-	public static OptionGroup getGeneralOptionGroup(String caption, boolean required)
+	public static OptionGroup getGeneralOptionGroup(String caption, boolean required, boolean readOnly)
 	{
 		OptionGroup result = new OptionGroup(caption);
 		result.setImmediate(true);
 		result.setRequired(required);
+		result.setReadOnly(readOnly);
 		return result;
 	}
 	
