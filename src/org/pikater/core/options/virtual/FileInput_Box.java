@@ -1,12 +1,12 @@
 package org.pikater.core.options.virtual;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualFileInputBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.options.SlotsHelper;
 
 public class FileInput_Box {
 	
@@ -19,16 +19,13 @@ public class FileInput_Box {
 		agentInfo.setName("FileInput");
 		agentInfo.setDescription("This box provides a data source to other boxes.");
 
-		NewOption optionIN = new NewOption("fileURI", new StringValue("inputFile.ARFF"));
+		NewOption optionIN = new NewOption(CoreConstants.FILEURI, new StringValue("inputFile.ARFF"));
 		optionIN.setDescription("File name");
 		
 		agentInfo.addOption(optionIN);
 		
-		Slot outputSlot = new Slot();
-		outputSlot.setSlotType(SlotTypes.DATA_TYPE);
-		outputSlot.setDataType("fileData");
-		
-		agentInfo.addOutputSlot(outputSlot);
+		agentInfo.setOutputSlots(
+				SlotsHelper.getOutputSlot_FileInput());
 
 		return agentInfo;
 	}

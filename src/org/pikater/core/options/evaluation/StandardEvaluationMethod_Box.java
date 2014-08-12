@@ -16,7 +16,7 @@ public class StandardEvaluationMethod_Box {
 		agentInfo.importOntologyClass(EvaluationMethod.class);
 
 		agentInfo.setOutputSlots(
-				SlotsHelper.getSlots_EvaluationMethodOutput());
+				SlotsHelper.getOutputSlots_EvaluationMethod());
 
 		return agentInfo;
 	}

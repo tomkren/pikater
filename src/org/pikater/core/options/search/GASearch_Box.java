@@ -70,7 +70,7 @@ public class GASearch_Box {
 
 
 		//Slot Definition
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Search());
 
 		return agentInfo;
 	}

@@ -47,7 +47,7 @@ public class GridSearch_Box {
 		agentInfo.addOption(optionZ);
 
 		//Slot Definition
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Search());
 		
 		return agentInfo;
 	}

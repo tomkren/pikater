@@ -20,7 +20,7 @@ public class NMTopRecommender_Box {
 		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 		
 		//Slot Definition
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_RecommendOutput());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Recommend());
 
 		return agentInfo;
 	}

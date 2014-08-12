@@ -86,7 +86,7 @@ public class EASearch_Box {
 		agentInfo.addOption(optionF);
 		agentInfo.addOption(optionL);
 
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Search());
 		
 		return agentInfo;
 	}

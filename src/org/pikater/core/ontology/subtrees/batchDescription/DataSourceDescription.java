@@ -1,5 +1,6 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
@@ -28,13 +29,13 @@ public class DataSourceDescription implements Concept {
     public void setDataProvider(IDataProvider dataProvider) {
     	
     	if (dataProvider instanceof FileDataProvider) {
-    		this.setDataOutputType("fileData");
+    		this.setDataOutputType(CoreConstants.SLOT_FILE_DATA);
     		
     	} else if (dataProvider instanceof ComputingAgent) {
-    		this.setDataOutputType("computedData");
+    		this.setDataOutputType(CoreConstants.SLOT_COMPUTED_DATA);
     		
     	} else if (dataProvider instanceof CARecSearchComplex) {
-    		this.setDataOutputType("computedData");
+    		this.setDataOutputType(CoreConstants.SLOT_COMPUTED_DATA);
     	}
     	
         this.dataProvider = dataProvider;

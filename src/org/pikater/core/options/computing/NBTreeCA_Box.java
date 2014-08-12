@@ -20,8 +20,8 @@ public class NBTreeCA_Box {
 		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 
 		// Slots Definition
-		agentInfo.setInputSlots(SlotsHelper.getSlots_CAInput());
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_CAOutput());
+		agentInfo.setInputSlots(SlotsHelper.getInputSlots_CA());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_CA());
 
 		return agentInfo;
 	}

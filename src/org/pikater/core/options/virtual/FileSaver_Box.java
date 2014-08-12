@@ -2,9 +2,8 @@ package org.pikater.core.options.virtual;
 
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualFileSaverBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
+import org.pikater.core.options.SlotsHelper;
 
 public class FileSaver_Box {
 
@@ -16,12 +15,9 @@ public class FileSaver_Box {
 
 		agentInfo.setName("FileSaver");
 		agentInfo.setDescription("This box save data to Pikater database");
-
-		Slot inputSlot = new Slot();
-		inputSlot.setSlotType(SlotTypes.DATA_TYPE);
-		inputSlot.setDataType("data");
 		
-		agentInfo.addInputSlot(inputSlot);
+		agentInfo.setInputSlots(
+				SlotsHelper.getInputSlot_FileSaver());
 
 		return agentInfo;
 

@@ -19,7 +19,7 @@ public class BasicRecommend_Box {
 
 		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 		
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_RecommendOutput());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Recommend());
 		
 		return agentInfo;
 	}

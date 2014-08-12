@@ -28,7 +28,7 @@ public class ChooseXValue_Box {
 		agentInfo.addOption(optionN);
 		
 		// Slot Definition
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Search());
 
 		return agentInfo;
 	}

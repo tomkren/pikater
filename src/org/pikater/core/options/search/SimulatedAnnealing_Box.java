@@ -54,7 +54,7 @@ public class SimulatedAnnealing_Box {
 		agentInfo.addOption(optionS);
 
 		// Slot Definition
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());		
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Search());		
 
 		return agentInfo;
 	}

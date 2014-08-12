@@ -17,14 +17,14 @@ public class OptionsHelper
 {
 	public static List<NewOption> getCAOptions()
 	{
-		NewOption optModel = new NewOption("model", new NullValue());
+		NewOption optModel = new NewOption(CoreConstants.MODEL, new NullValue());
 
 		List<IValueData> durationValues = new ArrayList<IValueData>();
 		durationValues.add(new StringValue(ShortTimeDuration.class.getSimpleName()));
 		durationValues.add(new StringValue(LongTermDuration.class.getSimpleName()));
 
 		NewOption optDuration = new NewOption(
-				"duration",
+				CoreConstants.DURATION,
 				new StringValue(LongTermDuration.class.getSimpleName()),
 				new SetRestriction(false, durationValues));
 		

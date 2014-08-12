@@ -38,7 +38,7 @@ public class RandomSearch_Box {
 		agentInfo.addOption(optionM);
 
 		//Slot Definition
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_SearchOutput());		
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Search());		
 
 		return agentInfo;
 	}

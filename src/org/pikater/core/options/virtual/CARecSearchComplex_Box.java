@@ -17,9 +17,9 @@ public class CARecSearchComplex_Box {
 		agentInfo.setName("Complex");
 		agentInfo.setDescription("Complex Box");
 
-		agentInfo.setInputSlots(SlotsHelper.getSlots_CARecSearchComplexIntput());
+		agentInfo.setInputSlots(SlotsHelper.getIntputSlots_CARecSearchComplex());
 
-		agentInfo.setOutputSlots(SlotsHelper.getSlots_CARecSearchComplexOutput());
+		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_CARecSearchComplex());
 
 		return agentInfo;
 	}

@@ -4,6 +4,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standart;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
@@ -15,7 +16,7 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 	private List<NewOption> options;
 
 	public EvaluationMethod() {
-		this.agentType = "Standard";
+		this.agentType = Standart.class.getName();
 		this.options = new ArrayList<NewOption>();
 	}
 	public EvaluationMethod(String type) {
