@@ -8,7 +8,8 @@ public class IntegerValueProvider extends AbstractFieldProviderForValue
 	@Override
 	protected void doGenerateFields(final Value value)
 	{
-		addField("value", createNumericField(value, "Value:", new IOnValueChange<Integer>()
+		IFieldContext<Integer> context = getFieldContextFrom(value);
+		addField("value", createNumericField("Value:", context, new IOnValueChange<Integer>()
 		{
 			@Override
 			public void valueChanged(Integer number)

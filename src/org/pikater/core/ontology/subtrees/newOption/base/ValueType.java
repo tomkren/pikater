@@ -8,7 +8,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
-import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData; 
 
 public class ValueType implements Concept, IValidated
@@ -166,23 +166,13 @@ public class ValueType implements Concept, IValidated
 	//-------------------------------------------------------------
 	// OTHER INHERITED INTERFACE
 	/**
-	 * The following conditions are checked (all of them are assumed in web package, so
-	 * don't change them lightly):
-	 * - Default value is set.
-	 * - At least one of range and set restrictions is not set.
-	 * - No restriction is set for question mark values.
-	 * - If a restriction is set, it needs to be valid.
+	 * Conditions checked in this method are assumed in web package, so
+	 * don't change them lightly:
 	 * @return 
 	 */
 	@Override
 	public boolean isValid()
 	{
-		// TODO: QMR -> range restriction defined
-		// TODO: QMS -> set restriction defined
-		
-		// TODO: IRangedValueData extends IComparableValueData - adds a "isValidAgainst(RangeRestriction restriction)"
-		// TODO: IEnumeratedValueData - likewise
-		
 		if(defaultValue == null)
 		{
 			return false;
@@ -191,24 +181,59 @@ public class ValueType implements Concept, IValidated
 		{
 			return false;
 		}
-		else if (((defaultValue instanceof StringValue) || (defaultValue instanceof BooleanValue) ||
-				(defaultValue instanceof NullValue) || (defaultValue instanceof QuestionMarkSet)) 
-				&& isRangeRestrictionDefined())
+		else if(isRangeRestrictionDefined())
 		{
-			return false;
+			if(!rangeRestriction.isValid())
+			{
+				return false;
+			}
+			else if(defaultValue instanceof IComparableValueData) 
+			{
+				return rangeRestriction.validatesValue((IComparableValueData) defaultValue);
+			}
+			else if(defaultValue instanceof QuestionMarkRange)
+			{
+				QuestionMarkRange qmr = (QuestionMarkRange) defaultValue;
+				if(!qmr.isValid())
+				{
+					return false;
+				}
+				else
+				{
+					return rangeRestriction.isMasterRangeOf(qmr.getUserDefinedRestriction());
+				}
+			}
+			else
+			{
+				return false;
+			}
 		}
-		else if (((defaultValue instanceof BooleanValue) || (defaultValue instanceof NullValue) ||
-				(defaultValue instanceof QuestionMarkRange)) && isSetRestrictionDefined())
+		else if(isSetRestrictionDefined())
 		{
-			return false;
-		}
-		else if(isRangeRestrictionDefined() && (!rangeRestriction.isValid() || !rangeRestriction.isValidAgainst(defaultValue))) // TODO: doesn't work for QMR & QMS - min & max must be checked
-		{
-			return false;
-		}
-		else if(isSetRestrictionDefined() && (!setRestriction.isValid() || !setRestriction.isValidAgainst(defaultValue))) // TODO:
-		{
-			return false;
+			if(!setRestriction.isValid())
+			{
+				return false;
+			}
+			else if((defaultValue instanceof BooleanValue) || (defaultValue instanceof NullValue) || (defaultValue instanceof QuestionMarkRange))
+			{
+				return false;
+			}
+			else if(defaultValue instanceof QuestionMarkSet)
+			{
+				QuestionMarkSet qms = (QuestionMarkSet) defaultValue;
+				if(!qms.isValid())
+				{
+					return false;
+				}
+				else
+				{
+					return setRestriction.isMasterSetOf(qms.getUserDefinedRestriction());
+				}
+			}
+			else
+			{
+				return setRestriction.validatesValue(defaultValue);
+			}
 		}
 		else
 		{

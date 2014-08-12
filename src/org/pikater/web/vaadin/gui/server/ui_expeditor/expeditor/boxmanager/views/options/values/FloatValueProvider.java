@@ -8,7 +8,8 @@ public class FloatValueProvider extends AbstractFieldProviderForValue
 	@Override
 	protected void doGenerateFields(final Value value)
 	{
-		addField("value", createNumericField(value, "Value:", new IOnValueChange<Float>()
+		IFieldContext<Float> context = getFieldContextFrom(value);
+		addField("value", createNumericField("Value:", context, new IOnValueChange<Float>()
 		{
 			@Override
 			public void valueChanged(Float number)

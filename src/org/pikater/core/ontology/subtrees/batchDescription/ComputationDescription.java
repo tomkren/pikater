@@ -280,7 +280,7 @@ public class ComputationDescription implements Concept {
 			
 			Collection<UniversalConnector> slotsI = uOntoI.getInputSlots();
 			for (UniversalConnector slotIJ : slotsI) {
-	
+				
 				UniversalElement uElement = slotIJ.getFromElement();
 				IDataProvider dataProvider =  (IDataProvider)
 						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
@@ -291,6 +291,14 @@ public class ComputationDescription implements Concept {
 				dataSourceDesc.setDataProvider(dataProvider);
 				
 				inputSlots.add(dataSourceDesc);
+				
+				// TODO:
+				/*
+				if(slotIJ.isFullySpecified())
+				{
+					
+				}
+				*/
 			}
 			
 			processI.importAllDataSourceDescriptions(inputSlots);

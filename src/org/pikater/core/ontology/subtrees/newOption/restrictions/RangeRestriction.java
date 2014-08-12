@@ -39,6 +39,88 @@ public class RangeRestriction implements IRestriction
 		this.maxValue = maxValue;
 	}
 	
+	/*
+	 * Some convenience interface.
+	 */
+	public Class<? extends IComparableValueData> fetchRangeType()
+	{
+		if(minValue != null)
+		{
+			return minValue.getClass();
+		}
+		else if(maxValue != null)
+		{
+			return maxValue.getClass();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	public boolean isFullySpecified()
+	{
+		return (minValue != null) && (maxValue != null); 
+	}
+	public boolean isMasterRangeOf(RangeRestriction other)
+	{
+		if(isValid() && other.isValid() && fetchRangeType().equals(other.fetchRangeType()))
+		{
+			if(isFullySpecified() != other.isFullySpecified())
+			{
+				return false;
+			}
+			else
+			{
+				// ranges with only opposite bounds defined can not be compatible
+				if(!isFullySpecified())
+				{
+					if((minValue != null) && (other.getMaxValue() != null))
+					{
+						return false;
+					}
+					if((maxValue != null) && (other.getMinValue() != null))
+					{
+						return false;
+					}
+				}
+				
+				// check the "subrange" relation
+				if((minValue != null) && (other.getMinValue() != null) && (minValue.compareTo(other.getMinValue()) > 0))
+				{
+					return false;
+				}
+				if((maxValue != null) && (other.getMaxValue() != null) && (other.getMaxValue().compareTo(maxValue) > 0))
+				{
+					return false;
+				}
+				return true;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean validatesValue(IComparableValueData value)
+	{
+		if(isValid())
+		{
+			if((minValue != null) && minValue.getClass().equals(value.getClass()) && (minValue.compareTo(value) > 0))
+			{
+				return false;
+			}
+			if((maxValue != null) && maxValue.getClass().equals(value.getClass()) && (value.compareTo(maxValue) > 0))
+			{
+				return false;
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	/* -------------------------------------------------------------
 	 * CUSTOM INSTANCE COMPARING - GENERATED WITH ECLIPSE
 	 * - generate again when you change local fields or their types
@@ -86,30 +168,17 @@ public class RangeRestriction implements IRestriction
 	@Override
 	public boolean isValid()
 	{
-		if((minValue == null) || (maxValue == null) || !minValue.getClass().equals(maxValue.getClass()))
+		if((minValue == null) && (maxValue == null))
 		{
 			return false;
 		}
-		else if(minValue.compareTo(maxValue) > 0)
+		else if(isFullySpecified() && (!minValue.getClass().equals(maxValue.getClass()) || (minValue.compareTo(maxValue) > 0))) 
 		{
 			return false;
 		}
 		else
 		{
 			return true;
-		}
-	}
-	@Override
-	public boolean isValidAgainst(Object obj)
-	{
-		if(isValid() && obj.getClass().equals(minValue.getClass()))
-		{
-			IComparableValueData valueComp = (IComparableValueData) obj;
-			return (minValue.compareTo(valueComp) <= 0) && (valueComp.compareTo(maxValue) <= 0); 
-		}
-		else
-		{
-			return false;
 		}
 	}
 	@Override

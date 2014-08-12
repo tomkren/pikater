@@ -7,7 +7,6 @@ import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
-import org.pikater.web.vaadin.gui.server.layouts.formlayout.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxHighlightExtension;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerView;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
@@ -114,14 +113,14 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 					new Integer[] { endpoint.getParentBox().getID() }
 			).extend(connectionRow);
 			
-			CheckBox chb_endpoint = FormFieldFactory.getGeneralCheckField(
+			CheckBox chb_endpoint = new CheckBox(
 					null,
 					getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().areSlotsConnected(
 							getCurrentSource(),
 							endpoint.getChildSlot()
-					),
-					false
+					)
 			);
+			chb_endpoint.setImmediate(true);
 			chb_endpoint.addValueChangeListener(new Property.ValueChangeListener()
 			{
 				private static final long serialVersionUID = -3307902234166001492L;
