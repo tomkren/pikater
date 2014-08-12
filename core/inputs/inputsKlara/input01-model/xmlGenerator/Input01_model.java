@@ -71,7 +71,7 @@ public final class Input01_model {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		System.out.println("Exporting Ontology input01 to Klara's input XML configuration file.");
+		System.out.println("Exporting Ontology input01-model to Klara's input XML configuration file.");
 
 		ComputationDescription comDescription = createDescription();
 		

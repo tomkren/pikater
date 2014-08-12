@@ -83,7 +83,7 @@
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
-            <type>CrossValidation</type>
+            <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
             <options>
               <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
                 <name>F</name>
@@ -125,6 +125,7 @@
               <dataSources/>
               <fileURI>weather.arff</fileURI>
             </dataProvider>
+            <dataOutputType>fileData</dataOutputType>
             <dataInputType>trainingData</dataInputType>
           </trainingData>
           <testingData>
@@ -135,10 +136,11 @@
               <dataSources/>
               <fileURI>weather.arff</fileURI>
             </dataProvider>
+            <dataOutputType>fileData</dataOutputType>
             <dataInputType>testingData</dataInputType>
           </testingData>
         </dataProvider>
-        <dataOutputType>Data</dataOutputType>
+        <dataOutputType>computedData</dataOutputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>

@@ -67,23 +67,35 @@
                           <org.pikater.core.ontology.subtrees.newOption.base.Value>
                             <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                               <countOfValuesToTry>20</countOfValuesToTry>
-                              <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                <value>0.0</value>
-                              </min>
-                              <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                <value>1.0</value>
-                              </max>
+                              <userDefinedRestriction>
+                                <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>0.0</value>
+                                </minValue>
+                                <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>1.0</value>
+                                </maxValue>
+                              </userDefinedRestriction>
                             </currentValue>
                             <type>
                               <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                                 <countOfValuesToTry>20</countOfValuesToTry>
-                                <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                  <value>0.0</value>
-                                </min>
-                                <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                  <value>1.0</value>
-                                </max>
+                                <userDefinedRestriction>
+                                  <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                    <value>0.0</value>
+                                  </minValue>
+                                  <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                    <value>1.0</value>
+                                  </maxValue>
+                                </userDefinedRestriction>
                               </defaultValue>
+                              <rangeRestriction>
+                                <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>0.0</value>
+                                </minValue>
+                                <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                  <value>1.0</value>
+                                </maxValue>
+                              </rangeRestriction>
                             </type>
                           </org.pikater.core.ontology.subtrees.newOption.base.Value>
                         </a>
@@ -98,13 +110,23 @@
                                 <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                                   <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                                     <countOfValuesToTry>20</countOfValuesToTry>
-                                    <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                      <value>0.0</value>
-                                    </min>
-                                    <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                                      <value>1.0</value>
-                                    </max>
+                                    <userDefinedRestriction>
+                                      <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                        <value>0.0</value>
+                                      </minValue>
+                                      <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                        <value>1.0</value>
+                                      </maxValue>
+                                    </userDefinedRestriction>
                                   </defaultValue>
+                                  <rangeRestriction>
+                                    <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                      <value>0.0</value>
+                                    </minValue>
+                                    <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                      <value>1.0</value>
+                                    </maxValue>
+                                  </rangeRestriction>
                                 </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                               </a>
                             </types>
@@ -238,23 +260,35 @@
                     <org.pikater.core.ontology.subtrees.newOption.base.Value>
                       <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                         <countOfValuesToTry>20</countOfValuesToTry>
-                        <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                          <value>0.0</value>
-                        </min>
-                        <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                          <value>1.0</value>
-                        </max>
+                        <userDefinedRestriction>
+                          <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <value>0.0</value>
+                          </minValue>
+                          <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <value>1.0</value>
+                          </maxValue>
+                        </userDefinedRestriction>
                       </currentValue>
                       <type>
                         <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                           <countOfValuesToTry>20</countOfValuesToTry>
-                          <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                            <value>0.0</value>
-                          </min>
-                          <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                            <value>1.0</value>
-                          </max>
+                          <userDefinedRestriction>
+                            <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <value>0.0</value>
+                            </minValue>
+                            <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <value>1.0</value>
+                            </maxValue>
+                          </userDefinedRestriction>
                         </defaultValue>
+                        <rangeRestriction>
+                          <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <value>0.0</value>
+                          </minValue>
+                          <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                            <value>1.0</value>
+                          </maxValue>
+                        </rangeRestriction>
                       </type>
                     </org.pikater.core.ontology.subtrees.newOption.base.Value>
                   </values>
@@ -266,13 +300,23 @@
                         <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                           <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange">
                             <countOfValuesToTry>20</countOfValuesToTry>
-                            <min type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                              <value>0.0</value>
-                            </min>
-                            <max type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
-                              <value>1.0</value>
-                            </max>
+                            <userDefinedRestriction>
+                              <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <value>0.0</value>
+                              </minValue>
+                              <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                                <value>1.0</value>
+                              </maxValue>
+                            </userDefinedRestriction>
                           </defaultValue>
+                          <rangeRestriction>
+                            <minValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <value>0.0</value>
+                            </minValue>
+                            <maxValue type="org.pikater.core.ontology.subtrees.newOption.values.DoubleValue">
+                              <value>1.0</value>
+                            </maxValue>
+                          </rangeRestriction>
                         </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
                       </types>
                     </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
