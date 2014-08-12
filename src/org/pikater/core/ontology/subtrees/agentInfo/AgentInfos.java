@@ -48,9 +48,18 @@ public class AgentInfos implements Concept {
 	}
 
 	public boolean contains(AgentClass agentClass) {
+		if (agentClass == null) {
+			throw new IllegalArgumentException("Argument agentClass can't be null");
+		}
+		
 		for (AgentInfo agentInfoI : this.agentInfos) {
 			
-			if ( agentInfoI.getAgentClassName().equals(agentClass.getAgentClass()) ) {
+			String agentClassNameI = agentInfoI.getAgentClassName();
+			if (agentClassNameI == null) {
+				if (agentClass.getAgentClass() == null) {
+					return true;
+				}
+			} else if ( agentClassNameI.equals(agentClass.getAgentClass()) ) {
 				return true;
 			}
 		}
