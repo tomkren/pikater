@@ -10,7 +10,7 @@ public class NotSpecifiedComputingAgent_Box {
 	public static AgentInfo get() {
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.importAgentClass(null);
+		agentInfo.setAgentClassName(null);
 		agentInfo.importOntologyClass(ComputingAgent.class);
 
 		agentInfo.setName("NotSpecifiedCA");
