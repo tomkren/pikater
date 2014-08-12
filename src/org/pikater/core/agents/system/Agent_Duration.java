@@ -26,7 +26,6 @@ import java.util.Vector;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
-import org.pikater.core.agents.experiment.computing.Agent_WekaDurationLinearRegression;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
 import org.pikater.core.agents.PikaterAgent;
