@@ -1,6 +1,5 @@
 package org.pikater.core.options.virtual;
 
-import org.pikater.core.agents.experiment.virtual.Agent_VirtualNotSpecifiedComputingAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.options.OptionsHelper;
@@ -11,7 +10,7 @@ public class NotSpecifiedComputingAgent_Box {
 	public static AgentInfo get() {
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.importAgentClass(Agent_VirtualNotSpecifiedComputingAgent.class);
+		agentInfo.importAgentClass(null);
 		agentInfo.importOntologyClass(ComputingAgent.class);
 
 		agentInfo.setName("NotSpecifiedCA");
