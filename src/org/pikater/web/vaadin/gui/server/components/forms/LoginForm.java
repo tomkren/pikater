@@ -2,9 +2,9 @@ package org.pikater.web.vaadin.gui.server.components.forms;
 
 import java.util.List;
 
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
-import org.pikater.web.vaadin.gui.server.layouts.formlayout.FormFieldFactory;
 
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;

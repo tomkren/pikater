@@ -6,14 +6,14 @@ import java.util.List;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.CustomFormCheckBox;
+import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
-import org.pikater.web.vaadin.gui.server.layouts.formlayout.FormFieldFactory;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextArea;
@@ -84,7 +84,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 	private final OptionGroup field_saveForLaterMode;
 	private final TextField field_experimentName;
 	private final ComboBox field_priorityAssignedByUser;
-	private final CheckBox field_sendEmailWhenFinished;
+	private final CustomFormCheckBox field_sendEmailWhenFinished;
 	private final TextArea field_experimentNote;
 	
 	/*
@@ -106,7 +106,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 		switch(saveMode)
 		{
 			case SAVE_FOR_LATER:
-				this.field_saveForLaterMode = FormFieldFactory.getGeneralOptionGroup("How to save:", true);
+				this.field_saveForLaterMode = FormFieldFactory.getGeneralOptionGroup("How to save:", true, false);
 				SaveForLaterMode[] availableSaveForLaterModes = SaveForLaterMode.getAvailableByContext(sourceExperiment);
 				for(SaveForLaterMode mode : availableSaveForLaterModes)
 				{
@@ -160,7 +160,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 				}
 				this.field_priorityAssignedByUser = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
 				this.field_priorityAssignedByUser.setWidth("100%");
-				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("send email when finished", true, false);
+				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("Email when finished:", "", true, false);
 				break;
 				
 			default:
@@ -223,7 +223,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 	
 	public boolean getSendEmailWhenFinished()
 	{
-		return (Boolean) field_sendEmailWhenFinished.getConvertedValue();
+		return field_sendEmailWhenFinished.isSelected();
 	}
 	
 	public String getExperimentNote()
