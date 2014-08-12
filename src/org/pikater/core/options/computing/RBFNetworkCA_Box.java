@@ -83,7 +83,6 @@ public class RBFNetworkCA_Box {
 		agentInfo.addOption(optionS);
 		agentInfo.addOption(optionM);
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
-		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 		
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getInputSlots_CA());

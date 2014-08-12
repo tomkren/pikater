@@ -188,7 +188,6 @@ public class MultiLayerPerceptronCA_Box {
 		agentInfo.addOption(optionL);
 		agentInfo.addOption(optionH);
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
-		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getInputSlots_CA());

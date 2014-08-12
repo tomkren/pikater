@@ -34,7 +34,6 @@ public class OneRCA_Box {
 
 		agentInfo.addOption(optionB);
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
-		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getInputSlots_CA());

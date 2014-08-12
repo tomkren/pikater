@@ -167,7 +167,6 @@ public class SMOCA_Box {
 		agentInfo.addOption(optionV);
 		agentInfo.addOption(optionW);
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
-		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getInputSlots_CA());

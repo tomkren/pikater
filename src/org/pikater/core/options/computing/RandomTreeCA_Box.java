@@ -57,7 +57,6 @@ public class RandomTreeCA_Box {
 		agentInfo.addOption(optionM);
 		agentInfo.addOption(optionQ);
 		agentInfo.addOptions(OptionsHelper.getCAOptions());
-		agentInfo.addOptions(OptionsHelper.getCAorRecommenderOptions());
 		
 		// Slots Definition
 		agentInfo.setInputSlots(SlotsHelper.getInputSlots_CA());

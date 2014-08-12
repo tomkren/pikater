@@ -1,7 +1,6 @@
 package org.pikater.core.options;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.core.CoreConstants;
@@ -17,7 +16,16 @@ public class OptionsHelper
 {
 	public static List<NewOption> getCAOptions()
 	{
+		List<NewOption> options = OptionsHelper.getNotSpecifiedCAOptions();
+		
 		NewOption optModel = new NewOption(CoreConstants.MODEL, new NullValue());
+
+		options.add(optModel);
+		
+		return options;
+	}
+	
+	public static List<NewOption> getNotSpecifiedCAOptions() {
 
 		List<IValueData> durationValues = new ArrayList<IValueData>();
 		durationValues.add(new StringValue(ShortTimeDuration.class.getSimpleName()));
@@ -27,14 +35,6 @@ public class OptionsHelper
 				CoreConstants.DURATION,
 				new StringValue(LongTermDuration.class.getSimpleName()),
 				new SetRestriction(false, durationValues));
-		
-		return Arrays.asList(
-				optModel,
-				optDuration
-		);
-	}
-	
-	public static List<NewOption> getCAorRecommenderOptions() {
 		
 		List<IValueData> modeValues = new ArrayList<IValueData>();
 		modeValues.add(new StringValue(CoreConstants.MODE_TRAIN_ONLY));
@@ -65,13 +65,14 @@ public class OptionsHelper
 				CoreConstants.RESULT,
 				new StringValue(CoreConstants.RESULT_AFTER),
 				new SetRestriction(false, resultValues));
-
 		
-		return Arrays.asList(
-				optMode,
-				optOutput,
-				optResult
-		);
+		List<NewOption> options = new ArrayList<NewOption>();
+		options.add(optDuration);
+		options.add(optMode);
+		options.add(optOutput);
+		options.add(optResult);
+		
+		return options;
 	}
 	
 }

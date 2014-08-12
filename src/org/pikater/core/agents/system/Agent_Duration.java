@@ -21,7 +21,6 @@ import jade.proto.AchieveREResponder;
 import jade.proto.ContractNetInitiator;
 
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Vector;
 
 import org.pikater.core.AgentNames;
