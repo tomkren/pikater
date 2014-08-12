@@ -31,6 +31,11 @@ public class TypeRestriction implements IRestriction
 		types.add(type);
 	}
 	
+	public boolean isValidAgainst(Object obj)
+	{
+		return isValid() && (obj instanceof ValueType) && types.contains((ValueType) obj);
+	}
+	
 	@Override
 	public TypeRestriction clone()
 	{
@@ -45,10 +50,5 @@ public class TypeRestriction implements IRestriction
 	public boolean isValid()
 	{
 		return (types != null) && !types.isEmpty();
-	}
-	@Override
-	public boolean isValidAgainst(Object obj)
-	{
-		return isValid() && (obj instanceof ValueType) && types.contains((ValueType) obj);
 	}
 }

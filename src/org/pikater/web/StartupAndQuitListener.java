@@ -187,10 +187,26 @@ public class StartupAndQuitListener implements ServletContextListener
 						options.addOption(new NewOption("Double", new DoubleValue(1)));
 						options.addOption(new NewOption("Boolean", new BooleanValue(true)));
 						options.addOption(new NewOption("Float", new FloatValue(1)));
-						options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(
-								new IntegerValue(5), new IntegerValue(10), 3)));
-						options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(new ArrayList<IValueData>(Arrays.asList(
-								new IntegerValue(5), new IntegerValue(10))), 3)));
+						
+						options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(new IntegerValue(5), new IntegerValue(10), 3)));
+						options.addOption(new NewOption(
+								"QuestionMarkSet",
+								new QuestionMarkSet(3, new ArrayList<IValueData>(Arrays.asList(
+										new IntegerValue(5),
+										new IntegerValue(6),
+										new IntegerValue(9),
+										new IntegerValue(10),
+										new IntegerValue(11)))) /*,
+								new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
+										new IntegerValue(5),
+										new IntegerValue(6),
+										new IntegerValue(7),
+										new IntegerValue(8),
+										new IntegerValue(9),
+										new IntegerValue(10),
+										new IntegerValue(11)
+								))))); */
+						));
 						
 						Slot slotInput_test = new Slot();
 						slotInput_test.setDataType("pokus");

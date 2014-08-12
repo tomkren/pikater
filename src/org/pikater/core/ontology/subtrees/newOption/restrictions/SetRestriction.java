@@ -2,14 +2,13 @@ package org.pikater.core.ontology.subtrees.newOption.restrictions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-public class SetRestriction implements IRestriction
+public class SetRestriction implements IRestriction, Iterable<IValueData>
 {
 	private static final long serialVersionUID = 611963641797046162L;
 
@@ -45,9 +44,35 @@ public class SetRestriction implements IRestriction
 		this.values = values;
 	}
 	
+	/*
+	 * Some convenience interface.
+	 */
 	public void addValues(List<IValueData> values)
 	{
 		this.values.addAll(values);
+	}
+	public boolean validatesValue(IValueData value)
+	{
+		if(isValid() && fetchSetType().equals(value.getClass()))
+		{
+			return values.contains(value);
+		}
+		return false;
+	}
+	public Class<?> fetchSetType()
+	{
+		return values.get(0).getClass();
+	}
+	public boolean isMasterSetOf(SetRestriction other)
+	{
+		if(isValid() && other.isValid() && fetchSetType().equals(other.fetchSetType()))
+		{
+			return values.containsAll(other.getValues());
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/* -------------------------------------------------------------
@@ -88,6 +113,11 @@ public class SetRestriction implements IRestriction
 	//-------------------------------------------------------------
 	// OTHER INHERITED INTERFACE
 	@Override
+	public Iterator<IValueData> iterator()
+	{
+		return values.iterator();
+	}
+	@Override
 	public SetRestriction clone()
 	{
 		List<IValueData> valuesCopied = new ArrayList<IValueData>();
@@ -115,29 +145,5 @@ public class SetRestriction implements IRestriction
 			}
 			return types.size() < 2;
 		}
-	}
-	@Override
-	public boolean isValidAgainst(Object obj)
-	{
-		if(isValid() && values.get(0).getClass().equals(obj.getClass()))
-		{
-			if(obj instanceof NullValue)
-			{
-				return true;
-			}
-			else if(obj instanceof IComparableValueData)
-			{
-				IComparableValueData valueComp = (IComparableValueData) obj;
-				for(IValueData val : values)
-				{
-					if(valueComp.compareTo((IComparableValueData) val) == 0)
-					{
-						return true;
-					}
-				}
-				return false; 
-			}
-		}
-		return false;
 	}
 }

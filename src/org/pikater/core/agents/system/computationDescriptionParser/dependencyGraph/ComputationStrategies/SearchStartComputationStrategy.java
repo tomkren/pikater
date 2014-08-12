@@ -168,8 +168,8 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
                 IntervalSearchItem itm = new IntervalSearchItem();
                 itm.setName(opt.getName());
                 itm.setNumber_of_values_to_try(questionMarkRange.getCountOfValuesToTry());
-                itm.setMin(questionMarkRange.getMin());
-                itm.setMax(questionMarkRange.getMax());
+                itm.setMin(questionMarkRange.getUserDefinedRestriction().getMinValue());
+                itm.setMax(questionMarkRange.getUserDefinedRestriction().getMaxValue());
                 schema.add(itm);
             }
             else if (typedValue instanceof QuestionMarkSet)
@@ -178,7 +178,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
                 SetSItem itm = new SetSItem();
                 itm.setName(opt.getName());
                 itm.setNumber_of_values_to_try(questionMarkSet.getCountOfValuesToTry());
-                itm.setSet(questionMarkSet.getValues());
+                itm.setSet(questionMarkSet.getUserDefinedRestriction().getValues());
                 schema.add(itm);
             }
         }

@@ -4,6 +4,7 @@ import jade.content.Concept;
 
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
@@ -121,15 +122,15 @@ public class Value implements Concept, IValidated
 		{
 			return false;
 		}
-		else if(!type.isValid() || !type.getDefaultValue().getClass().equals(currentValue.getClass()))
+		else if(!type.isValid() || !type.getDefaultValue().getClass().equals(currentValue.getClass())) // this allows the next round
 		{
 			return false;
 		}
-		else if(type.isRangeRestrictionDefined() && !type.getRangeRestriction().isValidAgainst(currentValue))
+		else if(type.isRangeRestrictionDefined() && !type.getRangeRestriction().validatesValue((IComparableValueData) currentValue))
 		{
 			return false;
 		}
-		else if(type.isSetRestrictionDefined() && !type.getSetRestriction().isValidAgainst(currentValue))
+		else if(type.isSetRestrictionDefined() && !type.getSetRestriction().validatesValue(currentValue))
 		{
 			return false;
 		}

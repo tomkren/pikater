@@ -30,37 +30,49 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	 */
 	@Deprecated
 	public NewOption() {}
-	
-	/**
+    public NewOption(String name, int value)
+    {
+        this(name,new IntegerValue(value));
+    }
+    public NewOption(String name, String value)
+    {
+        this(name,new StringValue(value));
+    }
+    public NewOption(String name, double value)
+    {
+        this(name,new DoubleValue(value));
+    }
+    public NewOption(String name, float value)
+    {
+        this(name,new FloatValue(value));
+    }
+    /**
 	 * Creates an option with a single predefined value. Value type and restrictions are inferred.
 	 * @param name
 	 * @param defaultValue
 	 */
 	public NewOption(String name, IValueData defaultValue)
 	{
-		this(name, new Value(defaultValue), new TypeRestriction(Arrays.asList(new ValueType(defaultValue)))); 
+		this(name, new Value(defaultValue), new TypeRestriction(Arrays.asList(new ValueType(defaultValue))));
 	}
-
-    public NewOption(String name, int value)
-    {
-        this(name,new IntegerValue(value));
-    }
-
-    public NewOption(String name, String value)
-    {
-        this(name,new StringValue(value));
-    }
-
-    public NewOption(String name, double value)
-    {
-        this(name,new DoubleValue(value));
-    }
-
-    public NewOption(String name, float value)
-    {
-        this(name,new FloatValue(value));
-    }
-
+	/**
+	 * Creates an option with a single predefined {@link QuestionMarkRange} value. Value type and restrictions are inferred.
+	 * @param name
+	 * @param defaultValue
+	 */
+	public NewOption(String name, QuestionMarkRange defaultValue)
+	{
+		this(name, defaultValue, defaultValue.getUserDefinedRestriction());
+	}
+	/**
+	 * Creates an option with a single predefined {@link QuestionMarkSet} value. Value type and restrictions are inferred.
+	 * @param name
+	 * @param defaultValue
+	 */
+	public NewOption(String name, QuestionMarkSet defaultValue)
+	{
+		this(name, defaultValue, defaultValue.getUserDefinedRestriction());
+	}
 	/**
 	 * Creates an option with a single predefined value. Value 
 	 * type and restrictions are inferred from the arguments.
@@ -158,6 +170,9 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 		this.valueRestrictions = valueRestrictions;
 	}
 
+	/*
+	 * Some convenience interface.
+	 */
 	public boolean isMutable()
     {
         return !isImmutable();

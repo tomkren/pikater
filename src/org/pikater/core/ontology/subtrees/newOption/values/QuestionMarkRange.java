@@ -1,5 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
@@ -9,8 +10,7 @@ public class QuestionMarkRange implements IValidatedValueData
 	private static final long serialVersionUID = 4064649544713291827L;
 
 	private int countOfValuesToTry;
-	private IComparableValueData min;
-	private IComparableValueData max;
+	private RangeRestriction userDefinedRestriction;
 	
 	/**
 	 * Should only be used by JADE.
@@ -18,17 +18,36 @@ public class QuestionMarkRange implements IValidatedValueData
 	@Deprecated
 	public QuestionMarkRange() {}
 
+	/**
+	 * Basic constructor, calls the other one & sets the {@link #countOfValuesToTry}
+	 * field to default.
+	 * @param min
+	 * @param max
+	 */
     public QuestionMarkRange(IComparableValueData min, IComparableValueData max)
     {
-        this.min = min;
-        this.max = max;
+    	this(min, max, 0);
     }
-
+    /**
+     * Main constructor.
+     * @param min
+     * @param max
+     * @param countOfValuesToTry
+     */
 	public QuestionMarkRange(IComparableValueData min, IComparableValueData max, int countOfValuesToTry)
 	{
-		this.min = min;
-		this.max = max;
+		this(countOfValuesToTry, new RangeRestriction(min, max));
+	}
+	/**
+	 * More or less a copy constructor. For internal use only.
+	 * @param min
+	 * @param max
+	 * @param countOfValuesToTry
+	 */
+	private QuestionMarkRange(int countOfValuesToTry, RangeRestriction userDefinedRestriction)
+	{
 		this.countOfValuesToTry = countOfValuesToTry;
+		this.userDefinedRestriction = userDefinedRestriction;
 	}
 	
 	public int getCountOfValuesToTry()
@@ -39,21 +58,13 @@ public class QuestionMarkRange implements IValidatedValueData
 	{
 		this.countOfValuesToTry = countOfValuesToTry;
 	}
-	public IComparableValueData getMin()
+	public RangeRestriction getUserDefinedRestriction()
 	{
-		return min;
+		return userDefinedRestriction;
 	}
-	public void setMin(IComparableValueData min)
+	public void setUserDefinedRestriction(RangeRestriction userDefinedRestriction)
 	{
-		this.min = min;
-	}
-	public IComparableValueData getMax()
-	{
-		return max;
-	}
-	public void setMax(IComparableValueData max)
-	{
-		this.max = max;
+		this.userDefinedRestriction = userDefinedRestriction;
 	}
 	
 	/* -------------------------------------------------------------
@@ -67,8 +78,10 @@ public class QuestionMarkRange implements IValidatedValueData
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + countOfValuesToTry;
-		result = prime * result + ((max == null) ? 0 : max.hashCode());
-		result = prime * result + ((min == null) ? 0 : min.hashCode());
+		result = prime
+				* result
+				+ ((userDefinedRestriction == null) ? 0
+						: userDefinedRestriction.hashCode());
 		return result;
 	}
 	@Override
@@ -83,19 +96,12 @@ public class QuestionMarkRange implements IValidatedValueData
 		QuestionMarkRange other = (QuestionMarkRange) obj;
 		if (countOfValuesToTry != other.countOfValuesToTry)
 			return false;
-		if (max == null)
+		if (userDefinedRestriction == null)
 		{
-			if (other.max != null)
+			if (other.userDefinedRestriction != null)
 				return false;
 		}
-		else if (!max.equals(other.max))
-			return false;
-		if (min == null)
-		{
-			if (other.min != null)
-				return false;
-		}
-		else if (!min.equals(other.min))
+		else if (!userDefinedRestriction.equals(other.userDefinedRestriction))
 			return false;
 		return true;
 	}
@@ -109,7 +115,7 @@ public class QuestionMarkRange implements IValidatedValueData
 	@Override
 	public IValueData clone()
 	{
-		return new QuestionMarkRange((IComparableValueData) min.clone(), (IComparableValueData) max.clone(), countOfValuesToTry);
+		return new QuestionMarkRange(countOfValuesToTry, userDefinedRestriction.clone());
 	}
 	@Override
 	public String exportToWeka()
@@ -124,11 +130,7 @@ public class QuestionMarkRange implements IValidatedValueData
 	@Override
 	public boolean isValid()
 	{
-		if((min == null) && (max == null))
-		{
-			return false;
-		}
-		else if((min != null) && (max != null) && (!min.getClass().equals(max.getClass()) || (min.compareTo(max) > 0))) 
+		if((userDefinedRestriction == null) || !userDefinedRestriction.isValid())
 		{
 			return false;
 		}

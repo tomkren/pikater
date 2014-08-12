@@ -1,8 +1,8 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
@@ -11,17 +11,27 @@ public class QuestionMarkSet implements IValidatedValueData
 	private static final long serialVersionUID = 4434448192843651477L;
 
 	private int countOfValuesToTry;
-	private List<IValueData> values;
+	private SetRestriction userDefinedRestriction;
 	
 	/**
 	 * Should only be used by JADE.
 	 */
 	@Deprecated
 	public QuestionMarkSet() {}
-	public QuestionMarkSet(List<IValueData> values, int countOfValuesToTry)
+	/**
+	 * Main constructor.
+	 */
+	public QuestionMarkSet(int countOfValuesToTry, List<IValueData> values) 
 	{
-		this.values = values;
+		this(countOfValuesToTry, new SetRestriction(false, values));
+	}
+	/**
+	 * More or less a copy constructor. For internal use only.
+	 */
+	private QuestionMarkSet(int countOfValuesToTry, SetRestriction restriction) 
+	{
 		this.countOfValuesToTry = countOfValuesToTry;
+		this.userDefinedRestriction = restriction;
 	}
 	
 	public int getCountOfValuesToTry()
@@ -32,13 +42,13 @@ public class QuestionMarkSet implements IValidatedValueData
 	{
 		this.countOfValuesToTry = countOfValuesToTry;
 	}
-	public List<IValueData> getValues()
+	public SetRestriction getUserDefinedRestriction()
 	{
-		return values;
+		return userDefinedRestriction;
 	}
-	public void setValues(List<IValueData> values)
+	public void setUserDefinedRestriction(SetRestriction userDefinedRestriction)
 	{
-		this.values = values;
+		this.userDefinedRestriction = userDefinedRestriction;
 	}
 	
 	/* -------------------------------------------------------------
@@ -52,7 +62,10 @@ public class QuestionMarkSet implements IValidatedValueData
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + countOfValuesToTry;
-		result = prime * result + ((values == null) ? 0 : values.hashCode());
+		result = prime
+				* result
+				+ ((userDefinedRestriction == null) ? 0
+						: userDefinedRestriction.hashCode());
 		return result;
 	}
 	@Override
@@ -67,12 +80,12 @@ public class QuestionMarkSet implements IValidatedValueData
 		QuestionMarkSet other = (QuestionMarkSet) obj;
 		if (countOfValuesToTry != other.countOfValuesToTry)
 			return false;
-		if (values == null)
+		if (userDefinedRestriction == null)
 		{
-			if (other.values != null)
+			if (other.userDefinedRestriction != null)
 				return false;
 		}
-		else if (!values.equals(other.values))
+		else if (!userDefinedRestriction.equals(other.userDefinedRestriction))
 			return false;
 		return true;
 	}
@@ -86,12 +99,7 @@ public class QuestionMarkSet implements IValidatedValueData
 	@Override
 	public IValueData clone()
 	{
-		List<IValueData> valuesCopied = new ArrayList<IValueData>();
-		for(IValueData value : values)
-		{
-			valuesCopied.add(value.clone());
-		}
-		return new QuestionMarkSet(valuesCopied, countOfValuesToTry);
+		return new QuestionMarkSet(countOfValuesToTry, userDefinedRestriction.clone());
 	}
 	@Override
 	public String exportToWeka()
@@ -106,10 +114,7 @@ public class QuestionMarkSet implements IValidatedValueData
 	@Override
 	public boolean isValid()
 	{
-		if((values == null) || values.isEmpty())
-		{
-			return false; 
-		}
-		return (countOfValuesToTry > 0) && (countOfValuesToTry <= values.size());
+		return (userDefinedRestriction != null) && userDefinedRestriction.isValid() && 
+				(countOfValuesToTry > 0) && (countOfValuesToTry <= userDefinedRestriction.getValues().size());
 	}
 }
