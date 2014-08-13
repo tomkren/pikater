@@ -27,7 +27,6 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
 import org.pikater.shared.database.utils.Hash;
-import org.pikater.shared.database.utils.ResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
@@ -276,16 +275,19 @@ public class DataSetDAO extends AbstractDAO{
 	 * TODO: make it transactional
 	 * Stores a new dataset from file to the database and creates the corresponding {@link JPADataSetLO} and {@link JPAFilemapping} objects.
 	 * @param sourceFile
-	 * @param initialData
+	 * @param description
+	 * @param userID
 	 * @return ID of the new {@link JPADataSetLO} object
 	 * @throws IOException
 	 */
-	public int storeNewDataSet(File sourceFile, String description, JPAUser user) throws IOException{
+	public int storeNewDataSet(File sourceFile, String description, int userID) throws IOException{
 			
+		JPAUser owner = DAOs.userDAO.getByID(userID);
+		
 		JPADataSetLO newDSLO=new JPADataSetLO();
 		newDSLO.setCreated(new Date());
 		newDSLO.setDescription(description);
-		newDSLO.setOwner(user);
+		newDSLO.setOwner(owner);
 		
 		long oid = -1;
 		String hash = Hash.getMD5Hash(sourceFile);
@@ -302,7 +304,7 @@ public class DataSetDAO extends AbstractDAO{
 		JPAFilemapping fm=new JPAFilemapping();
 		fm.setExternalfilename(sourceFile.getName());
 		fm.setInternalfilename(hash);
-		fm.setUser(user);
+		fm.setUser(owner);
 		DAOs.filemappingDAO.storeEntity(fm);
 		newDSLO.setHash(hash);
 		newDSLO.setOID(oid);

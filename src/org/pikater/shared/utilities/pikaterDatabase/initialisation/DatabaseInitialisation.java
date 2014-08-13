@@ -90,7 +90,7 @@ public class DatabaseInitialisation {
 				JPADataSetLO newDSLO=new JPADataSetLO(owner,datasetI.getName());
 				//hash a OID will be set using DAO
 				//DAOs.dataSetDAO.storeNewDataSet(datasetI, newDSLO);
-				DAOs.dataSetDAO.storeNewDataSet(datasetI, datasetI.getName(), "stepan");
+				DAOs.dataSetDAO.storeNewDataSet(datasetI, datasetI.getName(), owner.getId());
 				
 				System.out.println("--------------------");
 				System.out.println();
