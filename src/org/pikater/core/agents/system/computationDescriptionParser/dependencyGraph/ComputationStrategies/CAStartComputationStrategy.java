@@ -44,20 +44,22 @@ import java.util.Map;
 public class CAStartComputationStrategy implements StartComputationStrategy{
 	
 	Agent_Manager myAgent;
-	int graphId;
+	int graphID;
+	int userID;
 	ModelComputationNode computationNode;
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
 	
 	public CAStartComputationStrategy (Agent_Manager manager, 
-			int graphId, ModelComputationNode computationNode){
-		myAgent = manager;
-        this.graphId = graphId;
+			int graphId, int userID, ModelComputationNode computationNode){
+		this.myAgent = manager;
+        this.graphID = graphId;
+        this.userID = userID;
         this.computationNode = computationNode;
 	}
 	
 	public void execute(ComputationNode computation){    	
-		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
+		ACLMessage originalRequest = myAgent.getComputation(graphID).getMessage();
 		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, this));    	
     }
 		
@@ -162,10 +164,11 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, 1));
 
 		IExpectedDuration duration = computationNode.getExpectedDuration();
+		task.setUserID(userID);
 		task.setSaveResults(true);
 		task.setSaveMode("message");
 		task.setNodeID(computationNode.getId());
-		task.setGraphID(graphId);
+		task.setGraphID(graphID);
 		task.setAgent(agent);
 		task.setDatas(datas);
 		task.setExpectedDuration(duration);
