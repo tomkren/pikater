@@ -51,9 +51,9 @@ public class JPABatch extends JPAAbstractEntity{
 	private String XML;
 	@ManyToOne
 	private JPAUser owner;
-	private int priority;
-	private int totalPriority;
-	private int computationEstimateInHours;
+	private int priority; // TODO: rename this to avoid confusion (e.g. userAssignedPriority)
+	private int totalPriority; // TODO: this is currently not used (propagate to core)
+	private int computationEstimateInHours; // TODO: this is obsolete now - delete
 	private boolean sendEmailAfterFinish;
 	@Enumerated(EnumType.STRING)
 	private JPABatchStatus status;
@@ -86,10 +86,8 @@ public class JPABatch extends JPAAbstractEntity{
 		this.note = note;
 		this.XML = xml;
 		this.owner=owner;
-		this.priority = 9; // TODO: this is probably just for tests - let's have some methods to easily access the defaults
-
-
-		this.totalPriority=99; // TODO: this is probably just for tests - let's have some methods to easily access the defaults
+		this.priority = 0;
+		this.totalPriority=0;
 		this.created=new Date();
 		this.status=JPABatchStatus.CREATED;
 	}
@@ -112,7 +110,7 @@ public class JPABatch extends JPAAbstractEntity{
 		this.owner=owner;
 		this.priority = userAssignedPriority;
 		this.sendEmailAfterFinish=sendEmailAfterFinish;
-		this.totalPriority=99; // TODO: this is probably just for tests
+		this.totalPriority=99; // TODO: this should be refreshed when setting user assigned priority => a separate method
 		this.created=new Date();
 		this.status=JPABatchStatus.WAITING;
 	}
@@ -146,13 +144,21 @@ public class JPABatch extends JPAAbstractEntity{
 	}
 
 	public void setPriority(int priority){
-		this.priority=priority;
+		if((priority >= 0) && priority < 10)
+		{
+			this.priority=priority; // TODO: total priority needs to be refreshed when user assigned priority changes and the batch had been scheduled
+		}
+		else
+		{
+			throw new IllegalArgumentException("Only values from 0 to 9 are allowed. Received: " + priority);
+		}
 	}
-	public int getPriority(){
+	public int getPriority(){ 
 		return this.priority;
 	}
 	
 	public void setTotalPriority(int totalPriority){
+		// TODO: concatenation of user priority (JPAUser) and user assigned priority
 		this.totalPriority=totalPriority;
 	}
 	public int getTotalPriority(){

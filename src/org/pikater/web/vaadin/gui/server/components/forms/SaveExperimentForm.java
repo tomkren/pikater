@@ -151,14 +151,19 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 				break;
 				
 			case SAVE_FOR_EXECUTION:
-				this.field_saveForLaterMode = null;
-				JPAUser user = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+				/**
+				 * This is dependent on {@link JPAUser#setPriorityMax()} and
+				 * {@link UniversalComputationDescription#setPriority()}.
+				 */
 				List<Integer> userPriorityOptions = new ArrayList<Integer>();
-				for(int i = 0; i <= user.getPriorityMax(); i++)
+				for(int i = 0; i < 10; i++)
 				{
 					userPriorityOptions.add(i);
 				}
+				this.field_saveForLaterMode = null;
+				JPAUser user = ManageAuth.getUserEntity(VaadinSession.getCurrent());
 				this.field_priorityAssignedByUser = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
+				this.field_priorityAssignedByUser.setDescription("The more, the higher priority.");
 				this.field_priorityAssignedByUser.setWidth("100%");
 				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("Email when finished:", "", true, false);
 				break;

@@ -53,8 +53,6 @@ public class JPAUser extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
 	
-	// TODO: eventually swap "private String password;" for "private String passwordHash;"
-	
 	/** Constructor for JPA Compatibility. */
 	protected JPAUser(){}
 	
@@ -67,7 +65,7 @@ public class JPAUser extends JPAAbstractEntity{
 	 */
 	public JPAUser(String login, String password, String email, JPARole role)
 	{
-		this(login, password, role, email, 9, JPAUserStatus.ACTIVE);
+		this(login, password, role, email, 0, JPAUserStatus.ACTIVE); // lowest priority possible, until an admin raises it
 	}
 	
 	/**
@@ -81,12 +79,12 @@ public class JPAUser extends JPAAbstractEntity{
 	 */
 	protected JPAUser(String login, String password, JPARole role, String email, int maxPriority, JPAUserStatus status)
 	{
-		this.login=login;
-		this.password=password;
-		this.priorityMax=maxPriority;
-		this.email=email;
-		this.role=role;
-		this.status=status;
+		setLogin(login);
+		setPassword(password);
+		setPriorityMax(maxPriority);
+		setEmail(email);
+		setRole(role);
+		setStatus(status);
 		this.created = new Date();
 	}
 	
@@ -118,7 +116,14 @@ public class JPAUser extends JPAAbstractEntity{
 		return priorityMax;
 	}
 	public void setPriorityMax(int priorityMax) {
-		this.priorityMax = priorityMax;
+		if((priorityMax >= 0) && priorityMax < 10)
+		{
+			this.priorityMax = priorityMax;
+		}
+		else
+		{
+			throw new IllegalArgumentException("Only values from 0 to 9 are allowed. Received: " + priorityMax);
+		}
 	}
 	public String getEmail() {
 		return email;

@@ -154,7 +154,6 @@ public class ComputationDescription implements Concept {
 		gene();
 		
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
-		uModel.setPriority(this.priority);
 		NewOptions optionsOnt = new NewOptions(this.getGlobalOptions());
 		uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
 		
@@ -228,10 +227,10 @@ public class ComputationDescription implements Concept {
 	}
 
 	public static ComputationDescription importUniversalComputationDescription(
-			UniversalComputationDescription uDescription) {
+			UniversalComputationDescription uDescription, int totalPriority) {
 
 		ComputationDescription description = new ComputationDescription();
-		description.setPriority(uDescription.getPriority());
+		description.setPriority(totalPriority);
 		description.setGlobalOptions(
 				new ArrayList<NewOption>(uDescription.getGlobalOptions()) );
 
