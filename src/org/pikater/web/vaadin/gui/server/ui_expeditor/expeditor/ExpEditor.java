@@ -9,12 +9,12 @@ import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
-import org.pikater.web.vaadin.gui.server.layouts.tabsheet.ITabSheetOwner;
-import org.pikater.web.vaadin.gui.server.layouts.tabsheet.TabSheet;
-import org.pikater.web.vaadin.gui.server.layouts.tabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxbrowser.BoxBrowserToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxManagerToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IBoxManagerToolboxContext;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.ITabSheetOwner;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheet;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticDnDWrapper;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.utilcomponent.UtilitiesToolbox;
@@ -129,7 +129,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		});
 		this.toolbox_boxBrowser.setStyleName("boxBrowserToolbox");
 		setComponent(Border.WEST, this.toolbox_boxBrowser);
-		addColumnStyleName(Column.WEST, "boxBrowserToolboxSize");
 		
 		// CENTER COMPONENT INIT
 		this.experimentTabs = new TabSheet(this);
@@ -158,7 +157,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		});
 		this.toolbox_boxManager.setStyleName("boxManagerToolbox");
 		setComponent(Border.EAST, this.toolbox_boxManager);
-		addColumnStyleName(Column.EAST, "boxManagerToolboxSize");
 		
 		// SOUTH COMPONENT INIT
 		this.toolbox_util = new UtilitiesToolbox(ExpEditorToolbox.UTILITIES.toDisplayName(), new MouseEvents.ClickListener()
@@ -179,6 +177,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setColumnWidth(Column.CENTER, new Dimension(100, DimensionUnit.PCT));
 		setToolboxVisible(ExpEditorToolbox.BOX_MANAGER, false);
 		setToolboxVisible(ExpEditorToolbox.UTILITIES, false);
+		setFixedLayout(new Dimension(175, DimensionUnit.PX), new Dimension(DimensionMode.AUTO), new Dimension(275, DimensionUnit.PX));
 		
 		for(final ExpEditorToolbox toolbox : ExpEditorToolbox.values())
 		{
@@ -207,7 +206,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		this.extension.getClientRPC().command_loadBoxPictures(allPictureURLs.toArray(new String[0]));
 		
 		// display an empty experiment by default
-		// addEmptyTab();
+		// addEmptyTab(); // TODO: this seems to be a bit buggy...
 	}
 	
 	@Override
@@ -219,9 +218,18 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	@Override
 	public void onTabSelectionChange()
 	{
+		// reset toolbar
+		toolbar.onTabSelectionChange(getActiveKineticComponent());
+				
+		// reset box manager state
 		getActiveKineticComponent().cancelSelection();
 		((BoxManagerToolbox) getToolbox(ExpEditorToolbox.BOX_MANAGER)).setContentFromSelectedBoxes(new BoxInfoServer[0]);
-		toolbar.onTabSelectionChange(getActiveKineticComponent());
+		
+		// send notification to the client
+		extension.getState().currentlySelectedKineticConnectorID = getActiveKineticComponent().getConnectorId();
+		
+		// and resize the newly selected kinetic component and its stage
+		extension.getClientRPC().command_resizeSelectedKineticComponent();
 	}
 	
 	// -------------------------------------------------------------
@@ -325,11 +333,13 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	public void openToolbox(ExpEditorToolbox toolbox)
 	{
 		setToolboxVisible(toolbox, true);
+		extension.getClientRPC().command_resizeSelectedKineticComponent();
 	}
 	
 	public void minimizeToolbox(ExpEditorToolbox toolbox)
 	{
 		setToolboxVisible(toolbox, false);
+		extension.getClientRPC().command_resizeSelectedKineticComponent();
 	}
 	
 	// -------------------------------------------------------------

@@ -1,13 +1,8 @@
 @CHARSET "US-ASCII";
 
-.boxManagerToolboxSize
-{
-	min-width: 275px;
-	height: 100%;
-}
-
 .boxManagerToolbox
 {
+	height: 100%;
 	padding: 1px;
 	border: 1px solid black;
 	max-width: 350px;
