@@ -118,14 +118,10 @@ public class DataProcessing implements IDataProvider {
 		UniversalOntology ontologyInfo = new UniversalOntology();
 		ontologyInfo.setId(getId());
 		ontologyInfo.setOntologyClass(getClass());
-		try {
-			if (this.getAgentType() == null) {
-				ontologyInfo.setAgentClass(null);
-			} else {
-				ontologyInfo.setAgentClass(Class.forName(this.getAgentType()));
-			}
-		} catch (ClassNotFoundException e) {
-			Log.error("Class " + agentType + " not found");
+		if (getAgentType() == null) {
+			ontologyInfo.setAgentClass(null);
+		} else {
+			ontologyInfo.setAgentClass(getAgentType());
 		}
 		ontologyInfo.setOptions(new NewOptions(exportAllOptions()));
 		ontologyInfo.setErrors(exportAllErrors());
@@ -162,7 +158,7 @@ public class DataProcessing implements IDataProvider {
 		if (uOntology.getAgentClass() == null) {
 			dataProcess.setAgentType(null);
 		} else {
-			dataProcess.setAgentType(uOntology.getAgentClass().getName());	
+			dataProcess.setAgentType(uOntology.getAgentClass());	
 		}
 		dataProcess.importAllOptions(uOntology.getOptions().getOptions());
 		dataProcess.importAllErrors(

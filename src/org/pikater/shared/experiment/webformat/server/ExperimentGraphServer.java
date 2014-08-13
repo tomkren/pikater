@@ -300,7 +300,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				try
 				{
 					uniBox.getOntologyInfo().setOntologyClass(Class.forName(webBox.getAssociatedAgent().getOntologyClassName()));
-					uniBox.getOntologyInfo().setAgentClass(Class.forName(webBox.getAssociatedAgent().getAgentClassName()));
+					uniBox.getOntologyInfo().setAgentClass(webBox.getAssociatedAgent().getAgentClassName());
 				}
 				catch (ClassNotFoundException e)
 				{
@@ -437,7 +437,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 						// guarantees the correct result object or an exception
 						agentInfo = agentInfoProvider.getUnique(
 								element.getOntologyInfo().getOntologyClass().getName(),
-								element.getOntologyInfo().getAgentClass().getName()
+								element.getOntologyInfo().getAgentClass()
 								);
 					}
 					catch (Throwable t)

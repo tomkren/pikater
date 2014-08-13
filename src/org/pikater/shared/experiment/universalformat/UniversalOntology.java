@@ -11,7 +11,7 @@ public class UniversalOntology {
 	
 	private int id;
 	private Class<?> ontologyClass;
-	private Class<?> agentClass;
+	private String agentClass;
 
 	/**
 	 * List of edges that lead to the {@link UniversalElement element} containing
@@ -44,12 +44,12 @@ public class UniversalOntology {
 		this.ontologyClass = type;
 	}
 	
-	public Class<?> getAgentClass()
+	public String getAgentClass()
 	{
 		return agentClass;
 	}
 
-	public void setAgentClass(Class<?> agentClass)
+	public void setAgentClass(String agentClass)
 	{
 		this.agentClass = agentClass;
 	}
