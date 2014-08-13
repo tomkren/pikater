@@ -1,19 +1,13 @@
 package org.pikater.core.agents.system.planner.dataStructures;
 
 import jade.core.AID;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.ontology.subtrees.management.ComputerInfo;
@@ -23,37 +17,19 @@ public class CPUCoresStructure {
 	private Map <CPUCore, TaskToSolve> busyCores = new HashMap<CPUCore, TaskToSolve>();
 	private List<CPUCore> untappedCores = new ArrayList<CPUCore>();
 	
-	public void initCPUCores(Agent_Planner agent) {
-		 DFAgentDescription template = new DFAgentDescription();
-		 ServiceDescription sd = new ServiceDescription();
-		 sd.setType(Agent_ManagerAgent.class.getName());
-		 template.addServices(sd);
-		 
-		 DFAgentDescription[] result = null;
-		 try {
-			result = DFService.search(agent, template);
-		} catch (FIPAException e1) {
-			agent.logError(e1.getMessage(), e1);
-		}
-		if (result.length == 0) {
-			return;
-		}
-		
-		List<DFAgentDescription> descriptions =
-				new ArrayList<DFAgentDescription>(Arrays.asList(result));
+	public void initCPUCores(Agent_Planner agent,
+			List<AID> slaveServers) {
 
-		for (DFAgentDescription descriptionI : descriptions) {
-			
-			AID managerAgentAID = descriptionI.getName();
+		for (AID managerAgentI : slaveServers) {
 			
 			PlannerCommunicator comminicator = new PlannerCommunicator(agent);
 			ComputerInfo computerInfo =
-					comminicator.getComputerInfo(managerAgentAID);
+					comminicator.getComputerInfo(managerAgentI);
 			int numberOfCores = computerInfo.getNumberOfCores();
 			
 			for (int i = 0; i < numberOfCores; i++) {
 				
-				CPUCore cpuCore = new CPUCore(managerAgentAID, i);
+				CPUCore cpuCore = new CPUCore(managerAgentI, i);
 				untappedCores.add(cpuCore);
 			}
 		}

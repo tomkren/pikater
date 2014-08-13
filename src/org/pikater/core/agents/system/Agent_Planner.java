@@ -29,6 +29,7 @@ import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
 import org.pikater.core.agents.system.planner.dataStructures.DataRegistry;
 import org.pikater.core.agents.system.planner.dataStructures.Lock;
+import org.pikater.core.agents.system.planner.dataStructures.SlaveServersStructure;
 import org.pikater.core.agents.system.planner.dataStructures.TaskToSolve;
 import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -50,6 +51,8 @@ public class Agent_Planner extends PikaterAgent {
 
 	private volatile Lock lock = new Lock();
 	
+	private SlaveServersStructure slaveServersStructure =
+			new SlaveServersStructure();
 	private WaitingTasksQueues waitingToStartComputingTasks =
 			new WaitingTasksQueues();
 	private CPUCoresStructure cpuCoresStructure =
@@ -73,8 +76,6 @@ public class Agent_Planner extends PikaterAgent {
 
 		// waiting to start ManagerAgent
 		doWait(10000);
-
-		initCPUCores();
 		
 		
 		Ontology taskOntontology = TaskOntology.getInstance();
@@ -134,10 +135,6 @@ public class Agent_Planner extends PikaterAgent {
 		});
 
 	}
-
-	private void initCPUCores() {
-		cpuCoresStructure.initCPUCores(this);
-	}
 	
 	protected ACLMessage respondToExecuteTask(ACLMessage request, Action a) {
 
@@ -145,7 +142,6 @@ public class Agent_Planner extends PikaterAgent {
 
 		TaskToSolve taskToSolve = new TaskToSolve(
 				executeTask.getTask(), a, request);
-		
 		
 		try {
 			lock.lock();
@@ -320,17 +316,23 @@ public class Agent_Planner extends PikaterAgent {
 	
 	private void plan() {
 		
-		TaskToSolve taskToSolve = waitingToStartComputingTasks.
+		// choose one task(with the highest priority)
+		TaskToSolve taskToSolve = this.waitingToStartComputingTasks.
 				removeTaskWithHighestPriority();
 		
 		// test if some task is available
 		if (taskToSolve == null) {
 			return;
 		}
-		
 		Task task = taskToSolve.getTask();
 		task.setStart(Agent_DataManager.getCurrentPikaterDateString());
+		
+		// update number of cores
+		List<AID> newSlaveServers =
+				slaveServersStructure.scannNewSlaveServers(this);
+		cpuCoresStructure.initCPUCores(this, newSlaveServers);
 
+		// choose one CPU core (data-transfer friendly)
 		Set<String> dataLocations = dataRegistry.
 				getDataLocations(taskToSolve);
 		CPUCore selectedCore = cpuCoresStructure.
@@ -342,8 +344,10 @@ public class Agent_Planner extends PikaterAgent {
 			return;
 		}
 		
+		// set CPU core as busy
 		this.cpuCoresStructure.setCPUCoreAsBusy(selectedCore, taskToSolve);
 
+		// send task to the computing agent
 		PlannerCommunicator communicator = new PlannerCommunicator(this);
 		communicator.sendExecuteTask(task, selectedCore.getAID());
 		
