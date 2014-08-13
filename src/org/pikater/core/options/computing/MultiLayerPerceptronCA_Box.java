@@ -3,7 +3,7 @@ package org.pikater.core.options.computing;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.pikater.core.agents.experiment.computing.Agent_WekaPerceptronCA;
+import org.pikater.core.agents.experiment.computing.Agent_WekaMultilayerPerceptronCA;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -169,7 +169,7 @@ public class MultiLayerPerceptronCA_Box {
 
 
 		AgentInfo agentInfo = new AgentInfo();
-		agentInfo.importAgentClass(Agent_WekaPerceptronCA.class);
+		agentInfo.importAgentClass(Agent_WekaMultilayerPerceptronCA.class);
 		agentInfo.importOntologyClass(ComputingAgent.class);
 	
 		agentInfo.setName("MultiLayerPerceptron");
