@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor;
 
-import org.pikater.web.vaadin.gui.server.layouts.tabsheet.TabSheetTabComponent;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 public class CustomTabSheetTabComponent extends TabSheetTabComponent
@@ -20,7 +20,7 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 	@Override
 	public boolean canCloseTab()
 	{
-		return contentComponent.getExperimentGraph().isEmpty();
+		return contentComponent.getExperimentGraph().isEmpty(); // TODO: content modified
 	}
 	
 	public KineticComponent getContentComponent()

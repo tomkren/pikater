@@ -32,9 +32,7 @@ public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 				extendedWidget.getElement().getStyle().setBackgroundColor(
 						KineticBoxSettings.getColor(VisualStyle.HIGHLIGHTED_SLOT).toString()
 				);
-				
-				KineticComponentConnector kineticConnector = (KineticComponentConnector) getConnection().getConnector(getState().kineticConnectorID, 0);
-				kineticConnector.getWidget().highlightBoxes(getState().boxesToBeHighlighted);
+				getKineticConnectorByID(getState().kineticConnectorID).getWidget().highlightBoxes(getState().boxesToBeHighlighted);
 			}
 		}, MouseOverEvent.getType());
 		extendedWidget.addDomHandler(new MouseOutHandler()
@@ -43,9 +41,7 @@ public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 			public void onMouseOut(MouseOutEvent event)
 			{
 				extendedWidget.getElement().getStyle().clearBackgroundColor();
-				
-				KineticComponentConnector kineticConnector = (KineticComponentConnector) getConnection().getConnector(getState().kineticConnectorID, 0);
-				kineticConnector.getWidget().cancelBoxHighlight();
+				getKineticConnectorByID(getState().kineticConnectorID).getWidget().cancelBoxHighlight();
 			}
 		}, MouseOutEvent.getType());
 	}
@@ -54,5 +50,10 @@ public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 	public BoxHighlightExtensionSharedState getState()
 	{
 		return (BoxHighlightExtensionSharedState) super.getState();
+	}
+	
+	private KineticComponentConnector getKineticConnectorByID(String id)
+	{
+		return (KineticComponentConnector) getConnection().getConnector(id, 0);
 	}
 }
