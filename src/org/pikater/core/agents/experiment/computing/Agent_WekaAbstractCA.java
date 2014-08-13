@@ -4,7 +4,6 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
-import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
@@ -27,7 +26,6 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private static final long serialVersionUID = -3594051562022044000L;
 	
-	private String DurationServiceRegression_output_prefix = "  --d-- ";
 	
 	protected abstract Classifier getClassifierClass();
     protected Classifier classifier;
@@ -45,9 +43,8 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
 		working = true;
 		
-		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
-				log(DurationServiceRegression_output_prefix, 2);
-		}
+		this.logStartTask();
+		
 		log("Training...", 2);
 		log("Options: " + getOptions());
         classifier=getClassifierClass();
@@ -77,9 +74,6 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		d.setValue(duration);
 		evals.add(d);
 
-		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
-			log(DurationServiceRegression_output_prefix, 2);
-		}
 		this.lastStartDate=new Date(start);
 		this.lastDuration=duration;
 		log("start: " + new Date(start) + " : duration: " + duration, 2);
@@ -88,13 +82,8 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		options = classifier.getOptions();
 
 		// write out net parameters
-		if (getLocalName().equals(AgentNames.DURATION_SERVICE)){
-                log(DurationServiceRegression_output_prefix+getOptions(),2);
-		}
-		else{
-			log(getOptions(), 1);
-		}
-		
+		logOptions();
+
 		working = false;
 		
 		// add evals to Evaluation

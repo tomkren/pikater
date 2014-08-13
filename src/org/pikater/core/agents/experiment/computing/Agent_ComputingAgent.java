@@ -332,11 +332,19 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		Date date = new Date();
 		return dateFormat.format(date);
 	}
+
+	public void logStartTask() {
+	}
 	
-	public void taskFinished() {
+	public void logOptions() {
+		log(getOptions(), 1);
+	}
+	
+	public void logFinishedTask() {
 		log("CA terminating");
 		terminate();
 	}
+	
 	
 }
 

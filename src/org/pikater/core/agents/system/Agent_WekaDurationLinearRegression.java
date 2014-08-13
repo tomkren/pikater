@@ -11,6 +11,8 @@ public class Agent_WekaDurationLinearRegression extends
 	
 	private static final long serialVersionUID = 2468509141983327763L;
 
+	private String DurationServiceRegression_output_prefix = "  --d-- ";
+	
 	@Override
 	public Date train(Evaluation evaluation) throws Exception {
 		Date date= super.train(evaluation);
@@ -20,7 +22,17 @@ public class Agent_WekaDurationLinearRegression extends
 	}
 	
 	@Override	
-	public void taskFinished() {
+	public void logStartTask() {
+		log(DurationServiceRegression_output_prefix, 2);
+	}
+
+	@Override	
+	public void logOptions() {
+		log(DurationServiceRegression_output_prefix + getOptions(),2);
+	}
+	
+	@Override	
+	public void logFinishedTask() {
 	}
 	
 }

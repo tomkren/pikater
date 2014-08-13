@@ -511,7 +511,7 @@ public class ComputingAction extends FSMBehaviour {
 				if (agent.taskFIFO.size() > 0) {
 					agent.executionBehaviour.restart();
 				} else {
-					agent.taskFinished();
+					agent.logFinishedTask();
 				}
 
 			}
