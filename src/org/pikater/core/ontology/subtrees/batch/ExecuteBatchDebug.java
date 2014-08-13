@@ -6,14 +6,22 @@ public class ExecuteBatchDebug {
 
 	private ComputationDescription description;
 	private int batchID;
+	private int userID;
 	
 	@Deprecated
 	public ExecuteBatchDebug() {}
 
 	public ExecuteBatchDebug(
-			ComputationDescription description, int batchID) {
+			ComputationDescription description, int batchID, int userID) {
 		this.description = description;
 		this.batchID = batchID;
+	}
+
+	public int getUserID() {
+		return userID;
+	}
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 	public ComputationDescription getDescription() {

@@ -27,7 +27,7 @@ public class Parser {
         this.agent = agent_;
     }
 
-    public void parseRoot(IDataSaver dataSaver, int batchID) {
+    public void parseRoot(IDataSaver dataSaver, int batchID, int userID) {
         agent.log("Ontology Parser - IDataSaver");
         //Ontology root is Leaf in Computation
         parseSaver(dataSaver, batchID);
@@ -112,7 +112,7 @@ public class Parser {
     }
 
     //This is the root of all parsing
-    public void parseRoots(ComputationDescription comDescription, int batchID) {
+    public void parseRoots(ComputationDescription comDescription, int batchID, int userID) {
         agent.log("Ontology Parser - ComputationDescription");
         
         ManagerCommunicator communicator = new ManagerCommunicator();
@@ -123,7 +123,7 @@ public class Parser {
 
         List<FileDataSaver> elements = comDescription.getRootElements();
         for (FileDataSaver fileSaverI : elements) {
-        	this.parseRoot(fileSaverI, batchID);
+        	this.parseRoot(fileSaverI, batchID, userID);
         }
     }
 

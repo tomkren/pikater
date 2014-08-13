@@ -54,13 +54,14 @@ public class ParserBehaviour extends AchieveREResponder {
     	 */
     	if (concept instanceof ExecuteBatchDebug) {
     		
-    		ExecuteBatchDebug executeExperiment =
+    		ExecuteBatchDebug executeBatch =
     				(ExecuteBatchDebug) concept;
     		ComputationDescription comDescription =
-					executeExperiment.getDescription();
-    		int batchID = executeExperiment.getBatchID();
+					executeBatch.getDescription();
+    		int batchID = executeBatch.getBatchID();
+    		int userID = executeBatch.getUserID();
     		
-    		return respondToNewBatch(comDescription, batchID, request);
+    		return respondToNewBatch(comDescription, batchID, userID, request);
         }
     	
     	/*
@@ -69,6 +70,7 @@ public class ParserBehaviour extends AchieveREResponder {
     	if (concept instanceof NewBatch) {
     		
     		NewBatch newBatch = (NewBatch) concept;
+    		int userID = newBatch.getUserId();
     		
     		ManagerCommunicator communicator = new ManagerCommunicator();
     		Batch batch = communicator.loadBatch(agent, newBatch.getBatchId());
@@ -76,7 +78,7 @@ public class ParserBehaviour extends AchieveREResponder {
     		ComputationDescription comDescription = batch.getDescription();
     		int batchID = batch.getId();
     		
-    		return respondToNewBatch(comDescription, batchID, request);
+    		return respondToNewBatch(comDescription, batchID, userID, request);
     		
     	}
    
@@ -88,10 +90,10 @@ public class ParserBehaviour extends AchieveREResponder {
     }
     
     private ACLMessage respondToNewBatch(ComputationDescription comDescription,
-    		int batchID, ACLMessage request) {
+    		int batchID, int userID, ACLMessage request) {
     	
 		Parser parser = new Parser(agent);
-		parser.parseRoots(comDescription, batchID);
+		parser.parseRoots(comDescription, batchID, userID);
 		
 		ComputationGraph computationGraph = parser.getComputationGraph();
         ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request,batchID);
