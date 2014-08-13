@@ -23,6 +23,7 @@ public class Task implements Concept {
 	private int nodeID;
 	private int computationID;
 
+	private int userID;
 	private int batchID;
 	private int experimentID;
 
@@ -69,6 +70,13 @@ public class Task implements Concept {
 		this.computationID = computationID;
 	}
 
+	public int getUserID() {
+		return userID;
+	}
+	public void setUserID(int userID) {
+		this.userID = userID;
+	}
+	
 	public int getBatchID() {
 		return batchID;
 	}
