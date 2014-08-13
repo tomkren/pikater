@@ -374,6 +374,7 @@ public final class KineticEngine
 		Vector2d newSize = new Vector2d(newWidth, newHeight); 
 		stage.setSize(newSize);
 		fillRectangle.setSize(newSize);
+		stage.draw();
 	}
 	
 	/**

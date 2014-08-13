@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.pikater.web.vaadin.gui.client.extensions.ExpEditorExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.extensions.ExpEditorExtensionServerRpc;
+import org.pikater.web.vaadin.gui.client.extensions.ExpEditorExtensionSharedState;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
 import com.vaadin.server.AbstractExtension;
@@ -22,6 +23,12 @@ public class ExpEditorExtension extends AbstractExtension
 		{
 			private static final long serialVersionUID = 216446786216335413L;
 		});
+	}
+	
+	@Override
+	public ExpEditorExtensionSharedState getState()
+	{
+		return (ExpEditorExtensionSharedState) super.getState();
 	}
 	
 	/**
@@ -43,7 +50,7 @@ public class ExpEditorExtension extends AbstractExtension
 		if(modified ? modifiedContent.add(content) : modifiedContent.remove(content))
 		{
 			// modified content size changed
-			getClientRPC().command_modifiedTabsCountChanged(modifiedContent.size());
+			getState().modifiedTabsCount = modifiedContent.size();
 		}
 	}
 }
