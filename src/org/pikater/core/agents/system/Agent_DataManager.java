@@ -857,12 +857,12 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		try {
 			
-			int jpadsloID=DAOs.dataSetDAO.storeNewDataSet(new File(sd.getSourceFile()), sd.getDescription(), sd.getUserLogin());
+			int jpadsloID=DAOs.dataSetDAO.storeNewDataSet(new File(sd.getSourceFile()), sd.getDescription(), sd.getUserID());
 			
 			reply.setContentObject((new Integer(jpadsloID)));
 			log("Saved Dataset with ID: "+jpadsloID);
 		} catch (NoResultException e) {
-			logError("No user found with login: "+sd.getUserLogin(), e);
+			logError("No user found with login: "+sd.getUserID(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 		} catch (IOException e) {
 			logError("File can't be read.", e);

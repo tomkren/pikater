@@ -20,6 +20,7 @@ import java.io.File;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
@@ -27,6 +28,7 @@ import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.ResultOntology;
+import org.pikater.core.ontology.subtrees.account.GetUserID;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
@@ -103,6 +105,71 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
+	/*
+	 * Sends the request to userID to the Agent_DataManger
+	 * Returns User-ID
+	 */
+	public static int getUserID(PikaterAgent agent, String login) {
+		
+		GetUserID getUserID = new GetUserID();
+		getUserID.setLogin(login);
+        
+        Ontology ontology = AccountOntology.getInstance();
+
+        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+        msg.setSender(agent.getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+        msg.setLanguage(new SLCodec().getName());
+        msg.setOntology(ontology.getName());
+
+		Action a = new Action();
+		a.setAction(getUserID);
+		a.setActor(agent.getAID());
+
+		try {
+			// Let JADE convert from Java objects to string
+			agent.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			agent.logError(ce.getMessage());
+		} catch (OntologyException oe) {
+			agent.logError(oe.getMessage());
+		}
+
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(agent, msg);
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage());
+		}
+		
+		ContentElement content = null;
+		try {
+			content = agent.getContentManager().extractContent(reply);
+		} catch (UngroundedException e1) {
+			agent.logError(e1.getMessage());
+		} catch (CodecException e1) {
+			agent.logError(e1.getMessage());
+		} catch (OntologyException e1) {
+			agent.logError(e1.getMessage());
+		}
+
+		if (content instanceof Result) {
+			Result result = (Result) content;
+			
+			int userID = Integer.parseInt((String)result.getValue());
+			agent.log("Recieved ID " + userID);
+			
+			return userID;
+		} else {
+			agent.logError("No Result ontology");
+		}
+		
+		return -1;
+	}
+	
 	public static void saveResult(PikaterAgent agent, Task task,
 			int experimentID) {
 

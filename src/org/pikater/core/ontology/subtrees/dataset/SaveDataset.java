@@ -7,15 +7,15 @@ public class SaveDataset implements AgentAction {
 
 	private static final long serialVersionUID = 8885019280601751665L;
 
-	private String userLogin;
+	private int userID;
 	private String description;
 	private String sourceFile;
 	
-	public String getUserLogin() {
-		return userLogin;
+	public int getUserID() {
+		return userID;
 	}
-	public void setUserLogin(String userLogin) {
-		this.userLogin = userLogin;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 	public String getDescription() {
 		return description;

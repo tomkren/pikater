@@ -23,6 +23,7 @@ import java.util.List;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
@@ -293,25 +294,30 @@ public class Agent_GUIKlara extends PikaterAgent {
 	private void addDataset(String cmd) throws Exception{
 		int dataSetID=-1;
 		
+		//int userID = -1;
+		
 		String[] cmdA=cmd.split(" ");
 		if(cmdA.length==4){
 			String username=cmdA[1];
 			String description=cmdA[2];
 			String filename=testAndAskForConversion(new File(cmdA[3]));
+			int userID = DataManagerService.getUserID(this, username);
 			if(filename==null) return;
-			dataSetID = this.sendRequestSaveDataSet(filename, username, description);
+			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
 		}else if(cmdA.length==3){
 			String username=cmdA[1];
 			String description="Dataset saved in KlaraGui";
 			String filename=testAndAskForConversion(new File(cmdA[2]));
+			int userID = DataManagerService.getUserID(this, username);
 			if(filename==null) return;
-			dataSetID = this.sendRequestSaveDataSet(filename, username, description);
+			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
 		}else if(cmdA.length==2){
 			String username="klara";
 			String description="Dataset saved in KlaraGui";
 			String filename=testAndAskForConversion(new File(cmdA[1]));
+			int userID = DataManagerService.getUserID(this, username);
 			if(filename==null) return;
-			dataSetID = this.sendRequestSaveDataSet(filename, username, description);
+			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
 		}else{
 			System.err.println("Wrong parameters");
 		}
@@ -322,12 +328,12 @@ public class Agent_GUIKlara extends PikaterAgent {
 		
 	}
 	
-	private int sendRequestSaveDataSet(String filename,String username,String description){
+	private int sendRequestSaveDataSet(String filename, int userID, String description){
 		try {
         	AID dataManager = new AID(AgentNames.DATA_MANAGER, false);
     		Ontology ontology = DataOntology.getInstance();
     		SaveDataset sd = new SaveDataset();
-    		sd.setUserLogin(username);
+    		sd.setUserID(userID);
     		sd.setSourceFile(filename);
     		sd.setDescription(description);
             ACLMessage request = new ACLMessage(ACLMessage.REQUEST);

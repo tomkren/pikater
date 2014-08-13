@@ -280,10 +280,8 @@ public class DataSetDAO extends AbstractDAO{
 	 * @return ID of the new {@link JPADataSetLO} object
 	 * @throws IOException
 	 */
-	public int storeNewDataSet(File sourceFile,String description,String userlogin) throws IOException{
-		
-		JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin(userlogin)).getSingleResult();
-		
+	public int storeNewDataSet(File sourceFile, String description, JPAUser user) throws IOException{
+			
 		JPADataSetLO newDSLO=new JPADataSetLO();
 		newDSLO.setCreated(new Date());
 		newDSLO.setDescription(description);

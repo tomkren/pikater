@@ -268,7 +268,7 @@ public class Agent_Planner extends PikaterAgent {
 		for (TaskOutput t : task.getOutput()) {
 			log("requesting save of data "+t.getName());
 			SaveDataset sd = new SaveDataset();
-			sd.setUserLogin("stepan"); // TODO odnekud splasit skutecneho usera k tasku (planovac ho musi znat)
+			sd.setUserID(task.getUserID());
 			sd.setSourceFile(CoreConfiguration.DATA_FILES_PATH+System.getProperty("file.separator")+t.getName());
 			sd.setDescription("Output from batch "+task.getBatchID()+ " ("+t.getType().toString()+")");
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
