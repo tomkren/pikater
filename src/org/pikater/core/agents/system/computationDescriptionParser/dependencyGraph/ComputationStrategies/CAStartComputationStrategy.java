@@ -6,6 +6,7 @@ import jade.content.onto.basic.Action;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
+import org.jfree.util.Log;
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
@@ -162,7 +163,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		datas.importInternalTrainFileName(myAgent.getHashOfFile(training, 1));
 		datas.importExternalTestFileName(testing);
 		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, 1));
-
+		
 		IExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setUserID(userID);
 		task.setSaveResults(true);
