@@ -72,6 +72,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	{
 		super();
 		setSizeFull();
+		setPrimaryStyleName("kineticComponent");
 		
 		/*
 		 * Init.

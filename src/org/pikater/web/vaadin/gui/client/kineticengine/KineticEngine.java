@@ -39,6 +39,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModul
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticEdgeSettings;
 
 @SuppressWarnings("deprecation")
 public final class KineticEngine
@@ -115,6 +116,7 @@ public final class KineticEngine
 	 * References to graph item visual settings.
 	 */
 	private KineticBoxSettings settings_box;
+	private KineticEdgeSettings settings_edge;
 	
 	/**
 	 * All the event handlers of the engine.
@@ -284,6 +286,7 @@ public final class KineticEngine
 		
 		this.context = null;
 		this.settings_box = null;
+		this.settings_edge = null;
 	}
 	
 	// *****************************************************************************************************
@@ -358,8 +361,8 @@ public final class KineticEngine
 	// INTERFACE TO USE FROM CONTEXT
 	
 	/**
-	 * This method only resets the engine, e.g. boxes, edges and selection. Further cleanup is expected to be done
-	 * in the calling code.
+	 * This method only resets the engine, e.g. boxes, edges and selection. Further cleanup (e.g. history)
+	 * is expected to be done in the calling code.
 	 */
 	public void destroyGraphAndClearStage()
 	{
@@ -397,19 +400,24 @@ public final class KineticEngine
 		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, true, false, selectionModule.getSelectedBoxes());
 	}
 	
-	public void reloadBoxVisualStyle(KineticBoxSettings settings)
+	public void reloadBoxVisualStyle(KineticBoxSettings boxSettings, KineticEdgeSettings edgeSettings)
 	{
-		for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
+		if((this.settings_box == null) || (this.settings_edge == null) ||
+				!this.settings_box.equals(boxSettings) || !this.settings_edge.equals(edgeSettings)) 
 		{
-			box.applyUserSettings(settings);
-			for(EdgeGraphItemClient edge : box.connectedEdges)
+			this.settings_box = boxSettings;
+			this.settings_edge = edgeSettings;
+			
+			for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
 			{
-				edge.applyUserSettings(null);
+				box.applySettings(boxSettings);
 			}
+			for(EdgeGraphItemClient edge : itemRegistrationModule.getRegisteredEdges())
+			{
+				edge.applySettings(edgeSettings);
+			}
+			draw(EngineComponent.STAGE);
 		}
-		draw(EngineComponent.STAGE); // selection...
-		
-		this.settings_box = settings;
 	}
 	
 	// *****************************************************************************************************
@@ -530,6 +538,11 @@ public final class KineticEngine
 	public KineticBoxSettings getBoxSettings()
 	{
 		return settings_box;
+	}
+	
+	public KineticEdgeSettings getEdgeSettings()
+	{
+		return settings_edge;
 	}
 	
 	public Container getContainer(EngineComponent component)

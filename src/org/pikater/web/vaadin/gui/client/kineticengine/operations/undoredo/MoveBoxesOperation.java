@@ -11,7 +11,7 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOpera
 
 public class MoveBoxesOperation extends BiDiOperation
 {
-	private final Node[] originalNodes;
+	private final Node[] originalNodes; // boxes and edges
 	private final EdgeGraphItemClient[] originalEdgesInBetween;
 	
 	private Vector2d delta;

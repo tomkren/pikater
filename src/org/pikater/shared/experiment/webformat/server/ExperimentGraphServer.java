@@ -13,6 +13,7 @@ import org.pikater.shared.experiment.universalformat.UniversalConnector;
 import org.pikater.shared.experiment.universalformat.UniversalElement;
 import org.pikater.shared.experiment.webformat.IExperimentGraph;
 import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -442,8 +443,10 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 					}
 					catch (Throwable t)
 					{
-						throw new IllegalStateException(String.format(
-								"No agent info instance was found for ontology '%s'.", element.getOntologyInfo().getOntologyClass().getName()));
+						PikaterLogger.logThrowable(String.format("No agent info instance was found for ontology '%s' and agent '%s'.", 
+								element.getOntologyInfo().getOntologyClass().getName(),
+								element.getOntologyInfo().getAgentClass()), t);
+						throw new IllegalStateException();
 					}
 
 					// create web-format box and link it to uni-format box

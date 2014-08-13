@@ -21,9 +21,9 @@ import net.edzard.kinetic.Vector2d;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
-import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticEdgeSettings;
 
-public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSettings>
+public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSettings>
 {
 	// **********************************************************************************************
 	// INNER KINETIC COMPONENTS
@@ -49,23 +49,6 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 	 */
 	private final Line baseLine;
 		
-	// **********************************************************************************************
-	// SOME VISUAL STYLE PARAMETERS
-	
-	/**
-	 * Parameters defining the looks of the arrowhead (how "sharp" it is).
-	 * In this case, it is a little bit longer than wider, which makes for a bit "sharper" arrowhead.
-	 */
-	private static final int arrowLength = 7;
-	private static final int arrowWidth = 6;
-	
-	/**
-	 * Parameter defining the size of the drag marks. 
-	 */
-	private static final int dragMarkDimensionInPixels = 12;
-	private static final Vector2d dragMarkSize = new Vector2d(dragMarkDimensionInPixels, dragMarkDimensionInPixels);
-	private static final Vector2d dragMarkHalfSize = new Vector2d(dragMarkDimensionInPixels >> 1, dragMarkDimensionInPixels >> 1);
-	
 	// **********************************************************************************************
 	// PROGRAMMATIC VARIABLES AND TYPES
 	
@@ -106,6 +89,11 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 	private EdgeState internalState;
 	
 	/**
+	 * Reference kept for updating the edge.
+	 */
+	private KineticEdgeSettings currentSettings;
+	
+	/**
 	 * Regular constructor.
 	 */
 	public EdgeGraphItemClient(KineticEngine kineticEngine)
@@ -115,6 +103,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 		// first programmatic fields
 		this.fromBox = null;
 		this.toBox = null;
+		this.currentSettings = null;
 		
 		// setup the edge if not connected
 		this.baseLine = Kinetic.createLine(Vector2d.origin, Vector2d.origin);
@@ -130,14 +119,12 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 		this.arrow.setStrokeWidth(3.0);
 		
 		// setup the edge if connected, part 2
-		this.fromBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, dragMarkSize));
+		this.fromBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
 		this.fromBoxDragMark.setDraggable(false);
-		this.fromBoxDragMark.setFill(Colour.darkorchid);
 		
 		// setup the edge if connected, part 3
-		this.toBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, dragMarkSize));
+		this.toBoxDragMark = Kinetic.createRectangle(new Box2d(Vector2d.origin, Vector2d.origin));
 		this.toBoxDragMark.setDraggable(false);
-		this.toBoxDragMark.setFill(Colour.darkorchid);
 		
 		// create the group, bind it all together
 		this.groupContainer = Kinetic.createGroup();
@@ -151,8 +138,19 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 	// INHERITED INTERFACE
 	
 	@Override
-	public void applyUserSettings(KineticBoxSettings settings)
+	public void applySettings(KineticEdgeSettings settings)
 	{
+		this.fromBoxDragMark.setSize(settings.getDragMarkSize());
+		this.toBoxDragMark.setSize(settings.getDragMarkSize());
+		this.fromBoxDragMark.setFill(settings.getDragMarkFill());
+		this.toBoxDragMark.setFill(settings.getDragMarkFill());
+		
+		this.currentSettings = settings; // must remember the reference
+		
+		if(internalState == EdgeState.EDGE)
+		{
+			updateEdge();
+		}
 	}
 
 	@Override
@@ -242,62 +240,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 	}
 	
 	// **********************************************************************************************
-	// ENDPOINT OR EDGE DRAGGING RELATED METHODS
-	
-	public void endPointDrag_toBaseLine(BoxGraphItemClient draggedEndPoint)
-	{
-		// IMPORTANT: don't violate the call order
-		baseLine.setEnd(getOtherEndpoint(draggedEndPoint).getAbsolutePointPosition(RectanglePoint.CENTER));
-		endPointDrag_updateBaseLine(draggedEndPoint);
-		setInternalState(EdgeState.BASELINE);
-	}
-	
-	public void endPointDrag_updateBaseLine(BoxGraphItemClient draggedEndPoint)
-	{
-		updateBaseLineStart(draggedEndPoint.getAbsolutePointPosition(RectanglePoint.CENTER));
-	}
-	
-	public void endPointDrag_toEdge()
-	{
-		toEdge_onFinish(true);
-	}
-	
-	public void edgeDrag_toBaseLine(Vector2d initialDragPosition, BoxGraphItemClient staticBox)
-	{
-		// IMPORTANT: don't violate the call order
-		baseLine.setEnd(staticBox.getAbsolutePointPosition(RectanglePoint.CENTER));
-		edgeDrag_updateBaseLine(initialDragPosition);
-		setInternalState(EdgeState.BASELINE);
-	}
-	
-	public void edgeDrag_updateBaseLine(Vector2d newPosition)
-	{
-		updateBaseLineStart(newPosition);
-	}
-	
-	public void edgeDrag_toEdge(boolean updateEdge)
-	{
-		toEdge_onFinish(updateEdge);
-	}
-	
-	// **********************************************************************************************
-	// JUST SOME GETTERS AND UNIMPORTANT PUBLIC ROUTINES
-	
-	public static EdgeGraphItemShared[] toShared(EdgeGraphItemClient... edges)
-	{
-		Set<EdgeGraphItemShared> resultSet = new HashSet<EdgeGraphItemShared>();
-		for(int i = 0; i < edges.length; i++)
-		{
-			if(edges[i].areBothEndsDefined())
-			{
-				resultSet.add(new EdgeGraphItemShared(
-						edges[i].getEndPoint(EndPoint.FROM).getInfo().boxID,
-						edges[i].getEndPoint(EndPoint.TO).getInfo().boxID
-				));
-			}
-		}
-		return resultSet.toArray(new EdgeGraphItemShared[0]);
-	}
+	// SOME BASIC ENDPOINT RELATED GETTERS & ROUTINES
 	
 	public BoxGraphItemClient getEndPoint(EndPoint endPoint)
 	{
@@ -384,7 +327,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 	}
 	
 	// **********************************************************************************************
-	// OTHER IMPORTANT PUBLIC METHODS
+	// OTHER PUBLIC METHODS
 	
 	public void setInternalState(EdgeState newState)
 	{
@@ -446,6 +389,100 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 		}
 	}
 	
+	public static EdgeGraphItemShared[] toShared(EdgeGraphItemClient... edges)
+	{
+		Set<EdgeGraphItemShared> resultSet = new HashSet<EdgeGraphItemShared>();
+		for(int i = 0; i < edges.length; i++)
+		{
+			if(edges[i].areBothEndsDefined())
+			{
+				resultSet.add(new EdgeGraphItemShared(
+						edges[i].getEndPoint(EndPoint.FROM).getInfo().boxID,
+						edges[i].getEndPoint(EndPoint.TO).getInfo().boxID
+				));
+			}
+		}
+		return resultSet.toArray(new EdgeGraphItemShared[0]);
+	}
+	
+	// **********************************************************************************************
+	// ENDPOINT OR EDGE DRAGGING RELATED METHODS
+
+	public void endPointDrag_toBaseLine(BoxGraphItemClient draggedEndPoint)
+	{
+		// IMPORTANT: don't violate the call order
+		baseLine.setEnd(getOtherEndpoint(draggedEndPoint).getAbsolutePointPosition(RectanglePoint.CENTER));
+		endPointDrag_updateBaseLine(draggedEndPoint);
+		setInternalState(EdgeState.BASELINE);
+	}
+
+	public void endPointDrag_updateBaseLine(BoxGraphItemClient draggedEndPoint)
+	{
+		updateBaseLineStart(draggedEndPoint.getAbsolutePointPosition(RectanglePoint.CENTER));
+	}
+
+	public void endPointDrag_toEdge()
+	{
+		toEdge_onFinish(true);
+	}
+
+	public void edgeDrag_toBaseLine(Vector2d initialDragPosition, BoxGraphItemClient staticBox)
+	{
+		// IMPORTANT: don't violate the call order
+		baseLine.setEnd(staticBox.getAbsolutePointPosition(RectanglePoint.CENTER));
+		edgeDrag_updateBaseLine(initialDragPosition);
+		setInternalState(EdgeState.BASELINE);
+	}
+
+	public void edgeDrag_updateBaseLine(Vector2d newPosition)
+	{
+		updateBaseLineStart(newPosition);
+	}
+
+	public void edgeDrag_toEdge(boolean updateEdge)
+	{
+		toEdge_onFinish(updateEdge);
+	}
+	
+	// **********************************************************************************************
+	// MISCELLANEOUS PRIVATE INTERFACE
+
+	private void updateBaseLineStart(Vector2d position)
+	{
+		baseLine.setStart(position);
+		Vector2d delta = position.sub(baseLine.getEnd()); // alias for the same Vector2d instance
+		if(delta.x == 0 || delta.y == 0)
+		{
+			baseLine.setStrokeWidth(2);
+			baseLine.setLineStyle(LineStyle.NORMAL);
+		}
+		else
+		{
+			baseLine.setStrokeWidth(0.5);
+			baseLine.setLineStyle(LineStyle.DASHED);
+		}
+	}
+	
+	/**
+	 * Called to switch internal state to 'edge', after both endpoints have been specified.
+	 * @param updateEdge
+	 */
+	private void toEdge_onFinish(boolean updateEdge)
+	{
+		// change the state
+		setInternalState(EdgeState.EDGE);
+		
+		// update arrow positions
+		if(updateEdge)
+		{
+			updateEdge();
+		}
+		setEdgeRegisteredInEndpoints(true);
+	}
+	
+	// **********************************************************************************************
+	// EDGE COMPUTATION INTERFACE
+	
 	/**
 	 * Recomputes the arrow path. If changes are to be visible in the kinetic environment, the 
 	 * {@link KineticEngine#draw(EngineComponent component)} needs to be called.
@@ -482,12 +519,10 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 		computeArrowPath(fromPos, toPos);
 		
 		// update the drag marks
+		Vector2d dragMarkHalfSize = currentSettings.getDragMarkSize().scale(0.5);
 		this.fromBoxDragMark.setPosition(fromPos.sub(dragMarkHalfSize));
 		this.toBoxDragMark.setPosition(toPos.sub(dragMarkHalfSize));
 	}
-	
-	// **********************************************************************************************
-	// PRIVATE INTERFACE
 	
 	private void computeArrowPath(Vector2d fromPos, Vector2d toPos)
 	{
@@ -495,8 +530,8 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 		Vector2d u = new Vector2d(toPos.x - fromPos.x, toPos.y - fromPos.y);
 		u.normalize();
 		Vector2d v = new Vector2d(-u.y, u.x);
-		u.scale(arrowLength * Math.sqrt(3));
-		v.scale(arrowWidth);
+		u.scale(currentSettings.getArrowHeight() * Math.sqrt(3));
+		v.scale(currentSettings.getArrowWidth());
 		
 		// compute the arrowhead's end points
 		Vector2d leftArrowEnd = new Vector2d(toPos.x, toPos.y);
@@ -509,38 +544,5 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticBoxSetti
 		// update the arrow
 		this.arrow.setData(new Path().moveTo(fromPos).lineTo(toPos).moveTo(leftArrowEnd).lineTo(toPos).lineTo(rightArrowEnd).closePath().toSVGPath());
 		this.arrow.setPosition(0, 0); // reset any selection drags to avoid the X and Y properties to act as an offset
-	}
-	
-	private void updateBaseLineStart(Vector2d position)
-	{
-		baseLine.setStart(position);
-		Vector2d delta = position.sub(baseLine.getEnd()); // alias for the same Vector2d instance
-		if(delta.x == 0 || delta.y == 0)
-		{
-			baseLine.setStrokeWidth(2);
-			baseLine.setLineStyle(LineStyle.NORMAL);
-		}
-		else
-		{
-			baseLine.setStrokeWidth(0.5);
-			baseLine.setLineStyle(LineStyle.DASHED);
-		}
-	}
-	
-	/**
-	 * Called to switch internal state to 'edge', after both endpoints have been specified.
-	 * @param updateEdge
-	 */
-	private void toEdge_onFinish(boolean updateEdge)
-	{
-		// change the state
-		setInternalState(EdgeState.EDGE);
-		
-		// update arrow positions
-		if(updateEdge)
-		{
-			updateEdge();
-		}
-		setEdgeRegisteredInEndpoints(true);
 	}
 }

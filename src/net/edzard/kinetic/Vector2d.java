@@ -22,9 +22,11 @@ public class Vector2d implements Serializable {
 	/** Unit vector in direction of y axis */
 	public static final Vector2d yUnit = new Vector2d(0,1);
 	
+	/** Unit vector in both directions (1,1) */
+	public static final Vector2d xyUnit = new Vector2d(1,1);
+	
 	/** Origin vector (0,0) */
 	public static final Vector2d origin = new Vector2d(0,0);
-	
 	
 	/** The horizontal component */
 	public double x;

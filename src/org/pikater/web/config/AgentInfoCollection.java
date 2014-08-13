@@ -38,11 +38,10 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 	 */
 	public AgentInfo getUnique(String ontologyClassName, String agentClassName)
 	{
-		List<AgentInfo> result = new ArrayList<AgentInfo>(); 
+		List<AgentInfo> result = new ArrayList<AgentInfo>();
 		for(AgentInfo info : boxes)
 		{
-			if(info.getOntologyClassName().equals(ontologyClassName) && 
-					info.getAgentClassName().equals(agentClassName))
+			if(info.isIdentifiedBy(ontologyClassName, agentClassName))
 			{
 				result.add(info);
 			}

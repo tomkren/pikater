@@ -101,23 +101,33 @@ public class Rectangle extends Shape {
 	 * @param the point
 	 * @return the position
 	 */
-	public final Vector2d getAbsolutePointPosition(RectanglePoint point)
+	public final Vector2d getAbsolutePointPosition(RectanglePoint point, Vector2d scale)
 	{
 		Vector2d absPos = getAbsolutePosition();
 		switch (point)
 		{
 			case EASTCENTER:
-				return new Vector2d(absPos.x, absPos.y + getHeight() / 2); 
+				return new Vector2d(absPos.x, absPos.y + getScaledHeight(scale.y) / 2); 
 			case WESTCENTER:
-				return new Vector2d(absPos.x + getWidth(), absPos.y + getHeight() / 2);
+				return new Vector2d(absPos.x + getScaledWidth(scale.x), absPos.y + getScaledHeight(scale.y) / 2);
 			case NORTHCENTER:
-				return new Vector2d(absPos.x + getWidth() / 2, absPos.y);
+				return new Vector2d(absPos.x + getScaledWidth(scale.x) / 2, absPos.y);
 			case SOUTHCENTER:
-				return new Vector2d(absPos.x + getWidth() / 2, absPos.y + getHeight());
+				return new Vector2d(absPos.x + getScaledWidth(scale.x) / 2, absPos.y + getScaledHeight(scale.y));
 			case CENTER:
-				return new Vector2d(absPos.x + getWidth() / 2, absPos.y + getHeight() / 2);
+				return new Vector2d(absPos.x + getScaledWidth(scale.x) / 2, absPos.y + getScaledHeight(scale.y) / 2);
 			default:
 				 throw new IllegalStateException();
 		}
+	}
+	
+	private double getScaledWidth(double scale)
+	{
+		return getWidth() * scale;
+	}
+	
+	private double getScaledHeight(double scale)
+	{
+		return getHeight() * scale;
 	}
 }

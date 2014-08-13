@@ -7,6 +7,7 @@ import com.vaadin.client.communication.RpcProxy;
 import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticEdgeSettings;
 
 import com.vaadin.client.communication.StateChangeEvent;
 
@@ -138,6 +139,6 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	{
 		super.onStateChanged(stateChangeEvent);
 		
-		getWidget().getEngine().reloadBoxVisualStyle(getState().toSettingsClass());
+		getWidget().getEngine().reloadBoxVisualStyle(getState().toSettingsClass(), new KineticEdgeSettings());
 	}
 }

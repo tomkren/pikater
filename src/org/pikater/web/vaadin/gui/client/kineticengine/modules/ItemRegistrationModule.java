@@ -36,6 +36,11 @@ public class ItemRegistrationModule implements IEngineModule
 	private final Map<Integer, BoxGraphItemClient> allRegisteredBoxes;
 	
 	/**
+	 * A self-explanatory variable.
+	 */
+	private final Set<EdgeGraphItemClient> allRegisteredEdges;
+	
+	/**
 	 * Constructor.
 	 * @param kineticEngine
 	 */
@@ -44,6 +49,7 @@ public class ItemRegistrationModule implements IEngineModule
 		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = engine;
 		this.allRegisteredBoxes = new HashMap<Integer, BoxGraphItemClient>();
+		this.allRegisteredEdges = new HashSet<EdgeGraphItemClient>();
 	}
 	
 	// **********************************************************************************************
@@ -98,6 +104,7 @@ public class ItemRegistrationModule implements IEngineModule
 		{
 			for(BoxGraphItemClient box : boxes)
 			{
+				box.applySettings(kineticEngine.getBoxSettings());
 				box.setVisibleInKinetic(true);
 				allRegisteredBoxes.put(box.getInfo().getID(), box);
 			}
@@ -156,11 +163,14 @@ public class ItemRegistrationModule implements IEngineModule
 			// only register unregistered edges and vice versa - don't register an already registered edge again
 			if((opKind == RegistrationOperation.REGISTER) && !edge.getMasterNode().isRegistered())
 			{
+				edge.applySettings(kineticEngine.getEdgeSettings());
 				edge.setVisibleInKinetic(true);
+				allRegisteredEdges.add(edge);
 			}
 			else if((opKind == RegistrationOperation.UNREGISTER) && edge.getMasterNode().isRegistered())
 			{
 				edge.setVisibleInKinetic(false);
+				allRegisteredEdges.remove(edge);
 			}
 		}
 		
@@ -181,41 +191,20 @@ public class ItemRegistrationModule implements IEngineModule
 	}
 	
 	/**
-	 * Issues a command to clear the graph and remove/destroy all the items.</br>
-	 * This operation only resets the engine, e.g. boxes, edges and selection. Further cleanup is expected to be done
+	 * Does what the method's name suggests.</br>
+	 * This method is supposed to be called from the server and only resets the
+	 * engine (boxes, edges and selection). Further cleanup is expected to be done
 	 * in the calling code.
 	 */
 	public void destroyGraphAndClearStage()
 	{
-		// first deselect everything - selection plugin will not merge selections should this operation be unmade
-		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, getRegisteredBoxes());
-		
 		// then destroy edges
-		Set<EdgeGraphItemClient> destroyedEdges = new HashSet<EdgeGraphItemClient>();
-		for(BoxGraphItemClient box : allRegisteredBoxes.values())
+		for(EdgeGraphItemClient edge : allRegisteredEdges)
 		{
-			for(EdgeGraphItemClient edge : box.connectedEdges)
-			{
-				if(edge.getMasterNode().isRegistered()) // only destroy each edge once (it has 2 endpoints)
-				{
-					edge.setVisibleInKinetic(false);
-					edge.destroy();
-					if(edge.areBothEndsDefined()) // destroying an item is required to keep programmatic fields intact
-					{
-						destroyedEdges.add(edge);
-					}
-					else
-					{
-						throw new IllegalStateException("Edges were destroyed and apparently also "
-								+ "unregistered from connected boxes. The connection has to be kept intact.");
-					}
-				}
-			}
+			edge.setEdgeRegisteredInEndpoints(false);
+			edge.setVisibleInKinetic(false);
+			edge.destroy();
 		}
-		
-		// send info to the server
-		// kineticEngine.getContext().command_itemSetChange(RegistrationOperation.UNREGISTER, BoxGraphItemShared.fromArray(getRegisteredBoxes()));
-		// kineticEngine.getContext().command_itemSetChange(RegistrationOperation.UNREGISTER, EdgeGraphItemShared.fromArray(destroyedEdges.toArray(new EdgeGraphItemClient[0])));
 
 		// destroy boxes
 		for(BoxGraphItemClient box : allRegisteredBoxes.values())
@@ -225,6 +214,7 @@ public class ItemRegistrationModule implements IEngineModule
 
 		// and final cleanup
 		allRegisteredBoxes.clear();
+		allRegisteredEdges.clear();
 	}
 	
 	// *****************************************************************************************************
@@ -238,5 +228,10 @@ public class ItemRegistrationModule implements IEngineModule
 	public BoxGraphItemClient[] getRegisteredBoxes()
 	{
 		return allRegisteredBoxes.values().toArray(new BoxGraphItemClient[0]);
+	}
+	
+	public EdgeGraphItemClient[] getRegisteredEdges()
+	{
+		return allRegisteredEdges.toArray(new EdgeGraphItemClient[0]);
 	}
 }

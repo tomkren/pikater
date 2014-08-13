@@ -186,7 +186,7 @@ public abstract class AbstractGraphItemClient<S extends IGraphItemSettings> impl
 	/**
 	 * Used when a global setting (common for all instances of an item) changes.
 	 */
-	public abstract void applyUserSettings(S settings);
+	public abstract void applySettings(S settings);
 	
 	/**
 	 * Method called to change the visual style of inner components and accept some changes.

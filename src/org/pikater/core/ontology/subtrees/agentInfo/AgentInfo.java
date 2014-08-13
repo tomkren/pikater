@@ -204,6 +204,25 @@ public class AgentInfo implements Concept, ICloneable
 		return null;
 	}
 	
+	public boolean isIdentifiedBy(String ontologyClassName, String agentClassName)
+	{
+		if(this.agentClassName == null) // some kind of a weird agent (should be exactly one)
+		{
+			if(this.ontologyClassName.equals(ontologyClassName) && this.agentClassName == agentClassName)
+			{
+				return true;
+			}
+		}
+		else // just what we expect, the good option
+		{
+			if(this.ontologyClassName.equals(ontologyClassName) && this.agentClassName.equals(agentClassName))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean isOntologyType(Class<?> ontologyClass) {
 		
 		return this.ontologyClassName.equals(ontologyClass.getName());

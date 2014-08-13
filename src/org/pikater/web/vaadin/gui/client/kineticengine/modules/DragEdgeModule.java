@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.modules;
 
 import net.edzard.kinetic.Rectangle.RectanglePoint;
+import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
@@ -62,7 +63,7 @@ public final class DragEdgeModule implements IEngineModule
 		protected void handleInner(KineticEvent event)
 		{
 			edgeBeingDragged.edgeDrag_toBaseLine(
-					edgeBeingDragged.getDragMark(draggedEdgeEndpoint).getAbsolutePointPosition(RectanglePoint.CENTER),
+					edgeBeingDragged.getDragMark(draggedEdgeEndpoint).getAbsolutePointPosition(RectanglePoint.CENTER, Vector2d.xyUnit),
 					edgeBeingDragged.getEndPoint(draggedEdgeEndpoint.getInverted())
 			);
 			setEdgeBeingDragged(edgeBeingDragged, draggedEdgeEndpoint);

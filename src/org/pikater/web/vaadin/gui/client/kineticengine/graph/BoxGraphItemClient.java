@@ -148,44 +148,27 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 	// INHERITED INTERFACE
 	
 	@Override
-	public void applyUserSettings(KineticBoxSettings settings)
+	public void applySettings(KineticBoxSettings settings)
 	{
-		/*
-		 * Set sizes.
-		 */
-		
-		final int componentSpace = 13; // in pixels
-		final Vector2d boxSize = new Vector2d(settings.getBoxWidth(), settings.getBoxHeight());
-		final double textHeight = settings.getIconHeight() / 2;
+		final double textOffset_left = settings.getTextOffsetLeft();
+		final Vector2d textSize = new Vector2d(settings.getTextWidth(textOffset_left), settings.getTextHeight());
 		
 		if(settings.isIconsVisible())
 		{
 			this.icon.show();
-			
-			final double textOffset_left = componentSpace + settings.getIconWidth() + (componentSpace >> 1);
-			final Vector2d textSize = new Vector2d(boxSize.x - textOffset_left - componentSpace, textHeight);
-			
-			this.icon.setPosition(new Vector2d(componentSpace, componentSpace));
-			this.title.setPosition(new Vector2d(textOffset_left, componentSpace));
-			this.name.setPosition(new Vector2d(textOffset_left, componentSpace + textSize.y));
-			
-			this.rectangle.setSize(boxSize);
-			this.title.setSize(textSize);
-			this.name.setSize(textSize);
 		}
 		else
 		{
 			this.icon.hide();
-			
-			final Vector2d textSize = new Vector2d(boxSize.x - (componentSpace << 1), textHeight);
-			
-			this.title.setPosition(new Vector2d(componentSpace, componentSpace));
-			this.name.setPosition(new Vector2d(componentSpace, componentSpace + textSize.y));
-			
-			this.rectangle.setSize(boxSize);
-			this.title.setSize(textSize);
-			this.name.setSize(textSize);
 		}
+		
+		this.icon.setPosition(new Vector2d(settings.getInnerComponentSpace(), settings.getInnerComponentSpace()));
+		this.title.setPosition(new Vector2d(textOffset_left, settings.getInnerComponentSpace()));
+		this.name.setPosition(new Vector2d(textOffset_left, settings.getInnerComponentSpace() + textSize.y));
+
+		this.rectangle.setSize(new Vector2d(settings.getBoxWidth(), settings.getBoxHeight()));
+		this.title.setSize(textSize);
+		this.name.setSize(textSize);
 		
 		this.container.setScale(new Vector2d(settings.getScale(), settings.getScale()));
 	}
@@ -305,7 +288,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 	
 	public Vector2d getAbsolutePointPosition(RectanglePoint point)
 	{
-		return rectangle.getAbsolutePointPosition(point);
+		return rectangle.getAbsolutePointPosition(point, container.getScale());
 	}
 	
 	public boolean isNotConnectedTo(BoxGraphItemClient otherBox)

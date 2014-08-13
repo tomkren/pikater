@@ -21,74 +21,65 @@ public class KineticBoxSettings implements IGraphItemSettings
 		return iconsVisible;
 	}
 
-	public double getScale()
-	{
-		return scale;
-	}
-
-	/*
-	private static final double minWidth = 125;
-	private static final double maxWidth = 225;
-	private static final double difference = maxWidth - minWidth;
+	//--------------------------------------------------------------
+	// POSITIONING
 	
-	private Vector2d currentSize = getSizeFromWidth(175); // default
-	
-	public void setBoxSize(int percent)
+	public double getTextOffsetLeft()
 	{
-		switch (percent)
+		if(isIconsVisible())
 		{
-			case -1: // scale to browser width
-				currentSize = getSizeFromWidth(normalize(Window.getClientWidth() / 800));
-				break;
-			default: // scale to the percent factor provided 
-				currentSize = getSizeFromWidth(minWidth + difference * percent / 100); 
-				break;
-		}
-	}
-	
-	private static double normalize(double width)
-	{
-		if(width < minWidth)
-		{
-			return minWidth;
-		}
-		else if(width > maxWidth)
-		{
-			return maxWidth;
+			return getInnerComponentSpace() + getIconWidth() + (getInnerComponentSpace() >> 1);
 		}
 		else
 		{
-			return width;
+			return getInnerComponentSpace();
 		}
 	}
-	
-	private static Vector2d getSizeFromWidth(double width)
-	{
-		return new Vector2d(width, width / 2); // width is double height
-	}
-	*/
 	
 	//--------------------------------------------------------------
 	// SIZING
 	
-	public int getBoxWidth()
+	public double getBoxWidth()
 	{
 		return 175;
 	}
 	
-	public int getBoxHeight()
+	public double getBoxHeight()
 	{
 		return getBoxWidth() / 2;
 	}
 	
-	public int getIconWidth()
+	public double getIconWidth()
 	{
 		return 48;
 	}
 	
-	public int getIconHeight()
+	public double getIconHeight()
 	{
 		return 48;
+	}
+	
+	public double getTextWidth(double textOffsetLeft)
+	{
+		return getBoxWidth() - textOffsetLeft - getInnerComponentSpace();
+	}
+	
+	public double getTextHeight()
+	{
+		return getIconHeight() / 2;
+	}
+	
+	//--------------------------------------------------------------
+	// VARIOUS
+		
+	public int getInnerComponentSpace()
+	{
+		return 13;
+	}
+	
+	public double getScale()
+	{
+		return scale;
 	}
 	
 	//--------------------------------------------------------------
@@ -108,5 +99,38 @@ public class KineticBoxSettings implements IGraphItemSettings
 			default:
 				return Colour.black;
 		}
+	}
+	
+	//--------------------------------------------------------------
+	// INSTANCE COMPARING - GENERATED WITH ECLIPSE
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (iconsVisible ? 1231 : 1237);
+		long temp;
+		temp = Double.doubleToLongBits(scale);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		KineticBoxSettings other = (KineticBoxSettings) obj;
+		if (iconsVisible != other.iconsVisible)
+			return false;
+		if (Double.doubleToLongBits(scale) != Double
+				.doubleToLongBits(other.scale))
+			return false;
+		return true;
 	}
 }

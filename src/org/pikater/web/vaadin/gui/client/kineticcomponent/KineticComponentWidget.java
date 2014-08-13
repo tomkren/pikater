@@ -22,7 +22,10 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FocusPanel;
 
 public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc, KineticComponentServerRpc, IKineticEngineContext
@@ -106,6 +109,22 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			public void onMouseOver(MouseOverEvent event)
 			{
 				setFocus(true); // there is no cross-browser support for "isFocused" method so just set focus anyway :)
+			}
+		});
+		
+		Window.addResizeHandler(new ResizeHandler()
+		{
+			@Override
+			public void onResize(ResizeEvent event)
+			{
+				Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand()
+				{
+					@Override
+					public void execute()
+					{
+						Window.alert("RESIZE DETECTED");
+					}
+				});
 			}
 		});
 		
