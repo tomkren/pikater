@@ -11,9 +11,13 @@ public class TypeRestriction implements IRestriction
 	
 	private List<ValueType> types;
 
-	public TypeRestriction() {}
+	public TypeRestriction()
+	{
+		this.types = new ArrayList<ValueType>();
+	}
 	public TypeRestriction(List<ValueType> types)
 	{
+		this();
 		setTypes(types);
 	}
 	
@@ -23,14 +27,14 @@ public class TypeRestriction implements IRestriction
 	}
 	public void setTypes(List<ValueType> types)
 	{
-		this.types = types;
+		this.types.clear();
+		this.types.addAll(types);
 	}
 	
-	public void addtype(ValueType type)
+	public void addType(ValueType type)
 	{
 		types.add(type);
 	}
-	
 	public boolean isValidAgainst(Object obj)
 	{
 		return isValid() && (obj instanceof ValueType) && types.contains((ValueType) obj);

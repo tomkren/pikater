@@ -48,7 +48,7 @@ public class MultiLayerPerceptronCA_Box {
 		**/
 		RangeRestriction rangeRestrictionM = new RangeRestriction(new FloatValue(0.0f), new FloatValue(0.9f));
 		NewOption optionM = new NewOption("M", new FloatValue(0.2f), rangeRestrictionM); 
-		optionM.getValueRestrictions().fetchByIndex(0).addtype(new ValueType(
+		optionM.getValueRestrictions().fetchByIndex(0).addType(new ValueType(
 				new QuestionMarkRange(rangeRestrictionM.getMinValue(), rangeRestrictionM.getMaxValue(), 10),
 				rangeRestrictionM
 		));
