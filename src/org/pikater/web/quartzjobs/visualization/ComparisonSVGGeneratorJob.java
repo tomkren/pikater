@@ -75,8 +75,8 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 			}
 			else
 			{
-				//TODO: check whether metadata are computed: exception or compute now?
-				
+				// TODO: check whether metadata are computed: exception or compute now?
+				// TODO: yes, throw exception for sure :)
 				
 				File datasetCachedFile1 = PostgreLobAccess.downloadFileFromDB(dataset1.getOID());
 				File datasetCachedFile2=PostgreLobAccess.downloadFileFromDB(dataset2.getOID());
@@ -85,10 +85,9 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 				for(Tuple<AttrMapping, AttrMapping> attrsToCompare : comparisonList)
 				{
 					DSVisTwoSubresult imageResult = result.createSingleImageResult(attrsToCompare, ImageType.SVG);
-					PrintStream output = new PrintStream(imageResult.getFile());
 					new ComparisonSVGGenerator(
-							null,
-							output,
+							null, // no need to pass in progress listener - progress is updated below
+							new PrintStream(imageResult.getFile()),
 							dataset1,
 							dataset2,
 							datasetCachedFile1,
