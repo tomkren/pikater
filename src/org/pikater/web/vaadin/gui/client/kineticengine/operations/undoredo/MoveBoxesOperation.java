@@ -13,14 +13,15 @@ public class MoveBoxesOperation extends BiDiOperation
 {
 	private final Node[] originalNodes; // boxes and edges
 	private final EdgeGraphItemClient[] originalEdgesInBetween;
-	
 	private Vector2d delta;
 	
-	public MoveBoxesOperation(KineticEngine kineticState, Node[] originalNodes, EdgeGraphItemClient[] originalEdgesInBetween)
+	public MoveBoxesOperation(KineticEngine kineticState)
 	{
 		super(kineticState);
-		this.originalNodes = originalNodes;
-		this.originalEdgesInBetween = originalEdgesInBetween;
+		
+		SelectionModule selectionModule = (SelectionModule) kineticState.getModule(SelectionModule.moduleID);
+		this.originalNodes = selectionModule.getSelectionContainer().getChildren().toArray(new Node[0]);
+		this.originalEdgesInBetween = selectionModule.getEdgesInBetween();
 		this.delta = null;
 	}
 	
