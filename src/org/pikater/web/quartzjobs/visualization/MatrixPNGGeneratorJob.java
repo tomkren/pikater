@@ -68,39 +68,28 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 		DSVisOneResult result = new DSVisOneResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		try
 		{
-			//TODO: check whether metadata are computed: exception or compute now?
+			// TODO: check whether metadata are computed: exception or compute now?
+			// TODO: yes, throw exception for sure :)
 			
 			File datasetCachedFile = PostgreLobAccess.downloadFileFromDB(dataset.getOID());
 			
-			int count=0;
+			int count = 0;
 			for(String attrY : attrs)
 			{
 				for(String attrX : attrs)
 				{
-					/*
-					 * Definitely not ok, but it depends :p. 
-					 * I think we should make it better where it's not too much work to do so and this is 
-					 * one of those cases - see the 'downloadedDataset' above :). I made a blocking function
-					 * that downloads large object files to local temporary files. The only question now is...
-					 * do we extend the progress listener with methods:
-					 * 1) "void setNumberOfSubtasks(int subtaskCount)" 
-					 * 2) "void setCurrentSubtask(int subtask, String message)"
-					 * 
-					 * and do we extend our jobs to support them? :)
-					 */
-					
 					DSVisOneSubresult imageResult = result.createSingleImageResult(
 							new AttrMapping(attrX, attrY, attrTarget),
 							ImageType.PNG
 					);
-					PrintStream output = new PrintStream(imageResult.getFile());
-					// TODO: progress update for multiple image tiles
-					/*
-					 * What do you mean by this? :)
-					 * BTW, you can call update progress quite often now - the VAADIN UI will not be affected
-					 * since it polls for changes in a custom time interval (500ms at the moment I think).
-					 */
-					new SinglePNGGenerator(null, dataset,datasetCachedFile, output, attrX, attrY, attrs[attrs.length-1]).create(); // TODO: use attrTarget instead as the last argument?
+					new SinglePNGGenerator(
+							null, // no need to pass in progress listener - progress is updated below
+							dataset,
+							datasetCachedFile,
+							new PrintStream(imageResult.getFile()),
+							attrX,
+							attrY,
+							attrTarget).create();
 					count++;
 					result.updateProgress(100*count/attrs.length/attrs.length);
 				}

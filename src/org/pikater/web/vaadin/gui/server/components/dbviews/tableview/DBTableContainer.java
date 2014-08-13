@@ -219,7 +219,6 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static Property<? extends Object> getProperty(DBTableContainer container, ITableColumn column, AbstractTableRowDBView row, 
 			AbstractDBViewValue<? extends Object> value)
 	{
@@ -284,15 +283,17 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		return rows.getAllItemsCount();
 	}
 	
-	// TODO: do we even need this?
 	protected void batchSetValues(Set<Integer> ids, Header header, String newValue)
 	{
+		// TODO: finish
 		if(header.supportsBatchSet())
 		{
+			/*
 			for(Integer itemID : ids)
 			{
 				//getItem(itemID).serverInfoProperties.setValueForProperty(header, newValue);
 			}
+			*/
 		}
 		else
 		{

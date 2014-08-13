@@ -7,7 +7,7 @@ import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.implementation.renderer.RendererInterface;
 
 public abstract class Generator {
-	protected AbstractDSVisResult progressListener;
+	protected AbstractDSVisResult<?,?> progressListener;
 	protected PrintStream output;
 	
 	protected int instNum;
@@ -17,7 +17,7 @@ public abstract class Generator {
 	
 	protected RendererInterface renderer;
 	
-	protected Generator(AbstractDSVisResult progressListener, PrintStream output){
+	protected Generator(AbstractDSVisResult<?,?> progressListener, PrintStream output){
 		this.progressListener=progressListener;
 		this.output=output;
 	}

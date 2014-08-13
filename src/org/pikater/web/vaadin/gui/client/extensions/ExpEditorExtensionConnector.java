@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentConnector;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditorExtension;
 
@@ -11,8 +10,6 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
-import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ServerConnector;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.shared.ui.Connect;
@@ -23,13 +20,17 @@ public class ExpEditorExtensionConnector extends AbstractExtensionConnector
 	private static final long serialVersionUID = 6766120104518020715L;
 	
 	// private final ExpEditorExtensionServerRpc serverRPC = RpcProxy.create(ExpEditorExtensionServerRpc.class, this);
+	/*
 	private int offsetWidth;
 	private int offsetHeight;
+	*/
 	
 	public ExpEditorExtensionConnector()
 	{
+		/*
 		this.offsetWidth = 0;
 		this.offsetHeight = 0;
+		*/
 		registerRpc(ExpEditorExtensionClientRpc.class, new ExpEditorExtensionClientRpc()
 		{
 			private static final long serialVersionUID = 560120982576334694L;

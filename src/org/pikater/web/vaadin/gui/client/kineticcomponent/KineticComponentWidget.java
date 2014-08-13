@@ -171,7 +171,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 					
 					// some debug info
 					GWTLogger.logWarning("Resized kinetic component: " + connector.getConnectorId());
-
 				}
 				
 				/*
