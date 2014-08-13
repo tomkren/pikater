@@ -20,7 +20,9 @@ public class NotSpecifiedComputingAgent_Box {
 				OptionsHelper.getNotSpecifiedCAOptions());
 		agentInfo.setInputSlots(
 				SlotsHelper.getInputSlots_CA());
-
+		agentInfo.setOutputSlots(
+				SlotsHelper.getOutputSlots_CA());
+		
 		return agentInfo;
 
 	}
