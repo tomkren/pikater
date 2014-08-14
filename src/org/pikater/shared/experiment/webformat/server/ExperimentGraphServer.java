@@ -1,5 +1,6 @@
 package org.pikater.shared.experiment.webformat.server;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -473,7 +474,10 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				// then convert all edges
 				for(UniversalElement element : uniFormat.getAllElements())
 				{
-					for(UniversalConnector edge : element.getOntologyInfo().getInputDataSlots())
+					Collection<UniversalConnector> dataAndErrorSlotConnections = new HashSet<UniversalConnector>();
+					dataAndErrorSlotConnections.addAll(element.getOntologyInfo().getInputDataSlots());
+					dataAndErrorSlotConnections.addAll(element.getOntologyInfo().getInputErrorSlots());
+					for(UniversalConnector slotConnection : dataAndErrorSlotConnections)
 					{
 						/*
 						 * SERIALIZATION SCHEME:
@@ -482,7 +486,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 						 */
 						
 						// connect boxes
-						BoxInfoServer fromBox = webFormat.getBox(uniBoxToWebBoxID.get(edge.getFromElement()));
+						BoxInfoServer fromBox = webFormat.getBox(uniBoxToWebBoxID.get(slotConnection.getFromElement()));
 						BoxInfoServer toBox = webFormat.getBox(uniBoxToWebBoxID.get(element));
 						if(!webFormat.edgeExistsBetween(fromBox.getID(), toBox.getID())) // protection against multiple slot connections through the same edge
 						{
@@ -490,10 +494,10 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 						}
 						
 						// also connect slots if needed
-						if((edge.getInputDataType() != null) && (edge.getOutputDataType() != null))
+						if((slotConnection.getInputDataType() != null) && (slotConnection.getOutputDataType() != null))
 						{
-							Slot fromBoxSlot = fromBox.getAssociatedAgent().fetchOutputSlotByDataType(edge.getOutputDataType());
-							Slot toBoxSlot = toBox.getAssociatedAgent().fetchInputSlotByDataType(edge.getInputDataType());
+							Slot fromBoxSlot = fromBox.getAssociatedAgent().fetchOutputSlotByDataType(slotConnection.getOutputDataType());
+							Slot toBoxSlot = toBox.getAssociatedAgent().fetchInputSlotByDataType(slotConnection.getInputDataType());
 							if((fromBoxSlot == null) || (toBoxSlot == null))
 							{
 								throw new IllegalStateException("Could not find a slot by name in resolved agent info. Invalid binding.");
