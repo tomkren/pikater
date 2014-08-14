@@ -1,11 +1,11 @@
 package org.pikater.shared.experiment.webformat.server;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.experiment.webformat.IBoxInfo;
+import org.pikater.shared.experiment.webformat.IBoxInfoCommon;
 import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
-public class BoxInfoServer implements IBoxInfo<Integer>
+public class BoxInfoServer implements IBoxInfoCommon<Integer>
 {
 	/*
 	 * Read-only fields (except ID, which is only set once and then it is read-only).

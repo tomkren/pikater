@@ -107,7 +107,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 		this.name.setListening(false);
 		
 		// create the group, bind it all together
-	    this.container = Kinetic.createGroup(new Vector2d(info.initialX, info.initialY), 0);
+	    this.container = Kinetic.createGroup(new Vector2d(info.getPosX(), info.getPosY()), 0);
 		this.container.setID(String.valueOf(info.boxID));
 		this.container.setDraggable(false);
 		this.container.add(rectangle);
@@ -118,6 +118,15 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 	    // set event handlers
 		BoxDragListenerProvider listenerProvider = new BoxDragListenerProvider(new IBoxDragContext()
 		{
+			private final Set<BoxGraphItemClient> thisBoxSet = new HashSet<BoxGraphItemClient>()
+			{
+				private static final long serialVersionUID = -4038174041349265650L;
+
+				{
+					add(BoxGraphItemClient.this);
+				}
+			};
+			
 			@Override
 			public KineticEngine getEngine()
 			{
@@ -131,9 +140,9 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 			}
 			
 			@Override
-			public BoxGraphItemClient getBoxBeingDragged()
+			public Set<BoxGraphItemClient> getBoxesBeingMoved()
 			{
-				return BoxGraphItemClient.this;
+				return thisBoxSet;
 			}
 			
 			@Override
@@ -143,7 +152,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 			}
 			
 			@Override
-			public Node[] getAllMovedNodes()
+			public Node[] getAllNodesBeingMoved()
 			{
 				return new Node[]{ container };
 			}
@@ -290,9 +299,16 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 	public static BoxGraphItemShared[] toShared(BoxGraphItemClient... boxes)
 	{
 		BoxGraphItemShared[] result = new BoxGraphItemShared[boxes.length];
-		for(int i = 0; i < boxes.length; i++)
+		int index = 0;
+		for(BoxGraphItemClient box : boxes)
 		{
-			result[i] = new BoxGraphItemShared(boxes[i].getInfo().boxID);
+			Vector2d currentPosition = box.getAbsoluteNodePosition();
+			result[index] = new BoxGraphItemShared(
+					box.getInfo().boxID,
+					(int) currentPosition.x,
+					(int) currentPosition.y
+			);
+			index++;
 		}
 		return result;
 	}

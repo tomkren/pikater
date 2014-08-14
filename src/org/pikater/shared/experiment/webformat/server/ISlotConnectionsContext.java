@@ -2,9 +2,9 @@ package org.pikater.shared.experiment.webformat.server;
 
 import java.util.Set;
 
-import org.pikater.shared.experiment.webformat.IBoxInfo;
+import org.pikater.shared.experiment.webformat.IBoxInfoCommon;
 
-public interface ISlotConnectionsContext<I extends Object, B extends IBoxInfo<I>>
+public interface ISlotConnectionsContext<I extends Object, B extends IBoxInfoCommon<I>>
 {
 	/**
 	 * Gets the list of boxes to which an edge leads from box

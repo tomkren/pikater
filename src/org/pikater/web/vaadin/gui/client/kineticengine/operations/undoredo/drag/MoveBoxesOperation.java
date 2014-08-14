@@ -4,6 +4,7 @@ import net.edzard.kinetic.Node;
 import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
@@ -15,6 +16,7 @@ public class MoveBoxesOperation extends BiDiOperation implements IBoxDragEndCont
 {
 	// main operation related variables 
 	private final IBoxDragContext context;
+	private final BoxGraphItemClient[] boxesBeingMoved;
 	private final Node[] allMovedNodes; // boxes and edges
 	private final EdgeGraphItemClient[] edgesInBetween;
 	
@@ -23,14 +25,14 @@ public class MoveBoxesOperation extends BiDiOperation implements IBoxDragEndCont
 	private final Vector2d newPosition;
 	private final Vector2d delta;
 	
-	public MoveBoxesOperation(IBoxDragContext context, Node[] allMovedNodes, EdgeGraphItemClient[] edgesInBetween, Vector2d originalPosition,
-			Vector2d newPosition)
+	public MoveBoxesOperation(IBoxDragContext context, Vector2d originalPosition, Vector2d newPosition)
 	{
 		super(context.getEngine());
 		
 		this.context = context;
-		this.allMovedNodes = allMovedNodes;
-		this.edgesInBetween = edgesInBetween;
+		this.boxesBeingMoved = context.getBoxesBeingMoved().toArray(new BoxGraphItemClient[0]);
+		this.allMovedNodes = context.getAllNodesBeingMoved();
+		this.edgesInBetween = context.getEdgesInBetween().toArray(new EdgeGraphItemClient[0]);
 		
 		this.originalPosition = originalPosition;
 		this.newPosition = newPosition;
@@ -63,6 +65,9 @@ public class MoveBoxesOperation extends BiDiOperation implements IBoxDragEndCont
 		
 		// and finally, update the edges caught between selection and dynamic layer and draw changes
 		recomputeEdgesInBetweenAndDraw();
+		
+		// notify server about the changes - compute new serialized objects with current positions
+		kineticEngine.getContext().command_boxPositionsChanged(BoxGraphItemClient.toShared(boxesBeingMoved));
 	}
 
 	@Override
@@ -73,6 +78,9 @@ public class MoveBoxesOperation extends BiDiOperation implements IBoxDragEndCont
 		
 		// and then update the edges caught between selection and dynamic layer and draw changes
 		recomputeEdgesInBetweenAndDraw();
+		
+		// notify server about the changes - compute new serialized objects with current positions
+		kineticEngine.getContext().command_boxPositionsChanged(BoxGraphItemClient.toShared(boxesBeingMoved));
 	}
 	
 	// **********************************************************************************

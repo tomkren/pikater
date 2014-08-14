@@ -13,9 +13,9 @@ public interface IBoxDragContext
 {
 	KineticEngine getEngine();
 	Vector2d getCurrentPosition();
-	BoxGraphItemClient getBoxBeingDragged();
+	Set<BoxGraphItemClient> getBoxesBeingMoved();
+	Node[] getAllNodesBeingMoved();
 	Set<EdgeGraphItemClient> getEdgesInBetween();
-	Node[] getAllMovedNodes();
 	void setNewPositions(Node[] allMovedNodes, IBoxDragEndContext dragEndContext);
 	void setOriginalPositions(Node[] allMovedNodes, IBoxDragEndContext dragEndContext);
 }

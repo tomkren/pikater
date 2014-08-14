@@ -7,6 +7,7 @@ import net.edzard.kinetic.event.KineticEvent;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 
 @SuppressWarnings("deprecation")
@@ -23,6 +24,8 @@ public class BoxDragListenerProvider
 	//-----------------------------------------------------------
 	// EVENT LISTENERS
 	
+	private BoxGraphItemClient boxBeingMoved;
+	
 	public IEventListener getDragStartListener()
 	{
 		return new IEventListener()
@@ -32,8 +35,10 @@ public class BoxDragListenerProvider
 			{
 				GWTCursorManager.setCursorType(context.getEngine().getContext().getStageDOMElement(), MyCursor.MOVE);
 				
-				// first and foremost, remember some basic information
+				// first and foremost, remember & compute some basic information
 				originalPosition = context.getCurrentPosition();
+				boxBeingMoved = (context.getBoxesBeingMoved() != null) || (context.getBoxesBeingMoved().size() == 1) ?
+						context.getBoxesBeingMoved().iterator().next() : null;
 				
 				/*
 				 * Switch from normal mode to drag mode - turn all edges in between into dashed
@@ -42,7 +47,7 @@ public class BoxDragListenerProvider
 				
 				for(EdgeGraphItemClient edge : context.getEdgesInBetween())
 				{
-					edge.endPointDrag_toBaseLine(context.getBoxBeingDragged() != null ? context.getBoxBeingDragged() : edge.getSelectedEndpoint());
+					edge.endPointDrag_toBaseLine(boxBeingMoved != null ? boxBeingMoved : edge.getSelectedEndpoint());
 				}
 				
 				// draw and finish
@@ -62,7 +67,7 @@ public class BoxDragListenerProvider
 				// update the dashed edges
 				for(EdgeGraphItemClient edge : context.getEdgesInBetween())
 				{
-					edge.endPointDrag_updateBaseLine(context.getBoxBeingDragged() != null ? context.getBoxBeingDragged() : edge.getSelectedEndpoint());
+					edge.endPointDrag_updateBaseLine(boxBeingMoved != null ? boxBeingMoved : edge.getSelectedEndpoint());
 				}
 				
 				// draw and finish
@@ -88,8 +93,6 @@ public class BoxDragListenerProvider
 				// propagate the new position to selected items and switch edges in between back to normal mode
 				context.getEngine().pushNewOperation(new MoveBoxesOperation(
 						context,
-						context.getAllMovedNodes(),
-						context.getEdgesInBetween().toArray(new EdgeGraphItemClient[0]),
 						originalPosition,
 						context.getCurrentPosition()
 				));

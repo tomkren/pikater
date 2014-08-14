@@ -138,9 +138,9 @@ public class SelectionModule implements IEngineModule
 			}
 
 			@Override
-			public BoxGraphItemClient getBoxBeingDragged()
+			public Set<BoxGraphItemClient> getBoxesBeingMoved()
 			{
-				return null;
+				return selectedBoxes;
 			}
 			
 			@Override
@@ -150,7 +150,7 @@ public class SelectionModule implements IEngineModule
 			}
 
 			@Override
-			public Node[] getAllMovedNodes()
+			public Node[] getAllNodesBeingMoved()
 			{
 				return selectionGroup.getChildren().toArray(new Node[0]); 
 			}
