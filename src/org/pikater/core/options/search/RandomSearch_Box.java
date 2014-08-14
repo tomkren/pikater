@@ -5,7 +5,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.options.SlotsHelper;
 
@@ -13,9 +13,9 @@ public class RandomSearch_Box {
 
 	public static AgentInfo get() {
 
-		NewOption optionE = new NewOption("E", new DoubleValue(0.01), new RangeRestriction(
-				new DoubleValue(0.0),
-				new DoubleValue(1.0))
+		NewOption optionE = new NewOption("E", new FloatValue(0.01f), new RangeRestriction(
+				new FloatValue(0.0f),
+				new FloatValue(1.0f))
 		);
 		optionE.setDescription("E");
 		
