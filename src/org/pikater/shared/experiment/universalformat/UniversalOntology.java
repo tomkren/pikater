@@ -77,7 +77,11 @@ public class UniversalOntology {
 		this.inputErrorSlots.clear();
 		this.inputErrorSlots.addAll(errors);
 	}
-
+	
+	public void addInputErrorSlot(UniversalConnector connector) {
+		inputErrorSlots.add(connector);
+	}
+	
 	/**
 	 * Gets edges that lead to the {@link UniversalElement element} containing
 	 * this instance.

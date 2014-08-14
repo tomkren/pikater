@@ -617,6 +617,8 @@ public class Agent_DataManager extends PikaterAgent {
 						uDescription, batchJPA.getPriority() 
 		);
 		
+		System.out.println(compDescription.exportXML());
+		
 		Batch batch = new Batch();
 		batch.setId(batchJPA.getId());
 		batch.setName(batchJPA.getName());

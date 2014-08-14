@@ -207,12 +207,8 @@ public class ComputationDescription implements Concept {
 			UniversalOntology ontoI = finishedtUniOntologys.get(keyI);
 			IComputationElement processI = finishedDataProcessings.get(keyI);
 			
-			List<ISourceDescription> slotsI = new ArrayList<ISourceDescription>();
-			slotsI.addAll(processI.exportAllDataSourceDescriptions());
-			slotsI.addAll(processI.exportAllErrors());
-			
-			System.out.println(processI.getClass());
-			for (ISourceDescription slotIJ : slotsI) {
+			for (ISourceDescription slotIJ :
+				processI.exportAllDataSourceDescriptions()) {
 	
 				UniversalElement uniElement = new UniversalElement();
 				UniversalOntology uniOntology =
@@ -225,6 +221,21 @@ public class ComputationDescription implements Concept {
 				connector.setFromElement(uniElement);
 				
 				ontoI.addInputDataSlot(connector);
+			}
+
+			for (ISourceDescription slotIJ : processI.exportAllErrors()) {
+				
+				UniversalElement uniElement = new UniversalElement();
+				UniversalOntology uniOntology =
+						finishedtUniOntologys.get(slotIJ.exportSource().getId());
+				uniElement.setOntologyInfo(uniOntology);
+				
+				UniversalConnector connector = new UniversalConnector();
+				connector.setInputDataType(slotIJ.getInputType());
+				connector.setOutputDataType(slotIJ.getOutputType());
+				connector.setFromElement(uniElement);
+				
+				ontoI.addInputErrorSlot(connector);
 			}
 			
 			UniversalElement elementI =  new UniversalElement();
@@ -277,7 +288,7 @@ public class ComputationDescription implements Concept {
 				}
 			}
 		}
-		
+
 		// connecting to graph
 		for ( Integer keyI : finishedDataProcessings.keySet()) {
 
@@ -287,28 +298,18 @@ public class ComputationDescription implements Concept {
 			List<DataSourceDescription> inputDataSources = new ArrayList<DataSourceDescription>();
 			List<ErrorSourceDescription> inputErrorSources = new ArrayList<ErrorSourceDescription>();
 			
-			Collection<UniversalConnector> slotsI = uOntoI.getInputDataSlots();
-			for (UniversalConnector slotIJ : slotsI) {
+			for (UniversalConnector slotIJ : uOntoI.getInputDataSlots()) {
 				
 				UniversalElement uElement = slotIJ.getFromElement();
 				IDataProvider dataProvider =  (IDataProvider)
 						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
 				
-				if (slotIJ.getOutputDataType().equals(CoreConstants.SLOT_ERRORS)) {
-					ErrorSourceDescription errorSourceDesc = new ErrorSourceDescription();
-					errorSourceDesc.setInputType(slotIJ.getInputDataType());
-					errorSourceDesc.setOutputType(slotIJ.getOutputDataType());
-					errorSourceDesc.importSource(dataProvider);
-					
-					inputErrorSources.add(errorSourceDesc);
-				} else {
-					DataSourceDescription dataSourceDesc = new DataSourceDescription();
-					dataSourceDesc.setInputType(slotIJ.getInputDataType());
-					dataSourceDesc.setOutputType(slotIJ.getOutputDataType());
-					dataSourceDesc.importSource(dataProvider);
-					
-					inputDataSources.add(dataSourceDesc);
-				}
+				DataSourceDescription dataSourceDesc = new DataSourceDescription();
+				dataSourceDesc.setInputType(slotIJ.getInputDataType());
+				dataSourceDesc.setOutputType(slotIJ.getOutputDataType());
+				dataSourceDesc.importSource(dataProvider);
+				
+				inputDataSources.add(dataSourceDesc);
 				
 				// TODO:
 				/*
@@ -318,7 +319,20 @@ public class ComputationDescription implements Concept {
 				}
 				*/
 			}
-			
+
+			for (UniversalConnector slotIJ : uOntoI.getErrors()) {
+				
+				UniversalElement uElement = slotIJ.getFromElement();
+				IDataProvider dataProvider =  (IDataProvider)
+						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
+				
+				ErrorSourceDescription errorSourceDesc = new ErrorSourceDescription();
+				errorSourceDesc.setInputType(slotIJ.getInputDataType());
+				errorSourceDesc.setOutputType(slotIJ.getOutputDataType());
+				errorSourceDesc.importSource(dataProvider);
+					
+				inputErrorSources.add(errorSourceDesc);
+			}
 			processI.importAllDataSourceDescriptions(inputDataSources);
 			processI.importAllErrors(inputErrorSources);
 			
