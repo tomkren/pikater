@@ -6,14 +6,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
@@ -320,7 +318,7 @@ public class ComputationDescription implements Concept {
 				*/
 			}
 
-			for (UniversalConnector slotIJ : uOntoI.getErrors()) {
+			for (UniversalConnector slotIJ : uOntoI.getInputErrorSlots()) {
 				
 				UniversalElement uElement = slotIJ.getFromElement();
 				IDataProvider dataProvider =  (IDataProvider)
