@@ -382,7 +382,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	public BoxInfoServer createBox(AgentInfo info, int absX, int absY, boolean sendToClient)
 	{
 		BoxInfoServer result = experimentGraph.addBox(new BoxInfoServer(
-				info.clone(), // agent info needs to be cloned because options may be changed by user later
+				info,
 				absX - absoluteLeft,
 				absY - absoluteTop
 		));

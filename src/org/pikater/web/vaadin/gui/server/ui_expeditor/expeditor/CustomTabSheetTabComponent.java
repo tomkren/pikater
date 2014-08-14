@@ -20,7 +20,14 @@ public class CustomTabSheetTabComponent extends TabSheetTabComponent
 	@Override
 	public boolean canCloseTab()
 	{
-		return contentComponent.getExperimentGraph().isEmpty(); // TODO: content modified
+		if(contentComponent.getExperimentGraph() != null)
+		{
+			return contentComponent.getExperimentGraph().isEmpty(); // TODO: content modified
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	public KineticComponent getContentComponent()

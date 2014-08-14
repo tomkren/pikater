@@ -26,7 +26,7 @@ public class BoxInfoServer implements IBoxInfoCommon<Integer>
 	{
 		this.generatedUniqueID = null;
 		this.boxType = BoxType.fromAgentInfo(associatedAgent);
-		this.associatedAgent = associatedAgent;
+		this.associatedAgent = associatedAgent.clone(); // each box needs to have a unique instance (to preserve original instances intact)
 		this.posX = posX;
 		this.posY = posY;
 		this.registered = true;
