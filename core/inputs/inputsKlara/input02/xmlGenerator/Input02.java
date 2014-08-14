@@ -12,7 +12,6 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 //Example: single datasource, search the space of parameters of single computation model
@@ -65,13 +64,13 @@ public final class Input02 {
         ErrorSourceDescription errorDescription = new ErrorSourceDescription();
         errorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
         errorDescription.setProvider(comAgent);
-        //complex.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
+        complex.addError(errorDescription);
 
         // set DataSource
         // Note that the data provider is complex.
         // To save each iteration the data source would have to be comAgent
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setOutputType("Data");
+		computingDataSource.setOutputType(CoreConstants.SLOT_DATA);
 		computingDataSource.setDataProvider(complex);
 
         FileDataSaver saver = new FileDataSaver();

@@ -12,6 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction
 import org.pikater.core.ontology.subtrees.newOption.values.*;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +54,13 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	 */
 	public NewOption(String name, IValueData defaultValue)
 	{
-		this(name, new Value(defaultValue), new TypeRestriction(Arrays.asList(new ValueType(defaultValue))));
+		this(
+				name,
+				new Value(defaultValue),
+				new TypeRestriction(
+						new ArrayList<ValueType>(Arrays.asList(
+								new ValueType(defaultValue)
+								))));
 	}
 	/**
 	 * Creates an option with a single predefined {@link QuestionMarkRange} value. Value type and restrictions are inferred.
@@ -103,7 +110,13 @@ public class NewOption implements Concept, IMergeable, IWekaItem
      */
 	public NewOption(String name, Value value)
 	{
-		this(name, value, new TypeRestriction(Arrays.asList(value.getType())));
+		this(
+				name,
+				value,
+				new TypeRestriction(
+						new ArrayList<ValueType>(Arrays.asList(
+								value.getType()
+								))));
 	}
 	/**
 	 * Creates an option with a single predefined value. Value type is inferred, restriction is given.
@@ -113,7 +126,13 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	 */
 	public NewOption(String name, Value value, TypeRestriction restriction)
 	{
-		this(name, Arrays.asList(value), Arrays.asList(restriction));
+		this(
+				name,
+				new ArrayList<Value>(Arrays.asList(
+						value)),
+				new ArrayList<TypeRestriction>(Arrays.asList(
+						restriction))
+						);
 	}
 	/**
 	 * Creates an option with multiple values.

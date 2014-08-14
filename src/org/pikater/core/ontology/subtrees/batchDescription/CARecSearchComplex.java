@@ -34,9 +34,18 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
         return errors;
     }
     public void setErrors(List<ErrorSourceDescription> errors) {
+    	if (errors == null) {
+    		throw new IllegalArgumentException("Argument errors can't be null");
+    	}
         this.errors = errors;
     }
-
+    public void addError(ErrorSourceDescription error) {
+    	if (error == null) {
+    		throw new IllegalArgumentException("Argument error can't be null");
+    	}
+        this.errors.add(error);
+    }
+    
     public IComputingAgent getComputingAgent() {
         return computingAgent;
     }

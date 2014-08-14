@@ -125,7 +125,13 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     	if (options == null) {
     		throw new NullPointerException("Argument options can't be null");
     	}
-        this.options = options;
+    	List<NewOption> optionsList = new ArrayList<NewOption>();
+    	for (NewOption optionI : options) {
+    		if (optionI != null) {
+    			optionsList.add(optionI);
+    		}
+    	}
+        this.options = optionsList;
     }
     public void addOption(NewOption option) {
     	
