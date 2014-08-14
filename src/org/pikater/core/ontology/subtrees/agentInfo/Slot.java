@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
+import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
+
 import jade.content.Concept;
 
 public class Slot implements Concept {
@@ -39,5 +41,10 @@ public class Slot implements Concept {
 	{
 		return true; // TODO: a hack around...
 		// return slotType.equals(otherSlot.slotType);
+	}
+	
+	public boolean isErrorSlot()
+	{
+		return slotType.equals(SlotTypes.ERROR);
 	}
 }

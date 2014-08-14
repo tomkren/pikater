@@ -6,15 +6,13 @@ import java.util.Set;
 import net.edzard.kinetic.Container;
 import net.edzard.kinetic.Group;
 import net.edzard.kinetic.Kinetic;
+import net.edzard.kinetic.Node;
 import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.event.EventType;
-import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
-import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTCursorManager.MyCursor;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient;
@@ -22,7 +20,9 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.MoveBoxesOperation;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.BoxDragListenerProvider;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragContext;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragEndContext;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
 @SuppressWarnings("deprecation")
@@ -122,9 +122,64 @@ public class SelectionModule implements IEngineModule
 		this.selectionGroup = Kinetic.createGroup();
 		this.selectionGroup.setPosition(Vector2d.origin);
 		this.selectionGroup.setDraggable(true);
-		this.selectionGroup.addEventListener(selectionGroupDragStartHandler, EventType.Basic.DRAGSTART);
-		this.selectionGroup.addEventListener(selectionGroupDragMoveHandler, EventType.Basic.DRAGMOVE);
-		this.selectionGroup.addEventListener(selectionGroupDragEndHandler, EventType.Basic.DRAGEND);
+		
+		BoxDragListenerProvider listenerProvider = new BoxDragListenerProvider(new IBoxDragContext()
+		{
+			@Override
+			public KineticEngine getEngine()
+			{
+				return SelectionModule.this.kineticEngine;
+			}
+			
+			@Override
+			public Vector2d getCurrentPosition()
+			{
+				return selectionGroup.getPosition();
+			}
+
+			@Override
+			public Set<BoxGraphItemClient> getBoxesBeingMoved()
+			{
+				return selectedBoxes;
+			}
+			
+			@Override
+			public Set<EdgeGraphItemClient> getEdgesInBetween()
+			{
+				return edgesInBetween;
+			}
+
+			@Override
+			public Node[] getAllNodesBeingMoved()
+			{
+				return selectionGroup.getChildren().toArray(new Node[0]); 
+			}
+
+			@Override
+			public void setNewPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			{
+				for(Node node : allMovedNodes)
+				{
+					node.setPosition(node.getX() + context.getDelta().x, node.getY() + context.getDelta().y);
+				}
+				
+				// this will always affect the current selection group but it doesn't matter since this is an invariant:
+				selectionGroup.setPosition(Vector2d.origin);
+			}
+
+			@Override
+			public void setOriginalPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			{
+				for(Node node : allMovedNodes)
+				{
+					node.setPosition(node.getX() - context.getDelta().x, node.getY() - context.getDelta().y);
+				}
+			}
+		});
+		this.selectionGroup.addEventListener(listenerProvider.getDragStartListener(), EventType.Basic.DRAGSTART);
+		this.selectionGroup.addEventListener(listenerProvider.getDragMoveListener(), EventType.Basic.DRAGMOVE);
+		this.selectionGroup.addEventListener(listenerProvider.getDragEndListener(), EventType.Basic.DRAGEND);
+		
 		this.kineticEngine.getContainer(EngineComponent.LAYER_SELECTION).add(selectionGroup);
 	}
 	
@@ -161,54 +216,6 @@ public class SelectionModule implements IEngineModule
 			throw new IllegalStateException();
 		}
 	}
-	
-	// *****************************************************************************************************
-	// SELECTION DRAGGING CODE
-	
-	/*
-	 * Event handlers to define selection dragging. 
-	 */
-	private final IEventListener selectionGroupDragStartHandler = new IEventListener()
-	{
-		@Override
-		public void handle(KineticEvent event)
-		{
-			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.MOVE);
-			
-			// start of a drag operation - turn all edges in between into dashed lines of a special color that connect the centers of their endpoints boxes
-			kineticEngine.fromEdgesToBaseLines(edgesInBetween, null); // draws changes by default
-			event.stopVerticalPropagation();
-		}
-	};
-	private final IEventListener selectionGroupDragMoveHandler = new IEventListener()
-	{
-		@Override
-		public void handle(KineticEvent event)
-		{
-			kineticEngine.updateBaseLines(edgesInBetween, null); // draws changes by default
-			event.stopVerticalPropagation();
-		}
-	};
-	private final IEventListener selectionGroupDragEndHandler = new IEventListener()
-	{
-		/**
-		 * End of a drag operation.
-		 * Undo the effects of drag start and propagate the drag changes to selection items.
-		 */
-		@Override
-		public void handle(KineticEvent event)
-		{
-			GWTCursorManager.rollBackCursor(kineticEngine.getContext().getStageDOMElement());
-			
-			// propagate the selection group's position to the selected items
-			kineticEngine.pushNewOperation(new MoveBoxesOperation(kineticEngine));
-			
-			// draws changes by default
-			kineticEngine.fromBaseLinesToEdges(edgesInBetween);
-			
-			event.stopVerticalPropagation();
-		}
-	};
 	
 	// *****************************************************************************************************
 	// PUBLIC TYPES AND INTERFACE TO PERFORM ALL SELECTION/DESELECTION RELATED OPERATIONS

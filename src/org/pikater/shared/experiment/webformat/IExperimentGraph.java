@@ -1,6 +1,6 @@
 package org.pikater.shared.experiment.webformat;
 
-public interface IExperimentGraph<I extends Object, B extends IBoxInfo<I>>
+public interface IExperimentGraph<I extends Object, B extends IBoxInfoCommon<I>>
 {
 	boolean containsBox(I boxID);
 	B getBox(I boxID);

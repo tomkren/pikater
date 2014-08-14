@@ -25,4 +25,5 @@ public interface KineticComponentServerRpc extends ServerRpc
 	void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes);
 	void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges);
 	void command_selectionChange(Integer[] selectedBoxesAgentIDs);
+	void command_boxPositionsChanged(BoxGraphItemShared[] boxes);
 }

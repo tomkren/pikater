@@ -423,7 +423,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 
 	public void endPointDrag_toEdge()
 	{
-		toEdge_onFinish(true);
+		toEdge_onFinish(false);
 	}
 
 	public void edgeDrag_toBaseLine(Vector2d initialDragPosition, BoxGraphItemClient staticBox)

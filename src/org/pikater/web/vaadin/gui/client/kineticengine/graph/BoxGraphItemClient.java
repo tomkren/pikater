@@ -16,16 +16,16 @@ import net.edzard.kinetic.Text;
 import net.edzard.kinetic.Text.FontStyle;
 import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.event.EventType;
-import net.edzard.kinetic.event.IEventListener;
-import net.edzard.kinetic.event.KineticEvent;
 
 import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.BoxDragListenerProvider;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragContext;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragEndContext;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
-@SuppressWarnings("deprecation")
 public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettings>
 {
 	// **********************************************************************************************
@@ -107,41 +107,71 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 		this.name.setListening(false);
 		
 		// create the group, bind it all together
-	    this.container = Kinetic.createGroup(new Vector2d(info.initialX, info.initialY), 0);
+	    this.container = Kinetic.createGroup(new Vector2d(info.getPosX(), info.getPosY()), 0);
 		this.container.setID(String.valueOf(info.boxID));
+		this.container.setDraggable(false);
 		this.container.add(rectangle);
 		this.container.add(icon);
 		this.container.add(title);
 		this.container.add(name);
 		
 	    // set event handlers
-	    this.container.addEventListener(new IEventListener()
+		BoxDragListenerProvider listenerProvider = new BoxDragListenerProvider(new IBoxDragContext()
 		{
-			@Override
-			public void handle(KineticEvent event)
+			private final Set<BoxGraphItemClient> thisBoxSet = new HashSet<BoxGraphItemClient>()
 			{
-				getKineticEngine().fromEdgesToBaseLines(connectedEdges, BoxGraphItemClient.this); // draws changes by default
-				event.stopVerticalPropagation();
-			}
-		}, EventType.Basic.DRAGSTART);
-	    this.container.addEventListener(new IEventListener()
-		{
+				private static final long serialVersionUID = -4038174041349265650L;
+
+				{
+					add(BoxGraphItemClient.this);
+				}
+			};
+			
 			@Override
-			public void handle(KineticEvent event)
+			public KineticEngine getEngine()
 			{
-				getKineticEngine().updateBaseLines(connectedEdges, BoxGraphItemClient.this); // draws changes by default
-				event.stopVerticalPropagation();
+				return getKineticEngine();
 			}
-		}, EventType.Basic.DRAGMOVE);
-	    this.container.addEventListener(new IEventListener()
-		{
+			
 			@Override
-			public void handle(KineticEvent event)
+			public Vector2d getCurrentPosition()
 			{
-				getKineticEngine().fromBaseLinesToEdges(connectedEdges); // draws changes by default
-				event.stopVerticalPropagation();
+				return container.getPosition();
 			}
-		}, EventType.Basic.DRAGEND);
+			
+			@Override
+			public Set<BoxGraphItemClient> getBoxesBeingMoved()
+			{
+				return thisBoxSet;
+			}
+			
+			@Override
+			public Set<EdgeGraphItemClient> getEdgesInBetween()
+			{
+				return connectedEdges;
+			}
+			
+			@Override
+			public Node[] getAllNodesBeingMoved()
+			{
+				return new Node[]{ container };
+			}
+			
+			@Override
+			public void setOriginalPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			{
+				container.setPosition(context.getOriginalPosition());
+			}
+			
+			@Override
+			public void setNewPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			{
+				container.setPosition(context.getNewPosition());
+			}
+		});
+	    this.container.addEventListener(listenerProvider.getDragStartListener(), EventType.Basic.DRAGSTART);
+	    this.container.addEventListener(listenerProvider.getDragMoveListener(), EventType.Basic.DRAGMOVE);
+	    this.container.addEventListener(listenerProvider.getDragEndListener(), EventType.Basic.DRAGEND);
 	}
 	
 	// **********************************************************************************************
@@ -269,9 +299,16 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 	public static BoxGraphItemShared[] toShared(BoxGraphItemClient... boxes)
 	{
 		BoxGraphItemShared[] result = new BoxGraphItemShared[boxes.length];
-		for(int i = 0; i < boxes.length; i++)
+		int index = 0;
+		for(BoxGraphItemClient box : boxes)
 		{
-			result[i] = new BoxGraphItemShared(boxes[i].getInfo().boxID);
+			Vector2d currentPosition = box.getAbsoluteNodePosition();
+			result[index] = new BoxGraphItemShared(
+					box.getInfo().boxID,
+					(int) currentPosition.x,
+					(int) currentPosition.y
+			);
+			index++;
 		}
 		return result;
 	}

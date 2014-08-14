@@ -2,7 +2,6 @@ package org.pikater.shared.experiment.universalformat;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 
@@ -61,7 +60,7 @@ public class UniversalOntology {
 	{
 		if(options == null)
 		{
-			throw new NullPointerException("Argument options can't be null");
+			throw new IllegalArgumentException("Argument options can't be null");
 		}
 		else
 		{
@@ -69,32 +68,27 @@ public class UniversalOntology {
 		}
 	}
 
-	public Collection<UniversalConnector> getErrors() {
-		return inputErrorSlots;
-	}
-
-	public void setErrors(Collection<UniversalConnector> errors) {
-		this.inputErrorSlots.clear();
-		this.inputErrorSlots.addAll(errors);
-	}
-	
-	public void addInputErrorSlot(UniversalConnector connector) {
-		inputErrorSlots.add(connector);
+	/**
+	 * Gets edges that lead to the {@link UniversalElement element} containing
+	 * this instance and connect data slots.
+	 */
+	public Collection<UniversalConnector> getInputDataSlots() {
+		return inputDataSlots;
 	}
 	
 	/**
 	 * Gets edges that lead to the {@link UniversalElement element} containing
-	 * this instance.
+	 * this instance and connect error slots.
 	 */
-	public Collection<UniversalConnector> getInputDataSlots() {
-		return inputDataSlots;
+	public Collection<UniversalConnector> getInputErrorSlots() {
+		return inputErrorSlots;
 	}
 
 	public void addInputDataSlot(UniversalConnector connector) {
 		inputDataSlots.add(connector);
 	}
-
-	public void addInputDataSlots(List<UniversalConnector> connectors) {
-		inputDataSlots.addAll(connectors);
+	
+	public void addInputErrorSlot(UniversalConnector connector) {
+		inputErrorSlots.add(connector);
 	}
 }

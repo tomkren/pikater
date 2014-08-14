@@ -16,12 +16,12 @@ public class DeleteSelectedBoxesOperation extends BiDiOperation
 	private final BoxGraphItemClient[] originalSelectedBoxes;
 	private final EdgeGraphItemClient[] allRelatedEdges; // selected and "in-between"
 	
-	public DeleteSelectedBoxesOperation(KineticEngine kineticState)
+	public DeleteSelectedBoxesOperation(KineticEngine kineticEngine)
 	{
-		super(kineticState);
+		super(kineticEngine);
 		
-		this.selectionModule = (SelectionModule) kineticState.getModule(SelectionModule.moduleID);
-		this.itemRegistrationModule = (ItemRegistrationModule) kineticState.getModule(ItemRegistrationModule.moduleID);
+		this.selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
+		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
 		this.originalSelectedBoxes = this.selectionModule.getSelectedBoxes();
 		this.allRelatedEdges = this.selectionModule.getAllRelatedEdges();
 	}

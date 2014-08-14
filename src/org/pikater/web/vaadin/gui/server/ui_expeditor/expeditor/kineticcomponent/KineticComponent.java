@@ -195,6 +195,17 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 					}
 				}
 			}
+
+			@Override
+			public void command_boxPositionsChanged(BoxGraphItemShared[] boxes)
+			{
+				for(BoxGraphItemShared box_shared : boxes)
+				{
+					BoxInfoServer box_server = experimentGraph.getBox(box_shared.getID());
+					box_server.setPosX(box_shared.getPosX());
+					box_server.setPosY(box_shared.getPosY());
+				}
+			}
 		});
 	}
 	
@@ -313,12 +324,11 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		{
 			UniversalComputationDescription result = experimentGraph.toUniversalFormat();
 			
-			/*
 			// test case - redirect the same experiment into a new tab and test the conversion cycle
 			JPABatch newBatch = new JPABatch("poliket", "bla bla", result.toXML(), null);
 			parentEditor.loadExperimentIntoNewTab(newBatch);
-			*/
 			
+			/*
 			exportCallback.handleExperiment(result, new IOnExperimentSaved()
 			{
 				@Override
@@ -335,6 +345,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 					}
 				}
 			});
+			*/
 		}
 		catch (ConversionException e)
 		{

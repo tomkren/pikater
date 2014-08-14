@@ -349,6 +349,12 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		getServerRPC().command_edgeSetChange(opKind, edges);
 	}
 	
+	@Override
+	public void command_boxPositionsChanged(BoxGraphItemShared[] boxes)
+	{
+		getServerRPC().command_boxPositionsChanged(boxes);
+	}
+	
 	// *****************************************************************************************************
 	// KINETIC CONTEXT INTERFACE
 	

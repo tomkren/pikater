@@ -347,12 +347,21 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 								{
 									if(slotConnections.areSlotsConnected(inputSlot, outputSlot))
 									{
-										// remember the edge, with exact slot connection
+										// construct the edge, with exact slot connection
 										UniversalConnector connector = new UniversalConnector();
 										connector.setFromElement(uniBox);
 										connector.setOutputDataType(outputSlot.getDataType());
 										connector.setInputDataType(inputSlot.getDataType());
-										neighbourUniBox.getOntologyInfo().addInputDataSlot(connector);
+										
+										// distinguish between error and data slots
+										if(inputSlot.isErrorSlot() && outputSlot.isErrorSlot())
+										{
+											neighbourUniBox.getOntologyInfo().addInputErrorSlot(connector);
+										}
+										else
+										{
+											neighbourUniBox.getOntologyInfo().addInputDataSlot(connector);
+										}
 									}
 								}
 							}
