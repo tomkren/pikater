@@ -1,8 +1,11 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
+import net.edzard.kinetic.Stage;
+
 import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
+import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTLogger;
 import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator;
@@ -22,10 +25,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FocusPanel;
 
 public class KineticComponentWidget extends FocusPanel implements KineticComponentClientRpc, KineticComponentServerRpc, IKineticEngineContext
@@ -112,22 +112,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			}
 		});
 		
-		Window.addResizeHandler(new ResizeHandler()
-		{
-			@Override
-			public void onResize(ResizeEvent event)
-			{
-				Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand()
-				{
-					@Override
-					public void execute()
-					{
-						Window.alert("RESIZE DETECTED");
-					}
-				});
-			}
-		});
-		
 		/*
 		// set action modifier key
 		// resource for this: http://stackoverflow.com/questions/3902635/how-does-one-capture-a-macs-command-key-via-javascript
@@ -160,7 +144,11 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		{
 			this.state = new KineticState(this);
 		}
-		
+		doResize();
+	}
+	
+	public void doResize()
+	{
 		// when the GWT event loop finishes and the component is fully read and its information published
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
@@ -168,21 +156,35 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			public void execute()
 			{
 				/*
-				 * TODO: only use this to expand... if one of the new dimensions is smaller than it was, only shrink the parent widget
-				 * This is not going to be extremely trivial...
+				 * Only use this to expand... if one of the new dimensions is smaller than it was, let
+				 * the parent widget shrink. 
 				 */
 
-				// resize the kinetic stage to fully fill the parent component
-				Element elementWithKnownSize = getElement();
-				getEngine().resize(elementWithKnownSize.getOffsetWidth(), elementWithKnownSize.getOffsetHeight());
+				// determine the new size
+				Stage underlyingStage = (Stage) getEngine().getContainer(EngineComponent.STAGE);
+				int newWidth = Math.max(getElement().getOffsetWidth(), (int) underlyingStage.getWidth());
+				int newHeight = Math.max(getElement().getOffsetHeight(), (int) underlyingStage.getHeight());
+				if((newWidth > underlyingStage.getWidth()) || (newHeight > underlyingStage.getHeight()))
+				{
+					// actually resize
+					getEngine().resize(newWidth, newHeight);
+					
+					// some debug info
+					GWTLogger.logWarning("Resized kinetic component: " + connector.getConnectorId());
+				}
 				
-				// send information about absolute position to the server so that it can compute relative mouse position
+				/*
+				 * Send information about absolute position to the server so that it can compute relative
+				 * mouse positions correctly.
+				 */
 				command_onLoadCallback(getAbsoluteLeft(), getAbsoluteTop());
-				
-				// and finally, draw the stage
-				getEngine().draw(EngineComponent.STAGE);
 			}
 		});
+	}
+	
+	private KineticComponentServerRpc getServerRPC()
+	{
+		return connector.serverRPC;
 	}
 	
 	// *****************************************************************************************************
@@ -378,13 +380,5 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 	public ClickMode getClickMode()
 	{
 		return connector.getState().clickMode;
-	}
-	
-	// *****************************************************************************************************
-	// PRIVATE INTERFACE
-	
-	private KineticComponentServerRpc getServerRPC()
-	{
-		return connector.serverRPC;
 	}
 }

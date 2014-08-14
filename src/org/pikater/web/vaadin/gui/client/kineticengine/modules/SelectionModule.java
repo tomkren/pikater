@@ -6,7 +6,6 @@ import java.util.Set;
 import net.edzard.kinetic.Container;
 import net.edzard.kinetic.Group;
 import net.edzard.kinetic.Kinetic;
-import net.edzard.kinetic.Node;
 import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.event.EventType;
 import net.edzard.kinetic.event.IEventListener;
@@ -46,6 +45,11 @@ public class SelectionModule implements IEngineModule
 	 * A self-explanatory variable.
 	 */
 	private final Set<BoxGraphItemClient> selectedBoxes;
+	
+	/**
+	 * A self-explanatory variable.
+	 */
+	private final Set<EdgeGraphItemClient> selectedEdges;
 	
 	/** 
 	 * Edges with exactly one of their ends (a box) selected.
@@ -112,6 +116,7 @@ public class SelectionModule implements IEngineModule
 		moduleID = GWTMisc.getSimpleName(this.getClass());
 		this.kineticEngine = kineticEngine;
 		this.selectedBoxes = new HashSet<BoxGraphItemClient>();
+		this.selectedEdges = new HashSet<EdgeGraphItemClient>();
 		this.edgesInBetween = new HashSet<EdgeGraphItemClient>();
 		
 		this.selectionGroup = Kinetic.createGroup();
@@ -171,7 +176,7 @@ public class SelectionModule implements IEngineModule
 			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.MOVE);
 			
 			// start of a drag operation - turn all edges in between into dashed lines of a special color that connect the centers of their endpoints boxes
-			kineticEngine.fromEdgesToBaseLines(getEdgesInBetween(), null); // draws changes by default
+			kineticEngine.fromEdgesToBaseLines(edgesInBetween, null); // draws changes by default
 			event.stopVerticalPropagation();
 		}
 	};
@@ -180,7 +185,7 @@ public class SelectionModule implements IEngineModule
 		@Override
 		public void handle(KineticEvent event)
 		{
-			kineticEngine.updateBaseLines(getEdgesInBetween(), null); // draws changes by default
+			kineticEngine.updateBaseLines(edgesInBetween, null); // draws changes by default
 			event.stopVerticalPropagation();
 		}
 	};
@@ -196,14 +201,10 @@ public class SelectionModule implements IEngineModule
 			GWTCursorManager.rollBackCursor(kineticEngine.getContext().getStageDOMElement());
 			
 			// propagate the selection group's position to the selected items
-			kineticEngine.pushNewOperation(new MoveBoxesOperation(
-					kineticEngine,
-					getSelectedKineticNodes(),
-					getEdgesInBetween().toArray(new EdgeGraphItemClient[0])
-			));
+			kineticEngine.pushNewOperation(new MoveBoxesOperation(kineticEngine));
 			
 			// draws changes by default
-			kineticEngine.fromBaseLinesToEdges(getEdgesInBetween());
+			kineticEngine.fromBaseLinesToEdges(edgesInBetween);
 			
 			event.stopVerticalPropagation();
 		}
@@ -295,33 +296,39 @@ public class SelectionModule implements IEngineModule
 		}
 	}
 	
+	/** 
+	 * @param edge
+	 * @param originalEndPoint the original endpoint of the edge
+	 * @param newEndPoint the new endpoint of the edge
+	 * @param staticEndPoint the other endpoint of the edge that is unaffected by the drag operation 
+	 */
 	public void onEdgeDragOperationFinished(EdgeGraphItemClient edge, BoxGraphItemClient originalEndPoint, BoxGraphItemClient newEndPoint, BoxGraphItemClient staticEndPoint)
 	{
 		// IMPORTANT: this code assumes that the endpoint swap has not been done yet
 		if(originalEndPoint.isSelected() != newEndPoint.isSelected())
 		{
-			if(originalEndPoint.isSelected())
+			if(originalEndPoint.isSelected()) // the original endpoint IS selected and the new one is NOT, so:
 			{
-				// the original endpoint IS selected and the new one is NOT, so:
-				if(staticEndPoint.isSelected())
+				if(staticEndPoint.isSelected()) // the unaffected endpoint IS selected, so:
 				{
 					edge.invertSelection();
+					selectedEdges.remove(edge);
 					edgesInBetween.add(edge);
 				}
-				else
+				else // the unaffected endpoint is NOT selected, so:
 				{
 					edgesInBetween.remove(edge);
 				}
 			}
-			else
+			else // the original endpoint is NOT selected and the new one IS, so:
 			{
-				// the original endpoint is NOT selected and the new one IS, so:
-				if(staticEndPoint.isSelected())
+				if(staticEndPoint.isSelected()) // the unaffected endpoint IS selected, so:
 				{
 					edge.invertSelection();
+					selectedEdges.add(edge);
 					edgesInBetween.remove(edge);
 				}
-				else
+				else // the unaffected endpoint is NOT selected, so:
 				{
 					edgesInBetween.add(edge);
 				}
@@ -333,7 +340,7 @@ public class SelectionModule implements IEngineModule
 	{
 		if(edge.isSelected())
 		{
-			throw new IllegalArgumentException("The provided edge is selected. Created edges can not be selected.");
+			throw new IllegalStateException("The given edge is selected. Edges being created can not be selected.");
 		}
 		else
 		{
@@ -344,6 +351,7 @@ public class SelectionModule implements IEngineModule
 					break;
 				case 2:
 					edge.invertSelection();
+					selectedEdges.add(edge);
 					break;
 				default:
 					break;
@@ -359,19 +367,26 @@ public class SelectionModule implements IEngineModule
 		return selectionGroup;
 	}
 	
-	public Node[] getSelectedKineticNodes()
-	{
-		return getSelectionContainer().getChildren().toArray(new Node[0]);
-	}
-	
 	public BoxGraphItemClient[] getSelectedBoxes()
 	{
 		return selectedBoxes.toArray(new BoxGraphItemClient[0]);
 	}
 	
-	public Set<EdgeGraphItemClient> getEdgesInBetween()
+	public EdgeGraphItemClient[] getSelectedEdges()
 	{
-		return edgesInBetween;
+		return selectedEdges.toArray(new EdgeGraphItemClient[0]);
+	}
+	
+	public EdgeGraphItemClient[] getEdgesInBetween()
+	{
+		return edgesInBetween.toArray(new EdgeGraphItemClient[0]);
+	}
+	
+	public EdgeGraphItemClient[] getAllRelatedEdges()
+	{
+		Set<EdgeGraphItemClient> result = new HashSet<EdgeGraphItemClient>(selectedEdges);
+		result.addAll(edgesInBetween);
+		return result.toArray(new EdgeGraphItemClient[0]);
 	}
 	
 	// *****************************************************************************************************
@@ -387,6 +402,7 @@ public class SelectionModule implements IEngineModule
 			{
 				edge.invertSelection();
 				edgesInBetween.remove(edge);
+				selectedEdges.add(edge);
 			}
 			else // 1 end is selected
 			{
@@ -406,6 +422,7 @@ public class SelectionModule implements IEngineModule
 			{
 				edge.invertSelection();
 				edgesInBetween.add(edge);
+				selectedEdges.remove(edge);
 			}
 			else // neither end is selected
 			{

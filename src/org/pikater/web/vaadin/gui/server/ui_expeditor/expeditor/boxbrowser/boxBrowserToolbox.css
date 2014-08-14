@@ -1,13 +1,8 @@
 @CHARSET "US-ASCII";
 
-.boxBrowserToolboxSize
-{
-	width: 200px;
-	height: 100%;
-}
-
 .boxBrowserToolbox
 {
+	height: 100%;
 	padding: 1px;
 	border: 1px solid black;
 }

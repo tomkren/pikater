@@ -481,9 +481,9 @@ public class Toolbar extends VerticalLayout
 					}
 					catch (PikaterGatewayException e)
 					{
-						// TODO: delete the newly saved batch
+						DAOs.batchDAO.deleteBatchEntity(newExperiment);
 						PikaterLogger.logThrowable("Could not send notification about a new batch to core.", e);
-						MyNotifications.showError("Failed", "Saved but not scheduled.");
+						MyNotifications.showError("Failed", "Save the batch for now?");
 					}
 				}
 				

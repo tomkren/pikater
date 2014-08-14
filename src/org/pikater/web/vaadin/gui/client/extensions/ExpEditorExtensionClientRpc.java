@@ -14,10 +14,9 @@ public interface ExpEditorExtensionClientRpc extends ClientRpc
 	void command_loadBoxPictures(String[] pictureURLs);
 	
 	/**
-	 * Called everytime the modified content set changes. Useful to
-	 * handle close events and let the user confirm leaving unsaved
-	 * content behind.
-	 * @param newCount
+	 * Called on events that might change the kinetic component's parent's size.
+	 * If this happens, the underlying kinetic {@link net.edzard.kinetic.Stage}
+	 * needs to be resized manually as well.
 	 */
-	void command_modifiedTabsCountChanged(int newCount);
+	void command_resizeSelectedKineticComponent();
 }

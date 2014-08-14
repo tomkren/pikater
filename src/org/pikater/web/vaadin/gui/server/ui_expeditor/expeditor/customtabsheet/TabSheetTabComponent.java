@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.layouts.tabsheet;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet;
 
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.iconbutton.IconButton;

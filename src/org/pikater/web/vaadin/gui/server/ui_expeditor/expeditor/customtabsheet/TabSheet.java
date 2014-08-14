@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.layouts.tabsheet;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +56,7 @@ public class TabSheet extends CustomComponent
 		this.innerLayout.setRowInvisible(Row.CENTER, Row.SOUTH);
 		this.innerLayout.setComponent(Border.NORTH, this.tabBar);
 		this.innerLayout.setRowHeight(Row.SOUTH, new Dimension(DimensionMode.MAX));
+		this.innerLayout.setFixedLayout(new Dimension(DimensionMode.AUTO), new Dimension(DimensionMode.AUTO), new Dimension(DimensionMode.AUTO));
 		
 		// this component's basic setup
 		setCompositionRoot(innerLayout);
@@ -164,14 +165,14 @@ public class TabSheet extends CustomComponent
 					GeneralDialogs.confirm("Really close this tab?", "The content will be lost, if unsaved.", new GeneralDialogs.IDialogResultHandler()
 					{
 						/*
-						 * If the user confirms, do the following: 
+						 * If confirmed:
 						 */
 						
 						@Override
 						public boolean handleResult(Object[] args)
 						{
-							closeTab();
-							return true;
+							closeTab(); // close the tab
+							return true; // close the dialog
 						}
 					});
 				}

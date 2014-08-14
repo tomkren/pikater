@@ -12,12 +12,16 @@ import org.pikater.web.visualisation.implementation.datasource.multiple.Multiple
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
 import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
 
+/**
+ * Obsolete.
+ */
+@Deprecated
 public class MatrixPNGGenerator extends Generator {
 	
 	private JPADataSetLO dslo;
 	private MultipleArffDataset dataset;
 	
-	public MatrixPNGGenerator(AbstractDSVisResult progressListener, JPADataSetLO dslo, PrintStream output){
+	public MatrixPNGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo, PrintStream output){
 		super(progressListener,output);
 		this.dslo=dslo;
 		init();
@@ -60,7 +64,5 @@ public class MatrixPNGGenerator extends Generator {
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
 	}
-	
-	
 	
 }
