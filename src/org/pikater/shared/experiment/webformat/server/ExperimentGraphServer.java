@@ -341,6 +341,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 							 * - connector: outputDataType (output slot) -> inputDataType (input slot)
 							 */
 							
+							boolean aConnectedWasAdded = false;
 							for(Slot outputSlot : webBox.getAssociatedAgent().getOutputSlots())
 							{
 								for(Slot inputSlot : neighbourWebBox.getAssociatedAgent().getInputSlots())
@@ -362,11 +363,17 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 										{
 											neighbourUniBox.getOntologyInfo().addInputDataSlot(connector);
 										}
+										aConnectedWasAdded = true;
 									}
 								}
 							}
-							if(neighbourUniBox.getOntologyInfo().getInputDataSlots().isEmpty()) // no slot connections are defined
+							if(!aConnectedWasAdded) // no slot connections are defined
 							{
+								/*
+								 * It is necessary to check like this... (neighbourUniBox.getOntologyInfo().getInputDataSlots().isEmpty())
+								 * is not safe because connectors may have been added previously (for another pair of boxes).
+								 */
+								
 								// at least remember the edge, with no slot connections whatsoever
 								UniversalConnector connector = new UniversalConnector();
 								connector.setFromElement(uniBox);
