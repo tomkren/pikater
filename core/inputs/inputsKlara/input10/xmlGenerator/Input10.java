@@ -24,11 +24,11 @@ public final class Input10 {
         
 		// Specify a datasource
 		DataSourceDescription fileDataSource1 = new DataSourceDescription();
-		fileDataSource1.setDataInputType("firstInput");
+		fileDataSource1.setInputType("firstInput");
 		fileDataSource1.setDataProvider(fileDataProvider);
 
 		DataSourceDescription fileDataSource2 = new DataSourceDescription();
-		fileDataSource2.setDataInputType("secondInput");
+		fileDataSource2.setInputType("secondInput");
 		fileDataSource2.setDataProvider(fileDataProvider2);
 
 		// PreProcessing
@@ -38,7 +38,7 @@ public final class Input10 {
 		processing.addDataSources(fileDataSource2);
 
 		DataSourceDescription dataSourceSunny = new DataSourceDescription();
-		dataSourceSunny.setDataOutputType("sunnyOutput");
+		dataSourceSunny.setOutputType("sunnyOutput");
 		dataSourceSunny.setDataProvider(processing);
 
 		// Save Sunny data
@@ -46,7 +46,7 @@ public final class Input10 {
 		saverSunny.setDataSource(dataSourceSunny);
 
 		DataSourceDescription dataSourceOvercast = new DataSourceDescription();
-		dataSourceOvercast.setDataOutputType("overcastOutput");
+		dataSourceOvercast.setOutputType("overcastOutput");
 		dataSourceOvercast.setDataProvider(processing);
 
 		// Save Overcast data
@@ -54,7 +54,7 @@ public final class Input10 {
 		saverOvercast.setDataSource(dataSourceOvercast);
 
 		DataSourceDescription dataSourceRainy = new DataSourceDescription();
-		dataSourceRainy.setDataOutputType("rainyOutput");
+		dataSourceRainy.setOutputType("rainyOutput");
 		dataSourceRainy.setDataProvider(processing);
 
 		// Save Overcast data

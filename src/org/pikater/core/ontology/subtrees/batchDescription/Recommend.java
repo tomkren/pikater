@@ -16,12 +16,12 @@ public class Recommend extends DataProcessing {
 
 	private String recommenderClass;
     private List<NewOption> options;
-    private List<ErrorDescription> errors;    
+    private List<ErrorSourceDescription> errors;    
    
 
 	public Recommend() {
     	this.options = new ArrayList<NewOption>();
-    	this.errors = new ArrayList<ErrorDescription>();
+    	this.errors = new ArrayList<ErrorSourceDescription>();
     }
 
     public String getAgentType() {	
@@ -45,10 +45,10 @@ public class Recommend extends DataProcessing {
         this.options.add(option);
     }
 
-    public List<ErrorDescription> getErrors() {
+    public List<ErrorSourceDescription> getErrors() {
 		return errors;
 	}
-	public void setErrors(List<ErrorDescription> errors) {
+	public void setErrors(List<ErrorSourceDescription> errors) {
 		this.errors = errors;
 	} 
     
@@ -67,11 +67,11 @@ public class Recommend extends DataProcessing {
 	}
 
 	@Override
-	public List<ErrorDescription> exportAllErrors() {
+	public List<ErrorSourceDescription> exportAllErrors() {
 		return this.errors;
 	}
 	@Override
-	public void importAllErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorSourceDescription> errors) {
 		this.errors = errors;
 	}
 

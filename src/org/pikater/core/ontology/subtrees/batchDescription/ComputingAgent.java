@@ -73,8 +73,8 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument trainingData can't be null");
     	}
     	DataSourceDescription trainingDataC = new DataSourceDescription(); 
-    	trainingDataC.setDataInputType(CoreConstants.SLOT_TRAINING_DATA);
-    	trainingDataC.setDataOutputType(trainingData.getDataOutputType());
+    	trainingDataC.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+    	trainingDataC.setOutputType(trainingData.getOutputType());
     	trainingDataC.setDataProvider(trainingData.getDataProvider());
     	
         this.trainingData = trainingDataC;
@@ -88,8 +88,8 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument testingData can't be null");
     	}
     	DataSourceDescription testingDataC = new DataSourceDescription(); 
-    	testingDataC.setDataInputType(CoreConstants.SLOT_TESTING_DATA);
-    	testingDataC.setDataOutputType(testingData.getDataOutputType());
+    	testingDataC.setInputType(CoreConstants.SLOT_TESTING_DATA);
+    	testingDataC.setOutputType(testingData.getOutputType());
     	testingDataC.setDataProvider(testingData.getDataProvider());
 
         this.testingData = testingDataC;
@@ -103,8 +103,8 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument validationData can't be null");
     	}
     	DataSourceDescription validationDataC = new DataSourceDescription(); 
-    	validationDataC.setDataInputType(CoreConstants.SLOT_VALIDATION_DATA);
-    	validationDataC.setDataOutputType(validationData.getDataOutputType());
+    	validationDataC.setInputType(CoreConstants.SLOT_VALIDATION_DATA);
+    	validationDataC.setOutputType(validationData.getOutputType());
     	validationDataC.setDataProvider(validationData.getDataProvider());
 
         this.validationData = validationDataC;
@@ -197,11 +197,11 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	}
 	
 	@Override
-	public List<ErrorDescription> exportAllErrors() {
-		return new ArrayList<ErrorDescription>();
+	public List<ErrorSourceDescription> exportAllErrors() {
+		return new ArrayList<ErrorSourceDescription>();
 	}
 	@Override
-	public void importAllErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorSourceDescription> errors) {
 		
 		if (errors != null && !errors.isEmpty()) {
 			throw new IllegalArgumentException("Argument errors can be only null");
@@ -215,32 +215,32 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (trainingData != null) {
 			DataSourceDescription trainingDataC = new DataSourceDescription();
-			trainingDataC.setDataInputType(CoreConstants.SLOT_TRAINING_DATA);
-			trainingDataC.setDataOutputType(trainingData.getDataOutputType());
+			trainingDataC.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+			trainingDataC.setOutputType(trainingData.getOutputType());
 			trainingDataC.setDataProvider(trainingData.getDataProvider());
 			slots.add(trainingDataC);
 		}
 		
 		if (testingData != null) {
 			DataSourceDescription testingDataC = new DataSourceDescription();
-			testingDataC.setDataInputType(CoreConstants.SLOT_TESTING_DATA);
-			testingDataC.setDataOutputType(testingData.getDataOutputType());
+			testingDataC.setInputType(CoreConstants.SLOT_TESTING_DATA);
+			testingDataC.setOutputType(testingData.getOutputType());
 			testingDataC.setDataProvider(testingData.getDataProvider());
 			slots.add(testingDataC);
 		}
 		
 		if (validationData != null) {
 			DataSourceDescription validationDataC = new DataSourceDescription();
-			validationDataC.setDataInputType(CoreConstants.SLOT_VALIDATION_DATA);
-			validationDataC.setDataOutputType(validationData.getDataOutputType());
+			validationDataC.setInputType(CoreConstants.SLOT_VALIDATION_DATA);
+			validationDataC.setOutputType(validationData.getOutputType());
 			validationDataC.setDataProvider(validationData.getDataProvider());
 			slots.add(validationDataC);
 		}
 		
 		if (evaluationMethod != null) {
 			DataSourceDescription evaluationMethodDataC = new DataSourceDescription();
-			evaluationMethodDataC.setDataInputType(CoreConstants.SLOT_EVALUATION_METHOD);
-			evaluationMethodDataC.setDataOutputType("evaluationMethod");
+			evaluationMethodDataC.setInputType(CoreConstants.SLOT_EVALUATION_METHOD);
+			evaluationMethodDataC.setOutputType("evaluationMethod");
 			evaluationMethodDataC.setDataProvider(evaluationMethod);
 			slots.add(evaluationMethodDataC);
 

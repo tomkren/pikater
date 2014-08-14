@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.recommend.Agent_Basic;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -46,8 +47,8 @@ public final class Input05 {
 		complex.setRecommender(recommender);
 
         //Set error provider
-        ErrorDescription errorDescription=new ErrorDescription();
-        errorDescription.setType("error");
+        ErrorSourceDescription errorDescription=new ErrorSourceDescription();
+        errorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
         errorDescription.setProvider(comAgent);
         recommender.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
         
@@ -55,7 +56,7 @@ public final class Input05 {
         // Note that the data provider is complex.
         // To save each iteration the data source would have to be comAgent
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setDataOutputType("Data");
+		computingDataSource.setOutputType("Data");
 		computingDataSource.setDataProvider(complex);
 
         FileDataSaver saver = new FileDataSaver();

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
@@ -111,11 +112,15 @@ public class ComputationDescription implements Concept {
 		
 		List<IComputationElement> elements = new ArrayList<IComputationElement>();
 		
-		for (DataSourceDescription descrI : dataProcessing.exportAllDataSourceDescriptions()) {
+		List<ISourceDescription> sources = new ArrayList<ISourceDescription>();
+		sources.addAll(dataProcessing.exportAllDataSourceDescriptions());
+		sources.addAll(dataProcessing.exportAllErrors());
+		
+		for (ISourceDescription descrI : sources) {
 			
-			IDataProvider dataProviderI = descrI.getDataProvider();
+			IComputationElement dataProviderI = descrI.exportSource();
 			if ( dataProviderI != null) {
-				elements.add(descrI.getDataProvider());				
+				elements.add(dataProviderI);				
 			}
 		}
 		
@@ -140,7 +145,7 @@ public class ComputationDescription implements Concept {
 			IComputationElement dataProcessing = fifo.get(0);
 			fifo.remove(0);
 			
-			dataProcessing.cloneDataSources();
+			dataProcessing.cloneSources();
 			
 			fifo.addAll(notNullElements(dataProcessing) );
 			
@@ -154,6 +159,7 @@ public class ComputationDescription implements Concept {
 		gene();
 		
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
+		uModel.setPriority(this.getPriority());
 		NewOptions optionsOnt = new NewOptions(this.getGlobalOptions());
 		uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
 		
@@ -201,18 +207,21 @@ public class ComputationDescription implements Concept {
 			UniversalOntology ontoI = finishedtUniOntologys.get(keyI);
 			IComputationElement processI = finishedDataProcessings.get(keyI);
 			
-			List<DataSourceDescription> slotsI = processI.exportAllDataSourceDescriptions();
+			List<ISourceDescription> slotsI = new ArrayList<ISourceDescription>();
+			slotsI.addAll(processI.exportAllDataSourceDescriptions());
+			slotsI.addAll(processI.exportAllErrors());
+			
 			System.out.println(processI.getClass());
-			for (DataSourceDescription slotIJ : slotsI) {
+			for (ISourceDescription slotIJ : slotsI) {
 	
 				UniversalElement uniElement = new UniversalElement();
 				UniversalOntology uniOntology =
-						finishedtUniOntologys.get(slotIJ.getDataProvider().getId());
+						finishedtUniOntologys.get(slotIJ.exportSource().getId());
 				uniElement.setOntologyInfo(uniOntology);
 				
 				UniversalConnector connector = new UniversalConnector();
-				connector.setInputDataType(slotIJ.getDataInputType());
-				connector.setOutputDataType(slotIJ.getDataOutputType());
+				connector.setInputDataType(slotIJ.getInputType());
+				connector.setOutputDataType(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
 				
 				ontoI.addInputSlot(connector);
@@ -275,7 +284,8 @@ public class ComputationDescription implements Concept {
 			DataProcessing processI = (DataProcessing) finishedDataProcessings.get(keyI);
 			UniversalOntology uOntoI = finishedtUniOntologys.get(keyI);
 			
-			List<DataSourceDescription> inputSlots = new ArrayList<DataSourceDescription>();
+			List<DataSourceDescription> inputDataSources = new ArrayList<DataSourceDescription>();
+			List<ErrorSourceDescription> inputErrorSources = new ArrayList<ErrorSourceDescription>();
 			
 			Collection<UniversalConnector> slotsI = uOntoI.getInputSlots();
 			for (UniversalConnector slotIJ : slotsI) {
@@ -284,12 +294,21 @@ public class ComputationDescription implements Concept {
 				IDataProvider dataProvider =  (IDataProvider)
 						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
 				
-				DataSourceDescription dataSourceDesc = new DataSourceDescription();
-				dataSourceDesc.setDataInputType(slotIJ.getInputDataType());
-				dataSourceDesc.setDataOutputType(slotIJ.getOutputDataType());
-				dataSourceDesc.setDataProvider(dataProvider);
-				
-				inputSlots.add(dataSourceDesc);
+				if (slotIJ.getOutputDataType().equals(CoreConstants.SLOT_ERRORS)) {
+					ErrorSourceDescription errorSourceDesc = new ErrorSourceDescription();
+					errorSourceDesc.setInputType(slotIJ.getInputDataType());
+					errorSourceDesc.setOutputType(slotIJ.getOutputDataType());
+					errorSourceDesc.importSource(dataProvider);
+					
+					inputErrorSources.add(errorSourceDesc);
+				} else {
+					DataSourceDescription dataSourceDesc = new DataSourceDescription();
+					dataSourceDesc.setInputType(slotIJ.getInputDataType());
+					dataSourceDesc.setOutputType(slotIJ.getOutputDataType());
+					dataSourceDesc.importSource(dataProvider);
+					
+					inputDataSources.add(dataSourceDesc);
+				}
 				
 				// TODO:
 				/*
@@ -300,7 +319,8 @@ public class ComputationDescription implements Concept {
 				*/
 			}
 			
-			processI.importAllDataSourceDescriptions(inputSlots);
+			processI.importAllDataSourceDescriptions(inputDataSources);
+			processI.importAllErrors(inputErrorSources);
 			
 			if (processI instanceof FileDataSaver) {
 				FileDataSaver saverOnto = (FileDataSaver)processI; 

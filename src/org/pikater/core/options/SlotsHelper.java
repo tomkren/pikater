@@ -15,24 +15,30 @@ public abstract class SlotsHelper
 	public static List<Slot> getIntputSlots_CARecSearchComplex()
 	{
 		Slot recomedSlot = new Slot();
-		recomedSlot.setSlotType(SlotTypes.RECOMMEND_TYPE);
+		recomedSlot.setSlotType(SlotTypes.DATA_RECOMMEND);
 		recomedSlot.setDataType(CoreConstants.SLOT_RECOMMEND);
 		recomedSlot.setDescription("Recommends an agent to use (its name).");
 		
 		Slot comAgentSlot = new Slot();
-		comAgentSlot.setSlotType(SlotTypes.AGENT_TYPE);
+		comAgentSlot.setSlotType(SlotTypes.DATA_AGENT);
 		comAgentSlot.setDataType(CoreConstants.SLOT_COMPUTATION_AGENT);
 		comAgentSlot.setDescription("Data computed by an agent.");
 		
 		Slot searchSlot = new Slot();
-		searchSlot.setSlotType(SlotTypes.SEARCH_TYPE);
+		searchSlot.setSlotType(SlotTypes.DATA_SEARCH);
 		searchSlot.setDataType(CoreConstants.SLOT_SEARCH);
 		searchSlot.setDescription("Parameters produced by search.");
+		
+		Slot comAgentErrorSlot = new Slot();
+		comAgentErrorSlot.setSlotType(SlotTypes.ERROR);
+		comAgentErrorSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		comAgentErrorSlot.setDescription("Errors from computing agent.");
 		
 		return Arrays.asList(
 				recomedSlot,
 				comAgentSlot,
-				searchSlot);
+				searchSlot,
+				comAgentErrorSlot);
 	}
 	
 	public static List<Slot> getOutputSlots_CARecSearchComplex()
@@ -43,19 +49,19 @@ public abstract class SlotsHelper
 	public static List<Slot> getInputSlots_CA()
 	{
 		Slot inputTrainingSlot = new Slot();
-		inputTrainingSlot.setSlotType(SlotTypes.DATA_TYPE);
+		inputTrainingSlot.setSlotType(SlotTypes.DATA);
 		inputTrainingSlot.setDataType(CoreConstants.SLOT_TRAINING_DATA);
 
 		Slot inputTestingSlot = new Slot();
-		inputTestingSlot.setSlotType(SlotTypes.DATA_TYPE);
+		inputTestingSlot.setSlotType(SlotTypes.DATA);
 		inputTestingSlot.setDataType(CoreConstants.SLOT_TESTING_DATA);
 
 		Slot inputValidationSlot = new Slot();
-		inputValidationSlot.setSlotType(SlotTypes.DATA_TYPE);
+		inputValidationSlot.setSlotType(SlotTypes.DATA);
 		inputValidationSlot.setDataType(CoreConstants.SLOT_VALIDATION_DATA);
 
 		Slot evaluationMethodSlot = new Slot();
-		evaluationMethodSlot.setSlotType(SlotTypes.EVALUATIONMETHOD_TYPE);
+		evaluationMethodSlot.setSlotType(SlotTypes.DATA_EVALUATIONMETHOD);
 		evaluationMethodSlot.setDataType(CoreConstants.SLOT_EVALUATION_METHOD);
 		
 		return Arrays.asList(
@@ -68,18 +74,23 @@ public abstract class SlotsHelper
 
 	public static List<Slot> getOutputSlots_CA()
 	{
-		Slot comAgentSlot = new Slot();
-		comAgentSlot.setSlotType(SlotTypes.AGENT_TYPE);
-		comAgentSlot.setDataType(CoreConstants.SLOT_COMPUTED_DATA);
-		comAgentSlot.setDescription("Data computed by an agent.");
+		Slot comAgentDataSlot = new Slot();
+		comAgentDataSlot.setSlotType(SlotTypes.DATA_AGENT);
+		comAgentDataSlot.setDataType(CoreConstants.SLOT_COMPUTED_DATA);
+		comAgentDataSlot.setDescription("Data computed by an agent.");
 		
-		return Arrays.asList(comAgentSlot);
+		Slot comAgentErrorSlot = new Slot();
+		comAgentErrorSlot.setSlotType(SlotTypes.ERROR);
+		comAgentErrorSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		comAgentErrorSlot.setDescription("Errors produced by computing agent.");
+		
+		return Arrays.asList(comAgentDataSlot, comAgentErrorSlot);
 	}
 
 	public static List<Slot> getOutputSlots_Search()
 	{
 		Slot searchSlot = new Slot();
-		searchSlot.setSlotType(SlotTypes.SEARCH_TYPE);
+		searchSlot.setSlotType(SlotTypes.DATA_SEARCH);
 		searchSlot.setDataType(CoreConstants.SLOT_SEARCH);
 		searchSlot.setDescription("Parameters produced by search.");
 		
@@ -89,7 +100,7 @@ public abstract class SlotsHelper
 	public static List<Slot> getOutputSlots_Recommend()
 	{
 		Slot recomedSlot = new Slot();
-		recomedSlot.setSlotType(SlotTypes.RECOMMEND_TYPE);
+		recomedSlot.setSlotType(SlotTypes.DATA_RECOMMEND);
 		recomedSlot.setDataType(CoreConstants.SLOT_RECOMMEND);
 		recomedSlot.setDescription("Recommends an agent to use (its name).");
 		
@@ -99,7 +110,7 @@ public abstract class SlotsHelper
 	public static List<Slot> getOutputSlots_EvaluationMethod()
 	{
 		Slot evaluationMethodSlot = new Slot();
-		evaluationMethodSlot.setSlotType(SlotTypes.EVALUATIONMETHOD_TYPE);
+		evaluationMethodSlot.setSlotType(SlotTypes.DATA_EVALUATIONMETHOD);
 		evaluationMethodSlot.setDataType(CoreConstants.SLOT_EVALUATION_METHOD);
 		return Arrays.asList(evaluationMethodSlot);
 	}
@@ -107,7 +118,7 @@ public abstract class SlotsHelper
 	public static List<Slot> getOutputSlot_FileInput()
 	{
 		Slot fileInputSlot = new Slot();
-		fileInputSlot.setSlotType(SlotTypes.DATA_TYPE);
+		fileInputSlot.setSlotType(SlotTypes.DATA);
 		fileInputSlot.setDataType(CoreConstants.SLOT_FILE_DATA);
 		return  Arrays.asList(fileInputSlot);
 	}	
@@ -115,7 +126,7 @@ public abstract class SlotsHelper
 	public static List<Slot> getInputSlot_FileSaver()
 	{
 		Slot fileSaverSlot = new Slot();
-		fileSaverSlot.setSlotType(SlotTypes.DATA_TYPE);
+		fileSaverSlot.setSlotType(SlotTypes.DATA);
 		fileSaverSlot.setDataType(CoreConstants.SLOT_FILE_DATA);
 		return  Arrays.asList(fileSaverSlot);
 	}

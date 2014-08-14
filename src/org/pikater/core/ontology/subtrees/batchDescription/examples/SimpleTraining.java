@@ -42,7 +42,7 @@ public class SimpleTraining {
 
         DataSourceDescription CAds = new DataSourceDescription();
         CAds.setDataProvider(ca);
-        CAds.setDataOutputType("trained");
+        CAds.setOutputType("trained");
 
         FileDataSaver fds = new FileDataSaver();
         fds.setDataSource(CAds);

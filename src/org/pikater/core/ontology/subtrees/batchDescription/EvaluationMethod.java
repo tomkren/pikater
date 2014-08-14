@@ -52,11 +52,11 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 	}
 	
 	@Override
-	public List<ErrorDescription> exportAllErrors() {
-		return new ArrayList<ErrorDescription>();
+	public List<ErrorSourceDescription> exportAllErrors() {
+		return new ArrayList<ErrorSourceDescription>();
 	}
 	@Override
-	public void importAllErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorSourceDescription> errors) {
 	}
 	
 	@Override

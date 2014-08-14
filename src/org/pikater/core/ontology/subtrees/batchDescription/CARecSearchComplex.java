@@ -18,7 +18,7 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 	private static final long serialVersionUID = -913470799010962236L;
 
 	private List<NewOption> options;
-    private List<ErrorDescription> errors;
+    private List<ErrorSourceDescription> errors;
 
     private Search search;
     private Recommend recommender;
@@ -27,13 +27,13 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
     public CARecSearchComplex() {
     	
     	this.options = new ArrayList<NewOption>();
-    	this.errors = new ArrayList<ErrorDescription>();
+    	this.errors = new ArrayList<ErrorSourceDescription>();
     }
     
-    public List<ErrorDescription> getErrors() {
+    public List<ErrorSourceDescription> getErrors() {
         return errors;
     }
-    public void setErrors(List<ErrorDescription> errors) {
+    public void setErrors(List<ErrorSourceDescription> errors) {
         this.errors = errors;
     }
 
@@ -81,11 +81,11 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 	}
 	
 	@Override
-	public List<ErrorDescription> exportAllErrors() {
+	public List<ErrorSourceDescription> exportAllErrors() {
 		return this.errors;
 	}
 	@Override
-	public void importAllErrors(List<ErrorDescription> errors) {
+	public void importAllErrors(List<ErrorSourceDescription> errors) {
 		this.errors = errors;
 	}
 	
@@ -94,25 +94,25 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		
 		DataSourceDescription searchSlot =
 				new DataSourceDescription();
-		searchSlot.setDataInputType(
+		searchSlot.setInputType(
 				CoreConstants.SLOT_SEARCH);
-		searchSlot.setDataOutputType(
+		searchSlot.setOutputType(
 				CoreConstants.SLOT_SEARCH);
 		searchSlot.setDataProvider(search);
 		
 		DataSourceDescription recommenderSlot =
 				new DataSourceDescription();
-		recommenderSlot.setDataInputType(
+		recommenderSlot.setInputType(
 				CoreConstants.SLOT_RECOMMEND);
-		recommenderSlot.setDataOutputType(
+		recommenderSlot.setOutputType(
 				CoreConstants.SLOT_RECOMMEND);
 		recommenderSlot.setDataProvider(recommender);
 		
 		DataSourceDescription computingAgentSlot =
 				new DataSourceDescription();
-		computingAgentSlot.setDataInputType(
+		computingAgentSlot.setInputType(
 				CoreConstants.SLOT_COMPUTATION_AGENT);
-		computingAgentSlot.setDataOutputType(
+		computingAgentSlot.setOutputType(
 				CoreConstants.SLOT_COMPUTATION_AGENT);
 		computingAgentSlot.setDataProvider((IDataProvider) computingAgent);
 
@@ -134,13 +134,13 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		
 		for (DataSourceDescription slotI : dataSourceDescriptions) {
 			
-			if (slotI.getDataInputType().equals(CoreConstants.SLOT_SEARCH)) {
+			if (slotI.getInputType().equals(CoreConstants.SLOT_SEARCH)) {
 				search = (Search) slotI.getDataProvider();
 			}
-			if (slotI.getDataInputType().equals(CoreConstants.SLOT_RECOMMEND)) {
+			if (slotI.getInputType().equals(CoreConstants.SLOT_RECOMMEND)) {
 				recommender = (Recommend) slotI.getDataProvider();
 			}
-			if (slotI.getDataInputType().equals(CoreConstants.SLOT_COMPUTATION_AGENT)) {
+			if (slotI.getInputType().equals(CoreConstants.SLOT_COMPUTATION_AGENT)) {
 				computingAgent = (IComputingAgent) slotI.getDataProvider();
 			}
 		}

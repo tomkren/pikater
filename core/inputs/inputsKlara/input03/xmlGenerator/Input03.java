@@ -31,7 +31,7 @@ public final class Input03 {
 		complex1.addOption(optionOutput1);
 
 		DataSourceDescription computingDataSource1 = new DataSourceDescription();
-		computingDataSource1.setDataOutputType("Data");
+		computingDataSource1.setOutputType("Data");
 		computingDataSource1.setDataProvider(complex1);
 
 
@@ -48,7 +48,7 @@ public final class Input03 {
 		complex2.addOption(optionOutput2);
 
 		DataSourceDescription computingDataSource2 = new DataSourceDescription();
-		computingDataSource2.setDataOutputType("Data");
+		computingDataSource2.setOutputType("Data");
 		computingDataSource2.setDataProvider(complex2);
 
 

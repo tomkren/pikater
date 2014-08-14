@@ -48,7 +48,7 @@ public final class Input06 {
 
 		// Data processed by dp are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setDataOutputType("Data");
+		computingDataSource.setOutputType("Data");
 		computingDataSource.setDataProvider(dp);
 		
         //Create new computing agent, add options and datasource that we have created above
@@ -61,7 +61,7 @@ public final class Input06 {
 		comAgent.setEvaluationMethod(evaluationMethod);
 		
 		DataSourceDescription computingAgentDataSource = new DataSourceDescription();
-		computingAgentDataSource.setDataOutputType("DataCA");
+		computingAgentDataSource.setOutputType("DataCA");
 		computingAgentDataSource.setDataProvider(comAgent);
 
         //Save labeled data

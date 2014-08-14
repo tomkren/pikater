@@ -21,12 +21,12 @@ public class DataProcessing implements IDataProvider {
 	private String agentType;
 	
 	private List<NewOption> options;
-	private List<ErrorDescription> errors;
+	private List<ErrorSourceDescription> errors;
 	private List<DataSourceDescription> dataSources;
 
 	public DataProcessing() {
 		this.options = new ArrayList<NewOption>();
-		this.errors = new ArrayList<ErrorDescription>();
+		this.errors = new ArrayList<ErrorSourceDescription>();
 		this.dataSources = new ArrayList<DataSourceDescription>();
 	}
 			
@@ -51,10 +51,10 @@ public class DataProcessing implements IDataProvider {
 		this.options = options;
 	}
 
-	public List<ErrorDescription> getErrors() {
+	public List<ErrorSourceDescription> getErrors() {
 		return errors;
 	}
-	public void setErrors(List<ErrorDescription> errors) {
+	public void setErrors(List<ErrorSourceDescription> errors) {
 		this.errors = errors;
 	}
 
@@ -84,17 +84,7 @@ public class DataProcessing implements IDataProvider {
 		}
 		this.options = options;
 	}
-	
-	@Override
-	public List<ErrorDescription> exportAllErrors() {
-		return this.errors;
-	}
-	@Override
-	public void importAllErrors(List<ErrorDescription> errors) {
-		this.errors = errors;
 		
-	}
-	
 	@Override
 	public List<DataSourceDescription> exportAllDataSourceDescriptions() {		
 		return this.dataSources;
@@ -103,6 +93,15 @@ public class DataProcessing implements IDataProvider {
 	public void importAllDataSourceDescriptions(
 			List<DataSourceDescription> dataSourceDescriptions) {
 		this.dataSources = dataSourceDescriptions;
+	}
+	
+	@Override
+	public List<ErrorSourceDescription> exportAllErrors() {
+		return this.errors;
+	}
+	@Override
+	public void importAllErrors(List<ErrorSourceDescription> errors) {
+		this.errors = errors;
 	}
 	
 	public int generateIDs(int lastUsedId) {
@@ -124,8 +123,8 @@ public class DataProcessing implements IDataProvider {
 			ontologyInfo.setAgentClass(getAgentType());
 		}
 		ontologyInfo.setOptions(new NewOptions(exportAllOptions()));
-		ontologyInfo.setErrors(exportAllErrors());
-		//ontologyInfo.addInputSlots(null);
+		//ontologyInfo.setErrors(exportAllErrors());
+
 		
 		return ontologyInfo;
 	}
@@ -161,8 +160,8 @@ public class DataProcessing implements IDataProvider {
 			dataProcess.setAgentType(uOntology.getAgentClass());	
 		}
 		dataProcess.importAllOptions(uOntology.getOptions().getOptions());
-		dataProcess.importAllErrors(
-				new ArrayList<ErrorDescription>(uOntology.getErrors()));
+		//dataProcess.importAllErrors(
+		//		new ArrayList<ErrorDescription>(uOntology.getErrors()));
 		
 		return dataProcess;
 	}
@@ -181,8 +180,8 @@ public class DataProcessing implements IDataProvider {
 			allOptionsCloned.add(optionI.clone());
 		}
 
-		List<ErrorDescription> errorsCloned = new ArrayList<ErrorDescription>();
-		for (ErrorDescription errorI : exportAllErrors()) {
+		List<ErrorSourceDescription> errorsCloned = new ArrayList<ErrorSourceDescription>();
+		for (ErrorSourceDescription errorI : exportAllErrors()) {
 			errorsCloned.add(errorI.clone());
 		}
 
@@ -201,8 +200,8 @@ public class DataProcessing implements IDataProvider {
 		return dataProcessing;
 	}
 
-	@Override
-	public void cloneDataSources() {
+
+	public void cloneSources() {
 		
 		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
 		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions()) {
@@ -210,6 +209,13 @@ public class DataProcessing implements IDataProvider {
 		}
 		
 		importAllDataSourceDescriptions(dataSourceCloned);
+		
+		List<ErrorSourceDescription> errorSourceCloned = new ArrayList<ErrorSourceDescription>();
+		for (ErrorSourceDescription errorSourceI : exportAllErrors()) {
+			errorSourceCloned.add(errorSourceI.clone());
+		}
+		
+		importAllErrors(errorSourceCloned);
 	}
 	
 	

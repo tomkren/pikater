@@ -2,10 +2,11 @@ package org.pikater.core.ontology.subtrees.agentInfo.slotTypes;
 
 public class SlotTypes {
 
-	public static String DATA_TYPE = "DATA_TYPE";
-	public static String ERROR_TYPE = "ERROR_TYPE";
-	public static String AGENT_TYPE = "AGENT_TYPE";
-	public static String SEARCH_TYPE = "SEARCH_TYPE";
-	public static String RECOMMEND_TYPE = "RECOMMEND_TYPE";
-	public static String EVALUATIONMETHOD_TYPE = "EVALUATIONMETHOD_TYPE";
+	public static String ERROR = "ERROR_TYPE";
+	
+	public static String DATA = "DATA_TYPE";
+	public static String DATA_AGENT = "AGENT_TYPE";
+	public static String DATA_SEARCH = "SEARCH_TYPE";
+	public static String DATA_RECOMMEND = "RECOMMEND_TYPE";
+	public static String DATA_EVALUATIONMETHOD = "EVALUATIONMETHOD_TYPE";
 }

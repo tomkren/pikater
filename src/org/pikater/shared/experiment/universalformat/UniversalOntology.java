@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.ErrorDescription;
+import org.pikater.core.ontology.subtrees.batchDescription.ErrorSourceDescription;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 
 public class UniversalOntology {
@@ -19,12 +19,12 @@ public class UniversalOntology {
 	 */
 	private final Collection<UniversalConnector> inputSlots;
 
-	private final Collection<ErrorDescription> errors;
+	private final Collection<ErrorSourceDescription> errors;
 	private NewOptions options;
 
 	public UniversalOntology() {
 		this.inputSlots = new ArrayList<UniversalConnector>();
-		this.errors = new ArrayList<ErrorDescription>();
+		this.errors = new ArrayList<ErrorSourceDescription>();
 		this.options = new NewOptions();
 	}
 
@@ -71,11 +71,11 @@ public class UniversalOntology {
 		}
 	}
 
-	public Collection<ErrorDescription> getErrors() {
+	public Collection<ErrorSourceDescription> getErrors() {
 		return errors;
 	}
 
-	public void setErrors(Collection<ErrorDescription> errors) {
+	public void setErrors(Collection<ErrorSourceDescription> errors) {
 		this.errors.clear();
 		this.errors.addAll(errors);
 	}

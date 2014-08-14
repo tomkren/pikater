@@ -145,25 +145,25 @@ public class StartupAndQuitListener implements ServletContextListener
 						switch(type)
 						{
 							case CHOOSE:
-								name = "Klobása";
+								name = "Klob��sa";
 								break;
 							case COMPUTE:
-								name = "Vepřová kýta";
+								name = "Vep��ov�� k��ta";
 								break;
 							case PROCESS_DATA:
 								name = "Chleba";
 								break;
 							case OPTION:
-								name = "Bobkový list";
+								name = "Bobkov�� list";
 								break;
 							case INPUT:
 								name = "Brambory";
 								break;
 							case MISC:
-								name = "Pepř";
+								name = "Pep��";
 								break;
 							case OUTPUT:
-								name = "Sůl";
+								name = "S��l";
 								break;
 							case SEARCH:
 								name = "Cibule";
@@ -210,12 +210,12 @@ public class StartupAndQuitListener implements ServletContextListener
 						
 						Slot slotInput_test = new Slot();
 						slotInput_test.setDataType("pokus");
-						slotInput_test.setSlotType(SlotTypes.DATA_TYPE);
+						slotInput_test.setSlotType(SlotTypes.DATA);
 						slotInput_test.setDescription("A general test input slot.");
 						
 						Slot slotOutput_test = new Slot();
 						slotOutput_test.setDataType("pokus");
-						slotOutput_test.setSlotType(SlotTypes.DATA_TYPE);
+						slotOutput_test.setSlotType(SlotTypes.DATA);
 						slotOutput_test.setDescription("A general test output slot.");
 
 						agentInfo.setOptions(options);

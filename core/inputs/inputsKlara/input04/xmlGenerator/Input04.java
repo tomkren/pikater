@@ -55,14 +55,15 @@ public final class Input04 {
         complex.setSearch(search);
 
         //Set error provider
-        ErrorDescription errorDescription=new ErrorDescription();
-        errorDescription.setType("error");
+        ErrorSourceDescription errorDescription=new ErrorSourceDescription();
+        errorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
+        errorDescription.setInputType(CoreConstants.SLOT_ERRORS);
         errorDescription.setProvider(comAgent);
         complex.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
 
         // error from search to recommender
-        ErrorDescription searchErrorDescription=new ErrorDescription();
-        searchErrorDescription.setType("error");
+        ErrorSourceDescription searchErrorDescription=new ErrorSourceDescription();
+        searchErrorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
         searchErrorDescription.setProvider(search);
         recommender.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
 
@@ -71,7 +72,7 @@ public final class Input04 {
         // Note that the data provider is complex.
         // To save each iteration the data source would have to be comAgent
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setDataOutputType("Data");
+		computingDataSource.setOutputType(CoreConstants.SLOT_DATA);
 		computingDataSource.setDataProvider(complex);
 
         FileDataSaver saver = new FileDataSaver();

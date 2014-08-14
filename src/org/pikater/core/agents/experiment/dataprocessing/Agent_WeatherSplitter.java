@@ -62,26 +62,26 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		agentInfo.setDescription("Splits weather data by prediction.");
 
 		Slot i1 = new Slot();
-		i1.setSlotType(SlotTypes.DATA_TYPE);
+		i1.setSlotType(SlotTypes.DATA);
 		i1.setDataType("firstInput");
 		i1.setDescription("First weather input.");
 		Slot i2 = new Slot();
-		i2.setSlotType(SlotTypes.DATA_TYPE);
+		i2.setSlotType(SlotTypes.DATA);
 		i2.setDataType("secondInput");
 		i2.setDescription("Second weather input.");
 		
 		agentInfo.setInputSlots(Arrays.asList(i1, i2));
 
 		Slot o_sunny = new Slot();
-		o_sunny.setSlotType(SlotTypes.DATA_TYPE);
+		o_sunny.setSlotType(SlotTypes.DATA);
 		o_sunny.setDataType("sunnyOutput");
 		o_sunny.setDescription("Sunny output.");
 		Slot o_overcast = new Slot();
-		o_overcast.setSlotType(SlotTypes.DATA_TYPE);
+		o_overcast.setSlotType(SlotTypes.DATA);
 		o_overcast.setDataType("overcastOutput");
 		o_overcast.setDescription("Overcast output.");
 		Slot o_rainy = new Slot();
-		o_rainy.setSlotType(SlotTypes.DATA_TYPE);
+		o_rainy.setSlotType(SlotTypes.DATA);
 		o_rainy.setDataType("rainyOutput");
 		o_rainy.setDescription("Rainy output.");
 

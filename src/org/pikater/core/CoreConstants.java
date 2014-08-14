@@ -36,6 +36,8 @@ public class CoreConstants {
 	public static String SLOT_RECOMMEND = "recommender";
 	public static String SLOT_COMPUTATION_AGENT = "computingAgent";
 	
+	public static String SLOT_ERRORS = "errors";
+	
 	public static String SLOT_TRAINING_DATA = "trainingData";
 	public static String SLOT_TESTING_DATA = "testingData";
 	public static String SLOT_VALIDATION_DATA = "validationData";

@@ -5,30 +5,30 @@ import java.util.List;
 
 public class ErrorDescriptions {
 
-	private List<ErrorDescription> errors;
+	private List<ErrorSourceDescription> errors;
 
 	public ErrorDescriptions() {
-		this.errors = new ArrayList<ErrorDescription>();
+		this.errors = new ArrayList<ErrorSourceDescription>();
 	}
 	
-	public ErrorDescriptions(List<ErrorDescription> errors) {
+	public ErrorDescriptions(List<ErrorSourceDescription> errors) {
 		this.errors = errors; 
 	}
 	
-	public List<ErrorDescription> getErrors() {
+	public List<ErrorSourceDescription> getErrors() {
 		return errors;
 	}
-	public void setErrors(List<ErrorDescription> errors) {
+	public void setErrors(List<ErrorSourceDescription> errors) {
 		this.errors = errors;
 	}
-	public void addErrors(ErrorDescription error) {
+	public void addErrors(ErrorSourceDescription error) {
 		this.errors.add(error);
 	}
 	
 	public ErrorDescriptions clone() {
 		
 		ErrorDescriptions errorsOnt = new ErrorDescriptions();
-		for (ErrorDescription errorI : errors) {
+		for (ErrorSourceDescription errorI : errors) {
 			errorsOnt.addErrors(errorI.clone());
 		}
 		

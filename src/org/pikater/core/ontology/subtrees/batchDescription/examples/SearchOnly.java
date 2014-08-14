@@ -45,11 +45,11 @@ public class SearchOnly {
         CARecSearchComplex crsc = new CARecSearchComplex();
         crsc.setComputingAgent(ca);
 
-        ErrorDescription ed = new ErrorDescription();
+        ErrorSourceDescription ed = new ErrorSourceDescription();
         ed.setProvider(ca);
-        ed.setType("mse");
+        ed.setOutputType("mse");
 
-        List<ErrorDescription> eds = new ArrayList<ErrorDescription>();
+        List<ErrorSourceDescription> eds = new ArrayList<ErrorSourceDescription>();
         eds.add(ed);
 
         crsc.setErrors(eds);
@@ -71,7 +71,7 @@ public class SearchOnly {
 
         DataSourceDescription CAds = new DataSourceDescription();
         CAds.setDataProvider(ca);
-        CAds.setDataOutputType("trained");
+        CAds.setOutputType("trained");
 
         FileDataSaver fds = new FileDataSaver();
         fds.setDataSource(CAds);

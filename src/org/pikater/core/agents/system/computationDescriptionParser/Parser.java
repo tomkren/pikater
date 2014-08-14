@@ -95,7 +95,7 @@ public class Parser {
         child.addInput(connectionName,fileBuffer);
     }
 
-    public void parseErrors(ErrorDescription errorDescription, ComputationNode child) {
+    public void parseErrors(ErrorSourceDescription errorDescription, ComputationNode child) {
         if (errorDescription==null) return;
         agent.log("Ontology Parser - IErrorProvider");
         ComputingAgent errorProvider=(ComputingAgent)errorDescription.getProvider();
@@ -106,8 +106,8 @@ public class Parser {
         }
         ComputationNode errorNode=alreadyProcessed.get(errorProvider.getId());
         StandardBuffer<ErrorEdge> buffer=new StandardBuffer<ErrorEdge>(errorNode,child);
-        errorNode.addBufferToOutput(errorDescription.getType(), buffer);
-        child.addInput(errorDescription.getType(),buffer);
+        errorNode.addBufferToOutput(errorDescription.getOutputType(), buffer);
+        child.addInput(errorDescription.getOutputType(),buffer);
         buffer.block();
     }
 
@@ -232,7 +232,7 @@ public class Parser {
         return computingNode;
     }
 
-    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorDescription> errors,List<NewOption> childOptions, int batchId) {
+    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorSourceDescription> errors,List<NewOption> childOptions, int batchId) {
         agent.log("Ontology Parser - Search");
 
         if (!alreadyProcessed.containsKey(search.getId()))
@@ -255,7 +255,7 @@ public class Parser {
         computationGraph.addNode(searchNode);
         alreadyProcessed.put(search.getId(),searchNode);
         addOptionsToInputs(searchNode, search.getOptions());
-        for (ErrorDescription error:errors)
+        for (ErrorSourceDescription error:errors)
         {
             parseErrors(error,searchNode);
         }
@@ -287,7 +287,7 @@ public class Parser {
         training.setTarget(recNode);
         recNode.addInput("training",training);
 
-        for (ErrorDescription error:recommender.getErrors()) {
+        for (ErrorSourceDescription error:recommender.getErrors()) {
             parseErrors(error, recNode);
         }
 

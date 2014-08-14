@@ -18,8 +18,8 @@ public interface IComputationElement extends Concept {
 	public List<NewOption> exportAllOptions();
 	public void importAllOptions(List<NewOption> options);
 	
-	public List<ErrorDescription> exportAllErrors();
-	public void importAllErrors(List<ErrorDescription> errors);
+	public List<ErrorSourceDescription> exportAllErrors();
+	public void importAllErrors(List<ErrorSourceDescription> errors);
 	
 	public List<DataSourceDescription> exportAllDataSourceDescriptions();
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions);
@@ -30,5 +30,5 @@ public interface IComputationElement extends Concept {
 	public boolean equalsElement(IComputationElement element);
 	
 	public IComputationElement clone();
-	public void cloneDataSources();
+	public void cloneSources();
 }
