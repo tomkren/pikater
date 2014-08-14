@@ -123,8 +123,6 @@ public class DataProcessing implements IDataProvider {
 			ontologyInfo.setAgentClass(getAgentType());
 		}
 		ontologyInfo.setOptions(new NewOptions(exportAllOptions()));
-		//ontologyInfo.setErrors(exportAllErrors());
-
 		
 		return ontologyInfo;
 	}
@@ -160,8 +158,6 @@ public class DataProcessing implements IDataProvider {
 			dataProcess.setAgentType(uOntology.getAgentClass());	
 		}
 		dataProcess.importAllOptions(uOntology.getOptions().getOptions());
-		//dataProcess.importAllErrors(
-		//		new ArrayList<ErrorDescription>(uOntology.getErrors()));
 		
 		return dataProcess;
 	}
