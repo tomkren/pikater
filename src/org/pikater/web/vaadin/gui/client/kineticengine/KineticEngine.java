@@ -425,39 +425,6 @@ public final class KineticEngine
 	// IMPLEMENTATION INDEPENDENT PUBLIC INTERFACE
 	
 	/*
-	 * Box drag routines. 
-	 */
-	
-	public void fromEdgesToBaseLines(Set<EdgeGraphItemClient> edges, BoxGraphItemClient movingBox)
-	{
-		for(EdgeGraphItemClient edge : edges)
-		{
-			edge.endPointDrag_toBaseLine(movingBox != null ? movingBox : edge.getSelectedEndpoint());
-		}
-		draw(EngineComponent.LAYER_EDGES);
-		draw(EngineComponent.LAYER_SELECTION);
-	}
-	
-	public void updateBaseLines(Set<EdgeGraphItemClient> edges, BoxGraphItemClient movingBox)
-	{
-		for(EdgeGraphItemClient edge : edges)
-		{
-			edge.endPointDrag_updateBaseLine(movingBox != null ? movingBox : edge.getSelectedEndpoint());
-		}
-		draw(EngineComponent.LAYER_EDGES);
-	}
-	
-	public void fromBaseLinesToEdges(Set<EdgeGraphItemClient> edges)
-	{
-		for(EdgeGraphItemClient edge : edges)
-		{
-			edge.endPointDrag_toEdge();
-		}
-		draw(EngineComponent.LAYER_EDGES);
-		draw(EngineComponent.LAYER_SELECTION);
-	}
-	
-	/*
 	 * Module related public routines.
 	 */
 	
