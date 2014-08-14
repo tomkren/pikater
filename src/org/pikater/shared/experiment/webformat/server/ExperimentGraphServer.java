@@ -352,16 +352,16 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 										connector.setFromElement(uniBox);
 										connector.setOutputDataType(outputSlot.getDataType());
 										connector.setInputDataType(inputSlot.getDataType());
-										neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+										neighbourUniBox.getOntologyInfo().addInputDataSlot(connector);
 									}
 								}
 							}
-							if(neighbourUniBox.getOntologyInfo().getInputSlots().isEmpty()) // no slot connections are defined
+							if(neighbourUniBox.getOntologyInfo().getInputDataSlots().isEmpty()) // no slot connections are defined
 							{
 								// at least remember the edge, with no slot connections whatsoever
 								UniversalConnector connector = new UniversalConnector();
 								connector.setFromElement(uniBox);
-								neighbourUniBox.getOntologyInfo().addInputSlot(connector);
+								neighbourUniBox.getOntologyInfo().addInputDataSlot(connector);
 							}
 						}
 					}
@@ -457,7 +457,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				// then convert all edges
 				for(UniversalElement element : uniFormat.getAllElements())
 				{
-					for(UniversalConnector edge : element.getOntologyInfo().getInputSlots())
+					for(UniversalConnector edge : element.getOntologyInfo().getInputDataSlots())
 					{
 						/*
 						 * SERIALIZATION SCHEME:

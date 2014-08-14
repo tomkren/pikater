@@ -17,14 +17,13 @@ public class UniversalOntology {
 	 * List of edges that lead to the {@link UniversalElement element} containing
 	 * this instance.
 	 */
-	private final Collection<UniversalConnector> inputSlots;
-
-	private final Collection<ErrorSourceDescription> errors;
+	private final Collection<UniversalConnector> inputDataSlots;
+	private final Collection<ErrorSourceDescription> inputErrorSlots;
 	private NewOptions options;
 
 	public UniversalOntology() {
-		this.inputSlots = new ArrayList<UniversalConnector>();
-		this.errors = new ArrayList<ErrorSourceDescription>();
+		this.inputDataSlots = new ArrayList<UniversalConnector>();
+		this.inputErrorSlots = new ArrayList<ErrorSourceDescription>();
 		this.options = new NewOptions();
 	}
 
@@ -72,27 +71,27 @@ public class UniversalOntology {
 	}
 
 	public Collection<ErrorSourceDescription> getErrors() {
-		return errors;
+		return inputErrorSlots;
 	}
 
 	public void setErrors(Collection<ErrorSourceDescription> errors) {
-		this.errors.clear();
-		this.errors.addAll(errors);
+		this.inputErrorSlots.clear();
+		this.inputErrorSlots.addAll(errors);
 	}
 
 	/**
 	 * Gets edges that lead to the {@link UniversalElement element} containing
 	 * this instance.
 	 */
-	public Collection<UniversalConnector> getInputSlots() {
-		return inputSlots;
+	public Collection<UniversalConnector> getInputDataSlots() {
+		return inputDataSlots;
 	}
 
-	public void addInputSlot(UniversalConnector connector) {
-		inputSlots.add(connector);
+	public void addInputDataSlot(UniversalConnector connector) {
+		inputDataSlots.add(connector);
 	}
 
-	public void addInputSlots(List<UniversalConnector> connectors) {
-		inputSlots.addAll(connectors);
+	public void addInputDataSlots(List<UniversalConnector> connectors) {
+		inputDataSlots.addAll(connectors);
 	}
 }

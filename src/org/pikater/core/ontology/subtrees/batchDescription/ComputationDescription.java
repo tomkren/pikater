@@ -224,7 +224,7 @@ public class ComputationDescription implements Concept {
 				connector.setOutputDataType(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
 				
-				ontoI.addInputSlot(connector);
+				ontoI.addInputDataSlot(connector);
 			}
 			
 			UniversalElement elementI =  new UniversalElement();
@@ -272,7 +272,7 @@ public class ComputationDescription implements Concept {
 				finishedDataProcessings.put(
 						uOntology.getId(), ontology);
 				
-				for (UniversalConnector connectorI : uElement.getOntologyInfo().getInputSlots()) {
+				for (UniversalConnector connectorI : uElement.getOntologyInfo().getInputDataSlots()) {
 					fifo.add( connectorI.getFromElement());
 				}
 			}
@@ -287,7 +287,7 @@ public class ComputationDescription implements Concept {
 			List<DataSourceDescription> inputDataSources = new ArrayList<DataSourceDescription>();
 			List<ErrorSourceDescription> inputErrorSources = new ArrayList<ErrorSourceDescription>();
 			
-			Collection<UniversalConnector> slotsI = uOntoI.getInputSlots();
+			Collection<UniversalConnector> slotsI = uOntoI.getInputDataSlots();
 			for (UniversalConnector slotIJ : slotsI) {
 				
 				UniversalElement uElement = slotIJ.getFromElement();

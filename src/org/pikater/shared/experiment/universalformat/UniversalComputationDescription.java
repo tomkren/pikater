@@ -135,7 +135,7 @@ public class UniversalComputationDescription
 		}
 		for(UniversalElement element : allElements)
 		{
-			for(UniversalConnector connector : element.getOntologyInfo().getInputSlots())
+			for(UniversalConnector connector : element.getOntologyInfo().getInputDataSlots())
 			{
 				if(connector.getFromElement() == null)
 				{
