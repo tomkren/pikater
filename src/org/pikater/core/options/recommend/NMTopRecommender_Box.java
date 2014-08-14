@@ -17,6 +17,7 @@ public class NMTopRecommender_Box {
 		agentInfo.setDescription("NMTop Recommend");
 		
 		//Slot Definition
+		agentInfo.setInputSlots(SlotsHelper.getInputSlots_Recommend());
 		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Recommend());
 
 		return agentInfo;

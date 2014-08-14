@@ -16,6 +16,7 @@ public class BasicRecommend_Box {
 		agentInfo.setName("Basic");
 		agentInfo.setDescription("Basic Recommend");
 		
+		agentInfo.setInputSlots(SlotsHelper.getInputSlots_Recommend());
 		agentInfo.setOutputSlots(SlotsHelper.getOutputSlots_Recommend());
 		
 		return agentInfo;

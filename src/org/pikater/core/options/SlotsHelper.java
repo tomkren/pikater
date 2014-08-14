@@ -96,6 +96,16 @@ public abstract class SlotsHelper
 		
 		return Arrays.asList(searchSlot);
 	}
+	
+	public static List<Slot> getInputSlots_Recommend()
+	{
+		Slot recomedSlot = new Slot();
+		recomedSlot.setSlotType(SlotTypes.ERROR);
+		recomedSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		recomedSlot.setDescription("Agent errors.");
+		
+		return Arrays.asList(recomedSlot);
+	}
 
 	public static List<Slot> getOutputSlots_Recommend()
 	{
