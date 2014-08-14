@@ -11,6 +11,10 @@ public class TypeRestriction implements IRestriction
 	
 	private List<ValueType> types;
 
+	/**
+	 * Should only be used internally and by Jade.
+	 */
+	@Deprecated
 	public TypeRestriction()
 	{
 		this.types = new ArrayList<ValueType>();
@@ -18,7 +22,7 @@ public class TypeRestriction implements IRestriction
 	public TypeRestriction(List<ValueType> types)
 	{
 		this();
-		setTypes(types);
+		this.types.addAll(types);
 	}
 	
 	public List<ValueType> getTypes()
@@ -31,6 +35,9 @@ public class TypeRestriction implements IRestriction
 		this.types.addAll(types);
 	}
 	
+	/*
+	 * Some convenience interface.
+	 */
 	public void addType(ValueType type)
 	{
 		types.add(type);
@@ -40,6 +47,9 @@ public class TypeRestriction implements IRestriction
 		return isValid() && (obj instanceof ValueType) && types.contains((ValueType) obj);
 	}
 	
+	/*
+	 * Inherited interface.
+	 */
 	@Override
 	public TypeRestriction clone()
 	{

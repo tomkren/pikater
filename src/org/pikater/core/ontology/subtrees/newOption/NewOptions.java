@@ -101,7 +101,7 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
     @Override
 	public void mergeWith(IMergeable other)
 	{
-    	NewOptions otherOptionsWrapper = (NewOptions) other; 
+    	NewOptions otherOptionsWrapper = (NewOptions) other;
     	for(NewOption optionInOther : otherOptionsWrapper.getOptions())
 		{
 			NewOption optionLocal = fetchOptionByName(optionInOther.getName());

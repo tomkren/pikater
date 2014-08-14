@@ -21,18 +21,22 @@ public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable
 	private List<Value> values;
 	
 	/**
-	 * Should only be used by JADE.
+	 * Should only be used internally and by JADE.
 	 */
 	@Deprecated
-	public ValuesForOption() {}
+	public ValuesForOption()
+	{
+		this.values = new ArrayList<Value>();
+	}
     public ValuesForOption(Value value)
     {
-        this.values=new ArrayList<Value>();
+    	this();
         this.values.add(value);
     }
 	public ValuesForOption(List<Value> values)
 	{
-		this.values = values;
+		this();
+		this.values.addAll(values);
 	}
 	
 	public List<Value> getValues() {
@@ -42,6 +46,9 @@ public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable
 		this.values = values;
 	}
 	
+	/*
+	 * Some convenience interface.
+	 */
 	public void addValue(Value value)
 	{
 		this.values.add(value);
@@ -67,6 +74,9 @@ public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable
 		return false;
 	}
 	
+	/*
+	 * Inherited interface.
+	 */
 	@Override
 	public ValuesForOption clone()
 	{

@@ -12,7 +12,6 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction
 import org.pikater.core.ontology.subtrees.newOption.values.*;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,31 +53,7 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	 */
 	public NewOption(String name, IValueData defaultValue)
 	{
-		this(
-				name,
-				new Value(defaultValue),
-				new TypeRestriction(
-						new ArrayList<ValueType>(Arrays.asList(
-								new ValueType(defaultValue)
-								))));
-	}
-	/**
-	 * Creates an option with a single predefined {@link QuestionMarkRange} value. Value type and restrictions are inferred.
-	 * @param name
-	 * @param defaultValue
-	 */
-	public NewOption(String name, QuestionMarkRange defaultValue)
-	{
-		this(name, defaultValue, defaultValue.getUserDefinedRestriction());
-	}
-	/**
-	 * Creates an option with a single predefined {@link QuestionMarkSet} value. Value type and restrictions are inferred.
-	 * @param name
-	 * @param defaultValue
-	 */
-	public NewOption(String name, QuestionMarkSet defaultValue)
-	{
-		this(name, defaultValue, defaultValue.getUserDefinedRestriction());
+		this(name, new Value(defaultValue));
 	}
 	/**
 	 * Creates an option with a single predefined value. Value 
@@ -103,6 +78,24 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 		this(name, new Value(defaultValue, setRestriction));
 	}
 	/**
+	 * Creates an option with a single predefined {@link QuestionMarkRange} value. Value type and restrictions are inferred.
+	 * @param name
+	 * @param defaultValue
+	 */
+	public NewOption(String name, QuestionMarkRange defaultValue)
+	{
+		this(name, defaultValue, defaultValue.getUserDefinedRestriction());
+	}
+	/**
+	 * Creates an option with a single predefined {@link QuestionMarkSet} value. Value type and restrictions are inferred.
+	 * @param name
+	 * @param defaultValue
+	 */
+	public NewOption(String name, QuestionMarkSet defaultValue)
+	{
+		this(name, defaultValue, defaultValue.getUserDefinedRestriction());
+	}
+	/**
 	 * Creates an option with a single predefined value. Value 
 	 * type and restrictions are inferred from the arguments.
 	 * @param name
@@ -110,13 +103,17 @@ public class NewOption implements Concept, IMergeable, IWekaItem
      */
 	public NewOption(String name, Value value)
 	{
-		this(
-				name,
-				value,
-				new TypeRestriction(
-						new ArrayList<ValueType>(Arrays.asList(
-								value.getType()
-								))));
+		this(name, value, value.getType());
+	}
+	/**
+	 * Creates an option with a single predefined value. Value 
+	 * type and restrictions are inferred from the arguments.
+	 * @param name
+	 * @param value
+     */
+	public NewOption(String name, Value value, ValueType... types)
+	{
+		this(name, value, new TypeRestriction(Arrays.asList(types)));
 	}
 	/**
 	 * Creates an option with a single predefined value. Value type is inferred, restriction is given.
@@ -126,13 +123,7 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	 */
 	public NewOption(String name, Value value, TypeRestriction restriction)
 	{
-		this(
-				name,
-				new ArrayList<Value>(Arrays.asList(
-						value)),
-				new ArrayList<TypeRestriction>(Arrays.asList(
-						restriction))
-						);
+		this(name, Arrays.asList(value), Arrays.asList(restriction));
 	}
 	/**
 	 * Creates an option with multiple values.
@@ -144,7 +135,7 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 		this(name, new ValuesForOption(values), new RestrictionsForOption(restrictions));
 	}
 	/**
-	 * More or less a copy-constructor; for internal use. 
+	 * More or less a copy-constructor; for internal use.
 	 * @param name
 	 * @param values
 	 * @param restrictions
@@ -329,13 +320,31 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 		}
 		else
 		{
+			// first determine basic information & references
 			Value currentOptionValue = toSingleValue();
 			Value otherOptionValue = otherOption.toSingleValue();
-			if(currentOptionValue.getType().getDefaultValue().getClass().equals(
-					otherOptionValue.getType().getDefaultValue().getClass()))
+			
+			// then make sure that both options have the same type selected
+			if(!currentOptionValue.getType().equals(otherOptionValue.getType()))
 			{
-				currentOptionValue.setCurrentValue(otherOptionValue.getCurrentValue());
+				boolean typeFound = false;
+				for(ValueType currentOptionType : fetchValueRestrictionForIndex(0).getTypes())
+				{
+					if(currentOptionType.equals(otherOptionValue.getType()))
+					{
+						currentOptionValue.setType(currentOptionType);
+						typeFound = true;
+						break;
+					}
+				}
+				if(!typeFound)
+				{
+					throw new IllegalArgumentException("The provided option's type is not known to this option");
+				}
 			}
+			
+			// and finally, copy the other option's current value
+			currentOptionValue.setCurrentValue(otherOptionValue.getCurrentValue());
 		}
 	}
 	@Override

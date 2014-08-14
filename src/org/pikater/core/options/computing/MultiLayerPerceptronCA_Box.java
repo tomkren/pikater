@@ -47,12 +47,11 @@ public class MultiLayerPerceptronCA_Box {
 		# Momentum Rate for the back-propagation algorithm., Default = 0.2
 		$ M float 1 1 r 0 0.9
 		**/
-		RangeRestriction rangeRestrictionM = new RangeRestriction(new DoubleValue(0.0), new DoubleValue(0.9));
-		NewOption optionM = new NewOption("M", new DoubleValue(0.2), rangeRestrictionM); 
-		optionM.getValueRestrictions().fetchByIndex(0).addType(new ValueType(
-				new QuestionMarkRange(rangeRestrictionM.getMinValue(), rangeRestrictionM.getMaxValue(), 10),
-				rangeRestrictionM
-		));
+		RangeRestriction rangeM = new RangeRestriction(new DoubleValue(0.0), new DoubleValue(0.9));
+		NewOption optionM = new NewOption("M", 
+				new Value(new DoubleValue(0.2), rangeM),
+				new ValueType(new QuestionMarkRange(rangeM.getMinValue(), rangeM.getMaxValue(), 10), rangeM)
+		);
 		optionM.setDescription("Momentum Rate for the backpropagation algorithm");
 
 		

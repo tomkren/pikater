@@ -15,13 +15,18 @@ public class RestrictionsForOption implements Concept, ICloneable, IValidated
 	
 	private List<TypeRestriction> restrictions;
 	
+	/**
+	 * Should only be used internally and by JADE.
+	 */
+	@Deprecated
 	public RestrictionsForOption()
 	{
 		this.restrictions = new ArrayList<TypeRestriction>();
 	}
 	public RestrictionsForOption(List<TypeRestriction> restrictions)
 	{
-		this.restrictions = restrictions;
+		this();
+		this.restrictions.addAll(restrictions);
 	}
 
 	public List<TypeRestriction> getRestrictions()
@@ -33,6 +38,9 @@ public class RestrictionsForOption implements Concept, ICloneable, IValidated
 		this.restrictions = restrictions;
 	}
 	
+	/*
+	 * Some convenience interface.
+	 */
 	public TypeRestriction fetchByIndex(int index)
 	{
 		return restrictions.get(index);
@@ -46,6 +54,9 @@ public class RestrictionsForOption implements Concept, ICloneable, IValidated
 		return restrictions.size();
 	}
 	
+	/*
+	 * Inherited interface.
+	 */
 	@Override
 	public RestrictionsForOption clone()
 	{
