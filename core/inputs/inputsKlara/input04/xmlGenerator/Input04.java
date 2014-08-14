@@ -57,7 +57,6 @@ public final class Input04 {
         //Set error provider
         ErrorSourceDescription errorDescription=new ErrorSourceDescription();
         errorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
-        errorDescription.setInputType(CoreConstants.SLOT_ERRORS);
         errorDescription.setProvider(comAgent);
         complex.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
 

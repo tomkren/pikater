@@ -123,8 +123,8 @@
                       <dataSources/>
                       <fileURI>weather.arff</fileURI>
                     </dataProvider>
-                    <dataOutputType>fileData</dataOutputType>
-                    <dataInputType>trainingData</dataInputType>
+                    <outputType>fileData</outputType>
+                    <inputType>trainingData</inputType>
                   </trainingData>
                   <testingData>
                     <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -134,13 +134,13 @@
                       <dataSources/>
                       <fileURI>weather.arff</fileURI>
                     </dataProvider>
-                    <dataOutputType>fileData</dataOutputType>
-                    <dataInputType>testingData</dataInputType>
+                    <outputType>fileData</outputType>
+                    <inputType>testingData</inputType>
                   </testingData>
                 </computingAgent>
               </dataProvider>
-              <dataOutputType>computedData</dataOutputType>
-              <dataInputType>trainingData</dataInputType>
+              <outputType>computedData</outputType>
+              <inputType>trainingData</inputType>
             </trainingData>
             <testingData>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex">
@@ -204,8 +204,8 @@
                       <dataSources/>
                       <fileURI>weather.arff</fileURI>
                     </dataProvider>
-                    <dataOutputType>fileData</dataOutputType>
-                    <dataInputType>trainingData</dataInputType>
+                    <outputType>fileData</outputType>
+                    <inputType>trainingData</inputType>
                   </trainingData>
                   <testingData>
                     <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -215,17 +215,17 @@
                       <dataSources/>
                       <fileURI>weather.arff</fileURI>
                     </dataProvider>
-                    <dataOutputType>fileData</dataOutputType>
-                    <dataInputType>testingData</dataInputType>
+                    <outputType>fileData</outputType>
+                    <inputType>testingData</inputType>
                   </testingData>
                 </computingAgent>
               </dataProvider>
-              <dataOutputType>computedData</dataOutputType>
-              <dataInputType>testingData</dataInputType>
+              <outputType>computedData</outputType>
+              <inputType>testingData</inputType>
             </testingData>
           </computingAgent>
         </dataProvider>
-        <dataOutputType>computedData</dataOutputType>
+        <outputType>computedData</outputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>

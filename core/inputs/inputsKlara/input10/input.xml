@@ -22,8 +22,8 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
-              <dataOutputType>fileData</dataOutputType>
-              <dataInputType>firstInput</dataInputType>
+              <outputType>fileData</outputType>
+              <inputType>firstInput</inputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
             <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -33,12 +33,12 @@
                 <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
-              <dataOutputType>fileData</dataOutputType>
-              <dataInputType>secondInput</dataInputType>
+              <outputType>fileData</outputType>
+              <inputType>secondInput</inputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
-        <dataOutputType>sunnyOutput</dataOutputType>
+        <outputType>sunnyOutput</outputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
     <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
@@ -61,8 +61,8 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
-              <dataOutputType>fileData</dataOutputType>
-              <dataInputType>firstInput</dataInputType>
+              <outputType>fileData</outputType>
+              <inputType>firstInput</inputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
             <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -72,12 +72,12 @@
                 <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
-              <dataOutputType>fileData</dataOutputType>
-              <dataInputType>secondInput</dataInputType>
+              <outputType>fileData</outputType>
+              <inputType>secondInput</inputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
-        <dataOutputType>overcastOutput</dataOutputType>
+        <outputType>overcastOutput</outputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
     <org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
@@ -100,8 +100,8 @@
                 <dataSources/>
                 <fileURI>weather.arff</fileURI>
               </dataProvider>
-              <dataOutputType>fileData</dataOutputType>
-              <dataInputType>firstInput</dataInputType>
+              <outputType>fileData</outputType>
+              <inputType>firstInput</inputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
             <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -111,12 +111,12 @@
                 <dataSources/>
                 <fileURI>weather2.arff</fileURI>
               </dataProvider>
-              <dataOutputType>fileData</dataOutputType>
-              <dataInputType>secondInput</dataInputType>
+              <outputType>fileData</outputType>
+              <inputType>secondInput</inputType>
             </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
           </dataSources>
         </dataProvider>
-        <dataOutputType>rainyOutput</dataOutputType>
+        <outputType>rainyOutput</outputType>
       </dataSource>
     </org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver>
   </rootElements>
