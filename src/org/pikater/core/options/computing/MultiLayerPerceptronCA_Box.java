@@ -13,6 +13,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestrictio
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
 import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
@@ -46,8 +47,8 @@ public class MultiLayerPerceptronCA_Box {
 		# Momentum Rate for the back-propagation algorithm., Default = 0.2
 		$ M float 1 1 r 0 0.9
 		**/
-		RangeRestriction rangeRestrictionM = new RangeRestriction(new FloatValue(0.0f), new FloatValue(0.9f));
-		NewOption optionM = new NewOption("M", new FloatValue(0.2f), rangeRestrictionM); 
+		RangeRestriction rangeRestrictionM = new RangeRestriction(new DoubleValue(0.0), new DoubleValue(0.9));
+		NewOption optionM = new NewOption("M", new DoubleValue(0.2), rangeRestrictionM); 
 		optionM.getValueRestrictions().fetchByIndex(0).addType(new ValueType(
 				new QuestionMarkRange(rangeRestrictionM.getMinValue(), rangeRestrictionM.getMaxValue(), 10),
 				rangeRestrictionM
