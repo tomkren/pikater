@@ -48,8 +48,6 @@ public class WizardWithOutput<T extends IWizardCommon> extends Wizard
 			@Override
 			public void activeStepChanged(WizardStepActivationEvent event)
 			{
-				event.getActivatedStep().getContent().addStyleName("myWizard-step-content"); // always, for all wizard steps
-				
 				if(refreshActivatedSteps)
 				{
 					if(event.getActivatedStep() instanceof RefreshableWizardStep<?, ?>)

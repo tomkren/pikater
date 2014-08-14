@@ -1,7 +1,6 @@
 package org.pikater.shared.database.views.tableview.batches.experiments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
@@ -30,12 +29,7 @@ public class ExperimentTableDBView extends AbstractTableDBView
 	public ExperimentTableDBView(JPAUser user,JPABatch batch)
 	{
 		this.owner = user;
-		this.batch=batch;
-	}
-	
-	private boolean adminMode()
-	{
-		return this.owner == null;
+		this.batch = batch;
 	}
 	
 	/**
@@ -47,14 +41,12 @@ public class ExperimentTableDBView extends AbstractTableDBView
 		/*
 		 * First the read-only properties.
 		 */
-		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
 		STATUS,
-		MODEL_STRATEGY,
-		CREATED,
 		STARTED,
 		FINISHED,
-		MODEL,
-		RESULTS;
+		MODEL_STRATEGY,
+		RESULTS,
+		BEST_MODEL;
 
 		@Override
 		public String getDisplayName()
@@ -67,15 +59,13 @@ public class ExperimentTableDBView extends AbstractTableDBView
 		{
 			switch(this)
 			{
-				case OWNER:
-				case CREATED:
 				case STARTED:
 				case FINISHED:
 				case STATUS:
 				case MODEL_STRATEGY:
 					return DBViewValueType.STRING;
 					
-				case MODEL:
+				case BEST_MODEL:
 				case RESULTS:
 					return DBViewValueType.NAMED_ACTION;
 					
@@ -88,21 +78,13 @@ public class ExperimentTableDBView extends AbstractTableDBView
 	@Override
 	public ITableColumn[] getColumns()
 	{
-		if(adminMode())
-		{
-			return Column.values();
-		}
-		else
-		{
-			ITableColumn[] allColumns = Column.values();
-			return Arrays.copyOfRange(allColumns, 1, allColumns.length); // everything except owner, which is specified
-		}
+		return Column.values();
 	}
 	
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return adminMode() ? Column.OWNER : Column.CREATED;
+		return Column.STATUS;
 	}
 	
 	@Override

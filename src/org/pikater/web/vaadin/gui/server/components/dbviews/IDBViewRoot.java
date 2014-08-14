@@ -9,7 +9,8 @@ import com.vaadin.ui.AbstractComponent;
 public interface IDBViewRoot<T extends AbstractTableDBView>
 {
 	T getUnderlyingDBView();
-	void onCellCreate(ITableColumn column, AbstractComponent component);
 	int getColumnSize(ITableColumn column);
+	ITableColumn getExpandColumn();
+	void onCellCreate(ITableColumn column, AbstractComponent component);
 	void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action);
 }

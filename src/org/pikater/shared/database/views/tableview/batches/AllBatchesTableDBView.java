@@ -20,22 +20,22 @@ public class AllBatchesTableDBView extends AbstractBatchTableDBView
 	public ITableColumn[] getColumns()
 	{
 		return EnumSet.of(
-				Column.FINISHED,
 				Column.STATUS,
-				Column.PRIORITY,
-				Column.MAX_PRIORITY,
+				Column.FINISHED,
 				Column.CREATED,
+				Column.MAX_PRIORITY,
 				Column.OWNER,
 				Column.NAME,
 				Column.NOTE,
-				Column.ABORT
+				Column.ABORT,
+				Column.RESULTS
 		).toArray(new ITableColumn[0]);
 	}
 	
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return Column.FINISHED;
+		return Column.STATUS;
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class AllBatchesTableDBView extends AbstractBatchTableDBView
 		
 		for(JPABatch batch : allBatches)
 		{
-			rows.add(new BatchTableDBRow(batch));
+			rows.add(new BatchTableDBRow(batch, true));
 		}
 		return new QueryResult(rows, allBatchesCount);
 	}

@@ -4,11 +4,6 @@
 {
 }
 
-.myWizard-step-content
-{
-	padding: 15px;
-}
-
 .myDynamicWizard
 {
 }
@@ -16,4 +11,9 @@
 .myDynamicWizard .v-slot-step-caption
 {
 	margin-right: 25px;
+}
+
+.myWizard > * > .v-slot:nth-child(2) > * > *:nth-child(2), .myDynamicWizard > * > .v-slot:nth-child(2) > * > *:nth-child(2)
+{
+	padding: 15px;
 }

@@ -36,21 +36,21 @@ public class UserBatchesTableDBView extends AbstractBatchTableDBView
 	{
 		// everything except owner, which is specified
 		return EnumSet.of(
-				Column.FINISHED,
 				Column.STATUS,
-				Column.PRIORITY,
-				Column.MAX_PRIORITY,
+				Column.FINISHED,
 				Column.CREATED,
+				Column.MAX_PRIORITY,
 				Column.NAME,
 				Column.NOTE,
-				Column.ABORT
+				Column.ABORT,
+				Column.RESULTS
 		).toArray(new ITableColumn[0]);
 	}
 	
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return Column.FINISHED;
+		return Column.STATUS;
 	}
 	
 	@Override
@@ -64,7 +64,7 @@ public class UserBatchesTableDBView extends AbstractBatchTableDBView
 		
 		for(JPABatch batch : allBatches)
 		{
-			rows.add(new BatchTableDBRow(batch));
+			rows.add(new BatchTableDBRow(batch, false));
 		}
 		return new QueryResult(rows, userBatchCount);
 	}

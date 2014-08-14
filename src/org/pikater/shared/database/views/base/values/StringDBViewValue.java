@@ -7,7 +7,13 @@ public abstract class StringDBViewValue extends AbstractDBViewValue<String>
 {
 	public StringDBViewValue(String value)
 	{
-		super(DBViewValueType.STRING, value);
+		super(DBViewValueType.STRING, value == null ? "" : value);
+	}
+	
+	@Override
+	public void setValue(String newValue) throws UnsupportedOperationException
+	{
+		super.setValue(newValue == null ? "" : newValue);
 	}
 	
 	@Override

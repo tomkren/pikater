@@ -31,14 +31,10 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 		/*
 		 * First the read-only properties.
 		 */
-		case CREATED:
-			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getCreated()));
 		case STARTED:
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getStarted()));
 		case FINISHED:
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(experiment.getFinished()));
-		case OWNER:
-			return new StringReadOnlyDBViewValue(experiment.getBatch()==null?"error":experiment.getBatch().getOwner().getLogin());
 		case STATUS:
 			return new StringReadOnlyDBViewValue(experiment.getStatus().name());
 		case MODEL_STRATEGY:
@@ -47,14 +43,14 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 		/*
 		 * And then custom actions.
 		 */
-		case MODEL:
+		case BEST_MODEL:
 			//TODO: Implement best model retrieval
-			return new NamedActionDBViewValue("Get Best Model") {	
+			return new NamedActionDBViewValue("Download") {	
 
 				@Override
 				public boolean isEnabled()
 				{
-					return true;
+					return true; // TODO: is this correct?
 				}
 
 				@Override
@@ -69,51 +65,28 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 					// TODO Auto-generated method stub
 				}
 			};
-
 		case RESULTS:
-			if((experiment.getResults()==null) || experiment.getResults().isEmpty()){
-				return new NamedActionDBViewValue("No Results") {
-					
-					@Override
-					public boolean isEnabled()
-					{
-						return true;
-					}
-
-					@Override
-					protected void updateEntities()
-					{
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					protected void commitEntities()
-					{
-						// TODO Auto-generated method stub
-					}
-				};
-			}else{
-				return new NamedActionDBViewValue("Show Results") {	
-
-					@Override
-					public boolean isEnabled()
-					{
-						return true;
-					}
-
-					@Override
-					protected void updateEntities()
-					{
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					protected void commitEntities()
-					{
-						// TODO Auto-generated method stub
-					}
-				};
-			}
+			return new NamedActionDBViewValue("Download")
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					// TODO Auto-generated method stub
+					return false; // whether results are available
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+			};
 		
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

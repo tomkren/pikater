@@ -27,18 +27,25 @@ public abstract class AbstractBatchTableDBView extends AbstractTableDBView
 		 */
 		FINISHED, // both users and admins should probably be most interested in the latest batches
 		STATUS, // and whether they are yet finished or not
-		PRIORITY,
 		MAX_PRIORITY,
 		CREATED,
 		OWNER,
 		NAME,
-		NOTE, // this should be last because of potentially long text
-		ABORT;
+		NOTE,
+		ABORT,
+		RESULTS;
 
 		@Override
 		public String getDisplayName()
 		{
-			return this.name();
+			switch(this)
+			{
+				case MAX_PRIORITY:
+					return "TOTAL_PRIORITY";
+					
+				default:
+					return name();
+			}
 		}
 
 		@Override
@@ -54,12 +61,11 @@ public abstract class AbstractBatchTableDBView extends AbstractTableDBView
 				case STATUS:
 					return DBViewValueType.STRING;
 					
-				// TODO: some of these should be editable for both admin and user view (specification requirement for admins at least)
-				case PRIORITY:
 				case MAX_PRIORITY:
-					return DBViewValueType.STRING;
+					return DBViewValueType.REPRESENTATIVE;
 					
 				case ABORT:
+				case RESULTS:
 					return DBViewValueType.NAMED_ACTION;
 					
 				default:
