@@ -184,7 +184,8 @@ public class MultiLayerPerceptronCA_Box {
 		agentInfo.addOption(optionG);
 		agentInfo.addOption(optionI);
 		agentInfo.addOption(optionD);
-		agentInfo.addOption(optionE);
+		//TODO:
+		//agentInfo.addOption(optionE);
 		agentInfo.addOption(optionS);
 		agentInfo.addOption(optionV);
 		agentInfo.addOption(optionN);

@@ -34,8 +34,7 @@ public class RandomSearch_Box {
 		agentInfo.setName("Random");
 		agentInfo.setDescription("Selects and provides random values for its output parameters.");
 
-		//TODO:
-		//agentInfo.addOption(optionE);
+		agentInfo.addOption(optionE);
 		agentInfo.addOption(optionM);
 
 		//Slot Definition
