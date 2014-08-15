@@ -4,7 +4,7 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.*;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.*;
-import org.pikater.core.agents.system.manager.ManagerCommunicator;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.account.User;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
@@ -130,8 +130,7 @@ public class Parser {
     public void parseRoots(ComputationDescription comDescription, int batchID, int userID) {
         agent.log("Ontology Parser - ComputationDescription");
         
-        ManagerCommunicator communicator = new ManagerCommunicator();
-        User user = communicator.loadUser(agent, 5856); //TODO:
+        User user = DataManagerService.loadUser(agent, 5856); //TODO:
 
         this.priority = 10 * user.getPriorityMax() +
         		comDescription.getPriority();        
@@ -199,8 +198,7 @@ public class Parser {
         experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
         experiment.setBatchID(batchID);
         
-        ManagerCommunicator communicator = new ManagerCommunicator();
-        int experimentID = communicator.saveExperiment(agent, experiment);
+        int experimentID = DataManagerService.saveExperiment(agent, experiment);
         
         computingNode.setExperimentID(experimentID);
         

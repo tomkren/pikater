@@ -15,8 +15,7 @@ import jade.proto.AchieveREResponder;
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.agents.system.guiAgentsCommunicator.GuiCommunicator;
-import org.pikater.core.agents.system.manager.ManagerCommunicator;
+import org.pikater.core.agents.system.manager.ManagerService;
 import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
@@ -122,14 +121,12 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
             batch.setDescription(compDescription);
 
             // send received ComputationDescription as Batch to DataManger to save to DB
-            ManagerCommunicator communicator = new ManagerCommunicator();
-            int batchId =  communicator.saveBatch(this, batch);
+            int batchId =  DataManagerService.saveBatch(this, batch);
             log("BatchId: " + batchId + " saved");
 
             
             // send only NewBatch
-            GuiCommunicator guiCommunicator = new GuiCommunicator();
-            guiCommunicator.sendNewBatchInfoToManager(this, batchOwnerID, batchId);
+            ManagerService.sendNewBatchInfoToManager(this, batchOwnerID, batchId);
             		
             
             // send reply to User-GuiAgent
