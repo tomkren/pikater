@@ -36,12 +36,11 @@ public class WebToCoreEntryPoint {
 
 	/**
 	 * Notifies the core system about a new user-uploaded agent. 
-	 * @param agentClass class representation of the uploaded jar's agent 
+	 * @param externalAgentID ID of external agent's JPA entity 
 	 * @throws PikaterGatewayException
 	 */
-	public static void notify_newAgent(Class<?> agentClass) throws PikaterGatewayException {
-		// TODO: argument needs to be id of JPAExternalAgent
-		PikaterGateway_NewAgent.newAgent(agentClass);
+	public static void notify_newAgent(int externalAgentID) throws PikaterGatewayException {
+		PikaterGateway_NewAgent.newAgent(externalAgentID);
 	}
 
 	/**
