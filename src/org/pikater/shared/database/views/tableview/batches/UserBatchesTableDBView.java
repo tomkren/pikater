@@ -1,8 +1,8 @@
 package org.pikater.shared.database.views.tableview.batches;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -14,7 +14,7 @@ import org.pikater.shared.database.views.tableview.base.ITableColumn;
 /**
  * A view displaying all experiments for the given user.
  */
-public class UserBatchesTableDBView extends AbstractBatchTableDBView
+public class UserBatchesTableDBView extends AllBatchesTableDBView
 {
 	protected final JPAUser owner;
 	
@@ -32,19 +32,19 @@ public class UserBatchesTableDBView extends AbstractBatchTableDBView
 	}	
 	
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		// everything except owner, which is specified
-		return EnumSet.of(
-				Column.STATUS,
-				Column.FINISHED,
-				Column.CREATED,
-				Column.MAX_PRIORITY,
-				Column.NAME,
-				Column.NOTE,
-				Column.ABORT,
-				Column.RESULTS
-		).toArray(new ITableColumn[0]);
+		Set<ITableColumn> superResult = super.getAllColumns();
+		superResult.remove(Column.OWNER);
+		return superResult;
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		Set<ITableColumn> superResult = super.getDefaultColumns();
+		superResult.remove(Column.OWNER);
+		return superResult;
 	}
 	
 	@Override

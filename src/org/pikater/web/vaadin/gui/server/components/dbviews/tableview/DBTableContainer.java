@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
@@ -42,7 +41,7 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Collection<ITableColumn> getContainerPropertyIds()
 	{
-		return Arrays.asList(viewRoot.getUnderlyingDBView().getColumns());
+		return viewRoot.getUnderlyingDBView().getAllColumns();
 	}
 	
 	@Override

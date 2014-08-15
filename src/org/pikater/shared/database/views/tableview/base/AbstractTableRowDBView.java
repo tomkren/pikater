@@ -30,7 +30,7 @@ public abstract class AbstractTableRowDBView
 	{
 		if(!initialized)
 		{
-			for(ITableColumn column : dbView.getColumns())
+			for(ITableColumn column : dbView.getAllColumns())
 			{
 				columnToValueWrapper.put(column, initValueWrapper(column));
 			}
