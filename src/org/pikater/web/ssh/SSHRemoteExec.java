@@ -32,7 +32,7 @@ public class SSHRemoteExec implements ISSHChannel, ISSHAsyncCommandExec, ISSHSyn
 	}
 
 	@Override
-	public void close()
+	public void close() throws JSchException
 	{
 		batchExecChannel.close();
 		interactiveExecChannel.close();

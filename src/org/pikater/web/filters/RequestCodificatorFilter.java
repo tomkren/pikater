@@ -21,11 +21,16 @@ public class RequestCodificatorFilter extends AbstractFilter
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException
 	{
+		// determine basic information & references
 		HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+		
+		// print debug info if needed
 		if(isDebugMode())
 		{
 			printRequestComponents(RequestCodificatorFilter.class.getSimpleName(), httpRequest);
 		}
+		
+		// actually do stuff
 		if(!isServletPathDefined(httpRequest))
 		{
 			if(isDebugMode())

@@ -12,7 +12,6 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserB
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserDatasetsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.user.UserProfileView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various.TestView;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various.UnimplementedView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various.WelcomeView;
 
 import com.vaadin.navigator.View;
@@ -55,7 +54,7 @@ public class ContentProvider
 			switch(this)
 			{
 				case TEST:
-					return CustomConfiguredUI.isDebugModeActive(); // TODO: test content won't display but an error will... ban this in filters!
+					return CustomConfiguredUI.isDebugModeActive();
 				case WELCOME:
 					return true; // this feature set is for everyone
 				default:
@@ -88,8 +87,7 @@ public class ContentProvider
 		VIEW_USERS("adminAllUsers", UsersView.class),
 		VIEW_DATASETS("adminAllDatasets", DatasetsView.class),
 		VIEW_METHODS("adminAllUserAgents", AgentsView.class),
-		VIEW_EXPERIMENTS("adminAllExperiments", BatchesView.class),
-		VIEW_SYSTEM_STATUS("adminSystemStatus", UnimplementedView.class);
+		VIEW_EXPERIMENTS("adminAllExperiments", BatchesView.class);
 		
 		private final Class<? extends IContentComponent> mappedComponent;
 		private final String navigatorName;
@@ -113,8 +111,6 @@ public class ContentProvider
 					return "All user agents";
 				case VIEW_EXPERIMENTS:
 					return "All experiments";
-				case VIEW_SYSTEM_STATUS:
-					return "View system status";
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}

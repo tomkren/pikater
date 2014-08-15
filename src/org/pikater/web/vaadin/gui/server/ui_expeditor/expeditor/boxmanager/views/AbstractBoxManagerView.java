@@ -86,7 +86,7 @@ public abstract class AbstractBoxManagerView<S extends Object> extends VerticalL
 	
 	protected abstract void validateSource(S source) throws IllegalArgumentException;
 	
-	protected abstract void refreshContent();
+	public abstract void refreshContent();
 	
 	//-------------------------------------------------
 	// PROTECTED INTERFACE

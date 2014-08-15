@@ -69,6 +69,6 @@ public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 	@Override
 	public void setReadOnly(boolean newStatus)
 	{
-		// TODO: temporary value change may be needed sometimes?
+		throw new UnsupportedOperationException();
 	}
 }

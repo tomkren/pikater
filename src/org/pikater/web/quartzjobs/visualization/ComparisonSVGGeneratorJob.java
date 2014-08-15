@@ -50,7 +50,6 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 	@Override
 	public void buildJob(JobBuilder builder)
 	{
-		// TODO Auto-generated method stub
 	}
 
 	@Override

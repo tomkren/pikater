@@ -73,6 +73,11 @@ public class SingleDatasetVisualizer extends Panel
 	//---------------------------------------------------------------
 	// SPECIAL TYPES
 	
+	/** 
+	 * TODO: This class is only a temporary solution to visualization. Much better
+	 * (but also much more time-consuming) solution would be to use deep zoom images
+	 * and a client-side viewer for them (like openseadragon).
+	 */
 	private class ChartThumbnail extends VerticalLayout
 	{
 		public ChartThumbnail(AbstractDSVisSubresult imageResult, int imageWidth, int imageHeight)

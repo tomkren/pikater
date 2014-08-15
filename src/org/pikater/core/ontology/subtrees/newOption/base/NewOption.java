@@ -350,6 +350,19 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	@Override
 	public String exportToWeka()
 	{
+		if (isSingleValue() ) {
+			IValueData valueData = toSingleValue().getCurrentValue();
+			
+			if (valueData instanceof BooleanValue) {
+				BooleanValue booleanValue =  (BooleanValue) valueData;
+				
+				if (booleanValue.getValue()) {
+					return "-" + this.getName() + " ";
+				} else {
+					return "";
+				}
+			}
+		}
 		return "-" + this.getName() + valuesWrapper.exportToWeka();
 	}
 }
