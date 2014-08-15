@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.bcel.generic.DADD;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.model.Model;
 import org.pikater.shared.database.exceptions.NoResultException;
@@ -35,12 +36,12 @@ import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 public class DatabaseTest {
 	
 	public void test(){
-		testDBConnection();
+		//testDBConnection();
 		//exportResults();
 		//listVisibleAndApprovedDatasets();
 		//removeResult();
 		//listDataSetsWithResults();
-		//listDataSets();
+		listDataSets();
 		//addExperiment();
 		//listExternalAgents();
 		//listDataSetWithExclusion();
@@ -154,10 +155,10 @@ public class DatabaseTest {
 	}
 	
 	public void listDataSets(){
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.ASCENDING);
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+			p(dslo.getId()+". "+" ext: "+DAOs.filemappingDAO.getSingleExternalFilename(dslo)+" int: "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+(dslo.getGlobalMetaData()!=null ? dslo.getGlobalMetaData().getNumberofInstances():-1));
 		}
 		p("------------");
 		p("");

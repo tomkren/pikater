@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -196,8 +197,7 @@ public class DatasetsView extends ExpandableView
 					@Override
 					public String getFilename()
 					{
-						// TODO:
-						return null;
+						return DAOs.filemappingDAO.getSingleExternalFilename(rowView.getDataset());
 					}
 				});
 				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(datasetDownloadResourceUI));
