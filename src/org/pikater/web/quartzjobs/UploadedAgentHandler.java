@@ -6,9 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
 
+import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
@@ -72,6 +74,11 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			}
 			agent.setJar(content);
 			DAOs.externalAgentDAO.storeEntity(agent);
+			// WebToCoreEntryPoint.notify_newAgent(Class.forName(agentClass)); // TODO: wait until only ID can be passed
+		}
+		catch (Throwable t)
+		{
+			PikaterLogger.logThrowable("Processing uploaded agent failed:", t);
 		}
 		finally
 		{
