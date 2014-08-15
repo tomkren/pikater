@@ -13,24 +13,30 @@ import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agent.NewAgent;
+import org.pikater.shared.database.jpa.JPAExternalAgent;
+import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
+import org.pikater.shared.database.jpa.daos.DAOs;
 
 public class PikaterGateway_NewAgent {
 
-	public static void newAgent(Class<?> agentClass) throws PikaterGatewayException {
+	public static void newAgent(int externalAgentID) throws PikaterGatewayException {
 		try {
 	        NewAgent newAgent = new NewAgent();
-	        newAgent.setAgentClassName(agentClass.getName());
+	        JPAExternalAgent ea = DAOs.externalAgentDAO.getByID(externalAgentID, EmptyResultAction.NULL);
+	        if(ea!=null){
+	        	newAgent.setAgentClassName(ea.getAgentClass());
 
-			Ontology agentInfoOntology = AgentInfoOntology.getInstance();
+	        	Ontology agentInfoOntology = AgentInfoOntology.getInstance();
 
-			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.AGENTINFO_MANAGER, agentInfoOntology,
-					newAgent);
+	        	ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
+	        			AgentNames.AGENTINFO_MANAGER, agentInfoOntology,
+	        			newAgent);
 
-			Initiator initiator = new Initiator(msg);
+	        	Initiator initiator = new Initiator(msg);
 
-			PikaterGateway_General.generalRequest(initiator);
-			initiator.getOkResponse();
+	        	PikaterGateway_General.generalRequest(initiator);
+	        	initiator.getOkResponse();
+	        }
 
 		} catch (ControllerException e1) {
 			throw new PikaterGatewayException("Failed to make request");
