@@ -289,8 +289,7 @@ public abstract class PikaterAgent extends Agent {
 	}
 	
 	public AID createAgent(String type, String name, Arguments options){
-		ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
-		return communicator.createAgent(this, type, name, options);
+		return ManagerAgentCommunicator.createAgent(this, type, name, options);
 	}
 	
 	public AID createAgent(String type){

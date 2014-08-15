@@ -92,8 +92,7 @@ public class Agent_Duration extends PikaterAgent {
 		
         // create linear regression agent
         // send message to AgentManager to create an agent
-        ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
-        aid = communicator.createAgent(
+        aid = ManagerAgentCommunicator.createAgent(
         		this,
         		Agent_WekaDurationLinearRegression.class.getName(),
         		AgentNames.DURATION_SERVICE,

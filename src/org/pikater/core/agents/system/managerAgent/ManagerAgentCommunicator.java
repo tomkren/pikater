@@ -25,12 +25,14 @@ import org.pikater.core.ontology.subtrees.model.Model;
  * this template use File | Settings | File Templates.
  */
 public class ManagerAgentCommunicator {
-	public AID createAgent(PikaterAgent agent,
+	
+	public static AID createAgent(PikaterAgent agent,
 			String type, String name, Arguments options) {
-		return createAgent(agent, type, name, options, new AID(AgentNames.MANAGER_AGENT, false));
+		return ManagerAgentCommunicator.createAgent(
+				agent, type, name, options, new AID(AgentNames.MANAGER_AGENT, false));
 	}
 
-	public AID createAgent(PikaterAgent agent,
+	public static AID createAgent(PikaterAgent agent,
 			String type, String name, Arguments options, AID agentManagerAID) {
 
 		Ontology ontology = AgentManagementOntology.getInstance();

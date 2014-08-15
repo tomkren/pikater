@@ -55,7 +55,6 @@ public class PlannerCommunicator {
 	
 	/** Request creation or loading of a CA */
 	public AID prepareCA(Task task, AID agentManagerAID) {
-		ManagerAgentCommunicator comm = new ManagerAgentCommunicator();
 		AID caAID;
 
 		if (task.getAgent().getModel() != null) {
@@ -64,7 +63,8 @@ public class PlannerCommunicator {
 		} else {
 			String CAtype = task.getAgent().getType();
 			agent.log("Sending request to create CA " + CAtype);
-			caAID = comm.createAgent(agent, CAtype, CAtype, new Arguments(), agentManagerAID);
+			caAID = ManagerAgentCommunicator.createAgent(
+					agent, CAtype, CAtype, new Arguments(), agentManagerAID);
 			//agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
 			agent.log("CA " + CAtype + " created");
 		}

@@ -307,8 +307,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 */
 	
 	public AID createAgent(String type, String name, Arguments arguments) {
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator();
-        AID aid=communicator.createAgent(this,type,name,arguments);
+        AID aid=ManagerAgentCommunicator.createAgent(this,type,name,arguments);
         return aid;
 	}
 	
