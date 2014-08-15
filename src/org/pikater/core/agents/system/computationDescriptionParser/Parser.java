@@ -2,10 +2,7 @@ package org.pikater.core.agents.system.computationDescriptionParser;
 
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.FileSavingStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.RecommenderStartComputationStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.SearchStartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.*;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.*;
 import org.pikater.core.agents.system.manager.ManagerCommunicator;
 import org.pikater.core.ontology.subtrees.account.User;
@@ -82,8 +79,26 @@ public class Parser {
         }
         else if (dataProvider instanceof DataProcessing) {
             agent.log("Ontology Matched - DataProcessing");
+            DataProcessing dataProcessing = (DataProcessing) dataProvider;
+            //TODO: support multiple sources, maybe add the option to name input and outputs differently
+            if (alreadyProcessed.containsKey(dataProcessing.getId()))
+            {
+                 parent=alreadyProcessed.get(dataProcessing.getId());
+            }
+            else {
+                parent = new ComputationNode();
+            }
+            addOptionsToInputs(parent,dataProcessing.getOptions());
+            parent.setStartBehavior(new DataProcessingStrategy(agent, batchID, parent));
+            NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
+            parent.addBufferToOutput(connectionName,buffer);
+            child.addInput(connectionName,buffer);
 
-            //TODO:  parseSaver(postprocessing) DataProcessing postprocessing = (DataProcessing) dataProvider;;
+            computationGraph.addNode(parent);
+            alreadyProcessed.put(dataProcessing.getId(),parent);
+
+            DataSourceDescription ds= dataProcessing.getDataSources().get(0);
+            parseDataSourceDescription(ds,batchID,userID,parent,"data");
             return;
         } else {
             agent.log("Ontology Matched - Error unknown IDataProvider");
