@@ -26,7 +26,7 @@ import java.util.Vector;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DurationOntology;
@@ -92,7 +92,7 @@ public class Agent_Duration extends PikaterAgent {
 		
         // create linear regression agent
         // send message to AgentManager to create an agent
-        aid = ManagerAgentCommunicator.createAgent(
+        aid = ManagerAgentService.createAgent(
         		this,
         		Agent_WekaDurationLinearRegression.class.getName(),
         		AgentNames.DURATION_SERVICE,

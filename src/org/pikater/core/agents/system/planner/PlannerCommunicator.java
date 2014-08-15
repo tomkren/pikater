@@ -15,7 +15,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.agents.system.Agent_Planner;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
@@ -58,12 +58,12 @@ public class PlannerCommunicator {
 		AID caAID;
 
 		if (task.getAgent().getModel() != null) {
-			caAID = ManagerAgentCommunicator.loadAgent(agent, task.getAgent().getModel(), agentManagerAID);
+			caAID = ManagerAgentService.loadAgent(agent, task.getAgent().getModel(), agentManagerAID);
 			agent.log("CA model " + task.getAgent().getModel() + " resurrected");
 		} else {
 			String CAtype = task.getAgent().getType();
 			agent.log("Sending request to create CA " + CAtype);
-			caAID = ManagerAgentCommunicator.createAgent(
+			caAID = ManagerAgentService.createAgent(
 					agent, CAtype, CAtype, new Arguments(), agentManagerAID);
 			//agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
 			agent.log("CA " + CAtype + " created");

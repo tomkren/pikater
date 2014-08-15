@@ -24,11 +24,11 @@ import org.pikater.core.ontology.subtrees.model.Model;
  * Created with IntelliJ IDEA. User: Kuba Date: 25.8.13 Time: 9:21 To change
  * this template use File | Settings | File Templates.
  */
-public class ManagerAgentCommunicator {
+public class ManagerAgentService {
 	
 	public static AID createAgent(PikaterAgent agent,
 			String type, String name, Arguments options) {
-		return ManagerAgentCommunicator.createAgent(
+		return ManagerAgentService.createAgent(
 				agent, type, name, options, new AID(AgentNames.MANAGER_AGENT, false));
 	}
 
