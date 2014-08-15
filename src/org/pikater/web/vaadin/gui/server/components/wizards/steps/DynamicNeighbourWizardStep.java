@@ -44,6 +44,5 @@ public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, W
 	//----------------------------------------------------
 	// ABSTRACT INTERFACE
 	
-	public abstract boolean constructionOfNextStepAllowed();
 	public abstract DynamicNeighbourWizardStep<OUTPUT, WIZARD> constructNextStep();
 }

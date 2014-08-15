@@ -11,5 +11,6 @@ public abstract class ExpandableView extends WizardWithDynamicSteps<IWizardCommo
 	public ExpandableView()
 	{
 		super(new IWizardCommon() {}, false);
+		getNextButton().setEnabled(false); // first step is added via an abstract method
 	}
 }

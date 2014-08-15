@@ -58,7 +58,6 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 					steps.remove(steps.size() - 1); // remove the last step
 				}
 				getBackButton().setEnabled(!isFirstStep(activatedStep));
-				getNextButton().setEnabled(true); // always keep it on
 				getNextButton().setVisible(!activatedStep.isLeaf()); // except leaf wizard steps
 			}
 		});
@@ -70,14 +69,31 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				if(!getCurrentStep().isLeaf() && getCurrentStep().constructionOfNextStepAllowed())
-				{
-					DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> newStep = getCurrentStep().constructNextStep();
-					addStep(newStep);
-					// activateStep(newStep);
-				}
+				advance(getCurrentStep().constructNextStep());
 			}
 		});
+	}
+	
+	protected boolean canAdvance()
+	{
+		return !getCurrentStep().isLeaf();
+	}
+	
+	public void advance(DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> newStep)
+	{
+		if(canAdvance())
+		{
+			if(newStep != null)
+			{
+				getNextButton().setEnabled(false); // always disable on advance - new steps are created
+				addStep(newStep);
+			}
+			// activateStep(newStep);
+		}
+		else
+		{
+			throw new IllegalStateException("The current step has been declared as leaf. Can not expand.");
+		}
 	}
 	
 	/**
@@ -95,7 +111,7 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 	public void addStep(WizardStep step)
 	{
 		// a lot of this class's code depends on the following "filter":
-		if(step instanceof DynamicNeighbourWizardStep<?,?>)
+		if(step instanceof DynamicNeighbourWizardStep)
 		{
 			super.addStep(step);
 		}
@@ -114,7 +130,8 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 		// the {@link addStep} method ensures steps are of the correct type
 		return (DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>>) currentStep;
 	}
-		
+	
+	/*
 	protected void forceNextStepTransitionNow()
 	{
 		if(getCurrentStep().isLeaf())
@@ -126,6 +143,7 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 			addStep(getCurrentStep().constructNextStep());
 		}
 	}
+	*/
 	
 	protected abstract DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> getFirstStep();
 }
