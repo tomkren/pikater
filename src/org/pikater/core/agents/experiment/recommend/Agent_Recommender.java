@@ -224,8 +224,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 	public List<NewOption> getAgentOptions(String agentType) {
 		
-		DataManagerService service = new DataManagerService();
-		AgentInfo agentInfo = service.getAgentInfo(this, agentType);
+		AgentInfo agentInfo = DataManagerService.getAgentInfo(this, agentType);
 		NewOptions optionsOnt = agentInfo.getOptions();
 
 		return optionsOnt.getOptions();
