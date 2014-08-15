@@ -95,54 +95,7 @@ public class ResourceRegistrar
 	{
 		synchronized(lock_object)
 		{
-			if(uuidToResource.containsKey(resourceID))
-			{
-				IRegistrarResource resource = uuidToResource.get(resourceID);
-				if(resource.getLifeSpan() == ResourceExpiration.ON_FIRST_PICKUP)
-				{
-					uuidToResource.remove(resourceID);
-				}
-				return resource;
-			}
-			else
-			{
-				return null;
-			}
-		}
-	}
-	
-	/**
-	 * Expires a resource that was to be expired on first pickup.
-	 * @param resourceID
-	 * @param resource
-	 */
-	public static void expireOnFirstPickupResource(UUID resourceID, IRegistrarResource resource) 
-	{
-		synchronized(lock_object)
-		{
-			if(uuidToResource.containsKey(resourceID) && uuidToResource.get(resourceID).equals(resource))
-			{
-				uuidToResource.remove(resourceID); // TODO: call "expired()" method on the resource
-			}
-		}
-	}
-	
-	/**
-	 * Method to be used when a resource expires.
-	 * @param resourceID
-	 * @param resource
-	 */
-	public static void expireSessionResources(VaadinSession session) 
-	{
-		synchronized(lock_object)
-		{
-			for(UUID resourceID : ManageSession.getSharedResources(session))
-			{
-				if(uuidToResource.containsKey(resourceID) && uuidToResource.get(resourceID).getLifeSpan() == ResourceExpiration.ON_SESSION_END)
-				{
-					uuidToResource.remove(resourceID); // TODO: call "expired()" method on the resource
-				}
-			}
+			return getResource(resourceID, true);
 		}
 	}
 	
@@ -170,7 +123,7 @@ public class ResourceRegistrar
 	
 	//-------------------------------------------------------------
 	// DOWNLOADABLE RESOURCE ROUTINES
-	
+
 	/**
 	 * Creates a download URL for the given resource ID. The associated resource
 	 * must be an instance of {@link IDownloadResource}. The returned URL points to
@@ -178,31 +131,85 @@ public class ResourceRegistrar
 	 * @param uuid
 	 * @return
 	 */
-	public static String getDownloadURL(UUID resourceID)
+	public static String getDownloadURL(UUID resourceID) throws IllegalStateException
 	{
 		synchronized(lock_object)
 		{
-			if(uuidToResource.containsKey(resourceID))
+			IRegistrarResource resource = getResource(resourceID, false);
+			if(resource instanceof IDownloadResource)
 			{
-				IRegistrarResource resource = getResource(resourceID);
-				if(resource instanceof IDownloadResource)
-				{
-					return String.format("./download?t=%s", fromResourceID(resourceID));
-				}
-				else
-				{
-					throw new IllegalStateException("Resource associated with the given ID is not downloadable.");
-				}
+				return String.format("./download?t=%s", fromResourceID(resourceID));
 			}
 			else
 			{
-				throw new IllegalStateException("No resource found for the given ID.");
+				throw new IllegalStateException("Resource associated with the given ID is not downloadable.");
+			}
+		}
+	}
+		
+	
+	//-------------------------------------------------------------
+	// RESOURCE EXPIRATION INTERFACE
+	
+	/**
+	 * Expires a resource that was to be expired on first pickup.
+	 * @param resourceID
+	 * @param resource
+	 */
+	public static void expireOnFirstPickupResource(UUID resourceID, IRegistrarResource resource) 
+	{
+		synchronized(lock_object)
+		{
+			if(uuidToResource.containsKey(resourceID) && uuidToResource.get(resourceID).equals(resource))
+			{
+				resourceExpired(resourceID);
 			}
 		}
 	}
 	
+	/**
+	 * Method to be used when a resource expires.
+	 * @param resourceID
+	 * @param resource
+	 */
+	public static void expireSessionResources(VaadinSession session) 
+	{
+		synchronized(lock_object)
+		{
+			for(UUID resourceID : ManageSession.getSharedResources(session))
+			{
+				if(uuidToResource.containsKey(resourceID) && uuidToResource.get(resourceID).getLifeSpan() == ResourceExpiration.ON_SESSION_END)
+				{
+					resourceExpired(resourceID);
+				}
+			}
+		}
+	}
+	
+	private static void resourceExpired(UUID resourceID)
+	{
+		uuidToResource.remove(resourceID);
+	}
+	
 	//-----------------------------------------------------------------------------
 	// PRIVATE INTERFACE
+	
+	private static IRegistrarResource getResource(UUID resourceID, boolean deleteIfFound) throws IllegalStateException
+	{
+		if(uuidToResource.containsKey(resourceID))
+		{
+			IRegistrarResource resource = uuidToResource.get(resourceID);
+			if((resource.getLifeSpan() == ResourceExpiration.ON_FIRST_PICKUP) && deleteIfFound)
+			{
+				resourceExpired(resourceID);
+			}
+			return resource;
+		}
+		else
+		{
+			throw new IllegalStateException("No resource found for the given ID.");
+		}
+	}
 	
 	private static UUID getNextUIID()
 	{
