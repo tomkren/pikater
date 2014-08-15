@@ -60,7 +60,7 @@ public class DynamicDownloadServlet extends HttpServlet
 			resp.setHeader("Content-Disposition", "attachment; filename=\"" + downloadableResource.getFilename() + "\"");
 			resp.setContentLength((int) downloadableResource.getSize());
 			
-			// TODO: set cache time or other things, if you mean to
+			// THIS IS THE PLACE TO SET CACHE TIME OR OTHER THINGS, IF YOU MEAN TO
 			
 			InputStream input = null;
 	        try

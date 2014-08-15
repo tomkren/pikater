@@ -10,26 +10,32 @@ public class DBTableItemPropertyCheck implements Property<CheckBox>
 	private static final long serialVersionUID = 8460699686386766346L;
 	
 	private final CheckBox checkBox;
+	private final boolean readOnly;
 	
 	public DBTableItemPropertyCheck(final DBTable parentTable, final BooleanDBViewValue valueWrapper)
 	{
+		this.readOnly = valueWrapper.isReadOnly();
+		
 		this.checkBox = new CheckBox(null, valueWrapper.getValue());
 		this.checkBox.setImmediate(true);
-		this.checkBox.setReadOnly(valueWrapper.isReadOnly());
-		this.checkBox.addValueChangeListener(new ValueChangeListener()
+		this.checkBox.setReadOnly(isReadOnly());
+		if(!isReadOnly())
 		{
-			private static final long serialVersionUID = -7967404862064544415L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event)
+			this.checkBox.addValueChangeListener(new ValueChangeListener()
 			{
-				valueWrapper.setValue((Boolean) event.getProperty().getValue());
-				if(parentTable.isImmediate())
+				private static final long serialVersionUID = -7967404862064544415L;
+
+				@Override
+				public void valueChange(ValueChangeEvent event)
 				{
-					valueWrapper.commit();
+					valueWrapper.setValue((Boolean) event.getProperty().getValue());
+					if(parentTable.isImmediate())
+					{
+						valueWrapper.commit();
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override
@@ -53,7 +59,7 @@ public class DBTableItemPropertyCheck implements Property<CheckBox>
 	@Override
 	public boolean isReadOnly()
 	{
-		return true;
+		return readOnly;
 	}
 
 	@Override

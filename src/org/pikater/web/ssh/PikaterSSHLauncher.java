@@ -3,6 +3,7 @@ package org.pikater.web.ssh;
 import org.pikater.web.ExecSequence;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent.MessageStyle;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 import org.pikater.shared.FieldVerifier;
@@ -30,8 +31,9 @@ public class PikaterSSHLauncher
 	public PikaterSSHLauncher(RemoteServerInfoItem serverInfo)
 	{
 		super();
-		this.session = null;
 		this.serverInfo = serverInfo;
+		this.session = null;
+		this.outputConsoleComponent = null;
 	}
 	
 	public SimpleConsoleComponent getOutputConsoleComponent()
@@ -211,7 +213,7 @@ public class PikaterSSHLauncher
 		}
 		else
 		{
-			// TODO:
+			MyNotifications.showApplicationError(errorMessage);
 		}
 	}
 }

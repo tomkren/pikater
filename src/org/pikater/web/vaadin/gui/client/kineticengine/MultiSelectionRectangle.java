@@ -34,7 +34,6 @@ public class MultiSelectionRectangle implements IKineticShapeWrapper
 		this.path = Kinetic.createPathSVG(Vector2d.origin, "");
 		this.path.setStroke(Colour.red);
 		this.path.setListening(false);
-		// TODO: this.path.setLineStyle(LineStyle.DASHED);
 		
 		reset();
 	}

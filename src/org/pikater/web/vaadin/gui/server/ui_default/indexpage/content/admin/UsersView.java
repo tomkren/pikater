@@ -26,7 +26,7 @@ public class UsersView extends DBTableLayout implements IContentComponent, IDBVi
 		setWidth("100%");
 		
 		this.dbView = new UsersTableDBView();
-		setView(this); // required to be executed after initializing db view
+		setView(this); // required to be executed after initializing DB view
 	}
 	
 	//----------------------------------------------------

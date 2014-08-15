@@ -5,10 +5,6 @@ import java.util.Stack;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
-/**
- * TODO: options editing makes this incomplete... we have to merge all changes
- * to be registered either on the server or the client.
- */
 public class KineticUndoRedoManager
 {
 	private final KineticComponentWidget widget;
@@ -92,6 +88,11 @@ public class KineticUndoRedoManager
 	
 	//---------------------------------------------------------------
 	// INTERFACE FOR SHARING THE "MODIFIED" STATUS WITH THE SERVER
+	
+	/*
+	 * TODO: options editing makes this incomplete... we have to merge all changes
+	 * to be registered either on the server or the client.
+	 */
 	
 	@SuppressWarnings("unused")
 	private void notifyExperimentModifiedIf(boolean condition)

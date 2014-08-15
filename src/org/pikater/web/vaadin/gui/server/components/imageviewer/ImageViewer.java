@@ -13,10 +13,7 @@ import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * A image viewer for large images capable of zooming in and out.</br>
- * TODO: This class is only a temporary solution to visualization. Much better
- * (but also much more time-consuming) solution would be to use deep zoom images
- * and a client-side viewer for them (like openseadragon).
+ * A image viewer for large images capable of zooming in and out. 
  */
 @StyleSheet("imageViewer.css")
 public class ImageViewer extends VerticalLayout

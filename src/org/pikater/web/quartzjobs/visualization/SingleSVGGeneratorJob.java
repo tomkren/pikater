@@ -46,8 +46,8 @@ public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob
 	}
 
 	@Override
-	public void buildJob(JobBuilder builder) {
-		// TODO Auto-generated method stub
+	public void buildJob(JobBuilder builder)
+	{
 	}
 
 	@Override

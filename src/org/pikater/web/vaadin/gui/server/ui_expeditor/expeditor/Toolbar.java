@@ -196,6 +196,7 @@ public class Toolbar extends VerticalLayout
 		
 		MenuItem viewMenuItem = menu.addItem("View", null);
 		viewMenuItem.setStyleName("menu-topLevelItem");
+		/*
 		viewMenuItem.addItem("Go full screen (only FF, Chrome & Opera)", new Command()
 		{
 			private static final long serialVersionUID = 4109313735302030716L;
@@ -203,11 +204,12 @@ public class Toolbar extends VerticalLayout
 			@Override
 			public void menuSelected(MenuItem selectedItem)
 			{
-				// TODO:
+				// TODO: maybe in future
 				MyNotifications.showWarning(null, "Not implemented yet.");
 			}
 		});
 		viewMenuItem.addSeparator();
+		*/
 		for(final ExpEditorToolbox toolbox : ExpEditorToolbox.values())
 		{
 			viewMenuItem.addItem(String.format("Open %s", toolbox.toDisplayName().toLowerCase()), new Command()
@@ -224,6 +226,7 @@ public class Toolbar extends VerticalLayout
 		
 		if(debugMode)
 		{
+			/*
 			MenuItem debugMenuItem = menu.addItem("Debug", null);
 			debugMenuItem.setStyleName("menu-topLevelItem");
 			debugMenuItem.addItem("Show debug window", new Command()
@@ -237,6 +240,7 @@ public class Toolbar extends VerticalLayout
 					MyNotifications.showWarning(null, "Not implemented yet.");
 				}
 			});
+			*/
 		}
 		
 		addComponent(menu);

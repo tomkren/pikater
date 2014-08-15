@@ -10,28 +10,34 @@ public class DBTableItemPropertyText implements Property<TextField>
 	private static final long serialVersionUID = -1889090215704801361L;
 	
 	private final TextField textField;
+	private final boolean readOnly;
 	
 	public DBTableItemPropertyText(final DBTable parentTable, final StringDBViewValue valueWrapper)
 	{
+		this.readOnly = valueWrapper.isReadOnly();
+		
 		this.textField = new TextField(null, valueWrapper.getValue());
 		this.textField.setWidth("100%");
 		this.textField.setImmediate(true);
 		this.textField.setTextChangeTimeout(500); // necessary to avoid too big DB traffic
-		this.textField.setReadOnly(valueWrapper.isReadOnly());
-		this.textField.addValueChangeListener(new ValueChangeListener() // TODO: use a textchangelistener instead?
+		this.textField.setReadOnly(isReadOnly());
+		if(!isReadOnly())
 		{
-			private static final long serialVersionUID = -6175606221977226773L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event)
+			this.textField.addValueChangeListener(new ValueChangeListener() // TODO: use a textchangelistener instead?
 			{
-				valueWrapper.setValue((String) event.getProperty().getValue());
-				if(parentTable.isImmediate())
+				private static final long serialVersionUID = -6175606221977226773L;
+
+				@Override
+				public void valueChange(ValueChangeEvent event)
 				{
-					valueWrapper.commit();
+					valueWrapper.setValue((String) event.getProperty().getValue());
+					if(parentTable.isImmediate())
+					{
+						valueWrapper.commit();
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override
@@ -55,7 +61,7 @@ public class DBTableItemPropertyText implements Property<TextField>
 	@Override
 	public boolean isReadOnly()
 	{
-		return true;
+		return readOnly;
 	}
 
 	@Override

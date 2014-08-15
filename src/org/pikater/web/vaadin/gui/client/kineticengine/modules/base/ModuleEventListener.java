@@ -22,7 +22,7 @@ public abstract class ModuleEventListener implements IEventListener
 				}
 				else
 				{
-					// TODO: method chain...
+					// TODO
 				}
 			}
 			*/

@@ -288,6 +288,7 @@ public class DataSetDAO extends AbstractDAO{
 		newDSLO.setCreated(new Date());
 		newDSLO.setDescription(description);
 		newDSLO.setOwner(owner);
+		newDSLO.setApproved(owner.isAdmin());
 		
 		long oid = -1;
 		String hash = Hash.getMD5Hash(sourceFile);

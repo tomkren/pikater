@@ -57,15 +57,11 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		
 		// the conversion
 		File convertedFile = null;
-		try {
+		try
+		{
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
-			
-			int datasetID=DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId());
-			
-			//TODO: Notify Pikater that new dataset was uploaded, to compute the metadata
-			WebToCoreEntryPoint.notify_newDataset(datasetID);
-			//TODO: approve the dataset if owner has sufficient rights
-			
+			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId());
+			WebToCoreEntryPoint.notify_newDataset(newDatasetID);
 		} catch (IOException e) {
 			throw new JobExecutionException(e);
 		} catch (DataSetConverterCellException e){

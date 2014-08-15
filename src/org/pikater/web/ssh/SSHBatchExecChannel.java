@@ -89,22 +89,28 @@ public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandE
 	}
 	
 	@Override
-	public synchronized void close()
+	public synchronized void close() throws JSchException
 	{
-		if((shellChannel != null) && !shellChannel.isClosed())
+		if(shellChannel != null)
 		{
-			shellChannel.disconnect();
-			try
+			if(!shellChannel.isClosed())
 			{
-				commandStream.close();
-				responseStream.close();
-			}
-			catch (IOException e)
-			{
-				PikaterLogger.logThrowable("An error occured while closing the channel's related streams.", e);
+				shellChannel.disconnect();
+				try
+				{
+					commandStream.close();
+					responseStream.close();
+				}
+				catch (IOException e)
+				{
+					PikaterLogger.logThrowable("An error occured while closing the channel's related streams.", e);
+				}
 			}
 		}
-		shellChannel = null;
+		else
+		{
+			throw new JSchException("Channel has not been initialized properly due to an error. Resolve it and try again.");
+		}
 	}
 	
 	//------------------------------------------------------------------------------
@@ -204,7 +210,6 @@ public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandE
 					}
 					if(shellChannel.isClosed())
 					{
-						// TODO: if remote server disconnection or close method called then ... else ...
 						session.getNotificationHandler().notifyChannelClosed(shellChannel.getExitStatus());
 						break;
 					}
@@ -225,13 +230,16 @@ public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandE
 			}
 			finally
 			{
-				SSHBatchExecChannel.this.close(); // may have no effect
 				try
 				{
+					SSHBatchExecChannel.this.close(); // may have no effect
 					this.consoleOutput.close();
 					this.close();
 				}
 				catch (IOException e)
+				{
+				}
+				catch (JSchException e)
 				{
 				}
 			}

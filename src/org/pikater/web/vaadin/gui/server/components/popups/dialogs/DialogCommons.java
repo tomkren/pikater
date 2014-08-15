@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.UI;
 
 import de.steinwedel.messagebox.ButtonId;
 import de.steinwedel.messagebox.MessageBox;
@@ -28,10 +29,7 @@ public class DialogCommons
 		{
 			box.setAutoClose(closeWithAnyButton);
 		}
-
-		// TODO:
-		// content.setStyleName("pikaterDialogContent");
-		// parentUI.setFocusedComponent(box);
+		UI.getCurrent().setFocusedComponent(box.getWindow());
 	}
 
 	/**
