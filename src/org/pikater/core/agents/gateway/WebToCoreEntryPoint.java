@@ -35,13 +35,12 @@ public class WebToCoreEntryPoint {
 	}
 
 	/**
-	 * Notifies the core system about a new user-uploaded agent.
-	 * TODO: should validity be checked for on the web (before passing the information
-	 * to core)?
+	 * Notifies the core system about a new user-uploaded agent. 
 	 * @param agentClass class representation of the uploaded jar's agent 
 	 * @throws PikaterGatewayException
 	 */
 	public static void notify_newAgent(Class<?> agentClass) throws PikaterGatewayException {
+		// TODO: argument needs to be id of JPAExternalAgent
 		PikaterGateway_NewAgent.newAgent(agentClass);
 	}
 
@@ -54,21 +53,6 @@ public class WebToCoreEntryPoint {
 		PikaterGateway_NewDataset.newDataset(IDnewDataset);
 	}
 
-	
-	public static void uploadDataset(String filename, int userID, String description) throws IOException{
-		
-		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID);
-		System.out.println("Dataset uploaded with ID : "+id);
-		System.out.println("Demanding metadata computation...");
-		try{
-			WebToCoreEntryPoint.notify_newDataset(id);
-			System.out.println("Metadata computation finished");
-			
-		}catch(PikaterGatewayException pgwe){
-			System.err.println("Error during metadata computation");
-		}
-	}
-	
 	/*
 	 * Test
 	 */
@@ -90,6 +74,21 @@ public class WebToCoreEntryPoint {
 		WebToCoreEntryPoint.uploadDataset("core/datasets/autos.arff", userID, "autos");
 		WebToCoreEntryPoint.uploadDataset("core/datasets/mushroom.arff", userID, "mushroom");
 		WebToCoreEntryPoint.uploadDataset("core/datasets/ionosphere.arff", userID, "ionosphere");
+		
+	}
+	
+	private static void uploadDataset(String filename, int userID, String description) throws IOException{
+		
+		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID);
+		System.out.println("Dataset uploaded with ID : "+id);
+		System.out.println("Demanding metadata computation...");
+		try{
+			WebToCoreEntryPoint.notify_newDataset(id);
+			System.out.println("Metadata computation finished");
+			
+		}catch(PikaterGatewayException pgwe){
+			System.err.println("Error during metadata computation");
+		}
 		
 	}
 }

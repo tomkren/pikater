@@ -49,6 +49,12 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	// INHERITED TABLE INTERFACE
 	
 	@Override
+	public DBTableContainer getContainerDataSource()
+	{
+		return tableContainer;
+	}
+	
+	@Override
 	public void setSortContainerPropertyId(Object propertyId)
 	{
 		ITableColumn newSortColumn = (ITableColumn) propertyId;
@@ -135,66 +141,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	}
 	
 	//-------------------------------------------------------------------
-	// OTHER PUBLIC INTERFACE
-	
-	/**
-	 * The most important method. Without this, the table is but an empty shell.
-	 * @param viewRoot
-	 */
-	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
-	{
-		// this must be first so that column collapsing works...
-		tableContainer.setViewRoot(viewRoot);
-		setContainerDataSource(tableContainer);
-				
-		// basic setup of columns
-		Set<ITableColumn> allDefinedColumns = viewRoot.getUnderlyingDBView().getAllColumns();
-		for(ITableColumn column : allDefinedColumns)
-		{
-			setColumnHeader(column, column.getDisplayName());
-			setColumnAlignment(column, Align.CENTER);
-			setColumnWidth(column, viewRoot.getColumnSize(column));
-			setColumnCollapsible(column, true);
-			setColumnCollapsed(column, true);
-		}
-		for(ITableColumn column : viewRoot.getUnderlyingDBView().getDefaultColumns())
-		{
-			setColumnCollapsed(column, false);
-		}
-		addHeaderClickListener(new HeaderClickListener()
-		{
-			private static final long serialVersionUID = -1276767165561401427L;
-
-			@Override
-			public void headerClick(HeaderClickEvent event)
-			{
-				ITableColumn column = (ITableColumn) event.getPropertyId();
-				if(column.getColumnType().isSortable())
-				{
-					setSortContainerPropertyId(event.getPropertyId()); // Vaadin will not do this by itself... doh
-				}
-			}
-		});
-		
-		// expand ratio of columns
-		if((viewRoot.getExpandColumn() == null) || !allDefinedColumns.contains(viewRoot.getExpandColumn()))
-		{
-			// distribute available space evenly
-			float expandRatio = 1 / (float) allDefinedColumns.size();
-			for(ITableColumn column : allDefinedColumns)
-			{
-				setColumnExpandRatio(column, expandRatio);
-			}
-		}
-		else
-		{
-			// one column takes up all the available space
-			setColumnExpandRatio(viewRoot.getExpandColumn(), 1);
-		}
-		
-		// this will rebuild the container row cache
-		setSortContainerPropertyId(viewRoot.getUnderlyingDBView().getDefaultSortOrder());
-	}
+	// SELECTION RELATED INTERFACE
 	
 	@SuppressWarnings("unchecked")
 	public Set<Object> getSelectedRowIDs()
@@ -232,6 +179,68 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 			index++;
 		}
 		return result;
+	}
+	
+	//-------------------------------------------------------------------
+	// OTHER PUBLIC INTERFACE
+
+	/**
+	 * The most important method. Without this, the table is but an empty shell.
+	 * @param viewRoot
+	 */
+	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
+	{
+		// this must be first so that column collapsing works...
+		tableContainer.setViewRoot(viewRoot);
+		setContainerDataSource(tableContainer);
+
+		// basic setup of columns
+		Set<ITableColumn> allDefinedColumns = viewRoot.getUnderlyingDBView().getAllColumns();
+		for(ITableColumn column : allDefinedColumns)
+		{
+			setColumnHeader(column, column.getDisplayName());
+			setColumnAlignment(column, Align.CENTER);
+			setColumnWidth(column, viewRoot.getColumnSize(column));
+			setColumnCollapsible(column, true);
+			setColumnCollapsed(column, true);
+		}
+		for(ITableColumn column : viewRoot.getUnderlyingDBView().getDefaultColumns())
+		{
+			setColumnCollapsed(column, false);
+		}
+		addHeaderClickListener(new HeaderClickListener()
+		{
+			private static final long serialVersionUID = -1276767165561401427L;
+
+			@Override
+			public void headerClick(HeaderClickEvent event)
+			{
+				ITableColumn column = (ITableColumn) event.getPropertyId();
+				if(column.getColumnType().isSortable())
+				{
+					setSortContainerPropertyId(event.getPropertyId()); // Vaadin will not do this by itself... doh
+				}
+			}
+		});
+
+		// expand ratio of columns
+		if((viewRoot.getExpandColumn() == null) || !allDefinedColumns.contains(viewRoot.getExpandColumn()))
+		{
+			// distribute available space evenly
+			float expandRatio = 1 / (float) allDefinedColumns.size();
+			for(ITableColumn column : allDefinedColumns)
+			{
+				setColumnExpandRatio(column, expandRatio);
+			}
+		}
+		else
+		{
+			// one column takes up all the available space
+			setColumnExpandRatio(viewRoot.getExpandColumn(), 1);
+		}
+
+		// this will rebuild the container row cache
+		setSortContainerPropertyId(viewRoot.getUnderlyingDBView().getDefaultSortOrder());
 	}
 	
 	public PagingComponent getPagingControls()

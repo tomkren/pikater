@@ -19,6 +19,7 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
+import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableViewStep;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -28,8 +29,6 @@ import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbo
 import org.pikater.web.vaadin.gui.server.layouts.SimplePanel;
 
 import com.vaadin.annotations.StyleSheet;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
@@ -347,22 +346,13 @@ public class DatasetsView extends ExpandableView
 	//----------------------------------------------------------------------------
 	// INDIVIDUAL STEPS OF THIS VIEW
 	
-	protected class DatasetOverviewStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
+	protected class DatasetOverviewStep extends ExpandableViewStep
 	{
 		public DatasetOverviewStep(WizardWithDynamicSteps<IWizardCommon> parentWizard)
 		{
 			super(parentWizard, false);
 			
-			mainDatasetsLayout.getTable().addValueChangeListener(new ValueChangeListener()
-			{
-				private static final long serialVersionUID = 2787932307187569389L;
-
-				@Override
-				public void valueChange(ValueChangeEvent event)
-				{
-					getNextButton().setEnabled(!mainDatasetsLayout.getTable().getSelectedRowIDs().isEmpty());
-				}
-			});
+			registerDBViewLayout(mainDatasetsLayout);
 		}
 
 		@Override
@@ -378,26 +368,30 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public boolean constructionOfNextStepAllowed()
+		public ExpandableViewStep constructNextStep()
 		{
-			boolean result = mainDatasetsLayout.getTable().isARowSelected();
-			if(!result)
+			if(!mainDatasetsLayout.getTable().isARowSelected())
 			{
 				MyNotifications.showWarning(null, "No table row (dataset) is selected.");
+				return null;
 			}
-			return result;
+			else
+			{
+				// this assumes single select mode
+				AbstractTableRowDBView[] selectedRowsViews = mainDatasetsLayout.getTable().getViewsOfSelectedRows();
+				return constructNextStepFromView(selectedRowsViews[0]);
+			}
 		}
 
 		@Override
-		public DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> constructNextStep()
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
 		{
-			AbstractTableRowDBView[] selectedRowsViews = mainDatasetsLayout.getTable().getViewsOfSelectedRows();
-			DataSetTableDBRow selectedDatasetView = (DataSetTableDBRow) selectedRowsViews[0]; // this assumes single select mode
+			DataSetTableDBRow selectedDatasetView = (DataSetTableDBRow) view;
 			return new DatasetDetailStep(getParentWizard(), selectedDatasetView.getDataset());
 		}
 	}
 	
-	protected class DatasetDetailStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
+	protected class DatasetDetailStep extends ExpandableViewStep
 	{
 		private final SimplePanel panel;
 
@@ -437,13 +431,13 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public boolean constructionOfNextStepAllowed()
+		public ExpandableViewStep constructNextStep()
 		{
-			return false;
+			return null;
 		}
 
 		@Override
-		public DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> constructNextStep()
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
 		{
 			return null;
 		}

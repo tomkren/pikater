@@ -12,6 +12,7 @@ import org.pikater.shared.database.views.tableview.batches.experiments.Experimen
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
+import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableViewStep;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
@@ -234,7 +235,7 @@ public class BatchesView extends ExpandableView
 		@Override
 		public ITableColumn getExpandColumn()
 		{
-			return ResultTableDBView.Column.NOTE;
+			return null;
 		}
 		
 		@Override
@@ -257,7 +258,7 @@ public class BatchesView extends ExpandableView
 	//----------------------------------------------------------------------------
 	// INDIVIDUAL STEPS OF THIS VIEW
 	
-	protected class BatchStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
+	protected class BatchStep extends ExpandableViewStep
 	{
 		private final DBTableLayout innerLayout;
 		
@@ -268,6 +269,7 @@ public class BatchesView extends ExpandableView
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.getTable().setMultiSelect(false); // this is required below
 			this.innerLayout.setView(new BatchDBViewRoot(dbView));
+			registerDBViewLayout(this.innerLayout);
 		}
 
 		@Override
@@ -283,26 +285,30 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public boolean constructionOfNextStepAllowed()
+		public ExpandableViewStep constructNextStep()
 		{
-			boolean result = innerLayout.getTable().isARowSelected();
-			if(!result)
+			if(!innerLayout.getTable().isARowSelected())
 			{
 				MyNotifications.showWarning(null, "No table row (batch) is selected.");
+				return null;
 			}
-			return result;
+			else
+			{
+				// this assumes single select mode
+				AbstractTableRowDBView[] selectedRowsViews = innerLayout.getTable().getViewsOfSelectedRows();
+				return constructNextStepFromView(selectedRowsViews[0]);
+			}
 		}
 
 		@Override
-		public DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> constructNextStep()
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
 		{
-			AbstractTableRowDBView[] selectedRowsViews = innerLayout.getTable().getViewsOfSelectedRows();
-			BatchTableDBRow selectedBatchView = (BatchTableDBRow) selectedRowsViews[0]; // this assumes single select mode
-			return new ExperimentStep(BatchesView.this, selectedBatchView.getBatch());
+			BatchTableDBRow specificView = (BatchTableDBRow) view; 
+			return new ExperimentStep(BatchesView.this, specificView.getBatch());
 		}
 	}
 	
-	protected class ExperimentStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
+	protected class ExperimentStep extends ExpandableViewStep
 	{
 		private final DBTableLayout innerLayout;
 		
@@ -314,6 +320,7 @@ public class BatchesView extends ExpandableView
 			this.innerLayout.getTable().setMultiSelect(false); // this is required below
 			this.innerLayout.setReadOnly(true);
 			this.innerLayout.setView(new ExperimentDBViewRoot(batch));
+			registerDBViewLayout(this.innerLayout);
 		}
 
 		@Override
@@ -329,26 +336,30 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public boolean constructionOfNextStepAllowed()
+		public ExpandableViewStep constructNextStep()
 		{
-			boolean result = innerLayout.getTable().isARowSelected();
-			if(!result)
+			if(!innerLayout.getTable().isARowSelected())
 			{
 				MyNotifications.showWarning(null, "No table row (experiment) is selected.");
+				return null;
 			}
-			return result;
+			else
+			{
+				// this assumes single select mode
+				AbstractTableRowDBView[] selectedRowsViews = innerLayout.getTable().getViewsOfSelectedRows();
+				return constructNextStepFromView(selectedRowsViews[0]);
+			}
 		}
 
 		@Override
-		public DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> constructNextStep()
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
 		{
-			AbstractTableRowDBView[] selectedRowsViews = innerLayout.getTable().getViewsOfSelectedRows();
-			ExperimentTableDBRow selectedExperimentView = (ExperimentTableDBRow) selectedRowsViews[0]; // this assumes single select mode
+			ExperimentTableDBRow selectedExperimentView = (ExperimentTableDBRow) view;
 			return new ResultStep(BatchesView.this, selectedExperimentView.getExperiment());
 		}
 	}
 	
-	protected class ResultStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
+	protected class ResultStep extends ExpandableViewStep
 	{
 		private final DBTableLayout innerLayout;
 		
@@ -359,6 +370,7 @@ public class BatchesView extends ExpandableView
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.setReadOnly(true);
 			this.innerLayout.setView(new ResultDBViewRoot(experiment));
+			// registerDBViewLayout(this.innerLayout); // POINTLESS (leaf)
 		}
 
 		@Override
@@ -374,13 +386,13 @@ public class BatchesView extends ExpandableView
 		}
 
 		@Override
-		public boolean constructionOfNextStepAllowed()
+		public ExpandableViewStep constructNextStep()
 		{
-			return false;
+			return null;
 		}
 
 		@Override
-		public DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> constructNextStep()
+		protected ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view)
 		{
 			return null;
 		}
