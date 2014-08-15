@@ -1,7 +1,10 @@
 package org.pikater.shared.database.views.tableview.users;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -87,9 +90,15 @@ public class UsersTableDBView extends AbstractTableDBView
 	}
 	
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		return Column.values();
+		return new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		return getAllColumns();
 	}
 	
 	@Override

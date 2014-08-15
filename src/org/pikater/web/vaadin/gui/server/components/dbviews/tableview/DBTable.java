@@ -1,8 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.pikater.shared.database.views.base.QueryConstraints;
@@ -145,13 +143,23 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	 */
 	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
+		// this must be first so that column collapsing works...
+		tableContainer.setViewRoot(viewRoot);
+		setContainerDataSource(tableContainer);
+				
 		// basic setup of columns
-		List<ITableColumn> allDefinedColumns = Arrays.asList(viewRoot.getUnderlyingDBView().getColumns());
+		Set<ITableColumn> allDefinedColumns = viewRoot.getUnderlyingDBView().getAllColumns();
 		for(ITableColumn column : allDefinedColumns)
 		{
 			setColumnHeader(column, column.getDisplayName());
 			setColumnAlignment(column, Align.CENTER);
 			setColumnWidth(column, viewRoot.getColumnSize(column));
+			setColumnCollapsible(column, true);
+			setColumnCollapsed(column, true);
+		}
+		for(ITableColumn column : viewRoot.getUnderlyingDBView().getDefaultColumns())
+		{
+			setColumnCollapsed(column, false);
 		}
 		addHeaderClickListener(new HeaderClickListener()
 		{
@@ -184,10 +192,8 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 			setColumnExpandRatio(viewRoot.getExpandColumn(), 1);
 		}
 		
-		// finish init
-		tableContainer.setViewRoot(viewRoot);
-		setContainerDataSource(tableContainer);
-		setSortContainerPropertyId(viewRoot.getUnderlyingDBView().getDefaultSortOrder()); // this will rebuild the container row cache
+		// this will rebuild the container row cache
+		setSortContainerPropertyId(viewRoot.getUnderlyingDBView().getDefaultSortOrder());
 	}
 	
 	@SuppressWarnings("unchecked")

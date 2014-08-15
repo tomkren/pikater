@@ -2,7 +2,9 @@ package org.pikater.shared.database.views.tableview.batches;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -26,13 +28,19 @@ public class UserSavedBatchesTableDBView extends UserBatchesTableDBView
 	}
 	
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		return EnumSet.of(
+		return new LinkedHashSet<ITableColumn>(EnumSet.of(
 				Column.CREATED,
 				Column.NAME,
 				Column.NOTE
-		).toArray(new ITableColumn[0]);
+		));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		return getAllColumns();
 	}
 	
 	@Override

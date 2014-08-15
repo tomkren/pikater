@@ -2,7 +2,9 @@ package org.pikater.shared.database.views.tableview.datasets;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -121,9 +123,15 @@ public class DataSetTableDBView extends AbstractTableDBView
 	}
 
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		return (ITableColumn[]) Column.getColumns(adminMode()).toArray(new Column[0]);
+		return new LinkedHashSet<ITableColumn>(Column.getColumns(adminMode()));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		return getAllColumns();
 	}
 	
 	@Override

@@ -13,10 +13,11 @@ public class NeverEndingBuffer<E> extends AbstractComputationBuffer<E> {
     {
         this.singleElement=singleElement;
     }
+    public NeverEndingBuffer(){};
 
     @Override
     public boolean hasNext() {
-        return true;
+        return singleElement!=null;
     }
 
     public void insert(E element) {
@@ -30,6 +31,6 @@ public class NeverEndingBuffer<E> extends AbstractComputationBuffer<E> {
 
     @Override
     public int size() {
-        return 1;
+        return singleElement==null? 0: 1;
     }
 }

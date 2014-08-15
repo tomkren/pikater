@@ -1,7 +1,10 @@
 package org.pikater.shared.database.views.tableview.batches.experiments;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
@@ -76,9 +79,15 @@ public class ExperimentTableDBView extends AbstractTableDBView
 	}
 
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		return Column.values();
+		return new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		return getAllColumns();
 	}
 	
 	@Override

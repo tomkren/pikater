@@ -1,7 +1,10 @@
 package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
@@ -92,15 +95,27 @@ public class ResultTableDBView extends AbstractTableDBView
 	}
 
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		return Column.values();
+		return new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		Set<ITableColumn> result = getAllColumns();
+		result.remove(Column.AGENT_NAME);
+		result.remove(Column.WEKA_OPTIONS);
+		result.remove(Column.NOTE);
+		result.remove(Column.TRAINED_MODEL);
+		result.remove(Column.AGENT_NAME);
+		return result;
 	}
 	
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return Column.AGENT_NAME;
+		return Column.ERROR_RATE;
 	}
 	
 	@Override
