@@ -133,16 +133,16 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 		return state;
 	}
 	
-	public void initState(KineticState backup)
+	public void initState(final KineticState backup)
 	{
 		if(backup != null)
 		{
-			this.state = backup;
-			this.state.setParentWidget(this);
+			state = backup;
+			state.setParentWidget(KineticComponentWidget.this);
 		}
 		else
 		{
-			this.state = new KineticState(this);
+			state = new KineticState(KineticComponentWidget.this);
 		}
 		doResize();
 	}
@@ -168,9 +168,6 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				{
 					// actually resize
 					getEngine().resize(newWidth, newHeight);
-					
-					// some debug info
-					GWTLogger.logWarning("Resized kinetic component: " + connector.getConnectorId());
 				}
 				
 				/*

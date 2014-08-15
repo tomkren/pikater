@@ -1,15 +1,14 @@
 package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
-import com.vaadin.client.ui.AbstractComponentConnector;
-import com.vaadin.shared.ui.Connect;
-import com.vaadin.client.communication.RpcProxy;
-
 import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticEdgeSettings;
 
+import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
+import com.vaadin.client.ui.AbstractComponentConnector;
+import com.vaadin.shared.ui.Connect;
 
 @Connect(KineticComponent.class)
 public class KineticComponentConnector extends AbstractComponentConnector

@@ -64,8 +64,6 @@ public class DatasetsView extends ExpandableView
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		this.mainDatasetsLayout.setCommitImmediately(false);
-		
 		// always call these last, when you're absolutely ready to display the content
 		this.mainDatasetsLayout.setView(new DatasetDBViewRoot());
 		super.finishInit(); // don't forget to!
