@@ -80,7 +80,7 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 	}
 
 	@Override
-	protected void refreshContent()
+	public void refreshContent()
 	{
 		BoxSlot currentEndpoint = new BoxSlot(getContext().getCurrentBoxDataSource(), getCurrentSource());
 		

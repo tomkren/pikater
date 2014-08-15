@@ -52,7 +52,7 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption>
 	}
 
 	@Override
-	protected void refreshContent()
+	public void refreshContent()
 	{
 		link_optionName.setValue(getCurrentSource().getName());
 		link_optionName.setDescription(getCurrentSource().getDescription());

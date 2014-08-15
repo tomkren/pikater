@@ -132,11 +132,20 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			@Override
 			public void command_boxSetChange(RegistrationOperation opKind, BoxGraphItemShared[] boxes)
 			{
+				// get the toolbox
+				final BoxManagerToolbox boxManager = (BoxManagerToolbox) parentEditor.getToolbox(ExpEditorToolbox.BOX_MANAGER);
+				
+				// register/unregister the boxes on the server, update box manager if need be
 				for(BoxGraphItemShared boxShared : boxes)
 				{
-					experimentGraph.getBox(boxShared.getID()).setRegistered(opKind == RegistrationOperation.REGISTER);
+					BoxInfoServer boxServer = experimentGraph.getBox(boxShared.getID());
+					boxServer.setRegistered(opKind == RegistrationOperation.REGISTER);
+					if(!getState().boxManagerBoundWithSelection && (opKind == RegistrationOperation.UNREGISTER)
+							&& (boxServer.getID() == boxManager.getCurrentBoxDataSource().getID()))  
+					{
+						boxManager.setContentFromSelectedBoxes(new BoxInfoServer[0]);
+					}
 				}
-				// TODO: update box manager views (could delete a box that is connected with the current one via a slot)
 			}
 			
 			/**
@@ -146,23 +155,27 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			@Override
 			public void command_edgeSetChange(RegistrationOperation opKind, EdgeGraphItemShared[] edges)
 			{
-				if(opKind == RegistrationOperation.REGISTER)
+				// get the toolbox's current data source
+				final BoxManagerToolbox boxManager = (BoxManagerToolbox) parentEditor.getToolbox(ExpEditorToolbox.BOX_MANAGER);
+				
+				boolean boxManagerNeedsToUpdate = false;
+				for(EdgeGraphItemShared edge : edges)
 				{
-					for(EdgeGraphItemShared edge : edges)
+					interboxConnectionAction(opKind, edge);
+					
+					if(boxManager.getCurrentBoxDataSource() != null)
 					{
-						// does all kinds of checks and throws exceptions
-						experimentGraph.connect(edge.fromBoxID, edge.toBoxID);
+						if((edge.fromBoxID == boxManager.getCurrentBoxDataSource().getID()) ||
+							(edge.toBoxID == boxManager.getCurrentBoxDataSource().getID()))
+						{
+							boxManagerNeedsToUpdate = true;
+						}
 					}
 				}
-				else
+				if(boxManagerNeedsToUpdate)
 				{
-					for(EdgeGraphItemShared edge : edges)
-					{
-						// does all kinds of checks and throws exceptions
-						experimentGraph.disconnect(edge.fromBoxID, edge.toBoxID); // this will invalidate any actual slot connections
-					}
+					boxManager.getCurrentView().refreshContent();
 				}
-				// TODO: update box manager views (could delete an edge that allows a slot connection)
 			}
 			
 			@Override
@@ -204,6 +217,26 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 					BoxInfoServer box_server = experimentGraph.getBox(box_shared.getID());
 					box_server.setPosX(box_shared.getPosX());
 					box_server.setPosY(box_shared.getPosY());
+				}
+			}
+			
+			//-------------------------------------------------------------
+			// SOME CONVENIENCE PRIVATE INTERFACE
+			
+			/**
+			 * Does all kinds of checks and throws exceptions.
+			 * @param opKind
+			 * @param edge
+			 */
+			private void interboxConnectionAction(RegistrationOperation opKind, EdgeGraphItemShared edge)
+			{
+				if(opKind == RegistrationOperation.REGISTER)
+				{
+					experimentGraph.connect(edge.fromBoxID, edge.toBoxID);
+				}
+				else
+				{
+					experimentGraph.disconnect(edge.fromBoxID, edge.toBoxID);
 				}
 			}
 		});
