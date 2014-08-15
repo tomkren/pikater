@@ -25,7 +25,7 @@ public class DBTableLayout extends VerticalLayout
 	public DBTableLayout()
 	{
 		super();
-		setSizeUndefined();
+		setSizeFull();
 		setSpacing(true);
 		
 		this.chb_commit = new CheckBox("commit changes immediately", true); // table is, by default, immediate
@@ -45,10 +45,10 @@ public class DBTableLayout extends VerticalLayout
 		});
 		
 		this.table = new DBTable();
-		this.table.setSizeFull();
+		this.table.setWidth("100%");
 		
 		this.tablePagingControls = this.table.getPagingControls();
-		this.tablePagingControls.setSizeFull();
+		this.tablePagingControls.setWidth("100%");
 		
 		this.btn_saveChanges = new Button("Save changes", new Button.ClickListener()
 		{

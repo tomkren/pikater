@@ -1,6 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.tableview;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.pikater.shared.database.views.base.QueryConstraints;
@@ -143,12 +145,13 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	 */
 	public void setView(IDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
-		for(ITableColumn column : viewRoot.getUnderlyingDBView().getColumns())
+		// basic setup of columns
+		List<ITableColumn> allDefinedColumns = Arrays.asList(viewRoot.getUnderlyingDBView().getColumns());
+		for(ITableColumn column : allDefinedColumns)
 		{
 			setColumnHeader(column, column.getDisplayName());
 			setColumnAlignment(column, Align.CENTER);
 			setColumnWidth(column, viewRoot.getColumnSize(column));
-			// TODO: table.setColumnExpandRatio(propertyId, expandRatio); // override fixed column width
 		}
 		addHeaderClickListener(new HeaderClickListener()
 		{
@@ -164,6 +167,24 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 				}
 			}
 		});
+		
+		// expand ratio of columns
+		if((viewRoot.getExpandColumn() == null) || !allDefinedColumns.contains(viewRoot.getExpandColumn()))
+		{
+			// distribute available space evenly
+			float expandRatio = 1 / (float) allDefinedColumns.size();
+			for(ITableColumn column : allDefinedColumns)
+			{
+				setColumnExpandRatio(column, expandRatio);
+			}
+		}
+		else
+		{
+			// one column takes up all the available space
+			setColumnExpandRatio(viewRoot.getExpandColumn(), 1);
+		}
+		
+		// finish init
 		tableContainer.setViewRoot(viewRoot);
 		setContainerDataSource(tableContainer);
 		setSortContainerPropertyId(viewRoot.getUnderlyingDBView().getDefaultSortOrder()); // this will rebuild the container row cache

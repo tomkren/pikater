@@ -1,5 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.popups;
 
+import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.vaadin.alump.fancylayouts.FancyNotification;
@@ -15,7 +16,7 @@ import com.vaadin.ui.UI;
  * pattern.
  * </br></br>
  * TODO: is there a decent way to improve this? To get an instance of underlying
- * UI based on something other than currently running thread?
+ * UI based on something other than currently running thread? Maybe {@link ResourceRegistrar}?
  */
 public class MyNotifications
 {

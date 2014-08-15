@@ -85,6 +85,12 @@ public class BoxManagerToolbox extends Toolbox implements IContextForViews
 	}
 	
 	@Override
+	public AbstractBoxManagerView<?> getCurrentView()
+	{
+		return currentView;
+	}
+	
+	@Override
 	public AbstractBoxManagerView<?> getView(BoxManagerView view)
 	{
 		switch(view)

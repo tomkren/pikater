@@ -43,7 +43,19 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 		@Override
 		public String getDisplayName()
 		{
-			return this.name();
+			switch(this)
+			{
+				case RATIO_OF_MISSING_VALUES:
+					return "MISSING_VALUES_%";
+				case MINIMUM:
+					return "MIN";
+				case MAXIMUM:
+					return "MAX";
+				case AVERAGE:
+					return "AVG";
+				default:
+					return name();
+			}
 		}
 
 		@Override

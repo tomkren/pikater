@@ -37,7 +37,15 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 		@Override
 		public String getDisplayName()
 		{
-			return this.name();
+			switch(this)
+			{
+				case RATIO_OF_MISSING_VALUES:
+					return "MISSING_VALUES_%";
+				case CATEGORY_COUNT:
+					return "CATEGORIES";
+				default:
+					return name();
+			}
 		}
 
 		@Override

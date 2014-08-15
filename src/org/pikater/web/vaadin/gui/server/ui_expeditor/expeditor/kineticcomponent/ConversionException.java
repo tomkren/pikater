@@ -7,6 +7,5 @@ public class ConversionException extends Exception
 	public ConversionException(Throwable cause)
 	{
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 }

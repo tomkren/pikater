@@ -21,6 +21,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.TextField;
 
 public class AgentsView extends DBTableLayout implements IContentComponent, IDBViewRoot<ExternalAgentTableDBView>
 {
@@ -32,14 +33,18 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 	{
 		super();
 		setSizeUndefined();
+		setWidth("100%");
 		
 		this.underlyingDBView = new ExternalAgentTableDBView();
 	}
+	
+	//----------------------------------------------------
+	// VIEW INTERFACE
 
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		setView(this); // required to be executed after initializing db view
+		setView(this); // required to be executed after initializing DB view
 	}
 
 	@Override
@@ -53,16 +58,14 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 	{
 		return null;
 	}
-
+	
+	//----------------------------------------------------
+	// DB VIEW INTERFACE
+	
 	@Override
 	public ExternalAgentTableDBView getUnderlyingDBView()
 	{
 		return underlyingDBView;
-	}
-
-	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
-	{
 	}
 
 	@Override
@@ -72,21 +75,39 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 		switch(specificColumn)
 		{
 			case OWNER:
-				return 100;
 			case CREATED:
-				return 75;
+				return 100;
 			case NAME:
 				return 150;
 			case AGENT_CLASS:
-				return 150; // TODO: set tooltip
+				return 150;
 			case DESCRIPTION:
 				return 250;
 			case APPROVED:
+				return 75;
 			case DOWNLOAD:
-			case DELETE:
 				return 100;
+			case DELETE:
+				return 75;
 			default:
 				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+		}
+	}
+	
+	@Override
+	public ITableColumn getExpandColumn()
+	{
+		return ExternalAgentTableDBView.Column.DESCRIPTION;
+	}
+	
+	@Override
+	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	{
+		ExternalAgentTableDBView.Column specificColumn = (ExternalAgentTableDBView.Column) column;
+		if((specificColumn == Column.AGENT_CLASS) || (specificColumn == Column.DESCRIPTION)) 
+		{
+			TextField tf_value = (TextField) component;
+			tf_value.setDescription(tf_value.getValue());
 		}
 	}
 

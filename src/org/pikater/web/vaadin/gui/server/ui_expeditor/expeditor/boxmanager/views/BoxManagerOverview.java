@@ -52,7 +52,7 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 	}
 
 	@Override
-	protected void refreshContent()
+	public void refreshContent()
 	{
 		innerLayout.removeAllComponents();
 		refreshOptions();

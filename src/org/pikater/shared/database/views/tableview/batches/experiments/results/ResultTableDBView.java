@@ -1,7 +1,6 @@
 package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPAExperiment;
@@ -33,11 +32,6 @@ public class ResultTableDBView extends AbstractTableDBView
 		this.experiment = experiment;
 	}
 	
-	private boolean adminMode()
-	{
-		return this.owner == null;
-	}
-	
 	/**
 	 * Table headers will be presented in the order defined here, so
 	 * make sure to order them right :). 
@@ -47,25 +41,28 @@ public class ResultTableDBView extends AbstractTableDBView
 		/*
 		 * First the read-only properties.
 		 */
-		OWNER, // owner is expected to be declared first in the {@link #getColumns()} method
 		AGENT_NAME,
 		WEKA_OPTIONS,
 		ERROR_RATE,
-		KAPPA_STATISTIC,
-		MEAN_ABSOLUTE_ERROR,
-		ROOT_MEAN_SQUARED_ERROR,
-		RELATIVE_ABSOLUTE_ERROR,
-		ROOT_RELATIVE_SQUARED_ERROR,
-		STARTED,
-		FINISHED,
+		KAPPA,
+		REL_ABS_ERR,
+		MEAN_ABS_ERR,
+		ROOT_REL_SQR_ERR,
+		ROOT_MEAN_SQR_ERR,
 		NOTE,
-		CREATED_MODEL;
-		
+		TRAINED_MODEL,
+		EXPORT;
 
 		@Override
 		public String getDisplayName()
 		{
-			return this.name();
+			switch(this)
+			{
+				case AGENT_NAME:
+					return "AGENT";
+				default:
+					return name();
+			}
 		}
 
 		@Override
@@ -73,24 +70,19 @@ public class ResultTableDBView extends AbstractTableDBView
 		{
 			switch(this)
 			{
-				case OWNER:
-		
 				case AGENT_NAME:
-				case NOTE:
 				case WEKA_OPTIONS:
-				
+				case NOTE:
 				case ERROR_RATE:
-				case KAPPA_STATISTIC:
-				case MEAN_ABSOLUTE_ERROR:
-				case RELATIVE_ABSOLUTE_ERROR:
-				case ROOT_MEAN_SQUARED_ERROR:
-				case ROOT_RELATIVE_SQUARED_ERROR:
-					
-				case STARTED:
-				case FINISHED:
+				case KAPPA:
+				case MEAN_ABS_ERR:
+				case REL_ABS_ERR:
+				case ROOT_MEAN_SQR_ERR:
+				case ROOT_REL_SQR_ERR:
 					return DBViewValueType.STRING;
-				
-				case CREATED_MODEL:
+					
+				case TRAINED_MODEL:
+				case EXPORT:
 					return DBViewValueType.NAMED_ACTION;
 					
 				default:
@@ -102,21 +94,13 @@ public class ResultTableDBView extends AbstractTableDBView
 	@Override
 	public ITableColumn[] getColumns()
 	{
-		if(adminMode())
-		{
-			return Column.values();
-		}
-		else
-		{
-			ITableColumn[] allColumns = Column.values();
-			return Arrays.copyOfRange(allColumns, 1, allColumns.length); // everything except owner, which is specified
-		}
+		return Column.values();
 	}
 	
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return adminMode() ? Column.OWNER : Column.AGENT_NAME;
+		return Column.AGENT_NAME;
 	}
 	
 	@Override

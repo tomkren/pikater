@@ -204,9 +204,6 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		this.extension = new ExpEditorExtension();
 		this.extension.extend(this);
 		this.extension.getClientRPC().command_loadBoxPictures(allPictureURLs.toArray(new String[0]));
-		
-		// display an empty experiment by default
-		// addEmptyTab(); // TODO: this seems to be a bit buggy...
 	}
 	
 	@Override

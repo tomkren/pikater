@@ -20,8 +20,6 @@ public class ServerConfigurationInterface
 	private static JadeTopologies jadeTopologies = null;
 	private static AgentInfoCollection knownAgents = null;
 	
-	// TODO: merge this with NoSessionStore eventually?
-	
 	// **************************************************************************************************
 	// PUBLIC INTERFACE
 	
@@ -32,7 +30,7 @@ public class ServerConfigurationInterface
 			case CONTEXT:
 				if(context != null)
 				{
-					throw new IllegalStateException();
+					throw new IllegalStateException("Application context is already defined.");
 				}
 				else
 				{
@@ -42,7 +40,7 @@ public class ServerConfigurationInterface
 			case CONFIG:
 				if(config != null)
 				{
-					throw new IllegalStateException();
+					throw new IllegalStateException("Application configuration is already defined.");
 				}
 				else
 				{
@@ -52,7 +50,7 @@ public class ServerConfigurationInterface
 			case JADE_TOPOLOGIES:
 				if(jadeTopologies != null)
 				{
-					throw new IllegalStateException();
+					throw new IllegalStateException("Known agents are already defined.");
 				}
 				else
 				{
@@ -89,12 +87,12 @@ public class ServerConfigurationInterface
 	
 	public static Boolean avoidUsingDBForNow()
 	{
-		return false;
+		return false; // TODO: move this to application configuration eventually
 	}
 	
 	public static boolean isApplicationReadyToServe()
 	{
-		/* TODO:
+		/* TODO: synchronize with full application configuration
 		return (getContext() != null) && 
 				(getConfig() != null) && getConfig().isValid() && 
 				(getJadeTopologies() != null) && (getJadeTopologies().getConnectedTopologies().size() > 1);

@@ -8,7 +8,6 @@ import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.shared.util.DateUtils;
 import org.pikater.shared.util.LocaleUtils;
 
 public class ResultTableDBRow extends AbstractTableRowDBView {
@@ -32,41 +31,30 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 		 * First the read-only properties.
 		 */
 		case AGENT_NAME:
-			return new StringReadOnlyDBViewValue(result.getAgentName());
-		case OWNER:
-			//TODO: fix the back references
-			String res="error";
-			try{
-				res=result.getExperiment().getBatch().getOwner().getLogin();
-			}catch(NullPointerException npe){}
-			return new StringReadOnlyDBViewValue(res);
-		case NOTE:
-			return new StringReadOnlyDBViewValue(result.getNote());
-		case STARTED:
-			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(result.getStart()));
-		case FINISHED:
-			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(result.getFinish()));
-		case ERROR_RATE:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getErrorRate()));
-		case KAPPA_STATISTIC:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getKappaStatistic()));
-		case MEAN_ABSOLUTE_ERROR:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getMeanAbsoluteError()));
-		case RELATIVE_ABSOLUTE_ERROR:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRelativeAbsoluteError()));
-		case ROOT_MEAN_SQUARED_ERROR:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRootMeanSquaredError()));
-		case ROOT_RELATIVE_SQUARED_ERROR:
-			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRootRelativeSquaredError()));
+			return new StringReadOnlyDBViewValue(result.getAgentName().substring(result.getAgentName().lastIndexOf(".") + 1));
 		case WEKA_OPTIONS:
 			return new StringReadOnlyDBViewValue(result.getOptions());
+		case NOTE:
+			return new StringReadOnlyDBViewValue(result.getNote());
+		case ERROR_RATE:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getErrorRate()));
+		case KAPPA:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getKappaStatistic()));
+		case MEAN_ABS_ERR:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getMeanAbsoluteError()));
+		case REL_ABS_ERR:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRelativeAbsoluteError()));
+		case ROOT_MEAN_SQR_ERR:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRootMeanSquaredError()));
+		case ROOT_REL_SQR_ERR:
+			return new StringReadOnlyDBViewValue(LocaleUtils.formatDouble(currentLocale, result.getRootRelativeSquaredError()));
 		
 		/*
 		 * And then custom actions.
 		 */
-		case CREATED_MODEL:
+		case TRAINED_MODEL:
 			//TODO: Implement best model retrieval
-			return new NamedActionDBViewValue("Get Model") {	
+			return new NamedActionDBViewValue("Download") {	
 
 				@Override
 				public boolean isEnabled()
@@ -86,6 +74,29 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 					// TODO Auto-generated method stub
 				}
 			};
+		case EXPORT:
+			// TODO: export full information into a zip or a readable format?
+			return new NamedActionDBViewValue("Download") {	
+
+				@Override
+				public boolean isEnabled()
+				{
+					return true;
+				}
+
+				@Override
+				protected void updateEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				protected void commitEntities()
+				{
+					// TODO Auto-generated method stub
+				}
+			};
+			
 		
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

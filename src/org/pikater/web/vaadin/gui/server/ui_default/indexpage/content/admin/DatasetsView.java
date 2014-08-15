@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -24,6 +25,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialog
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbourWizardStep;
+import org.pikater.web.vaadin.gui.server.layouts.SimplePanel;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -33,7 +35,8 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TextField;
 
 @StyleSheet("datasetsView.css")
 public class DatasetsView extends ExpandableView
@@ -46,13 +49,18 @@ public class DatasetsView extends ExpandableView
 	public DatasetsView()
 	{
 		super();
+		setSizeUndefined();
+		setWidth("100%");
 		
 		this.underlyingView = new DataSetTableDBView();
 		
 		this.mainDatasetsLayout = new DBTableLayout();
-		this.mainDatasetsLayout.setSizeUndefined();
+		this.mainDatasetsLayout.setSizeFull();
 		this.mainDatasetsLayout.getTable().setMultiSelect(false); // this is required below
 	}
+	
+	//----------------------------------------------------
+	// VIEW INTERFACE
 
 	@Override
 	public void enter(ViewChangeEvent event)
@@ -99,16 +107,6 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, AbstractComponent component)
-		{
-			DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
-			if(specificColumn == Column.DESCRIPTION)
-			{
-				// TODO: set description to the label somehow to display it whole?
-			}
-		}
-
-		@Override
 		public int getColumnSize(ITableColumn column)
 		{
 			DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
@@ -116,29 +114,49 @@ public class DatasetsView extends ExpandableView
 			{
 				case OWNER:
 					return 125;
+					
+				case CREATED:
+					return 100;
+					
+				case SIZE:
+					return 60;
 				
 				case DEFAULT_TASK_TYPE:
-					return 150;
+					return 100;
 					
 				case NUMBER_OF_INSTANCES:
 					return 75;
 				
-				case CREATED:
-					return 100;
-				
-				case SIZE:
-					return 75;
-					
 				case DESCRIPTION:
 					return 300;
 					
 				case APPROVED:
+					return 75;
+					
 				case DOWNLOAD:
-				case DELETE:
 					return 100;
+				case DELETE:
+					return 75;
 					
 				default:
 					throw new IllegalStateException(String.format("No sizing information found for column '%s'", specificColumn.name()));
+			}
+		}
+		
+		@Override
+		public ITableColumn getExpandColumn()
+		{
+			return DataSetTableDBView.Column.DESCRIPTION;
+		}
+		
+		@Override
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
+		{
+			DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
+			if(specificColumn == Column.DESCRIPTION)
+			{
+				TextField tf_value = (TextField) component;
+				tf_value.setDescription(tf_value.getValue());
 			}
 		}
 
@@ -179,8 +197,7 @@ public class DatasetsView extends ExpandableView
 					@Override
 					public String getFilename()
 					{
-						// TODO:
-						return null;
+						return DAOs.filemappingDAO.getSingleExternalFilename(rowView.getDataset());
 					}
 				});
 				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(datasetDownloadResourceUI));
@@ -221,31 +238,37 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, AbstractComponent component)
-		{
-		}
-
-		@Override
 		public int getColumnSize(ITableColumn column)
 		{
 			CategoricalMetaDataTableDBView.Column specificColumn = (CategoricalMetaDataTableDBView.Column) column;
 			switch(specificColumn)
 			{
 				case NAME:
-					return 100;
+					return 150;
 				case IS_TARGET:
 					return 75;
 				case CATEGORY_COUNT:
-					return 125;
+					return 100;
 				case RATIO_OF_MISSING_VALUES:
-					return 175;
+					return 125;
 				case CLASS_ENTROPY:
-					return 100;
+					return 75;
 				case ENTROPY:
-					return 100;
+					return 115;
 				default:
 					throw new IllegalStateException(String.format("No sizing information found for column '%s'", specificColumn.name()));
 			}
+		}
+		
+		@Override
+		public ITableColumn getExpandColumn()
+		{
+			return null;
+		}
+		
+		@Override
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
+		{
 		}
 
 		@Override
@@ -270,11 +293,6 @@ public class DatasetsView extends ExpandableView
 		}
 
 		@Override
-		public void onCellCreate(ITableColumn column, AbstractComponent component)
-		{
-		}
-
-		@Override
 		public int getColumnSize(ITableColumn column)
 		{
 			NumericalMetaDataTableDBView.Column specificColumn = (NumericalMetaDataTableDBView.Column) column;
@@ -283,23 +301,41 @@ public class DatasetsView extends ExpandableView
 				case NAME:
 					return 100;
 				case IS_TARGET:
+					return 75;
+				
 				case IS_REAL:
+					return 55;
+					
 				case MINIMUM:
 				case MAXIMUM:
 				case AVERAGE:
-				// case MODE:
 				case MEDIAN:
+				// case MODE:
+					return 65;
+				
 				case VARIANCE:
-					return 75;
+					return 70;
 				case RATIO_OF_MISSING_VALUES:
-					return 175;
+					return 125;
+				case ENTROPY:
+					return 70;
 				case CLASS_ENTROPY:
 					return 100;
-				case ENTROPY:
-					return 100;
+				
 				default:
 					throw new IllegalStateException(String.format("No sizing information found for column '%s'", specificColumn.name()));
 			}
+		}
+		
+		@Override
+		public ITableColumn getExpandColumn()
+		{
+			return NumericalMetaDataTableDBView.Column.CLASS_ENTROPY;
+		}
+		
+		@Override
+		public void onCellCreate(ITableColumn column, AbstractComponent component)
+		{
 		}
 
 		@Override
@@ -363,47 +399,41 @@ public class DatasetsView extends ExpandableView
 	
 	protected class DatasetDetailStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
 	{
-		private final VerticalLayout innerLayout;
+		private final SimplePanel panel;
 
 		public DatasetDetailStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, JPADataSetLO dataset)
 		{
 			super(parentWizard, true);
 			
-			this.innerLayout = new VerticalLayout();
-			this.innerLayout.setSizeUndefined();
-			this.innerLayout.setSpacing(true);
-			this.innerLayout.setStyleName("datasetDetailView");
-			
-			DBTableLayout categoricalMetadataTable = createTable("Categorical columns:");
+			DBTableLayout categoricalMetadataTable = new DBTableLayout();
 			categoricalMetadataTable.setView(new CategoricalMetadataDBViewRoot(new CategoricalMetaDataTableDBView(dataset)));
 			categoricalMetadataTable.setReadOnly(true);
 			
-			DBTableLayout numericalMetadataTable = createTable("Numerical columns:");
+			DBTableLayout numericalMetadataTable = new DBTableLayout();
 			numericalMetadataTable.setView(new NumericalMetadataDBViewRoot(new NumericalMetaDataTableDBView(dataset)));
 			numericalMetadataTable.setReadOnly(true);
 			
-			this.innerLayout.addComponent(categoricalMetadataTable);
-			this.innerLayout.addComponent(numericalMetadataTable);
+			TabSheet tabSheet = new TabSheet();
+			tabSheet.setSizeFull();
+			tabSheet.setImmediate(true);
+			tabSheet.addTab(categoricalMetadataTable, "Categorical");
+			tabSheet.addTab(numericalMetadataTable, "Numerical");
+			
+			this.panel = new SimplePanel(tabSheet);
+			this.panel.addStyleName("datasetDetailView");
+			this.panel.setSizeFull();
 		}
 		
-		private DBTableLayout createTable(String caption)
-		{
-			DBTableLayout resultTable = new DBTableLayout();
-			resultTable.setCaption(caption);
-			resultTable.setSizeUndefined();
-			return resultTable;
-		}
-
 		@Override
 		public String getCaption()
 		{
-			return "Dataset detail";
+			return "Dataset metadata";
 		}
 
 		@Override
 		public Component getContent()
 		{
-			return innerLayout;
+			return this.panel;
 		}
 
 		@Override

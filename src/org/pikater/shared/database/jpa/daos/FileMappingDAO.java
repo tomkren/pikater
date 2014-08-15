@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
+import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.utils.CustomActionResultFormatter;
@@ -33,6 +34,14 @@ public class FileMappingDAO extends AbstractDAO {
 				getByTypedNamedQuery("FileMapping.getByID", "id", ID),
 				era
 				).getSingleResultWithNull();
+	}
+	
+	public String getSingleExternalFilename(JPADataSetLO dslo){
+		try{
+			return DAOs.filemappingDAO.getByInternalFilename(dslo.getHash()).get(0).getExternalfilename();
+		}catch(ArrayIndexOutOfBoundsException aioobe){
+			return null;
+		}
 	}
 	
 	public List<JPAFilemapping> getByInternalFilename(String internalFilename) {

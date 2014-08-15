@@ -51,7 +51,6 @@ public class BatchDAO extends AbstractDAO {
 		case FINISHED: 
 		case NAME:
 		case NOTE:
-		case PRIORITY:
 		case STATUS:
 			return root.get(column.toString().toLowerCase());
 		case MAX_PRIORITY:

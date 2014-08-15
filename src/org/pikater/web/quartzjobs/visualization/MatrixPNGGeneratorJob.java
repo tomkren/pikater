@@ -49,7 +49,6 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 	@Override
 	public void buildJob(JobBuilder builder)
 	{
-		// TODO Auto-generated method stub
 	}
 
 	@Override

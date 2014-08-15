@@ -9,6 +9,11 @@ public class NullValue implements IValueData
 	public NullValue() {}
 	
 	@Override
+	public boolean equals(Object obj)
+	{
+		return true; // needed in {@link NewOption#mergeWith(IMergeable)}
+	}
+	@Override
 	public Object hackValue()
 	{
 		return null;

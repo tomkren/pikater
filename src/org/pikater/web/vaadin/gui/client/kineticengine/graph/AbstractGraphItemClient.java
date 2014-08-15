@@ -1,8 +1,9 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.graph;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
+import java.util.SortedSet;
 
+import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 
@@ -22,16 +23,23 @@ public abstract class AbstractGraphItemClient<S extends IGraphItemSettings> impl
 	 * The list to update the looks of your graph items from. Styles are applied
 	 * in the order they were added to this list, so the later the more priority.
 	 */
-	private final List<VisualStyle> appliedVisualStyles;
+	private final SortedSet<VisualStyle> appliedVisualStyles;
 	
 	public enum VisualStyle
 	{
-		SELECTED,
+		/*
+		 * First nullifiers.
+		 */
 		NOT_SELECTED,
-		HIGHLIGHTED_EDGE,
 		NOT_HIGHLIGHTED_EDGE,
-		HIGHLIGHTED_SLOT,
-		NOT_HIGHLIGHTED_SLOT;
+		NOT_HIGHLIGHTED_SLOT,
+		
+		/*
+		 * Then modifiers.
+		 */
+		SELECTED,
+		HIGHLIGHTED_EDGE,
+		HIGHLIGHTED_SLOT;
 		
 		public VisualStyle getComplementStyle()
 		{
@@ -54,9 +62,16 @@ public abstract class AbstractGraphItemClient<S extends IGraphItemSettings> impl
 			}
 		}
 		
-		public static List<VisualStyle> getDefault()
+		public static SortedSet<VisualStyle> getDefault()
 		{
-			List<VisualStyle> result = new ArrayList<AbstractGraphItemClient.VisualStyle>();
+			SortedSet<VisualStyle> result = new CustomOrderSet<VisualStyle>(new Comparator<VisualStyle>()
+			{
+				@Override
+				public int compare(VisualStyle o1, VisualStyle o2)
+				{
+					return ((Integer) o1.ordinal()).compareTo(o2.ordinal());
+				}
+			});
 			result.add(NOT_SELECTED);
 			result.add(NOT_HIGHLIGHTED_EDGE);
 			result.add(NOT_HIGHLIGHTED_SLOT);

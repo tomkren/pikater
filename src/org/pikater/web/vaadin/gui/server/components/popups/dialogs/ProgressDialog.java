@@ -18,6 +18,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import de.steinwedel.messagebox.ButtonId;
 import de.steinwedel.messagebox.Icon;
 import de.steinwedel.messagebox.MessageBox;
+import de.steinwedel.messagebox.ResourceFactory;
 
 public class ProgressDialog extends DialogCommons
 {
@@ -245,6 +246,7 @@ public class ProgressDialog extends DialogCommons
 				public void run()
 				{
 					box.getButton(ButtonId.ABORT).setCaption("Finished - click to open result");
+					box.getButton(ButtonId.ABORT).setIcon(new ResourceFactory().getIcon(ButtonId.YES));
 					box.getButton(ButtonId.ABORT).addClickListener(new Button.ClickListener()
 					{
 						private static final long serialVersionUID = 5823278457271773907L;

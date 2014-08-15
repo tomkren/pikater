@@ -23,10 +23,14 @@ public class UsersView extends DBTableLayout implements IContentComponent, IDBVi
 	{
 		super();
 		setSizeUndefined();
+		setWidth("100%");
 		
 		this.dbView = new UsersTableDBView();
-		setView(this); // required to be executed after initializing db view
+		setView(this); // required to be executed after initializing DB view
 	}
+	
+	//----------------------------------------------------
+	// VIEW INTERFACE
 
 	@Override
 	public void enter(ViewChangeEvent event)
@@ -45,20 +49,13 @@ public class UsersView extends DBTableLayout implements IContentComponent, IDBVi
 		return null;
 	}
 	
+	//----------------------------------------------------
+	// DB VIEW INTERFACE
+	
 	@Override
 	public UsersTableDBView getUnderlyingDBView()
 	{
 		return dbView;
-	}
-
-	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
-	{
-		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
-		if(specificColumn == Column.MAX_PRIORITY)
-		{
-			component.setDescription("The higher, the better.");
-		}
 	}
 
 	@Override
@@ -83,10 +80,26 @@ public class UsersView extends DBTableLayout implements IContentComponent, IDBVi
 			case RESET_PSWD:
 				return 100;
 			case DELETE:
-				return 100;
+				return 75;
 			
 			default:
 				throw new IllegalStateException("Unknown state: " + specificColumn.name());
+		}
+	}
+	
+	@Override
+	public ITableColumn getExpandColumn()
+	{
+		return UsersTableDBView.Column.EMAIL;
+	}
+	
+	@Override
+	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	{
+		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
+		if(specificColumn == Column.MAX_PRIORITY)
+		{
+			component.setDescription("The higher, the better.");
 		}
 	}
 

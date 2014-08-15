@@ -10,9 +10,12 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 	private static final long serialVersionUID = -5919644785774086999L;
 	
 	private final ComboBox comboBox;
+	private final boolean readOnly;
 
 	public DBTableItemPropertyCombo(final DBTable parentTable, final RepresentativeDBViewValue valueWrapper)
 	{
+		this.readOnly = valueWrapper.isReadOnly();
+		
 		this.comboBox = new ComboBox(null, valueWrapper.getValues());
 		this.comboBox.setWidth("100%");
 		this.comboBox.setValue(valueWrapper.getValue());
@@ -20,21 +23,24 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 		this.comboBox.setTextInputAllowed(false);
 		this.comboBox.setNewItemsAllowed(false);
 		this.comboBox.setImmediate(true);
-		this.comboBox.setReadOnly(valueWrapper.isReadOnly());
-		this.comboBox.addValueChangeListener(new ValueChangeListener()
+		this.comboBox.setReadOnly(isReadOnly());
+		if(!isReadOnly())
 		{
-			private static final long serialVersionUID = -6175606221977226773L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event)
+			this.comboBox.addValueChangeListener(new ValueChangeListener()
 			{
-				valueWrapper.setValue((String) event.getProperty().getValue());
-				if(parentTable.isImmediate())
+				private static final long serialVersionUID = -6175606221977226773L;
+
+				@Override
+				public void valueChange(ValueChangeEvent event)
 				{
-					valueWrapper.commit();
+					valueWrapper.setValue((String) event.getProperty().getValue());
+					if(parentTable.isImmediate())
+					{
+						valueWrapper.commit();
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	@Override
@@ -58,7 +64,7 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 	@Override
 	public boolean isReadOnly()
 	{
-		return true;
+		return readOnly;
 	}
 
 	@Override

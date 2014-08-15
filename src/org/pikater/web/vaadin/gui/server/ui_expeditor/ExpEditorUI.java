@@ -78,5 +78,8 @@ public class ExpEditorUI extends CustomConfiguredUI
 		ExpEditor editor = new ExpEditor(isDebugModeActive());
 		// editor.loadExperimentIntoNewTab("test experiment", UniversalComputationDescription.getDummy());
 		setContent(editor);
+		
+		// display an empty experiment by default
+		// addEmptyTab(); // TODO: test
 	}
 }

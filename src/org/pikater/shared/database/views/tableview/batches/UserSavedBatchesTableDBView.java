@@ -54,7 +54,7 @@ public class UserSavedBatchesTableDBView extends UserBatchesTableDBView
 		
 		for(JPABatch batch : allBatches)
 		{
-			rows.add(new BatchTableDBRow(batch));
+			rows.add(new BatchTableDBRow(batch, false));
 		}
 		return new QueryResult(rows, count);
 	}

@@ -49,7 +49,14 @@ public class UsersTableDBView extends AbstractTableDBView
 		@Override
 		public String getDisplayName()
 		{
-			return this.name();
+			if(this == MAX_PRIORITY)
+			{
+				return "USER_PRIORITY";
+			}
+			else
+			{
+				return this.name();
+			}
 		}
 
 		@Override

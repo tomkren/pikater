@@ -46,6 +46,7 @@ public class DBTableItemPropertyAction implements Property<Button>
 	@Override
 	public void setValue(Button newValue) throws com.vaadin.data.Property.ReadOnlyException
 	{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

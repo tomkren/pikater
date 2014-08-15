@@ -30,9 +30,9 @@ public class UserScheduledBatchesTableDBView extends UserBatchesTableDBView
 	{
 		return EnumSet.of(
 				Column.CREATED,
+				Column.STATUS,
 				Column.NAME,
-				Column.NOTE,
-				Column.STATUS
+				Column.NOTE
 		).toArray(new ITableColumn[0]);
 	}
 	
@@ -55,7 +55,7 @@ public class UserScheduledBatchesTableDBView extends UserBatchesTableDBView
 		
 		for(JPABatch batch : allBatches)
 		{
-			rows.add(new BatchTableDBRow(batch));
+			rows.add(new BatchTableDBRow(batch, false));
 		}
 		return new QueryResult(rows, count);
 	}

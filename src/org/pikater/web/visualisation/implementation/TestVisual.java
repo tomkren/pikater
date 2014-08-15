@@ -27,19 +27,16 @@ public class TestVisual {
 			@Override
 			public void updateProgress(float percentage)
 			{
-				// TODO Auto-generated method stub
 			}
 			
 			@Override
 			public void finished(IProgressDialogTaskResult result)
 			{
-				// TODO Auto-generated method stub
 			}
 			
 			@Override
 			public void failed()
 			{
-				// TODO Auto-generated method stub
 			}
 		}, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		
