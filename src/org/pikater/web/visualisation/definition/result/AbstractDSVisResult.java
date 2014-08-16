@@ -53,6 +53,12 @@ public abstract class AbstractDSVisResult<I extends Object & Comparable<? super 
 	 * Main.
 	 */
 	
+	@Override
+	public Iterator<R> iterator()
+	{
+		return resultImageCollection.iterator();
+	}
+	
 	public int getImageWidth()
 	{
 		return imageWidth;
@@ -68,10 +74,9 @@ public abstract class AbstractDSVisResult<I extends Object & Comparable<? super 
 		return indexer;
 	}
 	
-	@Override
-	public Iterator<R> iterator()
+	public boolean isSubresultRegistered(I leftIndex, I topIndex)
 	{
-		return resultImageCollection.iterator();
+		return indexer.isSubresultRegistered(leftIndex, topIndex);
 	}
 	
 	/*
@@ -85,6 +90,10 @@ public abstract class AbstractDSVisResult<I extends Object & Comparable<? super 
 	
 	public void failed()
 	{
+		for(R subresult : resultImageCollection)
+		{
+			subresult.destroy();
+		}
 		taskResult.failed();
 	}
 	

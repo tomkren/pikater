@@ -23,15 +23,25 @@ public class SubresultIndexer<I extends Object & Comparable<? super I>, R extend
 		this.indexesToSubresult = new HashMap<Tuple<I, I>, R>();
 	}
 	
+	public boolean isSubresultRegistered(I leftIndex, I topIndex)
+	{
+		return this.indexesToSubresult.containsKey(new Tuple<I, I>(leftIndex, topIndex));
+	}
+	
 	public void registerSubresult(I leftIndex, I topIndex, R subresult)
 	{
-		if(this.leftIndexSet.add(leftIndex) || this.topIndexSet.add(topIndex))
+		if(!isSubresultRegistered(leftIndex, topIndex))
 		{
+			leftIndexSet.add(leftIndex);
+			topIndexSet.add(topIndex);
 			indexesToSubresult.put(new Tuple<I, I>(leftIndex, topIndex), subresult);
 		}
 		else
 		{
-			throw new IllegalArgumentException("That result was already registered.");
+			throw new IllegalArgumentException(String.format("Result for '%s' (left) and '%s' (top) was already registered.",
+					leftIndex.toString(),
+					topIndex.toString()
+			));
 		}
 	}
 

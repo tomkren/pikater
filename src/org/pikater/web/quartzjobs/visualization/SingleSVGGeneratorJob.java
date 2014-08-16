@@ -76,7 +76,7 @@ public class SingleSVGGeneratorJob extends InterruptibleImmediateOneTimeJob
 				listener.finished();
 			} catch (IOException e) {
 				file.delete();
-				listener.failed();
+				listener.failed(); // don't forget to... important cleanup will take place
 				throw new JobExecutionException();
 			}
 

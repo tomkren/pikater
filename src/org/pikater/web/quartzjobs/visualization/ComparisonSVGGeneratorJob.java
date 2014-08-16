@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.PrintStream;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.pikater.shared.util.Tuple;
@@ -75,14 +75,17 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 			}
 			else
 			{
-				if((dataset1.getGlobalMetaData()==null)||(dataset1.getAttributeMetaData()==null))
+				if((dataset1.getGlobalMetaData() == null) || (dataset1.getAttributeMetaData() == null))
+				{
 					throw new MetadataNotPresentException(dataset1.getDescription());
-				
-				if((dataset2.getGlobalMetaData()==null)||(dataset2.getAttributeMetaData()==null))
+				}
+				if((dataset2.getGlobalMetaData() == null) || (dataset2.getAttributeMetaData() == null))
+				{
 					throw new MetadataNotPresentException(dataset2.getDescription());
+				}
 				
-				File datasetCachedFile1 = PostgreLobAccess.downloadFileFromDB(dataset1.getOID());
-				File datasetCachedFile2=PostgreLobAccess.downloadFileFromDB(dataset2.getOID());
+				File datasetCachedFile1 = new PGLargeObjectAction(null).downloadLOFromDB(dataset1.getOID());
+				File datasetCachedFile2 = new PGLargeObjectAction(null).downloadLOFromDB(dataset2.getOID());
 				
 				int count=0;
 				for(Tuple<AttrMapping, AttrMapping> attrsToCompare : comparisonList)
@@ -111,7 +114,7 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 		catch (Throwable t)
 		{
 			PikaterLogger.logThrowable("Job could not finish because of the following error:", t);
-			result.failed();
+			result.failed(); // don't forget to... important cleanup will take place
 		}
 	}
 	

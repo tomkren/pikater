@@ -24,6 +24,10 @@ public abstract class AbstractDSVisSubresult<I extends Object & Comparable<? sup
 	{
 		return imageFile;
 	}
+	public void destroy()
+	{
+		imageFile.delete();
+	}
 	
 	//----------------------------------------------------
 	// SOME ABSTRACT INTERFACE
