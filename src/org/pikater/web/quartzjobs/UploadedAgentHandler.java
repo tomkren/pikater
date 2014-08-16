@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
+import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -74,11 +75,11 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			}
 			agent.setJar(content);
 			DAOs.externalAgentDAO.storeEntity(agent);
-			// WebToCoreEntryPoint.notify_newAgent(Class.forName(agentClass)); // TODO: wait until only ID can be passed
+			WebToCoreEntryPoint.notify_newAgent(agent.getId());
 		}
-		catch (Throwable t)
+		catch (PikaterGatewayException e)
 		{
-			PikaterLogger.logThrowable("Processing uploaded agent failed:", t);
+			PikaterLogger.logThrowable("Processing uploaded agent failed:", e);
 		}
 		finally
 		{
