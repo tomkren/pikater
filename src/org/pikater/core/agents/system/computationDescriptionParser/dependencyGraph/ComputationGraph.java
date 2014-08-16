@@ -3,6 +3,10 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 import java.util.HashMap;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -49,12 +53,20 @@ public class ComputationGraph {
            }
     }
 
-    public void computationBatchFinished()
+    public void computationBatchFinished(PikaterAgent agent, int batchID)
     {
-        //TODOStepan: log end of computation
+    	DataManagerService.updateBatchStatus(
+    			agent, batchID, JPABatchStatus.FINISHED.name());
         //TODOJakub: call this when the batch is completed
     }
-        
+
+    public void computationExperimentFinished(PikaterAgent agent, int experimentID)
+    {
+    	DataManagerService.updateExperimentStatus(
+    			agent, experimentID, JPAExperimentStatus.FINISHED.name());
+        //TODOJakub: call this when the experiment is completed
+    }
+    
     public int getId() {
         return id;
     }
