@@ -497,13 +497,6 @@ public class ComputingAction extends FSMBehaviour {
 					agent.logError(e.getMessage(), e);
 				}
 
-				if (agent.currentTask.getGetResults() != null
-						&& agent.currentTask.getGetResults().equals(
-								CoreConstants.RESULT_AFTER_EACH_TASK)) {
-					resultMsg.addReceiver(new AID(agent.currentTask
-							.getGuiAgent(), false));
-				}
-
 				agent.currentTask.setFinish(agent.getDateTime());
 
 				agent.send(resultMsg);

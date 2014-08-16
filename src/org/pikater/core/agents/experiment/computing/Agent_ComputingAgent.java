@@ -214,7 +214,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		NewOptions taskOptions = new NewOptions(task.getAgent().getOptions());
 		taskOptions.removeOptionByName(CoreConstants.MODE);
 		taskOptions.removeOptionByName(CoreConstants.OUTPUT);
-		taskOptions.removeOptionByName(CoreConstants.RESULT);
 		
 		String wekaOptionsString = 
 				taskOptions.exportToWeka();
