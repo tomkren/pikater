@@ -150,20 +150,34 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		agent.setOptions(usedoptions.getOptions());
 		
 		Datas datas = new Datas();
-		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
-		String testing;
+        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get("training").getNext();
+        DataSourceEdge testingEdge;
+		String training = trainingEdge.getDataSourceId();
 		if( inputs.get("testing") == null){
-			testing = training;							
+			testingEdge=trainingEdge;
 		}
 		else{
-			testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();
+
+			testingEdge = ((DataSourceEdge) inputs.get("testing").getNext());
 		}
-		
-		datas.importExternalTrainFileName(training);
-		datas.importInternalTrainFileName(myAgent.getHashOfFile(training, userID));
-		datas.importExternalTestFileName(testing);
-		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, userID));
-		
+
+        if (trainingEdge.isFile()) {
+            datas.importExternalTrainFileName(training);
+            datas.importInternalTrainFileName(myAgent.getHashOfFile(training, userID));
+        }
+        else
+        {
+            datas.importExternalTrainFileName(training);
+        }
+        if (testingEdge.isFile()) {
+            datas.importExternalTestFileName(testingEdge.getDataSourceId());
+            datas.importInternalTestFileName(myAgent.getHashOfFile(testingEdge.getDataSourceId(), userID));
+        }
+        else
+        {
+            datas.importExternalTestFileName(testingEdge.getDataSourceId());
+        }
+
 		IExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setUserID(userID);
 		task.setSaveResults(true);
