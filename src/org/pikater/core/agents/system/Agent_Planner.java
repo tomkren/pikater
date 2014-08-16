@@ -15,6 +15,7 @@ import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREResponder;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Set;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.metadata.MetadataCommunicator;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
@@ -34,6 +36,7 @@ import org.pikater.core.agents.system.planner.dataStructures.TaskToSolve;
 import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DataOntology;
+import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
@@ -64,6 +67,7 @@ public class Agent_Planner extends PikaterAgent {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(DataOntology.getInstance());
 		ontologies.add(TaskOntology.getInstance());
+		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(ModelOntology.getInstance());
 		return ontologies;
@@ -252,7 +256,6 @@ public class Agent_Planner extends PikaterAgent {
 	}
 
 	private void saveDataToDB(Task task, String node) {
-		// TODO nemusely by se ukladat vsechny data...  zrejme by tohle melo byt ve FileSavingStrategy, tam ale neprobublaji zadne informace o vystupech, v pripade input02 se dokonce vubec nespousti
 		String dataManagerName = AgentNames.DATA_MANAGER;
 		if (node != null) {
 			dataManagerName += "-";
@@ -272,16 +275,23 @@ public class Agent_Planner extends PikaterAgent {
 			request.setLanguage(getCodec().getName());
 			request.setOntology(ontology.getName());
 			ACLMessage reply = null;
+			int datasetId;
 			try {
-				// TODO kdy maji vzniknout metadata?
 				getContentManager().fillContent(request, new Action(dataManager, sd));
 				reply = FIPAService.doFipaRequestClient(this, request, 10000);
 				if (reply == null) {
 					logError("Failed to save output data in DB - reply not received.");
+					return;
 				}
+				datasetId = (Integer)reply.getContentObject();
 			} catch (CodecException | OntologyException | FIPAException e) {
 				logError("Failed to save output data in DB", e);
+				return;
+			} catch (UnreadableException e) {
+				logError("Failed to request metadata", e);
+				return;
 			}
+			MetadataCommunicator.requestMetadataForDataset(this, datasetId);
 			log("saved output to DB: "+t.getName());
 		}
 	}
