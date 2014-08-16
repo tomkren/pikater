@@ -28,7 +28,7 @@ import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.TerminationOntology;
@@ -289,8 +289,7 @@ public abstract class PikaterAgent extends Agent {
 	}
 	
 	public AID createAgent(String type, String name, Arguments options){
-		ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
-		return communicator.createAgent(this, type, name, options);
+		return ManagerAgentService.createAgent(this, type, name, options);
 	}
 	
 	public AID createAgent(String type){
@@ -302,7 +301,7 @@ public abstract class PikaterAgent extends Agent {
 	}
 	
 	public boolean killAgent(String agentName){
-		ManagerAgentCommunicator communicator = new ManagerAgentCommunicator();
+		ManagerAgentService communicator = new ManagerAgentService();
 		return communicator.killAgent(this, agentName);
 	}
 	

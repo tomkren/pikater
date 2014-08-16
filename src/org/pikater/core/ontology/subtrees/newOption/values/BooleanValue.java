@@ -68,7 +68,6 @@ public class BooleanValue implements IValueData
 	@Override
 	public String exportToWeka()
 	{
-		
 		return String.valueOf(value);
 	}
 	@Override

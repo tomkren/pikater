@@ -145,25 +145,25 @@ public class StartupAndQuitListener implements ServletContextListener
 						switch(type)
 						{
 							case CHOOSE:
-								name = "Klob��sa";
+								name = "Klobása";
 								break;
 							case COMPUTE:
-								name = "Vep��ov�� k��ta";
+								name = "Vepřová kýta";
 								break;
 							case PROCESS_DATA:
 								name = "Chleba";
 								break;
 							case OPTION:
-								name = "Bobkov�� list";
+								name = "Bobkový list";
 								break;
 							case INPUT:
 								name = "Brambory";
 								break;
 							case MISC:
-								name = "Pep��";
+								name = "Pepř";
 								break;
 							case OUTPUT:
-								name = "S��l";
+								name = "Sůl";
 								break;
 							case SEARCH:
 								name = "Cibule";

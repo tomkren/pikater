@@ -1,4 +1,4 @@
-package org.pikater.core.agents.system.guiAgentsCommunicator;
+package org.pikater.core.agents.system.manager;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
@@ -16,12 +16,12 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
 
-public class GuiCommunicator {
-	
+public class ManagerService {
+
 	/*
 	 * Sends ID of new batch as inform to agent Manager
 	 */
-	public void sendNewBatchInfoToManager(PikaterAgent agent, int userID, int newBatchID) {
+	public static void sendNewBatchInfoToManager(PikaterAgent agent, int userID, int newBatchID) {
 		
 		NewBatch newBatch = new NewBatch();
 		newBatch.setUserId(userID);

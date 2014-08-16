@@ -1,4 +1,4 @@
-package org.pikater.core.agents.gateway.newDataset;
+package org.pikater.core.agents.gateway.batch;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -11,21 +11,23 @@ import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.gateway.Initiator;
 import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
-import org.pikater.core.ontology.MetadataOntology;
-import org.pikater.core.ontology.subtrees.metadata.NewDataset;
+import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.subtrees.batch.NewBatch;
 
-public class PikaterGateway_NewDataset {
+public class PikaterGateway_NewBatch {
 
-	public static void newDataset(int IDNewDataset) throws PikaterGatewayException {
+	public static void newBatch(int IDNewBatch) throws PikaterGatewayException {
 
 		try {
-			NewDataset newDataset = new NewDataset();
-			newDataset.setDataSetID(IDNewDataset);
+	        
+	        NewBatch newBatch = new NewBatch();
+	        newBatch.setBatchId(IDNewBatch);
 
-			Ontology metadataOntology = MetadataOntology.getInstance();
+			Ontology batchOntology = BatchOntology.getInstance();
 
 			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.METADATA_QUEEN, metadataOntology, newDataset);
+					AgentNames.MANAGER, batchOntology,
+					newBatch);
 
 			Initiator initiator = new Initiator(msg);
 			PikaterGateway_General.generalRequest(initiator);
@@ -40,4 +42,5 @@ public class PikaterGateway_NewDataset {
 		}
 
 	}
+
 }

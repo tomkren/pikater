@@ -20,7 +20,7 @@ import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentCommunicator;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.AgentManagementOntology;
@@ -224,8 +224,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 
 	public List<NewOption> getAgentOptions(String agentType) {
 		
-		DataManagerService service = new DataManagerService();
-		AgentInfo agentInfo = service.getAgentInfo(this, agentType);
+		AgentInfo agentInfo = DataManagerService.getAgentInfo(this, agentType);
 		NewOptions optionsOnt = agentInfo.getOptions();
 
 		return optionsOnt.getOptions();
@@ -308,8 +307,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 */
 	
 	public AID createAgent(String type, String name, Arguments arguments) {
-        ManagerAgentCommunicator communicator=new ManagerAgentCommunicator();
-        AID aid=communicator.createAgent(this,type,name,arguments);
+        AID aid=ManagerAgentService.createAgent(this,type,name,arguments);
         return aid;
 	}
 	

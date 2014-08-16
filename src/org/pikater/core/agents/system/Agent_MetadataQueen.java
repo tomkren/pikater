@@ -94,7 +94,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			JPADataSetLO dslo= DAOs.dataSetDAO.getByID(dataSetID, EmptyResultAction.THROW);
 			PostgreLargeObjectReader plor = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
 			
-			File file=new File(CoreConfiguration.FREDDIE_PATH + dslo.getHash());
+			File file=new File(CoreConfiguration.METADATA_PATH + dslo.getHash());
 			if(!file.exists()){
 			FileWriter fw=new FileWriter(file);
 			

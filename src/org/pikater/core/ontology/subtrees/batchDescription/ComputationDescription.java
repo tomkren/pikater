@@ -28,26 +28,13 @@ public class ComputationDescription implements Concept {
 
 	private static final long serialVersionUID = -7951850172320173523L;
 
-	private int priority;
 	private List<NewOption> globalOptions;
 
 	private List<FileDataSaver> rootElements;
 	
 	public ComputationDescription() {
-		this.priority = 0;
 		this.globalOptions = new ArrayList<NewOption>();
 		this.rootElements = new ArrayList<FileDataSaver>();
-	}
-
-	public int getPriority() {
-		return priority;
-	}
-	public void setPriority(int priority) {
-		if (priority < 0 || 9 < priority) {
-			throw new IllegalArgumentException(
-					"Argument priority have to be in the interval <0,9>");
-		}
-		this.priority = priority;
 	}
 
 	public List<NewOption> getGlobalOptions() {
@@ -157,7 +144,6 @@ public class ComputationDescription implements Concept {
 		gene();
 		
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
-		uModel.setPriority(this.getPriority());
 		NewOptions optionsOnt = new NewOptions(this.getGlobalOptions());
 		uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
 		
@@ -245,10 +231,9 @@ public class ComputationDescription implements Concept {
 	}
 
 	public static ComputationDescription importUniversalComputationDescription(
-			UniversalComputationDescription uDescription, int totalPriority) {
+			UniversalComputationDescription uDescription) {
 
 		ComputationDescription description = new ComputationDescription();
-		description.setPriority(totalPriority);
 		description.setGlobalOptions(
 				new ArrayList<NewOption>(uDescription.getGlobalOptions()) );
 

@@ -3,10 +3,11 @@ package org.pikater.core.agents.gateway;
 import java.io.File;
 import java.io.IOException;
 
+import org.pikater.core.agents.gateway.batch.PikaterGateway_KillBatch;
+import org.pikater.core.agents.gateway.batch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
 import org.pikater.core.agents.gateway.newAgent.PikaterGateway_NewAgent;
-import org.pikater.core.agents.gateway.newBatch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
@@ -35,14 +36,12 @@ public class WebToCoreEntryPoint {
 	}
 
 	/**
-	 * Notifies the core system about a new user-uploaded agent.
-	 * TODO: should validity be checked for on the web (before passing the information
-	 * to core)?
-	 * @param agentClass class representation of the uploaded jar's agent 
+	 * Notifies the core system about a new user-uploaded agent. 
+	 * @param externalAgentID ID of external agent's JPA entity 
 	 * @throws PikaterGatewayException
 	 */
-	public static void notify_newAgent(Class<?> agentClass) throws PikaterGatewayException {
-		PikaterGateway_NewAgent.newAgent(agentClass);
+	public static void notify_newAgent(int externalAgentID) throws PikaterGatewayException {
+		PikaterGateway_NewAgent.newAgent(externalAgentID);
 	}
 
 	/**
@@ -53,22 +52,16 @@ public class WebToCoreEntryPoint {
 	public static void notify_newDataset(int IDnewDataset) throws PikaterGatewayException {
 		PikaterGateway_NewDataset.newDataset(IDnewDataset);
 	}
-
 	
-	public static void uploadDataset(String filename, int userID, String description) throws IOException{
-		
-		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID);
-		System.out.println("Dataset uploaded with ID : "+id);
-		System.out.println("Demanding metadata computation...");
-		try{
-			WebToCoreEntryPoint.notify_newDataset(id);
-			System.out.println("Metadata computation finished");
-			
-		}catch(PikaterGatewayException pgwe){
-			System.err.println("Error during metadata computation");
-		}
+	/**
+	 * Notifies Agent Planner to stop executing the batch.
+	 * @param batchID ID of the batch to be stopped
+	 * @throws PikaterGatewayException
+	 */
+	public static void notify_killBatch(int batchID) throws PikaterGatewayException{
+		PikaterGateway_KillBatch.killBatch(batchID);
 	}
-	
+
 	/*
 	 * Test
 	 */
@@ -90,6 +83,21 @@ public class WebToCoreEntryPoint {
 		WebToCoreEntryPoint.uploadDataset("core/datasets/autos.arff", userID, "autos");
 		WebToCoreEntryPoint.uploadDataset("core/datasets/mushroom.arff", userID, "mushroom");
 		WebToCoreEntryPoint.uploadDataset("core/datasets/ionosphere.arff", userID, "ionosphere");
+		
+	}
+	
+	private static void uploadDataset(String filename, int userID, String description) throws IOException{
+		
+		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID);
+		System.out.println("Dataset uploaded with ID : "+id);
+		System.out.println("Demanding metadata computation...");
+		try{
+			WebToCoreEntryPoint.notify_newDataset(id);
+			System.out.println("Metadata computation finished");
+			
+		}catch(PikaterGatewayException pgwe){
+			System.err.println("Error during metadata computation");
+		}
 		
 	}
 }

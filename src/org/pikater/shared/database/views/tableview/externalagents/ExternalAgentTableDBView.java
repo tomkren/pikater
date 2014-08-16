@@ -2,7 +2,9 @@ package org.pikater.shared.database.views.tableview.externalagents;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -96,19 +98,32 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 					throw new IllegalStateException("Unknown state: " + name());
 			}
 		}
+		
+		public static EnumSet<Column> getAllColumns(boolean adminMode)
+		{
+			if(adminMode)
+			{
+				return EnumSet.allOf(Column.class); 
+			}
+			else
+			{
+				return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVED));
+			}
+		}
 	}
 
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		if(adminMode())
-		{
-			return Column.values(); 
-		}
-		else
-		{
-			return EnumSet.complementOf(EnumSet.of(Column.OWNER, Column.APPROVED)).toArray(new ITableColumn[0]);
-		}
+		return new LinkedHashSet<ITableColumn>(Column.getAllColumns(adminMode()));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		Set<ITableColumn> result = getAllColumns();
+		result.remove(Column.AGENT_CLASS);
+		return result;
 	}
 	
 	@Override

@@ -13,7 +13,7 @@
         <agent type="org.pikater.core.agents.system.Agent_DataManager" name="DataManager">
         </agent>
 
-        <agent type="org.pikater.core.agents.system.Agent_MetadataQueen" name="Freddie">
+        <agent type="org.pikater.core.agents.system.Agent_MetadataQueen" name="MetadataQueen">
         </agent>
 
         <agent type="org.pikater.core.agents.system.Agent_ManagerAgent" name="ManagerAgent">

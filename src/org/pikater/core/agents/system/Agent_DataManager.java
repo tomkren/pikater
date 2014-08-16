@@ -76,6 +76,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
+import org.pikater.core.ontology.subtrees.batch.GetBatchPriority;
 import org.pikater.core.ontology.subtrees.batch.LoadBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
@@ -215,6 +216,9 @@ public class Agent_DataManager extends PikaterAgent {
 					}
 					if (a.getAction() instanceof UpdateBatchStatus) {
 						return respondToUpdateBatchStatus(request, a);
+					}
+					if (a.getAction() instanceof GetBatchPriority) {
+						return respondToGetBatchPriority(request, a);
 					}
 					
 					/**
@@ -614,8 +618,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ComputationDescription compDescription =
 				ComputationDescription.importUniversalComputationDescription(
-						uDescription, batchJPA.getPriority() 
-		);
+						uDescription);
 		
 		Batch batch = new Batch();
 		batch.setId(batchJPA.getId());
@@ -663,6 +666,36 @@ public class Agent_DataManager extends PikaterAgent {
 		reply.setContent("OK");
 		
 		return reply;
+	}
+	
+	private ACLMessage respondToGetBatchPriority(ACLMessage request,
+			Action a) {
+		log("respondToGetBatchPriority");
+		
+		GetBatchPriority getBatchPriority = (GetBatchPriority) a.getAction();
+		int batchID = getBatchPriority.getBatchID();
+		
+		JPABatch batchJPA = DAOs.batchDAO.getByID(batchID);
+		
+		ACLMessage reply = request.createReply();
+		
+		if(batchJPA == null){
+			reply.setPerformative(ACLMessage.FAILURE);
+		}else{
+			reply.setPerformative(ACLMessage.INFORM);
+
+			Result result = new Result(a, batchJPA.getTotalPriority());
+			try {
+				getContentManager().fillContent(reply, result);
+			} catch (CodecException e) {
+				logError(e.getMessage(), e);
+			} catch (OntologyException e) {
+				logError(e.getMessage(), e);
+			}
+		}
+		
+		return reply;
+
 	}
 	
 	private ACLMessage respondToSaveExperiment(ACLMessage request,

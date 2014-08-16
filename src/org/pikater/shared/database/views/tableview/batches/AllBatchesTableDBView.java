@@ -2,7 +2,9 @@ package org.pikater.shared.database.views.tableview.batches;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -17,19 +19,23 @@ import org.pikater.shared.database.views.tableview.base.ITableColumn;
 public class AllBatchesTableDBView extends AbstractBatchTableDBView
 {
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		return EnumSet.of(
-				Column.STATUS,
+		return new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		return new LinkedHashSet<ITableColumn>(EnumSet.of(
 				Column.FINISHED,
+				Column.STATUS,
 				Column.CREATED,
-				Column.MAX_PRIORITY,
 				Column.OWNER,
 				Column.NAME,
 				Column.NOTE,
-				Column.ABORT,
-				Column.RESULTS
-		).toArray(new ITableColumn[0]);
+				Column.ABORT
+		));
 	}
 	
 	@Override

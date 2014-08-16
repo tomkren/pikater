@@ -1,7 +1,7 @@
 package org.pikater.shared.database.views.tableview.base;
 
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.pikater.shared.database.views.base.QueryConstraints;
 import org.pikater.shared.database.views.base.QueryResult;
@@ -17,17 +17,29 @@ import org.pikater.shared.database.views.base.QueryResult;
 public abstract class AbstractTableDBView
 {
 	/**
-	 * Returns the enumeration of all columns this view defines, in
+	 * Returns the enumeration of all columns this view supports, in
 	 * the order they will be displayed in GUI.
-	 * @see {@link org.pikater.shared.database.views.tableview.users.UsersTableDBView} - example
 	 * @return
 	 */
-	public abstract ITableColumn[] getColumns();
+	public abstract Set<ITableColumn> getAllColumns();
 	
-	public Collection<ITableColumn> getSortableColumns()
+	/**
+	 * Returns the enumeration of all columns that will be displayed
+	 * by default in GUI.
+	 * @return
+	 */
+	public abstract Set<ITableColumn> getDefaultColumns();
+	
+	/**
+	 * Returns the column by which this view is sorted by default.
+	 * @return
+	 */
+	public abstract ITableColumn getDefaultSortOrder();
+	
+	public Set<ITableColumn> getSortableColumns()
 	{
 		HashSet<ITableColumn> result = new HashSet<ITableColumn>();
-		for(ITableColumn column : getColumns())
+		for(ITableColumn column : getAllColumns())
 		{
 			if(column.getColumnType().isSortable())
 			{
@@ -36,12 +48,6 @@ public abstract class AbstractTableDBView
 		}
 		return result;
 	}
-	
-	/**
-	 * Returns the column by which this view is sorted by default.
-	 * @return
-	 */
-	public abstract ITableColumn getDefaultSortOrder();
 	
 	/**
 	 * Returns a non-cached initialized collection of rows.

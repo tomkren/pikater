@@ -14,6 +14,7 @@ import jade.proto.AchieveREResponder;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
@@ -72,8 +73,7 @@ public class ParserBehaviour extends AchieveREResponder {
     		NewBatch newBatch = (NewBatch) concept;
     		int userID = newBatch.getUserId();
     		
-    		ManagerCommunicator communicator = new ManagerCommunicator();
-    		Batch batch = communicator.loadBatch(agent, newBatch.getBatchId());
+    		Batch batch = DataManagerService.loadBatch(agent, newBatch.getBatchId());
     		
     		ComputationDescription comDescription = batch.getDescription();
     		int batchID = batch.getId();
@@ -100,8 +100,7 @@ public class ParserBehaviour extends AchieveREResponder {
         agent.addComputation(item);
         
         // change status to computing and log to database
-        ManagerCommunicator communicator = new ManagerCommunicator();
-        communicator.updateBatchStatus(agent, batchID, JPABatchStatus.COMPUTING.name());
+        DataManagerService.updateBatchStatus(agent, batchID, JPABatchStatus.COMPUTING.name());
         
 		computationGraph.startBatchComputation();
 		

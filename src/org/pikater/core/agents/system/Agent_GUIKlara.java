@@ -11,6 +11,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+import jade.wrapper.ControllerException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,20 +24,26 @@ import java.util.List;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.gateway.Agent_PikaterGateway;
+import org.pikater.core.agents.gateway.Initiator;
+import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
+import org.pikater.core.agents.system.metadata.MetadataCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
+import org.pikater.core.ontology.subtrees.task.KillTasks;
 import org.pikater.shared.database.utils.DataSetConverter;
 
 
@@ -165,6 +172,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				System.out.println(" Help:\n" +
 						" Help             --help\n" +
 						" Shutdown         --shutdown\n" +
+						" Kill Batch       --kill [batchID]\n" +
 						" Add dataset      --add-dataset [username] [description] <path>\n" +
 						" Get duration     --dura\n"+
 						" For test purposes --test "+
@@ -178,6 +186,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 			} else if (input.startsWith("--run")) {
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
+			} else if (input.startsWith("--kill")) {
+				killBatch(input);
 			} else {
 				System.out.println(
 						"Sorry, I don't understand you. \n" +
@@ -186,6 +196,44 @@ public class Agent_GUIKlara extends PikaterAgent {
 			}
 		}
 
+	}
+
+	private void killBatch(String input) {
+		String[] cmd=input.split(" ");
+		int batchID=-1;
+		try{
+			batchID=Integer.parseInt(cmd[cmd.length-1]);
+			
+			KillTasks killBatch = new KillTasks();
+	        killBatch.setBatchID(batchID);
+
+			Ontology taskOntology = TaskOntology.getInstance();
+
+			try {
+				AID planner = new AID(AgentNames.PLANNER, false);
+
+				ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+				request.addReceiver(planner);
+				request.setLanguage(getCodec().getName());
+				request.setOntology(taskOntology.getName());
+				getContentManager().fillContent(request, new Action(planner, killBatch));
+
+				ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
+
+				if((reply!=null)&&(reply.getPerformative()==ACLMessage.INFORM)){
+					System.out.println("Planner responded Inform");
+				}else{
+					System.err.println("Planner couldn't perform the action");
+				}
+            
+			} catch (CodecException | OntologyException | FIPAException e) {
+				e.printStackTrace();
+			}
+           
+		}catch(NumberFormatException nfe){
+			System.err.println("Wrong number format of Batch ID");
+		}
+		
 	}
 
 	private void printDurationAgentResponse() {
@@ -323,9 +371,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 		
 		if(dataSetID!=-1){
-			this.sendRequestToComputeMetaDataForDataset(dataSetID);
+			MetadataCommunicator.requestMetadataForDataset(this, dataSetID);
 		}
-		
 	}
 	
 	private int sendRequestSaveDataSet(String filename, int userID, String description){
@@ -362,48 +409,5 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 		return -1;
 	}
-	
-	
-	private void sendRequestToComputeMetaDataForDataset(int dataSetID){
-		AID receiver = new AID(AgentNames.FREDDIE, false);
-
-        NewDataset nds = new NewDataset();
-        
-        //nds.setInternalFileName("28c7b9febbecff6ce207bcde29fc0eb8");
-        //nds.setDataSetID(2301);
-        nds.setDataSetID(dataSetID);
-        log("Sending request to store metadata for DataSetID: "+dataSetID);
-        
-        try {
-            ACLMessage request = makeActionRequest(receiver, nds);
-           
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
-            if (reply == null)
-                logError("Reply not received.");
-            else
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
-        } catch (CodecException e) {
-            logError("Codec error occurred: "+e.getMessage(), e);
-        } catch (OntologyException e) {
-            logError("Ontology error occurred: "+e.getMessage(), e);
-        } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage(), e);
-        }
-	}
-	
-	
-	/** Naplni pozadavek na konkretni akci pro jednoho ciloveho agenta */
-    private ACLMessage makeActionRequest(AID target, AgentAction action) throws CodecException, OntologyException {
-    	Ontology ontology = MetadataOntology.getInstance();
-    	
-        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-        msg.addReceiver(target);
-        msg.setLanguage(getCodec().getName());
-        msg.setOntology(ontology.getName());
-        getContentManager().fillContent(msg, new Action(target, action));
-        return msg;
-    }
-	
-	
 }
 

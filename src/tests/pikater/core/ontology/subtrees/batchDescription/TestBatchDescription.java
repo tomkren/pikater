@@ -65,8 +65,7 @@ public class TestBatchDescription {
 
 		ComputationDescription comDescription2 =
 				ComputationDescription.importUniversalComputationDescription(
-						udescriptinSimpleTraining,
-						udescriptinSimpleTraining.getPriority());
+						udescriptinSimpleTraining);
 
 		String xml1 = comDescription.exportXML();
 		String xml2 = comDescription2.exportXML();

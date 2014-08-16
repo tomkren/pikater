@@ -1,8 +1,11 @@
 package org.pikater.shared.database.views.tableview.datasets.metadata;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
@@ -85,9 +88,17 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 	}
 
 	@Override
-	public ITableColumn[] getColumns()
+	public Set<ITableColumn> getAllColumns()
 	{
-		return Column.values();
+		return new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+	}
+	
+	@Override
+	public Set<ITableColumn> getDefaultColumns()
+	{
+		Set<ITableColumn> result = getAllColumns();
+		result.remove(Column.IS_REAL);
+		return result;
 	}
 	
 	@Override

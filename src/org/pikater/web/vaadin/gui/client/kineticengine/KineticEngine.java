@@ -377,6 +377,36 @@ public final class KineticEngine
 		stage.draw();
 	}
 	
+	public void setContext(KineticComponentWidget context)
+	{
+		/*
+		 * First set up the stage.
+		 */
+		if(this.stage != null)
+		{
+			this.layer1_boxes.remove();
+			this.layer2_selection.remove();
+			this.layer3_edges.remove();
+			this.stage.destroy();
+		}
+		this.stage = Kinetic.createStage(context.getStageDOMElement());
+		this.stage.add(layer1_boxes);
+		this.stage.add(layer2_selection);
+		this.stage.add(layer3_edges);
+		
+		/*
+		 * The set up z-indexes for layers.
+		 * NOTE: ZIndex = value that determines priority for event handlers when 2 objects collide. The higher ZIndex, the closer to the user. 
+		 */
+		
+		setFirstArgHigherZIndex(layer2_selection, layer1_boxes);
+		setFirstArgHigherZIndex(layer3_edges, layer2_selection);
+		
+		// and do the rest
+		this.fillRectangle.setSize(this.stage.getSize());
+		this.context = context;
+	}
+	
 	/**
 	 * Highlight boxes only for a single stage repaint.
 	 * @param boxIDs
@@ -471,36 +501,6 @@ public final class KineticEngine
 	public KineticComponentWidget getContext()
 	{
 		return context;
-	}
-	
-	public void setContext(KineticComponentWidget context)
-	{
-		/*
-		 * First set up the stage.
-		 */
-		if(this.stage != null)
-		{
-			this.layer1_boxes.remove();
-			this.layer2_selection.remove();
-			this.layer3_edges.remove();
-			this.stage.destroy();
-		}
-		this.stage = Kinetic.createStage(context.getStageDOMElement());
-		this.stage.add(layer1_boxes);
-		this.stage.add(layer2_selection);
-		this.stage.add(layer3_edges);
-		
-		/*
-		 * The set up z-indexes for layers.
-		 * NOTE: ZIndex = value that determines priority for event handlers when 2 objects collide. The higher ZIndex, the closer to the user. 
-		 */
-		
-		setFirstArgHigherZIndex(layer2_selection, layer1_boxes);
-		setFirstArgHigherZIndex(layer3_edges, layer2_selection);
-		
-		// and do the rest
-		this.fillRectangle.setSize(this.stage.getSize());
-		this.context = context;
 	}
 	
 	public KineticBoxSettings getBoxSettings()

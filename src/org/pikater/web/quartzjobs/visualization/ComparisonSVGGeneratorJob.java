@@ -15,6 +15,7 @@ import org.pikater.web.visualisation.definition.ImageType;
 import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 import org.pikater.web.visualisation.definition.result.DSVisTwoSubresult;
 import org.pikater.web.visualisation.definition.task.IDSVisTwo;
+import org.pikater.web.visualisation.exception.MetadataNotPresentException;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
 import org.quartz.JobBuilder;
@@ -74,8 +75,11 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 			}
 			else
 			{
-				// TODO: check whether metadata are computed: exception or compute now?
-				// TODO: yes, throw exception for sure :)
+				if((dataset1.getGlobalMetaData()==null)||(dataset1.getAttributeMetaData()==null))
+					throw new MetadataNotPresentException(dataset1.getDescription());
+				
+				if((dataset2.getGlobalMetaData()==null)||(dataset2.getAttributeMetaData()==null))
+					throw new MetadataNotPresentException(dataset2.getDescription());
 				
 				File datasetCachedFile1 = PostgreLobAccess.downloadFileFromDB(dataset1.getOID());
 				File datasetCachedFile2=PostgreLobAccess.downloadFileFromDB(dataset2.getOID());

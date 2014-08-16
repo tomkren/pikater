@@ -154,13 +154,6 @@ public class Task implements Concept {
 		this.saveResults = saveResults;
 	}
 
-	public String getGetResults() {
-		return getResults;
-	}
-	public void setGetResults(String getResults) {
-		this.getResults = getResults;
-	}
-
 	public String getGuiAgent() {
 		return guiAgent;
 	}
