@@ -365,7 +365,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	
 	
 	private void sendRequestToComputeMetaDataForDataset(int dataSetID){
-		AID receiver = new AID(AgentNames.FREDDIE, false);
+		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
 
         NewDataset nds = new NewDataset();
         

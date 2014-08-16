@@ -25,7 +25,7 @@ public class PikaterGateway_NewDataset {
 			Ontology metadataOntology = MetadataOntology.getInstance();
 
 			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.FREDDIE, metadataOntology, newDataset);
+					AgentNames.METADATA_QUEEN, metadataOntology, newDataset);
 
 			Initiator initiator = new Initiator(msg);
 			PikaterGateway_General.generalRequest(initiator);
