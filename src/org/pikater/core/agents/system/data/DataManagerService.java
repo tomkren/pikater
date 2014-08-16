@@ -866,7 +866,8 @@ public class DataManagerService extends FIPAService {
 		if (content instanceof Result) {
 			Result result = (Result) content;
 
-			int totalPriority = (int) result.getValue();
+			long totalPriorityLong = (long) result.getValue();
+			int totalPriority = (int) totalPriorityLong;
 			return totalPriority;
 		} else {
 			agent.logError("No Result ontology");
