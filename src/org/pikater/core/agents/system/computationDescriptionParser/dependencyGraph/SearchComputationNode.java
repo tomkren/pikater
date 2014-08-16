@@ -12,12 +12,12 @@ public class SearchComputationNode extends ComputationNode {
     private String defaultPackagePrefix= Agent_Search.class.getPackage().getName() + ".";
 
     
-	public SearchComputationNode(StartComputationStrategy executeStrategy) {
-        super(executeStrategy);
+	public SearchComputationNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph) {
+        super(executeStrategy,computationGraph);
     }
 
-    public SearchComputationNode() {
-        super();
+    public SearchComputationNode(ComputationGraph computationGraph) {
+        super(computationGraph);
     }
     
     public String getModelClass() {

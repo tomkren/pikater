@@ -8,6 +8,10 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 public class DataProcessingComputationNode extends ComputationNode {
     private int numberOfInputs;
 
+    public DataProcessingComputationNode(ComputationGraph computationGraph) {
+        super(computationGraph);
+    }
+
     public int getNumberOfInputs() {
         return numberOfInputs;
     }

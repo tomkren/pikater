@@ -61,7 +61,8 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 	
 	public void execute(ComputationNode computation){    	
 		ACLMessage originalRequest = myAgent.getComputation(graphID).getMessage();
-		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, this));    	
+		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, this,computationNode));
+        computationNode.computationFinished();
     }
 		
 	public void processValidation(String dataSourceName){

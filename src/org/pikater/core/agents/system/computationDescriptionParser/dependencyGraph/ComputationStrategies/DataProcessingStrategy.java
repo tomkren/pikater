@@ -48,7 +48,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
     @Override
     public void execute(ComputationNode computation) {
         ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
-        myAgent.addBehaviour(new ExecuteDataProcessingBehaviour(myAgent, prepareRequest(), originalRequest, this));
+        myAgent.addBehaviour(new ExecuteDataProcessingBehaviour(myAgent, prepareRequest(), originalRequest, this,computationNode));
         computationNode.computationFinished();
     }
 

@@ -25,18 +25,21 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 
 	private Agent_Manager myAgent;
 	private DataProcessingStrategy strategy;
-	private ACLMessage msg; // original message sent by whoever wants to
+    private final ComputationNode node;
+    private ACLMessage msg; // original message sent by whoever wants to
 	 						// compute the task (either search agent or
 							// gui agent);
 							// to be able to send a reply
 
 	public ExecuteDataProcessingBehaviour(Agent_Manager a, ACLMessage req,
-                                          ACLMessage msg, DataProcessingStrategy cs) {
+                                          ACLMessage msg, DataProcessingStrategy cs, ComputationNode node) {
 		super(a, req);
 		myAgent = a;
         this.msg = msg;
 		strategy = cs;
-	}
+        this.node = node;
+        node.increaseNumberOfOutstandingTask();
+    }
 
 	protected void handleRefuse(ACLMessage refuse) {
 		myAgent.log("Agent "+refuse.getSender().getName()+" refused.", 1);
@@ -64,8 +67,6 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 				Task t = (Task)result.getValue();
                 ComputationCollectionItem computation =
                 		myAgent.getComputation(t.getGraphID());
-                ComputationNode node =
-                		computation.getProblemGraph().getNode(t.getNodeID());
                 ArrayList<TaskOutput> outputs = t.getOutput();
                 for (int i=0;i<outputs.size();i++)
                 {
@@ -90,6 +91,7 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
                         node.addToOutputAndProcess(edge,"validation");
                     }
                 }
+                node.decreaseNumberOfOutstandingTask();
             }
 
 		} catch (UngroundedException e) {

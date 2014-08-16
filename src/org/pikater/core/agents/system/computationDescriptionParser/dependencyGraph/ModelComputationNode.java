@@ -12,14 +12,13 @@ public class ModelComputationNode extends ComputationNode {
     private EvaluationMethod evaluationMethod;
     private IExpectedDuration expectedDuration;
     private int priority;
-    private int experimentID;
 
-    public ModelComputationNode() {
-        super();
+    public ModelComputationNode(ComputationGraph computationGraph) {
+        super(computationGraph);
     }
 
-    public ModelComputationNode(StartComputationStrategy executeStrategy) {
-        super(executeStrategy);
+    public ModelComputationNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph) {
+        super(executeStrategy,computationGraph);
     }
 
 	public EvaluationMethod getEvaluationMethod() {
@@ -47,11 +46,6 @@ public class ModelComputationNode extends ComputationNode {
 	}
 
 	public int getExperimentID() {
-		return experimentID;
+		return computationGraph.getExperimentId();
 	}
-
-	public void setExperimentID(int experimentID) {
-		this.experimentID = experimentID;
-	}
-	
 }

@@ -8,12 +8,12 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 public class RecommenderComputationNode extends ComputationNode {
     private String recommenderClass;
 
-    public RecommenderComputationNode(StartComputationStrategy executeStrategy) {
-        super(executeStrategy);
+    public RecommenderComputationNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph) {
+        super(executeStrategy,computationGraph);
     }
 
-    public RecommenderComputationNode() {
-        super();
+    public RecommenderComputationNode(ComputationGraph computationGraph) {
+        super(computationGraph);
     }
 
     public String getRecommenderClass() {

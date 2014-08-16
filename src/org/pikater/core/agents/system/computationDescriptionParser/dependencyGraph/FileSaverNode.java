@@ -6,11 +6,11 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
  * Time: 9:51
  */
 public class FileSaverNode extends ComputationNode {
-    public FileSaverNode(StartComputationStrategy executeStrategy) {
-        super(executeStrategy);
+    public FileSaverNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph) {
+        super(executeStrategy,computationGraph);
     }
 
-    public FileSaverNode() {
-        super();
+    public FileSaverNode(ComputationGraph computationGraph) {
+        super(computationGraph);
     }
 }

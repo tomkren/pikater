@@ -9,8 +9,8 @@ import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -23,18 +23,22 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 	private Agent_Manager myAgent;
 	@SuppressWarnings("unused")
 	private CAStartComputationStrategy strategy;
-	private ACLMessage msg; // original message sent by whoever wants to
-	 						// compute the task (either search agent or 
-							// gui agent);
-							// to be able to send a reply
+    private final ModelComputationNode node;
+    // original message sent by whoever wants to
+    // compute the task (either search agent or
+    // gui agent);
+    // to be able to send a reply
+    private ACLMessage msg;
 	
-	public ExecuteTaskBehaviour(Agent_Manager a, ACLMessage req, 
-			ACLMessage msg, CAStartComputationStrategy cs) {
+	public ExecuteTaskBehaviour(Agent_Manager a, ACLMessage req,
+                                ACLMessage msg, CAStartComputationStrategy cs, ModelComputationNode node) {
 		super(a, req);
 		myAgent = a;
         this.msg = msg;
 		strategy = cs;
-	}
+        this.node = node;
+        node.increaseNumberOfOutstandingTask();
+    }
 
 	protected void handleRefuse(ACLMessage refuse) {
 		myAgent.log("Agent "+refuse.getSender().getName()+" refused.", 1);
@@ -52,28 +56,6 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 	protected void handleInform(ACLMessage inform) {
 		myAgent.log("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
 		
-		// when all tasks' results are sent, send reply-inform to gui agent
-		if (isLastTask()){			
-			myAgent.log("All results sent.");				
-
-			ACLMessage msgOut = msg.createReply();
-			msgOut.setPerformative(ACLMessage.INFORM);
-			msgOut.setContent("Finished");
-
-			myAgent.send(msgOut);
-			
-			
-			/* TODO: prepare results, send them to GUI?, save to xml
-			 * prepareTaskResults(ACLMessage resultmsg, String problemID)
-			 *   - asi jenom pro searche?
-			 * save resutls to xml file
-			 
-			 if (!no_xml_output){
-				writeXMLResults(results);
-			}
-			*/				
-		}						
-		
 		ContentElement content;
 		try {
 			content = myAgent.getContentManager().extractContent(inform);
@@ -83,8 +65,6 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				Task t = (Task)result.getValue();
                 ComputationCollectionItem computation =
                 		myAgent.getComputation(t.getGraphID());
-                ComputationNode node =
-                		computation.getProblemGraph().getNode(t.getNodeID());
                 if (node.ContainsOutput("file"))
                 {
                     DataSourceEdge labeledData = new DataSourceEdge();
@@ -98,15 +78,8 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                 Task task=(Task)result.getValue();
                 ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationID());
                 node.addToOutputAndProcess(errorEdge,"error");
-                node.computationFinished();
-				     //TODO: what is this? just send labeled data?
-//				if (t.getOutputByName(Task.InOutType.VALIDATION) != null){
-//					String dataSourceName = (String) t.getOutputByName(Task.InOutType.VALIDATION);
-//
-//					strategy.processValidation(dataSourceName);
-//				}
+                node.decreaseNumberOfOutstandingTask();
 			}
-
 		} catch (UngroundedException e) {
 			myAgent.logError(e.getMessage(), e);
 		} catch (CodecException e) {
@@ -118,13 +91,6 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 		// send subscription to the original agent after each received task
 		myAgent.sendSubscription(inform, msg);
 	}
-		
-	private boolean isLastTask(){
-		// TODO - return true if there is not anything to compute in the graph
-		
-		return false;
-	}
-
-} // end of ExecuteTask ("send request to planner agent") bahavior
+}
 
 

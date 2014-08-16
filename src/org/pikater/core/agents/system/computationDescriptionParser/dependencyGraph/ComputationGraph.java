@@ -1,11 +1,12 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph;
 
 import java.util.HashMap;
+import java.util.Observable;
 
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.events.ExperimentFinished;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -15,10 +16,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Date: 11.5.2014
  * Time: 21:27
  */
-public class ComputationGraph {
+public class ComputationGraph extends Observable {
     private HashMap<Integer,ComputationNode> nodes=new HashMap<Integer,ComputationNode>();
-
     private int id;
+    private int experimentId;
     
     public ComputationGraph()
     {
@@ -28,7 +29,6 @@ public class ComputationGraph {
         GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
         id=generator.getAndAllocateGUID();
     }
-    
     
     public HashMap<Integer, ComputationNode> getNodes() {
         return nodes;
@@ -53,18 +53,20 @@ public class ComputationGraph {
            }
     }
 
-    public void computationBatchFinished(PikaterAgent agent, int batchID)
+    public void computationBatchFinished()
     {
-    	DataManagerService.updateBatchStatus(
-    			agent, batchID, JPABatchStatus.FINISHED.name());
-        //TODOJakub: call this when the batch is completed
+        ExperimentFinished finishedEvent=new ExperimentFinished(experimentId);
+        setChanged();
+        notifyObservers(finishedEvent);
     }
 
-    public void computationExperimentFinished(PikaterAgent agent, int experimentID)
+    public void updateState()
     {
-    	DataManagerService.updateExperimentStatus(
-    			agent, experimentID, JPAExperimentStatus.FINISHED.name());
-        //TODOJakub: call this when the experiment is completed
+        for (ComputationNode node:nodes.values())
+        {
+            if (node.AnyOutstandingTasks()) return;
+        }
+        computationBatchFinished();
     }
     
     public int getId() {
@@ -73,5 +75,13 @@ public class ComputationGraph {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(int experimentId) {
+        this.experimentId = experimentId;
     }
 }

@@ -17,16 +17,19 @@ import java.util.Map;
 public class ComputationNode {
     private boolean idle=true;
     private int id;
+    protected int numberOfTasksInProgress;
     private Map<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> outputs = new HashMap<String, ArrayList<ComputationOutputBuffer<EdgeValue>>>();
     private Map<String, ComputationOutputBuffer> inputs = new HashMap<String, ComputationOutputBuffer>();
     private StartComputationStrategy startBehavior;
+    protected ComputationGraph computationGraph;
 
-    public ComputationNode()
+    public ComputationNode(ComputationGraph computationGraph)
     {
-       initDefault();
+        this.computationGraph = computationGraph;
+        initDefault();
     }
 
-    public ComputationNode(StartComputationStrategy executeStrategy)
+    public ComputationNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph)
     {
         initDefault();
         startBehavior=executeStrategy;
@@ -119,6 +122,7 @@ public class ComputationNode {
     public void computationFinished()
     {
         idle=true;
+        numberOfTasksChanged();
         if (canComputationStart())
         {
             startComputation();
@@ -147,5 +151,39 @@ public class ComputationNode {
         ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
         GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
         id=generator.getAndAllocateGUID();
+    }
+
+    public int getNumberOfTasksInProgress() {
+        return numberOfTasksInProgress;
+    }
+
+    public void setNumberOfTasksInProgress(int numberOfTasksInProgress) {
+        this.numberOfTasksInProgress = numberOfTasksInProgress;
+        numberOfTasksChanged();
+    }
+
+    public void numberOfTasksChanged()
+    {
+        if (numberOfTasksInProgress==0)
+        {
+            computationGraph.updateState();
+        }
+    }
+
+    public void decreaseNumberOfOutstandingTask()
+    {
+        numberOfTasksInProgress--;
+        numberOfTasksChanged();
+    }
+
+    public void increaseNumberOfOutstandingTask()
+    {
+        numberOfTasksInProgress++;
+        numberOfTasksChanged();
+    }
+
+    public boolean AnyOutstandingTasks()
+    {
+        return numberOfTasksInProgress>0 || !idle;
     }
 }

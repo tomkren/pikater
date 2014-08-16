@@ -14,12 +14,15 @@ import jade.proto.AchieveREResponder;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.Parser;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationGraph;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.events.ExperimentLoggerObserver;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 public class ParserBehaviour extends AchieveREResponder {
 	
@@ -91,12 +94,20 @@ public class ParserBehaviour extends AchieveREResponder {
     
     private ACLMessage respondToNewBatch(ComputationDescription comDescription,
     		int batchID, int userID, ACLMessage request) {
-    	
-		Parser parser = new Parser(agent);
-		parser.parseRoots(comDescription, batchID, userID);
-		
-		ComputationGraph computationGraph = parser.getComputationGraph();
-        ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request,batchID);
+        // save Experiment
+        Experiment experiment = new Experiment();
+        experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
+        experiment.setBatchID(batchID);
+        int priority = DataManagerService.getBatchPriority(agent, batchID);
+        int experimentID = DataManagerService.saveExperiment(agent, experiment);
+
+        Parser parser = new Parser(agent,priority);
+        parser.parseRoots(comDescription, experimentID, userID);
+
+        ComputationGraph computationGraph = parser.getComputationGraph();
+        computationGraph.setExperimentId(experimentID);
+        computationGraph.addObserver(new ExperimentLoggerObserver(agent));
+        ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request,experimentID);
         agent.addComputation(item);
         
         // change status to computing and log to database
