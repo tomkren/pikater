@@ -79,4 +79,31 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 	public void updateValues(JPAAbstractEntity newValues) throws NotUpdatableEntityException{
 		throw new NotUpdatableEntityException();
 	}
+	
+	/**
+	 * Tests whether two attribute metadata entries are compatible for visualisation
+	 * <p>
+	 * Please note, that even this function returns true, doesn't mean that the result of
+	 * visualisation should be attractive. 
+	 * @param metadata Object of metadata for which we determine compatibility
+	 * @return true if the objects can be visually compared
+	 */
+	public boolean isVisuallyCompatible(JPAAttributeMetaData metadata){
+		if(metadata instanceof JPAAttributeNumericalMetaData){
+			//pair of numerical metadata is always compatible
+			//numerical is not compatible with categorical
+			return this instanceof JPAAttributeNumericalMetaData;
+		}else if (metadata instanceof JPAAttributeCategoricalMetaData){
+			if(this instanceof JPAAttributeCategoricalMetaData){
+				//two categoricals are compatible if having same category numbers
+				return ((JPAAttributeCategoricalMetaData)this).getNumberOfCategories()
+						==((JPAAttributeCategoricalMetaData)metadata).getNumberOfCategories();
+			}else{
+				//categorical is not compatible with other types (numerical)
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
 }
