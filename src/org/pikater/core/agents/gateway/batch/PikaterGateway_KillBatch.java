@@ -1,4 +1,4 @@
-package org.pikater.core.agents.gateway.newBatch;
+package org.pikater.core.agents.gateway.batch;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -12,22 +12,22 @@ import org.pikater.core.agents.gateway.Initiator;
 import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.ontology.BatchOntology;
-import org.pikater.core.ontology.subtrees.batch.NewBatch;
+import org.pikater.core.ontology.subtrees.task.KillTasks;
 
-public class PikaterGateway_NewBatch {
+public class PikaterGateway_KillBatch {
 
-	public static void newBatch(int IDNewBatch) throws PikaterGatewayException {
+	public static void killBatch(int batchID) throws PikaterGatewayException {
 
 		try {
-	        
-	        NewBatch newBatch = new NewBatch();
-	        newBatch.setBatchId(IDNewBatch);
+			
+	        KillTasks killBatch = new KillTasks();
+	        killBatch.setBatchID(batchID);
 
 			Ontology batchOntology = BatchOntology.getInstance();
 
 			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.MANAGER, batchOntology,
-					newBatch);
+					AgentNames.PLANNER, batchOntology,
+					killBatch);
 
 			Initiator initiator = new Initiator(msg);
 			PikaterGateway_General.generalRequest(initiator);
