@@ -1,4 +1,4 @@
-package org.pikater.shared.database;
+package org.pikater.shared.database.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Date: 9.11.13
  * Time: 19:48
  */
-public interface ConnectionProvider {
+public interface IConnectionProvider {
     public Connection getConnection() throws ClassNotFoundException, SQLException;
     public String getConnectionInfo();
     public String getSchema();

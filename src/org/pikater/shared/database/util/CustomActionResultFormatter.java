@@ -1,4 +1,4 @@
-package org.pikater.shared.database.utils;
+package org.pikater.shared.database.util;
 
 import java.util.List;
 

@@ -5,12 +5,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.core.ontology.subtrees.model.Model;
-import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAModel;
 import org.pikater.shared.database.jpa.JPAResult;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.database.util.ResultFormatter;
 
 public class ResultDAO extends AbstractDAO {
 

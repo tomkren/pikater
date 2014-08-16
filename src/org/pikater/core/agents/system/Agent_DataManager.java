@@ -34,9 +34,8 @@ import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
-import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
+import org.pikater.shared.database.util.ResultFormatter;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.PikaterAgent;
@@ -1303,7 +1302,7 @@ public class Agent_DataManager extends PikaterAgent {
 				JPADataSetLO dslo=dslos.get(0);
 				log(new Date().toString()+" Found DSLO: "+dslo.getDescription()+" - "+dslo.getOID()+" - "+dslo.getHash());
 
-				PostgreLargeObjectReader reader = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
+				PGLargeObjectReader reader = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 				log(reader.toString());
 				File temp = new File(CoreConfiguration.DATA_FILES_PATH + "temp" +
 						System.getProperty("file.separator") + hash);

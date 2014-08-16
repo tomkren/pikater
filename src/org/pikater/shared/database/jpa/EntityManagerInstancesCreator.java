@@ -1,4 +1,4 @@
-package org.pikater.shared.database;
+package org.pikater.shared.database.jpa;
 
 import java.net.UnknownHostException;
 

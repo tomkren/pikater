@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.pikater.shared.database.EntityManagerInstancesCreator;
 import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.database.util.ResultFormatter;
 
 public class FileMappingDAO extends AbstractDAO {
 

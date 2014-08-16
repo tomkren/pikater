@@ -6,9 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
-import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
+import org.pikater.shared.database.postgre.MyPGConnection;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 
 public abstract class AbstractDAO
@@ -146,7 +146,7 @@ public abstract class AbstractDAO
 	 * @return true if database is reachable
 	 */
 	public boolean testDatabaseConenctivity(){
-		if(!PostgreLobAccess.isDatabaseConnected()){
+		if(!MyPGConnection.isConnectionToCurrentPGDBEstablished()){
 			return false;
 		}
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();

@@ -1,6 +1,5 @@
 package org.pikater.core.agents.system;
 
-import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -11,7 +10,6 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
-import jade.wrapper.ControllerException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,9 +22,6 @@ import java.util.List;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.gateway.Agent_PikaterGateway;
-import org.pikater.core.agents.gateway.Initiator;
-import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
 import org.pikater.core.agents.system.metadata.MetadataCommunicator;
@@ -42,9 +37,8 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.duration.Duration;
 import org.pikater.core.ontology.subtrees.duration.GetDuration;
-import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
-import org.pikater.shared.database.utils.DataSetConverter;
+import org.pikater.shared.database.util.DataSetConverter;
 
 
 public class Agent_GUIKlara extends PikaterAgent {

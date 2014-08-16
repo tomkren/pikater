@@ -5,12 +5,12 @@ import java.io.IOException;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
+import org.pikater.shared.database.exceptions.DataSetConverterCellException;
+import org.pikater.shared.database.exceptions.DataSetConverterException;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.utils.DataSetConverter;
-import org.pikater.shared.database.utils.DataSetConverter.InputType;
-import org.pikater.shared.database.utils.exception.DataSetConverterCellException;
-import org.pikater.shared.database.utils.exception.DataSetConverterException;
+import org.pikater.shared.database.util.DataSetConverter;
+import org.pikater.shared.database.util.DataSetConverter.InputType;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;

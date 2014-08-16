@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import org.pikater.shared.database.exceptions.AttributeException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.charts.axis.CategoricalAxis;
 import org.pikater.web.visualisation.implementation.charts.axis.ValueAxis;
@@ -54,7 +54,7 @@ public abstract class ArffDataset {
 
 	private void initFromJPA() {
 		try {
-			this.arffStream = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID()).getInputStream();
+			this.arffStream = PGLargeObjectReader.getForLargeObject(dslo.getOID()).getInputStream();
 			init();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

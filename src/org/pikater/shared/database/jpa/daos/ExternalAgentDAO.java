@@ -9,10 +9,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
-import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;

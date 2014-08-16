@@ -1,4 +1,4 @@
-package org.pikater.shared.database.utils;
+package org.pikater.shared.database.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,8 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.pikater.shared.database.utils.exception.DataSetConverterCellException;
-import org.pikater.shared.database.utils.exception.DataSetConverterException;
+import org.pikater.shared.database.exceptions.DataSetConverterCellException;
+import org.pikater.shared.database.exceptions.DataSetConverterException;
 
 public class DataSetConverter {
 	

@@ -1,4 +1,4 @@
-package org.pikater.shared.database.utils.exception;
+package org.pikater.shared.database.exceptions;
 
 public class DataSetConverterCellException extends DataSetConverterException {
 	

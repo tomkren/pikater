@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
+import org.pikater.shared.database.util.ResultFormatter;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
@@ -51,8 +51,8 @@ public class TestVisual {
 		System.out.println("Generating SVG Comparison Chart for: " +iris1.getDescription()+" and "+iris2.getDescription());
 		time=System.currentTimeMillis();
 		try{
-			File iris1file=PostgreLobAccess.downloadFileFromDB(iris1.getOID());
-			File iris2file=PostgreLobAccess.downloadFileFromDB(iris2.getOID());
+			File iris1file=new PGLargeObjectAction(null).downloadLOFromDB(iris1.getOID());
+			File iris2file=new PGLargeObjectAction(null).downloadLOFromDB(iris2.getOID());
 			System.out.println("Iris 1 temp file: "+iris1file.getAbsolutePath());
 			System.out.println("Iris 2 temp file: "+iris2file.getAbsolutePath());
 			ComparisonSVGGenerator csvggiris=new ComparisonSVGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), iris1, iris2, iris1file, iris2file, attr1, attr1, attr2, attr2, attr3, attr3);
@@ -70,7 +70,7 @@ public class TestVisual {
 			
 			File temp;
 			try {
-				temp = PostgreLobAccess.downloadFileFromDB(dataset.getOID());
+				temp = new PGLargeObjectAction(null).downloadLOFromDB(dataset.getOID());
 				System.out.println("Dataset downloaded to "+temp.getAbsolutePath());
 				SinglePNGGenerator spngg=new SinglePNGGenerator(dummyResult, dataset,temp,new PrintStream("core/datasets/visual/"+dataset.getDescription()+"_0_1_2s.png"), 0, 1, 2);
 				spngg.create();

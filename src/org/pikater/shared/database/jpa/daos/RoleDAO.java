@@ -4,11 +4,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.security.PikaterRole;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.database.util.ResultFormatter;
 
 public class RoleDAO extends AbstractDAO {
 

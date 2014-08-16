@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import org.jfree.util.Log;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 
 public class LargeObjectInputStreamTest {
 
@@ -16,7 +16,7 @@ public class LargeObjectInputStreamTest {
 		long oid=30783;
 		
 		try {
-			InputStream is=PostgreLobAccess.getPostgreLargeObjectReader(oid).getInputStream();
+			InputStream is=PGLargeObjectReader.getForLargeObject(oid).getInputStream();
 			FileOutputStream fos=new FileOutputStream(new File("core/datasets/test_from_DB.arff"));			
 			System.out.println("Retrieving dataset content...");
 			byte[] buffer=new byte[1000];

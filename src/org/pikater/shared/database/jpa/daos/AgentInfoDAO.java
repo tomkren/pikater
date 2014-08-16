@@ -6,9 +6,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
 
 public class AgentInfoDAO extends AbstractDAO{
 

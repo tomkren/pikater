@@ -1,4 +1,4 @@
-package org.pikater.shared.database.utils.exception;
+package org.pikater.shared.database.exceptions;
 
 public class DataSetConverterException extends Exception {
 	private static final long serialVersionUID = 1294904974363350993L;

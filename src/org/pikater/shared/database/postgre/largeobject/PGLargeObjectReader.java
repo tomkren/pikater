@@ -1,15 +1,16 @@
-package org.pikater.shared.database.pglargeobject;
+package org.pikater.shared.database.postgre.largeobject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.sql.SQLException;
 
+import org.pikater.shared.database.postgre.MyPGConnection;
 import org.postgresql.PGConnection;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 
-public class PostgreLargeObjectReader extends Reader {
+public class PGLargeObjectReader extends Reader {
 	
 	long oid=-1;
 	LargeObjectManager lobj=null;
@@ -22,7 +23,7 @@ public class PostgreLargeObjectReader extends Reader {
 	 * @param con The PGConnection, that is used to retrieve the data
 	 * @param oid The ID of the LargeObject for which the reader should be created
 	 */
-	public PostgreLargeObjectReader(PGConnection con, long oid){
+	public PGLargeObjectReader(PGConnection con, long oid){
 		this.con=con;
 		this.oid=oid;
 		init();
@@ -114,5 +115,9 @@ public class PostgreLargeObjectReader extends Reader {
 			return -1;
 		}
 	}
-	
+
+	public static PGLargeObjectReader getForLargeObject(long oid)
+	{
+		return new PGLargeObjectReader(MyPGConnection.getConnectionToCurrentPGDB(), oid);
+	}
 }

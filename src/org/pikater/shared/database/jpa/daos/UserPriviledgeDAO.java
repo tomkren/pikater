@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.database.util.ResultFormatter;
 
 public class UserPriviledgeDAO extends AbstractDAO {
 

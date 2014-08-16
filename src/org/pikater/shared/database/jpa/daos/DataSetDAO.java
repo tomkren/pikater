@@ -15,7 +15,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import org.pikater.shared.database.EntityManagerInstancesCreator;
+import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
@@ -24,9 +24,9 @@ import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.Hash;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.database.util.Hash;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
@@ -297,7 +297,7 @@ public class DataSetDAO extends AbstractDAO{
 			oid = sameHashDS.get(0).getOID();
 		} else {
 			try {
-				oid = PostgreLobAccess.saveFileToDB(sourceFile);
+				oid = new PGLargeObjectAction(null).uploadLOToDB(sourceFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

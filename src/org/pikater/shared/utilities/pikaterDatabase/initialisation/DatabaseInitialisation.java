@@ -30,9 +30,9 @@ import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
-import org.pikater.shared.database.utils.CustomActionResultFormatter;
-import org.pikater.shared.database.utils.Hash;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.database.util.Hash;
+import org.pikater.shared.database.util.ResultFormatter;
 import org.pikater.shared.util.DateUtils;
 
 public class DatabaseInitialisation {

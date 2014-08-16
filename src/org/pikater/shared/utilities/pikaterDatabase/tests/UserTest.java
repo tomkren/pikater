@@ -5,7 +5,7 @@ import java.util.Date;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.util.ResultFormatter;
 
 public class UserTest {
 

@@ -1,10 +1,11 @@
-package org.pikater.shared.database;
+package org.pikater.shared.database.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class PostgreSQLConnectionProvider implements ConnectionProvider {
+public class PostgreSQLConnectionProvider implements IConnectionProvider
+{
     private final String url;
     private final String userName;
     private final String password;

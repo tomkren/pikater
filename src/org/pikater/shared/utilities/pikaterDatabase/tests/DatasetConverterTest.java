@@ -2,7 +2,7 @@ package org.pikater.shared.utilities.pikaterDatabase.tests;
 
 import java.io.File;
 
-import org.pikater.shared.database.utils.DataSetConverter;
+import org.pikater.shared.database.util.DataSetConverter;
 
 public class DatasetConverterTest {
 	public static void main(String[] args) throws Exception{

@@ -34,8 +34,7 @@ import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
-import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 
 import weka.core.Instances;
 
@@ -92,7 +91,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
         
         try {
 			JPADataSetLO dslo= DAOs.dataSetDAO.getByID(dataSetID, EmptyResultAction.THROW);
-			PostgreLargeObjectReader plor = PostgreLobAccess.getPostgreLargeObjectReader(dslo.getOID());
+			PGLargeObjectReader plor = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 			
 			File file=new File(CoreConfiguration.METADATA_PATH + dslo.getHash());
 			if(!file.exists()){

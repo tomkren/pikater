@@ -31,7 +31,7 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
-import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 
 
 public class Database {
@@ -1104,13 +1104,13 @@ public class Database {
 	 * @param hash The hash of the dataset
 	 * @return The Reader for the dataset in the database
 	 */
-	public PostgreLargeObjectReader getLargeObjectReader(String hash){
+	public PGLargeObjectReader getLargeObjectReader(String hash){
 		try {
 			em = emf.createEntityManager();
 			Query q = em.createQuery("select dslo from JPADataSetLO dslo where dslo.hash=:hashString");
 			q.setParameter("hashString", hash);
 			JPADataSetLO dslo=(JPADataSetLO) q.getSingleResult();
-			return new PostgreLargeObjectReader(connection, dslo.getOID());
+			return new PGLargeObjectReader(connection, dslo.getOID());
 		} finally {
 			cleanUpEntityManager();
 		}

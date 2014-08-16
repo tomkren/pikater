@@ -8,9 +8,9 @@ import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.pikater.shared.database.PostgreSQLConnectionProvider;
+import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.pglargeobject.PostgreLargeObjectReader;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.shared.utilities.pikaterDatabase.Database;
 import org.postgresql.PGConnection;
 
@@ -33,7 +33,7 @@ public class TestLargeObjectReader {
 			System.out.println("Hash: "+dslo.getHash()+"   OID: "+dslo.getOID()+" Owner: "+dslo.getOwner().getLogin());
 			
 			
-			PostgreLargeObjectReader plor=db.getLargeObjectReader(dslo.getHash());
+			PGLargeObjectReader plor=db.getLargeObjectReader(dslo.getHash());
 			
 			System.out.println("Size: "+plor.size());
 			

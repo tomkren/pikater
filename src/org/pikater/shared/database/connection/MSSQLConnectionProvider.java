@@ -1,4 +1,4 @@
-package org.pikater.shared.database;
+package org.pikater.shared.database.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * Date: 9.11.13
  * Time: 19:55
  */
-public class MSSQLConnectionProvider implements ConnectionProvider {
+public class MSSQLConnectionProvider implements IConnectionProvider {
     private final String connectionUrl;
 
     public MSSQLConnectionProvider(String connectionUrl)

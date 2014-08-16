@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.utils.ResultFormatter;
+import org.pikater.shared.database.util.ResultFormatter;
 import org.pikater.web.ssh.SSHSession;
 import org.pikater.web.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
@@ -162,7 +162,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 			{
 				return new Label(String.format("[%s; %s]", index1, index2));
 			}
-		});
+		}, null);
 		matrix.setWidth("600px");
 		matrix.setHeight("600px");
 		addComponent(matrix);
