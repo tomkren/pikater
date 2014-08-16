@@ -14,11 +14,6 @@ import org.pikater.shared.util.SimpleIDGenerator;
 public class UniversalComputationDescription
 {
 	/**
-	 * Priority of Batch.
-	 */
-	private int priority; // TODO: this is obsolete => delete
-
-	/**
 	 * Top-level options for this computation.
 	 */
 	private final Set<NewOption> globalOptions;
@@ -49,15 +44,6 @@ public class UniversalComputationDescription
 	
 	// ----------------------------------------------------------
 	// SOME BASIC INTERFACE
-
-
-	public int getPriority() {
-		return priority;
-	}
-
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
 	
 	public Set<NewOption> getGlobalOptions()
 	{

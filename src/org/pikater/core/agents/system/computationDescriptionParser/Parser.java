@@ -130,10 +130,7 @@ public class Parser {
     public void parseRoots(ComputationDescription comDescription, int batchID, int userID) {
         agent.log("Ontology Parser - ComputationDescription");
         
-        User user = DataManagerService.loadUser(agent, 5856); //TODO:
-
-        this.priority = 10 * user.getPriorityMax() +
-        		comDescription.getPriority();        
+        this.priority = DataManagerService.getBatchPriority(agent, batchID);
 
         List<FileDataSaver> elements = comDescription.getRootElements();
         for (FileDataSaver fileSaverI : elements) {

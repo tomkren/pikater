@@ -80,7 +80,6 @@ public final class Input02 {
         roots.add(saver);
         
         ComputationDescription comDescription = new ComputationDescription();
-        comDescription.setPriority(6);
         comDescription.setRootElements(roots);
 
         return comDescription;
