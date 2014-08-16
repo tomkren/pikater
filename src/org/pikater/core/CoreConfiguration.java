@@ -22,7 +22,7 @@ public class CoreConfiguration {
 	public static String SAVED_PATH = "core"
 			+ System.getProperty("file.separator") + "saved"
 			+ System.getProperty("file.separator");
-	public static String FREDDIE_PATH = "core"
-			+ System.getProperty("file.separator") + "freddie"
+	public static String METADATA_PATH = "core"
+			+ System.getProperty("file.separator") + "metadata"
 			+ System.getProperty("file.separator");
 }

@@ -414,7 +414,6 @@ public class Agent_Duration extends PikaterAgent {
 		
 		task.setEvaluationMethod(evaluationMethod);
 		
-		task.setGetResults(CoreConstants.RESULT_AFTER);
 		task.setSaveResults(false);
 
 		ExecuteTask executeTask = new ExecuteTask();

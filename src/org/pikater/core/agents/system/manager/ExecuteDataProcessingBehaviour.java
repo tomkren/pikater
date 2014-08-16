@@ -15,6 +15,9 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSou
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
+
+import java.util.ArrayList;
 
 public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 
@@ -63,21 +66,31 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
                 		myAgent.getComputation(t.getGraphID());
                 ComputationNode node =
                 		computation.getProblemGraph().getNode(t.getNodeID());
-                if (node.ContainsOutput("file"))
+                ArrayList<TaskOutput> outputs = t.getOutput();
+                for (int i=0;i<outputs.size();i++)
                 {
-                    DataSourceEdge labeledData = new DataSourceEdge();
-                    node.addToOutputAndProcess(labeledData,"file");
+                    TaskOutput output=outputs.get(i);
+                    DataSourceEdge edge=new DataSourceEdge();
+                    edge.setDataSourceId(output.getName());
+                    edge.setFile(false);
+                    if (node.ContainsOutput("data"+i))
+                    {
+                        node.addToOutputAndProcess(edge,"data"+i);
+                    }
+                    else if ((i==0 || output.getType().name()=="training") && node.ContainsOutput("training"))
+                    {
+                        node.addToOutputAndProcess(edge,"training");
+                    }
+                    else if ((i==1 || output.getType().name()=="testing") && node.ContainsOutput("testing"))
+                    {
+                        node.addToOutputAndProcess(edge,"testing");
+                    }
+                    else if ((i==2 || output.getType().name()=="validation") && node.ContainsOutput("validation"))
+                    {
+                        node.addToOutputAndProcess(edge,"validation");
+                    }
                 }
-
-				// save results to the database										
-				if (t.getSaveResults()){
-					DataManagerService.saveResult(myAgent, t, t.getExperimentID());
-				}
-                Task task=(Task)result.getValue();
-                ErrorEdge errorEdge=new ErrorEdge(task.getResult(),task.getComputationID());
-                node.addToOutputAndProcess(errorEdge,"error");
-                node.computationFinished();
-			}
+            }
 
 		} catch (UngroundedException e) {
 			myAgent.logError(e.getMessage(), e);

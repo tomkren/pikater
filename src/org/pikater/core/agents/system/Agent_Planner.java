@@ -329,7 +329,7 @@ public class Agent_Planner extends PikaterAgent {
 		
 		// update number of cores
 		List<AID> newSlaveServers =
-				slaveServersStructure.scannNewSlaveServers(this);
+				slaveServersStructure.checkForNewSlaveServers(this);
 		cpuCoresStructure.initCPUCores(this, newSlaveServers);
 
 		// choose one CPU core (data-transfer friendly)

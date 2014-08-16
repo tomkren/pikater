@@ -3,10 +3,11 @@ package org.pikater.core.agents.gateway;
 import java.io.File;
 import java.io.IOException;
 
+import org.pikater.core.agents.gateway.batch.PikaterGateway_KillBatch;
+import org.pikater.core.agents.gateway.batch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
 import org.pikater.core.agents.gateway.newAgent.PikaterGateway_NewAgent;
-import org.pikater.core.agents.gateway.newBatch.PikaterGateway_NewBatch;
 import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
@@ -50,6 +51,15 @@ public class WebToCoreEntryPoint {
 	 */
 	public static void notify_newDataset(int IDnewDataset) throws PikaterGatewayException {
 		PikaterGateway_NewDataset.newDataset(IDnewDataset);
+	}
+	
+	/**
+	 * Notifies Agent Planner to stop executing the batch.
+	 * @param batchID ID of the batch to be stopped
+	 * @throws PikaterGatewayException
+	 */
+	public static void notify_killBatch(int batchID) throws PikaterGatewayException{
+		PikaterGateway_KillBatch.killBatch(batchID);
 	}
 
 	/*

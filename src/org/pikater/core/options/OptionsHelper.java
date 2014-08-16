@@ -56,21 +56,10 @@ public class OptionsHelper
 				new StringValue(CoreConstants.OUTPUT_PREDICTION),
 				new SetRestriction(false, outputValues));
 
-		
-		List<IValueData> resultValues = new ArrayList<IValueData>();
-		resultValues.add(new StringValue(CoreConstants.RESULT_AFTER));
-		resultValues.add(new StringValue(CoreConstants.RESULT_AFTER_EACH_TASK));
-
-		NewOption optResult = new NewOption(
-				CoreConstants.RESULT,
-				new StringValue(CoreConstants.RESULT_AFTER),
-				new SetRestriction(false, resultValues));
-		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(optDuration);
 		options.add(optMode);
 		options.add(optOutput);
-		options.add(optResult);
 		
 		return options;
 	}

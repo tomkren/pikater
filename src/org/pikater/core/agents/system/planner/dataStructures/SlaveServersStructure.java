@@ -18,7 +18,7 @@ public class SlaveServersStructure {
 	private List<DFAgentDescription> slaveServers =
 			new ArrayList<DFAgentDescription>();
 	
-	public List<AID> scannNewSlaveServers(Agent_Planner agent) {
+	public List<AID> checkForNewSlaveServers(Agent_Planner agent) {
 		
 		 DFAgentDescription template = new DFAgentDescription();
 		 ServiceDescription sd = new ServiceDescription();

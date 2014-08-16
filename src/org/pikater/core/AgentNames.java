@@ -15,7 +15,7 @@ public abstract class AgentNames {
 	public static String GATEWAY = "Gateway";
 	public static String AGENTINFO_MANAGER = "AgentInfoManager";
 	public static String VIRTUAL_BOX_PROVIDER = "VirtualBoxProvider";
-	public static String FREDDIE = "Freddie";
+	public static String METADATA_QUEEN = "MetadataQueen";
 	public static String MAILING = "Mailing";
 	public static String DURATION = "Duration";
 	public static String DURATION_SERVICE = "DurationServiceRegression";
