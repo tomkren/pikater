@@ -1,0 +1,29 @@
+@CHARSET "US-ASCII";
+
+.chartThumbnail
+{
+	height: 230px;
+	width: 200px;
+	
+	border: 2px solid #96d1f8;
+	border-radius: 5px;
+}
+
+.chartThumbnail:hover
+{
+	cursor: pointer;
+}
+
+.chartThumbnail .v-label
+{
+	background-color: #96d1f8;
+	line-height: 26px;
+	font-size: 14px;
+	padding-left: 15px; 
+}
+
+.chartThumbnail .v-image
+{
+	width: 196px;
+	height: 196px;
+}
