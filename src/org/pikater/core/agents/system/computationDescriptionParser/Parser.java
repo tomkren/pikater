@@ -80,25 +80,38 @@ public class Parser {
         else if (dataProvider instanceof DataProcessing) {
             agent.log("Ontology Matched - DataProcessing");
             DataProcessing dataProcessing = (DataProcessing) dataProvider;
-            //TODO: support multiple sources, maybe add the option to name input and outputs differently
+            List<DataSourceDescription> dataSources= dataProcessing.getDataSources();
             if (alreadyProcessed.containsKey(dataProcessing.getId()))
             {
                  parent=alreadyProcessed.get(dataProcessing.getId());
             }
             else {
-                parent = new ComputationNode();
+                DataProcessingComputationNode dpNode = new DataProcessingComputationNode();
+                dpNode.setNumberOfInputs(dataSources.size());
+                parent=dpNode;
+                String agentType = dataProcessing.getAgentType();
+                if (agentType!=null)
+                {
+                    NeverEndingBuffer typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType, 0));
+                    typeBuffer.setTarget(parent);
+                    parent.addInput("agenttype",typeBuffer);
+                }
+
+                addOptionsToInputs(parent,dataProcessing.getOptions());
+                parent.setStartBehavior(new DataProcessingStrategy(agent, batchID,userID, dpNode));
+                NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
+                buffer.setTarget(child);
+                buffer.setSource(parent);
+                parent.addBufferToOutput(connectionName,buffer);
+                child.addInput(connectionName,buffer);
+
+                computationGraph.addNode(parent);
+                alreadyProcessed.put(dataProcessing.getId(),parent);
+                for (int i=0;i<dataSources.size();i++) {
+                    DataSourceDescription ds = dataProcessing.getDataSources().get(i);
+                    parseDataSourceDescription(ds, batchID, userID, parent, "data"+i);
+                }
             }
-            addOptionsToInputs(parent,dataProcessing.getOptions());
-            parent.setStartBehavior(new DataProcessingStrategy(agent, batchID, parent));
-            NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
-            parent.addBufferToOutput(connectionName,buffer);
-            child.addInput(connectionName,buffer);
-
-            computationGraph.addNode(parent);
-            alreadyProcessed.put(dataProcessing.getId(),parent);
-
-            DataSourceDescription ds= dataProcessing.getDataSources().get(0);
-            parseDataSourceDescription(ds,batchID,userID,parent,"data");
             return;
         } else {
             agent.log("Ontology Matched - Error unknown IDataProvider");
@@ -148,13 +161,15 @@ public class Parser {
         if (!alreadyProcessed.containsKey(file.getId()))
         {
             alreadyProcessed.put(file.getId(), null);
-            DataSourceEdge fileEdge=new DataSourceEdge();
-            fileEdge.setFile(true);
-            fileEdge.setDataSourceId(file.getFileURI());
-            ComputationOutputBuffer<EdgeValue> buffer=new NeverEndingBuffer<EdgeValue>(fileEdge);
-            buffer.setTarget(child);
-            child.addInput(connectionName,buffer);
+
         }
+        DataSourceEdge fileEdge;
+        fileEdge=new DataSourceEdge();
+        fileEdge.setFile(true);
+        fileEdge.setDataSourceId(file.getFileURI());
+        ComputationOutputBuffer<EdgeValue> buffer=new NeverEndingBuffer<EdgeValue>(fileEdge);
+        buffer.setTarget(child);
+        child.addInput(connectionName,buffer);
     }
 
     public ModelComputationNode parseComputing(IComputingAgent computingAgent,

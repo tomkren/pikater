@@ -41,6 +41,7 @@ public final class Input06 {
         //Create data-processing
         List<DataSourceDescription> dataSources = new ArrayList<DataSourceDescription>();
         dataSources.add(fileDataSource);
+        dataSources.add(fileDataSource);
         
         DataProcessing dp = new DataProcessing();
 		dp.setDataSources(dataSources);

@@ -7,6 +7,8 @@ package org.pikater.core.agents.system.computationDescriptionParser.edges;
  */
 public class AgentTypeEdge extends EdgeValue {
 	private String agentType;
+
+    //TODO: looks obsolete
 	private Integer model;
 
 	public AgentTypeEdge(String agentType) {

@@ -160,9 +160,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 		}
 		
 		datas.importExternalTrainFileName(training);
-		datas.importInternalTrainFileName(myAgent.getHashOfFile(training, 1));
+		datas.importInternalTrainFileName(myAgent.getHashOfFile(training, userID));
 		datas.importExternalTestFileName(testing);
-		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, 1));
+		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, userID));
 		
 		IExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setUserID(userID);

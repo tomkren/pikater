@@ -8,12 +8,14 @@ import jade.lang.acl.ACLMessage;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.DataProcessingComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.AgentTypeEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.manager.ExecuteDataProcessingBehaviour;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -30,14 +32,16 @@ import java.util.Map;
 public class DataProcessingStrategy implements StartComputationStrategy {
     Agent_Manager myAgent;
     int graphId;
-    ComputationNode computationNode;
+    private final int userID;
+    DataProcessingComputationNode computationNode;
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
 
     public DataProcessingStrategy(Agent_Manager manager,
-                                  int graphId, ComputationNode computationNode) {
+                                  int graphId,int userID, DataProcessingComputationNode computationNode) {
         myAgent = manager;
         this.graphId = graphId;
+        this.userID = userID;
         this.computationNode = computationNode;
     }
 
@@ -69,6 +73,13 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         }
         NewOptions usedoptions = options;
 
+        ComputationOutputBuffer input=inputs.get("agenttype");
+        if (!input.isBlocked())
+        {
+            agentTypeEdge = (AgentTypeEdge)input.getNext();
+            input.block();
+        }
+
         Task task = new Task();
         // uncomment and implement if preprocessing should be searchable
 //        if (inputs.get("searchedoptions") != null){
@@ -80,9 +91,16 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         agent.setOptions(usedoptions.getOptions());
 
         Datas datas = new Datas();
-        String training = ((DataSourceEdge) inputs.get("data").getNext()).getDataSourceId();
-
-        datas.importExternalTrainFileName(training);
+        for (int i =0;i<computationNode.getNumberOfInputs();i++)
+        {
+            String dataName = ((DataSourceEdge) inputs.get("data"+i).getNext()).getDataSourceId();
+            datas.addData(
+                    new Data(
+                            myAgent.getHashOfFile(dataName, userID),
+                            dataName,
+                            "data"+i
+                    ));
+        }
 
         task.setSaveResults(false);
         task.setSaveMode("message");
@@ -100,7 +118,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
         request.setLanguage(myAgent.getCodec().getName());
         request.setOntology(TaskOntology.getInstance().getName());
-        request.addReceiver(myAgent.getAgentByType("org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter"));
+        request.addReceiver(myAgent.getAgentByType(agentTypeEdge.getAgentType()));
 
         request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
