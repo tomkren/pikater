@@ -11,7 +11,7 @@ import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.gateway.Initiator;
 import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
-import org.pikater.core.ontology.BatchOntology;
+import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 
 public class PikaterGateway_KillBatch {
@@ -23,10 +23,10 @@ public class PikaterGateway_KillBatch {
 	        KillTasks killBatch = new KillTasks();
 	        killBatch.setBatchID(batchID);
 
-			Ontology batchOntology = BatchOntology.getInstance();
+			Ontology ontology = TaskOntology.getInstance();
 
 			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.PLANNER, batchOntology,
+					AgentNames.PLANNER, ontology,
 					killBatch);
 
 			Initiator initiator = new Initiator(msg);
