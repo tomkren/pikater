@@ -618,8 +618,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		ComputationDescription compDescription =
 				ComputationDescription.importUniversalComputationDescription(
-						uDescription, batchJPA.getPriority() 
-		);
+						uDescription);
 		
 		Batch batch = new Batch();
 		batch.setId(batchJPA.getId());
