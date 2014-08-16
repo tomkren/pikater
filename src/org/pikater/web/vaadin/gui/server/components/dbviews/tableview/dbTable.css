@@ -4,6 +4,11 @@
 {
 }
 
+.dbTable > .v-scrollable
+{
+	overflow: hidden;
+}
+
 .dbTable .v-table-row-spacer:last-child
 {
 	/*

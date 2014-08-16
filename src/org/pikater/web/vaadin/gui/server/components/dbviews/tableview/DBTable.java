@@ -35,7 +35,7 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		setColumnReorderingAllowed(false);
 		setColumnCollapsingAllowed(true);
 		setSelectable(true);
-		setMultiSelect(true);
+		setMultiSelect(false);
 		setSortEnabled(true);
 		setStyleName("dbTable");
 		

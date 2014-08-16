@@ -150,7 +150,12 @@ public class AgentsView extends DBTableLayout implements IContentComponent, IDBV
 				@Override
 				public String getFilename()
 				{
-					return rowView.getAgent().getName();
+					String fileName = rowView.getAgent().getName();
+					if(!fileName.endsWith(".jar"))
+					{
+						fileName += ".jar";
+					}
+					return fileName; 
 				}
 			});
 			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(agentDownloadResourceUUID));
