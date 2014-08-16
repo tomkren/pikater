@@ -66,7 +66,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 					dataset.setApproved(!dataset.isApproved());
 				}
 				/**
-				 * TODO: pikater core will see all datasets (visible restrictions are only in getAll, getByOwner methords
+				 * TODO: pikater core will see all datasets (visible restrictions are only in getAll, getByOwner methods
 				 * which are used by web)
 				 * I added DatasetDAO#getAllVisibleApproved which will maybe be useful in input box, to generate list from which user can select input dataset)
 				 */
@@ -76,8 +76,27 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 					DAOs.dataSetDAO.updateEntity(dataset);
 				}
 			};
+		case VISUALIZE:
+			return new NamedActionDBViewValue("Visualize") // no DB changes needed - this is completely GUI managed
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return true; // TODO: metadata check; when implemented, also add it to visualization quartz jobs 
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+				}
+			};
 		case DOWNLOAD:
-			return new NamedActionDBViewValue("Download")
+			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
 				public boolean isEnabled()

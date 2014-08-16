@@ -67,6 +67,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 		NUMBER_OF_INSTANCES,
 		DESCRIPTION,
 		APPROVED,
+		VISUALIZE,
 		DOWNLOAD,
 		DELETE;
 
@@ -100,6 +101,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 				case APPROVED:
 					return DBViewValueType.BOOLEAN;
 					
+				case VISUALIZE:
 				case DOWNLOAD:
 				case DELETE:
 					return DBViewValueType.NAMED_ACTION;
@@ -131,7 +133,9 @@ public class DataSetTableDBView extends AbstractTableDBView
 	@Override
 	public Set<ITableColumn> getDefaultColumns()
 	{
-		return getAllColumns();
+		Set<ITableColumn> result = getAllColumns();
+		result.remove(Column.DOWNLOAD);
+		return result;
 	}
 	
 	@Override
