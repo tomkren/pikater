@@ -1,14 +1,15 @@
 package org.pikater.web.vaadin.gui.server.components.imageviewer;
 
+import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.components.scalableimage.ScalableImage;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
 
@@ -28,6 +29,7 @@ public class ImageViewer extends VerticalLayout
 		setPrimaryStyleName("imageViewer");
 		
 		Label lbl_zoom = new Label("Zoom level (PCT):");
+		lbl_zoom.setSizeUndefined();
 		
 		Slider slider = new Slider(0, 2, 2);
 		slider.setWidth("200px");
@@ -43,23 +45,25 @@ public class ImageViewer extends VerticalLayout
 			}
 		});
 		
-		HorizontalLayout toolbar = new HorizontalLayout();
+		HorizontalFlowLayout toolbar = new HorizontalFlowLayout(new IFlowLayoutStyleProvider()
+		{
+			@Override
+			public void setStylesForInnerComponent(Component c, StyleBuilder builder)
+			{
+				builder.setProperty("margin-left", "10px");
+			}
+		});
+		toolbar.setStyleName("imageViewer-toolbar");
 		toolbar.setSizeUndefined();
-		toolbar.setSpacing(true);
+		toolbar.setWidth("100%");
 		toolbar.addComponent(lbl_zoom);
 		toolbar.addComponent(slider);
-		toolbar.setComponentAlignment(slider, Alignment.MIDDLE_LEFT);
-		
-		Panel toolbarContainer = new Panel();
-		toolbarContainer.setWidth("100%");
-		toolbarContainer.setStyleName("imageViewer-toolbar");
-		toolbarContainer.setContent(toolbar);
 		
 		this.scaler = new ScalableImage(imageURL, imageWidth, imageHeight);
 		this.scaler.setSizeFull();
-		slider.setValue(new Double(0.5)); // zoom out to half of the image's size
+		slider.setValue(new Double(1)); // no zoom level by default
 		
-		addComponent(toolbarContainer);
+		addComponent(toolbar);
 		addComponent(this.scaler);
 		setExpandRatio(this.scaler, 1);
 	}
