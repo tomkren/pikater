@@ -13,6 +13,7 @@ import org.pikater.web.visualisation.definition.ImageType;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.definition.result.DSVisOneSubresult;
 import org.pikater.web.visualisation.definition.task.IDSVisOne;
+import org.pikater.web.visualisation.exception.MetadataNotPresentException;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 import org.quartz.JobBuilder;
@@ -67,8 +68,8 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 		DSVisOneResult result = new DSVisOneResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		try
 		{
-			// TODO: check whether metadata are computed: exception or compute now?
-			// TODO: yes, throw exception for sure :)
+			if((dataset.getGlobalMetaData()==null)||(dataset.getAttributeMetaData()==null))
+				throw new MetadataNotPresentException();
 			
 			File datasetCachedFile = PostgreLobAccess.downloadFileFromDB(dataset.getOID());
 			
