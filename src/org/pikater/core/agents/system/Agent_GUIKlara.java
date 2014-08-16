@@ -25,6 +25,7 @@ import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
+import org.pikater.core.agents.system.metadata.MetadataCommunicator;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
@@ -323,9 +324,8 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 		
 		if(dataSetID!=-1){
-			this.sendRequestToComputeMetaDataForDataset(dataSetID);
+			MetadataCommunicator.requestMetadataForDataset(this, dataSetID);
 		}
-		
 	}
 	
 	private int sendRequestSaveDataSet(String filename, int userID, String description){
@@ -362,48 +362,5 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 		return -1;
 	}
-	
-	
-	private void sendRequestToComputeMetaDataForDataset(int dataSetID){
-		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
-
-        NewDataset nds = new NewDataset();
-        
-        //nds.setInternalFileName("28c7b9febbecff6ce207bcde29fc0eb8");
-        //nds.setDataSetID(2301);
-        nds.setDataSetID(dataSetID);
-        log("Sending request to store metadata for DataSetID: "+dataSetID);
-        
-        try {
-            ACLMessage request = makeActionRequest(receiver, nds);
-           
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
-            if (reply == null)
-                logError("Reply not received.");
-            else
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
-        } catch (CodecException e) {
-            logError("Codec error occurred: "+e.getMessage(), e);
-        } catch (OntologyException e) {
-            logError("Ontology error occurred: "+e.getMessage(), e);
-        } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage(), e);
-        }
-	}
-	
-	
-	/** Naplni pozadavek na konkretni akci pro jednoho ciloveho agenta */
-    private ACLMessage makeActionRequest(AID target, AgentAction action) throws CodecException, OntologyException {
-    	Ontology ontology = MetadataOntology.getInstance();
-    	
-        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-        msg.addReceiver(target);
-        msg.setLanguage(getCodec().getName());
-        msg.setOntology(ontology.getName());
-        getContentManager().fillContent(msg, new Action(target, action));
-        return msg;
-    }
-	
-	
 }
 
