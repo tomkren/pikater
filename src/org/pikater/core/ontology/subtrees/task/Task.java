@@ -182,14 +182,14 @@ public class Task implements Concept {
 		this.note = note;
 	}
 
-	public Object getOutputByName(InOutType name) {
-		for (TaskOutput to : this.output) {
-			if (to.getName().equals(name)) {
-				return to.getValue();
-			}
-		}
-		return null;
-	}
+    public TaskOutput getOutputByType(InOutType name) {
+        for (TaskOutput to : this.output) {
+            if (to.getType().name().equals(name.toString())) {
+                return to;
+            }
+        }
+        return null;
+    }
 
 	public boolean equalsTask(Task task) {
 		boolean equals =

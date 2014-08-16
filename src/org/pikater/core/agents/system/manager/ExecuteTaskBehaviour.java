@@ -15,6 +15,9 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSou
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.core.ontology.subtrees.task.TaskOutput;
+
+import java.util.ArrayList;
 
 public class ExecuteTaskBehaviour extends AchieveREInitiator{
 
@@ -65,10 +68,34 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				Task t = (Task)result.getValue();
                 ComputationCollectionItem computation =
                 		myAgent.getComputation(t.getGraphID());
+                DataSourceEdge labeledData = new DataSourceEdge();
+                labeledData.setFile(false);
+
                 if (node.ContainsOutput("file"))
                 {
-                    DataSourceEdge labeledData = new DataSourceEdge();
+                    TaskOutput data= t.getOutputByType(Task.InOutType.DATA);
+                    if (data==null)
+                    {
+                        data=t.getOutput().get(0);
+                    }
+                    labeledData.setDataSourceId(data.getName());
                     node.addToOutputAndProcess(labeledData,"file");
+                }
+                if (node.ContainsOutput("testing"))
+                {
+                    TaskOutput test= t.getOutputByType(Task.InOutType.TEST);
+                    if (test==null)
+                    {
+                        test=t.getOutputByType(Task.InOutType.TRAIN);
+                    }
+                    labeledData.setDataSourceId(test.getName());
+                    node.addToOutputAndProcess(labeledData,"testing");
+                }
+                if (node.ContainsOutput("training"))
+                {
+                    TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
+                    labeledData.setDataSourceId(train.getName());
+                    node.addToOutputAndProcess(labeledData,"training");
                 }
 
 				// save results to the database										

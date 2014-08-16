@@ -67,7 +67,7 @@ public final class Input07 {
         //Labeled data labeled by our CA are the new datasource
 		DataSourceDescription computingDataSource2 = new DataSourceDescription();
 		computingDataSource2.setOutputType("Data");
-		computingDataSource2.setDataProvider(comAgent1);
+		computingDataSource2.setDataProvider(comAgent2);
 		
         //Save labeled data
         FileDataSaver saver = new FileDataSaver();
