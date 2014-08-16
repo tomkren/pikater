@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.layouts.matrixlayout;
 
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.VerticalFlowLayout;
 
 import com.vaadin.annotations.StyleSheet;
@@ -39,7 +40,7 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 	private HeaderComponent selectedHeader_leftIndex;
 	private HeaderComponent selectedHeader_topIndex;
 	
-	public MatrixLayout(IMatrixDataSource<I, ? extends Component> dataSource)
+	public MatrixLayout(IMatrixDataSource<I, ? extends Component> dataSource, IFlowLayoutStyleProvider contentStyleProvider)
 	{
 		super();
 		setPrimaryStyleName("matrixView");
@@ -56,14 +57,14 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 		 * Setup the UI.
 		 */
 		
-		this.content = new HorizontalFlowLayout(null); // TODO: use the style provider and don't use external css
+		this.content = new HorizontalFlowLayout(contentStyleProvider);
 		content.setSizeFull();
 		content.addStyleName("main-subcomponent");
 		content.addStyleName("content");
 		updateContent();
 		
 		// first row
-		HorizontalFlowLayout fLayout_indexTop = new HorizontalFlowLayout(null); // TODO: use the style provider and don't use external css
+		HorizontalFlowLayout fLayout_indexTop = new HorizontalFlowLayout(null); // TODO: use the style provider and don't use external CSS
 		fLayout_indexTop.setSizeFull();
 		fLayout_indexTop.addStyleName("topHeaders");
 		fLayout_indexTop.addStyleName("main-subcomponent");

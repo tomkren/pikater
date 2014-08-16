@@ -28,6 +28,12 @@
 	padding: 15px;
 }
 
+.matrixView .headerComponent
+{
+	border: 1px solid black;
+	margin: 3px;
+}
+
 .matrixView .headerComponent .v-label
 {
 	padding-left: 5px;
@@ -39,12 +45,6 @@
 {
 	padding-left: 0px;
 	text-align: center;
-}
-
-.headerComponent
-{
-	border: 1px solid black;
-	margin: 3px;
 }
 
 /*******************************************************/
@@ -74,12 +74,12 @@
 
 .headerComponent.notSelected:hover
 {
-    background-color: gold;
+    background-color: lightyellow;
 }
 
 .headerComponent.selected:hover
 {
-    color: gold;
+    color: lightyellow;
 }
 
 .headerComponent.notSelected:active, .headerComponent.selected:active

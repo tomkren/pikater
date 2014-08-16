@@ -86,6 +86,11 @@ public abstract class CustomConfiguredUI extends UI
 		universalUIExt.extend(this);
 		
 		/*
+		 * Make inner layout independent of the content's size.
+		 */
+		topLayout.setSizeFull();
+		
+		/*
 		 * Prevent errors from directly being displayed on the client. Rather log the errors on server and
 		 * send a notification to the client.
 		 * NOTE: this is the last hook to catch the exception. If another error handler is set on a child

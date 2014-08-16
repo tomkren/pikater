@@ -1,11 +1,14 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.pglargeobject.PostgreLobAccess;
+import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
@@ -23,10 +26,16 @@ import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.Expan
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.DynamicNeighbourWizardStep;
 import org.pikater.web.vaadin.gui.server.layouts.SimplePanel;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
+import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
+import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -130,6 +139,7 @@ public class DatasetsView extends ExpandableView
 				case APPROVED:
 					return 75;
 					
+				case VISUALIZE:
 				case DOWNLOAD:
 					return 100;
 				case DELETE:
@@ -161,7 +171,52 @@ public class DatasetsView extends ExpandableView
 		public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 		{
 			DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
-			if(specificColumn == Column.DOWNLOAD)
+			if(specificColumn == Column.VISUALIZE)
+			{
+				// determine arguments
+				final JPADataSetLO dataset = ((DataSetTableDBRow) row).getDataset(); 
+				
+				// TODO: dialog
+				final List<String> attrNames = new ArrayList<String>(); 
+				for(JPAAttributeMetaData attrMetaData : dataset.getAttributeMetaData())
+				{
+					attrNames.add(attrMetaData.getName());
+				}
+				final String attrTarget = dataset.getAttributeMetaData().get(dataset.getNumberOfAttributes() - 1).getName();
+				
+				// show progress dialog
+				ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
+				{
+					private DatasetVisualizationEntryPoint underlyingTask;
+
+					@Override
+					public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+					{
+						// start the task and bind it with the progress dialog
+						underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
+						underlyingTask.visualizeDataset(
+								dataset,
+								attrNames.toArray(new String[0]),
+								attrTarget
+						);
+					}
+
+					@Override
+					public void abortTask()
+					{
+						underlyingTask.abortVisualization();
+					}
+
+					@Override
+					public void onTaskFinish(IProgressDialogTaskResult result)
+					{
+						// and when the task finishes, construct the UI
+						DSVisOneUIArgs uiArgs = new DSVisOneUIArgs((DSVisOneResult) result); 
+						Page.getCurrent().setLocation(uiArgs.toRedirectURL());
+					}
+				});
+			}
+			else if(specificColumn == Column.DOWNLOAD)
 			{
 				// download, don't run action
 				final DataSetTableDBRow rowView = (DataSetTableDBRow) row;
@@ -176,7 +231,7 @@ public class DatasetsView extends ExpandableView
 					@Override
 					public InputStream getStream() throws Throwable
 					{
-						return PostgreLobAccess.getPostgreLargeObjectReader(rowView.getDataset().getOID()).getInputStream();
+						return PGLargeObjectReader.getForLargeObject(rowView.getDataset().getOID()).getInputStream();
 					}
 					
 					@Override
