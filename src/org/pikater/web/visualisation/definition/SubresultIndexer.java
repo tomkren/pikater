@@ -12,9 +12,9 @@ import org.pikater.web.visualisation.definition.result.AbstractDSVisSubresult;
 public class SubresultIndexer<I extends Object & Comparable<? super I>, R extends AbstractDSVisSubresult<I>> implements
 	IMatrixDataSource<I, R>
 {
-	private final CustomOrderSet<I> leftIndexSet;
-	private final CustomOrderSet<I> topIndexSet;
-	private final Map<Tuple<I, I>, R> indexesToSubresult;
+	private final CustomOrderSet<I> leftIndexSet; // TODO: these do NOT contain all elements...
+	private final CustomOrderSet<I> topIndexSet; // TODO: these do NOT contain all elements...
+	private final Map<Tuple<I, I>, R> indexesToSubresult; // contains exactly the number results wanted
 	
 	public SubresultIndexer()
 	{

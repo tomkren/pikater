@@ -1,8 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -175,13 +173,8 @@ public class DatasetsView extends ExpandableView
 				// determine arguments
 				final JPADataSetLO dataset = ((DataSetTableDBRow) row).getDataset(); 
 				
-				// TODO: dialog
-				final List<String> attrNames = new ArrayList<String>(); 
-				for(JPAAttributeMetaData attrMetaData : dataset.getAttributeMetaData())
-				{
-					attrNames.add(attrMetaData.getName());
-				}
-				final String attrTarget = dataset.getAttributeMetaData().get(dataset.getNumberOfAttributes() - 1).getName();
+				// TODO: leave it like this for now but eventually a dialog would be nice
+				final JPAAttributeMetaData attrTarget = dataset.getAttributeMetaData().get(dataset.getNumberOfAttributes() - 1);
 				
 				// show progress dialog
 				ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
@@ -195,7 +188,7 @@ public class DatasetsView extends ExpandableView
 						underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
 						underlyingTask.visualizeDataset(
 								dataset,
-								attrNames.toArray(new String[0]),
+								dataset.getAttributeMetaData().toArray(new JPAAttributeMetaData[0]),
 								attrTarget
 						);
 					}

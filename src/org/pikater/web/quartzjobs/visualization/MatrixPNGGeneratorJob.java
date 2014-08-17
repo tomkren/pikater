@@ -3,6 +3,7 @@ package org.pikater.web.quartzjobs.visualization;
 import java.io.File;
 import java.io.PrintStream;
 
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.postgre.largeobject.IPGLOActionContext;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
@@ -37,9 +38,9 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 			case 0:
 				return arg instanceof JPADataSetLO;
 			case 1:
-				return arg instanceof String[];
+				return arg instanceof JPAAttributeMetaData[];
 			case 2:
-				return arg instanceof String;
+				return arg instanceof JPAAttributeMetaData;
 			case 3:
 				return arg instanceof IProgressDialogResultHandler;
 			default:
@@ -56,8 +57,8 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 	protected void execute() throws JobExecutionException
 	{
 		JPADataSetLO dataset = getArg(0);
-		String[] attrs = getArg(1);
-		String attrTarget = getArg(2);
+		JPAAttributeMetaData[] attrs = getArg(1);
+		JPAAttributeMetaData attrTarget = getArg(2);
 		context = getArg(3);
 		visualizeDataset(dataset, attrs, attrTarget);
 	}
@@ -69,7 +70,7 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 	}
 
 	@Override
-	public void visualizeDataset(JPADataSetLO dataset, String[] attrs, String attrTarget)
+	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget)
 	{
 		DSVisOneResult result = new DSVisOneResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		try
@@ -83,9 +84,9 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 			
 			float subresultsGenerated = 0;
 			float finalCountOfSubresults = attrs.length * attrs.length;
-			for(String attrY : attrs)
+			for(JPAAttributeMetaData attrY : attrs)
 			{
-				for(String attrX : attrs)
+				for(JPAAttributeMetaData attrX : attrs)
 				{
 					// interrupt generation when the user commands it
 					if(isInterrupted())
@@ -103,9 +104,9 @@ public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob impl
 							dataset,
 							datasetCachedFile,
 							new PrintStream(imageResult.getFile()),
-							attrX,
-							attrY,
-							attrTarget).create();
+							attrX.getName(),
+							attrY.getName(),
+							attrTarget.getName()).create();
 					subresultsGenerated++;
 					result.updateProgress(subresultsGenerated / finalCountOfSubresults);
 				}

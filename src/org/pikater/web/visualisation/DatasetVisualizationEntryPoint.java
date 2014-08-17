@@ -1,5 +1,6 @@
 package org.pikater.web.visualisation;
 
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
@@ -23,7 +24,7 @@ public class DatasetVisualizationEntryPoint implements IDSVisOne, IDSVisTwo
 	}
 	
 	@Override
-	public void visualizeDataset(JPADataSetLO dataset, String[] attrs, String attrTarget) throws Throwable
+	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Throwable
 	{
 		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
 		{

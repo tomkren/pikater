@@ -1,6 +1,6 @@
 @CHARSET "US-ASCII";
 
-.chartThumbnail
+.thumbnail
 {
 	height: 230px;
 	width: 200px;
@@ -9,12 +9,12 @@
 	border-radius: 5px;
 }
 
-.chartThumbnail:hover
+.thumbnail:hover
 {
 	cursor: pointer;
 }
 
-.chartThumbnail .v-label
+.thumbnail .v-label
 {
 	background-color: #96d1f8;
 	line-height: 26px;
@@ -22,7 +22,7 @@
 	padding-left: 15px; 
 }
 
-.chartThumbnail .v-image
+.thumbnail .itemContent
 {
 	width: 196px;
 	height: 196px;

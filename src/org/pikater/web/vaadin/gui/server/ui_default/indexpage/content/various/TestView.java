@@ -77,8 +77,8 @@ public class TestView extends VerticalLayout implements IContentComponent
 		// determine basic information & references
 		final JPADataSetLO iris = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
 		final JPADataSetLO weather = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("weather")).getSingleResultWithNull();
-		final String iris_attrTarget = iris.getAttributeMetaData().get(iris.getNumberOfAttributes() - 1).getName();
-		final String weather_attrTarget = weather.getAttributeMetaData().get(iris.getNumberOfAttributes() - 1).getName();
+		final JPAAttributeMetaData iris_attrTarget = iris.getAttributeMetaData().get(iris.getNumberOfAttributes() - 1);
+		final JPAAttributeMetaData weather_attrTarget = weather.getAttributeMetaData().get(iris.getNumberOfAttributes() - 1);
 		
 		// determine attribute sets to (potentially) compare
 		Set<AttrMapping> irisAttrSet = new HashSet<AttrMapping>();
@@ -88,7 +88,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 			{
 				if(attrX.isVisuallyCompatible(attrY))
 				{
-					irisAttrSet.add(new AttrMapping(attrX.getName(), attrY.getName(), iris_attrTarget));
+					irisAttrSet.add(new AttrMapping(attrX, attrY, iris_attrTarget));
 				}
 			}
 		}
@@ -99,7 +99,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 			{
 				if(attrX.isVisuallyCompatible(attrY))
 				{
-					weatherAttrSet.add(new AttrMapping(attrX.getName(), attrY.getName(), weather_attrTarget));
+					weatherAttrSet.add(new AttrMapping(attrX, attrY, weather_attrTarget));
 				}
 			}
 		}
@@ -110,8 +110,10 @@ public class TestView extends VerticalLayout implements IContentComponent
 		{
 			for(AttrMapping mapping2 : weatherAttrSet)
 			{
-				// TODO:
-				attrComparisons.add(new Tuple<AttrMapping, AttrMapping>(mapping1, mapping2));
+				if(mapping1.getAttrX().isVisuallyCompatible(mapping2.getAttrX()))
+				{
+					attrComparisons.add(new Tuple<AttrMapping, AttrMapping>(mapping1, mapping2));
+				}
 			}
 		}
 		
@@ -142,57 +144,6 @@ public class TestView extends VerticalLayout implements IContentComponent
 				Page.getCurrent().setLocation(uiArgs.toRedirectURL());
 			}
 		});
-		
-		/*
-		// create an image file to which the visualization module will generate the image
-		final File tmpFile = IOUtils.createTemporaryFile("visualization-generated", ".png");
-		
-		// then display progress dialog
-		ProgressDialog.show("Vizualization progress...", new IProgressDialogHandler()
-		{
-			private JobKey jobKey = null;
-			
-			@Override
-			public void startTask(IProgressDialogTaskContext context) throws Throwable
-			{
-				// start the task and bind it with the progress dialog
-				jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
-				{
-					context,
-					arguments.getDatasetToBeViewed(),
-					tmpFile.getAbsolutePath()
-				});
-			}
-			
-			@Override
-			public void abortTask()
-			{
-				if(jobKey == null)
-				{
-					PikaterLogger.logThrowable("", new NullPointerException("Can not abort a task that has not started."));
-				}
-				else
-				{
-					try
-					{
-						PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
-					}
-					catch (Throwable t)
-					{
-						PikaterLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
-					}
-				}
-			}
-			
-			@Override
-			public void onTaskFinish(IProgressDialogTaskResult result)
-			{
-				ProgressDialogVisualizationTaskResult visTaskResult = (ProgressDialogVisualizationTaskResult) result;
-								
-				// TODO:
-			}
-		});
-		*/
 	}
 	
 	public void testAnchor()

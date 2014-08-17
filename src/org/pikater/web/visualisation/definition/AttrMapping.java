@@ -1,29 +1,31 @@
 package org.pikater.web.visualisation.definition;
 
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
+
 public class AttrMapping implements Comparable<AttrMapping>
 {
-	private final String attrX;
-	private final String attrY;
-	private final String attrTarget;
+	private final JPAAttributeMetaData attrX;
+	private final JPAAttributeMetaData attrY;
+	private final JPAAttributeMetaData attrTarget;
 	
-	public AttrMapping(String attrX, String attrY, String attrTarget)
+	public AttrMapping(JPAAttributeMetaData attrX, JPAAttributeMetaData attrY, JPAAttributeMetaData attrTarget)
 	{
 		this.attrX = attrX;
 		this.attrY = attrY;
 		this.attrTarget = attrTarget;
 	}
 
-	public String getAttrX()
+	public JPAAttributeMetaData getAttrX()
 	{
 		return attrX;
 	}
 
-	public String getAttrY()
+	public JPAAttributeMetaData getAttrY()
 	{
 		return attrY;
 	}
 
-	public String getAttrTarget()
+	public JPAAttributeMetaData getAttrTarget()
 	{
 		return attrTarget;
 	}
@@ -31,7 +33,7 @@ public class AttrMapping implements Comparable<AttrMapping>
 	@Override
 	public int compareTo(AttrMapping o)
 	{
-		return attrX.compareTo(o.getAttrX());
+		return attrX.getName().compareTo(o.getAttrX().getName());
 	}
 	
 	/**
@@ -41,9 +43,58 @@ public class AttrMapping implements Comparable<AttrMapping>
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("Y: ").append(attrY).append("</br>");
-		sb.append("X: ").append(attrX).append("</br>");
-		sb.append("=>: ").append(attrTarget);
+		sb.append("Y: ").append(attrY.getName()).append("</br>");
+		sb.append("X: ").append(attrX.getName()).append("</br>");
+		sb.append("=>: ").append(attrTarget.getName());
 		return sb.toString();
+	}
+	
+	//--------------------------------------------------------
+	// INSTANCE COMPARING INTERFACE - generated with Eclipse
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((attrTarget == null) ? 0 : attrTarget.hashCode());
+		result = prime * result + ((attrX == null) ? 0 : attrX.hashCode());
+		result = prime * result + ((attrY == null) ? 0 : attrY.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AttrMapping other = (AttrMapping) obj;
+		if (attrTarget == null)
+		{
+			if (other.attrTarget != null)
+				return false;
+		}
+		else if (!attrTarget.equals(other.attrTarget))
+			return false;
+		if (attrX == null)
+		{
+			if (other.attrX != null)
+				return false;
+		}
+		else if (!attrX.equals(other.attrX))
+			return false;
+		if (attrY == null)
+		{
+			if (other.attrY != null)
+				return false;
+		}
+		else if (!attrY.equals(other.attrY))
+			return false;
+		return true;
 	}
 }

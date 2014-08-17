@@ -96,6 +96,13 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 			float finalCountOfSubresults = comparisonList.size();
 			for(Tuple<AttrMapping, AttrMapping> attrsToCompare : comparisonList)
 			{
+				// interrupt generation when the user commands it
+				if(isInterrupted())
+				{
+					return;
+				}
+				
+				// otherwise continue generating
 				DSVisTwoSubresult imageResult = result.createSingleImageResult(attrsToCompare, ImageType.SVG);
 				new ComparisonSVGGenerator(
 						null, // no need to pass in progress listener - progress is updated below
@@ -104,22 +111,31 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 						dataset2,
 						datasetCachedFile1,
 						datasetCachedFile2,
-						attrsToCompare.getValue1().getAttrX(),
-						attrsToCompare.getValue2().getAttrX(),
-						attrsToCompare.getValue1().getAttrY(),
-						attrsToCompare.getValue2().getAttrY(),
-						attrsToCompare.getValue1().getAttrTarget(),
-						attrsToCompare.getValue2().getAttrTarget()
+						attrsToCompare.getValue1().getAttrX().getName(),
+						attrsToCompare.getValue2().getAttrX().getName(),
+						attrsToCompare.getValue1().getAttrY().getName(),
+						attrsToCompare.getValue2().getAttrY().getName(),
+						attrsToCompare.getValue1().getAttrTarget().getName(),
+						attrsToCompare.getValue2().getAttrTarget().getName()
 						).create();
 				subresultsGenerated++;
 				result.updateProgress(subresultsGenerated / finalCountOfSubresults);
 			}
 			result.finished();
 		}
+		catch (InterruptedException e)
+		{
+			// user interrupted visualization, don't log
+			result.failed(); // don't forget to... important cleanup will take place
+		}
 		catch (Throwable t)
 		{
 			PikaterLogger.logThrowable("Job could not finish because of the following error:", t);
 			result.failed(); // don't forget to... important cleanup will take place
+		}
+		finally
+		{
+			// generated temporary files will be deleted when the JVM exits
 		}
 	}
 }

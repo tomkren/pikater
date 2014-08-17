@@ -1,9 +1,10 @@
 package org.pikater.web.visualisation.definition.result;
 
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.web.visualisation.definition.AttrMapping;
 import org.pikater.web.visualisation.definition.ImageType;
 
-public class DSVisOneSubresult extends AbstractDSVisSubresult<String>
+public class DSVisOneSubresult extends AbstractDSVisSubresult<JPAAttributeMetaData>
 {
 	private final AttrMapping attrInfo;
 
@@ -20,13 +21,13 @@ public class DSVisOneSubresult extends AbstractDSVisSubresult<String>
 	}
 
 	@Override
-	public String toLeftIndex()
+	public JPAAttributeMetaData toLeftIndex()
 	{
 		return attrInfo.getAttrY();
 	}
 
 	@Override
-	public String toTopIndex()
+	public JPAAttributeMetaData toTopIndex()
 	{
 		return attrInfo.getAttrX();
 	}

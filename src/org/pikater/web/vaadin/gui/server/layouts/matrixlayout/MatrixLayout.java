@@ -3,11 +3,11 @@ package org.pikater.web.vaadin.gui.server.layouts.matrixlayout;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.VerticalFlowLayout;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.thumbnail.Thumbnail;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.MouseEvents.ClickListener;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -15,7 +15,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 @StyleSheet("matrixLayout.css")
-public class MatrixLayout<I extends Object> extends VerticalLayout
+public class MatrixLayout<I extends Object, R extends Thumbnail> extends VerticalLayout
 {
 	private static final long serialVersionUID = -4102353757340619486L;
 	
@@ -40,7 +40,7 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 	private HeaderComponent selectedHeader_leftIndex;
 	private HeaderComponent selectedHeader_topIndex;
 	
-	public MatrixLayout(IMatrixDataSource<I, ? extends Component> dataSource, IFlowLayoutStyleProvider contentStyleProvider)
+	public MatrixLayout(IMatrixDataSource<I, R> dataSource, IMatrixCaptionProvider<I> captionProvider, IFlowLayoutStyleProvider contentStyleProvider)
 	{
 		super();
 		setPrimaryStyleName("matrixView");
@@ -61,7 +61,6 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 		content.setSizeFull();
 		content.addStyleName("main-subcomponent");
 		content.addStyleName("content");
-		updateContent();
 		
 		// first row
 		HorizontalFlowLayout fLayout_indexTop = new HorizontalFlowLayout(null); // TODO: use the style provider and don't use external CSS
@@ -70,7 +69,7 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 		fLayout_indexTop.addStyleName("main-subcomponent");
 		for(I indexTop : dataSource.getTopIndexSet())
 		{
-			final HeaderComponent header = new HeaderComponent(indexTop.toString());
+			final HeaderComponent header = new HeaderComponent(captionProvider.getCaptionComponent(indexTop));
 			header.setAssociatedIndex(indexTop);
 			header.addClickListener(new ClickListener()
 			{
@@ -104,7 +103,7 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 			fLayout_indexTop.addComponent(header);
 		}
 		
-		final HeaderComponent header_reset = new HeaderComponent("Reset selection");
+		final HeaderComponent header_reset = new HeaderComponent(new Label("RESET SELECTION"));
 		header_reset.addClickListener(new ClickListener()
 		{
 			private static final long serialVersionUID = -911534300593086566L;
@@ -146,7 +145,7 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 		fLayout_indexLeft.addStyleName("main-subcomponent");
 		for(I indexLeft : dataSource.getLeftIndexSet())
 		{
-			final HeaderComponent header = new HeaderComponent(indexLeft.toString());
+			final HeaderComponent header = new HeaderComponent(captionProvider.getCaptionComponent(indexLeft));
 			header.setAssociatedIndex(indexLeft);
 			header.addClickListener(new ClickListener()
 			{
@@ -192,6 +191,7 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 		addComponent(firstRow);
 		addComponent(secondRow);
 		setExpandRatio(secondRow, 1);
+		updateContent();
 	}
 	
 	//--------------------------------------------------------
@@ -247,7 +247,7 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 		private boolean selected;
 		private I associatedIndex;
 		
-		public HeaderComponent(String caption)
+		public HeaderComponent(Label lbl_inner)
 		{
 			super();
 			setWidth(HEADER_WIDTH);
@@ -257,10 +257,8 @@ public class MatrixLayout<I extends Object> extends VerticalLayout
 			this.selected = false;
 			this.associatedIndex = null;
 			
-			Label lbl_inner = new Label(caption.toUpperCase(), ContentMode.HTML);
 			lbl_inner.setSizeFull();
 			lbl_inner.setHeight(HEADER_HEIGHT);
-			
 			setContent(lbl_inner);
 		}
 		

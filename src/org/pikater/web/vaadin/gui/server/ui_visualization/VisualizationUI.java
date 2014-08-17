@@ -11,13 +11,12 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.IUIArguments;
-import org.pikater.web.vaadin.gui.server.ui_visualization.components.CompareDatasetsVisualizer;
-import org.pikater.web.vaadin.gui.server.ui_visualization.components.SingleDatasetVisualizer;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
@@ -27,13 +26,13 @@ import com.vaadin.shared.communication.PushMode;
 @Title("Visualization")
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
-@SuppressWarnings("rawtypes")
+@StyleSheet("visualizationUI.css")
 public class VisualizationUI extends CustomConfiguredUI
 {
 	private static final long serialVersionUID = -8917289148464357783L;
 	private static final String PARAM_RESOURCE = "res";
 	
-	private DSVisUIArgs arguments = null;
+	private DSVisUIArgs<?> arguments = null;
 	
 	@Override
 	protected void init(VaadinRequest request)
@@ -44,7 +43,7 @@ public class VisualizationUI extends CustomConfiguredUI
 		try
 		{
 			UUID resourceID = ResourceRegistrar.toResourceID(request.getParameter(PARAM_RESOURCE)); 
-			arguments = (DSVisUIArgs) ResourceRegistrar.getResource(resourceID);
+			arguments = (DSVisUIArgs<?>) ResourceRegistrar.getResource(resourceID);
 			arguments.getClass(); // spawn a null pointer exception if resource is not defined
 		}
 		catch(Throwable t)

@@ -15,7 +15,7 @@ public class DSVisTwoResult extends AbstractDSVisResult<AttrMapping, DSVisTwoSub
 	public DSVisTwoSubresult createSingleImageResult(Tuple<AttrMapping, AttrMapping> attrInfo, ImageType imageType)
 	{
 		DSVisTwoSubresult newImageResult = new DSVisTwoSubresult(imageType, attrInfo);
-		registerSubresult(attrInfo.getValue1(), attrInfo.getValue2(), newImageResult);
+		registerSubresult(newImageResult.toLeftIndex(), newImageResult.toTopIndex(), newImageResult);
 		return newImageResult;
 	}
 }
