@@ -13,14 +13,12 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 @Entity
 @Table(name="AttributeMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
+public abstract class JPAAttributeMetaData extends JPAAbstractEntity implements Comparable<JPAAttributeMetaData>
+{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 	
-	public int getId() {
-        return id;
-    }
 	private double ratioOfMissingValues;
 	private boolean isTarget;
 	private String name;
@@ -28,6 +26,9 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 	private double entropy;
 	private int attrOrder;
 
+	public int getId() {
+        return id;
+    }
 	
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;
@@ -105,5 +106,42 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity {
 		}else{
 			return false;
 		}
+	}
+	
+	/*
+	 * The code below is required in web:
+	 */
+	
+	@Override
+	public int compareTo(JPAAttributeMetaData o)
+	{
+		return getName().compareTo(o.getName());
+	}
+	
+	//--------------------------------------------------------
+	// INSTANCE COMPARING INTERFACE - generated with Eclipse
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JPAAttributeMetaData other = (JPAAttributeMetaData) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 }
