@@ -1,70 +1,76 @@
 package org.pikater.web.vaadin.gui.server.ui_visualization.components;
 
-import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI;
-import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisTwoUIArgs;
+import java.util.Collection;
 
+import org.pikater.web.vaadin.gui.server.StyleBuilder;
+import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
+import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisTwoUIArgs;
+import org.pikater.web.visualisation.definition.AttrMapping;
+import org.pikater.web.visualisation.definition.result.DSVisTwoSubresult;
+
+import com.vaadin.annotations.StyleSheet;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+@StyleSheet("visualizationComponent.css")
 public class CompareDatasetsVisualizer extends VerticalLayout
 {
 	private static final long serialVersionUID = 3682122092659178186L;
 
-	public CompareDatasetsVisualizer(DSVisTwoUIArgs arguments)
+	public CompareDatasetsVisualizer(final DSVisTwoUIArgs arguments)
 	{
 		super();
-	}
-	
-	private void generateDatasetComparison()
-	{
-		/*
-		// create an image file to which the visualization module will generate the image
-		final File tmpFile = IOUtils.createTemporaryFile("visualization-generated", ".png");
+		setSizeFull();
+		setStyleName("visualizationComponent");
+		setSpacing(true);
 		
-		// then display progress dialog
-		ProgressDialog.show("Vizualization progress...", new IProgressDialogHandler()
+		// define the header
+		Label lbl_visType = new Label("DATASET COMPARISON");
+		Label lbl_leftDataset = new Label(String.format("LEFT ATTRIBUTES: '%s'", arguments.getDataset1().getFileName()));
+		Label lbl_topDataset = new Label(String.format("TOP ATTRIBUTES: '%s'", arguments.getDataset2().getFileName()));
+		
+		final IMatrixDataSource<AttrMapping, DSVisTwoSubresult> resultMatrixView = arguments.getGeneratedResult().toMatrixView();
+		MatrixLayout<AttrMapping> matrixLayout = new MatrixLayout<AttrMapping>(new IMatrixDataSource<AttrMapping, ChartThumbnail>()
 		{
-			private JobKey jobKey = null;
-			
 			@Override
-			public void startTask(IProgressDialogTaskContext context) throws Throwable
+			public Collection<AttrMapping> getLeftIndexSet()
 			{
-				// start the task and bind it with the progress dialog
-				jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
-				{
-					context,
-					arguments.getDatasetToBeViewed(),
-					tmpFile.getAbsolutePath()
-				});
+				return resultMatrixView.getLeftIndexSet();
 			}
-			
+
 			@Override
-			public void abortTask()
+			public Collection<AttrMapping> getTopIndexSet()
 			{
-				if(jobKey == null)
-				{
-					PikaterLogger.logThrowable("", new NullPointerException("Can not abort a task that has not started."));
-				}
-				else
-				{
-					try
-					{
-						PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
-					}
-					catch (Throwable t)
-					{
-						PikaterLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
-					}
-				}
+				return resultMatrixView.getTopIndexSet();
 			}
-			
+
 			@Override
-			public void onTaskFinish(IProgressDialogTaskResult result)
+			public ChartThumbnail getElement(AttrMapping leftIndex, AttrMapping topIndex)
 			{
-				ProgressDialogVisualizationTaskResult visTaskResult = (ProgressDialogVisualizationTaskResult) result;
-								
-				// TODO:
+				return new ChartThumbnail(
+						resultMatrixView.getElement(leftIndex, topIndex),
+						arguments.getGeneratedResult().getImageWidth(),
+						arguments.getGeneratedResult().getImageHeight()
+				);
+			}
+		}, new IFlowLayoutStyleProvider()
+		{
+			@Override
+			public void setStylesForInnerComponent(Component c, StyleBuilder builder)
+			{
+				builder.setProperty("margin", "10px");
 			}
 		});
-		*/
+		matrixLayout.setSizeFull();
+
+		// and display it
+		addComponent(lbl_visType);
+		addComponent(lbl_leftDataset);
+		addComponent(lbl_topDataset);
+		addComponent(matrixLayout);
+		setExpandRatio(matrixLayout, 1);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.web.sharedresources.IRegistrarResource;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
@@ -12,6 +13,7 @@ import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.IUIArguments;
 import org.pikater.web.vaadin.gui.server.ui_visualization.components.CompareDatasetsVisualizer;
 import org.pikater.web.vaadin.gui.server.ui_visualization.components.SingleDatasetVisualizer;
+import org.pikater.web.visualisation.definition.result.AbstractDSVisResult;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 
@@ -81,7 +83,7 @@ public class VisualizationUI extends CustomConfiguredUI
 	//-------------------------------------------------------------------------------
 	// SPECIAL TYPES
 	
-	public abstract static class DSVisUIArgs<T> implements IUIArguments, IRegistrarResource
+	public abstract static class DSVisUIArgs<T extends AbstractDSVisResult<?, ?>> implements IUIArguments, IRegistrarResource
 	{
 		private final T generatedResult;
 		
@@ -112,17 +114,40 @@ public class VisualizationUI extends CustomConfiguredUI
 	
 	public static class DSVisOneUIArgs extends DSVisUIArgs<DSVisOneResult> 
 	{
-		public DSVisOneUIArgs(DSVisOneResult generatedResult)
+		private final JPADataSetLO dataset;
+		
+		public DSVisOneUIArgs(JPADataSetLO dataset, DSVisOneResult generatedResult)
 		{
 			super(generatedResult);
+			this.dataset = dataset;
+		}
+		
+		public JPADataSetLO getDataset()
+		{
+			return dataset;
 		}
 	}
 	
 	public static class DSVisTwoUIArgs extends DSVisUIArgs<DSVisTwoResult> 
 	{
-		public DSVisTwoUIArgs(DSVisTwoResult generatedResult)
+		private final JPADataSetLO dataset1;
+		private final JPADataSetLO dataset2;
+		
+		public DSVisTwoUIArgs(JPADataSetLO dataset1, JPADataSetLO dataset2, DSVisTwoResult generatedResult)
 		{
 			super(generatedResult);
+			this.dataset1 = dataset1;
+			this.dataset2 = dataset2;
+		}
+		
+		public JPADataSetLO getDataset1()
+		{
+			return dataset1;
+		}
+		
+		public JPADataSetLO getDataset2()
+		{
+			return dataset2;
 		}
 	}
 }

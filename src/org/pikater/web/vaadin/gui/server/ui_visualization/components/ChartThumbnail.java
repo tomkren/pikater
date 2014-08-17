@@ -7,7 +7,7 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.ImageDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.imageviewer.ImageViewer;
 import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
-import org.pikater.web.visualisation.definition.result.DSVisOneSubresult;
+import org.pikater.web.visualisation.definition.result.AbstractDSVisSubresult;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents;
@@ -31,7 +31,7 @@ import com.vaadin.ui.VerticalLayout;
 	private final UUID resourceID;
 	private final String downloadURL;
 
-	public ChartThumbnail(DSVisOneSubresult imageResult, final int imageWidth, final int imageHeight)
+	public ChartThumbnail(AbstractDSVisSubresult<?> imageResult, final int imageWidth, final int imageHeight)
 	{
 		super();
 		setStyleName("chartThumbnail");

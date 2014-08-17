@@ -9,9 +9,13 @@ import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
 import org.pikater.web.visualisation.definition.result.DSVisOneSubresult;
 
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
+@StyleSheet("visualizationComponent.css")
 public class SingleDatasetVisualizer extends VerticalLayout
 {
 	private static final long serialVersionUID = 8665905099485047156L;
@@ -20,7 +24,15 @@ public class SingleDatasetVisualizer extends VerticalLayout
 	{
 		super();
 		setSizeFull();
+		setStyleName("visualizationComponent");
+		setSpacing(true);
 		
+		// define the header
+		Label lbl_visType = new Label("SINGLE DATASET VISUALIZATION");
+		Label lbl_Dataset = new Label(String.format("DATASET: '%s'", arguments.getDataset().getFileName()));
+		
+		// define the matrix view
+		Panel matrixContainer = new Panel();
 		final IMatrixDataSource<String, DSVisOneSubresult> resultMatrixView = arguments.getGeneratedResult().toMatrixView();
 		MatrixLayout<String> matrixLayout = new MatrixLayout<String>(new IMatrixDataSource<String, ChartThumbnail>()
 		{
@@ -54,9 +66,13 @@ public class SingleDatasetVisualizer extends VerticalLayout
 			}
 		});
 		matrixLayout.setSizeFull();
+		matrixContainer.setSizeFull();
+		matrixContainer.setContent(matrixLayout);
 
 		// and display it
-		addComponent(matrixLayout);
-		setExpandRatio(matrixLayout, 1);
+		addComponent(lbl_visType);
+		addComponent(lbl_Dataset);
+		addComponent(matrixContainer);
+		setExpandRatio(matrixContainer, 1);
 	}
 }

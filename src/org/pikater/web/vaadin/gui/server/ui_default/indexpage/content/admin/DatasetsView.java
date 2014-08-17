@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
@@ -211,7 +210,7 @@ public class DatasetsView extends ExpandableView
 					public void onTaskFinish(IProgressDialogTaskResult result)
 					{
 						// and when the task finishes, construct the UI
-						DSVisOneUIArgs uiArgs = new DSVisOneUIArgs((DSVisOneResult) result); 
+						DSVisOneUIArgs uiArgs = new DSVisOneUIArgs(dataset, (DSVisOneResult) result); 
 						Page.getCurrent().setLocation(uiArgs.toRedirectURL());
 					}
 				});
@@ -249,7 +248,7 @@ public class DatasetsView extends ExpandableView
 					@Override
 					public String getFilename()
 					{
-						return DAOs.filemappingDAO.getSingleExternalFilename(rowView.getDataset());
+						return rowView.getDataset().getFileName();
 					}
 				});
 				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(datasetDownloadResourceUI));

@@ -1,10 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.various;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,6 +12,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.util.ResultFormatter;
+import org.pikater.shared.util.Tuple;
 import org.pikater.web.ssh.SSHSession;
 import org.pikater.web.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
@@ -22,22 +21,20 @@ import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
-import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
-import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.MatrixLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
-import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisTwoUIArgs;
 import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
-import org.pikater.web.visualisation.definition.result.DSVisOneResult;
+import org.pikater.web.visualisation.definition.AttrComparisons;
+import org.pikater.web.visualisation.definition.AttrMapping;
+import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 public class TestView extends VerticalLayout implements IContentComponent
@@ -51,9 +48,8 @@ public class TestView extends VerticalLayout implements IContentComponent
 		
 		// testJSCH();
 		// testAnchor();
-		// testVisualization();
 		// testMatrixViewer();
-		testSingleDatasetVisualization();
+		testDatasetComparison();
 	}
 
 	@Override
@@ -76,16 +72,48 @@ public class TestView extends VerticalLayout implements IContentComponent
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
 	
-	public void testSingleDatasetVisualization()
+	public void testDatasetComparison()
 	{
-		// determine arguments
+		// determine basic information & references
 		final JPADataSetLO iris = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
-		final List<String> attrNames = new ArrayList<String>(); 
-		for(JPAAttributeMetaData attrMetaData : iris.getAttributeMetaData())
+		final JPADataSetLO weather = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("weather")).getSingleResultWithNull();
+		final String iris_attrTarget = iris.getAttributeMetaData().get(iris.getNumberOfAttributes() - 1).getName();
+		final String weather_attrTarget = weather.getAttributeMetaData().get(iris.getNumberOfAttributes() - 1).getName();
+		
+		// determine attribute sets to (potentially) compare
+		Set<AttrMapping> irisAttrSet = new HashSet<AttrMapping>();
+		for(JPAAttributeMetaData attrX : iris.getAttributeMetaData())
 		{
-			attrNames.add(attrMetaData.getName());
+			for(JPAAttributeMetaData attrY : iris.getAttributeMetaData())
+			{
+				if(attrX.isVisuallyCompatible(attrY))
+				{
+					irisAttrSet.add(new AttrMapping(attrX.getName(), attrY.getName(), iris_attrTarget));
+				}
+			}
 		}
-		final String attrTarget = iris.getAttributeMetaData().get(iris.getNumberOfAttributes() - 1).getName();
+		Set<AttrMapping> weatherAttrSet = new HashSet<AttrMapping>();
+		for(JPAAttributeMetaData attrX : weather.getAttributeMetaData())
+		{
+			for(JPAAttributeMetaData attrY : weather.getAttributeMetaData())
+			{
+				if(attrX.isVisuallyCompatible(attrY))
+				{
+					weatherAttrSet.add(new AttrMapping(attrX.getName(), attrY.getName(), weather_attrTarget));
+				}
+			}
+		}
+		
+		// data source
+		final AttrComparisons attrComparisons = new AttrComparisons();
+		for(AttrMapping mapping1 : irisAttrSet)
+		{
+			for(AttrMapping mapping2 : weatherAttrSet)
+			{
+				// TODO:
+				attrComparisons.add(new Tuple<AttrMapping, AttrMapping>(mapping1, mapping2));
+			}
+		}
 		
 		// show progress dialog
 		ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
@@ -97,11 +125,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 			{
 				// start the task and bind it with the progress dialog
 				underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
-				underlyingTask.visualizeDataset(
-						iris,
-						attrNames.toArray(new String[0]),
-						attrTarget
-				);
+				underlyingTask.visualizeDatasetComparison(iris, weather, attrComparisons);
 			}
 
 			@Override
@@ -114,58 +138,61 @@ public class TestView extends VerticalLayout implements IContentComponent
 			public void onTaskFinish(IProgressDialogTaskResult result)
 			{
 				// and when the task finishes, construct the UI
-				DSVisOneUIArgs uiArgs = new DSVisOneUIArgs((DSVisOneResult) result); 
+				DSVisTwoUIArgs uiArgs = new DSVisTwoUIArgs(iris, weather, (DSVisTwoResult) result); 
 				Page.getCurrent().setLocation(uiArgs.toRedirectURL());
 			}
 		});
-	}
-	
-	public void testMatrixViewer()
-	{
-		MatrixLayout<String> matrix = new MatrixLayout<String>(new IMatrixDataSource<String, Component>()
+		
+		/*
+		// create an image file to which the visualization module will generate the image
+		final File tmpFile = IOUtils.createTemporaryFile("visualization-generated", ".png");
+		
+		// then display progress dialog
+		ProgressDialog.show("Vizualization progress...", new IProgressDialogHandler()
 		{
+			private JobKey jobKey = null;
+			
 			@Override
-			public Collection<String> getLeftIndexSet()
+			public void startTask(IProgressDialogTaskContext context) throws Throwable
 			{
-				return Arrays.asList(
-						"firstIndex1",
-						"firstIndex2",
-						"firstIndex3",
-						"firstIndex4",
-						"firstIndex5",
-						"firstIndex6",
-						"firstIndex7",
-						"firstIndex8",
-						"firstIndex9",
-						"firstIndex10",
-						"firstIndex11",
-						"firstIndex12",
-						"firstIndex13",
-						"firstIndex14",
-						"firstIndex15",
-						"firstIndex16",
-						"firstIndex17",
-						"firstIndex18",
-						"firstIndex19",
-						"firstIndex20"
-				);
+				// start the task and bind it with the progress dialog
+				jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
+				{
+					context,
+					arguments.getDatasetToBeViewed(),
+					tmpFile.getAbsolutePath()
+				});
 			}
-
+			
 			@Override
-			public Collection<String> getTopIndexSet()
+			public void abortTask()
 			{
-				return Arrays.asList( "secondIndex1", "secondIndex2" );
+				if(jobKey == null)
+				{
+					PikaterLogger.logThrowable("", new NullPointerException("Can not abort a task that has not started."));
+				}
+				else
+				{
+					try
+					{
+						PikaterJobScheduler.getJobScheduler().interruptJob(jobKey);
+					}
+					catch (Throwable t)
+					{
+						PikaterLogger.logThrowable(String.format("Could not interrupt job: '%s'. What now?", jobKey.toString()), t);
+					}
+				}
 			}
-
+			
 			@Override
-			public Component getElement(String index1, String index2)
+			public void onTaskFinish(IProgressDialogTaskResult result)
 			{
-				return new Label(String.format("[%s; %s]", index1, index2));
+				ProgressDialogVisualizationTaskResult visTaskResult = (ProgressDialogVisualizationTaskResult) result;
+								
+				// TODO:
 			}
-		}, null);
-		matrix.setWidth("600px");
-		matrix.setHeight("600px");
-		addComponent(matrix);
+		});
+		*/
 	}
 	
 	public void testAnchor()
