@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 
 import org.pikater.shared.database.exceptions.AttributeActionNotApplicableException;
 import org.pikater.shared.database.exceptions.AttributeNameNotFoundException;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
 
 
@@ -201,5 +202,10 @@ public class JPADataSetLO extends JPAAbstractEntity{
 
 	public int getNumberOfAttributes(){ 
 		return this.getAttributeMetaData().size(); 
-	} 	
+	}
+	
+	public String getFileName()
+	{
+		return DAOs.filemappingDAO.getSingleExternalFilename(this);
+	}
 }
