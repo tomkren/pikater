@@ -25,7 +25,7 @@ import java.util.Set;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.metadata.MetadataCommunicator;
+import org.pikater.core.agents.system.metadata.MetadataService;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
@@ -264,6 +264,8 @@ public class Agent_Planner extends PikaterAgent {
 		AID dataManager = new AID(dataManagerName, false);
 		Ontology ontology = DataOntology.getInstance();
 		
+		int userID = task.getUserID();
+		
 		for (TaskOutput t : task.getOutput()) {
 			log("requesting save of data "+t.getName());
 			SaveDataset sd = new SaveDataset();
@@ -275,7 +277,7 @@ public class Agent_Planner extends PikaterAgent {
 			request.setLanguage(getCodec().getName());
 			request.setOntology(ontology.getName());
 			ACLMessage reply = null;
-			int datasetId;
+			int computedDataID;
 			try {
 				getContentManager().fillContent(request, new Action(dataManager, sd));
 				reply = FIPAService.doFipaRequestClient(this, request, 10000);
@@ -283,7 +285,7 @@ public class Agent_Planner extends PikaterAgent {
 					logError("Failed to save output data in DB - reply not received.");
 					return;
 				}
-				datasetId = (Integer)reply.getContentObject();
+				computedDataID = (Integer)reply.getContentObject();
 			} catch (CodecException | OntologyException | FIPAException e) {
 				logError("Failed to save output data in DB", e);
 				return;
@@ -291,7 +293,8 @@ public class Agent_Planner extends PikaterAgent {
 				logError("Failed to request metadata", e);
 				return;
 			}
-			MetadataCommunicator.requestMetadataForDataset(this, datasetId);
+			MetadataService.requestMetadataForComputedData(this,
+					computedDataID, userID);
 			log("saved output to DB: "+t.getName());
 		}
 	}

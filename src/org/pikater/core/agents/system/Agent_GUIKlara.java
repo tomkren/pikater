@@ -24,7 +24,7 @@ import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
-import org.pikater.core.agents.system.metadata.MetadataCommunicator;
+import org.pikater.core.agents.system.metadata.MetadataService;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
@@ -334,30 +334,29 @@ public class Agent_GUIKlara extends PikaterAgent {
 	}
 	
 	private void addDataset(String cmd) throws Exception{
-		int dataSetID=-1;
-		
-		//int userID = -1;
+		int dataSetID = -1;
+		int userID = -1;
 		
 		String[] cmdA=cmd.split(" ");
 		if(cmdA.length==4){
 			String username=cmdA[1];
 			String description=cmdA[2];
 			String filename=testAndAskForConversion(new File(cmdA[3]));
-			int userID = DataManagerService.getUserID(this, username);
+			userID = DataManagerService.getUserID(this, username);
 			if(filename==null) return;
 			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
 		}else if(cmdA.length==3){
 			String username=cmdA[1];
 			String description="Dataset saved in KlaraGui";
 			String filename=testAndAskForConversion(new File(cmdA[2]));
-			int userID = DataManagerService.getUserID(this, username);
+			userID = DataManagerService.getUserID(this, username);
 			if(filename==null) return;
 			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
 		}else if(cmdA.length==2){
 			String username="klara";
 			String description="Dataset saved in KlaraGui";
 			String filename=testAndAskForConversion(new File(cmdA[1]));
-			int userID = DataManagerService.getUserID(this, username);
+			userID = DataManagerService.getUserID(this, username);
 			if(filename==null) return;
 			dataSetID = this.sendRequestSaveDataSet(filename, userID, description);
 		}else{
@@ -365,7 +364,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		}
 		
 		if(dataSetID!=-1){
-			MetadataCommunicator.requestMetadataForDataset(this, dataSetID);
+			MetadataService.requestMetadataForDataset(this, dataSetID, userID);
 		}
 	}
 	

@@ -13,6 +13,7 @@ import xmlGenerator.Input04;
 import xmlGenerator.Input03;
 import xmlGenerator.Input05;
 import xmlGenerator.Input06;
+import xmlGenerator.Input07;
 import xmlGenerator.Input10;
 
 public class TestBatchDescription {
@@ -50,7 +51,11 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input06.createDescription(),
 				"Input06");
-	
+		
+		testComputatingDescription(
+				Input07.createDescription(),
+				"Input07");
+		
 		testComputatingDescription(
 				Input10.createDescription(),
 				"Input10");

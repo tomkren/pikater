@@ -26,8 +26,10 @@ import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.core.ontology.MetadataOntology;
+import org.pikater.core.ontology.subtrees.account.GetUserID;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
+import org.pikater.core.ontology.subtrees.metadata.NewComputedData;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.shared.database.exceptions.NoResultException;
@@ -66,6 +68,9 @@ public class Agent_MetadataQueen extends PikaterAgent {
 					if (a.getAction() instanceof NewDataset) {
 						return respondToNewDataset(request, a);
 					}
+					if (a.getAction() instanceof NewComputedData) {
+						return respondToNewComputedData(request, a);
+					}
 				} catch (OntologyException e) {
 					logError("Problem extracting content",e);
 				} catch (CodecException e) {
@@ -83,17 +88,31 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		});
         
     }
-    
+
     private ACLMessage respondToNewDataset(ACLMessage request, Action a) {
-        NewDataset nd=(NewDataset)a.getAction();
-        
-        int dataSetID=nd.getDataSetID();
+    	
+    	NewDataset newDataset = (NewDataset)a.getAction();
+		
+    	return respondToNewData(request,
+    			CoreConfiguration.METADATA_PATH,
+    			newDataset.getDataSetID());
+    }
+    private ACLMessage respondToNewComputedData(ACLMessage request, Action a) {
+    	
+    	NewComputedData newComputedData = (NewComputedData)a.getAction();
+    	
+    	return respondToNewData(request,
+    			CoreConfiguration.DATA_FILES_PATH,
+    			newComputedData.getComputedDataID());	
+    }
+    
+    private ACLMessage respondToNewData(ACLMessage request, String path, int dataID) {
         
         try {
-			JPADataSetLO dslo= DAOs.dataSetDAO.getByID(dataSetID, EmptyResultAction.THROW);
+			JPADataSetLO dslo = DAOs.dataSetDAO.getByID(dataID, EmptyResultAction.THROW);
 			PGLargeObjectReader plor = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 			
-			File file=new File(CoreConfiguration.METADATA_PATH + dslo.getHash());
+			File file=new File(path + dslo.getHash());
 			if(!file.exists()){
 			FileWriter fw=new FileWriter(file);
 			
@@ -105,16 +124,16 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			fw.close();
 			}
 			
-			Metadata resultMetaData=this.readFile(file);
+			Metadata resultMetaData = this.readFile(file);
 		
-			this.sendSaveMetaDataRequest(resultMetaData, dataSetID);
+			this.sendSaveMetaDataRequest(resultMetaData, dataID);
 				
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
 		
 			return reply;	
 		} catch (NoResultException e) {
-			logError("DataSet with ID "+dataSetID+" not found  in the database",e);
+			logError("DataSet with ID "+dataID+" not found  in the database",e);
 		} catch (IOException e) {
 			logError("IOError while accessing dataset", e);
 		}

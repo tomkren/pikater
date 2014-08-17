@@ -11,7 +11,7 @@ public class NewDataset implements AgentAction {
 	private static final long serialVersionUID = 1014780512687910546L;
 
 	private int dataSetID;
-	private int userId;
+	private int userID;
 
 	
 	public int getDataSetID() {
@@ -20,11 +20,11 @@ public class NewDataset implements AgentAction {
 	public void setDataSetID(int dataSetID) {
 		this.dataSetID = dataSetID;
 	}
-	public int getUserId() {
-		return userId;
+	public int getUserID() {
+		return userID;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 }

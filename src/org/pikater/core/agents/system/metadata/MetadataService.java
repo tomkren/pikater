@@ -12,17 +12,20 @@ import jade.lang.acl.ACLMessage;
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MetadataOntology;
+import org.pikater.core.ontology.subtrees.metadata.NewComputedData;
 import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 
-public class MetadataCommunicator {
-	public static void requestMetadataForDataset(PikaterAgent agent, int dataSetID) {
+public class MetadataService {
+	
+	public static void requestMetadataForDataset(PikaterAgent agent,
+			int dataSetID, int userID) {
+		
 		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
 
 		NewDataset nds = new NewDataset();
-
-		//nds.setInternalFileName("28c7b9febbecff6ce207bcde29fc0eb8");
-		//nds.setDataSetID(2301);
+		nds.setUserID(userID);
 		nds.setDataSetID(dataSetID);
+		
 		agent.log("Sending request to store metadata for DataSetID: " + dataSetID);
 
 		try {
@@ -47,4 +50,39 @@ public class MetadataCommunicator {
 			agent.logError("FIPA error occurred: " + e.getMessage(), e);
 		}
 	}
+	
+	public static void requestMetadataForComputedData(PikaterAgent agent,
+			int computedDataID, int userID) {
+
+		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
+
+		NewComputedData ncd = new NewComputedData();
+		ncd.setUserID(userID);
+		ncd.setComputedDataID(computedDataID);
+		
+		agent.log("Sending request to store metadata for ComputedDataID: " + computedDataID);
+
+		try {
+			Ontology ontology = MetadataOntology.getInstance();
+
+			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+			request.addReceiver(receiver);
+			request.setLanguage(agent.getCodec().getName());
+			request.setOntology(ontology.getName());
+			agent.getContentManager().fillContent(request, new Action(receiver, ncd));
+
+			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request, 10000);
+			if (reply == null)
+				agent.logError("Reply not received.");
+			else
+				agent.log("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+		} catch (CodecException e) {
+			agent.logError("Codec error occurred: " + e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError("Ontology error occurred: " + e.getMessage(), e);
+		} catch (FIPAException e) {
+			agent.logError("FIPA error occurred: " + e.getMessage(), e);
+		}
+	}
+	
 }

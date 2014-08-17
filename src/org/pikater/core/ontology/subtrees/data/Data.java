@@ -19,7 +19,7 @@ public class Data implements Concept {
 
 	public Data() {}
 	
-	public Data(String externalFileName, String internalFileName,
+	public Data(String internalFileName, String externalFileName,
 			String dataType) {
 		this.internalFileName = internalFileName;
 		this.externalFileName = externalFileName;
