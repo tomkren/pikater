@@ -1,6 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -46,7 +47,7 @@ public final class Input06 {
 
 		// Data processed by dp are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setOutputType("Data");
+		computingDataSource.setOutputType("sunnyOutput");
 		computingDataSource.setDataProvider(dp);
 
 		// Create new computing agent, add options and datasource that we have
@@ -60,7 +61,7 @@ public final class Input06 {
 		comAgent.setEvaluationMethod(evaluationMethod);
 
 		DataSourceDescription computingAgentDataSource = new DataSourceDescription();
-		computingAgentDataSource.setOutputType("DataCA");
+		computingAgentDataSource.setOutputType(CoreConstants.SLOT_COMPUTED_DATA);
 		computingAgentDataSource.setDataProvider(comAgent);
 
 		// Save labeled data

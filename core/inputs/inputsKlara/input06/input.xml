@@ -144,7 +144,7 @@
                 </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               </dataSources>
             </dataProvider>
-            <outputType>Data</outputType>
+            <outputType>sunnyOutput</outputType>
             <inputType>trainingData</inputType>
           </trainingData>
           <testingData>
@@ -176,7 +176,7 @@
                 </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               </dataSources>
             </dataProvider>
-            <outputType>Data</outputType>
+            <outputType>sunnyOutput</outputType>
             <inputType>testingData</inputType>
           </testingData>
         </dataProvider>
