@@ -344,4 +344,31 @@ public class BatchDAO extends AbstractDAO {
 	public void deleteBatchByID(int id){
 		this.deleteEntityByID(JPABatch.class, id);
 	}
+
+	/**
+	 * Sets the status of computed batches to failed, because just after startup, there shouldn't be
+	 * running computations.
+	 */
+	public void cleanUp() {
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			logger.info("Starting cleaning up");
+			List<JPABatch> batches=em
+					.createNamedQuery("Batch.getByStatus",JPABatch.class)
+					.setParameter("status", JPABatchStatus.COMPUTING)
+					.getResultList();
+			for(JPABatch batch : batches){
+				batch.setStatus(JPABatchStatus.FAILED.name());
+			}
+			em.getTransaction().commit();
+			logger.info("Cleaning up finished");
+		}catch(Exception e){
+			logger.error("Error during cleanup...", e);
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+		
+	}
 }
