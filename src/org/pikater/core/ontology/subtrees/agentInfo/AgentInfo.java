@@ -140,8 +140,14 @@ public class AgentInfo implements Concept, ICloneable
 		result.setAgentClassName(agentClassName);
 		result.setName(name);
 		result.setDescription(description);
-		result.setInputSlots(inputSlots);
-		result.setOutputSlots(outputSlots);
+		for(Slot slot : inputSlots)
+		{
+			result.addInputSlot(slot.clone());
+		}
+		for(Slot slot : outputSlots)
+		{
+			result.addOutputSlot(slot.clone());
+		}
 		result.setOptions(options.clone());
 		return result;
 	}
