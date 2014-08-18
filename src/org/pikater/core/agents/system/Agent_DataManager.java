@@ -327,7 +327,12 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 
 		});
+		
+		cleanupAbortedBatches();
+	}
 
+	private void cleanupAbortedBatches() {
+		DAOs.batchDAO.cleanUp();
 	}
 
 	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {
