@@ -15,7 +15,8 @@ import org.pikater.shared.experiment.universalformat.UniversalComputationDescrip
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
-import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
+import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm.ExperimentSaveMode;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
@@ -23,7 +24,6 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
 import org.pikater.web.vaadin.gui.server.layouts.verticalgroupLayout.VerticalGroupLayout;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent.IOnExperimentSaved;
@@ -589,7 +589,7 @@ public class Toolbar extends VerticalLayout
 					}
 				}
 			});
-			savedExperimentsLayout.setView(new BatchDBViewRoot(new UserSavedBatchesTableDBView(currentUser)));
+			savedExperimentsLayout.setView(new BatchDBViewRoot<UserSavedBatchesTableDBView>(new UserSavedBatchesTableDBView(currentUser)));
 			
 			final DBTableLayout scheduledExperimentsLayout = new DBTableLayout();
 			scheduledExperimentsLayout.setSizeFull();
@@ -616,7 +616,7 @@ public class Toolbar extends VerticalLayout
 					}
 				}
 			});
-			scheduledExperimentsLayout.setView(new BatchDBViewRoot(new UserScheduledBatchesTableDBView(currentUser)));
+			scheduledExperimentsLayout.setView(new BatchDBViewRoot<UserScheduledBatchesTableDBView>(new UserScheduledBatchesTableDBView(currentUser)));
 			
 			addTab(savedExperimentsLayout, "Saved experiments");
 			addTab(scheduledExperimentsLayout, "Scheduled experiments");

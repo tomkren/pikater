@@ -18,7 +18,7 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 	public WizardWithDynamicSteps(T output, boolean cancelButtonUsable)
 	{
 		super(output);
-		setStyleName("myDynamicWizard");
+		addStyleName("dynamicWizard");
 		setButtonUsed(getFinishButton(), false);
 		if(!cancelButtonUsable)
 		{

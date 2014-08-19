@@ -24,23 +24,23 @@ public class DataSetTableDBView extends AbstractTableDBView
 	private JPAUser owner;
 	
 	/**
-	 * By default, admin mode (all datasets of all users) will be inspected. 
+	 * Creates an admin mode view. All datasets of all users will be viewed.
 	 */
 	public DataSetTableDBView()
 	{
 		this.owner = null;
 	}
 	
-	/** 
-	 * @param owner The user whose datasets to display. If null (admin mode), all datasets should
-	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method instead.
+	/**
+	 * Creates a user mode view. 
+	 * @param owner the user whose datasets to display
 	 */
-	public void setDatasetOwner(JPAUser owner)
+	public DataSetTableDBView(JPAUser owner)
 	{
 		this.owner = owner;
 	}
 	
-	private boolean adminMode()
+	protected boolean adminMode()
 	{
 		return this.owner == null;
 	}
@@ -68,6 +68,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 		DESCRIPTION,
 		APPROVED,
 		VISUALIZE,
+		COMPARE,
 		DOWNLOAD,
 		DELETE;
 
@@ -102,6 +103,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 					return DBViewValueType.BOOLEAN;
 					
 				case VISUALIZE:
+				case COMPARE:
 				case DOWNLOAD:
 				case DELETE:
 					return DBViewValueType.NAMED_ACTION;

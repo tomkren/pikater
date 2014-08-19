@@ -24,18 +24,18 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 	private JPAUser owner;
 	
 	/**
-	 * By default, admin mode (all agents of all users) will be inspected. 
+	 * Creates an admin mode view. All agents of all users will be viewed.
 	 */
 	public ExternalAgentTableDBView()
 	{
 		this.owner = null;
 	}
 	
-	/** 
-	 * @param owner The user whose agents to display. If null (admin mode), all agents should
-	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method instead.
+	/**
+	 * Creates a user mode view. 
+	 * @param owner the user whose agents to display
 	 */
-	public void setAgentOwner(JPAUser owner)
+	public ExternalAgentTableDBView(JPAUser owner)
 	{
 		this.owner = owner;
 	}
