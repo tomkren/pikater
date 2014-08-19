@@ -50,13 +50,13 @@ public class CompareDatasetsVisualizer extends VerticalLayout
 			@Override
 			public Collection<AttrMapping> getLeftIndexSet()
 			{
-				return resultMatrixView.getLeftIndexSet();
+				return resultMatrixView.getLeftIndexSet(); // just keep insertion order
 			}
 
 			@Override
 			public Collection<AttrMapping> getTopIndexSet()
 			{
-				return resultMatrixView.getTopIndexSet();
+				return resultMatrixView.getTopIndexSet(); // just keep insertion order
 			}
 			
 			@Override
@@ -70,7 +70,6 @@ public class CompareDatasetsVisualizer extends VerticalLayout
 					 * mappings are defined in pairs to begin with...). 
 					 */
 					
-					// TODO: 9 results are displayed whereas 65 should be displayed...
 					return new ChartThumbnail(
 							subresult,
 							arguments.getGeneratedResult().getImageWidth(),

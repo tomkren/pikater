@@ -1,8 +1,10 @@
 package org.pikater.web.vaadin.gui.server.ui_visualization;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
+import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixCaptionProvider;
@@ -38,16 +40,25 @@ public class SingleDatasetVisualizer extends VerticalLayout
 		MatrixLayout<JPAAttributeMetaData, ChartThumbnail> matrixLayout = new MatrixLayout<JPAAttributeMetaData, ChartThumbnail>(
 				new IMatrixDataSource<JPAAttributeMetaData, ChartThumbnail>()
 		{
+			private final Comparator<JPAAttributeMetaData> comp = new Comparator<JPAAttributeMetaData>()
+			{
+				@Override
+				public int compare(JPAAttributeMetaData o1, JPAAttributeMetaData o2)
+				{
+					return o1.getName().compareTo(o2.getName());
+				}
+			}; 
+					
 			@Override
 			public Collection<JPAAttributeMetaData> getLeftIndexSet()
 			{
-				return resultMatrixView.getLeftIndexSet();
+				return new CustomOrderSet<JPAAttributeMetaData>(resultMatrixView.getLeftIndexSet(), comp);
 			}
 
 			@Override
 			public Collection<JPAAttributeMetaData> getTopIndexSet()
 			{
-				return resultMatrixView.getTopIndexSet();
+				return new CustomOrderSet<JPAAttributeMetaData>(resultMatrixView.getTopIndexSet(), comp);
 			}
 			
 			@Override

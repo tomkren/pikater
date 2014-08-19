@@ -9,7 +9,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.visualisation.definition.SubresultIndexer;
 
-public abstract class AbstractDSVisResult<I extends Object & Comparable<? super I>, R extends AbstractDSVisSubresult<I>> implements 
+public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>> implements 
 	IProgressDialogTaskResult, Iterable<R>
 {
 	/**

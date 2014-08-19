@@ -5,7 +5,7 @@ import java.io.File;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.visualisation.definition.ImageType;
 
-public abstract class AbstractDSVisSubresult<I extends Object & Comparable<? super I>>
+public abstract class AbstractDSVisSubresult<I>
 {
 	private final ImageType imageType;
 	private final File imageFile;
