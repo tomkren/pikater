@@ -45,7 +45,7 @@ public class ModelComputationNode extends ComputationNode {
 		this.priority = priority;
 	}
 
-	public int getExperimentID() {
-		return computationGraph.getExperimentId();
+	public int getBatchID() {
+		return computationGraph.getBatchID();
 	}
 }

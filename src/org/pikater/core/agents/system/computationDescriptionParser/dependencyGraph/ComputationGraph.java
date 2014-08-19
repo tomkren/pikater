@@ -5,7 +5,7 @@ import java.util.Observable;
 
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.events.ExperimentFinished;
+import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.events.BatchFinished;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +19,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ComputationGraph extends Observable {
     private HashMap<Integer,ComputationNode> nodes=new HashMap<Integer,ComputationNode>();
     private int id;
-    private int experimentId;
+    private int batchID;
     
     public ComputationGraph()
     {
@@ -55,7 +55,7 @@ public class ComputationGraph extends Observable {
 
     public void computationBatchFinished()
     {
-        ExperimentFinished finishedEvent=new ExperimentFinished(experimentId);
+        BatchFinished finishedEvent = new BatchFinished(batchID);
         setChanged();
         notifyObservers(finishedEvent);
     }
@@ -77,11 +77,11 @@ public class ComputationGraph extends Observable {
         this.id = id;
     }
 
-    public int getExperimentId() {
-        return experimentId;
+    public int getBatchID() {
+        return batchID;
     }
 
-    public void setExperimentId(int experimentId) {
-        this.experimentId = experimentId;
+    public void setBatchID(int batchID) {
+        this.batchID = batchID;
     }
 }

@@ -649,6 +649,7 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		UpdateBatchStatus updateBatchStatus = (UpdateBatchStatus) a.getAction();
 		
+		log("****** " + updateBatchStatus.getBatchID());
 		JPABatch batchJPA = DAOs.batchDAO.getByID(updateBatchStatus.getBatchID());
 		JPABatchStatus batchStatus=JPABatchStatus.valueOf(updateBatchStatus.getStatus());
 		switch(batchStatus){
