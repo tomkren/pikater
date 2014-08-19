@@ -95,6 +95,25 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				{
 				}
 			};
+		case COMPARE:
+			return new NamedActionDBViewValue("Compare to") // no DB changes needed - this is completely GUI managed
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return true; // TODO: metadata check; when implemented, also add it to visualization quartz jobs 
+				}
+				
+				@Override
+				protected void updateEntities()
+				{
+				}
+				
+				@Override
+				protected void commitEntities()
+				{
+				}
+			};
 		case DOWNLOAD:
 			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
