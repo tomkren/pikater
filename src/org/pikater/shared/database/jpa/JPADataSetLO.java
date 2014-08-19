@@ -1,5 +1,6 @@
 package org.pikater.shared.database.jpa;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -202,6 +203,19 @@ public class JPADataSetLO extends JPAAbstractEntity{
 
 	public int getNumberOfAttributes(){ 
 		return this.getAttributeMetaData().size(); 
+	}
+	
+	public List<JPAAttributeMetaData> getTargetAttributes()
+	{
+		List<JPAAttributeMetaData> result = new ArrayList<JPAAttributeMetaData>();
+		for(JPAAttributeMetaData attr : getAttributeMetaData())
+		{
+			if(attr.isTarget())
+			{
+				result.add(attr);
+			}
+		}
+		return result;
 	}
 	
 	public String getFileName()

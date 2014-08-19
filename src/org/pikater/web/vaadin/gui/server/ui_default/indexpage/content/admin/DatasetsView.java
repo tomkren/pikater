@@ -21,7 +21,9 @@ import org.pikater.web.vaadin.gui.server.components.dbviews.IDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.expandableview.ExpandableViewStep;
 import org.pikater.web.vaadin.gui.server.components.dbviews.tableview.DBTableLayout;
+import org.pikater.web.vaadin.gui.server.components.forms.DatasetVisualizationForm;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
@@ -170,41 +172,43 @@ public class DatasetsView extends ExpandableView
 			DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
 			if(specificColumn == Column.VISUALIZE)
 			{
-				// determine arguments
-				final JPADataSetLO dataset = ((DataSetTableDBRow) row).getDataset(); 
-				
-				// TODO: leave it like this for now but eventually a dialog would be nice
-				final JPAAttributeMetaData attrTarget = dataset.getAttributeMetaData().get(dataset.getNumberOfAttributes() - 1);
-				
-				// show progress dialog
-				ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
+				final JPADataSetLO dataset = ((DataSetTableDBRow) row).getDataset();
+				GeneralDialogs.componentDialog("Attributes to visualize", new DatasetVisualizationForm(dataset), new DialogCommons.IDialogResultHandler()
 				{
-					private DatasetVisualizationEntryPoint underlyingTask;
-
 					@Override
-					public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+					public boolean handleResult(final Object[] args)
 					{
-						// start the task and bind it with the progress dialog
-						underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
-						underlyingTask.visualizeDataset(
-								dataset,
-								dataset.getAttributeMetaData().toArray(new JPAAttributeMetaData[0]),
-								attrTarget
-						);
-					}
+						// show progress dialog
+						ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
+						{
+							private DatasetVisualizationEntryPoint underlyingTask;
 
-					@Override
-					public void abortTask()
-					{
-						underlyingTask.abortVisualization();
-					}
+							@Override
+							public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+							{
+								JPAAttributeMetaData[] attrsToCompare = (JPAAttributeMetaData[]) args[0];
+								JPAAttributeMetaData attrTarget = (JPAAttributeMetaData) args[1];
+								
+								// start the task and bind it with the progress dialog
+								underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
+								underlyingTask.visualizeDataset(dataset, attrsToCompare, attrTarget);
+							}
 
-					@Override
-					public void onTaskFinish(IProgressDialogTaskResult result)
-					{
-						// and when the task finishes, construct the UI
-						DSVisOneUIArgs uiArgs = new DSVisOneUIArgs(dataset, (DSVisOneResult) result); 
-						Page.getCurrent().setLocation(uiArgs.toRedirectURL());
+							@Override
+							public void abortTask()
+							{
+								underlyingTask.abortVisualization();
+							}
+
+							@Override
+							public void onTaskFinish(IProgressDialogTaskResult result)
+							{
+								// and when the task finishes, construct the UI
+								DSVisOneUIArgs uiArgs = new DSVisOneUIArgs(dataset, (DSVisOneResult) result); 
+								Page.getCurrent().setLocation(uiArgs.toRedirectURL());
+							}
+						});
+						return true;
 					}
 				});
 			}
