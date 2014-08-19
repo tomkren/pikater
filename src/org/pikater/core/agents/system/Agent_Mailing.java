@@ -26,7 +26,7 @@ public class Agent_Mailing extends PikaterAgent {
     private static final long serialVersionUID = -2734321127446793005L;
 
     /** Podporovane typy e-mailu */
-    public static enum EmailType { TEST };
+    public static enum EmailType { TEST, RESULT };
 
     /** Adresa, ktera bude uvedena ve FROM u mailu, ktere agent posle
      * TODO: nekam do konfigurace? */
@@ -80,6 +80,9 @@ public class Agent_Mailing extends PikaterAgent {
             switch (type) {
             case TEST:
                 sendEmail(to, "Test message", "Example message from pikater MailAgent");
+                break;
+            case RESULT:
+                sendEmail("jkr.sw@atlas.cz", "results message", "TODO"); //XXX adresa
                 break;
             default:
                 throw new UnsupportedOperationException();
