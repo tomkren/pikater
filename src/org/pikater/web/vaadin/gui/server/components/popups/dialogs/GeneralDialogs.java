@@ -77,4 +77,37 @@ public class GeneralDialogs extends DialogCommons
 		bindActionsToKeyboard(mb, ButtonId.OK, true);
 		return mb;
 	}
+	
+	public static MessageBox componentDialog(String title, IDialogComponent content)
+	{
+		MyComponentMessageBoxListener<IDialogComponent> listener = new MyComponentMessageBoxListener<IDialogComponent>(content);
+		MessageBox mb = MessageBox.showCustomized(
+				Icon.NONE,
+				title != null ? title : "",
+				content,
+				listener,
+				ButtonId.OK, ButtonId.CANCEL
+				);
+		listener.setParentBox(mb); // don't forget this!
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.OK, true);
+		return mb;
+	}
+	
+	public static MessageBox componentDialog(String title, IDialogResultPreparer content, IDialogResultHandler resultHandler)
+	{
+		MyComponentMessageBoxListenerWithExternalResultHandler<IDialogResultPreparer> listener = 
+				new MyComponentMessageBoxListenerWithExternalResultHandler<IDialogResultPreparer>(content, resultHandler);
+		MessageBox mb = MessageBox.showCustomized(
+				Icon.NONE,
+				title != null ? title : "",
+				content,
+				listener,
+				ButtonId.OK, ButtonId.CANCEL
+				);
+		listener.setParentBox(mb); // don't forget this!
+		setupMessageBox(mb, false);
+		bindActionsToKeyboard(mb, ButtonId.OK, true);
+		return mb;
+	}
 }

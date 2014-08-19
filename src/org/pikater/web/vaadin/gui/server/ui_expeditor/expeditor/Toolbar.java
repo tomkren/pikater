@@ -20,8 +20,8 @@ import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm.ExperimentSaveMode;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
 import org.pikater.web.vaadin.gui.server.layouts.verticalgroupLayout.VerticalGroupLayout;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.admin.BatchesView.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
@@ -425,7 +425,7 @@ public class Toolbar extends VerticalLayout
 						sourceExperiment = null;
 					}
 					final SaveExperimentForm seForm = new SaveExperimentForm(saveMode, sourceExperiment);
-					MessageBox dialog = SpecialDialogs.saveExperimentDialog(seForm, new DialogCommons.IDialogResultHandler()
+					MessageBox dialog = GeneralDialogs.componentDialog("Save experiment from active tab", seForm, new DialogCommons.IDialogResultHandler()
 					{
 						@Override
 						public boolean handleResult(Object[] args)
@@ -513,7 +513,7 @@ public class Toolbar extends VerticalLayout
 	
 	private void loadArbitraryExperimentIntoANewTab()
 	{
-		MessageBox dialog = SpecialDialogs.loadExperimentDialog(new LoadExperimentComponent()
+		MessageBox dialog = GeneralDialogs.componentDialog("Choose experiment to load into a new tab", new LoadExperimentComponent()
 		{
 			private static final long serialVersionUID = -3405189166030944018L;
 

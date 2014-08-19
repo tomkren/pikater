@@ -218,7 +218,7 @@ public class DialogCommons
 	// -------------------------------------------------------------------------
 	// PUBLIC TYPES - GENERAL DIALOG RESULT HANDLING AND PREPARATION TO IT
 
-	public static interface IDialogResultValidator
+	public static interface IDialogResultValidator extends Component
 	{
 		/**
 		 * This method is called when the "OK" button is clicked in the dialog. Use
