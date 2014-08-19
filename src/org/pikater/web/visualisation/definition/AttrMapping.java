@@ -2,7 +2,7 @@ package org.pikater.web.visualisation.definition;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 
-public class AttrMapping implements Comparable<AttrMapping>
+public class AttrMapping
 {
 	private final JPAAttributeMetaData attrX;
 	private final JPAAttributeMetaData attrY;
@@ -30,12 +30,6 @@ public class AttrMapping implements Comparable<AttrMapping>
 		return attrTarget;
 	}
 
-	@Override
-	public int compareTo(AttrMapping o)
-	{
-		return attrX.getName().compareTo(o.getAttrX().getName());
-	}
-	
 	/**
 	 * This is going to be displayed in headers of the result matrix view.
 	 */

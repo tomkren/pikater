@@ -2,24 +2,24 @@ package org.pikater.web.visualisation.definition;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.pikater.shared.util.Tuple;
-import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisSubresult;
 
-public class SubresultIndexer<I extends Object & Comparable<? super I>, R extends AbstractDSVisSubresult<I>> implements
-	IMatrixDataSource<I, R>
+public class SubresultIndexer<I, R extends AbstractDSVisSubresult<I>> implements IMatrixDataSource<I, R>
 {
-	private final CustomOrderSet<I> leftIndexSet; // TODO: these do NOT contain all elements...
-	private final CustomOrderSet<I> topIndexSet; // TODO: these do NOT contain all elements...
-	private final Map<Tuple<I, I>, R> indexesToSubresult; // contains exactly the number results wanted
+	private final Set<I> leftIndexSet;
+	private final Set<I> topIndexSet;
+	private final Map<Tuple<I, I>, R> indexesToSubresult;
 	
 	public SubresultIndexer()
 	{
-		this.leftIndexSet = new CustomOrderSet<I>();
-		this.topIndexSet = new CustomOrderSet<I>();
+		this.leftIndexSet = new LinkedHashSet<I>(); // hash, don't use comparing and keep the insertion order
+		this.topIndexSet = new LinkedHashSet<I>(); // hash, don't use comparing and keep the insertion order
 		this.indexesToSubresult = new HashMap<Tuple<I, I>, R>();
 	}
 	

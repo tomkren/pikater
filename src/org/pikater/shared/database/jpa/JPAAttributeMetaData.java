@@ -120,13 +120,22 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity implements 
 	
 	//--------------------------------------------------------
 	// INSTANCE COMPARING INTERFACE - generated with Eclipse
-	
+
 	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + attrOrder;
+		long temp;
+		temp = Double.doubleToLongBits(classEntropy);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(entropy);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (isTarget ? 1231 : 1237);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		temp = Double.doubleToLongBits(ratioOfMissingValues);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -140,7 +149,25 @@ public abstract class JPAAttributeMetaData extends JPAAbstractEntity implements 
 		if (getClass() != obj.getClass())
 			return false;
 		JPAAttributeMetaData other = (JPAAttributeMetaData) obj;
-		if (id != other.id)
+		if (attrOrder != other.attrOrder)
+			return false;
+		if (Double.doubleToLongBits(classEntropy) != Double
+				.doubleToLongBits(other.classEntropy))
+			return false;
+		if (Double.doubleToLongBits(entropy) != Double
+				.doubleToLongBits(other.entropy))
+			return false;
+		if (isTarget != other.isTarget)
+			return false;
+		if (name == null)
+		{
+			if (other.name != null)
+				return false;
+		}
+		else if (!name.equals(other.name))
+			return false;
+		if (Double.doubleToLongBits(ratioOfMissingValues) != Double
+				.doubleToLongBits(other.ratioOfMissingValues))
 			return false;
 		return true;
 	}
