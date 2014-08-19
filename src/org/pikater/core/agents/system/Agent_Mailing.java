@@ -82,7 +82,8 @@ public class Agent_Mailing extends PikaterAgent {
                 sendEmail(to, "Test message", "Example message from pikater MailAgent");
                 break;
             case RESULT:
-                sendEmail("jkr.sw@atlas.cz", "results message", "TODO"); //XXX adresa
+                log("would send mail with results to "+to);
+                //sendEmail("jkr.sw@atlas.cz", "results message", "TODO"); //XXX adresa
                 break;
             default:
                 throw new UnsupportedOperationException();
