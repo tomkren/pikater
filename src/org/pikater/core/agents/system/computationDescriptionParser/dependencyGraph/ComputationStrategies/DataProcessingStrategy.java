@@ -5,6 +5,7 @@ import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
+
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -13,6 +14,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 import org.pikater.core.agents.system.computationDescriptionParser.edges.AgentTypeEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.manager.ExecuteDataProcessingBehaviour;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.data.Data;
@@ -31,23 +33,23 @@ import java.util.Map;
  */
 public class DataProcessingStrategy implements StartComputationStrategy {
     Agent_Manager myAgent;
-    int graphId;
+    int graphID;
     private final int userID;
     DataProcessingComputationNode computationNode;
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
 
     public DataProcessingStrategy(Agent_Manager manager,
-                                  int graphId,int userID, DataProcessingComputationNode computationNode) {
+                                  int graphID,int userID, DataProcessingComputationNode computationNode) {
         myAgent = manager;
-        this.graphId = graphId;
+        this.graphID = graphID;
         this.userID = userID;
         this.computationNode = computationNode;
     }
 
     @Override
     public void execute(ComputationNode computation) {
-        ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
+        ACLMessage originalRequest = myAgent.getComputation(graphID).getMessage();
         myAgent.addBehaviour(new ExecuteDataProcessingBehaviour(myAgent, prepareRequest(), originalRequest, this,computationNode));
         computationNode.computationFinished();
     }
@@ -94,9 +96,13 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         for (int i =0;i<computationNode.getNumberOfInputs();i++)
         {
             String dataName = ((DataSourceEdge) inputs.get("data"+i).getNext()).getDataSourceId();
+            
+            String internalFileName = DataManagerService
+            		.translateExternalFilename(myAgent, userID, dataName);
+
             datas.addData(
                     new Data(
-                            myAgent.getHashOfFile(dataName, userID),
+                    		internalFileName,
                             dataName,
                             "data"+i
                     ));
@@ -105,7 +111,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         task.setSaveResults(false);
         task.setSaveMode("message");
         task.setNodeID(computationNode.getId());
-        task.setGraphID(graphId);
+        task.setGraphID(graphID);
         task.setAgent(agent);
         task.setDatas(datas);
 

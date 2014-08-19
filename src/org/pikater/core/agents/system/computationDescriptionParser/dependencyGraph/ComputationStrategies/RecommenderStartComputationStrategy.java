@@ -20,6 +20,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.AgentTy
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.RecommendOntology;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -35,16 +36,18 @@ import java.util.Map;
  */
 public class RecommenderStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
-	int graphId;
+	int graphID;
+	int userId;
 	RecommenderComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
     NewOptions options;
     AID recommender;
 
     public RecommenderStartComputationStrategy (Agent_Manager manager,
-			int graphId, RecommenderComputationNode computationNode){
+			int graphId, int userID_, RecommenderComputationNode computationNode){
 		myAgent = manager;
-        this.graphId = graphId;
+        this.graphID = graphId;
+        this.userId = userID_;
         this.computationNode = computationNode;
 	}
 
@@ -115,10 +118,15 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();
 		}
 		
+        String internalTrainFileName = DataManagerService
+        		.translateExternalFilename(myAgent, userId, training);
+        String internalTestFileName = DataManagerService
+        		.translateExternalFilename(myAgent, userId, testing);
+
 		datas.importExternalTrainFileName(training);
 		datas.importExternalTestFileName(testing);
-		datas.importInternalTrainFileName(myAgent.getHashOfFile(training, 1));
-		datas.importInternalTestFileName(myAgent.getHashOfFile(testing, 1));
+		datas.importInternalTrainFileName(internalTrainFileName);
+		datas.importInternalTestFileName(internalTestFileName);
 
 		Recommend recommend = new Recommend();
 		recommend.setDatas(datas);

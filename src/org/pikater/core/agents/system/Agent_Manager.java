@@ -220,69 +220,6 @@ public class Agent_Manager extends PikaterAgent {
 		}
 		
 	} // end sendSubscription
-		
-
-	public String getHashOfFile(String nameOfFile, int userID) {
-		
-		TranslateFilename translate = new TranslateFilename();
-		translate.setExternalFilename(nameOfFile);
-		translate.setUserID(userID);
-
-		// create a request message
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.setSender(getAID());
-		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
-		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-		msg.setLanguage(getCodec().getName());
-		msg.setOntology(FilenameTranslationOntology.getInstance().getName());
-		// We want to receive a reply in 30 secs
-		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
-		//msg.setConversationId(problem.getGui_id() + agent.getLocalName());
-
-		Action a = new Action();
-		a.setAction(translate);
-		a.setActor(getAID());
-
-		try {
-			getContentManager().fillContent(msg, a);
-
-		} catch (CodecException ce) {
-			logError(ce.getMessage(), ce);
-		} catch (OntologyException oe) {
-			logError(oe.getMessage(), oe);
-		}
-
-
-		ACLMessage reply = null;
-		try {
-			reply = FIPAService.doFipaRequestClient(this, msg);
-		} catch (FIPAException e) {
-			logError(e.getMessage(), e);
-		}
-		
-		ContentElement content = null;
-		String fileHash = null;
-
-		try {
-			content = getContentManager().extractContent(reply);
-		} catch (UngroundedException e1) {
-			logError(e1.getMessage(), e1);
-		} catch (CodecException e1) {
-			logError(e1.getMessage(), e1);
-		} catch (OntologyException e1) {
-			logError(e1.getMessage(), e1);
-		}
-
-		if (content instanceof Result) {
-			Result result = (Result) content;
-			
-			fileHash = (String) result.getValue();
-		}
-		
-		return fileHash;
-	}
-
 	
 	public AID getAgentByType(String agentType) {
 		return (AID)getAgentByType(agentType, 1).get(0);

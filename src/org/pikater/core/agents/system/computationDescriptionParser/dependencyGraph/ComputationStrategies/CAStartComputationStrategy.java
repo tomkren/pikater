@@ -6,7 +6,6 @@ import jade.content.onto.basic.Action;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
-import org.jfree.util.Log;
 import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
@@ -17,6 +16,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.AgentTy
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionEdge;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
@@ -164,7 +164,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
 
         if (trainingEdge.isFile()) {
             datas.importExternalTrainFileName(training);
-            datas.importInternalTrainFileName(myAgent.getHashOfFile(training, userID));
+            String internalTrainFileName = DataManagerService
+            		.translateExternalFilename(myAgent, userID, training);
+            datas.importInternalTrainFileName(internalTrainFileName);
         }
         else
         {
@@ -172,8 +174,10 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
         }
         if (testingEdge.isFile()) {
             datas.importExternalTestFileName(testingEdge.getDataSourceId());
-            datas.importInternalTestFileName(myAgent.getHashOfFile(testingEdge.getDataSourceId(), userID));
-        }
+            String fileName = DataManagerService
+            		.translateExternalFilename(myAgent, userID, testingEdge.getDataSourceId());
+            datas.importInternalTestFileName(fileName);
+       }
         else
         {
             datas.importExternalTestFileName(testingEdge.getDataSourceId());

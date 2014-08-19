@@ -141,7 +141,17 @@ public class DataManagerService extends FIPAService {
 		return -1;
 	}
 
-	public static String translateFilename(PikaterAgent agent, int user,
+	public static String translateInternalFilename(PikaterAgent agent, int user,
+			String internalFilename) {
+		return DataManagerService.translateFilename(agent, user,
+				null, internalFilename);
+	}
+	public static String translateExternalFilename(PikaterAgent agent, int user,
+			String externalFilename) {
+		return DataManagerService.translateFilename(agent, user,
+				externalFilename, null);	
+	}
+	private static String translateFilename(PikaterAgent agent, int user,
 			String externalFilename, String internalFilename) {
 
 		TranslateFilename tf = new TranslateFilename();

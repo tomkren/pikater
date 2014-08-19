@@ -224,7 +224,7 @@ public class Parser {
         }
         if (recommenderO!=null)
         {
-            parseRecommender(recommenderO, computingNode,experimentId);
+            parseRecommender(recommenderO, computingNode, experimentId, userID);
         }
         else
         {
@@ -274,11 +274,12 @@ public class Parser {
         return searchNode;
     }
 
-    public void parseRecommender(Recommend recommender, ComputationNode child, int experimentId) {
+    public void parseRecommender(Recommend recommender, ComputationNode child, int experimentId, int userID) {
         agent.log("Ontology Parser - Recommender");
 
-        RecommenderComputationNode recNode=new RecommenderComputationNode(computationGraph);
-        RecommenderStartComputationStrategy recStrategy=new RecommenderStartComputationStrategy(agent,experimentId,recNode);
+        RecommenderComputationNode recNode = new RecommenderComputationNode(computationGraph);
+        RecommenderStartComputationStrategy recStrategy =
+        		new RecommenderStartComputationStrategy(agent, experimentId, userID, recNode);
         recNode.setStartBehavior(recStrategy);
         StandardBuffer recBuffer=new StandardBuffer(recNode,child);
         recNode.addBufferToOutput("agenttype",recBuffer);
