@@ -7,12 +7,13 @@ import org.pikater.core.agents.system.computationDescriptionParser.dependencyGra
 public class ComputationCollectionItem {
 	private ComputationGraph problemGraph;
 	private ACLMessage message;
-    private int computationId;
+    private int batchID;
 
-    public ComputationCollectionItem(ComputationGraph problemGraph, ACLMessage message, int batchId) {
-        this.problemGraph=problemGraph;
+    public ComputationCollectionItem(ComputationGraph problemGraph,
+    		ACLMessage message, int batchId) {
+        this.problemGraph = problemGraph;
         this.message=message;
-        computationId=batchId;
+        this.batchID = batchId;
     }
 
     public ComputationGraph getProblemGraph() {
@@ -29,11 +30,11 @@ public class ComputationCollectionItem {
 		this.message = message;
 	}
 
-    public int getComputationId() {
-        return computationId;
+    public int getBatchID() {
+        return batchID;
     }
 
-    public void setComputationId(int computationId) {
-        this.computationId = computationId;
+    public void setBatchID(int batchID) {
+        this.batchID = batchID;
     }
 }

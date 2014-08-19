@@ -20,9 +20,7 @@ import org.pikater.core.ontology.subtrees.batch.Batch;
 import org.pikater.core.ontology.subtrees.batch.ExecuteBatchDebug;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
-import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
-import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 public class ParserBehaviour extends AchieveREResponder {
 	
@@ -94,20 +92,15 @@ public class ParserBehaviour extends AchieveREResponder {
     
     private ACLMessage respondToNewBatch(ComputationDescription comDescription,
     		int batchID, int userID, ACLMessage request) {
-        // save Experiment
-        Experiment experiment = new Experiment();
-        experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
-        experiment.setBatchID(batchID);
-        int priority = DataManagerService.getBatchPriority(agent, batchID);
-        int experimentID = DataManagerService.saveExperiment(agent, experiment);
 
-        Parser parser = new Parser(agent, priority);
-        parser.parseRoots(comDescription, experimentID, userID);
+        Parser parser = new Parser(agent);
+        parser.parseRoots(comDescription, batchID, userID);
 
         ComputationGraph computationGraph = parser.getComputationGraph();
         computationGraph.setBatchID(batchID);
         computationGraph.addObserver(new LoggerObserver(agent));
-        ComputationCollectionItem item = new ComputationCollectionItem(computationGraph, request,experimentID);
+        ComputationCollectionItem item = new ComputationCollectionItem(
+        		computationGraph, request, batchID);
         agent.addComputation(item);
         
         // change status to computing and log to database

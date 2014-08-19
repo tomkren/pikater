@@ -6,7 +6,6 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -15,7 +14,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
-import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
@@ -29,7 +27,6 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.Solutio
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
 import org.pikater.core.ontology.*;
-import org.pikater.core.ontology.subtrees.file.TranslateFilename;
 import org.pikater.core.ontology.subtrees.search.ExecuteParameters;
 import org.pikater.core.ontology.subtrees.search.SearchSolution;
 
@@ -52,7 +49,7 @@ public class Agent_Manager extends PikaterAgent {
 	}
     public void addComputation(ComputationCollectionItem item)
     {
-        computationCollection.put(item.getComputationId(),item);
+        computationCollection.put(item.getBatchID(),item);
     }
 
 	@Override

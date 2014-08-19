@@ -16,43 +16,42 @@ public class Parser {
     private Agent_Manager agent = null;
     private int priority;
 
-    public Parser(Agent_Manager agent_, int priority) {
+    public Parser(Agent_Manager agent_) {
         this.agent = agent_;
-        this.priority=priority;
     }
 
-    public void parseRoot(IDataSaver dataSaver, int experimentId, int userID) {
+    public void parseRoot(IDataSaver dataSaver, int batchID, int userID) {
         agent.log("Ontology Parser - IDataSaver");
         //Ontology root is Leaf in Computation
-        parseSaver(dataSaver, experimentId, userID);
+        parseSaver(dataSaver, batchID, userID);
     }
 
-    private void parseSaver(IDataSaver dataSaver, int experimentId, int userID) {
+    private void parseSaver(IDataSaver dataSaver, int batchID, int userID) {
         if (dataSaver instanceof FileDataSaver) {
             agent.log("Ontology Matched - FileDataSaver");
 
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
             FileSaverNode saverNode=new FileSaverNode(computationGraph);
-            saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),experimentId,saverNode));
+            saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),batchID,saverNode));
             computationGraph.addNode(saverNode);
             alreadyProcessed.put(dataSaver.getId(),saverNode);
-            parseDataSourceDescription(dataSource, experimentId, userID, saverNode, "file");
+            parseDataSourceDescription(dataSource, batchID, userID, saverNode, "file");
         } else {
             agent.logError("Ontology Parser - Error unknown IDataSaver");
         }
     }
 
     private void parseDataSourceDescription(DataSourceDescription dataSource,
-    		int experimentId, int userID, ComputationNode child, String connectionName) {
+    		int batchID, int userID, ComputationNode child, String connectionName) {
         agent.log("Ontology Parser - DataSourceDescription");
 
         IDataProvider dataProvider = dataSource.getDataProvider();
-        this.parseDataProvider(dataProvider, experimentId, userID, child, connectionName);
+        this.parseDataProvider(dataProvider, batchID, userID, child, connectionName);
     }
         
     public void parseDataProvider(IDataProvider dataProvider,
-    		int experimentId, int userID, ComputationNode child, String connectionName) {
+    		int batchID, int userID, ComputationNode child, String connectionName) {
         agent.log("Ontology Parser - IDataProvider");
         ComputationNode parent;
         if (dataProvider instanceof FileDataProvider) {
@@ -65,14 +64,14 @@ public class Parser {
             agent.log("Ontology Matched - ComputingAgent");
 
             ComputingAgent computingAgent = (ComputingAgent) dataProvider;
-            parent=parseComputing(computingAgent, experimentId, userID, true);
+            parent=parseComputing(computingAgent, batchID, userID, true);
         }
         else if (dataProvider instanceof CARecSearchComplex)
         {
             agent.log("Ontology Matched - CARecSearchComplex");
 
             CARecSearchComplex complex = (CARecSearchComplex) dataProvider;
-            parent=parseComplex(complex, experimentId, userID);
+            parent=parseComplex(complex, batchID, userID);
         }
         else if (dataProvider instanceof DataProcessing) {
             agent.log("Ontology Matched - DataProcessing");
@@ -95,7 +94,7 @@ public class Parser {
                 }
 
                 addOptionsToInputs(parent,dataProcessing.getOptions());
-                parent.setStartBehavior(new DataProcessingStrategy(agent, experimentId,userID, dpNode));
+                parent.setStartBehavior(new DataProcessingStrategy(agent, batchID,userID, dpNode));
                 NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
                 buffer.setTarget(child);
                 buffer.setSource(parent);
@@ -106,7 +105,7 @@ public class Parser {
                 alreadyProcessed.put(dataProcessing.getId(),parent);
                 for (int i=0;i<dataSources.size();i++) {
                     DataSourceDescription ds = dataProcessing.getDataSources().get(i);
-                    parseDataSourceDescription(ds, experimentId, userID, parent, "data"+i);
+                    parseDataSourceDescription(ds, batchID, userID, parent, "data"+i);
                 }
             }
             return;
@@ -137,12 +136,12 @@ public class Parser {
     }
 
     //This is the root of all parsing
-    public void parseRoots(ComputationDescription comDescription, int experimentId, int userID) {
+    public void parseRoots(ComputationDescription comDescription, int batchID, int userID) {
         agent.log("Ontology Parser - ComputationDescription");
 
         List<FileDataSaver> elements = comDescription.getRootElements();
         for (FileDataSaver fileSaverI : elements) {
-        	this.parseRoot(fileSaverI, experimentId, userID);
+        	this.parseRoot(fileSaverI, batchID, userID);
         }
     }
 
@@ -164,7 +163,7 @@ public class Parser {
     }
 
     public ModelComputationNode parseComputing(IComputingAgent computingAgent,
-    		int experimentId, int userID, Boolean addOptions)
+    		int batchID, int userID, Boolean addOptions)
     {
         agent.log("Ontology Parser - Computing Agent Simple");
 
@@ -172,7 +171,7 @@ public class Parser {
         {
             ModelComputationNode node = new ModelComputationNode(computationGraph);
             CAStartComputationStrategy strategy =
-            		new CAStartComputationStrategy(agent, experimentId, userID, node);
+            		new CAStartComputationStrategy(agent, batchID, userID, node);
             node.setStartBehavior(strategy);
             alreadyProcessed.put(computingAgent.getId(),node);
 
@@ -198,12 +197,12 @@ public class Parser {
         if (addOptions) {
             addOptionsToInputs(computingNode, computingAgentO.getOptions());
         }
-        fillDataSources(computingAgentO, experimentId, userID, computingNode);
+        fillDataSources(computingAgentO, batchID, userID, computingNode);
         
         return computingNode;
     }
 
-    public ComputationNode parseComplex(CARecSearchComplex complex, int experimentId, int userID) {
+    public ComputationNode parseComplex(CARecSearchComplex complex, int batchID, int userID) {
         agent.log("Ontology Parser - CARecSearchComplex");
 
         ComputationNode computingNode;
@@ -214,17 +213,17 @@ public class Parser {
         {
             CARecSearchComplex complexChild=(CARecSearchComplex)iComputingAgent;
             childOptions=complexChild.getOptions();
-            computingNode=parseComplex(complexChild, experimentId, userID);
+            computingNode=parseComplex(complexChild, batchID, userID);
         }
         else
         {
             ComputingAgent ca=(ComputingAgent)iComputingAgent;
             childOptions=ca.getOptions();
-            computingNode=parseComputing(iComputingAgent, experimentId, userID, recommenderO==null);
+            computingNode=parseComputing(iComputingAgent, batchID, userID, recommenderO==null);
         }
         if (recommenderO!=null)
         {
-            parseRecommender(recommenderO, computingNode, experimentId, userID);
+            parseRecommender(recommenderO, computingNode, batchID, userID);
         }
         else
         {
@@ -232,18 +231,20 @@ public class Parser {
         }
         if ( iComputingAgent instanceof ComputingAgent) {
         	ComputingAgent computingAgent = (ComputingAgent) iComputingAgent;
-            fillDataSources(computingAgent, experimentId, userID, computingNode);
+            fillDataSources(computingAgent, batchID, userID, computingNode);
         }
 
         Search searchAgentO = complex.getSearch();
         if (searchAgentO!=null)
         {
-            return parseSearch(searchAgentO, computingNode, complex.getErrors(),childOptions,experimentId);
+            return parseSearch(searchAgentO, computingNode, complex.getErrors(),childOptions,batchID);
         }
         return computingNode;
     }
 
-    public SearchComputationNode parseSearch(Search search, ComputationNode child, List<ErrorSourceDescription> errors,List<NewOption> childOptions, int experimentId) {
+    public SearchComputationNode parseSearch(Search search, ComputationNode child,
+    		List<ErrorSourceDescription> errors, List<NewOption> childOptions,
+    		int batchID) {
         agent.log("Ontology Parser - Search");
 
         if (!alreadyProcessed.containsKey(search.getId()))
@@ -259,7 +260,7 @@ public class Parser {
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         searchNode.addInput("childoptions",optionBuffer);
 
-        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent,experimentId,searchNode));
+        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent, batchID, searchNode));
         StandardBuffer searchBuffer=new StandardBuffer(searchNode,child);
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
         child.addInput("searchedoptions",searchBuffer);
@@ -274,12 +275,13 @@ public class Parser {
         return searchNode;
     }
 
-    public void parseRecommender(Recommend recommender, ComputationNode child, int experimentId, int userID) {
+    public void parseRecommender(Recommend recommender, ComputationNode child,
+    		int batchID, int userID) {
         agent.log("Ontology Parser - Recommender");
 
         RecommenderComputationNode recNode = new RecommenderComputationNode(computationGraph);
         RecommenderStartComputationStrategy recStrategy =
-        		new RecommenderStartComputationStrategy(agent, experimentId, userID, recNode);
+        		new RecommenderStartComputationStrategy(agent, batchID, userID, recNode);
         recNode.setStartBehavior(recStrategy);
         StandardBuffer recBuffer=new StandardBuffer(recNode,child);
         recNode.addBufferToOutput("agenttype",recBuffer);
@@ -309,19 +311,19 @@ public class Parser {
     }
 
     private void fillDataSources(ComputingAgent compAgent,
-    		int experimentId, int userID, ComputationNode node) {
+    		int batchID, int userID, ComputationNode node) {
         DataSourceDescription trainingData = compAgent.getTrainingData();
         DataSourceDescription testingData = compAgent.getTestingData();
         DataSourceDescription validationData = compAgent.getValidationData();
 
         if (trainingData!=null) {
-            parseDataSourceDescription(trainingData, experimentId, userID, node, "training");
+            parseDataSourceDescription(trainingData, batchID, userID, node, "training");
         }
         if (testingData!=null) {
-            parseDataSourceDescription(testingData, experimentId, userID, node, "testing");
+            parseDataSourceDescription(testingData, batchID, userID, node, "testing");
         }
         if (validationData!=null) {
-            parseDataSourceDescription(validationData, experimentId, userID, node, "validation");
+            parseDataSourceDescription(validationData, batchID, userID, node, "validation");
         }
     }
     
@@ -331,7 +333,7 @@ public class Parser {
 
     private void addOptionsToInputs(ComputationNode node,List<NewOption> options)
     {
-        OptionEdge option=new OptionEdge();
+        OptionEdge option = new OptionEdge();
         option.setOptions(options);
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         node.addInput("options",optionBuffer);
