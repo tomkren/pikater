@@ -308,7 +308,14 @@ public class Parser {
              parent = alreadyProcessed.get(dataProcessing.getId());
         }
         else {
-            DataProcessingComputationNode dpNode = new DataProcessingComputationNode(computationGraph);
+            Experiment experiment = new Experiment();
+            experiment.setBatchID(batchID);
+            experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
+            
+            int experimentID = DataManagerService.saveExperiment(agent, experiment);
+            
+            DataProcessingComputationNode dpNode = new DataProcessingComputationNode(
+            		computationGraph, agent, experimentID);
             dpNode.setNumberOfInputs(dataSources.size());
             parent=dpNode;
             String agentType = dataProcessing.getAgentType();
@@ -320,12 +327,6 @@ public class Parser {
             }
 
             addOptionsToInputs(parent,dataProcessing.getOptions());
-            
-            Experiment experiment = new Experiment();
-            experiment.setBatchID(batchID);
-            experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
-            
-            int experimentID = DataManagerService.saveExperiment(agent, experiment);
             
             DataProcessingStrategy strategy = new DataProcessingStrategy(
             		agent, batchID, experimentID, userID, dpNode);
