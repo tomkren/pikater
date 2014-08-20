@@ -142,23 +142,23 @@ public class DataManagerService extends FIPAService {
 		return -1;
 	}
 
-	public static String translateInternalFilename(PikaterAgent agent, int user,
+	public static String translateInternalFilename(PikaterAgent agent, int userID,
 			String internalFilename) {
-		return DataManagerService.translateFilename(agent, user,
+		return DataManagerService.translateFilename(agent, userID,
 				null, internalFilename);
 	}
-	public static String translateExternalFilename(PikaterAgent agent, int user,
+	public static String translateExternalFilename(PikaterAgent agent, int userID,
 			String externalFilename) {
-		return DataManagerService.translateFilename(agent, user,
+		return DataManagerService.translateFilename(agent, userID,
 				externalFilename, null);	
 	}
-	private static String translateFilename(PikaterAgent agent, int user,
+	private static String translateFilename(PikaterAgent agent, int userID,
 			String externalFilename, String internalFilename) {
 
-		TranslateFilename tf = new TranslateFilename();
-		tf.setUserID(user);
-		tf.setExternalFilename(externalFilename);
-		tf.setInternalFilename(internalFilename);
+		TranslateFilename translateFile = new TranslateFilename();
+		translateFile.setUserID(userID);
+		translateFile.setExternalFilename(externalFilename);
+		translateFile.setInternalFilename(internalFilename);
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
@@ -168,7 +168,7 @@ public class DataManagerService extends FIPAService {
 
 		Action a = new Action();
 		a.setActor(agent.getAID());
-		a.setAction(tf);
+		a.setAction(translateFile);
 
 		try {
 			agent.getContentManager().fillContent(request, a);

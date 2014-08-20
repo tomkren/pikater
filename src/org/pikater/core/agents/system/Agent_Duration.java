@@ -26,10 +26,12 @@ import java.util.Vector;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DurationOntology;
+import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standart;
@@ -62,6 +64,9 @@ public class Agent_Duration extends PikaterAgent {
     
     boolean log_LR_durations = false;
     
+	private String durationDatasetName;
+	private String durationDatasetHash;
+    
     @Override
     protected String getAgentType(){
     	return AgentNames.DURATION;
@@ -73,6 +78,7 @@ public class Agent_Duration extends PikaterAgent {
 		ontologies.add(AgentManagementOntology.getInstance());
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(DurationOntology.getInstance());
+		ontologies.add(FilenameTranslationOntology.getInstance());
 		
 		return ontologies;
 	}
@@ -97,10 +103,15 @@ public class Agent_Duration extends PikaterAgent {
         		Agent_WekaDurationLinearRegression.class.getName(),
         		AgentNames.DURATION_SERVICE,
         		null);
-        		
+        
+		this.durationDatasetName = CoreConstants.DURATION_DATASET_NAME;
+		this.durationDatasetHash = DataManagerService.
+				translateExternalFilename(this, -1, durationDatasetName);
+
 		// compute one LR (as the first one is usually longer)
-        String durationDataset = CoreConstants.DURATION_DATASET_INTERNAL_NAME;
-        ACLMessage durationMsg = createCFPmessage(aid, this, durationDataset);
+        ACLMessage durationMsg = createCFPmessage(
+        		aid, this, durationDatasetName, durationDatasetHash);
+        
 		addBehaviour(new ExecuteTaskInitiator(this, durationMsg));
 		
 		doWait(2000);
@@ -232,17 +243,19 @@ public class Agent_Duration extends PikaterAgent {
 		private static final long serialVersionUID = -2200601967185243650L;
 		private PikaterAgent agent;
 
+
 		public TestBehaviour(PikaterAgent agent, long period) {
 			super(agent, period);
 			this.agent = agent;
-			
 		}
 
 		protected void onTick() {
 			// compute linear regression on random (but the same) dataset
 
-			String durationDataset = CoreConstants.DURATION_DATASET_INTERNAL_NAME;
-	        ACLMessage durationMsg = createCFPmessage(aid, agent, durationDataset);
+			
+					
+	        ACLMessage durationMsg = createCFPmessage(aid, agent,
+	        		durationDatasetName, durationDatasetHash);
 			addBehaviour(new ExecuteTaskInitiator(agent, durationMsg));			  
 		} 
     }
@@ -377,7 +390,8 @@ public class Agent_Duration extends PikaterAgent {
 	} // end of call for proposal bahavior
 
         
-    protected ACLMessage createCFPmessage(AID aid, PikaterAgent agent, String filename) {
+    protected ACLMessage createCFPmessage(AID aid, PikaterAgent agent,
+    		String durationDatasetName, String durationDatasetHash) {
 
         Ontology ontology = TaskOntology.getInstance();
     	
@@ -397,7 +411,10 @@ public class Agent_Duration extends PikaterAgent {
 		ag.setOptions(new ArrayList<NewOption>());
 		
 		Datas datas = new Datas();
-		datas.addData(new Data("xxx", filename, DataTypes.TRAIN_DATA));
+		datas.addData(
+				new Data(durationDatasetName,
+						durationDatasetHash,
+						DataTypes.TRAIN_DATA));
 		datas.addData(new Data("xxx", "xxx", DataTypes.TEST_DATA));
 		datas.setMode(CoreConstants.MODE_TRAIN_ONLY);
 		
