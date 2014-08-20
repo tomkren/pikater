@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class SearchStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
-	int graphId;
+	int batchID;
 	SearchComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
     NewOptions options;
@@ -48,14 +48,14 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
     AID searchAID;
 
 	public SearchStartComputationStrategy (Agent_Manager manager,
-			int graphId, SearchComputationNode computationNode){
+			int batchID, SearchComputationNode computationNode){
 		myAgent = manager;
-        this.graphId = graphId;
+        this.batchID = batchID;
         this.computationNode = computationNode;
 	}
 
 	public void execute(ComputationNode computation){
-		ACLMessage originalRequest = myAgent.getComputation(graphId).getMessage();
+		ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
         if (searchAID==null) {
             Agent search = getSearchFromNode();
             searchAID= myAgent.createAgent(search.getType(), search.getName(), null);
@@ -73,7 +73,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 			ErrorEdge errorEdge = (ErrorEdge)(inputs.get("error").getNext());
 			
 			
-			String conversationID = graphId+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId());
+			String conversationID = batchID+"_"+computationNode.getId()+"_"+Integer.toString(errorEdge.getComputationId());
 			ACLMessage query = myAgent.searchMessages.get(conversationID); 
 			//remove from search messages, we wont need this anymore
             myAgent.searchMessages.remove(conversationID);
@@ -111,7 +111,7 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		msg.setLanguage(myAgent.getCodec().getName());
 		msg.setOntology(SearchOntology.getInstance().getName());
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		msg.setConversationId(Integer.toString(graphId)+"_"+Integer.toString(computationNode.getId()));
+		msg.setConversationId(Integer.toString(batchID)+"_"+Integer.toString(computationNode.getId()));
 
 		GetParameters gp = new GetParameters();
         if (childOptions==null)

@@ -19,7 +19,6 @@ public class Task implements Concept {
 	};
 
 	// administrative:
-	private int graphID;
 	private int nodeID;
 	private int computationID;
 
@@ -48,13 +47,6 @@ public class Task implements Concept {
 	private ArrayList<TaskOutput> output; // list of outputs
 
 	private String note;
-
-	public int getGraphID() {
-		return graphID;
-	}
-	public void setGraphID(int graphID) {
-		this.graphID = graphID;
-	}
 
 	public int getNodeID() {
 		return nodeID;
@@ -193,7 +185,7 @@ public class Task implements Concept {
 
 	public boolean equalsTask(Task task) {
 		boolean equals =
-				getGraphID() == task.getGraphID() &&
+				getBatchID() == task.getBatchID() &&
 				getNodeID() == task.getNodeID() &&
 				getComputationID() == task.getComputationID();
 		return equals;

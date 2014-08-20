@@ -36,18 +36,18 @@ import java.util.Map;
  */
 public class RecommenderStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
-	int graphID;
-	int userId;
+	int batchID;
+	int userID;
 	RecommenderComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
     NewOptions options;
     AID recommender;
 
     public RecommenderStartComputationStrategy (Agent_Manager manager,
-			int graphId, int userID_, RecommenderComputationNode computationNode){
-		myAgent = manager;
-        this.graphID = graphId;
-        this.userId = userID_;
+			int batchID, int userID, RecommenderComputationNode computationNode){
+		this.myAgent = manager;
+        this.batchID = batchID;
+        this.userID = userID;
         this.computationNode = computationNode;
 	}
 
@@ -88,6 +88,7 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		}
 		
 		// fill in the queues of CA
+		myAgent.logError(recommendedAgent.getType());
 		AgentTypeEdge re = new AgentTypeEdge(recommendedAgent.getType());
 		computationNode.addToOutputAndProcess(re, "agenttype", true);
 		
@@ -119,9 +120,9 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		}
 		
         String internalTrainFileName = DataManagerService
-        		.translateExternalFilename(myAgent, userId, training);
+        		.translateExternalFilename(myAgent, userID, training);
         String internalTestFileName = DataManagerService
-        		.translateExternalFilename(myAgent, userId, testing);
+        		.translateExternalFilename(myAgent, userID, testing);
 
 		datas.importExternalTrainFileName(training);
 		datas.importExternalTestFileName(testing);

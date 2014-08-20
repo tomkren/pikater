@@ -137,7 +137,7 @@ public class ComputationNode {
         this.id = id;
     }
 
-    public StartComputationStrategy getStartBehavior() {
+	public StartComputationStrategy getStartBehavior() {
         return startBehavior;
     }
 
