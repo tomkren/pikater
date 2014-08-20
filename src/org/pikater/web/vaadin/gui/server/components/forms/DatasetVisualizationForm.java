@@ -66,13 +66,13 @@ public class DatasetVisualizationForm extends CustomFormLayout implements IDialo
 		arguments.add(getSelectedTargetAttribute());
 	}
 	
-	private JPAAttributeMetaData getSelectedTargetAttribute()
+	public JPAAttributeMetaData getSelectedTargetAttribute()
 	{
 		return (JPAAttributeMetaData) field_attrTarget.getValue();
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JPAAttributeMetaData[] getSelectedAttributes()
+	public JPAAttributeMetaData[] getSelectedAttributes()
 	{
 		return ((Set<JPAAttributeMetaData>) field_attrsToCompare.getValue()).toArray(new JPAAttributeMetaData[0]);
 	}

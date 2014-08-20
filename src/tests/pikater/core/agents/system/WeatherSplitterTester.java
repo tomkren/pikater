@@ -40,15 +40,13 @@ public class WeatherSplitterTester extends PikaterAgent {
 		ExecuteTask ex = new ExecuteTask();
 		Datas datas = new Datas();
 		datas.addData(
-				new Data(
+				new Data("weather.arff",
 						"28c7b9febbecff6ce207bcde29fc0eb8",
-						"weather.arff",
 						"weather1"
 						));
 		datas.addData(
-				new Data(
+				new Data("weather.arff",
 						"28c7b9febbecff6ce207bcde29fc0eb8",
-						"weather.arff",
 						"weather2"
 						));		
 

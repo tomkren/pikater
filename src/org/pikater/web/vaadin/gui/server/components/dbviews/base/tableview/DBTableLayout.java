@@ -74,6 +74,7 @@ public class DBTableLayout extends VerticalLayout
 		addComponent(this.table);
 		addComponent(this.tablePagingControls);
 		addComponent(hl_btnInterface);
+		setExpandRatio(hl_btnInterface, 1);
 	}
 	
 	@Override

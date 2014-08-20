@@ -1,19 +1,37 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.compare;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.shared.database.views.tableview.datasets.DatasetPickingTableDBView;
+import org.pikater.shared.util.Tuple;
 import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.ParentAwareWizardStep;
+import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisTwoUIArgs;
+import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
+import org.pikater.web.visualisation.DatasetVisualizationValidation;
+import org.pikater.web.visualisation.definition.AttrComparisons;
+import org.pikater.web.visualisation.definition.AttrMapping;
+import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 
+import com.vaadin.server.Page;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Button.ClickEvent;
 
 public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 {
@@ -22,12 +40,98 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 	public DatasetCompareWizard(Window parentPopup, JPADataSetLO originalDataset)
 	{
 		super(parentPopup, new DatasetCompareCommons(originalDataset));
+		setRefreshActivatedSteps(true);
 		
 		addStep(new Step1(this));
 		addStep(new Step2(this));
 		addStep(new Step3(this));
 		
-		// TODO: test & integrate
+		getFinishButton().addClickListener(new Button.ClickListener()
+		{
+			private static final long serialVersionUID = -1069956626807311766L;
+
+			@Override
+			public void buttonClick(ClickEvent event)
+			{
+				// determine attribute sets to (potentially) compare
+				Set<AttrMapping> attrComps_original = getCompatibleAttributes(
+						getOutput().getDatasetOriginal(),
+						getOutput().getFormOriginal().getSelectedAttributes(),
+						getOutput().getFormOriginal().getSelectedTargetAttribute()
+				);
+				Set<AttrMapping> attrComps_compared = getCompatibleAttributes(
+						getOutput().getDatasetCompareTo(),
+						getOutput().getFormCompareTo().getSelectedAttributes(),
+						getOutput().getFormCompareTo().getSelectedTargetAttribute()
+				);
+				
+				// determine attribute pairs to compare
+				final AttrComparisons attrComparisons = new AttrComparisons();
+				for(AttrMapping mapping1 : attrComps_original)
+				{
+					for(AttrMapping mapping2 : attrComps_compared)
+					{
+						if(DatasetVisualizationValidation.areCompatible(mapping1, mapping2))
+						{
+							attrComparisons.add(new Tuple<AttrMapping, AttrMapping>(mapping1, mapping2));
+						}
+					}
+				}
+				if(!attrComparisons.isEmpty())
+				{
+					// show progress dialog
+					ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
+					{
+						private DatasetVisualizationEntryPoint underlyingTask;
+
+						@Override
+						public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+						{
+							// start the task and bind it with the progress dialog
+							underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
+							underlyingTask.visualizeDatasetComparison(getOutput().getDatasetOriginal(), getOutput().getDatasetCompareTo(), attrComparisons);
+						}
+
+						@Override
+						public void abortTask()
+						{
+							underlyingTask.abortVisualization();
+						}
+
+						@Override
+						public void onTaskFinish(IProgressDialogTaskResult result)
+						{
+							// and when the task finishes, construct the UI
+							DSVisTwoUIArgs uiArgs = new DSVisTwoUIArgs(getOutput().getDatasetOriginal(), getOutput().getDatasetCompareTo(), (DSVisTwoResult) result); 
+							Page.getCurrent().setLocation(uiArgs.toRedirectURL());
+						}
+					});
+					
+					closeWizardAndTheParentPopup();
+				}
+				else
+				{
+					MyNotifications.showWarning("Nothing to compare", "No compatible mappings found.");
+				}
+			}
+			
+			private Set<AttrMapping> getCompatibleAttributes(JPADataSetLO dataset, JPAAttributeMetaData[] selectedAttrs, JPAAttributeMetaData attrTarget)
+			{
+				Set<AttrMapping> attrComps = new HashSet<AttrMapping>();
+				for(JPAAttributeMetaData attrX : selectedAttrs)
+				{
+					for(JPAAttributeMetaData attrY : selectedAttrs)
+					{
+						AttrMapping attributes = new AttrMapping(attrX, attrY, attrTarget);
+						if(DatasetVisualizationValidation.areCompatible(attributes))
+						{
+							attrComps.add(attributes);
+						}
+					}
+				}
+				return attrComps;
+			}
+		});
 	}
 	
 	//--------------------------------------------------------------
@@ -76,7 +180,7 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 		@Override
 		public boolean onBack()
 		{
-			return true;
+			return false;
 		}
 	}
 	
@@ -90,9 +194,11 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 			
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.setSizeFull();
-			this.innerLayout.setCaption("Select a row and click 'Next':");
+			this.innerLayout.setReadOnly(true);
+			this.innerLayout.setCaption("CAPTION");
 			this.innerLayout.getTable().setMultiSelect(false);
 			this.innerLayout.setView(new DatasetDBViewRoot<DatasetPickingTableDBView>(new DatasetPickingTableDBView()));
+			this.innerLayout.addComponentAsFirst(new Label("Select a row and click 'Next':"));
 		}
 
 		@Override
@@ -128,11 +234,11 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 		@Override
 		public boolean onBack()
 		{
-			return false;
+			return true;
 		}
 	}
 	
-	private class Step3 extends ParentAwareWizardStep<DatasetCompareCommons, DatasetCompareWizard>
+	private class Step3 extends RefreshableWizardStep<DatasetCompareCommons, DatasetCompareWizard>
 	{
 		private final VerticalLayout vLayout;
 		
@@ -143,15 +249,6 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 			this.vLayout = new VerticalLayout();
 			this.vLayout.setSizeFull();
 			this.vLayout.setSpacing(true);
-			
-			Label label = new Label(String.format("And finally, select attributes to be compared for '%s':", 
-					getOutput().getDatasetCompareTo().getFileName()));
-			label.setSizeUndefined();
-			label.setStyleName("v-label-undefWidth-wordWrap");
-			
-			this.vLayout.addComponent(label);
-			this.vLayout.addComponent(getOutput().getFormCompareTo());
-			this.vLayout.setExpandRatio(getOutput().getFormCompareTo(), 1);
 		}
 
 		@Override
@@ -176,6 +273,21 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 		public boolean onBack()
 		{
 			return true;
+		}
+
+		@Override
+		public void refresh()
+		{
+			this.vLayout.removeAllComponents();
+			
+			Label label = new Label(String.format("And finally, select attributes to be compared for '%s':", 
+					getOutput().getDatasetCompareTo().getFileName()));
+			label.setSizeUndefined();
+			label.setStyleName("v-label-undefWidth-wordWrap");
+			
+			this.vLayout.addComponent(label);
+			this.vLayout.addComponent(getOutput().getFormCompareTo());
+			this.vLayout.setExpandRatio(getOutput().getFormCompareTo(), 1);
 		}
 	}
 }

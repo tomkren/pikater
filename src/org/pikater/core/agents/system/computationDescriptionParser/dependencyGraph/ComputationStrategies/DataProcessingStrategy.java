@@ -103,9 +103,8 @@ public class DataProcessingStrategy implements StartComputationStrategy {
             		.translateExternalFilename(myAgent, userID, dataName);
 
             datas.addData(
-                    new Data(
+                    new Data(dataName,
                     		internalFileName,
-                            dataName,
                             "data"+i
                     ));
         }
