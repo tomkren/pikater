@@ -774,7 +774,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		JPAExperiment experimentJPA = DAOs.experimentDAO.getByID(updateExperimentStatus.getExperimentID());
 		JPAExperimentStatus experimentStatus = JPAExperimentStatus.valueOf(updateExperimentStatus.getStatus());
-		
+		experimentJPA.setStatus(experimentStatus);
 		switch (experimentStatus) {
 		case COMPUTING:
 			experimentJPA.setStarted(new Date());
