@@ -11,6 +11,7 @@ public class SingleChart extends Chart{
 	private Color horizontalCaptionColor;
 	private Color verticalCaptionColor;
 	private int captionSize=20;
+	private boolean capitalCaption=false;
 	
 	public SingleChart(){
 		super(1000,1000,0,0,null,null,null);
@@ -32,10 +33,22 @@ public class SingleChart extends Chart{
 		this.setBackGroundColor(Color.getHSBColor(0.0f, 0.0f, 0.95f));
 		this.setHorizontalCaptionColor(Color.GRAY);
 		this.setVerticalCaptionColor(Color.GRAY);
-		this.setCaptionSize(35);
+		this.setCaptionSize(40);
+		this.setCapitalCaption(true);
+	}
+
+	public boolean isCapitalCaption() {
+		return capitalCaption;
+	}
+
+	public void setCapitalCaption(boolean capitalCaption) {
+		this.capitalCaption = capitalCaption;
 	}
 
 	private void renderHorizontalCaption(String caption){
+		if(isCapitalCaption()){
+			caption=caption.toUpperCase();
+		}
 		renderer.drawText(
 				caption,
 				offsetx+yLabelWidth+getAreaWidth()/2,
@@ -47,6 +60,9 @@ public class SingleChart extends Chart{
 	}
 	
 	private void renderVerticalCaption(String caption){
+		if(isCapitalCaption()){
+			caption=caption.toUpperCase();
+		}
 		renderer.drawText(
 				caption,
 				offsetx+yLabelWidth/2,

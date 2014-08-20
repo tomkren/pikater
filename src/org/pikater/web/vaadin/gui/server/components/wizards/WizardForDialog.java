@@ -29,8 +29,6 @@ public class WizardForDialog<C extends IWizardCommon> extends WizardWithOutput<C
 				closeWizardAndTheParentPopup();
 			}
 		});
-		getFinishButton().setEnabled(false);
-		getFinishButton().setVisible(false);
 	}
 	
 	protected Window getParentPopup()
