@@ -98,7 +98,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
 
     @Override
     protected Agent chooseBestAgent(Datas data) {
-
+    	
         Metadata metadata = data.getMetadata();
 
         GetAllMetadata gm = new GetAllMetadata();
@@ -128,13 +128,23 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         }
 
         Collections.sort(distances);
+        
+        if(distances.size()<M){
+        	//we do not have enough agents to choose from
+        	//using default one
+        	Agent agent=new Agent();
+			agent.setType(Agent_Recommender.DEFAULT_AGENT.getName());
+			agent.setName(Agent_Recommender.DEFAULT_AGENT.getName());
+			logError("Not having enough agents to choose from. Using default agent: "+agent.getType());
+			return agent;
+        }
 
         List<Agent> agents = new LinkedList<Agent>();
         for (int i = 0; i < M; i++) {
             log(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
             Agents agentsOnt = DataManagerService.getNBestAgents(this, distances.get(i).m.getInternalName(), N);
             
-            if(agents!=null) {
+            if((agents!=null)&&(agentsOnt!=null)) {
             
 	            for (Agent agentI : agentsOnt.getAgents()) {
 	                agents.add(agentI);
