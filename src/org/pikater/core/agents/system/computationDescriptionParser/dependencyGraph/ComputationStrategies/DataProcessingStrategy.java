@@ -33,23 +33,25 @@ import java.util.Map;
  */
 public class DataProcessingStrategy implements StartComputationStrategy {
     Agent_Manager myAgent;
-    int graphID;
+    int batchID;
+    int experimentID;
     private final int userID;
     DataProcessingComputationNode computationNode;
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
 
-    public DataProcessingStrategy(Agent_Manager manager,
-                                  int graphID,int userID, DataProcessingComputationNode computationNode) {
+    public DataProcessingStrategy(Agent_Manager manager, int batchID,
+    		int experimentID, int userID, DataProcessingComputationNode computationNode) {
         myAgent = manager;
-        this.graphID = graphID;
+        this.batchID = batchID;
+        this.experimentID = experimentID;
         this.userID = userID;
         this.computationNode = computationNode;
     }
 
     @Override
     public void execute(ComputationNode computation) {
-        ACLMessage originalRequest = myAgent.getComputation(graphID).getMessage();
+        ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
         myAgent.addBehaviour(new ExecuteDataProcessingBehaviour(myAgent, prepareRequest(), originalRequest, this,computationNode));
         computationNode.computationFinished();
     }
@@ -108,12 +110,13 @@ public class DataProcessingStrategy implements StartComputationStrategy {
                     ));
         }
 
-        task.setSaveResults(false);
-        task.setSaveMode("message");
-        task.setNodeID(computationNode.getId());
-        task.setGraphID(graphID);
         task.setAgent(agent);
         task.setDatas(datas);
+        task.setBatchID(batchID);
+        task.setExperimentID(experimentID);
+        task.setNodeID(computationNode.getId());
+        task.setSaveResults(false);
+        task.setSaveMode("message");
 
         return task;
     }

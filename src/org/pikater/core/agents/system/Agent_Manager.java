@@ -138,16 +138,16 @@ public class Agent_Manager extends PikaterAgent {
 
 						// => fill CA's queue
 						String[] ids = query.getConversationId().split("_");
-						int graphId = Integer.parseInt(ids[0]);
+						int batchID = Integer.parseInt(ids[0]);
 						int nodeId = Integer.parseInt(ids[1]);
 						int computationId = Integer.parseInt(ids[2]);
 											
 						SearchComputationNode searchNode = 
-								(SearchComputationNode) computationCollection.get(graphId)
+								(SearchComputationNode) computationCollection.get(batchID)
 									.getProblemGraph().getNode(nodeId); 
 
 
-                        for (SearchSolution ss:ep.getSolutions())
+                        for (SearchSolution ss : ep.getSolutions())
                         {
                             SolutionEdge se = new SolutionEdge();
                             se.setComputationID(computationId);

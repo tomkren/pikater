@@ -50,6 +50,7 @@ import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
+import org.pikater.core.ontology.subtrees.experiment.UpdateExperimentStatus;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
 import org.pikater.core.ontology.subtrees.file.DeleteTempFiles;
 import org.pikater.core.ontology.subtrees.file.GetFile;
@@ -955,6 +956,44 @@ public class DataManagerService extends FIPAService {
 
 	public static void updateExperimentStatus(PikaterAgent agent,
 			int experimentID, String experimentStatus) {
+		
+		UpdateExperimentStatus updateExperimentStatus = new UpdateExperimentStatus();
+		updateExperimentStatus.setExperimentID(experimentID);
+		updateExperimentStatus.setStatus(experimentStatus);
+
+		Ontology ontology = ExperimentOntology.getInstance();
+
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(agent.getAID());
+		msg.addReceiver(new AID(AgentNames.DATA_MANAGER, false));
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+		msg.setLanguage(agent.getCodec().getName());
+		msg.setOntology(ontology.getName());
+		msg.setReplyByDate(new Date(System.currentTimeMillis() + 30000));
+
+		Action a = new Action();
+		a.setAction(updateExperimentStatus);
+		a.setActor(agent.getAID());
+
+		try {
+			// Let JADE convert from Java objects to string
+			agent.getContentManager().fillContent(msg, a);
+
+		} catch (CodecException ce) {
+			agent.logError(ce.getMessage(), ce);
+		} catch (OntologyException oe) {
+			agent.logError(oe.getMessage(), oe);
+		}
+
+		@SuppressWarnings("unused")
+		ACLMessage reply = null;
+		try {
+			reply = FIPAService.doFipaRequestClient(agent, msg);
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage(), e);
+		}
+		
 	}
 
 	public static User loadUser(PikaterAgent agent, int userID) {

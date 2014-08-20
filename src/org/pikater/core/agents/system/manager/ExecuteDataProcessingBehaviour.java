@@ -66,7 +66,7 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 				Result result = (Result) content;					
 				Task t = (Task)result.getValue();
                 ComputationCollectionItem computation =
-                		myAgent.getComputation(t.getGraphID());
+                		myAgent.getComputation(t.getBatchID());
                 ArrayList<TaskOutput> outputs = t.getOutput();
                 for (int i=0;i<outputs.size();i++)
                 {

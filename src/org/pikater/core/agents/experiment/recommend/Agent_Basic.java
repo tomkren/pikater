@@ -46,10 +46,10 @@ public class Agent_Basic extends Agent_Recommender {
 		
 		GetAllMetadata gm = new GetAllMetadata();
 		gm.setResults_required(true);
-
+		
 		// 1. choose the nearest training data
 		Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
-
+		
 		// set the min, max instances and attributes first
 		for(Metadata next_md : allMetadata.getMetadatas()) {
 

@@ -4,20 +4,25 @@ import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.*;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.*;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class Parser {
-    private ComputationGraph computationGraph=new ComputationGraph();
-    private HashMap<Integer,ComputationNode> alreadyProcessed=new HashMap<Integer,ComputationNode>();
+    private ComputationGraph computationGraph =
+    		new ComputationGraph();
+    private HashMap<Integer,ComputationNode> alreadyProcessed =
+    		new HashMap<Integer,ComputationNode>();
     private Agent_Manager agent = null;
     private int priority;
 
-    public Parser(Agent_Manager agent_) {
-        this.agent = agent_;
+    public Parser(Agent_Manager agent) {
+        this.agent = agent;
     }
 
     public void parseRoot(IDataSaver dataSaver, int batchID, int userID) {
@@ -50,8 +55,8 @@ public class Parser {
         this.parseDataProvider(dataProvider, batchID, userID, child, connectionName);
     }
         
-    public void parseDataProvider(IDataProvider dataProvider,
-    		int batchID, int userID, ComputationNode child, String connectionName) {
+    public void parseDataProvider(IDataProvider dataProvider, int batchID,
+    		int userID, ComputationNode child, String connectionName) {
         agent.log("Ontology Parser - IDataProvider");
         ComputationNode parent;
         if (dataProvider instanceof FileDataProvider) {
@@ -75,39 +80,9 @@ public class Parser {
         }
         else if (dataProvider instanceof DataProcessing) {
             agent.log("Ontology Matched - DataProcessing");
+            
             DataProcessing dataProcessing = (DataProcessing) dataProvider;
-            List<DataSourceDescription> dataSources= dataProcessing.getDataSources();
-            if (alreadyProcessed.containsKey(dataProcessing.getId()))
-            {
-                 parent=alreadyProcessed.get(dataProcessing.getId());
-            }
-            else {
-                DataProcessingComputationNode dpNode = new DataProcessingComputationNode(computationGraph);
-                dpNode.setNumberOfInputs(dataSources.size());
-                parent=dpNode;
-                String agentType = dataProcessing.getAgentType();
-                if (agentType!=null)
-                {
-                    NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType, 0));
-                    typeBuffer.setTarget(parent);
-                    parent.addInput("agenttype",typeBuffer);
-                }
-
-                addOptionsToInputs(parent,dataProcessing.getOptions());
-                parent.setStartBehavior(new DataProcessingStrategy(agent, batchID,userID, dpNode));
-                NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
-                buffer.setTarget(child);
-                buffer.setSource(parent);
-                parent.addBufferToOutput(connectionName,buffer);
-                child.addInput(connectionName,buffer);
-
-                computationGraph.addNode(parent);
-                alreadyProcessed.put(dataProcessing.getId(),parent);
-                for (int i=0;i<dataSources.size();i++) {
-                    DataSourceDescription ds = dataProcessing.getDataSources().get(i);
-                    parseDataSourceDescription(ds, batchID, userID, parent, "data"+i);
-                }
-            }
+            parent = parseDataProcessing(dataProcessing, child, batchID, userID, connectionName);
             return;
         } else {
             agent.log("Ontology Matched - Error unknown IDataProvider");
@@ -119,6 +94,7 @@ public class Parser {
         child.addInput(connectionName,fileBuffer);
     }
 
+    
     public void parseErrors(ErrorSourceDescription errorDescription, ComputationNode child) {
         if (errorDescription==null) return;
         agent.log("Ontology Parser - IErrorProvider");
@@ -169,9 +145,15 @@ public class Parser {
 
         if (!alreadyProcessed.containsKey(computingAgent.getId()))
         {
-            ModelComputationNode node = new ModelComputationNode(computationGraph);
+            Experiment experiment = new Experiment();
+            experiment.setBatchID(batchID);
+            experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
+            
+            int experimentID = DataManagerService.saveExperiment(agent, experiment);
+            
+            ModelComputationNode node = new ModelComputationNode(computationGraph, agent, experimentID);
             CAStartComputationStrategy strategy =
-            		new CAStartComputationStrategy(agent, batchID, userID, node);
+            		new CAStartComputationStrategy(agent, batchID, experimentID, userID, node);
             node.setStartBehavior(strategy);
             alreadyProcessed.put(computingAgent.getId(),node);
 
@@ -249,18 +231,23 @@ public class Parser {
 
         if (!alreadyProcessed.containsKey(search.getId()))
         {
-            alreadyProcessed.put(search.getId(), new SearchComputationNode(computationGraph));
+        	SearchComputationNode searchNode =
+        			new SearchComputationNode(computationGraph);
+            alreadyProcessed.put(search.getId(), searchNode);
 
         }
-        SearchComputationNode searchNode= (SearchComputationNode) alreadyProcessed.get(search.getId());
+        SearchComputationNode searchNode = (SearchComputationNode) alreadyProcessed.get(search.getId());
         searchNode.setModelClass(search.getAgentType());
         
-        OptionEdge option=new OptionEdge();
+        OptionEdge option = new OptionEdge();
         option.setOptions(childOptions);
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         searchNode.addInput("childoptions",optionBuffer);
-
-        searchNode.setStartBehavior(new SearchStartComputationStrategy(agent, batchID, searchNode));
+        
+        SearchStartComputationStrategy strategy =
+        		new SearchStartComputationStrategy(agent, batchID, searchNode);
+        
+        searchNode.setStartBehavior(strategy);
         StandardBuffer searchBuffer=new StandardBuffer(searchNode,child);
         searchNode.addBufferToOutput("searchedoptions",searchBuffer);
         child.addInput("searchedoptions",searchBuffer);
@@ -310,6 +297,58 @@ public class Parser {
         recNode.setRecommenderClass(recommender.getAgentType());
     }
 
+    private ComputationNode parseDataProcessing(DataProcessing dataProcessing,
+    		ComputationNode child, int batchID, int userID, String connectionName) {
+    	
+        List<DataSourceDescription> dataSources= dataProcessing.getDataSources();
+        
+        ComputationNode parent;
+        if (alreadyProcessed.containsKey(dataProcessing.getId()))
+        {
+             parent = alreadyProcessed.get(dataProcessing.getId());
+        }
+        else {
+            Experiment experiment = new Experiment();
+            experiment.setBatchID(batchID);
+            experiment.setStatus(JPAExperimentStatus.COMPUTING.name());
+            
+            int experimentID = DataManagerService.saveExperiment(agent, experiment);
+            
+            DataProcessingComputationNode dpNode = new DataProcessingComputationNode(
+            		computationGraph, agent, experimentID);
+            dpNode.setNumberOfInputs(dataSources.size());
+            parent=dpNode;
+            String agentType = dataProcessing.getAgentType();
+            if (agentType!=null)
+            {
+                NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType, 0));
+                typeBuffer.setTarget(parent);
+                parent.addInput("agenttype",typeBuffer);
+            }
+
+            addOptionsToInputs(parent,dataProcessing.getOptions());
+            
+            DataProcessingStrategy strategy = new DataProcessingStrategy(
+            		agent, batchID, experimentID, userID, dpNode);
+            
+            parent.setStartBehavior(strategy);
+            NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
+            buffer.setTarget(child);
+            buffer.setSource(parent);
+            parent.addBufferToOutput(connectionName,buffer);
+            child.addInput(connectionName,buffer);
+
+            computationGraph.addNode(parent);
+            alreadyProcessed.put(dataProcessing.getId(),parent);
+            for (int i=0;i<dataSources.size();i++) {
+                DataSourceDescription ds = dataProcessing.getDataSources().get(i);
+                parseDataSourceDescription(ds, batchID, userID, parent, "data"+i);
+            }
+        }
+        
+        return parent;
+    }
+    
     private void fillDataSources(ComputingAgent compAgent,
     		int batchID, int userID, ComputationNode node) {
         DataSourceDescription trainingData = compAgent.getTrainingData();

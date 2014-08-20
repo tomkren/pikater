@@ -42,25 +42,27 @@ import java.util.Map;
  * Date: 18.5.2014
  * Time: 11:13
  */
-public class CAStartComputationStrategy implements StartComputationStrategy{
+public class CAStartComputationStrategy implements StartComputationStrategy {
 	
 	Agent_Manager myAgent;
-	int graphID;
+	int batchID;
+	int experimentID;
 	int userID;
 	ModelComputationNode computationNode;
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
 	
-	public CAStartComputationStrategy (Agent_Manager manager, 
-			int graphId, int userID, ModelComputationNode computationNode){
+	public CAStartComputationStrategy (Agent_Manager manager, int batchID,
+			int experimentID, int userID, ModelComputationNode computationNode){
 		this.myAgent = manager;
-        this.graphID = graphId;
+        this.batchID = batchID;
+        this.experimentID = experimentID;
         this.userID = userID;
         this.computationNode = computationNode;
 	}
 	
-	public void execute(ComputationNode computation){    	
-		ACLMessage originalRequest = myAgent.getComputation(graphID).getMessage();
+	public void execute(ComputationNode computation) {    	
+		ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
 		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, this,computationNode));
         computationNode.computationFinished();
     }
@@ -184,17 +186,16 @@ public class CAStartComputationStrategy implements StartComputationStrategy{
         }
 
 		IExpectedDuration duration = computationNode.getExpectedDuration();
+		task.setBatchID(batchID);
+		task.setExperimentID(experimentID);
 		task.setUserID(userID);
 		task.setSaveResults(true);
 		task.setSaveMode("message");
 		task.setNodeID(computationNode.getId());
-		task.setGraphID(graphID);
 		task.setAgent(agent);
 		task.setDatas(datas);
 		task.setExpectedDuration(duration);
 		task.setPriority(computationNode.getPriority());
-		task.setBatchID(computationNode.getBatchID());
-		//task.setExperimentID(computationNode.getExperimentID());
 		task.setEvaluationMethod(computationNode.getEvaluationMethod());
 		
 		return task;

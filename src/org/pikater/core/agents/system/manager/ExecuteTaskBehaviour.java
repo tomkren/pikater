@@ -67,7 +67,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				Result result = (Result) content;					
 				Task t = (Task)result.getValue();
                 ComputationCollectionItem computation =
-                		myAgent.getComputation(t.getGraphID());
+                		myAgent.getComputation(t.getBatchID());
                 DataSourceEdge labeledData = new DataSourceEdge();
                 labeledData.setFile(false);
 
