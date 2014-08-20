@@ -51,7 +51,10 @@ public abstract class ComparisonGenerator extends Generator {
 			renderer.begin();
 
 			Axis yAxis=Axis.join(dataset1.getYAxis(), dataset2.getYAxis());
+			yAxis.setCaption(dataset1.getYAxis().getCaption()+" / "+dataset2.getYAxis().getCaption());
 			Axis xAxis=Axis.join(dataset1.getXAxis(), dataset2.getXAxis());
+			xAxis.setCaption(dataset1.getXAxis().getCaption()+" / "+dataset2.getXAxis().getCaption());
+			
 			Colorer colorer1=dataset1.getZColorer();
 			Colorer colorer2=dataset2.getZColorer();
 

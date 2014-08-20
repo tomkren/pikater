@@ -42,7 +42,7 @@ public class TestVisual {
 		
 		long time=0;
 		JPADataSetLO iris1=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
-		JPADataSetLO iris2=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("iris")).getSingleResultWithNull();
+		JPADataSetLO iris2=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByDescription("modified-iris")).getSingleResultWithNull();
 		
 		String attr1="sepallength";
 		String attr2="petallength";
@@ -60,7 +60,7 @@ public class TestVisual {
 		}catch(Throwable t){}
 		System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
 	
-		
+		/**
 		List<JPADataSetLO> datasets = DAOs.dataSetDAO.getAll();
 		
 		for(JPADataSetLO dataset : datasets){
@@ -80,5 +80,6 @@ public class TestVisual {
 			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
 			break;
 		}
+		**/
 	}
 }
