@@ -58,7 +58,7 @@ public class WizardWithOutput<T extends IWizardCommon> extends Wizard
 			}
 		});
 	}
-
+	
 	public T getOutput()
 	{
 		return output;

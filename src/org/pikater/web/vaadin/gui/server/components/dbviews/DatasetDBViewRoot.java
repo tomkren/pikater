@@ -17,11 +17,13 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.forms.DatasetVisualizationForm;
+import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.compare.DatasetCompareWizard;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
 import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
@@ -97,10 +99,11 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 	{
+		final JPADataSetLO dataset = ((DataSetTableDBRow) row).getDataset();
+		
 		DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
 		if(specificColumn == Column.VISUALIZE)
 		{
-			final JPADataSetLO dataset = ((DataSetTableDBRow) row).getDataset();
 			GeneralDialogs.componentDialog("Attributes to visualize", new DatasetVisualizationForm(dataset), new DialogCommons.IDialogResultHandler()
 			{
 				@Override
@@ -142,7 +145,11 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 		}
 		else if(specificColumn == Column.COMPARE)
 		{
-			// TODO:
+			MyPopup datasetCompareWizardWindow = new MyPopup("Dataset compare guide");
+			datasetCompareWizardWindow.setWidth("700px");
+			datasetCompareWizardWindow.setHeight("550px");
+			datasetCompareWizardWindow.setContent(new DatasetCompareWizard(datasetCompareWizardWindow, dataset));
+			datasetCompareWizardWindow.show();
 		}
 		else if(specificColumn == Column.DOWNLOAD)
 		{
