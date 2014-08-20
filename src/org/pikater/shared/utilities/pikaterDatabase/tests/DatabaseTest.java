@@ -25,6 +25,7 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
+import org.pikater.shared.database.postgre.MyPGConnection;
 import org.pikater.shared.database.util.ResultExporter;
 import org.pikater.shared.database.util.ResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
@@ -36,7 +37,7 @@ import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 public class DatabaseTest {
 	
 	public void test(){
-		//testDBConnection();
+		testDBConnection();
 		//exportResults();
 		//listVisibleAndApprovedDatasets();
 		//removeResult();
@@ -54,7 +55,7 @@ public class DatabaseTest {
 	}
 	
 	private void testDBConnection() {
-		System.out.println("Database connected: "+DAOs.userDAO.testDatabaseConenctivity());		
+		System.out.println("Database connected: "+MyPGConnection.isConnectionToCurrentPGDBEstablished());		
 	}
 
 	private void exportResults() {

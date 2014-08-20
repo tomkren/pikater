@@ -69,6 +69,18 @@ public class WizardWithOutput<T extends IWizardCommon> extends Wizard
 		this.refreshActivatedSteps = refresh;
 	}
 	
+	public void setContentPadding(boolean enabled)
+	{
+		if(enabled)
+		{
+			addStyleName("contentPadding");
+		}
+		else
+		{
+			removeStyleName("contentPadding");
+		}
+	}
+	
 	protected static void setButtonUsed(Button btn, boolean used)
 	{
 		btn.setEnabled(used);

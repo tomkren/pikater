@@ -23,13 +23,13 @@ public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, W
 		return true;
 	}
 	
+	/**
+	 * <font color="red">RED ALERT:</font> this is a "system" method, called in ActiveStepChanged event etc.</br>
+	 * Unless you want to suffer from heap out of memory error, don't add or activate steps in here.
+	 */
 	@Override
-	public final boolean onAdvance()
+	public boolean onAdvance()
 	{
-		/*
-		 * This is a "system" method, called in ActiveStepChanged event etc.
-		 * Unless you want to suffer from heap out of memory error, don't add or activate steps in here.
-		 */
 		return true;
 	}
 	
