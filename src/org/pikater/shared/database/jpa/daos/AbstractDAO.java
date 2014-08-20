@@ -139,26 +139,4 @@ public abstract class AbstractDAO
 		}
 	}
 	
-	/**
-	 * Test Database connectivity with testing following features
-	 * 1. accessibility of Postgre connection for Large Objects
-	 * 2. accessibility of entity table
-	 * @return true if database is reachable
-	 */
-	public boolean testDatabaseConenctivity(){
-		if(!MyPGConnection.isConnectionToCurrentPGDBEstablished()){
-			return false;
-		}
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		Query q=em.createNativeQuery("select count(*) from "+getEntityName());
-		try{
-			@SuppressWarnings("unused")
-			Long bg = (Long) q.getSingleResult();
-		}catch(Exception e){
-			return false;
-		}
-		return true;
-	}
-	
-	
 }
