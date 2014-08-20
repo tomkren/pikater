@@ -81,6 +81,7 @@ public class CPUCoresStructure {
 		if (untappedCores.size() == 0) {
 			return null;
 		}
+		
 		return untappedCores.get(0);
 	}
 	
