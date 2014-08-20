@@ -18,15 +18,15 @@ import org.pikater.web.visualisation.definition.result.DSVisTwoSubresult;
 import org.pikater.web.visualisation.definition.task.IDSVisTwo;
 import org.pikater.web.visualisation.exception.MetadataNotPresentException;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
+import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonPNGGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
-public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext
+public class ComparisonGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext
 {
 	private IProgressDialogResultHandler context;
 	
-	public ComparisonSVGGeneratorJob()
+	public ComparisonGeneratorJob()
 	{
 		super(4);
 	}
@@ -104,7 +104,7 @@ public class ComparisonSVGGeneratorJob extends InterruptibleImmediateOneTimeJob 
 				
 				// otherwise continue generating
 				DSVisTwoSubresult imageResult = result.createSingleImageResult(attrsToCompare, ImageType.SVG);
-				new ComparisonSVGGenerator(
+				new ComparisonPNGGenerator(
 						null, // no need to pass in progress listener - progress is updated below
 						new PrintStream(imageResult.getFile()),
 						dataset1,

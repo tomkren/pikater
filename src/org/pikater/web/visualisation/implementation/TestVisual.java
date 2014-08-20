@@ -15,7 +15,7 @@ import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.implementation.charts.axis.exception.AxisNotJoinableException;
 import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonSVGGenerator;
+import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonPNGGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 
 public class TestVisual {
@@ -55,7 +55,7 @@ public class TestVisual {
 			File iris2file=new PGLargeObjectAction(null).downloadLOFromDB(iris2.getOID());
 			System.out.println("Iris 1 temp file: "+iris1file.getAbsolutePath());
 			System.out.println("Iris 2 temp file: "+iris2file.getAbsolutePath());
-			ComparisonSVGGenerator csvggiris=new ComparisonSVGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), iris1, iris2, iris1file, iris2file, attr1, attr1, attr2, attr2, attr3, attr3);
+			ComparisonPNGGenerator csvggiris=new ComparisonPNGGenerator(dummyResult, new PrintStream("core/datasets/visual/sIRIS_sepallength_petallength_class_c.svg"), iris1, iris2, iris1file, iris2file, attr1, attr1, attr2, attr2, attr3, attr3);
 			csvggiris.create();
 		}catch(Throwable t){}
 		System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");

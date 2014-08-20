@@ -4,7 +4,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.web.quartzjobs.visualization.ComparisonSVGGeneratorJob;
+import org.pikater.web.quartzjobs.visualization.ComparisonGeneratorJob;
 import org.pikater.web.quartzjobs.visualization.MatrixPNGGeneratorJob;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.visualisation.definition.AttrComparisons;
@@ -38,7 +38,7 @@ public class DatasetVisualizationEntryPoint implements IDSVisOne, IDSVisTwo
 	@Override
 	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare) throws Throwable
 	{
-		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(ComparisonSVGGeneratorJob.class, new Object[]
+		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(ComparisonGeneratorJob.class, new Object[]
 		{
 			dataset1,
 			dataset2,
