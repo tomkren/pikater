@@ -2,7 +2,7 @@ package org.pikater.core;
 
 public class CoreConstants {
 
-	public static String DURATION_DATASET_INTERNAL_NAME = "dc7ce6dea5a75110486760cfac1051a5";
+	public static String DURATION_DATASET_NAME = "lineardata.arff";
 	
 	//train_only, test_only, train_test
 	public static String MODE = "mode";
