@@ -25,6 +25,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.duration.DurationService;
 import org.pikater.core.agents.system.metadata.MetadataService;
+import org.pikater.core.ontology.AccountOntology;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
@@ -58,6 +59,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		ontologies.add(MetadataOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(DurationOntology.getInstance());
+		ontologies.add(AccountOntology.getInstance());
 		
 		//for test purposes
 		ontologies.add(ModelOntology.getInstance());
