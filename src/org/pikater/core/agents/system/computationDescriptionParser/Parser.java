@@ -151,7 +151,7 @@ public class Parser {
             
             int experimentID = DataManagerService.saveExperiment(agent, experiment);
             
-            ModelComputationNode node = new ModelComputationNode(computationGraph);
+            ModelComputationNode node = new ModelComputationNode(computationGraph, agent, experimentID);
             CAStartComputationStrategy strategy =
             		new CAStartComputationStrategy(agent, batchID, experimentID, userID, node);
             node.setStartBehavior(strategy);

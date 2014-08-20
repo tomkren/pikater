@@ -1,7 +1,10 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph;
 
+import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
+import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 /**
  * User: Kuba
@@ -11,10 +14,15 @@ import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDur
 public class ModelComputationNode extends ComputationNode {
     private EvaluationMethod evaluationMethod;
     private IExpectedDuration expectedDuration;
+    private PikaterAgent agent;
+    private int experimentID;
     private int priority;
 
-    public ModelComputationNode(ComputationGraph computationGraph) {
+    public ModelComputationNode(ComputationGraph computationGraph,
+    		PikaterAgent agent, int experimentID) {
         super(computationGraph);
+        this.agent = agent;
+        this.experimentID = experimentID;
     }
 
     public ModelComputationNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph) {
@@ -48,4 +56,15 @@ public class ModelComputationNode extends ComputationNode {
 	public int getBatchID() {
 		return computationGraph.getBatchID();
 	}
+	
+	@Override
+    public void numberOfTasksChanged() {
+		
+        if (numberOfTasksInProgress==0) {
+        	
+    		DataManagerService.updateExperimentStatus(
+    				this.agent, experimentID, JPAExperimentStatus.FINISHED.name());
+            computationGraph.updateState();
+        }
+    }
 }

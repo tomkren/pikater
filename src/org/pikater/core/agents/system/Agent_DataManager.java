@@ -118,7 +118,6 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.jpa.daos.UserDAO;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
@@ -769,12 +768,13 @@ public class Agent_DataManager extends PikaterAgent {
 
 	protected ACLMessage respondToUpdateExperimentStatus(ACLMessage request, Action a) {
 
-		logError("respondToUpdateExperimentStatus");
+		log("respondToUpdateExperimentStatus");
 
 		UpdateExperimentStatus updateExperimentStatus = (UpdateExperimentStatus) a.getAction();
 
 		JPAExperiment experimentJPA = DAOs.experimentDAO.getByID(updateExperimentStatus.getExperimentID());
 		JPAExperimentStatus experimentStatus = JPAExperimentStatus.valueOf(updateExperimentStatus.getStatus());
+		
 		switch (experimentStatus) {
 		case COMPUTING:
 			experimentJPA.setStarted(new Date());
