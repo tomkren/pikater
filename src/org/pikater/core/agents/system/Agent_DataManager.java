@@ -1162,8 +1162,12 @@ public class Agent_DataManager extends PikaterAgent {
 		if (results.size() > 0) {
 
 			for (JPAResult result : results) {
-				NewOptions options = NewOptions.importXML(result.getOptions());
-
+				NewOptions options = new NewOptions();
+				try{
+					options = NewOptions.importXML(result.getOptions());
+				}catch(Exception e){
+					logError("Incompatible options in result, using default options");
+				}
 				Agent agent = new Agent();
 				agent.setName(result.getAgentName());
 				agent.setType(result.getAgentName());
