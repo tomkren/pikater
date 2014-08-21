@@ -3,19 +3,22 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.view
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.IOptionViewDataSource;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.OptionValueForm;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Button.ClickEvent;
 
 public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption>
 {
 	private static final long serialVersionUID = 5778436487377608808L;
 	
+	private final IContextForViews context;
 	private final Anchor link_optionName;
 	private OptionValueForm currentForm;
 	
@@ -36,6 +39,7 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption>
 		hl_optionIdentification.addComponent(lbl_valueType);
 		hl_optionIdentification.addComponent(this.link_optionName);
 		
+		this.context = context;
 		this.currentForm = null;
 		
 		addComponent(getBoxIdentificatinComponent());
@@ -57,14 +61,39 @@ public class BoxManagerOptionView extends AbstractBoxManagerView<NewOption>
 		link_optionName.setValue(getCurrentSource().getName());
 		link_optionName.setDescription(getCurrentSource().getDescription());
 
-		Value value = getCurrentSource().toSingleValue();
-		TypeRestriction restriction = getCurrentSource().fetchValueRestrictionForIndex(0); 
-
 		if(currentForm != null)
 		{
 			removeComponent(currentForm);
 		}
-		currentForm = new OptionValueForm(value, restriction);
+		currentForm = new OptionValueForm(new IOptionViewDataSource()
+		{
+			private final Value currentValue = getCurrentSource().toSingleValue();
+			private final TypeRestriction allowedTypes = getCurrentSource().fetchValueRestrictionForIndex(0);
+			
+			@Override
+			public BoxInfoServer getBox()
+			{
+				return context.getCurrentBoxDataSource();
+			}
+			
+			@Override
+			public NewOption getOption()
+			{
+				return getCurrentSource();
+			}
+			
+			@Override
+			public Value getValue()
+			{
+				return currentValue; 
+			}
+			
+			@Override
+			public TypeRestriction getAllowedTypes()
+			{
+				return allowedTypes;
+			}
+		});
 		currentForm.setCaption("Value information:");
 		currentForm.setSizeFull();
 		currentForm.addCustomButtonInterface(new Button("Back to overview", new Button.ClickListener()

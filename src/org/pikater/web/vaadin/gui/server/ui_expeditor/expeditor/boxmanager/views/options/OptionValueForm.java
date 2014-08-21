@@ -18,6 +18,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.collections.BidiMap;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
@@ -49,6 +50,12 @@ public class OptionValueForm extends CustomFormLayout
 	private static final long serialVersionUID = 2200291325058461983L;
 	
 	/**
+	 * Data source for this component. Provides information about currently
+	 * viewed data structures.
+	 */
+	private final IOptionViewDataSource dataSource;
+	
+	/**
 	 * An object that constructs value fields for the given value and
 	 * provides some other useful interface.
 	 */
@@ -59,13 +66,14 @@ public class OptionValueForm extends CustomFormLayout
 	 */
 	private final BidiMap<ValueType, String> typeToDisplayString;
 	
-	public OptionValueForm(Value value, TypeRestriction restriction)
+	public OptionValueForm(IOptionViewDataSource dataSource)
 	{
 		super(null);
+		this.dataSource = dataSource;
 		this.typeSpecificFieldProvider = null;
 		this.typeToDisplayString = new BidiMap<ValueType, String>();
 		
-		setupFields(value, restriction);
+		setupFields();
 	}
 	
 	@Override
@@ -77,11 +85,11 @@ public class OptionValueForm extends CustomFormLayout
 	//---------------------------------------------------------------------------------------
 	// ROOT METHOD TO CREATE THE FORM - CREATES A TYPE FIELD AND CALLS OTHER METHODS
 	
-	private void setupFields(final Value value, TypeRestriction allowedTypes)
+	private void setupFields()
 	{
 		// go through allowed types, validate, register, sort & transform into strings
 		List<String> typeOptions = new ArrayList<String>();
-		for(ValueType type : allowedTypes.getTypes())
+		for(ValueType type : dataSource.getAllowedTypes().getTypes())
 		{
 			/*
 			 * IMPORTANT: this is assumed to check various things which are needed both here
@@ -128,26 +136,27 @@ public class OptionValueForm extends CustomFormLayout
 		{
 			MyNotifications.showError("No types defined or all invalid", "Please, contact the admins.");
 		}
-		else if(typeOptions.size() != allowedTypes.getTypes().size()) // a type is missing
+		else if(typeOptions.size() != dataSource.getAllowedTypes().getTypes().size()) // a type is missing
 		{
 			MyNotifications.showWarning("Some types not valid", "If this is a bug, contact admins.");
 		}
 		else
 		{
 			String selectedType;
-			if((value.getType() != null) && typeToDisplayString.containsKey(value.getType())) // value has defined type and it is a known type in restrictions
+			if((dataSource.getValue().getType() != null) && typeToDisplayString.containsKey(dataSource.getValue().getType()))
 			{
-				selectedType = typeToDisplayString.getValue(value.getType());
-				if(value.getCurrentValue() == null)
+				// value has defined type and it is a known type in restrictions
+				selectedType = typeToDisplayString.getValue(dataSource.getValue().getType());
+				if(dataSource.getValue().getCurrentValue() == null)
 				{
-					value.setCurrentValue(value.getType().getDefaultValue().clone());
+					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().getDefaultValue().clone());
 				}
 			}
 			else // auto-correct accidental invalid type binding
 			{
 				selectedType = typeOptions.get(0);
-				value.setType(typeToDisplayString.getKey(selectedType));
-				value.setCurrentValue(typeToDisplayString.getKey(selectedType).getDefaultValue().clone());
+				dataSource.getValue().setType(typeToDisplayString.getKey(selectedType));
+				dataSource.getValue().setCurrentValue(typeToDisplayString.getKey(selectedType).getDefaultValue().clone());
 			}
 			// at this point, current value needs to be set (non-null) for the 'value' argument
 			
@@ -172,17 +181,17 @@ public class OptionValueForm extends CustomFormLayout
 				{
 					// first change type and reset value to default
 					ValueType newlySelectedType = typeToDisplayString.getKey((String) event.getProperty().getValue());
-					value.setType(newlySelectedType);
-					value.setCurrentValue(newlySelectedType.getDefaultValue().clone());
+					dataSource.getValue().setType(newlySelectedType);
+					dataSource.getValue().setCurrentValue(newlySelectedType.getDefaultValue().clone());
 					
 					// and then recreate type specific fields
-					recreateTypeSpecificFields(value);
+					recreateTypeSpecificFields(dataSource.getValue());
 				}
 			});
 			addField("type", cb_type);
 			
 			// create and setup other fields
-			recreateTypeSpecificFields(value);
+			recreateTypeSpecificFields(dataSource.getValue());
 			
 			// add a special button to reset value to default (default value of the currently selected type)
 			addCustomButtonInterface(new Button("Reset value", new Button.ClickListener()
@@ -193,10 +202,10 @@ public class OptionValueForm extends CustomFormLayout
 				public void buttonClick(ClickEvent event)
 				{
 					// first reset the value
-					value.setCurrentValue(value.getType().getDefaultValue().clone());
+					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().getDefaultValue().clone());
 					
 					// and then recreate type specific fields
-					recreateTypeSpecificFields(value);
+					recreateTypeSpecificFields(dataSource.getValue());
 				}
 			}));
 		}
@@ -240,6 +249,8 @@ public class OptionValueForm extends CustomFormLayout
 			}
 		}
 		
+		// TODO: model has NullValue atm - wait until type is determined
+		
 		// then get the appropriate field provider according to the given value type
 		Class<? extends IValueData> typeClass = value.getCurrentValue().getClass();
 		if(typeClass.equals(BooleanValue.class))
@@ -248,7 +259,18 @@ public class OptionValueForm extends CustomFormLayout
 		}
 		else if(typeClass.equals(StringValue.class))
 		{
-			typeSpecificFieldProvider = new StringValueProvider();
+			// first special treatment and then default
+			if((dataSource.getBox().getBoxType() == BoxType.INPUT) &&
+					dataSource.getBox().getAssociatedAgent().getName().equals("FileInput") &&
+					dataSource.getOption().getName().equals("fileURI"))
+			{
+				// TODO
+				typeSpecificFieldProvider = new StringValueProvider();
+			}
+			else
+			{
+				typeSpecificFieldProvider = new StringValueProvider();
+			}
 		}
 		else if(typeClass.equals(IntegerValue.class))
 		{
