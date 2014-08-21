@@ -25,7 +25,6 @@ import java.util.Set;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 import org.pikater.core.agents.system.metadata.MetadataService;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
@@ -347,7 +346,8 @@ public class Agent_Planner extends PikaterAgent {
 				slaveServersStructure.checkForNewSlaveServers(this);
 		List<AID> deadSlaveServers =
 				slaveServersStructure.checkForDeadSlaveServers(this);
-		cpuCoresStructure.initCPUCores(this, newSlaveServers);
+		cpuCoresStructure.initNewCPUCores(this, newSlaveServers);
+		cpuCoresStructure.deleteDeadCPUCores(this, deadSlaveServers);
 
 		// choose one CPU core (data-transfer friendly)
 		Set<AID> dataLocations = dataRegistry.

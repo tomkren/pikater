@@ -17,7 +17,7 @@ public class CPUCoresStructure {
 	private Map <CPUCore, TaskToSolve> busyCores = new HashMap<CPUCore, TaskToSolve>();
 	private List<CPUCore> untappedCores = new ArrayList<CPUCore>();
 	
-	public void initCPUCores(Agent_Planner agent,
+	public void initNewCPUCores(Agent_Planner agent,
 			List<AID> slaveServers) {
 
 		for (AID managerAgentI : slaveServers) {
@@ -35,6 +35,11 @@ public class CPUCoresStructure {
 		}
 		
 	}
+	public void deleteDeadCPUCores(Agent_Planner agent,
+			List<AID> slaveServers) {
+		//TODO:
+	}
+	
 	
 	public TaskToSolve setCPUCoreAsFree(CPUCore cpuCore) {
 		

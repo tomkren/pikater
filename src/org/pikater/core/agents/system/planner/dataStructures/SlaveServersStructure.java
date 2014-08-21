@@ -16,8 +16,7 @@ import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 
 public class SlaveServersStructure {
 
-	private List<AID> slaveServers =
-			new ArrayList<AID>();
+	private List<AID> slaveServers = new ArrayList<AID>();
 	
 	public List<AID> checkForNewSlaveServers(Agent_Planner agent) {
 		
