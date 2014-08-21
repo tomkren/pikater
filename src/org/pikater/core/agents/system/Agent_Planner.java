@@ -345,6 +345,8 @@ public class Agent_Planner extends PikaterAgent {
 		// update number of cores
 		List<AID> newSlaveServers =
 				slaveServersStructure.checkForNewSlaveServers(this);
+		List<AID> deadSlaveServers =
+				slaveServersStructure.checkForDeadSlaveServers(this);
 		cpuCoresStructure.initCPUCores(this, newSlaveServers);
 
 		// choose one CPU core (data-transfer friendly)
@@ -367,10 +369,6 @@ public class Agent_Planner extends PikaterAgent {
 		communicator.sendExecuteTask(task, selectedCore.getAID());
 		
 		getSystemLoad();
-		
-		if (ManagerAgentService.isPingOK(this)) {
-			this.log("Ping - OK");
-		}
 		
 	}
 }

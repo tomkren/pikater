@@ -12,11 +12,12 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 import org.pikater.core.agents.system.Agent_ManagerAgent;
 import org.pikater.core.agents.system.Agent_Planner;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 
 public class SlaveServersStructure {
 
-	private List<DFAgentDescription> slaveServers =
-			new ArrayList<DFAgentDescription>();
+	private List<AID> slaveServers =
+			new ArrayList<AID>();
 	
 	public List<AID> checkForNewSlaveServers(Agent_Planner agent) {
 		
@@ -34,25 +35,40 @@ public class SlaveServersStructure {
 		List<DFAgentDescription> foundDFADescriptions =
 				new ArrayList<DFAgentDescription>(Arrays.asList(result));
 		
-		
 		List<AID> newSlaveServers = new ArrayList<AID>();
 
 		for (DFAgentDescription dfaDescriptI : foundDFADescriptions) {
-			if (! contains(dfaDescriptI)) {
-				newSlaveServers.add(dfaDescriptI.getName());
+			AID aidI = dfaDescriptI.getName();
+			if (! contains(aidI)) {
+				newSlaveServers.add(aidI);
 			}
 		}
 		
-		slaveServers.addAll(foundDFADescriptions);
+		slaveServers.addAll(newSlaveServers);
 		
 		return newSlaveServers;
 	}
+
+	public List<AID> checkForDeadSlaveServers(Agent_Planner agent) {
+		
+		List<AID> deadServers = new ArrayList<AID>();
+		
+		for (AID slaveServerAidI : slaveServers) {
+						
+			if (! ManagerAgentService.isPingOK(agent, slaveServerAidI)) {
+				deadServers.add(slaveServerAidI);
+			}
+		}
+		
+		return deadServers;
+	}
 	
-	private boolean contains(DFAgentDescription slaveServer) {
+	private boolean contains(AID slaveServer) {
 				
-		for (DFAgentDescription dfaDescriptI : slaveServers) {
-			String serverNameI = dfaDescriptI.getName().getLocalName();
-			String newServerName = slaveServer.getName().getLocalName();
+		for (AID dfaDescriptI : slaveServers) {
+			String serverNameI = dfaDescriptI.getName();
+			String newServerName = slaveServer.getName();
+
 			if (serverNameI.equals(newServerName)) {
 				return true;
 			}

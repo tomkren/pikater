@@ -159,14 +159,13 @@ public class ManagerAgentService {
 		throw new IllegalStateException("LoadAgent for model "+modelId+" failed");
 	}
 	
-	public static boolean isPingOK(PikaterAgent agent) {
+	public static boolean isPingOK(PikaterAgent agent, AID agentManagerAID) {
 		
 		if (agent == null) {
 			throw new IllegalArgumentException(
 					"Argument agentKiller can't be null");
 		}
 
-		AID agentManagerAID = new AID(AgentNames.MANAGER_AGENT, false);
 		Ontology ontology = AgentManagementOntology.getInstance();
 
 		ACLMessage msgPingManagerAgent = new ACLMessage(ACLMessage.REQUEST);
