@@ -124,7 +124,7 @@ public class IOUtils
 	 */
 	public static File createTemporaryFile(String prefix)
 	{
-	    return createTemporaryFile(prefix, "");
+	    return createTemporaryFile(prefix, null);
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public class IOUtils
 	    File file;
 	    try
 	    {
-	    	file = File.createTempFile(prefix + "_tmpfile_" + System.currentTimeMillis(), null);
+	    	file = File.createTempFile(prefix + "_tmpfile_" + System.currentTimeMillis(), extension);
 	    	file.deleteOnExit();
 	    	return file;
 	    }

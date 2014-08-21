@@ -51,5 +51,18 @@ public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBVi
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{
+		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
+		if(specificColumn == ExperimentTableDBView.Column.BEST_MODEL)
+		{
+			// TODO:
+		}
+		else if(specificColumn == ExperimentTableDBView.Column.RESULTS)
+		{
+			// TODO:
+		}
+		else
+		{
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name())); 
+		}
 	}
 }

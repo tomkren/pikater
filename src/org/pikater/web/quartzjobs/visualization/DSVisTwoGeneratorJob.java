@@ -22,11 +22,11 @@ import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonP
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
-public class ComparisonGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext
+public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext
 {
 	private IProgressDialogResultHandler context;
 	
-	public ComparisonGeneratorJob()
+	public DSVisTwoGeneratorJob()
 	{
 		super(4);
 	}
@@ -103,7 +103,7 @@ public class ComparisonGeneratorJob extends InterruptibleImmediateOneTimeJob imp
 				}
 				
 				// otherwise continue generating
-				DSVisTwoSubresult imageResult = result.createSingleImageResult(attrsToCompare, ImageType.SVG);
+				DSVisTwoSubresult imageResult = result.createSingleImageResult(attrsToCompare, ImageType.PNG);
 				new ComparisonPNGGenerator(
 						null, // no need to pass in progress listener - progress is updated below
 						new PrintStream(imageResult.getFile()),

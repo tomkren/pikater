@@ -1,9 +1,14 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
+import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
+import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
@@ -65,6 +70,28 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{
-		// TODO Auto-generated method stub
+		BatchTableDBRow specificRow = (BatchTableDBRow) row;
+		
+		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
+		if(specificColumn == AbstractBatchTableDBView.Column.ABORT)
+		{
+			try
+			{
+				WebToCoreEntryPoint.notify_killBatch(specificRow.getBatch().getId());
+			}
+			catch (PikaterGatewayException e)
+			{
+				PikaterLogger.logThrowable(String.format("Could not kill batch with id '%d'.", specificRow.getBatch().getId()), e);
+				MyNotifications.showError("Failed", "Batch could not be killed.");
+			}
+		}
+		else if(specificColumn == AbstractBatchTableDBView.Column.RESULTS)
+		{
+			// TODO:
+		}
+		else
+		{
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name())); 
+		}
 	}
 }

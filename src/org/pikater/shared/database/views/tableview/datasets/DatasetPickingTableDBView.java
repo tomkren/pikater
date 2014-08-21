@@ -15,6 +15,7 @@ public class DatasetPickingTableDBView extends DataSetTableDBView
 				Column.CREATED,
 				Column.DEFAULT_TASK_TYPE,
 				Column.NUMBER_OF_INSTANCES,
+				Column.FILENAME,
 				Column.DESCRIPTION
 		));
 	}

@@ -10,10 +10,10 @@ public class PostgreSQLConnectionProvider implements IConnectionProvider
     private final String userName;
     private final String password;
 
-    public PostgreSQLConnectionProvider(String url, String userName, String password)
+    public PostgreSQLConnectionProvider(String url, String username, String password)
     {
         this.url = url;
-        this.userName = userName;
+        this.userName = username;
         this.password = password;
     }
 

@@ -63,5 +63,18 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{
+		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
+		if(specificColumn == ResultTableDBView.Column.TRAINED_MODEL)
+		{
+			// TODO:
+		}
+		else if(specificColumn == ResultTableDBView.Column.EXPORT)
+		{
+			// TODO:
+		}
+		else
+		{
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name())); 
+		}
 	}
 }

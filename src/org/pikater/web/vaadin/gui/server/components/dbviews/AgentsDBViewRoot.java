@@ -133,7 +133,7 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 		}
 		else
 		{
-			action.run();
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name()));
 		}
 	}
 }

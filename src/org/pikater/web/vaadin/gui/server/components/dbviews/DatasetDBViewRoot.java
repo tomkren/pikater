@@ -58,6 +58,9 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 			case DEFAULT_TASK_TYPE:
 				return 100;
 				
+			case FILENAME:
+				return 100;
+				
 			case NUMBER_OF_INSTANCES:
 				return 75;
 			
@@ -89,7 +92,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 	public void onCellCreate(ITableColumn column, AbstractComponent component)
 	{
 		DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
-		if(specificColumn == Column.DESCRIPTION)
+		if((specificColumn == Column.DESCRIPTION) || (specificColumn == Column.FILENAME))
 		{
 			TextField tf_value = (TextField) component;
 			tf_value.setDescription(tf_value.getValue());
@@ -203,8 +206,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 		}
 		else
 		{
-			// always approve
-			action.run();
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name()));
 		}
 	}
 }
