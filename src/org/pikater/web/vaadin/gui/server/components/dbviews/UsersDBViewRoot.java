@@ -65,15 +65,36 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 	{
-		String targetUserLogin = ((StringDBViewValue) row.getValueWrapper(UsersTableDBView.Column.LOGIN)).getValue();
-		GeneralDialogs.confirm(null, String.format("Really reset password for user '%s'?", targetUserLogin), new GeneralDialogs.IDialogResultHandler()
+		final String targetUserLogin = ((StringDBViewValue) row.getValueWrapper(UsersTableDBView.Column.LOGIN)).getValue();
+		
+		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
+		if(specificColumn == UsersTableDBView.Column.RESET_PSWD)
 		{
-			@Override
-			public boolean handleResult(Object[] args)
+			GeneralDialogs.confirm(null, String.format("Really reset password for user '%s'?", targetUserLogin), new GeneralDialogs.IDialogResultHandler()
 			{
-				action.run();
-				return true;
-			}
-		});
+				@Override
+				public boolean handleResult(Object[] args)
+				{
+					action.run(); // approve
+					return true;
+				}
+			});
+		}
+		else if(specificColumn == UsersTableDBView.Column.DELETE)
+		{
+			GeneralDialogs.confirm(null, String.format("Really delete account for user '%s'?", targetUserLogin), new GeneralDialogs.IDialogResultHandler()
+			{
+				@Override
+				public boolean handleResult(Object[] args)
+				{
+					action.run(); // approve
+					return true;
+				}
+			});
+		}
+		else
+		{
+			throw new IllegalStateException(String.format("Action '%s' has to be approved before being executed", specificColumn.name())); 
+		}
 	}
 }
