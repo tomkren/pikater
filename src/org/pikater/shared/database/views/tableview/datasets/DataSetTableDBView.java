@@ -65,6 +65,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 		SIZE,
 		DEFAULT_TASK_TYPE,
 		NUMBER_OF_INSTANCES,
+		FILENAME,
 		DESCRIPTION,
 		APPROVED,
 		VISUALIZE,
@@ -96,6 +97,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 				case NUMBER_OF_INSTANCES:
 				case DEFAULT_TASK_TYPE:
 				case SIZE:
+				case FILENAME:
 				case DESCRIPTION:
 					return DBViewValueType.STRING;
 					
@@ -136,7 +138,19 @@ public class DataSetTableDBView extends AbstractTableDBView
 	public Set<ITableColumn> getDefaultColumns()
 	{
 		Set<ITableColumn> result = getAllColumns();
-		result.remove(Column.DOWNLOAD);
+		result.remove(Column.NUMBER_OF_INSTANCES);
+		result.remove(Column.DEFAULT_TASK_TYPE);
+		if(adminMode())
+		{
+			result.remove(Column.VISUALIZE);
+			result.remove(Column.COMPARE);
+		}
+		else
+		{
+			result.remove(Column.OWNER);
+			result.remove(Column.APPROVED);
+			result.remove(Column.DOWNLOAD);
+		}
 		return result;
 	}
 	

@@ -35,8 +35,6 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 		/*
 		 * First the read-only properties.
 		 */
-		case DESCRIPTION:
-			return new StringReadOnlyDBViewValue(dataset.getDescription());
 		case NUMBER_OF_INSTANCES:
 			return new StringReadOnlyDBViewValue(dataset.getGlobalMetaData()!=null?""+dataset.getGlobalMetaData().getNumberofInstances():"N/A");
 		case DEFAULT_TASK_TYPE:
@@ -52,7 +50,11 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 		case CREATED:
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(dataset.getCreated()));
 		case OWNER:
-			return new StringReadOnlyDBViewValue(dataset.getOwner().getLogin()); 
+			return new StringReadOnlyDBViewValue(dataset.getOwner().getLogin());
+		case DESCRIPTION:
+			return new StringReadOnlyDBViewValue(dataset.getDescription());
+		case FILENAME:
+			return new StringReadOnlyDBViewValue(dataset.getFileName());
 			
 		/*
 		 * And then custom actions.
