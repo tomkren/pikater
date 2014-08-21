@@ -23,6 +23,19 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	public static MessageBox warning(String title, String message)
+	{
+		MessageBox mb = MessageBox.showPlain(
+				Icon.WARN,
+				title == null ? "Warning" : title,
+				message,
+				ButtonId.CLOSE
+		);
+		setupMessageBox(mb, true);
+		bindActionsToKeyboard(mb, ButtonId.CLOSE, true);
+		return mb;
+	}
+	
 	public static MessageBox error(String title, String message)
 	{
 		MessageBox mb = MessageBox.showPlain(Icon.ERROR, title == null ? "Error" : title, message, ButtonId.OK);
