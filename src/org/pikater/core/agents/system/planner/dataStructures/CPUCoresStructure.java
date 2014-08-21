@@ -70,9 +70,8 @@ public class CPUCoresStructure {
 		this.untappedCores.remove(selectedCore);
 	}
 	
-	// TODO: improve selection
 	public CPUCore getTheBestCPUCoreForTask(TaskToSolve task,
-			Set<String> dataLocations) {
+			Set<AID> dataLocations) {
 		
 		if (task == null) {
 			throw new IllegalArgumentException("Argument task can't be null");
@@ -82,9 +81,12 @@ public class CPUCoresStructure {
 			return null;
 		}
 		
-		if (dataLocations.size() > 0) {
-			String ho;
-			ho = "gf";
+		// select first CPU where is one needed file 
+		for (CPUCore cpuCoreI : untappedCores) {
+			AID aid = cpuCoreI.getAID();
+			if (dataLocations.contains(aid)) {
+				return cpuCoreI;
+			}
 		}
 		
 		return untappedCores.get(0);

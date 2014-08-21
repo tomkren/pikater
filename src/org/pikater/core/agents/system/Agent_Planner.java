@@ -60,7 +60,7 @@ public class Agent_Planner extends PikaterAgent {
 			new WaitingTasksQueues();
 	private CPUCoresStructure cpuCoresStructure =
 			new CPUCoresStructure();
-	private DataRegistry dataRegistry = new DataRegistry(cpuCoresStructure);
+	private DataRegistry dataRegistry = new DataRegistry(this, cpuCoresStructure);
 	
 	@Override
 	public List<Ontology> getOntologies() {
@@ -228,7 +228,7 @@ public class Agent_Planner extends PikaterAgent {
 		}
 			cpuCoresStructure.setCPUCoreAsFree(cpuCore);
 			String node = nodeName(cpuCore.getAID());
-			dataRegistry.saveDataLocation(finishedTask, node);
+			dataRegistry.saveDataLocation(finishedTask, cpuCore.getAID());
 			saveDataToDB(finishedTask, node);
 			plan();
 		lock.unlock();
@@ -346,7 +346,7 @@ public class Agent_Planner extends PikaterAgent {
 		cpuCoresStructure.initCPUCores(this, newSlaveServers);
 
 		// choose one CPU core (data-transfer friendly)
-		Set<String> dataLocations = dataRegistry.
+		Set<AID> dataLocations = dataRegistry.
 				getDataLocations(taskToSolve);
 		CPUCore selectedCore = cpuCoresStructure.
 				getTheBestCPUCoreForTask(taskToSolve, dataLocations);
