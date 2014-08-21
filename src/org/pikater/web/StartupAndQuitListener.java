@@ -1,7 +1,5 @@
 package org.pikater.web;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,27 +8,10 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
-import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
-import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
-import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
-import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
-import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
-import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.shared.logging.GeneralPikaterLogger;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
-import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.JadeTopologies;
 import org.pikater.web.config.ServerConfiguration;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -98,135 +79,33 @@ public class StartupAndQuitListener implements ServletContextListener
 						ThemeResources.prop_appConf.getSourceFile().getAbsolutePath()));
 			}
 			
+			if(ServerConfigurationInterface.getConfig().coreEnabled)
+			{
+				announceCheckOrAction("checking core connection");
+				try
+				{
+					WebToCoreEntryPoint.checkLocalConnection();
+				}
+				catch(Throwable t)
+				{
+					throw new IllegalStateException("Could not establish connection with pikater core.", t);
+				}
+			}
+			
 			announceCheckOrAction("database connection");
 			/*
-			if(!ServerConfigurationInterface.avoidUsingDBForNow() && !PostgreLobAccess.isDatabaseConnected())
+			 * // TODO: doesn't work in context listeners for some reason
+			if(!ServerConfigurationInterface.avoidUsingDBForNow() && !MyPGConnection.isConnectionToCurrentPGDBEstablished())
 			{
-				// TODO: doesn't work 
+				Class.forName("org.postgresql.Driver");
+				DriverManager.registerDriver(new Driver());
 				throw new IllegalStateException("Could not connect to database.");
 			}
 			*/
-
-			// TODO: move this to CustomConfiguredUI eventually (upon exiting the app-launch wizard)
-			announceCheckOrAction("getting known agents from core & initializing task scheduler");
-			boolean initHere = true;
-			if(initHere)
-			{
-				// init scheduler
-				PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
-
-				// init agent info
-				AgentInfoCollection agentInfoCollection = new AgentInfoCollection();
-				if(!ServerConfigurationInterface.getConfig().useDummyBoxes)
-				{
-					try
-					{
-						AgentInfos infos = WebToCoreEntryPoint.getAgentInfos();
-						for(AgentInfo info : infos.getAgentInfos())
-						{
-							agentInfoCollection.addDefinition(info);
-						}
-					}
-					catch (Exception e)
-					{
-						throw new IllegalStateException("Could not fetch list of known agents from core.", e);
-					}
-				}
-				else
-				{
-					for(BoxType type : BoxType.values())
-					{
-						AgentInfo agentInfo = new AgentInfo();
-						agentInfo.setOntologyClassName(type.toOntologyClass().getName());
-						agentInfo.setAgentClassName(this.getClass().getName());
-						agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
-
-						String name = null;
-						switch(type)
-						{
-							case CHOOSE:
-								name = "Klobása";
-								break;
-							case COMPUTE:
-								name = "Vepřová kýta";
-								break;
-							case PROCESS_DATA:
-								name = "Chleba";
-								break;
-							case OPTION:
-								name = "Bobkový list";
-								break;
-							case INPUT:
-								name = "Brambory";
-								break;
-							case MISC:
-								name = "Pepř";
-								break;
-							case OUTPUT:
-								name = "Sůl";
-								break;
-							case SEARCH:
-								name = "Cibule";
-								break;
-							case COMPOSITE:
-								name = "Protlak";
-								break;
-							default:
-								break;
-						}
-						agentInfo.setName(name);
-
-						NewOptions options = new NewOptions();
-						options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
-						options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
-								new IntegerValue(2),
-								new IntegerValue(3),
-								new IntegerValue(5),
-								new IntegerValue(10))))
-								));
-						options.addOption(new NewOption("Double", new DoubleValue(1)));
-						options.addOption(new NewOption("Boolean", new BooleanValue(true)));
-						options.addOption(new NewOption("Float", new FloatValue(1)));
-						
-						options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(new IntegerValue(5), new IntegerValue(10), 3)));
-						options.addOption(new NewOption(
-								"QuestionMarkSet",
-								new QuestionMarkSet(3, new ArrayList<IValueData>(Arrays.asList(
-										new IntegerValue(5),
-										new IntegerValue(6),
-										new IntegerValue(9),
-										new IntegerValue(10),
-										new IntegerValue(11)))) /*,
-								new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
-										new IntegerValue(5),
-										new IntegerValue(6),
-										new IntegerValue(7),
-										new IntegerValue(8),
-										new IntegerValue(9),
-										new IntegerValue(10),
-										new IntegerValue(11)
-								))))); */
-						));
-						
-						Slot slotInput_test = new Slot();
-						slotInput_test.setDataType("pokus");
-						slotInput_test.setSlotType(SlotTypes.DATA);
-						slotInput_test.setDescription("A general test input slot.");
-						
-						Slot slotOutput_test = new Slot();
-						slotOutput_test.setDataType("pokus");
-						slotOutput_test.setSlotType(SlotTypes.DATA);
-						slotOutput_test.setDescription("A general test output slot.");
-
-						agentInfo.setOptions(options);
-						agentInfo.setInputSlots(Arrays.asList(slotInput_test));
-						agentInfo.setOutputSlots(Arrays.asList(slotOutput_test));
-						agentInfoCollection.addDefinition(agentInfo);
-					}
-				}
-				ServerConfigurationInterface.setField(ServerConfItem.BOX_DEFINITIONS, agentInfoCollection);
-			}
 			
+			announceCheckOrAction("initializing task scheduler");
+			PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
+
 			PikaterLogger.log(Level.INFO, "\n**********************************************************\n"
 					+ "APPLICATION SETUP SUCCESSFULLY FINISHED\n"
 					+ "**********************************************************");
@@ -234,7 +113,7 @@ public class StartupAndQuitListener implements ServletContextListener
 		catch(Throwable t)
 		{
 			PikaterLogger.log(Level.SEVERE, "APPLICATION LAUNCH REQUIREMENTS WERE NOT MET. ABORTED.");
-			throw t; // will be printed just afterwards
+			throw new IllegalStateException(t); // will be printed just afterwards
 		}
 	}
 	

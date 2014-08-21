@@ -13,6 +13,7 @@ import org.pikater.shared.database.views.tableview.batches.UserSavedBatchesTable
 import org.pikater.shared.database.views.tableview.batches.UserScheduledBatchesTableDBView;
 import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
@@ -479,15 +480,24 @@ public class Toolbar extends VerticalLayout
 					
 					JPABatch newExperiment = new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority, sendEmailWhenFinished);
 					saveExperiment(newExperiment, experimentSavedCallback);
-					try
+					if(ServerConfigurationInterface.getConfig().coreEnabled)
 					{
-						WebToCoreEntryPoint.notify_newBatch(newExperiment.getId());
+						try
+						{
+							WebToCoreEntryPoint.notify_newBatch(newExperiment.getId());
+						}
+						catch (PikaterGatewayException e)
+						{
+							DAOs.batchDAO.deleteBatchEntity(newExperiment);
+							PikaterLogger.logThrowable("Could not send notification about a new batch to core.", e);
+							GeneralDialogs.warning("Failed to notify core", "Your experiment has been saved and designated "
+									+ "for execution but notification was not successfully passed to pikater core.");
+						}
 					}
-					catch (PikaterGatewayException e)
+					else
 					{
-						DAOs.batchDAO.deleteBatchEntity(newExperiment);
-						PikaterLogger.logThrowable("Could not send notification about a new batch to core.", e);
-						MyNotifications.showError("Failed", "Save the batch for now?");
+						GeneralDialogs.info("Core not available at this moment", "Your experiment has been saved and designated "
+								+ "for execution but the actual execution may be pending until a running pikater core picks your experiment up.");
 					}
 				}
 				
