@@ -4,8 +4,8 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
-import org.pikater.web.quartzjobs.visualization.ComparisonGeneratorJob;
-import org.pikater.web.quartzjobs.visualization.MatrixPNGGeneratorJob;
+import org.pikater.web.quartzjobs.visualization.DSVisTwoGeneratorJob;
+import org.pikater.web.quartzjobs.visualization.DSVisOneGeneratorJob;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.visualisation.definition.AttrComparisons;
 import org.pikater.web.visualisation.definition.task.IDSVisOne;
@@ -26,7 +26,7 @@ public class DatasetVisualizationEntryPoint implements IDSVisOne, IDSVisTwo
 	@Override
 	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Throwable
 	{
-		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(MatrixPNGGeneratorJob.class, new Object[]
+		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(DSVisOneGeneratorJob.class, new Object[]
 		{
 			dataset,
 			attrs,
@@ -38,7 +38,7 @@ public class DatasetVisualizationEntryPoint implements IDSVisOne, IDSVisTwo
 	@Override
 	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare) throws Throwable
 	{
-		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(ComparisonGeneratorJob.class, new Object[]
+		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(DSVisTwoGeneratorJob.class, new Object[]
 		{
 			dataset1,
 			dataset2,

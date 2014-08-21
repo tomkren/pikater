@@ -21,11 +21,11 @@ import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGe
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
-public class MatrixPNGGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisOne, IPGLOActionContext
+public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisOne, IPGLOActionContext
 {
 	private IProgressDialogResultHandler context;
 	
-	public MatrixPNGGeneratorJob()
+	public DSVisOneGeneratorJob()
 	{
 		super(4);
 	}
