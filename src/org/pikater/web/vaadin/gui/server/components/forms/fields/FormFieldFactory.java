@@ -129,7 +129,7 @@ public class FormFieldFactory
 		if(!readOnly)
 		{
 			field.setValidationVisible(true);
-			field.setTextChangeTimeout(0); // timeout to validate the field after text change event
+			field.setTextChangeTimeout(500); // timeout to validate the field after text change event
 			field.addTextChangeListener(new FieldEvents.TextChangeListener()
 			{
 				private static final long serialVersionUID = 1895549466379801259L;
@@ -138,7 +138,9 @@ public class FormFieldFactory
 				public void textChange(TextChangeEvent event)
 				{
 					// necessary for auto form update to work:
-					field.setValue(event.getText()); // triggers a value change event
+					int position = field.getCursorPosition();
+					field.setValue(event.getText()); // triggers a value change event which triggers validation
+					field.setCursorPosition(position);
 				}
 			});
 		}
