@@ -25,6 +25,7 @@ import java.util.Set;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
 import org.pikater.core.agents.system.metadata.MetadataService;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
@@ -60,7 +61,8 @@ public class Agent_Planner extends PikaterAgent {
 			new WaitingTasksQueues();
 	private CPUCoresStructure cpuCoresStructure =
 			new CPUCoresStructure();
-	private DataRegistry dataRegistry = new DataRegistry(this, cpuCoresStructure);
+	private DataRegistry dataRegistry =
+			new DataRegistry(this, cpuCoresStructure);
 	
 	@Override
 	public List<Ontology> getOntologies() {
@@ -365,5 +367,10 @@ public class Agent_Planner extends PikaterAgent {
 		communicator.sendExecuteTask(task, selectedCore.getAID());
 		
 		getSystemLoad();
+		
+		if (ManagerAgentService.isPingOK(this)) {
+			this.log("Ping - OK");
+		}
+		
 	}
 }

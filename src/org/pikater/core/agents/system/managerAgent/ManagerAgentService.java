@@ -8,6 +8,7 @@ import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.domain.FIPAException;
 import jade.domain.FIPAService;
+import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.AgentNames;
@@ -19,6 +20,7 @@ import org.pikater.core.ontology.subtrees.management.CreateAgent;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.model.Model;
+import org.pikater.core.ontology.subtrees.ping.Ping;
 
 /**
  * Created with IntelliJ IDEA. User: Kuba Date: 25.8.13 Time: 9:21 To change
@@ -156,4 +158,47 @@ public class ManagerAgentService {
 		}
 		throw new IllegalStateException("LoadAgent for model "+modelId+" failed");
 	}
+	
+	public static boolean isPingOK(PikaterAgent agent) {
+		
+		if (agent == null) {
+			throw new IllegalArgumentException(
+					"Argument agentKiller can't be null");
+		}
+
+		AID agentManagerAID = new AID(AgentNames.MANAGER_AGENT, false);
+		Ontology ontology = AgentManagementOntology.getInstance();
+
+		ACLMessage msgPingManagerAgent = new ACLMessage(ACLMessage.REQUEST);
+		msgPingManagerAgent.addReceiver(agentManagerAID);
+		msgPingManagerAgent.setSender(agent.getAID());
+		msgPingManagerAgent.setLanguage(agent.getCodec().getName());
+		msgPingManagerAgent.setOntology(ontology.getName());
+
+		Ping ping = new Ping();
+		
+		Action action = new Action(agent.getAID(), ping);
+		
+		try {
+			agent.getContentManager().fillContent(msgPingManagerAgent, action);
+			
+			try {
+				FIPAService.doFipaRequestClient(
+						agent, msgPingManagerAgent, 3000);
+				
+			} catch(FailureException e0) {
+				return false;
+			}
+			
+		} catch (FIPAException e) {
+			agent.logError(agent.getName(), e);
+		} catch (Codec.CodecException e) {
+			agent.logError(agent.getName(), e);
+		} catch (OntologyException e) {
+			agent.logError(agent.getName(), e);
+		}
+		
+		return true;
+	}
+	
 }

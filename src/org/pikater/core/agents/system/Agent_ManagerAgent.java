@@ -28,6 +28,7 @@ import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
+import org.pikater.core.ontology.subtrees.ping.Ping;
 
 import java.io.File;
 import java.util.HashMap;
@@ -102,11 +103,14 @@ public class Agent_ManagerAgent extends PikaterAgent {
 						
 						return responder.respondToCreateAgent(request);
 					} else if (a.getAction() instanceof KillAgent) {
-						
+					
 						return responder.respondToKillAgent(request);
 					} else if (a.getAction() instanceof GetComputerInfo) {
-					
+						
 						return responder.respondToGetComputerInfo(request);
+					} else if (a.getAction() instanceof Ping) {
+						
+						return responder.respondToPing(request);
 					}
 
 				} catch (OntologyException e) {

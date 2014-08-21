@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.core.ontology.subtrees.ping.Ping;
 import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
 
 
@@ -31,6 +32,8 @@ public class AgentManagementOntology extends BeanOntology {
         String valuePackage = BooleanValue.class.getPackage().getName();
         String systemLoadPackage = SystemLoad.class.getPackage().getName();
         
+        String pingPackage = Ping.class.getPackage().getName();
+        
         try {
             add(createAgentPackage);
 
@@ -40,6 +43,7 @@ public class AgentManagementOntology extends BeanOntology {
             add(valueDataPackage);
             add(valuePackage);
             add(systemLoadPackage);
+            add(pingPackage);
         } catch (Exception e) {
             e.printStackTrace();
         }

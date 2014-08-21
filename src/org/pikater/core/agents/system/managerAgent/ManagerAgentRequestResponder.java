@@ -29,6 +29,8 @@ import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.management.KillAgent;
 import org.pikater.core.ontology.subtrees.management.LoadAgent;
 import org.pikater.core.ontology.subtrees.management.SaveAgent;
+import org.pikater.core.ontology.subtrees.ping.Ping;
+import org.pikater.core.ontology.subtrees.ping.PingReply;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 
 import java.io.*;
@@ -252,4 +254,34 @@ public class ManagerAgentRequestResponder {
         return reply;
     }
 
+    public ACLMessage respondToPing(ACLMessage request) throws OntologyException, CodecException {
+    	
+        Action a = (Action) managerAgent.getContentManager().extractContent(request);
+
+        @SuppressWarnings("unused")
+        Ping getPing = (Ping) a.getAction();
+
+        managerAgent.log("Request to get Ping");
+        Ontology ontology = AgentManagementOntology.getInstance();
+        Codec codec = managerAgent.getCodec();
+
+        ACLMessage reply = request.createReply();
+        reply.setPerformative(ACLMessage.INFORM);
+        reply.setLanguage(codec.getName());
+        reply.setOntology(ontology.getName());
+        
+    	Result result = new Result(a.getAction(), new PingReply());
+    	
+        try {
+        	managerAgent.getContentManager().fillContent(reply, result);	
+		} catch (CodecException e) {
+			managerAgent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			managerAgent.logError(e.getMessage(), e);
+		}
+        
+        return reply;
+
+    }
+    
 }
