@@ -6,6 +6,7 @@ import java.util.List;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
 import org.pikater.shared.experiment.webformat.server.BoxType;
+import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
@@ -101,14 +102,17 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	// -------------------------------------------------------------
 	// PROGRAMMATIC VARIABLES
 	
+	private final AgentInfoCollection agentInfoProvider;
 	private final ExpEditorExtension extension;
 	
-	public ExpEditor(boolean debugMode)
+	public ExpEditor(AgentInfoCollection agentInfoProvider, boolean debugMode)
 	{
 		super();
 		setSizeFull();
 		setStyleName("expEditor");
 		setCellSpacing(3);
+		
+		this.agentInfoProvider = agentInfoProvider;
 		
 		// NORTH COMPONENT INIT
 		this.toolbar = new Toolbar(this, debugMode);
@@ -117,7 +121,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setComponent(Border.NORTH, this.toolbar);
 		
 		// WEST COMPONENT INIT
-		this.toolbox_boxBrowser = new BoxBrowserToolbox(ExpEditorToolbox.BOX_BROWSER.toDisplayName(), new MouseEvents.ClickListener()
+		this.toolbox_boxBrowser = new BoxBrowserToolbox(ExpEditorToolbox.BOX_BROWSER.toDisplayName(), agentInfoProvider, new MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = 812989325500737028L;
 
@@ -231,6 +235,11 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	
 	// -------------------------------------------------------------
 	// PUBLIC INTERFACE
+	
+	public AgentInfoCollection getAgentInfoProvider()
+	{
+		return agentInfoProvider;
+	}
 	
 	public static String getBoxPictureURL(BoxType type)
 	{

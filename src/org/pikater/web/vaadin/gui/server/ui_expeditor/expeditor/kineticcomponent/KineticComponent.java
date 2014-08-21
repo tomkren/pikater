@@ -333,7 +333,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			UniversalComputationDescription uniFormat = UniversalComputationDescription.fromXML(experiment.getXML());
 			
 			// transform universal format to server format and store the result
-			experimentGraph = ExperimentGraphServer.fromUniversalFormat(uniFormat);
+			experimentGraph = ExperimentGraphServer.fromUniversalFormat(parentEditor.getAgentInfoProvider(), uniFormat);
 			
 			// transform to client format and send it to the client
 			getClientRPC().receiveExperimentToLoad(experimentGraph.toClientFormat());
@@ -355,7 +355,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	{
 		try
 		{
-			UniversalComputationDescription result = experimentGraph.toUniversalFormat();
+			UniversalComputationDescription result = experimentGraph.toUniversalFormat(parentEditor.getAgentInfoProvider());
 			
 			/*
 			// test case - redirect the same experiment into a new tab and test the conversion cycle

@@ -9,7 +9,6 @@ public class ServerConfigurationInterface
 		CONTEXT,
 		CONFIG,
 		JADE_TOPOLOGIES,
-		BOX_DEFINITIONS,
 	};
 	
 	/**
@@ -18,7 +17,6 @@ public class ServerConfigurationInterface
 	private static ServletContext context = null;
 	private static ServerConfiguration config = null;
 	private static JadeTopologies jadeTopologies = null;
-	private static AgentInfoCollection knownAgents = null;
 	
 	// **************************************************************************************************
 	// PUBLIC INTERFACE
@@ -57,9 +55,6 @@ public class ServerConfigurationInterface
 					jadeTopologies = (JadeTopologies) value;
 				}
 				break;
-			case BOX_DEFINITIONS:
-				knownAgents = (AgentInfoCollection) value;
-				break;
 			default:
 				throw new IllegalArgumentException();
 		}
@@ -78,11 +73,6 @@ public class ServerConfigurationInterface
 	public static JadeTopologies getJadeTopologies()
 	{
 		return jadeTopologies;
-	}
-	
-	public static AgentInfoCollection getKnownAgents()
-	{
-		return knownAgents;
 	}
 	
 	public static Boolean avoidUsingDBForNow()

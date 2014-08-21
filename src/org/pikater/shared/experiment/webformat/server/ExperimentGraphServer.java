@@ -17,7 +17,6 @@ import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.AgentInfoCollection;
-import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.ConversionException;
 
 public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoServer>, ISlotConnectionsContext<Integer, BoxInfoServer>
@@ -262,15 +261,14 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * @return
 	 * @throws ConversionException
 	 */
-	public UniversalComputationDescription toUniversalFormat() throws ConversionException
+	public UniversalComputationDescription toUniversalFormat(AgentInfoCollection agentInfoProvider) throws ConversionException
 	{
 		try
 		{
 			// first some checks
-			AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
 			if(agentInfoProvider == null)
 			{
-				throw new NullPointerException("Agent information has not yet been received from pikater.");
+				throw new NullPointerException("The argument agent info provider is null.");
 			}
 
 			// create the result uni-format experiment
@@ -412,17 +410,16 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * @return
 	 * @throws ConversionException
 	 */
-	public static ExperimentGraphServer fromUniversalFormat(UniversalComputationDescription uniFormat) throws ConversionException
+	public static ExperimentGraphServer fromUniversalFormat(AgentInfoCollection agentInfoProvider, UniversalComputationDescription uniFormat) throws ConversionException
 	{
 		try
 		{
 			// first some checks
-			AgentInfoCollection agentInfoProvider = ServerConfigurationInterface.getKnownAgents();
 			if(agentInfoProvider == null)
 			{
-				throw new NullPointerException("Agent information has not yet been received from pikater.");
+				throw new NullPointerException("The argument agent info provider is null.");
 			}
-			else if(uniFormat == null)
+			if(uniFormat == null)
 			{
 				throw new NullPointerException("The argument uni-format is null.");
 			}

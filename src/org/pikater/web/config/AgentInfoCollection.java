@@ -1,19 +1,34 @@
 package org.pikater.web.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
+import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
+import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
+import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
+import org.pikater.core.ontology.subtrees.newOption.values.FloatValue;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.experiment.webformat.server.BoxType;
 
 public class AgentInfoCollection implements Iterable<AgentInfo>
 {
 	private final Set<AgentInfo> boxes;
 	
-	public AgentInfoCollection()
+	private AgentInfoCollection()
 	{
 		this.boxes = new HashSet<AgentInfo>(); 
 	}
@@ -24,7 +39,7 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 		return boxes.iterator();
 	}
 	
-	public boolean addDefinition(AgentInfo info)
+	private boolean addDefinition(AgentInfo info)
 	{
 		return boxes.add(info);
 	}
@@ -71,21 +86,111 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 		return result;
 	}
 
-	/*
-	private ArrayList<BoxInfo> getWrapperBoxes()
+	//---------------------------------------------------------
+	// SOME STATIC METHODS TO CONSTRUCT FROM DATA
+	
+	public static AgentInfoCollection getFrom(AgentInfos boxesFromCore)
 	{
-		LogicalBoxDescription treeLogicalBox = new LogicalBoxDescription(
-				"Complex", CARecSearchComplex.class,
-				"Wraper for tree boxes, Computing, Search and Recomend");
-
-		treeLogicalBox.setPicture("complex.jpg");
-
-		BoxInfo treeBox = transformation(treeLogicalBox, BoxType.WRAPPER);
-
-		ArrayList<BoxInfo> wrappers = new ArrayList<BoxInfo>();
-		wrappers.add(treeBox);
-
-		return wrappers;
+		AgentInfoCollection agentInfoCollection = new AgentInfoCollection();
+		for(AgentInfo info : boxesFromCore.getAgentInfos())
+		{
+			agentInfoCollection.addDefinition(info);
+		}
+		return agentInfoCollection;
 	}
-	*/
+	
+	public static AgentInfoCollection getDummyBoxes()
+	{
+		AgentInfoCollection agentInfoCollection = new AgentInfoCollection();
+		for(BoxType type : BoxType.values())
+		{
+			AgentInfo agentInfo = new AgentInfo();
+			agentInfo.setOntologyClassName(type.toOntologyClass().getName());
+			agentInfo.setAgentClassName(AgentInfoCollection.class.getName());
+			agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
+
+			String name = null;
+			switch(type)
+			{
+				case CHOOSE:
+					name = "Klobása";
+					break;
+				case COMPUTE:
+					name = "Vepřová kýta";
+					break;
+				case PROCESS_DATA:
+					name = "Chleba";
+					break;
+				case OPTION:
+					name = "Bobkový list";
+					break;
+				case INPUT:
+					name = "Brambory";
+					break;
+				case MISC:
+					name = "Pepř";
+					break;
+				case OUTPUT:
+					name = "Sůl";
+					break;
+				case SEARCH:
+					name = "Cibule";
+					break;
+				case COMPOSITE:
+					name = "Protlak";
+					break;
+				default:
+					break;
+			}
+			agentInfo.setName(name);
+
+			NewOptions options = new NewOptions();
+			options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
+			options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
+					new IntegerValue(2),
+					new IntegerValue(3),
+					new IntegerValue(5),
+					new IntegerValue(10))))
+					));
+			options.addOption(new NewOption("Double", new DoubleValue(1)));
+			options.addOption(new NewOption("Boolean", new BooleanValue(true)));
+			options.addOption(new NewOption("Float", new FloatValue(1)));
+
+			options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(new IntegerValue(5), new IntegerValue(10), 3)));
+			options.addOption(new NewOption(
+					"QuestionMarkSet",
+					new QuestionMarkSet(3, new ArrayList<IValueData>(Arrays.asList(
+							new IntegerValue(5),
+							new IntegerValue(6),
+							new IntegerValue(9),
+							new IntegerValue(10),
+							new IntegerValue(11)))) /*,
+						new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
+								new IntegerValue(5),
+								new IntegerValue(6),
+								new IntegerValue(7),
+								new IntegerValue(8),
+								new IntegerValue(9),
+								new IntegerValue(10),
+								new IntegerValue(11)
+						))))); */
+					));
+
+			Slot slotInput_test = new Slot();
+			slotInput_test.setDataType("pokus");
+			slotInput_test.setSlotType(SlotTypes.DATA);
+			slotInput_test.setDescription("A general test input slot.");
+
+			Slot slotOutput_test = new Slot();
+			slotOutput_test.setDataType("pokus");
+			slotOutput_test.setSlotType(SlotTypes.DATA);
+			slotOutput_test.setDescription("A general test output slot.");
+
+			agentInfo.setOptions(options);
+			agentInfo.setInputSlots(Arrays.asList(slotInput_test));
+			agentInfo.setOutputSlots(Arrays.asList(slotOutput_test));
+			agentInfoCollection.addDefinition(agentInfo);
+		}
+		return agentInfoCollection;
+	}
 }

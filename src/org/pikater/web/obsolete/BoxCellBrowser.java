@@ -8,7 +8,6 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
 import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.shared.util.collections.CustomOrderSet;
-import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.CellBrowser;
 import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.ICellBrowserCellProvider;
 import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.ICellBrowserTreeViewModel;
@@ -63,9 +62,10 @@ public class BoxCellBrowser extends CustomComponent
 						@Override
 						public AbstractComponent getComponentForSource(CellBrowserCellSource source)
 						{
-							BoxType type = (BoxType) source.source;
-							int boxCountForThisType = ServerConfigurationInterface.getKnownAgents().getListByType(type).size();
-							return new Label(String.format("%s (%d)", type.name(), boxCountForThisType));
+							// BoxType type = (BoxType) source.source;
+							// int boxCountForThisType = ServerConfigurationInterface.getKnownAgents().getListByType(type).size();
+							// return new Label(String.format("%s (%d)", type.name(), boxCountForThisType));
+							return null;
 						}
 					};
 				}
@@ -79,10 +79,12 @@ public class BoxCellBrowser extends CustomComponent
 						public CustomOrderSet<CellBrowserCellSource> getSourceObjects()
 						{
 							Collection<CellBrowserCellSource> unsortedObjects = new ArrayList<CellBrowserCellSource>();
+							/*
 							for(AgentInfo info : ServerConfigurationInterface.getKnownAgents().getListByType((BoxType) value))
 							{
 								unsortedObjects.add(new CellBrowserCellSource(info));
 							}
+							*/
 							return new CustomOrderSet<CellBrowserCellSource>(unsortedObjects,
 									new Comparator<CellBrowserCellSource>()
 									{

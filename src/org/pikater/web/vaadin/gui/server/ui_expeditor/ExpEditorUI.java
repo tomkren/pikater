@@ -1,5 +1,8 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
+import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
+import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
@@ -42,19 +45,15 @@ public class ExpEditorUI extends CustomConfiguredUI
 		 * of all available experiment related agents.
 		 */
 		
-		if(ServerConfigurationInterface.getKnownAgents() == null)
-		{
-			// if not, let the user know 
-			GeneralDialogs.info("Not available yet", "The application needs to perform some tasks before this feature is accessible. Please, try again in a short while.");
-		}
-		else
+		final AgentInfoCollection agentInfoProvider = createAgentInfoProvider();
+		if(agentInfoProvider != null)
 		{
 			/*
 			 * Display editor if authenticated or make the user authenticate first and then display it.
 			 */
 			if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
 			{
-				displayExperimentEditor();
+				displayExperimentEditor(agentInfoProvider);
 			}
 			else
 			{
@@ -63,20 +62,42 @@ public class ExpEditorUI extends CustomConfiguredUI
 					@Override
 					public void onSuccessfulAuth()
 					{
-						displayExperimentEditor();
+						displayExperimentEditor(agentInfoProvider);
 					}
 				});
 			}
 		}
 	}
 	
-	private void displayExperimentEditor()
+	private AgentInfoCollection createAgentInfoProvider()
+	{
+		AgentInfoCollection agentInfoProvider = null;
+		if(ServerConfigurationInterface.getConfig().coreEnabled)
+		{
+			try
+			{
+				agentInfoProvider = AgentInfoCollection.getFrom(WebToCoreEntryPoint.getAgentInfos());
+			}
+			catch (Throwable t)
+			{
+				PikaterLogger.logThrowable("No information about agents received from core.", t);
+				GeneralDialogs.error("Not available at this moment", "Information about agents has not been received from core.");
+			}
+		}
+		else
+		{
+			agentInfoProvider = AgentInfoCollection.getDummyBoxes();
+		}
+		return agentInfoProvider;
+	}
+	
+	private void displayExperimentEditor(AgentInfoCollection agentInfoProvider)
 	{
 		// disable regular page layout
 		setPageCroppedAndHorizontallyCentered(false);
 		
 		// simply create a new empty editor and let the user handle the rest
-		ExpEditor editor = new ExpEditor(isDebugModeActive());
+		ExpEditor editor = new ExpEditor(agentInfoProvider, isDebugModeActive());
 		setContent(editor);
 		
 		// display an empty experiment by default
