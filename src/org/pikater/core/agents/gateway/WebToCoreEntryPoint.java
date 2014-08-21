@@ -1,5 +1,10 @@
 package org.pikater.core.agents.gateway;
 
+import jade.core.ProfileException;
+import jade.wrapper.ControllerException;
+import jade.wrapper.StaleProxyException;
+import jade.wrapper.gateway.JadeGateway;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -22,7 +27,11 @@ public class WebToCoreEntryPoint {
 	 * @throws PikaterGatewayException
 	 */
 	public static AgentInfos getAgentInfos() throws PikaterGatewayException {
-		return PikaterGateway_GetAgentInfo.getAgentInfos();
+		try {
+			return PikaterGateway_GetAgentInfo.getAgentInfos();
+		} catch (ProfileException e) {
+			throw new PikaterGatewayException("Weird ProfileException happened.");
+		}
 	}
 
 	/**
@@ -62,11 +71,23 @@ public class WebToCoreEntryPoint {
 		PikaterGateway_KillBatch.killBatch(batchID);
 	}
 
+	/**
+	 * Get information about run of Pikater-Core.
+	 */
+	public static boolean isPikaterCoreRunning() {
+		try {
+			PikaterGateway_GetAgentInfo.getAgentInfos();
+			return true;
+		} catch (jade.core.ProfileException | PikaterGatewayException t) {
+			return false;
+		}
+	}
+
 	/*
 	 * Test
 	 */
 	public static void main(String[] args) throws Exception {
-
+		
 		PikaterGateway_General.MASTER_PORT=2100;//1099;
 		
 		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfos();
