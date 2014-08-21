@@ -63,15 +63,12 @@ public class WebToCoreEntryPoint {
 	}
 
 	/**
-	 * Get information about run of Pikater-Core.
+	 * Is pikater core running locally on the same machine?
+	 * @throws PikaterGatewayException 
 	 */
-	public static boolean isPikaterCoreRunning() {
-		try {
-			PikaterGateway_GetAgentInfo.getAgentInfos();
-			return true;
-		} catch (PikaterGatewayException t) {
-			return false;
-		}
+	public static void checkLocalConnection() throws PikaterGatewayException 
+	{
+		PikaterGateway_GetAgentInfo.getAgentInfos();
 	}
 
 	/*
