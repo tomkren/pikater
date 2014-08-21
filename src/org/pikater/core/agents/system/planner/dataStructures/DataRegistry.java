@@ -23,8 +23,19 @@ public class DataRegistry {
 		if (nodeName == null) {
 			nodeName = MASTER_NODE_NAME;
 		}
-		for (TaskOutput t : task.getOutput()) {
-			String hash = t.getName();
+		for (TaskOutput outputTaskI : task.getOutput()) {
+			String hash = outputTaskI.getName();
+			if (dataMap.get(hash) == null) {
+				Set<String> list = new HashSet<>();
+				list.add(nodeName);
+				dataMap.put(hash, list);
+			} else {
+				dataMap.get(hash).add(nodeName);
+			}
+		}
+		// data that had to be transported on the slave server
+		for (Data inputDataI : task.getDatas().getDatas()) {
+			String hash = inputDataI.getInternalFileName();
 			if (dataMap.get(hash) == null) {
 				Set<String> list = new HashSet<>();
 				list.add(nodeName);

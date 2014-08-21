@@ -82,6 +82,11 @@ public class CPUCoresStructure {
 			return null;
 		}
 		
+		if (dataLocations.size() > 0) {
+			String ho;
+			ho = "gf";
+		}
+		
 		return untappedCores.get(0);
 	}
 	
