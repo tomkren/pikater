@@ -38,11 +38,12 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
+		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
 		//exportResults();
 		//listVisibleAndApprovedDatasets();
 		//removeResult();
 		//listDataSetsWithResults();
-		listDataSets();
+		//listDataSets();
 		//addExperiment();
 		//listExternalAgents();
 		//listDataSetWithExclusion();
@@ -54,6 +55,10 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void testModelRemoval() {
+		DAOs.modelDAO.removeOldModels(1);
+	}
+
 	private void testDBConnection() {
 		System.out.println("Database connected: "+MyPGConnection.isConnectionToCurrentPGDBEstablished());		
 	}

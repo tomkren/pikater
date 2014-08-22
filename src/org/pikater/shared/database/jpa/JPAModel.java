@@ -19,7 +19,8 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 @NamedQueries({
 	@NamedQuery(name="Model.getAll",query="select m from JPAModel m"),
 	@NamedQuery(name="Model.getByID",query="select m from JPAModel m where m.id=:id"),
-	@NamedQuery(name="Model.getByAgentClassName",query="select m from JPAModel m where m.agentClassName=:agentClassName")
+	@NamedQuery(name="Model.getByAgentClassName",query="select m from JPAModel m where m.agentClassName=:agentClassName"),
+	@NamedQuery(name="Model.getOlderThan",query="select m, r from JPAModel m, JPAResult r where r.createdModel=m and m.created < :paramDate")
 })
 public class JPAModel extends JPAAbstractEntity{
 	

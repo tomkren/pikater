@@ -3,6 +3,7 @@ package org.pikater.shared.quartz.jobs.crons;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobBuilder;
@@ -34,6 +35,12 @@ public class RemoveExpiredTrainedModels extends ZeroArgJob
 	@Override
 	public void execute() throws JobExecutionException
 	{
-		// TODO: implement
+		//TODO: is this OK? Deleting models associated with exepriments, but leaving the experiment statistic untouched
+		//(apart from removing model ID)
+		try{
+			DAOs.modelDAO.removeOldModels(90);//remove models older than 90 days
+		}catch(Exception e){
+			throw new JobExecutionException("Error while trying to delete old models.");
+		}
 	}
 }
