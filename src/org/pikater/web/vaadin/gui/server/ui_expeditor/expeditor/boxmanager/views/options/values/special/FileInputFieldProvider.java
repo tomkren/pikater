@@ -1,19 +1,13 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special;
 
-import java.util.List;
-
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
-import org.pikater.shared.database.views.tableview.datasets.DatasetPickingTableDBView;
-import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
-import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
+import org.pikater.web.vaadin.gui.server.components.dbviews.special.DatasetPickerComponent;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.StringValueProvider;
 import org.vaadin.actionbuttontextfield.ActionButtonTextField;
 import org.vaadin.actionbuttontextfield.widgetset.client.ActionButtonType;
 
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 public class FileInputFieldProvider extends StringValueProvider
@@ -55,31 +49,5 @@ public class FileInputFieldProvider extends StringValueProvider
 				});
 		    }
 		});
-	}
-	
-	private class DatasetPickerComponent extends DBTableLayout implements IDialogResultPreparer
-	{
-		private static final long serialVersionUID = 9055067769093710286L;
-
-		public DatasetPickerComponent(String caption)
-		{
-			setSizeUndefined();
-			setReadOnly(true);
-			getTable().setMultiSelect(false);
-			setView(new DatasetDBViewRoot<DatasetPickingTableDBView>(new DatasetPickingTableDBView()));
-			addComponentAsFirst(new Label(caption));
-		}
-		
-		@Override
-		public boolean isResultReadyToBeHandled()
-		{
-			return getTable().isARowSelected();
-		}
-
-		@Override
-		public void addArgs(List<Object> arguments)
-		{
-			arguments.add(getTable().getViewsOfSelectedRows()[0]);
-		}
 	}
 }

@@ -69,6 +69,17 @@
 	font-weight: bold;
 }
 
+.boxManagerOptionView .actionbuttontextfield-textfield
+{
+	padding-right: 0;
+}
+
+.boxManagerOptionView .actionbuttontextfield-search
+{
+	margin-left: -22px;
+	right: 0;
+}
+
 .v-caption-customFormLayout
 {
 	margin-bottom: -5px;

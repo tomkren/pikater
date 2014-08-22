@@ -31,7 +31,7 @@ public class TestView extends VerticalLayout implements IContentComponent
 		setSizeFull();
 		
 		// testJSCH();
-		testAnchor(); 
+		testAnchor();
 	}
 
 	@Override
