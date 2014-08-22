@@ -3,9 +3,6 @@ package org.pikater.shared.database.jpa;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,9 +22,7 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 	@NamedQuery(name="Model.getByAgentClassName",query="select m from JPAModel m where m.agentClassName=:agentClassName")
 })
 public class JPAModel extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
 	@OneToOne
 	private JPAResult creatorResult;
 	private String agentClassName;
@@ -40,10 +35,6 @@ public class JPAModel extends JPAAbstractEntity{
     	this.created=new Date();
     }
     
-    public int getId() {
-        return id;
-    }
-	
     public JPAResult getCreatorResult() {
 		return creatorResult;
 	}

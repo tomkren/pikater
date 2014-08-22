@@ -8,9 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -32,9 +29,7 @@ import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 	@NamedQuery(name="Experiment.getByStatus",query="select exp from JPAExperiment exp where exp.status=:status")
 })
 public class JPAExperiment extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
     @Enumerated(EnumType.STRING)
 	private JPAExperimentStatus status;
     @ManyToOne
@@ -82,10 +77,6 @@ public class JPAExperiment extends JPAAbstractEntity{
 		this.modelStrategy=JPAModelStrategy.EXISTING;
 		this.usedModel=model;
 	}
-
-	public int getId() {
-        return id;
-    }
 
 	public JPAExperimentStatus getStatus() {
 		return status;

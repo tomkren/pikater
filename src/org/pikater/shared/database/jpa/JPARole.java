@@ -9,9 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -30,13 +27,7 @@ import org.pikater.shared.database.jpa.security.PikaterRole;
 	@NamedQuery(name="Role.getByName",query="select r from JPARole r where r.name=:name")
 })
 public class JPARole extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
 	
-	public int getId() {
-        return id;
-    }
 	@OneToMany
 	private List<JPAUser> usersWithThisRole=new LinkedList<JPAUser>();
 	@Column(unique=true)

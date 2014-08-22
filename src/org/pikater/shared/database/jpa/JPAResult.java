@@ -6,9 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -30,9 +27,7 @@ import javax.persistence.Transient;
 	@NamedQuery(name="Result.getByDataSetHashErrorAscending",query="select res from JPAResult res where res.serializedFileName=:hash order by res.errorRate asc")
 })
 public class JPAResult extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
     @Column(nullable = false)
 	private int agentTypeId;
     @Column(nullable = false)
@@ -72,9 +67,6 @@ public class JPAResult extends JPAAbstractEntity{
     	this.outputs=new ArrayList<String>();
     }
     
-	public int getId() {
-        return id;
-    }
     public JPAExperiment getExperiment() {
         return experiment;
     }

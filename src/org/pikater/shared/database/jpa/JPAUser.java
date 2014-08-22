@@ -7,9 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,9 +30,7 @@ import org.pikater.shared.database.jpa.status.JPAUserStatus;
 	@NamedQuery(name="User.getByRole",query="select u from JPAUser u where u.role=:role")
 })
 public class JPAUser extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
 	@Column(unique=true)
 	private String login;
 	@Column(nullable=false)
@@ -97,9 +92,6 @@ public class JPAUser extends JPAAbstractEntity{
 		return new JPAUser("dummy_user", "dummy_password", null, "dummy_user@mail.com", 9, JPAUserStatus.ACTIVE);
 	}
 	
-	public int getId() {
-        return id;
-    }
 	public String getLogin() {
 		return login;
 	}

@@ -1,9 +1,6 @@
 package org.pikater.shared.database.jpa;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -17,13 +14,7 @@ import javax.persistence.Transient;
 	@NamedQuery(name="GlobalMetaData.getById",query="select gmd from JPAGlobalMetaData gmd where gmd.id=:id")
 })
 public class JPAGlobalMetaData extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
 	
-	public int getId() {
-        return id;
-    }
 	@ManyToOne
 	private JPATaskType defaultTaskType;
 	private int numberofInstances;
