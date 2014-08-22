@@ -1,5 +1,6 @@
 package org.pikater.shared.database.jpa;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +33,8 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner"),
 	@NamedQuery(name="Batch.getByOwner.count",query="select count(b) from JPABatch b where b.owner=:owner"),
 	@NamedQuery(name="Batch.getByOwnerAndStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status=:status"),
-	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status")
+	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status"),
+	@NamedQuery(name="Batch.getByIDwithResult",query="select b,e,r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results")
 })
 public class JPABatch extends JPAAbstractEntity{
 	
@@ -217,11 +219,30 @@ public class JPABatch extends JPAAbstractEntity{
 		this.setStatus(JPABatchStatus.valueOf(status));
 	}
 	
-	public boolean isScheduled()
+	public boolean isDesignatedForExecution()
 	{
 		return getStatus() != JPABatchStatus.CREATED;
 	}
-
+	
+	public boolean isBeingExecuted()
+	{
+		return getStatus().ordinal() >= JPABatchStatus.STARTED.ordinal();
+	}
+	
+	public boolean isFinishedOrFailed()
+	{
+		return (getStatus() == JPABatchStatus.FINISHED) || (getStatus() == JPABatchStatus.FAILED);
+	}
+	
+	/**
+	 * Exports the results of this batch into the given temporary file (CSV format).
+	 * @param file
+	 */
+	public void toCSV(File file)
+	{
+		// TODO:
+	}
+	
 	@Transient
 	public static final String EntityName = "Batch";
 	

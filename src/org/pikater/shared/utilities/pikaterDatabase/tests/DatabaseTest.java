@@ -24,6 +24,7 @@ import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.MyPGConnection;
 import org.pikater.shared.database.util.ResultExporter;
@@ -38,6 +39,8 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
+		listBestResult();
+		listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
 		//exportResults();
 		//listVisibleAndApprovedDatasets();
@@ -55,6 +58,30 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void listBestResult() {
+		JPAExperiment exp=DAOs.experimentDAO.getByID(116652, EmptyResultAction.NULL);
+		JPAResult result = DAOs.resultDAO.getByExperimentBestResult(exp);
+		p("Best result for experiment ID "+exp.getId());
+		if(result==null){
+			p("no results yet");
+		}else{
+			p(result.getErrorRate()+" "+result.getCreatedModel());
+		}
+		p("----------------");
+		
+	}
+
+	private void listUserUploadedDatasets(){
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllUserUploaded();
+		p("No. of found DataSets: "+dslos.size());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getDescription()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+		}
+		p("------------");
+		p("");
+		
+	}
+	
 	private void testModelRemoval() {
 		DAOs.modelDAO.removeOldModels(1);
 	}
@@ -64,9 +91,9 @@ public class DatabaseTest {
 	}
 
 	private void exportResults() {
-		JPABatch batch=DAOs.batchDAO.getByID(87801, EmptyResultAction.NULL);
+		//JPABatch batch=DAOs.batchDAO.getByID(87801, EmptyResultAction.NULL);
 		ResultExporter exp=new ResultExporter(System.err);
-		exp.export(batch);
+		exp.export(117301);
 		exp.flush();
 	}
 

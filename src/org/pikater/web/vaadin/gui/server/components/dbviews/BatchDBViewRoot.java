@@ -1,16 +1,28 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.UUID;
+
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.util.IOUtils;
+import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.sharedresources.ResourceExpiration;
+import org.pikater.web.sharedresources.ResourceRegistrar;
+import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 
+import com.vaadin.server.Page;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
 
@@ -95,7 +107,45 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 		}
 		else if(specificColumn == AbstractBatchTableDBView.Column.RESULTS)
 		{
-			// TODO:
+			// TODO: progress dialog
+			
+			// download, don't run action
+			final BatchTableDBRow rowView = (BatchTableDBRow) row;
+			final File tmpFile = IOUtils.createTemporaryFile("results", ".csv");
+			rowView.getBatch().toCSV(tmpFile);
+			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			{
+				@Override
+				public ResourceExpiration getLifeSpan()
+				{
+					return ResourceExpiration.ON_FIRST_PICKUP;
+				}
+
+				@Override
+				public InputStream getStream() throws Throwable
+				{
+					return new FileInputStream(tmpFile);
+				}
+
+				@Override
+				public long getSize()
+				{
+					return tmpFile.length();
+				}
+
+				@Override
+				public String getMimeType()
+				{
+					return HttpContentType.TEXT_CSV.toString();
+				}
+
+				@Override
+				public String getFilename()
+				{
+					return tmpFile.getName();
+				}
+			});
+			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
 		}
 		else
 		{

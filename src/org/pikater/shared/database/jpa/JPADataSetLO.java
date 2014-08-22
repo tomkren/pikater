@@ -30,6 +30,7 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 @Table(name="DataSetLO")
 @NamedQueries({
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
+	@NamedQuery(name="DataSetLO.getAllBySoruce",query="select dslo from JPADataSetLO dslo where dslo.source=:source"),
 	@NamedQuery(name="DataSetLO.getAll.count",query="select count(dslo) from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getAllVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getAllWithResults",query="select dslo from JPADataSetLO dslo where exists (select r from JPAResult r where r.serializedFileName = dslo.hash) "),

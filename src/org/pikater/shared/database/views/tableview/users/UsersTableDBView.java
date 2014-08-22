@@ -24,8 +24,7 @@ public class UsersTableDBView extends AbstractTableDBView
 	 * This enum is used for create Criteria API query in the function
 	 * {@link UserDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}.
 	 * <p>
-	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}
-	 *  
+	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}.  
 	 */
 	public enum Column implements ITableColumn
 	{
@@ -110,15 +109,14 @@ public class UsersTableDBView extends AbstractTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(final QueryConstraints constraints)
 	{
-		List<JPAUser> allUsers = DAOs.userDAO.getAll(constraints.getOffset(),constraints.getMaxResults(), constraints.getSortColumn(),constraints.getSortOrder());
+		List<JPAUser> resultUsers = DAOs.userDAO.getAll(constraints.getOffset(),constraints.getMaxResults(), constraints.getSortColumn(),constraints.getSortOrder());
 		int allUsersCount=DAOs.userDAO.getAllCount();
-		List<UsersTableDBRow> rows = new ArrayList<UsersTableDBRow>();
 		
-		for(JPAUser user : allUsers)
+		List<UsersTableDBRow> resultRows = new ArrayList<UsersTableDBRow>();
+		for(JPAUser user : resultUsers)
 		{
-			rows.add(new UsersTableDBRow(user));
+			resultRows.add(new UsersTableDBRow(user));
 		}
-		
-		return new QueryResult(rows, allUsersCount);
+		return new QueryResult(resultRows, allUsersCount);
 	}
 }

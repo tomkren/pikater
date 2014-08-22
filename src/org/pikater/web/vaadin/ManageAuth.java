@@ -27,6 +27,7 @@ public class ManageAuth
 		}
 		else
 		{
+			// TODO: getByLoginAndPassword
 			List<JPAUser> usersWithProvidedLogin = DAOs.userDAO.getByLogin(login);
 			for(JPAUser user : usersWithProvidedLogin)
 			{

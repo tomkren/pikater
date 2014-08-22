@@ -52,18 +52,14 @@ public class UserSavedBatchesTableDBView extends UserBatchesTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
+		List<JPABatch> resultBatches=DAOs.batchDAO.getByOwnerAndStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+		int allBatchesCount = DAOs.batchDAO.getByOwnerAndStatusCount(this.owner, JPABatchStatus.CREATED);
 		
-		// TODO: only display NOT SCHEDULED batches (Status.CREATED)
-		
-		List<JPABatch> allBatches=DAOs.batchDAO.getByOwnerAndStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
-		int count = DAOs.batchDAO.getByOwnerAndStatusCount(this.owner, JPABatchStatus.CREATED);
-		List<BatchTableDBRow> rows = new ArrayList<BatchTableDBRow>();
-		
-		for(JPABatch batch : allBatches)
+		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
+		for(JPABatch batch : resultBatches)
 		{
-			rows.add(new BatchTableDBRow(batch, false));
+			resultRows.add(new BatchTableDBRow(batch, false));
 		}
-		return new QueryResult(rows, count);
+		return new QueryResult(resultRows, allBatchesCount);
 	}
 }

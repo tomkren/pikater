@@ -16,7 +16,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
+import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
@@ -52,18 +54,6 @@ public class JPAUser extends JPAAbstractEntity{
 	protected JPAUser(){}
 	
 	/**
-	 * Creates a new user with active status (no administrator acceptance is needed) and default max priority.
-	 * @param login
-	 * @param password
-	 * @param email
-	 * @param role
-	 */
-	public JPAUser(String login, String password, String email, JPARole role)
-	{
-		this(login, password, role, email, 0, JPAUserStatus.ACTIVE); // lowest priority possible, until an admin raises it
-	}
-	
-	/**
 	 * Complete constructor - for internal use only.
 	 * @param login The login of the user.
 	 * @param password The password of the user.
@@ -72,7 +62,7 @@ public class JPAUser extends JPAAbstractEntity{
 	 * @param maxPriority The maximal priority of user's tasks.
 	 * @param status The user's account status.
 	 */
-	protected JPAUser(String login, String password, JPARole role, String email, int maxPriority, JPAUserStatus status)
+	protected JPAUser(String login, String password, String email, JPARole role, int maxPriority, JPAUserStatus status)
 	{
 		setLogin(login);
 		setPassword(password);
@@ -84,12 +74,42 @@ public class JPAUser extends JPAAbstractEntity{
 	}
 	
 	/**
+	 * Creates a new user account. Notes:
+	 * - not an admin,
+	 * - lowest priority possible (administrator should raise),
+	 * - passive status (administrator acceptance is needed).  
+	 * @param login
+	 * @param password
+	 * @param email
+	 * @return
+	 */
+	public static JPAUser createAccountForGUI(String login, String password, String email)
+	{
+		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.USER), 0, JPAUserStatus.PASSIVE);
+	}
+	
+	/**
+	 * Creates a new user account. Notes:
+	 * - admin account,
+	 * - maximum priority,
+	 * - active status (no administrator acceptance is needed). 
+	 * @param login
+	 * @param password
+	 * @param email
+	 * @param role
+	 */
+	public static JPAUser createAccountForDBInit(String login, String password, String email, JPARole role)
+	{
+		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN), 9, JPAUserStatus.ACTIVE);
+	}
+	
+	/**
 	 * Used in web for offline development when the database is not reachable or usable for some reason.
 	 * @return
 	 */
 	public static JPAUser getDummy()
 	{
-		return new JPAUser("dummy_user", "dummy_password", null, "dummy_user@mail.com", 9, JPAUserStatus.ACTIVE);
+		return new JPAUser("dummy_user", "dummy_password", "dummy_user@mail.com", null, 9, JPAUserStatus.ACTIVE);
 	}
 	
 	public String getLogin() {
@@ -153,14 +173,31 @@ public class JPAUser extends JPAAbstractEntity{
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
-	public Boolean isAdmin(){ // changed return type to allow comparisons without boxing
-		return this.role.isAdmin();
+	public boolean isAdmin(){
+		return role != null ? role.isAdmin() : false;
 	}
 	public boolean isUser(){
-		return this.role.isUser();
+		return role != null ? role.isUser() : true;
+	}
+	public void setAdmin(boolean admin)
+	{
+		if(admin) // promote
+		{
+			if(!isAdmin())
+			{
+				setRole(DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN));
+			}
+		}
+		else // downgrade
+		{
+			if(isAdmin())
+			{
+				setRole(DAOs.roleDAO.getByPikaterRole(PikaterRole.USER));
+			}
+		}
 	}
 	public boolean hasPrivilege(PikaterPriviledge priviledge){
-		return this.role.hasPriviledge(priviledge);
+		return role != null ? role.hasPriviledge(priviledge) : false;
 	}
 	@Transient
 	public static final String EntityName = "User";
@@ -178,5 +215,4 @@ public class JPAUser extends JPAAbstractEntity{
 		this.created=updateValues.getCreated();
 		this.lastLogin=updateValues.getLastLogin();
 	}
-	
 }

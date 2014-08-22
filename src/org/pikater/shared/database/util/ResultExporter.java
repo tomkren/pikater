@@ -2,13 +2,13 @@ package org.pikater.shared.database.util;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.List;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
+import org.pikater.shared.database.jpa.daos.DAOs;
 
 /**
  * Class for exporting experiment results to CSV format
@@ -35,30 +35,45 @@ public class ResultExporter {
 	 * @param batch the {@link JPABatch} object, which results should be exported 
 	 */
 	public void export(JPABatch batch){
-		header();
-		for(JPAExperiment experiment : safe(batch.getExperiments())){
-			for(JPAResult result : safe(experiment.getResults())){
-				result(result);
-			}
-		}
+		this.export(batch.getId());
 	}
 	
 	/**
-	 * Exports the result of one experiment to CSV format.
+	 * Exports the results of a batch to CSV format by exporting all of its experiments
 	 * <p>
-	 * Header is printed on the first row. For exporting a whole batch
-	 * use {@link ResultExporter#export(JPABatch)}
-	 * @param experiment the {@link JPAExperiment} object, which result sshould be exported
+	 * Header is printed on the first row.
+	 * @param batchID the ID of batch, which results should be exported 
 	 */
-	public void export(JPAExperiment experiment){
+	public void export(int batchID){
 		header();
-		for(JPAResult result : safe(experiment.getResults())){
-			result(result);
+		List<Object[]> batchExperimentResultList=DAOs.batchDAO.getByIDwithResults(batchID);
+		for(Object[] triplet : batchExperimentResultList){
+			row(
+				(JPABatch)triplet[0],
+				(JPAExperiment)triplet[1],
+				(JPAResult)triplet[2]);
 		}
 	}
-	
+
 	private void header(){
 		StringBuilder sb=new StringBuilder();
+		
+		sb.append("batch ID");
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append("batch name");
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append("note");
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append("batch created");
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append("batch finished");
+		sb.append(ResultExporter.DELIMINITER);
+		
+		sb.append("model strategy");
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append("used model class");
+		sb.append(ResultExporter.DELIMINITER);
+		
 		sb.append("agent name");
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append("duration");
@@ -83,8 +98,25 @@ public class ResultExporter {
 		out.println(sb.toString());
 	}
 	
-	private void result(JPAResult result){
+	private void row(JPABatch batch, JPAExperiment experiment, JPAResult result){
 		StringBuilder sb=new StringBuilder();
+		
+		sb.append(batch.getId());
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append(batch.getName());
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append(batch.getNote());
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append(batch.getCreated());
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append(batch.getFinished());
+		sb.append(ResultExporter.DELIMINITER);
+		
+		sb.append(experiment.getModelStrategy().name());
+		sb.append(ResultExporter.DELIMINITER);
+		sb.append(experiment.getUsedModel()!=null?experiment.getUsedModel().getAgentClassName():"no_model");
+		sb.append(ResultExporter.DELIMINITER);
+		
 		sb.append(result.getAgentName());
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(result.getDuration());
@@ -107,10 +139,6 @@ public class ResultExporter {
 		sb.append(ResultExporter.DELIMINITER);
 		sb.append(NewOptions.exportToWeka(NewOptions.importXML(result.getOptions()).getOptions()));
 		out.println(sb.toString());
-	}
-	
-	private <T> List<T> safe(List<T> list){
-		return list==null ? Collections.<T>emptyList() : list;
 	}
 	
 	/**

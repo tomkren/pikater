@@ -165,7 +165,6 @@ public class DataSetTableDBView extends AbstractTableDBView
 	{
 		List<JPADataSetLO> allDatasets;
 		int allDatasetCount=0;
-		
 		if(this.adminMode()){
 			allDatasets = DAOs.dataSetDAO.getAllVisible(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
 			allDatasetCount=DAOs.dataSetDAO.getAllVisibleCount();
@@ -174,12 +173,11 @@ public class DataSetTableDBView extends AbstractTableDBView
 			allDatasetCount=DAOs.dataSetDAO.getByOwnerVisibleCount(owner);
 		}
 		
-		List<DataSetTableDBRow> rows = new ArrayList<DataSetTableDBRow>();
-		
+		List<DataSetTableDBRow> resultRows = new ArrayList<DataSetTableDBRow>();
 		for(JPADataSetLO dslo : allDatasets)
 		{
-			rows.add(new DataSetTableDBRow(dslo));
+			resultRows.add(new DataSetTableDBRow(dslo));
 		}
-		return new QueryResult(rows, allDatasetCount);
+		return new QueryResult(resultRows, allDatasetCount);
 	}
 }

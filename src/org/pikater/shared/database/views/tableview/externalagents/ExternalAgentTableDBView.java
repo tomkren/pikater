@@ -136,22 +136,23 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
 		List<JPAExternalAgent> agents;
-		int agentCount=0;
-		
-		if(this.adminMode()){
+		int allAgentsCount=0;
+		if(adminMode())
+		{
 			agents = DAOs.externalAgentDAO.getAll(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			agentCount=DAOs.externalAgentDAO.getAllCount();
-		}else{
+			allAgentsCount=DAOs.externalAgentDAO.getAllCount();
+		}
+		else
+		{
 			agents=DAOs.externalAgentDAO.getByOwner(owner, constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			agentCount=DAOs.externalAgentDAO.getByOwnerCount(owner);
+			allAgentsCount=DAOs.externalAgentDAO.getByOwnerCount(owner);
 		}
 		
-		List<ExternalAgentTableDBRow> rows = new ArrayList<ExternalAgentTableDBRow>();
-		
+		List<ExternalAgentTableDBRow> resultRows = new ArrayList<ExternalAgentTableDBRow>();
 		for(JPAExternalAgent agent : agents)
 		{
-			rows.add(new ExternalAgentTableDBRow(agent));
+			resultRows.add(new ExternalAgentTableDBRow(agent));
 		}
-		return new QueryResult(rows, agentCount);
+		return new QueryResult(resultRows, allAgentsCount);
 	}
 }

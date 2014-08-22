@@ -62,7 +62,7 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 				}
 			};
 		case DOWNLOAD:
-			return new NamedActionDBViewValue("Download")
+			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
 				public boolean isEnabled()
@@ -98,6 +98,7 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 				protected void commitEntities()
 				{
 					// TODO: "hide" or really remove?
+					// TODO: this is directly connected to the issue of JPAAgentInfo's relation to JPAExternalAgent
 				}
 			};
 			

@@ -66,11 +66,11 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
 		if(specificColumn == ResultTableDBView.Column.TRAINED_MODEL)
 		{
-			// TODO:
+			// TODO: talk to Peter about this
 		}
 		else if(specificColumn == ResultTableDBView.Column.EXPORT)
 		{
-			// TODO:
+			// TODO: wait for Peter to confirm this
 		}
 		else
 		{

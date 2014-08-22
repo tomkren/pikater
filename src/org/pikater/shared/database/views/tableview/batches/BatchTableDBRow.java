@@ -1,10 +1,10 @@
 package org.pikater.shared.database.views.tableview.batches;
 
-import java.util.HashSet;
-import java.util.Locale;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPABatch;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
@@ -13,11 +13,10 @@ import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.util.DateUtils;
-import org.pikater.shared.util.LocaleUtils;
 
 public class BatchTableDBRow extends AbstractTableRowDBView
 {
-	private static final Set<String> allowedTotalPriorities = new HashSet<String>()
+	private static final Set<String> allowedTotalPriorities = new LinkedHashSet<String>()
 	{
 		private static final long serialVersionUID = -7303124181497778648L;
 
@@ -30,13 +29,13 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 	};
 	
 	private final JPABatch batch;
-	private final Locale currentLocale;
+	// private final Locale currentLocale;
 	private final boolean adminMode;
 
 	public BatchTableDBRow(JPABatch batch, boolean adminMode)
 	{
 		this.batch = batch;
-		this.currentLocale = LocaleUtils.getDefaultLocale();
+		// this.currentLocale = LocaleUtils.getDefaultLocale();
 		this.adminMode = adminMode;
 	}
 	
@@ -66,15 +65,21 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 				return new RepresentativeDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority()))
 				{
 					@Override
+					public boolean isReadOnly()
+					{
+						return batch.isBeingExecuted();
+					}
+					
+					@Override
 					protected void updateEntities(String newValue)
 					{
-						// TODO Auto-generated method stub
+						batch.setTotalPriority(Integer.parseInt(newValue));
 					}
 					
 					@Override
 					protected void commitEntities()
 					{
-						// TODO Auto-generated method stub
+						commitRow();
 					}
 				};
 			}
@@ -89,46 +94,46 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 			return new StringReadOnlyDBViewValue(batch.getStatus().name());
 		case NOTE:
 			return new StringReadOnlyDBViewValue(batch.getNote());
+			
+		/*
+		 * And then actions. 
+		 */
 		case ABORT:
-			return new NamedActionDBViewValue("Abort")
+			return new NamedActionDBViewValue("Abort") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
-				protected void commitEntities()
+				public boolean isEnabled()
 				{
-					// TODO Auto-generated method stub
+					return batch.isDesignatedForExecution();
 				}
 				
 				@Override
 				protected void updateEntities()
 				{
-					// TODO Auto-generated method stub
 				}
 				
 				@Override
-				public boolean isEnabled()
+				protected void commitEntities()
 				{
-					return true; // TODO: experiment is scheduled or being executed
 				}
 			};
 		case RESULTS:
-			return new NamedActionDBViewValue("Download")
+			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{
 				@Override
 				public boolean isEnabled()
 				{
-					return true; // TODO: experiment is finished
+					return batch.isFinishedOrFailed();
 				}
 				
 				@Override
 				protected void commitEntities()
 				{
-					// TODO Auto-generated method stub
 				}
 				
 				@Override
 				protected void updateEntities()
 				{
-					// TODO Auto-generated method stub
 				}
 			}; 
 			
@@ -140,5 +145,6 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 	@Override
 	public void commitRow()
 	{
+		DAOs.batchDAO.updateEntity(batch);
 	}
 }

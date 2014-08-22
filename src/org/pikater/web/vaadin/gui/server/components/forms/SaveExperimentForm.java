@@ -67,7 +67,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 		
 		public static SaveForLaterMode[] getAvailableByContext(JPABatch sourceExperiment)
 		{
-			if((sourceExperiment == null) || sourceExperiment.isScheduled())
+			if((sourceExperiment == null) || sourceExperiment.isDesignatedForExecution())
 			{
 				return new SaveForLaterMode[] { SaveForLaterMode.SAVE_AS_NEW };
 			}

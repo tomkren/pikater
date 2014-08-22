@@ -17,11 +17,30 @@ import org.pikater.shared.util.collections.CollectionUtils;
 
 public class UsersTableDBRow extends AbstractTableRowDBView
 {
-	public final JPAUser user;
+	private final JPAUser user;
+	private String newPlainTextPassword;
+	private Runnable onNewPasswordCommitted;
 	
 	public UsersTableDBRow(JPAUser user)
 	{
 		this.user = user;
+		this.newPlainTextPassword = null;
+		this.onNewPasswordCommitted = null;
+	}
+	
+	public JPAUser getUser()
+	{
+		return user;
+	}
+	
+	public String getNewPlainTextPassword()
+	{
+		return newPlainTextPassword;
+	}
+	
+	public void setOnNewPasswordCommitted(Runnable action)
+	{
+		this.onNewPasswordCommitted = action;
 	}
 
 	@Override
@@ -83,15 +102,16 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					@Override
 					protected void updateEntities(Boolean newValue)
 					{
-						// TODO:
+						user.setAdmin(newValue);
 					}
-					
+						
 					@Override
 					protected void commitEntities()
 					{
 						commitRow();
 					}
 				};
+				
 			case RESET_PSWD:
 				return new NamedActionDBViewValue("Reset")
 				{
@@ -104,15 +124,17 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					@Override
 					protected void updateEntities()
 					{
-						// TODO:
+						newPlainTextPassword = DAOs.userDAO.resetPasswordButDontUpdate(user); // needed for GUI to send email about this action
 					}
 
 					@Override
 					protected void commitEntities()
 					{
 						commitRow();
+						onNewPasswordCommitted.run(); // callback to GUI to send email - call only AFTER the new password is committed to DB 
 					}
 				};
+				
 			case DELETE:
 				return new NamedActionDBViewValue("Delete")
 				{
@@ -130,7 +152,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					@Override
 					protected void commitEntities()
 					{
-						// TODO:
+						// TODO: talk to Peter about this
 					}
 				};
 				

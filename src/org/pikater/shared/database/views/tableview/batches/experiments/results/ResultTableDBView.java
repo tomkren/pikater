@@ -121,28 +121,29 @@ public class ResultTableDBView extends AbstractTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-
-		List<JPAResult> results;
-		
-		if(owner==null){
-			results=experiment.getResults();
-		}else{
-			if(owner.getLogin().equals(experiment.getBatch().getOwner().getLogin())){
-				results=experiment.getResults();
-			}else{
-				results=new ArrayList<JPAResult>();
+		List<JPAResult> allResults;
+		if(owner==null)
+		{
+			allResults=experiment.getResults();
+		}
+		else
+		{
+			if(owner.getId() == experiment.getBatch().getOwner().getId())
+			{
+				allResults=experiment.getResults();
+			}
+			else
+			{
+				allResults=new ArrayList<JPAResult>();
 			}
 		}
 		
-		
-		List<ResultTableDBRow> rows = new ArrayList<ResultTableDBRow>();
-		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), results.size());
-		for(JPAResult result : results.subList(constraints.getOffset(), endIndex))
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allResults.size());
+		List<ResultTableDBRow> resultRows = new ArrayList<ResultTableDBRow>();
+		for(JPAResult result : allResults.subList(constraints.getOffset(), endIndex))
 		{
-			rows.add(new ResultTableDBRow(result));
+			resultRows.add(new ResultTableDBRow(result));
 		}
-		return new QueryResult(rows, results.size());
+		return new QueryResult(resultRows, allResults.size());
 	}
 }

@@ -99,28 +99,29 @@ public class ExperimentTableDBView extends AbstractTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-
-		List<JPAExperiment> experiments;
-		
-		if(owner==null){
-			experiments=batch.getExperiments();
-		}else{
-			if(owner.getLogin().equals(batch.getOwner().getLogin())){
-				experiments=batch.getExperiments();
-			}else{
-				experiments=new ArrayList<JPAExperiment>();
+		List<JPAExperiment> allExperiments;
+		if(owner==null)
+		{
+			allExperiments=batch.getExperiments();
+		}
+		else
+		{
+			if(owner.getId() == batch.getOwner().getId())
+			{
+				allExperiments=batch.getExperiments();
+			}
+			else
+			{
+				allExperiments=new ArrayList<JPAExperiment>();
 			}
 		}
 		
-		
-		List<ExperimentTableDBRow> rows = new ArrayList<ExperimentTableDBRow>();
-		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), experiments.size());
-		for(JPAExperiment experiment : experiments.subList(constraints.getOffset(), endIndex))
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allExperiments.size());
+		List<ExperimentTableDBRow> resultRows = new ArrayList<ExperimentTableDBRow>();
+		for(JPAExperiment experiment : allExperiments.subList(constraints.getOffset(), endIndex))
 		{
-			rows.add(new ExperimentTableDBRow(experiment));
+			resultRows.add(new ExperimentTableDBRow(experiment));
 		}
-		return new QueryResult(rows, experiments.size());
+		return new QueryResult(resultRows, allExperiments.size());
 	}
 }

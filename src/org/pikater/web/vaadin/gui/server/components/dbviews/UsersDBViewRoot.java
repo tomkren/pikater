@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
-import org.pikater.shared.database.views.base.values.StringDBViewValue;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBRow;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
@@ -65,24 +65,39 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 	{
-		final String targetUserLogin = ((StringDBViewValue) row.getValueWrapper(UsersTableDBView.Column.LOGIN)).getValue();
+		final UsersTableDBRow specificRow = (UsersTableDBRow) row;
 		
 		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
 		if(specificColumn == UsersTableDBView.Column.RESET_PSWD)
 		{
-			GeneralDialogs.confirm(null, String.format("Really reset password for user '%s'?", targetUserLogin), new GeneralDialogs.IDialogResultHandler()
+			GeneralDialogs.confirm(null, String.format("Really reset password for user '%s'?", specificRow.getUser().getLogin()), new GeneralDialogs.IDialogResultHandler()
 			{
 				@Override
 				public boolean handleResult(Object[] args)
 				{
-					action.run(); // approve
+					specificRow.setOnNewPasswordCommitted(new Runnable()
+					{
+						/*
+						 * This action is called when the password is committed to DB.
+						 */
+						
+						@Override
+						public void run()
+						{
+							// TODO: send email
+							specificRow.getNewPlainTextPassword();
+						}
+					});
+					
+					// action is approved, perform it:
+					action.run();
 					return true;
 				}
 			});
 		}
 		else if(specificColumn == UsersTableDBView.Column.DELETE)
 		{
-			GeneralDialogs.confirm(null, String.format("Really delete account for user '%s'?", targetUserLogin), new GeneralDialogs.IDialogResultHandler()
+			GeneralDialogs.confirm(null, String.format("Really delete account for user '%s'?", specificRow.getUser().getLogin()), new GeneralDialogs.IDialogResultHandler()
 			{
 				@Override
 				public boolean handleResult(Object[] args)

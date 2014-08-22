@@ -116,20 +116,18 @@ public class CategoricalMetaDataTableDBView extends AbstractTableDBView{
 	@Override
 	protected QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-		
-		List<CategoricalMetadataTableDBRow> rows = new ArrayList<CategoricalMetadataTableDBRow>();
+		List<CategoricalMetadataTableDBRow> resultRows = new ArrayList<CategoricalMetadataTableDBRow>();
 		if(dslo != null)
 		{
 			for(JPAAttributeMetaData md : dslo.getAttributeMetaData())
 			{
 				if(md instanceof JPAAttributeCategoricalMetaData)
 				{
-					rows.add(new CategoricalMetadataTableDBRow((JPAAttributeCategoricalMetaData) md,this.currentLocale));
+					resultRows.add(new CategoricalMetadataTableDBRow((JPAAttributeCategoricalMetaData) md,this.currentLocale));
 				}
 			}
 		}
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), rows.size());
-		return new QueryResult(rows.subList(constraints.getOffset(), endIndex), rows.size());
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), resultRows.size());
+		return new QueryResult(resultRows.subList(constraints.getOffset(), endIndex), resultRows.size());
 	}
 }

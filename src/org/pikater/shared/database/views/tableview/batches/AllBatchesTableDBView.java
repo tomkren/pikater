@@ -47,15 +47,14 @@ public class AllBatchesTableDBView extends AbstractBatchTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: only display SCHEDULED batches (don't include Status.CREATED)
-		List<JPABatch> allBatches=DAOs.batchDAO.getAllExcludeByStatus(constraints.getOffset(), constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),JPABatchStatus.CREATED);
+		List<JPABatch> resultBatches=DAOs.batchDAO.getAllExcludeByStatus(constraints.getOffset(), constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),JPABatchStatus.CREATED);
 		int allBatchesCount=DAOs.batchDAO.getAllExcludedStatusCount(JPABatchStatus.CREATED);
-		List<BatchTableDBRow> rows = new ArrayList<BatchTableDBRow>();
 		
-		for(JPABatch batch : allBatches)
+		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
+		for(JPABatch batch : resultBatches)
 		{
-			rows.add(new BatchTableDBRow(batch, true));
+			resultRows.add(new BatchTableDBRow(batch, true));
 		}
-		return new QueryResult(rows, allBatchesCount);
+		return new QueryResult(resultRows, allBatchesCount);
 	}
 }

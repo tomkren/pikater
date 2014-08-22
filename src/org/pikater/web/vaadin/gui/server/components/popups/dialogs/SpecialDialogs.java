@@ -2,7 +2,6 @@ package org.pikater.web.vaadin.gui.server.components.popups.dialogs;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.web.vaadin.gui.server.components.forms.CreateAccountForm;
 import org.pikater.web.vaadin.gui.server.components.forms.LoginForm;
 
@@ -30,11 +29,10 @@ public class SpecialDialogs extends DialogCommons
 						@Override
 						public boolean handleResult(Object[] args)
 						{
-							DAOs.userDAO.storeEntity(new JPAUser(
+							DAOs.userDAO.storeEntity(JPAUser.createAccountForGUI(
 									(String) args[0],
 									(String) args[1],
-									(String) args[2],
-									DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN)
+									(String) args[2]
 							));
 							return true;
 						}

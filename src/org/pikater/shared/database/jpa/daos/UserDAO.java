@@ -1,6 +1,8 @@
 package org.pikater.shared.database.jpa.daos;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -13,11 +15,12 @@ import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.security.bcrypt.BCrypt;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
+import org.pikater.shared.logging.PikaterLogger;
 
 public class UserDAO extends AbstractDAO {
 
@@ -107,6 +110,43 @@ public class UserDAO extends AbstractDAO {
 		return getByTypedNamedQuery("User.getByLogin", "login", login);
 	}
 	
+	public JPAUser getByLoginAndPassword(String login, String password)
+	{
+		List<JPAUser> usersByLogin = getByLogin(login);
+		if((usersByLogin != null) && (!usersByLogin.isEmpty()))
+		{
+			List<JPAUser> resultUsers = new ArrayList<JPAUser>();
+			for(JPAUser user : usersByLogin)
+			{
+				if(BCrypt.checkpw(password, user.getPassword()))
+				{
+					resultUsers.add(user);
+				}
+			}
+			switch(resultUsers.size())
+			{
+				case 0:
+					return null;
+				case 1:
+					return resultUsers.get(0);
+				default:
+					// TODO: trigger a cleanup cron or hunt bugs?
+					StringBuilder sb = new StringBuilder();
+					sb.append("Several user accounts with the same credentials were found:\n");
+					for(JPAUser user : resultUsers)
+					{
+						sb.append(String.format("- ID: %d", user.getId()));
+					}
+					PikaterLogger.logThrowable(sb.toString(), new IllegalStateException());
+					return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public List<JPAUser> getByRole(JPARole role) {
 		return getByTypedNamedQuery("User.getByRole", "role", role);
 	}
@@ -147,4 +187,33 @@ public class UserDAO extends AbstractDAO {
 		this.deleteEntityByID(JPAUser.class, id);
 	}
 	
+	/**
+	 * Sets new pasword to the given entity, doesn't update it in DB. 
+	 * @param user
+	 * @return the new password in plain text
+	 */
+	public String resetPasswordButDontUpdate(JPAUser user)
+	{
+		String newPassword = UUID.randomUUID().toString();
+		user.setPassword(hashPw(newPassword));
+		return newPassword;
+	}
+	
+	@Override
+	public void storeEntity(Object newEntity)
+	{
+		JPAUser user = (JPAUser) newEntity;
+		user.setPassword(hashPw(user.getPassword()));
+		super.storeEntity(user);
+	}
+	
+	// ------------------------------------------------------------------------------------------------
+	// PASSWORD HASHING INTERFACE
+
+	private static int hashSalt = 13;
+
+	public static String hashPw(String pwToHash)
+	{
+		return BCrypt.hashpw(pwToHash, BCrypt.gensalt(hashSalt));
+	}
 }
