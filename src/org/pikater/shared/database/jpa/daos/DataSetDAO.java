@@ -124,6 +124,18 @@ public class DataSetDAO extends AbstractDAO{
 		return query.getResultList();
 	}
 	
+	public List<JPADataSetLO> getAllUserUploaded(){
+		return this.getAllBySource(JPADatasetSource.USER_UPLOAD);
+	}
+	
+	public List<JPADataSetLO> getAllExperimentUploaded(){
+		return this.getAllBySource(JPADatasetSource.EXPERIMENT);
+	}
+	
+	public List<JPADataSetLO> getAllBySource(JPADatasetSource source){
+		return this.getByTypedNamedQuery("DataSetLO.getAllBySoruce", "source", source);
+	}
+	
 	public List<JPADataSetLO> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder) {
 		return this.getByOwner(owner, offset, maxResults, sortColumn, sortOrder,true);
 	}

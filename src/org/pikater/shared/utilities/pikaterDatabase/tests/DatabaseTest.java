@@ -24,6 +24,7 @@ import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.MyPGConnection;
 import org.pikater.shared.database.util.ResultExporter;
@@ -38,6 +39,7 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
+		listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
 		//exportResults();
 		//listVisibleAndApprovedDatasets();
@@ -53,6 +55,17 @@ public class DatabaseTest {
 		//listExperiments();
 		//listFileMappings();
 		//listAgentInfos();
+	}
+	
+	private void listUserUploadedDatasets(){
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllUserUploaded();
+		p("No. of found DataSets: "+dslos.size());
+		for(JPADataSetLO dslo:dslos){
+			p(dslo.getId()+". "+dslo.getDescription()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+		}
+		p("------------");
+		p("");
+		
 	}
 	
 	private void testModelRemoval() {
