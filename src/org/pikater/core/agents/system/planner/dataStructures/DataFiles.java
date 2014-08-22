@@ -37,16 +37,17 @@ public class DataFiles {
 	}
 	public Set<TaskToSolve> tasksToRestart() {
 		
-		Set<TaskToSolve> tasks = new HashSet<>();
+		Set<TaskToSolve> tasksToSolve = new HashSet<>();
 		
 		for (DataFile dataFileI : new ArrayList<DataFile>(dataFiles)) {
 			Set<AID> locationsI = dataFileI.getLocations();
-			TaskToSolve taskI = dataFileI.getProducer();
+			TaskToSolve taskToSolveI = dataFileI.getProducer();
 			if (locationsI.isEmpty()) {
-				tasks.add(taskI);
+				taskToSolveI.setSendResultToManager(false);
+				tasksToSolve.add(taskToSolveI);
 			}
 		}
-		return tasks;
+		return tasksToSolve;
 	}
 	
 }

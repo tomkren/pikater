@@ -11,6 +11,7 @@ public class TaskToSolve {
 	private Action action;
 	private ACLMessage msg;
 	private int priority;
+	private boolean sendResultToManager;
 
 	public TaskToSolve(Task task, Action action, ACLMessage msg) {
 		this.task = task;
@@ -39,6 +40,16 @@ public class TaskToSolve {
 	}
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+	public void setDownPriority() {
+		this.priority = this.priority -1;
+	}
+
+	public boolean isSendResultToManager() {
+		return sendResultToManager;
+	}
+	public void setSendResultToManager(boolean sendResultToManager) {
+		this.sendResultToManager = sendResultToManager;
 	}
 	
 }

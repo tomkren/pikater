@@ -1392,7 +1392,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	public ACLMessage respondToGetAllDatasetInfo(ACLMessage request, Action a) {
 		
-		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getAll();
+		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getAllUserUploaded();
 		DatasetsInfo datasetsOnto = new DatasetsInfo();
 		
 		for (JPADataSetLO datasetI : dslos) {
@@ -1402,10 +1402,7 @@ public class Agent_DataManager extends PikaterAgent {
 			datasetOntoI.setHash(datasetI.getHash());
 			datasetOntoI.setFileName(datasetI.getFileName());
 			
-			//TODO:
-			if (! datasetI.getDescription().startsWith("Output from batch")) {
-				datasetsOnto.addDatasets(datasetOntoI);
-			}
+			datasetsOnto.addDatasets(datasetOntoI);
 		}
 		
 		ACLMessage reply = request.createReply();

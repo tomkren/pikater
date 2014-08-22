@@ -29,7 +29,6 @@ public class WaitingTasksQueues {
 		List<TaskToSolve> tasks = new ArrayList<TaskToSolve>(taskToSolve);
 		
 		for (TaskToSolve taskToSolveI : tasks) {
-			taskToSolveI.setPriority(100);
 			addTask(taskToSolveI);
 		}
 	}
@@ -61,6 +60,11 @@ public class WaitingTasksQueues {
 		return null;
 	}
 
+	public boolean isExistingTaskToSolve() {
+		
+		return getNumberOfTasksInQueue() > 0;
+	}
+	
 	public void removeTasks(int batchID) {
 
 		Comparator<TaskToSolve> comparator = new PlannerComparator();
