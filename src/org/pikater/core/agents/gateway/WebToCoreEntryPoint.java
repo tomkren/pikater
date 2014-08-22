@@ -62,6 +62,15 @@ public class WebToCoreEntryPoint {
 	public static void notify_killBatch(int batchID) throws PikaterGatewayException{
 		PikaterGateway_KillBatch.killBatch(batchID);
 	}
+	
+	/**
+	 * Notifies the core system about a changed priority of a batch (by an admin).
+	 * @param batchID
+	 * @throws PikaterGatewayException
+	 */
+	public static void notify_batchPriorityChanged(int batchID) throws PikaterGatewayException{
+		// TODO
+	}
 
 	/**
 	 * Is pikater core running locally on the same machine?
