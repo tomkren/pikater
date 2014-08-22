@@ -1,7 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 
@@ -10,12 +11,14 @@ public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 	private static final long serialVersionUID = -2142093421893500620L;
 	
 	private final DBTableContainer container;
+	private final AbstractTableRowDBView row;
 	private final ITableColumn column;
 	private final AbstractDBViewValue<T> valueWrapper;
 	
-	public DBTableItemPropertyGeneric(DBTableContainer container, ITableColumn column, AbstractDBViewValue<T> valueWrapper)
+	public DBTableItemPropertyGeneric(DBTableContainer container, AbstractTableRowDBView row, ITableColumn column, AbstractDBViewValue<T> valueWrapper)
 	{
 		this.container = container;
+		this.row = row;
 		this.column = column;
 		this.valueWrapper = valueWrapper;
 		
@@ -49,7 +52,7 @@ public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 		valueWrapper.setValue(newValue);
 		if(container.getParentTable().isImmediate())
 		{
-			valueWrapper.commit();
+			valueWrapper.commit(row);
 		}
 	}
 

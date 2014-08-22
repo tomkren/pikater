@@ -3,14 +3,14 @@ package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 import java.util.Collection;
 import java.util.Set;
 
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.base.values.StringDBViewValue;
-import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
@@ -224,23 +224,23 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		switch(column.getColumnType())
 		{
 			case BOOLEAN:
-				DBTableItemPropertyCheck newProperty1 = new DBTableItemPropertyCheck(container.getParentTable(), (BooleanDBViewValue) value);
-				container.getViewRoot().onCellCreate(column, newProperty1.getValue());
+				DBTableItemPropertyCheck newProperty1 = new DBTableItemPropertyCheck(container.getParentTable(), row, (BooleanDBViewValue) value);
+				container.getViewRoot().onCellCreate(column, value, newProperty1.getValue());
 				return newProperty1;
 				
 			case STRING:
-				DBTableItemPropertyText newProperty2 = new DBTableItemPropertyText(container.getParentTable(), (StringDBViewValue) value);
-				container.getViewRoot().onCellCreate(column, newProperty2.getValue());
+				DBTableItemPropertyText newProperty2 = new DBTableItemPropertyText(container.getParentTable(), row, (StringDBViewValue) value);
+				container.getViewRoot().onCellCreate(column, value, newProperty2.getValue());
 				return newProperty2;
 			
 			case REPRESENTATIVE:
-				DBTableItemPropertyCombo newProperty3 = new DBTableItemPropertyCombo(container.getParentTable(), (RepresentativeDBViewValue) value);
-				container.getViewRoot().onCellCreate(column, newProperty3.getValue());
+				DBTableItemPropertyCombo newProperty3 = new DBTableItemPropertyCombo(container.getParentTable(), row, (RepresentativeDBViewValue) value);
+				container.getViewRoot().onCellCreate(column, value, newProperty3.getValue());
 				return newProperty3;
 				
 			case NAMED_ACTION:
 				DBTableItemPropertyAction newProperty4 = new DBTableItemPropertyAction(container, column, row, (NamedActionDBViewValue) value);
-				container.getViewRoot().onCellCreate(column, newProperty4.getValue());
+				container.getViewRoot().onCellCreate(column, value, newProperty4.getValue());
 				return newProperty4;
 				
 			default:

@@ -3,8 +3,9 @@ package org.pikater.web.vaadin.gui.server.components.dbviews;
 import java.io.InputStream;
 import java.util.UUID;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBRow;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView.Column;
@@ -60,7 +61,7 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 		ExternalAgentTableDBView.Column specificColumn = (ExternalAgentTableDBView.Column) column;
 		if((specificColumn == Column.AGENT_CLASS) || (specificColumn == Column.DESCRIPTION)) 
@@ -69,7 +70,7 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 			tf_value.setDescription(tf_value.getValue());
 		}
 	}
-
+	
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 	{

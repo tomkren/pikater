@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.ComboBox;
@@ -12,7 +13,7 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 	private final ComboBox comboBox;
 	private final boolean readOnly;
 
-	public DBTableItemPropertyCombo(final DBTable parentTable, final RepresentativeDBViewValue valueWrapper)
+	public DBTableItemPropertyCombo(final DBTable parentTable, final AbstractTableRowDBView row, final RepresentativeDBViewValue valueWrapper)
 	{
 		this.readOnly = valueWrapper.isReadOnly();
 		
@@ -36,7 +37,7 @@ public class DBTableItemPropertyCombo implements Property<ComboBox>
 					valueWrapper.setValue((String) event.getProperty().getValue());
 					if(parentTable.isImmediate())
 					{
-						valueWrapper.commit();
+						valueWrapper.commit(row);
 					}
 				}
 			});

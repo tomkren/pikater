@@ -1,7 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.metadata.NumericalMetaDataTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 
@@ -56,10 +57,10 @@ public class NumericalMetadataDBViewRoot extends AbstractDBViewRoot<NumericalMet
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 	}
-
+	
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{

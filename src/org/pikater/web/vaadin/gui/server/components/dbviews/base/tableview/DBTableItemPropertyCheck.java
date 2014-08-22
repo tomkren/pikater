@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.CheckBox;
@@ -12,7 +13,7 @@ public class DBTableItemPropertyCheck implements Property<CheckBox>
 	private final CheckBox checkBox;
 	private final boolean readOnly;
 	
-	public DBTableItemPropertyCheck(final DBTable parentTable, final BooleanDBViewValue valueWrapper)
+	public DBTableItemPropertyCheck(final DBTable parentTable, final AbstractTableRowDBView row, final BooleanDBViewValue valueWrapper)
 	{
 		this.readOnly = valueWrapper.isReadOnly();
 		
@@ -31,7 +32,7 @@ public class DBTableItemPropertyCheck implements Property<CheckBox>
 					valueWrapper.setValue((Boolean) event.getProperty().getValue());
 					if(parentTable.isImmediate())
 					{
-						valueWrapper.commit();
+						valueWrapper.commit(row);
 					}
 				}
 			});

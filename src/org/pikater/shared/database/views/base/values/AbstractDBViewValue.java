@@ -1,5 +1,7 @@
 package org.pikater.shared.database.views.base.values;
 
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
+
 /**
  * Abstract parameterized read-only or editable value with a method to store
  * the changed value in database.
@@ -9,11 +11,13 @@ public abstract class AbstractDBViewValue<T extends Object>
 	private final DBViewValueType type;
 	private T lastCommitedValue;
 	private T currentValue;
+	private IOnValueCommitted onCommitted;
 	
 	public AbstractDBViewValue(DBViewValueType type, T value)
 	{
 		this.type = type;
 		this.currentValue = value;
+		this.onCommitted = null;
 		setLastCommitedValue();
 	}
 	
@@ -65,14 +69,26 @@ public abstract class AbstractDBViewValue<T extends Object>
 	/**
 	 * Stores the current value to database if updated.
 	 */
-	public void commit()
+	public void commit(AbstractTableRowDBView row)
 	{
 		if(isEdited())
 		{
 			commitEntities();
 			setLastCommitedValue();
+			if(onCommitted != null)
+			{
+				onCommitted.onCommitted(row, this);
+			}
 		}
 	}
+	
+	public void setOnCommitted(IOnValueCommitted onCommitted)
+	{
+		this.onCommitted = onCommitted;
+	}
+	
+	//-----------------------------------------------------------------
+	// PRIVATE INTERFACE
 	
 	/**
 	 * Sets this value as committed.
@@ -80,6 +96,19 @@ public abstract class AbstractDBViewValue<T extends Object>
 	private void setLastCommitedValue()
 	{
 		lastCommitedValue = getValue();
+	}
+	
+	//-----------------------------------------------------------------
+	// SPECIAL TYPES
+	
+	public static interface IOnValueCommitted
+	{
+		/**
+		 * Called when a value is edited and committed to database.
+		 * @param row
+		 * @param value
+		 */
+		void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value);
 	}
 	
 	//-----------------------------------------------------------------
