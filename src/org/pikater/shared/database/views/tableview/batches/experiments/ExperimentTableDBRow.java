@@ -1,11 +1,11 @@
 package org.pikater.shared.database.views.tableview.batches.experiments;
 
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
 
 public class ExperimentTableDBRow extends AbstractTableRowDBView {
@@ -44,14 +44,12 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 		 * And then custom actions.
 		 */
 		case BEST_MODEL:
-			// TODO: Implement best model retrieval
-			// DAOs.resultDAO.getByExperimentBestResult(experiment).getCreatedModel();
+		case RESULTS:
 			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
 			{	
 				@Override
 				public boolean isEnabled()
 				{
-					// no DB changes needed - this is completely GUI managed
 					return (experiment.getResults() != null) && !experiment.getResults().isEmpty();
 				}
 
@@ -62,25 +60,6 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 
 				@Override
 				protected void commitEntities()
-				{
-				}
-			};
-		case RESULTS:
-			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
-			{
-				@Override
-				public boolean isEnabled()
-				{
-					return (experiment.getResults() != null) && !experiment.getResults().isEmpty();
-				}
-				
-				@Override
-				protected void commitEntities()
-				{
-				}
-				
-				@Override
-				protected void updateEntities()
 				{
 				}
 			};

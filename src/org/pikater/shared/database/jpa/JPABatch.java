@@ -225,7 +225,8 @@ public class JPABatch extends JPAAbstractEntity{
 	
 	public boolean isBeingExecuted()
 	{
-		return getStatus().ordinal() >= JPABatchStatus.STARTED.ordinal();
+		return (getStatus().ordinal() >= JPABatchStatus.STARTED.ordinal()) &&
+				(getStatus().ordinal() <= JPABatchStatus.COMPUTING.ordinal());
 	}
 	
 	public boolean isFinishedOrFailed()

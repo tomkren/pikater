@@ -3,8 +3,9 @@ package org.pikater.web.vaadin.gui.server.components.dbviews;
 import java.io.InputStream;
 import java.util.UUID;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBView;
 import org.pikater.web.HttpContentType;
@@ -59,7 +60,7 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
 		if(specificColumn == ResultTableDBView.Column.NOTE)
@@ -68,7 +69,7 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 			tf_value.setDescription(tf_value.getValue());				
 		}
 	}
-
+	
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{
@@ -106,10 +107,7 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 				@Override
 				public String getFilename()
 				{
-					return String.format("%d-%s.agent",
-							rowView.getResult().getExperiment().getId(),
-							rowView.getResult().getCreatedModel().getAgentClassName()
-					);
+					return rowView.getResult().getCreatedModel().getFileName();
 				}
 			});
 			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));

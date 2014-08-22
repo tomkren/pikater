@@ -5,13 +5,13 @@ import java.util.EnumSet;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
 import org.pikater.shared.util.collections.CollectionUtils;
 
@@ -19,13 +19,11 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 {
 	private final JPAUser user;
 	private String newPlainTextPassword;
-	private Runnable onNewPasswordCommitted;
 	
 	public UsersTableDBRow(JPAUser user)
 	{
 		this.user = user;
 		this.newPlainTextPassword = null;
-		this.onNewPasswordCommitted = null;
 	}
 	
 	public JPAUser getUser()
@@ -38,11 +36,6 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 		return newPlainTextPassword;
 	}
 	
-	public void setOnNewPasswordCommitted(Runnable action)
-	{
-		this.onNewPasswordCommitted = action;
-	}
-
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
 	{
@@ -92,10 +85,6 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 						commitRow();
 					}
 				};
-				
-			/*
-			 * And finally, custom actions.
-			 */
 			case ADMIN:
 				return new BooleanDBViewValue(user.isAdmin())
 				{
@@ -112,6 +101,9 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					}
 				};
 				
+			/*
+			 * And finally, custom actions.
+			 */
 			case RESET_PSWD:
 				return new NamedActionDBViewValue("Reset")
 				{
@@ -131,7 +123,6 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					protected void commitEntities()
 					{
 						commitRow();
-						onNewPasswordCommitted.run(); // callback to GUI to send email - call only AFTER the new password is committed to DB 
 					}
 				};
 				

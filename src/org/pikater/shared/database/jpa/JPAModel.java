@@ -75,6 +75,11 @@ public class JPAModel extends JPAAbstractEntity{
 		return new ByteArrayInputStream(serializedAgent);
 	}
 	
+	public String getFileName()
+	{
+		return String.format("%d-%s.agent", creatorResult.getExperiment().getId(), creatorResult.getCreatedModel().getAgentClassName());
+	}
+	
 	@Transient
 	public static final String EntityName = "Model";
 	

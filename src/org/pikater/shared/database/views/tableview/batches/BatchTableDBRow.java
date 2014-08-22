@@ -5,13 +5,13 @@ import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.base.values.RepresentativeReadonlyDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
 
 public class BatchTableDBRow extends AbstractTableRowDBView
@@ -28,13 +28,11 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 	};
 	
 	private final JPABatch batch;
-	// private final Locale currentLocale;
 	private final boolean adminMode;
 
 	public BatchTableDBRow(JPABatch batch, boolean adminMode)
 	{
 		this.batch = batch;
-		// this.currentLocale = LocaleUtils.getDefaultLocale();
 		this.adminMode = adminMode;
 	}
 	
@@ -61,13 +59,12 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 		case MAX_PRIORITY:
 			if(adminMode)
 			{
-				// TODO: jirka - send info to pikater
 				return new RepresentativeDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority()))
 				{
 					@Override
 					public boolean isReadOnly()
 					{
-						return batch.isBeingExecuted();
+						return !batch.isBeingExecuted();
 					}
 					
 					@Override
