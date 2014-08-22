@@ -95,7 +95,7 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 						@Override
 						public void abortTask()
 						{
-							underlyingTask.abortVisualization();
+							underlyingTask.abort();
 						}
 
 						@Override

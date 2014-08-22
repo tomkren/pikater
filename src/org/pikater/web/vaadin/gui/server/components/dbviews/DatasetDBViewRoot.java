@@ -131,7 +131,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 						@Override
 						public void abortTask()
 						{
-							underlyingTask.abortVisualization();
+							underlyingTask.abort();
 						}
 
 						@Override

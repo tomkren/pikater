@@ -19,7 +19,6 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 	private static final Set<String> allowedTotalPriorities = new LinkedHashSet<String>()
 	{
 		private static final long serialVersionUID = -7303124181497778648L;
-
 		{
 			for(int i = 1; i < 100; i++)
 			{
@@ -62,6 +61,7 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 		case MAX_PRIORITY:
 			if(adminMode)
 			{
+				// TODO: jirka - send info to pikater
 				return new RepresentativeDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority()))
 				{
 					@Override
