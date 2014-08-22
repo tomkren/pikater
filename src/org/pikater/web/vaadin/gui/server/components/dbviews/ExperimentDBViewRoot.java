@@ -5,8 +5,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.jpa.JPAModel;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBView;
 import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
@@ -62,10 +65,10 @@ public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBVi
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 	}
-
+	
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{
@@ -74,7 +77,40 @@ public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBVi
 		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
 		if(specificColumn == ExperimentTableDBView.Column.BEST_MODEL)
 		{
-			// TODO: talk with Peter about this
+			final JPAModel modelToServe = DAOs.resultDAO.getByExperimentBestResult(specificRow.getExperiment()).getCreatedModel();
+			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			{
+				@Override
+				public ResourceExpiration getLifeSpan()
+				{
+					return ResourceExpiration.ON_FIRST_PICKUP;
+				}
+
+				@Override
+				public InputStream getStream() throws Throwable
+				{
+					return modelToServe.getInputStream();
+				}
+
+				@Override
+				public long getSize()
+				{
+					return modelToServe.getSerializedAgent().length;
+				}
+
+				@Override
+				public String getMimeType()
+				{
+					return HttpContentType.TEXT_CSV.toString();
+				}
+
+				@Override
+				public String getFilename()
+				{
+					return modelToServe.getFileName();
+				}
+			});
+			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
 		}
 		else if(specificColumn == ExperimentTableDBView.Column.RESULTS)
 		{
