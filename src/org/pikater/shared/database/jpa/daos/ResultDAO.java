@@ -58,6 +58,26 @@ public class ResultDAO extends AbstractDAO {
 	}
 	
 	/**
+	 * Returns the Result for Experiment with the minimal ErrorRate
+	 * @param experiment {@link JPAExperiment} for which we want get the best result
+	 * @return {@link JPAResult} with minimal error rate or null if no results available
+	 */
+	public JPAResult getByExperimentBestResult(JPAExperiment experiment){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return em
+				.createNamedQuery("Result.getByExperimentErrorAscending", JPAResult.class)
+				.setParameter("experiment", experiment)
+				.setMaxResults(1)//fix exception, when more than one result is returned
+				.getSingleResult();
+		}catch(Exception e){
+			return null;
+		}finally{
+			em.close();
+		}
+	}
+	
+	/**
 	 * Persists a model for the specific result
 	 * <p>
 	 * The ID of the result is held by the {@link Model} object 

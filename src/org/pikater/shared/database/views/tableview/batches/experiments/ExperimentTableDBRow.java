@@ -1,6 +1,7 @@
 package org.pikater.shared.database.views.tableview.batches.experiments;
 
 import org.pikater.shared.database.jpa.JPAExperiment;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
@@ -45,6 +46,7 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 		 */
 		case BEST_MODEL:
 			//TODO: Implement best model retrieval
+			//DAOs.resultDAO.getByExperimentBestResult(experiment).getCreatedModel();
 			return new NamedActionDBViewValue("Download") {	
 
 				@Override

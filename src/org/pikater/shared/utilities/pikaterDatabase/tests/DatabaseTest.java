@@ -39,9 +39,10 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
+		listBestResult();
 		listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
-		exportResults();
+		//exportResults();
 		//listVisibleAndApprovedDatasets();
 		//removeResult();
 		//listDataSetsWithResults();
@@ -57,6 +58,19 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void listBestResult() {
+		JPAExperiment exp=DAOs.experimentDAO.getByID(116652, EmptyResultAction.NULL);
+		JPAResult result = DAOs.resultDAO.getByExperimentBestResult(exp);
+		p("Best result for experiment ID "+exp.getId());
+		if(result==null){
+			p("no results yet");
+		}else{
+			p(result.getErrorRate()+" "+result.getCreatedModel());
+		}
+		p("----------------");
+		
+	}
+
 	private void listUserUploadedDatasets(){
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllUserUploaded();
 		p("No. of found DataSets: "+dslos.size());
