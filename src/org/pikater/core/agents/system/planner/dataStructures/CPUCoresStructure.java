@@ -4,6 +4,7 @@ import jade.core.AID;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,8 +15,10 @@ import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class CPUCoresStructure {
-	private Map <CPUCore, TaskToSolve> busyCores = new HashMap<CPUCore, TaskToSolve>();
-	private List<CPUCore> untappedCores = new ArrayList<CPUCore>();
+	private Map <CPUCore, TaskToSolve> busyCores =
+			new HashMap<CPUCore, TaskToSolve>();
+	private List<CPUCore> untappedCores =
+			new ArrayList<CPUCore>();
 	
 	public void initNewCPUCores(Agent_Planner agent,
 			List<AID> slaveServers) {
@@ -35,9 +38,37 @@ public class CPUCoresStructure {
 		}
 		
 	}
-	public void deleteDeadCPUCores(Agent_Planner agent,
-			List<AID> slaveServers) {
-		//TODO:
+	public Set<TaskToSolve> deleteDeadCPUCores(Agent_Planner agent,
+			List<AID> deadSlaveServers) {
+		
+		List<CPUCore> busyCoresKeys =
+				new ArrayList<CPUCore>(this.busyCores.keySet());
+		
+		// delete untapped cores
+		for (CPUCore untappedCoreI : untappedCores) {
+			AID aidI = untappedCoreI.getAID();
+			
+			if (deadSlaveServers.contains(aidI)) {
+				this.busyCores.remove(untappedCoreI);
+			}
+		}
+		
+		Set<TaskToSolve> notFinishedTasks = new HashSet<TaskToSolve>();
+		
+		// delete busy cores
+		for (CPUCore busyCpuCoreI : busyCoresKeys) {
+			AID aidI = busyCpuCoreI.getAID();
+			
+			if (deadSlaveServers.contains(aidI)) {
+
+				TaskToSolve taskToSolveI = this.busyCores.get(busyCpuCoreI);
+				notFinishedTasks.add(taskToSolveI);
+				
+				this.busyCores.remove(busyCpuCoreI);
+			}
+		}
+		
+		return notFinishedTasks;
 	}
 	
 	
@@ -76,7 +107,7 @@ public class CPUCoresStructure {
 	}
 	
 	public CPUCore getTheBestCPUCoreForTask(TaskToSolve task,
-			Set<AID> dataLocations) {
+			DataFiles dataLocations) {
 		
 		if (task == null) {
 			throw new IllegalArgumentException("Argument task can't be null");
@@ -88,9 +119,13 @@ public class CPUCoresStructure {
 		
 		// select first CPU where is one needed file 
 		for (CPUCore cpuCoreI : untappedCores) {
-			AID aid = cpuCoreI.getAID();
-			if (dataLocations.contains(aid)) {
-				return cpuCoreI;
+			AID aidCPU = cpuCoreI.getAID();
+			for (DataFile dataFileI : dataLocations.getDataFiles()) {
+				Set<AID> aidFileLocations = dataFileI.getLocations();
+			
+				if (aidFileLocations.contains(aidCPU)) {
+					return cpuCoreI;
+				}
 			}
 		}
 		
@@ -100,9 +135,9 @@ public class CPUCoresStructure {
 	public CPUCore getCPUCoreOfComputingTask(Task task) {
 		
 		List<CPUCore> cpuCores = new ArrayList<CPUCore>();
-		cpuCores.addAll(busyCores.keySet());
+		cpuCores.addAll(this.busyCores.keySet());
 		for (CPUCore cpuCoreI : cpuCores) {
-			TaskToSolve taskToSolveI = busyCores.get(cpuCoreI);
+			TaskToSolve taskToSolveI = this.busyCores.get(cpuCoreI);
 			Task taskI = taskToSolveI.getTask();
 			
 			if (taskI.equalsTask(task)) {
@@ -115,12 +150,13 @@ public class CPUCoresStructure {
 	public TaskToSolve getTaskToSolveOfComputingTask(Task task) {
 		
 		List<CPUCore> cpuCores = new ArrayList<CPUCore>();
-		cpuCores.addAll(busyCores.keySet());
+		cpuCores.addAll(this.busyCores.keySet());
 		for (CPUCore cpuCoreI : cpuCores) {
-			TaskToSolve taskToSolveI = busyCores.get(cpuCoreI);
+			TaskToSolve taskToSolveI = this.busyCores.get(cpuCoreI);
 			Task taskI = taskToSolveI.getTask();
 			
 			if (taskI.equalsTask(task)) {
+				
 				return taskToSolveI;
 			}
 		}
@@ -129,7 +165,7 @@ public class CPUCoresStructure {
 	
 	public TaskToSolve getComputingTask(int taskID) {
 	
-		for (TaskToSolve taskToSolveI : busyCores.values()) {
+		for (TaskToSolve taskToSolveI : this.busyCores.values()) {
 			if (taskToSolveI.getTask().getBatchID() == taskID) {
 				return taskToSolveI;
 			}
@@ -138,9 +174,14 @@ public class CPUCoresStructure {
 	}
 
 	public int getNumOfBusyCores() {
-		return busyCores.size();
+		return this.busyCores.size();
 	}
 	public int getNumOfUntappedCores() {
-		return untappedCores.size();
+		return this.untappedCores.size();
 	}
+	
+	public boolean isExistingUntappedCore() {
+		return getNumOfUntappedCores() > 0;
+	}
+	
 }

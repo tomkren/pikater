@@ -47,6 +47,8 @@ import org.pikater.core.ontology.subtrees.batch.LoadBatch;
 import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
+import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
+import org.pikater.core.ontology.subtrees.dataset.GetAllDatasetInfo;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
 import org.pikater.core.ontology.subtrees.experiment.SavedExperiment;
@@ -535,6 +537,48 @@ public class DataManagerService extends FIPAService {
 		}
 	}
 
+	public static DatasetsInfo getAllDatasetInfo(PikaterAgent agent) {
+
+		if (agent == null) {
+			throw new IllegalArgumentException("Argument agent can't be null");
+		}
+
+		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		Ontology ontology = DataOntology.getInstance();
+
+		ACLMessage getAllDatasetInfoMsg = new ACLMessage(ACLMessage.REQUEST);
+		getAllDatasetInfoMsg.addReceiver(receiver);
+		getAllDatasetInfoMsg.setSender(agent.getAID());
+		getAllDatasetInfoMsg.setLanguage(agent.getCodec().getName());
+		getAllDatasetInfoMsg.setOntology(ontology.getName());
+
+		GetAllDatasetInfo getAllDatasetInfo = new GetAllDatasetInfo();
+
+		Action action = new Action(agent.getAID(), getAllDatasetInfo);
+
+		try {
+			agent.getContentManager().fillContent(getAllDatasetInfoMsg, action);
+			ACLMessage datasetInfoMsg = FIPAService.doFipaRequestClient(agent,
+					getAllDatasetInfoMsg);
+
+			Result replyResult = (Result) agent.getContentManager()
+					.extractContent(datasetInfoMsg);
+
+			DatasetsInfo datasetsInfo = (DatasetsInfo) replyResult.getValue();
+
+			return datasetsInfo;
+
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (Codec.CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		}
+
+		return null;
+	}
+	
 	public static AgentInfo getAgentInfo(PikaterAgent agent,
 			String agentClassName) {
 

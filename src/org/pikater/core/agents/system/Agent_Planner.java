@@ -29,6 +29,7 @@ import org.pikater.core.agents.system.metadata.MetadataService;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
+import org.pikater.core.agents.system.planner.dataStructures.DataFiles;
 import org.pikater.core.agents.system.planner.dataStructures.DataRegistry;
 import org.pikater.core.agents.system.planner.dataStructures.Lock;
 import org.pikater.core.agents.system.planner.dataStructures.SlaveServersStructure;
@@ -139,6 +140,7 @@ public class Agent_Planner extends PikaterAgent {
 
 		});
 
+		//dataRegistry.updateDataSets();
 	}
 	
 	protected ACLMessage respondToExecuteTask(ACLMessage request, Action a) {
@@ -147,6 +149,7 @@ public class Agent_Planner extends PikaterAgent {
 
 		TaskToSolve taskToSolve = new TaskToSolve(
 				executeTask.getTask(), a, request);
+		taskToSolve.setSendResultToManager(true);
 		
 		try {
 			lock.lock();
@@ -221,6 +224,8 @@ public class Agent_Planner extends PikaterAgent {
 				getCPUCoreOfComputingTask(finishedTask);
 		TaskToSolve taskToSolve = cpuCoresStructure.
 				getTaskToSolveOfComputingTask(finishedTask);
+		// update task - result
+		taskToSolve.setTask(finishedTask);
 
 		try {
 			lock.lock();
@@ -229,7 +234,7 @@ public class Agent_Planner extends PikaterAgent {
 		}
 			cpuCoresStructure.setCPUCoreAsFree(cpuCore);
 			String node = nodeName(cpuCore.getAID());
-			dataRegistry.saveDataLocation(finishedTask, cpuCore.getAID());
+			dataRegistry.saveDataLocation(taskToSolve, cpuCore.getAID());
 			saveDataToDB(finishedTask, node);
 			plan();
 		lock.unlock();
@@ -248,7 +253,10 @@ public class Agent_Planner extends PikaterAgent {
 		} catch (OntologyException e) {
 			logError(e.getMessage(), e);
 		}
-		send(msgToManager);
+		
+		if (taskToSolve.isSendResultToManager()) {
+			send(msgToManager);
+		}
 		/////
 		
 		//ACLMessage reply = finishedTaskMsg.createReply();
@@ -329,15 +337,16 @@ public class Agent_Planner extends PikaterAgent {
 	}
 	
 	private void plan() {
+
+		// test if some task is available
+		if (! waitingToStartComputingTasks.isExistingTaskToSolve()) {
+			return;
+		}
 		
 		// choose one task(with the highest priority)
 		TaskToSolve taskToSolve = this.waitingToStartComputingTasks.
 				removeTaskWithHighestPriority();
 		
-		// test if some task is available
-		if (taskToSolve == null) {
-			return;
-		}
 		Task task = taskToSolve.getTask();
 		task.setStart(Agent_DataManager.getCurrentPikaterDateString());
 		
@@ -346,20 +355,49 @@ public class Agent_Planner extends PikaterAgent {
 				slaveServersStructure.checkForNewSlaveServers(this);
 		List<AID> deadSlaveServers =
 				slaveServersStructure.checkForDeadSlaveServers(this);
+		// initialization of new CPU Cores
 		cpuCoresStructure.initNewCPUCores(this, newSlaveServers);
-		cpuCoresStructure.deleteDeadCPUCores(this, deadSlaveServers);
+		// removing dead CPU Cores
+		Set<TaskToSolve> notFinishedTasks =
+				cpuCoresStructure.deleteDeadCPUCores(this, deadSlaveServers);
+		
+		// add back to queue all not finished Tasks and restart function plan
+		if (! notFinishedTasks.isEmpty()) {
+			log("Some SlaveServer is dead");
+			waitingToStartComputingTasks.addTasks(notFinishedTasks);
+			waitingToStartComputingTasks.addTask(taskToSolve);
+			plan();
+			return;
+		}
 
-		// choose one CPU core (data-transfer friendly)
-		Set<AID> dataLocations = dataRegistry.
+
+		//delete CPU cores from dataRegistry
+		dataRegistry.deleteDeadCPUCores(deadSlaveServers);
+		dataRegistry.updateDataSets();
+		// get location of all files needed to solve the Task
+		DataFiles dataLocations = dataRegistry.
 				getDataLocations(taskToSolve);
-		CPUCore selectedCore = cpuCoresStructure.
-				getTheBestCPUCoreForTask(taskToSolve, dataLocations);
+
+		// add back to queue all needed Tasks and restart function plan
+		if (! dataLocations.existsAllDataFiles()) {
+			log("All Data doesn't exists");
+			Set<TaskToSolve> taskToRestart = dataLocations.tasksToRestart();
+			waitingToStartComputingTasks.addTasks(taskToRestart);
+			
+			taskToSolve.setDownPriority();
+			waitingToStartComputingTasks.addTask(taskToSolve);
+			plan();
+			return;
+		}
 
 		// test if some core is available
-		if (selectedCore == null) {
+		if (! cpuCoresStructure.isExistingUntappedCore()) {
 			this.waitingToStartComputingTasks.addTask(taskToSolve);
 			return;
 		}
+		// select the best core
+		CPUCore selectedCore = cpuCoresStructure.
+				getTheBestCPUCoreForTask(taskToSolve, dataLocations);
 		
 		// set CPU core as busy
 		this.cpuCoresStructure.setCPUCoreAsBusy(selectedCore, taskToSolve);
