@@ -1,10 +1,15 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import javax.mail.MessagingException;
+
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBRow;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
+import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.utilities.mailing.Mailing;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 
@@ -51,17 +56,46 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 		UsersTableDBView.Column specificColumn = (UsersTableDBView.Column) column;
 		if(specificColumn == Column.MAX_PRIORITY)
 		{
 			component.setDescription("The higher, the better.");
 		}
+		else if(specificColumn == Column.RESET_PSWD)
+		{
+			value.setOnCommitted(new AbstractDBViewValue.IOnValueCommitted()
+			{
+				/*
+				 * This action is called after the new password is committed to DB.
+				 */
+				@Override
+				public void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value)
+				{
+					UsersTableDBRow specificRow = (UsersTableDBRow) row;
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append("Your password has been reset. The new password is:");
+					sb.append("\r\n");
+					sb.append(specificRow.getNewPlainTextPassword());
+					
+					try
+					{
+						Mailing.sendEmail(specificRow.getUser().getEmail(), "Password reset", sb.toString());
+					}
+					catch (MessagingException e)
+					{
+						// TODO: sending emails should be implemented using quartz and stored in database if not executed
+						PikaterLogger.logThrowable(String.format("Could not send a password reset notification to '%s':", specificRow.getUser().getEmail()), e);
+					}
+				}
+			});
+		}
 	}
-
+	
 	@Override
-	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
+	public void approveAction(final ITableColumn column, final AbstractTableRowDBView row, final Runnable action)
 	{
 		final UsersTableDBRow specificRow = (UsersTableDBRow) row;
 		
@@ -73,20 +107,6 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 				@Override
 				public boolean handleResult(Object[] args)
 				{
-					specificRow.setOnNewPasswordCommitted(new Runnable()
-					{
-						/*
-						 * This action is called when the password is committed to DB.
-						 */
-						
-						@Override
-						public void run()
-						{
-							// TODO: send email
-							specificRow.getNewPlainTextPassword();
-						}
-					});
-					
 					// action is approved, perform it:
 					action.run();
 					return true;
