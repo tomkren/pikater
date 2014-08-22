@@ -1,5 +1,6 @@
 package org.pikater.shared.database.jpa;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -217,11 +218,30 @@ public class JPABatch extends JPAAbstractEntity{
 		this.setStatus(JPABatchStatus.valueOf(status));
 	}
 	
-	public boolean isScheduled()
+	public boolean isDesignatedForExecution()
 	{
 		return getStatus() != JPABatchStatus.CREATED;
 	}
-
+	
+	public boolean isBeingExecuted()
+	{
+		return getStatus().ordinal() >= JPABatchStatus.STARTED.ordinal();
+	}
+	
+	public boolean isFinishedOrFailed()
+	{
+		return (getStatus() == JPABatchStatus.FINISHED) || (getStatus() == JPABatchStatus.FAILED);
+	}
+	
+	/**
+	 * Exports the results of this batch into the given temporary file (CSV format).
+	 * @param file
+	 */
+	public void toCSV(File file)
+	{
+		// TODO:
+	}
+	
 	@Transient
 	public static final String EntityName = "Batch";
 	
