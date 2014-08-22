@@ -16,7 +16,6 @@ import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.views.base.SortOrder;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 
 public class UserDAO extends AbstractDAO {
@@ -105,6 +104,16 @@ public class UserDAO extends AbstractDAO {
 	
 	public List<JPAUser> getByLogin(String login) {
 		return getByTypedNamedQuery("User.getByLogin", "login", login);
+	}
+	
+	public JPAUser getByLoginAndPassword(String login, String password)
+	{
+		List<JPAUser> usersByLogin = getByLogin(login);
+		for(JPAUser user : usersByLogin)
+		{
+			
+		}
+		return null;
 	}
 	
 	public List<JPAUser> getByRole(JPARole role) {

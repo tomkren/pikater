@@ -83,15 +83,16 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					@Override
 					protected void updateEntities(Boolean newValue)
 					{
-						// TODO:
+						user.setAdmin(newValue);
 					}
-					
+						
 					@Override
 					protected void commitEntities()
 					{
 						commitRow();
 					}
 				};
+				
 			case RESET_PSWD:
 				return new NamedActionDBViewValue("Reset")
 				{
@@ -113,6 +114,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 						commitRow();
 					}
 				};
+				
 			case DELETE:
 				return new NamedActionDBViewValue("Delete")
 				{
