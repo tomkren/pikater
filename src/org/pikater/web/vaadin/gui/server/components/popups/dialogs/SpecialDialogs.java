@@ -29,7 +29,7 @@ public class SpecialDialogs extends DialogCommons
 						@Override
 						public boolean handleResult(Object[] args)
 						{
-							DAOs.userDAO.storeEntity(JPAUser.registerANewAccountForGUI(
+							DAOs.userDAO.storeEntity(JPAUser.createAccountForGUI(
 									(String) args[0],
 									(String) args[1],
 									(String) args[2]

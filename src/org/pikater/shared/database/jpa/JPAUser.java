@@ -83,7 +83,7 @@ public class JPAUser extends JPAAbstractEntity{
 	 * @param email
 	 * @return
 	 */
-	public static JPAUser registerANewAccountForGUI(String login, String password, String email)
+	public static JPAUser createAccountForGUI(String login, String password, String email)
 	{
 		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.USER), 0, JPAUserStatus.PASSIVE);
 	}
@@ -98,7 +98,7 @@ public class JPAUser extends JPAAbstractEntity{
 	 * @param email
 	 * @param role
 	 */
-	public static JPAUser registerANewAccountForDBInit(String login, String password, String email, JPARole role)
+	public static JPAUser createAccountForDBInit(String login, String password, String email, JPARole role)
 	{
 		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN), 9, JPAUserStatus.ACTIVE);
 	}

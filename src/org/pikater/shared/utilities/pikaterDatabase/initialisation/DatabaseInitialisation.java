@@ -174,33 +174,33 @@ public class DatabaseInitialisation {
 		DAOs.roleDAO.storeEntity(a);
 		
 		
-		JPAUser u0=JPAUser.registerANewAccountForDBInit("zombie","xxx", "invalid@mail.com", u);
+		JPAUser u0=JPAUser.createAccountForDBInit("zombie","xxx", "invalid@mail.com", u);
 		u0.setPriorityMax(-1);
 		u0.setStatus(JPAUserStatus.PASSIVE);
 		DAOs.userDAO.storeEntity(u0);
 		
 		
-		JPAUser u1=JPAUser.registerANewAccountForDBInit("stepan","123", "bc.stepan.balcar@gmail.com", a);
+		JPAUser u1=JPAUser.createAccountForDBInit("stepan","123", "bc.stepan.balcar@gmail.com", a);
 		DAOs.userDAO.storeEntity(u1);
 		
 		
-		JPAUser u2=JPAUser.registerANewAccountForDBInit("kj","123", "kj@gmail.com", a);
+		JPAUser u2=JPAUser.createAccountForDBInit("kj","123", "kj@gmail.com", a);
 		DAOs.userDAO.storeEntity(u2);
 	
 		
-		JPAUser u3=JPAUser.registerANewAccountForDBInit("sj","123", "kukurka@gmail.com", a);
+		JPAUser u3=JPAUser.createAccountForDBInit("sj","123", "kukurka@gmail.com", a);
 		DAOs.userDAO.storeEntity(u3);
 		
 		
-		JPAUser u4=JPAUser.registerANewAccountForDBInit("sp","123", "sp@gmail.com", a);
+		JPAUser u4=JPAUser.createAccountForDBInit("sp","123", "sp@gmail.com", a);
 		DAOs.userDAO.storeEntity(u4);
 		
 		
-		JPAUser u5=JPAUser.registerANewAccountForDBInit("martin", "123", "Martin.Pilat@mff.cuni.cz", u);
+		JPAUser u5=JPAUser.createAccountForDBInit("martin", "123", "Martin.Pilat@mff.cuni.cz", u);
 		DAOs.userDAO.storeEntity(u5);
 		
 		
-		JPAUser u6=JPAUser.registerANewAccountForDBInit("klara", "123", "peskova@braille.mff.cuni.cz", u);
+		JPAUser u6=JPAUser.createAccountForDBInit("klara", "123", "peskova@braille.mff.cuni.cz", u);
 		DAOs.userDAO.storeEntity(u6);
 		
 		
