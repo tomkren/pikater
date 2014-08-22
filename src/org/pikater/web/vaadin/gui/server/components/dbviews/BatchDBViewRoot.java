@@ -6,8 +6,9 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.logging.PikaterLogger;
@@ -75,7 +76,7 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
 		if(specificColumn == AbstractBatchTableDBView.Column.NOTE)
@@ -83,8 +84,35 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 			TextField tf_value = (TextField) component;
 			tf_value.setDescription(tf_value.getValue());
 		}
+		else if(specificColumn == AbstractBatchTableDBView.Column.MAX_PRIORITY)
+		{
+			value.setOnCommitted(new AbstractDBViewValue.IOnValueCommitted()
+			{
+				@Override
+				public void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value)
+				{
+					final BatchTableDBRow specificRow = (BatchTableDBRow) row;
+					if(ServerConfigurationInterface.getConfig().coreEnabled)
+					{
+						try
+						{
+							WebToCoreEntryPoint.notify_batchPriorityChanged(specificRow.getBatch().getId());
+						}
+						catch (Throwable e)
+						{
+							PikaterLogger.logThrowable(String.format("Could not notify core about a priority change of batch '%d':", specificRow.getBatch().getId()), e);
+							MyNotifications.showApplicationError();
+						}
+					}
+					else
+					{
+						GeneralDialogs.info("Core not available", "Priority was changed but it won't be effective.");
+					}
+				}
+			});
+		}
 	}
-
+	
 	@Override
 	public void approveAction(ITableColumn column, final AbstractTableRowDBView row, Runnable action)
 	{
