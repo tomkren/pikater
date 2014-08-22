@@ -41,7 +41,7 @@ public class DatabaseTest {
 		testDBConnection();
 		listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
-		//exportResults();
+		exportResults();
 		//listVisibleAndApprovedDatasets();
 		//removeResult();
 		//listDataSetsWithResults();
@@ -77,9 +77,9 @@ public class DatabaseTest {
 	}
 
 	private void exportResults() {
-		JPABatch batch=DAOs.batchDAO.getByID(87801, EmptyResultAction.NULL);
+		//JPABatch batch=DAOs.batchDAO.getByID(87801, EmptyResultAction.NULL);
 		ResultExporter exp=new ResultExporter(System.err);
-		exp.export(batch);
+		exp.export(117301);
 		exp.flush();
 	}
 

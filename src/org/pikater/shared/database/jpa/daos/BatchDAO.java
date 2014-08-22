@@ -320,6 +320,18 @@ public class BatchDAO extends AbstractDAO {
 			em.close();
 		}
 	}
+	
+	public List<Object[]> getByIDwithResults(int batchID){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return em
+					.createNamedQuery("Batch.getByIDwithResult",Object[].class)
+					.setParameter("batchID", batchID)
+					.getResultList();
+		}finally{
+			em.close();
+		}
+	}
 
 
 	public void updateEntity(JPABatch changedEntity){

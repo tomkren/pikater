@@ -33,7 +33,8 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner"),
 	@NamedQuery(name="Batch.getByOwner.count",query="select count(b) from JPABatch b where b.owner=:owner"),
 	@NamedQuery(name="Batch.getByOwnerAndStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status=:status"),
-	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status")
+	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status"),
+	@NamedQuery(name="Batch.getByIDwithResult",query="select b,e,r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results")
 })
 public class JPABatch extends JPAAbstractEntity{
 	
