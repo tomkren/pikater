@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +26,7 @@ import org.pikater.shared.database.exceptions.AttributeActionNotApplicableExcept
 import org.pikater.shared.database.exceptions.AttributeNameNotFoundException;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
 
 @Entity	
@@ -66,6 +69,8 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	private long size;
 	private boolean approved;
 	private boolean visible;
+	@Enumerated(EnumType.STRING)
+	private JPADatasetSource source;
 	
 	/**Constructor for JPA compatibility**/
 	public JPADataSetLO(){
@@ -159,6 +164,19 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+	
+	public JPADatasetSource getSource() {
+		return source;
+	}
+	
+	public void setSource(JPADatasetSource source) {
+		this.source = source;
+	}
+	
+	public void setSource(String source){
+		this.source=JPADatasetSource.valueOf(source);
+	}
+	
 	@Transient
 	public static final String EntityName = "DataSetLO";
 	@Override
@@ -172,6 +190,8 @@ public class JPADataSetLO extends JPAAbstractEntity{
 		this.hash=updateValues.getHash();
 		this.owner=updateValues.getOwner();	
 		this.approved=updateValues.isApproved();
+		this.visible=updateValues.isVisible();
+		this.source=updateValues.getSource();
 	}
 	
 	
@@ -221,5 +241,9 @@ public class JPADataSetLO extends JPAAbstractEntity{
 	public String getFileName()
 	{
 		return DAOs.filemappingDAO.getSingleExternalFilename(this);
+	}
+	
+	public boolean hasComputedMetadata(){
+		return (this.globalMetaData!=null)&&(this.attributeMetaData!=null);
 	}
 }

@@ -75,7 +75,7 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 		DSVisOneResult result = new DSVisOneResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		try
 		{
-			if((dataset.getGlobalMetaData()==null) || (dataset.getAttributeMetaData()==null))
+			if(!dataset.hasComputedMetadata())
 			{
 				throw new MetadataNotPresentException();
 			}

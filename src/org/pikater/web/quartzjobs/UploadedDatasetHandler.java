@@ -8,6 +8,7 @@ import org.pikater.shared.database.exceptions.DataSetConverterCellException;
 import org.pikater.shared.database.exceptions.DataSetConverterException;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.util.DataSetConverter;
 import org.pikater.shared.database.util.DataSetConverter.InputType;
 import org.pikater.shared.logging.PikaterLogger;
@@ -62,7 +63,7 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		try
 		{
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
-			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId());
+			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId(),JPADatasetSource.USER_UPLOAD);
 			
 			
 			if(ServerConfigurationInterface.getConfig().coreEnabled)

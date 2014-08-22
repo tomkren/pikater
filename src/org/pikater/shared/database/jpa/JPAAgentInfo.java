@@ -1,6 +1,8 @@
 package org.pikater.shared.database.jpa;
 
 import java.util.Date;
+
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,6 +35,8 @@ public class JPAAgentInfo extends JPAAbstractEntity{
 	private String agentClass;
 	private String ontologyClass;
 	private String description;
+	@Nullable
+	private JPAUser owner;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationTime;
 	
@@ -69,6 +73,12 @@ public class JPAAgentInfo extends JPAAbstractEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public JPAUser getOwner() {
+		return owner;
+	}
+	public void setOwner(JPAUser owner) {
+		this.owner = owner;
+	}
 	public Date getCreationTime() {
 		return creationTime;
 	}
@@ -87,6 +97,7 @@ public class JPAAgentInfo extends JPAAbstractEntity{
 		this.description=updateValues.getDescription();
 		this.name=updateValues.getName();
 		this.creationTime=updateValues.getCreationTime();
+		this.owner=updateValues.getOwner();
 	}
 	
 }

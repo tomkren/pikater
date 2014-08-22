@@ -12,6 +12,7 @@ import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
 public class WebToCoreEntryPoint {
 
@@ -97,7 +98,7 @@ public class WebToCoreEntryPoint {
 	
 	private static void uploadDataset(String filename, int userID, String description) throws IOException{
 		
-		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID);
+		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID,JPADatasetSource.USER_UPLOAD);
 		System.out.println("Dataset uploaded with ID : "+id);
 		System.out.println("Demanding metadata computation...");
 		try{

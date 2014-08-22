@@ -159,7 +159,7 @@ public class DatabaseTest {
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.ASCENDING);
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+" ext: "+DAOs.filemappingDAO.getSingleExternalFilename(dslo)+" int: "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+(dslo.getGlobalMetaData()!=null ? dslo.getGlobalMetaData().getNumberofInstances():-1));
+			p(dslo.getId()+". from "+dslo.getSource().name()+" ext: "+DAOs.filemappingDAO.getSingleExternalFilename(dslo)+" int: "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+(dslo.getGlobalMetaData()!=null ? dslo.getGlobalMetaData().getNumberofInstances():-1));
 		}
 		p("------------");
 		p("");

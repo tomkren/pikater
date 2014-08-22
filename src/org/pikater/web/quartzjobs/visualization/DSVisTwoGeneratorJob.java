@@ -79,11 +79,11 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 			{
 				throw new IllegalArgumentException("Identical datasets were received for comparison.");
 			}
-			else if((dataset1.getGlobalMetaData() == null) || (dataset1.getAttributeMetaData() == null))
+			else if(!dataset1.hasComputedMetadata())
 			{
 				throw new MetadataNotPresentException(dataset1.getDescription());
 			}
-			else if((dataset2.getGlobalMetaData() == null) || (dataset2.getAttributeMetaData() == null))
+			else if(!dataset2.hasComputedMetadata())
 			{
 				throw new MetadataNotPresentException(dataset2.getDescription());
 			}
