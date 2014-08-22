@@ -1,14 +1,15 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
@@ -75,14 +76,21 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
 		if(specificColumn == AbstractBatchTableDBView.Column.ABORT)
 		{
-			try
+			if(ServerConfigurationInterface.getConfig().coreEnabled)
 			{
-				WebToCoreEntryPoint.notify_killBatch(specificRow.getBatch().getId());
+				try
+				{
+					WebToCoreEntryPoint.notify_killBatch(specificRow.getBatch().getId());
+				}
+				catch (Throwable e)
+				{
+					PikaterLogger.logThrowable(String.format("Could not kill batch '%d':", specificRow.getBatch().getId()), e);
+					MyNotifications.showApplicationError();
+				}
 			}
-			catch (PikaterGatewayException e)
+			else
 			{
-				PikaterLogger.logThrowable(String.format("Could not kill batch with id '%d'.", specificRow.getBatch().getId()), e);
-				MyNotifications.showError("Failed", "Batch could not be killed.");
+				GeneralDialogs.info("Core not available at this moment", "No experiment can be aborted.");
 			}
 		}
 		else if(specificColumn == AbstractBatchTableDBView.Column.RESULTS)

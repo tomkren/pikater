@@ -38,11 +38,12 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
+		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
 		//exportResults();
 		//listVisibleAndApprovedDatasets();
 		//removeResult();
 		//listDataSetsWithResults();
-		listDataSets();
+		//listDataSets();
 		//addExperiment();
 		//listExternalAgents();
 		//listDataSetWithExclusion();
@@ -54,6 +55,10 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void testModelRemoval() {
+		DAOs.modelDAO.removeOldModels(1);
+	}
+
 	private void testDBConnection() {
 		System.out.println("Database connected: "+MyPGConnection.isConnectionToCurrentPGDBEstablished());		
 	}
@@ -159,7 +164,7 @@ public class DatabaseTest {
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.ASCENDING);
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+" ext: "+DAOs.filemappingDAO.getSingleExternalFilename(dslo)+" int: "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+(dslo.getGlobalMetaData()!=null ? dslo.getGlobalMetaData().getNumberofInstances():-1));
+			p(dslo.getId()+". from "+dslo.getSource().name()+" ext: "+DAOs.filemappingDAO.getSingleExternalFilename(dslo)+" int: "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+(dslo.getGlobalMetaData()!=null ? dslo.getGlobalMetaData().getNumberofInstances():-1));
 		}
 		p("------------");
 		p("");

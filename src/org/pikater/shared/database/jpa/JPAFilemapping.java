@@ -1,9 +1,6 @@
 package org.pikater.shared.database.jpa;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -20,16 +17,11 @@ import javax.persistence.Table;
 	@NamedQuery(name="FileMapping.getByUserAndExternalFileName",query="select fm from JPAFilemapping fm where fm.user=:user and fm.externalfilename=:externalFilename")
 })
 public class JPAFilemapping extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
 	private JPAUser user;
 	private String externalfilename;
 	private String internalfilename;
 	
-    public int getId() {
-		return id;
-	}  
 	public JPAUser getUser() {
 		return user;
 	}

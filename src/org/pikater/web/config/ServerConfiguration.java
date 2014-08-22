@@ -12,20 +12,18 @@ public class ServerConfiguration extends PropertiesHandler
 	 */
 	
 	private static final String property_allowDefaultAdminAccount = "allowDefaultAdminAccount";
+	private static final String property_coreEnabled = "coreEnabled";
 	private static final String property_forceUseTopologies = "forceUseTopologies";
 	private static final String property_forceLeaveTopologies = "forceLeaveTopologies";
-	private static final String property_dummyBoxes = "dummyBoxes";
 	
 	/*
 	 * Variables to be parsed from the configuration file.
 	 */
 	
 	public final boolean defaultAdminAccountAllowed;
-	
+	public final boolean coreEnabled;
 	public final String forceUseTopologies;
 	public final String forceLeaveTopologies;
-	
-	public final boolean useDummyBoxes;
 	
 	public ServerConfiguration(File resource)
 	{
@@ -33,16 +31,17 @@ public class ServerConfiguration extends PropertiesHandler
 		if(prop != null)
 		{
 			defaultAdminAccountAllowed = new Boolean(getProperty(prop, property_allowDefaultAdminAccount));
+			coreEnabled = new Boolean(getProperty(prop, property_coreEnabled));
 			forceUseTopologies = getProperty(prop, property_forceUseTopologies);
 			forceLeaveTopologies = getProperty(prop, property_forceLeaveTopologies);
-			useDummyBoxes = new Boolean(getProperty(prop, property_dummyBoxes));
+			
 		}
 		else
 		{
 			defaultAdminAccountAllowed = false;
+			coreEnabled = false;
 			forceUseTopologies = null;
 			forceLeaveTopologies = null;
-			useDummyBoxes = false;
 		}
 	}
 	

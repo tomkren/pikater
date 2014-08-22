@@ -1,9 +1,6 @@
 package org.pikater.shared.database.jpa;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
@@ -14,21 +11,13 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 @Table(name="AttributeMetaData")
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class JPAAttributeMetaData extends JPAAbstractEntity implements Comparable<JPAAttributeMetaData>
-{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-	
+{	
 	private double ratioOfMissingValues;
 	private boolean isTarget;
 	private String name;
 	private double classEntropy;
 	private double entropy;
 	private int attrOrder;
-
-	public int getId() {
-        return id;
-    }
 	
 	public double getRatioOfMissingValues() {
 		return ratioOfMissingValues;

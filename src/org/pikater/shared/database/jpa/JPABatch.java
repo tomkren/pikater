@@ -8,9 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -38,13 +35,7 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status")
 })
 public class JPABatch extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
 	
-	public int getId() {
-        return id;
-    }
 	private String name;
 	private String note;
 	@Lob

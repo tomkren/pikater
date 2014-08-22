@@ -28,6 +28,7 @@ import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.security.PikaterRole;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
@@ -90,7 +91,7 @@ public class DatabaseInitialisation {
 				JPADataSetLO newDSLO=new JPADataSetLO(owner,datasetI.getName());
 				//hash a OID will be set using DAO
 				//DAOs.dataSetDAO.storeNewDataSet(datasetI, newDSLO);
-				DAOs.dataSetDAO.storeNewDataSet(datasetI, datasetI.getName(), owner.getId());
+				DAOs.dataSetDAO.storeNewDataSet(datasetI, datasetI.getName(), owner.getId(),JPADatasetSource.USER_UPLOAD);
 				
 				System.out.println("--------------------");
 				System.out.println();

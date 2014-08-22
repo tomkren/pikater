@@ -24,6 +24,7 @@ import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.util.Hash;
@@ -280,7 +281,7 @@ public class DataSetDAO extends AbstractDAO{
 	 * @return ID of the new {@link JPADataSetLO} object
 	 * @throws IOException
 	 */
-	public int storeNewDataSet(File sourceFile, String description, int userID) throws IOException{
+	public int storeNewDataSet(File sourceFile, String description, int userID,JPADatasetSource datasetSource) throws IOException{
 			
 		JPAUser owner = DAOs.userDAO.getByID(userID);
 		
@@ -310,6 +311,7 @@ public class DataSetDAO extends AbstractDAO{
 		newDSLO.setHash(hash);
 		newDSLO.setOID(oid);
 		newDSLO.setSize(sourceFile.length());
+		newDSLO.setSource(datasetSource);
 		storeEntity(newDSLO);
 		
 		return newDSLO.getId();

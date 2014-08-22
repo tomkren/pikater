@@ -1,22 +1,13 @@
 package org.pikater.shared.database.jpa;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name="GeneralFile")
 public class JPAGeneralFile extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
 	
-	public int getId() {
-        return id;
-    }
 	//ID of the LargeObject stored in the Postgre DB, that contains
 	//Use method in pikater.utility.pikaterDatabase.Database to retrieve the data based on OID
 	private long OID;

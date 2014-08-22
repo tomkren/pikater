@@ -5,9 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,9 +25,7 @@ import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
 	@NamedQuery(name="ExternalAgent.getByClass",query="select o from JPAExternalAgent o where o.agentClass=:class")
 })
 public class JPAExternalAgent extends JPAAbstractEntity{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	
 	@Column(nullable=false,unique=true)
 	private String name;
 	@Column(nullable=false,unique=true)
@@ -42,9 +37,6 @@ public class JPAExternalAgent extends JPAAbstractEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 
-	public int getId() {
-		return id;
-	}
 	public void setId(int id) {
 		this.id = id;
 	}

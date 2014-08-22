@@ -65,7 +65,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				@Override
 				protected void updateEntities(Boolean newValue)
 				{
-					dataset.setApproved(!dataset.isApproved());
+					dataset.setApproved(newValue);
 				}
 				/**
 				 * TODO: pikater core will see all datasets (visible restrictions are only in getAll, getByOwner methods
@@ -84,7 +84,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				@Override
 				public boolean isEnabled()
 				{
-					return true; // TODO: metadata check; when implemented, also add it to visualization quartz jobs 
+					return dataset.hasComputedMetadata(); 
 				}
 				
 				@Override
@@ -103,7 +103,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				@Override
 				public boolean isEnabled()
 				{
-					return true; // TODO: metadata check; when implemented, also add it to visualization quartz jobs 
+					return dataset.hasComputedMetadata(); 
 				}
 				
 				@Override

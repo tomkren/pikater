@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.IOException;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.exceptions.DataSetConverterCellException;
 import org.pikater.shared.database.exceptions.DataSetConverterException;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.util.DataSetConverter;
 import org.pikater.shared.database.util.DataSetConverter.InputType;
+import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
+import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
@@ -60,17 +63,36 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		try
 		{
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
-			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId());
-			WebToCoreEntryPoint.notify_newDataset(newDatasetID);
+			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId(),JPADatasetSource.USER_UPLOAD);
+			
+			
+			if(ServerConfigurationInterface.getConfig().coreEnabled)
+			{
+				try
+				{
+					WebToCoreEntryPoint.notify_newDataset(newDatasetID);
+				}
+				catch (Throwable t)
+				{
+					PikaterLogger.logThrowable("Could not send notification about a new dataset to core.", t);
+					GeneralDialogs.warning("Failed to notify core", "Your dataset has been saved and designated "
+							+ "for metadata computation but notification was not successfully passed to pikater core.");
+				}
+			}
+			else
+			{
+				GeneralDialogs.info("Core not available at this moment", "Your dataset has been saved and designated "
+						+ "for metadata computation but the actual computation may be pending until a running pikater core picks your agent up.");
+			}
+			
 		} catch (IOException e) {
 			throw new JobExecutionException(e);
 		} catch (DataSetConverterCellException e){
 			throw new JobExecutionException(e);
 		} catch (DataSetConverterException e) {
 			throw new JobExecutionException(e);
-		} catch (PikaterGatewayException e) {
-			throw new JobExecutionException(e);
-		} finally{
+		}
+		finally{
 			if(uploadedFile.exists()){
 				uploadedFile.delete();
 			}

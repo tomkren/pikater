@@ -35,6 +35,8 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 	public DatasetUploadWizard(Window parentPopup)
 	{
 		super(parentPopup, new DatasetUploadCommons());
+		getFinishButton().setEnabled(false);
+		getFinishButton().setVisible(false);
 		
 		addStep(new Step1(this));
 		addStep(new Step2(this));

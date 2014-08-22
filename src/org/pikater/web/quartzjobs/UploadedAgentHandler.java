@@ -7,12 +7,13 @@ import java.nio.file.Paths;
 import java.util.Date;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
+import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
@@ -68,18 +69,35 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			agent.setOwner(owner);
 			agent.setCreated(new Date());
 			byte[] content;
-			try {
+			try
+			{
 				content = Files.readAllBytes(Paths.get(uploadedFile.getAbsolutePath()));
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				throw new JobExecutionException("Unable to open input jar", e);
 			}
 			agent.setJar(content);
 			DAOs.externalAgentDAO.storeEntity(agent);
-			WebToCoreEntryPoint.notify_newAgent(agent.getId());
-		}
-		catch (PikaterGatewayException e)
-		{
-			PikaterLogger.logThrowable("Processing uploaded agent failed:", e);
+			
+			if(ServerConfigurationInterface.getConfig().coreEnabled)
+			{
+				try
+				{
+					WebToCoreEntryPoint.notify_newAgent(agent.getId());
+				}
+				catch (Throwable t)
+				{
+					PikaterLogger.logThrowable("Could not send notification about a new external agent to core.", t);
+					GeneralDialogs.warning("Failed to notify core", "Your agent has been saved and designated "
+							+ "for registration but notification was not successfully passed to pikater core.");
+				}
+			}
+			else
+			{
+				GeneralDialogs.info("Core not available at this moment", "Your agent has been saved and designated "
+						+ "for registration but the actual registration may be pending until a running pikater core picks your agent up.");
+			}
 		}
 		finally
 		{

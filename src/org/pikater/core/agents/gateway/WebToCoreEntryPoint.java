@@ -12,6 +12,7 @@ import org.pikater.core.agents.gateway.newDataset.PikaterGateway_NewDataset;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
 public class WebToCoreEntryPoint {
 
@@ -63,15 +64,12 @@ public class WebToCoreEntryPoint {
 	}
 
 	/**
-	 * Get information about run of Pikater-Core.
+	 * Is pikater core running locally on the same machine?
+	 * @throws PikaterGatewayException 
 	 */
-	public static boolean isPikaterCoreRunning() {
-		try {
-			PikaterGateway_GetAgentInfo.getAgentInfos();
-			return true;
-		} catch (PikaterGatewayException t) {
-			return false;
-		}
+	public static void checkLocalConnection() throws PikaterGatewayException 
+	{
+		PikaterGateway_GetAgentInfo.getAgentInfos();
 	}
 
 	/*
@@ -100,7 +98,7 @@ public class WebToCoreEntryPoint {
 	
 	private static void uploadDataset(String filename, int userID, String description) throws IOException{
 		
-		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID);
+		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID,JPADatasetSource.USER_UPLOAD);
 		System.out.println("Dataset uploaded with ID : "+id);
 		System.out.println("Demanding metadata computation...");
 		try{
