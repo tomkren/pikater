@@ -56,16 +56,14 @@ public class UserBatchesTableDBView extends AllBatchesTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
+		List<JPABatch> resultBatches=DAOs.batchDAO.getByOwner(this.owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+		int allBatchesCount=DAOs.batchDAO.getByOwnerCount(owner);
 		
-		List<JPABatch> allBatches=DAOs.batchDAO.getByOwner(this.owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
-		int userBatchCount=DAOs.batchDAO.getByOwnerCount(owner);
-		List<BatchTableDBRow> rows = new ArrayList<BatchTableDBRow>();
-		
-		for(JPABatch batch : allBatches)
+		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
+		for(JPABatch batch : resultBatches)
 		{
-			rows.add(new BatchTableDBRow(batch, false));
+			resultRows.add(new BatchTableDBRow(batch, false));
 		}
-		return new QueryResult(rows, userBatchCount);
+		return new QueryResult(resultRows, allBatchesCount);
 	}
 }

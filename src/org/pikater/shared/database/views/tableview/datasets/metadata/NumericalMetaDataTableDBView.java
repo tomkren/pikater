@@ -133,20 +133,18 @@ public class NumericalMetaDataTableDBView extends AbstractTableDBView{
 	@Override
 	protected QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		// TODO: NOW USES CONSTRAINTS GIVEN IN ARGUMENT BUT IT'S A SHALLOW AND INCORRECT IMPLEMENTATION - SHOULD BE NATIVE
-		
-		List<NumericalMetadataTableDBRow> rows = new ArrayList<NumericalMetadataTableDBRow>();
+		List<NumericalMetadataTableDBRow> resultRows = new ArrayList<NumericalMetadataTableDBRow>();
 		if(dslo != null)
 		{
 			for(JPAAttributeMetaData md : dslo.getAttributeMetaData())
 			{
 				if(md instanceof JPAAttributeNumericalMetaData)
 				{
-					rows.add(new NumericalMetadataTableDBRow((JPAAttributeNumericalMetaData)md,this.currentLocale));
+					resultRows.add(new NumericalMetadataTableDBRow((JPAAttributeNumericalMetaData)md,this.currentLocale));
 				}
 			}
 		}
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), rows.size());
-		return new QueryResult(rows.subList(constraints.getOffset(), endIndex), rows.size());
+		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), resultRows.size());
+		return new QueryResult(resultRows.subList(constraints.getOffset(), endIndex), resultRows.size());
 	}
 }
