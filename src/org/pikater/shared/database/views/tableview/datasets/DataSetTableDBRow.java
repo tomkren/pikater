@@ -67,11 +67,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				{
 					dataset.setApproved(newValue);
 				}
-				/**
-				 * TODO: pikater core will see all datasets (visible restrictions are only in getAll, getByOwner methods
-				 * which are used by web)
-				 * I added DatasetDAO#getAllVisibleApproved which will maybe be useful in input box, to generate list from which user can select input dataset)
-				 */
+				
 				@Override
 				protected void commitEntities()
 				{

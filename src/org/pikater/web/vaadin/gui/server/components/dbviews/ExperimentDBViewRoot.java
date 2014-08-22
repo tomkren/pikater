@@ -54,11 +54,11 @@ public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBVi
 		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
 		if(specificColumn == ExperimentTableDBView.Column.BEST_MODEL)
 		{
-			// TODO:
+			// TODO: talk with Peter about this
 		}
 		else if(specificColumn == ExperimentTableDBView.Column.RESULTS)
 		{
-			// TODO:
+			// TODO: wait for Peter to confirm this
 		}
 		else
 		{
