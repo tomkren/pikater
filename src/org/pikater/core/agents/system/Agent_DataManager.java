@@ -645,6 +645,18 @@ public class Agent_DataManager extends PikaterAgent {
 			public void action() {
 				String mailAddr = batchJPA.getOwner().getEmail();
 				SendEmail action = new SendEmail(Agent_Mailing.EmailType.RESULT, mailAddr);
+				action.setBatch_id(batchJPA.getId());
+				List<JPAExperiment> exps = batchJPA.getExperiments();
+				// when there was more than 1 sub-experiment, don't send the best result 
+				if (exps.size() == 1 && exps.get(0).getResults().size() > 0) {
+					double bestErrorRate = 200;
+					for (JPAResult r : exps.get(0).getResults()) {
+						if (r.getErrorRate() < bestErrorRate) {
+							bestErrorRate = r.getErrorRate();
+						}
+					}
+					action.setResult(bestErrorRate);
+				}
 				AID receiver = new AID(AgentNames.MAILING, false);
 				ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 				Ontology ontology = MailingOntology.getInstance();
@@ -690,8 +702,10 @@ public class Agent_DataManager extends PikaterAgent {
 		batchJPA.setStatus(batchStatus);
 		DAOs.batchDAO.updateEntity(batchJPA);
 
-		if (batchStatus == JPABatchStatus.FINISHED) {
+		if (batchStatus == JPABatchStatus.FINISHED && batchJPA.isSendEmailAfterFinish()) {
 			requestMailNotification(batchJPA);
+		} else {
+			log("not sending mail notification - option not set");
 		}
 
 		ACLMessage reply = request.createReply();
