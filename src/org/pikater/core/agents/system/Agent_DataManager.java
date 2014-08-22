@@ -65,6 +65,9 @@ import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.dataset.DatasetInfo;
+import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
+import org.pikater.core.ontology.subtrees.dataset.GetAllDatasetInfo;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 import org.pikater.core.ontology.subtrees.experiment.SaveExperiment;
@@ -298,7 +301,10 @@ public class Agent_DataManager extends PikaterAgent {
 					if (a.getAction() instanceof GetFile) {
 						return respondToGetFile(request, a);
 					}
-
+					if (a.getAction() instanceof GetAllDatasetInfo) {
+						return respondToGetAllDatasetInfo(request, a);
+					}
+					
 					/**
 					 * Deprecated Files actions
 					 */
@@ -1369,6 +1375,39 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	public ACLMessage respondToGetAllDatasetInfo(ACLMessage request, Action a) {
+		
+		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getAll();
+		DatasetsInfo datasetsOnto = new DatasetsInfo();
+		
+		for (JPADataSetLO datasetI : dslos) {
+		
+			DatasetInfo datasetOntoI = new DatasetInfo();
+			datasetOntoI.setDatasetID(datasetI.getId());
+			datasetOntoI.setHash(datasetI.getHash());
+			datasetOntoI.setFileName(datasetI.getFileName());
+			
+			//TODO:
+			if (! datasetI.getDescription().startsWith("Output from batch")) {
+				datasetsOnto.addDatasets(datasetOntoI);
+			}
+		}
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		Result result = new Result(a, datasetsOnto);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return reply;
+	}
+	
 	public static String getPikaterDateString(Date date) {
 		return "" + date.getTime();
 	}

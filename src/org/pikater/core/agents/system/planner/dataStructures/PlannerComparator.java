@@ -7,8 +7,8 @@ public class PlannerComparator implements Comparator<TaskToSolve> {
 	@Override
 	public int compare(TaskToSolve task0, TaskToSolve task1) {
 		
-		int priority0 = task0.getTask().getPriority();
-		int priority1 = task1.getTask().getPriority();
+		int priority0 = task0.getPriority();
+		int priority1 = task1.getPriority();
 		
 		return priority0 - priority1;
 	}

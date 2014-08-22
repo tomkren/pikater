@@ -2,7 +2,7 @@ package org.pikater.core.ontology;
 
 
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
-import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
+import org.pikater.core.ontology.subtrees.dataset.DatasetInfo;
 import org.pikater.core.ontology.subtrees.file.GetFile;
 import org.pikater.core.ontology.subtrees.data.GetData;
 import org.pikater.core.ontology.subtrees.externalAgent.GetExternalAgentJar;
@@ -20,9 +20,10 @@ public class DataOntology extends BeanOntology {
 
 		String getFilePackage = GetFile.class.getPackage().getName();
 		String getDataPackage = GetData.class.getPackage().getName();
+		String getDatasetInfoPackage = DatasetInfo.class.getPackage().getName();
 		try {
 			add(getFilePackage);
-			add(SaveDataset.class);
+			add(getDatasetInfoPackage);
 			add(GetExternalAgentJar.class);
 			add(DataInstances.class);
 			

@@ -5,9 +5,12 @@ import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDura
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
 import org.pikater.core.ontology.subtrees.task.Task;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 public class WaitingTasksQueues {
 	
@@ -20,6 +23,15 @@ public class WaitingTasksQueues {
 		
 		shortTimeDurationQueue = new PriorityQueue<TaskToSolve>(10, comparator);
 		longTermDurationQueue = new PriorityQueue<TaskToSolve>(10, comparator);
+	}
+	
+	public void addTasks(Set<TaskToSolve> taskToSolve) {
+		List<TaskToSolve> tasks = new ArrayList<TaskToSolve>(taskToSolve);
+		
+		for (TaskToSolve taskToSolveI : tasks) {
+			taskToSolveI.setPriority(100);
+			addTask(taskToSolveI);
+		}
 	}
 	
 	public void addTask(TaskToSolve taskToSolve) {

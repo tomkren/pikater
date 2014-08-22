@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.pikater.core.agents.system.Agent_Planner;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
@@ -14,8 +13,10 @@ import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.task.Task;
 
 public class CPUCoresStructure {
-	private Map <CPUCore, TaskToSolve> busyCores = new HashMap<CPUCore, TaskToSolve>();
-	private List<CPUCore> untappedCores = new ArrayList<CPUCore>();
+	private Map <CPUCore, TaskToSolve> busyCores =
+			new HashMap<CPUCore, TaskToSolve>();
+	private List<CPUCore> untappedCores =
+			new ArrayList<CPUCore>();
 	
 	public void initNewCPUCores(Agent_Planner agent,
 			List<AID> slaveServers) {
@@ -36,8 +37,29 @@ public class CPUCoresStructure {
 		
 	}
 	public void deleteDeadCPUCores(Agent_Planner agent,
-			List<AID> slaveServers) {
-		//TODO:
+			List<AID> deadSlaveServers) {
+		
+		List<CPUCore> busyCoresKeys =
+				new ArrayList<CPUCore>(busyCores.keySet());
+		
+		// delete busy cores
+		for (CPUCore busyCpuCoreI : busyCoresKeys) {
+			AID aidI = busyCpuCoreI.getAID();
+			
+			if (deadSlaveServers.contains(aidI)) {
+				busyCores.remove(busyCpuCoreI);
+			}
+		}
+		
+		// delete untapped cores
+		for (CPUCore untappedCoreI : untappedCores) {
+			AID aidI = untappedCoreI.getAID();
+			
+			if (deadSlaveServers.contains(aidI)) {
+				busyCores.remove(untappedCoreI);
+			}
+		}
+		
 	}
 	
 	
@@ -76,7 +98,7 @@ public class CPUCoresStructure {
 	}
 	
 	public CPUCore getTheBestCPUCoreForTask(TaskToSolve task,
-			Set<AID> dataLocations) {
+			DataFiles dataLocations) {
 		
 		if (task == null) {
 			throw new IllegalArgumentException("Argument task can't be null");
@@ -86,14 +108,16 @@ public class CPUCoresStructure {
 			return null;
 		}
 		
+		//TODO:
 		// select first CPU where is one needed file 
+/*
 		for (CPUCore cpuCoreI : untappedCores) {
 			AID aid = cpuCoreI.getAID();
 			if (dataLocations.contains(aid)) {
 				return cpuCoreI;
 			}
 		}
-		
+*/		
 		return untappedCores.get(0);
 	}
 	
@@ -121,6 +145,7 @@ public class CPUCoresStructure {
 			Task taskI = taskToSolveI.getTask();
 			
 			if (taskI.equalsTask(task)) {
+				
 				return taskToSolveI;
 			}
 		}

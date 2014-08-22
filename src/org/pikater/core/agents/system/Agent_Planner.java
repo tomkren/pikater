@@ -29,6 +29,7 @@ import org.pikater.core.agents.system.metadata.MetadataService;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
+import org.pikater.core.agents.system.planner.dataStructures.DataFiles;
 import org.pikater.core.agents.system.planner.dataStructures.DataRegistry;
 import org.pikater.core.agents.system.planner.dataStructures.Lock;
 import org.pikater.core.agents.system.planner.dataStructures.SlaveServersStructure;
@@ -139,6 +140,7 @@ public class Agent_Planner extends PikaterAgent {
 
 		});
 
+		dataRegistry.updateDataSets();
 	}
 	
 	protected ACLMessage respondToExecuteTask(ACLMessage request, Action a) {
@@ -221,6 +223,8 @@ public class Agent_Planner extends PikaterAgent {
 				getCPUCoreOfComputingTask(finishedTask);
 		TaskToSolve taskToSolve = cpuCoresStructure.
 				getTaskToSolveOfComputingTask(finishedTask);
+		// update task - result
+		taskToSolve.setTask(finishedTask);
 
 		try {
 			lock.lock();
@@ -229,7 +233,7 @@ public class Agent_Planner extends PikaterAgent {
 		}
 			cpuCoresStructure.setCPUCoreAsFree(cpuCore);
 			String node = nodeName(cpuCore.getAID());
-			dataRegistry.saveDataLocation(finishedTask, cpuCore.getAID());
+			dataRegistry.saveDataLocation(taskToSolve, cpuCore.getAID());
 			saveDataToDB(finishedTask, node);
 			plan();
 		lock.unlock();
@@ -349,9 +353,19 @@ public class Agent_Planner extends PikaterAgent {
 		cpuCoresStructure.initNewCPUCores(this, newSlaveServers);
 		cpuCoresStructure.deleteDeadCPUCores(this, deadSlaveServers);
 
+
 		// choose one CPU core (data-transfer friendly)
-		Set<AID> dataLocations = dataRegistry.
+		dataRegistry.deleteDeadCPUCores(deadSlaveServers);
+		//dataRegistry.updateDataSets();
+		DataFiles dataLocations = dataRegistry.
 				getDataLocations(taskToSolve);
+		
+		if (! dataLocations.existsAllDataFiles()) {
+			logError("All Data doesn't exists");
+			Set<TaskToSolve> taskToRestart = dataLocations.tasksToRestart();
+			waitingToStartComputingTasks.addTasks(taskToRestart);
+		}
+		
 		CPUCore selectedCore = cpuCoresStructure.
 				getTheBestCPUCoreForTask(taskToSolve, dataLocations);
 
