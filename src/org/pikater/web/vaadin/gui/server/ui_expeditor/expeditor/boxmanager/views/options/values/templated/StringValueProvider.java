@@ -1,10 +1,16 @@
-package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated;
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special.FileInputFieldProvider;
 
 public class StringValueProvider extends AbstractFieldProviderForValue
 {
+	/**
+	 * IMPORTANT: {@link FileInputFieldProvider} requires a single text field
+	 * to be generated in this method.
+	 */
 	@Override
 	protected void doGenerateFields(final Value value)
 	{

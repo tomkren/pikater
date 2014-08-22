@@ -1,9 +1,10 @@
-package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated;
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.CustomFormCheckBox;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;

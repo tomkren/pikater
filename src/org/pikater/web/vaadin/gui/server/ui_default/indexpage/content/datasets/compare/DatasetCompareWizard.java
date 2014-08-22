@@ -195,7 +195,6 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.setSizeFull();
 			this.innerLayout.setReadOnly(true);
-			this.innerLayout.setCaption("CAPTION");
 			this.innerLayout.getTable().setMultiSelect(false);
 			this.innerLayout.setView(new DatasetDBViewRoot<DatasetPickingTableDBView>(new DatasetPickingTableDBView()));
 			this.innerLayout.addComponentAsFirst(new Label("Select a row and click 'Next':"));

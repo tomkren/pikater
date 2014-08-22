@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated;
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.values.DoubleValue;
@@ -9,6 +9,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.IBoundsProvider;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 
 import com.vaadin.data.Validator;
 import com.vaadin.ui.AbstractField;

@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values;
+package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated;
 
 import java.util.Collection;
 
@@ -7,6 +7,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.shared.util.collections.BidiMap;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
