@@ -1,12 +1,12 @@
 package org.pikater.shared.database.views.tableview.externalagents;
 
 import org.pikater.shared.database.jpa.JPAExternalAgent;
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
 
 public class ExternalAgentTableDBRow extends AbstractTableRowDBView {

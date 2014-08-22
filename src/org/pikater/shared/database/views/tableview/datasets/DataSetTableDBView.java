@@ -10,11 +10,11 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
-import org.pikater.shared.database.views.base.QueryConstraints;
-import org.pikater.shared.database.views.base.QueryResult;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.QueryConstraints;
+import org.pikater.shared.database.views.base.query.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
-import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 
 /**
  * A generic view for tables displaying dataset information.  

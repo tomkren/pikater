@@ -1,10 +1,11 @@
-package org.pikater.shared.database.views.tableview.base;
+package org.pikater.shared.database.views.tableview;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.pikater.shared.database.views.base.QueryConstraints;
-import org.pikater.shared.database.views.base.QueryResult;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.QueryConstraints;
+import org.pikater.shared.database.views.base.query.QueryResult;
 
 /**
  * Database table view designed to work well with Vaadin's table {@link com.vaadin.data.Container}.

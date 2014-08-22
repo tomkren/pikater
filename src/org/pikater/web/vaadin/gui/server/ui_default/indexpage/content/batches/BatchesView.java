@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.AllBatchesTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;

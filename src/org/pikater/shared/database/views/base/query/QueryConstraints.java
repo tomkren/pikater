@@ -1,6 +1,6 @@
-package org.pikater.shared.database.views.base;
+package org.pikater.shared.database.views.base.query;
 
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
 
 public class QueryConstraints
 {

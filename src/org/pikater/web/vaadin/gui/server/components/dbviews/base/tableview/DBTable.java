@@ -3,11 +3,11 @@ package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.pikater.shared.database.views.base.QueryConstraints;
-import org.pikater.shared.database.views.base.SortOrder;
-import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.QueryConstraints;
+import org.pikater.shared.database.views.base.query.SortOrder;
+import org.pikater.shared.database.views.tableview.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent;

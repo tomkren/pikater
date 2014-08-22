@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.shared.database.views.tableview.datasets.DatasetPickingTableDBView;
 import org.pikater.shared.util.Tuple;

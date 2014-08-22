@@ -7,7 +7,7 @@ import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.UserSavedBatchesTableDBView;
 import org.pikater.shared.database.views.tableview.batches.UserScheduledBatchesTableDBView;

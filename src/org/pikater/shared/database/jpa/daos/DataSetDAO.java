@@ -28,8 +28,8 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.util.Hash;
-import org.pikater.shared.database.views.base.SortOrder;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 
 public class DataSetDAO extends AbstractDAO{

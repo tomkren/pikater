@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.pikater.shared.database.views.base.QueryResult;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.base.query.QueryResult;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.SimpleIDGenerator;
 
 public class DBTableContainerItems implements ICommitable
