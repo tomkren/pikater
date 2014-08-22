@@ -62,21 +62,6 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 			/*
 			 * Then the editable ones.
 			 */
-			case STATUS:
-				return new RepresentativeDBViewValue(CollectionUtils.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name())
-				{
-					@Override
-					protected void updateEntities(String newValue)
-					{
-						user.setStatus(JPAUserStatus.valueOf(newValue));
-					}
-
-					@Override
-					protected void commitEntities()
-					{
-						commitRow();
-					}
-				};
 			case MAX_PRIORITY:
 				return new RepresentativeDBViewValue(CollectionUtils.rangeToStringSet(0, 9), String.valueOf(user.getPriorityMax()))
 				{
@@ -86,6 +71,21 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 						user.setPriorityMax(Integer.parseInt(newValue));
 					}
 					
+					@Override
+					protected void commitEntities()
+					{
+						commitRow();
+					}
+				};
+			case STATUS:
+				return new RepresentativeDBViewValue(CollectionUtils.enumSetToStringSet(EnumSet.allOf(JPAUserStatus.class)), user.getStatus().name())
+				{
+					@Override
+					protected void updateEntities(String newValue)
+					{
+						user.setStatus(JPAUserStatus.valueOf(newValue));
+					}
+
 					@Override
 					protected void commitEntities()
 					{
@@ -132,27 +132,6 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					{
 						commitRow();
 						onNewPasswordCommitted.run(); // callback to GUI to send email - call only AFTER the new password is committed to DB 
-					}
-				};
-				
-			case DELETE:
-				return new NamedActionDBViewValue("Delete")
-				{
-					@Override
-					public boolean isEnabled()
-					{
-						return true;
-					}
-
-					@Override
-					protected void updateEntities()
-					{
-					}
-
-					@Override
-					protected void commitEntities()
-					{
-						// TODO: talk to Peter about this
 					}
 				};
 				

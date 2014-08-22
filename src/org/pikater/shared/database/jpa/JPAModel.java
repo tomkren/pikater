@@ -1,5 +1,7 @@
 package org.pikater.shared.database.jpa;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -67,6 +69,12 @@ public class JPAModel extends JPAAbstractEntity{
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+	
+	public InputStream getInputStream()
+	{
+		return new ByteArrayInputStream(serializedAgent);
+	}
+	
 	@Transient
 	public static final String EntityName = "Model";
 	

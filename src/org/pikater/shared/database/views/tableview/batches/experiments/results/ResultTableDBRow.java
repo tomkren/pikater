@@ -20,6 +20,11 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 		this.result=result;
 		this.currentLocale=LocaleUtils.getDefaultLocale();
 	}
+	
+	public JPAResult getResult()
+	{
+		return result;
+	}
 
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
@@ -53,50 +58,24 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 		 * And then custom actions.
 		 */
 		case TRAINED_MODEL:
-			//TODO: Implement best model retrieval
-			return new NamedActionDBViewValue("Download") {	
-
+			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
+			{
 				@Override
 				public boolean isEnabled()
 				{
-					return true;
+					return result.getCreatedModel() != null;
 				}
 
 				@Override
 				protected void updateEntities()
 				{
-					// TODO Auto-generated method stub
 				}
 
 				@Override
 				protected void commitEntities()
 				{
-					// TODO Auto-generated method stub
 				}
 			};
-		case EXPORT:
-			// TODO: export full information into a zip or a readable format?
-			return new NamedActionDBViewValue("Download") {	
-
-				@Override
-				public boolean isEnabled()
-				{
-					return true;
-				}
-
-				@Override
-				protected void updateEntities()
-				{
-					// TODO Auto-generated method stub
-				}
-
-				@Override
-				protected void commitEntities()
-				{
-					// TODO Auto-generated method stub
-				}
-			};
-			
 		
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

@@ -45,8 +45,7 @@ public class UsersTableDBView extends AbstractTableDBView
 		 * And finally, custom actions.
 		 */
 		ADMIN, // CHECKBOX
-		RESET_PSWD, // BUTTON
-		DELETE; // BUTTON
+		RESET_PSWD; // BUTTON
 
 		@Override
 		public String getDisplayName()
@@ -79,7 +78,6 @@ public class UsersTableDBView extends AbstractTableDBView
 					return DBViewValueType.BOOLEAN;
 					
 				case RESET_PSWD:
-				case DELETE:
 					return DBViewValueType.NAMED_ACTION;
 					
 				default:

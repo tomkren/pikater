@@ -38,8 +38,6 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 			
 			case RESET_PSWD:
 				return 100;
-			case DELETE:
-				return 75;
 			
 			default:
 				throw new IllegalStateException("Unknown state: " + specificColumn.name());
@@ -91,18 +89,6 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 					
 					// action is approved, perform it:
 					action.run();
-					return true;
-				}
-			});
-		}
-		else if(specificColumn == UsersTableDBView.Column.DELETE)
-		{
-			GeneralDialogs.confirm(null, String.format("Really delete account for user '%s'?", specificRow.getUser().getLogin()), new GeneralDialogs.IDialogResultHandler()
-			{
-				@Override
-				public boolean handleResult(Object[] args)
-				{
-					action.run(); // approve
 					return true;
 				}
 			});

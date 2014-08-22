@@ -22,8 +22,8 @@ import org.pikater.shared.database.views.tableview.base.ITableColumn;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.shared.logging.PikaterLogger;
 
-public class UserDAO extends AbstractDAO {
-
+public class UserDAO extends AbstractDAO
+{
 	@Override
 	public String getEntityName() {
 		return JPAUser.EntityName;

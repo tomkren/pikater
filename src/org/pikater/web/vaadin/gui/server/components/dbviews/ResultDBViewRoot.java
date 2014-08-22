@@ -1,10 +1,20 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
+import java.io.InputStream;
+import java.util.UUID;
+
 import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBView;
+import org.pikater.web.HttpContentType;
+import org.pikater.web.sharedresources.ResourceExpiration;
+import org.pikater.web.sharedresources.ResourceRegistrar;
+import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 
+import com.vaadin.server.Page;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
 
@@ -30,7 +40,6 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 				
 			case ROOT_REL_SQR_ERR:
 			case TRAINED_MODEL:
-			case EXPORT:
 				return 115;
 				
 			case WEKA_OPTIONS:
@@ -66,11 +75,44 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
 		if(specificColumn == ResultTableDBView.Column.TRAINED_MODEL)
 		{
-			// TODO: talk to Peter about this
-		}
-		else if(specificColumn == ResultTableDBView.Column.EXPORT)
-		{
-			// TODO: wait for Peter to confirm this
+			// download, don't run action
+			final ResultTableDBRow rowView = (ResultTableDBRow) row;
+			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			{
+				@Override
+				public ResourceExpiration getLifeSpan()
+				{
+					return ResourceExpiration.ON_FIRST_PICKUP;
+				}
+
+				@Override
+				public InputStream getStream() throws Throwable
+				{
+					return rowView.getResult().getCreatedModel().getInputStream();
+				}
+
+				@Override
+				public long getSize()
+				{
+					return rowView.getResult().getCreatedModel().getSerializedAgent().length;
+				}
+
+				@Override
+				public String getMimeType()
+				{
+					return HttpContentType.APPLICATION_OCTET_STREAM.toString();
+				}
+
+				@Override
+				public String getFilename()
+				{
+					return String.format("%d-%s.agent",
+							rowView.getResult().getExperiment().getId(),
+							rowView.getResult().getCreatedModel().getAgentClassName()
+					);
+				}
+			});
+			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
 		}
 		else
 		{

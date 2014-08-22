@@ -53,8 +53,7 @@ public class ResultTableDBView extends AbstractTableDBView
 		ROOT_REL_SQR_ERR,
 		ROOT_MEAN_SQR_ERR,
 		NOTE,
-		TRAINED_MODEL,
-		EXPORT;
+		TRAINED_MODEL;
 
 		@Override
 		public String getDisplayName()
@@ -85,7 +84,6 @@ public class ResultTableDBView extends AbstractTableDBView
 					return DBViewValueType.STRING;
 					
 				case TRAINED_MODEL:
-				case EXPORT:
 					return DBViewValueType.NAMED_ACTION;
 					
 				default:
