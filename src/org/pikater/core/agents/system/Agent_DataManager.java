@@ -56,6 +56,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAllAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
@@ -208,6 +209,9 @@ public class Agent_DataManager extends PikaterAgent {
 					}
 					if (a.getAction() instanceof GetAgentInfos) {
 						return respondToGetAgentInfos(request, a);
+					}
+					if (a.getAction() instanceof GetAllAgentInfos) {
+						return respondToGetAllAgentInfos(request, a);
 					}
 					if (a.getAction() instanceof GetExternalAgentNames) {
 						return respondToGetExternalAgentNames(request, a);
@@ -488,9 +492,16 @@ public class Agent_DataManager extends PikaterAgent {
 
 	protected ACLMessage respondToGetAgentInfos(ACLMessage request, Action a) {
 
+		GetAgentInfos getAgentInfos = (GetAgentInfos) a.getAction();
+		int userID = getAgentInfos.getUserID();
+		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
+		JPAUser user = DAOs.userDAO.getByID(userID);
+		
+		//TODO:
+		//List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getByOwner(user);
 		List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
 
 		AgentInfos agentInfos = new AgentInfos();
@@ -513,6 +524,32 @@ public class Agent_DataManager extends PikaterAgent {
 
 	}
 
+	protected ACLMessage respondToGetAllAgentInfos(ACLMessage request, Action a) {
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		List<JPAAgentInfo> agentInfoList = DAOs.agentInfoDAO.getAll();
+
+		AgentInfos agentInfos = new AgentInfos();
+		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
+
+			AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
+			agentInfos.addAgentInfo(agentInfoI);
+		}
+
+		Result result = new Result(a, agentInfos);
+		try {
+			getContentManager().fillContent(reply, result);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return reply;
+	}
+	
 	protected ACLMessage respondToGetExternalAgentNames(ACLMessage request, Action a) throws CodecException, OntologyException {
 
 		log("getting external agent names");
@@ -521,14 +558,19 @@ public class Agent_DataManager extends PikaterAgent {
 
 		List<AgentClass> agentNames = new ArrayList<AgentClass>();
 		for (JPAExternalAgent JPAAgentI : externalAgents) {
-			agentNames.add(new AgentClass(JPAAgentI.getAgentClass()));
+			AgentClass agentClass = new AgentClass(
+					JPAAgentI.getAgentClass(),
+					JPAAgentI.getOwner().getId()
+					);
+			
+			agentNames.add(agentClass);
 		}
 		ExternalAgentNames externalAgentNames = new ExternalAgentNames(agentNames);
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		Result r = new Result(a, externalAgentNames);
-		getContentManager().fillContent(reply, r);
+		Result result = new Result(a, externalAgentNames);
+		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
@@ -539,6 +581,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		SaveAgentInfo saveAgentInfo = (SaveAgentInfo) a.getAction();
 		AgentInfo newAgentInfo = saveAgentInfo.getAgentInfo();
+		int userID = saveAgentInfo.getUserID();
 
 		ACLMessage reply = request.createReply();
 
@@ -553,7 +596,9 @@ public class Agent_DataManager extends PikaterAgent {
 			}
 		}
 
-		DAOs.agentInfoDAO.storeAgentInfoOntology(newAgentInfo);
+		JPAUser user = DAOs.userDAO.getByID(userID);
+		
+		DAOs.agentInfoDAO.storeAgentInfoOntology(newAgentInfo, user);
 
 		reply.setPerformative(ACLMessage.INFORM);
 		reply.setContent("OK");

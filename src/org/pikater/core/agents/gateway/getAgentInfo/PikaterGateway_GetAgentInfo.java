@@ -1,6 +1,5 @@
 package org.pikater.core.agents.gateway.getAgentInfo;
 
-import jade.content.AgentAction;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
@@ -19,12 +18,13 @@ import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
 
 public class PikaterGateway_GetAgentInfo {
 
-	public static AgentInfos getAgentInfos() throws PikaterGatewayException {
+	public static AgentInfos getAgentInfos(int userID) throws PikaterGatewayException {
 		
 		AgentInfos agentInfos = null;
 		
 		try {	        
-			AgentAction getAgentInfos = new GetAgentInfos();
+			GetAgentInfos getAgentInfos = new GetAgentInfos();
+			getAgentInfos.setUserID(userID);
 
 			Codec codec = new SLCodec();
 			Ontology agentInfoOntology = AgentInfoOntology.getInstance();

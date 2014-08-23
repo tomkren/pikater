@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
+import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
 
 public class AgentInfoDAO extends AbstractDAO{
@@ -58,7 +59,7 @@ public class AgentInfoDAO extends AbstractDAO{
 		}
 	}
 	
-	public void storeAgentInfoOntology(AgentInfo agentInfoOntology){
+	public void storeAgentInfoOntology(AgentInfo agentInfoOntology, JPAUser user){
 		JPAAgentInfo nai=new JPAAgentInfo();
 		nai.setAgentClass(agentInfoOntology.getAgentClassName());
 		nai.setOntologyClass(agentInfoOntology.getOntologyClassName());
@@ -66,6 +67,7 @@ public class AgentInfoDAO extends AbstractDAO{
 		nai.setInformationXML(agentInfoOntology.exportXML());
 		nai.setName(agentInfoOntology.getName());
 		nai.setCreationTime(new Date());
+		nai.setOwner(user);
 		DAOs.agentInfoDAO.storeEntity(nai);
 	}
 	

@@ -46,7 +46,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	 * 
 	 */
 	private static final long serialVersionUID = 6530381228391705988L;
-
+	
 	public List<Ontology> getOntologies() {
 
 		List<Ontology> ontologies = new ArrayList<Ontology>();
@@ -68,6 +68,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 		log("Agent " + getName() + " started");
 
+		//this.agentInfosPublic = 
+		
 		MessageTemplate newAgentInfoTemplate =
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 
@@ -101,6 +103,10 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					return respondToGetAgentInfos(request, action);
 				}
 
+				if (action.getAction() instanceof GetAgentInfos) {
+					return respondToGetAgentInfos(request, action);
+				}
+				
 				if (action.getAction() instanceof NewAgent) {
 					return respondToNewAgent(request, action);
 				}
@@ -123,8 +129,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		List<AgentClass> agentClasses =
 				getAllExperimmentAgentClasses();
 		
-		DataManagerService service = new DataManagerService();
-		AgentInfos savedAgentInfos = service.getAgentInfos(this);
+		AgentInfos savedAgentInfos = DataManagerService.getAllAgentInfos(this);
 		
 		List<AgentClass> notSavedAgentClasses =
 				notSavedClasses(agentClasses, savedAgentInfos);
@@ -147,9 +152,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		for (AgentClass agentClassI : agentClasses) {
 			
 			AgentInfo agentInfo = getAgentInfo(this, agentClassI.getAgentClass());
+			int userID = agentClassI.getUserID();
 			
-			DataManagerService service = new DataManagerService();
-			service.saveAgentInfo(this, agentInfo);
+			DataManagerService.saveAgentInfo(this, agentInfo, userID);
 		}
 		
 	}
@@ -187,12 +192,14 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		
 		List<AgentClass> agentClasses = new ArrayList<AgentClass>();
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : allAgentClasses) {
-			agentClasses.add(new AgentClass(agentClassI.getName()));
+			AgentClass agentClassOnt = new AgentClass(
+					agentClassI.getName(),
+					-1);
+			agentClasses.add(agentClassOnt);
 		}
 		
-		DataManagerService service = new DataManagerService();
 		ExternalAgentNames externalAgentNames =
-				service.getExternalAgentNames(this);
+				DataManagerService.getExternalAgentNames(this);
 		agentClasses.addAll(externalAgentNames.getAgentNames());
 
 		return agentClasses;
@@ -251,15 +258,15 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		
-		DataManagerService service = new DataManagerService();
-		AgentInfo agenInfo = service.getAgentInfo(this, agentClassName);
+		AgentInfo agenInfo = DataManagerService
+				.getAgentInfo(this, agentClassName);
 		 
 		//Models models = service.getAllModels();
 		//agenInfos.importModels(models);
 		
-		Result r = new Result(action, agenInfo);
+		Result result = new Result(action, agenInfo);
 		try {
-			getContentManager().fillContent(reply, r);
+			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
 			logError(e.getMessage(), e);
 		} catch (OntologyException e) {
@@ -271,11 +278,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	
 	private ACLMessage respondToGetAgentInfos(ACLMessage request, Action action) {
 
+		GetAgentInfos getAgentInfos = (GetAgentInfos)action.getAction();
+		int userID = getAgentInfos.getUserID();
+		
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		DataManagerService communicator = new DataManagerService();
-		AgentInfos agenInfos = communicator.getAgentInfos(this);
+		AgentInfos agenInfos = DataManagerService.getAgentInfos(this, userID);
 		
 		//Models models = communicator.getAllModels();
 		//agenInfos.importModels(models);
@@ -297,9 +306,10 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 		NewAgent newAgent = (NewAgent)action.getAction();
 		String agentClassName = newAgent.getAgentClassName();
+		int userID = newAgent.getUserID();
 		
 		List<AgentClass> classes = new ArrayList<AgentClass>();
-		classes.add(new AgentClass(agentClassName));
+		classes.add(new AgentClass(agentClassName, userID));
 		
 		wakeUpAgentInfo(classes);
 

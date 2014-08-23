@@ -39,6 +39,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAllAgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.GetExternalAgentNames;
 import org.pikater.core.ontology.subtrees.agentInfo.SaveAgentInfo;
 import org.pikater.core.ontology.subtrees.batch.Batch;
@@ -196,9 +197,10 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
-	public static void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo) {
+	public static void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo, int userID) {
 
 		SaveAgentInfo saveAgentInfo = new SaveAgentInfo();
+		saveAgentInfo.setUserID(userID);
 		saveAgentInfo.setAgentInfo(agentInfo);
 
 		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
@@ -623,7 +625,7 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
-	public static AgentInfos getAgentInfos(PikaterAgent agent) {
+	public static AgentInfos getAgentInfos(PikaterAgent agent, int userID) {
 
 		if (agent == null) {
 			throw new IllegalArgumentException("Argument agent can't be null");
@@ -639,6 +641,7 @@ public class DataManagerService extends FIPAService {
 		getAgentInfomsg.setOntology(ontology.getName());
 
 		GetAgentInfos getAgentInfos = new GetAgentInfos();
+		getAgentInfos.setUserID(userID);
 
 		Action action = new Action(agent.getAID(), getAgentInfos);
 
@@ -665,6 +668,48 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
+	public static AgentInfos getAllAgentInfos(PikaterAgent agent) {
+
+		if (agent == null) {
+			throw new IllegalArgumentException("Argument agent can't be null");
+		}
+
+		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		Ontology ontology = AgentInfoOntology.getInstance();
+
+		ACLMessage getAgentInfomsg = new ACLMessage(ACLMessage.REQUEST);
+		getAgentInfomsg.addReceiver(receiver);
+		getAgentInfomsg.setSender(agent.getAID());
+		getAgentInfomsg.setLanguage(agent.getCodec().getName());
+		getAgentInfomsg.setOntology(ontology.getName());
+
+		GetAllAgentInfos getAllAgentInfos = new GetAllAgentInfos();
+
+		Action action = new Action(agent.getAID(), getAllAgentInfos);
+
+		try {
+			agent.getContentManager().fillContent(getAgentInfomsg, action);
+			ACLMessage agentInfoMsg = FIPAService.doFipaRequestClient(agent,
+					getAgentInfomsg);
+
+			Result replyResult = (Result) agent.getContentManager()
+					.extractContent(agentInfoMsg);
+
+			AgentInfos agentInfos = (AgentInfos) replyResult.getValue();
+
+			return agentInfos;
+
+		} catch (FIPAException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (Codec.CodecException e) {
+			agent.logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			agent.logError(e.getMessage(), e);
+		}
+
+		return null;
+	}
+	
 	public static ExternalAgentNames getExternalAgentNames(PikaterAgent agent) {
 
 		AID receiver = new AID(AgentNames.DATA_MANAGER, false);

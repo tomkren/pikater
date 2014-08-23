@@ -22,8 +22,8 @@ public class WebToCoreEntryPoint {
 	 * @return
 	 * @throws PikaterGatewayException
 	 */
-	public static AgentInfos getAgentInfos() throws PikaterGatewayException {
-		return PikaterGateway_GetAgentInfo.getAgentInfos();
+	public static AgentInfos getAgentInfos(int userID) throws PikaterGatewayException {
+		return PikaterGateway_GetAgentInfo.getAgentInfos(userID);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class WebToCoreEntryPoint {
 	 */
 	public static void checkLocalConnection() throws PikaterGatewayException 
 	{
-		PikaterGateway_GetAgentInfo.getAgentInfos();
+		PikaterGateway_GetAgentInfo.getAgentInfos(-1);
 	}
 
 	/*
@@ -77,14 +77,17 @@ public class WebToCoreEntryPoint {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		PikaterGateway_General.MASTER_PORT=2100;//1099;
+		PikaterGateway_General.MASTER_PORT=1099;
 		
-		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfos();
+		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfos(-1);
 
 		for (AgentInfo agentInfoI : agentInfos.getAgentInfos()) {
 			System.out.println("AgentInfo: " + agentInfoI.getName());
 		}
 
+		if (1 == 1)
+		{return;}
+		
 		int userID = 5859;
 		
 		WebToCoreEntryPoint.uploadDataset("core/datasets/weather.arff",  userID, "weather");
