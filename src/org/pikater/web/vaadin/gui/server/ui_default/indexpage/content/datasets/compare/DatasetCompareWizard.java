@@ -5,12 +5,10 @@ import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
-import org.pikater.shared.database.views.tableview.datasets.DatasetPickingTableDBView;
 import org.pikater.shared.util.Tuple;
-import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
-import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
+import org.pikater.web.vaadin.gui.server.components.dbviews.special.DatasetPickerComponent;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
@@ -27,11 +25,11 @@ import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
 public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 {
@@ -95,7 +93,7 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 						@Override
 						public void abortTask()
 						{
-							underlyingTask.abortVisualization();
+							underlyingTask.abort();
 						}
 
 						@Override
@@ -186,19 +184,14 @@ public class DatasetCompareWizard extends WizardForDialog<DatasetCompareCommons>
 	
 	private class Step2 extends ParentAwareWizardStep<DatasetCompareCommons, DatasetCompareWizard>
 	{
-		private final DBTableLayout innerLayout;
+		private final DatasetPickerComponent innerLayout;
 		
 		public Step2(DatasetCompareWizard parentWizard)
 		{
 			super(parentWizard);
 			
-			this.innerLayout = new DBTableLayout();
+			this.innerLayout = new DatasetPickerComponent("Select a row and click 'Next':");
 			this.innerLayout.setSizeFull();
-			this.innerLayout.setReadOnly(true);
-			this.innerLayout.setCaption("CAPTION");
-			this.innerLayout.getTable().setMultiSelect(false);
-			this.innerLayout.setView(new DatasetDBViewRoot<DatasetPickingTableDBView>(new DatasetPickingTableDBView()));
-			this.innerLayout.addComponentAsFirst(new Label("Select a row and click 'Next':"));
 		}
 
 		@Override

@@ -1,8 +1,8 @@
-package org.pikater.shared.database.views.base;
+package org.pikater.shared.database.views.base.query;
 
 import java.util.Collection;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 public class QueryResult
 {

@@ -1,8 +1,9 @@
-package org.pikater.shared.database.views.tableview.base;
+package org.pikater.shared.database.views.tableview;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 
 /**

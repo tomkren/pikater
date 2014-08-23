@@ -10,9 +10,9 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
-import org.pikater.shared.database.views.base.QueryConstraints;
-import org.pikater.shared.database.views.base.QueryResult;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.QueryConstraints;
+import org.pikater.shared.database.views.base.query.QueryResult;
 
 /**
  * A view displaying all saved (not scheduled) experiments for the given user.

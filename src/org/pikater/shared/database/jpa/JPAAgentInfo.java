@@ -20,7 +20,9 @@ import javax.persistence.Transient;
 	@NamedQuery(name="AgentInfo.getByID",query="select ai from JPAAgentInfo ai where ai.id=:id"),
 	@NamedQuery(name="AgentInfo.getByName",query="select ai from JPAAgentInfo ai where ai.name=:name"),
 	@NamedQuery(name="AgentInfo.getByAgentClass",query="select ai from JPAAgentInfo ai where ai.agentClass=:agentClass"),
-	@NamedQuery(name="AgentInfo.getByOntologyClass",query="select ai from JPAAgentInfo ai where ai.ontologyClass=:ontologyClass")
+	@NamedQuery(name="AgentInfo.getByOntologyClass",query="select ai from JPAAgentInfo ai where ai.ontologyClass=:ontologyClass"),
+	@NamedQuery(name="AgentInfo.getWithoutExternal",query="select ai from JPAAgentInfo ai where ai.externalAgent is null"),
+	@NamedQuery(name="AgentInfo.getByExternalAgentOwner",query="select ai from JPAAgentInfo ai where ai.externalAgent.owner=:owner")
 })
 public class JPAAgentInfo extends JPAAbstractEntity{
 	
@@ -31,7 +33,7 @@ public class JPAAgentInfo extends JPAAbstractEntity{
 	private String ontologyClass;
 	private String description;
 	@Nullable
-	private JPAUser owner;
+	private JPAExternalAgent externalAgent;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationTime;
 	
@@ -65,11 +67,11 @@ public class JPAAgentInfo extends JPAAbstractEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public JPAUser getOwner() {
-		return owner;
+	public JPAExternalAgent getExternalAgent() {
+		return externalAgent;
 	}
-	public void setOwner(JPAUser owner) {
-		this.owner = owner;
+	public void setExternalAgent(JPAExternalAgent externalAgent) {
+		this.externalAgent = externalAgent;
 	}
 	public Date getCreationTime() {
 		return creationTime;
@@ -89,7 +91,7 @@ public class JPAAgentInfo extends JPAAbstractEntity{
 		this.description=updateValues.getDescription();
 		this.name=updateValues.getName();
 		this.creationTime=updateValues.getCreationTime();
-		this.owner=updateValues.getOwner();
+		this.externalAgent=updateValues.getExternalAgent();
 	}
 	
 }

@@ -1,4 +1,4 @@
-package org.pikater.shared.database.views.tableview.base;
+package org.pikater.shared.database.views.base;
 
 import org.pikater.shared.database.views.base.values.DBViewValueType;
 

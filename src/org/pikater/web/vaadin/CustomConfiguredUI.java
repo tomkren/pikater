@@ -375,9 +375,14 @@ public abstract class CustomConfiguredUI extends UI
 		return CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + ui.getURLPattern();
 	}
 	
+	public static boolean isProductionModeActive()
+	{
+		return VaadinSession.getCurrent().getConfiguration().isProductionMode();
+	}
+	
 	public static boolean isDebugModeActive()
 	{
-		return !VaadinSession.getCurrent().getConfiguration().isProductionMode();
+		return !isProductionModeActive();
 	}
 	
 	public static String getURIFragment()

@@ -25,13 +25,14 @@ import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactor
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.BooleanValueProvider;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.DoubleValueProvider;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.FloatValueProvider;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.IntegerValueProvider;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.QMRValueProvider;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.QMSValueProvider;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.StringValueProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special.FileInputFieldProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.BooleanValueProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.DoubleValueProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.FloatValueProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.IntegerValueProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.QMRValueProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.QMSValueProvider;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.StringValueProvider;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -264,8 +265,7 @@ public class OptionValueForm extends CustomFormLayout
 					dataSource.getBox().getAssociatedAgent().getName().equals("FileInput") &&
 					dataSource.getOption().getName().equals("fileURI"))
 			{
-				// TODO: DatasetDAO#getAllVisibleApproved
-				typeSpecificFieldProvider = new StringValueProvider();
+				typeSpecificFieldProvider = new FileInputFieldProvider();
 			}
 			else
 			{

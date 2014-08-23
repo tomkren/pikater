@@ -29,7 +29,7 @@ import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.MyPGConnection;
 import org.pikater.shared.database.util.ResultExporter;
 import org.pikater.shared.database.util.ResultFormatter;
-import org.pikater.shared.database.views.base.SortOrder;
+import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
@@ -55,7 +55,7 @@ public class DatabaseTest {
 		//listBatches();
 		//listExperiments();
 		//listFileMappings();
-		//listAgentInfos();
+		listAgentInfos();
 	}
 	
 	private void listBestResult() {
@@ -75,7 +75,7 @@ public class DatabaseTest {
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllUserUploaded();
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+dslo.getDescription()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+			p(dslo.getId()+". "+dslo.getDescription()+"    "+dslo.getCreated()+"   DT:"+ (dslo.getGlobalMetaData()!=null?dslo.getGlobalMetaData().getNumberofInstances():"no_gmd"));
 		}
 		p("------------");
 		p("");
@@ -306,7 +306,8 @@ public class DatabaseTest {
 	}
 	
 	public void listAgentInfos(){		
-		List<JPAAgentInfo> ais=DAOs.agentInfoDAO.getAll();
+		JPAUser user=DAOs.userDAO.getByID(5859, EmptyResultAction.NULL);
+		List<JPAAgentInfo> ais=DAOs.agentInfoDAO.getByExternalAgentOwner(user);
 		p("No. of AgentInfos "+ais.size());
 		for(JPAAgentInfo ai:ais){
 			p(ai.getId()+". "+ai.getAgentClass()+" '"+ai.getCreationTime()+"' - "+ai.getName()+" : "+ai.getDescription());

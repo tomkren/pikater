@@ -6,20 +6,26 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.quartzjobs.results.ExportBatchResultsJob;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
@@ -70,7 +76,7 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
 		if(specificColumn == AbstractBatchTableDBView.Column.NOTE)
@@ -78,12 +84,39 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 			TextField tf_value = (TextField) component;
 			tf_value.setDescription(tf_value.getValue());
 		}
+		else if(specificColumn == AbstractBatchTableDBView.Column.MAX_PRIORITY)
+		{
+			value.setOnCommitted(new AbstractDBViewValue.IOnValueCommitted()
+			{
+				@Override
+				public void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value)
+				{
+					final BatchTableDBRow specificRow = (BatchTableDBRow) row;
+					if(ServerConfigurationInterface.getConfig().coreEnabled)
+					{
+						try
+						{
+							WebToCoreEntryPoint.notify_batchPriorityChanged(specificRow.getBatch().getId());
+						}
+						catch (Throwable e)
+						{
+							PikaterLogger.logThrowable(String.format("Could not notify core about a priority change of batch '%d':", specificRow.getBatch().getId()), e);
+							MyNotifications.showApplicationError();
+						}
+					}
+					else
+					{
+						GeneralDialogs.info("Core not available", "Priority was changed but it won't be effective.");
+					}
+				}
+			});
+		}
 	}
-
+	
 	@Override
-	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
+	public void approveAction(ITableColumn column, final AbstractTableRowDBView row, Runnable action)
 	{
-		BatchTableDBRow specificRow = (BatchTableDBRow) row;
+		final BatchTableDBRow specificRow = (BatchTableDBRow) row;
 		
 		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
 		if(specificColumn == AbstractBatchTableDBView.Column.ABORT)
@@ -102,50 +135,75 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 			}
 			else
 			{
-				GeneralDialogs.info("Core not available at this moment", "No experiment can be aborted.");
+				GeneralDialogs.info("Core not available", "Experiments can not be aborted at this time.");
 			}
 		}
 		else if(specificColumn == AbstractBatchTableDBView.Column.RESULTS)
 		{
-			// TODO: progress dialog
+			final File tmpFile = IOUtils.createTemporaryFile("results", ".csv");
 			
 			// download, don't run action
-			final BatchTableDBRow rowView = (BatchTableDBRow) row;
-			final File tmpFile = IOUtils.createTemporaryFile("results", ".csv");
-			rowView.getBatch().toCSV(tmpFile);
-			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			ProgressDialog.show("Export progress...", new ProgressDialog.IProgressDialogTaskHandler()
 			{
+				private InterruptibleJobHelper underlyingTask;
+				
 				@Override
-				public ResourceExpiration getLifeSpan()
+				public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
 				{
-					return ResourceExpiration.ON_FIRST_PICKUP;
+					// start the task and bind it with the progress dialog
+					underlyingTask = new InterruptibleJobHelper();
+					underlyingTask.startJob(ExportBatchResultsJob.class, new Object[]
+					{
+						specificRow.getBatch(),
+						tmpFile,
+						contextForTask
+					});
 				}
-
+				
 				@Override
-				public InputStream getStream() throws Throwable
+				public void abortTask()
 				{
-					return new FileInputStream(tmpFile);
+					underlyingTask.abort();
 				}
-
+				
 				@Override
-				public long getSize()
+				public void onTaskFinish(IProgressDialogTaskResult result)
 				{
-					return tmpFile.length();
-				}
+					UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+					{
+						@Override
+						public ResourceExpiration getLifeSpan()
+						{
+							return ResourceExpiration.ON_FIRST_PICKUP;
+						}
 
-				@Override
-				public String getMimeType()
-				{
-					return HttpContentType.TEXT_CSV.toString();
-				}
+						@Override
+						public InputStream getStream() throws Throwable
+						{
+							return new FileInputStream(tmpFile);
+						}
 
-				@Override
-				public String getFilename()
-				{
-					return tmpFile.getName();
+						@Override
+						public long getSize()
+						{
+							return tmpFile.length();
+						}
+
+						@Override
+						public String getMimeType()
+						{
+							return HttpContentType.TEXT_CSV.toString();
+						}
+
+						@Override
+						public String getFilename()
+						{
+							return tmpFile.getName();
+						}
+					});
+					Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
 				}
 			});
-			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
 		}
 		else
 		{

@@ -8,6 +8,7 @@ import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
 import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.sharedresources.ThemeResources;
+import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxbrowser.BoxBrowserToolbox;
@@ -105,7 +106,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	private final AgentInfoCollection agentInfoProvider;
 	private final ExpEditorExtension extension;
 	
-	public ExpEditor(AgentInfoCollection agentInfoProvider, boolean debugMode)
+	public ExpEditor(AgentInfoCollection agentInfoProvider)
 	{
 		super();
 		setSizeFull();
@@ -115,7 +116,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		this.agentInfoProvider = agentInfoProvider;
 		
 		// NORTH COMPONENT INIT
-		this.toolbar = new Toolbar(this, debugMode);
+		this.toolbar = new Toolbar(this, CustomConfiguredUI.isDebugModeActive());
 		this.toolbar.setSizeFull();
 		this.toolbar.setStyleName("top-interface");
 		setComponent(Border.NORTH, this.toolbar);

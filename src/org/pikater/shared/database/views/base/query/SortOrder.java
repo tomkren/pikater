@@ -1,4 +1,4 @@
-package org.pikater.shared.database.views.base;
+package org.pikater.shared.database.views.base.query;
 
 public enum SortOrder
 {

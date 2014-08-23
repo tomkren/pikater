@@ -9,11 +9,11 @@ import java.util.Set;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.views.base.QueryConstraints;
-import org.pikater.shared.database.views.base.QueryResult;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.QueryConstraints;
+import org.pikater.shared.database.views.base.query.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
-import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 
 /**
  * A generic view for tables displaying result errors and statistic.  
@@ -53,8 +53,7 @@ public class ResultTableDBView extends AbstractTableDBView
 		ROOT_REL_SQR_ERR,
 		ROOT_MEAN_SQR_ERR,
 		NOTE,
-		TRAINED_MODEL,
-		EXPORT;
+		TRAINED_MODEL;
 
 		@Override
 		public String getDisplayName()
@@ -85,7 +84,6 @@ public class ResultTableDBView extends AbstractTableDBView
 					return DBViewValueType.STRING;
 					
 				case TRAINED_MODEL:
-				case EXPORT:
 					return DBViewValueType.NAMED_ACTION;
 					
 				default:

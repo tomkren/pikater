@@ -1,10 +1,31 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
-import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBView;
-import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.UUID;
 
+import org.pikater.shared.database.jpa.JPAModel;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBRow;
+import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBView;
+import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
+import org.pikater.shared.util.IOUtils;
+import org.pikater.web.HttpContentType;
+import org.pikater.web.quartzjobs.results.ExportExperimentResultsJob;
+import org.pikater.web.sharedresources.ResourceExpiration;
+import org.pikater.web.sharedresources.ResourceRegistrar;
+import org.pikater.web.sharedresources.download.IDownloadResource;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
+
+import com.vaadin.server.Page;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 
 public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBView>
@@ -44,21 +65,119 @@ public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBVi
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 	}
-
+	
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{
+		final ExperimentTableDBRow specificRow = (ExperimentTableDBRow) row;
+		
 		ExperimentTableDBView.Column specificColumn = (ExperimentTableDBView.Column) column;
 		if(specificColumn == ExperimentTableDBView.Column.BEST_MODEL)
 		{
-			// TODO: talk with Peter about this
+			final JPAModel modelToServe = DAOs.resultDAO.getByExperimentBestResult(specificRow.getExperiment()).getCreatedModel();
+			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			{
+				@Override
+				public ResourceExpiration getLifeSpan()
+				{
+					return ResourceExpiration.ON_FIRST_PICKUP;
+				}
+
+				@Override
+				public InputStream getStream() throws Throwable
+				{
+					return modelToServe.getInputStream();
+				}
+
+				@Override
+				public long getSize()
+				{
+					return modelToServe.getSerializedAgent().length;
+				}
+
+				@Override
+				public String getMimeType()
+				{
+					return HttpContentType.TEXT_CSV.toString();
+				}
+
+				@Override
+				public String getFilename()
+				{
+					return modelToServe.getFileName();
+				}
+			});
+			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
 		}
 		else if(specificColumn == ExperimentTableDBView.Column.RESULTS)
 		{
-			// TODO: wait for Peter to confirm this
+			final File tmpFile = IOUtils.createTemporaryFile("results", ".csv");
+			
+			// download, don't run action
+			ProgressDialog.show("Export progress...", new ProgressDialog.IProgressDialogTaskHandler()
+			{
+				private InterruptibleJobHelper underlyingTask;
+				
+				@Override
+				public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+				{
+					// start the task and bind it with the progress dialog
+					underlyingTask = new InterruptibleJobHelper();
+					underlyingTask.startJob(ExportExperimentResultsJob.class, new Object[]
+					{
+						specificRow.getExperiment(),
+						tmpFile,
+						contextForTask
+					});
+				}
+				
+				@Override
+				public void abortTask()
+				{
+					underlyingTask.abort();
+				}
+				
+				@Override
+				public void onTaskFinish(IProgressDialogTaskResult result)
+				{
+					UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+					{
+						@Override
+						public ResourceExpiration getLifeSpan()
+						{
+							return ResourceExpiration.ON_FIRST_PICKUP;
+						}
+
+						@Override
+						public InputStream getStream() throws Throwable
+						{
+							return new FileInputStream(tmpFile);
+						}
+
+						@Override
+						public long getSize()
+						{
+							return tmpFile.length();
+						}
+
+						@Override
+						public String getMimeType()
+						{
+							return HttpContentType.TEXT_CSV.toString();
+						}
+
+						@Override
+						public String getFilename()
+						{
+							return tmpFile.getName();
+						}
+					});
+					Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+				}
+			});
 		}
 		else
 		{

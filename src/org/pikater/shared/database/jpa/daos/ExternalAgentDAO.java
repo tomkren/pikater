@@ -13,8 +13,8 @@ import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
-import org.pikater.shared.database.views.base.SortOrder;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 
 public class ExternalAgentDAO extends AbstractDAO {

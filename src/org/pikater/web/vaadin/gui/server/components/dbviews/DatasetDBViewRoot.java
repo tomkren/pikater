@@ -6,8 +6,9 @@ import java.util.UUID;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView.Column;
@@ -89,7 +90,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 	}
 	
 	@Override
-	public void onCellCreate(ITableColumn column, AbstractComponent component)
+	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
 		DataSetTableDBView.Column specificColumn = (DataSetTableDBView.Column) column;
 		if((specificColumn == Column.DESCRIPTION) || (specificColumn == Column.FILENAME))
@@ -98,7 +99,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 			tf_value.setDescription(tf_value.getValue());
 		}
 	}
-
+	
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, final Runnable action)
 	{
@@ -131,7 +132,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 						@Override
 						public void abortTask()
 						{
-							underlyingTask.abortVisualization();
+							underlyingTask.abort();
 						}
 
 						@Override

@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.metadata.CategoricalMetaDataTableDBView;

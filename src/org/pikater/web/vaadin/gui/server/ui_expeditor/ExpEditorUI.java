@@ -97,7 +97,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 		setPageCroppedAndHorizontallyCentered(false);
 		
 		// simply create a new empty editor and let the user handle the rest
-		ExpEditor editor = new ExpEditor(agentInfoProvider, isDebugModeActive());
+		ExpEditor editor = new ExpEditor(agentInfoProvider);
 		setContent(editor);
 		
 		// display an empty experiment by default

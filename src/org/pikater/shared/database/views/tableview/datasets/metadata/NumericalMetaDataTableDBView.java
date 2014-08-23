@@ -10,11 +10,11 @@ import java.util.Set;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.views.base.QueryConstraints;
-import org.pikater.shared.database.views.base.QueryResult;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.QueryConstraints;
+import org.pikater.shared.database.views.base.query.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
-import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 import org.pikater.shared.util.LocaleUtils;
 
 /**

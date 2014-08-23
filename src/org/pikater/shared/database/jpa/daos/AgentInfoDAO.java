@@ -29,33 +29,34 @@ public class AgentInfoDAO extends AbstractDAO{
 	@Override
 	public JPAAgentInfo getByID(int ID, EmptyResultAction era) {
 		return new CustomActionResultFormatter<JPAAgentInfo>(
-				getByTypedNamedQuery("AgentInfo.getByID", "id", ID),
+				getByTypedNamedQuery(JPAAgentInfo.class,"AgentInfo.getByID", "id", ID),
 				era
 				).getSingleResultWithNull();
 	}
 	
 	public List<JPAAgentInfo> getByName(String name) {
-		return getByTypedNamedQuery("AgentInfo.getByName", "name", name);
+		return getByTypedNamedQuery(JPAAgentInfo.class,"AgentInfo.getByName", "name", name);
 	}
 	
 	public List<JPAAgentInfo> getByAgentClass(String agentClass) {
-		return getByTypedNamedQuery("AgentInfo.getByAgentClass", "agentClass", agentClass);
+		return getByTypedNamedQuery(JPAAgentInfo.class,"AgentInfo.getByAgentClass", "agentClass", agentClass);
 	}
 	
 	public List<JPAAgentInfo> getByOntologyClass(String ontologyClass) {
-		return getByTypedNamedQuery("AgentInfo.getByOntologyClass", "ontologyClass", ontologyClass);
+		return getByTypedNamedQuery(JPAAgentInfo.class,"AgentInfo.getByOntologyClass", "ontologyClass", ontologyClass);
 	}
-		
-	private List<JPAAgentInfo> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAAgentInfo.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
+	
+	/**
+	 * Retrieves the agent info records for agents, that were created by certain {@link JPAUser}
+	 * If the owner is null, that agent infos with no associated external agents are returned 
+	 * @param owner {@link JPAUser} for which we search agent infos
+	 * @return the list of user's agetn infos or all internal agents
+	 */
+	public List<JPAAgentInfo> getByExternalAgentOwner(JPAUser owner){
+		if(owner==null){
+			return getByTypedNamedQuery(JPAAgentInfo.class, "AgentInfo.getWithoutExternal");
+		}else{
+			return getByTypedNamedQuery(JPAAgentInfo.class,"AgentInfo.getByExternalAgentOwner", "owner", owner);
 		}
 	}
 	

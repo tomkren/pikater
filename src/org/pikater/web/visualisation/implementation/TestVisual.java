@@ -3,7 +3,6 @@ package org.pikater.web.visualisation.implementation;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.List;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.daos.DAOs;
@@ -16,7 +15,6 @@ import org.pikater.web.visualisation.implementation.charts.axis.exception.AxisNo
 import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
 import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
 import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonPNGGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
 
 public class TestVisual {
 

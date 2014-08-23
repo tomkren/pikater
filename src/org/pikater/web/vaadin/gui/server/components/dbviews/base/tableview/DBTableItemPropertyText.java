@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
 import org.pikater.shared.database.views.base.values.StringDBViewValue;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.TextField;
@@ -12,7 +13,7 @@ public class DBTableItemPropertyText implements Property<TextField>
 	private final TextField textField;
 	private final boolean readOnly;
 	
-	public DBTableItemPropertyText(final DBTable parentTable, final StringDBViewValue valueWrapper)
+	public DBTableItemPropertyText(final DBTable parentTable, final AbstractTableRowDBView row, final StringDBViewValue valueWrapper)
 	{
 		this.readOnly = valueWrapper.isReadOnly();
 		
@@ -33,7 +34,7 @@ public class DBTableItemPropertyText implements Property<TextField>
 					valueWrapper.setValue((String) event.getProperty().getValue());
 					if(parentTable.isImmediate())
 					{
-						valueWrapper.commit();
+						valueWrapper.commit(row);
 					}
 				}
 			});

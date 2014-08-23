@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.base.ITableColumn;
 
 public class DatasetPickingTableDBView extends DataSetTableDBView
 {

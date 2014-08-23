@@ -176,7 +176,7 @@ public class DatabaseInitialisation {
 		
 		JPAUser u0=JPAUser.createAccountForDBInit("zombie","xxx", "invalid@mail.com", u);
 		u0.setPriorityMax(-1);
-		u0.setStatus(JPAUserStatus.PASSIVE);
+		u0.setStatus(JPAUserStatus.SUSPENDED);
 		DAOs.userDAO.storeEntity(u0);
 		
 		

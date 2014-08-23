@@ -1,5 +1,7 @@
 package org.pikater.shared.database.views.base.values;
 
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
+
 /**
  * Corresponds to a button. You have an action that is named and can be arbitrarily called.
  */
@@ -26,7 +28,7 @@ public abstract class NamedActionDBViewValue extends AbstractDBViewValue<String>
 	 */
 	@Deprecated()
 	@Override
-	public void commit()
+	public void commit(AbstractTableRowDBView row)
 	{
 		throw new UnsupportedOperationException("This method is obsolete for this type. See the Javadoc.");
 	}

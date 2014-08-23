@@ -29,9 +29,9 @@
 		<dependency org="de.steinwedel.vaadin.addon" name="messagebox" rev="2.0.6" />
 		<dependency org="org.vaadin.addons" name="fonticon" rev="7.1.1" />	
 		<dependency org="org.vaadin.addons" name="dom" rev="0.1.0" />
+		<dependency org="org.vaadin.addons" name="actionbuttontextfield" rev="1.0.2" />
 		<!--
 		<dependency org="org.vaadin.alump.gofullscreen" name="gofullscreen-addon" rev="0.2.0" />
-		<dependency org="org.vaadin.addons" name="actionbuttontextfield" rev="1.0.2" />
 		-->
 		
 		<!-- Miscellaneous includes -->

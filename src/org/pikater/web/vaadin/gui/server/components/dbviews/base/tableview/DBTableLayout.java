@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
-import org.pikater.shared.database.views.tableview.base.AbstractTableDBView;
+import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 
 import com.vaadin.annotations.StyleSheet;

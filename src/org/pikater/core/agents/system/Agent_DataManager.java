@@ -626,7 +626,7 @@ public class Agent_DataManager extends PikaterAgent {
 		batchJpa.setName(batch.getName());
 		batchJpa.setNote(batch.getNote());
 		batchJpa.setStatus(batch.getStatus());
-		batchJpa.setPriority(batch.getPriority());
+		batchJpa.setUserAssignedPriority(batch.getPriority());
 		batchJpa.setTotalPriority(totalPriority);
 		batchJpa.setXML(batchXml);
 		batchJpa.setOwner(user);
@@ -670,7 +670,7 @@ public class Agent_DataManager extends PikaterAgent {
 		batch.setName(batchJPA.getName());
 		batch.setStatus(batchJPA.getStatus().name());
 		batch.setOwnerID(batchJPA.getOwner().getId());
-		batch.setPriority(batchJPA.getPriority());
+		batch.setPriority(batchJPA.getUserAssignedPriority());
 		batch.setDescription(compDescription);
 
 		ACLMessage reply = request.createReply();

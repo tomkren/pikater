@@ -1,12 +1,11 @@
 package org.pikater.shared.database.views.tableview.batches.experiments;
 
 import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
-import org.pikater.shared.database.views.tableview.base.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.base.ITableColumn;
+import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.DateUtils;
 
 public class ExperimentTableDBRow extends AbstractTableRowDBView {
@@ -45,48 +44,23 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 		 * And then custom actions.
 		 */
 		case BEST_MODEL:
-			//TODO: Implement best model retrieval
-			//DAOs.resultDAO.getByExperimentBestResult(experiment).getCreatedModel();
-			return new NamedActionDBViewValue("Download") {	
-
-				@Override
-				public boolean isEnabled()
-				{
-					return true; // TODO: is this correct?
-				}
-
-				@Override
-				protected void updateEntities()
-				{
-					// TODO Auto-generated method stub
-				}
-
-				@Override
-				protected void commitEntities()
-				{
-					// TODO Auto-generated method stub
-				}
-			};
 		case RESULTS:
-			return new NamedActionDBViewValue("Download")
-			{
+			return new NamedActionDBViewValue("Download") // no DB changes needed - this is completely GUI managed
+			{	
 				@Override
 				public boolean isEnabled()
 				{
-					// TODO Auto-generated method stub
-					return false; // whether results are available
+					return (experiment.getResults() != null) && !experiment.getResults().isEmpty();
 				}
-				
-				@Override
-				protected void commitEntities()
-				{
-					// TODO Auto-generated method stub
-				}
-				
+
 				@Override
 				protected void updateEntities()
 				{
-					// TODO Auto-generated method stub
+				}
+
+				@Override
+				protected void commitEntities()
+				{
 				}
 			};
 		
