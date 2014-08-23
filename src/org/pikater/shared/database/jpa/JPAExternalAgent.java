@@ -33,6 +33,8 @@ public class JPAExternalAgent extends JPAAbstractEntity{
 	private String description;
 	@Column(nullable=false)
 	private byte[] jar;
+	private boolean approved;
+	private boolean visible;
 	private JPAUser owner;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
@@ -63,6 +65,18 @@ public class JPAExternalAgent extends JPAAbstractEntity{
 	}
 	public void setJar(byte[] jar) {
 		this.jar = jar;
+	}
+	public boolean isApproved() {
+		return approved;
+	}
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+	public boolean isVisible() {
+		return visible;
+	}
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 	public JPAUser getOwner() {
 		return owner;

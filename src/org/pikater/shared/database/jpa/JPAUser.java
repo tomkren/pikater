@@ -85,7 +85,7 @@ public class JPAUser extends JPAAbstractEntity{
 	 */
 	public static JPAUser createAccountForGUI(String login, String password, String email)
 	{
-		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.USER), 0, JPAUserStatus.PASSIVE);
+		return new JPAUser(login, password, email, DAOs.roleDAO.getByPikaterRole(PikaterRole.USER), 0, JPAUserStatus.SUSPENDED);
 	}
 	
 	/**

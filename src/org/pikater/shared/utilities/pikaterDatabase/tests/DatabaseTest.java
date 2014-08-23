@@ -55,7 +55,7 @@ public class DatabaseTest {
 		//listBatches();
 		//listExperiments();
 		//listFileMappings();
-		//listAgentInfos();
+		listAgentInfos();
 	}
 	
 	private void listBestResult() {
@@ -75,7 +75,7 @@ public class DatabaseTest {
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllUserUploaded();
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+dslo.getDescription()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
+			p(dslo.getId()+". "+dslo.getDescription()+"    "+dslo.getCreated()+"   DT:"+ (dslo.getGlobalMetaData()!=null?dslo.getGlobalMetaData().getNumberofInstances():"no_gmd"));
 		}
 		p("------------");
 		p("");
@@ -306,7 +306,8 @@ public class DatabaseTest {
 	}
 	
 	public void listAgentInfos(){		
-		List<JPAAgentInfo> ais=DAOs.agentInfoDAO.getAll();
+		JPAUser user=DAOs.userDAO.getByID(5859, EmptyResultAction.NULL);
+		List<JPAAgentInfo> ais=DAOs.agentInfoDAO.getByExternalAgentOwner(user);
 		p("No. of AgentInfos "+ais.size());
 		for(JPAAgentInfo ai:ais){
 			p(ai.getId()+". "+ai.getAgentClass()+" '"+ai.getCreationTime()+"' - "+ai.getName()+" : "+ai.getDescription());

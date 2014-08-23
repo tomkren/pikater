@@ -58,7 +58,7 @@ public class Database {
 
 		JPAUser user=DAOs.userDAO.getByID(userId, EmptyResultAction.NULL);
 
-		int totalPriority = 10*user.getPriorityMax() + batch.getPriority();
+		int totalPriority = 10*user.getPriorityMax() + batch.getUserAssignedPriority();
 
 		batch.setXML(batchXml);
 		batch.setOwner(user);

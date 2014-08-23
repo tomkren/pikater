@@ -95,6 +95,18 @@ public abstract class AbstractDAO
 		}
 	}
 	
+	protected <T extends JPAAbstractEntity> List<T> getByTypedNamedQuery(Class<T> entityClass,String queryName){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return
+				em
+				.createNamedQuery(queryName,entityClass)
+				.getResultList();
+		}finally{
+			em.close();
+		}
+	}
+	
 	protected <T extends JPAAbstractEntity> List<T> getByTypedNamedQuery(Class<T> entityClass,String queryName,String paramName,Object param){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
