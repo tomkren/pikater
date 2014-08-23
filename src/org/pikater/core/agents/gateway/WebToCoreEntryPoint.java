@@ -32,8 +32,8 @@ public class WebToCoreEntryPoint {
 	 * @param IDNewBatch ID of the newly scheduled batch
 	 * @throws PikaterGatewayException
 	 */
-	public static void notify_newBatch(int IDNewBatch) throws PikaterGatewayException {
-		PikaterGateway_NewBatch.newBatch(IDNewBatch);
+	public static void notify_newBatch(int IDNewBatch, int userID) throws PikaterGatewayException {
+		PikaterGateway_NewBatch.newBatch(IDNewBatch, userID);
 	}
 
 	/**
