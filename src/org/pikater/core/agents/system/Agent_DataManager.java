@@ -557,9 +557,7 @@ public class Agent_DataManager extends PikaterAgent {
 		List<AgentClass> agentNames = new ArrayList<AgentClass>();
 		for (JPAExternalAgent JPAAgentI : externalAgents) {
 			AgentClass agentClass = new AgentClass(
-					JPAAgentI.getAgentClass(),
-					JPAAgentI.getOwner().getId()
-					);
+					JPAAgentI.getAgentClass());
 			
 			agentNames.add(agentClass);
 		}
@@ -579,10 +577,12 @@ public class Agent_DataManager extends PikaterAgent {
 
 		SaveAgentInfo saveAgentInfo = (SaveAgentInfo) a.getAction();
 		AgentInfo newAgentInfo = saveAgentInfo.getAgentInfo();
-		int userID = saveAgentInfo.getUserID();
+
 		String agentClassName = newAgentInfo.getAgentClassName();
 
 		
+		//TODO:
+		//JPAExternalAgent externalAgent = DAOs.externalAgentDAO.getByAgentClass();
 		JPAExternalAgent externalAgent = null;
 		List<JPAExternalAgent> externalAgents = DAOs.externalAgentDAO.getAll();
 		for (JPAExternalAgent externalAgentI : externalAgents) {

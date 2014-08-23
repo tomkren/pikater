@@ -153,9 +153,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		for (AgentClass agentClassI : agentClasses) {
 			
 			AgentInfo agentInfo = getAgentInfo(this, agentClassI.getAgentClass());
-			int userID = agentClassI.getUserID();
 			
-			DataManagerService.saveAgentInfo(this, agentInfo, userID);
+			DataManagerService.saveAgentInfo(this, agentInfo);
 		}
 		
 	}
@@ -194,8 +193,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		List<AgentClass> agentClasses = new ArrayList<AgentClass>();
 		for (Class<? extends Agent_AbstractExperiment> agentClassI : allAgentClasses) {
 			AgentClass agentClassOnt = new AgentClass(
-					agentClassI.getName(),
-					-1);
+					agentClassI.getName());
 			agentClasses.add(agentClassOnt);
 		}
 		
@@ -339,10 +337,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 
 		NewAgent newAgent = (NewAgent)action.getAction();
 		String agentClassName = newAgent.getAgentClassName();
-		int userID = newAgent.getUserID();
 		
 		List<AgentClass> classes = new ArrayList<AgentClass>();
-		classes.add(new AgentClass(agentClassName, userID));
+		classes.add(new AgentClass(agentClassName));
 		
 		wakeUpAgentInfo(classes);
 

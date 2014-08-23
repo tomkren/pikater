@@ -197,10 +197,9 @@ public class DataManagerService extends FIPAService {
 		return null;
 	}
 
-	public static void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo, int userID) {
+	public static void saveAgentInfo(PikaterAgent agent, AgentInfo agentInfo) {
 
 		SaveAgentInfo saveAgentInfo = new SaveAgentInfo();
-		saveAgentInfo.setUserID(userID);
 		saveAgentInfo.setAgentInfo(agentInfo);
 
 		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
