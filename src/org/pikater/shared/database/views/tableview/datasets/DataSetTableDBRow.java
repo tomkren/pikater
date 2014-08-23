@@ -84,7 +84,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 				
@@ -103,7 +103,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 				
@@ -122,7 +122,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 				
@@ -141,7 +141,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 					dataset.setVisible(false);
 				}

@@ -22,31 +22,6 @@ public abstract class NamedActionDBViewValue extends AbstractDBViewValue<String>
 	}
 	
 	/**
-	 * Should not be used since this value is read only and the original
-	 * implementation of this method has no effect then.
-	 * Replaced by {@link #actionExecuted}.
-	 */
-	@Deprecated()
-	@Override
-	public void commit(AbstractTableRowDBView row)
-	{
-		throw new UnsupportedOperationException("This method is obsolete for this type. See the Javadoc.");
-	}
-	
-	/**
-	 * Called as a replacement for {@link #commit} and {@link @setValue}.
-	 * @param commit whether changes made by this action should also be committed to DB right away
-	 */
-	public void actionExecuted(boolean commit)
-	{
-		updateEntities();
-		if(commit)
-		{
-			commitEntities();
-		}
-	}
-	
-	/**
 	 * Replaced by {@link #updateEntities()}.
 	 */
 	@Deprecated()
@@ -65,5 +40,11 @@ public abstract class NamedActionDBViewValue extends AbstractDBViewValue<String>
 	 * Execute this action and appropriately update all related entities. However, do
 	 * not store anything to database yet - {@link #commitEntities()} is responsible for that. 
 	 */
-	protected abstract void updateEntities();
+	public abstract void updateEntities();
+	
+	@Override
+	public void commit(AbstractTableRowDBView row)
+	{
+		commitEdited(row);
+	}
 }

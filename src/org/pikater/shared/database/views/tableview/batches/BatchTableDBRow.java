@@ -105,7 +105,7 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 				
@@ -129,7 +129,7 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 			}; 

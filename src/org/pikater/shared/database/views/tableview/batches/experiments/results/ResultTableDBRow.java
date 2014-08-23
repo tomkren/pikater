@@ -67,7 +67,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				}
 
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 

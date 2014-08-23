@@ -72,7 +72,7 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 				
@@ -91,7 +91,7 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 				}
 				
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 					agent.setVisible(false);
 				}

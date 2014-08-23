@@ -1,7 +1,5 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews;
 
-import javax.mail.MessagingException;
-
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
@@ -84,9 +82,9 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 					{
 						Mailing.sendEmail(specificRow.getUser().getEmail(), "Password reset", sb.toString());
 					}
-					catch (MessagingException e)
+					catch (Throwable e)
 					{
-						// TODO: sending emails should be implemented using quartz and stored in database if not executed
+						// SMTP server should take responsibility for delivering emails, no custom handling needed
 						PikaterLogger.logThrowable(String.format("Could not send a password reset notification to '%s':", specificRow.getUser().getEmail()), e);
 					}
 				}
