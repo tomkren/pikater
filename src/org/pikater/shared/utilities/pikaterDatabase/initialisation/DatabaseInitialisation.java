@@ -26,6 +26,7 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.daos.UserDAO;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
@@ -154,7 +155,7 @@ public class DatabaseInitialisation {
 		}
 	}
 	
-	private void createRolesAndUsers() throws UserNotFoundException {		
+	private void createRoles(){
 		for(PikaterPriviledge priv : PikaterPriviledge.values()){
 			DAOs.userPrivDAO.storeEntity(
 					  new JPAUserPriviledge(priv.name(), priv)
@@ -172,7 +173,11 @@ public class DatabaseInitialisation {
 		a.addPriviledge(sdsPriv);
 		a.addPriviledge(sbPriv);
 		DAOs.roleDAO.storeEntity(a);
-		
+	}
+	
+	private void createUsers(){
+		JPARole u = DAOs.roleDAO.getByPikaterRole(PikaterRole.USER);
+		JPARole a = DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN);
 		
 		JPAUser u0=JPAUser.createAccountForDBInit("zombie","xxx", "invalid@mail.com", u);
 		u0.setPriorityMax(-1);
@@ -202,8 +207,11 @@ public class DatabaseInitialisation {
 		
 		JPAUser u6=JPAUser.createAccountForDBInit("klara", "123", "peskova@braille.mff.cuni.cz", u);
 		DAOs.userDAO.storeEntity(u6);
-		
-		
+	}
+	
+	private void createRolesAndUsers() {		
+		createRoles();
+		createUsers();
 	}
 	
 	private void createFileMapping() {
