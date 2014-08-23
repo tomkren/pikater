@@ -579,18 +579,7 @@ public class Agent_DataManager extends PikaterAgent {
 		AgentInfo newAgentInfo = saveAgentInfo.getAgentInfo();
 
 		String agentClassName = newAgentInfo.getAgentClassName();
-
-		
-		//TODO:
-		//JPAExternalAgent externalAgent = DAOs.externalAgentDAO.getByAgentClass();
-		JPAExternalAgent externalAgent = null;
-		List<JPAExternalAgent> externalAgents = DAOs.externalAgentDAO.getAll();
-		for (JPAExternalAgent externalAgentI : externalAgents) {
-			String agentClassNameI = externalAgentI.getAgentClass();
-			if (agentClassNameI.equals(agentClassName)) {
-				externalAgent = externalAgentI;
-			}
-		}
+		JPAExternalAgent externalAgent = DAOs.externalAgentDAO.getByAgentClass(agentClassName);
 		
 		ACLMessage reply = request.createReply();
 

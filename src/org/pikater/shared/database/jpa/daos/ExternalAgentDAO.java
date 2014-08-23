@@ -88,6 +88,10 @@ public class ExternalAgentDAO extends AbstractDAO {
 		return query.getResultList();
 	}
 
+	public JPAExternalAgent getByAgentClass(String agentClass){
+		return getSingleResultByTypedNamedQuery(JPAExternalAgent.class, "ExternalAgent.getByAgentClass", "agentClass", agentClass);
+	}
+	
 	public List<JPAExternalAgent> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder) {
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb=em.getCriteriaBuilder();

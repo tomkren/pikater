@@ -135,6 +135,21 @@ public abstract class AbstractDAO
 		}
 	}
 	
+	protected <T extends JPAAbstractEntity> T getSingleResultByTypedNamedQuery(Class<T> entityClass,String queryName,String paramName,Object param){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try {
+			return
+				em
+				 .createNamedQuery(queryName,entityClass)
+				 .setParameter(paramName, param)
+				 .setMaxResults(1)
+				 .getSingleResult();
+		}catch(Exception e){
+			return null;
+		}finally{
+			em.close();
+		}
+	}
 	
 	public void deleteEntityByID(Class<? extends JPAAbstractEntity> entityClass,int id){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
