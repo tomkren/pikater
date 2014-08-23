@@ -30,7 +30,7 @@ public class PikaterGateway_General {
 	public static void generalRequest(Initiator initiator,int port) throws PikaterGatewayException{
 		try{
 			
-		JadeGateway.execute(initiator, 10000);
+		JadeGateway.execute(initiator);
 
 		JadeGateway.shutdown();
 		} catch (ControllerException e) {
