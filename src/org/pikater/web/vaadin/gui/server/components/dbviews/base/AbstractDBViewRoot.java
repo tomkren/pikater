@@ -30,7 +30,14 @@ public abstract class AbstractDBViewRoot<T extends AbstractTableDBView>
 	
 	public DBTable getParentTable()
 	{
-		return parentTable;
+		if(parentTable != null)
+		{
+			return parentTable;
+		}
+		else
+		{
+			throw new IllegalStateException("No table has been associated with this view. Check {@link DBTable}.");
+		}
 	}
 	
 	public abstract int getColumnSize(ITableColumn column);

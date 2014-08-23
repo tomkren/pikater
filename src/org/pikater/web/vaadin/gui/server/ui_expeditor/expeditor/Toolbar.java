@@ -488,7 +488,6 @@ public class Toolbar extends VerticalLayout
 						}
 						catch (PikaterGatewayException e)
 						{
-							DAOs.batchDAO.deleteBatchEntity(newExperiment);
 							PikaterLogger.logThrowable("Could not send notification about a new batch to core.", e);
 							GeneralDialogs.warning("Failed to notify core", "Your experiment has been saved and designated "
 									+ "for execution but notification was not successfully passed to pikater core.");

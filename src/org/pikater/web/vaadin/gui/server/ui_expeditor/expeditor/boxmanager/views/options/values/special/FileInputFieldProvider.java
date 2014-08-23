@@ -26,9 +26,7 @@ public class FileInputFieldProvider extends StringValueProvider
 		final TextField tf_value = (TextField) getGeneratedFields().entrySet().iterator().next().getValue();
 		
 		/*
-		 * - Add action button it.
-		 * - Don't disable user editing - some datasets may be hard to find and user input
-		 * may be handy. 
+		 * Add action button it, don't disable user editing (some datasets may be hard to find and user input may be handy). 
 		 */
 		ActionButtonTextField tf_value_extension = ActionButtonTextField.extend(tf_value);
 		tf_value_extension.getState().type = ActionButtonType.ACTION_SEARCH;
