@@ -22,8 +22,8 @@ public class WebToCoreEntryPoint {
 	 * @return
 	 * @throws PikaterGatewayException
 	 */
-	public static AgentInfos getAgentInfos(int userID) throws PikaterGatewayException {
-		return PikaterGateway_GetAgentInfo.getAgentInfos(userID);
+	public static AgentInfos getAgentInfosVisibleForUser(int userID) throws PikaterGatewayException {
+		return PikaterGateway_GetAgentInfo.getAgentInfosVisibleForUser(userID);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class WebToCoreEntryPoint {
 	 */
 	public static void checkLocalConnection() throws PikaterGatewayException 
 	{
-		PikaterGateway_GetAgentInfo.getAgentInfos(-1);
+		PikaterGateway_GetAgentInfo.getAgentInfosVisibleForUser(-1);
 	}
 
 	/*
@@ -88,7 +88,7 @@ public class WebToCoreEntryPoint {
 		
 		PikaterGateway_General.MASTER_PORT=1099;
 		
-		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfos(-1);
+		AgentInfos agentInfos = WebToCoreEntryPoint.getAgentInfosVisibleForUser(-1);
 
 		for (AgentInfo agentInfoI : agentInfos.getAgentInfos()) {
 			System.out.println("AgentInfo: " + agentInfoI.getName());

@@ -21,6 +21,7 @@ import org.pikater.core.ontology.subtrees.agent.NewAgent;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.ExternalAgentNames;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfoVisibleForUser;
 import org.pikater.core.ontology.subtrees.agentInfo.GetYourAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
@@ -103,8 +104,8 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					return respondToGetAgentInfos(request, action);
 				}
 
-				if (action.getAction() instanceof GetAgentInfos) {
-					return respondToGetAgentInfos(request, action);
+				if (action.getAction() instanceof GetAgentInfoVisibleForUser) {
+					return respondToGetAgentInfoVisibleForUser(request, action);
 				}
 				
 				if (action.getAction() instanceof NewAgent) {
@@ -301,7 +302,39 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		return reply;
 
 	}
+	
+	private ACLMessage respondToGetAgentInfoVisibleForUser(ACLMessage request, Action action) {
 
+		GetAgentInfoVisibleForUser getAgentInfoVisibleForUser =
+				(GetAgentInfoVisibleForUser)action.getAction();
+		int userID = getAgentInfoVisibleForUser.getUserID();
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+
+		AgentInfos agenInfosUser = DataManagerService.getAgentInfos(this, userID);
+		AgentInfos agenInfosEveryone = DataManagerService.getAgentInfos(this, -1);
+		
+		AgentInfos agentInfos = new AgentInfos();
+		agentInfos.addAgentInfo(agenInfosUser.getAgentInfos());
+		agentInfos.addAgentInfo(agenInfosEveryone.getAgentInfos());
+		
+		//Models models = communicator.getAllModels();
+		//agenInfos.importModels(models);
+		
+		Result r = new Result(action, agentInfos);
+		try {
+			getContentManager().fillContent(reply, r);
+		} catch (CodecException e) {
+			logError(e.getMessage(), e);
+		} catch (OntologyException e) {
+			logError(e.getMessage(), e);
+		}
+
+		return reply;
+
+	}
+	
 	protected ACLMessage respondToNewAgent(ACLMessage request, Action action) {
 
 		NewAgent newAgent = (NewAgent)action.getAction();

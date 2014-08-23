@@ -46,7 +46,12 @@ public class AgentInfos implements Concept {
 		}
 		this.agentInfos.add(agentInfo);
 	}
-
+	public void addAgentInfo(List<AgentInfo> agentInfos) {
+		if (agentInfos == null) {
+			throw new IllegalArgumentException("Argument agentInfos can't be null");
+		}
+		this.agentInfos.addAll(agentInfos);
+	}
 	public boolean contains(AgentClass agentClass) {
 		if (agentClass == null) {
 			throw new IllegalArgumentException("Argument agentClass can't be null");

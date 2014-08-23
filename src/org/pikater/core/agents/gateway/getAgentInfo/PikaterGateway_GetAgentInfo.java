@@ -14,16 +14,16 @@ import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
-import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfos;
+import org.pikater.core.ontology.subtrees.agentInfo.GetAgentInfoVisibleForUser;
 
 public class PikaterGateway_GetAgentInfo {
 
-	public static AgentInfos getAgentInfos(int userID) throws PikaterGatewayException {
+	public static AgentInfos getAgentInfosVisibleForUser(int userID) throws PikaterGatewayException {
 		
 		AgentInfos agentInfos = null;
 		
 		try {	        
-			GetAgentInfos getAgentInfos = new GetAgentInfos();
+			GetAgentInfoVisibleForUser getAgentInfos = new GetAgentInfoVisibleForUser();
 			getAgentInfos.setUserID(userID);
 
 			Codec codec = new SLCodec();
