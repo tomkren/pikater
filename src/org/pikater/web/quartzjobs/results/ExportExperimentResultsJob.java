@@ -1,9 +1,11 @@
 package org.pikater.web.quartzjobs.results;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
+import org.pikater.shared.database.util.ResultExporter;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
@@ -50,15 +52,21 @@ public class ExportExperimentResultsJob extends InterruptibleImmediateOneTimeJob
 		// the actual action
 		try
 		{
+			ResultExporter re=new ResultExporter(new FileOutputStream(resultFile));
+			
+			re.header((JPAExperiment)null, (JPAResult)null);
+			
 			float resultsExported = 0;
 			float resultCount = experiment.getResults().size();  
 			for(JPAResult result : experiment.getResults())
 			{
-				// TODO: export result to the above file
+				re.row(experiment, result);
 				
 				resultsExported++;
 				resultHandler.updateProgress(resultsExported / resultCount);
 			}
+			
+			re.close();
 			resultHandler.finished(null);
 		}
 		catch (Throwable t)
