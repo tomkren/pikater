@@ -155,9 +155,16 @@ public final class DragEdgeModule implements IEngineModule
 				{
 					// IMPORTANT: don't violate the call order
 					selectionModule.onEdgeDragOperationFinished(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
-					kineticEngine.pushNewOperation(new SwapEdgeEndPointOperation(kineticEngine)); // changes the endpoint, updates the edge but doesn't draw
+					kineticEngine.pushNewOperation(new SwapEdgeEndPointOperation(
+							kineticEngine,
+							getDraggedEdge(),
+							getEndPointBeingChanged()
+					)); // changes the endpoint, updates the edge, notifies server and draws
 				}
-				kineticEngine.draw(EngineComponent.STAGE);
+				else
+				{
+					kineticEngine.draw(EngineComponent.STAGE);
+				}
 			}
 			else // edge was dragged off the previous box onto blank space
 			{

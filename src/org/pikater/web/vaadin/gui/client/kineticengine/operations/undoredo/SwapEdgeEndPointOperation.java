@@ -4,27 +4,30 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EndPoint;
-import org.pikater.web.vaadin.gui.client.kineticengine.modules.DragEdgeModule;
+import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
+import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 
 public class SwapEdgeEndPointOperation extends BiDiOperation
 {
+	private final ItemRegistrationModule itemRegistrationModule;
 	private final EdgeGraphItemClient edge;
-	private final EndPoint endPointType;
-	private final BoxGraphItemClient originalEndpoint;
-	private final BoxGraphItemClient newEndpoint;
+	private final EndPoint affectedEndpoint;
+	private final BoxGraphItemClient boxEndpoint_original;
+	private final BoxGraphItemClient boxEndpoint_new;
 	
-	public SwapEdgeEndPointOperation(KineticEngine kineticEngine)
+	public SwapEdgeEndPointOperation(KineticEngine kineticEngine, EdgeGraphItemClient edge, EndPoint affectedEndpoint)
 	{
 		super(kineticEngine);
 		
-		DragEdgeModule edgeDragOperation = (DragEdgeModule) kineticEngine.getModule(DragEdgeModule.moduleID);
-		this.edge = edgeDragOperation.getDraggedEdge();
-		this.endPointType = edgeDragOperation.getEndPointBeingChanged();
-		this.originalEndpoint = this.edge.getEndPoint(this.endPointType);
-		this.newEndpoint = kineticEngine.getHoveredBox();
+		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
 		
-		if(this.newEndpoint == null)
+		this.edge = edge;
+		this.affectedEndpoint = affectedEndpoint;
+		this.boxEndpoint_original = this.edge.getEndPoint(this.affectedEndpoint);
+		this.boxEndpoint_new = kineticEngine.getHoveredBox();
+		
+		if(this.boxEndpoint_new == null)
 		{
 			throw new NullPointerException("Can not perform this operation because no hovered box was found. Did you"
 					+ "somehow break the track mouse plugin's functions?");
@@ -34,40 +37,30 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 	@Override
 	public void firstExecution()
 	{
-		setEdgeEndPoint(newEndpoint); // same as Redo() but don't draw
+		redo();
 	}
 
 	@Override
 	public void undo()
 	{
-		setEdgeEndPoint(originalEndpoint);
-		drawChanges();
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, true, edge);
+		edge.setEndpoint(affectedEndpoint, boxEndpoint_original);
+		edge.updateEdge();
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, true, edge);
 	}
 
 	@Override
 	public void redo()
 	{
-		setEdgeEndPoint(newEndpoint);
-		drawChanges();
+		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, true, edge);
+		edge.setEndpoint(affectedEndpoint, boxEndpoint_new);
+		edge.updateEdge();
+		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, true, edge);
 	}
 	
 	@Override
 	public String toString()
 	{
 		return "SwapEdgeEndPointOperation";
-	}
-	
-	// **********************************************************************************************
-	// PRIVATE INTERFACE
-	
-	private void setEdgeEndPoint(BoxGraphItemClient box)
-	{
-		edge.setEndpoint(endPointType, box);
-		edge.updateEdge();
-	}
-	
-	private void drawChanges()
-	{
-		kineticEngine.draw(edge.getComponentToDraw());
 	}
 }
