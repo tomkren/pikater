@@ -10,6 +10,7 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
+import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.QueryConstraints;
 import org.pikater.shared.database.views.base.query.QueryResult;
@@ -50,7 +51,7 @@ public class DataSetTableDBView extends AbstractTableDBView
 	 * make sure to order them right :). 
 	 * <p>
 	 * This enum is used for create Criteria API query in functions
-	 * {@link DataSetDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
+	 * {@link DataSetDAO#getAllUserUpload(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
 	 * {@link DataSetDAO#getByOwner(JPAUser, int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}
 	 * <p>
 	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}
@@ -166,11 +167,11 @@ public class DataSetTableDBView extends AbstractTableDBView
 		List<JPADataSetLO> allDatasets;
 		int allDatasetCount=0;
 		if(this.adminMode()){
-			allDatasets = DAOs.dataSetDAO.getAllVisible(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allDatasetCount=DAOs.dataSetDAO.getAllVisibleCount();
+			allDatasets = DAOs.dataSetDAO.getUserUploadVisible(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			allDatasetCount=DAOs.dataSetDAO.getBySourceVisibleCount(JPADatasetSource.USER_UPLOAD);
 		}else{
-			allDatasets = DAOs.dataSetDAO.getByOwnerVisible(owner,constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allDatasetCount=DAOs.dataSetDAO.getByOwnerVisibleCount(owner);
+			allDatasets = DAOs.dataSetDAO.getByOwnerUserUploadVisible(owner,constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
+			allDatasetCount=DAOs.dataSetDAO.getByOwnerSourceVisibleCount(owner, JPADatasetSource.USER_UPLOAD);
 		}
 		
 		List<DataSetTableDBRow> resultRows = new ArrayList<DataSetTableDBRow>();

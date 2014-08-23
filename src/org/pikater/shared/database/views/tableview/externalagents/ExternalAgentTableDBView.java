@@ -50,7 +50,7 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 	 * make sure to order them right :). 
 	 * <p>
 	 * This enum is used for create Criteria API query in functions
-	 * {@link ExternalAgentDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
+	 * {@link ExternalAgentDAO#getAllUserUpload(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
 	 * {@link ExternalAgentDAO#getByOwner(JPAUser, int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}
 	 * <p>
 	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}

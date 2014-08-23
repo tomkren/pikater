@@ -39,8 +39,9 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
-		listBestResult();
-		listUserUploadedDatasets();
+		testDatasetViewFunctions();
+		//listBestResult();
+		//listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
 		//exportResults();
 		//listVisibleAndApprovedDatasets();
@@ -55,9 +56,29 @@ public class DatabaseTest {
 		//listBatches();
 		//listExperiments();
 		//listFileMappings();
-		listAgentInfos();
+		//listAgentInfos();
 	}
 	
+	private void testDatasetViewFunctions() {
+		List<JPADataSetLO> allDatasets;
+		int allDatasetCount=0;
+		
+		allDatasets = DAOs.dataSetDAO.getUserUploadVisible(0,100,DataSetTableDBView.Column.CREATED,SortOrder.DESCENDING);
+		allDatasetCount=DAOs.dataSetDAO.getBySourceVisibleCount(JPADatasetSource.USER_UPLOAD);
+		
+		p("-----  Query count : "+allDatasetCount+"  --------");
+		p("-----  List  count : "+allDatasets.size()+"  --------");
+		
+		JPAUser owner=DAOs.userDAO.getByLogin("sj").get(0);
+		
+		allDatasets = DAOs.dataSetDAO.getByOwnerUserUploadVisible(owner,0,100,DataSetTableDBView.Column.CREATED,SortOrder.DESCENDING);
+		allDatasetCount=DAOs.dataSetDAO.getByOwnerSourceVisibleCount(owner, JPADatasetSource.USER_UPLOAD);
+		
+		p("-----  Query count : "+allDatasetCount+"  --------");
+		p("-----  List  count : "+allDatasets.size()+"  --------");
+		
+	}
+
 	private void listBestResult() {
 		JPAExperiment exp=DAOs.experimentDAO.getByID(116652, EmptyResultAction.NULL);
 		JPAResult result = DAOs.resultDAO.getByExperimentBestResult(exp);
@@ -98,7 +119,7 @@ public class DatabaseTest {
 	}
 
 	private void listVisibleAndApprovedDatasets() {
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllVisible(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getUserUploadVisible(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
 		p("No. of found visible DataSets: "+dslos.size());
 		p("No. of all visible DataSets: "+DAOs.dataSetDAO.getAllVisibleCount());
 		for(JPADataSetLO dslo:dslos){
@@ -107,7 +128,7 @@ public class DatabaseTest {
 		p("------------");
 		p("");
 		
-		dslos= DAOs.dataSetDAO.getAllVisibleApproved(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
+		dslos= DAOs.dataSetDAO.getUserUploadVisibleApproved(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
 		p("No. of found visible and approved DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
 			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
@@ -115,7 +136,7 @@ public class DatabaseTest {
 		p("------------");
 		p("");
 		
-		dslos= DAOs.dataSetDAO.getByOwnerVisible(DAOs.userDAO.getByLogin("sp").get(0),0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
+		dslos= DAOs.dataSetDAO.getByOwnerUserUploadVisible(DAOs.userDAO.getByLogin("sp").get(0),0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
 		p("No. of found visible DataSets for user sp: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
 			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
@@ -188,7 +209,7 @@ public class DatabaseTest {
 	}
 	
 	public void listDataSets(){
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAll(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.ASCENDING);
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllUserUpload(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.ASCENDING);
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
 			p(dslo.getId()+". from "+dslo.getSource().name()+" ext: "+DAOs.filemappingDAO.getSingleExternalFilename(dslo)+" int: "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+(dslo.getGlobalMetaData()!=null ? dslo.getGlobalMetaData().getNumberofInstances():-1));
