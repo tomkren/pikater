@@ -1,6 +1,7 @@
 package org.pikater.shared.database.views.tableview.externalagents;
 
 import org.pikater.shared.database.jpa.JPAExternalAgent;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
@@ -47,18 +48,18 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 		 * And then custom actions.
 		 */
 		case APPROVED:
-			return new BooleanDBViewValue(false) // TODO: agent.isApproved
+			return new BooleanDBViewValue(agent.isApproved())
 			{
 				@Override
 				protected void updateEntities(Boolean newValue)
 				{
-					// TODO Auto-generated method stub
+					agent.setApproved(newValue);
 				}
 				
 				@Override
 				protected void commitEntities()
 				{
-					// TODO Auto-generated method stub
+					commitRow();
 				}
 			};
 		case DOWNLOAD:
@@ -92,13 +93,13 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 				@Override
 				protected void updateEntities()
 				{
+					agent.setVisible(false);
 				}
 				
 				@Override
 				protected void commitEntities()
 				{
-					// TODO: "hide" or really remove?
-					// TODO: this is directly connected to the issue of JPAAgentInfo's relation to JPAExternalAgent
+					commitRow();
 				}
 			};
 			
@@ -110,5 +111,6 @@ public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 	@Override
 	public void commitRow()
 	{
+		DAOs.externalAgentDAO.updateEntity(agent);
 	}
 }
