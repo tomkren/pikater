@@ -1,7 +1,5 @@
 package org.pikater.web.vaadin;
 
-import java.util.List;
-
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
@@ -27,17 +25,16 @@ public class ManageAuth
 		}
 		else
 		{
-			// TODO: getByLoginAndPassword
-			List<JPAUser> usersWithProvidedLogin = DAOs.userDAO.getByLogin(login);
-			for(JPAUser user : usersWithProvidedLogin)
+			JPAUser user = DAOs.userDAO.getByLoginAndPassword(login, password);
+			if(user != null)
 			{
-				if(user.getPassword().equals(password)) // passwords match
-				{
-					login(session, user.getId()); // actually authenticate in this UI
-					return true;
-				}
+				login(session, user.getId()); // actually authenticate in this UI
+				return true;
 			}
-			return false;
+			else
+			{
+				return false;
+			}
 		}
 	}
 	
