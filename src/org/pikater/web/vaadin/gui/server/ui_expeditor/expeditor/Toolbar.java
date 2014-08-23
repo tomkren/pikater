@@ -484,7 +484,7 @@ public class Toolbar extends VerticalLayout
 					{
 						try
 						{
-							WebToCoreEntryPoint.notify_newBatch(newExperiment.getId());
+							WebToCoreEntryPoint.notify_newBatch(newExperiment.getId(), experimentOwner.getId());
 						}
 						catch (PikaterGatewayException e)
 						{

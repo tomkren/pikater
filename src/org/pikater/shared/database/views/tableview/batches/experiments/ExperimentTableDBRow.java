@@ -54,7 +54,7 @@ public class ExperimentTableDBRow extends AbstractTableRowDBView {
 				}
 
 				@Override
-				protected void updateEntities()
+				public void updateEntities()
 				{
 				}
 

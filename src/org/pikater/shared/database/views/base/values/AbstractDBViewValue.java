@@ -73,12 +73,7 @@ public abstract class AbstractDBViewValue<T extends Object>
 	{
 		if(isEdited())
 		{
-			commitEntities();
-			setLastCommitedValue();
-			if(onCommitted != null)
-			{
-				onCommitted.onCommitted(row, this);
-			}
+			commitEdited(row);
 		}
 	}
 	
@@ -88,7 +83,20 @@ public abstract class AbstractDBViewValue<T extends Object>
 	}
 	
 	//-----------------------------------------------------------------
-	// PRIVATE INTERFACE
+	// PROTECTED & PRIVATE INTERFACE
+	
+	/**
+	 * Stores the current value to database if updated.
+	 */
+	protected void commitEdited(AbstractTableRowDBView row)
+	{
+		commitEntities();
+		setLastCommitedValue();
+		if(onCommitted != null)
+		{
+			onCommitted.onCommitted(row, this);
+		}
+	}
 	
 	/**
 	 * Sets this value as committed.

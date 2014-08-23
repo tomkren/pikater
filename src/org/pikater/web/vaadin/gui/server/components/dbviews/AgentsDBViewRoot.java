@@ -131,6 +131,7 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 					return true; // close the dialog
 				}
 			});
+			
 		}
 		else
 		{

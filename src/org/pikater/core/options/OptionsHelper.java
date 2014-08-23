@@ -1,13 +1,17 @@
 package org.pikater.core.options;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.core.ontology.subtrees.newOption.base.Value;
+import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
@@ -18,7 +22,10 @@ public class OptionsHelper
 	{
 		List<NewOption> options = OptionsHelper.getNotSpecifiedCAOptions();
 		
-		NewOption optModel = new NewOption(CoreConstants.MODEL, new NullValue());
+		Value defaultValue = new Value(new NullValue());
+		
+		NewOption optModel = new NewOption(CoreConstants.MODEL, defaultValue, 
+				defaultValue.getType(), new ValueType(new IntegerValue(0)));
 
 		options.add(optModel);
 		

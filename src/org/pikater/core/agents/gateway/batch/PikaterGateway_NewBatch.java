@@ -16,11 +16,12 @@ import org.pikater.core.ontology.subtrees.batch.NewBatch;
 
 public class PikaterGateway_NewBatch {
 
-	public static void newBatch(int IDNewBatch) throws PikaterGatewayException {
+	public static void newBatch(int IDNewBatch, int userID) throws PikaterGatewayException {
 
 		try {
 	        
 	        NewBatch newBatch = new NewBatch();
+	        newBatch.setUserId(userID);
 	        newBatch.setBatchId(IDNewBatch);
 
 			Ontology batchOntology = BatchOntology.getInstance();

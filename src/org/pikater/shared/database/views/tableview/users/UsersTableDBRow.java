@@ -114,7 +114,7 @@ public class UsersTableDBRow extends AbstractTableRowDBView
 					}
 
 					@Override
-					protected void updateEntities()
+					public void updateEntities()
 					{
 						newPlainTextPassword = DAOs.userDAO.resetPasswordButDontUpdate(user); // needed for GUI to send email about this action
 					}
