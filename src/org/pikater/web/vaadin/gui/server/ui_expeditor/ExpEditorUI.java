@@ -41,42 +41,35 @@ public class ExpEditorUI extends CustomConfiguredUI
 	protected void displayChildContent()
 	{
 		/*
-		 * First check whether launched pikater has already gathered and sent over information
-		 * of all available experiment related agents.
+		 * Display editor if authenticated or make the user authenticate first and then display it.
 		 */
-		
-		final AgentInfoCollection agentInfoProvider = createAgentInfoProvider();
-		if(agentInfoProvider != null)
+		if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
 		{
-			/*
-			 * Display editor if authenticated or make the user authenticate first and then display it.
-			 */
-			if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
+			displayExperimentEditor();
+		}
+		else
+		{
+			forceUserToAuthenticate(new CustomConfiguredUI.IAuthenticationSuccessful()
 			{
-				displayExperimentEditor(agentInfoProvider);
-			}
-			else
-			{
-				forceUserToAuthenticate(new CustomConfiguredUI.IAuthenticationSuccessful()
+				@Override
+				public void onSuccessfulAuth()
 				{
-					@Override
-					public void onSuccessfulAuth()
-					{
-						displayExperimentEditor(agentInfoProvider);
-					}
-				});
-			}
+					displayExperimentEditor();
+				}
+			});
 		}
 	}
 	
 	private AgentInfoCollection createAgentInfoProvider()
 	{
+		// fetch information about available agents from core or create dummy
 		AgentInfoCollection agentInfoProvider = null;
 		if(ServerConfigurationInterface.getConfig().coreEnabled)
 		{
 			try
 			{
-				agentInfoProvider = AgentInfoCollection.getFrom(WebToCoreEntryPoint.getAgentInfos());
+				agentInfoProvider = AgentInfoCollection.getFrom(WebToCoreEntryPoint.getAgentInfosVisibleForUser(
+						ManageAuth.getUserID(VaadinSession.getCurrent())));
 			}
 			catch (Throwable t)
 			{
@@ -91,16 +84,20 @@ public class ExpEditorUI extends CustomConfiguredUI
 		return agentInfoProvider;
 	}
 	
-	private void displayExperimentEditor(AgentInfoCollection agentInfoProvider)
+	private void displayExperimentEditor()
 	{
-		// disable regular page layout
-		setPageCroppedAndHorizontallyCentered(false);
-		
-		// simply create a new empty editor and let the user handle the rest
-		ExpEditor editor = new ExpEditor(agentInfoProvider);
-		setContent(editor);
-		
-		// display an empty experiment by default
-		editor.addEmptyTab();
+		final AgentInfoCollection agentInfoProvider = createAgentInfoProvider();
+		if(agentInfoProvider != null)
+		{
+			// disable regular page layout
+			setPageCroppedAndHorizontallyCentered(false);
+			
+			// simply create a new empty editor and let the user handle the rest
+			ExpEditor editor = new ExpEditor(agentInfoProvider);
+			setContent(editor);
+			
+			// display an empty experiment by default
+			editor.addEmptyTab();
+		}
 	}
 }
