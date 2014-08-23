@@ -30,7 +30,15 @@ public class UserDatasetsView extends DatasetsView
 				MyPopup datasetUploadWizardWindow = new MyPopup("Dataset upload guide");
 				datasetUploadWizardWindow.setWidth("600px");
 				datasetUploadWizardWindow.setHeight("500px");
-				datasetUploadWizardWindow.setContent(new DatasetUploadWizard(datasetUploadWizardWindow));
+				datasetUploadWizardWindow.setContent(new DatasetUploadWizard(datasetUploadWizardWindow, new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						// when a dataset is successfully uploaded:
+						getMainLayout().getTable().rebuildRowCache();
+					}
+				}));
 				datasetUploadWizardWindow.show();
 			}
 		}));

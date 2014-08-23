@@ -128,6 +128,7 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 				public boolean handleResult(Object[] args)
 				{
 					action.run();
+					getParentTable().rebuildRowCache();
 					return true; // close the dialog
 				}
 			});

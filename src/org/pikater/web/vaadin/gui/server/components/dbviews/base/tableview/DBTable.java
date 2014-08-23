@@ -190,6 +190,9 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	 */
 	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
+		// first register thy self in the view and don't forget to!
+		viewRoot.setParentTable(this);
+		
 		// this must be first so that column collapsing works...
 		tableContainer.setViewRoot(viewRoot);
 		setContainerDataSource(tableContainer);
@@ -258,7 +261,17 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		pagingControls.updatePageCount(tableContainer.getUnconstrainedQueryResultsCount());
 	}
 	
-	private void rebuildRowCache()
+	/**
+	 * Should only be used internally. Use {@link #rebuildRowCache()} instead.
+	 */
+	@Deprecated
+	@Override
+	public void refreshRowCache()
+	{
+		super.refreshRowCache();
+	}
+	
+	public void rebuildRowCache()
 	{
 		setPageLength(tableContainer.getItemIds().size());
 		refreshRowCache();

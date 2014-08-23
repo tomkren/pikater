@@ -12,6 +12,7 @@ import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
@@ -32,7 +33,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	public DatasetUploadWizard(Window parentPopup)
+	public DatasetUploadWizard(Window parentPopup, Runnable onSuccessfulUploadCallback)
 	{
 		super(parentPopup, new DatasetUploadCommons());
 		getFinishButton().setEnabled(false);
@@ -40,7 +41,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 		
 		addStep(new Step1(this));
 		addStep(new Step2(this));
-		addStep(new Step3(this));
+		addStep(new Step3(this, onSuccessfulUploadCallback));
 	}
 	
 	//--------------------------------------------------------------
@@ -156,7 +157,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 	{
 		private final VerticalLayout vLayout;
 		
-		public Step3(DatasetUploadWizard parentWizard)
+		public Step3(DatasetUploadWizard parentWizard, final Runnable onSuccessfulUploadCallback)
 		{
 			super(parentWizard);
 			this.vLayout = new VerticalLayout();
@@ -224,7 +225,12 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 						}
 					}
 					
-					MyNotifications.showSuccess("Upload successful", event.getFileName());
+					if(ServerConfigurationInterface.getConfig().coreEnabled)
+					{
+						GeneralDialogs.info("Upload successful", "It may take a while before your dataset is processed and (for example) visualization "
+								+ "can be invoked on it.");
+					}
+					onSuccessfulUploadCallback.run();
 				}
 			});
 			

@@ -13,6 +13,7 @@ import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
@@ -38,7 +39,7 @@ public class AgentUploadForm extends CustomFormLayout
 	private final TextArea tf_agentDescription;
 	private final MyMultiUpload upload;
 
-	public AgentUploadForm(final Window parentPopup)
+	public AgentUploadForm(final Window parentPopup, final Runnable onSuccessfulUploadCallback)
 	{
 		super(null);
 		
@@ -116,8 +117,13 @@ public class AgentUploadForm extends CustomFormLayout
 						parentPopup.close();
 					}
 				}
-				
-				MyNotifications.showSuccess("Upload successful", event.getFileName());
+
+				if(ServerConfigurationInterface.getConfig().coreEnabled)
+				{
+					GeneralDialogs.info("Upload successful", "It may take a while before your agent is processed and made available in the experiment "
+							+ "editor.");
+				}
+				onSuccessfulUploadCallback.run();
 			}
 		});
 		this.upload.setEnabled(false);

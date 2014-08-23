@@ -201,6 +201,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 				public boolean handleResult(Object[] args)
 				{
 					action.run(); // approve
+					getParentTable().rebuildRowCache();
 					return true;
 				}
 			});
