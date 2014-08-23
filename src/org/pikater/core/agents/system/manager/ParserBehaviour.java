@@ -93,6 +93,11 @@ public class ParserBehaviour extends AchieveREResponder {
     private ACLMessage respondToNewBatch(ComputationDescription comDescription,
     		int batchID, int userID, ACLMessage request) {
 
+    	ACLMessage reply = request.createReply();
+        reply.setPerformative(ACLMessage.INFORM);
+        reply.setContent("OK");
+        this.agent.send(reply);
+        
         Parser parser = new Parser(agent);
         parser.parseRoots(comDescription, batchID, userID);
 
@@ -108,12 +113,7 @@ public class ParserBehaviour extends AchieveREResponder {
         
 		computationGraph.startBatchComputation();
 		
-		
-    	ACLMessage reply = request.createReply();
-        reply.setPerformative(ACLMessage.INFORM);
-        reply.setContent("OK");
-        
-        return reply;
+        return null;
     }
     
 }
