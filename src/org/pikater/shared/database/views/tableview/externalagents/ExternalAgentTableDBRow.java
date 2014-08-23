@@ -12,7 +12,7 @@ import org.pikater.shared.util.DateUtils;
 
 public class ExternalAgentTableDBRow extends AbstractTableRowDBView {
 
-	private JPAExternalAgent agent=null;
+	private JPAExternalAgent agent;
 
 	public ExternalAgentTableDBRow(JPAExternalAgent agent)
 	{
