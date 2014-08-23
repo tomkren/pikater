@@ -50,15 +50,16 @@ public abstract class AbstractDAO
 		return getByID(ID, EmptyResultAction.NULL)!=null;
 	}
 	
-	public void updateEntity(JPAAbstractEntity changedEntity){
+	
+	protected <T extends JPAAbstractEntity> void updateEntity(Class<T> entityClass,T changedEntity){
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
 		try{
-			JPAAbstractEntity item=em.find(JPAAbstractEntity.class, changedEntity.getId());
+			T item=em.find(entityClass, changedEntity.getId());
 			item.updateValues(changedEntity);
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't update JPA AbstractEntity object.", e);
+			logger.error("Can't update "+changedEntity.getClass().getName()+" object.", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();

@@ -167,4 +167,8 @@ public class ExternalAgentDAO extends AbstractDAO {
 		this.deleteEntityByID(JPAExternalAgent.class, id);
 	}
 	
+	public void updateEntity(JPAExternalAgent externalAgent){
+		updateEntity(JPAExternalAgent.class, externalAgent);
+	}
+	
 }

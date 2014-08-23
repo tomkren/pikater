@@ -11,8 +11,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.pikater.shared.database.exceptions.NotUpdatableEntityException;
-
 
 @Entity	
 @Table(name="ExternalAgent")
@@ -97,6 +95,13 @@ public class JPAExternalAgent extends JPAAbstractEntity{
 	}
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
-		throw new NotUpdatableEntityException();
+		JPAExternalAgent updateValues=(JPAExternalAgent)newValues;
+		this.setApproved(updateValues.isApproved());
+		this.setVisible(updateValues.isVisible());
+		this.setDescription(updateValues.getDescription());
+		this.setAgentClass(updateValues.getAgentClass());
+		this.setCreated(updateValues.getCreated());
+		this.setName(updateValues.getName());
+		this.setOwner(updateValues.getOwner());
 	}
 }
