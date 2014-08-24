@@ -51,11 +51,18 @@ public class SetRestriction implements IRestriction, Iterable<IValueData>
 	{
 		this.values.addAll(values);
 	}
-	public boolean validatesValue(IValueData value)
+	public boolean validatesValue(IValueData otherValue)
 	{
-		if(isValid() && fetchSetType().equals(value.getClass()))
+		if(isValid() && fetchSetType().equals(otherValue.getClass()))
 		{
-			return values.contains(value);
+			for(IValueData value : values)
+			{
+				if(value.equals(otherValue))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 		return false;
 	}

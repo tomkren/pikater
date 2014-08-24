@@ -42,7 +42,7 @@ public class OptionsHelper
 
 		NewOption optDuration = new NewOption(
 				CoreConstants.DURATION,
-				new StringValue(DurationType.MINUTES.name()),
+				new StringValue(DurationType.MINUTES.getGuiValue()),
 				new SetRestriction(false, durationValues));
 		
 		List<IValueData> modeValues = new ArrayList<IValueData>();
