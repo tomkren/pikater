@@ -6,30 +6,16 @@ import javax.persistence.EntityManager;
 
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPATaskType;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
-import org.pikater.shared.database.util.ResultFormatter;
 
-public class TaskTypeDAO extends AbstractDAO {
+public class TaskTypeDAO extends AbstractDAO<JPATaskType> {
+	
+	public TaskTypeDAO(){
+		super(JPATaskType.class);
+	}
 
 	@Override
 	public String getEntityName() {
 		return JPATaskType.EntityName;
-	}
-
-	@Override
-	public List<JPATaskType> getAll() {
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("TaskType.getAll", JPATaskType.class)
-				.getResultList();
-	}
-
-	@Override
-	public JPATaskType getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPATaskType>(
-				getByTypedNamedQuery("TaskType.getByID", "id", ID),
-				era
-				).getSingleResultWithNull();
 	}
 	
 	public JPATaskType createOrGetByName(String name) {
@@ -57,18 +43,4 @@ public class TaskTypeDAO extends AbstractDAO {
 		}
 		return null;
 	}
-	
-	
-	private List<JPATaskType> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPATaskType.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}	
 }

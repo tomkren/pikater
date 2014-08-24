@@ -17,24 +17,19 @@ import org.pikater.shared.database.jpa.JPAModel;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
 
-public class BatchDAO extends AbstractDAO {
+public class BatchDAO extends AbstractDAO<JPABatch> {
 
+	public BatchDAO(){
+		super(JPABatch.class);
+	}
+	
 	@Override
 	public String getEntityName() {
 		return JPABatch.EntityName;
-	}
-
-	@Override
-	public List<JPABatch> getAll() {
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("Batch.getAll", JPABatch.class)
-				.getResultList();
 	}
 	
 	public List<JPABatch> getAll(int offset, int maxResultCount) {
@@ -236,14 +231,6 @@ public class BatchDAO extends AbstractDAO {
 				.getSingleResult())
 				.intValue();
 	}
-
-	@Override
-	public JPABatch getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPABatch>(
-				getByTypedNamedQuery("Batch.getByID", "id", ID),
-				era
-				).getSingleResultWithNull();
-	}
 	
 	public List<JPABatch> getByStatus(JPABatchStatus status) {
 		return getByTypedNamedQuery("Batch.getByStatus", "status", status);
@@ -303,34 +290,6 @@ public class BatchDAO extends AbstractDAO {
 		}
 	}
 	
-	private List<JPABatch> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPABatch.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-	
-	private List<JPABatch> getByTypedNamedQuery(String queryName,String paramName,Object param,int offset,int maxResultCount){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPABatch.class)
-				.setParameter(paramName, param)
-				.setFirstResult(offset)
-				.setMaxResults(maxResultCount)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-	
 	public List<Object[]> getByIDwithResults(int batchID){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -385,7 +344,7 @@ public class BatchDAO extends AbstractDAO {
 	}
 	
 	public void deleteBatchByID(int id){
-		this.deleteEntityByID(JPABatch.class, id);
+		this.deleteEntityByID(id);
 	}
 	
 	/**

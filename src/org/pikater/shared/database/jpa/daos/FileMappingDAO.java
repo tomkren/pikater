@@ -2,38 +2,19 @@ package org.pikater.shared.database.jpa.daos;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import org.pikater.shared.database.exceptions.NoResultException;
-import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
-import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
-import org.pikater.shared.database.util.ResultFormatter;
 
-public class FileMappingDAO extends AbstractDAO {
+public class FileMappingDAO extends AbstractDAO<JPAFilemapping> {
 
+	public FileMappingDAO(){
+		super(JPAFilemapping.class);
+	}
+	
 	@Override
 	public String getEntityName() {
 		return JPAFilemapping.EntityName;
-	}
-
-	@Override
-	public List<JPAFilemapping> getAll() {
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("FileMapping.getAll", JPAFilemapping.class)
-				.getResultList();
-	}
-
-	@Override
-	public JPAFilemapping getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPAFilemapping>(
-				getByTypedNamedQuery("FileMapping.getByID", "id", ID),
-				era
-				).getSingleResultWithNull();
 	}
 	
 	public String getSingleExternalFilename(JPADataSetLO dslo){
@@ -96,31 +77,4 @@ public class FileMappingDAO extends AbstractDAO {
 			return null;
 		}
 	}
-	
-	private List<JPAFilemapping> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAFilemapping.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-	
-	private List<JPAFilemapping> getByTypedNamedQueryDouble(String queryName,String paramName1,Object param1,String paramName2,Object param2){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAFilemapping.class)
-				.setParameter(paramName1, param1)
-				.setParameter(paramName2, param2)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}	
 }

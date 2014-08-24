@@ -22,8 +22,12 @@ import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.shared.logging.PikaterLogger;
 
-public class UserDAO extends AbstractDAO
-{
+public class UserDAO extends AbstractDAO<JPAUser>{
+	
+	public UserDAO(){
+		super(JPAUser.class);
+	}
+	
 	@Override
 	public String getEntityName() {
 		return JPAUser.EntityName;
@@ -151,40 +155,12 @@ public class UserDAO extends AbstractDAO
 		return getByTypedNamedQuery("User.getByRole", "role", role);
 	}
 	
-	private List<JPAUser> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAUser.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-
-	public void updateEntity(JPAUser changedEntity){
-		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
-		em.getTransaction().begin();
-		try{
-			JPAUser item=em.find(JPAUser.class, changedEntity.getId());
-			item.updateValues(changedEntity);
-			em.getTransaction().commit();
-		}catch(Exception e){
-			logger.error("Can't update JPA User object.", e);
-			em.getTransaction().rollback();
-		}finally{
-			em.close();
-		}
-	}
-	
 	public void deleteUserEntity(JPAUser user){
 		this.deleteUserByID(user.getId());
 	}
 	
 	public void deleteUserByID(int id){
-		this.deleteEntityByID(JPAUser.class, id);
+		this.deleteEntityByID(id);
 	}
 	
 	/**

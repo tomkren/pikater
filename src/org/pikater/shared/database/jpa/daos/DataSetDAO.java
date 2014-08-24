@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -27,25 +26,20 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.util.Hash;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 
-public class DataSetDAO extends AbstractDAO{
+public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 
+	public DataSetDAO(){
+		super(JPADataSetLO.class);
+	}
+	
 	@Override
 	public String getEntityName() {
 		return JPADataSetLO.EntityName;
-	}
-
-	@Override
-	public List<JPADataSetLO> getAll() {
-		return EntityManagerInstancesCreator
-		.getEntityManagerInstance()
-		.createNamedQuery("DataSetLO.getAll", JPADataSetLO.class)
-		.getResultList();
 	}
 	
 	public List<JPADataSetLO> getAll(int offset,int maxResultCount) {
@@ -227,14 +221,6 @@ public class DataSetDAO extends AbstractDAO{
 		return res;
 	}
 
-	@Override
-	public JPADataSetLO getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPADataSetLO>(
-				getByTypedNamedQuery("DataSetLO.getByID", "id", ID),
-				era
-				).getSingleResultWithNull();
-	}
-	
 	public List<JPADataSetLO> getByOwner(JPAUser user) {
 		return getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user);
 	}
@@ -352,35 +338,6 @@ public class DataSetDAO extends AbstractDAO{
 		
 		return newDSLO.getId();
 	}
-		
-	private List<JPADataSetLO> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPADataSetLO.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-	
-	private List<JPADataSetLO> getByTypedNamedQuery(String queryName,String paramName,Object param, int offset, int maxResultCount){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPADataSetLO.class)
-				.setParameter(paramName, param)
-				.setFirstResult(offset)
-				.setMaxResults(maxResultCount)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-	
 	
 	public void updateEntity(JPADataSetLO changedEntity){
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
@@ -442,7 +399,7 @@ public class DataSetDAO extends AbstractDAO{
 	}
 	
 	public void deleteDatasetByID(int id){
-		this.deleteEntityByID(JPADataSetLO.class, id);
+		this.deleteEntityByID(id);
 	}
 
 }

@@ -9,27 +9,16 @@ import javax.persistence.TemporalType;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAModel;
 import org.pikater.shared.database.jpa.JPAResult;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
 
-public class ModelDAO extends AbstractDAO {
+public class ModelDAO extends AbstractDAO<JPAModel> {
 
+	public ModelDAO(){
+		super(JPAModel.class);
+	}
+	
 	@Override
 	public String getEntityName() {
 		return JPAModel.EntityName;
-	}
-
-	@Override
-	public List<JPAModel> getAll() {
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("Model.getAll", JPAModel.class)
-				.getResultList();
-	}
-
-	@Override
-	public JPAModel getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPAModel>(
-				this.getByTypedNamedQuery("Model.getByID", "id", ID), era).getSingleResultWithNull();
 	}
 	
 	public List<JPAModel> getByAgentClassName(String agentClassName) {
@@ -64,23 +53,6 @@ public class ModelDAO extends AbstractDAO {
 		}finally{
 			em.close();
 		}
-	}
-	
-	private List<JPAModel> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAModel.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-	
-	public void updateEntity(JPAModel model){
-		this.updateEntity(JPAModel.class, model);
 	}
 	
 }

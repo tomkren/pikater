@@ -12,12 +12,15 @@ import javax.persistence.criteria.Root;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 
-public class ExternalAgentDAO extends AbstractDAO {
+public class ExternalAgentDAO extends AbstractDAO<JPAExternalAgent> {
+	
+	public ExternalAgentDAO(){
+		super(JPAExternalAgent.class);
+	}
 	
 	public JPAExternalAgent getByClass(String cls) {
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
@@ -39,14 +42,6 @@ public class ExternalAgentDAO extends AbstractDAO {
 	@Override
 	public String getEntityName() {
 		return JPAExternalAgent.class.getSimpleName();
-	}
-
-	@Override
-	public List<JPAExternalAgent> getAll() {
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("ExternalAgent.getAll", JPAExternalAgent.class)
-				.getResultList();
 	}
 	
 	private Path<Object> convertColumnToJPAParam(Root<JPAExternalAgent> root,ITableColumn column){
@@ -123,7 +118,7 @@ public class ExternalAgentDAO extends AbstractDAO {
 	}
 
 	public JPAExternalAgent getByAgentClass(String agentClass){
-		return getSingleResultByTypedNamedQuery(JPAExternalAgent.class, "ExternalAgent.getByAgentClass", "agentClass", agentClass);
+		return getSingleResultByTypedNamedQuery("ExternalAgent.getByAgentClass", "agentClass", agentClass);
 	}
 	
 	public List<JPAExternalAgent> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder,boolean agentVisibility) {
@@ -173,16 +168,8 @@ public class ExternalAgentDAO extends AbstractDAO {
 		return tq.getResultList();
 	}
 
-	@Override
-	public JPAExternalAgent getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPAExternalAgent>(
-				getByTypedNamedQuery(JPAExternalAgent.class,"ExternalAgent.getByID", "id", ID),
-				era)
-				.getSingleResultWithNull();
-	}
-	
 	public List<JPAExternalAgent> getByOwner(JPAUser user) {
-		return getByTypedNamedQuery(JPAExternalAgent.class,"ExternalAgent.getByOwner", "owner", user);
+		return getByTypedNamedQuery("ExternalAgent.getByOwner", "owner", user);
 	}
 	
 	public int getByOwnerCount(JPAUser user){
@@ -205,7 +192,7 @@ public class ExternalAgentDAO extends AbstractDAO {
 	}
 	
 	public List<JPAExternalAgent> getByOwner(JPAUser user,int offset,int maxResultSize){
-		return getByTypedNamedQuery(JPAExternalAgent.class,"ExternalAgent.getByOwner", "owner", user,offset,maxResultSize);
+		return getByTypedNamedQuery("ExternalAgent.getByOwner", "owner", user,offset,maxResultSize);
 	}
 	
 	public void deleteExternalAgentEntity(JPAExternalAgent externalAgent){
@@ -213,11 +200,7 @@ public class ExternalAgentDAO extends AbstractDAO {
 	}
 	
 	public void deleteExternalAgentByID(int id){
-		this.deleteEntityByID(JPAExternalAgent.class, id);
-	}
-	
-	public void updateEntity(JPAExternalAgent externalAgent){
-		updateEntity(JPAExternalAgent.class, externalAgent);
+		this.deleteEntityByID(id);
 	}
 	
 }
