@@ -79,4 +79,8 @@ public class ModelDAO extends AbstractDAO {
 		}
 	}
 	
+	public void updateEntity(JPAModel model){
+		this.updateEntity(JPAModel.class, model);
+	}
+	
 }
