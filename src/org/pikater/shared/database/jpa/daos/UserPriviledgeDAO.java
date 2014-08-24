@@ -16,8 +16,7 @@ public class UserPriviledgeDAO extends AbstractDAO<JPAUserPriviledge> {
 	
 	public JPAUserPriviledge getByName(String name) {
 		return new CustomActionResultFormatter<JPAUserPriviledge>(
-				getByTypedNamedQuery("UserPriviledge.getByName", "name", name),
-				EmptyResultAction.getDefault()
+				getByTypedNamedQuery("UserPriviledge.getByName", "name", name)
 			   ).getSingleResultWithNull();
 	}
 	
