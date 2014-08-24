@@ -37,7 +37,8 @@ public class ModelDAO extends AbstractDAO {
 	}
 	
 	/**
-	 * Removes models, that are older than current datetime - given days
+	 * Removes models, that are older than current datetime - given days and
+	 * doesn't have permanent flag.
 	 * @param daysback maximum age of models, that should be left in the database
 	 */
 	public void removeOldModels(int daysback){
@@ -48,7 +49,7 @@ public class ModelDAO extends AbstractDAO {
 			
 			List<Object[]> results=
 				em
-				.createNamedQuery("Model.getOlderThan",Object[].class)
+				.createNamedQuery("Model.getNotPermanentOlderThan",Object[].class)
 				.setParameter("paramDate", date, TemporalType.TIMESTAMP)
 				.getResultList();
 			
