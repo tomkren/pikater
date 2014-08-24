@@ -1,8 +1,8 @@
 package org.pikater.core.agents.system.planner.dataStructures;
 
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
+
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.ArrayList;
@@ -35,16 +35,16 @@ public class WaitingTasksQueues {
 	
 	public void addTask(TaskToSolve taskToSolve) {
 		
-		IExpectedDuration expectedDuration =
+		ExpectedDuration expectedDuration =
 				taskToSolve.getTask().getExpectedDuration();
-		if (expectedDuration instanceof ShortTimeDuration) {
+		DurationType durationType = expectedDuration.exportDurationType();
+		
+		if (durationType.equals(ExpectedDuration.DurationType.SECONDS)) {
 		
 			this.shortTimeDurationQueue.add(taskToSolve);
-		} else if (expectedDuration instanceof LongTermDuration) {
+		} else {
 			
 			this.longTermDurationQueue.add(taskToSolve);
-		} else {
-			throw new IllegalArgumentException("Illegal field expectedDuration");
 		}
 	}
 	

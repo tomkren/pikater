@@ -5,7 +5,7 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.jfree.util.Log;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
@@ -28,7 +28,7 @@ public class ResultOntology extends BeanOntology {
         String taskPackage = Task.class.getPackage().getName();
         String dataPackage = Datas.class.getPackage().getName();
         
-        String shortTimeDurationPackage = ShortTimeDuration.class.getPackage().getName();
+        String expectedDurationPackage = ExpectedDuration.class.getPackage().getName();
         
         String optionPackage = NewOption.class.getPackage().getName();
         String restrictionPackage = IRestriction.class.getPackage().getName();
@@ -46,7 +46,7 @@ public class ResultOntology extends BeanOntology {
             add(taskPackage);
             add(dataPackage);
             
-            add(shortTimeDurationPackage);            
+            add(expectedDurationPackage);            
             
             add(optionPackage);
             add(restrictionPackage);

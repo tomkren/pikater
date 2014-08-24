@@ -19,7 +19,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.Solutio
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.manager.ExecuteTaskBehaviour;
 import org.pikater.core.ontology.TaskOntology;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
@@ -185,7 +185,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
             datas.importExternalTestFileName(testingEdge.getDataSourceId());
         }
 
-		IExpectedDuration duration = computationNode.getExpectedDuration();
+		ExpectedDuration duration = computationNode.getExpectedDuration();
 		task.setBatchID(batchID);
 		task.setExperimentID(experimentID);
 		task.setUserID(userID);

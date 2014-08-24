@@ -19,8 +19,8 @@ import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
@@ -98,11 +98,14 @@ public class Agent_PlannerTester extends PikaterAgent {
     	method.setAgentType(CrossValidation.class.getName());
     	method.addOption(optionF);
 
+    	ExpectedDuration expectedDuration = new ExpectedDuration();
+    	expectedDuration.setDurationType(DurationType.SECONDS.name());
+    	
     	Task task = new Task();
     	task.setAgent(agent);
     	task.setDatas(datas);
     	task.setEvaluationMethod(method);
-    	task.setExpectedDuration(new LongTermDuration());
+    	task.setExpectedDuration(expectedDuration);
     	
         ExecuteTask executeTask = new ExecuteTask();
         executeTask.setTask(task);
@@ -158,11 +161,14 @@ public class Agent_PlannerTester extends PikaterAgent {
     	method.setAgentType(CrossValidation.class.getName());
     	method.addOption(optionF);
     	
+    	ExpectedDuration expectedDuration = new ExpectedDuration();
+    	expectedDuration.setDurationType(DurationType.MINUTES.name());
+    	
     	Task task = new Task();
     	task.setAgent(agent);
     	task.setDatas(datas);
     	task.setEvaluationMethod(method);
-    	task.setExpectedDuration(new LongTermDuration());
+    	task.setExpectedDuration(expectedDuration);
     	
         ExecuteTask executeTask = new ExecuteTask();
         executeTask.setTask(task);
@@ -218,11 +224,14 @@ public class Agent_PlannerTester extends PikaterAgent {
     	method.setAgentType(CrossValidation.class.getName());
     	method.addOption(optionF);
     	
+    	ExpectedDuration expectedDuration = new ExpectedDuration();
+    	expectedDuration.setDurationType(DurationType.SECONDS.name());
+    	
     	Task task = new Task();
     	task.setAgent(agent);
     	task.setDatas(datas);
     	task.setEvaluationMethod(method);
-    	task.setExpectedDuration(new ShortTimeDuration());
+    	task.setExpectedDuration(expectedDuration);
     	
         ExecuteTask executeTask = new ExecuteTask();
         executeTask.setTask(task);

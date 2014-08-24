@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.CoreConstants;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -27,7 +25,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	private String agentType;
     private List<NewOption> options;
 	private Integer model; // null = new model
-	private IExpectedDuration duration;
+	private ExpectedDuration duration;
 	
     private EvaluationMethod evaluationMethod;
     
@@ -39,7 +37,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     	
     	this.options = new ArrayList<NewOption>();
     	this.model = null;
-    	this.duration = new LongTermDuration();
+    	this.duration = new ExpectedDuration();
     	this.evaluationMethod =
     			new EvaluationMethod(CrossValidation.class.getName());
     }
@@ -58,10 +56,10 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		this.model = model;
 	}    
 
-    public IExpectedDuration getDuration() {
+    public ExpectedDuration getDuration() {
 		return duration;
 	}
-	public void setDuration(IExpectedDuration duration) {
+	public void setDuration(ExpectedDuration duration) {
 		this.duration = duration;
 	}
 
@@ -155,7 +153,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		options.add(modelOption);
 		
 		NewOption expectedDurationOption = new NewOption(
-				CoreConstants.DURATION, duration.getClass().getSimpleName());
+				CoreConstants.DURATION, duration.getDurationType());
 		
 		options.add(expectedDurationOption);
 		options.addAll(this.options);
@@ -187,13 +185,9 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		NewOption optDuration = optionsOntol.fetchOptionByName(CoreConstants.DURATION);
 		StringValue valueMethod = (StringValue)
 				optDuration.toSingleValue().getCurrentValue();
-		if (valueMethod.getValue().equals(LongTermDuration.class.getSimpleName())) {
-			this.duration = new LongTermDuration();
-		} else if (valueMethod.getValue().equals(ShortTimeDuration.class.getSimpleName()) ) {
-			this.duration = new ShortTimeDuration();
-		} else {
-			throw new IllegalStateException("Option doesn't contain correct type");
-		}
+		
+		this.duration = new ExpectedDuration();
+		this.duration.setDurationType(valueMethod.getValue());
 		
 		options.remove(optModel);
 		options.remove(optDuration);

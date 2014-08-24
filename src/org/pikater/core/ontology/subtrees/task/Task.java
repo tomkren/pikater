@@ -4,7 +4,7 @@ import jade.content.Concept;
 
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
 
@@ -33,7 +33,7 @@ public class Task implements Concept {
 
 	// duration
 	private int priority;
-	private IExpectedDuration expectedDuration;
+	private ExpectedDuration expectedDuration;
 	private String start;
 	private String finish;
 
@@ -111,10 +111,10 @@ public class Task implements Concept {
 		this.priority = priority;
 	}
 
-	public IExpectedDuration getExpectedDuration() {
+	public ExpectedDuration getExpectedDuration() {
 		return expectedDuration;
 	}
-	public void setExpectedDuration(IExpectedDuration expectedDuration) {
+	public void setExpectedDuration(ExpectedDuration expectedDuration) {
 		this.expectedDuration = expectedDuration;
 	}
 
