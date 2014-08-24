@@ -39,7 +39,8 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
-		testBatchResultRetrieval();
+		testExternalAgentView();
+		//testBatchResultRetrieval();
 		//testDatasetViewFunctions();
 		//listBestResult();
 		//listUserUploadedDatasets();
@@ -60,6 +61,29 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void testExternalAgentView() {
+		List<JPAExternalAgent> agents;
+		int allAgentsCount=0;
+		
+		agents = DAOs.externalAgentDAO.getByVisibility(0,100,ExternalAgentTableDBView.Column.AGENT_CLASS,SortOrder.ASCENDING,true);
+		allAgentsCount=DAOs.externalAgentDAO.getByVisibilityCount(true);
+		p("-------   Query Count = "+allAgentsCount+"   ------");
+		p("-------    List Count = "+agents.size()+"   ------");
+		for(JPAExternalAgent ea:agents){
+			p(ea.getId()+". "+ea.getAgentClass()+" : "+ea.getDescription());
+		}
+		p("");
+		JPAUser owner=DAOs.userDAO.getByLogin("sj").get(0);
+		p("----------  For User "+owner.getLogin()+" ------------");
+		agents=DAOs.externalAgentDAO.getByOwner(owner, 0, 100,ExternalAgentTableDBView.Column.AGENT_CLASS,SortOrder.ASCENDING,true);
+		allAgentsCount=DAOs.externalAgentDAO.getByOwnerAndVisibilityCount(owner, true);
+		p("-------   Query Count = "+allAgentsCount+"   ------");
+		p("-------    List Count = "+agents.size()+"   ------");
+		for(JPAExternalAgent ea:agents){
+			p(ea.getId()+". "+ea.getAgentClass()+" : "+ea.getDescription());
+		}
+	}
+
 	private void testBatchResultRetrieval() {
 		JPABatch batch=DAOs.batchDAO.getAll().get(0);
 		
