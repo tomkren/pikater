@@ -286,8 +286,8 @@ public class DatabaseInitialisation {
 			return;
 		}
 		JPAUser owner=new CustomActionResultFormatter<JPAUser>(
-				DAOs.userDAO.getByLogin("sj"),
-				EmptyResultAction.LOG_NULL).getSingleResultWithNull();
+				DAOs.userDAO.getByLogin("sj"))
+				.getSingleResultWithNull();
 		
 		JPAExternalAgent e = new JPAExternalAgent();
 		e.setAgentClass(cls);

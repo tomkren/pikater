@@ -17,15 +17,13 @@ public class RoleDAO extends AbstractDAO<JPARole> {
 	
 	public JPARole getByPikaterRole(PikaterRole role){
 		return new CustomActionResultFormatter<JPARole>(
-				getByTypedNamedQuery("Role.getByPikaterRole", "pRole", role),
-				EmptyResultAction.NULL
+				getByTypedNamedQuery("Role.getByPikaterRole", "pRole", role)
 				).getSingleResultWithNull();
 	}
 	
 	public JPARole getByName(String name) {
 		return new CustomActionResultFormatter<JPARole>(
-				getByTypedNamedQuery("Role.getByName", "name", name),
-				EmptyResultAction.getDefault()
+				getByTypedNamedQuery("Role.getByName", "name", name)
 				).getSingleResultWithNull();
 	}
 	

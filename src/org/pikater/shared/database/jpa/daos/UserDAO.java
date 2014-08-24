@@ -16,7 +16,6 @@ import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.security.bcrypt.BCrypt;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
@@ -31,14 +30,6 @@ public class UserDAO extends AbstractDAO<JPAUser>{
 	@Override
 	public String getEntityName() {
 		return JPAUser.EntityName;
-	}
-
-	@Override
-	public List<JPAUser> getAll() {
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("User.getAll", JPAUser.class)
-				.getResultList();
 	}
 	
 	public List<JPAUser> getAll(int offset, int maxQuerySize){
@@ -96,14 +87,6 @@ public class UserDAO extends AbstractDAO<JPAUser>{
 		return ((Long)EntityManagerInstancesCreator
 				.getEntityManagerInstance()
 				.createNamedQuery("User.getAll.count").getSingleResult()).intValue();
-	}
-
-	@Override
-	public JPAUser getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPAUser>(
-				getByTypedNamedQuery("User.getByID", "id", ID),
-				era)
-				.getSingleResultWithNull();
 	}
 	
 	public List<JPAUser> getByStatus(JPAUserStatus status) {

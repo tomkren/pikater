@@ -39,8 +39,8 @@ public class DatabaseTest {
 	public void test(){
 		testDBConnection();
 		testExternalAgentView();
-		//testBatchResultRetrieval();
-		//testDatasetViewFunctions();
+		testBatchResultRetrieval();
+		testDatasetViewFunctions();
 		//listBestResult();
 		//listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
@@ -50,7 +50,7 @@ public class DatabaseTest {
 		//listDataSetsWithResults();
 		//listDataSets();
 		//addExperiment();
-		//listExternalAgents();
+		listExternalAgents();
 		//listDataSetWithExclusion();
 		//listResults();
 		//listUserAndRoles();
@@ -60,7 +60,7 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
-	private void testExternalAgentView() {
+	protected void testExternalAgentView() {
 		List<JPAExternalAgent> agents;
 		int allAgentsCount=0;
 		
@@ -83,7 +83,7 @@ public class DatabaseTest {
 		}
 	}
 
-	private void testBatchResultRetrieval() {
+	protected void testBatchResultRetrieval() {
 		JPABatch batch=DAOs.batchDAO.getAll().get(0);
 		
 		p("-------   ID = "+batch.getId()+"   ------");
@@ -101,7 +101,7 @@ public class DatabaseTest {
 		
 	}
 
-	private void testDatasetViewFunctions() {
+	protected void testDatasetViewFunctions() {
 		List<JPADataSetLO> allDatasets;
 		int allDatasetCount=0;
 		
@@ -121,7 +121,7 @@ public class DatabaseTest {
 		
 	}
 
-	private void listBestResult() {
+	protected void listBestResult() {
 		JPAExperiment exp=DAOs.experimentDAO.getByID(116652, EmptyResultAction.NULL);
 		JPAResult result = DAOs.resultDAO.getByExperimentBestResult(exp);
 		p("Best result for experiment ID "+exp.getId());
@@ -134,7 +134,7 @@ public class DatabaseTest {
 		
 	}
 
-	private void listUserUploadedDatasets(){
+	protected void listUserUploadedDatasets(){
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllUserUploaded();
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
@@ -145,22 +145,22 @@ public class DatabaseTest {
 		
 	}
 	
-	private void testModelRemoval() {
+	protected void testModelRemoval() {
 		DAOs.modelDAO.removeOldModels(1);
 	}
 
-	private void testDBConnection() {
+	protected void testDBConnection() {
 		System.out.println("Database connected: "+MyPGConnection.isConnectionToCurrentPGDBEstablished());		
 	}
 
-	private void exportResults() {
+	protected void exportResults() {
 		//JPABatch batch=DAOs.batchDAO.getByID(87801, EmptyResultAction.NULL);
 		ResultExporter exp=new ResultExporter(System.err);
 		exp.export(117301);
 		exp.flush();
 	}
 
-	private void listVisibleAndApprovedDatasets() {
+	protected void listVisibleAndApprovedDatasets() {
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getUserUploadVisible(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
 		p("No. of found visible DataSets: "+dslos.size());
 		p("No. of all visible DataSets: "+DAOs.dataSetDAO.getAllVisibleCount());
@@ -188,7 +188,7 @@ public class DatabaseTest {
 		
 	}
 
-	private void listDataSetsWithResults() {
+	protected void listDataSetsWithResults() {
 		//List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllWithResults();
 		List<String> exlist=new ArrayList<String>();
 		exlist.add("28c7b9febbecff6ce207bcde29fc0eb8");
@@ -261,8 +261,8 @@ public class DatabaseTest {
 	}
 	
 	public void listExternalAgents(){
-		List<JPAExternalAgent> agents= DAOs.externalAgentDAO.getAll(0,5,ExternalAgentTableDBView.Column.AGENT_CLASS,SortOrder.DESCENDING);
-		p("No. of found DataSets: "+agents.size());
+		List<JPAExternalAgent> agents= DAOs.externalAgentDAO.getAll();//0,5,ExternalAgentTableDBView.Column.AGENT_CLASS,SortOrder.DESCENDING);
+		p("No. of found External Agents: "+agents.size());
 		for(JPAExternalAgent ag:agents){
 			p(ag.getId()+". "+ag.getAgentClass()+"    "+ag.getOwner().getLogin()+"  "+ag.getCreated()+"   "+ag.getDescription()+" ");
 		}
