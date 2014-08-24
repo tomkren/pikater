@@ -14,6 +14,7 @@ import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAModel;
+import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
@@ -142,6 +143,15 @@ public class BatchDAO extends AbstractDAO {
 				.getEntityManagerInstance()
 				.createNamedQuery("Batch.getAllNotStatus.count")
 				.setParameter("status", status)
+				.getSingleResult())
+				.intValue();
+	}
+	
+	public int getBatchResultCount(JPABatch batch) {
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery("Batch.getByIDonlyResults.count")
+				.setParameter("batchID", batch.getId())
 				.getSingleResult())
 				.intValue();
 	}
@@ -327,6 +337,27 @@ public class BatchDAO extends AbstractDAO {
 			return em
 					.createNamedQuery("Batch.getByIDwithResult",Object[].class)
 					.setParameter("batchID", batchID)
+					.getResultList();
+		}finally{
+			em.close();
+		}
+	}
+	
+	/**
+	 * Retrieves all results for the given batch
+	 * @param batchID ID of {@link JPABatch} entity
+	 * @param offset index of the first result
+	 * @param maxResultCount maximal number of needed results
+	 * @return list of {@link JPAResult}s for the batch
+	 */
+	public List<JPAResult> getByIDwithResults(int batchID,int offset,int maxResultCount){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return em
+					.createNamedQuery("Batch.getByIDonlyResults",JPAResult.class)
+					.setParameter("batchID", batchID)
+					.setFirstResult(offset)
+					.setMaxResults(maxResultCount)
 					.getResultList();
 		}finally{
 			em.close();

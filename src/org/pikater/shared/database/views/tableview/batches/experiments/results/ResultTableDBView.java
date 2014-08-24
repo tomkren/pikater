@@ -20,7 +20,7 @@ import org.pikater.shared.database.views.tableview.AbstractTableDBView;
  */
 public class ResultTableDBView extends AbstractTableDBView
 {
-	private final JPAUser owner;
+	protected final JPAUser owner;
 	private JPAExperiment experiment;
 	
 	/**  
@@ -33,6 +33,10 @@ public class ResultTableDBView extends AbstractTableDBView
 	{
 		this.owner = user;
 		this.experiment = experiment;
+	}
+	
+	protected ResultTableDBView(JPAUser user){
+		this.owner=user;
 	}
 	
 	/**

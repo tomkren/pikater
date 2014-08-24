@@ -39,7 +39,8 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
-		testDatasetViewFunctions();
+		testBatchResultRetrieval();
+		//testDatasetViewFunctions();
 		//listBestResult();
 		//listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
@@ -59,6 +60,24 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void testBatchResultRetrieval() {
+		JPABatch batch=DAOs.batchDAO.getAll().get(0);
+		
+		p("-------   ID = "+batch.getId()+"   ------");
+		
+		List<JPAResult> batchResultList=DAOs.batchDAO.getByIDwithResults(batch.getId(), 0, 100);
+		int resultCount = DAOs.batchDAO.getBatchResultCount(batch);
+		
+		p("-------   Query Count = "+resultCount+"   ------");
+		p("-------    List Count = "+batchResultList.size()+"   ------");
+		
+		for(JPAResult result:batchResultList){
+			p(result.getAgentName()+"  "+result.getErrorRate());
+		}
+		p("------------------------------------");
+		
+	}
+
 	private void testDatasetViewFunctions() {
 		List<JPADataSetLO> allDatasets;
 		int allDatasetCount=0;
