@@ -26,7 +26,7 @@ public class Metadatas implements Concept {
 	}
 	public void addMetadata(Metadata metadata) {
 		
-		if (contains(metadata)) {
+		if (! contains(metadata)) {
 			this.metadatas.add(metadata);
 		}
 	}
