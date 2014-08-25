@@ -17,12 +17,12 @@ import org.pikater.shared.database.views.base.query.QueryResult;
 /**
  * A view displaying all saved (not scheduled) experiments for the given user.
  */
-public class UserSavedBatchesTableDBView extends UserBatchesTableDBView
+public class BatchTableDBViewUserSaved extends BatchTableDBViewUser
 {
 	/**  
 	 * @param user the user whose batches to display
 	 */
-	public UserSavedBatchesTableDBView(JPAUser user)
+	public BatchTableDBViewUserSaved(JPAUser user)
 	{
 		super(user);
 	}

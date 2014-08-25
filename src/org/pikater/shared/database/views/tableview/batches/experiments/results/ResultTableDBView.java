@@ -1,48 +1,18 @@
 package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
-import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.database.jpa.JPAResult;
-import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.base.ITableColumn;
-import org.pikater.shared.database.views.base.query.QueryConstraints;
-import org.pikater.shared.database.views.base.query.QueryResult;
 import org.pikater.shared.database.views.base.values.DBViewValueType;
 import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 
 /**
  * A generic view for tables displaying result errors and statistic.  
  */
-public class ResultTableDBView extends AbstractTableDBView
+public abstract class ResultTableDBView extends AbstractTableDBView
 {
-	protected final JPAUser owner;
-	private JPAExperiment experiment;
-	
-	protected JPAExperiment getExperiment() {
-		return experiment;
-	}
-
-	/**  
-	 * @param user The user whose experiment results to display. If null (admin mode), all datasets should
-	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method.
-	 * The owner of the batch of experiment is compared to the given user.
-	 * @param experiment The experiment for which the results are listed
-	 */
-	public ResultTableDBView(JPAUser user,JPAExperiment experiment)
-	{
-		this.owner = user;
-		this.experiment = experiment;
-	}
-	
-	protected ResultTableDBView(JPAUser user){
-		this.owner=user;
-	}
-	
 	/**
 	 * Table headers will be presented in the order defined here, so
 	 * make sure to order them right :). 
@@ -122,34 +92,5 @@ public class ResultTableDBView extends AbstractTableDBView
 	public ITableColumn getDefaultSortOrder()
 	{
 		return Column.ERROR_RATE;
-	}
-	
-	@Override
-	public QueryResult queryUninitializedRows(QueryConstraints constraints)
-	{
-		List<JPAResult> allResults;
-		if(owner==null)
-		{
-			allResults=experiment.getResults();
-		}
-		else
-		{
-			if(owner.getId() == experiment.getBatch().getOwner().getId())
-			{
-				allResults=experiment.getResults();
-			}
-			else
-			{
-				allResults=new ArrayList<JPAResult>();
-			}
-		}
-		
-		int endIndex = Math.min(constraints.getOffset() + constraints.getMaxResults(), allResults.size());
-		List<ResultTableDBRow> resultRows = new ArrayList<ResultTableDBRow>();
-		for(JPAResult result : allResults.subList(constraints.getOffset(), endIndex))
-		{
-			resultRows.add(new ResultTableDBRow(result));
-		}
-		return new QueryResult(resultRows, allResults.size());
 	}
 }

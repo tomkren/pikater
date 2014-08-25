@@ -9,7 +9,7 @@ import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.logging.PikaterLogger;
 import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
@@ -32,7 +32,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
 
-public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends AbstractDBViewRoot<V>
+public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewRoot<V>
 {
 	public BatchDBViewRoot(V view)
 	{
@@ -42,7 +42,7 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 	@Override
 	public int getColumnSize(ITableColumn column)
 	{
-		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
+		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
 		switch(specificColumn)
 		{
 			case FINISHED:
@@ -72,19 +72,19 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 	@Override
 	public ITableColumn getExpandColumn()
 	{
-		return AbstractBatchTableDBView.Column.NOTE;
+		return BatchTableDBView.Column.NOTE;
 	}
 	
 	@Override
 	public void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component)
 	{
-		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
-		if(specificColumn == AbstractBatchTableDBView.Column.NOTE)
+		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
+		if(specificColumn == BatchTableDBView.Column.NOTE)
 		{
 			TextField tf_value = (TextField) component;
 			tf_value.setDescription(tf_value.getValue());
 		}
-		else if(specificColumn == AbstractBatchTableDBView.Column.MAX_PRIORITY)
+		else if(specificColumn == BatchTableDBView.Column.MAX_PRIORITY)
 		{
 			value.setOnCommitCallback(new AbstractDBViewValue.IOnValueCommitted()
 			{
@@ -118,8 +118,8 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 	{
 		final BatchTableDBRow specificRow = (BatchTableDBRow) row;
 		
-		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
-		if(specificColumn == AbstractBatchTableDBView.Column.ABORT)
+		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
+		if(specificColumn == BatchTableDBView.Column.ABORT)
 		{
 			if(ServerConfigurationInterface.getConfig().coreEnabled)
 			{
@@ -138,7 +138,7 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 				GeneralDialogs.info("Core not available", "Experiments can not be aborted at this time.");
 			}
 		}
-		else if(specificColumn == AbstractBatchTableDBView.Column.RESULTS)
+		else if(specificColumn == BatchTableDBView.Column.RESULTS)
 		{
 			final File tmpFile = IOUtils.createTemporaryFile("results", ".csv");
 			

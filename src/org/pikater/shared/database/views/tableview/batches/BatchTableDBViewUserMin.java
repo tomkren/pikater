@@ -1,22 +1,28 @@
-package org.pikater.shared.database.views.tableview.datasets;
+package org.pikater.shared.database.views.tableview.batches;
 
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.base.ITableColumn;
 
-public class DatasetPickingTableDBView extends DataSetTableDBView
+public class BatchTableDBViewUserMin extends BatchTableDBViewUser
 {
+	public BatchTableDBViewUserMin(JPAUser user)
+	{
+		super(user);
+	}
+
 	@Override
 	public Set<ITableColumn> getAllColumns()
 	{
 		return new LinkedHashSet<ITableColumn>(EnumSet.of(
+				Column.FINISHED,
+				Column.STATUS,
 				Column.CREATED,
-				Column.DEFAULT_TASK_TYPE,
-				Column.NUMBER_OF_INSTANCES,
-				Column.FILENAME,
-				Column.DESCRIPTION
+				Column.NAME,
+				Column.NOTE
 		));
 	}
 	

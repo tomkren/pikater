@@ -1,63 +1,60 @@
 package org.pikater.shared.database.views.tableview.batches;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.QueryConstraints;
 import org.pikater.shared.database.views.base.query.QueryResult;
 
 /**
- * A view displaying all experiments for the given user.
+ * A view displaying all scheduled (whether waiting, started or finished) experiments for the given user.
  */
-public class UserBatchesTableDBView extends AllBatchesTableDBView
+public class BatchTableDBViewUserScheduled extends BatchTableDBViewUser
 {
-	protected final JPAUser owner;
-	
 	/**  
 	 * @param user the user whose batches to display
 	 */
-	public UserBatchesTableDBView(JPAUser user)
+	public BatchTableDBViewUserScheduled(JPAUser user)
 	{
-		this.owner = user;
+		super(user);
 	}
-	
-	public JPAUser getOwner()
-	{
-		return owner;
-	}	
 	
 	@Override
 	public Set<ITableColumn> getAllColumns()
 	{
-		Set<ITableColumn> superResult = super.getAllColumns();
-		superResult.remove(Column.OWNER);
-		return superResult;
+		return new LinkedHashSet<ITableColumn>(EnumSet.of(
+				Column.CREATED,
+				Column.STATUS,
+				Column.NAME,
+				Column.NOTE
+		));
 	}
 	
 	@Override
 	public Set<ITableColumn> getDefaultColumns()
 	{
-		Set<ITableColumn> superResult = super.getDefaultColumns();
-		superResult.remove(Column.OWNER);
-		return superResult;
+		return getAllColumns();
 	}
 	
 	@Override
 	public ITableColumn getDefaultSortOrder()
 	{
-		return Column.STATUS;
+		return Column.CREATED; // user will probably want to continue working on his last experiments
 	}
 	
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
-		List<JPABatch> resultBatches=DAOs.batchDAO.getByOwner(this.owner, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
-		int allBatchesCount=DAOs.batchDAO.getByOwnerCount(owner);
+		List<JPABatch> resultBatches=DAOs.batchDAO.getByOwnerAndNotStatus(this.owner, JPABatchStatus.CREATED, constraints.getOffset(), constraints.getMaxResults(), constraints.getSortColumn(), constraints.getSortOrder());
+		int allBatchesCount = DAOs.batchDAO.getByOwnerAndNotStatusCount(this.owner, JPABatchStatus.CREATED);
 		
 		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
 		for(JPABatch batch : resultBatches)

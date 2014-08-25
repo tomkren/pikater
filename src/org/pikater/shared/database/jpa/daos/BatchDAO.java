@@ -19,7 +19,7 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
-import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
 
 public class BatchDAO extends AbstractDAO<JPABatch> {
 
@@ -42,7 +42,7 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 	}
 	
 	private Path<Object> convertColumnToJPAParam(Root<JPABatch> root,ITableColumn column){
-		switch((AbstractBatchTableDBView.Column)column){
+		switch((BatchTableDBView.Column)column){
 		case CREATED: 
 		case FINISHED: 
 		case NAME:

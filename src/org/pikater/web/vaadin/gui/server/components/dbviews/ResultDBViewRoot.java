@@ -19,9 +19,9 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
 
-public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
+public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBViewRoot<V>
 {
-	public ResultDBViewRoot(ResultTableDBView view)
+	public ResultDBViewRoot(V view)
 	{
 		super(view);
 	}

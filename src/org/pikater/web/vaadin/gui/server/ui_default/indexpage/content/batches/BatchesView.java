@@ -3,12 +3,12 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
-import org.pikater.shared.database.views.tableview.batches.AllBatchesTableDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewAll;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBView;
-import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBView;
+import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBViewExperiment;
 import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.ExperimentDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.ResultDBViewRoot;
@@ -58,7 +58,7 @@ public class BatchesView extends ExpandableView
 	@Override
 	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()
 	{
-		return new BatchStep(this, new AllBatchesTableDBView()); 
+		return new BatchStep(this, new BatchTableDBViewAll()); 
 	}
 	
 	//----------------------------------------------------------------------------
@@ -68,13 +68,13 @@ public class BatchesView extends ExpandableView
 	{
 		private final DBTableLayout innerLayout;
 		
-		public BatchStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, AbstractBatchTableDBView dbView)
+		public BatchStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, BatchTableDBView dbView)
 		{
 			super(parentWizard, false);
 			
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.getTable().setMultiSelect(false); // this is required below
-			this.innerLayout.setView(new BatchDBViewRoot<AbstractBatchTableDBView>(dbView));
+			this.innerLayout.setView(new BatchDBViewRoot<BatchTableDBView>(dbView));
 			registerDBViewLayout(this.innerLayout);
 		}
 
@@ -125,7 +125,7 @@ public class BatchesView extends ExpandableView
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.getTable().setMultiSelect(false); // this is required below
 			this.innerLayout.setReadOnly(true);
-			this.innerLayout.setView(new ExperimentDBViewRoot(new ExperimentTableDBView(batch.getOwner(), batch)));
+			this.innerLayout.setView(new ExperimentDBViewRoot<ExperimentTableDBView>(new ExperimentTableDBView(batch.getOwner(), batch)));
 			registerDBViewLayout(this.innerLayout);
 		}
 
@@ -175,7 +175,7 @@ public class BatchesView extends ExpandableView
 			
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.setReadOnly(true);
-			this.innerLayout.setView(new ResultDBViewRoot(new ResultTableDBView(experiment.getBatch().getOwner(), experiment)));
+			this.innerLayout.setView(new ResultDBViewRoot<ResultTableDBViewExperiment>(new ResultTableDBViewExperiment(experiment.getBatch().getOwner(), experiment)));
 			// registerDBViewLayout(this.innerLayout); // POINTLESS (leaf)
 		}
 

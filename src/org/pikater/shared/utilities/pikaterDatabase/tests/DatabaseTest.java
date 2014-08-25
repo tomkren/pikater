@@ -29,7 +29,7 @@ import org.pikater.shared.database.postgre.MyPGConnection;
 import org.pikater.shared.database.util.ResultExporter;
 import org.pikater.shared.database.util.ResultFormatter;
 import org.pikater.shared.database.views.base.query.SortOrder;
-import org.pikater.shared.database.views.tableview.batches.AbstractBatchTableDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
@@ -353,7 +353,7 @@ public class DatabaseTest {
 		//batches=DAOs.batchDAO.getAll(0, 10,AbstractBatchTableDBView.Column.NAME);
 		JPAUser user=new ResultFormatter<JPAUser>(DAOs.userDAO.getByLogin("klara")).getSingleResult();
 		//batches=DAOs.batchDAO.getByOwner(user, 0, 10,AbstractBatchTableDBView.Column.CREATED,SortOrder.ASCENDING);
-		batches=DAOs.batchDAO.getByOwnerAndStatus(user, JPABatchStatus.CREATED, 0, 10,AbstractBatchTableDBView.Column.CREATED,SortOrder.ASCENDING);
+		batches=DAOs.batchDAO.getByOwnerAndStatus(user, JPABatchStatus.CREATED, 0, 10,BatchTableDBView.Column.CREATED,SortOrder.ASCENDING);
 		p("No. of Batches in the system : "+DAOs.batchDAO.getByOwnerAndStatusCount(user, JPABatchStatus.CREATED));
 		for(JPABatch b:batches){
 			p(b.getOwner().getLogin()+":"+ b.getId()+". "+b.getName()+" : "+b.getCreated()+" - "+b.getFinished());

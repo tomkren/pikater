@@ -28,9 +28,9 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 
-public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBView>
+public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends AbstractDBViewRoot<V>
 {
-	public ExperimentDBViewRoot(ExperimentTableDBView view)
+	public ExperimentDBViewRoot(V view)
 	{
 		super(view);
 	}
