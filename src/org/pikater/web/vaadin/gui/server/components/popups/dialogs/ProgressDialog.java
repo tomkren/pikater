@@ -92,7 +92,7 @@ public class ProgressDialog extends DialogCommons
 		listener.setParentBox(mb); // don't forget this!
 		mb.getWindow().setWidth("250px");
 		mb.getWindow().setStyleName("progressDialog"); // stretch the component area to maximum width...
-		setupMessageBox(mb, false);
+		setupGeneralDialog(mb, false);
 		return new ProgressDialogContext(mb, progress, lbl_percentage, progressDialogEvents);
 	}
 	

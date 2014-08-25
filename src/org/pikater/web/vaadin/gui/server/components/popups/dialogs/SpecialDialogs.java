@@ -50,8 +50,8 @@ public class SpecialDialogs extends DialogCommons
 				ButtonId.OK, ButtonId.CUSTOM_1
 				);
 		listener.setParentBox(mb); // don't forget this!
-		setupMessageBox(mb, false);
-		bindActionsToKeyboard(mb, ButtonId.OK, false);
+		setupGeneralDialog(mb, false);
+		bindActionsToKeyboard(mb, mb.getButton(ButtonId.OK), false);
 		mb.getButton(ButtonId.CUSTOM_1).setCaption("Create account");
 		return mb;
 	}
