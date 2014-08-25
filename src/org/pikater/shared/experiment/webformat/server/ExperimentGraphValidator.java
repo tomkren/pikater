@@ -61,50 +61,41 @@ public class ExperimentGraphValidator
 				 * A check whether the box is approved is needed. Currently, this is done
 				 * in core system and only approved agents are sent to web.
 				 */
-				if(experimentGraph.edgesDefinedFor(box.getID()))
+				if(!experimentGraph.getSlotConnections().hasBoxSlotConnections(box))
 				{
-					if(!experimentGraph.getSlotConnections().hasBoxSlotConnections(box))
-					{
-						// the box is not isolated but has no valid slot connections defined
-						registerValidationProblem(String.format("At least one of '%s' boxes has no slot connections defined. Isolated boxes are not allowed.", 
-								box.getAssociatedAgent().getName()));
-					}
-					else
-					{
-						switch(box.getBoxType())
-						{
-							case INPUT:
-								validateBoxSlot(box, SlotType.OUTPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
-								break;
-							case CHOOSE:
-								break;
-							case COMPOSITE:
-								break;
-							case COMPUTE:
-								validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_TRAINING_DATA); // potentially duplicate check but it is needed
-								validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_TESTING_DATA); // potentially duplicate check but it is needed
-								break;
-							case MISC:
-								break;
-							case OPTION:
-								break;
-							case OUTPUT:
-								validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
-								break;
-							case PROCESS_DATA:
-								break;
-							case SEARCH:
-								break;
-							default:
-								throw new IllegalStateException("Unknown state: " + box.getBoxType().name());
-						}
-					}
+					// the box is not isolated but has no valid slot connections defined
+					registerValidationProblem(String.format("At least one of '%s' boxes has no slot connections defined. Isolated boxes are not allowed.", 
+							box.getAssociatedAgent().getName()));
 				}
 				else
 				{
-					// the box is isolated, not connected to anything whatsoever
-					registerValidationProblem(String.format("At least one of '%s' boxes is isolated. Isolated boxes are not allowed.", 
-							box.getAssociatedAgent().getName()));
+					switch(box.getBoxType())
+					{
+						case INPUT:
+							validateBoxSlot(box, SlotType.OUTPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
+							break;
+						case CHOOSE:
+							break;
+						case COMPOSITE:
+							break;
+						case COMPUTE:
+							validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_TRAINING_DATA); // potentially duplicate check but it is needed
+							validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_TESTING_DATA); // potentially duplicate check but it is needed
+							break;
+						case MISC:
+							break;
+						case OPTION:
+							break;
+						case OUTPUT:
+							validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
+							break;
+						case PROCESS_DATA:
+							break;
+						case SEARCH:
+							break;
+						default:
+							throw new IllegalStateException("Unknown state: " + box.getBoxType().name());
+					}
 				}
 			}
 		}
@@ -138,7 +129,7 @@ public class ExperimentGraphValidator
 		if(!experimentGraph.getSlotConnections().isSlotConnectedToAValidEndpoint(slotToCheck))
 		{
 			registerValidationProblem(String.format("At least one of '%s' boxes doesn't have the '%s' slot connected.", 
-					box.getAssociatedAgent().getName(), CoreConstants.SLOT_FILE_DATA));
+					box.getAssociatedAgent().getName(), slotDataType));
 		}
 	}
 }
