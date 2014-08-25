@@ -22,6 +22,11 @@
 	padding-left: 15px; 
 }
 
+.thumbnail .v-label.v-has-width
+{
+	white-space: nowrap;
+}
+
 .thumbnail .itemContent
 {
 	width: 196px;

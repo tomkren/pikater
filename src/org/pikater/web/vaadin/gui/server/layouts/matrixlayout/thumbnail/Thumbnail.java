@@ -28,7 +28,10 @@ public abstract class Thumbnail extends VerticalLayout
 		content.setSizeUndefined();
 		content.addStyleName("itemContent");
 		
-		addComponent(new Label(getContentCaption()));
+		Label lbl_caption = new Label(getContentCaption());
+		lbl_caption.setDescription(lbl_caption.getValue());
+		
+		addComponent(lbl_caption);
 		addComponent(content);
 		setExpandRatio(content, 1);
 	}

@@ -23,6 +23,11 @@
 {
 }
 
+.matrixView .leftHeaders, .matrixView .topHeaders
+{
+	overflow: auto;
+}
+
 .matrixView .content
 {
 	padding: 15px;

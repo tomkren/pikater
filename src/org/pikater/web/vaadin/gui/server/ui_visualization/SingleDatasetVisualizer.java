@@ -74,7 +74,7 @@ public class SingleDatasetVisualizer extends VerticalLayout
 					@Override
 					protected String getContentCaption()
 					{
-						return String.format("%s x %s", leftIndex.getName(), topIndex.getName());
+						return String.format("%s X %s", leftIndex.getName(), topIndex.getName());
 					}
 				};
 			}
