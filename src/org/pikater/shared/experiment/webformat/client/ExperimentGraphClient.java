@@ -3,6 +3,7 @@ package org.pikater.shared.experiment.webformat.client;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,6 +44,12 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	// INHERITED INTERFACE
 	
 	@Override
+	public Iterator<BoxInfoClient> iterator()
+	{
+		return leafBoxes.values().iterator();
+	}
+	
+	@Override
 	public boolean containsBox(Integer boxID)
 	{
 		return leafBoxes.containsKey(boxID);
@@ -81,17 +88,6 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	{
 		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty(); 
 	}
-	
-	/*
-	public Integer addWrapperBoxAndReturnID(UniversalGui guiInfo, AbstractBox... childBoxes) 
-	{
-		// TODO: problems with overlapping of LeafBoxes?
-		
-		WrapperBox newBox = new WrapperBox(idGenerator.getAndIncrement(), guiInfo, childBoxes);
-		allBoxes.put(newBox.id, newBox);
-		return newBox.id;
-	}
-	*/
 	
 	@Override
 	public void connect(Integer fromBoxKey, Integer toBoxKey)

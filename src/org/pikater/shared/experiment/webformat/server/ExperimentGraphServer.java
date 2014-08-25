@@ -3,6 +3,7 @@ package org.pikater.shared.experiment.webformat.server;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -60,6 +61,52 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	// INHERITED INTERFACE
 	
 	@Override
+	public Iterator<BoxInfoServer> iterator()
+	{
+		return leafBoxes.values().iterator();
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		return leafBoxes.isEmpty();
+	}
+	
+	@Override
+	public BoxInfoServer getBox(Integer boxID)
+	{
+		return leafBoxes.get(boxID);
+	}
+	
+	@Override
+	public boolean containsBox(Integer boxID)
+	{
+		return leafBoxes.containsKey(boxID);
+	}
+	
+	@Override
+	public BoxInfoServer addBox(BoxInfoServer box)
+	{
+		box.setID(boxIDGenerator.getAndIncrement());
+		leafBoxes.put(box.getID(), box);
+		return box;
+	}
+	
+	@Override
+	public void clear()
+	{
+		leafBoxes.clear();
+		edges.clear();
+		boxIDGenerator.reset();
+	}
+	
+	@Override
+	public boolean edgesDefinedFor(Integer boxID)
+	{
+		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty();
+	}
+	
+	@Override
 	public Set<BoxInfoServer> getFromNeighbours(Integer boxID)
 	{
 		Set<BoxInfoServer> result = new HashSet<BoxInfoServer>();
@@ -104,46 +151,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	}
 	
 	@Override
-	public boolean containsBox(Integer boxID)
-	{
-		return leafBoxes.containsKey(boxID);
-	}
-	
-	@Override
-	public BoxInfoServer getBox(Integer boxID)
-	{
-		return leafBoxes.get(boxID);
-	}
-	
-	@Override
-	public BoxInfoServer addBox(BoxInfoServer box)
-	{
-		box.setID(boxIDGenerator.getAndIncrement());
-		leafBoxes.put(box.getID(), box);
-		return box;
-	}
-	
-	@Override
-	public void clear()
-	{
-		leafBoxes.clear();
-		edges.clear();
-		boxIDGenerator.reset();
-	}
-	
-	@Override
-	public boolean isEmpty()
-	{
-		return leafBoxes.isEmpty();
-	}
-	
-	@Override
-	public boolean edgesDefinedFor(Integer boxID)
-	{
-		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty();
-	}
-	
-	@Override
 	public void connect(Integer fromBoxKey, Integer toBoxKey)
 	{
 		doEdgeAction(fromBoxKey, toBoxKey, true);
@@ -161,29 +168,6 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	public SlotConnections getSlotConnections()
 	{
 		return slotConnections;
-	}
-	
-	/**
-	 * NOT USED AT ALL
-	 */
-	@Deprecated
-	public boolean isValid()
-	{
-		// no need to check boxes - they are simple data holders
-		for(Entry<Integer, Set<Integer>> entry : edges.entrySet())
-		{
-			BoxInfoServer boxFrom = leafBoxes.get(entry.getKey());
-			for(Integer boxToID : entry.getValue())
-			{
-				BoxInfoServer boxTo = leafBoxes.get(boxToID);
-				if(boxFrom.isRegistered() != boxTo.isRegistered())
-				{
-					return false;
-				}
-				// TODO: should we delete the edge if both endpoints are not registered?
-			}
-		}
-		return true;
 	}
 	
 	// ------------------------------------------------------------------

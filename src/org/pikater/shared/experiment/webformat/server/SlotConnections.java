@@ -179,6 +179,25 @@ public class SlotConnections
 		return !getConnectedAndValidEndpointsForSlot(slot).isEmpty();
 	}
 	
+	public boolean hasBoxSlotConnections(BoxInfoServer box)
+	{
+		for(Slot inputSlot : box.getAssociatedAgent().getInputSlots())
+		{
+			if(isSlotConnectedToAValidEndpoint(inputSlot))
+			{
+				return true;
+			}
+		}
+		for(Slot outputSlot : box.getAssociatedAgent().getOutputSlots())
+		{
+			if(isSlotConnectedToAValidEndpoint(outputSlot))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	//-------------------------------------------
 	// PRIVATE INTERFACE
 	
