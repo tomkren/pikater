@@ -171,7 +171,7 @@ public class UserDAO extends AbstractDAO<JPAUser>{
 
 	private static int hashSalt = 13;
 
-	public static String hashPw(String pwToHash)
+	private static String hashPw(String pwToHash)
 	{
 		return BCrypt.hashpw(pwToHash, BCrypt.gensalt(hashSalt));
 	}

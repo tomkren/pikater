@@ -101,7 +101,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	}
 	
 	@Override
-	public boolean edgesDefinedFor(Integer boxID)
+	public boolean hasOutputEdges(Integer boxID)
 	{
 		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty();
 	}
@@ -110,7 +110,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	public Set<BoxInfoServer> getFromNeighbours(Integer boxID)
 	{
 		Set<BoxInfoServer> result = new HashSet<BoxInfoServer>();
-		if(edgesDefinedFor(boxID))
+		if(hasOutputEdges(boxID))
 		{
 			for(Integer otherBoxID : edges.get(boxID))
 			{
@@ -305,7 +305,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				uniBox.getGuiInfo().setY(webBox.getPosY());
 				
 				// edges
-				if(edgesDefinedFor(webBox.getID())) // these edges are all valid (currently registered)
+				if(hasOutputEdges(webBox.getID())) // these edges are all valid (currently registered)
 				{
 					for(Integer neighbourWebBoxID : edges.get(webBox.getID())) // these edges are all valid (currently registered)
 					{

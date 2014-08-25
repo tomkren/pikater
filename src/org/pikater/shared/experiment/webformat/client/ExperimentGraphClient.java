@@ -84,7 +84,7 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	}
 	
 	@Override
-	public boolean edgesDefinedFor(Integer boxID)
+	public boolean hasOutputEdges(Integer boxID)
 	{
 		return (edges.get(boxID) != null) && !edges.get(boxID).isEmpty(); 
 	}
