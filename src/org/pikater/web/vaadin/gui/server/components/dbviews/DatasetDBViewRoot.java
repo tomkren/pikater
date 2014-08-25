@@ -18,7 +18,6 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.forms.DatasetVisualizationForm;
-import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
@@ -33,6 +32,8 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
+
+import de.steinwedel.messagebox.MessageBox;
 
 public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBViewRoot<V>
 {
@@ -149,11 +150,9 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 		}
 		else if(specificColumn == Column.COMPARE)
 		{
-			MyPopup datasetCompareWizardWindow = new MyPopup("Dataset compare guide");
-			datasetCompareWizardWindow.setWidth("700px");
-			datasetCompareWizardWindow.setHeight("550px");
-			datasetCompareWizardWindow.setContent(new DatasetCompareWizard(datasetCompareWizardWindow, dataset));
-			datasetCompareWizardWindow.show();
+			MessageBox mb = GeneralDialogs.wizardDialog("Dataset compare guide", new DatasetCompareWizard(dataset));
+			mb.setWidth("800px");
+			mb.setHeight("500px");
 		}
 		else if(specificColumn == Column.DOWNLOAD)
 		{
