@@ -1,6 +1,14 @@
 Provedené změny
 =====
 
+Plánovač
+-----
+2. Šetrnost k využití síťové infrastruktury – omezení zbytečných přesunů dat
+mezi jednotlivými stroji, příp. agenty v rámci jednoho stroje (když už má
+agent data načtena, je lepší použít ho znovu na stejných datech, než data
+načítat znova v jiném agentovi).
+
+
 Distribuce dat
 -----
 
@@ -12,7 +20,9 @@ Distribuce dat
 
 
 • v jednotném formátu, kterému rozumí všichni výpočetní agenti,
+
 • dostatečně efektivně na to, aby byla umožněna práce i s velkými množinami,
+
 • co nejméně, ve smyslu opakovaného přenosu daných dat na jeden výpočetní
 uzel.
 
