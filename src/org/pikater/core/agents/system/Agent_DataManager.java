@@ -1171,7 +1171,7 @@ public class Agent_DataManager extends PikaterAgent {
 			datasets = DAOs.dataSetDAO.getAllExcludingHashes(exHash);
 		}
 
-		if (datasets != null) {
+		if (datasets == null) {
 			datasets = new ArrayList<JPADataSetLO>();
 		}
 		
