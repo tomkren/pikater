@@ -504,9 +504,13 @@ public class Agent_DataManager extends PikaterAgent {
 
 		AgentInfos agentInfos = new AgentInfos();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
-
-			AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
-			agentInfos.addAgentInfo(agentInfoI);
+			
+			if((jpaAgentInfoI.getExternalAgent() == null) // global agent... always approved
+					|| jpaAgentInfoI.getExternalAgent().isApproved()) // external agent for a user... check if approved
+			{
+				AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
+				agentInfos.addAgentInfo(agentInfoI);
+			}
 		}
 
 		Result result = new Result(a, agentInfos);
