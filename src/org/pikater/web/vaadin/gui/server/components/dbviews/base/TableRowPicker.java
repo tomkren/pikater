@@ -7,11 +7,11 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons
 
 import com.vaadin.ui.Label;
 
-public class AbstractTablePicker extends DBTableLayout implements IDialogResultPreparer
+public class TableRowPicker extends DBTableLayout implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = 9055067769093710286L;
 
-	public AbstractTablePicker(String caption)
+	public TableRowPicker(String caption)
 	{
 		setSizeUndefined();
 		setReadOnly(true);

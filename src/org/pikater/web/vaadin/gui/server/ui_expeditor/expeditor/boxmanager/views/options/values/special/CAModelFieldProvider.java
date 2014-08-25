@@ -12,6 +12,8 @@ import org.vaadin.actionbuttontextfield.widgetset.client.ActionButtonType;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.TextField;
 
+import de.steinwedel.messagebox.MessageBox;
+
 public class CAModelFieldProvider extends IntegerValueProvider
 {
 	@Override
@@ -37,7 +39,7 @@ public class CAModelFieldProvider extends IntegerValueProvider
 		    @Override
 		    public void buttonClick(ActionButtonTextField.ClickEvent clickEvent)
 		    {
-		    	GeneralDialogs.componentDialog("Search for model", new ModelWizardPicker(ManageAuth.getUserEntity(VaadinSession.getCurrent())), 
+		    	MessageBox mb = GeneralDialogs.wizardDialog("Search for model", new ModelWizardPicker(ManageAuth.getUserEntity(VaadinSession.getCurrent())), 
 		    			new GeneralDialogs.IDialogResultHandler()
 				{
 					@Override
@@ -48,6 +50,8 @@ public class CAModelFieldProvider extends IntegerValueProvider
 						return true; // close dialog
 					}
 				});
+		    	mb.setWidth("800px");
+		    	mb.setHeight("600px");
 		    }
 		});
 	}

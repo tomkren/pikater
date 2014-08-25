@@ -5,8 +5,15 @@ import java.util.List;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserScheduled;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBRow;
+import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBViewMin;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBRow;
+import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBViewMin;
+import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.ExperimentDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.ResultDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.TableRowPicker;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
@@ -29,9 +36,6 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 		addStep(new Step1(this));
 		addStep(new Step2(this));
 		addStep(new Step3(this));
-		
-		getFinishButton().setEnabled(false);
-		getFinishButton().setVisible(false);
 	}
 	
 	@Override
@@ -64,13 +68,14 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 	
 	private class Step1 extends ParentAwareWizardStep<ModelWizardPickerOutput, ModelWizardPicker>
 	{
-		private final BatchTablePicker innerLayout;
+		private final TableRowPicker innerLayout;
 		
 		public Step1(ModelWizardPicker parentWizard)
 		{
 			super(parentWizard);
 			
-			this.innerLayout = new BatchTablePicker("Select a row and click 'Next':", getOutput().getOwner());
+			this.innerLayout = new TableRowPicker("Select a row and click 'Next':");
+			this.innerLayout.setView(new BatchDBViewRoot<BatchTableDBViewUserScheduled>(new BatchTableDBViewUserScheduled(getOutput().getOwner())));
 			this.innerLayout.setSizeFull();
 		}
 
@@ -112,13 +117,13 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 	
 	private class Step2 extends RefreshableWizardStep<ModelWizardPickerOutput, ModelWizardPicker>
 	{
-		private ExperimentTablePicker innerLayout;
+		private TableRowPicker innerLayout;
 		
 		public Step2(ModelWizardPicker parentWizard)
 		{
 			super(parentWizard);
-			
-			refresh();
+			this.innerLayout = new TableRowPicker("Select a row and click 'Next':");
+			this.innerLayout.setSizeFull();
 		}
 
 		@Override
@@ -160,20 +165,31 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 		@Override
 		public void refresh()
 		{
-			this.innerLayout = new ExperimentTablePicker("Select a row and click 'Next':", getOutput().getOwner(), getOutput().getBatch());
-			this.innerLayout.setSizeFull();
+			this.innerLayout.setView(new ExperimentDBViewRoot<ExperimentTableDBViewMin>(new ExperimentTableDBViewMin(getOutput().getOwner(), getOutput().getBatch())));
 		}
 	}
 	
 	private class Step3 extends RefreshableWizardStep<ModelWizardPickerOutput, ModelWizardPicker>
 	{
-		private ResultTablePicker innerLayout;
+		private TableRowPicker innerLayout;
 		
 		public Step3(ModelWizardPicker parentWizard)
 		{
 			super(parentWizard);
-			
-			refresh();
+			this.innerLayout = new TableRowPicker("Select a row and click 'Finish':");
+			this.innerLayout.setSizeFull();
+			this.innerLayout.getTable().addValueChangeListener(new Property.ValueChangeListener()
+			{
+				private static final long serialVersionUID = 2551264104188838012L;
+
+				@Override
+				public void valueChange(ValueChangeEvent event)
+				{
+					AbstractTableRowDBView[] selectedRows = innerLayout.getTable().getViewsOfSelectedRows();
+					ResultTableDBRow selectedSingleRow = selectedRows.length == 1 ? (ResultTableDBRow) selectedRows[0] : null;
+					getOutput().setResult(selectedSingleRow.getResult());
+				}
+			});
 		}
 
 		@Override
@@ -204,20 +220,7 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 		@Override
 		public void refresh()
 		{
-			this.innerLayout = new ResultTablePicker("Select a row and click 'Finish':", getOutput().getOwner(), getOutput().getExperiment());
-			this.innerLayout.setSizeFull();
-			this.innerLayout.getTable().addValueChangeListener(new Property.ValueChangeListener()
-			{
-				private static final long serialVersionUID = 2551264104188838012L;
-
-				@Override
-				public void valueChange(ValueChangeEvent event)
-				{
-					AbstractTableRowDBView[] selectedRows = innerLayout.getTable().getViewsOfSelectedRows();
-					ResultTableDBRow selectedSingleRow = selectedRows.length == 1 ? (ResultTableDBRow) selectedRows[0] : null;
-					getOutput().setResult(selectedSingleRow.getResult());
-				}
-			});
+			this.innerLayout.setView(new ResultDBViewRoot<ResultTableDBViewMin>(new ResultTableDBViewMin(getOutput().getOwner(), getOutput().getExperiment())));
 		}
 	}
 }
