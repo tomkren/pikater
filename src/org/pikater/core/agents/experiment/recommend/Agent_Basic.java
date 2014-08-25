@@ -45,7 +45,7 @@ public class Agent_Basic extends Agent_Recommender {
 		Metadata metadata = data.getMetadata();
 		
 		GetAllMetadata gm = new GetAllMetadata();
-		gm.setResults_required(true);
+		gm.setResultsRequired(true);
 		
 		// 1. choose the nearest training data
 		Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
@@ -122,7 +122,7 @@ public class Agent_Basic extends Agent_Recommender {
 		String matrix = "";
 		
 		GetAllMetadata gm = new GetAllMetadata();
-		gm.setResults_required(false);
+		gm.setResultsRequired(false);
 	
 		Metadatas allMetadata = DataManagerService.getAllMetadata(this, gm);
 	

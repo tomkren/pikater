@@ -1156,59 +1156,39 @@ public class Agent_DataManager extends PikaterAgent {
 
 		log("Agent_DataManager.respondToGetAllMetadata");
 
+		List<String> exHash = new java.util.LinkedList<String>();
+		for (Metadata metadataI : gm.getExceptions()) {
+			exHash.add(metadataI.getInternalName());
+		}
+		
 		List<JPADataSetLO> datasets = null;
-
-		if (gm.getResults_required()) {
+		
+		if (gm.getResultsRequired()) {
 			log("DataManager.Results Required");
-			if (gm.getExceptions() != null) {
-				List<String> exHash = new java.util.LinkedList<String>();
-				Iterator itr = gm.getExceptions().iterator();
-				while (itr.hasNext()) {
-					Metadata m = (Metadata) itr.next();
-					exHash.add(m.getInternalName());
-				}
-				datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
-			} else {
-				datasets = DAOs.dataSetDAO.getAllWithResults();
-			}
+			datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
 		} else {
 			log("DataManager.Results NOT Required");
-			if (gm.getExceptions() != null) {
-
-				List<String> excludedHashes = new ArrayList<String>();
-
-				Iterator itr = gm.getExceptions().iterator();
-				while (itr.hasNext()) {
-					Metadata m = (Metadata) itr.next();
-					excludedHashes.add(m.getInternalName());
-				}
-
-				datasets = DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
-			} else {
-				datasets = DAOs.dataSetDAO.getAll();
-			}
-
+			datasets = DAOs.dataSetDAO.getAllExcludingHashes(exHash);
 		}
 
-		List<Metadata> allMetadata = new ArrayList<Metadata>();
-
 		if (datasets != null) {
-			for (JPADataSetLO dslo : datasets) {
-				if (dslo.getGlobalMetaData() != null) {
-					Metadata globalMetaData = this.convertJPADatasetToOntologyMetadata(dslo);
-					allMetadata.add(globalMetaData);
-				}
+			datasets = new ArrayList<JPADataSetLO>();
+		}
+		
+		Metadatas metadatas = new Metadatas();
+
+		for (JPADataSetLO dslo : datasets) {
+			if (dslo.getGlobalMetaData() != null) {
+				Metadata globalMetaData = this.convertJPADatasetToOntologyMetadata(dslo);
+				metadatas.addMetadata(globalMetaData);
 			}
 		}
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Metadatas metadatas = new Metadatas();
-		metadatas.setMetadatas(allMetadata);
-
-		Result _result = new Result(a.getAction(), metadatas);
-		getContentManager().fillContent(reply, _result);
+		Result result = new Result(a.getAction(), metadatas);
+		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}

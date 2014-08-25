@@ -1,7 +1,9 @@
 package org.pikater.core.ontology.subtrees.metadata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jade.content.AgentAction;
-import jade.util.leap.List;
 
 public class GetAllMetadata implements AgentAction {
 
@@ -9,21 +11,26 @@ public class GetAllMetadata implements AgentAction {
 	 * 
 	 */
 	private static final long serialVersionUID = -5223603055736238437L;
-	private List exceptions;
-	private boolean results_required;
 	
-	public List getExceptions() {
+	private List<Metadata> exceptions;
+	private boolean resultsRequired;
+	
+	public GetAllMetadata() {
+		this.exceptions = new ArrayList<Metadata>();
+	}
+	
+	public List<Metadata> getExceptions() {
 		return exceptions;
 	}
-	public void setExceptions(List exceptions) {
+	public void setExceptions(List<Metadata> exceptions) {
 		this.exceptions = exceptions;
 	}
-	public boolean getResults_required() {
-		return results_required;
+	
+	public boolean getResultsRequired() {
+		return resultsRequired;
 	}
-	public void setResults_required(boolean results_required) {
-		this.results_required = results_required;
+	public void setResultsRequired(boolean resultsRequired) {
+		this.resultsRequired = resultsRequired;
 	}
 	
-
 }
