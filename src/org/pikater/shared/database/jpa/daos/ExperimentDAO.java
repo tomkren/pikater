@@ -30,6 +30,21 @@ public class ExperimentDAO extends AbstractDAO<JPAExperiment> {
 	}
 	
 	/**
+	 * Creates a list of all experiments, where the result has attached model
+	 * @param batch {@link JPABatch} for which we wearch experiments
+	 * @param offset
+	 * @param maxResultCount
+	 * @return the list of experiments with models
+	 */
+	public List<JPAExperiment> getByBatchWithModel(JPABatch batch, int offset, int maxResultCount){
+		return getByTypedNamedQuery("Experiment.getByBatchWithModel", "batch", batch, offset, maxResultCount);
+	}
+	
+	public int getByBatchWithModelCount(JPABatch batch){
+		return getByCountQuery("Experiment.getByBatchWithModel.count", "batch", batch);
+	}
+	
+	/**
 	 * Persists experiment's result and binds it to the experiment 
 	 * @param experimentID
 	 * @param result

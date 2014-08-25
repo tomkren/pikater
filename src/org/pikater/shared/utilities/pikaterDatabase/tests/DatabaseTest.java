@@ -38,9 +38,10 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
-		testExternalAgentView();
-		testBatchResultRetrieval();
-		testDatasetViewFunctions();
+		testExperimentsWithModels();
+		//testExternalAgentView();
+		//testBatchResultRetrieval();
+		//testDatasetViewFunctions();
 		//listBestResult();
 		//listUserUploadedDatasets();
 		//testModelRemoval(); //removes very recent (older than 1 day) models!!!
@@ -60,6 +61,21 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	protected void testExperimentsWithModels() {
+		List<JPABatch> batches=DAOs.batchDAO.getAll();
+		
+		JPABatch batch=batches.get(batches.size()-1);
+		
+		List<JPAExperiment> experiments=DAOs.experimentDAO.getByBatchWithModel(batch, 0, 100);
+		p("----------------- Batch ID "+batch.getId()+" -------------");
+		for(JPAExperiment experiment:experiments){
+			p(experiment.getId()+". "+experiment.getStatus());
+			p("    -----------  Experiment ID "+experiment.getId()+" ( "+experiment.getResults().size()+" results )--------");
+			List<JPAResult> resultsWithModels=DAOs.resultDAO.getByExperimentWithModel(experiment, 0, 100);
+			p("    -- No. of results with models : "+resultsWithModels.size());
+		}
+	}
+
 	protected void testExternalAgentView() {
 		List<JPAExternalAgent> agents;
 		int allAgentsCount=0;

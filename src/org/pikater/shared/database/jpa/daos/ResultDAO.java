@@ -29,6 +29,21 @@ public class ResultDAO extends AbstractDAO<JPAResult> {
 		return getByTypedNamedQuery("Result.getByExperiment", "experiment", experiment);
 	}
 	
+	/**
+	 * Creates a list of all results, that have connected model
+	 * @param experiment {@link JPAExperiment} for which we search results
+	 * @param offset
+	 * @param maxResultCount
+	 * @return the list of results
+	 */
+	public List<JPAResult> getByExperimentWithModel(JPAExperiment experiment, int offset, int maxResultCount){
+		return getByTypedNamedQuery("Result.getByExperimentWithModel", "experiment", experiment, offset, maxResultCount);
+	}
+	
+	public int getByExperimentWithModelCount(JPAExperiment experiment){
+		return getByCountQuery("Result.getByExperimentWithModel.count", "experiment", experiment);
+	}
+	
 	public List<JPAResult> getByDataSetHash(String dataSetHash) {
 		return getByTypedNamedQuery("Result.getByDataSetHash", "hash", dataSetHash);
 	}

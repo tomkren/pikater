@@ -23,6 +23,8 @@ import javax.persistence.Transient;
 	@NamedQuery(name="Result.getByID",query="select res from JPAResult res where res.id=:id"),
 	@NamedQuery(name="Result.getByAgentName",query="select res from JPAResult res where res.agentName=:agentName"),
 	@NamedQuery(name="Result.getByExperiment",query="select res from JPAResult res where res.experiment=:experiment"),
+	@NamedQuery(name="Result.getByExperimentWithModel",query="select res from JPAResult res where res.experiment=:experiment and res.createdModel is not null"),
+	@NamedQuery(name="Result.getByExperimentWithModel.count",query="select count(res) from JPAResult res where res.experiment=:experiment and res.createdModel is not null"),
 	@NamedQuery(name="Result.getByDataSetHash",query="select res from JPAResult res where res.serializedFileName=:hash"),
 	@NamedQuery(name="Result.getByDataSetHashErrorAscending",query="select res from JPAResult res where res.serializedFileName=:hash order by res.errorRate asc"),
 	@NamedQuery(name="Result.getByExperimentErrorAscending",query="select res from JPAResult res where res.experiment=:experiment order by res.errorRate asc")

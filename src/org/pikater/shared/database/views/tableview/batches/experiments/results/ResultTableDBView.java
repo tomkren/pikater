@@ -23,6 +23,10 @@ public class ResultTableDBView extends AbstractTableDBView
 	protected final JPAUser owner;
 	private JPAExperiment experiment;
 	
+	protected JPAExperiment getExperiment() {
+		return experiment;
+	}
+
 	/**  
 	 * @param user The user whose experiment results to display. If null (admin mode), all datasets should
 	 * be provided in the {@link #queryUninitializedRows(QueryConstraints constraints)} method.

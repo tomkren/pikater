@@ -20,8 +20,8 @@ import org.pikater.shared.database.views.tableview.AbstractTableDBView;
  */
 public class ExperimentTableDBView extends AbstractTableDBView
 {
-	private final JPAUser owner;
-	private JPABatch batch;
+	protected final JPAUser owner;
+	protected JPABatch batch;
 	
 	/**  
 	 * @param user The user whose experiments to display. If null (admin mode), all datasets should

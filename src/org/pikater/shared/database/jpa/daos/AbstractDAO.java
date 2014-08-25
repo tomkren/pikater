@@ -136,6 +136,23 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
+	protected int getByCountQuery(String queryName){
+			return ((Long)EntityManagerInstancesCreator
+					.getEntityManagerInstance()
+					.createNamedQuery(queryName)
+					.getSingleResult())
+					.intValue();
+	}
+	
+	protected int getByCountQuery(String queryName, String paramName, Object param){
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery(queryName)
+				.setParameter(paramName, param)
+				.getSingleResult())
+				.intValue();
+	}
+	
 	protected List<T> getByTypedNamedQuery(String queryName){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{

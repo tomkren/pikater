@@ -180,19 +180,11 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 	}
 	
 	public int getAllCount(){
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("DataSetLO.getAll.count")
-				.getSingleResult())
-				.intValue();
+		return getByCountQuery("DataSetLO.getAll.count");
 	}
 	
 	public int getAllVisibleCount(){
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("DataSetLO.getAllVisible.count")
-				.getSingleResult())
-				.intValue();
+		return getByCountQuery("DataSetLO.getAllVisible.count");
 	}
 	
 
