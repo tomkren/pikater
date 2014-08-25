@@ -1,24 +1,21 @@
-package org.pikater.web.vaadin.gui.server.components.dbviews.special;
+package org.pikater.web.vaadin.gui.server.components.dbviews.base;
 
 import java.util.List;
 
-import org.pikater.shared.database.views.tableview.datasets.DatasetPickingTableDBView;
-import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 
 import com.vaadin.ui.Label;
 
-public class DatasetPickerComponent extends DBTableLayout implements IDialogResultPreparer
+public class AbstractTablePicker extends DBTableLayout implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = 9055067769093710286L;
 
-	public DatasetPickerComponent(String caption)
+	public AbstractTablePicker(String caption)
 	{
 		setSizeUndefined();
 		setReadOnly(true);
 		getTable().setMultiSelect(false);
-		setView(new DatasetDBViewRoot<DatasetPickingTableDBView>(new DatasetPickingTableDBView()));
 		addComponentAsFirst(new Label(caption));
 	}
 	
