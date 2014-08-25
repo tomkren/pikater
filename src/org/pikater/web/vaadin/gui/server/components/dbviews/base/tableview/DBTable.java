@@ -131,12 +131,19 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	@Override
 	public void commitToDB()
 	{
+		// lock
 		setEnabled(false);
+		
+		// commit changes to properties - properties commit changes to views
 		if(!isImmediate())
 		{
-			commit(); // commits changes to properties which commit them to the view
+			commit();
 		}
-		tableContainer.commitToDB(); // commits changes to the database; changes are taken from the view
+		
+		// then commit changes to database; changes are taken from views
+		tableContainer.commitToDB();
+		
+		// release
 		setEnabled(true);
 	}
 	

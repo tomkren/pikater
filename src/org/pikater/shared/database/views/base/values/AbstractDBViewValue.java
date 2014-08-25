@@ -11,13 +11,13 @@ public abstract class AbstractDBViewValue<T extends Object>
 	private final DBViewValueType type;
 	private T lastCommitedValue;
 	private T currentValue;
-	private IOnValueCommitted onCommitted;
+	private IOnValueCommitted onCommitCallback;
 	
 	public AbstractDBViewValue(DBViewValueType type, T value)
 	{
 		this.type = type;
 		this.currentValue = value;
-		this.onCommitted = null;
+		this.onCommitCallback = null;
 		setLastCommitedValue();
 	}
 	
@@ -67,41 +67,46 @@ public abstract class AbstractDBViewValue<T extends Object>
 	}
 	
 	/**
+	 * Sets a custom action to be called when this value is committed to database.
+	 * @param onCommitCallback
+	 */
+	public void setOnCommitCallback(IOnValueCommitted onCommitCallback)
+	{
+		this.onCommitCallback = onCommitCallback;
+	}
+	
+	/**
 	 * Stores the current value to database if updated.
 	 */
 	public void commit(AbstractTableRowDBView row)
 	{
 		if(isEdited())
 		{
-			commitEdited(row);
+			commitEntities();
+			onCommit(row);
 		}
 	}
 	
-	public void setOnCommitted(IOnValueCommitted onCommitted)
+	/**
+	 * Method defining action to be taken when this value is committed to database.</br>
+	 * Use only if you know what you're doing.
+	 */
+	public void onCommit(AbstractTableRowDBView row)
 	{
-		this.onCommitted = onCommitted;
+		setLastCommitedValue();
+		if(onCommitCallback != null)
+		{
+			onCommitCallback.onCommitted(row, this);
+		}
 	}
 	
 	//-----------------------------------------------------------------
-	// PROTECTED & PRIVATE INTERFACE
-	
-	/**
-	 * Stores the current value to database if updated.
-	 */
-	protected void commitEdited(AbstractTableRowDBView row)
-	{
-		commitEntities();
-		setLastCommitedValue();
-		if(onCommitted != null)
-		{
-			onCommitted.onCommitted(row, this);
-		}
-	}
+	// PRIVATE & PROTECTED INTERFACE
 	
 	/**
 	 * Sets this value as committed.
 	 */
-	private void setLastCommitedValue()
+	protected void setLastCommitedValue()
 	{
 		lastCommitedValue = getValue();
 	}

@@ -71,7 +71,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				@Override
 				protected void commitEntities()
 				{
-					DAOs.dataSetDAO.updateEntity(dataset);
+					commitRow();
 				}
 			};
 		case VISUALIZE:
@@ -149,7 +149,7 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 				@Override
 				protected void commitEntities()
 				{
-					DAOs.dataSetDAO.updateEntity(dataset);
+					commitRow();
 				}
 			};
 
@@ -161,5 +161,6 @@ public class DataSetTableDBRow extends AbstractTableRowDBView {
 	@Override
 	public void commitRow()
 	{
+		DAOs.dataSetDAO.updateEntity(dataset);
 	}
 }

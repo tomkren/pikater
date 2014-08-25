@@ -86,7 +86,7 @@ public class BatchDBViewRoot<V extends AbstractBatchTableDBView> extends Abstrac
 		}
 		else if(specificColumn == AbstractBatchTableDBView.Column.MAX_PRIORITY)
 		{
-			value.setOnCommitted(new AbstractDBViewValue.IOnValueCommitted()
+			value.setOnCommitCallback(new AbstractDBViewValue.IOnValueCommitted()
 			{
 				@Override
 				public void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value)

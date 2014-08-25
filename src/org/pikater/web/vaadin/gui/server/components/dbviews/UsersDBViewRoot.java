@@ -63,7 +63,7 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 		}
 		else if(specificColumn == Column.RESET_PSWD)
 		{
-			value.setOnCommitted(new AbstractDBViewValue.IOnValueCommitted()
+			value.setOnCommitCallback(new AbstractDBViewValue.IOnValueCommitted()
 			{
 				/*
 				 * This action is called after the new password is committed to DB.

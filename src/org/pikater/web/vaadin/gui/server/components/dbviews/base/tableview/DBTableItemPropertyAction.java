@@ -28,7 +28,7 @@ public class DBTableItemPropertyAction implements Property<Button>
 					@Override
 					public void run()
 					{
-						valueWrapper.updateEntities();
+						valueWrapper.executeAction();
 						if(container.getParentTable().isImmediate())
 						{
 							valueWrapper.commit(row);
