@@ -1,6 +1,9 @@
 package org.pikater.web.vaadin.gui.server.components.upload;
 
+import java.io.InputStream;
+
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.MultiFileUpload;
+import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 
 public class MyMultiUpload extends MultiFileUpload
@@ -9,7 +12,14 @@ public class MyMultiUpload extends MultiFileUpload
 	
     public MyMultiUpload(MyUploadStateWindow uploadStateWindow, boolean multiple)
     {
-        super(null, uploadStateWindow, multiple);
+        super(new UploadFinishedHandler()
+		{
+			@Override
+			public void handleFile(InputStream stream, String filename, String mimetype, long size)
+			{
+				// no implementation
+			}
+		}, uploadStateWindow, multiple);
     }
     
     // ----------------------------------------------------------------------
