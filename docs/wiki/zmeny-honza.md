@@ -25,14 +25,15 @@ TODO
 ##### Načítání dat
 {{{{{{
 
-ComputingAgent->ARFFReader: GetData
+ComputingAgent->+ARFFReader: GetData
+activate ComputingAgent
 opt data not cached
-  ARFFReader->DataManager:
+  ARFFReader->+DataManager:
   DataManager->DataManager: gets data from DB,\nstores them locally
-  DataManager->ARFFReader:
+  DataManager-->ARFFReader:
 end
 ARFFReader->ARFFReader: loads data
-ARFFReader->ComputingAgent: (data - O2A)
+ARFFReader-->-ComputingAgent: (data - O2A)
 }}}}}}
 
 
@@ -67,13 +68,14 @@ Do systému byl zaveden nový agent `org.pikater.core.agents.system.Agent_Mailin
 ##### Odesílání notifikace o dokončeném výpočtu
 {{{{{{
 
-Agent\nPlanner->Agent\nDataManager: updateExperimentStatus
+Agent\nManager->Agent\nDataManager: updateExperimentStatus
 opt new experiment status = FINISHED
-Agent\nDataManager->Agent\nMailing: SendEmail
+activate Agent\nManager
+Agent\nDataManager->+Agent\nMailing: SendEmail
   Agent\nMailing->Agent\nMailing: sends e-mail notification\nvia local SMTP server
-  Agent\nMailing-->Agent\nDataManager: 
+  Agent\nMailing-->-Agent\nDataManager: 
 end
-Agent\nDataManager-->Agent\nPlanner:
+Agent\nDataManager-->-Agent\nManager:
 }}}}}}
 
 TODO získání nejlepšího výsledku
@@ -98,16 +100,18 @@ TODO
 {{{{{{
 
 Planner->ManagerAgent: LoadAgent (ID)
-ManagerAgent->DataManager: GetModel (ID)
-DataManager->ManagerAgent: (agent)
-ManagerAgent->Planner: 
+activate Planner
+ManagerAgent->+DataManager: GetModel (ID)
+DataManager-->-ManagerAgent: (agent)
+ManagerAgent-->-Planner: 
 }}}}}}
 
 ##### Vytvoření agenta
 {{{{{{
 
-Planner->ManagerAgent: CreateAgent (type)
-ManagerAgent->Planner: (agent name)
+Planner->+ManagerAgent: CreateAgent (type)
+activate Planner
+ManagerAgent-->-Planner: (agent name)
 }}}}}}
 
 
