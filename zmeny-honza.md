@@ -1,19 +1,6 @@
 Provedené změny
 =====
 
-Plánovač
------
-
-##### Požadavky
-****
-* Šetrnost k využití síťové infrastruktury – omezení zbytečných přesunů dat
-mezi jednotlivými stroji, příp. agenty v rámci jednoho stroje (když už má
-agent data načtena, je lepší použít ho znovu na stejných datech, než data
-načítat znova v jiném agentovi).
-
-****
-
-
 Distribuce dat
 -----
 ##### Požadavky
@@ -33,6 +20,8 @@ Distribuce dat
 uzel.
 ****
 
+TODO
+
 ##### Načítání dat
 {{{{{{
 
@@ -45,6 +34,7 @@ end
 ARFFReader->ARFFReader: loads data
 ARFFReader->ComputingAgent: (data - O2A)
 }}}}}}
+
 
 Externí agenti
 ----
@@ -59,6 +49,8 @@ podléhat kontrole a schválení administrátorem systému, systém neposkytuje
 ochranu proti potenciálně škodlivé implementaci uživatelských agentů.
 
 ****
+
+TODO
 
 Mailing
 ----
@@ -95,6 +87,8 @@ nového trénování.
 
 ****
 
+TODO
+
 ##### Vytvoření agenta s natrénovaným modelem
 {{{{{{
 Planner->ManagerAgent: LoadAgent (ID)
@@ -109,8 +103,22 @@ Planner->ManagerAgent: CreateAgent (type)
 ManagerAgent->Planner: (agent name)
 }}}}}}
 
+
+DataRegistry
+-----
+
+##### Požadavky
+****
+* Šetrnost k využití síťové infrastruktury – omezení zbytečných přesunů dat
+mezi jednotlivými stroji, příp. agenty v rámci jednoho stroje (když už má
+agent data načtena, je lepší použít ho znovu na stejných datech, než data
+načítat znova v jiném agentovi).
+
+****
+
+TODO
+
 Zbytek
 ---
 
 * ukončování agentů ?
-* DataRegistry?
