@@ -30,7 +30,7 @@ activate ComputingAgent
 opt data not cached
   ARFFReader->+DataManager:
   DataManager->DataManager: gets data from DB,\nstores them locally
-  DataManager-->ARFFReader:
+  DataManager-->-ARFFReader:
 end
 ARFFReader->ARFFReader: loads data
 ARFFReader-->-ComputingAgent: (data - O2A)
@@ -73,9 +73,9 @@ opt new experiment status = FINISHED
 activate Agent\nManager
 Agent\nDataManager->+Agent\nMailing: SendEmail
   Agent\nMailing->Agent\nMailing: sends e-mail notification\nvia local SMTP server
-  Agent\nMailing-->-Agent\nDataManager: 
+  Agent\nMailing-->>-Agent\nDataManager: 
 end
-Agent\nDataManager-->-Agent\nManager:
+Agent\nDataManager-->>-Agent\nManager:
 }}}}}}
 
 TODO získání nejlepšího výsledku
@@ -102,8 +102,8 @@ TODO
 Planner->ManagerAgent: LoadAgent (ID)
 activate Planner
 ManagerAgent->+DataManager: GetModel (ID)
-DataManager-->-ManagerAgent: (agent)
-ManagerAgent-->-Planner: 
+DataManager-->>-ManagerAgent: (agent)
+ManagerAgent-->>-Planner: 
 }}}}}}
 
 ##### Vytvoření agenta
@@ -111,7 +111,7 @@ ManagerAgent-->-Planner:
 
 Planner->+ManagerAgent: CreateAgent (type)
 activate Planner
-ManagerAgent-->-Planner: (agent name)
+ManagerAgent-->>-Planner: (agent name)
 }}}}}}
 
 
