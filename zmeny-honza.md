@@ -26,11 +26,11 @@ Distribuce dat
 • co nejméně, ve smyslu opakovaného přenosu daných dat na jeden výpočetní
 uzel.
 
+##### Načítání dat
 {{{{{{
-title Načítání dat
 
 ComputingAgent->ARFFReader: GetData
-alt data not cached
+opt data not cached
   ARFFReader->DataManager:
   DataManager->DataManager: gets data from DB,\nstores them locally
   DataManager->ARFFReader:
@@ -52,10 +52,22 @@ ochranu proti potenciálně škodlivé implementaci uživatelských agentů.
 
 Mailing
 ----
-7. Možnost upozornění na dokončení výpočtu prostřednictvím e-mailu. Budou
+<!-- 7. Možnost upozornění na dokončení výpočtu prostřednictvím e-mailu. Budou
 v něm zároveň stručné výsledky experimentu – výsledky metod na daných
-datech.
+datech. -->
 
+Do systému byl zaveden nový agent `org.pikater.core.agents.system.Agent_Mailing`, který zprostředkovává službu posílání e-mailů ostatním agentům jádra pomocí akce `SendEmail`.
+
+##### Odesílání notifikace o dokončeném výpočtu
+Agent\nPlanner->Agent\nDataManager: updateExperimentStatus
+opt new experiment status = FINISHED
+Agent\nDataManager->Agent\nMailing: SendEmail
+  Agent\nMailing->Agent\nMailing: sends e-mail notification\nvia local SMTP server
+  Agent\nMailing-->Agent\nDataManager: 
+end
+Agent\nDataManager-->Agent\nPlanner:
+
+Komunikace s lokálním SMTP serverem potřebná k odeslání e-mailu je pro potřeby agenta `Agent_Mailing` a webového serveru zprostředkována rozhraním `org.pikater.shared.utilities.mailing.Mailing`, resp. metodou `org.pikater.shared.utilities.mailing.Mailing.sendEmail(to, subj, body)`.
 
 Modely
 ----
@@ -66,18 +78,16 @@ zároveň možnost trvale uložit pouze nejlepší natrénovaný model.
 Trvale uložené agenty bude možné použít v dalších výpočtech bez jejich
 nového trénování.
 
+##### Vytvoření agenta s natrénovaným modelem
 {{{{{{
-title Vytvoření agenta s natrénovaným modelem
-
 Planner->ManagerAgent: LoadAgent (ID)
 ManagerAgent->DataManager: GetModel (ID)
 DataManager->ManagerAgent: (agent)
 ManagerAgent->Planner: 
 }}}}}}
 
+##### Vytvoření agenta
 {{{{{{
-title Vytvoření agenta
-
 Planner->ManagerAgent: CreateAgent (type)
 ManagerAgent->Planner: (agent name)
 }}}}}}
@@ -86,3 +96,4 @@ Zbytek
 ---
 
 * ukončování agentů ?
+* DataRegistry?
