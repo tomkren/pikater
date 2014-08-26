@@ -26,7 +26,8 @@ Distribuce dat
 • co nejméně, ve smyslu opakovaného přenosu daných dat na jeden výpočetní
 uzel.
 
-{{{{{{title Načítání dat
+{{{{{{
+title Načítání dat
 
 ComputingAgent->ARFFReader: GetData
 alt data not cached
@@ -35,7 +36,8 @@ alt data not cached
   DataManager->ARFFReader:
 end
 ARFFReader->ARFFReader: loads data
-ARFFReader->ComputingAgent: (data - O2A)}}}}}}
+ARFFReader->ComputingAgent: (data - O2A)
+}}}}}}
 
 Externí agenti
 ----
