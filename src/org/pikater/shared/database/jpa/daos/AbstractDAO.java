@@ -9,7 +9,6 @@ import org.apache.log4j.Level;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
-import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 
 public abstract class AbstractDAO<T extends JPAAbstractEntity>
@@ -153,6 +152,16 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 				.intValue();
 	}
 	
+	protected int getByCountQuery(String queryName, String paramOneName, Object paramOne, String paramTwoName, Object paramTwo){
+		return ((Long)EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.createNamedQuery(queryName)
+				.setParameter(paramOneName, paramOne)
+				.setParameter(paramTwoName, paramTwo)
+				.getSingleResult())
+				.intValue();
+	}
+	
 	protected List<T> getByTypedNamedQuery(String queryName){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
@@ -193,14 +202,30 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}
 	}
 	
-	protected List<JPAFilemapping> getByTypedNamedQueryDouble(String queryName,String paramName1,Object param1,String paramName2,Object param2){
+	protected List<T> getByTypedNamedQueryDouble(String queryName,String paramName1,Object param1,String paramName2,Object param2){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
 			return
 				em
-				.createNamedQuery(queryName,JPAFilemapping.class)
+				.createNamedQuery(queryName,ec)
 				.setParameter(paramName1, param1)
 				.setParameter(paramName2, param2)
+				.getResultList();
+		}finally{
+			em.close();
+		}
+	}	
+	
+	protected List<T> getByTypedNamedQueryDouble(String queryName,String paramName1,Object param1,String paramName2,Object param2, int offset, int maxResultCount){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		try{
+			return
+				em
+				.createNamedQuery(queryName,ec)
+				.setParameter(paramName1, param1)
+				.setParameter(paramName2, param2)
+				.setFirstResult(offset)
+				.setMaxResults(maxResultCount)
 				.getResultList();
 		}finally{
 			em.close();

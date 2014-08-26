@@ -44,6 +44,14 @@ public class ResultDAO extends AbstractDAO<JPAResult> {
 		return getByCountQuery("Result.getByExperimentWithModel.count", "experiment", experiment);
 	}
 	
+	public List<JPAResult> getByExperimentAndAgentNameWithModel(JPAExperiment experiment, String agentName, int offset, int maxResultCount){
+		return getByTypedNamedQueryDouble("Result.getByExperimentAndAgentNameWithModel", "experiment", experiment, "agentName", agentName, offset, maxResultCount);
+	}
+	
+	public int getByExperimentAndAgentNameWithModelCount(JPAExperiment experiment, String agentName){
+		return getByCountQuery("Result.getByExperimentAndAgentNameWithModel.count", "experiment", experiment, "agentName", agentName);
+	}
+	
 	public List<JPAResult> getByDataSetHash(String dataSetHash) {
 		return getByTypedNamedQuery("Result.getByDataSetHash", "hash", dataSetHash);
 	}

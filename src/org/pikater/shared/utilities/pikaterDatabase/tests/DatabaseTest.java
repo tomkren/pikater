@@ -38,7 +38,8 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
-		testExperimentsWithModels();
+		//testExperimentsWithModels();
+		testResultsWithModelsAndAgentNames();
 		//testExternalAgentView();
 		//testBatchResultRetrieval();
 		//testDatasetViewFunctions();
@@ -61,6 +62,19 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	private void testResultsWithModelsAndAgentNames() {
+		String agentName="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA";
+		List<JPAExperiment> experiments=DAOs.experimentDAO.getAll();
+		JPAExperiment experiment=experiments.get(experiments.size()-1);
+		
+		List<JPAResult> results=DAOs.resultDAO.getByExperimentAndAgentNameWithModel(experiment, agentName, 0, 100);
+		int resultCount=DAOs.resultDAO.getByExperimentAndAgentNameWithModelCount(experiment, agentName);
+		
+		p("----- List Size :   "+results.size()+"  ----");
+		p("----- Result Count: "+resultCount+"  ----");
+		
+	}
+
 	protected void testExperimentsWithModels() {
 		List<JPABatch> batches=DAOs.batchDAO.getAll();
 		
