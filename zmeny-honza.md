@@ -53,3 +53,16 @@ zároveň možnost trvale uložit pouze nejlepší natrénovaný model.
 Trvale uložené agenty bude možné použít v dalších výpočtech bez jejich
 nového trénování.
 
+{{{{{{
+title Vytvoření agenta s natrénovaným modelem
+
+Planner->ManagerAgent: LoadAgent (ID)
+ManagerAgent->DataManager: GetModel (ID)
+DataManager->ManagerAgent: (agent)
+ManagerAgent->Planner: 
+}}}}}}
+
+Zbytek
+---
+
+* ukončování agentů ?
