@@ -6,13 +6,10 @@ import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
-import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.shared.util.Tuple;
-import org.pikater.web.vaadin.gui.server.components.dbviews.base.TableRowPicker;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
@@ -26,131 +23,122 @@ import org.pikater.web.visualisation.definition.AttrMapping;
 import org.pikater.web.visualisation.definition.result.DSVisTwoResult;
 
 import com.vaadin.server.Page;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
 public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> implements IDialogComponent
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	public ResultCompareWizard(JPADataSetLO originalDataset)
+	private Set<AttrMapping> attrComps_original;
+	private Set<AttrMapping> attrComps_compared;
+	private final AttrComparisons attrComparisons;
+	
+	public ResultCompareWizard(JPADataSetLO resultDataset, JPADataSetLO inputDataset)
 	{
-		super(new ResultCompareCommons(originalDataset));
+		super(new ResultCompareCommons(resultDataset, inputDataset));
 		setRefreshActivatedSteps(true);
+		
+		this.attrComps_original = null;
+		this.attrComps_compared = null;
+		this.attrComparisons = new AttrComparisons();
 		
 		addStep(new Step1(this));
 		addStep(new Step2(this));
-		addStep(new Step3(this));
-		
-		getFinishButton().addClickListener(new Button.ClickListener()
+	}
+	
+	@Override
+	public boolean isResultReadyToBeHandled()
+	{
+		// determine attribute sets to (potentially) compare
+		attrComps_original = getCompatibleAttributes(
+				getOutput().getResultDataset(),
+				getOutput().getResultDatasetForm().getSelectedAttributes(),
+				getOutput().getResultDatasetForm().getSelectedTargetAttribute()
+				);
+		attrComps_compared = getCompatibleAttributes(
+				getOutput().getInputDataset(),
+				getOutput().getInputDatasetForm().getSelectedAttributes(),
+				getOutput().getInputDatasetForm().getSelectedTargetAttribute()
+				);
+
+		// determine attribute pairs to compare
+		attrComparisons.clear();
+		for(AttrMapping mapping1 : attrComps_original)
 		{
-			private static final long serialVersionUID = -1069956626807311766L;
-
-			@Override
-			public void buttonClick(ClickEvent event)
+			for(AttrMapping mapping2 : attrComps_compared)
 			{
-				// determine attribute sets to (potentially) compare
-				Set<AttrMapping> attrComps_original = getCompatibleAttributes(
-						getOutput().getDatasetOriginal(),
-						getOutput().getFormOriginal().getSelectedAttributes(),
-						getOutput().getFormOriginal().getSelectedTargetAttribute()
-				);
-				Set<AttrMapping> attrComps_compared = getCompatibleAttributes(
-						getOutput().getDatasetCompareTo(),
-						getOutput().getFormCompareTo().getSelectedAttributes(),
-						getOutput().getFormCompareTo().getSelectedTargetAttribute()
-				);
-				
-				// determine attribute pairs to compare
-				final AttrComparisons attrComparisons = new AttrComparisons();
-				for(AttrMapping mapping1 : attrComps_original)
+				if(DatasetVisualizationValidation.areCompatible(mapping1, mapping2))
 				{
-					for(AttrMapping mapping2 : attrComps_compared)
-					{
-						if(DatasetVisualizationValidation.areCompatible(mapping1, mapping2))
-						{
-							attrComparisons.add(new Tuple<AttrMapping, AttrMapping>(mapping1, mapping2));
-						}
-					}
-				}
-				if(!attrComparisons.isEmpty())
-				{
-					// show progress dialog
-					ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
-					{
-						private DatasetVisualizationEntryPoint underlyingTask;
-
-						@Override
-						public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
-						{
-							// start the task and bind it with the progress dialog
-							underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
-							underlyingTask.visualizeDatasetComparison(getOutput().getDatasetOriginal(), getOutput().getDatasetCompareTo(), attrComparisons);
-						}
-
-						@Override
-						public void abortTask()
-						{
-							underlyingTask.abort();
-						}
-
-						@Override
-						public void onTaskFinish(IProgressDialogTaskResult result)
-						{
-							// and when the task finishes, construct the UI
-							DSVisTwoUIArgs uiArgs = new DSVisTwoUIArgs(getOutput().getDatasetOriginal(), getOutput().getDatasetCompareTo(), (DSVisTwoResult) result); 
-							Page.getCurrent().setLocation(uiArgs.toRedirectURL());
-						}
-					});
-				}
-				else
-				{
-					MyNotifications.showWarning("Nothing to compare", "No compatible mappings found.");
+					attrComparisons.add(new Tuple<AttrMapping, AttrMapping>(mapping1, mapping2));
 				}
 			}
-			
-			private Set<AttrMapping> getCompatibleAttributes(JPADataSetLO dataset, JPAAttributeMetaData[] selectedAttrs, JPAAttributeMetaData attrTarget)
-			{
-				Set<AttrMapping> attrComps = new HashSet<AttrMapping>();
-				for(JPAAttributeMetaData attrX : selectedAttrs)
-				{
-					for(JPAAttributeMetaData attrY : selectedAttrs)
-					{
-						AttrMapping attributes = new AttrMapping(attrX, attrY, attrTarget);
-						if(DatasetVisualizationValidation.isCompatible(attributes))
-						{
-							attrComps.add(attributes);
-						}
-					}
-				}
-				return attrComps;
-			}
-		});
+		}
+		if(!attrComparisons.isEmpty())
+		{
+			return true;
+		}
+		else
+		{
+			MyNotifications.showWarning("Nothing to compare", "No compatible mappings found.");
+			return false;
+		}
 	}
 	
 	@Override
 	public void addArgs(List<Object> arguments)
 	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isResultReadyToBeHandled()
-	{
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
 	public boolean handleResult(Object[] args)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		// show progress dialog
+		ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
+		{
+			private DatasetVisualizationEntryPoint underlyingTask;
+
+			@Override
+			public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+			{
+				// start the task and bind it with the progress dialog
+				underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
+				underlyingTask.visualizeDatasetComparison(getOutput().getResultDataset(), getOutput().getInputDataset(), attrComparisons);
+			}
+
+			@Override
+			public void abortTask()
+			{
+				underlyingTask.abort();
+			}
+
+			@Override
+			public void onTaskFinish(IProgressDialogTaskResult result)
+			{
+				// and when the task finishes, construct the UI
+				DSVisTwoUIArgs uiArgs = new DSVisTwoUIArgs(getOutput().getResultDataset(), getOutput().getInputDataset(), (DSVisTwoResult) result); 
+				Page.getCurrent().setLocation(uiArgs.toRedirectURL());
+			}
+		});
+		return true;
+	}
+	
+	private Set<AttrMapping> getCompatibleAttributes(JPADataSetLO dataset, JPAAttributeMetaData[] selectedAttrs, JPAAttributeMetaData attrTarget)
+	{
+		Set<AttrMapping> attrComps = new HashSet<AttrMapping>();
+		for(JPAAttributeMetaData attrX : selectedAttrs)
+		{
+			for(JPAAttributeMetaData attrY : selectedAttrs)
+			{
+				AttrMapping attributes = new AttrMapping(attrX, attrY, attrTarget);
+				if(DatasetVisualizationValidation.isCompatible(attributes))
+				{
+					attrComps.add(attributes);
+				}
+			}
+		}
+		return attrComps;
 	}
 	
 	//--------------------------------------------------------------
@@ -168,14 +156,13 @@ public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> i
 			this.vLayout.setSizeFull();
 			this.vLayout.setSpacing(true);
 			
-			Label label = new Label(String.format("First select attributes to be compared for '%s':", 
-					getOutput().getDatasetOriginal().getFileName()));
+			Label label = new Label("First select attributes to be compared for result dataset:");
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
 			this.vLayout.addComponent(label);
-			this.vLayout.addComponent(getOutput().getFormOriginal());
-			this.vLayout.setExpandRatio(getOutput().getFormOriginal(), 1);
+			this.vLayout.addComponent(getOutput().getResultDatasetForm());
+			this.vLayout.setExpandRatio(getOutput().getResultDatasetForm(), 1);
 		}
 
 		@Override
@@ -203,60 +190,11 @@ public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> i
 		}
 	}
 	
-	private class Step2 extends ParentAwareWizardStep<ResultCompareCommons, ResultCompareWizard>
-	{
-		private final TableRowPicker innerLayout;
-		
-		public Step2(ResultCompareWizard parentWizard)
-		{
-			super(parentWizard);
-			
-			this.innerLayout = new TableRowPicker("Select a row and click 'Next':");
-			this.innerLayout.setSizeFull();
-		}
-
-		@Override
-		public String getCaption()
-		{
-			return "Compare to...";
-		}
-
-		@Override
-		public Component getContent()
-		{
-			return innerLayout;
-		}
-
-		@Override
-		public boolean onAdvance()
-		{
-			AbstractTableRowDBView[] selectedViews = innerLayout.getTable().getViewsOfSelectedRows();
-			if(selectedViews.length > 0)
-			{
-				// this assumes single select mode
-				DataSetTableDBRow selectedView = (DataSetTableDBRow) selectedViews[0];
-				getOutput().setCompareToDataset(selectedView.getDataset());
-				return true;
-			}
-			else
-			{
-				MyNotifications.showError(null, "No table row (dataset) is selected.");
-				return false;
-			}
-		}
-
-		@Override
-		public boolean onBack()
-		{
-			return true;
-		}
-	}
-	
-	private class Step3 extends RefreshableWizardStep<ResultCompareCommons, ResultCompareWizard>
+	private class Step2 extends RefreshableWizardStep<ResultCompareCommons, ResultCompareWizard>
 	{
 		private final VerticalLayout vLayout;
 		
-		public Step3(ResultCompareWizard parentWizard)
+		public Step2(ResultCompareWizard parentWizard)
 		{
 			super(parentWizard);
 			
@@ -294,14 +232,13 @@ public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> i
 		{
 			this.vLayout.removeAllComponents();
 			
-			Label label = new Label(String.format("And finally, select attributes to be compared for '%s':", 
-					getOutput().getDatasetCompareTo().getFileName()));
+			Label label = new Label("Select attributes to be compared for input dataset:"); 
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
 			this.vLayout.addComponent(label);
-			this.vLayout.addComponent(getOutput().getFormCompareTo());
-			this.vLayout.setExpandRatio(getOutput().getFormCompareTo(), 1);
+			this.vLayout.addComponent(getOutput().getInputDatasetForm());
+			this.vLayout.setExpandRatio(getOutput().getInputDatasetForm(), 1);
 		}
 	}
 }

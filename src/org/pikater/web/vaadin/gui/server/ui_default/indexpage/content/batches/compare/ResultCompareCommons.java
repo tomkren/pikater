@@ -6,44 +6,36 @@ import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 
 class ResultCompareCommons implements IWizardCommon
 {
-	private final JPADataSetLO dataset_original;
-	private final DatasetVisualizationForm form_original;
+	private final JPADataSetLO dataset_result;
+	private final JPADataSetLO dataset_input;
+	private final DatasetVisualizationForm form_result;
+	private final DatasetVisualizationForm form_input;
 	
-	private JPADataSetLO dataset_compareTo;
-	private DatasetVisualizationForm form_compareTo;
-	
-	public ResultCompareCommons(JPADataSetLO dataset_original)
+	public ResultCompareCommons(JPADataSetLO dataset_result, JPADataSetLO dataset_input)
 	{
-		this.dataset_original = dataset_original;
-		this.form_original = new DatasetVisualizationForm(dataset_original);
-		
-		this.dataset_compareTo = null;
-		this.form_compareTo = null;
-	}
-	
-	public void setCompareToDataset(JPADataSetLO dataset)
-	{
-		this.dataset_compareTo = dataset;
-		this.form_compareTo = new DatasetVisualizationForm(dataset);
+		this.dataset_result = dataset_result;
+		this.dataset_input = dataset_input;
+		this.form_result = new DatasetVisualizationForm(dataset_result);
+		this.form_input = new DatasetVisualizationForm(dataset_input);
 	}
 
-	public JPADataSetLO getDatasetOriginal()
+	public JPADataSetLO getResultDataset()
 	{
-		return dataset_original;
+		return dataset_result;
 	}
 
-	public DatasetVisualizationForm getFormOriginal()
+	public JPADataSetLO getInputDataset()
 	{
-		return form_original;
+		return dataset_input;
 	}
 
-	public JPADataSetLO getDatasetCompareTo()
+	public DatasetVisualizationForm getResultDatasetForm()
 	{
-		return dataset_compareTo;
+		return form_result;
 	}
 
-	public DatasetVisualizationForm getFormCompareTo()
+	public DatasetVisualizationForm getInputDatasetForm()
 	{
-		return form_compareTo;
+		return form_input;
 	}
 }

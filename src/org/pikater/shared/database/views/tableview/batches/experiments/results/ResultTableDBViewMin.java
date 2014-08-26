@@ -19,14 +19,13 @@ public class ResultTableDBViewMin extends ResultTableDBViewExperiment
 	public Set<ITableColumn> getAllColumns()
 	{
 		return new LinkedHashSet<ITableColumn>(EnumSet.of(
-				Column.AGENT_NAME,
-				Column.NOTE,
 				Column.ERROR_RATE,
 				Column.KAPPA,
 				Column.MEAN_ABS_ERR,
 				Column.REL_ABS_ERR,
 				Column.ROOT_MEAN_SQR_ERR,
-				Column.ROOT_REL_SQR_ERR
+				Column.ROOT_REL_SQR_ERR,
+				Column.NOTE
 		));
 	}
 	

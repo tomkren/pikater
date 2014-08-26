@@ -76,6 +76,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 			case COMPARE:
 			case DOWNLOAD:
 				return 100;
+				
 			case DELETE:
 				return 75;
 				

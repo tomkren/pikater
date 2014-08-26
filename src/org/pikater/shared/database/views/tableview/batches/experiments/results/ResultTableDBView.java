@@ -31,7 +31,9 @@ public abstract class ResultTableDBView extends AbstractTableDBView
 		ROOT_REL_SQR_ERR,
 		ROOT_MEAN_SQR_ERR,
 		NOTE,
-		TRAINED_MODEL;
+		TRAINED_MODEL,
+		VISUALIZE,
+		COMPARE;
 
 		@Override
 		public String getDisplayName()
@@ -62,6 +64,8 @@ public abstract class ResultTableDBView extends AbstractTableDBView
 					return DBViewValueType.STRING;
 					
 				case TRAINED_MODEL:
+				case VISUALIZE:
+				case COMPARE:
 					return DBViewValueType.NAMED_ACTION;
 					
 				default:
@@ -84,7 +88,8 @@ public abstract class ResultTableDBView extends AbstractTableDBView
 		result.remove(Column.WEKA_OPTIONS);
 		result.remove(Column.NOTE);
 		result.remove(Column.TRAINED_MODEL);
-		result.remove(Column.AGENT_NAME);
+		result.remove(Column.VISUALIZE);
+		result.remove(Column.COMPARE);
 		return result;
 	}
 	
