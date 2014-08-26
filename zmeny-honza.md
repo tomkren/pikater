@@ -65,6 +65,8 @@ datech.
 Do systému byl zaveden nový agent `org.pikater.core.agents.system.Agent_Mailing`, který zprostředkovává službu posílání e-mailů ostatním agentům jádra pomocí akce `SendEmail`.
 
 ##### Odesílání notifikace o dokončeném výpočtu
+{{{{{{
+
 Agent\nPlanner->Agent\nDataManager: updateExperimentStatus
 opt new experiment status = FINISHED
 Agent\nDataManager->Agent\nMailing: SendEmail
@@ -72,6 +74,7 @@ Agent\nDataManager->Agent\nMailing: SendEmail
   Agent\nMailing-->Agent\nDataManager: 
 end
 Agent\nDataManager-->Agent\nPlanner:
+}}}}}}
 
 Komunikace s lokálním SMTP serverem potřebná k odeslání e-mailu je pro potřeby agenta `Agent_Mailing` a webového serveru zprostředkována rozhraním `org.pikater.shared.utilities.mailing.Mailing`, resp. metodou `org.pikater.shared.utilities.mailing.Mailing.sendEmail(to, subj, body)`.
 
