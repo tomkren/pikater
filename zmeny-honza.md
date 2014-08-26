@@ -76,6 +76,8 @@ end
 Agent\nDataManager-->Agent\nPlanner:
 }}}}}}
 
+TODO získání nejlepšího výsledku
+
 Komunikace s lokálním SMTP serverem potřebná k odeslání e-mailu je pro potřeby agenta `Agent_Mailing` a webového serveru zprostředkována rozhraním `org.pikater.shared.utilities.mailing.Mailing`, resp. metodou `org.pikater.shared.utilities.mailing.Mailing.sendEmail(to, subj, body)`.
 
 Modely
