@@ -21,7 +21,6 @@ public class UserDatasetsView extends DatasetsView
 	{
 		super();
 		
-		getMainLayout().setCommitImmediately(false);
 		getMainLayout().addCustomActionComponent(new Button("Upload new dataset", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = -1045335713385385849L;
@@ -29,7 +28,7 @@ public class UserDatasetsView extends DatasetsView
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				MessageBox mb = GeneralDialogs.wizardDialog("Dataset upload guide", new DatasetUploadWizard(getMainLayout().getTable()));
+				MessageBox mb = GeneralDialogs.wizardDialog("Dataset upload guide", new DatasetUploadWizard());
 				mb.setWidth("600px");
 				mb.setHeight("500px");
 			}

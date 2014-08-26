@@ -101,7 +101,7 @@ public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBVie
 				@Override
 				public String getMimeType()
 				{
-					return HttpContentType.APPLICATION_OCTET_STREAM.toString();
+					return HttpContentType.APPLICATION_OCTET_STREAM.getMimeType();
 				}
 
 				@Override

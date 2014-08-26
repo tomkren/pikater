@@ -1,7 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.upload;
 
 import java.io.File;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.pikater.shared.logging.PikaterLogger;
@@ -12,7 +11,6 @@ import org.pikater.web.quartzjobs.UploadedDatasetHandler;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
-import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
@@ -36,13 +34,9 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	private final DBTable tableToRefresh;
-	
-	public DatasetUploadWizard(DBTable tableToRefresh) 
+	public DatasetUploadWizard() 
 	{
 		super(new DatasetUploadCommons());
-		
-		this.tableToRefresh = tableToRefresh;
 		
 		addStep(new Step1(this));
 		addStep(new Step2(this));
@@ -199,8 +193,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 			ManageUserUploads uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads); 
 			MyMultiUpload mmu = uploadManager.createUploadButton(
 					"Choose file to upload",
-					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
-							HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN)
+					HttpContentType.getDatasetUploadTypes()
 			);
 			mmu.addFileUploadEventsCallback(new IFileUploadEvents()
 			{
@@ -256,7 +249,6 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 						GeneralDialogs.info("Upload successful", "It may take a while before your dataset is processed and (for example) visualization "
 								+ "can be invoked on it.");
 					}
-					tableToRefresh.rebuildRowCache();
 				}
 				
 				private Window getParentPopup()

@@ -64,8 +64,6 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		{
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
 			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId(),JPADatasetSource.USER_UPLOAD);
-			
-			
 			if(ServerConfigurationInterface.getConfig().coreEnabled)
 			{
 				try
@@ -149,5 +147,4 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 			}
 		}
 	}
-	
 }

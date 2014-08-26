@@ -39,7 +39,7 @@ public class AgentUploadForm extends CustomFormLayout
 	private final TextArea tf_agentDescription;
 	private final MyMultiUpload upload;
 
-	public AgentUploadForm(final Window parentPopup, final Runnable onSuccessfulUploadCallback)
+	public AgentUploadForm(final Window parentPopup)
 	{
 		super(null);
 		
@@ -123,7 +123,6 @@ public class AgentUploadForm extends CustomFormLayout
 					GeneralDialogs.info("Upload successful", "It may take a while before your agent is processed and made available in the experiment "
 							+ "editor.");
 				}
-				onSuccessfulUploadCallback.run();
 			}
 		});
 		this.upload.setEnabled(false);

@@ -32,15 +32,7 @@ public class UserAgentsView extends AgentsView
 				agentsUploadWizardWindow.setWidth("500px");
 				agentsUploadWizardWindow.setHeight("300px");
 				
-				AgentUploadForm form = new AgentUploadForm(agentsUploadWizardWindow, new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						// when an agent is successfully uploaded:
-						getTable().rebuildRowCache();
-					}
-				});
+				AgentUploadForm form = new AgentUploadForm(agentsUploadWizardWindow);
 				form.setStyleName("agentsUploadForm");
 				agentsUploadWizardWindow.setContent(form);
 				agentsUploadWizardWindow.show();

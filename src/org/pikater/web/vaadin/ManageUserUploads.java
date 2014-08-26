@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.EnumSet;
 
+import org.pikater.shared.util.collections.CollectionUtils;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
@@ -127,7 +128,8 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 		MyMultiUpload result = new MyMultiUpload(stateWindow, false); // true doesn't work... seems to be a bug in the plugin
 		result.setMaxFileSize(oneGB);
 		result.setAcceptedMimeTypes(HttpContentType.getMimeTypeList(allowedMIMETypes));
-		result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", HttpContentType.getExtensionList(allowedMIMETypes)));
+		result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", 
+				CollectionUtils.join(HttpContentType.getExtensionList(allowedMIMETypes), ", ")));
 		result.setSizeErrorMsgPattern("Error: you can only upload files up to 1GB.");
 		result.setMaxVisibleRows(5);
 		result.getSmartUpload().setUploadButtonCaptions(caption, caption);

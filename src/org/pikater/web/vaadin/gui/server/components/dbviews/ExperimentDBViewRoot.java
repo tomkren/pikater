@@ -101,7 +101,7 @@ public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends Abstr
 				@Override
 				public String getMimeType()
 				{
-					return HttpContentType.TEXT_CSV.toString();
+					return HttpContentType.TEXT_CSV.getMimeType();
 				}
 
 				@Override
@@ -166,7 +166,7 @@ public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends Abstr
 						@Override
 						public String getMimeType()
 						{
-							return HttpContentType.TEXT_CSV.toString();
+							return HttpContentType.TEXT_CSV.getMimeType();
 						}
 
 						@Override

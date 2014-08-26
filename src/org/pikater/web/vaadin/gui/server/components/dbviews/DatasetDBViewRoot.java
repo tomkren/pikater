@@ -181,7 +181,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 				@Override
 				public String getMimeType()
 				{
-					return HttpContentType.APPLICATION_JAR.toString();
+					return HttpContentType.APPLICATION_JAR.getMimeType();
 				}
 				
 				@Override

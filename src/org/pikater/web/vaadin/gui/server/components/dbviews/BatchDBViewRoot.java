@@ -192,7 +192,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 						@Override
 						public String getMimeType()
 						{
-							return HttpContentType.TEXT_CSV.toString();
+							return HttpContentType.TEXT_CSV.getMimeType();
 						}
 
 						@Override
