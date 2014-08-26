@@ -26,6 +26,17 @@ Distribuce dat
 • co nejméně, ve smyslu opakovaného přenosu daných dat na jeden výpočetní
 uzel.
 
+{{{{{{title Načítání dat
+
+ComputingAgent->ARFFReader: GetData
+alt data not cached
+  ARFFReader->DataManager:
+  DataManager->DataManager: gets data from DB,\nstores them locally
+  DataManager->ARFFReader:
+end
+ARFFReader->ARFFReader: loads data
+ARFFReader->ComputingAgent: (data - O2A)}}}}}}
+
 Externí agenti
 ----
 9. Přidávání nových komponent -„krabiček“. „Krabička” musí být specializací
@@ -60,6 +71,13 @@ Planner->ManagerAgent: LoadAgent (ID)
 ManagerAgent->DataManager: GetModel (ID)
 DataManager->ManagerAgent: (agent)
 ManagerAgent->Planner: 
+}}}}}}
+
+{{{{{{
+title Vytvoření agenta
+
+Planner->ManagerAgent: CreateAgent (type)
+ManagerAgent->Planner: (agent name)
 }}}}}}
 
 Zbytek
