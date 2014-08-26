@@ -175,7 +175,7 @@ public class BatchesView extends ExpandableView
 			
 			this.innerLayout = new DBTableLayout();
 			this.innerLayout.setReadOnly(true);
-			this.innerLayout.setView(new ResultDBViewRoot<ResultTableDBViewExperiment>(new ResultTableDBViewExperiment(experiment.getBatch().getOwner(), experiment)));
+			this.innerLayout.setView(new ResultDBViewRoot<ResultTableDBViewExperiment>(new ResultTableDBViewExperiment(experiment)));
 			// registerDBViewLayout(this.innerLayout); // POINTLESS (leaf)
 		}
 

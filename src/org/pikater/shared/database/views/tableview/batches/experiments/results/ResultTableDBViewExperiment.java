@@ -23,7 +23,7 @@ public class ResultTableDBViewExperiment extends ResultTableDBView
 	 * The owner of the batch of experiment is compared to the given user.
 	 * @param experiment The experiment for which the results are listed
 	 */
-	public ResultTableDBViewExperiment(JPAUser user, JPAExperiment experiment)
+	public ResultTableDBViewExperiment(JPAExperiment experiment)
 	{
 		this.owner = experiment.getBatch().getOwner();
 		this.experiment = experiment;

@@ -9,7 +9,7 @@ import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserS
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBViewMin;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBRow;
-import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBViewMin;
+import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBViewExperimentAgent;
 import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.ExperimentDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.ResultDBViewRoot;
@@ -28,9 +28,9 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	public ModelWizardPicker(JPAUser owner)
+	public ModelWizardPicker(JPAUser owner, String agentClassSimpleName)
 	{
-		super(new ModelWizardPickerOutput(owner));
+		super(new ModelWizardPickerOutput(owner, agentClassSimpleName));
 		setRefreshActivatedSteps(true);
 		
 		addStep(new Step1(this));
@@ -220,7 +220,10 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 		@Override
 		public void refresh()
 		{
-			this.innerLayout.setView(new ResultDBViewRoot<ResultTableDBViewMin>(new ResultTableDBViewMin(getOutput().getOwner(), getOutput().getExperiment())));
+			this.innerLayout.setView(new ResultDBViewRoot<ResultTableDBViewExperimentAgent>(new ResultTableDBViewExperimentAgent(
+					getOutput().getExperiment(),
+					getOutput().getAgentClassSimpleName()
+			)));
 		}
 	}
 }

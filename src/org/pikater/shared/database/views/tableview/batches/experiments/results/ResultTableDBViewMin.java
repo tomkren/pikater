@@ -5,14 +5,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.pikater.shared.database.jpa.JPAExperiment;
-import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.views.base.ITableColumn;
 
 public class ResultTableDBViewMin extends ResultTableDBViewExperiment 
 {
-	public ResultTableDBViewMin(JPAUser user, JPAExperiment experiment)
+	public ResultTableDBViewMin(JPAExperiment experiment)
 	{
-		super(user, experiment);
+		super(experiment);
 	}
 
 	@Override

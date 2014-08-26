@@ -9,13 +9,15 @@ import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 public class ModelWizardPickerOutput implements IWizardCommon
 {
 	private final JPAUser owner;
+	private final String agentClassSimpleName;
 	private JPABatch batch;
 	private JPAExperiment experiment;
 	private JPAResult result;
 	
-	public ModelWizardPickerOutput(JPAUser owner)
+	public ModelWizardPickerOutput(JPAUser owner, String agentClassSimpleName)
 	{
 		this.owner = owner;
+		this.agentClassSimpleName = agentClassSimpleName;
 		this.batch = null;
 		this.experiment = null;
 		this.result = null;
@@ -24,6 +26,11 @@ public class ModelWizardPickerOutput implements IWizardCommon
 	public JPAUser getOwner()
 	{
 		return owner;
+	}
+	
+	public String getAgentClassSimpleName()
+	{
+		return agentClassSimpleName;
 	}
 
 	public JPABatch getBatch()

@@ -16,6 +16,13 @@ import de.steinwedel.messagebox.MessageBox;
 
 public class CAModelFieldProvider extends IntegerValueProvider
 {
+	private final String agentClassSimpleName;
+	
+	public CAModelFieldProvider(String agentClassSimpleName)
+	{
+		this.agentClassSimpleName = agentClassSimpleName;
+	}
+
 	@Override
 	protected void doGenerateFields(Value value)
 	{
@@ -39,7 +46,7 @@ public class CAModelFieldProvider extends IntegerValueProvider
 		    @Override
 		    public void buttonClick(ActionButtonTextField.ClickEvent clickEvent)
 		    {
-		    	MessageBox mb = GeneralDialogs.wizardDialog("Search for model", new ModelWizardPicker(ManageAuth.getUserEntity(VaadinSession.getCurrent())), 
+		    	MessageBox mb = GeneralDialogs.wizardDialog("Search for model", new ModelWizardPicker(ManageAuth.getUserEntity(VaadinSession.getCurrent()), agentClassSimpleName), 
 		    			new GeneralDialogs.IDialogResultHandler()
 				{
 					@Override
