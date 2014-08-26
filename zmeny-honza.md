@@ -91,6 +91,7 @@ TODO
 
 ##### Vytvoření agenta s natrénovaným modelem
 {{{{{{
+
 Planner->ManagerAgent: LoadAgent (ID)
 ManagerAgent->DataManager: GetModel (ID)
 DataManager->ManagerAgent: (agent)
@@ -99,6 +100,7 @@ ManagerAgent->Planner:
 
 ##### Vytvoření agenta
 {{{{{{
+
 Planner->ManagerAgent: CreateAgent (type)
 ManagerAgent->Planner: (agent name)
 }}}}}}
