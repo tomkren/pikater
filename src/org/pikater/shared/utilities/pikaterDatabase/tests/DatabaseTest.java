@@ -208,7 +208,7 @@ public class DatabaseTest {
 		//List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllWithResults();
 		List<String> exlist=new ArrayList<String>();
 		exlist.add("28c7b9febbecff6ce207bcde29fc0eb8");
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exlist);
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllWithResultsExcludingHashesWithMetadata(exlist);
 		p("No. of found DataSets: "+dslos.size());
 		for(JPADataSetLO dslo:dslos){
 			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
@@ -305,7 +305,7 @@ public class DatabaseTest {
 			JPADataSetLO idslo=iDslos.get(0);
 			exList.add(idslo.getHash());
 		}
-		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllExcludingHashes(exList);
+		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getAllExcludingHashesWithMetadata(exList);
 		
 		p("No. of found DataSets: "+dslos.size());
 		System.out.print("Excluded: ");

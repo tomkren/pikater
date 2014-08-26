@@ -197,7 +197,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 				.intValue();
 	}
 	
-	public List<JPADataSetLO> getAllExcludingHashes(List<String> hashesToBeExcluded){
+	public List<JPADataSetLO> getAllExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb= em.getCriteriaBuilder();
 		CriteriaQuery<JPADataSetLO> cq=cb.createQuery(JPADataSetLO.class);
@@ -207,6 +207,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		for(String exHash:hashesToBeExcluded){
 			p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
 		}
+		p=cb.and(p,cb.isNotNull(r.get("globalMetaData")));
 		cq=cq.where(p);
 		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
 		
@@ -259,7 +260,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 				.getResultList();
 	}
 	
-	public List<JPADataSetLO> getAllWithResultsExcludingHashes(List<String> hashesToBeExcluded){
+	public List<JPADataSetLO> getAllWithResultsExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb= em.getCriteriaBuilder();
 		
@@ -270,6 +271,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		for(String exHash:hashesToBeExcluded){
 			p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
 		}
+		p=cb.and(p,cb.isNotNull(r.get("globalMetaData")));
 		
 		Subquery<JPAResult> subquery=cq.subquery(JPAResult.class);
 		Root<JPAResult> sqroot=subquery.from(JPAResult.class);

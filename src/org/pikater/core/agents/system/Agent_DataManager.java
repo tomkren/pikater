@@ -16,7 +16,6 @@ import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.util.leap.Iterator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1062,15 +1061,18 @@ public class Agent_DataManager extends PikaterAgent {
 		log("Retrieving metadata for hash " + gm.getInternal_filename());
 		JPADataSetLO dslo = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getInternal_filename())).getSingleResultWithNull();
 
-		if (dslo != null) {
+		if ((dslo != null)
+			&&(dslo.getGlobalMetaData()!=null)
+			&&(dslo.getAttributeMetaData()!=null)
+			){
 			m = this.convertJPADatasetToOntologyMetadata(dslo);
 			reply.setPerformative(ACLMessage.INFORM);
 		} else {
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 
-		Result _result = new Result(a.getAction(), m);
-		getContentManager().fillContent(reply, _result);
+		Result result = new Result(a.getAction(), m);
+		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
@@ -1165,10 +1167,10 @@ public class Agent_DataManager extends PikaterAgent {
 		
 		if (gm.getResultsRequired()) {
 			log("DataManager.Results Required");
-			datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
+			datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashesWithMetadata(exHash);
 		} else {
 			log("DataManager.Results NOT Required");
-			datasets = DAOs.dataSetDAO.getAllExcludingHashes(exHash);
+			datasets = DAOs.dataSetDAO.getAllExcludingHashesWithMetadata(exHash);
 		}
 
 		if (datasets == null) {
@@ -1178,10 +1180,8 @@ public class Agent_DataManager extends PikaterAgent {
 		Metadatas metadatas = new Metadatas();
 
 		for (JPADataSetLO dslo : datasets) {
-			if (dslo.getGlobalMetaData() != null) {
-				Metadata globalMetaData = this.convertJPADatasetToOntologyMetadata(dslo);
-				metadatas.addMetadata(globalMetaData);
-			}
+			Metadata globalMetaData = this.convertJPADatasetToOntologyMetadata(dslo);
+			metadatas.addMetadata(globalMetaData);
 		}
 
 		ACLMessage reply = request.createReply();
