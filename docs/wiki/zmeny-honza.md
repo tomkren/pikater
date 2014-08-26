@@ -30,10 +30,10 @@ activate ComputingAgent
 opt data not cached
   ARFFReader->+DataManager:
   DataManager->DataManager: gets data from DB,\nstores them locally
-  DataManager-->-ARFFReader:
+  DataManager-->>-ARFFReader:
 end
 ARFFReader->ARFFReader: loads data
-ARFFReader-->-ComputingAgent: (data - O2A)
+ARFFReader-->>-ComputingAgent: (data - O2A)
 }}}}}}
 
 
@@ -68,7 +68,7 @@ Do systému byl zaveden nový agent `org.pikater.core.agents.system.Agent_Mailin
 ##### Odesílání notifikace o dokončeném výpočtu
 {{{{{{
 
-Agent\nManager->Agent\nDataManager: updateExperimentStatus
+Agent\nManager->+Agent\nDataManager: updateExperimentStatus
 opt new experiment status = FINISHED
 activate Agent\nManager
 Agent\nDataManager->+Agent\nMailing: SendEmail
@@ -99,7 +99,7 @@ TODO
 ##### Vytvoření agenta s natrénovaným modelem
 {{{{{{
 
-Planner->ManagerAgent: LoadAgent (ID)
+Planner->+ManagerAgent: LoadAgent (ID)
 activate Planner
 ManagerAgent->+DataManager: GetModel (ID)
 DataManager-->>-ManagerAgent: (agent)
