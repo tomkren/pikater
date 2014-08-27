@@ -82,7 +82,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				@Override
 				public boolean isEnabled()
 				{
-					return result.getCreatedModel() != null;
+					return result.hasAnOutput();
 				}
 
 				@Override
@@ -101,7 +101,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				@Override
 				public boolean isEnabled()
 				{
-					return result.getCreatedModel() != null;
+					return result.hasAnOutput();
 				}
 
 				@Override

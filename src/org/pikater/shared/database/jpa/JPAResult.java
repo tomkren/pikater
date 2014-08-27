@@ -198,6 +198,10 @@ public class JPAResult extends JPAAbstractEntity{
         this.experiment = experiment;
     }
     
+    public boolean hasAnOutput()
+    {
+    	return (outputs != null) && !outputs.isEmpty();
+    }
 
 	public JPAModel getCreatedModel() {
 		return createdModel;
