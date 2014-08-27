@@ -10,8 +10,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name="GlobalMetaData")
 @NamedQueries({
-	@NamedQuery(name="GlobalMetaData.getAll",query="select gmd from JPAGlobalMetaData gmd"),
-	@NamedQuery(name="GlobalMetaData.getById",query="select gmd from JPAGlobalMetaData gmd where gmd.id=:id")
+	@NamedQuery(name="GlobalMetaData.getAll",query="select gmd from JPAGlobalMetaData gmd")
 })
 public class JPAGlobalMetaData extends JPAAbstractEntity{
 	

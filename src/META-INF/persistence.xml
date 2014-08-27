@@ -10,7 +10,6 @@
         <class>org.pikater.shared.database.jpa.JPAResult</class>
         <class>org.pikater.shared.database.jpa.JPAExperiment</class>
         <class>org.pikater.shared.database.jpa.JPABatch</class>
-        <class>org.pikater.shared.database.jpa.JPAGeneralFile</class>
         <class>org.pikater.shared.database.jpa.JPADataSetLO</class>
         <class>org.pikater.shared.database.jpa.JPAUser</class>
         <class>org.pikater.shared.database.jpa.JPARole</class>

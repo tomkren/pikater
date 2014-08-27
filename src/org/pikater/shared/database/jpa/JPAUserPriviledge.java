@@ -15,7 +15,6 @@ import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 @Table(name="UserPriviledge")
 @NamedQueries({
 	@NamedQuery(name="UserPriviledge.getAll",query="select up from JPAUserPriviledge up"),
-	@NamedQuery(name="UserPriviledge.getByID",query="select up from JPAUserPriviledge up where up.id=:id"),
 	@NamedQuery(name="UserPriviledge.getByName",query="select up from JPAUserPriviledge up where up.name=:name")
 })
 public class JPAUserPriviledge extends JPAAbstractEntity{

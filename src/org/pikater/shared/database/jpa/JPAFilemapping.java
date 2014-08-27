@@ -9,7 +9,6 @@ import javax.persistence.Table;
 @Table(name="FileMapping")
 @NamedQueries({
 	@NamedQuery(name="FileMapping.getAll",query="select fm from JPAFilemapping fm"),
-	@NamedQuery(name="FileMapping.getByID",query="select fm from JPAFilemapping fm where fm.id=:id"),
 	@NamedQuery(name="FileMapping.getByInternalFileName",query="select fm from JPAFilemapping fm where fm.internalfilename=:internalFilename"),
 	@NamedQuery(name="FileMapping.getByExternalFileName",query="select fm from JPAFilemapping fm where fm.externalfilename=:externalFilename"),
 	@NamedQuery(name="FileMapping.getByUser",query="select fm from JPAFilemapping fm where fm.user=:user"),
