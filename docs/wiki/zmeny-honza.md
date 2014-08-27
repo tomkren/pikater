@@ -1,16 +1,18 @@
 Provedené změny
 =====
 
-### Distribuce dat
------
+### Distribuce a reprezentace dat
 #### Požadavky
 ****
+Typy dat:
+
 • Soubory s datovými množinami.
 
 • Kód implementující jednotlivé metody strojového učení
 
 • Natrénované a uložené modely (agenti).
 
+Podmínky distribuce:
 
 • v jednotném formátu, kterému rozumí všichni výpočetní agenti,
 
@@ -21,6 +23,8 @@ uzel.
 ****
 
 #### Realizace
+
+##### Datové množiny
 
 Pro vnitřní reprezentaci uložených datasetů systém využívá formát ARFF, který je nativním formátem pro systémem využívanou knihovnu strojového učení WEKA.  ARFF soubor je v podstatě textový CSV soubor obohacený o metadata v podobě anotací.
 
@@ -34,8 +38,9 @@ V podobě `DataInstances` jsou datasety zprostředkovány výpočetním agentům
 
 Tento problém byl pro lokální přenosy (mezi ARFFReaderem a výpočetními agenty) vyřešen využitím "object to agent" rozhraní, které platforma JADE poskytuje.  K přenosu dat pak dojde pouze pomocí odkazu do stejného adresního prostoru, bez zbytečné serializace nebo kopírování dat.
 
+TODO ne-lokalni
 
-##### Načítání dat
+###### Načítání dat
 {{{{{{
 
 ComputingAgent->+ARFFReader: GetData
@@ -49,6 +54,13 @@ ARFFReader->ARFFReader: loads data
 ARFFReader-->>-ComputingAgent: (data - O2A)
 }}}}}}
 
+##### Kód implementující jednotlivé metody strojového učení
+
+TODO jarka
+
+##### Natrénované a uložené modely (agenti).
+
+TODO modely
 
 ### Externí agenti
 
