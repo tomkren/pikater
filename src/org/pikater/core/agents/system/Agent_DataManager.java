@@ -876,8 +876,13 @@ public class Agent_DataManager extends PikaterAgent {
 		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
 
 		for (TaskOutput output : task.getOutput()) {
-			jparesult.getOutputs().add(output.getName());
-			log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(output.getName())).getSingleResultWithNull();
+			if(dslo!=null){
+				jparesult.getOutputs().add(dslo);
+				log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			}else{
+				logError("Failed to add output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			}
 		}
 
 		float errorRate = Float.MAX_VALUE;

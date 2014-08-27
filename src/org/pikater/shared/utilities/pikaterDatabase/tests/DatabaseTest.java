@@ -37,6 +37,7 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
+		testDatasetRetrievalBasedOnResult();
 		//testExperimentsWithModels();
 		//testResultsWithModelsAndAgentNames();
 		testExternalAgentView();
@@ -61,6 +62,18 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
+	protected void testDatasetRetrievalBasedOnResult() {
+		
+		JPAResult result=DAOs.resultDAO.getByID(122205);
+		p("---- Result ID "+result.getId()+" ----");
+		List<JPADataSetLO> outputs=result.getOutputs();
+		p("------- No. of outputs "+outputs.size()+" --------");
+		for(JPADataSetLO dslo:outputs){
+			p(dslo.getId()+". "+dslo.getHash());
+		}
+		
+	}
+
 	protected void testResultsWithModelsAndAgentNames() {
 		String agentName="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA";
 		JPABatch batch=DAOs.batchDAO.getByID(119752);

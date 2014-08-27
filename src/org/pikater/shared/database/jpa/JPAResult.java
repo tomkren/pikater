@@ -10,6 +10,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -62,14 +63,15 @@ public class JPAResult extends JPAAbstractEntity{
 	private Date finish;
 	private String serializedFileName;
 	private String note;
-	private List<String> outputs;
+	@OneToMany
+	private List<JPADataSetLO> outputs;
     @ManyToOne
     private JPAExperiment experiment;
     @OneToOne
     private JPAModel createdModel;
     
     public JPAResult(){
-    	this.outputs=new ArrayList<String>();
+    	this.outputs=new ArrayList<JPADataSetLO>();
     }
     
     public JPAExperiment getExperiment() {
@@ -203,7 +205,7 @@ public class JPAResult extends JPAAbstractEntity{
 	public void setCreatedModel(JPAModel createdModel) {
 		this.createdModel = createdModel;
 	}
-	public List<String> getOutputs() {
+	public List<JPADataSetLO> getOutputs() {
 		return outputs;
 	}
 	@Transient
