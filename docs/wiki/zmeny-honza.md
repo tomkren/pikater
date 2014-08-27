@@ -1,9 +1,9 @@
 Provedené změny
 =====
 
-Distribuce dat
+### Distribuce dat
 -----
-##### Požadavky
+#### Požadavky
 ****
 • Soubory s datovými množinami.
 
@@ -20,7 +20,20 @@ Distribuce dat
 uzel.
 ****
 
-TODO
+#### Realizace
+
+Pro vnitřní reprezentaci uložených datasetů systém využívá formát ARFF, který je nativním formátem pro systémem využívanou knihovnu strojového učení WEKA.  ARFF soubor je v podstatě textový CSV soubor obohacený o metadata v podobě anotací.
+
+Formát ARFF je podrobně zdokumentován na vlastních stránkách: http://weka.wikispaces.com/ARFF
+
+Využití tohoto formátu bylo upřednostněno před zavedením vlastního nového formátu pro možnost přepoužití existujících parserů, kvalitní dokumentaci a přívětivost formátu pro lidské i strojové zpracování.  Nevýhodou formátu je neúspornost co do objemu dat, což by bylo možné řešit dodatečnou kompresí při ukládání nebo transportu.
+
+Reprezentace datasetu v paměti je třída (JADE concept) `org.pikater.core.ontology.subtrees.dataInstance.DataInstances`.  Tento je obálkou pro data převoditelné z a do formátu zpracovatelného knihovnou WEKA `weka.core.Instances`.
+
+V podobě `DataInstances` jsou datasety zprostředkovány výpočetním agentům prostřednictvím agenta `org.pikater.core.agents.system.Agent_ARFFReader`.  V původní implementaci systému Pikater se načtená data předávaly výpočetním agentům přímo ACL zprávami, což se ukázalo jako neefektivní – potenciálně velká data musely projít drahou serializací a deserializací i pokud se data předávají v rámci jednoho JADE kontejneru.
+
+Tento problém byl pro lokální přenosy (mezi ARFFReaderem a výpočetními agenty) vyřešen využitím "object to agent" rozhraní, které platforma JADE poskytuje.  K přenosu dat pak dojde pouze pomocí odkazu do stejného adresního prostoru, bez zbytečné serializace nebo kopírování dat.
+
 
 ##### Načítání dat
 {{{{{{
@@ -37,9 +50,9 @@ ARFFReader-->>-ComputingAgent: (data - O2A)
 }}}}}}
 
 
-Externí agenti
-----
-##### Požadavky
+### Externí agenti
+
+#### Požadavky
 ****
 * Přidávání nových komponent -„krabiček“. „Krabička” musí být specializací
 jednoho z typů definovaných systémem (Search, výpočetní agent,
@@ -51,11 +64,13 @@ ochranu proti potenciálně škodlivé implementaci uživatelských agentů.
 
 ****
 
+#### Realizace
+
 TODO
 
-Mailing
-----
-##### Požadavky
+### Mailing
+
+#### Požadavky
 ****
 * Možnost upozornění na dokončení výpočtu prostřednictvím e-mailu. Budou
 v něm zároveň stručné výsledky experimentu – výsledky metod na daných
@@ -63,7 +78,11 @@ datech.
 
 ****
 
+#### Realizace
+
 Do systému byl zaveden nový agent `org.pikater.core.agents.system.Agent_Mailing`, který zprostředkovává službu posílání e-mailů ostatním agentům jádra pomocí akce `SendEmail`.
+
+Komunikace s lokálním SMTP serverem potřebná k odeslání e-mailu je pro potřeby agenta `Agent_Mailing` a webového serveru zprostředkována rozhraním `org.pikater.shared.utilities.mailing.Mailing`, resp. metodou `org.pikater.shared.utilities.mailing.Mailing.sendEmail(to, subj, body)`.
 
 ##### Odesílání notifikace o dokončeném výpočtu
 {{{{{{
@@ -78,13 +97,10 @@ end
 Agent\nDataManager-->>-Agent\nManager:
 }}}}}}
 
-TODO získání nejlepšího výsledku
 
-Komunikace s lokálním SMTP serverem potřebná k odeslání e-mailu je pro potřeby agenta `Agent_Mailing` a webového serveru zprostředkována rozhraním `org.pikater.shared.utilities.mailing.Mailing`, resp. metodou `org.pikater.shared.utilities.mailing.Mailing.sendEmail(to, subj, body)`.
+### Modely
 
-Modely
-----
-##### Požadavky
+#### Požadavky
 ****
 8. U každého trénování metody bude možné nastavit, zda se má trvale uložit
 celý natrénovaný model. V případě použití prohledávacích algoritmů bude
@@ -93,6 +109,8 @@ Trvale uložené agenty bude možné použít v dalších výpočtech bez jejich
 nového trénování.
 
 ****
+
+#### Realizace
 
 TODO
 
@@ -103,7 +121,7 @@ Planner->+ManagerAgent: LoadAgent (ID)
 activate Planner
 ManagerAgent->+DataManager: GetModel (ID)
 DataManager-->>-ManagerAgent: (agent)
-ManagerAgent-->>-Planner: 
+ManagerAgent-->>-Planner: (agent AID)
 }}}}}}
 
 ##### Vytvoření agenta
@@ -111,14 +129,13 @@ ManagerAgent-->>-Planner:
 
 Planner->+ManagerAgent: CreateAgent (type)
 activate Planner
-ManagerAgent-->>-Planner: (agent name)
+ManagerAgent-->>-Planner: (agent AID)
 }}}}}}
 
 
-DataRegistry
------
+### DataRegistry
 
-##### Požadavky
+#### Požadavky
 ****
 * Šetrnost k využití síťové infrastruktury – omezení zbytečných přesunů dat
 mezi jednotlivými stroji, příp. agenty v rámci jednoho stroje (když už má
@@ -127,9 +144,10 @@ načítat znova v jiném agentovi).
 
 ****
 
+#### Realizace
+
 TODO
 
-Zbytek
----
+### Zbytek
 
 * ukončování agentů ?
