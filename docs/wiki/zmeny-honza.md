@@ -57,11 +57,38 @@ ARFFReader-->>-ComputingAgent: (data - O2A)
 
 ##### Kód implementující jednotlivé metody strojového učení
 
-TODO jarka
+Přenos JAR souborů s novými metodami strojového učení (nebo jinými typy externích agentů) zajišťuje `Agent_DataManager` na vyžádání agenta `Agent_ManagerAgent`.  JAR soubory pak na daném stroji zůstanou v keši.
+
+Protože jde typicky o malé soubory (do 5 MB), jejich přenos nepředstavuje riziko velkého vytížení infrastruktury.  Přenos probíhá přímým načtením ze vzdálené databáze do souboru.
+
+{{{{{{
+
+Manager->+ManagerAgent: CreateAgent (type)
+activate Manager
+opt external agent JAR not present locally
+ManagerAgent->+DataManager: GetExternalAgentJar (type)
+DataManager->DataManager: loads JAR\nstores it locally
+DataManager-->>-ManagerAgent: 
+end
+ManagerAgent->ManagerAgent: starts new agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
 
 ##### Natrénované a uložené modely (agenti).
 
-TODO modely
+Natrénované modely jsou uloženy v podobě serializované Javovské třídy daného agenta.  Samotnou serializaci modelu zajišťuje knihovna WEKA – její klasifikátory implementují rozhraní `Serializable`.
+
+Serializovaní agenti mají typicky do 100 kB a pro potřeby jejich oživení agentem `Agent_ManagerAgent` jsou mu doručováni jako `byte[]` přímo v ACL zprávě.
+
+{{{{{{
+
+Manager->+ManagerAgent: LoadAgent (ID)
+activate Manager
+ManagerAgent->+DataManager: GetModel (ID)
+DataManager-->>-ManagerAgent: (agent)
+ManagerAgent->ManagerAgent: starts saved agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
 
 ### Externí agenti
 
@@ -130,19 +157,26 @@ TODO
 ##### Vytvoření agenta s natrénovaným modelem
 {{{{{{
 
-Planner->+ManagerAgent: LoadAgent (ID)
-activate Planner
+Manager->+ManagerAgent: LoadAgent (ID)
+activate Manager
 ManagerAgent->+DataManager: GetModel (ID)
 DataManager-->>-ManagerAgent: (agent)
-ManagerAgent-->>-Planner: (agent AID)
+ManagerAgent->ManagerAgent: starts new agent
+ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
 ##### Vytvoření agenta
 {{{{{{
 
-Planner->+ManagerAgent: CreateAgent (type)
-activate Planner
-ManagerAgent-->>-Planner: (agent AID)
+Manager->+ManagerAgent: CreateAgent (type)
+activate Manager
+opt external agent JAR not present locally
+ManagerAgent->+DataManager: GetExternalAgentJar (type)
+DataManager->DataManager: loads JAR\nstores it locally
+DataManager-->>-ManagerAgent: 
+end
+ManagerAgent->ManagerAgent: starts saved agent
+ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
 
