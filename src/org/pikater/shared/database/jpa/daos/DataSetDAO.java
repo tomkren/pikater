@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -42,16 +41,8 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		return JPADataSetLO.EntityName;
 	}
 	
-	public List<JPADataSetLO> getAll(int offset,int maxResultCount) {
-		return EntityManagerInstancesCreator
-		.getEntityManagerInstance()
-		.createNamedQuery("DataSetLO.getAll", JPADataSetLO.class)
-		.setFirstResult(offset)
-		.setMaxResults(maxResultCount)
-		.getResultList();
-	}
-	
-	private Path<Object> convertColumnToJPAParam(Root<JPADataSetLO> root,ITableColumn column){
+	protected Path<Object> convertColumnToJPAParam(ITableColumn column){
+		Root<JPADataSetLO> root=getRoot();
 		switch((DataSetTableDBView.Column)column){
 		case CREATED:
 		case DESCRIPTION:
@@ -68,65 +59,63 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		}
 	}
 	
-	public List<JPADataSetLO> getAllUserUpload(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder) {
-		return this.getAll(offset, maxResults, sortColumn, sortOrder, true, false, JPADatasetSource.USER_UPLOAD);
-	}
-	
-	public List<JPADataSetLO> getUserUploadVisible(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder) {
-		return this.getAll(offset, maxResults, sortColumn, sortOrder, false, false, JPADatasetSource.USER_UPLOAD);
-	}
-	
-	public List<JPADataSetLO> getUserUploadVisibleApproved(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder) {
-		return this.getAll(offset, maxResults, sortColumn, sortOrder, false, true, JPADatasetSource.USER_UPLOAD);
+	private Predicate createAllUserUploadPredicate(){
+		return getCriteriaBuilder()
+				.equal(getRoot().get("source"), JPADatasetSource.USER_UPLOAD);
 	}
 	
 	/**
-	 * Returns a list of all datasets available in the database. The result include invisible datasets if the last parameter is set to true. 
+	 * Creates of the list of all datasets, that were uploaded by users. The result doesn't depend on dataset visibility.
 	 * @param offset the position from which the elements are returned
-	 * @param maxResults maximum number of retrieved elements
+	 * @param maxResultCount maximum number of retrieved elements
 	 * @param sortColumn column upon which the result is sorted
 	 * @param sortOrder ascending or descending order of sorting
-	 * @param includeDeleted false to retrieve only visible datasets, true to retrieve all items
-	 * @param source {@link JPADatasetSource} - the origin of the dataset
-	 * @return the list of all visible datasets
+	 * @return the list of all user uploaded datasets
 	 */
-	public List<JPADataSetLO> getAll(int offset, int maxResults,ITableColumn sortColumn, SortOrder sortOrder,boolean includeDeleted,boolean justApproved, JPADatasetSource source) {
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		CriteriaBuilder cb=em.getCriteriaBuilder();
-		CriteriaQuery<JPADataSetLO> q=cb.createQuery(JPADataSetLO.class);
-		Root<JPADataSetLO> c=q.from(JPADataSetLO.class);
-		q.select(c);
-		
-		if(!includeDeleted){
-			if(justApproved){
-				q.where(cb.and(cb.equal(c.get("source"), source), cb.and(cb.equal(c.get("visible"), true),cb.equal(c.get("approved"), true))));
-			}else{
-				q.where(cb.and(cb.equal(c.get("source"), source), cb.equal(c.get("visible"), true)));
-			}
-		}else{
-			if(justApproved){
-				q.where(cb.and(cb.equal(c.get("source"), source), cb.equal(c.get("approved"), true)));
-			}else{
-				q.where(cb.equal(c.get("source"), source));
-			}
-		}
-		
-		switch (sortOrder) {
-		case ASCENDING:
-			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
-			break;
-		case DESCENDING:
-			q.orderBy(cb.desc(this.convertColumnToJPAParam(c, sortColumn)));
-			break;
-		default:
-			break;
-		}
-		
-		TypedQuery<JPADataSetLO> query=
-				em.createQuery(q)
-				.setFirstResult(offset)
-				.setMaxResults(maxResults);
-		return query.getResultList();
+	public List<JPADataSetLO> getAllUserUpload(int offset, int maxResultCount,ITableColumn sortColumn, SortOrder sortOrder) {
+		return getByCriteriaQuery(
+				createAllUserUploadPredicate(),
+				sortColumn,
+				sortOrder,
+				offset,
+				maxResultCount);
+	}
+	
+	/**
+	 * Computes the number of all user uploaded datasets/
+	 * @return the number of datasets
+	 */
+	public int getAllUserUploadCount(){
+		return getByCriteriaQueryCount(createAllUserUploadPredicate());
+	}
+	
+	
+	private Predicate createUserUploadVisiblePredicate(){
+		return getCriteriaBuilder()
+				.and(
+					getCriteriaBuilder().equal(getRoot().get("source"), JPADatasetSource.USER_UPLOAD),
+					getCriteriaBuilder().equal(getRoot().get("visible"), true)
+					);
+	}
+	
+	/**
+	 * Creates a list of All datasets, that were uploaded by user and are visible to users
+	 * @param offset the position from which the elements are returned
+	 * @param maxResultCount maximum number of retrieved elements
+	 * @param sortColumn column upon which the result is sorted
+	 * @param sortOrder ascending or descending order of sorting
+	 * @return the list of all user uploaded visible datasets
+	 */
+	public List<JPADataSetLO> getUserUploadVisible(int offset, int maxResultCount,ITableColumn sortColumn, SortOrder sortOrder) {
+		return this.getByCriteriaQuery(createUserUploadVisiblePredicate(), sortColumn, sortOrder, offset, maxResultCount);
+	}
+	
+	/**
+	 * Computes the number of all user uploaded visible datasets
+	 * @return the number of datasets
+	 */
+	public int getUserUploadVisibleCount(){
+		return getByCriteriaQueryCount(createUserUploadVisiblePredicate());
 	}
 	
 	public List<JPADataSetLO> getAllUserUploaded(){
@@ -141,60 +130,55 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		return this.getByTypedNamedQuery("DataSetLO.getAllBySoruce", "source", source);
 	}
 	
-	public List<JPADataSetLO> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder) {
-		return this.getByOwner(owner, offset, maxResults, sortColumn, sortOrder,true, JPADatasetSource.USER_UPLOAD);
-	}
-	
-	public List<JPADataSetLO> getByOwnerUserUploadVisible(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder) {
-		return this.getByOwner(owner, offset, maxResults, sortColumn, sortOrder,false, JPADatasetSource.USER_UPLOAD);
-	}
-	
-	public List<JPADataSetLO> getByOwner(JPAUser owner, int offset, int maxResults, ITableColumn sortColumn, SortOrder sortOrder, boolean includeDeleted, JPADatasetSource source) {
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		CriteriaBuilder cb=em.getCriteriaBuilder();
-		CriteriaQuery<JPADataSetLO> q=cb.createQuery(JPADataSetLO.class);
-		Root<JPADataSetLO> c=q.from(JPADataSetLO.class);
-		q.select(c);
-		if(!includeDeleted){
-			q.where(cb.and(cb.equal(c.get("source"), source), cb.and(cb.equal(c.get("owner"), owner), cb.equal(c.get("visible"), true))));
-		}else{
-			q.where(cb.and(cb.equal(c.get("source"), source), cb.equal(c.get("owner"), owner)));
-		}
+	private Predicate createByOwnerUserUploadVisiblePredicate(JPAUser owner){
+		CriteriaBuilder cb=getCriteriaBuilder();
+		Predicate pred=
+				cb.equal(
+					getRoot().get("source"),
+					JPADatasetSource.USER_UPLOAD
+					);
+		pred=cb.and(
+				pred,
+				cb.equal(
+					getRoot().get("owner"),
+					owner)
+				);
+		pred=cb.and(
+				pred,
+				cb.equal(
+					getRoot().get("visible"),
+					true)
+				);
 		
-		switch (sortOrder) {
-		case ASCENDING:
-			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
-			break;
-		case DESCENDING:
-			q.orderBy(cb.desc(this.convertColumnToJPAParam(c, sortColumn)));
-			break;
-		default:
-			break;
-		}
-		
-		TypedQuery<JPADataSetLO> query=
-				em.createQuery(q)
-				.setFirstResult(offset)
-				.setMaxResults(maxResults);
-		return query.getResultList();
+		return pred;
 	}
 	
-	public int getAllCount(){
-		return getByCountQuery("DataSetLO.getAll.count");
+	/**
+	 * Creates a list of datasets, which have the following properties:
+	 * <p>
+	 * - dataset's owner is equals to the {@link JPAUser} parameter
+	 * <p>
+	 * - dataset is visible
+	 * <p>
+	 * - dataset was uploaded by the user (not by an experiment, which has run under user's name)
+	 * @param owner the owner of the dataset
+	 * @param offset the position from which the elements are returned
+	 * @param maxResultCount maximum number of retrieved elements
+	 * @param sortColumn column upon which the result is sorted
+	 * @param sortOrder ascending or descending order of sorting
+	 * @return the list of user's datasets
+	 */
+	public List<JPADataSetLO> getByOwnerUserUploadVisible(JPAUser owner, int offset, int maxResultCount, ITableColumn sortColumn, SortOrder sortOrder) {
+		return getByCriteriaQuery(createByOwnerUserUploadVisiblePredicate(owner), sortColumn, sortOrder, offset, maxResultCount);
 	}
 	
-	public int getAllVisibleCount(){
-		return getByCountQuery("DataSetLO.getAllVisible.count");
-	}
-	
-
-	public int getBySourceVisibleCount(JPADatasetSource source){
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("DataSetLO.getBySourceVisible.count")
-				.setParameter("source", source)
-				.getSingleResult())
-				.intValue();
+	/**
+	 * Computes the number of datasets for the given user, that are visible and were uploaded by the user
+	 * @param owner the owner of datasets
+	 * @return the number of datasets
+	 */
+	public int getByOwnerUserUploadVisibleCount(JPAUser owner){
+		return getByCriteriaQueryCount(createByOwnerUserUploadVisiblePredicate(owner));
 	}
 	
 	public List<JPADataSetLO> getAllExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
@@ -218,27 +202,8 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		return getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user);
 	}
 	
-	public List<JPADataSetLO> getByOwner(JPAUser user, int offset, int maxResultCount) {
-		return getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user,offset,maxResultCount);
-	}
-	
 	public int getByOwnerCount(JPAUser user){
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("DataSetLO.getByOwner.count")
-				.setParameter("owner", user)
-				.getSingleResult())
-				.intValue();
-	}
-	
-	public int getByOwnerSourceVisibleCount(JPAUser user, JPADatasetSource source){
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("DataSetLO.getByOwnerAndSourceVisible.count")
-				.setParameter("owner", user)
-				.setParameter("source",source)
-				.getSingleResult())
-				.intValue();
+		return getByCountQuery("DataSetLO.getByOwner.count", "owner", user);
 	}
 	
 	public List<JPADataSetLO> getByOID(long oid) {
@@ -254,10 +219,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 	}
 	
 	public List<JPADataSetLO> getAllWithResults(){
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("DataSetLO.getAllWithResults", JPADataSetLO.class)
-				.getResultList();
+		return getByTypedNamedQuery("DataSetLO.getAllWithResults");
 	}
 	
 	public List<JPADataSetLO> getAllWithResultsExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
@@ -297,7 +259,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 	 * @return ID of the new {@link JPADataSetLO} object
 	 * @throws IOException
 	 */
-	public int storeNewDataSet(File sourceFile, String description, int userID,JPADatasetSource datasetSource) throws IOException{
+	public int storeNewDataSet(File sourceFile, String description, int userID, JPADatasetSource datasetSource) throws IOException{
 			
 		JPAUser owner = DAOs.userDAO.getByID(userID);
 		

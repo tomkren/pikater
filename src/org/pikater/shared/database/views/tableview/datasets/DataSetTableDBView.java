@@ -10,7 +10,6 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.DataSetDAO;
-import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.QueryConstraints;
 import org.pikater.shared.database.views.base.query.QueryResult;
@@ -168,10 +167,10 @@ public class DataSetTableDBView extends AbstractTableDBView
 		int allDatasetCount=0;
 		if(this.adminMode()){
 			allDatasets = DAOs.dataSetDAO.getUserUploadVisible(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allDatasetCount=DAOs.dataSetDAO.getBySourceVisibleCount(JPADatasetSource.USER_UPLOAD);
+			allDatasetCount=DAOs.dataSetDAO.getUserUploadVisibleCount();
 		}else{
 			allDatasets = DAOs.dataSetDAO.getByOwnerUserUploadVisible(owner,constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allDatasetCount=DAOs.dataSetDAO.getByOwnerSourceVisibleCount(owner, JPADatasetSource.USER_UPLOAD);
+			allDatasetCount=DAOs.dataSetDAO.getByOwnerUserUploadVisibleCount(owner);
 		}
 		
 		List<DataSetTableDBRow> resultRows = new ArrayList<DataSetTableDBRow>();

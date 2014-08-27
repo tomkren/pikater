@@ -3,12 +3,19 @@ package org.pikater.shared.database.jpa.daos;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
+import org.pikater.shared.database.views.base.ITableColumn;
+import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.utilities.logging.PikaterLogger;
 
 public abstract class AbstractDAO<T extends JPAAbstractEntity>
@@ -246,6 +253,114 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}finally{
 			em.close();
 		}
+	}
+	
+	protected CriteriaBuilder getCriteriaBuilder(){
+		return EntityManagerInstancesCreator
+				.getEntityManagerInstance()
+				.getCriteriaBuilder();
+	}
+	
+	private Root<T> root=null;
+	
+	protected Root<T> getRoot(){
+		if(root==null){
+			root=getCriteriaBuilder().createQuery(ec).from(ec);
+		}
+		return root;
+	}
+	
+	protected Path<Object> convertColumnToJPAParam(ITableColumn column){
+		return getRoot().get("id");
+	}
+	
+	protected List<T> getByCriteriaQuery(){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaQuery<T> query=getCriteriaBuilder().createQuery(ec);
+		
+		return em
+				.createQuery(
+					query
+					 .select(getRoot())
+					 )
+				.getResultList();
+	}
+	
+	protected List<T> getByCriteriaQuery(Predicate wherePredicate){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaQuery<T> query=getCriteriaBuilder().createQuery(ec);
+		
+		return em
+				.createQuery(
+					query
+					 .select(getRoot())
+					 .where(wherePredicate)
+					 )
+				.getResultList();
+	}
+	
+	protected int getByCriteriaQueryCount(Predicate wherePredicate){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaQuery<Long> query=getCriteriaBuilder().createQuery(Long.class);
+		
+		return em
+				.createQuery(
+					query
+					 .select(getCriteriaBuilder().count(getRoot()))
+					 .where(wherePredicate)
+					 )
+				.getSingleResult()
+				.intValue();
+	}
+	
+	protected List<T> getByCriteriaQuery(ITableColumn sortColumn, SortOrder sortOrder, int offset, int maxResultCount){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaBuilder cb=getCriteriaBuilder();
+		CriteriaQuery<T> query=cb.createQuery(ec);
+		
+		query = query.select(getRoot());
+		
+		switch (sortOrder) {
+		case ASCENDING:
+			query.orderBy(cb.asc(convertColumnToJPAParam(sortColumn)));
+			break;
+		case DESCENDING:
+			query.orderBy(cb.desc(convertColumnToJPAParam(sortColumn)));
+			break;
+		default:
+			break;
+		}
+		
+		return em
+				.createQuery(query)
+				.setFirstResult(offset)
+				.setMaxResults(maxResultCount)
+				.getResultList();
+	}
+	
+	protected List<T> getByCriteriaQuery(Predicate wherePredicate, ITableColumn sortColumn, SortOrder sortOrder, int offset, int maxResultCount){
+		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
+		CriteriaBuilder cb=getCriteriaBuilder();
+		CriteriaQuery<T> query=cb.createQuery(ec);
+		
+		query = query.select(getRoot()).where(wherePredicate);
+		
+		switch (sortOrder) {
+		case ASCENDING:
+			query.orderBy(cb.asc(convertColumnToJPAParam(sortColumn)));
+			break;
+		case DESCENDING:
+			query.orderBy(cb.desc(convertColumnToJPAParam(sortColumn)));
+			break;
+		default:
+			break;
+		}
+		
+		return em
+				.createQuery(query)
+				.setFirstResult(offset)
+				.setMaxResults(maxResultCount)
+				.getResultList();
 	}
 	
 	public void deleteEntityByID(int id){

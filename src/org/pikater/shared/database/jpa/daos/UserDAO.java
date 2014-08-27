@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
@@ -41,7 +38,8 @@ public class UserDAO extends AbstractDAO<JPAUser>{
 		return tq.getResultList();
 	}
 	
-	private Path<Object> convertColumnToJPAParam(Root<JPAUser> root,ITableColumn column){
+	protected Path<Object> convertColumnToJPAParam(ITableColumn column){
+		Root<JPAUser> root = getRoot();
 		switch((UsersTableDBView.Column)column){
 		case LOGIN:
 		case STATUS:
@@ -58,35 +56,12 @@ public class UserDAO extends AbstractDAO<JPAUser>{
 		}
 	}
 	
-	public List<JPAUser> getAll(int offset, int maxResults, ITableColumn sortColumn,SortOrder order) {
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		CriteriaBuilder cb=em.getCriteriaBuilder();
-		CriteriaQuery<JPAUser> q=cb.createQuery(JPAUser.class);
-		Root<JPAUser> c=q.from(JPAUser.class);
-		q.select(c);
-		switch (order) {
-		case ASCENDING:
-			q.orderBy(cb.asc(this.convertColumnToJPAParam(c, sortColumn)));
-			break;
-		case DESCENDING:
-			q.orderBy(cb.desc(this.convertColumnToJPAParam(c, sortColumn)));
-			break;
-		default:
-			break;
-		}
-		
-		TypedQuery<JPAUser> query=
-				em.createQuery(q)
-				.setFirstResult(offset)
-				.setMaxResults(maxResults);
-		return query.getResultList();
+	public List<JPAUser> getAll(int offset, int maxResultCount, ITableColumn sortColumn,SortOrder sortOrder) {
+		return getByCriteriaQuery(sortColumn, sortOrder, offset, maxResultCount);
 	}
 	
-	
 	public int getAllCount(){
-		return ((Long)EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("User.getAll.count").getSingleResult()).intValue();
+		return getByCountQuery("User.getAll.count");
 	}
 	
 	public List<JPAUser> getByStatus(JPAUserStatus status) {

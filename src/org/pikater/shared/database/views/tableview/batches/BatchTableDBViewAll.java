@@ -48,7 +48,7 @@ public class BatchTableDBViewAll extends BatchTableDBView
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
 		List<JPABatch> resultBatches=DAOs.batchDAO.getAllExcludeByStatus(constraints.getOffset(), constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),JPABatchStatus.CREATED);
-		int allBatchesCount=DAOs.batchDAO.getAllExcludedStatusCount(JPABatchStatus.CREATED);
+		int allBatchesCount=DAOs.batchDAO.getAllExcludeByStatusCount(JPABatchStatus.CREATED);
 		
 		List<BatchTableDBRow> resultRows = new ArrayList<BatchTableDBRow>();
 		for(JPABatch batch : resultBatches)

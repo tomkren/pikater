@@ -32,13 +32,11 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getAllBySoruce",query="select dslo from JPADataSetLO dslo where dslo.source=:source"),
 	@NamedQuery(name="DataSetLO.getAll.count",query="select count(dslo) from JPADataSetLO dslo"),
-	@NamedQuery(name="DataSetLO.getBySourceVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.source=:source and dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getAllVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getAllWithResults",query="select dslo from JPADataSetLO dslo where exists (select r from JPAResult r where r.serializedFileName = dslo.hash) "),
 	@NamedQuery(name="DataSetLO.getByID",query="select dslo from JPADataSetLO dslo where dslo.id=:id"),
 	@NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner"),
 	@NamedQuery(name="DataSetLO.getByOwner.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner"),
-	@NamedQuery(name="DataSetLO.getByOwnerAndSourceVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner and dslo.source=:source and dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getByOID",query="select dslo from JPADataSetLO dslo where dslo.OID=:oid"),
 	@NamedQuery(name="DataSetLO.getByHash",query="select dslo from JPADataSetLO dslo where dslo.hash=:hash"),
 	@NamedQuery(name="DataSetLO.getByDescription",query="select dslo from JPADataSetLO dslo where dslo.description=:description")

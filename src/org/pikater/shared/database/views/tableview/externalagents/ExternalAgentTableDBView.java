@@ -146,7 +146,7 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 		else
 		{
 			//getting visible external agents of the user
-			agents=DAOs.externalAgentDAO.getByOwner(owner, constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),true);
+			agents=DAOs.externalAgentDAO.getByOwnerAndVisibility(owner, constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),true);
 			allAgentsCount=DAOs.externalAgentDAO.getByOwnerAndVisibilityCount(owner, true);
 		}
 		

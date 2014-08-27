@@ -1309,7 +1309,7 @@ public class Agent_DataManager extends PikaterAgent {
 		String type = ((GetExternalAgentJar) a.getAction()).getType();
 		log("getting JAR for agent type " + type);
 
-		JPAExternalAgent ea = DAOs.externalAgentDAO.getByClass(type);
+		JPAExternalAgent ea = DAOs.externalAgentDAO.getByAgentClass(type);
 
 		if (ea == null) {
 			throw new FailureException("Agent jar for type " + type + " not found in DB");

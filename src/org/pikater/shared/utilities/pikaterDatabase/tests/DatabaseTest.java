@@ -23,7 +23,6 @@ import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
-import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.MyPGConnection;
 import org.pikater.shared.database.util.ResultExporter;
@@ -39,8 +38,8 @@ public class DatabaseTest {
 	public void test(){
 		testDBConnection();
 		//testExperimentsWithModels();
-		testResultsWithModelsAndAgentNames();
-		//testExternalAgentView();
+		//testResultsWithModelsAndAgentNames();
+		testExternalAgentView();
 		//testBatchResultRetrieval();
 		//testDatasetViewFunctions();
 		//listBestResult();
@@ -52,7 +51,7 @@ public class DatabaseTest {
 		//listDataSetsWithResults();
 		//listDataSets();
 		//addExperiment();
-		listExternalAgents();
+		//listExternalAgents();
 		//listDataSetWithExclusion();
 		//listResults();
 		//listUserAndRoles();
@@ -62,9 +61,10 @@ public class DatabaseTest {
 		//listAgentInfos();
 	}
 	
-	private void testResultsWithModelsAndAgentNames() {
+	protected void testResultsWithModelsAndAgentNames() {
 		String agentName="org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA";
-		List<JPAExperiment> experiments=DAOs.experimentDAO.getAll();
+		JPABatch batch=DAOs.batchDAO.getByID(119752);
+		List<JPAExperiment> experiments=DAOs.experimentDAO.getByBatchWithModel(batch, 0, 100);
 		JPAExperiment experiment=experiments.get(experiments.size()-1);
 		
 		List<JPAResult> results=DAOs.resultDAO.getByExperimentAndAgentNameWithModel(experiment, agentName, 0, 100);
@@ -72,6 +72,9 @@ public class DatabaseTest {
 		
 		p("----- List Size :   "+results.size()+"  ----");
 		p("----- Result Count: "+resultCount+"  ----");
+		for(JPAResult result:results){
+			p(result.getId()+". "+result.getAgentName()+" "+result.getFinish()+" "+result.getErrorRate());
+		}
 		
 	}
 
@@ -104,7 +107,7 @@ public class DatabaseTest {
 		p("");
 		JPAUser owner=DAOs.userDAO.getByLogin("sj").get(0);
 		p("----------  For User "+owner.getLogin()+" ------------");
-		agents=DAOs.externalAgentDAO.getByOwner(owner, 0, 100,ExternalAgentTableDBView.Column.AGENT_CLASS,SortOrder.ASCENDING,true);
+		agents=DAOs.externalAgentDAO.getByOwnerAndVisibility(owner, 0, 100,ExternalAgentTableDBView.Column.AGENT_CLASS,SortOrder.ASCENDING,true);
 		allAgentsCount=DAOs.externalAgentDAO.getByOwnerAndVisibilityCount(owner, true);
 		p("-------   Query Count = "+allAgentsCount+"   ------");
 		p("-------    List Count = "+agents.size()+"   ------");
@@ -136,15 +139,15 @@ public class DatabaseTest {
 		int allDatasetCount=0;
 		
 		allDatasets = DAOs.dataSetDAO.getUserUploadVisible(0,100,DataSetTableDBView.Column.CREATED,SortOrder.DESCENDING);
-		allDatasetCount=DAOs.dataSetDAO.getBySourceVisibleCount(JPADatasetSource.USER_UPLOAD);
+		allDatasetCount=DAOs.dataSetDAO.getUserUploadVisibleCount();
 		
 		p("-----  Query count : "+allDatasetCount+"  --------");
 		p("-----  List  count : "+allDatasets.size()+"  --------");
 		
-		JPAUser owner=DAOs.userDAO.getByLogin("sj").get(0);
+		JPAUser owner=DAOs.userDAO.getByLogin("sp").get(0);
 		
 		allDatasets = DAOs.dataSetDAO.getByOwnerUserUploadVisible(owner,0,100,DataSetTableDBView.Column.CREATED,SortOrder.DESCENDING);
-		allDatasetCount=DAOs.dataSetDAO.getByOwnerSourceVisibleCount(owner, JPADatasetSource.USER_UPLOAD);
+		allDatasetCount=DAOs.dataSetDAO.getByOwnerUserUploadVisibleCount(owner);
 		
 		p("-----  Query count : "+allDatasetCount+"  --------");
 		p("-----  List  count : "+allDatasets.size()+"  --------");
@@ -193,15 +196,7 @@ public class DatabaseTest {
 	protected void listVisibleAndApprovedDatasets() {
 		List<JPADataSetLO> dslos= DAOs.dataSetDAO.getUserUploadVisible(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
 		p("No. of found visible DataSets: "+dslos.size());
-		p("No. of all visible DataSets: "+DAOs.dataSetDAO.getAllVisibleCount());
-		for(JPADataSetLO dslo:dslos){
-			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
-		}
-		p("------------");
-		p("");
-		
-		dslos= DAOs.dataSetDAO.getUserUploadVisibleApproved(0,5,DataSetTableDBView.Column.APPROVED,SortOrder.DESCENDING);
-		p("No. of found visible and approved DataSets: "+dslos.size());
+		p("No. of all visible DataSets: "+DAOs.dataSetDAO.getUserUploadVisibleCount());
 		for(JPADataSetLO dslo:dslos){
 			p(dslo.getId()+". "+dslo.getHash()+"    "+dslo.getCreated()+"   DT:"+dslo.getGlobalMetaData().getNumberofInstances());
 		}

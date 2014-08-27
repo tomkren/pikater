@@ -26,13 +26,10 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 @NamedQueries({
 	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
 	@NamedQuery(name="Batch.getAll.count",query="select count(b) from JPABatch b"),
-	@NamedQuery(name="Batch.getAllNotStatus.count",query="select count(b) from JPABatch b where b.status <> :status"),
 	@NamedQuery(name="Batch.getByID",query="select b from JPABatch b where b.id=:id"),
 	@NamedQuery(name="Batch.getByStatus",query="select b from JPABatch b where b.status=:status"),
 	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner"),
 	@NamedQuery(name="Batch.getByOwner.count",query="select count(b) from JPABatch b where b.owner=:owner"),
-	@NamedQuery(name="Batch.getByOwnerAndStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status=:status"),
-	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status"),
 	@NamedQuery(name="Batch.getByIDwithResult",query="select b,e,r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
 	@NamedQuery(name="Batch.getByIDonlyResults",query="select r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
 	@NamedQuery(name="Batch.getByIDonlyResults.count",query="select count(r) from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results")
