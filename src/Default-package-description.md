@@ -1,22 +1,12 @@
 <!-- --- title: Default package description -->
 
-##net.edzard
+<font color="red">// TODO</font>
 
-Contains KineticGWT code (see <font color="red">TODO</font>).
+All web application related source code is concentrated in the `org.pikater.web` package. There are some exceptions, however. Some of the code is shared between web and core (information about available computation methods for instance). Code shared between web and core can always be located in the `org.pikater.shared` package.
 
-##org.pikater
+The ``
+All GWT code (with the exceptions of objects shared between web and core - see above) are located in the `org.pikater.web.v`
 
-Contains application code. Click <font color="red">here</font> to display description of this package.
 
-##Beans.xml
+All GWT code (with the exceptions of objects shared between web and core - see above) are located in the `org.pikater.web.v`
 
-Contains resources for Spring framework used in core system (see <font color="red">TODO</font>).
-
-##log4j.xml
-
-Log4j configuration used by various application frameworks & components (e.g. Quartz). At the moment, standard configuration is used.
-
-##logging.properties
-
-A special file defining logging configuration for standard Java logging framework that redirects logged messages to a file.  
-It was intended as a means to make the logs accessible from browser but is not used after all. The file is kept for potential future reference. If interested in this topic, also see [tclogview](https://github.com/happygiraffe/tclogview).

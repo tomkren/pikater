@@ -33,8 +33,9 @@ Server:
 1. Install and prepare the database (currently only PostGRE is supported). Change the following files accordingly:
 	* `src/beans.xml`
 	* `src/META-INF/persistence.xml`
-2. Inspect/edit files in the `WebContent/WEB-INF/conf` directory:
-	* `appServer.properties` is used to configure the web application.  
+2. Edit files in the `WebContent/WEB-INF/conf` directory:
+	* `appServer.properties` is used to configure the web application.
+	* `jadeTopology1.xml` is used to provide directives to additional machines - one master machine to coordinate the application's core and other slave machines to do the work.
 3. Install and prepare a servlet container (e.g. Apache Tomcat), deploy the application into it and start it.
 
 ### Launching
@@ -76,4 +77,5 @@ Jeden vypocetni server:
 
 ## Documentation
 
-* <a href="docs/Overview.md">Open documentation overview</a>
+* <a href="docs/Documentation.md">Open documentation overview</a>
+
