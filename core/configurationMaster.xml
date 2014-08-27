@@ -28,8 +28,7 @@
         <agent type="org.pikater.core.agents.system.Agent_GuiAgentsCommunicator" name="GuiAgentsCommunicator">
         </agent>
  
-        <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara">
-        </agent>
+        <!-- <agent type="org.pikater.core.agents.system.Agent_GUIKlara" name="GUIKlara"></agent> -->
 
         <agent type="org.pikater.core.agents.system.Agent_AgentInfoManager" name="AgentInfoManager">
         </agent> 
