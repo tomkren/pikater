@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.
 import java.io.File;
 import java.util.List;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;

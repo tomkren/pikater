@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 import com.vaadin.ui.Alignment;

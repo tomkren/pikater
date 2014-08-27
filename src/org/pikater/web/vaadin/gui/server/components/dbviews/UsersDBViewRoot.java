@@ -6,8 +6,8 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBRow;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
-import org.pikater.shared.logging.PikaterLogger;
-import org.pikater.shared.utilities.mailing.Mailing;
+import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.util.Mailing;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 

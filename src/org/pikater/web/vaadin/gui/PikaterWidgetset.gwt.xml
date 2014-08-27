@@ -3,9 +3,10 @@
 <module>
 	
 	<inherits name="com.vaadin.DefaultWidgetSet" />
-	<inherits name="org.pikater.shared.sharedGWTModule" />
 	<inherits name="net.edzard.kinetic" />
-	<inherits name="org.pikater.web.vaadin.gui.gwtInit" />
+	<inherits name="org.pikater.shared.sharedGWTModule" />
+	<inherits name="org.pikater.web.webGWTModule" />
+	
 	<inherits name="com.wcs.wcslib.vaadin.widget.multifileupload.MultiFileUploadWidgetSet" />
     <inherits name="org.vaadin.alump.fancylayouts.gwt.FancyLayoutsWidgetset" />
     <inherits name="de.steinwedel.messagebox.WidgetSet" />
@@ -15,6 +16,9 @@
 	<!-- include the Java code from this package that is going to be translated to Javascript -->
 	<source path="client" />
 	<source path="shared" />
+	
+	<!-- Some initial client GWT setup. -->
+	<entry-point class="org.pikater.web.vaadin.gui.client.AppEntryPoint"/>
 	
 	<!-- include custom styles for the client widgets; defined in the public folder -->
 	<!-- <stylesheet src="globalClientStyles.css"/> -->

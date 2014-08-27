@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.postgresql.PGConnection;
 
 public class MyPGConnection

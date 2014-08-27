@@ -4,12 +4,20 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 
+/**
+ * This class acts as a keyboard listener. Listens to keyboards events and logs which
+ * keys are currently pressed.
+ */
 public class GWTKeyboardManager
 {
 	public static NativePreviewHandler getNativePreviewHandler()
 	{
 		return new NativePreviewHandler()
 		{
+			/**
+			 * The underlying code is called after an event is triggered and even before
+			 * the browser processes it which allows for event cancelling. 
+			 */
 			@Override
 			public void onPreviewNativeEvent(NativePreviewEvent event)
 			{

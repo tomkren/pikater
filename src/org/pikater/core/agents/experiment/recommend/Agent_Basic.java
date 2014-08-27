@@ -1,7 +1,7 @@
 package org.pikater.core.agents.experiment.recommend;
 
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.shared.logging.Verbosity;
+import org.pikater.shared.logging.core.Verbosity;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.metadata.GetAllMetadata;

@@ -126,7 +126,7 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.shared.database.util.ResultFormatter;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalComputationDescription;
 
 import com.google.common.io.Files;
 

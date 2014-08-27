@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.nio.channels.IllegalSelectorException;
 
 import org.fusesource.jansi.HtmlAnsiOutputStream;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.ssh.SSHRemoteExec;
 import org.pikater.web.ssh.SSHSession;
 import org.pikater.web.ssh.SSHBatchExecChannel.ISSHBatchChannelNotificationHandler;

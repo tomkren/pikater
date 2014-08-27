@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views;
 
-import org.pikater.shared.experiment.webformat.server.BoxType;
+import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.IContextForViews;
 import org.vaadin.jouni.dom.Dom;

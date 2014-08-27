@@ -2,8 +2,8 @@ package org.pikater.web.vaadin.gui.client.kineticcomponent;
 
 import net.edzard.kinetic.Stage;
 
-import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
-import org.pikater.shared.experiment.webformat.client.ExperimentGraphClient;
+import org.pikater.web.experiment.client.BoxInfoClient;
+import org.pikater.web.experiment.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTKeyboardManager;
 import org.pikater.web.vaadin.gui.client.kineticengine.IKineticEngineContext;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;

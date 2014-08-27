@@ -8,8 +8,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.shared.logging.GeneralPikaterLogger;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.GeneralPikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.JadeTopologies;

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.config.AgentInfoCollection;
+import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 
 import com.vaadin.annotations.StyleSheet;

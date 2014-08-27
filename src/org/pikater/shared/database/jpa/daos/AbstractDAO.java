@@ -16,7 +16,7 @@ import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
-import org.pikater.shared.utilities.logging.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterLogger;
 
 public abstract class AbstractDAO<T extends JPAAbstractEntity>
 {

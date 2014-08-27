@@ -10,7 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 
 @WebFilter(filterName="filter1", description = "Adds the default UI identifier to incoming default requests "

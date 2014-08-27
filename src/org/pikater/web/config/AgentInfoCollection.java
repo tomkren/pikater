@@ -22,7 +22,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.shared.experiment.webformat.server.BoxType;
+import org.pikater.web.experiment.server.BoxType;
 
 public class AgentInfoCollection implements Iterable<AgentInfo>
 {

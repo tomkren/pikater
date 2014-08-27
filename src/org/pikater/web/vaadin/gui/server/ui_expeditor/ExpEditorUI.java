@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.CustomConfiguredUI;

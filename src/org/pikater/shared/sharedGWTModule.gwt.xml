@@ -4,9 +4,6 @@
 	
 	<!-- Only sources actually used (transitively referenced) are compiled and included to GWT, so it's ok to include whole packages. -->
 	
-	<!-- Web format is used in GWT. -->
-	<source path="experiment" />
-	
 	<!-- At least SimpleIDGenerator is used. -->
 	<source path="util" />
 	

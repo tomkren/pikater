@@ -1,6 +1,6 @@
 package org.pikater.shared.quartz;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
 import org.pikater.shared.quartz.jobs.crons.RemoveExpiredTrainedModels;
 import org.pikater.shared.util.ReflectionUtils;

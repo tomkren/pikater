@@ -6,7 +6,7 @@ import jade.util.leap.Serializable;
 import org.apache.commons.io.FileUtils;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DataOntology;
-import org.pikater.shared.logging.Severity;
+import org.pikater.shared.logging.core.Severity;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.pikater.shared.database.postgre.MyPGConnection;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.util.IOUtils;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;

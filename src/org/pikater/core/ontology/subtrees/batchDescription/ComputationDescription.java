@@ -14,10 +14,10 @@ import java.util.Scanner;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.universalformat.UniversalConnector;
-import org.pikater.shared.experiment.universalformat.UniversalElement;
-import org.pikater.shared.experiment.universalformat.UniversalOntology;
+import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalConnector;
+import org.pikater.shared.experiment.UniversalElement;
+import org.pikater.shared.experiment.UniversalOntology;
 
 import com.thoughtworks.xstream.XStream;
 

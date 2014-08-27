@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.XStreamHelper;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;
 

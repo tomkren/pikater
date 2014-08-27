@@ -16,7 +16,7 @@ import org.pikater.shared.database.security.bcrypt.BCrypt;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 
 public class UserDAO extends AbstractDAO<JPAUser>{
 	

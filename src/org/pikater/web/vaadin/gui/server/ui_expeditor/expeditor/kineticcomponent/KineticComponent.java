@@ -2,11 +2,11 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponen
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
-import org.pikater.shared.experiment.webformat.server.ExperimentGraphServer;
-import org.pikater.shared.experiment.webformat.server.ExperimentGraphValidator;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.web.experiment.server.BoxInfoServer;
+import org.pikater.web.experiment.server.ExperimentGraphServer;
+import org.pikater.web.experiment.server.ExperimentGraphValidator;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClientRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;

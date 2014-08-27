@@ -11,7 +11,7 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.HttpContentType;

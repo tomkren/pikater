@@ -17,7 +17,7 @@ import net.edzard.kinetic.Text.FontStyle;
 import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.event.EventType;
 
-import org.pikater.shared.experiment.webformat.client.BoxInfoClient;
+import org.pikater.web.experiment.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.BoxDragListenerProvider;

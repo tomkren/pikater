@@ -6,8 +6,8 @@ import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
-import org.pikater.shared.experiment.webformat.server.BoxSlot;
+import org.pikater.web.experiment.server.BoxInfoServer;
+import org.pikater.web.experiment.server.BoxSlot;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.components.led.LedIndicator;
 import org.pikater.web.vaadin.gui.server.components.led.LedIndicatorTheme;
