@@ -297,9 +297,7 @@ public class OptionValueForm extends CustomFormLayout
 			// first special treatment and then default
 			if((dataSource.getBox().getBoxType() == BoxType.COMPUTE) && dataSource.getOption().getName().equals("model"))
 			{
-				String agentClassSimpleName = dataSource.getBox().getAssociatedAgent().getAgentClassName();
-				agentClassSimpleName = agentClassSimpleName.substring(agentClassSimpleName.lastIndexOf('.') + 1); // if no dot found, returns -1 and index is 0; yey! 
-				typeSpecificFieldProvider = new CAModelFieldProvider(agentClassSimpleName);
+				typeSpecificFieldProvider = new CAModelFieldProvider(dataSource.getBox().getAssociatedAgent().getAgentClassName());
 			}
 			else
 			{
