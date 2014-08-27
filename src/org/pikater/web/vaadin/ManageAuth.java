@@ -3,41 +3,11 @@ package org.pikater.web.vaadin;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
-import org.pikater.web.config.ServerConfigurationInterface;
 
 import com.vaadin.server.VaadinSession;
 
 public class ManageAuth
 {
-	/**
-	 * Tries to authenticate the user. If the provided auth info is correct, automatically
-	 * authenticates the user in this UI.
-	 * @param session
-	 * @param login
-	 * @param password
-	 * @return true if the provided auth info was correct
-	 */
-	public static boolean authenticateUser(VaadinSession session, String login, String password)
-	{
-		if(ServerConfigurationInterface.avoidUsingDBForNow())
-		{
-			return true;
-		}
-		else
-		{
-			JPAUser user = DAOs.userDAO.getByLoginAndPassword(login, password);
-			if(user != null)
-			{
-				login(session, user.getId()); // actually authenticate in this UI
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-	
 	public static Integer getUserID(VaadinSession session)
 	{
 		if(session == null)
@@ -61,7 +31,7 @@ public class ManageAuth
 		return getUserID(session) != null;
 	}
 	
-	private static void login(VaadinSession session, int userID)
+	public static void login(VaadinSession session, int userID)
 	{
 		if(isUserAuthenticated(session))
 		{
