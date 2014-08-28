@@ -1,13 +1,14 @@
-<!-- --- title: Default package description -->
+<!-- --- title: Web package -->
 
-Contains all web-application code. This file contains only very basic description. For more information, see:
-* <font color="red">GUI documentation</font>
-* <font color="red">Javadoc</font>
+Contains all web-application code. This file contains only very basic description. For more information, see:  
 
-#Vaadin
+1. [[Web application documentation|Web-documentation]].
+2. [[Javadoc|Technical-documentation#javadoc]].
 
-This package contains all code that uses the <font color="red">Vaadin</font> framework and thus defines all GUI and supportive infrastructure code.
+## Vaadin
 
-#Other packages
+This package contains all code that uses the Vaadin framework and thus defines all GUI and supportive infrastructure code. Package structure is quite self-explanatory (once the viewer has a notion of what it does and how it works). To see more details, open Javadoc with the link above.
 
-Contain all non-GUI code. Packages group code by functionality/topic.
+## Other packages
+
+Contain all non-GUI code. Packages group code by functionality/topic. To see more details, open Javadoc with the link above.

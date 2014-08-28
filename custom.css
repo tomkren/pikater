@@ -5,14 +5,53 @@
 /********************************************************/
 /* OVERRIDE PREDEFINED STYLES */
 
+#head > .actions
+{
+    position: absolute;
+}
+
+#head > h1
+{
+    margin-top: 2em;
+}
+
+#wiki-body
+{
+    margin-right: 0;
+}
+
+.actions > .minibutton
+{
+    margin-left: 0;
+    margin-right: 0.6em;
+}
+
 .markdown-body
 {
-    padding-top: 1em;
+    padding: 0;
+}
+
+.markdown-body p:empty
+{
+    display: none;
+}
+
+.toc
+{
+    margin-bottom: 2em;
+}
+
+.markdown-body > *:not(.toc)
+{
+    /* either we pad all elements recursively (all but toc and its children) or we pad nothing at all...
+    padding-left: 15px;
+    padding-right: 15px;
+    */
 }
 
 .markdown-body h2
 {
-    margin: 1.5em 0 15px;
+    margin: 2.5em 0 15px;
 }
 
 /********************************************************/

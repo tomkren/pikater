@@ -1,15 +1,16 @@
-<!-- --- title: Default package description -->
+<!-- --- title: Application package -->
 
-Contains all application code.
+`org.pikater` - contains all application code.
 
-#Core
+## Core package
+Core system is defined in this package, which means all Jade-related code that executes experiments and manages agents and their infrastructure. Documentation of core system can be found [[here|Technical-documentation#core]].
 
-Core system is defined in this package, which means all Jade-related code that executes experiments, manages system and user data. Documentation of core system can be found <font color="red">here</font>.  
 Has dependencies on `shared` package only.
 
-#Shared
+## Shared
 
-Various shared classes and frameworks are contained in this package. 'Shared' actually means shared between `core` and `web` which aim to be mutually independent. In reality, only `core` is completely independent of `web`, not vice versa.  
+Various shared classes and frameworks are contained in this package. 'Shared' actually means shared between `core` and `web` which aim to be mutually independent. In reality, only `core` is completely independent of `web`, not vice versa.
+
 Has no dependencies on other packages.
 
 Main functionalities of this package include:
@@ -21,9 +22,10 @@ Provides a mechanism for executing background tasks. It is only used by `web` at
 It acts as a mediator between `web` and `core` experiments formats, because they are quite different and need to address different requirements. Experiments saved in database are also in the universal format.
 * Various utilities and logging interfaces/implementations.
 
-#Web
+## Web
 
-All web application related code is concentrated in this package, with the exception of shared code.  
+All web application related code is concentrated in this package, with the exception of shared code.
+
 Has dependencies on both `client` and `shared` packages.
 
-Click <font color="red">here</font> to display more detailed information about this package.
+More detailed information about this package can be found [[here|Web-package-description]].
