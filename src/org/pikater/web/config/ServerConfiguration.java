@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import org.pikater.shared.PropertiesHandler;
 
+@SuppressWarnings("unused")
 public class ServerConfiguration extends PropertiesHandler
 {
 	/*
@@ -20,28 +21,28 @@ public class ServerConfiguration extends PropertiesHandler
 	 * Variables to be parsed from the configuration file.
 	 */
 	
-	public final boolean defaultAdminAccountAllowed;
+	// public final boolean defaultAdminAccountAllowed;
 	public final boolean coreEnabled;
-	public final String forceUseTopologies;
-	public final String forceLeaveTopologies;
+	// public final String forceUseTopologies;
+	// public final String forceLeaveTopologies;
 	
 	public ServerConfiguration(File resource)
 	{
 		Properties prop = openProperties(resource);
 		if(prop != null)
 		{
-			defaultAdminAccountAllowed = new Boolean(getProperty(prop, property_allowDefaultAdminAccount));
+			// defaultAdminAccountAllowed = new Boolean(getProperty(prop, property_allowDefaultAdminAccount));
 			coreEnabled = new Boolean(getProperty(prop, property_coreEnabled));
-			forceUseTopologies = getProperty(prop, property_forceUseTopologies);
-			forceLeaveTopologies = getProperty(prop, property_forceLeaveTopologies);
+			// forceUseTopologies = getProperty(prop, property_forceUseTopologies);
+			// forceLeaveTopologies = getProperty(prop, property_forceLeaveTopologies);
 			
 		}
 		else
 		{
-			defaultAdminAccountAllowed = false;
+			// defaultAdminAccountAllowed = false;
 			coreEnabled = false;
-			forceUseTopologies = null;
-			forceLeaveTopologies = null;
+			// forceUseTopologies = null;
+			// forceLeaveTopologies = null;
 		}
 	}
 	
