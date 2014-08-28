@@ -180,7 +180,26 @@ nového trénování.
 
 #### Realizace
 
-TODO
+Výpočetní agent v závislosti na zadání úlohy (`Task`) po jejím vyřešení serializuje svůj model a pošle jej jako součást výsledku výpočtu v conceptu `Task`.
+
+Serializovanou podobu svého modelu lze získat pomocí metody předka všech výpočetních agentů `org.pikater.core.agents.experiment.computing.Agent_ComputingAgent.getAgentObject()`.
+
+Agent Manager tento model přepošle v rámci výsledků k uložení DataManagerovi, který model uloží do databáze s vazbou na daný výsledek a experiment.
+
+##### Uložení natrénovaného modelu
+{{{{{{
+
+ComputingAgent-->>+Manager: (result for Task)
+destroy ComputingAgent
+Manager->+DataManager: SaveResults (Task)
+DataManager->DataManager: saves result to DB
+opt model included in Task result
+DataManager->DataManager: saves model for the result
+end
+DataManager-->>-Manager: 
+}}}}}}
+
+Dříve uložený model lze oživit prostřednictvím akce `org.pikater.core.ontology.subtrees.management.LoadAgent` agenta ManagerAgent.
 
 ##### Vytvoření agenta s natrénovaným modelem
 {{{{{{
