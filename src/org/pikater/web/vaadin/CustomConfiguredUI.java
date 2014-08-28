@@ -122,25 +122,12 @@ public abstract class CustomConfiguredUI extends UI
 				@Override
 				public boolean handleResult(Object[] args)
 				{
-					/*
-					 * First check whether the default admin account is allowed and was provided by the user.
-					 */
-
-					String login = (String) args[0];
-					String password = (String) args[1];
-					if(ServerConfigurationInterface.getConfig().defaultAdminAccountAllowed)
-					{
-						if(login.equals("pikater") && password.equals("pikater")) // check whether the given auth info matches the default account
-						{
-							displayApplicationSetupWizard();
-							return true; // necessary for the login dialog to close
-						}
-					}
-
 					/* 
-					 * If authentication using the default admin account failed, try to authenticate using the database.
+					 * Try to authenticate using the database.
 					 * Note: database connection is assumed to have been checked in {@link StartupAndQuitListener}. 
 					 */
+					String login = (String) args[0];
+					String password = (String) args[1];
 					
 					try
 					{
