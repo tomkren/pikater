@@ -22,7 +22,6 @@ import org.pikater.shared.database.jpa.security.PikaterRole;
 @Table(name="Role")
 @NamedQueries({
 	@NamedQuery(name="Role.getAll",query="select r from JPARole r"),
-	@NamedQuery(name="Role.getByID",query="select r from JPARole r where r.id=:id"),
 	@NamedQuery(name="Role.getByPikaterRole",query="select r from JPARole r where r.role=:pRole"),
 	@NamedQuery(name="Role.getByName",query="select r from JPARole r where r.name=:name")
 })

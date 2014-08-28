@@ -26,7 +26,6 @@ import org.pikater.shared.database.jpa.status.JPAUserStatus;
 @NamedQueries({
 	@NamedQuery(name="User.getAll",query="select u from JPAUser u"),
 	@NamedQuery(name="User.getAll.count",query="select count(u) from JPAUser u"),
-	@NamedQuery(name="User.getByID",query="select u from JPAUser u where u.id=:id"),
 	@NamedQuery(name="User.getByStatus",query="select u from JPAUser u where u.status=:status"),
 	@NamedQuery(name="User.getByLogin",query="select u from JPAUser u where u.login=:login"),
 	@NamedQuery(name="User.getByRole",query="select u from JPAUser u where u.role=:role")

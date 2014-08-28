@@ -18,7 +18,6 @@ import javax.persistence.Transient;
 @NamedQueries({
 	@NamedQuery(name="ExternalAgent.getAll",query="select o from JPAExternalAgent o"),
 	@NamedQuery(name="ExternalAgent.getAll.count",query="select count(o) from JPAExternalAgent o"),
-	@NamedQuery(name="ExternalAgent.getByID",query="select o from JPAExternalAgent o where o.id=:id"),
 	@NamedQuery(name="ExternalAgent.getByAgentClass",query="select o from JPAExternalAgent o where o.agentClass=:agentClass"),
 	@NamedQuery(name="ExternalAgent.getByOwner",query="select o from JPAExternalAgent o where o.owner=:owner"),
 	@NamedQuery(name="ExternalAgent.getByOwner.count",query="select count(o) from JPAExternalAgent o where o.owner=:owner")

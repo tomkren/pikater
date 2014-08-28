@@ -21,7 +21,6 @@ import javax.persistence.Transient;
 @Table(name="Result")
 @NamedQueries({
 	@NamedQuery(name="Result.getAll",query="select res from JPAResult res"),
-	@NamedQuery(name="Result.getByID",query="select res from JPAResult res where res.id=:id"),
 	@NamedQuery(name="Result.getByAgentName",query="select res from JPAResult res where res.agentName=:agentName"),
 	@NamedQuery(name="Result.getByExperiment",query="select res from JPAResult res where res.experiment=:experiment"),
 	@NamedQuery(name="Result.getByExperimentWithModel",query="select res from JPAResult res where res.experiment=:experiment and res.createdModel is not null"),

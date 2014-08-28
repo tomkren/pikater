@@ -26,7 +26,6 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 @NamedQueries({
 	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
 	@NamedQuery(name="Batch.getAll.count",query="select count(b) from JPABatch b"),
-	@NamedQuery(name="Batch.getByID",query="select b from JPABatch b where b.id=:id"),
 	@NamedQuery(name="Batch.getByStatus",query="select b from JPABatch b where b.status=:status"),
 	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner"),
 	@NamedQuery(name="Batch.getByOwner.count",query="select count(b) from JPABatch b where b.owner=:owner"),

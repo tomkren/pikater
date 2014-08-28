@@ -1,19 +1,21 @@
 package org.pikater.shared.database.util.initialisation;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.commons.io.FilenameUtils;
-import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
+import org.pikater.core.CoreConfiguration;
 import org.pikater.shared.database.exceptions.UserNotFoundException;
-import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
@@ -21,106 +23,16 @@ import org.pikater.shared.database.jpa.JPAUserPriviledge;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.security.PikaterRole;
-import org.pikater.shared.database.jpa.status.JPADatasetSource;
-import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
-import org.pikater.shared.database.util.Hash;
 import org.pikater.shared.util.DateUtils;
 
 public class DatabaseInitialisation {
 	
-	private static final String dataSetPath="core/datasets";
+	private static final String BEANS_CONFIGBASE="core/configbase/Beans.xml";
+	private static final String PERSISTENCE_CONFIGBASE="core/configbase/persistence.xml";
 	
-	private void init() throws UserNotFoundException, FileNotFoundException, IOException, SQLException, ParseException{
-		
-		//DatabaseTest dbTest=new DatabaseTest();
-		
-		this.createRolesAndUsers();
-		//dbTest.listUserAndRoles();
-		
-		/**
-		this.addWebDatasets();
-		dbTest.listDataSets();
-		**/
-		
-		//addExternalAgent("core/ext_agents/org_pikater_external_ExternalWekaAgent.jar", "ExternalTestingAgent", "Testing agent from JAR");
-		//listExternalAgents();
-	}
+	private static final String PERSISTENT_TARGET="META-INF/persistence.xml";
 	
-	
-	protected void addWebDatasets() throws FileNotFoundException, IOException, UserNotFoundException, SQLException{
-		File dir=new File(DatabaseInitialisation.dataSetPath);
-		
-		JPAUser owner = DAOs.userDAO.getByLogin("stepan").get(0);
-		System.out.println("Target user: "+owner.getLogin());
-		
-		File[] datasets=dir.listFiles();
-		for(File datasetI : datasets){
-			if(datasetI.isFile()){
-				try{
-				System.out.println("--------------------");
-				System.out.println("Dataset: "+datasetI.getAbsolutePath());
-				
-				DAOs.dataSetDAO.storeNewDataSet(datasetI, datasetI.getName(), owner.getId(),JPADatasetSource.USER_UPLOAD);
-				
-				System.out.println("--------------------");
-				System.out.println();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		
-		
-		
-		///Update metadata
-		/**
-		
-		File[] datasets2=dir.listFiles();
-		for(File datasetI : datasets2){
-			if(datasetI.isFile()){
-				try{
-				System.out.println("--------------------");
-				System.out.println("Updating metadata for : "+datasetI.getAbsolutePath());
-				this.updateMetaDataForHash(datasetI);
-				
-				System.out.println("--------------------");
-				System.out.println();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-		**/
-		
-		
-	}
-	
-	protected void updateMetaDataForHash(File file) throws IOException{
-		
-		String hash = Hash.getMD5Hash(file);
-		List<JPADataSetLO> dsloDataSetLO=DAOs.dataSetDAO.getByHash(hash);
-		if(dsloDataSetLO.size()>0){
-			JPADataSetLO dslo=dsloDataSetLO.get(0);
-			
-			JPAMetaDataReader readr=new JPAMetaDataReader();
-			try {
-				readr.readFile(file);
-				
-				dslo.setGlobalMetaData(readr.getJPAGlobalMetaData());
-				dslo.setAttributeMetaData(readr.getJPAAttributeMetaData());
-				
-				DAOs.dataSetDAO.updateEntity(dslo);
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}else{
-			System.out.println("DataSet not found");
-		}
-	}
 	
 	private void createRoles(){
 		for(PikaterPriviledge priv : PikaterPriviledge.values()){
@@ -142,45 +54,11 @@ public class DatabaseInitialisation {
 		DAOs.roleDAO.storeEntity(a);
 	}
 	
-	private void createUsers(){
-		JPARole u = DAOs.roleDAO.getByPikaterRole(PikaterRole.USER);
+	private void createAdminUser(String login,String password, String email){
 		JPARole a = DAOs.roleDAO.getByPikaterRole(PikaterRole.ADMIN);
-		
-		JPAUser u0=JPAUser.createAccountForDBInit("zombie","xxx", "invalid@mail.com", u);
-		u0.setPriorityMax(-1);
-		u0.setStatus(JPAUserStatus.SUSPENDED);
-		DAOs.userDAO.storeEntity(u0);
-		
-		
-		JPAUser u1=JPAUser.createAccountForDBInit("stepan","123", "bc.stepan.balcar@gmail.com", a);
-		DAOs.userDAO.storeEntity(u1);
-		
-		
-		JPAUser u2=JPAUser.createAccountForDBInit("kj","123", "kj@gmail.com", a);
-		DAOs.userDAO.storeEntity(u2);
-	
-		
-		JPAUser u3=JPAUser.createAccountForDBInit("sj","123", "kukurka@gmail.com", a);
-		DAOs.userDAO.storeEntity(u3);
-		
-		
-		JPAUser u4=JPAUser.createAccountForDBInit("sp","123", "sp@gmail.com", a);
-		DAOs.userDAO.storeEntity(u4);
-		
-		
-		JPAUser u5=JPAUser.createAccountForDBInit("martin", "123", "Martin.Pilat@mff.cuni.cz", u);
-		DAOs.userDAO.storeEntity(u5);
-		
-		
-		JPAUser u6=JPAUser.createAccountForDBInit("klara", "123", "peskova@braille.mff.cuni.cz", u);
-		DAOs.userDAO.storeEntity(u6);
+		JPAUser u=JPAUser.createAccountForDBInit(login,password, email, a);
+		DAOs.userDAO.storeEntity(u);
 	}
-	
-	private void createRolesAndUsers() {		
-		createRoles();
-		createUsers();
-	}
-	
 	
 	public void addExternalAgent(String jar, String name, String desc) {
 		String cls = FilenameUtils.getBaseName(jar).replace(".jar", "").replace("_", ".");
@@ -224,10 +102,117 @@ public class DatabaseInitialisation {
 		System.out.println(s);
 	}
 
+	private String readWholeFile(String source) throws FileNotFoundException{
+		Scanner scan = new Scanner(new File(source));  
+		scan.useDelimiter("\\Z");  
+		String text=scan.next();
+		scan.close();
+		return text;
+	}
+	
+	private void generateConfigFile(String source, File output, String dbPath, String dbUser, String dbPassword) throws FileNotFoundException{
+		String sourceString=this.readWholeFile(source);
+		sourceString = sourceString.replaceAll("###databaseURL###", dbPath);
+		sourceString = sourceString.replaceAll("###databaseusername###", dbUser);
+		sourceString = sourceString.replaceAll("###databasepassword###", dbPassword);
+		System.err.println(sourceString);
+	}
+	
+	private void configGeneration() throws IOException{
+		p("Database URL in format (no leading slashes): host:port/databasename ");
+		p("e.g. localhost:5432/mydatabase");
+		String dbPath=br.readLine();
+		p("Please add DB username: ");
+		String dbUser=br.readLine();
+		p("Please add password for DB user "+dbUser+":");
+		String dbPassword=br.readLine();
+		p("Generating configuration files for DB access. In next steps these files are used,");
+		p("please make sure, they are in correct locations.");
+		p("");
+		p("persistence.xml current target (type new or leave blank) ");
+		p(DatabaseInitialisation.PERSISTENT_TARGET);
+		String persistenceTarget=br.readLine();
+		if(persistenceTarget.equals(""))
+			persistenceTarget=DatabaseInitialisation.PERSISTENT_TARGET;
+				
+		p("Beans.xml current target (type new or leave blank) ");
+		p(CoreConfiguration.BEANS_CONFIG_FILE);
+		String beansTarget=br.readLine();
+		if(beansTarget.equals(""))
+			beansTarget=CoreConfiguration.BEANS_CONFIG_FILE;
+		
+		p("Generating "+persistenceTarget+" ...");
+		this.generateConfigFile(DatabaseInitialisation.PERSISTENCE_CONFIGBASE,
+				null,
+				dbPath,
+				dbUser,
+				dbPassword);
+
+		p("Generating "+beansTarget+" ...");
+		this.generateConfigFile(DatabaseInitialisation.BEANS_CONFIGBASE,
+				null,
+				dbPath,
+				dbUser,
+				dbPassword);
+	}
+	
+	private void databaseConfiguration() throws IOException{
+		p("Creating user roles...");
+		this.createRoles();
+		p("Add username of the first administrator: ");
+		String login=br.readLine();
+		p("Add password for user "+login+" : ");
+		String pwd=br.readLine();
+		p("Add e-mail address for user "+login+" : ");
+		String email=br.readLine();
+		this.createAdminUser(login, pwd, email);
+		p("");
+		p("Now administrator user should be stored in the database and ");
+		p("you can start the web interface of Pikater and log in using ");
+		p("this administrator login.");
+		p("Other user accounts can be created using the web interface.");
+	}
+	
+	private void configAll() throws IOException{
+		this.configGeneration();
+		this.databaseConfiguration();
+	}
+	
+	private void runInstallation() throws IOException{
+		p("--------------------------------------------------------------------------------");
+		p("|                           WELCOME to PIKATER                                 |");
+		p("--------------------------------------------------------------------------------");
+		p("");
+		p("Before you can run the system some configuration files must be generated.");
+		p("These files are stored in plain text format, so make sure, that can't be read ");
+		p("by anyone.");
+		p("Also some default database entries will be generated, which contains the first ");
+		p("user with administrator priviledge. Password of this user is stored as hash ");
+		p("in the database.");
+		p("");
+		p("Please choose, which part of initialisation would you like to run:");
+		p("Whole DB initialisation: 'a'");
+		p("Config file generation : 'c'");
+		p("Just DB initialisation : 'd'");
+		String choice=br.readLine().toLowerCase();
+		if(choice.equals("c")){
+			this.configGeneration();
+		}else if(choice.equals("d")){
+			this.databaseConfiguration();
+		}else if(choice.equals("a")){
+			this.configAll();
+		}else{
+			p("Invalid choice...exiting.");
+		}
+			
+	}
+	
+	private static BufferedReader br;
 
 	public static void main(String[] args) throws SQLException, IOException, UserNotFoundException, ClassNotFoundException, ParseException {
+		br=new BufferedReader(new InputStreamReader(System.in));
 		DatabaseInitialisation data = new DatabaseInitialisation();
-		data.init();
+		data.runInstallation();
 		System.out.println("End of Database Initialisation");
 	}
 }

@@ -18,7 +18,6 @@ import javax.persistence.Transient;
 @Table(name="Model")
 @NamedQueries({
 	@NamedQuery(name="Model.getAll",query="select m from JPAModel m"),
-	@NamedQuery(name="Model.getByID",query="select m from JPAModel m where m.id=:id"),
 	@NamedQuery(name="Model.getByAgentClassName",query="select m from JPAModel m where m.agentClassName=:agentClassName"),
 	@NamedQuery(name="Model.getNotPermanentOlderThan",query="select m, r from JPAModel m, JPAResult r where r.createdModel=m and m.created < :paramDate and m.permanent=false")
 })
