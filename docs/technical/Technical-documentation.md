@@ -35,9 +35,13 @@
 
 ### Package structure
 
-To display relevant information regarding the package structure of the source code, click [here](/fileview) and browse the `src` folder. Some of the packages contain a description file containing relevant information about the package it is in.
+To display relevant information regarding folders/packages of the source code, follow the links below:
 
-To display description of the default package (files in the `src` folder), click [[here|Default package description]].
+1. [[Repository root folder|Repository-root-description]]
+2. [[Default source code package|Default-package-description]]
+
+From there, you can navigate further down the tree.  
+Alternatively, you may enter the [fileview](/fileview) and browse the `src` folder. Some of the packages contain a description file.
 
 ### Javadoc<a name="javadoc"/>
 
@@ -68,5 +72,5 @@ While the inline documentation is more or less wiki-independent (markdown format
 	
 ### Configuration files
 
-Configuration files for the wiki can be found at the repository's root directory. See the [source code](#sourceCode) section.
+Configuration files for the wiki can be found at the repository's root folder. See the [source code](#sourceCode) section.
 

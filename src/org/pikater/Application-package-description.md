@@ -5,13 +5,9 @@
 ## Core package
 Core system is defined in this package, which means all Jade-related code that executes experiments and manages agents and their infrastructure. Documentation of core system can be found [[here|Technical-documentation#core]].
 
-Has dependencies on `shared` package only.
-
 ## Shared
 
-Various shared classes and frameworks are contained in this package. 'Shared' actually means shared between `core` and `web` which aim to be mutually independent. In reality, only `core` is completely independent of `web`, not vice versa.
-
-Has no dependencies on other packages.
+Various shared classes and frameworks are contained in this package. "Shared" actually means shared between `core` and `web`.
 
 Main functionalities of this package include:
 * Database framework.  
@@ -26,6 +22,20 @@ It acts as a mediator between `web` and `core` experiments formats, because they
 
 All web application related code is concentrated in this package, with the exception of shared code.
 
-Has dependencies on both `client` and `shared` packages.
-
 More detailed information about this package can be found [[here|Web-package-description]].
+
+## Dependencies
+
+Dependencies are represented by the following diagram:
+
+{{{{{{ blue-modern
+	Core->Shared: requires
+	Web->Shared: requires
+	alt web-app is in online mode
+		Web->Core: requires
+	end
+}}}}}}
+
+`Core` and `shared` packages are and aim to be completely independent of `web`, but as a standalone unit, they are also very limited in usage and user-experience.
+
+`Web` is only dependent on `core` when it is in "online mode" (see [[web application documentation|Web-documentation]]).

@@ -7,7 +7,7 @@ Contains all web-application code. This file contains only very basic descriptio
 
 ## Vaadin
 
-This package contains all code that uses the Vaadin framework and thus defines all GUI and supportive infrastructure code. Package structure is quite self-explanatory (once the viewer has a notion of what it does and how it works). To see more details, open Javadoc with the link above.
+This package contains all code that uses the Vaadin framework and thus defines all GUI and supportive infrastructure code. Package structure is quite self-explanatory (once the viewer has a notion of Java web applications, Vaadin and what it does and how it works). To see more details, open Javadoc with the link above.
 
 ## Other packages
 
