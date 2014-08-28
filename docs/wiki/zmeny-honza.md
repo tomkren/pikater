@@ -212,6 +212,7 @@ ManagerAgent->ManagerAgent: starts saved agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
+<!--
 ### DataRegistry
 
 #### Požadavky
@@ -230,3 +231,4 @@ TODO
 ### Zbytek
 
 * ukončování agentů ?
+-->
