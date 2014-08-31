@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents.AgentsView;
@@ -9,6 +9,7 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches.Ba
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches.UserBatchesView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.DatasetsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.UserDatasetsView;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.test.TestView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users.UserProfileView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users.UsersView;
 
@@ -117,7 +118,7 @@ public class ContentProvider
 		@Override
 		public boolean accessAllowed(VaadinSession session)
 		{
-			return ServerConfigurationInterface.avoidUsingDBForNow() ? true : ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
+			return WebAppConfiguration.avoidUsingDBForNow() ? true : ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
 		}
 		
 		@Override
@@ -153,7 +154,7 @@ public class ContentProvider
 		@Override
 		public boolean accessAllowed(VaadinSession session)
 		{
-			if(ServerConfigurationInterface.avoidUsingDBForNow())
+			if(WebAppConfiguration.avoidUsingDBForNow())
 			{
 				return true;
 			}

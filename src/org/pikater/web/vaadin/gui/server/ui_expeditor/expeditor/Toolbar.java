@@ -13,7 +13,7 @@ import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserS
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserScheduled;
 import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.logging.web.PikaterLogger;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
@@ -480,7 +480,7 @@ public class Toolbar extends VerticalLayout
 					
 					JPABatch newExperiment = new JPABatch(name, note, experimentXML, experimentOwner, userAssignedPriority, sendEmailWhenFinished);
 					saveExperiment(newExperiment, experimentSavedCallback);
-					if(ServerConfigurationInterface.getConfig().coreEnabled)
+					if(WebAppConfiguration.isCoreEnabled())
 					{
 						try
 						{

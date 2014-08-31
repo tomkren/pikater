@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   
-  <display-name>Pikater</display-name>
+  <!-- ***************************************************** -->
+  <!-- STANDARD WEB-APP CONFIGURATION
+  		See: http://docs.oracle.com/cd/E13222_01/wls/docs81/webapp/web_xml.html
+  -->
   
+  <!-- BASICS -->
+  <display-name>Pikater</display-name>
+  <session-config>
+    <session-timeout>30</session-timeout> <!-- in minutes -->
+  </session-config>
+  
+  <!-- FILTER DEFINITIONS
+  		The order below also determines the filter order in filter chain. Filter names refer to
+  		filters defined in package: "org.pikater.web.filters".
+  -->
+  <filter-mapping>
+    <filter-name>filter1</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- ***************************************************** -->
+  <!-- VAADIN WEB-APP CONFIGURATION
+  		See: https://vaadin.com/book/-/page/application.environment.html
+  -->
   <context-param>
-  	<description>Special parameter for filters. Print various debug messages or not?</description>
-  	<param-name>printDebugInfoInFilters</param-name>
- 	<param-value>false</param-value>
-  </context-param>
-  <context-param>
-    <description>Production mode of the whole application - overrides any eventual annotation settings. Used in filters.</description>
+    <description>Whether the application should start in production mode. This option overrides any potential UI annotation settings.</description>
     <param-name>productionMode</param-name>
     <param-value>false</param-value>
   </context-param>
   <context-param>
     <description>Heartbeat request interval (in seconds) for Vaadin client side engine.</description>
     <param-name>heartbeatInterval</param-name>
-    <param-value>300</param-value>
+    <param-value>300</param-value> <!-- 5 minutes -->
   </context-param>
   
-  <session-config>
-    <session-timeout>30</session-timeout>
-  </session-config>
-  
-  <!-- THE FOLLOWING FILTER MAPPING LIST ALSO SPECIFIES THE ORDER OF THEIR EXECUTION -->
-  <filter-mapping>
-    <filter-name>filter1</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+  <!-- ***************************************************** -->
+  <!-- CUSTOM/SPECIAL WEB-APP CONFIGURATION -->
+  <context-param>
+  	<description>Online/offline mode. Should the application try to connect to the core (JADE) system?</description>
+  	<param-name>coreEnabled</param-name>
+ 	<param-value>false</param-value>
+  </context-param>
+  <context-param>
+  	<description>Special parameter for filters (see above). Print various debug messages or not?</description>
+  	<param-name>printDebugInfoInFilters</param-name>
+ 	<param-value>false</param-value>
+  </context-param>
   
 </web-app>

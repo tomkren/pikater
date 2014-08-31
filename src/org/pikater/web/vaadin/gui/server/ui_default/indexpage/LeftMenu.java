@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pikater.shared.util.SimpleIDGenerator;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
@@ -86,7 +86,7 @@ public class LeftMenu extends Panel
 	{
 		super.attach();
 		
-		if(ServerConfigurationInterface.avoidUsingDBForNow())
+		if(WebAppConfiguration.avoidUsingDBForNow())
 		{
 			buildMenu(true);
 		}

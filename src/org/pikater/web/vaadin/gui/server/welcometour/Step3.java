@@ -12,7 +12,6 @@ import java.util.TreeSet;
 
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.TopologyModel.ServerType;
-import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.ssh.PikaterSSHLauncher;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -218,7 +217,7 @@ public class Step3 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 			// set all final models to the application wide variable
 			for(TopologyModel model : finalModels)
 			{
-				ServerConfigurationInterface.getJadeTopologies().topologyWasConnected(model);
+				// TODO: ServerConfigurationInterface.getJadeTopologies().topologyWasConnected(model);
 			}
 			
 			// cleanup - close all connections

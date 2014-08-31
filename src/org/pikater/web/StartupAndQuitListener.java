@@ -12,11 +12,7 @@ import org.pikater.shared.logging.web.GeneralPikaterLogger;
 import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
-import org.pikater.web.config.JadeTopologies;
-import org.pikater.web.config.ServerConfiguration;
-import org.pikater.web.config.ServerConfigurationInterface;
-import org.pikater.web.config.ServerConfigurationInterface.ServerConfItem;
-import org.pikater.web.sharedresources.ThemeResources;
+import org.pikater.web.config.WebAppConfiguration;
 
 @WebListener
 public class StartupAndQuitListener implements ServletContextListener
@@ -67,22 +63,13 @@ public class StartupAndQuitListener implements ServletContextListener
 			 */
 			
 			announceCheckOrAction("setting initial application state & essential variables");
-			ServerConfigurationInterface.setField(ServerConfItem.CONTEXT, event.getServletContext());
-			ServerConfigurationInterface.setField(ServerConfItem.JADE_TOPOLOGIES, new JadeTopologies());
+			WebAppConfiguration.setContext(event.getServletContext());
 			IOUtils.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
 			
 			announceCheckOrAction("initializing task scheduler");
 			PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
 			
-			announceCheckOrAction("reading & parsing application configuration file");
-			ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(ThemeResources.prop_appConf.getSourceFile()));
-			if(!ServerConfigurationInterface.getConfig().isValid())
-			{
-				throw new IllegalStateException(String.format("Configuration file '%s' is not valid. Double check it.", 
-						ThemeResources.prop_appConf.getSourceFile().getAbsolutePath()));
-			}
-			
-			if(ServerConfigurationInterface.getConfig().coreEnabled)
+			if(WebAppConfiguration.isCoreEnabled())
 			{
 				announceCheckOrAction("checking core connection");
 				try

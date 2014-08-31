@@ -139,9 +139,17 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2.jar"/>
+	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-expression-4.0.0.M2.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="libraries/spring-framework/org.springframework.orm.jar"/>
-	<classpathentry kind="lib" path="libraries/spring-framework/org.springframework.transaction_3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="libraries/spring-framework/org.springframework.transaction_3.0.5.RELEASE.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-javadoc.jar"/>
 	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2-sources.jar"/>
 	<classpathentry kind="lib" path="libraries/spring-framework-4.0.0.M2/libs/spring-aop-4.0.0.M2.jar"/>

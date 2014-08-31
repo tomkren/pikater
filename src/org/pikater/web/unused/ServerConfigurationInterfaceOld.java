@@ -3,8 +3,7 @@ package org.pikater.web.unused;
 import javax.servlet.ServletContext;
 
 import org.pikater.web.config.JadeTopologies;
-import org.pikater.web.config.ServerConfiguration;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 
 /**
  * A wrapper class for all getters/setters of any server variables.
@@ -14,7 +13,7 @@ public class ServerConfigurationInterfaceOld
 	/**
 	 * The configuration instance to be used throughout the whole application.
 	 */
-	public static ServerConfigurationInterface instance;
+	public static WebAppConfiguration instance;
 	
 	/**
 	 * Unique keys to use for the attributes to store.
@@ -46,30 +45,6 @@ public class ServerConfigurationInterfaceOld
 	
 	// **************************************************************************************************
 	// PUBLIC INTERFACE
-	
-	public ServerConfiguration getConfiguration()
-	{
-		return (ServerConfiguration) getObject(serverConfiguration);
-	}
-	
-	public void setConfiguration(ServerConfiguration configuration)
-	{
-		if(configuration == null)
-		{
-			throw new NullPointerException();
-		}
-		else if(!isConfigurationSet()) // only set if it has not been set before
-		{
-			setObject(serverConfiguration, configuration);
-			setObject(serverConfigurationNotNull, true);
-			setObject(serverConfigurationValid, configuration.isValid());
-			checkAgain();
-		}
-		else
-		{
-			throw new IllegalStateException("Configuration has already been set once.");
-		}
-	}
 	
 	public boolean isConfigurationSet()
 	{

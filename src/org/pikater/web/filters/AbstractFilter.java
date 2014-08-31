@@ -87,7 +87,7 @@ public abstract class AbstractFilter implements Filter
 	
 	protected boolean isDebugMode()
 	{
-		return Boolean.parseBoolean(context.getInitParameter("printDebugInfoInFilters"));
+		return Boolean.parseBoolean(context.getInitParameter("printDebugInfoInFilters")); // TODO: rewrite to use ServerConfiguration
 	}
 	
 	protected void printRequestComponents(String filterName, HttpServletRequest httpRequest)

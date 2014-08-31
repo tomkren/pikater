@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.components.forms;
 
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -84,7 +84,7 @@ public class UserProfileForm extends CustomFormLayout
 			@Override
 			public boolean onSubmit()
 			{
-				if(!ServerConfigurationInterface.avoidUsingDBForNow())
+				if(!WebAppConfiguration.avoidUsingDBForNow())
 				{
 					currentUser.setPassword(passwordField.getValue());
 					currentUser.setEmail(emailField.getValue());

@@ -12,7 +12,7 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
@@ -80,7 +80,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			agent.setJar(content);
 			DAOs.externalAgentDAO.storeEntity(agent);
 			
-			if(ServerConfigurationInterface.getConfig().coreEnabled)
+			if(WebAppConfiguration.isCoreEnabled())
 			{
 				try
 				{

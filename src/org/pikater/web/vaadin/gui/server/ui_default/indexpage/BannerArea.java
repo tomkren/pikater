@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.ManageAuth;
 
@@ -75,7 +75,7 @@ public class BannerArea extends HorizontalLayout
 	{
 		super.attach();
 		
-		if(ServerConfigurationInterface.avoidUsingDBForNow())
+		if(WebAppConfiguration.avoidUsingDBForNow())
 		{
 			lbl_accountName.setValue("some_account");
 		}

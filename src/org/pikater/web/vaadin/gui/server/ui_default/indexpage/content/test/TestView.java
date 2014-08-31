@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
+package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.test;
 
 import java.util.Date;
 import java.util.Timer;
@@ -6,10 +6,13 @@ import java.util.TimerTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.pikater.shared.database.views.tableview.test.TestTableDBView;
 import org.pikater.web.ssh.SSHSession;
 import org.pikater.web.ssh.SSHSession.ISSHSessionNotificationHandler;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleComponent;
+import org.pikater.web.vaadin.gui.server.components.dbviews.TestDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
@@ -31,7 +34,9 @@ public class TestView extends VerticalLayout implements IContentComponent
 		setSizeFull();
 		
 		// testJSCH();
-		testAnchor();
+		// testAnchor();
+		// dummyDBTableLayout();
+		dummyExpandableDBTableLayout();
 	}
 
 	@Override
@@ -53,6 +58,20 @@ public class TestView extends VerticalLayout implements IContentComponent
 	
 	// -------------------------------------------------------------------
 	// TEST GUI INITIALIZATONS
+	
+	public void dummyDBTableLayout()
+	{
+		DBTableLayout dbTableLayout = new DBTableLayout();
+		dbTableLayout.setReadOnly(true);
+		// dbTableLayout.setCommitImmediately(false);
+		dbTableLayout.setView(new TestDBViewRoot(new TestTableDBView()));
+		addComponent(dbTableLayout);
+	}
+	
+	public void dummyExpandableDBTableLayout()
+	{
+		addComponent(new TestExpandableView());
+	}
 	
 	public void testAnchor()
 	{

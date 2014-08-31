@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users;
 
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.components.forms.UserProfileForm;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
@@ -29,7 +29,7 @@ public class UserProfileView extends CustomComponent implements IContentComponen
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		innerForm.enter(ServerConfigurationInterface.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent()));
+		innerForm.enter(WebAppConfiguration.avoidUsingDBForNow() ? JPAUser.getDummy() : ManageAuth.getUserEntity(VaadinSession.getCurrent()));
 	}
 	
 	@Override

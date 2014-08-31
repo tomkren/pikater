@@ -15,7 +15,7 @@ import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.HttpContentType;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.quartzjobs.results.ExportBatchResultsJob;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
@@ -92,7 +92,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 				public void onCommitted(AbstractTableRowDBView row, AbstractDBViewValue<?> value)
 				{
 					final BatchTableDBRow specificRow = (BatchTableDBRow) row;
-					if(ServerConfigurationInterface.getConfig().coreEnabled)
+					if(WebAppConfiguration.isCoreEnabled())
 					{
 						try
 						{
@@ -121,7 +121,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
 		if(specificColumn == BatchTableDBView.Column.ABORT)
 		{
-			if(ServerConfigurationInterface.getConfig().coreEnabled)
+			if(WebAppConfiguration.isCoreEnabled())
 			{
 				try
 				{

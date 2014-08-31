@@ -10,7 +10,7 @@ import org.pikater.shared.database.jpa.status.JPAUserStatus;
 import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.requests.HttpRequestComponent;
 import org.pikater.web.requests.HttpRequestUtils;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
@@ -114,7 +114,7 @@ public abstract class CustomConfiguredUI extends UI
 		/*
 		 * Default initialization of the UI.
 		 */
-		if(!ServerConfigurationInterface.isApplicationReadyToServe()) // application has not yet been setup and pikater has not yet been launched
+		if(!WebAppConfiguration.isApplicationReadyToServe()) // application has not yet been setup and pikater has not yet been launched
 		{
 			// force the user to authenticate so that he can setup and launch pikater on remote machines
 			forceUserToAuthenticate(new IDialogResultHandler()
@@ -299,7 +299,7 @@ public abstract class CustomConfiguredUI extends UI
 	 */
 	private void authenticateUser(String login, String password, boolean adminCheck)
 	{
-		if(!ServerConfigurationInterface.avoidUsingDBForNow())
+		if(!WebAppConfiguration.avoidUsingDBForNow())
 		{
 			JPAUser user = DAOs.userDAO.getByLoginAndPassword(login, password);
 			if(user != null)

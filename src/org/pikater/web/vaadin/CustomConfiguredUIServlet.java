@@ -51,8 +51,8 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 	public enum PikaterUI
 	{
 		INDEX_PAGE("index", DefaultUI.class),
-		EXP_EDITOR("expEditor", ExpEditorUI.class),
-		DATASET_VISUALIZATION("dsVisual", VisualizationUI.class);
+		EXP_EDITOR("editor", ExpEditorUI.class),
+		DATASET_VISUALIZATION("visualization", VisualizationUI.class);
 
 		private final String mappedURL;
 		private final Class<? extends UI> mappedUI;

@@ -54,7 +54,18 @@ public abstract class ExpandableViewStep extends DynamicNeighbourWizardStep<IWiz
 		}
 	}
 	
+	/**
+	 * Method called when the "Next" button is clicked. Should internally call
+	 * {@link #constructNextStepFromView(AbstractTableRowDBView)}.
+	 */
 	@Override
 	public abstract ExpandableViewStep constructNextStep();
+	
+	/**
+	 * Internal method called when the "Next"button is clicked or when a custom
+	 * action triggers construction of the next step.
+	 * @param view
+	 * @return
+	 */
 	protected abstract ExpandableViewStep constructNextStepFromView(AbstractTableRowDBView view);
 }

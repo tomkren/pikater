@@ -113,31 +113,31 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 			switch(type)
 			{
 				case CHOOSE:
-					name = "Klobása";
+					name = "DummyChooser";
 					break;
 				case COMPUTE:
-					name = "Vepřová kýta";
+					name = "DummyComputeAgent";
 					break;
 				case PROCESS_DATA:
-					name = "Chleba";
+					name = "DummyDataProcessor";
 					break;
 				case OPTION:
-					name = "Bobkový list";
+					name = "DummyOptionModifier";
 					break;
 				case INPUT:
-					name = "Brambory";
+					name = "DumyInputBox";
 					break;
 				case MISC:
-					name = "Pepř";
+					name = "Dummy box";
 					break;
 				case OUTPUT:
-					name = "Sůl";
+					name = "DummyOutputBox";
 					break;
 				case SEARCH:
-					name = "Cibule";
+					name = "DummySearchAgent";
 					break;
 				case COMPOSITE:
-					name = "Protlak";
+					name = "DummyComposite";
 					break;
 				default:
 					break;

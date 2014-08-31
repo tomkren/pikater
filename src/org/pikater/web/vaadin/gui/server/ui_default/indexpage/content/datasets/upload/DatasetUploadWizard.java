@@ -6,7 +6,7 @@ import java.util.List;
 import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.HttpContentType;
-import org.pikater.web.config.ServerConfigurationInterface;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.quartzjobs.UploadedDatasetHandler;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageSession;
@@ -219,7 +219,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 					 * Single file upload is assumed here.
 					 */
 					
-					if(!ServerConfigurationInterface.avoidUsingDBForNow())
+					if(!WebAppConfiguration.avoidUsingDBForNow())
 					{
 						Object[] jobParams = new Object[]
 						{
@@ -244,7 +244,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 						}
 					}
 					
-					if(ServerConfigurationInterface.getConfig().coreEnabled)
+					if(WebAppConfiguration.isCoreEnabled())
 					{
 						GeneralDialogs.info("Upload successful", "It may take a while before your dataset is processed and (for example) visualization "
 								+ "can be invoked on it.");
