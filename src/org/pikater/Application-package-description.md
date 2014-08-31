@@ -10,13 +10,13 @@ Core system is defined in this package, which means all Jade-related code that e
 Various shared classes and frameworks are contained in this package. "Shared" actually means shared between `core` and `web`.
 
 Main functionalities of this package include:
-* Database framework.  
-Connection definition & providers, entities, queries, etc.
-* Quartz framework.  
-Provides a mechanism for executing background tasks. It is only used by `web` at this moment but can easily be used by `core` as well.
-* Universal experiment format.  
-It acts as a mediator between `web` and `core` experiments formats, because they are quite different and need to address different requirements. Experiments saved in database are also in the universal format.
-* Various utilities and logging interfaces/implementations.
+* Database framework  
+Connection definition & providers, entities, queries and so on. See [[database documentation|Database-documentation]].
+* Quartz scheduler  
+See [[web application documentation|Web-documentation]].
+* Universal experiment format  
+See [[technical documentation|Technical-documentation]].
+* Various utilities and logging interfaces/implementations
 
 ## Web
 
@@ -38,4 +38,6 @@ Dependencies are represented by the following diagram:
 
 `Core` and `shared` packages are and aim to be completely independent of `web`, but as a standalone unit, they are also very limited in usage and user-experience.
 
-`Web` is only dependent on `core` when it is in "online mode" (see [[web application documentation|Web-documentation]]).
+`Web` is only dependent on `core` when it is in "online mode" (see [[web application documentation|Web-documentation#conf]]). To be precise, `web` only calls methods defined in the following class:
+
+```java:/src/org/pikater/core/agents/gateway/WebToCoreEntryPoint.java```

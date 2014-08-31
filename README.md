@@ -64,12 +64,11 @@ Import the project in Eclipse:
 1. Install [Eclipse](https://www.eclipse.org/downloads/).
 2. Install the [Vaadin plugin for Eclipse](http://vaadin.com/eclipse).
 3. Clone the `Eclipse-Vaadin-project` branch on target machine.
-4. Create a new Vaadin project, as specified [here](https://vaadin.com/book/-/page/getting-started.first-project.html). **Project name should be "Pikater" and you must use Vaadin version `7.1.14`**.
+4. Create a new Vaadin project, as specified [here](https://vaadin.com/book/-/page/getting-started.first-project.html). **You must use Vaadin version `7.1.14`**.
 5. Overwrite the created project with the cloned pikater branch.
 6. Check your project's Java binding - it might have been corrupted in the last step. Check the `.classpath` file.
 5. Compile the `org.pikater.web.vaadin.gui.PikaterWidgetset.gwt.xml` widgetset.
-6. Inspect/edit files in the `WebContent/WEB-INF/conf` directory:
-	* `appServer.properties` is used to configure the web application.  
+6. Inspect/edit the `WebContent/WEB-INF/web.xml` file. It is used to configure the web application. Detailed information can be found [[here|Web-documentation#conf]].
 7. Install and prepare a servlet container (e.g. Apache Tomcat).
 
 ### Deployment & launching

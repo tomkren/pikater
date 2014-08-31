@@ -1,4 +1,4 @@
-<!-- --- title: Docs overview -->
+<!-- --- title: Documentation overview -->
 
 To display the application's goals or life cycle, check the project's [[GitHub overview|Home]].
 

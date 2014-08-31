@@ -5,11 +5,19 @@
 
 
 
-## Architecture
+## Design
+
+### Architecture
 
 <font color="red">TODO: is this alright or something needs to be edited/added?</font>
 
 [[architecture.png|architecture picture]]
+
+### Experiment formats
+
+<font color="red">TODO</font>
+
+It acts as a mediator between `web` and `core` experiments formats, because they are quite different and need to address different requirements. Experiments saved in database are also in the universal format.
 
 
 

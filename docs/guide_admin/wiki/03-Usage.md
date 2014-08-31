@@ -26,7 +26,7 @@ This project's wiki is configured to only support:
 3. MediaWiki
 4. Textile
 
-See `wiki-config.rb`.
+This can be customized in Gollum configuration files. See the [[repository root folder|Repository-root-description]].
 
 #### Syntax quick reference
 
@@ -41,8 +41,7 @@ See `wiki-config.rb`.
 
 #### Plugins for Eclipse
 
-Maybe it's best to use a system defined editor, but for the sake of completeness, let's list relevant Eclipse plugins.  
-<font color="red">Note, however, that none of them were tested or inspected in detail. Some might even contain a WYSIWYG editor or live preview</font>.
+Maybe it's best to use a system defined editor, but for the sake of completeness, let's list relevant Eclipse plugins - some might even contain a WYSIWYG editor or live preview. Note, however, that none of them were tested or inspected in detail.
 
 1. AsciiDoc, MediaWiki, Textile:  
 	<http://eclipsewiki.sourceforge.net/>  
@@ -54,3 +53,11 @@ Maybe it's best to use a system defined editor, but for the sake of completeness
 ### Gollum's own gotchas
 
 <https://github.com/gollum/gollum/wiki>
+
+Do note, however, that the alleged GitHub file includes do not work as specified in the above link. Instead of:
+
+<code>\`\`\`html:github:gollum/gollum/master/test/file_view/1_file.txt\`\`\`</code>
+
+we have to use:
+
+<code>\`\`\`java:/src/org/example/ExampleClass.java\`\`\`</code>

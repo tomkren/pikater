@@ -4,9 +4,28 @@
 
 It is contained in the `src` and `examples` folders. The latter only contains examples of used 3rd party software (dependencies).
 
+## Compiled code
+
+It is contained in the `bin` and `build` folders.
+
 ## Application dependencies
 
-They are contained in the `libraries` folder and `ivy.xml` file ([Apache Ivy](http://ant.apache.org/ivy) dependency management).
+They are contained in the `libraries` folder and `ivy.xml` file ([Apache Ivy](http://ant.apache.org/ivy) dependency  management).
+
+## Web application resources
+
+They are contained in the `WebContent` folder.  
+Resources are divided into several categories:
+
+1. `WebContent/VAADIN/widgetsets`  
+Client side web application compiled into Javascript.
+2. `WebContent/VAADIN/themes`  
+Web application resources - CSS, images, HTML code snippets (layout templates) and so on. In reality, this folder does not contain all used/referenced CSS and Javascript. Some of it is defined in the `src` folder, inline with the Vaadin components that use them, for simplicity. Vaadin then takes responsibility for publishing them (along with theme resources) to the above compilation folder.
+3. `WebContent/WEB-INF`  
+Standard web application folder where configuration and java resources for the application reside. In other words, files and folders that are not accessible from the client.  
+Configuration of the web application is documented [[here|Web-documentation]]. Furthermore, the folder contains some `.pxm` files. They are the source files for some of the application's images/icons and were created by the [PixelMator](http://www.pixelmator.com) application for Max OS X.
+
+Note, that the `ivy.xml` file mentioned above is also a web application resource (specific to Vaadin).
 
 ## Documentation
 

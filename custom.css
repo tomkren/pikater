@@ -41,6 +41,11 @@
     margin-bottom: 2em;
 }
 
+.toc ul ul ul
+{
+    padding-left: 25px;
+}
+
 .markdown-body > *:not(.toc)
 {
     /* either we pad all elements recursively (all but toc and its children) or we pad nothing at all...
