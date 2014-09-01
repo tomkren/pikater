@@ -1,4 +1,4 @@
-<!-- --- title: GitHub overview -->
+<!-- title: GitHub overview -->
 
 This project extends the [Pikater](https://github.com/peskk3am/pikater4) project with multi-user support, web based GUI and distributed infrastructure to allow simultaneous computation of many individual tasks.
 
@@ -44,8 +44,9 @@ First and foremost, note several things:
 	* `master` - contains the latest core system version.
 	* `Eclipse-Vaadin-project` - contains the latest GUI (web application) and documentation versions.
 2. This project requires:
-	* a JPA-compatible database (at this moment, only PostGRE database is supported) running locally or externally,
-	* a SMTP server running locally. (<font color="red">TODO: ještě něco je potřeba dodat?</font>)
+    * Java version 7,
+	* a JPA-compatible database (at this moment, only PostgreSQL database is supported) running locally or externally,
+	* a SMTP server open for local connections
 
 
 #### Database
@@ -102,7 +103,7 @@ To deploy and launch the extension:
 
 ### Maintenance
 
-If extension is used, one or more administrators may need to manage it using the GUI. Otherwise, the application should be self-maintained.
+If the extension is used, one or more administrators may need to manage it using the GUI. Otherwise, the application should be self-maintained.
 
 
 
