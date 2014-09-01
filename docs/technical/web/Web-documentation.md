@@ -187,10 +187,7 @@ As such, the client itself polls for changes once in 500ms (current default valu
 
 **Limitation**  
 Quote from user guide: `When you leave the page while a progress dialog with a background task is running, all progress is lost`.  
-
-because dialogs are Vaadin components attached to and dependent on a UI instance (a page instance). When the page is navigated away, it is destroyed on server which means the dialog is also destroyed and the underlying task and its progress as well.
-
-See [[user guide|User-guide]]. // TODO: #href
+This happens because dialogs are Vaadin components attached to and dependent on a UI instance (a page instance). When the page is navigated away, it is destroyed on server which means the dialog is also destroyed and the underlying task and its progress as well.
 
 TODO:
 - user upload process
