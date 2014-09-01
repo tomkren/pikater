@@ -65,12 +65,12 @@ Subfeatures:
 Subfeatures:
 	* listing all global and user-uploaded datasets,
 	* approving/disapproving them for use in experiments,
-	* deleting them. <font color="red">TODO</font>
+	* deleting them.
 * Agent management  
 Subfeatures:
 	* listing all user-uploaded agents,
 	* approving/disapproving them for use in experiments,
-	* deleting them. <font color="red">TODO</font>
+	* deleting them.
 * Experiment management  
 Subfeatures:
 	* listing all queued/failed/finished experiments,
@@ -103,59 +103,116 @@ Example of usage can be seen in (also, it is the only defined filter at this mom
 
 
 
-## Main processes
+## Processes
 
-### Startup process
+### Startup
 
 Should be clear from the following diagram:
 
 {{{{{{ blue-modern
 	Web app->Web app: initialize logger, inner state & Quartz
 	alt web-app is configured to run in online mode
-		Web app->Core system: RPC to test availability
-		Core system->Web app: response
+		Web app->+Core system: RPC to test availability
+		Core system-->-Web app: response
 	end
-	Web app->Database: init connection to test availability
-	Database->Web app: response
+	Web app->+Database: init connection to test availability
+	Database-->-Web app: response
 }}}}}}
 
-But you may refer to the latest source code as well: `org.pikater.web.StartupAndQuitListener.java`.  
-If any errors occur during this phase, the application will not start. Errors will need to be resolved before it can be successfully launched.
+**Notes**
+* If any errors occur during this phase, the application will not start. Errors will need to be resolved before it can be successfully launched.
+* Database availability test doesn't work at this moment. There are some strange issues with using connection drivers during application startup. They work without a problem outside of that scope, however.
+
+You may refer to the latest source code as well: 
+
+```java:/src/org/pikater/web/StartupAndQuitListener.java```
 
 ### Page request handling
 
 Has quite standard implementation:
 
 {{{{{{ blue-modern
-	Client->Web app: request page  
-	Web app->Web app: filter request
+	Client->+Web app: request page
 	alt request is filtered out
-		Web app->Client: return response (mostly an error)
+		Web app->Web app: output response (mostly an error)
 	else request is not filtered out
 		alt user is not logged in
 			Web app->Web app: output login dialog
 		else user is logged in
-			Web app->Requested-page: request page
+			Web app->+Requested-page: request page
 			alt access is allowed
-				Requested-page->Web app: output requested page
+				Requested-page->Requested-page: output requested page
 			else access is not allowed
-				Requested-page->Web app: output error message
+				Requested-page->Requested-page: output error message
 			end
+			Requested-page-->-Web app: return response
 		end
-		Web app->Client: return response
 	end
+	Web app-->-Client: return response
 }}}}}}
 
 Request filtering is done using filters (see [above](#conf)).
 
 Since the web application is an AJAX application (javascript calls do not refresh the whole page), subsequent calls from javascript do not apply to the scheme above. They are simply handled in RPC manner on the server. For more information about how this is done, refer to Book of Vaadin.
 
+### Progress synchronization
+
+General information about dialogs and specific progress dialog use cases can be seen [[here|User-guide]].  
+Three entities have to be recognized when progress dialogs are used: `client (browser)`, `web application` and `background task`. The following diagram describes synchronization and communication between these entities:
+
+{{{{{{ blue-modern
+	Client->Web-app: feature request
+	Web-app->Client: start polling for changes
+	Web-app->Task: start
+	loop until task is finished, failed or aborted
+    	Client->Web-app: poll for changes each 500ms
+    	Task->Web-app: update progress (API calls)
+	end
+	alt task aborted by user
+    	Web-app->Task: abort
+    	Web-app->Client: disable polling
+		Web-app->Web-app: close dialog
+	else task failed (error or API calls)
+		Web-app->Client: disable polling
+		Web-app->Web-app: update dialog and display a notification
+	else task finished (API calls)
+    	Web-app->Client: disable polling
+		Web-app->Web-app: update dialog and ready the results
+	end
+}}}}}}
+
+While Vaadin supports automatic pushing of changes from server to client, it seems rather uncomfortable to let it potentially generate so much server to client traffic. Furthermore, automatic pushing only works when changes are made in a thread that is used to handle a request from client (changes are pushed as a response) - this is not the case for our background task which is a Vaadin-independent thread. It is a Quartz job (see above).
+
+As such, the client itself polls for changes once in 500ms (current default value). It can be observed that the web application acts as a mediator and coordinator, just as it should.
+
+**Limitation**  
+Quote from user guide: `When you leave the page while a progress dialog with a background task is running, all progress is lost`.  
+
+because dialogs are Vaadin components attached to and dependent on a UI instance (a page instance). When the page is navigated away, it is destroyed on server which means the dialog is also destroyed and the underlying task and its progress as well.
+
+See [[user guide|User-guide]]. // TODO: #href
+
+TODO:
+- user upload process
+- reset password & smtp server running
+- gui: editor
+- gui FAQ: How do I display dataset metadata & stuff
+- Table views are defined in the following packages:
+
+1. `org.pikater.shared.database.views`  
+Contains data source definitions for views.
+2. `org.pikater.web.vaadin.gui.server.components.dbviews`  
+Contains GUI implementation that transforms the above data sources into a table.
+
+Altogether, they form "table DB view framework". It is quite configurable and specially designed to be easily modified in various ways.
 
 
 
-## GUI documentation<a name="webGUI"></a>
 
-See [[user guide|User-guide]].
+
+## User guide<a name="webGUI"></a>
+
+Some technical information may also be found at [[user guide|User-guide]].
 
 
 

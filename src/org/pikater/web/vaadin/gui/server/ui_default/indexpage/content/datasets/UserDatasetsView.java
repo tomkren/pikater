@@ -21,7 +21,7 @@ public class UserDatasetsView extends DatasetsView
 	{
 		super();
 		
-		getMainLayout().addCustomActionComponent(new Button("Upload new dataset", new Button.ClickListener()
+		getMainLayout().addCustomActionComponent(new Button("Upload a new dataset", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = -1045335713385385849L;
 

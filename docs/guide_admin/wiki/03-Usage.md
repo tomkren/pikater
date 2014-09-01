@@ -54,6 +54,7 @@ Maybe it's best to use a system defined editor, but for the sake of completeness
 
 <https://github.com/gollum/gollum/wiki>
 
+**Syntax highlighting**  
 Do note, however, that the alleged GitHub file includes do not work as specified in the above link. Instead of:
 
 <code>\`\`\`html:github:gollum/gollum/master/test/file_view/1_file.txt\`\`\`</code>
@@ -61,3 +62,13 @@ Do note, however, that the alleged GitHub file includes do not work as specified
 we have to use:
 
 <code>\`\`\`java:/src/org/example/ExampleClass.java\`\`\`</code>
+
+**Embedding video**  
+<pre><code>&lt;div class=&quot;embeddedVideo&quot;&gt;
+	&lt;span&gt;video/mp4&lt;/span&gt; // mime-type
+	&lt;span&gt;http://video-js.zencoder.com/oceans-clip.mp4&lt;/span&gt; // URL
+&lt;/div&gt;
+</code></pre>
+
+Current mime-type codec support for individual browsers:  
+<http://www.videojs.com/html5-video-support/>

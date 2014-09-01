@@ -25,7 +25,8 @@ Information dialogs are plain simple and do not require further commentary.
 Component dialogs are used when a user input is needed and it is not (for example) a simple String. Mostly, the required user input has multiple parts (forms or wizards are displayed) or it is a database table row or a part of it (table views are displayed) or a combination of the two.  
 Unless the component is a wizard, the dialog has two buttons: one to accept the entered input and one to close the dialog. Wizards have their own counterparts of these two buttons and define two more: a `Next` and `Back` button.
 3. **Progress dialogs**  
-Some actions trigger a potentially lengthy operations (e.g. dataset visualization). When triggered, this dialog will appear and track the underlying task's progress. The underlying task can be aborted anytime with the `Abort` button. When pressed, the dialog will be closed.
+Some actions trigger a potentially lengthy operations (e.g. dataset visualization). When triggered, this dialog will appear and track the underlying task's progress. The underlying task can be aborted anytime with the `Abort` button. When pressed, the dialog will be closed.  
+_Note that when you leave the page while a progress dialog with a background task is running, all progress is lost_.
 
 Common properties:
 
@@ -130,10 +131,6 @@ Individual steps can be navigated back and forth as intended, unless they are th
 
 Another use case or purpose of expandable table views would be to **choose a database entity or item** (a row) for further processing. Regular table views may be used to select a row within a single view. Expandable table views may be used to select a row of nested views. This is taken advantage of in [dialogs](#dialogs). In addition to buttons mentioned earlier, expandable table views then also define the `Finish` button, that appears in `final` view (replaces the `Next` button in fact).
 
-### Login dialog<a name="loginDialog"></a>
-
-<font color="red">TODO</font>
-
 
 
 
@@ -190,6 +187,8 @@ Special use cases are described in the [FAQ](#faq) section.
 URL: `http://my.domain/Pikater/visualization`  
 This page is generated as a result of dataset visualization or comparison.
 
+#### Documentation
+
 Again, a picture:
 
 [[visualization_ui_description.png|alt=Visualization UI description]]
@@ -210,7 +209,12 @@ Selection can be reset either by (again) clicking on selected indexes or clickin
 #### Summary
 
 URL: `http://my.domain/Pikater/editor`  
-TODO
+<font color="red">TODO</font>
+
+<div class="embeddedVideo">
+	<span>video/mp4</span>
+	<span>http://video-js.zencoder.com/oceans-clip.mp4</span>
+</div>
 
 
 
@@ -218,4 +222,120 @@ TODO
 
 ## FAQ<a name="faq"></a>
 
-TODO
+In this section, we will cover some untrivial use cases that are not fully explained by the above documentation and also provide some additional information related to using the application.
+
+### How do I create an account?
+
+1. Open one of the pages described above, a login dialog will appear (if client is not logged in yet).
+2. Click on the `Create account` button. Another dialog will appear, this time with an account-register form.
+3. Fill the form.
+4. Click `Ok`. The account register form will be closed and login dialog will be visible again.
+5. Fill credentials of your new account and click `Ok`. You will be logged in using your new account.
+
+Note that experiments queued under your new account will have the lowest possible priority. Consider contacting the administrator to raise it.
+
+### How do I change my password?<a name="changePassword"></a>
+
+1. Open the default page.
+2. Click on `View & edit profile` in the left menu.
+3. Click on the `Change password` button. A dialog will appear.
+4. Enter your current password. Enter the new password (twice, for safety).
+5. Click on `Ok`. The dialog will close.
+6. Click on `Save changes`.
+
+### How do I reset my password?
+
+Only administrators can do that.  
+New passwords are sent to the account's email address.
+
+### How do I change my email?
+
+1. Open the default page.
+2. Click on `View & edit profile` in the left menu.
+3. Enter new email into the appropriate field.
+4. Click on `Save changes`.
+
+### How do I generate scatter plots for datasets?
+
+1. Open the default page.
+2. Click on `My datasets` in the left menu.
+3. Find your dataset.
+4. Expand the `VISUALIZE` column (see [regular table views](#regularTableViews)).
+5. Click on the `Visualize` button located on the same row as your dataset. A dialog will appear.  
+_If the button is disabled, metadata have not yet been computed for your dataset or are not available at all. If you have a suspicion yours is the latter case, contact the administrators_.
+6. Select target attribute.
+7. Include or exclude attributes to be used in visualization.
+8. Click `Ok`.
+9. If no compatible attributes are found (from the selected), a notification will display and user will have to respecify the attributes (it is possible a dataset can not be visualized at all).  
+Otherwise, a progress dialog will appear.
+10. When scatter plots are generated, the progress dialog's `Abort` button will change into a `Finished` button. Click on it. You will be redirected to visualization page.
+
+### How do I generate scatter plots that compare two datasets?
+
+1. Open the default page.
+2. Click on `My datasets` in the left menu.
+3. Find your dataset.
+4. Expand the `COMPARE` column (see [regular table views](#regularTableViews)).
+5. Click on the `Compare to` button located on the same row as your dataset. A dialog will appear.  
+_If the button is disabled, metadata have not yet been computed for your dataset or are not available at all. If you have a suspicion yours is the latter case, contact the administrators_.
+6. Select target and included attributes to be used for the dataset from step 3.
+7. Click `Next`.
+8. Find the dataset to compare to, select its row and click `Next`.
+9. Select target and included attributes to be used for the "compare to" dataset.
+10. Click `Finish`.
+11. If no compatible attribute mappings are found (from the selected), a notification will display and user will have to respecify the attributes (it is possible the specified datasets can not be visualized at all).  
+Otherwise, a progress dialog will appear.
+12. When scatter plots are generated, the progress dialog's `Abort` button will change into a `Finished` button. Click on it. You will be redirected to visualization page.
+
+### How to upload a new dataset?
+
+1. Open the default page.
+2. Click on `My datasets` in the left menu.
+3. Click on `Upload new dataset`.
+4. Follow the wizard, everything all relevant information will be displayed in the right time.
+
+Note that:
+* Multiple files may be uploaded simultaneously. Each one will have to be entered through the wizard, however.
+* Metadata have to be computed for your dataset before it can be used in experiments, visualization and metadata viewer. Metadata can be viewed, when available, by expanding the dataset view to the next step (see above).
+
+### How to upload a new user agent (computation method)?
+
+1. Open the default page.
+2. Click on `My agents` in the left menu.
+3. Click on `Upload a new agent`.
+4. Enter the required information. `Agent class` needs to be a fully qualified Java class name, including package, e.g. `org.example.TestAgent`. The uploaded `.jar` file needs to include implementation for the the given class name.
+
+Note that:
+* Multiple files may be uploaded simultaneously. Each one will have to be entered through the dialog, however.
+* It may take some time before your agent can be used in experiments. It has to be registered in the core system. When that happens and there is no problem with your agent, it will display in experiment editor after a page refresh.
+
+### How to track experiment progress?
+
+1. Open the default page.
+2. Click on `My experiments` in the left menu.
+3. Find your experiment. You will its status. You may expand it to view individual tasks and results that have already been computed for it.
+
+### How to export experiment results to CSV?
+
+1. Open the default page.
+2. Click on `My experiments` in the left menu.
+3. Find your experiment.
+4. Expand the `RESULTS` column (see [regular table views](#regularTableViews)).
+5. Click on the `Download` button located on the same row as your experiment. A progress dialog will appear.  
+6. When the result `.csv` is generated, the progress dialog's `Abort` button will change into a `Finished` button. Click on it. The file will be downloaded.
+
+### How to change priority of running experiments?
+
+Note that this is an administrator feature.
+
+1. Open the default page.
+2. Click on `All experiments` in the left menu.
+3. Find your experiment.
+4. Expand the `TOTAL_PRIORITY` column (see [regular table views](#regularTableViews)).
+5. Change the `TOTAL_PRIORITY` value on the same row as your experiment, if enabled. If it is not, the experiment is not running anymore.
+
+
+
+
+
+

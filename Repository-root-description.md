@@ -45,7 +45,9 @@ Several other files in the repository's root are related to the aforementioned W
 
 1. `custom.css`  
 Contains custom CSS styles that override the Wiki's default styles to make it a bit nicer to work with.
-2. `wiki-config.rb`
+2. `custom.js`  
+Contains custom Javascript that enables support for videos.
+3. `wiki-config.rb`  
 Contains configuration for the wiki.
-3. `wiki-launch.sh`  
+4. `wiki-launch.sh`  
 Startup script for the wiki. See [[how to launch wiki|02-Launching]].

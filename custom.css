@@ -33,10 +33,10 @@
 
 .markdown-body p:empty
 {
-    display: none;
+    display: none; /* probably a bad way of adding space between page items */
 }
 
-.toc
+.markdown-body .toc, .markdown-body pre.highlight
 {
     margin-bottom: 2em;
 }
@@ -57,6 +57,11 @@
 .markdown-body h2
 {
     margin: 2.5em 0 15px;
+}
+
+.markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6  
+{
+    margin: 1.5em 0px 10px;
 }
 
 /********************************************************/
@@ -125,3 +130,7 @@ h5:before
 /********************************************************/
 /* VARIOUS OTHER STYLES */
 
+.embeddedVideo
+{
+    margin: 15px 0; /* to match ".markdown-body p" */
+}

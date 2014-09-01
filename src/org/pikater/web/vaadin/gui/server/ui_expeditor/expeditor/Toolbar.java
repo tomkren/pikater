@@ -106,7 +106,20 @@ public class Toolbar extends VerticalLayout
 		
 		MenuItem experimentMenuItem = menu.addItem("Experiment", null);
 		experimentMenuItem.setStyleName("menu-topLevelItem");
-		experimentMenuItem.addItem("Save experiment from active tab...", new Command()
+		experimentMenuItem.addItem("Load into a new tab...", new Command()
+		{
+			private static final long serialVersionUID = -2425266907437419549L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem)
+			{
+				loadArbitraryExperimentIntoANewTab();
+			}
+		});
+		
+		MenuItem activeTabMenuItem = menu.addItem("Active tab", null);
+		activeTabMenuItem.setStyleName("menu-topLevelItem");
+		activeTabMenuItem.addItem("Save for later...", new Command()
 		{
 			private static final long serialVersionUID = -8383604249370403859L;
 
@@ -123,7 +136,7 @@ public class Toolbar extends VerticalLayout
 				}, true);
 			}
 		});
-		experimentMenuItem.addItem("Schedule experiment from active tab...", new Command()
+		activeTabMenuItem.addItem("Queue for execution...", new Command()
 		{
 			private static final long serialVersionUID = -8383604249370403859L;
 
@@ -138,16 +151,6 @@ public class Toolbar extends VerticalLayout
 						saveExperimentInActiveTab(activeComponent, ExperimentSaveMode.SAVE_FOR_EXECUTION);
 					}
 				}, true);
-			}
-		});
-		experimentMenuItem.addItem("Load into a new tab...", new Command()
-		{
-			private static final long serialVersionUID = -2425266907437419549L;
-
-			@Override
-			public void menuSelected(MenuItem selectedItem)
-			{
-				loadArbitraryExperimentIntoANewTab();
 			}
 		});
 		

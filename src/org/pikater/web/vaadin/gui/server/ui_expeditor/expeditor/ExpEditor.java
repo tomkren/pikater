@@ -19,7 +19,6 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.T
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.customtabsheet.TabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticDnDWrapper;
-import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.utilcomponent.UtilitiesToolbox;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Border;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
@@ -42,8 +41,8 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	public enum ExpEditorToolbox
 	{
 		BOX_BROWSER,
-		BOX_MANAGER,
-		UTILITIES;
+		BOX_MANAGER;
+		// UTILITIES;
 		
 		public String toDisplayName()
 		{
@@ -53,8 +52,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 					return "Available boxes";
 				case BOX_MANAGER:
 					return "Box manager";
+					/*
 				case UTILITIES:
 					return "Utilities";
+					*/
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
@@ -68,8 +69,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 					return Border.WEST;
 				case BOX_MANAGER:
 					return Border.EAST;
+					/*
 				case UTILITIES:
 					return Border.SOUTH;
+					*/
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
@@ -83,8 +86,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 					return KeyCode.ARROW_LEFT;
 				case BOX_MANAGER:
 					return KeyCode.ARROW_RIGHT;
+					/*
 				case UTILITIES:
 					return KeyCode.ARROW_DOWN;
+					*/
 				default:
 					throw new IllegalStateException("Unknown state: " + name());
 			}
@@ -98,7 +103,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	private final BoxBrowserToolbox toolbox_boxBrowser; // WEST
 	private final TabSheet experimentTabs; // CENTER
 	private final BoxManagerToolbox toolbox_boxManager; // EAST
-	private final UtilitiesToolbox toolbox_util; // SOUTH
+	// private final UtilitiesToolbox toolbox_util; // SOUTH
 	
 	// -------------------------------------------------------------
 	// PROGRAMMATIC VARIABLES
@@ -164,6 +169,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		setComponent(Border.EAST, this.toolbox_boxManager);
 		
 		// SOUTH COMPONENT INIT
+		/*
 		this.toolbox_util = new UtilitiesToolbox(ExpEditorToolbox.UTILITIES.toDisplayName(), new MouseEvents.ClickListener()
 		{
 			private static final long serialVersionUID = -4668414159288469109L;
@@ -177,11 +183,12 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		this.toolbox_util.setStyleName("utilitiesToolbox");
 		setComponent(Border.SOUTH, this.toolbox_util);
 		addRowStyleName(Row.SOUTH, "utilitiesToolboxSize");
+		*/
 		
 		setRowHeight(Row.CENTER, new Dimension(DimensionMode.MAX));
 		setColumnWidth(Column.CENTER, new Dimension(100, DimensionUnit.PCT));
 		setToolboxVisible(ExpEditorToolbox.BOX_MANAGER, false);
-		setToolboxVisible(ExpEditorToolbox.UTILITIES, false);
+		// setToolboxVisible(ExpEditorToolbox.UTILITIES, false);
 		setFixedLayout(new Dimension(175, DimensionUnit.PX), new Dimension(DimensionMode.AUTO), new Dimension(275, DimensionUnit.PX));
 		
 		for(final ExpEditorToolbox toolbox : ExpEditorToolbox.values())
@@ -298,8 +305,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 				return toolbox_boxBrowser;
 			case BOX_MANAGER:
 				return toolbox_boxManager;
+				/*
 			case UTILITIES:
 				return toolbox_util;
+				*/
 			default:
 				throw new IllegalStateException("Unknown state: " + toolbox.name());
 		}
@@ -390,6 +399,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 					setColumnInvisible(Column.EAST, Column.CENTER);
 				}
 				break;
+			/*
 			case UTILITIES:
 				if(visible)
 				{
@@ -400,6 +410,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 					setRowInvisible(Row.SOUTH, Row.CENTER);
 				}
 				break;
+			*/
 			default:
 				throw new IllegalStateException("Unknown state: " + toolbox.name());
 		}
