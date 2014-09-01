@@ -295,7 +295,9 @@ Otherwise, a progress dialog will appear.
 4. Follow the wizard, everything all relevant information will be displayed in the right time.
 
 Note that:
-* Multiple files may be uploaded simultaneously. Each one will have to be entered through the wizard, however.
+* Multiple files may be uploaded simultaneously on the same page. Each one will have to be entered through the wizard, however.
+* Each user may only upload 3 files at a time across all pages.
+* The more files are being uploaded, the slower the server's responses will be.
 * Metadata have to be computed for your dataset before it can be used in experiments, visualization and metadata viewer. Metadata can be viewed, when available, by expanding the dataset view to the next step (see above).
 
 ### How to upload a new user agent (computation method)?
@@ -306,7 +308,9 @@ Note that:
 4. Enter the required information. `Agent class` needs to be a fully qualified Java class name, including package, e.g. `org.example.TestAgent`. The uploaded `.jar` file needs to include implementation for the the given class name.
 
 Note that:
-* Multiple files may be uploaded simultaneously. Each one will have to be entered through the dialog, however.
+* Multiple files may be uploaded simultaneously on the same page. Each one will have to be entered through the dialog, however.
+* Each user may only upload 3 files at a time across all pages.
+* The more files are being uploaded, the slower the server's responses will be.
 * It may take some time before your agent can be used in experiments. It has to be registered in the core system. When that happens and there is no problem with your agent, it will display in experiment editor after a page refresh.
 
 ### How to track experiment progress?

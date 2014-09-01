@@ -43,7 +43,10 @@ First and foremost, note several things:
 1. The repository has several branches. Two of them are important:
 	* `master` - contains the latest core system version.
 	* `Eclipse-Vaadin-project` - contains the latest GUI (web application) and documentation versions.
-2. This project requires a JPA-compatible database. At this moment, only PostGRE database is supported.
+2. This project requires:
+	* a JPA-compatible database (at this moment, only PostGRE database is supported) running locally or externally,
+	* a SMTP server running locally. (<font color="red">TODO: ještě něco je potřeba dodat?</font>)
+
 
 #### Database
 

@@ -190,8 +190,6 @@ Quote from user guide: `When you leave the page while a progress dialog with a b
 This happens because dialogs are Vaadin components attached to and dependent on a UI instance (a page instance). When the page is navigated away, it is destroyed on server which means the dialog is also destroyed and the underlying task and its progress as well.
 
 TODO:
-- user upload process
-- reset password & smtp server running
 - gui: editor
 - gui FAQ: How do I display dataset metadata & stuff
 - Table views are defined in the following packages:
