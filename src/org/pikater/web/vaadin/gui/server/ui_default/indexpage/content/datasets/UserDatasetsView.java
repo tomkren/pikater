@@ -5,8 +5,10 @@ import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
+import org.pikater.web.vaadin.gui.server.components.upload.UploadLimitReachedException;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.upload.DatasetUploadWizard;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -41,9 +43,17 @@ public class UserDatasetsView extends DatasetsView
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				MessageBox mb = GeneralDialogs.wizardDialog("Dataset upload guide", new DatasetUploadWizard(uploadManager, uploadInfoProvider));
-				mb.setWidth("600px");
-				mb.setHeight("500px");
+				try
+				{
+					MessageBox mb = GeneralDialogs.wizardDialog("Dataset upload guide", new DatasetUploadWizard(uploadManager, uploadInfoProvider));
+					mb.setWidth("600px");
+					mb.setHeight("500px");
+				}
+				catch (UploadLimitReachedException e)
+				{
+					MyNotifications.showWarning("Try later", "Only 3 concurrent uploads allowed.");
+					return;
+				}
 			}
 		}));
 	}

@@ -6,8 +6,10 @@ import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.dbviews.AgentsDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.forms.AgentUploadForm;
+import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
+import org.pikater.web.vaadin.gui.server.components.upload.UploadLimitReachedException;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -45,10 +47,17 @@ public class UserAgentsView extends AgentsView
 				agentsUploadWizardWindow.setWidth("500px");
 				agentsUploadWizardWindow.setHeight("300px");
 				
-				AgentUploadForm form = new AgentUploadForm(agentsUploadWizardWindow, uploadManager, uploadInfoProvider);
-				form.setStyleName("agentsUploadForm");
-				agentsUploadWizardWindow.setContent(form);
-				agentsUploadWizardWindow.show();
+				try
+				{
+					AgentUploadForm form = new AgentUploadForm(agentsUploadWizardWindow, uploadManager, uploadInfoProvider);
+					form.setStyleName("agentsUploadForm");
+					agentsUploadWizardWindow.setContent(form);
+					agentsUploadWizardWindow.show();
+				}
+				catch (UploadLimitReachedException e)
+				{
+					MyNotifications.showWarning("Try later", "Only 3 concurrent uploads allowed.");
+				}
 			}
 		}));
 	}

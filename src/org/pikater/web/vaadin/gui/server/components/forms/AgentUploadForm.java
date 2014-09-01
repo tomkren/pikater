@@ -16,6 +16,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialog
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
+import org.pikater.web.vaadin.gui.server.components.upload.UploadLimitReachedException;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 
 import com.vaadin.data.validator.RegexpValidator;
@@ -39,7 +40,7 @@ public class AgentUploadForm extends CustomFormLayout
 	private final TextArea tf_agentDescription;
 	private final MyMultiUpload upload;
 	
-	public AgentUploadForm(final Window parentPopup, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider)
+	public AgentUploadForm(final Window parentPopup, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
 	{
 		super(null);
 		

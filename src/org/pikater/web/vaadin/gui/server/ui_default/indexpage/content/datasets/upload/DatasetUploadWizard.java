@@ -16,6 +16,7 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
+import org.pikater.web.vaadin.gui.server.components.upload.UploadLimitReachedException;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.ParentAwareWizardStep;
 
@@ -34,7 +35,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	public DatasetUploadWizard(ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider)
+	public DatasetUploadWizard(ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
 	{
 		super(new DatasetUploadCommons());
 		
@@ -178,7 +179,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 	{
 		private final VerticalLayout vLayout;
 		
-		public Step3(DatasetUploadWizard parentWizard, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider)
+		public Step3(DatasetUploadWizard parentWizard, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
 		{
 			super(parentWizard);
 			this.vLayout = new VerticalLayout();

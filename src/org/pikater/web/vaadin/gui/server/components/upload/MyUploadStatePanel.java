@@ -156,6 +156,7 @@ public class MyUploadStatePanel extends UploadStatePanel
     public void onProgress(StreamVariable.StreamingProgressEvent event)
     {
     	// System.out.println("Bytes received: " + event.getBytesReceived());
+    	/*
         try
         {
             Thread.sleep(500);
@@ -164,6 +165,7 @@ public class MyUploadStatePanel extends UploadStatePanel
         {
             // Logger.getLogger(WidgetTestApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
         super.onProgress(event);
     }
     
