@@ -64,6 +64,7 @@ we have to use:
 <code>\`\`\`java:/src/org/example/ExampleClass.java\`\`\`</code>
 
 **Embedding video**  
+Example:  
 <pre><code>&lt;div class=&quot;embeddedVideo&quot;&gt;
 	&lt;span&gt;video/mp4&lt;/span&gt; // mime-type
 	&lt;span&gt;http://video-js.zencoder.com/oceans-clip.mp4&lt;/span&gt; // URL
