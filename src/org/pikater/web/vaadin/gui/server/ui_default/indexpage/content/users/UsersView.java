@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.UsersDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
@@ -28,14 +28,19 @@ public class UsersView extends DBTableLayout implements IContentComponent
 	}
 
 	@Override
-	public boolean hasUnsavedProgress()
+	public boolean isReadyToClose()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
-	public String getCloseDialogMessage()
+	public String getCloseMessage()
 	{
 		return null;
+	}
+	
+	@Override
+	public void beforeClose()
+	{
 	}
 }

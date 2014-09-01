@@ -23,7 +23,7 @@ public class MyMultiUpload extends MultiFileUpload
     }
     
     // ----------------------------------------------------------------------
-    // OVERRIDEN INTERFACE
+    // INHERITED INTERFACE
     
     @Override
     public MyUploadStatePanel getUploadStatePanel()

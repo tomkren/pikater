@@ -1,7 +1,5 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
-
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Label;
 
@@ -22,14 +20,19 @@ public class UnimplementedView extends Label implements IContentComponent
 	}
 
 	@Override
-	public boolean hasUnsavedProgress()
+	public boolean isReadyToClose()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
-	public String getCloseDialogMessage()
+	public String getCloseMessage()
 	{
 		return null;
+	}
+	
+	@Override
+	public void beforeClose()
+	{
 	}
 }

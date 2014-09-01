@@ -9,13 +9,13 @@ import org.pikater.web.HttpContentType;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.quartzjobs.UploadedDatasetHandler;
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
+import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.ParentAwareWizardStep;
 
@@ -34,13 +34,13 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	public DatasetUploadWizard() 
+	public DatasetUploadWizard(ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider)
 	{
 		super(new DatasetUploadCommons());
 		
 		addStep(new Step1(this));
 		addStep(new Step2(this));
-		addStep(new Step3(this));
+		addStep(new Step3(this, uploadManager, uploadInfoProvider));
 		
 		// renders the 3 methods below useless
 		getFinishButton().setEnabled(false); 
@@ -178,7 +178,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 	{
 		private final VerticalLayout vLayout;
 		
-		public Step3(DatasetUploadWizard parentWizard)
+		public Step3(DatasetUploadWizard parentWizard, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider)
 		{
 			super(parentWizard);
 			this.vLayout = new VerticalLayout();
@@ -190,9 +190,9 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
-			ManageUserUploads uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads); 
 			MyMultiUpload mmu = uploadManager.createUploadButton(
 					"Choose file to upload",
+					uploadInfoProvider,
 					HttpContentType.getDatasetUploadTypes()
 			);
 			mmu.addFileUploadEventsCallback(new IFileUploadEvents()

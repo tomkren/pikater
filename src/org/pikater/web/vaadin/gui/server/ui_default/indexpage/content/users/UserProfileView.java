@@ -4,7 +4,7 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.components.forms.UserProfileForm;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
@@ -33,14 +33,19 @@ public class UserProfileView extends CustomComponent implements IContentComponen
 	}
 	
 	@Override
-	public boolean hasUnsavedProgress()
+	public boolean isReadyToClose()
 	{
-		return innerForm.isFormUpdated();
+		return !innerForm.isFormUpdated();
 	}
 
 	@Override
-	public String getCloseDialogMessage()
+	public String getCloseMessage()
 	{
 		return "Changes were not stored yet. Discard them and continue?";
+	}
+	
+	@Override
+	public void beforeClose()
+	{
 	}
 }

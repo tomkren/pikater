@@ -3,8 +3,8 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 import org.pikater.shared.util.ReflectionUtils;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IWebFeature;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
@@ -42,14 +42,15 @@ public class ContentArea extends Panel
 				result = false; // block the change by default
 				if((event.getOldView() != null) && (event.getOldView() instanceof IContentComponent))
 				{
-					IContentComponent currentView = (IContentComponent) event.getOldView();
-					if(currentView.hasUnsavedProgress())
+					final IContentComponent currentView = (IContentComponent) event.getOldView();
+					if(!currentView.isReadyToClose())
 					{
-						GeneralDialogs.confirm("Navigate away?", currentView.getCloseDialogMessage(), new GeneralDialogs.IDialogResultHandler()
+						GeneralDialogs.confirm("Navigate away?", currentView.getCloseMessage(), new GeneralDialogs.IDialogResultHandler()
 						{
 							@Override
 							public boolean handleResult(Object[] args)
 							{
+								currentView.beforeClose();
 								result = true;
 								return true; // close the dialog
 							}

@@ -39,11 +39,6 @@ public class DatasetsView extends ExpandableView
 		this.mainDatasetsLayout.getTable().setMultiSelect(false); // this is required below
 	}
 	
-	protected DBTableLayout getMainLayout()
-	{
-		return mainDatasetsLayout;
-	}
-	
 	//----------------------------------------------------
 	// VIEW INTERFACE
 
@@ -56,22 +51,35 @@ public class DatasetsView extends ExpandableView
 	}
 
 	@Override
-	public boolean hasUnsavedProgress()
+	public boolean isReadyToClose()
 	{
-		return false; // datasets are completely read-only, except for adding new datasets which is independent of Vaadin anyway
+		return true; // datasets are completely read-only, except for adding new datasets which is independent of Vaadin anyway
 	}
 
 	@Override
-	public String getCloseDialogMessage()
+	public String getCloseMessage()
 	{
 		return null;
 	}
+	
+	@Override
+	public void beforeClose()
+	{
+	}
+	
+	//----------------------------------------------------
+	// OTHER INTERFACE
 	
 	@Override
 	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()
 	{
 		// this is called in the constructor via super
 		return new DatasetOverviewStep(this);
+	}
+	
+	protected DBTableLayout getMainLayout()
+	{
+		return mainDatasetsLayout;
 	}
 	
 	//----------------------------------------------------------------------------

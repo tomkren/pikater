@@ -31,31 +31,42 @@ public class TestExpandableView extends ExpandableView
 		this.mainTestLayout.setReadOnly(true);
 	}
 	
-	@Override
-	public boolean hasUnsavedProgress()
-	{
-		return false;
-	}
-
-	@Override
-	public String getCloseDialogMessage()
-	{
-		return null;
-	}
+	//-----------------------------------------------------------
+	// VIEW INTERFACE
 	
-	@Override
-	public void attach()
-	{
-		super.attach();
-		enter(null);
-	}
-
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
 		// always call these last, when you're absolutely ready to display the content
 		this.mainTestLayout.setView(new TestDBViewRoot(new TestTableDBView()));
 		super.finishInit(); // don't forget to!
+	}
+	
+	@Override
+	public boolean isReadyToClose()
+	{
+		return true;
+	}
+
+	@Override
+	public String getCloseMessage()
+	{
+		return null;
+	}
+	
+	@Override
+	public void beforeClose()
+	{
+	}
+	
+	//-----------------------------------------------------------
+	// OTHER INTERFACE
+	
+	@Override
+	public void attach()
+	{
+		super.attach();
+		enter(null);
 	}
 
 	@Override

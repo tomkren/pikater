@@ -14,7 +14,7 @@ import org.pikater.web.vaadin.gui.server.components.console.SimpleConsoleCompone
 import org.pikater.web.vaadin.gui.server.components.dbviews.TestDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
 
 import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -38,6 +38,9 @@ public class TestView extends VerticalLayout implements IContentComponent
 		// dummyDBTableLayout();
 		dummyExpandableDBTableLayout();
 	}
+	
+	//----------------------------------------------------
+	// VIEW INTERFACE
 
 	@Override
 	public void enter(ViewChangeEvent event)
@@ -45,15 +48,20 @@ public class TestView extends VerticalLayout implements IContentComponent
 	}
 
 	@Override
-	public boolean hasUnsavedProgress()
+	public boolean isReadyToClose()
 	{
 		return false;
 	}
 
 	@Override
-	public String getCloseDialogMessage()
+	public String getCloseMessage()
 	{
 		return null;
+	}
+	
+	@Override
+	public void beforeClose()
+	{
 	}
 	
 	// -------------------------------------------------------------------

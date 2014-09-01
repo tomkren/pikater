@@ -44,16 +44,24 @@ public class BatchesView extends ExpandableView
 	}
 
 	@Override
-	public boolean hasUnsavedProgress()
+	public boolean isReadyToClose()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
-	public String getCloseDialogMessage()
+	public String getCloseMessage()
 	{
 		return null;
 	}
+	
+	@Override
+	public void beforeClose()
+	{
+	}
+	
+	//----------------------------------------------------
+	// OTHER INTERFACE
 
 	@Override
 	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()

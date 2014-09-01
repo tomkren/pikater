@@ -9,13 +9,13 @@ import org.pikater.web.HttpContentType;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.quartzjobs.UploadedAgentHandler;
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
+import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 
 import com.vaadin.data.validator.RegexpValidator;
@@ -38,8 +38,8 @@ public class AgentUploadForm extends CustomFormLayout
 	private final TextField tf_agentClass;
 	private final TextArea tf_agentDescription;
 	private final MyMultiUpload upload;
-
-	public AgentUploadForm(final Window parentPopup)
+	
+	public AgentUploadForm(final Window parentPopup, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider)
 	{
 		super(null);
 		
@@ -62,9 +62,9 @@ public class AgentUploadForm extends CustomFormLayout
 		this.tf_agentDescription.setSizeFull();
 		addField("description", tf_agentDescription);
 		
-		ManageUserUploads uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads);
 		this.upload = uploadManager.createUploadButton(
 				"Choose file to upload (.jar)",
+				uploadInfoProvider,
 				EnumSet.of(HttpContentType.APPLICATION_JAR)
 		);
 		this.upload.addFileUploadEventsCallback(new IFileUploadEvents()
@@ -129,7 +129,7 @@ public class AgentUploadForm extends CustomFormLayout
 		
 		addCustomButtonInterface(this.upload);
 	}
-
+	
 	@Override
 	public IOnSubmit getSubmitAction()
 	{

@@ -2,9 +2,12 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents;
 
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.ManageSession;
+import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.dbviews.AgentsDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.forms.AgentUploadForm;
 import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
+import org.pikater.web.vaadin.gui.server.components.upload.MyUploadStateWindow;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -16,7 +19,17 @@ import com.vaadin.ui.Button.ClickEvent;
 public class UserAgentsView extends AgentsView
 {
 	private static final long serialVersionUID = 1257881871718854102L;
-
+	
+	/**
+	 * This should be a constant reference across all UI instances.
+	 */
+	private ManageUserUploads uploadManager;
+	
+	/**
+	 * One upload manager per UI instance.
+	 */
+	private MyUploadStateWindow uploadInfoProvider;
+	
 	public UserAgentsView()
 	{
 		super();
@@ -32,7 +45,7 @@ public class UserAgentsView extends AgentsView
 				agentsUploadWizardWindow.setWidth("500px");
 				agentsUploadWizardWindow.setHeight("300px");
 				
-				AgentUploadForm form = new AgentUploadForm(agentsUploadWizardWindow);
+				AgentUploadForm form = new AgentUploadForm(agentsUploadWizardWindow, uploadManager, uploadInfoProvider);
 				form.setStyleName("agentsUploadForm");
 				agentsUploadWizardWindow.setContent(form);
 				agentsUploadWizardWindow.show();
@@ -43,7 +56,29 @@ public class UserAgentsView extends AgentsView
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
+		this.uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads);
+		this.uploadInfoProvider = uploadManager.createUploadInfoProvider();
+		
 		// required to be executed after initializing DB view
 		setView(new AgentsDBViewRoot(new ExternalAgentTableDBView(ManageAuth.getUserEntity(VaadinSession.getCurrent()))));
+	}
+	
+	@Override
+	public boolean isReadyToClose()
+	{
+		return !uploadInfoProvider.isAFileBeingUploaded(); // only inspect uploads in this UI instance
+	}
+	
+	@Override
+	public String getCloseMessage()
+	{
+		return "Uploads will be interrupted. Continue?";
+	}
+	
+	@Override
+	public void beforeClose()
+	{
+		super.beforeClose();
+		this.uploadInfoProvider.interruptAll(); // only interrupt uploads originated in this UI instance
 	}
 }

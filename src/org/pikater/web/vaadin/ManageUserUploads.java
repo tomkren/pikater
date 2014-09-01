@@ -41,12 +41,6 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 	// INTERNAL FIELDS
 	
 	/**
-	 * One upload state window for each user. If he issues uploads from multiple upload components,
-	 * he will still see a single upload state window with all his issued uploads.
-	 */
-	private final MyUploadStateWindow stateWindow;
-	
-	/**
 	 * How many files the corresponding user uploads at the moment.
 	 */
 	private int currentUploadsCount;
@@ -62,8 +56,6 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 	
 	public ManageUserUploads()
 	{
-		this.stateWindow = new MyUploadStateWindow();
-		this.stateWindow.setWindowPosition(MyUploadStateWindow.WindowPosition.BOTTOM_RIGHT);
 		this.currentUploadsCount = 0;
 		this.originalPushMode = null;
 	}
@@ -113,6 +105,13 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 	// -----------------------------------------------
 	// OTHER PUBLIC METHODS
 	
+	public MyUploadStateWindow createUploadInfoProvider()
+	{
+		MyUploadStateWindow result = new MyUploadStateWindow();
+		result.setWindowPosition(MyUploadStateWindow.WindowPosition.BOTTOM_RIGHT);
+		return result;
+	}
+	
 	/**
 	 * This is the most important method of this class.
 	 * Creates a new upload button and binds it with the constant UploadStateWindow instance, unique for each
@@ -123,9 +122,9 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 	 * @param uploadedFileHandler
 	 * @return
 	 */
-	public MyMultiUpload createUploadButton(String caption, EnumSet<HttpContentType> allowedMIMETypes)
+	public MyMultiUpload createUploadButton(String caption, MyUploadStateWindow uploadInfoProvider, EnumSet<HttpContentType> allowedMIMETypes)
 	{
-		MyMultiUpload result = new MyMultiUpload(stateWindow, false); // true doesn't work... seems to be a bug in the plugin
+		MyMultiUpload result = new MyMultiUpload(uploadInfoProvider, false); // true doesn't work... seems to be a bug in the plugin
 		result.setMaxFileSize(oneGB);
 		result.setAcceptedMimeTypes(HttpContentType.getMimeTypeList(allowedMIMETypes));
 		result.setMimeTypeErrorMsgPattern(String.format("Error: you can only upload '%s' files via this dialog.", 
@@ -137,6 +136,9 @@ public class ManageUserUploads implements Serializable, IFileUploadEvents
 		return result;
 	}
 
+	/** 
+	 * @return whether a file is being uploaded in ANY UI instance
+	 */
 	public boolean isAFileBeingUploaded()
 	{
 		return get() > 0;

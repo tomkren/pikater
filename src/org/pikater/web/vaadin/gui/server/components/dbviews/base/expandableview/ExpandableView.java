@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.components.dbviews.base.expandableview
 
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.IContentComponent;
 
 public abstract class ExpandableView extends WizardWithDynamicSteps<IWizardCommon> implements IContentComponent
 {

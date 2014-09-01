@@ -13,7 +13,6 @@ import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.test.TestV
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users.UserProfileView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.users.UsersView;
 
-import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinSession;
 
 public class ContentProvider
@@ -24,12 +23,6 @@ public class ContentProvider
 		String toMenuCaption();
 		String toNavigatorName();
 		Class<? extends IContentComponent> toComponentClass();
-	}
-	
-	public interface IContentComponent extends View
-	{
-		boolean hasUnsavedProgress();
-		String getCloseDialogMessage();
 	}
 	
 	public enum DefaultFeature implements IWebFeature

@@ -6,7 +6,6 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.IContentComponent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
@@ -40,14 +39,19 @@ public class WelcomeView extends Label implements IContentComponent
 	}
 	
 	@Override
-	public boolean hasUnsavedProgress()
+	public boolean isReadyToClose()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
-	public String getCloseDialogMessage()
+	public String getCloseMessage()
 	{
 		return null;
+	}
+	
+	@Override
+	public void beforeClose()
+	{
 	}
 }
