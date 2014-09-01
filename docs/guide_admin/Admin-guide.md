@@ -9,7 +9,7 @@ See [[project overview|Home]].
 ## Responsibilities for administrators
 
 To see a list of what administrators can (and should) do within the GUI, refer to [[web application documentation|Web-documentation#adminFeatures]].
-To learn how these features can be exercised, refer to [[user guide|User-guide]].
+To learn how these features can be exercised, refer to [[user guide|User-guide]], particularly to [[default page|User-guide#defaultPage]].
 
 ## Logging
 
