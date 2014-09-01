@@ -9,9 +9,7 @@
 
 ### Architecture
 
-<font color="red">TODO: is this alright or something needs to be edited/added?</font>
-
-[[architecture.png|architecture picture]]
+[[typical_setup.png|architecture picture]]
 
 
 
