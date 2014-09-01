@@ -9,7 +9,7 @@
 
 ### Architecture
 
-[[typical_setup.png|architecture picture]]
+[[architektura-final.png|architecture picture]]
 
 
 
