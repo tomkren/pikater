@@ -76,6 +76,9 @@ Subfeatures:
 	* listing all queued/failed/finished experiments,
 	* changing their priority and aborting them, if still being computed.
 
+
+
+
 ## Configuration<a name="conf"></a>
 
 All available options can be found and customized in: `WebContent/WEB-INF/web.xml`.
@@ -189,18 +192,12 @@ As such, the client itself polls for changes once in 500ms (current default valu
 Quote from user guide: `When you leave the page while a progress dialog with a background task is running, all progress is lost`.  
 This happens because dialogs are Vaadin components attached to and dependent on a UI instance (a page instance). When the page is navigated away, it is destroyed on server which means the dialog is also destroyed and the underlying task and its progress as well.
 
+-------------------------------------------------------------------
 TODO:
 - gui: editor
-- gui FAQ: How do I display dataset metadata & stuff
-- Table views are defined in the following packages:
-
-1. `org.pikater.shared.database.views`  
-Contains data source definitions for views.
-2. `org.pikater.web.vaadin.gui.server.components.dbviews`  
-Contains GUI implementation that transforms the above data sources into a table.
-
-Altogether, they form "table DB view framework". It is quite configurable and specially designed to be easily modified in various ways.
-
+- admin guide
+- rozhodnutí, proč jsme se rozhodli, jak jsme se rozhodli... (v návaznosti na specifikaci)
+-------------------------------------------------------------------
 
 
 
