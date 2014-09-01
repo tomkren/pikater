@@ -1,6 +1,6 @@
 <!-- --- title: Documentation overview -->
 
-To display the application's goals or life cycle, check the project's [[GitHub overview|Home]].
+To display the application's goals or life cycle, check the [[project overview|Home]].
 
 Otherwise, detailed documentation is divided into the following sections.
 

@@ -45,14 +45,14 @@ Alternatively, you may enter the [fileview](/fileview) and browse the `src` fold
 
 ### Javadoc<a name="javadoc"/>
 
-* [Open Javadoc](../../javadoc/index.html)
+* [Open Javadoc](../../javadoc/index.html) <font color="red">TODO: GitHub link</font>
 
 
 
 
 ## Wiki
 
-The project contains an inline documentation that can easily be displayed as a wiki. For information on how to install, deploy & use it, refer to the [[documentation for administrators|Admin-guide]].
+The project contains an inline documentation that can easily be displayed as a wiki. For information on how to install, deploy & use it, refer to the [[project overview|Home]].
 
 ### Involved technologies
 

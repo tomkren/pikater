@@ -4,7 +4,7 @@
 
 ## How to install, deploy, launch & maintenance
 
-See [[GitHub overview|Home]].
+See [[project overview|Home]].
 
 ## Responsibilities for administrators
 
