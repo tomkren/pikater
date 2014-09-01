@@ -31,8 +31,6 @@ Some lines of code should have been added to your `.profile` and `.bash_profile`
 1. `source $HOME/.profile`
 2. `source $HOME/.bash_profile`
 
----
-
 After you have done so, confirm that RVM is a function. Run:  
 `type rvm | head -n 1`
 
@@ -44,8 +42,9 @@ The following should be printed in response:
 `rvm install 1.9.3`  
 `rvm use 1.9.3`
 
-NOTE 1: Gollum should be compatible with newer Ruby versions and you can use them but 1.9.3 is recommended so we will use it.
-NOTE 2: When opening a new shell window, RVM will use the "default" Ruby. To avoid accidental confusions and possibly even errors while setting up / maintaining Gollum, you should set the Ruby you wish to use with Gollum as default, e.g. `rvm use 1.9.3 --default`.
+Notes:
+* Gollum should be compatible with newer Ruby versions and you can use them but 1.9.3 is recommended so we will use it.
+* When opening a new shell window, RVM will use the "default" Ruby. To avoid accidental confusions and possibly even errors while setting up / maintaining Gollum, you should set the Ruby you wish to use with Gollum as default, e.g. `rvm use 1.9.3 --default`.
 
 ### Create a new gemset for the installed Ruby
 
@@ -53,7 +52,10 @@ For more information as to what a gemset is, take a look at internet or RVM webs
 `rvm gemset create {my-gemset}`  
 `rvm gemset use {my-gemset} --default`
 
-NOTE: <font color="red">never use sudo when working with gemsets</font>. Otherwise, you are running commands as another user in another shell. Hence all of the setup that RVM has done for you is ignored, your environment will be cleared out, files created will be unmodifiable by your user and strange things will happen. (You will start to think that someone has a voodoo doll of your application...)
+<font color="red">NOTE:</font> never use sudo when working with gemsets. If you do, you are running commands as another user in another shell and hence:
+* all of the setup that RVM has done for you is ignored,
+* your environment will be cleared out,
+* files created will be unmodifiable by your user account and strange things will happen (you will start to think that someone has a voodoo doll of your application).
 
 
 
@@ -106,5 +108,5 @@ All created gemsets for the currently selected ruby.
 ### Miscellaneous
 
 * RVM creates a new completely separate gem directory for each version of ruby and gemset, so install away :).
-* If you are deploying to a server or you don't want to wait around for rdoc and ri to install for each gem, you can disable them for gem installs and updates. Just add the following line to your ~/.gemrc or /etc/gemrc:  
+* If you are deploying to a server or you don't want to wait around for rdoc and ri to install for each gem, you can disable them for gem installs and updates. Just add the following line to your `~/.gemrc or /etc/gemrc`:  
 `gem: --no-rdoc --no-ri`

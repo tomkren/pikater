@@ -46,7 +46,7 @@ First and foremost, note several things:
 2. This project requires:
     * Java version 7,
 	* a JPA-compatible database (at this moment, only PostgreSQL database is supported) running locally or externally,
-	* a SMTP server open for local connections
+	* a SMTP server open for local connections.
 
 
 #### Database
