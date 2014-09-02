@@ -281,13 +281,15 @@ Tento agent odpovedá na dve typy správ:
 
 {{{{{{
 
-ComputingAgent ->+MetadataQueen: NewComputedData
+ComputingAgent->+MetadataQueen: NewComputedData
+MetadataQueen->+DataManager: SaveMetadata
 
 }}}}}}
 
 {{{{{{
 
-MetaDataQueen ->- DataManager: SaveMetadata
+PikaterGateway->+MetadataQueen: NewDataset
+MetadataQueen->+DataManager: SaveMetadata
 
 }}}}}}
 
