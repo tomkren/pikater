@@ -17,8 +17,6 @@ import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
-import java.util.ArrayList;
-
 public class ExecuteTaskBehaviour extends AchieveREInitiator{
 
 	private static final long serialVersionUID = -2044738642107219180L;
@@ -94,6 +92,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                 if (node.ContainsOutput("training"))
                 {
                     TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
+
                     labeledData.setDataSourceId(train.getName());
                     node.addToOutputAndProcess(labeledData,"training");
                 }

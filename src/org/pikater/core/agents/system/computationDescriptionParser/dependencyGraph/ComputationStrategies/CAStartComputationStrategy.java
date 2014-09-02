@@ -173,6 +173,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
         else
         {
             datas.importExternalTrainFileName(training);
+            datas.importInternalTrainFileName(training);
         }
         if (testingEdge.isFile()) {
             datas.importExternalTestFileName(testingEdge.getDataSourceId());
@@ -183,6 +184,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
         else
         {
             datas.importExternalTestFileName(testingEdge.getDataSourceId());
+            datas.importInternalTestFileName(testingEdge.getDataSourceId());
         }
 
 		ExpectedDuration duration = computationNode.getExpectedDuration();

@@ -2,7 +2,9 @@ package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.CoreConstants;
+import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
 import java.io.FileNotFoundException;
@@ -18,9 +20,21 @@ public final class Input03 {
         DataSourceDescription fileDataSource = new DataSourceDescription();
         fileDataSource.setDataProvider(fileDataProvider);
 
+        //Create validation method for a computing agent
+        EvaluationMethod evaluationMethod1 =
+        		new EvaluationMethod(CrossValidation.class.getName());
+        
+        //Create cross validation option                
+        NewOption optionF1 = new NewOption("F",8);
+        
+        evaluationMethod1.addOption(optionF1);
+        
 		ComputingAgent comAgent1 = new ComputingAgent();
+		comAgent1.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent1.setTrainingData(fileDataSource);
 		comAgent1.setTestingData(fileDataSource);
+		comAgent1.setModel(null);
+		comAgent1.setEvaluationMethod(evaluationMethod1);
 		
 		NewOption optionOutput1 = new NewOption(
 				CoreConstants.OUTPUT, CoreConstants.OUTPUT_EVALUATION_ONLY); 
@@ -35,10 +49,21 @@ public final class Input03 {
 		computingDataSource1.setDataProvider(complex1);
 
 
+        //Create validation method for a computing agent
+        EvaluationMethod evaluationMethod2 =
+        		new EvaluationMethod(CrossValidation.class.getName());
+        
+        //Create cross validation option                
+        NewOption optionF2 = new NewOption("F",8);
+        
+        evaluationMethod2.addOption(optionF2);
+        
 		ComputingAgent comAgent2 = new ComputingAgent();
+		comAgent2.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent2.setTrainingData(computingDataSource1);
 		comAgent2.setTestingData(computingDataSource1);
 		comAgent2.setModel(null);
+		comAgent2.setEvaluationMethod(evaluationMethod2);
 
 		NewOption optionOutput2 = new NewOption(
 				CoreConstants.OUTPUT, CoreConstants.OUTPUT_EVALUATION_ONLY);

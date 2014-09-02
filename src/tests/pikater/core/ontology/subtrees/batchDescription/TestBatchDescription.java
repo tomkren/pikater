@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraini
 import org.pikater.shared.experiment.UniversalComputationDescription;
 
 import xmlGenerator.Input01;
+import xmlGenerator.Input01_model;
 import xmlGenerator.Input02;
 import xmlGenerator.Input04;
 import xmlGenerator.Input03;
@@ -31,6 +32,10 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input01.createDescription(),
 				"Input01");
+		
+		testComputatingDescription(
+				Input01_model.createDescription(),
+				"Input01_model");
 
 		testComputatingDescription(
 				Input02.createDescription(),

@@ -1,6 +1,9 @@
 package org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies;
 
+import java.util.Map;
+
 import org.pikater.core.agents.system.Agent_Manager;
+import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.StartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
@@ -27,7 +30,11 @@ public class FileSavingStrategy implements StartComputationStrategy {
     @Override
     public void execute(ComputationNode computation) {
         myAgent.log("This will be the place where the data will be saved.");
-        DataSourceEdge dataToSave=(DataSourceEdge)computationNode.getInputs().get("file").getNext();
+        Map<String,ComputationOutputBuffer> map = computationNode.getInputs();
+        ComputationOutputBuffer buffer = map.get("file");
+        if (buffer != null) {
+        	DataSourceEdge dataToSave= (DataSourceEdge)buffer.getNext();
+        }
         computationNode.computationFinished();
     }
 }

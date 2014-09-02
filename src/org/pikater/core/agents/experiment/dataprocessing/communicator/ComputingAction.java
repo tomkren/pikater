@@ -468,7 +468,8 @@ public class ComputingAction extends FSMBehaviour {
 				}
 
 				addTaskOutput(InOutType.TEST, agent.test);
-				addTaskOutput(InOutType.TRAIN, agent.label);
+				addTaskOutput(InOutType.TRAIN, agent.train);
+				addTaskOutput(InOutType.VALIDATION, agent.label);
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);
