@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -63,6 +64,10 @@ public class JPAResult extends JPAAbstractEntity{
 	private String serializedFileName;
 	private String note;
 	@OneToMany
+	@JoinTable(name="result_dataset_inputs")
+	private List<JPADataSetLO> inputs;
+	@OneToMany
+	@JoinTable(name="result_dataset_outputs")
 	private List<JPADataSetLO> outputs;
     @ManyToOne
     private JPAExperiment experiment;
@@ -70,6 +75,7 @@ public class JPAResult extends JPAAbstractEntity{
     private JPAModel createdModel;
     
     public JPAResult(){
+    	this.inputs=new ArrayList<JPADataSetLO>();
     	this.outputs=new ArrayList<JPADataSetLO>();
     }
     
@@ -208,6 +214,10 @@ public class JPAResult extends JPAAbstractEntity{
 	public void setCreatedModel(JPAModel createdModel) {
 		this.createdModel = createdModel;
 	}
+	public List<JPADataSetLO> getInputs() {
+		return inputs;
+	}
+
 	public List<JPADataSetLO> getOutputs() {
 		return outputs;
 	}
