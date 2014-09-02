@@ -65,9 +65,9 @@ we have to use:
 
 **Embedding video**  
 Example:  
-<pre><code>&lt;div class=&quot;embeddedVideo&quot;&gt;
-	&lt;span&gt;video/mp4&lt;/span&gt; // mime-type
-	&lt;span&gt;http://video-js.zencoder.com/oceans-clip.mp4&lt;/span&gt; // URL
+<pre><code>&lt;div class=&quot;video-container&quot;&gt;
+	&lt;code class=&quot;vc-mime&quot;&gt;video/mp4&lt;/code&gt;
+	&lt;a class=&quot;vc-source&quot;&gt;http://video-js.zencoder.com/oceans-clip.mp4&lt;/a&gt;
 &lt;/div&gt;
 </code></pre>
 

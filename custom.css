@@ -5,13 +5,6 @@
 /********************************************************/
 /* OVERRIDE PREDEFINED STYLES */
 
-@media print {
-    .markdown-body
-    {
-        font-size: 15pt;
-    }
-}
-
 #head > .actions
 {
     position: absolute;
@@ -51,14 +44,6 @@
 .toc ul ul ul
 {
     padding-left: 25px;
-}
-
-.markdown-body > *:not(.toc)
-{
-    /* either we pad all elements recursively (all but toc and its children) or we pad nothing at all...
-    padding-left: 15px;
-    padding-right: 15px;
-    */
 }
 
 .markdown-body h2
@@ -137,7 +122,60 @@ h5:before
 /********************************************************/
 /* VARIOUS OTHER STYLES */
 
-.embeddedVideo
+.video-container .vc-mime, .video-container .vc-source
+{
+    display: none;
+}
+
+.video-container
 {
     margin: 15px 0; /* to match ".markdown-body p" */
+}
+
+/********************************************************/
+/* DEFINING/OVERRIDING STYLES FOR PRINTING */
+
+@media print
+{
+    #head > h1
+    {
+        margin-top: 0em;
+        margin-bottom: 1em;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .toc ul ul, .toc ul ul ul, .markdown-body, .markdown-body code, .markdown-body pre, .markdown-body tt
+    {
+        font-size: 15pt;
+    }
+    
+    .horizontal-navigator, .horizontal-navigator .span
+    {
+        display: none;
+    }
+    
+    h2, h3, h4, h5, h6
+    {
+        /*
+         * Don't insert page breaks between headers and text under them.
+         * TODO: doesn't work... wrap the header and the first <p> in a div and use page break inside.
+         */
+        page-break-after: avoid;
+    }
+    
+    .video-container .vc-source
+    {
+        display: initial;
+    }
+    
+    .video-container .video-js
+    {
+        display: none;
+    }
+    
+    #footer
+    {
+        display: none;
+    }
 }

@@ -211,9 +211,9 @@ Selection can be reset either by (again) clicking on selected indexes or clickin
 URL: `http://my.domain/Pikater/editor`  
 <font color="red">TODO</font>
 
-<div class="embeddedVideo">
-	<span>video/mp4</span>
-	<span>http://video-js.zencoder.com/oceans-clip.mp4</span>
+<div class="video-container">
+	<code class="vc-mime">video/mp4</code>
+	<a class="vc-source">http://video-js.zencoder.com/oceans-clip.mp4</a>
 </div>
 
 

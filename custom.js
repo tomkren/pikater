@@ -25,26 +25,23 @@ window.onload = function()
      */
      
     // alert("Start!");
-    var videoContainers = document.getElementsByClassName("embeddedVideo");
+    var videoContainers = document.getElementsByClassName("video-container");
     if(videoContainers)
     {
         // alert("About to add!");
         for (var i = 0; i < videoContainers.length; i++)
         {
             var currentContainer = videoContainers[i];
-            currentContainer.style.width = "640px";
-            currentContainer.style.height = "264px";
+            // currentContainer.style.width = "640px"; // causes problems with PDF printers
+            // currentContainer.style.height = "264px"; // causes problems with PDF printers
             
-            var childInfo = currentContainer.getElementsByTagName("span");
+            var mimeElem = currentContainer.getElementsByClassName("vc-mime")[0];
+            var sourceElem = currentContainer.getElementsByClassName("vc-source")[0];
             currentContainer.appendChild(constructVideoElem(
                 "video_nr_" + (i + 1),
-                childInfo[0].textContent,
-                childInfo[1].textContent
+                mimeElem.textContent,
+                sourceElem.textContent
             ));
-            
-            // don't mistake this for an error... it works!
-            currentContainer.removeChild(childInfo[0]);
-            currentContainer.removeChild(childInfo[0]);
         }
         // alert("Added!");
     }
@@ -66,8 +63,8 @@ function constructVideoElem(currentID, videoType, videoURL)
     var videoElem = document.createElement("video");
     videoElem.id = currentID;
     videoElem.className = "video-js vjs-default-skin vjs-big-play-centered";
-    videoElem.setAttributeNode(document.createAttribute("controls"));
-    videoElem.setAttribute("data-setup", "{ \"width\": \"100%\", \"height\": \"100%\" }");
+    videoElem.setAttribute("controls", undefined);
+    videoElem.setAttribute("data-setup", "{ \"width\": 640, \"height\": 264 }");
     videoElem.appendChild(srcElem);
     videoElem.appendChild(altElem);
     
