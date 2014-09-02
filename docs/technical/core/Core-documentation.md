@@ -160,7 +160,7 @@ Agent\nDataManager-->>-Agent\nManager:
 
 ### Agent ARFFReader         
 
-Agent se využívá k načítání ARF souborů s file systému a transformaci načtených dat na Ontologii. Agent přijímá Ontologii GetData obsahující jméno souboru, na kterou odpovídá Ontologií DataInstances. Tohoto agenta využívají experimentovaní Výpočetní agenti a DataProcessingoví agenti, zároveň ho využívá systémový agent MetadataQueen.    
+Agent se využívá k načítání ARF souborů s file systému a transformaci načtených dat na Ontologii. Agent přijímá Ontologii GetData obsahující jméno souboru, na kterou odpovídá Ontologií DataInstances. Tohoto agenta využívají experimentovaní Výpočetní agenti a DataProcessingoví agenti, zároveň ho využívá systémový agent MetadataQueen.
 
 #### Načítání dat
 {{{{{{
@@ -197,6 +197,40 @@ Jako příklad DataProcessingu uvedeme agenta WeatherSplitter, který dostane na
 Výpočetní agenti jsou specifičtější formou DataProcessingu. Nejedná se zde o pouhé datové transformace, ale provádí se zde přímo proces strojového učení. Nejčastěji se využívá volání externí knihovny např. WEKA, ale nic nebrání vlastní implementaci jakéhokoli metody. Tyto agenty nazýváme výpočetní, protože provádějí podobně jako některé DataProcessingy časově nejnáročnější operace v systému. Z tohoto důvodu se právě tyto výpočty distribuují na Slave servery. Pro reprezentaci výpočetního agent v ComputationDescription se využívá ontologie ComputingAgent.
 
 Agenti stejně jako DataProcessing přijímají ontologii Task, na které provádějí proces trénování, testování a validace. 
+
+#### Natrénované modely ComputingAgentů
+
+Dle požadavků na nový systém výpočetní agent v závislosti na zadání úlohy (`Task`) po jejím vyřešení serializuje svůj model a pošle jej jako součást výsledku výpočtu v conceptu `Task`.
+
+Serializovanou podobu svého modelu lze získat pomocí metody předka všech výpočetních agentů `org.pikater.core.agents.experiment.computing.Agent_ComputingAgent.getAgentObject()`.
+
+Agent Manager tento model přepošle v rámci výsledků k uložení DataManagerovi, který model uloží do databáze s vazbou na daný výsledek a experiment.
+
+##### Uložení natrénovaného modelu
+{{{{{{
+
+ComputingAgent-->>+Manager: (result for Task)
+destroy ComputingAgent
+Manager->+DataManager: SaveResults (Task)
+DataManager->DataManager: saves result to DB
+opt model included in Task result
+DataManager->DataManager: saves model for the result
+end
+DataManager-->>-Manager: 
+}}}}}}
+
+Dříve uložený model lze oživit prostřednictvím akce `org.pikater.core.ontology.subtrees.management.LoadAgent` agenta ManagerAgent.
+
+##### Vytvoření agenta s natrénovaným modelem
+{{{{{{
+
+Manager->+ManagerAgent: LoadAgent (ID)
+activate Manager
+ManagerAgent->+DataManager: GetModel (ID)
+DataManager-->>-ManagerAgent: (agent)
+ManagerAgent->ManagerAgent: starts saved agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
 
 ### Agenti Searcherové
 
