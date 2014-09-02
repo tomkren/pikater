@@ -193,6 +193,40 @@ Mezi jedno z nejdůležitějších využití DataManagera slouží uchováván�
 
 Návrh Univerzálního formátu vychází z nápadu obalit Ontologie ze struktury ComputationDescription a do každého wrapperu kromě výpočetního elementu i vložit nepovinou třídu obsahující informace pro GUI. Třída obalující celou strukturu je pojmenovaná UniversalComputationDescription. Třída obsahuje stejně navrženou stromovou strukturu instancí tříd UniversalElement, jako Ontologie ComputatioDescription. Třída UniversalElement zde slouží jako wrapper instance třídy UniversalOntology, což je třída představující datový model pro jednu instanci Ontologie Dataprocessing. Třída UniversalGui slouží pro reprezentaci informací pro webové GUI.
 
+### Externí agenti
+
+Požadavkem na rozšíření systému bylo umožnění přidávání nových komponent – agentů, kteří musí být specializací jednoho z typů definovaných systémem (search, výpočetní agent, doporučovač), kdy uživatel musí dodat implementaci v podobě JADE agenta, který umí na požádání poslat svoji konfiguraci(mj. pro účely zobrazení v GUI).
+
+Uživatel má možnost skrz webové rozhraní do systému nahrát JAR soubor s přeloženým kódem implementujícím funkčního agenta.  Tento musí dědit od třídy `org.pikater.core.agents.PikaterAgent` nebo některé specializace, např. `org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing`.
+
+Po schválení administrátorem je agent nabídnut v GUI a je prakticky rovnocenný s agenty které poskytuje systém.
+
+Samotné spuštění agenta poskytuje jako službu agent `Agent_ManagerAgent` pomocí stejného rozhraní, jakým se dají vytvářet běžní systémoví agenti, tj. akce `org.pikater.core.ontology.subtrees.management.CreateAgent`.  Pokud tento agent zjistí, že nemá načtený kód potřebný pro spuštění agenta dané třídy, vyžádá si přenos JARka s kódem od agenta `Agent_DataManager`.
+
+Načítání nových tříd v JAR souboru do běžící instance systému zajišťuje platforma JADE, pro kterou je při spouštění systému potřeba zadat na přikazové řádce jako parametr cestu, kde hledat nová JARka:
+
+`-jade_core_management_AgentManagementService_agentspath <cesta>`
+
+V našem případě je to:
+
+`-jade_core_management_AgentManagementService_agentspath core/ext_agents`
+
+Ukázková implementace externího agenta je v samostatném projektu `pikater-ext-agents`, třída `org.pikater.external.ExternalWekaAgent`, která se chová jako výpočetní agent typu RBFNetwork.
+
+#### Vytvoření agenta
+{{{{{{
+
+Manager->+ManagerAgent: CreateAgent (type)
+activate Manager
+opt external agent JAR not present locally
+ManagerAgent->+DataManager: GetExternalAgentJar (type)
+DataManager->DataManager: loads JAR\nstores it locally
+DataManager-->>-ManagerAgent: 
+end
+ManagerAgent->ManagerAgent: starts new agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
+
 ## Popis ontologií:
 
 ### AccountOntology

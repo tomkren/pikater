@@ -90,52 +90,6 @@ ManagerAgent->ManagerAgent: starts saved agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
-### Externí agenti
-
-#### Požadavky
-****
-* Přidávání nových komponent -„krabiček“. „Krabička” musí být specializací
-jednoho z typů definovaných systémem (Search, výpočetní agent,
-doporučovač) a uživatel musí dodat implementaci v podobě JADE agenta,
-který umí na požádání poslat svoji konfiguraci(mj. pro účely zobrazení v GUI).
-Přidání úplně nového typu krabičky umožněno nebude. Implementace bude
-podléhat kontrole a schválení administrátorem systému, systém neposkytuje
-ochranu proti potenciálně škodlivé implementaci uživatelských agentů.
-
-****
-
-#### Realizace
-
-Uživatel má možnost skrz webové rozhraní do systému nahrát JAR soubor s přeloženým kódem implementujícím funkčního agenta.  Tento musí dědit od třídy `org.pikater.core.agents.PikaterAgent` nebo některé specializace, např. `org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing`.
-
-Po schválení administrátorem je agent nabídnut v GUI a je prakticky rovnocenný s agenty které poskytuje systém.
-
-Samotné spuštění agenta poskytuje jako službu agent `Agent_ManagerAgent` pomocí stejného rozhraní, jakým se dají vytvářet běžní systémoví agenti, tj. akce `org.pikater.core.ontology.subtrees.management.CreateAgent`.  Pokud tento agent zjistí, že nemá načtený kód potřebný pro spuštění agenta dané třídy, vyžádá si přenos JARka s kódem od agenta `Agent_DataManager`.
-
-Načítání nových tříd v JAR souboru do běžící instance systému zajišťuje platforma JADE, pro kterou je při spouštění systému potřeba zadat na přikazové řádce jako parametr cestu, kde hledat nová JARka:
-
-`-jade_core_management_AgentManagementService_agentspath <cesta>`
-
-V našem případě je to:
-
-`-jade_core_management_AgentManagementService_agentspath core/ext_agents`
-
-Ukázková implementace externího agenta je v samostatném projektu `pikater-ext-agents`, třída `org.pikater.external.ExternalWekaAgent`, která se chová jako výpočetní agent typu RBFNetwork.
-
-##### Vytvoření agenta
-{{{{{{
-
-Manager->+ManagerAgent: CreateAgent (type)
-activate Manager
-opt external agent JAR not present locally
-ManagerAgent->+DataManager: GetExternalAgentJar (type)
-DataManager->DataManager: loads JAR\nstores it locally
-DataManager-->>-ManagerAgent: 
-end
-ManagerAgent->ManagerAgent: starts new agent
-ManagerAgent-->>-Manager: (agent AID)
-}}}}}}
-
 ### Modely
 
 #### Požadavky
