@@ -258,7 +258,9 @@ Jako defaultní Doporučovač se v Pikateru používal BasicRecommender, který
 
 ### Agent DataManager
 
-Tvůrci původního návrhu Pikater jako multiagentního maximálně adaptibilního systém se z akademického pohledu snažili o architekturu, která odstiňuje ne jenom technologii databáze , ale i existenci databázový systém od Pikateru vyčleněním speciálního agenta pro zajišťující uchovávání dat. Agent komunikuje opět pouze pomocí ontologií a má jako jediný v jádře systému možnost zapisovat do databáze.
+Tvůrci původního návrhu Pikater jako multiagentního maximálně adaptibilního systém se z akademického pohledu snažili o architekturu, která odstiňuje ne jenom technologii databáze , ale i existenci databázový systém od Pikateru vyčleněním speciálního agenta pro zajišťující uchovávání dat. Agent komunikuje opět pouze pomocí ontologií a má jako jediný v jádře systému možnost přímo číst a měnit databázi.
+
+Další informace související s ukládáním dat a funkcemi DataManagera viz kapitola Distribuce a reprezentace dat a dokument Databáze v pikateru.
 
 Webové GUI využívá na rozdíl od jednotlivých agentů přímý přístup do databáze. Teoreticky by šlo i z webového GUI využívat  pro manipulaci s daty agenta DataManagera ve spolupráci s Gateway agentem. Tato varianta by ale nedovolovala použít konstruktů, které se používají pro perzistování změn dat v grafických pohledech přímo do databáze. Byl bz nutný opětovný překlad struktur reprezentující pohled na ontologie a zpět. Reakce na možné nepříchozí JADE zprávy by přinesly nutnost ošetřit spoustu takovýchto případů. Navíc by webové GUI by se stalo zcela závislé na jádře systému.
 
@@ -299,6 +301,79 @@ DataManager->DataManager: loads JAR\nstores it locally
 DataManager-->>-ManagerAgent: 
 end
 ManagerAgent->ManagerAgent: starts new agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
+
+## Distribuce a reprezentace dat
+
+Jedním z požadavků na nový systém bylo zefektivnění datových přenosů, které v systému probíhají.  Tato kapitola popisuje způsob reprezentace a distribuce jednotlivých typů dat, se kterými systém pracuje a kroky provedené pro optimalizaci těchto přenosů.
+
+Podrobnosti k novému schématu databáze jsou v dokumentu Databaze v Pikateru.
+
+### Datové množiny
+
+Pro vnitřní reprezentaci uložených datasetů systém využívá formát ARFF, který je nativním formátem pro systémem využívanou knihovnu strojového učení WEKA.  ARFF soubor je v podstatě textový CSV soubor obohacený o metadata v podobě anotací.
+
+Formát ARFF je podrobně zdokumentován na vlastních stránkách: http://weka.wikispaces.com/ARFF
+
+Využití tohoto formátu bylo upřednostněno před zavedením vlastního nového formátu pro možnost přepoužití existujících parserů, kvalitní dokumentaci a přívětivost formátu pro lidské i strojové zpracování.  Nevýhodou formátu je neúspornost co do objemu dat, což by bylo možné řešit dodatečnou kompresí při ukládání nebo transportu.
+
+Reprezentace datasetu v paměti je třída (JADE concept) `org.pikater.core.ontology.subtrees.dataInstance.DataInstances`.  Tento je obálkou pro data převoditelné z a do formátu zpracovatelného knihovnou WEKA `weka.core.Instances`.
+
+V podobě `DataInstances` jsou datasety zprostředkovány výpočetním agentům prostřednictvím agenta `org.pikater.core.agents.system.Agent_ARFFReader`.  V původní implementaci systému Pikater se načtená data předávaly výpočetním agentům přímo ACL zprávami, což se ukázalo jako neefektivní – potenciálně velká data musely projít drahou serializací a deserializací i pokud se data předávají v rámci jednoho JADE kontejneru.
+
+Tento problém byl pro lokální přenosy (mezi ARFFReaderem a výpočetními agenty) vyřešen využitím "object to agent" rozhraní, které platforma JADE poskytuje.  K přenosu dat pak dojde pouze pomocí odkazu do stejného adresního prostoru, bez zbytečné serializace nebo kopírování dat.
+
+Pro zefektivnění přenosů mezi různými stroji pak byla zavedená keš dat.  Pokud potřebná data již někdy byla na daný stroj přenesena, agent je načte z keše a k dalším přenosům nedochází.  V případech, kdy je přenos datasetu potřebného k výpočtu nevyhnutelný se nyní data nepřenášejí pomocí ACL zprávy v načtené podobě, ale v serializované podobě z databáze.
+
+Pro uložení dat používají výpočetní agenti připravenou metodu `org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing.saveArff()`.  `Agent_Planner` pak prostřednitcvím `Agent_DataManager` a jeho akce `org.pikater.core.ontology.subtrees.dataset.SaveDataset` zajistí uložení dat do databáze pro možnost vizualizace.
+
+#### Načítání dat
+{{{{{{
+
+ComputingAgent->+ARFFReader: GetData
+activate ComputingAgent
+opt data not cached
+  ARFFReader->+DataManager:
+  DataManager->DataManager: gets data from DB,\nstores them locally
+  DataManager-->>-ARFFReader:
+end
+ARFFReader->ARFFReader: loads data
+ARFFReader-->>-ComputingAgent: (data - O2A)
+}}}}}}
+
+### Kód implementující jednotlivé metody strojového učení
+
+Přenos JAR souborů s novými metodami strojového učení (nebo jinými typy externích agentů) zajišťuje `Agent_DataManager` na vyžádání agenta `Agent_ManagerAgent`.  JAR soubory pak na daném stroji zůstanou v keši.
+
+Protože jde typicky o malé soubory (do 5 MB), jejich přenos nepředstavuje riziko velkého vytížení infrastruktury.  Přenos probíhá přímým načtením ze vzdálené databáze do souboru.
+
+{{{{{{
+
+Manager->+ManagerAgent: CreateAgent (type)
+activate Manager
+opt external agent JAR not present locally
+ManagerAgent->+DataManager: GetExternalAgentJar (type)
+DataManager->DataManager: loads JAR\nstores it locally
+DataManager-->>-ManagerAgent: 
+end
+ManagerAgent->ManagerAgent: starts new agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
+
+#### Natrénované a uložené modely (agenti).
+
+Natrénované modely jsou uloženy v podobě serializované Javovské třídy daného agenta.  Samotnou serializaci modelu zajišťuje knihovna WEKA – její klasifikátory implementují rozhraní `Serializable`.
+
+Serializovaní agenti mají typicky do 100 kB a pro potřeby jejich oživení agentem `Agent_ManagerAgent` jsou mu doručováni jako `byte[]` přímo v ACL zprávě.
+
+{{{{{{
+
+Manager->+ManagerAgent: LoadAgent (ID)
+activate Manager
+ManagerAgent->+DataManager: GetModel (ID)
+DataManager-->>-ManagerAgent: (agent)
+ManagerAgent->ManagerAgent: starts saved agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
