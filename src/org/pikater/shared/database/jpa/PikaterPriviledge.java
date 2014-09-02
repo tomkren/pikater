@@ -1,4 +1,4 @@
-package org.pikater.shared.database.jpa.security;
+package org.pikater.shared.database.jpa;
 
 public enum PikaterPriviledge {
 	SAVE_DATA_SET,

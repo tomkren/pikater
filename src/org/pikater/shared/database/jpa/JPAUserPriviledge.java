@@ -9,8 +9,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.pikater.shared.database.jpa.security.PikaterPriviledge;
-
 @Entity
 @Table(name="UserPriviledge")
 @NamedQueries({
