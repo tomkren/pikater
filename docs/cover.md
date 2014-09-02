@@ -1,6 +1,6 @@
 # Aktuální dokumentace
 
-Aktuální verze dokumentace v podobě wiki je dostupná on-line na adrese:
+Aktuální verze dokumentace v podobě wiki včetně netisknutelných video návodů je dostupná on-line na adrese:
 
 http://nassoftwerak.ms.mff.cuni.cz:4567
 
@@ -12,7 +12,7 @@ https://github.com/krajj7/pikater
 
 # Demo aplikace
 
-Aplikace bývá v provozu na adrese:
+Aplikace bývá v provozu na vyžádání na adrese:
 
 http://nassoftwerak.ms.mff.cuni.cz:8080/Pikater
 
