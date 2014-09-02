@@ -70,11 +70,29 @@ Jedná se o systémového agenta, který spouští všechny ostatní systémové
 
 ### Agent ManagerAgent
    
-Tento agent se nachází na každém containeru právě jednou. Jak na master containeru tak na Slave containerech má funkci vládce, který při přijmutí Ontologie CreateAgent vytváří požadovaného agenta specifikovaného ve zprávě. Dále nabízí možnost zabití agenta podle jména pomocí Ontologie KillAgent. Ontologie CreateAgent obsahuje tři fieldy:  String type reprezentující plné jméno třídy agenta,  String name udávající jméno agenta, Ontologii Argumens sloužící pro přepravu argumentů pro nového agenta. Ontologie KillAgent obsahuje pouze jeden field a to String name reprezentující jednoznačné jméno agenta v rámci systému. Agent přijímá Ontologie LoadAgent pro oživení již natrénovaného modelu. Pro uložení již natrénovaného agenta se používá ontologie SaveAgent. Agenti se ukládají i oživují ze souborů umístěných na filesystému. Přepravu souborů z filesystému do databáze nebo na jin stroj řeší modul pro přepravu dat.
+Tento agent se nachází na každém containeru právě jednou. Jak na master containeru tak na Slave containerech má funkci vládce, který při přijmutí Ontologie CreateAgent vytváří požadovaného agenta specifikovaného ve zprávě. Dále nabízí možnost zabití agenta podle jména pomocí Ontologie KillAgent. Ontologie CreateAgent obsahuje tři fieldy:  String type reprezentující plné jméno třídy agenta,  String name udávající jméno agenta, Ontologii Argumens sloužící pro přepravu argumentů pro nového agenta. Ontologie KillAgent obsahuje pouze jeden field a to String name reprezentující jednoznačné jméno agenta v rámci systému. Agent přijímá Ontologie LoadAgent pro oživení již natrénovaného modelu. Pro uložení již natrénovaného agenta se používá ontologie SaveAgent. Agenti se ukládají i oživují ze souborů umístěných na filesystému. Přepravu souborů z filesystému do databáze nebo na jiný stroj řeší modul pro přepravu dat.
 
 Agent jako vládce containeru poskytuje na vyžádání pomocí Ontologie GetComputerInfo informaci o počítači, na kterém běží. Vrací Ontologii ComputerInfo, kde nejžádanější informací o počítači bývá počet jader procesoru. Předpokládá se, že na jednom počítači poběží pouze jeden container. Na agenta ManageraAgenta je možné zaslat zprávu s Ontologií Ping a ověřit jestli je container v rámci JADE dostupný. 
 
+#### Vytvoření agenta
+{{{{{{
 
+Manager->+ManagerAgent: CreateAgent (type)
+activate Manager
+ManagerAgent->ManagerAgent: starts new agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
+
+#### Vytvoření agenta s natrénovaným modelem
+{{{{{{
+
+Manager->+ManagerAgent: LoadAgent (ID)
+activate Manager
+ManagerAgent->+DataManager: GetModel (ID)
+DataManager-->>-ManagerAgent: (agent)
+ManagerAgent->ManagerAgent: starts saved agent
+ManagerAgent-->>-Manager: (agent AID)
+}}}}}}
 
 ### Agent Manager
 
@@ -195,7 +213,7 @@ Návrh Univerzálního formátu vychází z nápadu obalit Ontologie ze struktu
 
 ### Externí agenti
 
-Požadavkem na rozšíření systému bylo umožnění přidávání nových komponent – agentů, kteří musí být specializací jednoho z typů definovaných systémem (search, výpočetní agent, doporučovač), kdy uživatel musí dodat implementaci v podobě JADE agenta, který umí na požádání poslat svoji konfiguraci(mj. pro účely zobrazení v GUI).
+Požadavkem na rozšíření systému bylo umožnění přidávání nových komponent – agentů, kteří musí být specializací jednoho z typů definovaných systémem (searcher, výpočetní agent, doporučovač), kdy uživatel musí dodat implementaci v podobě JADE agenta, který umí na požádání poslat svoji konfiguraci(mj. pro účely zobrazení v GUI).
 
 Uživatel má možnost skrz webové rozhraní do systému nahrát JAR soubor s přeloženým kódem implementujícím funkčního agenta.  Tento musí dědit od třídy `org.pikater.core.agents.PikaterAgent` nebo některé specializace, např. `org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing`.
 
