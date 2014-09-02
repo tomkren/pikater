@@ -57,114 +57,6 @@ Kompletní přestavbou prošla většina ontologií. Jednalo se většinou buď 
 Z hlediska nadstavby Pikateru je důležitý vznik ontologie AgentInfo a výměna ontologie Option, která využívala k reprezentaci informací řetězce na obecnou, typovanou, rozšiřitelnou, validovatelnou, do níž je zároveň možné ukládat informace o omezeních na hodnoty pro každý typ. Ontologie AgentInfo je datová struktura reprezentující jednu krabičku a slouží jako vstupní informace pro grafickou Stavebnici.
 
 
-## Popis ontologií:
-
-### AccountOntology
-
-Tuto množinu Ontologií využívají uživateli definovaní GUIagenti příklad Klára GUIagent, kteří pro poslání Batche ke zpracování, potřebují získat ze svého přihlašovacího jména ID svého uživatelského účtu. Na tyto požadavky zpravidla odpovídá agent DataManager, který je schopen tuto informaci vyhledat v databázi. Dále tuto množinu Ontologií využívá agent Mailing, který potřebuje znát k ID uživatele jeho emailovou adresu.
-
-    
-### AgentInfoOntology
-
-Jedná se o množinu Ontologií využívající se pro provoz informační infrastruktury zajišťující vstupní data pro webové rozhraní. Středobodem této infrastruktury, tudíž nejčastějším uživatelem těchto antologií je agent AgentInfoManager, který za účelem sbírání informací o existujících krabičkách komunikuje s experimentovými agenty.  Nejdůležitější ontologií je AgentInfo antologie, která popisuje účel experimentového agenta z pohledu grafické krabičky. Těchto informací nevyužívá pouze webové GUI, ale také Recommendeři pro zjištění defaultních hodnot Optionů.   
-
-
-### AgentManagementOntology
-
-Následující množinu Ontologií využívají všichni agenti, kteří někdy potřebují nějakého agenta vytvořit, zabít, oživit či zmrazit. Adresátem těchto zpráv bývá agent ManagerAgent, který má na containeru, na kterém se nachází absolutistickou moc nad životy všech agentů.  Služeb agenta ManagerAgent využívá agent Initiator při spouštění systému AgentManager při spouštění Searcherů a Recommenderů. Nejfrekventovaněji tyto služby využívá agent  Planner pro vytváření výpočetních agentů, případně agentů představující Dataprocessing.    
-
-
-### BatchOntology
-
-Tuto roli si osvojili všichni agenti, kteří mají za úkol buď vytvářet, načítat, přepravovat nebo logovat do databáze zadání v jedné Batche. Součástí je pro systém nepostradatelná ontologie ComputationDescription, která slouží k reprezentaci jedné dávky.
-
-### Ontologie ComputationDescription
-
-Ontologie byla navržena tak, aby mohla reprezentovat libovolné množství vzájemně datově závislých DataProcessingu. Jedná se tedy o strukturu logicky představující multigraf, kde vrcholy jsou DataProcessingy a hrany představují tok dat, a to buďto, Errorů nebo datasetů.
-
-DataProcessing představuje obecnou datovou transformaci dat z několika zdrojů na několik různých výstupů. Jedná se tedy z logického pohledu o nejobecnější formu práce s daty v systému zabývající se problémem strojového učení. Ontologie DataProcessing je z tohoto důvodu předkem všech ostatních výpočetních elementů z třídy ComputationDescription. 
-
-#### Struktura
-
-Třída ComputationDescription obsahuje seznam globálních Optionů, který je schopný pojmout za použití ontologie Option neomezeně specifickou konfiguraci. Dále třída obsahuje seznam FileDataSaverů potomků DataProcessingu. Tyto elementy představují logické uložení vyprodukovaných dat v rámci jednoho Batche. Ontologie FileDataSaver obsahuje odkaz na hranu multigrafu, reprezentovanou pomocí DataSourceDescription. Hrana je napojená na další výpočetní element dědící od DataProcessingu. Protože obecný DataProsessing může obsahovat libovolné množství vstupních zdrojů a zároveň může produkovat data pro libovolné množství  DataProcessingů nebo jejich potomků musí každá hrana v multigrafu obsahovat  výstupní identifikátor říkající jaký tip dat má být předán z prvního DataProcessingu do druhého. Zároveň musí ComputationDescription obsahovat i výstupní identifikátor, který říká pro jaký účel se mají data použít. 
-
-V systému se nejčastěji objevují agenti, kteří představují, tak zvaného výpočetního agenta, který v rámci datové transformace z trénovací, testovací a validační množiny dat je schopný, vytvořit natrénovaný model, poskytnout výsledky trénování a testování jako datovou množinu a udat míru chyby, které se model dopouští na daných datech. Tito agenti se v rámci Ontologie ComputationDescription jsou reprezentováni jako ComputationAgent. Agent, který slouží právě k efektivnímu procházení parametru předem zadaného rozsahu, se nazývá Searcher a je zadáván ComputationDescription jako třída Searcher. Searcher vždy spolupracuje s výpočetním agentem a prochází jeho parametry, které nabývají hodnoty Questionmark .
-
-Pokud uživatel snažící se natrénovat model netuší jaká metoda strojového učení by byla pro konkrétní data optimální může využít některého z Recommender agentů, kteří na základě podobnosti dat a již spočítaných výsledků, dokážou poradit vhodnou metodu.  Takovýto agend bude v ComputationDescripion zadefinovaný jako Recommender. 
-  
-Speciálním potomkem DataProcessingu je ontologie CARecSearchComplex pracovně nazývaná jako Trojkrabička. Trojkrabička obsahuje tři vstupy a to Recommendera, Searchera a výpočetního agenta.
- Tato Ontologie je ve skutečnosti hack, který dává uživateli možnost nevybrat si konkrétního výpočetního agenta, ale místo toho vyplnit nedefinovaného a zapojit k němu Recommender.  V případě, že uživatel nevyplní všechny optiony výpočetního agenta musí být zapojený Searcher, který projde množinou přípustných hodnot pro daný Option a pokusí se přiblížit k optimální hodnotě parametrů pro daná data. Trojkrabička umožňuje vícero validních zapojení přičemž, chování Trojkrabičky je závislé na tom, jaké všechny Ontologie z množiny Searcher Recommender a výpočetní agent jsou do ní zapojeny. Nejjednodušší případ zapojení Trojkrabičky je takový, když je na ní připojen pouze samotný konkrétní výpočetní agent se všemi vyplněnými parametry. V tomto případě má Trojkrabička stejný význam, jako kdyby tam nebyla a výpočetní agent byl připojen mimo Trojkrabičku.
-
-Speciálním případem výpočetního elementu dědící od Ontologie DataProcessing je Ontologie FileDataInput, která slouží jako reprezentant vstupního datasetu produkující data pro první řadu výpočetních elementů. 
-
-Dalším speciálním výpočetním elementem  je evaluační metoda, která se zapojuje jako vstup pro výpočetního agenta. Evaluační metoda slouží k určení správné doby procesů učení modelu, aby se našel vhodný kompromis mezi nedostatečně vytrénovaným a přeučeným modelem.        
-    
-### DataOntology
-
-DataOntology je množina ontologií používající se pro přepravu dat mezi agenty.  Díky možnosti spustit výpočet jednoho Batche distribuovaně na více strojích není možné, aby si jednotliví agenti předávali data pouze přes sdílený file systém, ale musela vzniknout infrastruktura pro přesuny dat a tato Ontologie. Tuto infrastrukturu z hlediska objemu dat bude nejvíce vytěžovat přeprava vstupních datasetů a vypočtených dat.  Jako soubory se mezi agenty na různých containerech přepravují JARka externích agentů, která nejsou součástí GitHub repozitáře.  Uživatelem těchto ontologií jsou tudíž agenti, kteří potřebují v systému přepravovat nějaká data. Agent ManagerAgent využívá přepravy JARek externích agentů, v případě že obdrží požadavek na vytvoření nového agenta jehož zdrojové kódy nemá na svém containeru k dispozici. Agent ARFFReader žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním file systému . Agent Planner využívá ontologie pro řízení, ukládání vypočtených dat do databáze odstíněné centrálním DataManagerem.     
-
-
-### DurationOntology 
-
-Následující množinu ontologií využívá primárně agent DutationAgent, který slouží k měření doby výpočtu.   
-
-
-### ExperimentOntology
-
-Ontologie ExperimentOntology se využívá pro manipulaci s takzvanými experimenty, což jsou podproblémy jedné Batche. Tuto roli nejvíce využívá agent Manager, který za pomoci agenta DataManagera řeší řízení, rozpársování Batche na jednotlivé experimenty jejich vytvoření a zalogování a změny jejich statusů.    
-
-### FileNameTrnslationOntology
-
-Pro potřebu překládání uživatelsky přívětivého takzvaného externího jména datasetu na systémem zpracovatelné interní jméno, se využívá právě tato skupina Ontologií. Interní jméno datového souboru je zpravidla md5 hash jeho obsahu. Tato konvence interního pojmenovávání souborů zjednodušuje řízení efektivní přepravy dat a přirozenou cestou zabraňuje tomu, aby se na filesystému objevovaly jedny data vícekrát. Dochází zde sice k překryvu jmen souborů, které mají logicky rozdílný význam, ovšem v problematice strojového učení jde touto cestou mnohonásobně zefektivnit využitelnost potřebných diskových kapacit. Překlad prování agent DataManager, který má uloženou mapu párování interních a externích jmen souborů. Překlad se volá z agenta Managera při pársování zadaných Batchů, kde v Ontologii FileDataImput překládá logické jméno vstupního ARFF souboru. Překlad využívá také agent Duration pro získání interního jména datasetu nastaveného v konfiguraci,  na kterém se opakovaně spouští úloha lineární regrese představující pro systém jednu logickou jednotku systémového času.       
-
-
-### MailingOntology
-
-Tuto množinu Ontologií využívají všichni agenti, kteří chtějí komunikovat s agentem Mailing za účelem nechání si poslat emailovou zprávu. Této možnosti využívá agent Manager při skončení výpočtu každého Batche za účelem informovat uživatele o dokončení výpočtu. V rámci celého systému Pikater se odesílání emailů využívá k informování uživatele i na dalších místech. Webové GUI emailem oznamuje třeba změnu hesla k uživatelskému účtu. V těchto případech se ale emaily posílají přímo z webové nástavby Pikateru za použití stejné knihovny, kterou využívá agent Mailing. Díky tomuto odstínění webové GUI z hlediska návrhu systému, získalo větší nezávislost na jádře a dostalo možnost provádět, některé pro jádro systému nepříliš podstatné operace samo.  
-
-
-### MetadataOntology
-
-Výzkumnou motivací pro vznik systému Pikater bylo na základě předchozích výpočtů a podobností dat odhadovat optimální metodu strojového učení pro právě řešený experiment. Proces určení míry podobnosti dvou ARFFsouborů je časově i paměťově náročná operace, která může zároveň nezanedbatelně zatěžovat přenesenou infrastrukturu. Díky motivaci odstranit tyto problémy, došlo ke vzniku metadat , které by měly sloužit jako popis množiny dat. Algoritmus porovnávající ARFF soubory nevyužívá přímo fyzických dat, ale vystačí si pouze s vygenerovanými metadaty. Díky vhodné volbě struktury metadat jsou schopny Rekomendři velmi dobře odhadnout z předchozích výpočtů optimální metodu strojového učení. Cílem této Ontologie je zajistit řízení generování,  přepravu, ukládání a načítání datadat. Agent, který v systému zajišťuje vygenerování metadat ve spolupráci s ARFFReaderem je agent MetadataQueen. Tomuto agentovi chodí zprávy informujícího o přidání nového vstupního datasetu od Gateway agenta, nebo od uživateli definovanými GUIagenty. Příkazy pro vygenerování metadat k vypočteným datovým souborům posílá i agent Planner,  v koordinaci s datovými přenosy souborů. Vypočtená metadata se posílají k uložení agentovi DataManager, který je ukládá do databáze. Konzumentem pro každý dataset i vypočtená data vygenerovaných metadat jsou z pravidla pouze Recommendři, kteří provádějí na jejich základě porovnávání datových množin.      
-
-
-
-### ModelOntology
-
-ModelOntology je množina Ontologií používající se pro práci s modely. Hlavní funkcionalitou je ukládání a načítání natrénovaných modelů. Ukládání modelu zajišťuje agent ManagerAgent ve spolupráci s DataManagerem.  
- 
-
-### RecommendOntology
-
-Tuto množinu Ontologií využívá agent Manager pro komunikaci s Recommendery. Účelem komunikace je předat popis experimentu a to primárně identifikovat vstupní data na základě kterých zvolený Recommender vybere nejlepšího agenta pro tento problém strojového učení. Následně doporučí Optiony,  se kterými by se měl agent spouštět za účelem minimalizovat chybu ErrorRate. Výsledky za použití těchto ontologií, pak Recommender vrací Managerovi.  
-
-
-
-### ResultOntology
-
-Výpočetní agenti, za jednu sekvenci trénování, testování a validace, vyprodukují ontologickou strukturu pojmenovanou Results, která obsahuje výsledky důležité z pohledu výzkumu strojového učení, což paradoxně nejsou výsledná data, ale jedná se o seznam chyb, popisující úspěšnost učení modelu. Cílem této ontologie je zajistit  pro každou tuto sekvenci uložení ontologie Results za použití agenta DataManagera do databází. O ukládání výsledků se stará agent Manager.  
-
-
-### SearchOntology
-
-Agent Manager tuto Ontologii používá pro komunikaci se Searcherem za účelem efektivního prohledávání, dávající důraz na vhodný poměr exploatace a explorace, stavového prostoru Optionu. Autoři jednotlivých Searcher agentů se snažili vytvořit co nejobecnější interface pro předávání parametrů pro procházení z agenta Managera do agenta Searchera. Za tímto účelem vznikla Ontologie Eval, na kterou se překládá Ontologie Option.   
-
-
-### TaskOntology
-
-TaskOntology je Ontologie, která umožňuje pracovat jednotlivým agentům v rámci Pikateru s jedním Taskem, neboli s objektem reprezentující nejnižší úroveň logického problému. Agent Manager, který jako první v řadě z hlediska průtoku dat používá Ontologi Task, neřeší pouze problém řízení výpočtu, ale také transformace příchozích Batchů na jednotlivé experimenty, které transformuje na seznam konkrétních dále nedělitelných Tasků. Tyto Tasky pak přeposílá agentovi Plannerovi, který za podpory hlídání datových závislostí předává Tasky distribuovaným výpočetním agentům, případně DataProcessingům. Jak DataProcessingy, tak výpočetní agenti, přijímají zadání jednoho výpočtu jako Ontologii Task. 
-
-### Ontologie Task
-
-Ontologie Task je obecná struktura, která je schopná pojmout jakýkoli pro Pikater dále nedělitelný problém určený pro libovolný typ agenta, obsahující neomezené množství vstupních souborů potřebných pro výpočet. Ukrývá informace o identifikaci Batche experimentu, ke kterému patří identifikátor uživatele, který Batche zadal  a spoustu dalších Optionů ovlivňující běh výpočtu. Pro plánování Tasku je zde informace o předpokládané délce běhu výpočtu, která má zajistit průchodnost systému pro krátce trvající výpočty. Po výpočtu Tasku se Ontologie Task předává zpátky až do agenta Managera. V tento okamžik jsou v Tasku vyplněné informace o vypočtených souborech, které výpočetní agent nebo DataProcessing vyprodukoval na file systém. Zároveň vypočtený Task obsahuje datum a čas začátku a konce běhu výpočtu. 
-
-
-Další agent využívající Ontologii Task je agent Duration, který využívá vlastního výpočetního agenta Duration servis odděděného od Wekovského výpočetního agenta LinearRegresion  pro počítání samplu lineární regrese. Zadávání tohoto samplu se ovšem posílá přímo agentovi DurationServis bez využití služeb agenta Plannera.        
-
-
-### TerminationOntology
-
-Tuto Ontologii využívají všichni experimentoví agenti, což jsou agenti typu výpočetní agent Recommender a Sercher, případně DataProcessing, kteří jsou buď defaultně součástí systému a nebo si je uživatel může do systému sám přidat v podobě JARka. O zabíjení agentů se stará agent ManagerAgent. Při přidání nového agenta do systému nebo inicializaci systému společně s agentem AgentInfoManager budí a následně zabíjí experimentální agenty. Dochází k buzení a následnému šetrnému zabíjení experimentových agentů.  Aparát šetrného zabíjení agentů je v systému nezbytný, agenty nejde jednoduše pouze zabít, ale musí se také nechat odregistrovat z JADE Directory Facilitator. Nejjednodušší cestou je požádat příslušného agenta z pozice ManagerAgenta, aby sám sebe ukončil. Snaha o čistý způsob zabíjení agentů byla primární motivací pro vznik této ontologie.  
 
 ## Popis agentů
 
@@ -281,3 +173,112 @@ Webové GUI využívá na rozdíl od jednotlivých agentů přímý přístup do
 Mezi jedno z nejdůležitějších využití DataManagera slouží uchovávání a načítání Batchů. Pro uložení jedné instance třídy ComputationDescription se využívá takzvaný "Univerzální formát". Motivací pro vznik tohoto formátu byla snaha vytvořit obecný a rozšiřitelný způsob jak ukládat Batche zadané jak z webového GUI tak z consolových GUIAgentů. Batche zadané z webového GUI obsahují na rozdíl od těch zadaných z konfiguráku informace navíc. Jsou to informace potřebné pro grafické zobrazení krabiček ve webové stavebnici. Jako příklad nepovinných informací slouží Xová a Yová pozice krabičky umístěná v poli stavebnice. Formát dává možnost obohatit stavebnici o další funkce a zároveň se snaží nenutit jádro Pikateru o těchto informacích vědět nebo jim dokonce rozumnět.
 
 Návrh Univerzálního formátu vychází z nápadu obalit Ontologie ze struktury ComputationDescription a do každého wrapperu kromě výpočetního elementu i vložit nepovinou třídu obsahující informace pro GUI. Třída obalující celou strukturu je pojmenovaná UniversalComputationDescription. Třída obsahuje stejně navrženou stromovou strukturu instancí tříd UniversalElement, jako Ontologie ComputatioDescription. Třída UniversalElement zde slouží jako wrapper instance třídy UniversalOntology, což je třída představující datový model pro jednu instanci Ontologie Dataprocessing. Třída UniversalGui slouží pro reprezentaci informací pro webové GUI.
+
+## Popis ontologií:
+
+### AccountOntology
+
+Tuto množinu Ontologií využívají uživateli definovaní GUIagenti příklad Klára GUIagent, kteří pro poslání Batche ke zpracování, potřebují získat ze svého přihlašovacího jména ID svého uživatelského účtu. Na tyto požadavky zpravidla odpovídá agent DataManager, který je schopen tuto informaci vyhledat v databázi. Dále tuto množinu Ontologií využívá agent Mailing, který potřebuje znát k ID uživatele jeho emailovou adresu.
+
+    
+### AgentInfoOntology
+
+Jedná se o množinu Ontologií využívající se pro provoz informační infrastruktury zajišťující vstupní data pro webové rozhraní. Středobodem této infrastruktury, tudíž nejčastějším uživatelem těchto antologií je agent AgentInfoManager, který za účelem sbírání informací o existujících krabičkách komunikuje s experimentovými agenty.  Nejdůležitější ontologií je AgentInfo antologie, která popisuje účel experimentového agenta z pohledu grafické krabičky. Těchto informací nevyužívá pouze webové GUI, ale také Recommendeři pro zjištění defaultních hodnot Optionů.   
+
+
+### AgentManagementOntology
+
+Následující množinu Ontologií využívají všichni agenti, kteří někdy potřebují nějakého agenta vytvořit, zabít, oživit či zmrazit. Adresátem těchto zpráv bývá agent ManagerAgent, který má na containeru, na kterém se nachází absolutistickou moc nad životy všech agentů.  Služeb agenta ManagerAgent využívá agent Initiator při spouštění systému AgentManager při spouštění Searcherů a Recommenderů. Nejfrekventovaněji tyto služby využívá agent  Planner pro vytváření výpočetních agentů, případně agentů představující Dataprocessing.    
+
+
+### BatchOntology
+
+Tuto roli si osvojili všichni agenti, kteří mají za úkol buď vytvářet, načítat, přepravovat nebo logovat do databáze zadání v jedné Batche. Součástí je pro systém nepostradatelná ontologie ComputationDescription, která slouží k reprezentaci jedné dávky.
+
+### Ontologie ComputationDescription
+
+Ontologie byla navržena tak, aby mohla reprezentovat libovolné množství vzájemně datově závislých DataProcessingu. Jedná se tedy o strukturu logicky představující multigraf, kde vrcholy jsou DataProcessingy a hrany představují tok dat, a to buďto, Errorů nebo datasetů.
+
+DataProcessing představuje obecnou datovou transformaci dat z několika zdrojů na několik různých výstupů. Jedná se tedy z logického pohledu o nejobecnější formu práce s daty v systému zabývající se problémem strojového učení. Ontologie DataProcessing je z tohoto důvodu předkem všech ostatních výpočetních elementů z třídy ComputationDescription. 
+
+#### Struktura
+
+Třída ComputationDescription obsahuje seznam globálních Optionů, který je schopný pojmout za použití ontologie Option neomezeně specifickou konfiguraci. Dále třída obsahuje seznam FileDataSaverů potomků DataProcessingu. Tyto elementy představují logické uložení vyprodukovaných dat v rámci jednoho Batche. Ontologie FileDataSaver obsahuje odkaz na hranu multigrafu, reprezentovanou pomocí DataSourceDescription. Hrana je napojená na další výpočetní element dědící od DataProcessingu. Protože obecný DataProsessing může obsahovat libovolné množství vstupních zdrojů a zároveň může produkovat data pro libovolné množství  DataProcessingů nebo jejich potomků musí každá hrana v multigrafu obsahovat  výstupní identifikátor říkající jaký tip dat má být předán z prvního DataProcessingu do druhého. Zároveň musí ComputationDescription obsahovat i výstupní identifikátor, který říká pro jaký účel se mají data použít. 
+
+V systému se nejčastěji objevují agenti, kteří představují, tak zvaného výpočetního agenta, který v rámci datové transformace z trénovací, testovací a validační množiny dat je schopný, vytvořit natrénovaný model, poskytnout výsledky trénování a testování jako datovou množinu a udat míru chyby, které se model dopouští na daných datech. Tito agenti se v rámci Ontologie ComputationDescription jsou reprezentováni jako ComputationAgent. Agent, který slouží právě k efektivnímu procházení parametru předem zadaného rozsahu, se nazývá Searcher a je zadáván ComputationDescription jako třída Searcher. Searcher vždy spolupracuje s výpočetním agentem a prochází jeho parametry, které nabývají hodnoty Questionmark .
+
+Pokud uživatel snažící se natrénovat model netuší jaká metoda strojového učení by byla pro konkrétní data optimální může využít některého z Recommender agentů, kteří na základě podobnosti dat a již spočítaných výsledků, dokážou poradit vhodnou metodu.  Takovýto agend bude v ComputationDescripion zadefinovaný jako Recommender. 
+  
+Speciálním potomkem DataProcessingu je ontologie CARecSearchComplex pracovně nazývaná jako Trojkrabička. Trojkrabička obsahuje tři vstupy a to Recommendera, Searchera a výpočetního agenta.
+ Tato Ontologie je ve skutečnosti hack, který dává uživateli možnost nevybrat si konkrétního výpočetního agenta, ale místo toho vyplnit nedefinovaného a zapojit k němu Recommender.  V případě, že uživatel nevyplní všechny optiony výpočetního agenta musí být zapojený Searcher, který projde množinou přípustných hodnot pro daný Option a pokusí se přiblížit k optimální hodnotě parametrů pro daná data. Trojkrabička umožňuje vícero validních zapojení přičemž, chování Trojkrabičky je závislé na tom, jaké všechny Ontologie z množiny Searcher Recommender a výpočetní agent jsou do ní zapojeny. Nejjednodušší případ zapojení Trojkrabičky je takový, když je na ní připojen pouze samotný konkrétní výpočetní agent se všemi vyplněnými parametry. V tomto případě má Trojkrabička stejný význam, jako kdyby tam nebyla a výpočetní agent byl připojen mimo Trojkrabičku.
+
+Speciálním případem výpočetního elementu dědící od Ontologie DataProcessing je Ontologie FileDataInput, která slouží jako reprezentant vstupního datasetu produkující data pro první řadu výpočetních elementů. 
+
+Dalším speciálním výpočetním elementem  je evaluační metoda, která se zapojuje jako vstup pro výpočetního agenta. Evaluační metoda slouží k určení správné doby procesů učení modelu, aby se našel vhodný kompromis mezi nedostatečně vytrénovaným a přeučeným modelem.        
+    
+### DataOntology
+
+DataOntology je množina ontologií používající se pro přepravu dat mezi agenty.  Díky možnosti spustit výpočet jednoho Batche distribuovaně na více strojích není možné, aby si jednotliví agenti předávali data pouze přes sdílený file systém, ale musela vzniknout infrastruktura pro přesuny dat a tato Ontologie. Tuto infrastrukturu z hlediska objemu dat bude nejvíce vytěžovat přeprava vstupních datasetů a vypočtených dat.  Jako soubory se mezi agenty na různých containerech přepravují JARka externích agentů, která nejsou součástí GitHub repozitáře.  Uživatelem těchto ontologií jsou tudíž agenti, kteří potřebují v systému přepravovat nějaká data. Agent ManagerAgent využívá přepravy JARek externích agentů, v případě že obdrží požadavek na vytvoření nového agenta jehož zdrojové kódy nemá na svém containeru k dispozici. Agent ARFFReader žádá o přepravu datasetu v případě, že data nejsou k dispozici na lokálním file systému . Agent Planner využívá ontologie pro řízení, ukládání vypočtených dat do databáze odstíněné centrálním DataManagerem.     
+
+
+### DurationOntology 
+
+Následující množinu ontologií využívá primárně agent DutationAgent, který slouží k měření doby výpočtu.   
+
+
+### ExperimentOntology
+
+Ontologie ExperimentOntology se využívá pro manipulaci s takzvanými experimenty, což jsou podproblémy jedné Batche. Tuto roli nejvíce využívá agent Manager, který za pomoci agenta DataManagera řeší řízení, rozpársování Batche na jednotlivé experimenty jejich vytvoření a zalogování a změny jejich statusů.    
+
+### FileNameTrnslationOntology
+
+Pro potřebu překládání uživatelsky přívětivého takzvaného externího jména datasetu na systémem zpracovatelné interní jméno, se využívá právě tato skupina Ontologií. Interní jméno datového souboru je zpravidla md5 hash jeho obsahu. Tato konvence interního pojmenovávání souborů zjednodušuje řízení efektivní přepravy dat a přirozenou cestou zabraňuje tomu, aby se na filesystému objevovaly jedny data vícekrát. Dochází zde sice k překryvu jmen souborů, které mají logicky rozdílný význam, ovšem v problematice strojového učení jde touto cestou mnohonásobně zefektivnit využitelnost potřebných diskových kapacit. Překlad prování agent DataManager, který má uloženou mapu párování interních a externích jmen souborů. Překlad se volá z agenta Managera při pársování zadaných Batchů, kde v Ontologii FileDataImput překládá logické jméno vstupního ARFF souboru. Překlad využívá také agent Duration pro získání interního jména datasetu nastaveného v konfiguraci,  na kterém se opakovaně spouští úloha lineární regrese představující pro systém jednu logickou jednotku systémového času.       
+
+
+### MailingOntology
+
+Tuto množinu Ontologií využívají všichni agenti, kteří chtějí komunikovat s agentem Mailing za účelem nechání si poslat emailovou zprávu. Této možnosti využívá agent Manager při skončení výpočtu každého Batche za účelem informovat uživatele o dokončení výpočtu. V rámci celého systému Pikater se odesílání emailů využívá k informování uživatele i na dalších místech. Webové GUI emailem oznamuje třeba změnu hesla k uživatelskému účtu. V těchto případech se ale emaily posílají přímo z webové nástavby Pikateru za použití stejné knihovny, kterou využívá agent Mailing. Díky tomuto odstínění webové GUI z hlediska návrhu systému, získalo větší nezávislost na jádře a dostalo možnost provádět, některé pro jádro systému nepříliš podstatné operace samo.  
+
+
+### MetadataOntology
+
+Výzkumnou motivací pro vznik systému Pikater bylo na základě předchozích výpočtů a podobností dat odhadovat optimální metodu strojového učení pro právě řešený experiment. Proces určení míry podobnosti dvou ARFFsouborů je časově i paměťově náročná operace, která může zároveň nezanedbatelně zatěžovat přenesenou infrastrukturu. Díky motivaci odstranit tyto problémy, došlo ke vzniku metadat , které by měly sloužit jako popis množiny dat. Algoritmus porovnávající ARFF soubory nevyužívá přímo fyzických dat, ale vystačí si pouze s vygenerovanými metadaty. Díky vhodné volbě struktury metadat jsou schopny Rekomendři velmi dobře odhadnout z předchozích výpočtů optimální metodu strojového učení. Cílem této Ontologie je zajistit řízení generování,  přepravu, ukládání a načítání datadat. Agent, který v systému zajišťuje vygenerování metadat ve spolupráci s ARFFReaderem je agent MetadataQueen. Tomuto agentovi chodí zprávy informujícího o přidání nového vstupního datasetu od Gateway agenta, nebo od uživateli definovanými GUIagenty. Příkazy pro vygenerování metadat k vypočteným datovým souborům posílá i agent Planner,  v koordinaci s datovými přenosy souborů. Vypočtená metadata se posílají k uložení agentovi DataManager, který je ukládá do databáze. Konzumentem pro každý dataset i vypočtená data vygenerovaných metadat jsou z pravidla pouze Recommendři, kteří provádějí na jejich základě porovnávání datových množin.      
+
+
+
+### ModelOntology
+
+ModelOntology je množina Ontologií používající se pro práci s modely. Hlavní funkcionalitou je ukládání a načítání natrénovaných modelů. Ukládání modelu zajišťuje agent ManagerAgent ve spolupráci s DataManagerem.  
+ 
+
+### RecommendOntology
+
+Tuto množinu Ontologií využívá agent Manager pro komunikaci s Recommendery. Účelem komunikace je předat popis experimentu a to primárně identifikovat vstupní data na základě kterých zvolený Recommender vybere nejlepšího agenta pro tento problém strojového učení. Následně doporučí Optiony,  se kterými by se měl agent spouštět za účelem minimalizovat chybu ErrorRate. Výsledky za použití těchto ontologií, pak Recommender vrací Managerovi.  
+
+
+
+### ResultOntology
+
+Výpočetní agenti, za jednu sekvenci trénování, testování a validace, vyprodukují ontologickou strukturu pojmenovanou Results, která obsahuje výsledky důležité z pohledu výzkumu strojového učení, což paradoxně nejsou výsledná data, ale jedná se o seznam chyb, popisující úspěšnost učení modelu. Cílem této ontologie je zajistit  pro každou tuto sekvenci uložení ontologie Results za použití agenta DataManagera do databází. O ukládání výsledků se stará agent Manager.  
+
+
+### SearchOntology
+
+Agent Manager tuto Ontologii používá pro komunikaci se Searcherem za účelem efektivního prohledávání, dávající důraz na vhodný poměr exploatace a explorace, stavového prostoru Optionu. Autoři jednotlivých Searcher agentů se snažili vytvořit co nejobecnější interface pro předávání parametrů pro procházení z agenta Managera do agenta Searchera. Za tímto účelem vznikla Ontologie Eval, na kterou se překládá Ontologie Option.   
+
+
+### TaskOntology
+
+TaskOntology je Ontologie, která umožňuje pracovat jednotlivým agentům v rámci Pikateru s jedním Taskem, neboli s objektem reprezentující nejnižší úroveň logického problému. Agent Manager, který jako první v řadě z hlediska průtoku dat používá Ontologi Task, neřeší pouze problém řízení výpočtu, ale také transformace příchozích Batchů na jednotlivé experimenty, které transformuje na seznam konkrétních dále nedělitelných Tasků. Tyto Tasky pak přeposílá agentovi Plannerovi, který za podpory hlídání datových závislostí předává Tasky distribuovaným výpočetním agentům, případně DataProcessingům. Jak DataProcessingy, tak výpočetní agenti, přijímají zadání jednoho výpočtu jako Ontologii Task. 
+
+### Ontologie Task
+
+Ontologie Task je obecná struktura, která je schopná pojmout jakýkoli pro Pikater dále nedělitelný problém určený pro libovolný typ agenta, obsahující neomezené množství vstupních souborů potřebných pro výpočet. Ukrývá informace o identifikaci Batche experimentu, ke kterému patří identifikátor uživatele, který Batche zadal  a spoustu dalších Optionů ovlivňující běh výpočtu. Pro plánování Tasku je zde informace o předpokládané délce běhu výpočtu, která má zajistit průchodnost systému pro krátce trvající výpočty. Po výpočtu Tasku se Ontologie Task předává zpátky až do agenta Managera. V tento okamžik jsou v Tasku vyplněné informace o vypočtených souborech, které výpočetní agent nebo DataProcessing vyprodukoval na file systém. Zároveň vypočtený Task obsahuje datum a čas začátku a konce běhu výpočtu. 
+
+
+Další agent využívající Ontologii Task je agent Duration, který využívá vlastního výpočetního agenta Duration servis odděděného od Wekovského výpočetního agenta LinearRegresion  pro počítání samplu lineární regrese. Zadávání tohoto samplu se ovšem posílá přímo agentovi DurationServis bez využití služeb agenta Plannera.        
+
+
+### TerminationOntology
+
+Tuto Ontologii využívají všichni experimentoví agenti, což jsou agenti typu výpočetní agent Recommender a Sercher, případně DataProcessing, kteří jsou buď defaultně součástí systému a nebo si je uživatel může do systému sám přidat v podobě JARka. O zabíjení agentů se stará agent ManagerAgent. Při přidání nového agenta do systému nebo inicializaci systému společně s agentem AgentInfoManager budí a následně zabíjí experimentální agenty. Dochází k buzení a následnému šetrnému zabíjení experimentových agentů.  Aparát šetrného zabíjení agentů je v systému nezbytný, agenty nejde jednoduše pouze zabít, ale musí se také nechat odregistrovat z JADE Directory Facilitator. Nejjednodušší cestou je požádat příslušného agenta z pozice ManagerAgenta, aby sám sebe ukončil. Snaha o čistý způsob zabíjení agentů byla primární motivací pro vznik této ontologie.  
