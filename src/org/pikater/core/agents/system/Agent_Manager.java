@@ -75,8 +75,8 @@ public class Agent_Manager extends PikaterAgent {
     	initDefault();
 
     	registerWithDF(AgentNames.MANAGER);
-		doWait(3000);
-				
+		doWait(30000);
+		
 		MessageTemplate subscriptionTemplate = 
 						MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE),
 								MessageTemplate.MatchPerformative(ACLMessage.CANCEL));
