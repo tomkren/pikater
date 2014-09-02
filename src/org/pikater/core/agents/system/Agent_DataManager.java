@@ -878,8 +878,12 @@ public class Agent_DataManager extends PikaterAgent {
 		for (TaskOutput output : task.getOutput()) {
 			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(output.getName())).getSingleResultWithNull();
 			if(dslo!=null){
-				jparesult.getOutputs().add(dslo);
-				log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+				if(!jparesult.getOutputs().contains(dslo)){
+					jparesult.getOutputs().add(dslo);
+					log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+				}else{
+					log("Adding output " + output.getName() + " skipped. Duplicate value.");
+				}
 			}else{
 				logError("Failed to add output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
 			}
