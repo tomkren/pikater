@@ -433,7 +433,7 @@ Následující množinu ontologií využívá primárně agent DutationAgent, kt
 
 Ontologie ExperimentOntology se využívá pro manipulaci s takzvanými experimenty, což jsou podproblémy jedné Batche. Tuto roli nejvíce využívá agent Manager, který za pomoci agenta DataManagera řeší řízení, rozpársování Batche na jednotlivé experimenty jejich vytvoření a zalogování a změny jejich statusů.    
 
-### FileNameTrnslationOntology
+### FileNameTranslationOntology
 
 Pro potřebu překládání uživatelsky přívětivého takzvaného externího jména datasetu na systémem zpracovatelné interní jméno, se využívá právě tato skupina Ontologií. Interní jméno datového souboru je zpravidla md5 hash jeho obsahu. Tato konvence interního pojmenovávání souborů zjednodušuje řízení efektivní přepravy dat a přirozenou cestou zabraňuje tomu, aby se na filesystému objevovaly jedny data vícekrát. Dochází zde sice k překryvu jmen souborů, které mají logicky rozdílný význam, ovšem v problematice strojového učení jde touto cestou mnohonásobně zefektivnit využitelnost potřebných diskových kapacit. Překlad prování agent DataManager, který má uloženou mapu párování interních a externích jmen souborů. Překlad se volá z agenta Managera při pársování zadaných Batchů, kde v Ontologii FileDataImput překládá logické jméno vstupního ARFF souboru. Překlad využívá také agent Duration pro získání interního jména datasetu nastaveného v konfiguraci,  na kterém se opakovaně spouští úloha lineární regrese představující pro systém jednu logickou jednotku systémového času.       
 
