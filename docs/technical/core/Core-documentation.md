@@ -264,6 +264,23 @@ Další informace související s ukládáním dat a funkcemi DataManagera viz k
 
 Webové GUI využívá na rozdíl od jednotlivých agentů přímý přístup do databáze. Teoreticky by šlo i z webového GUI využívat  pro manipulaci s daty agenta DataManagera ve spolupráci s Gateway agentem. Tato varianta by ale nedovolovala použít konstruktů, které se používají pro perzistování změn dat v grafických pohledech přímo do databáze. Byl bz nutný opětovný překlad struktur reprezentující pohled na ontologie a zpět. Reakce na možné nepříchozí JADE zprávy by přinesly nutnost ošetřit spoustu takovýchto případů. Navíc by webové GUI by se stalo zcela závislé na jádře systému.
 
+### Agent MetadataQueen
+Tento agent má jedinú úlohu, čo spočíva vo vypočítaní metadát pre jednotlivé datasety. Metadata pomáhajú odhadnúť podobnosť dvoch datasetov, bez toho, aby sme museli ich opäť načítať.
+
+Tento agent odpovedá na dve typy správ:
+
+1. `NewDataset` - typicky dostane cez `WebToCoreEntryPoint` po tom, ako užívatel nahral nový dataset cez webové rozhranie
+2. `NewComputedData` - dostane od nejakého `ComputingAgenta`, čo uložil do databáze výsledok nejakého experimentu a teraz potrebuje vypočítať si k nemu metadata
+
+{{{{{{
+
+ComputingAgent ->+MetadataQueen: NewComputedData
+MetaDataQueen ->- DataManager: SaveMetadata
+
+}}}}}}
+
+Nové vypočítané metadata potom posiela agentovi `Agent_DataManager`. Metadata sú typu `org.pikater.core.ontology.subtrees.metadata.Metadata`, ktoré sú potom `DataManagerom` ˇpripojené k záznamu o danom datasetu.
+
 #### Univerzálni formát
 
 Mezi jedno z nejdůležitějších využití DataManagera slouží uchovávání a načítání Batchů. Pro uložení jedné instance třídy ComputationDescription se využívá takzvaný "Univerzální formát". Motivací pro vznik tohoto formátu byla snaha vytvořit obecný a rozšiřitelný způsob jak ukládat Batche zadané jak z webového GUI tak z consolových GUIAgentů. Batche zadané z webového GUI obsahují na rozdíl od těch zadaných z konfiguráku informace navíc. Jsou to informace potřebné pro grafické zobrazení krabiček ve webové stavebnici. Jako příklad nepovinných informací slouží Xová a Yová pozice krabičky umístěná v poli stavebnice. Formát dává možnost obohatit stavebnici o další funkce a zároveň se snaží nenutit jádro Pikateru o těchto informacích vědět nebo jim dokonce rozumnět.
