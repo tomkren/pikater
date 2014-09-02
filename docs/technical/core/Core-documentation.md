@@ -1,3 +1,5 @@
+<!-- --- title: Dokumentace jádra systému Pikater -->
+
 [[_TOC_]]
 
 # PIKATER (Pikantní agentní teritorium)
