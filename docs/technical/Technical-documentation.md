@@ -11,27 +11,24 @@
 
 [[architektura-final.png|architecture picture]]
 
+### Individual components/modules
 
-
-
-## Individual components/modules
-
-### Database<a name="database"/>
+#### Database<a name="database"></a>
 
 [[Open database documentation|Database-documentation]].
 
-### Core system<a name="core"/>
+#### Core system<a name="core"></a>
 
 [[Open core system documentation|Core-documentation]].
 
-### Web application<a name="web"/>
+#### Web application<a name="web"></a>
 
 [[Open web application documentation|Web-documentation]].
 
 
 
 
-## Source code<a name="sourceCode"/>
+## Source code<a name="sourceCode"></a>
 
 ### Package structure
 

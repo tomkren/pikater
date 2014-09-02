@@ -195,7 +195,7 @@ This happens because dialogs are Vaadin components attached to and dependent on 
 -------------------------------------------------------------------
 TODO:
 - gui: editor
-- rozhodnutí, proč jsme se rozhodli, jak jsme se rozhodli... (v návaznosti na specifikaci)
+- rozhodnutí, proč jsme se rozhodli, jak jsme se rozhodli (pouze tady)... (pokud možno v návaznosti na specifikaci)
 -------------------------------------------------------------------
 
 

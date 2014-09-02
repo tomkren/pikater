@@ -24,7 +24,7 @@ All web application related code is concentrated in this package, with the excep
 
 More detailed information about this package can be found [[here|Web-package-description]].
 
-## Dependencies
+## Package dependencies
 
 Dependencies are represented by the following diagram:
 
