@@ -48,6 +48,37 @@ public class WaitingTasksQueues {
 		}
 	}
 	
+	public void updateTaskPriority(int batchID, int newPriority) {
+
+		Comparator<TaskToSolve> comparator = new PlannerComparator();
+
+		PriorityQueue<TaskToSolve> newShortTimeDurationQueue =
+				new PriorityQueue<TaskToSolve>(10, comparator);
+		while (!shortTimeDurationQueue.isEmpty()) {
+			TaskToSolve taskToSolveI = shortTimeDurationQueue.remove();
+			Task taskI = taskToSolveI.getTask();
+
+			if (taskI.getBatchID() == batchID) {
+				taskToSolveI.setPriority(newPriority);
+			}
+			newShortTimeDurationQueue.add(taskToSolveI);
+		}
+		shortTimeDurationQueue = newShortTimeDurationQueue;
+
+		PriorityQueue<TaskToSolve> newLongTermDurationQueue =
+				new PriorityQueue<TaskToSolve>(10, comparator);
+		while (!longTermDurationQueue.isEmpty()) {
+			TaskToSolve taskToSolveI = longTermDurationQueue.remove();
+			Task taskI = taskToSolveI.getTask();
+
+			if (taskI.getBatchID() == batchID) {
+				taskToSolveI.setPriority(newPriority);
+			}
+			newLongTermDurationQueue.add(taskToSolveI);
+		}
+		longTermDurationQueue = newLongTermDurationQueue;
+	}
+	
 	public TaskToSolve removeTaskWithHighestPriority() {
 		
 		if (this.shortTimeDurationQueue.size() != 0) {
