@@ -5,7 +5,9 @@
 
 
 
-## Technologies used
+## Technologies
+
+### Summary
 
 The focus of this documentation is not to explain the technologies used or provide documentation to them. If you wish to read more about them, follow the links or take a look at the "[Other useful links](#webLinks)" section below. A light introduction, however:
 * [Google Web Toolkit](http://www.gwtproject.org/) (GWT).  
@@ -18,6 +20,59 @@ KineticJS is javascript library used for drawing custom content (styled shapes, 
 * [KineticGWT](https://github.com/neothemachine/KineticGWT) for nice & easy integration of KineticJS in GWT.  
 KineticGWT is a GWT wrapper for KineticJS and is used to simplify development - it uses JSNI (inner GWT technology) to provide java interface and call javascript on the background.
 * [Quartz scheduler](http://quartz-scheduler.org/) as a mechanism of executing background tasks. It is only used by the web application at this moment but can easily be used by core system as well.
+
+### Decisions
+
+The main purpose was to find a solution that would allow us to:
+* avoid having to write in plain HTML/Javascript,
+* use some predefined GUI components, as customizable as possible,
+* easily integrate an HTML5 framework to draw experiments, potentially narrowing down HTML5 capabilities to a library with small API that does a lot of work by itself.
+
+**GWT and Vaadin**  
+
+We did some research and with respect to the above conditions ruled out `PHP` after a while, also because there was no previous experience with it amongst the team. An idea sprang forward that since the original `pikater` project was written in Java, it would be nice to continue writing in Java for as much compatibility and compactness as possible. So we stumbled across `RIA (Rich internet applications)` and `GWT`. It seemed to satisfy the above conditions very well and gave us a lot more than we were looking for:
+* a framework to manipulate with DOM,
+* a framework to work with browsers which should be supported by all major browsers,
+* RPC like mechanism to communicate in both directions (`client-server` and `server-client`).
+
+It would seem like a very good choice but it hides a potentially big problem - GWT is a client side technology and as such, it has very limited functionalities and extension code-base.  
+
+It was made clear from the very start that some data-structures (e.g. experiments) or implementations would have to be defined in `core`, `server` and `client` versions, each serving a different purpose. If only one or two of them were implemented, they would be difficult to work with at some point. In practice, we would have to overcome this issue by moving all the "complex" code to the server, having to define/redefine a lot of communication code, with a lot of effort. Whether many implementations of the same things or large communication protocol, none of these two options were ideal so we looked for a way to get over this issue and stumbled upon Vaadin, which seemed like a dream come true. A framework that:
+* extends GWT,
+* is free except for some "enterprise" features,
+* allows server-side development (GUI component definition and event handling),
+* is designed to be very customizable and extendable and yet again adds a lot of other value.
+
+Nothing is as good as it first seems, however and while Vaadin solved a lot of problems for us, it might introduce some others:
+* performance,
+* hidden bugs/incompatibilities/quirks and so on,
+* the danger of stopped development some time in the future,
+* the danger of it becoming a paid service.
+
+Performance was looked at first and foremost. We looked at Vaadin forums but didn't find any such problems reported by the many people who used the framework. Also, looking at the basics and the aforementioned forums, we found that performance seemed an important point for Vaadin's developers. Since then, performance only posed a problem in very specialized cases (some of which we eventually encountered) but even if the solution would not be perfect, there were still ways around the problem.
+
+When it comes to bugs and incompatibilities, those are mostly found in the most surprising moments and there was nothing much we could do about it but risk.
+
+And finally, stopped development didn't seem to be viable option for many years to come since Vaadin is being actively developed, actively contributes to GWT development, has quite a history by now, is backed by several organizations and has a business model of its own. For the same reasons (also note that Vaadin greatly builds upon GWT which is free and will still be free in the future), one can hardly imagine the basic framework becoming a paid product for many years to come.
+
+**KineticJS and KineticGWT**  
+
+At this point, the use of GWT and Vaadin is decided and decisions about experiment drawing interface come next.  
+In this case, the choice was much more simple.
+
+Since HTML5 was still a new hype at that time, many of these frameworks were under development and many of the more complete and nicer implementations were not free. We could only find a few open source ones out of which one stood out: `KineticJS`. It was being very actively developed on GitHub, steadily gaining more reputation and more importantly, it had a nice documentation. Also, it was quite extensive (among the frameworks we found), allowed much more than simple graph drawing and there was even a GWT module for it - something that leverages GWT's JSNI technology and provides Java API.
+
+While the choice might be different now, it was a very good choice then, full of prospects.
+
+**Quartz**  
+
+We needed background tasks to generate:
+* scatter plots for dataset visualization and comparison,
+* handle uploaded files (datasets and agents) before being passed to core system and do it independently of Vaadin not to slow it down.
+
+In due time, we discovered that Vaadin has no decent background task mechanism (quite logically when you think about it) and there was another decision in front of us: "A background task framework. Yes or no?".
+
+We ended up deciding for "yes" because it was a good idea to execute tasks in a specifically configured "environment" with fixed amount of threads and resource management so users would not be able to suffocate the web application in a spike. Quartz framework is a Java framework doing exactly that and much more. It could also be used to easily define cron jobs in the web application with a fixed schedule and might even be useful in core system from time to time.
 
 
 
@@ -192,11 +247,6 @@ As such, the client itself polls for changes once in 500ms (current default valu
 Quote from user guide: `When you leave the page while a progress dialog with a background task is running, all progress is lost`.  
 This happens because dialogs are Vaadin components attached to and dependent on a UI instance (a page instance). When the page is navigated away, it is destroyed on server which means the dialog is also destroyed and the underlying task and its progress as well.
 
--------------------------------------------------------------------
-TODO:
-- gui: editor
-- rozhodnutí, proč jsme se rozhodli, jak jsme se rozhodli (pouze tady)... (pokud možno v návaznosti na specifikaci)
--------------------------------------------------------------------
 
 
 
