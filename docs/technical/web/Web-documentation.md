@@ -53,12 +53,11 @@ Performance was looked at first and foremost. We looked at Vaadin forums but did
 
 When it comes to bugs and incompatibilities, those are mostly found in the most surprising moments and there was nothing much we could do about it but risk.
 
-And finally, stopped development didn't seem to be viable option for many years to come since Vaadin is being actively developed, actively contributes to GWT development, has quite a history by now, is backed by several organizations and has a business model of its own. For the same reasons (also note that Vaadin greatly builds upon GWT which is free and will still be free in the future), one can hardly imagine the basic framework becoming a paid product for many years to come.
+And finally, stopped development didn't seem to be a viable option for many years to come since Vaadin is being actively developed, actively contributes to GWT development, has quite a history by now, is backed by several organizations and has a business model of its own. For the same reasons (also note that Vaadin greatly builds upon GWT which is free and will still be free in the future), one can hardly imagine the basic framework becoming a paid product for many years to come.
 
 **KineticJS and KineticGWT**  
 
-At this point, the use of GWT and Vaadin is decided and decisions about experiment drawing interface come next.  
-In this case, the choice was much more simple.
+At this point, the use of GWT and Vaadin is decided and decisions about experiment drawing interface come next. This particular choice was much more simple.
 
 Since HTML5 was still a new hype at that time, many of these frameworks were under development and many of the more complete and nicer implementations were not free. We could only find a few open source ones out of which one stood out: `KineticJS`. It was being very actively developed on GitHub, steadily gaining more reputation and more importantly, it had a nice documentation. Also, it was quite extensive (among the frameworks we found), allowed much more than simple graph drawing and there was even a GWT module for it - something that leverages GWT's JSNI technology and provides Java API.
 
