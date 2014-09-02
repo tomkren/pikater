@@ -106,6 +106,7 @@ import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -861,6 +862,15 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	private <T extends JPAAbstractEntity> boolean containsID(List<T> list, T item ){
+		for(T i : list){
+			if(i.getId()==item.getId()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
@@ -878,7 +888,7 @@ public class Agent_DataManager extends PikaterAgent {
 		for (TaskOutput output : task.getOutput()) {
 			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(output.getName())).getSingleResultWithNull();
 			if(dslo!=null){
-				if(!jparesult.getOutputs().contains(dslo)){
+				if(!this.containsID(jparesult.getOutputs(), dslo)){
 					jparesult.getOutputs().add(dslo);
 					log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
 				}else{
