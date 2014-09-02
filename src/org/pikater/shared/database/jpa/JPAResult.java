@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -19,7 +20,17 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name="Result")
+@Table(
+		name="Result",
+		indexes={
+				@Index(columnList="serializedFileName"),
+				@Index(columnList="errorRate"),
+				@Index(columnList="experiment"),
+				@Index(columnList="createdModel"),
+				@Index(columnList="experiment,createdModel"),
+				@Index(columnList="experiment,agentName,createdModel")
+				}
+		)
 @NamedQueries({
 	@NamedQuery(name="Result.getAll",query="select res from JPAResult res"),
 	@NamedQuery(name="Result.getByAgentName",query="select res from JPAResult res where res.agentName=:agentName"),

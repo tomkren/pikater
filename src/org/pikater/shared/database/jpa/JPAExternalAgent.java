@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -14,7 +15,14 @@ import javax.persistence.Transient;
 
 
 @Entity	
-@Table(name="ExternalAgent")
+@Table(
+		name="ExternalAgent",
+		indexes={
+				@Index(columnList="agentClass"),
+				@Index(columnList="name"),
+				@Index(columnList="visible")
+				}
+	   )
 @NamedQueries({
 	@NamedQuery(name="ExternalAgent.getAll",query="select o from JPAExternalAgent o"),
 	@NamedQuery(name="ExternalAgent.getAll.count",query="select count(o) from JPAExternalAgent o"),

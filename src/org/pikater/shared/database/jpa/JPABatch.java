@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -22,7 +23,19 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 
 @Entity
-@Table(name="Batch")
+@Table(
+		name="Batch",
+		indexes={
+				@Index(columnList="owner"),
+				@Index(columnList="name"),
+				@Index(columnList="note"),
+				@Index(columnList="created"),
+				@Index(columnList="finished"),
+				@Index(columnList="status"),
+				@Index(columnList="totalPriority"),
+				@Index(columnList="owner,status")
+		}
+	  )
 @NamedQueries({
 	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
 	@NamedQuery(name="Batch.getAll.count",query="select count(b) from JPABatch b"),
