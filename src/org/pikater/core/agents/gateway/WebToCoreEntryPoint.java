@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.pikater.core.agents.gateway.batch.PikaterGateway_KillBatch;
 import org.pikater.core.agents.gateway.batch.PikaterGateway_NewBatch;
+import org.pikater.core.agents.gateway.batchPriorityChanged.PikaterGatewayBatchPriorityChanged;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
 import org.pikater.core.agents.gateway.getAgentInfo.PikaterGateway_GetAgentInfo;
 import org.pikater.core.agents.gateway.newAgent.PikaterGateway_NewAgent;
@@ -35,7 +36,16 @@ public class WebToCoreEntryPoint {
 	public static void notify_newBatch(int IDNewBatch, int userID) throws PikaterGatewayException {
 		PikaterGateway_NewBatch.newBatch(IDNewBatch, userID);
 	}
-
+	
+	/**
+	 * Notifies the core system about a new batch priority. 
+	 * @param BatchID ID of the batch
+	 * @throws PikaterGatewayException
+	 */
+	public static void notify_BatchPriorityChanged(int batchID) throws PikaterGatewayException {
+		PikaterGatewayBatchPriorityChanged.ChangeBatchPriority(batchID);
+	}
+	
 	/**
 	 * Notifies the core system about a new user-uploaded agent. 
 	 * @param externalAgentID ID of external agent's JPA entity 
