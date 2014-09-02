@@ -42,7 +42,7 @@ public class WebToCoreEntryPoint {
 	 * @param BatchID ID of the batch
 	 * @throws PikaterGatewayException
 	 */
-	public static void notify_BatchPriorityChanged(int batchID) throws PikaterGatewayException {
+	public static void notify_batchPriorityChanged(int batchID) throws PikaterGatewayException {
 		PikaterGatewayBatchPriorityChanged.ChangeBatchPriority(batchID);
 	}
 	
@@ -74,15 +74,6 @@ public class WebToCoreEntryPoint {
 	}
 	
 	/**
-	 * Notifies the core system about a changed priority of a batch (by an admin).
-	 * @param batchID
-	 * @throws PikaterGatewayException
-	 */
-	public static void notify_batchPriorityChanged(int batchID) throws PikaterGatewayException{
-		// TODO
-	}
-
-	/**
 	 * Is pikater core running locally on the same machine?
 	 * @throws PikaterGatewayException 
 	 */
@@ -103,9 +94,6 @@ public class WebToCoreEntryPoint {
 		for (AgentInfo agentInfoI : agentInfos.getAgentInfos()) {
 			System.out.println("AgentInfo: " + agentInfoI.getName());
 		}
-
-		if (1 == 1)
-		{return;}
 		
 		int userID = 5859;
 		

@@ -55,7 +55,7 @@ public class JPABatch extends JPAAbstractEntity{
 	@ManyToOne
 	private JPAUser owner;
 	private int userAssignedPriority;
-	private int totalPriority; // TODO: this is currently not used (propagate to core)
+	private int totalPriority;
 	private boolean sendEmailAfterFinish;
 	@Enumerated(EnumType.STRING)
 	private JPABatchStatus status;
