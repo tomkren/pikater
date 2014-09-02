@@ -136,36 +136,6 @@ ManagerAgent->ManagerAgent: starts new agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
-### Mailing
-
-#### Požadavky
-****
-* Možnost upozornění na dokončení výpočtu prostřednictvím e-mailu. Budou
-v něm zároveň stručné výsledky experimentu – výsledky metod na daných
-datech.
-
-****
-
-#### Realizace
-
-Do systému byl zaveden nový agent `org.pikater.core.agents.system.Agent_Mailing`, který zprostředkovává službu posílání e-mailů ostatním agentům jádra pomocí akce `SendEmail`.
-
-Komunikace s lokálním SMTP serverem potřebná k odeslání e-mailu je pro potřeby agenta `Agent_Mailing` a webového serveru zprostředkována rozhraním `org.pikater.shared.utilities.mailing.Mailing`, resp. metodou `org.pikater.shared.utilities.mailing.Mailing.sendEmail(to, subj, body)`.
-
-##### Odesílání notifikace o dokončeném výpočtu
-{{{{{{
-
-Agent\nManager->+Agent\nDataManager: updateExperimentStatus
-opt new experiment status = FINISHED
-activate Agent\nManager
-Agent\nDataManager->+Agent\nMailing: SendEmail
-  Agent\nMailing->Agent\nMailing: sends e-mail notification\nvia local SMTP server
-  Agent\nMailing-->>-Agent\nDataManager: 
-end
-Agent\nDataManager-->>-Agent\nManager:
-}}}}}}
-
-
 ### Modely
 
 #### Požadavky

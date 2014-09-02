@@ -56,7 +56,9 @@ Kompletní přestavbou prošla většina ontologií. Jednalo se většinou buď 
 
 Z hlediska nadstavby Pikateru je důležitý vznik ontologie AgentInfo a výměna ontologie Option, která využívala k reprezentaci informací řetězce na obecnou, typovanou, rozšiřitelnou, validovatelnou, do níž je zároveň možné ukládat informace o omezeních na hodnoty pro každý typ. Ontologie AgentInfo je datová struktura reprezentující jednu krabičku a slouží jako vstupní informace pro grafickou Stavebnici.
 
+### Schéma architektury
 
+[[architektura-final.png]]
 
 ## Popis agentů
 
@@ -112,7 +114,24 @@ Tento agent je pojmenovaný po magistře Kláře Peškové autorce původní ver
 
 ### Agent Mailing
 
-Agent Mailing slouží jádru systému pro odesílání emailu. Agent přijímá Ontologii SendEmail, která reprezentuje jednu emailovou zprávu. Tohoto agenta v jádře systému využívá pouze agent Manager při dopočtení Batche. 
+Do systému byl zaveden nový agent `org.pikater.core.agents.system.Agent_Mailing`, který zprostředkovává službu posílání e-mailů ostatním agentům jádra pomocí akce `SendEmail`.
+
+Agent přijímá Ontologii SendEmail, která reprezentuje jednu emailovou zprávu. Tohoto agenta v jádře systému využívá pouze agent Manager při dopočtení Batche. 
+
+Komunikace s lokálním SMTP serverem potřebná k odeslání e-mailu je pro potřeby agenta `Agent_Mailing` a webového serveru zprostředkována rozhraním `org.pikater.shared.utilities.mailing.Mailing`, resp. metodou `org.pikater.shared.utilities.mailing.Mailing.sendEmail(to, subj, body)`.
+
+#### Odesílání notifikace o dokončeném výpočtu
+{{{{{{
+
+Agent\nManager->+Agent\nDataManager: updateExperimentStatus
+opt new experiment status = FINISHED
+activate Agent\nManager
+Agent\nDataManager->+Agent\nMailing: SendEmail
+  Agent\nMailing->Agent\nMailing: sends e-mail notification\nvia local SMTP server
+  Agent\nMailing-->>-Agent\nDataManager: 
+end
+Agent\nDataManager-->>-Agent\nManager:
+}}}}}}
 
 ### Agent ARFFReader         
 
