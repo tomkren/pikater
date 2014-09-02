@@ -5,10 +5,11 @@
 /********************************************************/
 /* OVERRIDE PREDEFINED STYLES */
 
-#wiki-wrapper
-{
-    padding-left: 30px;
-    padding-right: 30px;
+@media print {
+    .markdown-body
+    {
+        font-size: 15pt;
+    }
 }
 
 #head > .actions
@@ -35,7 +36,6 @@
 .markdown-body
 {
     padding: 0;
-    font-size: 12pt;
 }
 
 .markdown-body p:empty
