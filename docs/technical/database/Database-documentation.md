@@ -70,7 +70,7 @@ V starej verzii Pikateru na konfiguráciu databázového pripojenia slúžil iba
 Pikater stále potrebuje nativný prístup do databáze, kvôli PgLOBom, preto sme sa rozhodli, že zachováme `Beans.xml` súbor a pre plynulejší prechod z hladiska konfigurácie necháme na pôvodnom mieste a to v koreňovom adresári zdrojového kódu.
 
 Časť v súboru `Beans.xml` zodpovedná za vytvorenie databázového pripojenia:
-```
+```xml
 ...
 <bean
 id="defaultConnection"
@@ -90,7 +90,7 @@ scope="singleton">
 ```
 
 Okrem natívneho databázového pripojenia potrebujeme, aby správca JPA entít mal takisto prístup k databázi. Okrem toho, musí poznať, že ktoré triedy má považovať za entity. Na túto konfiguráciu slúži súbor `persistence.xml` , čo musí byť uložený v zložke `META-INF`. Tento súbor musí obsahovať zoznam entít v našom programu vo forme, ako to ukáže nasledovný príklad:
-```
+```xml
 <persistence-unit name="pikaterDataModel" transaction-type="RESOURCE_LOCAL">
 <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 …
@@ -123,7 +123,7 @@ Na zjednodušenie vytvorenia konfiguračných súborov je možné používať pr
 
 Pri vytvorení novej štruktúry entít - a tým pádom aj súčasnú schématu databáze - sme vela zachovali z pôvodnej schémy. Na druhej strane bolo potrebné vytvoriť chýbajúce vzťahy medzi entitami (napríklad experiment má viac podexperimentov) a podklady pre nové funkcie (napríklad uloženie datasetov).
 
-|               |   Pôvodný Pikater   |   Aktuálný Pikater  |
+|               |   Pôvodný Pikater   |   Aktuálny Pikater  |
 |:-------------:|:-------------------:|:-------------------:|
 | datasety      | lokálne na disku    | v databázi          |
 | ostatné dáta  | v databázi          | v databázi          |
