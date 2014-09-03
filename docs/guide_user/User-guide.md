@@ -222,7 +222,9 @@ URL: `http://my.domain/Pikater/editor`
 
 ## FAQ<a name="faq"></a>
 
-In this section, we will cover some untrivial use cases that are not fully explained by the above documentation and also provide some additional information related to using the application.
+**Please note that this section is not a guide to all the application's features. It is recommended to read the above documentation to discover the application's capabilities, conventions and potentially (for some users) hidden features.**
+
+**In this section, we will only cover most common or untrivial use cases that are not explained by the above documentation. Additional information is also provided for some use cases.**
 
 ### How do I create an account?
 
@@ -232,7 +234,7 @@ In this section, we will cover some untrivial use cases that are not fully expla
 4. Click `Ok`. The account register form will be closed and login dialog will be visible again.
 5. Fill credentials of your new account and click `Ok`. You will be logged in using your new account.
 
-Note that experiments queued under your new account will have the lowest possible priority. Consider contacting the administrator to raise it.
+Note that experiments queued under your new account will have the lowest possible priority. Consider contacting an administrator to raise it.
 
 ### How do I change my password?<a name="changePassword"></a>
 
@@ -254,6 +256,31 @@ New passwords are sent to the account's email address.
 2. Click on `View & edit profile` in the left menu.
 3. Enter new email into the appropriate field.
 4. Click on `Save changes`.
+
+### How do I track experiment progress?
+
+1. Open the default page.
+2. Click on `My experiments` in the left menu.
+3. Find your experiment. You will its status. You may expand it to view individual tasks and results that have already been computed for it.
+
+### How do I export experiment results to CSV?
+
+1. Open the default page.
+2. Click on `My experiments` in the left menu.
+3. Find your experiment.
+4. Expand the `RESULTS` column (see [regular table views](#regularTableViews)).
+5. Click on the `Download` button located on the same row as your experiment. A progress dialog will appear.  
+6. When the result `.csv` is generated, the progress dialog's `Abort` button will change into a `Finished` button. Click on it. The file will be downloaded.
+
+### How do I change priority of running experiments?
+
+Note that this is an administrator feature.
+
+1. Open the default page.
+2. Click on `All experiments` in the left menu.
+3. Find your experiment.
+4. Expand the `PRIORITY` column (see [regular table views](#regularTableViews)).
+5. Change the `PRIORITY` value on the same row as your experiment, if enabled. If it is not, the experiment is not running anymore.
 
 ### How do I generate scatter plots for datasets?
 
@@ -287,7 +314,9 @@ _If the button is disabled, metadata have not yet been computed for your dataset
 Otherwise, a progress dialog will appear.
 12. When scatter plots are generated, the progress dialog's `Abort` button will change into a `Finished` button. Click on it. You will be redirected to visualization page.
 
-### How to upload a new dataset?
+Note that similar guide can be applied to comparing experiment results to input datasets, as demanded by the project's specification.
+
+### How do I upload a new dataset?
 
 1. Open the default page.
 2. Click on `My datasets` in the left menu.
@@ -300,43 +329,18 @@ Note that:
 * The more files are being uploaded, the slower the server's responses will be.
 * Metadata have to be computed for your dataset before it can be used in experiments, visualization and metadata viewer. Metadata can be viewed, when available, by expanding the dataset view to the next step (see above).
 
-### How to upload a new user agent (computation method)?
+### How do I upload a new user agent (computation method)?
 
 1. Open the default page.
 2. Click on `My agents` in the left menu.
 3. Click on `Upload a new agent`.
-4. Enter the required information. `Agent class` needs to be a fully qualified Java class name, including package, e.g. `org.example.TestAgent`. The uploaded `.jar` file needs to include implementation for the the given class name.
+4. Enter the required information. `Agent class` needs to be a fully qualified Java class name, including package, e.g. `org.example.TestAgent`. The uploaded `.jar` file needs to include implementation for the given class name.
 
 Note that:
 * Multiple files may be uploaded simultaneously on the same page. Each one will have to be entered through the dialog, however.
 * Each user may only upload 3 files at a time across all pages.
 * The more files are being uploaded, the slower the server's responses will be.
 * It may take some time before your agent can be used in experiments. It has to be registered in the core system. When that happens and there is no problem with your agent, it will display in experiment editor after a page refresh.
-
-### How to track experiment progress?
-
-1. Open the default page.
-2. Click on `My experiments` in the left menu.
-3. Find your experiment. You will its status. You may expand it to view individual tasks and results that have already been computed for it.
-
-### How to export experiment results to CSV?
-
-1. Open the default page.
-2. Click on `My experiments` in the left menu.
-3. Find your experiment.
-4. Expand the `RESULTS` column (see [regular table views](#regularTableViews)).
-5. Click on the `Download` button located on the same row as your experiment. A progress dialog will appear.  
-6. When the result `.csv` is generated, the progress dialog's `Abort` button will change into a `Finished` button. Click on it. The file will be downloaded.
-
-### How to change priority of running experiments?
-
-Note that this is an administrator feature.
-
-1. Open the default page.
-2. Click on `All experiments` in the left menu.
-3. Find your experiment.
-4. Expand the `PRIORITY` column (see [regular table views](#regularTableViews)).
-5. Change the `PRIORITY` value on the same row as your experiment, if enabled. If it is not, the experiment is not running anymore.
 
 
 
