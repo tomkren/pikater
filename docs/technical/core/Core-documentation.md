@@ -354,7 +354,7 @@ Pro zefektivnění přenosů mezi různými stroji pak byla zavedená keš dat. 
 
 Pro uložení dat používají výpočetní agenti připravenou metodu `org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing.saveArff()`.  `Agent_Planner` pak prostřednitcvím `Agent_DataManager` a jeho akce `org.pikater.core.ontology.subtrees.dataset.SaveDataset` zajistí uložení dat do databáze pro možnost vizualizace.
 
-#### Načítání dat
+#### Načítání datasetů
 {{{{{{
 
 ComputingAgent->+ARFFReader: GetData
@@ -387,7 +387,7 @@ ManagerAgent->ManagerAgent: starts new agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
-#### Natrénované a uložené modely (agenti).
+### Natrénované a uložené modely (agenti).
 
 Natrénované modely jsou uloženy v podobě serializované Javovské třídy daného agenta.  Samotnou serializaci modelu zajišťuje knihovna WEKA – její klasifikátory implementují rozhraní `Serializable`.
 
