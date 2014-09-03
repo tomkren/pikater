@@ -51,12 +51,12 @@ First and foremost, note several things:
 
 #### Database
 
-1. Install PostgreSQL database, that can be downloaded from address [PostgreSQL download site](http://www.postgresql.org/download/) or use package manager of your system. Pikater was tested with version 9.3 and it is highly recommended to use this version.
+1. Install PostgreSQL database, that can be downloaded from the address of [PostgreSQL download site](http://www.postgresql.org/download/) or use package manager of your system. Pikater was tested with version 9.3 and it is highly recommended to use this version.
 2. Create a new database with a name of your desire. Using UTF-8 character encoding is recommended.
 3. When you clone the project on your machines in later steps, change the following files accordingly to your fresh database install:
     * `src/beans.xml`
     * `src/META-INF/persistence.xml`
-3.1 After cloning the project you can use utility `org.pikater.shared.database.util.initialisation.DatabaseInitialisation` to generate the configuration files as well as to create the first administrator user of Pikater.
+4. After cloning the project you can use utility `org.pikater.shared.database.util.initialisation.DatabaseInitialisation` to generate the configuration files as well as to create the first administrator user of Pikater.
 ```
 --------------------------------------------------------------------------------
 |                           WELCOME to PIKATER                                 |
@@ -114,9 +114,6 @@ To deploy and launch the extension:
 1. Start the servlet container.
 2. Export the extension into a `.war` file from Eclipse, deploy it into the servlet container.
 3. Start the deployed application.
-
-<font color="red">TODO: tady (nebo nahoru) by měl Petr doplnit vygenerování iniciálního stavu DB</font>
-
 4. Access the page, e.g. go to `http://localhost:8080/Pikater` (for Apache Tomcat; by default) or `http://my.domain/Pikater`. A login dialog will appear.
 5. Enter the default login and password (see above) and start using. User guide can be found [[here|User-guide]].
 
