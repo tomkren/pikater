@@ -19,4 +19,6 @@ public interface ComputationOutputBuffer<E> {
     public boolean isBlocked();
     public void block();
     public void unblock();
+    public boolean isData();
+    public void setData(boolean data);
 }

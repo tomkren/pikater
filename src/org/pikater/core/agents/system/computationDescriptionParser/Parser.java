@@ -1,5 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.*;
@@ -90,6 +91,7 @@ public class Parser {
         }
         //handle parent - set him as file receiver
         ComputationOutputBuffer<EdgeValue> fileBuffer=new StandardBuffer<>(parent,child);
+        fileBuffer.setData(true);
         parent.addBufferToOutput(connectionName,fileBuffer);
         child.addInput(connectionName,fileBuffer);
     }
@@ -134,6 +136,7 @@ public class Parser {
         fileEdge.setFile(true);
         fileEdge.setDataSourceId(file.getFileURI());
         ComputationOutputBuffer<EdgeValue> buffer=new NeverEndingBuffer<EdgeValue>(fileEdge);
+        buffer.setData(true);
         buffer.setTarget(child);
         child.addInput(connectionName,buffer);
     }
@@ -280,13 +283,13 @@ public class Parser {
         computationGraph.addNode(recNode);
         alreadyProcessed.put(recommender.getId(),recNode);
 
-        DataSourceEdge ds=(DataSourceEdge) child.getInputs().get("training").getNext();
+        DataSourceEdge ds=(DataSourceEdge) child.getInputs().get(CoreConstants.SLOT_TRAINING_DATA).getNext();
         DataSourceEdge copy=new DataSourceEdge();
         copy.setDataSourceId(ds.getDataSourceId());
         copy.setFile(ds.isFile());
         NeverEndingBuffer<DataSourceEdge> training=new NeverEndingBuffer<>(copy);
         training.setTarget(recNode);
-        recNode.addInput("training",training);
+        recNode.addInput(CoreConstants.SLOT_TRAINING_DATA, training);
 
         for (ErrorSourceDescription error:recommender.getErrors()) {
             parseErrors(error, recNode);
@@ -340,10 +343,15 @@ public class Parser {
 
             computationGraph.addNode(parent);
             alreadyProcessed.put(dataProcessing.getId(),parent);
-            for (int i=0;i<dataSources.size();i++) {
+            /* for (int i=0;i<dataSources.size();i++) {
                 DataSourceDescription ds = dataProcessing.getDataSources().get(i);
                 parseDataSourceDescription(ds, batchID, userID, parent, "data"+i);
             }
+            */            
+            
+            for (DataSourceDescription ds : dataSources){
+            	parseDataSourceDescription(ds, batchID, userID, parent, ds.getInputType());
+            }            
         }
         
         return parent;
@@ -356,13 +364,13 @@ public class Parser {
         DataSourceDescription validationData = compAgent.getValidationData();
 
         if (trainingData!=null) {
-            parseDataSourceDescription(trainingData, batchID, userID, node, "training");
+            parseDataSourceDescription(trainingData, batchID, userID, node, trainingData.getInputType());
         }
         if (testingData!=null) {
-            parseDataSourceDescription(testingData, batchID, userID, node, "testing");
+            parseDataSourceDescription(testingData, batchID, userID, node, testingData.getInputType());
         }
         if (validationData!=null) {
-            parseDataSourceDescription(validationData, batchID, userID, node, "validation");
+            parseDataSourceDescription(validationData, batchID, userID, node, testingData.getInputType());
         }
     }
     

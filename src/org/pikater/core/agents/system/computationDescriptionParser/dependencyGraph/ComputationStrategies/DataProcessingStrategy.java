@@ -27,6 +27,7 @@ import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
 
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -98,18 +99,26 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         agent.setOptions(usedoptions.getOptions());
 
         Datas datas = new Datas();
-        for (int i =0;i<computationNode.getNumberOfInputs();i++)
-        {
-            String dataName = ((DataSourceEdge) inputs.get("data"+i).getNext()).getDataSourceId();
-            
-            String internalFileName = DataManagerService
-            		.translateExternalFilename(myAgent, userID, dataName);
+        
+        Iterator it = inputs.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, ComputationOutputBuffer> pairs = (Map.Entry)it.next();
 
-            datas.addData(
-                    new Data(dataName,
-                    		internalFileName,
-                            "data"+i
-                    ));
+            ComputationOutputBuffer cob = ((ComputationOutputBuffer)(pairs.getValue()));
+            
+            if (cob.isData() ){
+            	// add to Datas
+            	String dataName = ((DataSourceEdge) cob.getNext()).getDataSourceId();
+
+            	String internalFileName = DataManagerService
+                		.translateExternalFilename(myAgent, userID, dataName);
+
+                datas.addData(
+                        new Data(dataName,
+                        		internalFileName,
+                                pairs.getKey()
+                        ));            	
+            }
         }
        
         String agentClass = agentTypeEdge.getAgentType();

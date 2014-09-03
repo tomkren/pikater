@@ -133,16 +133,18 @@
                     <fileURI>weather.arff</fileURI>
                   </dataProvider>
                   <outputType>fileData</outputType>
+                  <inputType>firstInput</inputType>
                 </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
                 <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
                   <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
+                    <id>5</id>
                     <options/>
                     <errors/>
                     <dataSources/>
                     <fileURI>weather.arff</fileURI>
                   </dataProvider>
                   <outputType>fileData</outputType>
+                  <inputType>secondInput</inputType>
                 </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               </dataSources>
             </dataProvider>
@@ -165,16 +167,18 @@
                     <fileURI>weather.arff</fileURI>
                   </dataProvider>
                   <outputType>fileData</outputType>
+                  <inputType>firstInput</inputType>
                 </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
                 <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
                   <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
+                    <id>5</id>
                     <options/>
                     <errors/>
                     <dataSources/>
                     <fileURI>weather.arff</fileURI>
                   </dataProvider>
                   <outputType>fileData</outputType>
+                  <inputType>secondInput</inputType>
                 </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
               </dataSources>
             </dataProvider>

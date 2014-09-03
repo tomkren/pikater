@@ -309,7 +309,8 @@ public class Agent_Planner extends PikaterAgent {
 			log("requesting save of data "+t.getName());
 			SaveDataset sd = new SaveDataset();
 			sd.setUserID(task.getUserID());
-			sd.setSourceFile(CoreConfiguration.DATA_FILES_PATH+System.getProperty("file.separator")+t.getName());
+			String savedFileName = CoreConfiguration.DATA_FILES_PATH+System.getProperty("file.separator")+t.getName();
+			sd.setSourceFile(savedFileName);			
 			sd.setDescription("Output from batch "+task.getBatchID()+ " ("+t.getType().toString()+")");
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 			request.addReceiver(dataManager);
@@ -319,9 +320,10 @@ public class Agent_Planner extends PikaterAgent {
 			int computedDataID;
 			try {
 				getContentManager().fillContent(request, new Action(dataManager, sd));
-				reply = FIPAService.doFipaRequestClient(this, request, 10000);
+				reply = FIPAService.doFipaRequestClient(this, request);
 				if (reply == null) {
-					logError("Failed to save output data in DB - reply not received.");
+					logError("Failed to save output data in DB - reply not received."
+							 +" (Source file: "+savedFileName+")");
 					return;
 				}
 				computedDataID = (Integer)reply.getContentObject();

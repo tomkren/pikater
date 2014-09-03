@@ -17,13 +17,21 @@ public final class Input06 {
 
 	public static ComputationDescription createDescription() {
 
-		FileDataProvider fileDataProvider = new FileDataProvider();
-		fileDataProvider.setFileURI("weather.arff");
+        FileDataProvider fileDataProvider = new FileDataProvider();
+        fileDataProvider.setFileURI("weather.arff");
+        
+        FileDataProvider fileDataProvider2 = new FileDataProvider();
+        fileDataProvider2.setFileURI("weather.arff");
 
 		// Specify a datasource
-		DataSourceDescription fileDataSource = new DataSourceDescription();
-		fileDataSource.setDataProvider(fileDataProvider);
+		DataSourceDescription fileDataSource1 = new DataSourceDescription();
+		fileDataSource1.setInputType("firstInput");
+		fileDataSource1.setDataProvider(fileDataProvider);
 
+		DataSourceDescription fileDataSource2 = new DataSourceDescription();
+		fileDataSource2.setInputType("secondInput");
+		fileDataSource2.setDataProvider(fileDataProvider2);
+		
 		// Create validation method for a computing agent
 		EvaluationMethod evaluationMethod = new EvaluationMethod(
 				CrossValidation.class.getName());
@@ -37,12 +45,16 @@ public final class Input06 {
 		NewOption optionM = new NewOption("M", 2);
 
 		// Create data-processing
-		List<DataSourceDescription> dataSources = new ArrayList<DataSourceDescription>();
-		dataSources.add(fileDataSource);
-		dataSources.add(fileDataSource);
+		
+		// Specify a datasource
 
+		// PreProcessing
+				
 		DataProcessing dp = new DataProcessing();
-		dp.setDataSources(dataSources);
+		dp.setAgentType(Agent_WeatherSplitter.class.getName());
+		dp.addDataSources(fileDataSource1);
+		dp.addDataSources(fileDataSource2);
+
 		dp.setAgentType(Agent_WeatherSplitter.class.getName());
 
 		// Data processed by dp are the new datasource
