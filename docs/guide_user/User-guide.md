@@ -335,8 +335,8 @@ Note that this is an administrator feature.
 1. Open the default page.
 2. Click on `All experiments` in the left menu.
 3. Find your experiment.
-4. Expand the `TOTAL_PRIORITY` column (see [regular table views](#regularTableViews)).
-5. Change the `TOTAL_PRIORITY` value on the same row as your experiment, if enabled. If it is not, the experiment is not running anymore.
+4. Expand the `PRIORITY` column (see [regular table views](#regularTableViews)).
+5. Change the `PRIORITY` value on the same row as your experiment, if enabled. If it is not, the experiment is not running anymore.
 
 
 
