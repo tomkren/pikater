@@ -1,4 +1,4 @@
-<!-- --- title: Web application documentation-->
+<!-- --- title: Technical documentation part three: Web application documentation-->
 
 [[_TOC_]]
 
@@ -259,5 +259,5 @@ Some technical information may also be found at [[user guide|User-guide]].
 
 ## Other useful links<a name="webLinks"/></a>
 
-* [Servlet 3.0 documentation](http://tomcat.apache.org/tomcat-7.0-doc/servletapi/)
+* Servlet 3.0 documentation found at http://tomcat.apache.org/tomcat-7.0-doc/servletapi/
 

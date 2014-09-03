@@ -1,4 +1,4 @@
-<!-- --- title: Dokumentace databáze -->
+<!-- --- title: Technická dokumentace část první: Dokumentace databáze -->
 
 [[_TOC_]]
 

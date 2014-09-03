@@ -1,4 +1,4 @@
-<!-- --- title: Dokumentace jádra systému Pikater -->
+<!-- --- title: Technická dokumentace část druhá: Dokumentace jádra systému -->
 
 [[_TOC_]]
 

@@ -1,4 +1,4 @@
-<!-- --- title: Web application - GUI documentation -->
+<!-- --- title: Web application - user guide -->
 
 [[_TOC_]]
 
