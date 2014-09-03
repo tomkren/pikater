@@ -16,7 +16,7 @@ Formát používaný knižnicou Weka, čo mulitagentný systém Pikateru interne
 * __HSQLDB__ (Hyper SQL Database)
 * __PgLOB__ (Postgre Large Object)
 * [__JPA__](http://docs.oracle.com/javaee/6/tutorial/doc/bnbpz.html) (Java Persistence API)
-* __DAO_ - Data Access Object
+* __DAO__ - Data Access Object
 * __ACID__ - Atomicity, Consistency, Isolation, Durability
 * __JPQL__ - Java Persistence Query Language
 
@@ -61,7 +61,7 @@ Obrovskou výhodou JPA je, že objekty pripravené na prácu s JPA nemusia byť 
 
 ### Výber connectoru
 
-Rozhodnutie pre JPA znamená, že, okrem databáze a technológie pre prístup k nemu potrebujeme niečo, čo spojuje svet Javy so svetom databáze. V praxi to znamená prevod operácií v JPA na rôzne príkazy v SQL a naopak pre výsledok dotazu vytvoriť odpovedajúce entity. Obvykle výber tohto connectoru neoplyvní vývoj aplikácie, okrem použitia nejakých špeciálnych funkcí. Dva z najrozšírenejších connectorov sú Hibernate a Eclipselink. My sme sa rozhodli pre Ecipselink z dôvodu, že u Eclipselink je možné zmeniť vlastnosti databázového pripojenia zo zdrojového kódu, čo môžeme v budúcnosti využívať.
+Rozhodnutie pre JPA znamená, že, okrem databáze a technológie pre prístup k nemu potrebujeme niečo, čo spojuje svet Javy so svetom databáze. V praxi to znamená prevod operácií v JPA na rôzne príkazy v SQL a naopak pre výsledok dotazu vytvoriť odpovedajúce entity. Obvykle výber tohto connectoru neoplyvní vývoj aplikácie, okrem použitia nejakých špeciálnych funkcí. Dva z najrozšírenejších connectorov sú Hibernate a Eclipselink. My sme sa rozhodli pre Eclipselink z dôvodu, že u Eclipselink je možné zmeniť vlastnosti databázového pripojenia zo zdrojového kódu, čo môžeme v budúcnosti využívať.
 
 ### Konfigurácia
 
@@ -106,6 +106,9 @@ My sme sa rozhodli využívať iba súbor `persistence.xml` a to z viacerých d�
 Pre nás znamenal problém vytvoriť si `EntityManagerFactory` pomocou `Beans.xml` z dôvodu, že Spring interne používá javovské `Proxy` triedy pri vytvorení inštancií jednotlivých beanu. To znamená, že pre každý interface, čo dedí daná trieda je vytvorený jeden `Proxy` objekt, čo musíme pretypovať na typ interfaceu. `EntityManagerFactory` má vela interfaceov od ktorých sa dedí a ani jeden nepokrýva celú funkčnosť triedy a z tohto dôvodu nefunguje prístup pomocou funkcie `ApplicationContext.getBean`. Z podobného dôvodu sme nechceli injektovať `EntityManager`y (získané pomocou `EntityManagerFactory`) do objektov slúžiace na spravovanie entít, lebo v tom prípade tie objekty sú vytvorené takisto pomocou Springu a tým pádom pre každý takýto objekt potrebujeme jeden interface.
 
 Na zjednodušenie vytvorenia konfiguračných súborov je možné používať program `org.pikater.shared.database.util.initialisation.DatabaseInitialisation`, do ktorého môžeme pomocou príkazového riadka zadať potrebné údaje a vygeneruje nám obidva konfiguračné súbory.
+
+
+
 
 ## Databáza
 
@@ -265,9 +268,7 @@ Dotazy pomocou Criteria API sme vytvorili hlavne pre webové rozhranie, kde je p
 
 ### Poznámky k JPA
 
-<font color="red">Dokumentaci k JPA a použitým anotacím lze zobrazit v odkazu výše</font>.  
-
-Pre úplnosť samozrejme ešte doplníme:
+Dokumentaci k JPA a použitým anotacím lze zobrazit v odkazu výše. Pre úplnosť samozrejme ešte doplníme:
 * `@Lob` - síce uloženie velkých súborov máme vyriešené pomocou PgLOBov, ale menšie môžeme uložiť aj pomocou JPA anotácie. V tomto prípade premenná sa serializuje a uloží sa do bytového pola - alebo iného kompatibilného typu - v databázovom záznamu. Tento prístup využívame napr. u uložení modelov výpočtov, alebo u dlhých reťazcov XMLov.
 * `@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS` alebo `InheritanceType.JOINED`) - značka slúží na zadefinovanie, že ako chceme vytvoriť tabulky relácií pre jednotlivé entity. Nastavenie `TABLE_PER_CLASS` vytvorí vlastnú tabulku so všetkými hodnotami, ktoré v danej entite vyskytujú (vlastné aj zdedené). Nastavenie JOINED vytvorí iba jednu tabulu, pre danú entitu a všetky z nej odvodené. Znamená to, že niektoré položky sú prázdne, ale v niektorých prípadoch je to viac prehladný.
 * `@Enumerated(EnumType.STRING)` - u premenných odvodených od java.lang.Enum môžeme zadefinovať, či chceme aby sa do databáze uložil názov hodnoty, alebo jeho poradové číslo (`EnumType.ORDINAL`). Uložiť Enum ako String je výhodnejšie z tohto dôvodu, že pri pridaní novej položky nemusíme brať do úvahy poradie hodnôt. Vymazanie nejakej položky zo zdrojového kódu môže spôsobiť výnimku pri získaní hodnôt z databáze. Na druhej strane pri uložení ako `EnumType.ORDINAL` nemusíme získať výnimku, čo môže sposobiť zákerné chyby, pretože hodnoty enumov sú zle namapované.
