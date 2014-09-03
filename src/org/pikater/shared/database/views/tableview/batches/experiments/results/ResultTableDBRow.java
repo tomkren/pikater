@@ -30,6 +30,16 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 	{
 		return result;
 	}
+	
+	public JPADataSetLO getFirstValidInput()
+	{
+		return firstValidInput;
+	}
+
+	public JPADataSetLO getFirstValidOutput()
+	{
+		return firstValidOutput;
+	}
 
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
@@ -127,6 +137,32 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 				protected void commitEntities()
 				{
 				}
+				
+				private void setValidInput()
+				{
+					for(JPADataSetLO dataset : result.getInputs())
+					{
+						if(dataset.hasComputedMetadata())
+						{
+							firstValidInput = dataset;
+							return;
+						}
+					}
+					firstValidInput = null;
+				}
+				
+				private void setValidOutput()
+				{
+					for(JPADataSetLO dataset : result.getOutputs())
+					{
+						if(dataset.hasComputedMetadata())
+						{
+							firstValidOutput = dataset;
+							return;
+						}
+					}
+					firstValidOutput = null;
+				}
 			};
 			
 		
@@ -138,31 +174,5 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 	@Override
 	public void commitRow()
 	{
-	}
-	
-	private void setValidInput()
-	{
-		for(JPADataSetLO dataset : result.getInputs())
-		{
-			if(dataset.hasComputedMetadata())
-			{
-				firstValidInput = dataset;
-				return;
-			}
-		}
-		firstValidInput = null;
-	}
-	
-	private void setValidOutput()
-	{
-		for(JPADataSetLO dataset : result.getOutputs())
-		{
-			if(dataset.hasComputedMetadata())
-			{
-				firstValidOutput = dataset;
-				return;
-			}
-		}
-		firstValidOutput = null;
 	}
 }
