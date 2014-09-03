@@ -1,6 +1,8 @@
+# Projekt Pikater – Základní informace
+
 # Aktuální dokumentace
 
-Aktuální verze dokumentace v podobě wiki včetně netisknutelných video návodů je dostupná on-line na adrese:
+Aktuální verze dokumentace v podobě wiki je dostupná on-line na adrese:
 
 http://nassoftwerak.ms.mff.cuni.cz:4567
 
