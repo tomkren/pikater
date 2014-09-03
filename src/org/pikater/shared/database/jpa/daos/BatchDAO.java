@@ -39,7 +39,7 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 		case NOTE:
 		case STATUS:
 			return root.get(column.toString().toLowerCase());
-		case MAX_PRIORITY:
+		case TOTAL_PRIORITY:
 			return root.get("totalPriority");
 		case OWNER:
 			return root.get("owner").get("login");

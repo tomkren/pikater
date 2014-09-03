@@ -76,7 +76,7 @@ public class JPABatch extends JPAAbstractEntity{
 	public JPABatch(){}
 	
 	/**
-	 * Creates an experiment to be saved (not executed).
+	 * Creates an experiment to be saved (not queued).
 	 * @param name
 	 * @param note
 	 * @param xml
@@ -88,14 +88,14 @@ public class JPABatch extends JPAAbstractEntity{
 		this.note = note;
 		this.XML = xml;
 		this.owner=owner;
-		this.userAssignedPriority = 0;
+		this.userAssignedPriority=0;
 		this.totalPriority=0;
 		this.created=new Date();
 		this.status=JPABatchStatus.CREATED;
 	}
 	
 	/**
-	 * Creates an experiment to be saved for execution.
+	 * Creates an experiment to be queued.
 	 * @param name
 	 * @param note
 	 * @param xml
@@ -112,7 +112,7 @@ public class JPABatch extends JPAAbstractEntity{
 		this.owner=owner;
 		this.userAssignedPriority = userAssignedPriority;
 		this.sendEmailAfterFinish=sendEmailAfterFinish;
-		this.totalPriority=99; // TODO: this should be refreshed when setting user assigned priority => a separate method
+		updateTotalPriority();
 		this.created=new Date();
 		this.status=JPABatchStatus.WAITING;
 	}
@@ -145,10 +145,16 @@ public class JPABatch extends JPAAbstractEntity{
 		this.owner = owner;
 	}
 
-	public void setUserAssignedPriority(int priority){
+	public void setUserAssignedPriority(int priority)
+	{
+		/*
+		 * Currently it is only set once when an experiment is queued and after that it is readonly
+		 * so we don't need to update total priority.
+		 */
+		
 		if((priority >= 0) && priority < 10)
 		{
-			this.userAssignedPriority=priority; // TODO: total priority needs to be refreshed when user assigned priority changes and the batch had been scheduled
+			this.userAssignedPriority=priority;
 		}
 		else
 		{
@@ -159,12 +165,28 @@ public class JPABatch extends JPAAbstractEntity{
 		return this.userAssignedPriority;
 	}
 	
+	/**
+	 * Use this method with caution as it may break synchronization between user priority and 
+	 * user assigned priority.</br>
+	 * <ul>
+	 * <li> To override priority by an administrator, use this method.
+	 * <li> To initialize total priority of a new batch, use {@link #updateTotalPriority()}.
+	 * </ul>
+	 * @param totalPriority
+	 */
+	@Deprecated
 	public void setTotalPriority(int totalPriority){
-		// TODO: concatenation of user priority (JPAUser) and user assigned priority
 		this.totalPriority=totalPriority;
 	}
+	/**
+	 * Only THIS value is used in core system as priority for the whole batch.
+	 * @return
+	 */
 	public int getTotalPriority(){
 		return this.totalPriority;
+	}
+	public void updateTotalPriority(){
+		setTotalPriority(owner.getPriorityMax() * 10 + userAssignedPriority);
 	}
 
 	public boolean isSendEmailAfterFinish() {

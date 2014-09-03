@@ -20,12 +20,22 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 	{
 		private static final long serialVersionUID = -7303124181497778648L;
 		{
-			for(int i = 1; i < 100; i++)
+			for(int i = 0; i < 100; i++)
 			{
 				add(String.valueOf(i));
 			}
 		}
 	};
+	private static final Set<String> allowedUserPriorities = new LinkedHashSet<String>()
+			{
+				private static final long serialVersionUID = -7303124181497778648L;
+				{
+					for(int i = 0; i < 10; i++)
+					{
+						add(String.valueOf(i));
+					}
+				}
+			};
 	
 	private final JPABatch batch;
 	private final boolean adminMode;
@@ -56,7 +66,17 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(batch.getCreated()));
 		case FINISHED:
 			return new StringReadOnlyDBViewValue(DateUtils.toCzechDate(batch.getFinished()));
-		case MAX_PRIORITY:
+		case OWNER:
+			return new StringReadOnlyDBViewValue(batch.getOwner().getLogin());
+		case STATUS:
+			return new StringReadOnlyDBViewValue(batch.getStatus().name());
+		case NOTE:
+			return new StringReadOnlyDBViewValue(batch.getNote());
+			
+		/*
+		 * Then priority properties. 
+		 */
+		case TOTAL_PRIORITY:
 			if(adminMode)
 			{
 				return new RepresentativeDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority()))
@@ -67,6 +87,7 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 						return !batch.isBeingExecuted();
 					}
 					
+					@SuppressWarnings("deprecation") // we know what we're doing here
 					@Override
 					protected void updateEntities(String newValue)
 					{
@@ -84,13 +105,8 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 			{
 				return new RepresentativeReadonlyDBViewValue(allowedTotalPriorities, String.valueOf(batch.getTotalPriority()));
 			}
-			
-		case OWNER:
-			return new StringReadOnlyDBViewValue(batch.getOwner().getLogin());
-		case STATUS:
-			return new StringReadOnlyDBViewValue(batch.getStatus().name());
-		case NOTE:
-			return new StringReadOnlyDBViewValue(batch.getNote());
+		case USER_PRIORITY:
+			return new RepresentativeReadonlyDBViewValue(allowedUserPriorities, String.valueOf(batch.getUserAssignedPriority()));
 			
 		/*
 		 * And then actions. 

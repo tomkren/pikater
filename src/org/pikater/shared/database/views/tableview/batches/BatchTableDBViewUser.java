@@ -36,6 +36,8 @@ public class BatchTableDBViewUser extends BatchTableDBViewAll
 	{
 		Set<ITableColumn> superResult = super.getAllColumns();
 		superResult.remove(Column.OWNER);
+		superResult.remove(Column.TOTAL_PRIORITY);
+		superResult.add(Column.USER_PRIORITY);
 		return superResult;
 	}
 	
@@ -44,6 +46,8 @@ public class BatchTableDBViewUser extends BatchTableDBViewAll
 	{
 		Set<ITableColumn> superResult = super.getDefaultColumns();
 		superResult.remove(Column.OWNER);
+		superResult.remove(Column.TOTAL_PRIORITY);
+		superResult.add(Column.USER_PRIORITY);
 		return superResult;
 	}
 	
