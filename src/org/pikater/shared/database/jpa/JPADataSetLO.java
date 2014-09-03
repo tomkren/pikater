@@ -32,10 +32,10 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 		name="DataSetLO",
 		indexes={
 				@Index(columnList="hash"),
-				@Index(columnList="owner"),
+				@Index(columnList="owner_id"),
 				@Index(columnList="source"),
 				@Index(columnList="source,visible"),
-				@Index(columnList="source,owner,visible")
+				@Index(columnList="source,owner_id,visible")
 				}
 		)
 @NamedQueries({

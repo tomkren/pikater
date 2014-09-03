@@ -39,7 +39,7 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 		case NOTE:
 		case STATUS:
 			return root.get(column.toString().toLowerCase());
-		case MAX_PRIORITY:
+		case TOTAL_PRIORITY:
 			return root.get("totalPriority");
 		case OWNER:
 			return root.get("owner").get("login");
@@ -292,16 +292,28 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
 		try{
-			logger.info("Starting cleaning up");
+			logger.info("Starting cleaning up batches");
 			List<JPABatch> batches=em
 					.createNamedQuery("Batch.getByStatus",JPABatch.class)
 					.setParameter("status", JPABatchStatus.COMPUTING)
 					.getResultList();
+			batches.addAll(
+					em
+					.createNamedQuery("Batch.getByStatus",JPABatch.class)
+					.setParameter("status", JPABatchStatus.WAITING)
+					.getResultList()
+					);
+			batches.addAll(
+					em
+					.createNamedQuery("Batch.getByStatus",JPABatch.class)
+					.setParameter("status", JPABatchStatus.STARTED)
+					.getResultList()
+					);
 			for(JPABatch batch : batches){
 				batch.setStatus(JPABatchStatus.FAILED.name());
 			}
 			em.getTransaction().commit();
-			logger.info("Cleaning up finished");
+			logger.info("Cleaning up batches finished");
 		}catch(Exception e){
 			logger.error("Error during cleanup...", e);
 			em.getTransaction().rollback();

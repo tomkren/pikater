@@ -3,6 +3,7 @@ package org.pikater.shared.database.util.initialisation;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -20,9 +21,9 @@ import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.JPAUserPriviledge;
+import org.pikater.shared.database.jpa.PikaterPriviledge;
+import org.pikater.shared.database.jpa.PikaterRole;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.jpa.security.PikaterPriviledge;
-import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
 import org.pikater.shared.util.DateUtils;
 
@@ -110,12 +111,22 @@ public class DatabaseInitialisation {
 		return text;
 	}
 	
-	private void generateConfigFile(String source, File output, String dbPath, String dbUser, String dbPassword) throws FileNotFoundException{
+	private void generateConfigFile(String source, File output, String dbPath, String dbUser, String dbPassword) throws IOException{
 		String sourceString=this.readWholeFile(source);
 		sourceString = sourceString.replaceAll("###databaseURL###", dbPath);
 		sourceString = sourceString.replaceAll("###databaseusername###", dbUser);
 		sourceString = sourceString.replaceAll("###databasepassword###", dbPassword);
-		System.err.println(sourceString);
+		FileWriter fw = new FileWriter(output);
+		System.out.println("Writing file "+output.getAbsolutePath());
+		try {
+			fw.write(sourceString);
+		} catch (IOException e) {
+			System.err.println("Can't write output file: "+output.getAbsolutePath());
+			e.printStackTrace();
+		}finally{
+			fw.close();
+		}
+		System.out.println("File "+output.getAbsolutePath()+" was successfully created");
 	}
 	
 	private void configGeneration() throws IOException{
@@ -130,27 +141,27 @@ public class DatabaseInitialisation {
 		p("please make sure, they are in correct locations.");
 		p("");
 		p("persistence.xml current target (type new or leave blank) ");
-		p(DatabaseInitialisation.PERSISTENT_TARGET);
+		p("src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET);
 		String persistenceTarget=br.readLine();
 		if(persistenceTarget.equals(""))
-			persistenceTarget=DatabaseInitialisation.PERSISTENT_TARGET;
+			persistenceTarget="src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET;
 				
 		p("Beans.xml current target (type new or leave blank) ");
-		p(CoreConfiguration.BEANS_CONFIG_FILE);
+		p("src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE);
 		String beansTarget=br.readLine();
 		if(beansTarget.equals(""))
-			beansTarget=CoreConfiguration.BEANS_CONFIG_FILE;
+			beansTarget="src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE;
 		
 		p("Generating "+persistenceTarget+" ...");
 		this.generateConfigFile(DatabaseInitialisation.PERSISTENCE_CONFIGBASE,
-				null,
+				new File(persistenceTarget),
 				dbPath,
 				dbUser,
 				dbPassword);
 
 		p("Generating "+beansTarget+" ...");
 		this.generateConfigFile(DatabaseInitialisation.BEANS_CONFIGBASE,
-				null,
+				new File(beansTarget),
 				dbPath,
 				dbUser,
 				dbPassword);

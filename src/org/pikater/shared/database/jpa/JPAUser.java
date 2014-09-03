@@ -18,8 +18,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.jpa.security.PikaterPriviledge;
-import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity

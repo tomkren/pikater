@@ -1,7 +1,7 @@
 package org.pikater.shared.database.jpa.daos;
 
 import org.pikater.shared.database.jpa.JPARole;
-import org.pikater.shared.database.jpa.security.PikaterRole;
+import org.pikater.shared.database.jpa.PikaterRole;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
 
 public class RoleDAO extends AbstractDAO<JPARole> {

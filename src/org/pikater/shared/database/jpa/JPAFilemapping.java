@@ -12,8 +12,7 @@ import javax.persistence.Transient;
 		name="FileMapping",
 		indexes={
 				@Index(columnList="internalfilename"),
-				@Index(columnList="externalfilename"),
-				@Index(columnList="user")
+				@Index(columnList="externalfilename")
 				}
 		)
 @NamedQueries({

@@ -19,9 +19,9 @@ import org.pikater.shared.database.jpa.JPAFilemapping;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPARole;
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.PikaterPriviledge;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.database.jpa.security.PikaterPriviledge;
 import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.MyPGConnection;
@@ -258,7 +258,7 @@ public class DatabaseTest {
 		
 		Experiment exp=new Experiment();
 		exp.setBatchID(jpaBatch.getId());//62901);
-		exp.setStatus(JPAExperimentStatus.WAITING.name());
+		exp.setStatus(JPAExperimentStatus.FAILED.name());
 		
 		int id1=DAOs.batchDAO.addExperimentToBatch(exp);
 		System.out.println("Saved experiment with ID: "+id1);
