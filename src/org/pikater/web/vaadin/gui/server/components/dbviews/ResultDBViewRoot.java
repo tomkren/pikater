@@ -130,7 +130,7 @@ public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBVie
 		}
 		else if(specificColumn == ResultTableDBView.Column.VISUALIZE)
 		{
-			final JPADataSetLO resultsDataset = specificRow.getResult().getOutputs().get(0); // this is a temporary solution
+			final JPADataSetLO resultsDataset = specificRow.getFirstValidOutput(); // this is a temporary solution
 			GeneralDialogs.componentDialog("Attributes to visualize", new DatasetVisualizationForm(resultsDataset), new DialogCommons.IDialogResultHandler()
 			{
 				@Override
