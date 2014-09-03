@@ -442,7 +442,7 @@ Následující množinu Ontologií využívají všichni agenti, kteří někdy 
 
 Tuto roli si osvojili všichni agenti, kteří mají za úkol buď vytvářet, načítat, přepravovat nebo logovat do databáze zadání v jedné Batche. Součástí je pro systém nepostradatelná ontologie ComputationDescription, která slouží k reprezentaci jedné dávky.
 
-### Ontologie ComputationDescription
+#### Ontologie ComputationDescription
 
 Ontologie byla navržena tak, aby mohla reprezentovat libovolné množství vzájemně datově závislých DataProcessingu. Jedná se tedy o strukturu logicky představující multigraf, kde vrcholy jsou DataProcessingy a hrany představují tok dat, a to buďto, Errorů nebo datasetů.
 
@@ -518,7 +518,7 @@ Agent Manager tuto Ontologii používá pro komunikaci se Searcherem za účelem
 
 TaskOntology je Ontologie, která umožňuje pracovat jednotlivým agentům v rámci Pikateru s jedním Taskem, neboli s objektem reprezentující nejnižší úroveň logického problému. Agent Manager, který jako první v řadě z hlediska průtoku dat používá Ontologi Task, neřeší pouze problém řízení výpočtu, ale také transformace příchozích Batchů na jednotlivé experimenty, které transformuje na seznam konkrétních dále nedělitelných Tasků. Tyto Tasky pak přeposílá agentovi Plannerovi, který za podpory hlídání datových závislostí předává Tasky distribuovaným výpočetním agentům, případně DataProcessingům. Jak DataProcessingy, tak výpočetní agenti, přijímají zadání jednoho výpočtu jako Ontologii Task. 
 
-### Ontologie Task
+#### Ontologie Task
 
 Ontologie Task je obecná struktura, která je schopná pojmout jakýkoli pro Pikater dále nedělitelný problém určený pro libovolný typ agenta, obsahující neomezené množství vstupních souborů potřebných pro výpočet. Ukrývá informace o identifikaci Batche experimentu, ke kterému patří identifikátor uživatele, který Batche zadal  a spoustu dalších Optionů ovlivňující běh výpočtu. Pro plánování Tasku je zde informace o předpokládané délce běhu výpočtu, která má zajistit průchodnost systému pro krátce trvající výpočty. Po výpočtu Tasku se Ontologie Task předává zpátky až do agenta Managera. V tento okamžik jsou v Tasku vyplněné informace o vypočtených souborech, které výpočetní agent nebo DataProcessing vyprodukoval na file systém. Zároveň vypočtený Task obsahuje datum a čas začátku a konce běhu výpočtu. 
 
