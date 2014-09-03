@@ -47,7 +47,7 @@ public final class Input01_model {
 		comAgent.setTestingData(fileDataSource);
 		comAgent.setEvaluationMethod(new EvaluationMethod(CrossValidation.class.getName()));
 		comAgent.setEvaluationMethod(evaluationMethod);
-		comAgent.setModel(83304);
+		comAgent.setModel(122856);
 
         //Labeled data labeled by our CA are the new datasource
 		DataSourceDescription computingDataSource = new DataSourceDescription();

@@ -30,7 +30,7 @@
                 <options/>
                 <errors/>
                 <dataSources/>
-                <fileURI>weather2.arff</fileURI>
+                <fileURI>weather.arff</fileURI>
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>secondInput</inputType>
@@ -69,7 +69,7 @@
                 <options/>
                 <errors/>
                 <dataSources/>
-                <fileURI>weather2.arff</fileURI>
+                <fileURI>weather.arff</fileURI>
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>secondInput</inputType>
@@ -108,7 +108,7 @@
                 <options/>
                 <errors/>
                 <dataSources/>
-                <fileURI>weather2.arff</fileURI>
+                <fileURI>weather.arff</fileURI>
               </dataProvider>
               <outputType>fileData</outputType>
               <inputType>secondInput</inputType>

@@ -39,7 +39,6 @@ public class Task implements Concept {
 
 	private String saveMode = null;
 	private boolean saveResults;
-	private String getResults;
 	private String guiAgent;
 
 	// results are filled in after they are computed

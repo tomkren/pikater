@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -27,7 +28,16 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
 
 @Entity	
-@Table(name="DataSetLO")
+@Table(
+		name="DataSetLO",
+		indexes={
+				@Index(columnList="hash"),
+				@Index(columnList="owner_id"),
+				@Index(columnList="source"),
+				@Index(columnList="source,visible"),
+				@Index(columnList="source,owner_id,visible")
+				}
+		)
 @NamedQueries({
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getAllBySoruce",query="select dslo from JPADataSetLO dslo where dslo.source=:source"),

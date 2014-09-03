@@ -38,11 +38,6 @@ public class DataSourceDescriptions implements Concept {
 			String inputType) {
 		
 		for (DataSourceDescription descriptionI : this.descriptions) {
-			
-			if (descriptionI.getInputType() == null) {
-				int dsf =5;
-				dsf++;
-			}
 			if (descriptionI.getInputType().equals(inputType)) {
 				return descriptionI;
 			}

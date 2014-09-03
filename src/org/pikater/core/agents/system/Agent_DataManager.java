@@ -24,6 +24,7 @@ import java.net.ServerSocket;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +66,7 @@ import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataset.DatasetInfo;
 import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
 import org.pikater.core.ontology.subtrees.dataset.GetAllDatasetInfo;
@@ -106,6 +108,7 @@ import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -346,6 +349,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private void cleanupAbortedBatches() {
 		DAOs.batchDAO.cleanUp();
+		DAOs.experimentDAO.cleanUp();
 	}
 
 	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {
@@ -861,6 +865,19 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	private <T extends JPAAbstractEntity> boolean containsID(List<T> list, T item ){
+		for(T i : list){
+			if(i.getId()==item.getId()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private <E> List<E> safe(List<E> list){
+		return (list!=null)?list:Collections.<E>emptyList();
+	}
+	
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
@@ -875,11 +892,32 @@ public class Agent_DataManager extends PikaterAgent {
 		log("Saving result for hash: " + task.getDatas().exportInternalTrainFileName());
 		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
 
+		for(Data data : safe(task.getDatas().getDatas())){
+			if(data==null)
+				continue;
+			
+			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(data.getInternalFileName())).getSingleResultWithNull();
+			if(dslo!=null){
+				if(!this.containsID(jparesult.getInputs(), dslo)){
+					jparesult.getInputs().add(dslo);
+					log("Adding input " + data.getInternalFileName() + " to result." );
+				}else{
+					log("Adding input " + data.getInternalFileName() + " skipped. Duplicate value.");
+				}
+			}else{
+				logError("Failed to add output " + data.getInternalFileName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			}
+		}
+		
 		for (TaskOutput output : task.getOutput()) {
 			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(output.getName())).getSingleResultWithNull();
 			if(dslo!=null){
-				jparesult.getOutputs().add(dslo);
-				log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+				if(!this.containsID(jparesult.getOutputs(), dslo)){
+					jparesult.getOutputs().add(dslo);
+					log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+				}else{
+					log("Adding output " + output.getName() + " skipped. Duplicate value.");
+				}
 			}else{
 				logError("Failed to add output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
 			}
@@ -991,7 +1029,7 @@ public class Agent_DataManager extends PikaterAgent {
 			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(new File(sd.getSourceFile()), sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
 
 			reply.setContentObject((new Integer(jpadsloID)));
-			log("Saved Dataset with ID: " + jpadsloID);
+			log("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());
 		} catch (NoResultException e) {
 			logError("No user found with login: " + sd.getUserID(), e);
 			reply.setPerformative(ACLMessage.FAILURE);

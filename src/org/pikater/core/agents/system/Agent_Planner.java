@@ -25,6 +25,7 @@ import java.util.Set;
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.metadata.MetadataService;
 import org.pikater.core.agents.system.planner.PlannerCommunicator;
 import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
@@ -40,6 +41,7 @@ import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.ModelOntology;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.batch.BatchPriorityChanged;
 import org.pikater.core.ontology.subtrees.dataset.SaveDataset;
 import org.pikater.core.ontology.subtrees.systemLoad.GetSystemLoad;
 import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
@@ -117,6 +119,10 @@ public class Agent_Planner extends PikaterAgent {
 						return respondToExecuteTask(request, a);
 					}
 					
+					if (a.getAction() instanceof BatchPriorityChanged) {
+						return respondToBatchPriorityChanged(request, a);
+					}
+					
 					if (a.getAction() instanceof GetSystemLoad) {
 						return respondToGetSystemLoad(request, a);
 					}
@@ -160,14 +166,38 @@ public class Agent_Planner extends PikaterAgent {
 			plan();
 		lock.unlock();
 
-		//TODO:
-		ACLMessage reply = request.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		reply.setContent("OK - ExecuteTask msg accepted");
+		
+		//ACLMessage reply = request.createReply();
+		//reply.setPerformative(ACLMessage.INFORM);
+		//reply.setContent("OK - ExecuteTask msg accepted");
 
 		return null;
 	}
 
+	protected ACLMessage respondToBatchPriorityChanged(ACLMessage request, Action a) {
+		
+		BatchPriorityChanged batchPriorityChanged =
+				(BatchPriorityChanged) a.getAction();
+		int batchID = batchPriorityChanged.getBatchID();
+		
+		int newBatchPriority = DataManagerService.getBatchPriority(this, batchID);
+		
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			logError(e.getMessage(), e);
+		}
+			waitingToStartComputingTasks.updateTaskPriority(
+					batchID, newBatchPriority);
+		lock.unlock();
+		
+		ACLMessage reply = request.createReply();
+		reply.setPerformative(ACLMessage.INFORM);
+		reply.setContent("OK - Priority changed");
+		
+		return reply;
+	}
+	
 	protected ACLMessage respondToGetSystemLoad(ACLMessage request, Action a) {
 
 		SystemLoad systemLoad = getSystemLoad();

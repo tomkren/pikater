@@ -26,8 +26,4 @@
         </constructor-arg>
     </bean>
 
-    <bean id="dataModel" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-         <property name="persistenceUnitName" value="pikaterDataModel"/>
-    </bean>
-
 </beans>

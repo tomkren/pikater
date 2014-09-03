@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.Observable;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.events.BatchFinished;
-import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

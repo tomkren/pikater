@@ -2,7 +2,6 @@ package org.pikater.shared.database.jpa;
 
 import java.util.Date;
 
-import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -31,7 +30,6 @@ public class JPAAgentInfo extends JPAAbstractEntity{
 	private String agentClass;
 	private String ontologyClass;
 	private String description;
-	@Nullable
 	private JPAExternalAgent externalAgent;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationTime;

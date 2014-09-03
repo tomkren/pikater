@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,7 +21,16 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
-@Table(name="_User")
+@Table(
+		name="_User",
+		indexes={
+				@Index(columnList="login"),
+				@Index(columnList="email"),
+				@Index(columnList="priorityMax"),
+				@Index(columnList="status"),
+				@Index(columnList="created")
+				}
+	  )
 @NamedQueries({
 	@NamedQuery(name="User.getAll",query="select u from JPAUser u"),
 	@NamedQuery(name="User.getAll.count",query="select count(u) from JPAUser u"),
