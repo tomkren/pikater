@@ -268,6 +268,26 @@ Mezi jedno z nejdůležitějších využití DataManagera slouží uchováván�
 
 Návrh Univerzálního formátu vychází z nápadu obalit Ontologie ze struktury ComputationDescription a do každého wrapperu kromě výpočetního elementu i vložit nepovinou třídu obsahující informace pro GUI. Třída obalující celou strukturu je pojmenovaná UniversalComputationDescription. Třída obsahuje stejně navrženou stromovou strukturu instancí tříd UniversalElement, jako Ontologie ComputatioDescription. Třída UniversalElement zde slouží jako wrapper instance třídy UniversalOntology, což je třída představující datový model pro jednu instanci Ontologie Dataprocessing. Třída UniversalGui slouží pro reprezentaci informací pro webové GUI.
 
+#### Ontologické zprávy
+
+Ontologické zprávy pomocí kterých se manipuluje s daty a získávají se informace uchované agentem `DataManagerem` můžeme rozdělit do několika logických oblastí:
+
+* Pro získání základních informací o uživateli a překlad uživatelského jména na uživatelovo IDéčko se používají Ontologie `GetUser` a `GetUserID`.
+
+* Agent slouží i pro uchovávání mapování dat na jejich logický význam. Pro překlad externího jména souboru na hash se využívá ontologie `TranslateFilename`.
+
+* Další skupina Ontologií se využívá k ukládání a načítání struktury `AgentInfo`. Mezi nejpoužívanější třídy z této kategorie patří `SaveAgentInfo` a `GetAgentInfo`. Existují i Ontologie pro získání všech interních i externích `AgentInfo` uložené v databázi.
+
+* Pro práci s Batchemi se používají Ontologie `SaveBatch`, `LoadBatch`, `UpdateBatchStatus`, `GetBatchPriority`.
+
+    - Podobně koncipované jsou Ontologie pracující s Experimenty: `SaveExperiment` a `UpdateExperimentStatus`.
+    
+    - Analogicky se ukládají Resulty: `SaveResults`, `LoadResult`. Ontologie `Result` slouží pro reprezentaci chyb natrénovaného modelu, neobsahuje tudíž žádné datové množiny.
+
+* Pro ukládání datových množin slouží Ontologie `SaveDataset`, načítání provádí ontologie `GetFile`. Speciálním typem souboru tvoří Externí agenti. Pro ně je k dispozici Ontologie `GetExternalAgentJar`. Ukládání agentů provádí pouze webové GUIčko, tudíž ontologie `SaveExternalAgent` neexistuje.
+
+* Pro ukládání a čtení vygenerovaných metadat se využívají Ontologie `SaveMetadata`, `GetMetadata`, `GetAllMetadata`, `GetMultipleBestAgents`. Ukládání metadat využívá pouze agent `MetadataQueen`, zbylé ontologie využívají Recommendeři.
+
 ### Agent MetadataQueen
 
 Tento agent má v rámci systému pouze jedinou úlohu, která spočívá ve vygenerování metadat pro jednotlivé datasety. Jedná se o vypočtení statistických veličin popisující pomáhající odhadnout podobnost dvou datasetů bez časové náročné manipulace a opětovného načítání.
