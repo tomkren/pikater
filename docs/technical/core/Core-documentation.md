@@ -58,7 +58,7 @@ Z hlediska nadstavby Pikateru je důležitý vznik ontologie AgentInfo a výměn
 
 ### Schéma architektury
 
-[[architektura-final.png]]
+[[/docs/technical/architektura-final.png]]
 
 ## Popis agentů
 
