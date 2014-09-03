@@ -354,7 +354,7 @@ Pro zefektivnění přenosů mezi různými stroji pak byla zavedená keš dat. 
 
 Pro uložení dat používají výpočetní agenti připravenou metodu `org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing.saveArff()`.  `Agent_Planner` pak prostřednitcvím `Agent_DataManager` a jeho akce `org.pikater.core.ontology.subtrees.dataset.SaveDataset` zajistí uložení dat do databáze pro možnost vizualizace.
 
-#### Načítání dat
+#### Načítání datasetů
 {{{{{{
 
 ComputingAgent->+ARFFReader: GetData
@@ -387,7 +387,7 @@ ManagerAgent->ManagerAgent: starts new agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
 
-#### Natrénované a uložené modely (agenti).
+### Natrénované a uložené modely (agenti).
 
 Natrénované modely jsou uloženy v podobě serializované Javovské třídy daného agenta.  Samotnou serializaci modelu zajišťuje knihovna WEKA – její klasifikátory implementují rozhraní `Serializable`.
 
@@ -461,7 +461,7 @@ Ontologie ExperimentOntology se využívá pro manipulaci s takzvanými experime
 
 ### FileNameTranslationOntology
 
-Pro potřebu překládání uživatelsky přívětivého takzvaného externího jména datasetu na systémem zpracovatelné interní jméno, se využívá právě tato skupina Ontologií. Interní jméno datového souboru je zpravidla md5 hash jeho obsahu. Tato konvence interního pojmenovávání souborů zjednodušuje řízení efektivní přepravy dat a přirozenou cestou zabraňuje tomu, aby se na filesystému objevovaly jedny data vícekrát. Dochází zde sice k překryvu jmen souborů, které mají logicky rozdílný význam, ovšem v problematice strojového učení jde touto cestou mnohonásobně zefektivnit využitelnost potřebných diskových kapacit. Překlad prování agent DataManager, který má uloženou mapu párování interních a externích jmen souborů. Překlad se volá z agenta Managera při pársování zadaných Batchů, kde v Ontologii FileDataImput překládá logické jméno vstupního ARFF souboru. Překlad využívá také agent Duration pro získání interního jména datasetu nastaveného v konfiguraci,  na kterém se opakovaně spouští úloha lineární regrese představující pro systém jednu logickou jednotku systémového času.       
+Pro potřebu překládání uživatelsky přívětivého takzvaného externího jména datasetu na systémem zpracovatelné interní jméno, se využívá právě tato skupina Ontologií. Interní jméno datového souboru je zpravidla md5 hash jeho obsahu. Tato konvence interního pojmenovávání souborů zjednodušuje řízení efektivní přepravy dat a přirozenou cestou zabraňuje tomu, aby se na filesystému objevovaly jedny data vícekrát. Dochází zde sice k překryvu jmen souborů, které mají logicky rozdílný význam, ovšem v problematice strojového učení jde touto cestou mnohonásobně zefektivnit využitelnost potřebných diskových kapacit. Překlad provádí agent DataManager, který má uloženou mapu párování interních a externích jmen souborů. Překlad se volá z agenta Managera při pársování zadaných Batchů, kde v Ontologii FileDataImput překládá logické jméno vstupního ARFF souboru. Překlad využívá také agent Duration pro získání interního jména datasetu nastaveného v konfiguraci,  na kterém se opakovaně spouští úloha lineární regrese představující pro systém jednu logickou jednotku systémového času.       
 
 
 ### MailingOntology
