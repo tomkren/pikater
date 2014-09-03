@@ -2,19 +2,17 @@
 
 [[_TOC_]]
 
-# PIKATER (Pikantní agentní teritorium)
-
 Pikater je multiagentní systém vyvíjený týmem Mgr. Romana Nerudy, CSc. na Matematicko-fyzikální fakultě Univerzity Karlovy a je úzce spojen s Ústavem informatiky Akademie věd České Republiky.  Systém byl vyvíjen za účelem vytvořit výpočetní platformu pro akademický výzkum v oblasti strojového učení.
 
-Systém prošel mnoha podobami, využíval se jako výpočetní model pro výzkum v oblasti umělé inteligence na Edinburské univerzitě, rovněž také jako výukový program pro studenty středních škol poskytující úvod do problematiky umělé inteligence. Zároveň slouží jako univerzální prostředí pro ověření správnosti nových nápadů členům katedry. 
+Systém prošel mnoha podobami, využíval se jako výpočetní model pro výzkum v oblasti umělé inteligence na Edinburské univerzitě, rovněž také jako výukový program pro studenty středních škol poskytující úvod do problematiky umělé inteligence. Zároveň slouží jako univerzální prostředí pro ověření správnosti nových nápadů členům katedry.
+
+**Pikater jádro**  
+Jedná se o nejstarší část systému, která je nezávislá na všech ostatních nadstavbách. Jádro je schopné spolupráce s webovým GUI a dodržuje standardy pro možnost propojení s jinými platformami multiagentních případně expertních systémů. Zároveň může být jádro využíváno pro učení modelů na superpočítačích. Pro kompilaci jádra právě z tohoto důvodu nejsou potřeba žádné externí knihovny. 
+
 
 ## Výzkumná motivace pro vznik systému
 
 Procesy strojového učení patří mezi výpočetně velmi náročné úlohy způsobu jak učit model rozhodovat obecné problémy je mnoho a jde těžko predikovat, který způsob strojového učení by pro daný typ problému optimální. Problém volby optimální metody strojového učení je v systému řešen analýzou vstupních dat a na základě podobnosti datasetů je z již vypočtených výsledků v systému vybírána metoda strojového učení, která byla v minulých pokusech nejúspěšnější. Metody strojového učení dávají dispozici spoustu parametrů, kterými jde ovlivnit proces učení, testování i validace. Pikater se snaží vhodnými způsoby procházení stavového prostoru parametrů ušetřit strojový čas učení, zároveň zvolit vhodný poměr explorace a exploatace pro zajištění konvergence procesů učení co možná nejblíže k lokálnímu optimu. 
-
-## Pikater jádro
-
-Jedná se o nejstarší část systému, která je nezávislá na všech ostatních nadstavbách. Jádro je schopné spolupráce s webovým GUI a dodržuje standardy pro možnost propojení s jinými platformami multiagentních případně expertních systémů. Zároveň může být jádro využíváno pro učení modelů na superpočítačích. Pro kompilaci jádra právě z tohoto důvodu nejsou potřeba žádné externí knihovny. 
 
 ## Technologie
 
