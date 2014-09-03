@@ -240,13 +240,26 @@ Príkladom takéto dotazu môže byť nasledovný, čo slúží na získanie dat
 ```java
 @NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner")
 ```
-Objekt `DataSetDAO` pomocou volania funkcie `AbstractDAO.getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user)` doplní na miesto parametru odpovedajúci objekt a získa odpoveď.
+Objekt `DataSetDAO` pomocou volania funkcie `AbstractDAO.getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user)` doplní na miesto parametra odpovedajúci objekt a získa odpoveď.
 
 ##### Criteria dotazy
 
+Criteria API je rozhranie pre vytvorenie dotazov na JPA entitách. Pomocou neho môžeme vytvoriť dotazy, ktoré majú viac parametrov a dokonca počet parametrov závisí na nejakej premennej. Príkladom može byť nasledujúci dotaz, čo vráti všetky datasety, ktoré majú hash nevyskytujúci sa v zoznamu.
 
+```java
+     CriteriaBuilder cb= em.getCriteriaBuilder();
+ CriteriaQuery<JPADataSetLO> cq=cb.createQuery(JPADataSetLO.class);
+        Root<JPADataSetLO> r=cq.from(JPADataSetLO.class);
+        
+        Predicate p=cb.conjunction();
+        for(String exHash:hashesToBeExcluded){
+            p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
+        }
+        p=cb.and(p,cb.isNotNull(r.get("globalMetaData")));
+        cq=cq.where(p);
+```
 
-
+Dotazy pomocou Criteria API sme vytvorili hlavne pre webové rozhrania, kde je potrebné používať viac parametrov kvôli možnsti zoradenia podla jednotlivých stĺpcov.
 
 
 
