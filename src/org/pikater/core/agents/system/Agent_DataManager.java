@@ -349,6 +349,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private void cleanupAbortedBatches() {
 		DAOs.batchDAO.cleanUp();
+		DAOs.experimentDAO.cleanUp();
 	}
 
 	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {

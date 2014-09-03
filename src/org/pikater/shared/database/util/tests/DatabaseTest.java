@@ -258,7 +258,7 @@ public class DatabaseTest {
 		
 		Experiment exp=new Experiment();
 		exp.setBatchID(jpaBatch.getId());//62901);
-		exp.setStatus(JPAExperimentStatus.WAITING.name());
+		exp.setStatus(JPAExperimentStatus.FAILED.name());
 		
 		int id1=DAOs.batchDAO.addExperimentToBatch(exp);
 		System.out.println("Saved experiment with ID: "+id1);

@@ -78,4 +78,32 @@ public class ExperimentDAO extends AbstractDAO<JPAExperiment> {
 		this.deleteEntityByID(id);
 	}
 	
+	/**
+	 * Sets the status of computed experiments to failed, because just after startup, there shouldn't be
+	 * running computations.
+	 */
+	public void cleanUp() {
+		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
+		em.getTransaction().begin();
+		try{
+			logger.info("Starting cleaning up experiments");
+			List<JPAExperiment> experiments=em
+					.createNamedQuery("Experiment.getByStatus",JPAExperiment.class)
+					.setParameter("status", JPAExperimentStatus.COMPUTING)
+					.getResultList();
+			for(JPAExperiment experiment : experiments){
+				experiment.setStatus(JPAExperimentStatus.FAILED.name());
+			}
+			
+			em.getTransaction().commit();
+			logger.info("Cleaning up experiments finished");
+		}catch(Exception e){
+			logger.error("Error during cleanup...", e);
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+		
+	}
+	
 }
