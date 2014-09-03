@@ -247,8 +247,8 @@ Objekt `DataSetDAO` pomocou volania funkcie `AbstractDAO.getByTypedNamedQuery("D
 Criteria API je rozhranie pre vytvorenie dotazov na JPA entitách. Pomocou neho môžeme vytvoriť dotazy, ktoré majú viac parametrov a dokonca počet parametrov závisí na nejakej premennej. Príkladom može byť nasledujúci dotaz, čo vráti všetky datasety, ktoré majú hash nevyskytujúci sa v zoznamu.
 
 ```java
-     CriteriaBuilder cb= em.getCriteriaBuilder();
- CriteriaQuery<JPADataSetLO> cq=cb.createQuery(JPADataSetLO.class);
+     	CriteriaBuilder cb= em.getCriteriaBuilder();
+ 		CriteriaQuery<JPADataSetLO> cq=cb.createQuery(JPADataSetLO.class);
         Root<JPADataSetLO> r=cq.from(JPADataSetLO.class);
         
         Predicate p=cb.conjunction();
@@ -259,7 +259,7 @@ Criteria API je rozhranie pre vytvorenie dotazov na JPA entitách. Pomocou neho 
         cq=cq.where(p);
 ```
 
-Dotazy pomocou Criteria API sme vytvorili hlavne pre webové rozhrania, kde je potrebné používať viac parametrov kvôli možnsti zoradenia podla jednotlivých stĺpcov.
+Dotazy pomocou Criteria API sme vytvorili hlavne pre webové rozhranie, kde je potrebné používať viac parametrov kvôli možnsti zoradenia podla jednotlivých stĺpcov.
 
 
 
