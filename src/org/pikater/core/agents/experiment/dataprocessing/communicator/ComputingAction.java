@@ -466,9 +466,9 @@ public class ComputingAction extends FSMBehaviour {
 						}
 					}
 				}
-
+				
 				addTaskOutput(InOutType.TEST, CoreConstants.SLOT_TESTING_DATA, agent.test);
-				addTaskOutput(InOutType.TRAIN, CoreConstants.SLOT_TRAINING_DATA, agent.label);
+				addTaskOutput(InOutType.TRAIN, CoreConstants.SLOT_TRAINING_DATA, agent.train);
 				addTaskOutput(InOutType.VALIDATION, CoreConstants.SLOT_VALIDATION_DATA, agent.label);
 
 				resultMsg = incomingRequest.createReply();

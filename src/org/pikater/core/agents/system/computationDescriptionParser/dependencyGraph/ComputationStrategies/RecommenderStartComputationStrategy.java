@@ -11,6 +11,7 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -61,8 +62,8 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
             recommender = myAgent.createAgent(computationNode.getRecommenderClass());
         }
 
-        if (inputs.get("error").isBlocked()){
-			inputs.get("error").unblock();
+        if (inputs.get(CoreConstants.SLOT_ERRORS).isBlocked()){
+			inputs.get(CoreConstants.SLOT_ERRORS).unblock();
 		}
 		
 		// send message to recommender
@@ -109,13 +110,13 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		// request.setReplyByDate(new Date(System.currentTimeMillis() + 200));
 		
 		Datas datas = new Datas();
-		String training = ((DataSourceEdge)inputs.get("training").getNext()).getDataSourceId();
+		String training = ((DataSourceEdge)inputs.get(CoreConstants.SLOT_TRAINING_DATA).getNext()).getDataSourceId();
 		String testing;
-		if( inputs.get("testing") == null){
+		if( inputs.get(CoreConstants.SLOT_TESTING_DATA) == null){
 			testing = training;							
 		}
 		else{
-			testing = ((DataSourceEdge) inputs.get("testing").getNext()).getDataSourceId();
+			testing = ((DataSourceEdge) inputs.get(CoreConstants.SLOT_TESTING_DATA).getNext()).getDataSourceId();
 		}
 		
         String internalTrainFileName = DataManagerService
@@ -131,8 +132,8 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		Recommend recommend = new Recommend();
 		recommend.setDatas(datas);
 		recommend.setRecommender(getRecommenderFromNode());
-        if (inputs.get("error").hasNext()) {
-            recommend.setPreviousError(((ErrorEdge) inputs.get("error").getNext()).getEvaluation());
+        if (inputs.get(CoreConstants.SLOT_ERRORS).hasNext()) {
+            recommend.setPreviousError(((ErrorEdge) inputs.get(CoreConstants.SLOT_ERRORS).getNext()).getEvaluation());
         }
 
 		Action a = new Action();

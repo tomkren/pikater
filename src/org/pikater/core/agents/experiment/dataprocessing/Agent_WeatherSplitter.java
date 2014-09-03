@@ -210,9 +210,9 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 			}
 		}
 		
-		res.add(makeOutput(sunny, "sunny"));
-		res.add(makeOutput(overcast, "overcast"));
-		res.add(makeOutput(rainy, "rainy"));
+		res.add(makeOutput(sunny, "sunnyOutput"));
+		res.add(makeOutput(overcast, "overcastOutput"));
+		res.add(makeOutput(rainy, "rainyOutput"));
 		return res;
 	}
 	

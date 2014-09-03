@@ -108,7 +108,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
             
             if (cob.isData() ){
             	// add to Datas
-            	String dataName = ((DataSourceEdge) cob).getDataSourceId();
+            	String dataName = ((DataSourceEdge) cob.getNext()).getDataSourceId();
 
             	String internalFileName = DataManagerService
                 		.translateExternalFilename(myAgent, userID, dataName);
