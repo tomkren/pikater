@@ -2,9 +2,9 @@
 
 [[_TOC_]]
 
-## How to install, deploy, launch & maintenance
+## How to install, deploy, launch & maintain
 
-[[include:README]]
+[[include:lifecycle]]
 
 ## Responsibilities for administrators
 
