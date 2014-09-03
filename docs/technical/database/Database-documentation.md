@@ -4,7 +4,7 @@
 
 Pikater v rámci svojej úlohy vykonáva rôzne operácie na vstupných datách a pritom vzniknú dáta rôzneho povahu: napr. pri klasifikácii vznikne nový, už klasifikovaný dataset a štatistika výpočtu. Tieto dáta musia byť niekam uložené a sprístupnené pre prípadné ďalšie experimenty.
 
-## Predmluva
+## Predslovo
 
 ### Použité skratky
 
@@ -16,6 +16,9 @@ Formát používaný knižnicou Weka, čo mulitagentný systém Pikateru interne
 * __HSQLDB__ (Hyper SQL Database)
 * __PgLOB__ (Postgre Large Object)
 * [__JPA__](http://docs.oracle.com/javaee/6/tutorial/doc/bnbpz.html) (Java Persistence API)
+* __DAO_ - Data Access Object
+* __ACID__ - Atomicity, Consistency, Isolation, Durability
+* __JPQL__ - Java Persistence Query Language
 
 ### Použité pojmy
 
@@ -40,7 +43,7 @@ Nasledujúca tabulka obsahuje dáta o tom, že aké vlastnosti majú jednotlivé
 |:-------------:|:---------------:|:----------------:|:-------------------:|
 | tranzakcie    | áno (InnoDB)    | áno              | áno                 |
 | súbory (LOBy) | áno             | áno (64TiB spolu)| áno (4TiB per súbor)|
-| iné           | povodne použitý, rozšírená | Java  | rozšírená           |
+| iné           | pôvodne použitý, rozšírená | Java  | rozšírená           |
 
 Síce MySQL podporuje tranzakčné spracovávanie, ale to je dostupné iba pre engine InnoDB, čo je použitelné iba za poplatok. Vzhladom na to, že ostatné dva to ponúkajú zadarmo MySQL už mal docela velkú nevýhodu v porovnaní s ostatnými dvomi.
 
@@ -58,15 +61,51 @@ Obrovskou výhodou JPA je, že objekty pripravené na prácu s JPA nemusia byť 
 
 ### Výber connectoru
 
-Rozhodnutie pre JPA znamená, že, okrem databáze a technológie pre prístup k nemu potrebujeme niečo, čo spojuje svet Javy so svetom databáze. V praxi to znamená prevod operácií v JPA na rôzne príkazy v SQL a naopak pre výsledok dotazu vytvoriť odpovedajúce entity. Obvykle výber tohto connectoru neovlivní vývoj aplikácie, okrem použitia nejakých špeciálnych funkcí. Dva z najrozšírenejších connectorov sú Hibernate a Eclipselink. My sme sa rozhodli pre Ecipselink z dôvodu, že u Eclipselink je možné zmeniť vlastnosti databázového pripojenia zo zdrojového kódu, čo môžeme v budúcnosti využívať.
+Rozhodnutie pre JPA znamená, že, okrem databáze a technológie pre prístup k nemu potrebujeme niečo, čo spojuje svet Javy so svetom databáze. V praxi to znamená prevod operácií v JPA na rôzne príkazy v SQL a naopak pre výsledok dotazu vytvoriť odpovedajúce entity. Obvykle výber tohto connectoru neoplyvní vývoj aplikácie, okrem použitia nejakých špeciálnych funkcí. Dva z najrozšírenejších connectorov sú Hibernate a Eclipselink. My sme sa rozhodli pre Ecipselink z dôvodu, že u Eclipselink je možné zmeniť vlastnosti databázového pripojenia zo zdrojového kódu, čo môžeme v budúcnosti využívať.
 
 ### Konfigurácia
 
-<font color="red">TODO</font>
+V starej verzii Pikateru na konfiguráciu databázového pripojenia slúžil iba súbor `Beans.xml`. Pomocu knižnice Spring na základe tohto súboru bol sprístupnený objekt databázového pripojenia. Tento objekt bol získaný pomocou funkcie `ApplicationContext.getBean` .
 
+Pikater stále potrebuje nativný prístup do databáze, kvôli PgLOBom, preto sme sa rozhodli, že zachováme `Beans.xml` súbor a pre plynulejší prechod z hladiska konfigurácie necháme na pôvodnom mieste a to v koreňovom adresári zdrojového kódu.
 
+Časť v súboru `Beans.xml` zodpovedná za vytvorenie databázového pripojenia:
+```
+...
+<bean
+id="defaultConnection"
+class="org.pikater.shared.database.connection.PostgreSQLConnectionProvider"
+scope="singleton">
+        <constructor-arg index="0">
+                  <value><!-- url --></value>
+        </constructor-arg>
+        <constructor-arg index="1">
+                  <value><!-- database username --></value>
+        </constructor-arg>
+        <constructor-arg index="2">
+                  <value><!-- password for database user--></value>
+        </constructor-arg>
+</bean>
+...
+```
 
+Okrem natívneho databázového pripojenia potrebujeme, aby správca JPA entít mal takisto prístup k databázi. Okrem toho, musí poznať, že ktoré triedy má považovať za entity. Na túto konfiguráciu slúži súbor `persistence.xml` , čo musí byť uložený v zložke `META-INF`. Tento súbor musí obsahovať zoznam entít v našom programu vo forme, ako to ukáže nasledovný príklad:
+```
+<persistence-unit name="pikaterDataModel" transaction-type="RESOURCE_LOCAL">
+<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+…
+<class>org.pikater.shared.database.jpa.JPADataSetLO</class>
+...
+```
+Na definovanie databázového pripojenia máme viac možností. Jednak možeme pridať vlastnosti pripojenia do súboru `persistence.xml`. Druhá možnosť je využívať Spring na injektovania správce entít (trieda `EntityManagerFactory`), kde definujeme pripojenie čo sa má používať. 
+My sme sa rozhodli využívať iba súbor `persistence.xml` a to z viacerých dôvodov:
 
+* pri vytvorení EntityManagerFactory môžeme v zdrojovom kódu nastaviť vlastnosti pripojenia
+* väčšiou výhodou bola sloboda pri vytvorení tried na spravovanie entít.
+
+Pre nás znamenal problém vytvoriť si `EntityManagerFactory` pomocou `Beans.xml` z dôvodu, že Spring interne používá javovské `Proxy` triedy pri vytvorení inštancií jednotlivých beanu. To znamená, že pre každý interface, čo dedí daná trieda je vytvorený jeden `Proxy` objekt, čo musíme pretypovať na typ interfaceu. `EntityManagerFactory` má vela interfaceov od ktorých sa dedí a ani jeden nepokrýva celú funkčnosť triedy a z tohto dôvodu nefunguje prístup pomocou funkcie `ApplicationContext.getBean`. Z podobného dôvodu sme nechceli injektovať `EntityManager`y (získané pomocou `EntityManagerFactory`) do objektov slúžiace na spravovanie entít, lebo v tom prípade tie objekty sú vytvorené takisto pomocou Springu a tým pádom pre každý takýto objekt potrebujeme jeden interface.
+
+Na zjednodušenie vytvorenia konfiguračných súborov je možné používať program `org.pikater.shared.database.util.initialisation.DatabaseInitialisation`, do ktorého môžeme pomocou príkazového riadka zadať potrebné údaje a vygeneruje nám obidva konfiguračné súbory.
 
 ## Databáza
 
@@ -93,13 +132,13 @@ Pri vytvorení novej štruktúry entít - a tým pádom aj súčasnú schématu 
 
 #### PgLOBy
 
-Po výbere PostgreSQL ako databázový systém pre Pikater sme museli naimplementovať špeciálný prístup k súborum uloženým v databáze.
+Po výbere PostgreSQL ako databázový systém pre Pikater sme museli naimplementovať špeciálny prístup k súborom uloženým v databáze.
 
-Súbory sú uložene ako Postgre Large Objekty (PgLOBy, alebo jednoducho LOBy), čo znamená, že je uložené v systémovej tabulke `pg_largeobject` danej databáze. Pre každý súbor je vytvoreno množstvo záznamov, ktoré obsahujú súbor rozsekaný na niekolko byteových polí. Pri získaní dát alebo zapisovaní do databáze ale vystačíme s ID daného PgLOBu (oid). Napríklad v entite `JPADatasetLO` máme jednu premennú typu `long`, čo obsahuje OID.
+Súbory sú uložené ako Postgre Large Objekty (PgLOBy, alebo jednoducho LOBy), čo znamená, že je uložený v systémovej tabulke `pg_largeobject` danej databáze. Pre každý súbor je vytvorené množstvo záznamov, ktoré obsahujú súbor rozsekaný na niekolko byteových polí. Pri získaní dát alebo zapisovaní do databáze ale vystačíme s ID daného PgLOBu (oid). Napríklad v entite `JPADatasetLO` máme jednu premennú typu `long`, čo obsahuje OID.
 
-Prestože môžeme u premenných používať v JPA entitách anotáciu `@Lob` (naznačí, aby danú premennú JPA uložil do bytoveho pola), nemáme istotu, že velké súbory budú optimalne vyriešené. V najhoršom prípade môže sa nám stať, že celý obsah súboru je kopírovaný do pamäte a potom je prenesený do databáze.
+Síce môžeme u premenných používať v JPA entitách anotáciu `@Lob` (naznačí, aby danú premennú JPA uložil do bytového pola), nemáme istotu, že velké súbory budú optimálne vyriešené. V najhoršom prípade môže sa nám stať, že celý obsah súboru je kopírovaný do pamäte a potom je prenesený do databáze.
 
-Triedy pracujúcie s PgLOBy sa nalézajú v balíčku `org.pikater.shared.database.postgre.largeobject`.
+Triedy pracujúcie s PgLOBy sa nachádzajú v balíčku `org.pikater.shared.database.postgre.largeobject`.
 
 ### Práca s DB frameworkom
 
@@ -107,9 +146,9 @@ Framework sa nachádzí v balíčku `org.pikater.shared.database`, rozdelenie na
 
 #### Entity
 
-Entity začínajú na "JPA" (napríklad `JPAUser`). Stručne je popíšeme.
+Entity začínajú na "JPA" (napríklad `JPAUser`). Stručne ich popíšeme.
 
-V súčasnej verzii pre Pikater máme 16 vytvorených entit, ktoré sa nachádzajú v balíčku `org.pikater.shared.database.jpa`. Každá je odvodená od abstraktnej entity `JPAAbstractEntity`. Tento spoločný predok obsahuje iba ID slúžiace ako primárny klúč v databáze.
+V súčasnej verzii pre Pikater máme 16 vytvorených entít, ktoré sa nachádzajú v balíčku `org.pikater.shared.database.jpa`. Každá je odvodená od abstraktnej entity `JPAAbstractEntity`. Tento spoločný predok obsahuje iba ID slúžiace ako primárny klúč v databáze.
 
 ##### Týkajúce se uživatelů
 
@@ -124,7 +163,7 @@ Entita slúžicia na uloženie rôznych privilégií v systému. Síce privilég
 3. **JPARole**  
 Rôzne podmnožiny privilégií sú spojené do rôznych rolí,ktoré sú potom priradené k jednotlivým užívatelom.
 
-##### Týkajúce se datasetů
+##### Týkajúce sa datasetov
 
 1. **JPADataSetLO**  
 Obsahuje záznamy o datasetoch uložené v databáze. Nejdôležitejší je položka OID, čo obsahuje ID PgLOBu, kde je daný dataset uložený. Položka hash slúži na identifikáciu datasetu pomocou MD5 hashe, čo je vypočítaný pri nahrávaní datasetu. Síce môže existovať viac `JPADataSetLO` entít pre rovnaký hash, ale datasety sú považované za identické pri uploadovaní, takže v databáze sú uložené iba raz a všetky entity obsahujú rovnaký OID.  
@@ -145,7 +184,7 @@ Táto entita je podobná `JPAAttributeCategoricalMetadata`, odvodená od entity 
 6. **JPATaskType**  
 Každý dataset má definovaný typ prednastaveného experimentu. Počítali sme s tým, že množina týchto úloh môže byť v budúcnosti rozšírený, preto sme sa rozhodli pre zavedenie entity, čo môžeme dynamicky vytvárať pre nové neznáme úlohy.
 
-##### Týkajúce se experimentů
+##### Týkajúce sa experimentov
 
 Hlavnou úlohou Pikateru je spustenie experimentov strojového učenia. Tieto experimenty sú vytvorené na webovom rozhraní a potom sa dastanú do jadra systému.
 
@@ -167,7 +206,7 @@ Entita popíše agent, ktorý bol pridaný do Pikateru užívatelom. Agent je ul
 6. **JPAAgentInfo**   
 Obsahuje záznamy o agentoch, ktoré sú k dispozicii v systému Pikater. Hlavným účelom týchto entit, je prevod informácii z jadra Pikateru na webové rozhranie, čo získa dáta z databáze.
 
-##### Obecné/týkajúce sa jádra
+##### Obecné/týkajúce sa jadra
 
 1. **JPAFilemapping**  
 Jednotlivé záznamy predstavujú, pre každý dataset párovanie jeho povodného názvu na MD5 hash súboru. Tento prístup možno nie je najlepší, preto vytvári akoby duplicitný záznam pre datasetov, ale zachová prevodnú tabulku zo starého Pikateru. Hlavným dovodom možnosti použitia povodných názvov v rámci jednotlivých experimentov je zaistenia povodného prístupu, čo zaistil pridanie experimentu z príkazového riadka z XML súboru, čo obsahuje iba klasické názvy datasetov.
@@ -200,7 +239,7 @@ Vela dotazov je vyriešená pomocou pomenovaných dotazov, ktoré sú zapísané
 
 <font color="red">Dokumentaci k JPA a použitým anotacím lze zobrazit v odkazu výše</font>.  
 
-Pro úplnost ještě ovšem doplníme:
+Pre úplnosť samozrejme ešte doplníme:
 * `@Lob` - síce uloženie velkých súborov máme vyriešené pomocou PgLOBov, ale menšie môžeme uložiť aj pomocou JPA anotácie. V tomto prípade premenná sa serializuje a uloží sa do bytového pola - alebo iného kompatibilného typu - v databázovom záznamu. Tento prístup využívame napr. u uložení modelov výpočtov, alebo u dlhých reťazcov XMLov.
 * `@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS` alebo `InheritanceType.JOINED`) - značka slúží na zadefinovanie, že ako chceme vytvoriť tabulky relácií pre jednotlivé entity. Nastavenie `TABLE_PER_CLASS` vytvorí vlastnú tabulku so všetkými hodnotami, ktoré v danej entite vyskytujú (vlastné aj zdedené). Nastavenie JOINED vytvorí iba jednu tabulu, pre danú entitu a všetky z nej odvodené. Znamená to, že niektoré položky sú prázdne, ale v niektorých prípadoch je to viac prehladný.
 * `@Enumerated(EnumType.STRING)` - u premenných odvodených od java.lang.Enum môžeme zadefinovať, či chceme aby sa do databáze uložil názov hodnoty, alebo jeho poradové číslo (`EnumType.ORDINAL`). Uložiť Enum ako String je výhodnejšie z tohto dôvodu, že pri pridaní novej položky nemusíme brať do úvahy poradie hodnôt. Vymazanie nejakej položky zo zdrojového kódu môže spôsobiť výnimku pri získaní hodnôt z databáze. Na druhej strane pri uložení ako `EnumType.ORDINAL` nemusíme získať výnimku, čo môže sposobiť zákerné chyby, pretože hodnoty enumov sú zle namapované.
