@@ -49,7 +49,8 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 			case CREATED:
 				return 75;
 			
-			case MAX_PRIORITY:
+			case TOTAL_PRIORITY:
+			case USER_PRIORITY:
 			case STATUS:
 				return 100;
 				
@@ -84,7 +85,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 			TextField tf_value = (TextField) component;
 			tf_value.setDescription(tf_value.getValue());
 		}
-		else if(specificColumn == BatchTableDBView.Column.MAX_PRIORITY)
+		else if(specificColumn == BatchTableDBView.Column.TOTAL_PRIORITY)
 		{
 			value.setOnCommitCallback(new AbstractDBViewValue.IOnValueCommitted()
 			{

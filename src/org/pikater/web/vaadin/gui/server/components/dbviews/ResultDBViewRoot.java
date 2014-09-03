@@ -172,8 +172,8 @@ public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBVie
 		}
 		else if(specificColumn == ResultTableDBView.Column.COMPARE)
 		{
-			final JPADataSetLO resultsDataset = specificRow.getResult().getOutputs().get(0); // this is a temporary solution
-			final JPADataSetLO inputDataset = null; // TODO:
+			final JPADataSetLO resultsDataset = specificRow.getFirstValidOutput(); // this is a temporary solution
+			final JPADataSetLO inputDataset = specificRow.getFirstValidInput(); // this is a temporary solution
 			MessageBox mb = GeneralDialogs.wizardDialog("Result compare guide", new ResultCompareWizard(resultsDataset, inputDataset));
 			mb.setWidth("800px");
 			mb.setHeight("500px");

@@ -14,7 +14,6 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.ParentAwareWizardStep;
-import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;
 import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisTwoUIArgs;
 import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
 import org.pikater.web.visualisation.DatasetVisualizationValidation;
@@ -190,7 +189,7 @@ public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> i
 		}
 	}
 	
-	private class Step2 extends RefreshableWizardStep<ResultCompareCommons, ResultCompareWizard>
+	private class Step2 extends ParentAwareWizardStep<ResultCompareCommons, ResultCompareWizard>
 	{
 		private final VerticalLayout vLayout;
 		
@@ -201,6 +200,14 @@ public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> i
 			this.vLayout = new VerticalLayout();
 			this.vLayout.setSizeFull();
 			this.vLayout.setSpacing(true);
+			
+			Label label = new Label("Then select attributes to be compared for input dataset:");
+			label.setSizeUndefined();
+			label.setStyleName("v-label-undefWidth-wordWrap");
+			
+			this.vLayout.addComponent(label);
+			this.vLayout.addComponent(getOutput().getInputDatasetForm());
+			this.vLayout.setExpandRatio(getOutput().getInputDatasetForm(), 1);
 		}
 
 		@Override
@@ -225,20 +232,6 @@ public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> i
 		public boolean onBack()
 		{
 			return true;
-		}
-
-		@Override
-		public void refresh()
-		{
-			this.vLayout.removeAllComponents();
-			
-			Label label = new Label("Select attributes to be compared for input dataset:"); 
-			label.setSizeUndefined();
-			label.setStyleName("v-label-undefWidth-wordWrap");
-			
-			this.vLayout.addComponent(label);
-			this.vLayout.addComponent(getOutput().getInputDatasetForm());
-			this.vLayout.setExpandRatio(getOutput().getInputDatasetForm(), 1);
 		}
 	}
 }
