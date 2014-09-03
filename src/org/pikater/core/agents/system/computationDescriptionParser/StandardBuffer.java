@@ -11,6 +11,7 @@ import java.util.LinkedList;
  */
 public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
     LinkedList<E> buffer=new LinkedList<E>();
+    private boolean data; 
 
     public StandardBuffer(ComputationNode source, ComputationNode target) {
            super(source,target);
@@ -35,4 +36,14 @@ public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
     public int size() {
         return buffer.size();
     }
+
+	@Override
+	public boolean isData() {
+		return data;
+	}
+
+	@Override
+	public void setData(boolean data) {
+		this.data = data;
+	}
 }

@@ -8,6 +8,7 @@ import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
@@ -79,7 +80,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                     labeledData.setDataSourceId(data.getName());
                     node.addToOutputAndProcess(labeledData,"file");
                 }
-                if (node.ContainsOutput("testing"))
+                if (node.ContainsOutput(CoreConstants.SLOT_TESTING_DATA))
                 {
                     TaskOutput test= t.getOutputByType(Task.InOutType.TEST);
                     if (test==null)
@@ -87,14 +88,14 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                         test=t.getOutputByType(Task.InOutType.TRAIN);
                     }
                     labeledData.setDataSourceId(test.getName());
-                    node.addToOutputAndProcess(labeledData,"testing");
+                    node.addToOutputAndProcess(labeledData, CoreConstants.SLOT_TESTING_DATA);
                 }
-                if (node.ContainsOutput("training"))
+                if (node.ContainsOutput(CoreConstants.SLOT_TRAINING_DATA))
                 {
                     TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
 
                     labeledData.setDataSourceId(train.getName());
-                    node.addToOutputAndProcess(labeledData,"training");
+                    node.addToOutputAndProcess(labeledData, CoreConstants.SLOT_TRAINING_DATA);
                 }
 
 				// save results to the database										
