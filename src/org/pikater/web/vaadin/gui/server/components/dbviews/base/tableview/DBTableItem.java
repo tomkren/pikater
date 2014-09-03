@@ -33,7 +33,7 @@ public class DBTableItem implements Item, ICommitable
 	@Override
 	public void commitToDB()
 	{
-		rowView.commitRow();
+		rowView.commit();
 	}
 	
 	@Override

@@ -8,8 +8,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.shared.logging.GeneralPikaterLogger;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.GeneralPikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.JadeTopologies;
@@ -70,7 +70,10 @@ public class StartupAndQuitListener implements ServletContextListener
 			ServerConfigurationInterface.setField(ServerConfItem.CONTEXT, event.getServletContext());
 			ServerConfigurationInterface.setField(ServerConfItem.JADE_TOPOLOGIES, new JadeTopologies());
 			IOUtils.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
-
+			
+			announceCheckOrAction("initializing task scheduler");
+			PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
+			
 			announceCheckOrAction("reading & parsing application configuration file");
 			ServerConfigurationInterface.setField(ServerConfItem.CONFIG, new ServerConfiguration(ThemeResources.prop_appConf.getSourceFile()));
 			if(!ServerConfigurationInterface.getConfig().isValid())
@@ -102,9 +105,6 @@ public class StartupAndQuitListener implements ServletContextListener
 				throw new IllegalStateException("Could not connect to database.");
 			}
 			*/
-			
-			announceCheckOrAction("initializing task scheduler");
-			PikaterJobScheduler.initStaticScheduler(IOUtils.getAbsolutePath(IOUtils.getAbsoluteWEBINFCLASSESPath(), PikaterJobScheduler.class));
 
 			PikaterLogger.log(Level.INFO, "\n**********************************************************\n"
 					+ "APPLICATION SETUP SUCCESSFULLY FINISHED\n"

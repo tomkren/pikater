@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 import com.vaadin.ui.Alignment;
@@ -92,7 +92,7 @@ public class ProgressDialog extends DialogCommons
 		listener.setParentBox(mb); // don't forget this!
 		mb.getWindow().setWidth("250px");
 		mb.getWindow().setStyleName("progressDialog"); // stretch the component area to maximum width...
-		setupMessageBox(mb, false);
+		setupGeneralDialog(mb, false);
 		return new ProgressDialogContext(mb, progress, lbl_percentage, progressDialogEvents);
 	}
 	

@@ -16,7 +16,6 @@ import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
-import jade.util.leap.Iterator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +24,7 @@ import java.net.ServerSocket;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -66,6 +66,7 @@ import org.pikater.core.ontology.subtrees.batch.SaveBatch;
 import org.pikater.core.ontology.subtrees.batch.SavedBatch;
 import org.pikater.core.ontology.subtrees.batch.UpdateBatchStatus;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescription;
+import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataset.DatasetInfo;
 import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
 import org.pikater.core.ontology.subtrees.dataset.GetAllDatasetInfo;
@@ -107,6 +108,7 @@ import org.pikater.core.ontology.subtrees.task.Evaluation;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 import org.pikater.shared.database.exceptions.NoResultException;
+import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.jpa.JPAAgentInfo;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
@@ -127,7 +129,7 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import org.pikater.shared.database.util.ResultFormatter;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
+import org.pikater.shared.experiment.UniversalComputationDescription;
 
 import com.google.common.io.Files;
 
@@ -504,9 +506,13 @@ public class Agent_DataManager extends PikaterAgent {
 
 		AgentInfos agentInfos = new AgentInfos();
 		for (JPAAgentInfo jpaAgentInfoI : agentInfoList) {
-
-			AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
-			agentInfos.addAgentInfo(agentInfoI);
+			
+			if((jpaAgentInfoI.getExternalAgent() == null) // global agent... always approved
+					|| jpaAgentInfoI.getExternalAgent().isApproved()) // external agent for a user... check if approved
+			{
+				AgentInfo agentInfoI = AgentInfo.importXML(jpaAgentInfoI.getInformationXML());
+				agentInfos.addAgentInfo(agentInfoI);
+			}
 		}
 
 		Result result = new Result(a, agentInfos);
@@ -858,6 +864,19 @@ public class Agent_DataManager extends PikaterAgent {
 		return reply;
 	}
 
+	private <T extends JPAAbstractEntity> boolean containsID(List<T> list, T item ){
+		for(T i : list){
+			if(i.getId()==item.getId()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private <E> List<E> safe(List<E> list){
+		return (list!=null)?list:Collections.<E>emptyList();
+	}
+	
 	private ACLMessage respondToSaveResults(ACLMessage request, Action a) {
 		SaveResults saveResult = (SaveResults) a.getAction();
 		Task task = saveResult.getTask();
@@ -872,9 +891,35 @@ public class Agent_DataManager extends PikaterAgent {
 		log("Saving result for hash: " + task.getDatas().exportInternalTrainFileName());
 		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
 
+		for(Data data : safe(task.getDatas().getDatas())){
+			if(data==null)
+				continue;
+			
+			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(data.getInternalFileName())).getSingleResultWithNull();
+			if(dslo!=null){
+				if(!this.containsID(jparesult.getInputs(), dslo)){
+					jparesult.getInputs().add(dslo);
+					log("Adding input " + data.getInternalFileName() + " to result." );
+				}else{
+					log("Adding input " + data.getInternalFileName() + " skipped. Duplicate value.");
+				}
+			}else{
+				logError("Failed to add output " + data.getInternalFileName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			}
+		}
+		
 		for (TaskOutput output : task.getOutput()) {
-			jparesult.getOutputs().add(output.getName());
-			log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			JPADataSetLO dslo=new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(output.getName())).getSingleResultWithNull();
+			if(dslo!=null){
+				if(!this.containsID(jparesult.getOutputs(), dslo)){
+					jparesult.getOutputs().add(dslo);
+					log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+				}else{
+					log("Adding output " + output.getName() + " skipped. Duplicate value.");
+				}
+			}else{
+				logError("Failed to add output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+			}
 		}
 
 		float errorRate = Float.MAX_VALUE;
@@ -983,7 +1028,7 @@ public class Agent_DataManager extends PikaterAgent {
 			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(new File(sd.getSourceFile()), sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
 
 			reply.setContentObject((new Integer(jpadsloID)));
-			log("Saved Dataset with ID: " + jpadsloID);
+			log("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());
 		} catch (NoResultException e) {
 			logError("No user found with login: " + sd.getUserID(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
@@ -1058,15 +1103,18 @@ public class Agent_DataManager extends PikaterAgent {
 		log("Retrieving metadata for hash " + gm.getInternal_filename());
 		JPADataSetLO dslo = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getInternal_filename())).getSingleResultWithNull();
 
-		if (dslo != null) {
+		if ((dslo != null)
+			&&(dslo.getGlobalMetaData()!=null)
+			&&(dslo.getAttributeMetaData()!=null)
+			){
 			m = this.convertJPADatasetToOntologyMetadata(dslo);
 			reply.setPerformative(ACLMessage.INFORM);
 		} else {
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 
-		Result _result = new Result(a.getAction(), m);
-		getContentManager().fillContent(reply, _result);
+		Result result = new Result(a.getAction(), m);
+		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
@@ -1152,59 +1200,37 @@ public class Agent_DataManager extends PikaterAgent {
 
 		log("Agent_DataManager.respondToGetAllMetadata");
 
+		List<String> exHash = new java.util.LinkedList<String>();
+		for (Metadata metadataI : gm.getExceptions()) {
+			exHash.add(metadataI.getInternalName());
+		}
+		
 		List<JPADataSetLO> datasets = null;
-
-		if (gm.getResults_required()) {
+		
+		if (gm.getResultsRequired()) {
 			log("DataManager.Results Required");
-			if (gm.getExceptions() != null) {
-				List<String> exHash = new java.util.LinkedList<String>();
-				Iterator itr = gm.getExceptions().iterator();
-				while (itr.hasNext()) {
-					Metadata m = (Metadata) itr.next();
-					exHash.add(m.getInternalName());
-				}
-				datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashes(exHash);
-			} else {
-				datasets = DAOs.dataSetDAO.getAllWithResults();
-			}
+			datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashesWithMetadata(exHash);
 		} else {
 			log("DataManager.Results NOT Required");
-			if (gm.getExceptions() != null) {
-
-				List<String> excludedHashes = new ArrayList<String>();
-
-				Iterator itr = gm.getExceptions().iterator();
-				while (itr.hasNext()) {
-					Metadata m = (Metadata) itr.next();
-					excludedHashes.add(m.getInternalName());
-				}
-
-				datasets = DAOs.dataSetDAO.getAllExcludingHashes(excludedHashes);
-			} else {
-				datasets = DAOs.dataSetDAO.getAll();
-			}
-
+			datasets = DAOs.dataSetDAO.getAllExcludingHashesWithMetadata(exHash);
 		}
 
-		List<Metadata> allMetadata = new ArrayList<Metadata>();
+		if (datasets == null) {
+			datasets = new ArrayList<JPADataSetLO>();
+		}
+		
+		Metadatas metadatas = new Metadatas();
 
-		if (datasets != null) {
-			for (JPADataSetLO dslo : datasets) {
-				if (dslo.getGlobalMetaData() != null) {
-					Metadata globalMetaData = this.convertJPADatasetToOntologyMetadata(dslo);
-					allMetadata.add(globalMetaData);
-				}
-			}
+		for (JPADataSetLO dslo : datasets) {
+			Metadata globalMetaData = this.convertJPADatasetToOntologyMetadata(dslo);
+			metadatas.addMetadata(globalMetaData);
 		}
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 
-		Metadatas metadatas = new Metadatas();
-		metadatas.setMetadatas(allMetadata);
-
-		Result _result = new Result(a.getAction(), metadatas);
-		getContentManager().fillContent(reply, _result);
+		Result result = new Result(a.getAction(), metadatas);
+		getContentManager().fillContent(reply, result);
 
 		return reply;
 	}
@@ -1325,7 +1351,7 @@ public class Agent_DataManager extends PikaterAgent {
 		String type = ((GetExternalAgentJar) a.getAction()).getType();
 		log("getting JAR for agent type " + type);
 
-		JPAExternalAgent ea = DAOs.externalAgentDAO.getByClass(type);
+		JPAExternalAgent ea = DAOs.externalAgentDAO.getByAgentClass(type);
 
 		if (ea == null) {
 			throw new FailureException("Agent jar for type " + type + " not found in DB");

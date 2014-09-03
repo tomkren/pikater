@@ -5,23 +5,30 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 
 @Entity	
-@Table(name="ExternalAgent")
+@Table(
+		name="ExternalAgent",
+		indexes={
+				@Index(columnList="agentClass"),
+				@Index(columnList="name"),
+				@Index(columnList="visible")
+				}
+	   )
 @NamedQueries({
 	@NamedQuery(name="ExternalAgent.getAll",query="select o from JPAExternalAgent o"),
 	@NamedQuery(name="ExternalAgent.getAll.count",query="select count(o) from JPAExternalAgent o"),
-	@NamedQuery(name="ExternalAgent.getByID",query="select o from JPAExternalAgent o where o.id=:id"),
 	@NamedQuery(name="ExternalAgent.getByAgentClass",query="select o from JPAExternalAgent o where o.agentClass=:agentClass"),
 	@NamedQuery(name="ExternalAgent.getByOwner",query="select o from JPAExternalAgent o where o.owner=:owner"),
-	@NamedQuery(name="ExternalAgent.getByOwner.count",query="select count(o) from JPAExternalAgent o where o.owner=:owner"),
-	@NamedQuery(name="ExternalAgent.getByClass",query="select o from JPAExternalAgent o where o.agentClass=:class")
+	@NamedQuery(name="ExternalAgent.getByOwner.count",query="select count(o) from JPAExternalAgent o where o.owner=:owner")
 })
 public class JPAExternalAgent extends JPAAbstractEntity{
 	
@@ -93,6 +100,10 @@ public class JPAExternalAgent extends JPAAbstractEntity{
 		ByteArrayInputStream bis=new ByteArrayInputStream(jar);
 		return bis;
 	}
+	
+	@Transient
+	public static final String EntityName = "ExternalAgent";
+	
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPAExternalAgent updateValues=(JPAExternalAgent)newValues;

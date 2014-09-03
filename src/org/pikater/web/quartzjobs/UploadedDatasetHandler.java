@@ -11,7 +11,7 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.util.DataSetConverter;
 import org.pikater.shared.database.util.DataSetConverter.InputType;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -64,8 +64,6 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		{
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
 			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId(),JPADatasetSource.USER_UPLOAD);
-			
-			
 			if(ServerConfigurationInterface.getConfig().coreEnabled)
 			{
 				try
@@ -149,5 +147,4 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 			}
 		}
 	}
-	
 }

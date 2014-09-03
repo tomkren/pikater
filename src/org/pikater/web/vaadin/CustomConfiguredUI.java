@@ -4,7 +4,10 @@ import java.io.IOException;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.database.jpa.status.JPAUserStatus;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -119,45 +122,26 @@ public abstract class CustomConfiguredUI extends UI
 				@Override
 				public boolean handleResult(Object[] args)
 				{
-					/*
-					 * First check whether the default admin account is allowed and was provided by the user.
-					 */
-
-					String login = (String) args[0];
-					String password = (String) args[1];
-					if(ServerConfigurationInterface.getConfig().defaultAdminAccountAllowed)
-					{
-						if(login.equals("pikater") && password.equals("pikater")) // check whether the given auth info matches the default account
-						{
-							displayApplicationSetupWizard();
-							return true; // necessary for the login dialog to close
-						}
-					}
-
 					/* 
-					 * If authentication using the default admin account failed, try to authenticate using the database.
+					 * Try to authenticate using the database.
 					 * Note: database connection is assumed to have been checked in {@link StartupAndQuitListener}. 
 					 */
-
-					if(ManageAuth.authenticateUser(VaadinSession.getCurrent(), login, password)) // authentication succeeded
+					String login = (String) args[0];
+					String password = (String) args[1];
+					
+					try
 					{
-						if(ManageAuth.getUserEntity(VaadinSession.getCurrent()).isAdmin()) // final access check
-						{
-							displayApplicationSetupWizard();
-							return true;
-						}
-						else
-						{
-							ManageAuth.logout(VaadinSession.getCurrent());
-							MyNotifications.showWarning("Access denied", "Application needs to be launched first. Log in as administrator.");
-							return false;
-						}
+						authenticateUser(login, password, true);
 					}
-					else
+					catch(IllegalStateException e)
 					{
-						MyNotifications.showWarning("Access denied", "Invalid auth information.");
+						MyNotifications.showWarning("Access denied", e.getMessage());
 						return false;
 					}
+					
+					// authentication succeeded
+					displayApplicationSetupWizard();
+					return true;
 				}
 			});
 		}
@@ -288,18 +272,56 @@ public abstract class CustomConfiguredUI extends UI
 
 				String login = (String) args[0];
 				String password = (String) args[1];
-				if(ManageAuth.authenticateUser(VaadinSession.getCurrent(), login, password)) // authentication succeeded
+				try
 				{
-					authHandler.onSuccessfulAuth();
-					return true;
+					authenticateUser(login, password, false);
+				}
+				catch(IllegalStateException e)
+				{
+					MyNotifications.showWarning("Access denied", e.getMessage());
+					return false;
+				}
+				
+				// authentication succeeded
+				authHandler.onSuccessfulAuth();
+				return true;
+			}
+		});
+	}
+	
+	/**
+	 * Tries to authenticate the user. If the provided auth info is correct, automatically
+	 * authenticates the user in this UI.
+	 * @param session
+	 * @param login
+	 * @param password
+	 * @return true if the provided auth info was correct
+	 */
+	private void authenticateUser(String login, String password, boolean adminCheck)
+	{
+		if(!ServerConfigurationInterface.avoidUsingDBForNow())
+		{
+			JPAUser user = DAOs.userDAO.getByLoginAndPassword(login, password);
+			if(user != null)
+			{
+				if(user.getStatus() != JPAUserStatus.ACTIVE)
+				{
+					throw new IllegalStateException("Account suspended.");
+				}
+				else if(adminCheck && !user.isAdmin())
+				{
+					throw new IllegalStateException("Not an admin.");
 				}
 				else
 				{
-					MyNotifications.showWarning("Access denied", "Invalid auth information.");
-					return false;
+					ManageAuth.login(VaadinSession.getCurrent(), user.getId()); // actually authenticate in this UI
 				}
 			}
-		});
+			else
+			{
+				throw new IllegalStateException("Invalid auth information.");
+			}
+		}
 	}
 	
 	protected interface IAuthenticationSuccessful

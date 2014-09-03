@@ -3,6 +3,8 @@ package org.pikater.web.vaadin.gui.server.components.dbviews;
 import java.io.InputStream;
 import java.util.UUID;
 
+import org.pikater.shared.database.jpa.JPAAttributeMetaData;
+import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
@@ -13,15 +15,27 @@ import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.forms.DatasetVisualizationForm;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
+import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches.compare.ResultCompareWizard;
+import org.pikater.web.vaadin.gui.server.ui_visualization.VisualizationUI.DSVisOneUIArgs;
+import org.pikater.web.visualisation.DatasetVisualizationEntryPoint;
+import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
 
-public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
+import de.steinwedel.messagebox.MessageBox;
+
+public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBViewRoot<V>
 {
-	public ResultDBViewRoot(ResultTableDBView view)
+	public ResultDBViewRoot(V view)
 	{
 		super(view);
 	}
@@ -37,6 +51,8 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 			case KAPPA:
 			case REL_ABS_ERR:
 			case MEAN_ABS_ERR:
+			case VISUALIZE:
+			case COMPARE:
 				return 100;
 				
 			case ROOT_REL_SQR_ERR:
@@ -73,11 +89,11 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 	@Override
 	public void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action)
 	{
+		final ResultTableDBRow specificRow = (ResultTableDBRow) row;
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
 		if(specificColumn == ResultTableDBView.Column.TRAINED_MODEL)
 		{
 			// download, don't run action
-			final ResultTableDBRow rowView = (ResultTableDBRow) row;
 			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 			{
 				@Override
@@ -89,28 +105,78 @@ public class ResultDBViewRoot extends AbstractDBViewRoot<ResultTableDBView>
 				@Override
 				public InputStream getStream() throws Throwable
 				{
-					return rowView.getResult().getCreatedModel().getInputStream();
+					return specificRow.getResult().getCreatedModel().getInputStream();
 				}
 
 				@Override
 				public long getSize()
 				{
-					return rowView.getResult().getCreatedModel().getSerializedAgent().length;
+					return specificRow.getResult().getCreatedModel().getSerializedAgent().length;
 				}
 
 				@Override
 				public String getMimeType()
 				{
-					return HttpContentType.APPLICATION_OCTET_STREAM.toString();
+					return HttpContentType.APPLICATION_OCTET_STREAM.getMimeType();
 				}
 
 				@Override
 				public String getFilename()
 				{
-					return rowView.getResult().getCreatedModel().getFileName();
+					return specificRow.getResult().getCreatedModel().getFileName();
 				}
 			});
 			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+		}
+		else if(specificColumn == ResultTableDBView.Column.VISUALIZE)
+		{
+			final JPADataSetLO resultsDataset = specificRow.getResult().getOutputs().get(0); // this is a temporary solution
+			GeneralDialogs.componentDialog("Attributes to visualize", new DatasetVisualizationForm(resultsDataset), new DialogCommons.IDialogResultHandler()
+			{
+				@Override
+				public boolean handleResult(final Object[] args)
+				{
+					// show progress dialog
+					ProgressDialog.show("Vizualization progress...", new ProgressDialog.IProgressDialogTaskHandler()
+					{
+						private DatasetVisualizationEntryPoint underlyingTask;
+
+						@Override
+						public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+						{
+							JPAAttributeMetaData[] attrsToCompare = (JPAAttributeMetaData[]) args[0];
+							JPAAttributeMetaData attrTarget = (JPAAttributeMetaData) args[1];
+							
+							// start the task and bind it with the progress dialog
+							underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);
+							underlyingTask.visualizeDataset(resultsDataset, attrsToCompare, attrTarget);
+						}
+
+						@Override
+						public void abortTask()
+						{
+							underlyingTask.abort();
+						}
+
+						@Override
+						public void onTaskFinish(IProgressDialogTaskResult result)
+						{
+							// and when the task finishes, construct the UI
+							DSVisOneUIArgs uiArgs = new DSVisOneUIArgs(resultsDataset, (DSVisOneResult) result); 
+							Page.getCurrent().setLocation(uiArgs.toRedirectURL());
+						}
+					});
+					return true;
+				}
+			});
+		}
+		else if(specificColumn == ResultTableDBView.Column.COMPARE)
+		{
+			final JPADataSetLO resultsDataset = specificRow.getResult().getOutputs().get(0); // this is a temporary solution
+			final JPADataSetLO inputDataset = null; // TODO:
+			MessageBox mb = GeneralDialogs.wizardDialog("Result compare guide", new ResultCompareWizard(resultsDataset, inputDataset));
+			mb.setWidth("800px");
+			mb.setHeight("500px");
 		}
 		else
 		{

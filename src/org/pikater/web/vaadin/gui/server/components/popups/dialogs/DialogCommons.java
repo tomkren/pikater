@@ -3,8 +3,11 @@ package org.pikater.web.vaadin.gui.server.components.popups.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
+
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 
@@ -21,7 +24,7 @@ public class DialogCommons
 	 * @param closeWithAnyButton whether the dialog should close after clicking ANY of its buttons
 	 * @param escapeToClose
 	 */
-	protected static void setupMessageBox(MessageBox box, boolean closeWithAnyButton)
+	protected static void setupGeneralDialog(MessageBox box, boolean closeWithAnyButton)
 	{
 		box.getWindow().setResizable(false);
 		box.getWindow().setDraggable(false);
@@ -29,6 +32,21 @@ public class DialogCommons
 		{
 			box.setAutoClose(closeWithAnyButton);
 		}
+		UI.getCurrent().setFocusedComponent(box.getWindow());
+	}
+	
+	/**
+	 * Applies general message box settings.
+	 * @param box
+	 * @param enterButton which button to bind with the ENTER key
+	 * @param closeWithAnyButton whether the dialog should close after clicking ANY of its buttons
+	 * @param escapeToClose
+	 */
+	protected static void setupWizardDialog(MessageBox box, WizardForDialog<?> wizard)
+	{
+		box.getWindow().setClosable(true);
+		box.getWindow().setResizable(true);
+		box.getWindow().setDraggable(true);
 		UI.getCurrent().setFocusedComponent(box.getWindow());
 	}
 
@@ -43,11 +61,11 @@ public class DialogCommons
 	 * @param enterButton
 	 * @param escapeToClose
 	 */
-	protected static void bindActionsToKeyboard(MessageBox box, ButtonId enterButton, boolean escapeToClose)
+	protected static void bindActionsToKeyboard(MessageBox box, Button enterButton, boolean escapeToClose)
 	{
 		if(enterButton != null)
 		{
-			box.getButton(enterButton).setClickShortcut(KeyCodes.KEY_ENTER, null);
+			enterButton.setClickShortcut(KeyCodes.KEY_ENTER, null);
 		}
 		if(escapeToClose)
 		{

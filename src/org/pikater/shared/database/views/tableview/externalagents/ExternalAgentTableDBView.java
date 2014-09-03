@@ -50,7 +50,7 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 	 * make sure to order them right :). 
 	 * <p>
 	 * This enum is used for create Criteria API query in functions
-	 * {@link ExternalAgentDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
+	 * {@link ExternalAgentDAO#getAllUserUpload(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)} and 
 	 * {@link ExternalAgentDAO#getByOwner(JPAUser, int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}
 	 * <p>
 	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}
@@ -139,13 +139,15 @@ public class ExternalAgentTableDBView extends AbstractTableDBView
 		int allAgentsCount=0;
 		if(adminMode())
 		{
-			agents = DAOs.externalAgentDAO.getAll(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allAgentsCount=DAOs.externalAgentDAO.getAllCount();
+			//getting all visible external agents
+			agents = DAOs.externalAgentDAO.getByVisibility(constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),true);
+			allAgentsCount=DAOs.externalAgentDAO.getByVisibilityCount(true);
 		}
 		else
 		{
-			agents=DAOs.externalAgentDAO.getByOwner(owner, constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder());
-			allAgentsCount=DAOs.externalAgentDAO.getByOwnerCount(owner);
+			//getting visible external agents of the user
+			agents=DAOs.externalAgentDAO.getByOwnerAndVisibility(owner, constraints.getOffset(),constraints.getMaxResults(),constraints.getSortColumn(),constraints.getSortOrder(),true);
+			allAgentsCount=DAOs.externalAgentDAO.getByOwnerAndVisibilityCount(owner, true);
 		}
 		
 		List<ExternalAgentTableDBRow> resultRows = new ArrayList<ExternalAgentTableDBRow>();

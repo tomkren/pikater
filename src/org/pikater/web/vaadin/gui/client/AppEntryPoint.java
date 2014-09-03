@@ -20,10 +20,7 @@ public class AppEntryPoint implements EntryPoint
 		// JSNI_SharedConfig.exportStaticMethods();
 
 		/*
-		 * Adds a keyboard listener that keeps track of what keys are currently
-		 * pressed. The underlying code is called after an event is triggered
-		 * and even before the browser processes it which allows for cancelling
-		 * events.
+		 * Adds a keyboard listener that keeps track of what keys are currently ressed.
 		 */
 		Event.addNativePreviewHandler(GWTKeyboardManager.getNativePreviewHandler());
 		

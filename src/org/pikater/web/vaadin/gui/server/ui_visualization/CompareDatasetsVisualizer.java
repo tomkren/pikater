@@ -80,7 +80,7 @@ public class CompareDatasetsVisualizer extends VerticalLayout
 						@Override
 						protected String getContentCaption()
 						{
-							return String.format("%s x %s", getLabelForAttributes(leftIndex), getLabelForAttributes(topIndex)); 
+							return String.format("%s X %s", getLabelForAttributes(leftIndex), getLabelForAttributes(topIndex)); 
 						}
 					};
 				}

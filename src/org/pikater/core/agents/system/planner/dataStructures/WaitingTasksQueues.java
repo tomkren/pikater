@@ -1,8 +1,8 @@
 package org.pikater.core.agents.system.planner.dataStructures;
 
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
+
 import org.pikater.core.ontology.subtrees.task.Task;
 
 import java.util.ArrayList;
@@ -35,17 +35,48 @@ public class WaitingTasksQueues {
 	
 	public void addTask(TaskToSolve taskToSolve) {
 		
-		IExpectedDuration expectedDuration =
+		ExpectedDuration expectedDuration =
 				taskToSolve.getTask().getExpectedDuration();
-		if (expectedDuration instanceof ShortTimeDuration) {
+		DurationType durationType = expectedDuration.exportDurationType();
+		
+		if (durationType.equals(ExpectedDuration.DurationType.SECONDS)) {
 		
 			this.shortTimeDurationQueue.add(taskToSolve);
-		} else if (expectedDuration instanceof LongTermDuration) {
+		} else {
 			
 			this.longTermDurationQueue.add(taskToSolve);
-		} else {
-			throw new IllegalArgumentException("Illegal field expectedDuration");
 		}
+	}
+	
+	public void updateTaskPriority(int batchID, int newPriority) {
+
+		Comparator<TaskToSolve> comparator = new PlannerComparator();
+
+		PriorityQueue<TaskToSolve> newShortTimeDurationQueue =
+				new PriorityQueue<TaskToSolve>(10, comparator);
+		while (!shortTimeDurationQueue.isEmpty()) {
+			TaskToSolve taskToSolveI = shortTimeDurationQueue.remove();
+			Task taskI = taskToSolveI.getTask();
+
+			if (taskI.getBatchID() == batchID) {
+				taskToSolveI.setPriority(newPriority);
+			}
+			newShortTimeDurationQueue.add(taskToSolveI);
+		}
+		shortTimeDurationQueue = newShortTimeDurationQueue;
+
+		PriorityQueue<TaskToSolve> newLongTermDurationQueue =
+				new PriorityQueue<TaskToSolve>(10, comparator);
+		while (!longTermDurationQueue.isEmpty()) {
+			TaskToSolve taskToSolveI = longTermDurationQueue.remove();
+			Task taskI = taskToSolveI.getTask();
+
+			if (taskI.getBatchID() == batchID) {
+				taskToSolveI.setPriority(newPriority);
+			}
+			newLongTermDurationQueue.add(taskToSolveI);
+		}
+		longTermDurationQueue = newLongTermDurationQueue;
 	}
 	
 	public TaskToSolve removeTaskWithHighestPriority() {

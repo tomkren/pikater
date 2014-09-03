@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -22,18 +23,28 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 
 
 @Entity
-@Table(name="Batch")
+@Table(
+		name="Batch",
+		indexes={
+				@Index(columnList="owner"),
+				@Index(columnList="name"),
+				@Index(columnList="note"),
+				@Index(columnList="created"),
+				@Index(columnList="finished"),
+				@Index(columnList="status"),
+				@Index(columnList="totalPriority"),
+				@Index(columnList="owner,status")
+		}
+	  )
 @NamedQueries({
 	@NamedQuery(name="Batch.getAll",query="select b from JPABatch b"),
 	@NamedQuery(name="Batch.getAll.count",query="select count(b) from JPABatch b"),
-	@NamedQuery(name="Batch.getAllNotStatus.count",query="select count(b) from JPABatch b where b.status <> :status"),
-	@NamedQuery(name="Batch.getByID",query="select b from JPABatch b where b.id=:id"),
 	@NamedQuery(name="Batch.getByStatus",query="select b from JPABatch b where b.status=:status"),
 	@NamedQuery(name="Batch.getByOwner",query="select b from JPABatch b where b.owner=:owner"),
 	@NamedQuery(name="Batch.getByOwner.count",query="select count(b) from JPABatch b where b.owner=:owner"),
-	@NamedQuery(name="Batch.getByOwnerAndStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status=:status"),
-	@NamedQuery(name="Batch.getByOwnerAndNotStatus.count",query="select count(b) from JPABatch b where b.owner=:owner and b.status <> :status"),
-	@NamedQuery(name="Batch.getByIDwithResult",query="select b,e,r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results")
+	@NamedQuery(name="Batch.getByIDwithResult",query="select b,e,r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
+	@NamedQuery(name="Batch.getByIDonlyResults",query="select r from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results"),
+	@NamedQuery(name="Batch.getByIDonlyResults.count",query="select count(r) from JPABatch b, JPAExperiment e, JPAResult r where b.id=:batchID and e member of b.experiments and r member of e.results")
 })
 public class JPABatch extends JPAAbstractEntity{
 	
@@ -44,7 +55,7 @@ public class JPABatch extends JPAAbstractEntity{
 	@ManyToOne
 	private JPAUser owner;
 	private int userAssignedPriority;
-	private int totalPriority; // TODO: this is currently not used (propagate to core)
+	private int totalPriority;
 	private boolean sendEmailAfterFinish;
 	@Enumerated(EnumType.STRING)
 	private JPABatchStatus status;

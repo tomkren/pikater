@@ -24,8 +24,9 @@ import org.pikater.shared.database.jpa.status.JPAModelStrategy;
 @Table(name="Experiment")
 @NamedQueries({
 	@NamedQuery(name="Experiment.getAll",query="select exp from JPAExperiment exp"),
-	@NamedQuery(name="Experiment.getByID",query="select exp from JPAExperiment exp where exp.id=:id"),
 	@NamedQuery(name="Experiment.getByBatch",query="select exp from JPAExperiment exp where exp.batch=:batch"),
+	@NamedQuery(name="Experiment.getByBatchWithModel",query="select exp from JPAExperiment exp where exp.batch=:batch and exists (select res from JPAResult res where res member of exp.results and res.createdModel is not null)"),
+	@NamedQuery(name="Experiment.getByBatchWithModel.count",query="select count(exp) from JPAExperiment exp where exp.batch=:batch and exists (select res from JPAResult res where res member of exp.results and res.createdModel is not null)"),
 	@NamedQuery(name="Experiment.getByStatus",query="select exp from JPAExperiment exp where exp.status=:status")
 })
 public class JPAExperiment extends JPAAbstractEntity{

@@ -11,7 +11,6 @@ import javax.persistence.Transient;
 @Table(name="TaskType")
 @NamedQueries({
 	@NamedQuery(name="TaskType.getAll",query="select tt from JPATaskType tt"),
-	@NamedQuery(name="TaskType.getByID",query="select tt from JPATaskType tt where tt.id=:id"),
 	@NamedQuery(name="TaskType.getByName",query="select tt from JPATaskType tt where tt.name=:name")
 })
 public class JPATaskType extends JPAAbstractEntity{

@@ -3,7 +3,7 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.IExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 /**
@@ -13,7 +13,7 @@ import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
  */
 public class ModelComputationNode extends ComputationNode {
     private EvaluationMethod evaluationMethod;
-    private IExpectedDuration expectedDuration;
+    private ExpectedDuration expectedDuration;
     private PikaterAgent agent;
     private int experimentID;
     private int priority;
@@ -37,11 +37,11 @@ public class ModelComputationNode extends ComputationNode {
 		this.evaluationMethod = evaluationMethod;
 	}
 
-	public IExpectedDuration getExpectedDuration() {
+	public ExpectedDuration getExpectedDuration() {
 		return expectedDuration;
 	}
 
-	public void setExpectedDuration(IExpectedDuration expectedDuration) {
+	public void setExpectedDuration(ExpectedDuration expectedDuration) {
 		this.expectedDuration = expectedDuration;
 	}
 

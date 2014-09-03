@@ -2,6 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.view
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -18,13 +19,14 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.shared.experiment.webformat.server.BoxType;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.util.collections.BidiMap;
+import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special.CAModelFieldProvider;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special.FileInputFieldProvider;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.BooleanValueProvider;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.templated.DoubleValueProvider;
@@ -101,7 +103,7 @@ public class OptionValueForm extends CustomFormLayout
 				String typeStr = null;
 				try
 				{
-					typeStr = type.getDefaultValue().getClass().newInstance().toDisplayName();
+					typeStr = type.getDefaultValue().toDisplayName();
 				}
 				catch (Throwable t)
 				{
@@ -130,7 +132,27 @@ public class OptionValueForm extends CustomFormLayout
 				}
 			}
 		}
-		Collections.sort(typeOptions);
+		Collections.sort(typeOptions, new Comparator<String>()
+		{
+			private final String nullDisplayName = new NullValue().toDisplayName();
+			
+			@Override
+			public int compare(String o1, String o2)
+			{
+				if(o1.equals(nullDisplayName))
+				{
+					return -1;
+				}
+				else if (o2.equals(nullDisplayName))
+				{
+					return 1;
+				}
+				else
+				{
+					return o1.compareTo(o2);
+				}
+			}
+		});
 		
 		// display a warning to the user if there was a problem with the allowed types
 		if(typeOptions.isEmpty())
@@ -250,8 +272,6 @@ public class OptionValueForm extends CustomFormLayout
 			}
 		}
 		
-		// TODO: model has NullValue atm - wait until type is determined
-		
 		// then get the appropriate field provider according to the given value type
 		Class<? extends IValueData> typeClass = value.getCurrentValue().getClass();
 		if(typeClass.equals(BooleanValue.class))
@@ -274,7 +294,15 @@ public class OptionValueForm extends CustomFormLayout
 		}
 		else if(typeClass.equals(IntegerValue.class))
 		{
-			typeSpecificFieldProvider = new IntegerValueProvider();
+			// first special treatment and then default
+			if((dataSource.getBox().getBoxType() == BoxType.COMPUTE) && dataSource.getOption().getName().equals("model"))
+			{
+				typeSpecificFieldProvider = new CAModelFieldProvider(dataSource.getBox().getAssociatedAgent().getAgentClassName());
+			}
+			else
+			{
+				typeSpecificFieldProvider = new IntegerValueProvider();
+			}
 		}
 		else if(typeClass.equals(FloatValue.class))
 		{

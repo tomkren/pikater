@@ -104,7 +104,7 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 				@Override
 				public String getMimeType()
 				{
-					return HttpContentType.APPLICATION_JAR.toString();
+					return HttpContentType.APPLICATION_JAR.getMimeType();
 				}
 				
 				@Override
@@ -128,6 +128,7 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 				public boolean handleResult(Object[] args)
 				{
 					action.run();
+					getParentTable().rebuildRowCache();
 					return true; // close the dialog
 				}
 			});

@@ -28,9 +28,9 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 
-public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBView>
+public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends AbstractDBViewRoot<V>
 {
-	public ExperimentDBViewRoot(ExperimentTableDBView view)
+	public ExperimentDBViewRoot(V view)
 	{
 		super(view);
 	}
@@ -101,7 +101,7 @@ public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBVi
 				@Override
 				public String getMimeType()
 				{
-					return HttpContentType.TEXT_CSV.toString();
+					return HttpContentType.TEXT_CSV.getMimeType();
 				}
 
 				@Override
@@ -166,7 +166,7 @@ public class ExperimentDBViewRoot extends AbstractDBViewRoot<ExperimentTableDBVi
 						@Override
 						public String getMimeType()
 						{
-							return HttpContentType.TEXT_CSV.toString();
+							return HttpContentType.TEXT_CSV.getMimeType();
 						}
 
 						@Override

@@ -21,25 +21,25 @@ class DatasetCompareCommons implements IWizardCommon
 		this.form_compareTo = null;
 	}
 	
-	public void setCompareToDataset(JPADataSetLO dataset)
-	{
-		this.dataset_compareTo = dataset;
-		this.form_compareTo = new DatasetVisualizationForm(dataset);
-	}
-
 	public JPADataSetLO getDatasetOriginal()
 	{
 		return dataset_original;
 	}
-
+	
 	public DatasetVisualizationForm getFormOriginal()
 	{
 		return form_original;
 	}
-
+	
 	public JPADataSetLO getDatasetCompareTo()
 	{
 		return dataset_compareTo;
+	}
+	
+	public void setDatasetCompareTo(JPADataSetLO dataset)
+	{
+		this.dataset_compareTo = dataset;
+		this.form_compareTo = dataset != null ? new DatasetVisualizationForm(dataset) : null;
 	}
 
 	public DatasetVisualizationForm getFormCompareTo()

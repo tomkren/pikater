@@ -10,7 +10,7 @@ public class DatasetVisualizationValidation
 	 * @param attributes
 	 * @return
 	 */
-	public static boolean areCompatible(AttrMapping attributes)
+	public static boolean isCompatible(AttrMapping attributes)
 	{
 		return true;
 	}

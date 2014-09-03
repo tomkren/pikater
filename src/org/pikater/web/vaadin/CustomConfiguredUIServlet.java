@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.requests.HttpRequestUtils;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;

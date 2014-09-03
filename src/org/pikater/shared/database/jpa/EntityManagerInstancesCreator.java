@@ -8,7 +8,7 @@ import javax.persistence.Persistence;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.pikater.shared.utilities.logging.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterLogger;
 
 public class EntityManagerInstancesCreator
 {
@@ -20,7 +20,7 @@ public class EntityManagerInstancesCreator
 	public static EntityManagerFactory primaryFactory;
 	
 	/**
-	 * @see org.pikater.shared.logging.PikaterLogger
+	 * @see org.pikater.shared.logging.web.PikaterLogger
 	 */
 	private static Logger logger=PikaterLogger.getLogger(
 		    Thread.currentThread().getStackTrace()[0].getClassName() );

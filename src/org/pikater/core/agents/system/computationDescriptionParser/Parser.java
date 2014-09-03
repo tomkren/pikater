@@ -39,8 +39,8 @@ public class Parser {
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
             FileSaverNode saverNode=new FileSaverNode(computationGraph);
             saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),batchID,saverNode));
-            computationGraph.addNode(saverNode);
-            alreadyProcessed.put(dataSaver.getId(),saverNode);
+            //computationGraph.addNode(saverNode);
+            //alreadyProcessed.put(dataSaver.getId(),saverNode);
             parseDataSourceDescription(dataSource, batchID, userID, saverNode, "file");
         } else {
             agent.logError("Ontology Parser - Error unknown IDataSaver");

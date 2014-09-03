@@ -76,6 +76,45 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				{
 				}
 			};
+		case VISUALIZE:
+			return new NamedActionDBViewValue("Visualize") // no DB changes needed - this is completely GUI managed
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return result.hasAnOutput();
+				}
+
+				@Override
+				public void updateEntities()
+				{
+				}
+
+				@Override
+				protected void commitEntities()
+				{
+				}
+			};
+		case COMPARE:
+			return new NamedActionDBViewValue("Compare") // no DB changes needed - this is completely GUI managed
+			{
+				@Override
+				public boolean isEnabled()
+				{
+					return result.hasAnOutput();
+				}
+
+				@Override
+				public void updateEntities()
+				{
+				}
+
+				@Override
+				protected void commitEntities()
+				{
+				}
+			};
+			
 		
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());

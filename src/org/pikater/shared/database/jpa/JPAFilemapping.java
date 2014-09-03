@@ -1,15 +1,23 @@
 package org.pikater.shared.database.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name="FileMapping")
+@Table(
+		name="FileMapping",
+		indexes={
+				@Index(columnList="internalfilename"),
+				@Index(columnList="externalfilename"),
+				@Index(columnList="user")
+				}
+		)
 @NamedQueries({
 	@NamedQuery(name="FileMapping.getAll",query="select fm from JPAFilemapping fm"),
-	@NamedQuery(name="FileMapping.getByID",query="select fm from JPAFilemapping fm where fm.id=:id"),
 	@NamedQuery(name="FileMapping.getByInternalFileName",query="select fm from JPAFilemapping fm where fm.internalfilename=:internalFilename"),
 	@NamedQuery(name="FileMapping.getByExternalFileName",query="select fm from JPAFilemapping fm where fm.externalfilename=:externalFilename"),
 	@NamedQuery(name="FileMapping.getByUser",query="select fm from JPAFilemapping fm where fm.user=:user"),
@@ -40,6 +48,8 @@ public class JPAFilemapping extends JPAAbstractEntity{
 	public void setInternalfilename(String internalfilename) {
 		this.internalfilename = internalfilename;
 	}
+	@Transient
+	public static final String EntityName = "FileMapping";
 	@Override
 	public void updateValues(JPAAbstractEntity newValues) throws Exception {
 		JPAFilemapping updatedValues=(JPAFilemapping)newValues;

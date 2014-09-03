@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import org.pikater.shared.PropertiesHandler;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.AbstractJobWithArgs;
 import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
 import org.quartz.JobBuilder;

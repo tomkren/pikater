@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.upload;
 
 import java.io.File;
-import java.util.EnumSet;
+import java.util.List;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -12,6 +12,8 @@ import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
@@ -28,19 +30,39 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
+public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> implements IDialogComponent
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	public DatasetUploadWizard(Window parentPopup)
+	public DatasetUploadWizard() 
 	{
-		super(parentPopup, new DatasetUploadCommons());
-		getFinishButton().setEnabled(false);
-		getFinishButton().setVisible(false);
+		super(new DatasetUploadCommons());
 		
 		addStep(new Step1(this));
 		addStep(new Step2(this));
 		addStep(new Step3(this));
+		
+		// renders the 3 methods below useless
+		getFinishButton().setEnabled(false); 
+		getFinishButton().setVisible(false);
+	}
+	
+	@Override
+	public void addArgs(List<Object> arguments)
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isResultReadyToBeHandled()
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean handleResult(Object[] args)
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	//--------------------------------------------------------------
@@ -171,8 +193,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 			ManageUserUploads uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads); 
 			MyMultiUpload mmu = uploadManager.createUploadButton(
 					"Choose file to upload",
-					EnumSet.of(HttpContentType.APPLICATION_MS_EXCEL, HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
-							HttpContentType.TEXT_CSV, HttpContentType.TEXT_PLAIN)
+					HttpContentType.getDatasetUploadTypes()
 			);
 			mmu.addFileUploadEventsCallback(new IFileUploadEvents()
 			{
@@ -188,8 +209,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 					/*
 					 * Single file upload is assumed here.
 					 */
-					
-					getParentWizard().closeWizardAndTheParentPopup();
+					getParentPopup().close();
 				}
 				
 				@Override
@@ -220,11 +240,20 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons>
 						}
 						finally
 						{
-							getParentWizard().closeWizardAndTheParentPopup();
+							getParentPopup().close();
 						}
 					}
 					
-					MyNotifications.showSuccess("Upload successful", event.getFileName());
+					if(ServerConfigurationInterface.getConfig().coreEnabled)
+					{
+						GeneralDialogs.info("Upload successful", "It may take a while before your dataset is processed and (for example) visualization "
+								+ "can be invoked on it.");
+					}
+				}
+				
+				private Window getParentPopup()
+				{
+					return findAncestor(Window.class);
 				}
 			});
 			

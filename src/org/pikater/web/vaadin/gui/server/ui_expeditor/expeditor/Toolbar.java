@@ -9,10 +9,10 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
-import org.pikater.shared.database.views.tableview.batches.UserSavedBatchesTableDBView;
-import org.pikater.shared.database.views.tableview.batches.UserScheduledBatchesTableDBView;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserSaved;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserScheduled;
+import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.config.ServerConfigurationInterface;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
@@ -385,7 +385,7 @@ public class Toolbar extends VerticalLayout
 	{
 		try
 		{
-			activeComponent.exportExperiment(new KineticComponent.IOnExperimentExported()
+			activeComponent.exportExperiment(saveMode == ExperimentSaveMode.SAVE_FOR_EXECUTION, new KineticComponent.IOnExperimentExported()
 			{
 				private JPAUser experimentOwner;
 				private JPABatch sourceExperiment;
@@ -488,7 +488,6 @@ public class Toolbar extends VerticalLayout
 						}
 						catch (PikaterGatewayException e)
 						{
-							DAOs.batchDAO.deleteBatchEntity(newExperiment);
 							PikaterLogger.logThrowable("Could not send notification about a new batch to core.", e);
 							GeneralDialogs.warning("Failed to notify core", "Your experiment has been saved and designated "
 									+ "for execution but notification was not successfully passed to pikater core.");
@@ -599,7 +598,7 @@ public class Toolbar extends VerticalLayout
 					}
 				}
 			});
-			savedExperimentsLayout.setView(new BatchDBViewRoot<UserSavedBatchesTableDBView>(new UserSavedBatchesTableDBView(currentUser)));
+			savedExperimentsLayout.setView(new BatchDBViewRoot<BatchTableDBViewUserSaved>(new BatchTableDBViewUserSaved(currentUser)));
 			
 			final DBTableLayout scheduledExperimentsLayout = new DBTableLayout();
 			scheduledExperimentsLayout.setSizeFull();
@@ -626,7 +625,7 @@ public class Toolbar extends VerticalLayout
 					}
 				}
 			});
-			scheduledExperimentsLayout.setView(new BatchDBViewRoot<UserScheduledBatchesTableDBView>(new UserScheduledBatchesTableDBView(currentUser)));
+			scheduledExperimentsLayout.setView(new BatchDBViewRoot<BatchTableDBViewUserScheduled>(new BatchTableDBViewUserScheduled(currentUser)));
 			
 			addTab(savedExperimentsLayout, "Saved experiments");
 			addTab(scheduledExperimentsLayout, "Scheduled experiments");

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
-import org.pikater.shared.experiment.webformat.server.BoxType;
 import org.pikater.web.config.AgentInfoCollection;
+import org.pikater.web.experiment.server.BoxInfoServer;
+import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.sharedresources.ThemeResources;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;

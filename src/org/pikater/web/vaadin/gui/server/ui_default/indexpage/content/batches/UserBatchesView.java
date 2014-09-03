@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches;
 
-import org.pikater.shared.database.views.tableview.batches.UserBatchesTableDBView;
+import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUser;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
@@ -15,6 +15,6 @@ public class UserBatchesView extends BatchesView
 	@Override
 	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()
 	{
-		return new BatchStep(this, new UserBatchesTableDBView(ManageAuth.getUserEntity(VaadinSession.getCurrent())));
+		return new BatchStep(this, new BatchTableDBViewUser(ManageAuth.getUserEntity(VaadinSession.getCurrent())));
 	}
 }

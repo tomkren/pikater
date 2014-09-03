@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems;
 
 import java.io.Serializable;
 
-import org.pikater.shared.experiment.webformat.IBoxInfoCommon;
+import org.pikater.web.experiment.IBoxInfoCommon;
 
 public class BoxGraphItemShared implements Serializable, IBoxInfoCommon<Integer>
 {

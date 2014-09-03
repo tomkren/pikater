@@ -1,13 +1,18 @@
 package org.pikater.web.vaadin.gui.server.components.upload;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.pikater.web.HttpContentType;
+
+import com.google.gwt.thirdparty.guava.common.io.Files;
 import com.vaadin.server.StreamVariable;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
 import com.vaadin.server.StreamVariable.StreamingErrorEvent;
 import com.vaadin.server.StreamVariable.StreamingStartEvent;
 import com.wcs.wcslib.vaadin.widget.multifileupload.component.SmartMultiUpload;
+import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStatePanel;
 
 public class MyUploadStatePanel extends UploadStatePanel
@@ -21,13 +26,18 @@ public class MyUploadStatePanel extends UploadStatePanel
     {
         super(window, uploadReceiver);
         
-        this.uploadReceiver = uploadReceiver;
-        
         this.fileUploadEventsCallbacks = new ArrayList<IFileUploadEvents>();
+        this.uploadReceiver = uploadReceiver;
     }
 	
 	// ------------------------------------------------------------
 	// INHERITED INTERFACE
+	
+	@Override
+	public void setFinishedHandler(UploadFinishedHandler finishedHandler)
+	{
+		super.setFinishedHandler(finishedHandler);
+	}
 	
 	@Override
 	public void setMultiUpload(SmartMultiUpload multiUpload)
@@ -60,9 +70,81 @@ public class MyUploadStatePanel extends UploadStatePanel
 	public void streamingFinished(StreamingEndEvent event)
 	{
 		super.streamingFinished(event); // always call this first, otherwise unexpected problems may occur
-		for(IFileUploadEvents callbacks : fileUploadEventsCallbacks)
+		
+		final HttpContentType originalType = HttpContentType.fromString(event.getMimeType());
+		try
 		{
-			callbacks.uploadFinished(event, uploadReceiver.getUploadedFileHandler());
+			if(originalType.hasExtensionsDefined())
+			{
+				if(originalType.getExtensions().length == 1)
+				{
+					/*
+					 * At this moment, the file has a temporary extension (.tmp). Original
+					 * extension may be required.
+					 */
+
+					// determine absolute path of the file with its original extension
+					String pathWithOriginalExtension = uploadReceiver.getUploadedFileHandler().getAbsolutePath();
+					pathWithOriginalExtension = pathWithOriginalExtension.substring(0, pathWithOriginalExtension.lastIndexOf('.')).concat(originalType.getExtensions()[0]); 
+
+					// change extension of the uploaded file
+					File fileWithOriginalExtension = new File(pathWithOriginalExtension);
+					Files.move(uploadReceiver.getUploadedFileHandler(), fileWithOriginalExtension);
+
+					// callback
+					for(IFileUploadEvents callbacks : fileUploadEventsCallbacks)
+					{
+						callbacks.uploadFinished(event, fileWithOriginalExtension);
+					}
+				}
+				else
+				{
+					throw new IllegalStateException(String.format("Can not rename the uploaded file because the '%s' mime type has multiple "
+							+ "extensions defined.", originalType.getMimeType()));
+				}
+			}
+			else
+			{
+				throw new IllegalStateException(String.format("Can not rename the uploaded file because the '%s' mime type has no "
+						+ "extensions defined.", originalType.getMimeType()));
+			}
+		}
+		catch (Throwable t)
+		{
+			streamingFailed(new StreamingErrorEvent()
+			{
+				private static final long serialVersionUID = 5878030943462489881L;
+
+				@Override
+				public String getMimeType()
+				{
+					return originalType.getMimeType();
+				}
+				
+				@Override
+				public String getFileName()
+				{
+					return uploadReceiver.getUploadedFileHandler().getName();
+				}
+				
+				@Override
+				public long getContentLength()
+				{
+					return uploadReceiver.getUploadedFileHandler().length();
+				}
+				
+				@Override
+				public long getBytesReceived()
+				{
+					return uploadReceiver.getUploadedFileHandler().length();
+				}
+				
+				@Override
+				public Exception getException()
+				{
+					return new IllegalStateException("The designated mime type has several extensions defined. Only one is required.");
+				}
+			});
 		}
 	}
 

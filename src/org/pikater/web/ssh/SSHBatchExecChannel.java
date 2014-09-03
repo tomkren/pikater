@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSchException;

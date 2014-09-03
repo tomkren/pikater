@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,11 +23,19 @@ import org.pikater.shared.database.jpa.security.PikaterRole;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
 
 @Entity
-@Table(name="_User")
+@Table(
+		name="_User",
+		indexes={
+				@Index(columnList="login"),
+				@Index(columnList="email"),
+				@Index(columnList="priorityMax"),
+				@Index(columnList="status"),
+				@Index(columnList="created")
+				}
+	  )
 @NamedQueries({
 	@NamedQuery(name="User.getAll",query="select u from JPAUser u"),
 	@NamedQuery(name="User.getAll.count",query="select count(u) from JPAUser u"),
-	@NamedQuery(name="User.getByID",query="select u from JPAUser u where u.id=:id"),
 	@NamedQuery(name="User.getByStatus",query="select u from JPAUser u where u.status=:status"),
 	@NamedQuery(name="User.getByLogin",query="select u from JPAUser u where u.login=:login"),
 	@NamedQuery(name="User.getByRole",query="select u from JPAUser u where u.role=:role")

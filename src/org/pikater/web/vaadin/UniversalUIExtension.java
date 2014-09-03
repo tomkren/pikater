@@ -2,7 +2,7 @@ package org.pikater.web.vaadin;
 
 import java.util.logging.Level;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.vaadin.gui.client.extensions.UniversalUIExtensionClientRpc;
 import org.pikater.web.vaadin.gui.client.extensions.UniversalUIExtensionServerRpc;
 

@@ -88,7 +88,6 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		}
 		
 		// fill in the queues of CA
-		myAgent.logError(recommendedAgent.getType());
 		AgentTypeEdge re = new AgentTypeEdge(recommendedAgent.getType());
 		computationNode.addToOutputAndProcess(re, "agenttype", true);
 		

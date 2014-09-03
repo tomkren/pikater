@@ -1,7 +1,9 @@
 package org.pikater.shared.util.collections;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,5 +27,21 @@ public class CollectionUtils
 			result.add(String.valueOf(i));
 		}
 		return result;
+	}
+	
+	public static String join(Collection<String> collection, String delim)
+	{
+		StringBuilder result = new StringBuilder();
+		Iterator<String> it = collection.iterator();
+		if(it.hasNext())
+		{
+			result.append(it.next());
+		}
+		while(it.hasNext())
+		{
+			result.append(delim);
+			result.append(it.next());
+		}
+		return result.toString();
 	}
 }

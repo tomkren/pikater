@@ -44,7 +44,7 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 	@Override
 	public AbstractDBViewValue<? extends Object> initValueWrapper(final ITableColumn column)
 	{
-		AbstractBatchTableDBView.Column specificColumn = (AbstractBatchTableDBView.Column) column;
+		BatchTableDBView.Column specificColumn = (BatchTableDBView.Column) column;
 		switch(specificColumn)
 		{
 		/*
@@ -101,7 +101,7 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 				@Override
 				public boolean isEnabled()
 				{
-					return batch.isDesignatedForExecution();
+					return batch.isBeingExecuted();
 				}
 				
 				@Override

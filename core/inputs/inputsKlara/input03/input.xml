@@ -50,15 +50,49 @@
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
             <errors/>
             <dataSources/>
+            <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
             <options/>
-            <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
+            <duration>
+              <durationType>MINUTES</durationType>
+            </duration>
             <evaluationMethod>
               <id>4</id>
               <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
               <errors/>
               <dataSources/>
               <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
-              <options/>
+              <options>
+                <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                  <name>F</name>
+                  <valuesWrapper>
+                    <values>
+                      <org.pikater.core.ontology.subtrees.newOption.base.Value>
+                        <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                          <value>8</value>
+                        </currentValue>
+                        <type>
+                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                            <value>8</value>
+                          </defaultValue>
+                        </type>
+                      </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                    </values>
+                  </valuesWrapper>
+                  <valueRestrictions>
+                    <restrictions>
+                      <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                        <types>
+                          <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                            <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                              <value>8</value>
+                            </defaultValue>
+                          </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                        </types>
+                      </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                    </restrictions>
+                  </valueRestrictions>
+                </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+              </options>
             </evaluationMethod>
             <trainingData>
               <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.CARecSearchComplex">
@@ -104,15 +138,49 @@
                   <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                   <errors/>
                   <dataSources/>
+                  <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
                   <options/>
-                  <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
+                  <duration>
+                    <durationType>MINUTES</durationType>
+                  </duration>
                   <evaluationMethod>
                     <id>7</id>
                     <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                     <errors/>
                     <dataSources/>
                     <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
-                    <options/>
+                    <options>
+                      <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                        <name>F</name>
+                        <valuesWrapper>
+                          <values>
+                            <org.pikater.core.ontology.subtrees.newOption.base.Value>
+                              <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                <value>8</value>
+                              </currentValue>
+                              <type>
+                                <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                  <value>8</value>
+                                </defaultValue>
+                              </type>
+                            </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                          </values>
+                        </valuesWrapper>
+                        <valueRestrictions>
+                          <restrictions>
+                            <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                              <types>
+                                <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                    <value>8</value>
+                                  </defaultValue>
+                                </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                              </types>
+                            </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                          </restrictions>
+                        </valueRestrictions>
+                      </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                    </options>
                   </evaluationMethod>
                   <trainingData>
                     <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
@@ -185,15 +253,49 @@
                   <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                   <errors/>
                   <dataSources/>
+                  <agentType>org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA</agentType>
                   <options/>
-                  <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
+                  <duration>
+                    <durationType>MINUTES</durationType>
+                  </duration>
                   <evaluationMethod>
                     <id>7</id>
                     <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>
                     <errors/>
                     <dataSources/>
                     <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
-                    <options/>
+                    <options>
+                      <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                        <name>F</name>
+                        <valuesWrapper>
+                          <values>
+                            <org.pikater.core.ontology.subtrees.newOption.base.Value>
+                              <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                <value>8</value>
+                              </currentValue>
+                              <type>
+                                <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                  <value>8</value>
+                                </defaultValue>
+                              </type>
+                            </org.pikater.core.ontology.subtrees.newOption.base.Value>
+                          </values>
+                        </valuesWrapper>
+                        <valueRestrictions>
+                          <restrictions>
+                            <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                              <types>
+                                <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                                  <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
+                                    <value>8</value>
+                                  </defaultValue>
+                                </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
+                              </types>
+                            </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
+                          </restrictions>
+                        </valueRestrictions>
+                      </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
+                    </options>
                   </evaluationMethod>
                   <trainingData>
                     <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">

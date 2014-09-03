@@ -9,30 +9,16 @@ import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAModel;
 import org.pikater.shared.database.jpa.JPAResult;
-import org.pikater.shared.database.util.CustomActionResultFormatter;
-import org.pikater.shared.database.util.ResultFormatter;
 
-public class ResultDAO extends AbstractDAO {
+public class ResultDAO extends AbstractDAO<JPAResult> {
+	
+	public ResultDAO(){
+		super(JPAResult.class);
+	}
 
 	@Override
 	public String getEntityName() {
 		return JPAResult.EntityName;
-	}
-
-	@Override
-	public List<JPAResult> getAll() {
-		return EntityManagerInstancesCreator
-				.getEntityManagerInstance()
-				.createNamedQuery("Result.getAll", JPAResult.class)
-				.getResultList();
-	}
-
-	@Override
-	public JPAResult getByID(int ID, EmptyResultAction era) {
-		return new CustomActionResultFormatter<JPAResult>(
-				getByTypedNamedQuery("Result.getByID", "id", ID),
-				era
-				).getSingleResultWithNull();
 	}
 	
 	public List<JPAResult> getByAgentName(String agentName) {
@@ -43,13 +29,35 @@ public class ResultDAO extends AbstractDAO {
 		return getByTypedNamedQuery("Result.getByExperiment", "experiment", experiment);
 	}
 	
+	/**
+	 * Creates a list of all results, that have connected model
+	 * @param experiment {@link JPAExperiment} for which we search results
+	 * @param offset
+	 * @param maxResultCount
+	 * @return the list of results
+	 */
+	public List<JPAResult> getByExperimentWithModel(JPAExperiment experiment, int offset, int maxResultCount){
+		return getByTypedNamedQuery("Result.getByExperimentWithModel", "experiment", experiment, offset, maxResultCount);
+	}
+	
+	public int getByExperimentWithModelCount(JPAExperiment experiment){
+		return getByCountQuery("Result.getByExperimentWithModel.count", "experiment", experiment);
+	}
+	
+	public List<JPAResult> getByExperimentAndAgentNameWithModel(JPAExperiment experiment, String agentName, int offset, int maxResultCount){
+		return getByTypedNamedQueryDouble("Result.getByExperimentAndAgentNameWithModel", "experiment", experiment, "agentName", agentName, offset, maxResultCount);
+	}
+	
+	public int getByExperimentAndAgentNameWithModelCount(JPAExperiment experiment, String agentName){
+		return getByCountQuery("Result.getByExperimentAndAgentNameWithModel.count", "experiment", experiment, "agentName", agentName);
+	}
+	
 	public List<JPAResult> getByDataSetHash(String dataSetHash) {
 		return getByTypedNamedQuery("Result.getByDataSetHash", "hash", dataSetHash);
 	}
 	
 	public List<JPAResult> getResultsByDataSetHashAscendingUponErrorRate(String dataSetHash,int count){
-	    return this.getByTypedNamedQuery(
-	    		JPAResult.class,
+	    return getByTypedNamedQuery(
 	    		"Result.getByDataSetHashErrorAscending",
 	    		"hash",
 	    		dataSetHash,
@@ -109,24 +117,11 @@ public class ResultDAO extends AbstractDAO {
 		}
 	}
 	
-	private List<JPAResult> getByTypedNamedQuery(String queryName,String paramName,Object param){
-		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
-		try{
-			return
-				em
-				.createNamedQuery(queryName,JPAResult.class)
-				.setParameter(paramName, param)
-				.getResultList();
-		}finally{
-			em.close();
-		}
-	}
-	
 	public void deleteResultByEntity(JPAResult result){
 		this.deleteResultByID(result.getId());
 	}
 	
 	public void deleteResultByID(int id){
-		this.deleteEntityByID(JPAResult.class, id);
+		this.deleteEntityByID(id);
 	}
 }

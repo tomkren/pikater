@@ -5,11 +5,14 @@ import java.sql.SQLException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.postgresql.PGConnection;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MyPGConnection
 {
@@ -21,9 +24,11 @@ public class MyPGConnection
 	{
 		try
 		{
-			con = (PGConnection) (new PostgreSQLConnectionProvider(
-					"jdbc:postgresql://nassoftwerak.ms.mff.cuni.cz:5432/pikater",
-					"pikater", "SrapRoPy").getConnection());
+			ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(CoreConfiguration.BEANS_CONFIG_FILE);
+			con=(PGConnection)(
+					(PostgreSQLConnectionProvider)context.getBean("defaultConnection")
+					).getConnection();
+			context.close();
 		}
 		catch (ClassNotFoundException | SQLException e)
 		{

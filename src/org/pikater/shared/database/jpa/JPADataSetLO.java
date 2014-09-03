@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -27,17 +28,24 @@ import org.pikater.shared.database.jpa.status.JPADatasetSource;
 
 
 @Entity	
-@Table(name="DataSetLO")
+@Table(
+		name="DataSetLO",
+		indexes={
+				@Index(columnList="hash"),
+				@Index(columnList="owner"),
+				@Index(columnList="source"),
+				@Index(columnList="source,visible"),
+				@Index(columnList="source,owner,visible")
+				}
+		)
 @NamedQueries({
 	@NamedQuery(name="DataSetLO.getAll",query="select dslo from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getAllBySoruce",query="select dslo from JPADataSetLO dslo where dslo.source=:source"),
 	@NamedQuery(name="DataSetLO.getAll.count",query="select count(dslo) from JPADataSetLO dslo"),
 	@NamedQuery(name="DataSetLO.getAllVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getAllWithResults",query="select dslo from JPADataSetLO dslo where exists (select r from JPAResult r where r.serializedFileName = dslo.hash) "),
-	@NamedQuery(name="DataSetLO.getByID",query="select dslo from JPADataSetLO dslo where dslo.id=:id"),
 	@NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner"),
 	@NamedQuery(name="DataSetLO.getByOwner.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner"),
-	@NamedQuery(name="DataSetLO.getByOwnerVisible.count",query="select count(dslo) from JPADataSetLO dslo where dslo.owner=:owner and dslo.visible=true"),
 	@NamedQuery(name="DataSetLO.getByOID",query="select dslo from JPADataSetLO dslo where dslo.OID=:oid"),
 	@NamedQuery(name="DataSetLO.getByHash",query="select dslo from JPADataSetLO dslo where dslo.hash=:hash"),
 	@NamedQuery(name="DataSetLO.getByDescription",query="select dslo from JPADataSetLO dslo where dslo.description=:description")

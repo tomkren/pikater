@@ -61,6 +61,7 @@ public class DBTableLayout extends VerticalLayout
 			public void buttonClick(ClickEvent event)
 			{
 				table.commitToDB();
+				table.rebuildRowCache();
 			}
 		});
 		this.btn_saveChanges.setVisible(false);

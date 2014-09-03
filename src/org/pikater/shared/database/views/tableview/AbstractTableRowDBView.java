@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
+import org.pikater.shared.database.views.base.values.NamedActionDBViewValue;
 
 /**
  * This view represents a single row in the resulting table. Underlying
@@ -70,5 +71,24 @@ public abstract class AbstractTableRowDBView
 	/**
 	 * Stores all changes to this row to the database.
 	 */
-	public abstract void commitRow();
+	public void commit()
+	{
+		commitRow();
+		for(AbstractDBViewValue<? extends Object> value : columnToValueWrapper.values())
+		{
+			if(value instanceof NamedActionDBViewValue)
+			{
+				NamedActionDBViewValue specificValue = (NamedActionDBViewValue) value;
+				if(specificValue.isEdited())
+				{
+					specificValue.onCommit(this);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Stores all changes to this row to the database.
+	 */
+	protected abstract void commitRow();
 }

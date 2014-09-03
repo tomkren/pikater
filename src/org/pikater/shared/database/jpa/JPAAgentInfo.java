@@ -17,7 +17,6 @@ import javax.persistence.Transient;
 @Table(name="AgentInfo")
 @NamedQueries({
 	@NamedQuery(name="AgentInfo.getAll",query="select ai from JPAAgentInfo ai"),
-	@NamedQuery(name="AgentInfo.getByID",query="select ai from JPAAgentInfo ai where ai.id=:id"),
 	@NamedQuery(name="AgentInfo.getByName",query="select ai from JPAAgentInfo ai where ai.name=:name"),
 	@NamedQuery(name="AgentInfo.getByAgentClass",query="select ai from JPAAgentInfo ai where ai.agentClass=:agentClass"),
 	@NamedQuery(name="AgentInfo.getByOntologyClass",query="select ai from JPAAgentInfo ai where ai.ontologyClass=:ontologyClass"),

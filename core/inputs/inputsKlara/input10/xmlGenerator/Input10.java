@@ -20,7 +20,8 @@ public final class Input10 {
         fileDataProvider.setFileURI("weather.arff");
         
         FileDataProvider fileDataProvider2 = new FileDataProvider();
-        fileDataProvider2.setFileURI("weather2.arff");
+        //fileDataProvider2.setFileURI("weather2.arff"); // hack - we don't have weather2.arff
+        fileDataProvider2.setFileURI("weather.arff"); // wather2.arff would be better
         
 		// Specify a datasource
 		DataSourceDescription fileDataSource1 = new DataSourceDescription();

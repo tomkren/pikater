@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.server.components.forms;
 import java.io.File;
 import java.util.EnumSet;
 
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.ServerConfigurationInterface;
@@ -13,6 +13,7 @@ import org.pikater.web.vaadin.ManageSession;
 import org.pikater.web.vaadin.ManageUserUploads;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.upload.IFileUploadEvents;
 import org.pikater.web.vaadin.gui.server.components.upload.MyMultiUpload;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
@@ -116,8 +117,12 @@ public class AgentUploadForm extends CustomFormLayout
 						parentPopup.close();
 					}
 				}
-				
-				MyNotifications.showSuccess("Upload successful", event.getFileName());
+
+				if(ServerConfigurationInterface.getConfig().coreEnabled)
+				{
+					GeneralDialogs.info("Upload successful", "It may take a while before your agent is processed and made available in the experiment "
+							+ "editor.");
+				}
 			}
 		});
 		this.upload.setEnabled(false);

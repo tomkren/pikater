@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager;
 
-import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
+import org.pikater.web.experiment.server.BoxInfoServer;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.AbstractBoxManagerView;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.BoxManagerOptionView;

@@ -3,7 +3,9 @@ package org.pikater.web;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public enum HttpContentType
 {
@@ -14,28 +16,32 @@ public enum HttpContentType
 	APPLICATION_XHTML_XML("application/xhtml+xml", ".xhtml"),
 	APPLICATION_XML("application/xml", ".xml"),
 	TEXT_CSV("text/csv", ".csv"),
-	TEXT_HTML("text/html", ".htm, .html"),
+	TEXT_HTML("text/html", ".htm", ".html"),
 	TEXT_PLAIN("text/plain", ".txt"),
-	WILDCARD("*/*", "any format");
+	WILDCARD("*/*");
 	
 	private final String contentType;
-	private final String extensionList;
+	private final String[] extensionList;
 	
-	private HttpContentType(String contentType, String extensionList)
+	private HttpContentType(String contentType, String... extensionList)
 	{
 		this.contentType = contentType;
 		this.extensionList = extensionList;
 	}
 	
-	@Override
-	public String toString()
+	public String getMimeType()
 	{
 		return contentType;
 	}
 	
-	public String getExtensionList()
+	public String[] getExtensions()
 	{
 		return extensionList;
+	}
+	
+	public boolean hasExtensionsDefined()
+	{
+		return (extensionList != null) && extensionList.length > 0; 
 	}
 	
 	public static List<String> getMimeTypeList(EnumSet<HttpContentType> contentTypes)
@@ -44,23 +50,47 @@ public enum HttpContentType
 		Iterator<HttpContentType> iter = contentTypes.iterator();
 		while (iter.hasNext())
 		{
-			result.add(iter.next().contentType);
+			result.add(iter.next().getMimeType());
 		}
 		return result;
 	}
 	
-	public static String getExtensionList(EnumSet<HttpContentType> contentTypes)
+	public static Set<String> getExtensionList(EnumSet<HttpContentType> contentTypes)
 	{
-		StringBuilder result = new StringBuilder();
+		Set<String> result = new LinkedHashSet<String>();
 		Iterator<HttpContentType> iter = contentTypes.iterator();
-		if(iter.hasNext())
-		{
-			result.append(iter.next().getExtensionList());
-		}
 		while(iter.hasNext())
 		{
-			result.append(", ").append(iter.next().getExtensionList());
+			for(String extension : iter.next().getExtensions())
+			{
+				result.add(extension);
+			}
 		}
-		return result.toString();
+		return result;
+	}
+	
+	public static HttpContentType fromString(String contentType)
+	{
+		for(HttpContentType type : HttpContentType.values())
+		{
+			if(type.getMimeType().equalsIgnoreCase(contentType))
+			{
+				return type;
+			}
+		}
+		return null;
+	}
+	
+	//---------------------------------------------------------
+	// SOME APPLICATION SPECIFIC INTERFACE
+	
+	public static EnumSet<HttpContentType> getDatasetUploadTypes()
+	{
+		return EnumSet.of(
+				HttpContentType.APPLICATION_MS_EXCEL,
+				HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
+				HttpContentType.TEXT_CSV,
+				HttpContentType.TEXT_PLAIN
+		);
 	}
 }

@@ -22,7 +22,7 @@ public class UsersTableDBView extends AbstractTableDBView
 	 * make sure to order them right :).
 	 * <p>
 	 * This enum is used for create Criteria API query in the function
-	 * {@link UserDAO#getAll(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}.
+	 * {@link UserDAO#getAllUserUpload(int, int, ITableColumn, org.pikater.shared.database.views.base.SortOrder)}.
 	 * <p>
 	 * If you want to change column names you can redefine function {@link Column#getDisplayName()}.  
 	 */

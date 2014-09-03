@@ -3,13 +3,15 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
-import org.pikater.web.vaadin.gui.server.components.popups.MyPopup;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.upload.DatasetUploadWizard;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+
+import de.steinwedel.messagebox.MessageBox;
 
 public class UserDatasetsView extends DatasetsView
 {
@@ -19,7 +21,6 @@ public class UserDatasetsView extends DatasetsView
 	{
 		super();
 		
-		getMainLayout().setCommitImmediately(false);
 		getMainLayout().addCustomActionComponent(new Button("Upload new dataset", new Button.ClickListener()
 		{
 			private static final long serialVersionUID = -1045335713385385849L;
@@ -27,11 +28,9 @@ public class UserDatasetsView extends DatasetsView
 			@Override
 			public void buttonClick(ClickEvent event)
 			{
-				MyPopup datasetUploadWizardWindow = new MyPopup("Dataset upload guide");
-				datasetUploadWizardWindow.setWidth("600px");
-				datasetUploadWizardWindow.setHeight("500px");
-				datasetUploadWizardWindow.setContent(new DatasetUploadWizard(datasetUploadWizardWindow));
-				datasetUploadWizardWindow.show();
+				MessageBox mb = GeneralDialogs.wizardDialog("Dataset upload guide", new DatasetUploadWizard());
+				mb.setWidth("600px");
+				mb.setHeight("500px");
 			}
 		}));
 	}

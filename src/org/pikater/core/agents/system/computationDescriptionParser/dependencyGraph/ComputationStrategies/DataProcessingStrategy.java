@@ -3,9 +3,11 @@ package org.pikater.core.agents.system.computationDescriptionParser.dependencyGr
 import jade.content.lang.Codec;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
+import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
+import org.pikater.core.AgentNames;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -17,6 +19,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.OptionE
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.manager.ExecuteDataProcessingBehaviour;
 import org.pikater.core.ontology.TaskOntology;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.management.Agent;
@@ -117,13 +120,18 @@ public class DataProcessingStrategy implements StartComputationStrategy {
                         ));            	
             }
         }
-        
+       
+        String agentClass = agentTypeEdge.getAgentType();
+        agent.setName(agentClass);
+        agent.setType(agentClass);
         
         task.setAgent(agent);
         task.setDatas(datas);
         task.setBatchID(batchID);
         task.setExperimentID(experimentID);
+        task.setUserID(userID);
         task.setNodeID(computationNode.getId());
+        task.setExpectedDuration(new ExpectedDuration());
         task.setSaveResults(false);
         task.setSaveMode("message");
 
@@ -136,7 +144,8 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
         request.setLanguage(myAgent.getCodec().getName());
         request.setOntology(TaskOntology.getInstance().getName());
-        request.addReceiver(myAgent.getAgentByType(agentTypeEdge.getAgentType()));
+
+        request.addReceiver(new AID(AgentNames.PLANNER, false));
 
         request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 

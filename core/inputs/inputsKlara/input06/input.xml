@@ -75,7 +75,9 @@
               </valueRestrictions>
             </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
           </options>
-          <duration type="org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration"/>
+          <duration>
+            <durationType>MINUTES</durationType>
+          </duration>
           <evaluationMethod>
             <id>3</id>
             <options defined-in="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing"/>

@@ -2,14 +2,16 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponen
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.shared.experiment.universalformat.UniversalComputationDescription;
-import org.pikater.shared.experiment.webformat.server.BoxInfoServer;
-import org.pikater.shared.experiment.webformat.server.ExperimentGraphServer;
-import org.pikater.shared.logging.PikaterLogger;
+import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.web.experiment.server.BoxInfoServer;
+import org.pikater.web.experiment.server.ExperimentGraphServer;
+import org.pikater.web.experiment.server.ExperimentGraphValidator;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentClientRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentServerRpc;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
+import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.CustomTabSheetTabComponent;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor.ExpEditorToolbox;
@@ -351,14 +353,41 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		}
 	}
 	
-	public void exportExperiment(IOnExperimentExported exportCallback)
+	public void exportExperiment(boolean validationNeeded, IOnExperimentExported exportCallback)
 	{
 		try
 		{
+			/*
+			 * Only export experiments that are valid (if validation needs to be checked).
+			 */
+			if(validationNeeded)
+			{
+				ExperimentGraphValidator validator = new ExperimentGraphValidator(experimentGraph);
+				validator.validate();
+				if(validator.problemsFound())
+				{
+					StringBuilder sb = new StringBuilder();
+					for(String problem : validator.getProblems())
+					{
+						if(validator.getProblems().size() > 1)
+						{
+							sb.append("- ");
+						}
+						sb.append(problem);
+						sb.append("\n");
+					}
+					GeneralDialogs.error("Experiment not valid", sb.toString());
+					return;
+				}
+			}
+			
+			/*
+			 * The actual export code.
+			 */
 			UniversalComputationDescription result = experimentGraph.toUniversalFormat(parentEditor.getAgentInfoProvider());
 			
 			/*
-			// test case - redirect the same experiment into a new tab and test the conversion cycle
+			// test case - redirect the same experiment into a new tab and test the conversion cycle (don't save experiment for execution if you want to use this)
 			JPABatch newBatch = new JPABatch("poliket", "bla bla", result.toXML(), null);
 			parentEditor.loadExperimentIntoNewTab(newBatch);
 			*/

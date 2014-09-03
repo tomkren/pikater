@@ -1,15 +1,14 @@
 package org.pikater.core.options;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.pikater.core.CoreConstants;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.LongTermDuration;
-import org.pikater.core.ontology.subtrees.batchDescription.durarion.ShortTimeDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
 import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
+import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
@@ -25,7 +24,10 @@ public class OptionsHelper
 		Value defaultValue = new Value(new NullValue());
 		
 		NewOption optModel = new NewOption(CoreConstants.MODEL, defaultValue, 
-				defaultValue.getType(), new ValueType(new IntegerValue(0)));
+				defaultValue.getType(),
+				new ValueType(new IntegerValue(-1),
+						new RangeRestriction(new IntegerValue(0), null))
+		);
 
 		options.add(optModel);
 		
@@ -35,12 +37,16 @@ public class OptionsHelper
 	public static List<NewOption> getNotSpecifiedCAOptions() {
 
 		List<IValueData> durationValues = new ArrayList<IValueData>();
-		durationValues.add(new StringValue(ShortTimeDuration.class.getSimpleName()));
-		durationValues.add(new StringValue(LongTermDuration.class.getSimpleName()));
+		for (DurationType durationTypeI :
+			DurationType.values()) {
+			
+			String guiValueI = durationTypeI.getGuiValue();
+			durationValues.add(new StringValue(guiValueI));
+		}
 
 		NewOption optDuration = new NewOption(
 				CoreConstants.DURATION,
-				new StringValue(LongTermDuration.class.getSimpleName()),
+				new StringValue(DurationType.MINUTES.getGuiValue()),
 				new SetRestriction(false, durationValues));
 		
 		List<IValueData> modeValues = new ArrayList<IValueData>();

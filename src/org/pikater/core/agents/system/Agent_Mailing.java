@@ -20,7 +20,7 @@ import org.pikater.core.AgentNames;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
-import org.pikater.shared.utilities.mailing.Mailing;
+import org.pikater.shared.util.Mailing;
 
 /** Agent, ktery resi komunikaci s mistnim SMTP serverem, tj. odesilani ruznych e-mailu i jejich tvorbu. */
 public class Agent_Mailing extends PikaterAgent {

@@ -131,12 +131,19 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	@Override
 	public void commitToDB()
 	{
+		// lock
 		setEnabled(false);
+		
+		// commit changes to properties - properties commit changes to views
 		if(!isImmediate())
 		{
-			commit(); // commits changes to properties which commit them to the view
+			commit();
 		}
-		tableContainer.commitToDB(); // commits changes to the database; changes are taken from the view
+		
+		// then commit changes to database; changes are taken from views
+		tableContainer.commitToDB();
+		
+		// release
 		setEnabled(true);
 	}
 	
@@ -190,6 +197,9 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	 */
 	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
+		// first register thy self in the view and don't forget to!
+		viewRoot.setParentTable(this);
+		
 		// this must be first so that column collapsing works...
 		tableContainer.setViewRoot(viewRoot);
 		setContainerDataSource(tableContainer);
@@ -258,7 +268,17 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		pagingControls.updatePageCount(tableContainer.getUnconstrainedQueryResultsCount());
 	}
 	
-	private void rebuildRowCache()
+	/**
+	 * Should only be used internally. Use {@link #rebuildRowCache()} instead.
+	 */
+	@Deprecated
+	@Override
+	public void refreshRowCache()
+	{
+		super.refreshRowCache();
+	}
+	
+	public void rebuildRowCache()
 	{
 		setPageLength(tableContainer.getItemIds().size());
 		refreshRowCache();
