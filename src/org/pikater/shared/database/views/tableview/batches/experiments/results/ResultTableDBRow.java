@@ -2,6 +2,7 @@ package org.pikater.shared.database.views.tableview.batches.experiments.results;
 
 import java.util.Locale;
 
+import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
@@ -10,14 +11,18 @@ import org.pikater.shared.database.views.base.values.StringReadOnlyDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.LocaleUtils;
 
-public class ResultTableDBRow extends AbstractTableRowDBView {
-
-	private JPAResult result=null;
-	private Locale currentLocale=null;
+public class ResultTableDBRow extends AbstractTableRowDBView
+{
+	private JPAResult result;
+	private JPADataSetLO firstValidInput;
+	private JPADataSetLO firstValidOutput;
+	private Locale currentLocale;
 
 	public ResultTableDBRow(JPAResult result)
 	{
 		this.result=result;
+		this.firstValidInput=null;
+		this.firstValidOutput=null;
 		this.currentLocale=LocaleUtils.getDefaultLocale();
 	}
 	
@@ -101,7 +106,16 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				@Override
 				public boolean isEnabled()
 				{
-					return result.hasAnInput() && result.hasAnOutput();
+					if(result.hasAnInput() && result.hasAnOutput())
+					{
+						setValidInput();
+						setValidOutput();
+						return (firstValidInput != null) && (firstValidOutput != null);
+					}
+					else
+					{
+						return false;
+					}
 				}
 
 				@Override
@@ -124,5 +138,31 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 	@Override
 	public void commitRow()
 	{
+	}
+	
+	private void setValidInput()
+	{
+		for(JPADataSetLO dataset : result.getInputs())
+		{
+			if(dataset.hasComputedMetadata())
+			{
+				firstValidInput = dataset;
+				return;
+			}
+		}
+		firstValidInput = null;
+	}
+	
+	private void setValidOutput()
+	{
+		for(JPADataSetLO dataset : result.getOutputs())
+		{
+			if(dataset.hasComputedMetadata())
+			{
+				firstValidOutput = dataset;
+				return;
+			}
+		}
+		firstValidOutput = null;
 	}
 }
