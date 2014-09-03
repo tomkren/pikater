@@ -21,16 +21,18 @@ public class BatchTableDBViewAll extends BatchTableDBView
 	@Override
 	public Set<ITableColumn> getAllColumns()
 	{
-		return new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+		LinkedHashSet<ITableColumn> result = new LinkedHashSet<ITableColumn>(EnumSet.allOf(Column.class));
+		result.remove(Column.USER_PRIORITY);
+		return result;
 	}
 	
 	@Override
 	public Set<ITableColumn> getDefaultColumns()
 	{
 		return new LinkedHashSet<ITableColumn>(EnumSet.of(
-				Column.FINISHED,
 				Column.STATUS,
 				Column.CREATED,
+				Column.TOTAL_PRIORITY,
 				Column.OWNER,
 				Column.NAME,
 				Column.NOTE,
