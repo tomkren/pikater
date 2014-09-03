@@ -15,9 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.pikater.shared.database.jpa.security.PikaterPriviledge;
-import org.pikater.shared.database.jpa.security.PikaterRole;
-
 @Entity
 @Table(name="Role")
 @NamedQueries({
