@@ -25,10 +25,10 @@ import javax.persistence.Transient;
 		indexes={
 				@Index(columnList="serializedFileName"),
 				@Index(columnList="errorRate"),
-				@Index(columnList="experiment"),
-				@Index(columnList="createdModel"),
-				@Index(columnList="experiment,createdModel"),
-				@Index(columnList="experiment,agentName,createdModel")
+				@Index(columnList="experiment_id"),
+				@Index(columnList="createdModel_id"),
+				@Index(columnList="experiment_id,createdModel_id"),
+				@Index(columnList="experiment_id,agentName,createdModel_id")
 				}
 		)
 @NamedQueries({

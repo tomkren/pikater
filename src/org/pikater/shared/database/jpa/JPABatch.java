@@ -26,14 +26,14 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 @Table(
 		name="Batch",
 		indexes={
-				@Index(columnList="owner"),
+				@Index(columnList="owner_id"),
 				@Index(columnList="name"),
 				@Index(columnList="note"),
 				@Index(columnList="created"),
 				@Index(columnList="finished"),
 				@Index(columnList="status"),
 				@Index(columnList="totalPriority"),
-				@Index(columnList="owner,status")
+				@Index(columnList="owner_id,status")
 		}
 	  )
 @NamedQueries({
