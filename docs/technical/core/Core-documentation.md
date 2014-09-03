@@ -276,7 +276,7 @@ Tento agent má v rámci systému pouze jedinou úlohu, která spočívá ve vyg
 
 Agent zpracovává dva typy zpráv:
 
-* `NewDataset` - typicky obdrží od `Gateway` agenta za použití `WebToCoreEntryPoint` jako reakci na událost kdy uživatel nahrál do systému nový dataset přes webové rozhraní.
+1. `NewDataset` - typicky obdrží od `Gateway` agenta za použití `WebToCoreEntryPoint` jako reakci na událost kdy uživatel nahrál do systému nový dataset přes webové rozhraní.
 
 {{{{{{
 
@@ -284,7 +284,8 @@ PikaterGateway->+MetadataQueen: NewDataset
 MetadataQueen->-DataManager: SaveMetadata
 
 }}}}}}
-* `NewComputedData` - po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat, který zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž můžou u výpočtů obsahující datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.
+
+2. `NewComputedData` - po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat, který zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž můžou u výpočtů obsahující datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.
 
 {{{{{{
 
