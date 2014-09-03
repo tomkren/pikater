@@ -218,14 +218,29 @@ Cez DAO objekty získáváme, ukládáme, updatujeme a mažeme entity. Príklad:
 
 ```java:/src/org/pikater/shared/database/jpa/Showcase.java```
 
+Dôvodom využitia tohto prístupu je spôsob, akým JPA pracuje s entitami. S každou JPA entitou môžeme pracovať ako klasickým java objektom. Môžeme volať ich funkcie, zmeniť premenná. Po tom, ako entitu uložíme do databáze - v JPA terminológii persistujeme - zmeny prevedené na entite sú odzrkadlené do databáze. Jedinou podmienkou je, aby entita bola ešte stále v persistovanom kontextu. Na druhej strane je lešie mať tento kontext čo najmenší, aby sme nemali konflikty medzi entitami.
+
+Riešením je vytvorenie špeciálnych objektov, ktoré ponúkajú rôzne funkcie, ktoré sa dá používať na entity. Obvykle pre každý typ entity máme jeden takýto objekt, ale v niektorých prípadoch funkcia vykoná zmeny na viacerých objektoch. Díky podpory tranzakcí tieto zmeny splňajú podmienku ACID. Tieto objekty obvykle nazývame Data Access Objecty (skrátene DAO objekty) . Každú zmenu na entitách vykonávame pomocou týchto DAO objektov a pritom nemusíme riešiť problematiku persistence contextu.
+
 #### Dotazovanie
 
-<font color="red">TODO</font>
+Jeden z hlavných dôvodov využitia databáze ako úložísko dát, je možnosť efektívne vyhladávať na základe nejakých podmienok medzi záznamami. DAO objekty, okrem základných operácií, ponúkajú funkcie, ktoré umožnia jednoducho previesť zložitejšie dotazy.
 
 ##### JPQL dotazy
+
+JPQL majú syntax velmi podobný klasickým dotazom v SQL. V programu možeme dynamicky vytvoriť takýto dotaz pomocou jeho vygenerovania do reťazce.
+
 ##### Pomenované dotazy
 
-Vela dotazov je vyriešená pomocou pomenovaných dotazov, ktoré sú zapísané v entitách pomocou značiek `@NameQueries` a `@NamedQuery`.
+Pomenované dotazy sú predpripravené dotazy v jazyku JPQL, ktoré sú uložené buď v zdrojovom kódu enity, alebo v externom konfiguračnom súboru. Toto riešenie má velkú silu kvoli tomu, že dotaz v sebe može obsahovať parametry, ktoré v zdrojovom kódu možeme nastaviť podla potreby.
+
+Vela dotazov Pikater je vyriešený práve pomocou pomenovaných dotazov, ktoré sú zapísané v entitách pomocou značiek `@NameQueries` a `@NamedQuery`.
+
+Príkladom takéto dotazu môže byť nasledovný, čo slúží na získanie datasetov, ktoré boli pridané užívatelom `:owner`, čo je parametrom dotazu.
+```java
+@NamedQuery(name="DataSetLO.getByOwner",query="select dslo from JPADataSetLO dslo where dslo.owner=:owner")
+```
+Objekt `DataSetDAO` pomocou volania funkcie `AbstractDAO.getByTypedNamedQuery("DataSetLO.getByOwner", "owner", user)` doplní na miesto parametru odpovedajúci objekt a získa odpoveď.
 
 ##### Criteria dotazy
 
