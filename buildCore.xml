@@ -138,27 +138,17 @@
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
+            <fileset dir="core/inputs/inputsKlara/input01">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
             <fileset dir="core/inputs/inputsKlara/input01-model">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="core/inputs/inputsKlara/input06">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="core/inputs/inputsKlara/input05">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="core/inputs/inputsKlara/input04">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="core/inputs/inputsKlara/input01">
+            <fileset dir="core/inputs/inputsKlara/input02">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -168,12 +158,27 @@
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="core/inputs/inputsKlara/input10">
+            <fileset dir="core/inputs/inputsKlara/input04">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="core/inputs/inputsKlara/input02">
+            <fileset dir="core/inputs/inputsKlara/input05">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="core/inputs/inputsKlara/input06">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="core/inputs/inputsKlara/input07">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="core/inputs/inputsKlara/input10">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -188,14 +193,15 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac fork="yes" debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <src path="core/inputs/inputsKlara/input01-model"/>
-            <src path="core/inputs/inputsKlara/input06"/>
-            <src path="core/inputs/inputsKlara/input05"/>
-            <src path="core/inputs/inputsKlara/input04"/>
             <src path="core/inputs/inputsKlara/input01"/>
-            <src path="core/inputs/inputsKlara/input03"/>
-            <src path="core/inputs/inputsKlara/input10"/>
+            <src path="core/inputs/inputsKlara/input01-model"/>
             <src path="core/inputs/inputsKlara/input02"/>
+            <src path="core/inputs/inputsKlara/input03"/>
+            <src path="core/inputs/inputsKlara/input04"/>
+            <src path="core/inputs/inputsKlara/input05"/>
+            <src path="core/inputs/inputsKlara/input06"/>
+            <src path="core/inputs/inputsKlara/input07"/>
+            <src path="core/inputs/inputsKlara/input10"/>
             <exclude name="org/pikater/web/**"/>
             <exclude name="net/**"/>
             <exclude name="org/pikater/shared/ssh/**"/>
@@ -203,6 +209,7 @@
             <exclude name="org/pikater/shared/experiment/webformat/**"/>
             <exclude name="org/pikater/shared/utilities/pikaterDatabase/tests/DatasetConverterTest.java"/>
             <exclude name="org/pikater/shared/database/utils/DataSetConverter.java"/>
+            <exclude name="org/pikater/shared/database/security/bcrypt/TestBCrypt.java"/>
             <exclude name="org/pikater/shared/AppHelper.java"/>
             <exclude name="org/pikater/shared/XStreamHelper.java"/>
             <classpath refid="pikater.classpath"/>
