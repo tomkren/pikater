@@ -56,6 +56,10 @@ Kompletní přestavbou prošla většina ontologií. Jednalo se většinou buď 
 
 Z hlediska nadstavby Pikateru je důležitý vznik ontologie AgentInfo a výměna ontologie Option, která využívala k reprezentaci informací řetězce na obecnou, typovanou, rozšiřitelnou, validovatelnou, do níž je zároveň možné ukládat informace o omezeních na hodnoty pro každý typ. Ontologie AgentInfo je datová struktura reprezentující jednu krabičku a slouží jako vstupní informace pro grafickou Stavebnici.
 
+### Schéma architektury
+
+[[architektura-final.png]]
+
 ## Popis agentů
 
 ### Agent Initiator
