@@ -279,14 +279,15 @@ Tento agent odpovedá na dve typy správ:
 1. `NewDataset` - typicky dostane cez `WebToCoreEntryPoint` po tom, ako užívatel nahral nový dataset cez webové rozhranie
 {{{{{{
 
-ComputingAgent->+MetadataQueen: NewComputedData
+PikaterGateway->+MetadataQueen: NewDataset
 MetadataQueen->-DataManager: SaveMetadata
 
 }}}}}}
-2. `NewComputedData` - dostane od nejakého `ComputingAgenta`, čo uložil do databáze výsledok nejakého experimentu a teraz potrebuje vypočítať si k nemu metadata
+
+2. `NewComputedData` - po uložení datasetu nejakým agentom `Agent_ComputingAgent`, agent `Agent_Planner` požiada agenta Agent_MetadataQueen o vypočítání metadát pre tento dataset
 {{{{{{
 
-PikaterGateway->+MetadataQueen: NewDataset
+Planner->+MetadataQueen: NewComputedData
 MetadataQueen->-DataManager: SaveMetadata
 
 }}}}}}
