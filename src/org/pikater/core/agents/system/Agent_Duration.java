@@ -21,7 +21,6 @@ import jade.proto.AchieveREResponder;
 import jade.proto.ContractNetInitiator;
 
 import java.util.Date;
-import java.util.Vector;
 
 import org.pikater.core.AgentNames;
 import org.pikater.core.CoreConstants;
@@ -251,8 +250,6 @@ public class Agent_Duration extends PikaterAgent {
 
 		protected void onTick() {
 			// compute linear regression on random (but the same) dataset
-
-			
 					
 	        ACLMessage durationMsg = createCFPmessage(aid, agent,
 	        		durationDatasetName, durationDatasetHash);
@@ -264,17 +261,12 @@ public class Agent_Duration extends PikaterAgent {
 
 		private static final long serialVersionUID = -4895199062239049907L;
 				
-		private ACLMessage cfp;
+		
 		private PikaterAgent agent;
 		
 		public ExecuteTaskInitiator(PikaterAgent agent, ACLMessage cfp) {
 			super(agent, cfp);
 			this.agent = agent;
-			this.cfp = cfp;
-		}
-
-		protected void handlePropose(ACLMessage propose, Vector v) {
-			// System.out.println(myAgent.getLocalName()+": Agent "+propose.getSender().getName()+" proposed "+propose.getContent());
 		}
 		
 		protected void handleRefuse(ACLMessage refuse) {
@@ -291,59 +283,6 @@ public class Agent_Duration extends PikaterAgent {
                 log("Agent "+failure.getSender().getName()+" failed", 1);
 			}
 		}
-		
-		/**
-		 * TODO:
-		 * Several Computing agents sent their duration values, and the Duration agent
-		 * chose the best one.
-		 * However, in this version a I couldn't change the asynchronous behaviour of computing agent
-		 * which probably is my fault  
-		 */
-		
-		/**
-		protected void handleAllResponses(Vector responses, Vector acceptances) {
-			// Evaluate proposals.
-			int bestProposal = Integer.MAX_VALUE;
-			AID bestProposer = null;
-			ACLMessage accept = null;
-			Enumeration e = responses.elements();
-			while (e.hasMoreElements()) {
-				ACLMessage msg = (ACLMessage) e.nextElement();
-				if (msg.getPerformative() == ACLMessage.PROPOSE) {
-					ACLMessage reply = msg.createReply();
-					reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
-					acceptances.addElement(reply);
-					int proposal = Integer.parseInt(msg.getContent());
-					if (proposal < bestProposal) {
-						bestProposal = proposal;
-						bestProposer = msg.getSender();
-						accept = reply;
-					}
-				}
-			}
-			// Accept the proposal of the best proposer
-			if (accept != null) {				
-				try {
-					ContentElement content = getContentManager().extractContent(cfp);
-					ExecuteTask execute = (ExecuteTask) (((Action) content).getAction());
-					
-					Action a = new Action();
-					a.setAction(execute);
-					a.setActor(myAgent.getAID());
-												
-					getContentManager().fillContent(accept, a);
-
-				} catch (CodecException exception) {
-					agent.logError(exception.getMessage(), exception);
-				} catch (OntologyException exception) {
-					agent.logError(exception.getMessage(), exception);
-				}
-				
-				accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);				
-			}						
-			// TODO - if there is no proposer...
-		}
-		**/
 				
 		protected void handleInform(ACLMessage inform) {
             log("Agent "+inform.getSender().getName() + " successfully performed the requested action", 2);
@@ -427,7 +366,7 @@ public class Agent_Duration extends PikaterAgent {
 		task.setDatas(datas);
 		
 		EvaluationMethod evaluationMethod = new EvaluationMethod();
-		evaluationMethod.setAgentType(Standart.class.getName()); // TODO don't evaluate at all
+		evaluationMethod.setAgentType(Standart.class.getName());
 		
 		task.setEvaluationMethod(evaluationMethod);
 		
