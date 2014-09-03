@@ -51,11 +51,30 @@ First and foremost, note several things:
 
 #### Database
 
-1. Install a database of choice.
-(<font color="red">TODO: něco přidat/upravit Petře?</font>)
-2. When you clone the project on your machines in later steps, change the following files accordingly to your fresh database install:
-	* `src/beans.xml`
-	* `src/META-INF/persistence.xml` (<font color="red">TODO</font>)
+1. Install PostgreSQL database, that can be downloaded from address [PostgreSQL download site](http://www.postgresql.org/download/) or use package manager of your system. Pikater was tested with version 9.3 and it is highly recommended to use this version.
+2. Create a new database with a name of your desire. Using UTF-8 character encoding is recommended.
+3. When you clone the project on your machines in later steps, change the following files accordingly to your fresh database install:
+    * `src/beans.xml`
+    * `src/META-INF/persistence.xml`
+3.1 After cloning the project you can use utility `org.pikater.shared.database.util.initialisation.DatabaseInitialisation` to generate the configuration files as well as to create the first administrator user of Pikater.
+```
+--------------------------------------------------------------------------------
+|                           WELCOME to PIKATER                                 |
+--------------------------------------------------------------------------------
+
+Before you can run the system some configuration files must be generated.
+These files are stored in plain text format, so make sure, that can't be read
+by anyone.
+Also some default database entries will be generated, which contains the first
+user with administrator priviledge. Password of this user is stored as hash
+in the database.
+
+Please choose, which part of initialisation would you like to run:
+Whole DB initialisation: 'a'
+Config file generation : 'c'
+Just DB initialisation : 'd'
+```
+Initial console output of the utility is shown above.
 
 #### Core system
 
