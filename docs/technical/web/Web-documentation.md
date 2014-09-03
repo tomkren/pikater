@@ -250,14 +250,19 @@ This happens because dialogs are Vaadin components attached to and dependent on 
 
 
 
-## User guide<a name="webGUI"></a>
+## Read more
 
-Some technical information may also be found at [[user guide|User-guide]].
+Some technical information may also be found at the following documents.
 
+### Admin guide
 
+See [[admin guide|Admin-guide]].
 
+### User guide<a name="webGUI"></a>
 
-## Other useful links<a name="webLinks"/></a>
+See [[user guide|User-guide]].
+
+### Useful links<a name="webLinks"/></a>
 
 * Servlet 3.0 documentation found at http://tomcat.apache.org/tomcat-7.0-doc/servletapi/
 
