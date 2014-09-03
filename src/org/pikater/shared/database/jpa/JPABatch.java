@@ -85,8 +85,8 @@ public class JPABatch extends JPAAbstractEntity{
 	public JPABatch(String name, String note, String xml, JPAUser owner)
 	{
 		this.name=name;
-		this.note = note;
-		this.XML = xml;
+		this.note=note;
+		this.XML=xml;
 		this.owner=owner;
 		this.userAssignedPriority=0;
 		this.totalPriority=0;
@@ -107,11 +107,11 @@ public class JPABatch extends JPAAbstractEntity{
 	public JPABatch(String name, String note, String xml, JPAUser owner, int userAssignedPriority, boolean sendEmailAfterFinish)
 	{
 		this.name=name;
-		this.note = note;
-		this.XML = xml;
+		this.note=note;
+		this.XML=xml;
 		this.owner=owner;
-		this.userAssignedPriority = userAssignedPriority;
 		this.sendEmailAfterFinish=sendEmailAfterFinish;
+		this.userAssignedPriority = userAssignedPriority; // this needs to presede updating total priority:
 		updateTotalPriority();
 		this.created=new Date();
 		this.status=JPABatchStatus.WAITING;

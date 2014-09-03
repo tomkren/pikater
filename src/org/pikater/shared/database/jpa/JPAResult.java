@@ -214,24 +214,28 @@ public class JPAResult extends JPAAbstractEntity{
         this.experiment = experiment;
     }
     
-    public boolean hasAnOutput()
-    {
-    	return (outputs != null) && !outputs.isEmpty();
-    }
-
 	public JPAModel getCreatedModel() {
 		return createdModel;
 	}
 	public void setCreatedModel(JPAModel createdModel) {
 		this.createdModel = createdModel;
 	}
+	
 	public List<JPADataSetLO> getInputs() {
 		return inputs;
 	}
-
 	public List<JPADataSetLO> getOutputs() {
 		return outputs;
 	}
+	public boolean hasAnInput()
+    {
+    	return (inputs != null) && !inputs.isEmpty();
+    }
+	public boolean hasAnOutput()
+    {
+    	return (outputs != null) && !outputs.isEmpty();
+    }
+	
 	@Transient
 	public static final String EntityName = "Result";
 

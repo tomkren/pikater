@@ -101,7 +101,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView {
 				@Override
 				public boolean isEnabled()
 				{
-					return result.hasAnOutput();
+					return result.hasAnInput() && result.hasAnOutput();
 				}
 
 				@Override
