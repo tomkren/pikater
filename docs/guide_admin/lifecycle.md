@@ -1,4 +1,4 @@
-The project's GitHub repository can be found [here](https://github.com/krajj7/pikater).
+The project's GitHub repository can be found at https://github.com/krajj7/pikater.
 
 ### Installation
 
