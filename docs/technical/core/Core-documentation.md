@@ -280,14 +280,14 @@ Tento agent odpovedá na dve typy správ:
 {{{{{{
 
 ComputingAgent->+MetadataQueen: NewComputedData
-MetadataQueen->+DataManager: SaveMetadata
+MetadataQueen->-DataManager: SaveMetadata
 
 }}}}}}
 2. `NewComputedData` - dostane od nejakého `ComputingAgenta`, čo uložil do databáze výsledok nejakého experimentu a teraz potrebuje vypočítať si k nemu metadata
 {{{{{{
 
 PikaterGateway->+MetadataQueen: NewDataset
-MetadataQueen->+DataManager: SaveMetadata
+MetadataQueen->-DataManager: SaveMetadata
 
 }}}}}}
 
