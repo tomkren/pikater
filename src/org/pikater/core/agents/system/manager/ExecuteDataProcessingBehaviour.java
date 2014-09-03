@@ -74,22 +74,9 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
                     DataSourceEdge edge=new DataSourceEdge();
                     edge.setDataSourceId(output.getName());
                     edge.setFile(false);
-                    if (node.ContainsOutput("data"+i))
-                    {
-                        node.addToOutputAndProcess(edge,"data"+i);
-                    }
-                    else if ((i==0 || output.getType().name()=="training") && node.ContainsOutput("training"))
-                    {
-                        node.addToOutputAndProcess(edge,"training");
-                    }
-                    else if ((i==1 || output.getType().name()=="testing") && node.ContainsOutput("testing"))
-                    {
-                        node.addToOutputAndProcess(edge,"testing");
-                    }
-                    else if ((i==2 || output.getType().name()=="validation") && node.ContainsOutput("validation"))
-                    {
-                        node.addToOutputAndProcess(edge,"validation");
-                    }
+                    
+                    node.addToOutputAndProcess(edge, output.getDataType());
+                                                            
                 }
                 node.decreaseNumberOfOutstandingTask();
             }

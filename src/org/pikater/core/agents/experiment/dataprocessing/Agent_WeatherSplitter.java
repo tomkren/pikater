@@ -210,16 +210,17 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 			}
 		}
 		
-		res.add(makeOutput(sunny));
-		res.add(makeOutput(overcast));
-		res.add(makeOutput(rainy));
+		res.add(makeOutput(sunny, "sunny"));
+		res.add(makeOutput(overcast, "overcast"));
+		res.add(makeOutput(rainy, "rainy"));
 		return res;
 	}
 	
-	private TaskOutput makeOutput(Instances instances) {
+	private TaskOutput makeOutput(Instances instances, String dataType) {
 		TaskOutput res = new TaskOutput();
 		res.setName(saveArff(instances));
 		res.setType(InOutType.DATA);
+		res.setDataType(dataType);
 		return res;
 	}
 	

@@ -152,8 +152,12 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		}
 		agent.setOptions(usedoptions.getOptions());
 		
-		Datas datas = new Datas();
-        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get("training").getNext();
+		Datas datas = new Datas();	
+		for (Map.Entry<String, ComputationOutputBuffer> in : inputs.entrySet())
+		{
+		    if (in.getValue().isData() ); 
+		}
+        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get("trainingData").getNext();
         DataSourceEdge testingEdge;
 		String training = trainingEdge.getDataSourceId();
 		if( inputs.get("testing") == null){
@@ -161,7 +165,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		}
 		else{
 
-			testingEdge = ((DataSourceEdge) inputs.get("testing").getNext());
+			testingEdge = ((DataSourceEdge) inputs.get("testingData").getNext());
 		}
 
         if (trainingEdge.isFile()) {

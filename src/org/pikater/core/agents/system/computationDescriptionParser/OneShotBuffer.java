@@ -9,6 +9,7 @@ import org.pikater.core.agents.system.computationDescriptionParser.edges.EdgeVal
  */
 public class OneShotBuffer extends AbstractComputationBuffer<EdgeValue> {
     private EdgeValue shot;
+    private boolean data; 
 
     public OneShotBuffer(EdgeValue shot)
     {
@@ -40,4 +41,14 @@ public class OneShotBuffer extends AbstractComputationBuffer<EdgeValue> {
         }
         return 0;
     }
+    
+	@Override
+	public boolean isData() {
+		return data;
+	}
+
+	@Override
+	public void setData(boolean data) {
+		this.data = data;
+	}
 }
