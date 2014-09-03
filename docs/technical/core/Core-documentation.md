@@ -272,11 +272,11 @@ Návrh Univerzálního formátu vychází z nápadu obalit Ontologie ze struktu
 
 ### Agent MetadataQueen
 
-Tento agent má jedinú úlohu, čo spočíva vo vypočítaní metadát pre jednotlivé datasety. Metadata pomáhajú odhadnúť podobnosť dvoch datasetov, bez toho, aby sme museli ich opäť načítať.
+Tento agent má v rámci systému pouze jedinou úlohu, která spočívá ve vygenerování metadat pro jednotlivé datasety. Jedná se o vypočtení statistických veličin popisující pomáhající odhadnout podobnost dvou datasetů bez časové náročné manipulace a opětovného načítání.
 
-Tento agent odpovedá na dve typy správ:
+Agent zpracovává dva typy zpráv:
 
-1. `NewDataset` - typicky dostane cez `WebToCoreEntryPoint` po tom, ako užívatel nahral nový dataset cez webové rozhranie
+1. `NewDataset` - typicky obdrží od `Gateway` agenta za použití `WebToCoreEntryPoint` jako reakci na událost kdy uživatel nahrál do systému nový dataset přes webové rozhraní.
 {{{{{{
 
 PikaterGateway->+MetadataQueen: NewDataset
@@ -284,7 +284,7 @@ MetadataQueen->-DataManager: SaveMetadata
 
 }}}}}}
 
-2. `NewComputedData` - po uložení datasetu nejakým agentom `Agent_ComputingAgent`, agent `Agent_Planner` požiada agenta Agent_MetadataQueen o vypočítání metadát pre tento dataset
+2. `NewComputedData` - po vypočtení nové datové množiny výpočetním agentem nebo `DataProcessingem` agent `Planner` zavolá modul zajišťující přepravu dat, který zajistí uložení datové množiny do databáze za pomoci `DataManagera` na primárním containeru. Po úspěšné přepravě požádá agenta `MetadataQueen` o vygenerování metadat i k této datové množině. Data se totiž můžou u výpočtů obsahující datové závislosti dostat na vstup dalšímu experimentu, kde se může nacházet i `Recommender` potřebující k běhu právě metadata.
 {{{{{{
 
 Planner->+MetadataQueen: NewComputedData
@@ -292,7 +292,7 @@ MetadataQueen->-DataManager: SaveMetadata
 
 }}}}}}
 
-Nové vypočítané metadata - ktoré sú typu `org.pikater.core.ontology.subtrees.metadata.Metadata` - sú posielané agentovi `Agent_DataManager`, čo spojí ich k záznamu o danom datasetu.
+Nově vypočítaná metadata, využívající pro reprezentaci Ontologii `Metadata` jsou poslány agentovi `DataManagerovi`, na uložení do záznamů o daném datasetu.
 
 ### Externí agenti
 
