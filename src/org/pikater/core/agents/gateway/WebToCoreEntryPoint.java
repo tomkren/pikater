@@ -97,18 +97,18 @@ public class WebToCoreEntryPoint {
 		
 		int userID = 5859;
 		
-		WebToCoreEntryPoint.uploadDataset("core/datasets/weather.arff",  userID, "weather");
-		WebToCoreEntryPoint.uploadDataset("core/datasets/iris.arff", userID, "iris");
-		WebToCoreEntryPoint.uploadDataset("core/datasets/glass.arff", userID, "glass");
-		WebToCoreEntryPoint.uploadDataset("core/datasets/autos.arff", userID, "autos");
-		WebToCoreEntryPoint.uploadDataset("core/datasets/mushroom.arff", userID, "mushroom");
-		WebToCoreEntryPoint.uploadDataset("core/datasets/ionosphere.arff", userID, "ionosphere");
+		WebToCoreEntryPoint.uploadDataset("weather.arff",  userID, "weather");
+		WebToCoreEntryPoint.uploadDataset("iris.arff", userID, "iris");
+		WebToCoreEntryPoint.uploadDataset("glass.arff", userID, "glass");
+		WebToCoreEntryPoint.uploadDataset("autos.arff", userID, "autos");
+		WebToCoreEntryPoint.uploadDataset("mushroom.arff", userID, "mushroom");
+		WebToCoreEntryPoint.uploadDataset("ionosphere.arff", userID, "ionosphere");
 		
 	}
 	
 	private static void uploadDataset(String filename, int userID, String description) throws IOException{
 		
-		int id=DAOs.dataSetDAO.storeNewDataSet(new File(filename), description, userID,JPADatasetSource.USER_UPLOAD);
+		int id=DAOs.dataSetDAO.storeNewDataSet(new File("core/datasets/" + filename), filename, description, userID,JPADatasetSource.USER_UPLOAD);
 		System.out.println("Dataset uploaded with ID : "+id);
 		System.out.println("Demanding metadata computation...");
 		try{

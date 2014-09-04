@@ -151,7 +151,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
         try {
             ACLMessage request = makeActionRequest(receiver, saveMetaDataAction);
             log("Sending SaveMetaDataAction to DataManager");
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
+            ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
             if (reply == null)
                 logError("Reply not received");
             else
