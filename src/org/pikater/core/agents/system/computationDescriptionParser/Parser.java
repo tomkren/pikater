@@ -383,13 +383,13 @@ public class Parser {
         DataSourceDescription validationData = compAgent.getValidationData();
 
         if (trainingData!=null) {
-            parseDataSourceDescription(trainingData, batchID, userID, node, trainingData.getInputType());
+            parseDataSourceDescription(trainingData, batchID, userID, node, trainingData.getInputType(), trainingData.getOutputType());
         }
         if (testingData!=null) {
-            parseDataSourceDescription(testingData, batchID, userID, node, testingData.getInputType());
+            parseDataSourceDescription(testingData, batchID, userID, node, testingData.getInputType(), testingData.getOutputType());
         }
         if (validationData!=null) {
-            parseDataSourceDescription(validationData, batchID, userID, node, testingData.getInputType());
+            parseDataSourceDescription(validationData, batchID, userID, node, testingData.getInputType(), testingData.getOutputType());
         }
     }
     
