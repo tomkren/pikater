@@ -60,10 +60,7 @@ public final class Input04 {
         errorDescription.setProvider(comAgent);
         complex.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
 
-        // error from search to recommender
-        ErrorSourceDescription searchErrorDescription=new ErrorSourceDescription();
-        searchErrorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
-        searchErrorDescription.setProvider(search);
+        // error from agent to recommender
         recommender.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
 
         
