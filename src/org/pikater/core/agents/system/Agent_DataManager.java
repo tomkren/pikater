@@ -1019,7 +1019,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		try {
 			File f = new File(sd.getSourceFile());
-			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(f, sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
+			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(f, f.getName(), sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
 
 			reply.setContentObject((new Integer(jpadsloID)));
 			log("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());
