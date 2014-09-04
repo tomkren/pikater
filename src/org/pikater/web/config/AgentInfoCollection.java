@@ -128,7 +128,7 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 					name = "DumyInputBox";
 					break;
 				case MISC:
-					name = "Dummy box";
+					name = "DummyBox";
 					break;
 				case OUTPUT:
 					name = "DummyOutputBox";
@@ -140,7 +140,7 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 					name = "DummyComposite";
 					break;
 				default:
-					break;
+					throw new IllegalStateException("Unknown box type: " + type.name());
 			}
 			agentInfo.setName(name);
 
@@ -177,14 +177,14 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 					));
 
 			Slot slotInput_test = new Slot();
-			slotInput_test.setDataType("pokus");
+			slotInput_test.setDataType("testSlot");
 			slotInput_test.setSlotType(SlotTypes.DATA);
-			slotInput_test.setDescription("A general test input slot.");
+			slotInput_test.setDescription("Test input slot.");
 
 			Slot slotOutput_test = new Slot();
-			slotOutput_test.setDataType("pokus");
+			slotOutput_test.setDataType("testSlot");
 			slotOutput_test.setSlotType(SlotTypes.DATA);
-			slotOutput_test.setDescription("A general test output slot.");
+			slotOutput_test.setDescription("Test output slot.");
 
 			agentInfo.setOptions(options);
 			agentInfo.setInputSlots(Arrays.asList(slotInput_test));
