@@ -183,6 +183,11 @@
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
+            <fileset dir="core/inputs/inputsKlara/input09">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
             <fileset dir="core/inputs/inputsKlara/input10">
                 <exclude name="**/*.java"/>
             </fileset>
@@ -207,6 +212,7 @@
             <src path="core/inputs/inputsKlara/input06"/>
             <src path="core/inputs/inputsKlara/input07"/>
             <src path="core/inputs/inputsKlara/input08"/>
+            <src path="core/inputs/inputsKlara/input09"/>
             <src path="core/inputs/inputsKlara/input10"/>
             <exclude name="org/pikater/web/**"/>
             <exclude name="net/**"/>
