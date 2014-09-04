@@ -25,8 +25,8 @@ public class OptionsHelper
 		
 		NewOption optModel = new NewOption(CoreConstants.MODEL, defaultValue, 
 				defaultValue.getType(),
-				new ValueType(new IntegerValue(-1),
-						new RangeRestriction(new IntegerValue(0), null))
+				new ValueType(new IntegerValue(-1), // WEB requires -1
+						new RangeRestriction(new IntegerValue(-1), null)) // WEB requires -1
 		);
 
 		options.add(optModel);
