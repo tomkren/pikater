@@ -71,7 +71,7 @@ public class MetadataService {
 			request.setOntology(ontology.getName());
 			agent.getContentManager().fillContent(request, new Action(receiver, ncd));
 
-			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request, 10000);
+			ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
 			if (reply == null)
 				agent.logError("Reply not received.");
 			else
