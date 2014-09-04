@@ -4,6 +4,7 @@ import jade.content.Concept;
 
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
+import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
@@ -126,18 +127,18 @@ public class Value implements Concept, IValidated
 		{
 			return false;
 		}
-		else if(type.isRangeRestrictionDefined() && !type.getRangeRestriction().validatesValue((IComparableValueData) currentValue))
+		else if(type.isRangeRestrictionDefined())
 		{
-			return false;
+			if(!(currentValue instanceof QuestionMarkRange) && !type.getRangeRestriction().validatesValue((IComparableValueData) currentValue))
+			{
+				return false;
+			}
 		}
 		else if(type.isSetRestrictionDefined() && !type.getSetRestriction().validatesValue(currentValue))
 		{
 			return false;
 		}
-		else
-		{
-			return true;
-		}
+		return true;
 	}
 	@Override
 	public Value clone()

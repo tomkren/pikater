@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="core/inputs/inputsKlara/input09"/>
 	<classpathentry excluding="inputs/inputsKlara/input08/|inputs/inputsKlara/input01/|inputs/inputsKlara/input02/|inputs/inputsKlara/input03/|inputs/inputsKlara/input04/|inputs/inputsKlara/input05/|inputs/inputsKlara/input06/|inputs/inputsKlara/input07/|inputs/inputsKlara/input10/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input09/" kind="src" path="core"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input08"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input01"/>
@@ -114,7 +113,6 @@
 	<classpathentry kind="lib" path="libraries/commons-collections4-4.0/commons-collections4-4.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="libraries/xstream-1.4.7/lib/xstream/kxml2-2.3.0.jar"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=pikater&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=ivysettings.xml&amp;loadSettingsOnDemand=false&amp;ivyUserDir=&amp;propertyFiles="/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
@@ -154,8 +152,5 @@
 	<classpathentry kind="lib" path="libraries/poi/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="libraries/reflections/guava-16.0.1.jar"/>
 	<classpathentry kind="lib" path="libraries/reflections/javassist.jar"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=pikater_ok2&amp;ivyXmlPath=ivysettings.xml&amp;confs=*&amp;ivySettingsPath=ivysettings.xml&amp;loadSettingsOnDemand=false&amp;ivyUserDir=&amp;propertyFiles="/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=pikater_ok2&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=ivysettings.xml&amp;loadSettingsOnDemand=false&amp;ivyUserDir=&amp;propertyFiles="/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=pikater&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

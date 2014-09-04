@@ -184,6 +184,8 @@ public class RangeRestriction implements IRestriction
 	@Override
 	public RangeRestriction clone()
 	{
-		return new RangeRestriction((IComparableValueData) minValue.clone(), (IComparableValueData) maxValue.clone());
+		IComparableValueData clonedMin = minValue == null ? null : (IComparableValueData) minValue.clone();
+		IComparableValueData clonedMax = maxValue == null ? null : (IComparableValueData) maxValue.clone();
+		return new RangeRestriction(clonedMin, clonedMax);
 	}
 }
