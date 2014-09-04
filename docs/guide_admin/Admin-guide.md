@@ -70,9 +70,8 @@ To deploy and launch the extension:
 
 ### Maintenance
 
-If the extension is used, one or more administrators may need to manage it using the GUI. See [[admin guide|Admin-guide]].
-
-Otherwise, the application should be self-maintained.
+To see a list of what administrators can (and should) do within the GUI, refer to [[web application documentation|Web-documentation#adminFeatures]].
+To learn how these features can be exercised, refer to [[user guide|User-guide]], particularly to [[default page|User-guide#defaultPage]].
 
 ## Wiki
 
@@ -90,11 +89,6 @@ This project contains inline documentation written in markdown, easily available
 ### Usage
 
 [[How to use|docs/guide_admin/wiki/03-Usage]]
-
-## Responsibilities for administrators
-
-To see a list of what administrators can (and should) do within the GUI, refer to [[web application documentation|Web-documentation#adminFeatures]].
-To learn how these features can be exercised, refer to [[user guide|User-guide]], particularly to [[default page|User-guide#defaultPage]].
 
 ## Logging
 
