@@ -1,4 +1,4 @@
-<!-- --- title: Admin guide -->
+<!-- --- title: Administrator's handbook -->
 
 [[_TOC_]]
 

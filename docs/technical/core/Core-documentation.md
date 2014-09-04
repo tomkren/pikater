@@ -284,7 +284,7 @@ Ontologické zprávy pomocí kterých se manipuluje s daty a získávají se inf
     
     - Analogicky se ukládají Resulty: `SaveResults`, `LoadResult`. Ontologie `Result` slouží pro reprezentaci chyb natrénovaného modelu, neobsahuje tudíž žádné datové množiny.
 
-* Pro ukládání datových množin slouží Ontologie `SaveDataset`, načítání provádí ontologie `GetFile`. Speciálním typem souboru tvoří Externí agenti. Pro ně je k dispozici Ontologie `GetExternalAgentJar`. Ukládání agentů provádí pouze webové GUIčko, tudíž ontologie `SaveExternalAgent` neexistuje.
+* Pro ukládání datových množin slouží Ontologie `SaveDataset`, načítání provádí ontologie `GetFile`. Speciálním typem souboru tvoří Externí agenti. Pro ně je k dispozici Ontologie `GetExternalAgentJar`. Ukládání agentů provádí pouze webové GUI, tudíž ontologie `SaveExternalAgent` neexistuje.
 
 * Pro ukládání a čtení vygenerovaných metadat se využívají Ontologie `SaveMetadata`, `GetMetadata`, `GetAllMetadata`, `GetMultipleBestAgents`. Ukládání metadat využívá pouze agent `MetadataQueen`, zbylé ontologie využívají Recommendeři.
 
@@ -347,6 +347,41 @@ end
 ManagerAgent->ManagerAgent: starts new agent
 ManagerAgent-->>-Manager: (agent AID)
 }}}}}}
+
+## Gateway agenti
+
+Jádro Pikateru má zadefiné komunikační rozhraní pro předávání informací a povelů pomocí Gateway agentů. Toto rozhraní slouží primárně pro předávání informací o událostech. Původní snahou bylo postavit webové rozhraní pouze nad implementace Gateway agentů. Tvorba formulářů ve webovém GUI ovšem přináší diametrálně odlišné  požadavky na předávání dat od způsobu komunikace  jádra s agentem DataManagerem. Nejoptimálnější volbou bylo využívat pro předávání některých dat sdílenou databázi a přes Gateway agenty posílat informační zprávy o nových událostech.
+
+Třída reprezentující vstupní komunikační bod pro Jádro Pikateru z webové nadstavy se nazývá WebToCoreEntryPoint. Funkce využívají pro komunikaci s jádrem právě Gateway agenty.
+
+Funkce:
+* `getAgentInfosVisibleForUser (int userID)`
+
+Vrací seznam AgentInfo struktur reprezentující krabičky, viditelné pro daného uživatele.
+
+* `notify_newBatch(int IDNewBatch, int userID)`
+
+Slouží k poinformování agenta Managera o tom, ze do systému, uživatel přidal konkrétní Batch
+
+* `notify_batchPriorityChanged(int batchID)`
+
+Předá zprávu agentovi Plannerovi o změně priority specifikovaného Batche.
+
+* `notify_newAgent(int externalAgentID)`
+
+Zašle zprávu agentovi AgentInfoManagerovi s informací, že přibyl nový externí agent, agent následně nového agenta vzbudí a nechá si od něj poslat AgentInfo strukturu.
+
+* `notify_newDataset(int IDnewDataset)`
+
+Pošle se žádost agentovi MetadataQueen o nagenerování metadat k nově přidanému datasetu.
+
+* `notify_killBatch(int batchID)`
+
+Zašle agentovi Plannerovi zprávu nařizující mu zabít všechny Tasky které patří do specifikované Batche.
+
+* `checkLocalConnection()`
+
+Otestuje spojení s jádrem systému.
 
 ## Distribuce a reprezentace dat
 
@@ -442,7 +477,7 @@ Následující množinu Ontologií využívají všichni agenti, kteří někdy 
 
 Tuto roli si osvojili všichni agenti, kteří mají za úkol buď vytvářet, načítat, přepravovat nebo logovat do databáze zadání v jedné Batche. Součástí je pro systém nepostradatelná ontologie ComputationDescription, která slouží k reprezentaci jedné dávky.
 
-### Ontologie ComputationDescription
+#### Ontologie ComputationDescription
 
 Ontologie byla navržena tak, aby mohla reprezentovat libovolné množství vzájemně datově závislých DataProcessingu. Jedná se tedy o strukturu logicky představující multigraf, kde vrcholy jsou DataProcessingy a hrany představují tok dat, a to buďto, Errorů nebo datasetů.
 
@@ -518,7 +553,7 @@ Agent Manager tuto Ontologii používá pro komunikaci se Searcherem za účelem
 
 TaskOntology je Ontologie, která umožňuje pracovat jednotlivým agentům v rámci Pikateru s jedním Taskem, neboli s objektem reprezentující nejnižší úroveň logického problému. Agent Manager, který jako první v řadě z hlediska průtoku dat používá Ontologi Task, neřeší pouze problém řízení výpočtu, ale také transformace příchozích Batchů na jednotlivé experimenty, které transformuje na seznam konkrétních dále nedělitelných Tasků. Tyto Tasky pak přeposílá agentovi Plannerovi, který za podpory hlídání datových závislostí předává Tasky distribuovaným výpočetním agentům, případně DataProcessingům. Jak DataProcessingy, tak výpočetní agenti, přijímají zadání jednoho výpočtu jako Ontologii Task. 
 
-### Ontologie Task
+#### Ontologie Task
 
 Ontologie Task je obecná struktura, která je schopná pojmout jakýkoli pro Pikater dále nedělitelný problém určený pro libovolný typ agenta, obsahující neomezené množství vstupních souborů potřebných pro výpočet. Ukrývá informace o identifikaci Batche experimentu, ke kterému patří identifikátor uživatele, který Batche zadal  a spoustu dalších Optionů ovlivňující běh výpočtu. Pro plánování Tasku je zde informace o předpokládané délce běhu výpočtu, která má zajistit průchodnost systému pro krátce trvající výpočty. Po výpočtu Tasku se Ontologie Task předává zpátky až do agenta Managera. V tento okamžik jsou v Tasku vyplněné informace o vypočtených souborech, které výpočetní agent nebo DataProcessing vyprodukoval na file systém. Zároveň vypočtený Task obsahuje datum a čas začátku a konce běhu výpočtu. 
 
