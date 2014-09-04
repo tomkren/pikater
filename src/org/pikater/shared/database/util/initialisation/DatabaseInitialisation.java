@@ -47,11 +47,12 @@ public class DatabaseInitialisation {
 		
 		JPARole u= new JPARole(PikaterRole.USER.name(),PikaterRole.USER);
 		u.addPriviledge(sdsPriv);
-		DAOs.roleDAO.storeEntity(u);
 		
 		JPARole a= new JPARole(PikaterRole.ADMIN.name(),PikaterRole.ADMIN);
 		a.addPriviledge(sdsPriv);
 		a.addPriviledge(sbPriv);
+		
+		DAOs.roleDAO.storeEntity(u);
 		DAOs.roleDAO.storeEntity(a);
 	}
 	
