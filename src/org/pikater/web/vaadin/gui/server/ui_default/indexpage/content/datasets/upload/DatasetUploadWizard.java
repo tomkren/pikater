@@ -228,6 +228,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 								getOutput().optionalARFFHeaders,
 								getOutput().optionalDatasetDescription,
 								uploadedTemporaryFile,
+								event.getFileName()
 						};
 						try
 						{
@@ -249,6 +250,11 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 					{
 						GeneralDialogs.info("Upload successful", "It may take a while before your dataset is processed and (for example) visualization "
 								+ "can be invoked on it.");
+					}
+					else
+					{
+						GeneralDialogs.info("Core not available at this moment", "Your dataset has been saved and designated "
+								+ "for metadata computation but the actual computation may be pending until a running pikater core picks your agent up.");
 					}
 				}
 				

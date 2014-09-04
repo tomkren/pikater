@@ -124,6 +124,11 @@ public class AgentUploadForm extends CustomFormLayout
 					GeneralDialogs.info("Upload successful", "It may take a while before your agent is processed and made available in the experiment "
 							+ "editor.");
 				}
+				else
+				{
+					GeneralDialogs.info("Core not available at this moment", "Your agent has been saved and designated "
+							+ "for registration but the actual registration may be pending until a running pikater core picks your agent up.");
+				}
 			}
 		});
 		this.upload.setEnabled(false);

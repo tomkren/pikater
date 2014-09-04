@@ -13,8 +13,6 @@ import org.pikater.shared.database.util.DataSetConverter;
 import org.pikater.shared.database.util.DataSetConverter.InputType;
 import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
-import org.pikater.web.config.WebAppConfiguration;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
@@ -22,7 +20,7 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 {
 	public UploadedDatasetHandler()
 	{
-		super(4); // number of arguments
+		super(5); // number of arguments
 	}
 	
 	@Override
@@ -37,6 +35,8 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 				return arg instanceof String;
 			case 3:
 				return arg instanceof File;
+			case 4:
+				return arg instanceof String;
 			
 			default:
 				return false;
@@ -57,30 +57,22 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 		String optionalARFFHeaders = getArg(1);
 		String description = getArg(2);
 		File uploadedFile = getArg(3);
+		String realFilename = getArg(4);
 		
 		// the conversion
 		File convertedFile = null;
 		try
 		{
 			convertedFile= this.convert(uploadedFile, optionalARFFHeaders);
-			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,description, owner.getId(),JPADatasetSource.USER_UPLOAD);
-			if(WebAppConfiguration.isCoreEnabled())
+			int newDatasetID = DAOs.dataSetDAO.storeNewDataSet(convertedFile,realFilename,description, owner.getId(),JPADatasetSource.USER_UPLOAD);
+			
+			try
 			{
-				try
-				{
-					WebToCoreEntryPoint.notify_newDataset(newDatasetID);
-				}
-				catch (Throwable t)
-				{
-					PikaterLogger.logThrowable("Could not send notification about a new dataset to core.", t);
-					GeneralDialogs.warning("Failed to notify core", "Your dataset has been saved and designated "
-							+ "for metadata computation but notification was not successfully passed to pikater core.");
-				}
+				WebToCoreEntryPoint.notify_newDataset(newDatasetID);
 			}
-			else
+			catch (Throwable t)
 			{
-				GeneralDialogs.info("Core not available at this moment", "Your dataset has been saved and designated "
-						+ "for metadata computation but the actual computation may be pending until a running pikater core picks your agent up.");
+				PikaterLogger.logThrowable("Could not send notification about a new dataset to core.", t);
 			}
 			
 		} catch (IOException e) {

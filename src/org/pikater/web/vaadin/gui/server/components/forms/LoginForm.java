@@ -2,7 +2,6 @@ package org.pikater.web.vaadin.gui.server.components.forms;
 
 import java.util.List;
 
-import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
@@ -21,17 +20,13 @@ public class LoginForm extends CustomFormLayout implements IDialogResultPreparer
 	{
 		super(null);
 		
-		this.loginField = FormFieldFactory.getLoginField(
-				CustomConfiguredUI.isProductionModeActive() ? "" : "sj",
-				true,
-				false
-		);
-		this.passwordField = FormFieldFactory.getGeneralPasswordField(
-				"Password:",
-				CustomConfiguredUI.isProductionModeActive() ? "" : "123",
-				true,
-				false
-		);
+		/*
+		this.loginField = FormFieldFactory.getLoginField("sj", true, false);
+		this.passwordField = FormFieldFactory.getGeneralPasswordField("Password:", "123", true, false);
+		*/
+		
+		this.loginField = FormFieldFactory.getLoginField("", true, false);
+		this.passwordField = FormFieldFactory.getGeneralPasswordField("Password:", "", true, false);
 		
 		addField("login", loginField);
 		addField("password", passwordField);

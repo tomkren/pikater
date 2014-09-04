@@ -12,8 +12,6 @@ import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
-import org.pikater.web.config.WebAppConfiguration;
-import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
@@ -80,23 +78,13 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			agent.setJar(content);
 			DAOs.externalAgentDAO.storeEntity(agent);
 			
-			if(WebAppConfiguration.isCoreEnabled())
+			try
 			{
-				try
-				{
-					WebToCoreEntryPoint.notify_newAgent(agent.getId());
-				}
-				catch (Throwable t)
-				{
-					PikaterLogger.logThrowable("Could not send notification about a new external agent to core.", t);
-					GeneralDialogs.warning("Failed to notify core", "Your agent has been saved and designated "
-							+ "for registration but notification was not successfully passed to pikater core.");
-				}
+				WebToCoreEntryPoint.notify_newAgent(agent.getId());
 			}
-			else
+			catch (Throwable t)
 			{
-				GeneralDialogs.info("Core not available at this moment", "Your agent has been saved and designated "
-						+ "for registration but the actual registration may be pending until a running pikater core picks your agent up.");
+				PikaterLogger.logThrowable("Could not send notification about a new external agent to core.", t);
 			}
 		}
 		finally

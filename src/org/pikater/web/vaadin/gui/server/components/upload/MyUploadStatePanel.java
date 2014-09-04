@@ -87,7 +87,7 @@ public class MyUploadStatePanel extends UploadStatePanel
 					String pathWithOriginalExtension = uploadReceiver.getUploadedFileHandler().getAbsolutePath();
 					pathWithOriginalExtension = pathWithOriginalExtension.substring(0, pathWithOriginalExtension.lastIndexOf('.')).concat(originalType.getExtensions()[0]); 
 
-					// change extension of the uploaded file
+					// change extension of the uploaded file (needed for dataset conversion)
 					File fileWithOriginalExtension = new File(pathWithOriginalExtension);
 					Files.move(uploadReceiver.getUploadedFileHandler(), fileWithOriginalExtension);
 

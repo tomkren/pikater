@@ -9,7 +9,7 @@
   <!-- BASICS -->
   <display-name>Pikater</display-name>
   <session-config>
-    <session-timeout>30</session-timeout> <!-- in minutes -->
+    <session-timeout>60</session-timeout> <!-- in minutes -->
   </session-config>
   
   <!-- FILTER DEFINITIONS
@@ -41,7 +41,7 @@
   <context-param>
   	<description>Online/offline mode. Should the application try to connect to the core (JADE) system?</description>
   	<param-name>coreEnabled</param-name>
- 	<param-value>false</param-value>
+ 	<param-value>true</param-value>
   </context-param>
   <context-param>
   	<description>Special parameter for filters (see above). Print various debug messages or not?</description>
