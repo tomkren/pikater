@@ -54,6 +54,7 @@ public class ExperimentGraphValidator
 		clear();
 		
 		// first check boxes
+		boolean inputBoxIncluded = false;
 		for(BoxInfoServer box : experimentGraph)
 		{
 			if(box.isRegistered()) // only inspect registered boxes
@@ -70,6 +71,7 @@ public class ExperimentGraphValidator
 				}
 				else
 				{
+					// this is only basic validation, specific option validation may be done in the switch below
 					for(NewOption option : box.getAssociatedAgent().getOptions())
 					{
 						if(!option.isValid(true))
@@ -84,6 +86,16 @@ public class ExperimentGraphValidator
 					switch(box.getBoxType())
 					{
 						case INPUT:
+							inputBoxIncluded = true;
+							if(box.getAssociatedAgent().getName().equals("FileInput"))
+							{
+								NewOption optionToCheck = box.getAssociatedAgent().getOptions().fetchOptionByName("fileURI");
+								String value = (String) optionToCheck.toSingleValue().getCurrentValue().hackValue();
+								if(value.equals("inputFile.ARFF"))
+								{
+									registerValidationProblem("At least one of 'FileInput' boxes has the invalid default value set in the 'fileURI' option.");
+								}
+							}
 							validateBoxSlot(box, SlotType.OUTPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
 							break;
 						case CHOOSE:
@@ -110,6 +122,11 @@ public class ExperimentGraphValidator
 					}
 				}
 			}
+		}
+		
+		if(!inputBoxIncluded)
+		{
+			registerValidationProblem("The experiment has no registered input boxes. This error may be the result of previous errors.");
 		}
 		
 		// then check edges
