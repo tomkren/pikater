@@ -7,6 +7,7 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
 import org.pikater.core.AgentNames;
+import org.pikater.core.CoreConstants;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -157,15 +158,15 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		{
 		    if (in.getValue().isData() ); 
 		}
-        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get("trainingData").getNext();
+        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get(CoreConstants.SLOT_TRAINING_DATA).getNext();
         DataSourceEdge testingEdge;
 		String training = trainingEdge.getDataSourceId();
-		if( inputs.get("testing") == null){
+		if( inputs.get(CoreConstants.SLOT_TESTING_DATA) == null){
 			testingEdge=trainingEdge;
 		}
 		else{
 
-			testingEdge = ((DataSourceEdge) inputs.get("testingData").getNext());
+			testingEdge = ((DataSourceEdge) inputs.get(CoreConstants.SLOT_TESTING_DATA).getNext());
 		}
 
         if (trainingEdge.isFile()) {
