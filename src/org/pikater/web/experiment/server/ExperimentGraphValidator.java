@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
+import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.web.experiment.server.BoxSlot.SlotType;
 
 public class ExperimentGraphValidator
@@ -69,6 +70,17 @@ public class ExperimentGraphValidator
 				}
 				else
 				{
+					for(NewOption option : box.getAssociatedAgent().getOptions())
+					{
+						if(!option.isValid(true))
+						{
+							// the box is not isolated but has no valid slot connections defined
+							registerValidationProblem(String.format("At least one of '%s' boxes has invalid value in the '%s' option.", 
+									box.getAssociatedAgent().getName(),
+									option.getName()
+							));
+						}
+					}
 					switch(box.getBoxType())
 					{
 						case INPUT:
