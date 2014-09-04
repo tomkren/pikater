@@ -219,6 +219,8 @@ The editor GUI is made up of several parts:
 * right side-panel with box configuration,
 * stage for experiments (at the center).
 
+Only one of the side-panels may be open at a time. To switch between them, use the top menu item `View` or `ALT + LEFT_ARROW` and `ALT + RIGHT_ARROW` keyboard shortcuts.
+
 Everything needed to use the editor is explained in the below videos. It is recommended to watch them exactly in the given order.
 
 #### How to use boxes
