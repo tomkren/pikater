@@ -209,11 +209,51 @@ Selection can be reset either by (again) clicking on selected indexes or clickin
 #### Summary
 
 URL: `http://my.domain/Pikater/editor`  
-<font color="red">TODO</font>
+
+Experiment editor is used to define, save, load and queue experiments - simple graphs of boxes and edges with various configurations.
+
+The editor GUI is made up of several parts:
+* top menu,
+* settings panel (right under top menu),
+* left side-panel with all available boxes,
+* right side-panel with box configuration,
+* stage for experiments (at the center).
+
+Everything needed to use the editor is explained in the below videos. It is recommended to watch them exactly in the given order.
+
+#### How to use boxes
 
 <div class="video-container">
 	<code class="vc-mime">video/mp4</code>
-	<a class="vc-source">http://video-js.zencoder.com/oceans-clip.mp4</a>
+	<a class="vc-source">https://dl.dropboxusercontent.com/u/100302745/pikater_videos/01_boxes.mp4</a>
+</div>
+
+#### How to use edges
+
+<div class="video-container">
+	<code class="vc-mime">video/mp4</code>
+	<a class="vc-source">https://dl.dropboxusercontent.com/u/100302745/pikater_videos/02_edges.mp4</a>
+</div>
+
+#### How to configure boxes
+
+<div class="video-container">
+	<code class="vc-mime">video/mp4</code>
+	<a class="vc-source">https://dl.dropboxusercontent.com/u/100302745/pikater_videos/03_config.mp4</a>
+</div>
+
+#### How to save, load and queue
+
+<div class="video-container">
+	<code class="vc-mime">video/mp4</code>
+	<a class="vc-source">https://dl.dropboxusercontent.com/u/100302745/pikater_videos/04_save-load-queue.mp4</a>
+</div>
+
+#### How to change visual style
+
+<div class="video-container">
+	<code class="vc-mime">video/mp4</code>
+	<a class="vc-source">https://dl.dropboxusercontent.com/u/100302745/pikater_videos/05_style.mp4</a>
 </div>
 
 
