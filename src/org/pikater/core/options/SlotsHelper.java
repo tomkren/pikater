@@ -94,7 +94,12 @@ public abstract class SlotsHelper
 		searchSlot.setDataType(CoreConstants.SLOT_SEARCH);
 		searchSlot.setDescription("Parameters produced by search.");
 		
-		return Arrays.asList(searchSlot);
+		Slot searchErrorSlot = new Slot();
+		searchErrorSlot.setSlotType(SlotTypes.ERROR);
+		searchErrorSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		searchErrorSlot.setDescription("Errors produced by search.");
+		
+		return Arrays.asList(searchSlot, searchErrorSlot);
 	}
 	
 	public static List<Slot> getInputSlots_Recommend()
