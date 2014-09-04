@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
+import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
@@ -187,7 +188,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 				optDuration.toSingleValue().getCurrentValue();
 		
 		this.duration = new ExpectedDuration();
-		this.duration.setDurationType(valueMethod.getValue());
+		this.duration.setDurationType(DurationType.getDurationType(valueMethod.getValue()).name());
 		
 		options.remove(optModel);
 		options.remove(optDuration);
