@@ -9,6 +9,7 @@ import java.util.Set;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAUser;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.QueryConstraints;
 import org.pikater.shared.database.views.base.query.QueryResult;
@@ -99,16 +100,20 @@ public class ExperimentTableDBView extends AbstractTableDBView
 	@Override
 	public QueryResult queryUninitializedRows(QueryConstraints constraints)
 	{
+		//retrieving new JPABatch object to avoid useing stall objects
+		
+		JPABatch localBatch=DAOs.batchDAO.getByID(batch.getId());
+		
 		List<JPAExperiment> allExperiments;
 		if(owner==null)
 		{
-			allExperiments=batch.getExperiments();
+			allExperiments=localBatch.getExperiments();
 		}
 		else
 		{
-			if(owner.getId() == batch.getOwner().getId())
+			if(owner.getId() == localBatch.getOwner().getId())
 			{
-				allExperiments=batch.getExperiments();
+				allExperiments=localBatch.getExperiments();
 			}
 			else
 			{

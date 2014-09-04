@@ -97,7 +97,15 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 				@Override
 				public boolean isEnabled()
 				{
-					return result.hasAnOutput();
+					if(result.hasAnOutput())
+					{
+						setValidOutput();
+						return (firstValidOutput != null);
+					}
+					else
+					{
+						return false;
+					}
 				}
 
 				@Override
@@ -137,34 +145,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 				protected void commitEntities()
 				{
 				}
-				
-				private void setValidInput()
-				{
-					for(JPADataSetLO dataset : result.getInputs())
-					{
-						if(dataset.hasComputedMetadata())
-						{
-							firstValidInput = dataset;
-							return;
-						}
-					}
-					firstValidInput = null;
-				}
-				
-				private void setValidOutput()
-				{
-					for(JPADataSetLO dataset : result.getOutputs())
-					{
-						if(dataset.hasComputedMetadata())
-						{
-							firstValidOutput = dataset;
-							return;
-						}
-					}
-					firstValidOutput = null;
-				}
 			};
-			
 		
 		default:
 			throw new IllegalStateException("Unknown column: " + specificColumn.name());
@@ -174,5 +155,34 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 	@Override
 	public void commitRow()
 	{
+	}
+	
+	//------------------------------------------------------------
+	// SPECIAL PRIVATE INTERFACE
+	
+	private void setValidInput()
+	{
+		for(JPADataSetLO dataset : result.getInputs())
+		{
+			if(dataset.hasComputedMetadata())
+			{
+				firstValidInput = dataset;
+				return;
+			}
+		}
+		firstValidInput = null;
+	}
+	
+	private void setValidOutput()
+	{
+		for(JPADataSetLO dataset : result.getOutputs())
+		{
+			if(dataset.hasComputedMetadata())
+			{
+				firstValidOutput = dataset;
+				return;
+			}
+		}
+		firstValidOutput = null;
 	}
 }

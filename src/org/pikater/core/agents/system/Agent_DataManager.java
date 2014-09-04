@@ -278,10 +278,6 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToGetTheBestAgent(request, a);
 					}
 
-					///SaVEMODEL NATRENOVANY AGENT
-					///ONTOLOGIE K TOMU
-					///ONTOLOGIE NA SMAZANI NA ZAKLADE NEJAKYCH PODMINKE NAPR . PO 2 MESICICH
-					/// SMAZANI 
 					/**
 					 * Model actions
 					 */
@@ -316,16 +312,16 @@ public class Agent_DataManager extends PikaterAgent {
 					 * Deprecated Files actions
 					 */
 					if (a.getAction() instanceof GetFileInfo) {
-						logError("Not Implemented");
+						logError("Not Implemented - Deprecated");
 					}
 					if (a.getAction() instanceof ImportFile) {
-						logError("Not Implemented");
+						logError("Not Implemented - Deprecated");
 					}
 					if (a.getAction() instanceof GetFiles) {
-						logError("Not Implemented");
+						logError("Not Implemented - Deprecated");
 					}
 					if (a.getAction() instanceof DeleteTempFiles) {
-						logError("Not Implemented");
+						logError("Not Implemented - Deprecated");
 					}
 
 				} catch (OntologyException e) {
@@ -623,14 +619,11 @@ public class Agent_DataManager extends PikaterAgent {
 
 		String batchXml = uDescription.toXML();
 
-		int totalPriority = 10 * user.getPriorityMax() + batch.getPriority();
-
 		JPABatch batchJpa = new JPABatch();
 		batchJpa.setName(batch.getName());
 		batchJpa.setNote(batch.getNote());
 		batchJpa.setStatus(batch.getStatus());
 		batchJpa.setUserAssignedPriority(batch.getPriority());
-		batchJpa.setTotalPriority(totalPriority);
 		batchJpa.setXML(batchXml);
 		batchJpa.setOwner(user);
 		batchJpa.setCreated(new Date());
@@ -1026,7 +1019,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		try {
 			File f = new File(sd.getSourceFile());
-			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(f, sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
+			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(f, f.getName(), sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
 
 			reply.setContentObject((new Integer(jpadsloID)));
 			log("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());

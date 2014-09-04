@@ -254,12 +254,14 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 	 * TODO: make it transactional
 	 * Stores a new dataset from file to the database and creates the corresponding {@link JPADataSetLO} and {@link JPAFilemapping} objects.
 	 * @param sourceFile
+	 * @param realFilename file name that overrides the 'sourceFile' temporary name
 	 * @param description
 	 * @param userID
+	 * @param datasetSource
 	 * @return ID of the new {@link JPADataSetLO} object
 	 * @throws IOException
 	 */
-	public int storeNewDataSet(File sourceFile, String description, int userID, JPADatasetSource datasetSource) throws IOException{
+	public int storeNewDataSet(File sourceFile, String realFilename, String description, int userID, JPADatasetSource datasetSource) throws IOException{
 			
 		JPAUser owner = DAOs.userDAO.getByID(userID);
 		
@@ -282,7 +284,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			}
 		}
 		JPAFilemapping fm=new JPAFilemapping();
-		fm.setExternalfilename(sourceFile.getName());
+		fm.setExternalfilename(realFilename);
 		fm.setInternalfilename(hash);
 		fm.setUser(owner);
 		DAOs.filemappingDAO.storeEntity(fm);
