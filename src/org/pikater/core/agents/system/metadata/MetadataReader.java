@@ -19,7 +19,9 @@ import org.pikater.core.ontology.subtrees.metadata.attributes.*;
  * @author Kuba
  */
 public class MetadataReader {
-    public Metadata computeMetadata(DataInstances data){
+    private double defValue = 0;
+    
+	public Metadata computeMetadata(DataInstances data){
                 Metadata metadata = new Metadata();		
 							
                 // number of instances
@@ -144,8 +146,19 @@ public class MetadataReader {
                 values.add((Double)instanceI.getValues().get(attributeNumber));
         }
         Collections.sort(values);
-        met.setMin(values.get(0));
-        met.setMax(values.get(values.size()-1));
+        if (values.size() > 0){
+        	met.setMin(values.get(0));
+        }
+        else {
+        	met.setMin(defValue);
+        }
+        
+        if (values.size() > 0){
+        	met.setMax(values.get(values.size()-1));
+        }
+        else {
+        	met.setMax(defValue);
+        }
         double average=0;
         double squareaverage=0;
         double n=values.size();
@@ -159,7 +172,12 @@ public class MetadataReader {
         met.setAvg(average);
         met.setStandardDeviation(Math.sqrt(variation));
         int half=(int)Math.floor(values.size()/2);
-        met.setMedian(values.get(half));
+        if (values.size() > 0){
+        	met.setMedian(values.get(half));
+        }
+        else {
+        	met.setMedian(defValue);
+        }
     }
     
     private void setRatioMissingValues(DataInstances data,int attributeNumber, AttributeMetadata attributeMetadata)
