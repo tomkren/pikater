@@ -3,6 +3,8 @@
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/inputs/inputsKlara/input01-model"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/inputs/inputsKlara/input09"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/inputs/inputsKlara/input08"/>
         <property name="context-root" value="Pikater"/>
         <property name="java-output-path" value="/Pikater/build/classes"/>
     </wb-module>

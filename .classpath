@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="core/inputs/inputsKlara/input09"/>
+	<classpathentry kind="src" path="core/inputs/inputsKlara/input08"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input01-model"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input01"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input02"/>
