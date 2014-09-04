@@ -16,6 +16,8 @@ public interface ComputationOutputBuffer<E> {
     public void setSource(ComputationNode source);
     public ComputationNode getTarget();
     public void setTarget(ComputationNode target);
+    public void setTargetInput(String targetInput);
+    public String getTargetInput();
     public boolean isBlocked();
     public void block();
     public void unblock();

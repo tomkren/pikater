@@ -90,11 +90,11 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		
 		// fill in the queues of CA
 		AgentTypeEdge re = new AgentTypeEdge(recommendedAgent.getType());
-		computationNode.addToOutputAndProcess(re, "agenttype", true);
+		computationNode.addToOutputAndProcess(re, "agenttype", true, false);
 		
         OptionEdge oe = new OptionEdge();
         oe.setOptions(recommendedAgent.getOptions());
-		computationNode.addToOutputAndProcess(oe, "options", true);
+		computationNode.addToOutputAndProcess(oe, "options", true, false);
         computationNode.computationFinished();
     }
 

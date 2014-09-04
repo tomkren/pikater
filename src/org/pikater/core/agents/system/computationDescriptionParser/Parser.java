@@ -49,15 +49,24 @@ public class Parser {
     }
 
     private void parseDataSourceDescription(DataSourceDescription dataSource,
-    		int batchID, int userID, ComputationNode child, String connectionName) {
+    		int batchID, int userID, ComputationNode child, String connectionName, 
+    		String connectionOutName) {
         agent.log("Ontology Parser - DataSourceDescription");
 
         IDataProvider dataProvider = dataSource.getDataProvider();
-        this.parseDataProvider(dataProvider, batchID, userID, child, connectionName);
+        this.parseDataProvider(dataProvider, batchID, userID, child, 
+        		connectionName, connectionOutName);
     }
-        
+    
+    private void parseDataSourceDescription(DataSourceDescription dataSource,
+    		int batchID, int userID, ComputationNode child, String connectionName){
+    	parseDataSourceDescription(dataSource, batchID, userID, child, 
+    			connectionName, null);
+    }
+    
     public void parseDataProvider(IDataProvider dataProvider, int batchID,
-    		int userID, ComputationNode child, String connectionName) {
+    		int userID, ComputationNode child, String connectionName,
+    		String connectionOutName) {
         agent.log("Ontology Parser - IDataProvider");
         ComputationNode parent;
         if (dataProvider instanceof FileDataProvider) {
@@ -83,7 +92,8 @@ public class Parser {
             agent.log("Ontology Matched - DataProcessing");
             
             DataProcessing dataProcessing = (DataProcessing) dataProvider;
-            parent = parseDataProcessing(dataProcessing, child, batchID, userID, connectionName);
+            parent = parseDataProcessing(dataProcessing, child, batchID, userID, 
+            			connectionName, connectionOutName);
             return;
         } else {
             agent.log("Ontology Matched - Error unknown IDataProvider");
@@ -91,7 +101,7 @@ public class Parser {
         }
         //handle parent - set him as file receiver
         ComputationOutputBuffer<EdgeValue> fileBuffer=new StandardBuffer<>(parent,child);
-        fileBuffer.setData(true);
+        fileBuffer.setData(true);        
         parent.addBufferToOutput(connectionName,fileBuffer);
         child.addInput(connectionName,fileBuffer);
     }
@@ -301,7 +311,8 @@ public class Parser {
     }
 
     private ComputationNode parseDataProcessing(DataProcessing dataProcessing,
-    		ComputationNode child, int batchID, int userID, String connectionName) {
+    		ComputationNode child, int batchID, int userID, String connectionName,
+    		String connectionOutName) {
     	
         List<DataSourceDescription> dataSources= dataProcessing.getDataSources();
         
@@ -338,6 +349,7 @@ public class Parser {
             NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
             buffer.setTarget(child);
             buffer.setSource(parent);
+            buffer.setTargetInput(connectionOutName);
             parent.addBufferToOutput(connectionName,buffer);
             child.addInput(connectionName,buffer);
 
@@ -349,11 +361,18 @@ public class Parser {
             }
             */            
             
-            for (DataSourceDescription ds : dataSources){
-            	parseDataSourceDescription(ds, batchID, userID, parent, ds.getInputType());
-            }            
+            for (DataSourceDescription ds : dataSources){            	
+            	parseDataSourceDescription(ds, batchID, userID, parent, ds.getInputType(), ds.getOutputType());
+            }
         }
         
+        NeverEndingBuffer<DataSourceEdge> buffer=new NeverEndingBuffer<>();
+        buffer.setTarget(child);
+        buffer.setSource(parent);
+        buffer.setTargetInput(connectionOutName);
+        parent.addBufferToOutput(connectionName,buffer);
+        child.addInput(connectionName,buffer);
+
         return parent;
     }
     
@@ -384,5 +403,5 @@ public class Parser {
         option.setOptions(options);
         OneShotBuffer optionBuffer=new OneShotBuffer(option);
         node.addInput("options",optionBuffer);
-    }
+    }    
 }

@@ -7,6 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -86,10 +87,10 @@ public class ComputationNode {
     
     public void addToOutputAndProcess(EdgeValue o, String outputName)
     {
-    	addToOutputAndProcess(o, outputName, false);
+    	addToOutputAndProcess(o, outputName, false, false);
     }
     
-    public void addToOutputAndProcess(EdgeValue o, String outputName, Boolean unblock)
+    public void addToOutputAndProcess(EdgeValue o, String outputName, Boolean unblock, Boolean isData)
     {
     	if (outputs.get(outputName)==null){
     		return;
@@ -101,7 +102,10 @@ public class ComputationNode {
         	{
         		out.unblock();
         	}
-            out.insert(o);
+
+        	out.setData(isData);
+        	
+        	out.insert(o);
             if (out.size()==1)
             {
                 //was zero before - check for computation start
@@ -185,5 +189,21 @@ public class ComputationNode {
     public boolean AnyOutstandingTasks()
     {
         return numberOfTasksInProgress>0 || !idle;
+    }
+    
+    public String findOutput(String in){
+    	Iterator it = outputs.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> pairs = (Map.Entry)it.next();
+        	Iterator it1 = pairs.getValue().iterator();
+            while (it1.hasNext()) {
+            	ComputationOutputBuffer<EdgeValue> cob = (ComputationOutputBuffer<EdgeValue>)it1.next();
+                String target = (String)cob.getTargetInput();
+                if (target != null && target.equals(in)){ 
+                	return pairs.getKey();            	
+                }
+            }            
+        }
+    	return null; 
     }
 }

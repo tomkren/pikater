@@ -75,7 +75,10 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
                     edge.setDataSourceId(output.getName());
                     edge.setFile(false);
                     
-                    node.addToOutputAndProcess(edge, output.getDataType());
+                    String in =  node.findOutput(output.getDataType());
+                    if (in != null){                    	
+                    	node.addToOutputAndProcess(edge, in, false, true);
+                    }                    
                                                             
                 }
                 node.decreaseNumberOfOutstandingTask();

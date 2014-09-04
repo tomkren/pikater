@@ -9,8 +9,9 @@ package org.pikater.core.agents.system.computationDescriptionParser;
 public class NeverEndingBuffer<E> extends AbstractComputationBuffer<E> {
     private E singleElement;
     private boolean data; 
+    private String targetInput;
 
-    public NeverEndingBuffer(E singleElement)
+	public NeverEndingBuffer(E singleElement)
     {
         this.singleElement=singleElement;
     }
@@ -44,4 +45,12 @@ public class NeverEndingBuffer<E> extends AbstractComputationBuffer<E> {
 	public void setData(boolean data) {
 		this.data = data;
 	}
+	@Override
+	public void setTargetInput(String targetInput) {
+		this.targetInput = targetInput;		
+	}	
+	@Override
+	public String getTargetInput() {
+		return targetInput;
+	}	
 }
