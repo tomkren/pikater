@@ -22,9 +22,12 @@ Přihlašovací údaje:
 
 * User: oponent
 * Password: oponent
+* Email účtu:
+	* Login: pan.oponent@gmail.com
+	* Password: swp_pikater
 
 # Podpora
 
-V případě nedostupnosti aplikací prosím napište e-mail na:
+V případě problémů nebo nedostupnosti aplikací prosím napište e-mail na:
 
 nassoftwerak@googlegroups.com
