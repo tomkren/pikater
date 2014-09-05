@@ -58,18 +58,24 @@ public final class Input06 {
 		dp.setAgentType(Agent_WeatherSplitter.class.getName());
 
 		// Data processed by dp are the new datasource
-		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setOutputType("sunnyOutput");
-		computingDataSource.setDataProvider(dp);
+		DataSourceDescription dataSourceSunny = new DataSourceDescription();
+		dataSourceSunny.setOutputType("sunnyOutput");
+		dataSourceSunny.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+		dataSourceSunny.setDataProvider(dp);
 
+		DataSourceDescription dataSourceRainy = new DataSourceDescription();
+		dataSourceRainy.setOutputType("sunnyOutput");
+		dataSourceRainy.setInputType(CoreConstants.SLOT_TESTING_DATA);
+		dataSourceRainy.setDataProvider(dp);
+		
 		// Create new computing agent, add options and datasource that we have
 		// created above
 		ComputingAgent comAgent = new ComputingAgent();
 		comAgent.setAgentType(Agent_WekaRBFNetworkCA.class.getName());
 		comAgent.addOption(optionS);
 		comAgent.addOption(optionM);
-		comAgent.setTrainingData(computingDataSource);
-		comAgent.setTestingData(computingDataSource);
+		comAgent.setTrainingData(dataSourceSunny);
+		comAgent.setTestingData(dataSourceRainy);
 		comAgent.setEvaluationMethod(evaluationMethod);
 
 		DataSourceDescription computingAgentDataSource = new DataSourceDescription();

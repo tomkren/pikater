@@ -8,6 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -191,7 +192,9 @@ public class ComputationNode {
         return numberOfTasksInProgress>0 || !idle;
     }
     
-    public String findOutput(String in){
+    public List<String> findOutput(String in){
+    	List<String> keys = new ArrayList<String>();
+    	
     	Iterator it = outputs.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, ArrayList<ComputationOutputBuffer<EdgeValue>>> pairs = (Map.Entry)it.next();
@@ -200,10 +203,10 @@ public class ComputationNode {
             	ComputationOutputBuffer<EdgeValue> cob = (ComputationOutputBuffer<EdgeValue>)it1.next();
                 String target = (String)cob.getTargetInput();
                 if (target != null && target.equals(in)){ 
-                	return pairs.getKey();            	
+                	keys.add(pairs.getKey());            	
                 }
             }            
         }
-    	return null; 
+    	return keys; 
     }
 }
