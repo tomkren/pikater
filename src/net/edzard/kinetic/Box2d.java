@@ -79,15 +79,12 @@ public class Box2d implements Serializable {
 	 * @param point The point to evaluate
 	 * @return True, if the given point is within or on the boundaries of the box. False, otherwise.
 	 */
-	public final boolean isInside(Vector2d point) {
-		if (((left.equals(Double.NaN)) && (left <= point.x)) &&
-			((top.equals(Double.NaN)) && (top <= point.y)) &&
-			((right.equals(Double.NaN)) && (right >= point.x)) &&
-			((bottom.equals(Double.NaN)) && (bottom >= point.y))) {
-			return true;
-		} else {
-			return false;
-		}
+	public final boolean isInside(Vector2d point)
+	{
+		return !left.equals(Double.NaN) && (left <= point.x) &&
+			!top.equals(Double.NaN) && (top <= point.y) &&
+			!right.equals(Double.NaN) && (right >= point.x) &&
+			!bottom.equals(Double.NaN) && (bottom >= point.y);
 	}
 	
 	/**
@@ -107,7 +104,7 @@ public class Box2d implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("[(");
+		StringBuilder sb = new StringBuilder("[(");
 		sb.append(left).append(",").append(top).append(")").append(" x (").append(right).append(",").append(bottom).append(")]");
 		return sb.toString();
 	}
