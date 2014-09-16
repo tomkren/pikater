@@ -134,10 +134,6 @@ public class PGLargeObjectAction
         		PikaterDBLogger.logThrowable("There is a problem closing output stream to the downloaded file. Weird...", t);
         		// seems to me there is no reason to throw this
         	}
-        	if(isActionInterrupted())
-			{
-				file.delete();
-			}
         }
 	}
 }

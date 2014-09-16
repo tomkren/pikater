@@ -8,6 +8,8 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.pikater.shared.logging.database.PikaterDBLogger;
+
 public class Hash {
 	public static String getMD5Hash(File file) throws IOException {
 		if(file == null)
@@ -29,7 +31,7 @@ public class Hash {
 				byte[] dig = md.digest();
 				res = DatatypeConverter.printHexBinary(dig).toLowerCase();
 			} catch (NoSuchAlgorithmException nsae) {
-				nsae.printStackTrace();
+				PikaterDBLogger.logThrowable("Unexpected error occured:", nsae);
 			} finally {
 				fis.close();
 			}

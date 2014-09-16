@@ -202,7 +202,7 @@ public class DatabaseTest {
 	}
 	
 	protected void testModelRemoval() {
-		DAOs.modelDAO.removeOldModels(1);
+		DAOs.modelDAO.removeOldModels((short) 1);
 	}
 
 	protected void testDBConnection() {

@@ -163,10 +163,15 @@ public class IOUtils
 	    {
 	    	file = new File(directory + System.getProperty("file.separator") + prefix + "_tmpfile_" + 
 	    			System.currentTimeMillis() + extension);
-	    	file.mkdirs(); 
-	    	file.createNewFile();
-	    	file.deleteOnExit();
-	    	return file;
+	    	if(file.mkdirs() && file.createNewFile())
+	    	{
+	    		file.deleteOnExit();
+		    	return file;
+	    	}
+	    	else
+	    	{
+	    		throw new RuntimeException("Temporary file could not be created.");
+	    	}
 	    }
 	    catch (IOException e)
 	    {

@@ -25,6 +25,7 @@ import org.pikater.shared.database.jpa.PikaterPriviledge;
 import org.pikater.shared.database.jpa.PikaterRole;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.util.CustomActionResultFormatter;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.DateUtils;
 
 public class DatabaseInitialisation {
@@ -83,7 +84,7 @@ public class DatabaseInitialisation {
 			content = Files.readAllBytes(Paths.get(jar));
 		} catch (IOException e1) {
 			p("Failed to read JAR "+jar);
-			e1.printStackTrace();
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e1);
 			return;
 		}
 		e.setJar(content);
@@ -122,8 +123,7 @@ public class DatabaseInitialisation {
 		try {
 			fw.write(sourceString);
 		} catch (IOException e) {
-			System.err.println("Can't write output file: "+output.getAbsolutePath());
-			e.printStackTrace();
+			PikaterDBLogger.logThrowable("Can not write to output file: "+output.getAbsolutePath(), e);
 		}finally{
 			fw.close();
 		}

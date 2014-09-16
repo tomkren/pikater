@@ -12,7 +12,7 @@ public abstract class GeneralPikaterLogger
 		Throwable tt = t;
 		while (tt != null)
 		{
-			tt.printStackTrace(pw);
+			tt.printStackTrace(pw); // not an error but a feature
 			tt = tt.getCause();
 			if(tt != null)
 			{
