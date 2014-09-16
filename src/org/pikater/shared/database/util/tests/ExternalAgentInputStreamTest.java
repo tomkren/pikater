@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.jfree.util.Log;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.daos.DAOs;
 
@@ -34,6 +35,7 @@ public class ExternalAgentInputStreamTest
 		}
 		catch(Exception e)
 		{
+			Log.error("Unexpected error occured:", e);
 			IOUtils.closeQuietly(fos);
 			IOUtils.closeQuietly(is);
 		}

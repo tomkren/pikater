@@ -301,7 +301,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			try {
 				oid = new PGLargeObjectAction(null).uploadLOToDB(sourceFile);
 			} catch (Exception e) {
-				e.printStackTrace();
+				PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 			}
 		}
 		JPAFilemapping fm=new JPAFilemapping();

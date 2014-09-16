@@ -15,15 +15,14 @@ public class EntityManagerInstancesCreator
 	 * produce EntityManager instances, unless we need several different configurations for various
 	 * purposes.
 	 */
-	public static EntityManagerFactory primaryFactory;
-	
+	private static EntityManagerFactory primaryFactory;
 	static
 	{
 		try
 		{
 			primaryFactory = Persistence.createEntityManagerFactory("pikaterDataModel");
 		}
-		catch(Throwable t)
+		catch(Exception t)
 		{
 			PikaterDBLogger.logThrowable("Failed to initialize EntityManagerFactory: ", t);
 		}
