@@ -26,14 +26,21 @@
   		See: https://vaadin.com/book/-/page/application.environment.html
   -->
   <context-param>
-    <description>Whether the application should start in production mode. This option overrides any potential UI annotation settings.</description>
+    <description>Whether the application should start in production mode. This option overrides any potential UI
+    	annotation settings.</description>
     <param-name>productionMode</param-name>
     <param-value>false</param-value>
   </context-param>
   <context-param>
-    <description>Heartbeat request interval (in seconds) for Vaadin client side engine.</description>
+    <description>Heartbeat request interval (in seconds) for Vaadin client side engine. Keeps UI instances alive
+    	even if no user requests are received. 3 heartbeats without other requests expire the UI.</description>
     <param-name>heartbeatInterval</param-name>
     <param-value>300</param-value> <!-- 5 minutes -->
+  </context-param>
+  <context-param>
+    <description>Should the session close when all of its UI instances have expired?</description>
+    <param-name>closeIdleSessions</param-name>
+    <param-value>false</param-value>
   </context-param>
   
   <!-- ***************************************************** -->
