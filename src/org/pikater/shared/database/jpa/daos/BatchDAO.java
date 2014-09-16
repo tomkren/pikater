@@ -1,6 +1,7 @@
 package org.pikater.shared.database.jpa.daos;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.Path;
@@ -18,6 +19,7 @@ import org.pikater.shared.database.jpa.status.JPABatchStatus;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class BatchDAO extends AbstractDAO<JPABatch> {
 
@@ -269,7 +271,7 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 			item.updateValues(changedEntity);
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't update JPA Batch object.", e);
+			PikaterDBLogger.logThrowable("Can't update JPA Batch object.", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();
@@ -292,7 +294,7 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
 		try{
-			logger.info("Starting cleaning up batches");
+			PikaterDBLogger.log(Level.INFO, "Starting cleaning up batches");
 			List<JPABatch> batches=em
 					.createNamedQuery("Batch.getByStatus",JPABatch.class)
 					.setParameter("status", JPABatchStatus.COMPUTING)
@@ -313,9 +315,9 @@ public class BatchDAO extends AbstractDAO<JPABatch> {
 				batch.setStatus(JPABatchStatus.FAILED.name());
 			}
 			em.getTransaction().commit();
-			logger.info("Cleaning up batches finished");
+			PikaterDBLogger.log(Level.INFO, "Cleaning up batches finished");
 		}catch(Exception e){
-			logger.error("Error during cleanup...", e);
+			PikaterDBLogger.logThrowable("Error during cleanup...", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();

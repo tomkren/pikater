@@ -144,14 +144,16 @@ public class DatabaseInitialisation {
 		p("persistence.xml current target (type new or leave blank) ");
 		p("src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET);
 		String persistenceTarget=br.readLine();
-		if(persistenceTarget.equals(""))
+		if((persistenceTarget==null)||(persistenceTarget.equals(""))){
 			persistenceTarget="src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET;
+		}
 				
 		p("Beans.xml current target (type new or leave blank) ");
 		p("src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE);
 		String beansTarget=br.readLine();
-		if(beansTarget.equals(""))
+		if((beansTarget==null)||(beansTarget.equals(""))){
 			beansTarget="src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE;
+		}
 		
 		p("Generating "+persistenceTarget+" ...");
 		this.generateConfigFile(DatabaseInitialisation.PERSISTENCE_CONFIGBASE,
@@ -206,15 +208,20 @@ public class DatabaseInitialisation {
 		p("Whole DB initialisation: 'a'");
 		p("Config file generation : 'c'");
 		p("Just DB initialisation : 'd'");
-		String choice=br.readLine().toLowerCase();
-		if(choice.equals("c")){
-			this.configGeneration();
-		}else if(choice.equals("d")){
-			this.databaseConfiguration();
-		}else if(choice.equals("a")){
-			this.configAll();
+		String choice=br.readLine();
+		if(choice!=null){
+			choice=choice.toLowerCase();
+			if(choice.equals("c")){
+				this.configGeneration();
+			}else if(choice.equals("d")){
+				this.databaseConfiguration();
+			}else if(choice.equals("a")){
+				this.configAll();
+			}else{
+				p("Invalid choice...exiting.");
+			}
 		}else{
-			p("Invalid choice...exiting.");
+			p("End of input stream...exiting");
 		}
 			
 	}

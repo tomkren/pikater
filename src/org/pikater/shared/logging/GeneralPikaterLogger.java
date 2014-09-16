@@ -1,9 +1,9 @@
-package org.pikater.shared.logging.web;
+package org.pikater.shared.logging;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public abstract class GeneralPikaterLogger implements IPikaterLogger
+public abstract class GeneralPikaterLogger
 {
 	protected static String throwableToStackTrace(Throwable t)
 	{

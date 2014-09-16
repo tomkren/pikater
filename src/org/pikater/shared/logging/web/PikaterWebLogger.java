@@ -2,13 +2,15 @@ package org.pikater.shared.logging.web;
 
 import java.util.logging.Level;
 
-public class PikaterLogger
+import org.pikater.shared.logging.IPikaterLogger;
+
+public class PikaterWebLogger
 {
 	private static IPikaterLogger logger = null;
 	
 	public static void setLogger(IPikaterLogger logger)
 	{
-		PikaterLogger.logger = logger;
+		PikaterWebLogger.logger = logger;
 	}
 	
 	public static IPikaterLogger getLogger()

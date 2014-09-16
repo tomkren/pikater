@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import org.pikater.shared.PropertiesHandler;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.quartz.jobs.base.AbstractJobWithArgs;
 import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
 import org.quartz.JobBuilder;
@@ -141,14 +141,14 @@ public class MyJobScheduler extends PropertiesHandler
 		}
 		catch (UnableToInterruptJobException e)
 		{
-			PikaterLogger.logThrowable("Could not interrupt job with key: " + key.toString(), e);
+			PikaterDBLogger.logThrowable("Could not interrupt job with key: " + key.toString(), e);
 		}
 	}
 	
 	//--------------------------------------------------------
 	// OTHER INTERFACE
 	
-	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args) throws Exception
+	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args) throws Exception  
 	{
 		if(args.length != helperJobInstance.getNumberOfArguments())
 		{

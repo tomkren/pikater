@@ -1,6 +1,7 @@
 package org.pikater.shared.database.jpa.daos;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,14 +10,12 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.JPAAbstractEntity;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
-import org.pikater.shared.logging.database.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public abstract class AbstractDAO<T extends JPAAbstractEntity>
 {
@@ -25,9 +24,6 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 	protected AbstractDAO(Class<T> entityClass){
 		this.ec=entityClass;
 	}
-	
-	protected static Logger logger=PikaterLogger.getLogger(
-		    Thread.currentThread().getStackTrace()[0].getClassName() );
 	
 	public enum EmptyResultAction
 	{
@@ -68,8 +64,8 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		T item = null;
 		try{
 			item=em.find(ec, ID);
-		}catch(Throwable t){
-			logger.log(Level.ERROR, "Exception while retrieveing entity based on its primary key", t);
+		}catch(Exception t){
+			PikaterDBLogger.logThrowable("Exception while retrieveing entity based on its primary key", t);
 		}
 		
 		if(item!=null){
@@ -77,7 +73,7 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 		}else{
 			switch (era) {
 			case LOG_NULL:
-				logger.log(Level.WARN, "Entity not found, returning null");
+				PikaterDBLogger.log(Level.WARNING, "Entity not found, returning null");
 				break;
 			case THROW:
 				throw new NoResultException();
@@ -106,7 +102,7 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 			item.updateValues(changedEntity);
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't update "+changedEntity.getClass().getName()+" object.", e);
+			PikaterDBLogger.logThrowable("Can't update "+changedEntity.getClass().getName()+" object.", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();
@@ -120,7 +116,7 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 			em.persist(newEntity);
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't persist JPA object.",e);
+			PikaterDBLogger.logThrowable("Can't persist JPA object.",e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();
@@ -135,7 +131,7 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 			em.remove(entity);
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't remove JPA object", e);
+			PikaterDBLogger.logThrowable("Can't remove JPA object", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();
@@ -371,7 +367,7 @@ public abstract class AbstractDAO<T extends JPAAbstractEntity>
 			em.remove(entity);
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't remove JPA object", e);
+			PikaterDBLogger.logThrowable("Can't remove JPA object", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();

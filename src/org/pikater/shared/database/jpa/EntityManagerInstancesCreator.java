@@ -6,9 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.pikater.shared.logging.database.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class EntityManagerInstancesCreator
 {
@@ -19,12 +17,6 @@ public class EntityManagerInstancesCreator
 	 */
 	public static EntityManagerFactory primaryFactory;
 	
-	/**
-	 * @see org.pikater.shared.logging.web.PikaterLogger
-	 */
-	private static Logger logger=PikaterLogger.getLogger(
-		    Thread.currentThread().getStackTrace()[0].getClassName() );
-	
 	static
 	{
 		try
@@ -33,8 +25,7 @@ public class EntityManagerInstancesCreator
 		}
 		catch(Throwable t)
 		{
-			// TODO: use static JVM-wide logger with a nice interface instead?
-			logger.log(Level.ERROR, "Failed to initialize EntityManagerFactory: ", t);
+			PikaterDBLogger.logThrowable("Failed to initialize EntityManagerFactory: ", t);
 		}
 	}
 

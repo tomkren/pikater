@@ -1,6 +1,7 @@
 package org.pikater.shared.database.jpa.daos;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 
@@ -9,6 +10,7 @@ import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class ExperimentDAO extends AbstractDAO<JPAExperiment> {
 
@@ -86,7 +88,7 @@ public class ExperimentDAO extends AbstractDAO<JPAExperiment> {
 		EntityManager em = EntityManagerInstancesCreator.getEntityManagerInstance();
 		em.getTransaction().begin();
 		try{
-			logger.info("Starting cleaning up experiments");
+			PikaterDBLogger.log(Level.INFO, "Starting cleaning up experiments");
 			List<JPAExperiment> experiments=em
 					.createNamedQuery("Experiment.getByStatus",JPAExperiment.class)
 					.setParameter("status", JPAExperimentStatus.COMPUTING)
@@ -96,9 +98,9 @@ public class ExperimentDAO extends AbstractDAO<JPAExperiment> {
 			}
 			
 			em.getTransaction().commit();
-			logger.info("Cleaning up experiments finished");
+			PikaterDBLogger.log(Level.INFO, "Cleaning up experiments finished");
 		}catch(Exception e){
-			logger.error("Error during cleanup...", e);
+			PikaterDBLogger.logThrowable("Error during cleanup...", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();
