@@ -30,7 +30,7 @@ public class ModelDAO extends AbstractDAO<JPAModel> {
 	 * doesn't have permanent flag.
 	 * @param daysback maximum age of models, that should be left in the database
 	 */
-	public void removeOldModels(int daysback){
+	public void removeOldModels(long daysback){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		try{
 			em.getTransaction().begin();
