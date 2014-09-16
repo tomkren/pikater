@@ -107,7 +107,7 @@ public class AgentUploadForm extends CustomFormLayout
 					{
 						PikaterJobScheduler.getJobScheduler().defineJob(UploadedAgentHandler.class, jobParams);
 					}
-					catch (Throwable e)
+					catch (Exception e)
 					{
 						PikaterLogger.logThrowable("Could not issue an uploaded agent handling job.", e);
 						MyNotifications.showError("Upload failed", event.getFileName());

@@ -47,7 +47,7 @@ public class FileDownloadResource implements IDownloadResource
 	}
 
 	@Override
-	public InputStream getStream() throws Throwable
+	public InputStream getStream() throws Exception
 	{
 		return new FileInputStream(file);
 	}

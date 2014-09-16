@@ -516,7 +516,7 @@ public class Toolbar extends VerticalLayout
 				}
 			});
 		}
-		catch (Throwable t)
+		catch (Exception t)
 		{
 			PikaterLogger.logThrowable("Could not save experiment", t);
 			MyNotifications.showApplicationError();

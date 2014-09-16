@@ -49,7 +49,7 @@ public class NumberRangeValidator<N extends Number> implements Validator
 		{
 			return (N) thisNumber.parse(value);
 		}
-		catch(Throwable t)
+		catch(Exception t)
 		{
 			throw new InvalidValueException("Not " + thisNumber.errorDisplayString);
 		}

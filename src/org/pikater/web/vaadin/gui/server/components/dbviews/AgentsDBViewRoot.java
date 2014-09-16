@@ -9,6 +9,7 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBRow;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView.Column;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
@@ -81,44 +82,53 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 		{
 			// download, don't run action
 			final ExternalAgentTableDBRow rowView = (ExternalAgentTableDBRow) row;
-			final UUID agentDownloadResourceUUID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			try
 			{
-				@Override
-				public ResourceExpiration getLifeSpan()
+				final UUID agentDownloadResourceUUID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 				{
-					return ResourceExpiration.ON_FIRST_PICKUP;
-				}
-				
-				@Override
-				public InputStream getStream()
-				{
-					return rowView.getAgent().getInputStream();
-				}
-				
-				@Override
-				public long getSize()
-				{
-					return rowView.getAgent().getJar().length;
-				}
-				
-				@Override
-				public String getMimeType()
-				{
-					return HttpContentType.APPLICATION_JAR.getMimeType();
-				}
-				
-				@Override
-				public String getFilename()
-				{
-					String fileName = rowView.getAgent().getName();
-					if(!fileName.endsWith(".jar"))
+					@Override
+					public ResourceExpiration getLifeSpan()
 					{
-						fileName += ".jar";
+						return ResourceExpiration.ON_FIRST_PICKUP;
 					}
-					return fileName; 
-				}
-			});
-			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(agentDownloadResourceUUID));
+
+					@Override
+					public InputStream getStream()
+					{
+						return rowView.getAgent().getInputStream();
+					}
+
+					@Override
+					public long getSize()
+					{
+						return rowView.getAgent().getJar().length;
+					}
+
+					@Override
+					public String getMimeType()
+					{
+						return HttpContentType.APPLICATION_JAR.getMimeType();
+					}
+
+					@Override
+					public String getFilename()
+					{
+						String fileName = rowView.getAgent().getName();
+						if(!fileName.endsWith(".jar"))
+						{
+							fileName += ".jar";
+						}
+						return fileName; 
+					}
+				});
+				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(agentDownloadResourceUUID));
+			}
+			catch(Exception e)
+			{
+				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+				PikaterLogger.logThrowable("Could not issue the download because:", e);
+				throw new RuntimeException(e);
+			}
 		}
 		else if(specificColumn == Column.DELETE)
 		{

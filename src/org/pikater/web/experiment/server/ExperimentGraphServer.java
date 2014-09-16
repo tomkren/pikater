@@ -373,9 +373,9 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 			}
 			return result;
 		}
-		catch(Throwable t)
+		catch(Exception e)
 		{
-			throw new ConversionException(t);
+			throw new ConversionException(e);
 		}
 	}
 
@@ -439,12 +439,12 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 								element.getOntologyInfo().getAgentClass()
 								);
 					}
-					catch (Throwable t)
+					catch (Exception e)
 					{
 						PikaterLogger.logThrowable(String.format("No agent info instance was found for ontology '%s' and agent '%s'.", 
 								element.getOntologyInfo().getOntologyClass().getName(),
-								element.getOntologyInfo().getAgentClass()), t);
-						throw new IllegalStateException();
+								element.getOntologyInfo().getAgentClass()), e);
+						throw e;
 					}
 
 					// create web-format box and link it to uni-format box
@@ -505,9 +505,9 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 				return webFormat;
 			}
 		}
-		catch (Throwable t)
+		catch (Exception e)
 		{
-			throw new ConversionException(t);
+			throw new ConversionException(e);
 		}
 	}
 }

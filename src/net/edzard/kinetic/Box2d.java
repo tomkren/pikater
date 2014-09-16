@@ -112,12 +112,26 @@ public class Box2d implements Serializable {
 		return sb.toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(Object obj) {
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(bottom);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(left);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(right);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(top);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -125,13 +139,16 @@ public class Box2d implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Box2d other = (Box2d) obj;
-		if (bottom != other.bottom)
+		if (Double.doubleToLongBits(bottom) != Double
+				.doubleToLongBits(other.bottom))
 			return false;
-		if (left != other.left)
+		if (Double.doubleToLongBits(left) != Double
+				.doubleToLongBits(other.left))
 			return false;
-		if (right != other.right)
+		if (Double.doubleToLongBits(right) != Double
+				.doubleToLongBits(other.right))
 			return false;
-		if (top != other.top)
+		if (Double.doubleToLongBits(top) != Double.doubleToLongBits(other.top))
 			return false;
 		return true;
 	}

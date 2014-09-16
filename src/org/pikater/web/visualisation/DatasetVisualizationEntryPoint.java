@@ -20,7 +20,7 @@ public class DatasetVisualizationEntryPoint extends InterruptibleJobHelper imple
 	}
 	
 	@Override
-	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Throwable
+	public void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Exception
 	{
 		startJob(DSVisOneGeneratorJob.class, new Object[]
 		{
@@ -32,7 +32,7 @@ public class DatasetVisualizationEntryPoint extends InterruptibleJobHelper imple
 	}
 	
 	@Override
-	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare) throws Throwable
+	public void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons attrsToCompare) throws Exception
 	{
 		startJob(DSVisTwoGeneratorJob.class, new Object[]
 		{

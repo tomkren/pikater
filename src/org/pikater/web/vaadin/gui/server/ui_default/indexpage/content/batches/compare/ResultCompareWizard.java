@@ -99,7 +99,7 @@ public class ResultCompareWizard extends WizardForDialog<ResultCompareCommons> i
 			private DatasetVisualizationEntryPoint underlyingTask;
 
 			@Override
-			public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+			public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
 			{
 				// start the task and bind it with the progress dialog
 				underlyingTask = new DatasetVisualizationEntryPoint(contextForTask);

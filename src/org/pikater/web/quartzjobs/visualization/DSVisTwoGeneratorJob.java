@@ -128,9 +128,9 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 			// user interrupted visualization, don't log
 			result.failed(); // don't forget to... important cleanup will take place
 		}
-		catch (Throwable t)
+		catch (Exception e)
 		{
-			PikaterLogger.logThrowable("Job could not finish because of the following error:", t);
+			PikaterLogger.logThrowable("Job could not finish because of the following error:", e);
 			result.failed(); // don't forget to... important cleanup will take place
 		}
 		finally

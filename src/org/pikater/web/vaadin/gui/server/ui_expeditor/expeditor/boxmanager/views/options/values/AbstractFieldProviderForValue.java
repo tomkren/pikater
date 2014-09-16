@@ -91,7 +91,7 @@ public abstract class AbstractFieldProviderForValue
 					{
 						parsedNumber = numberParser.parse((String) event.getProperty().getValue());
 					}
-					catch(Throwable t)
+					catch(Exception t)
 					{
 						// if the field's content can not be parsed, do nothing (validation error will be displayed)
 						return;

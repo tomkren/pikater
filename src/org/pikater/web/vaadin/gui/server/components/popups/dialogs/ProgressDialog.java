@@ -72,7 +72,7 @@ public class ProgressDialog extends DialogCommons
 				{
 					progressDialogEvents.abortTask();
 				}
-				catch (Throwable t)
+				catch (Exception t)
 				{
 					PikaterLogger.logThrowable("Could not abort underlying task.", t);
 				}
@@ -110,7 +110,7 @@ public class ProgressDialog extends DialogCommons
 		 * @param contextForTask provides progress and status callbacks
 		 * @throws Throwable
 		 */
-		void startTask(IProgressDialogResultHandler contextForTask) throws Throwable;
+		void startTask(IProgressDialogResultHandler contextForTask) throws Exception;
 
 		/**
 		 * Signal used to abort the underlying task.
@@ -211,7 +211,7 @@ public class ProgressDialog extends DialogCommons
 			{
 				taskHandler.startTask(this);
 			}
-			catch (Throwable e)
+			catch (Exception e)
 			{
 				/*
 				 * We need the dialog to not be created (so as not to close it just afterwards).

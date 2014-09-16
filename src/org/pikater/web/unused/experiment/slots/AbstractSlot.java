@@ -25,6 +25,17 @@ public abstract class AbstractSlot
 	// ------------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result
+				+ ((resource == null) ? 0 : resource.hashCode());
+		return result;
+	}
+	
 	/**
 	 * Children of this class are used in Set collections in other code. As such, the equals method needs
 	 * to be overriden to denote whether the slots have identical meaning despite being different instances.

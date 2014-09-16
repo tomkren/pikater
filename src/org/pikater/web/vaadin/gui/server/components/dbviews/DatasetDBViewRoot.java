@@ -12,6 +12,7 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView.Column;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
@@ -121,7 +122,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 						private DatasetVisualizationEntryPoint underlyingTask;
 
 						@Override
-						public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+						public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
 						{
 							JPAAttributeMetaData[] attrsToCompare = (JPAAttributeMetaData[]) args[0];
 							JPAAttributeMetaData attrTarget = (JPAAttributeMetaData) args[1];
@@ -157,41 +158,50 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 		}
 		else if(specificColumn == Column.DOWNLOAD)
 		{
-			// download, don't run action
-			final DataSetTableDBRow rowView = (DataSetTableDBRow) row;
-			final UUID datasetDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			try
 			{
-				@Override
-				public ResourceExpiration getLifeSpan()
+				// download, don't run action
+				final DataSetTableDBRow rowView = (DataSetTableDBRow) row;
+				final UUID datasetDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 				{
-					return ResourceExpiration.ON_FIRST_PICKUP;
-				}
-				
-				@Override
-				public InputStream getStream() throws Throwable
-				{
-					return PGLargeObjectReader.getForLargeObject(rowView.getDataset().getOID()).getInputStream();
-				}
-				
-				@Override
-				public long getSize()
-				{
-					return rowView.getDataset().getSize();
-				}
-				
-				@Override
-				public String getMimeType()
-				{
-					return HttpContentType.APPLICATION_JAR.getMimeType();
-				}
-				
-				@Override
-				public String getFilename()
-				{
-					return rowView.getDataset().getFileName();
-				}
-			});
-			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(datasetDownloadResourceUI));
+					@Override
+					public ResourceExpiration getLifeSpan()
+					{
+						return ResourceExpiration.ON_FIRST_PICKUP;
+					}
+
+					@Override
+					public InputStream getStream() throws Exception
+					{
+						return PGLargeObjectReader.getForLargeObject(rowView.getDataset().getOID()).getInputStream();
+					}
+
+					@Override
+					public long getSize()
+					{
+						return rowView.getDataset().getSize();
+					}
+
+					@Override
+					public String getMimeType()
+					{
+						return HttpContentType.APPLICATION_JAR.getMimeType();
+					}
+
+					@Override
+					public String getFilename()
+					{
+						return rowView.getDataset().getFileName();
+					}
+				});
+				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(datasetDownloadResourceUI));
+			}
+			catch (Exception e)
+			{
+				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+				PikaterLogger.logThrowable("Could not issue the download because:", e);
+				throw new RuntimeException(e);
+			}
 		}
 		else if(specificColumn == Column.DELETE)
 		{

@@ -82,7 +82,7 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 					{
 						Mailing.sendEmail(specificRow.getUser().getEmail(), "Password reset", sb.toString());
 					}
-					catch (Throwable e)
+					catch (Exception e)
 					{
 						// SMTP server should take responsibility for delivering emails, no custom handling needed
 						PikaterLogger.logThrowable(String.format("Could not send a password reset notification to '%s':", specificRow.getUser().getEmail()), e);

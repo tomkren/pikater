@@ -39,13 +39,9 @@ public class DynamicDownloadServlet extends HttpServlet
 			UUID resourceID = ResourceRegistrar.toResourceID(token);
 			downloadableResource = (IDownloadResource) ResourceRegistrar.getResource(resourceID);
 		}
-		catch(Throwable t)
+		catch(Exception e)
 		{
-			/*
-			 * Covers cases where the resource doesn't exist or is already expired
-			 * or is not downloadable. No need to log this.
-			 */
-			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			ResourceRegistrar.handleError(e, resp);
 			return;
 		}
 		
@@ -80,9 +76,9 @@ public class DynamicDownloadServlet extends HttpServlet
 	        			String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", downloadableResource.getFilename()), e);
 	        	MyNotifications.showError("Download ended with error", downloadableResource.getFilename());
 	        }
-	        catch (Throwable t)
+	        catch (Exception e)
 	        {
-	        	PikaterLogger.logThrowable(String.format("Unknown error occured while uploading file '%s'.", downloadableResource.getFilename()), t);
+	        	PikaterLogger.logThrowable(String.format("Unknown error occured while uploading file '%s'.", downloadableResource.getFilename()), e);
 	        	MyNotifications.showError("Download ended with error", downloadableResource.getFilename());
 	        }
 	        finally

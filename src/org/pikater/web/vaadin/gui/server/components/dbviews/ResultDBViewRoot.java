@@ -10,6 +10,7 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBView;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
@@ -93,40 +94,49 @@ public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBVie
 		ResultTableDBView.Column specificColumn = (ResultTableDBView.Column) column;
 		if(specificColumn == ResultTableDBView.Column.TRAINED_MODEL)
 		{
-			// download, don't run action
-			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			try
 			{
-				@Override
-				public ResourceExpiration getLifeSpan()
+				// download, don't run action
+				UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 				{
-					return ResourceExpiration.ON_FIRST_PICKUP;
-				}
-
-				@Override
-				public InputStream getStream() throws Throwable
-				{
-					return specificRow.getResult().getCreatedModel().getInputStream();
-				}
-
-				@Override
-				public long getSize()
-				{
-					return specificRow.getResult().getCreatedModel().getSerializedAgent().length;
-				}
-
-				@Override
-				public String getMimeType()
-				{
-					return HttpContentType.APPLICATION_OCTET_STREAM.getMimeType();
-				}
-
-				@Override
-				public String getFilename()
-				{
-					return specificRow.getResult().getCreatedModel().getFileName();
-				}
-			});
-			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+					@Override
+					public ResourceExpiration getLifeSpan()
+					{
+						return ResourceExpiration.ON_FIRST_PICKUP;
+					}
+	
+					@Override
+					public InputStream getStream() throws Exception
+					{
+						return specificRow.getResult().getCreatedModel().getInputStream();
+					}
+	
+					@Override
+					public long getSize()
+					{
+						return specificRow.getResult().getCreatedModel().getSerializedAgent().length;
+					}
+	
+					@Override
+					public String getMimeType()
+					{
+						return HttpContentType.APPLICATION_OCTET_STREAM.getMimeType();
+					}
+	
+					@Override
+					public String getFilename()
+					{
+						return specificRow.getResult().getCreatedModel().getFileName();
+					}
+				});
+				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+			}
+			catch(Exception e)
+			{
+				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+				PikaterLogger.logThrowable("Could not issue the download because:", e);
+				throw new RuntimeException(e);
+			}
 		}
 		else if(specificColumn == ResultTableDBView.Column.VISUALIZE)
 		{
@@ -142,7 +152,7 @@ public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBVie
 						private DatasetVisualizationEntryPoint underlyingTask;
 
 						@Override
-						public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+						public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
 						{
 							JPAAttributeMetaData[] attrsToCompare = (JPAAttributeMetaData[]) args[0];
 							JPAAttributeMetaData attrTarget = (JPAAttributeMetaData) args[1];

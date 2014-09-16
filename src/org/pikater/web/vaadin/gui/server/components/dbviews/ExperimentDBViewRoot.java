@@ -12,6 +12,7 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.ExperimentTableDBView;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.HttpContentType;
@@ -78,39 +79,48 @@ public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends Abstr
 		if(specificColumn == ExperimentTableDBView.Column.BEST_MODEL)
 		{
 			final JPAModel modelToServe = DAOs.resultDAO.getByExperimentBestResult(specificRow.getExperiment()).getCreatedModel();
-			UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+			try
 			{
-				@Override
-				public ResourceExpiration getLifeSpan()
+				UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 				{
-					return ResourceExpiration.ON_FIRST_PICKUP;
-				}
+					@Override
+					public ResourceExpiration getLifeSpan()
+					{
+						return ResourceExpiration.ON_FIRST_PICKUP;
+					}
 
-				@Override
-				public InputStream getStream() throws Throwable
-				{
-					return modelToServe.getInputStream();
-				}
+					@Override
+					public InputStream getStream() throws Exception
+					{
+						return modelToServe.getInputStream();
+					}
 
-				@Override
-				public long getSize()
-				{
-					return modelToServe.getSerializedAgent().length;
-				}
+					@Override
+					public long getSize()
+					{
+						return modelToServe.getSerializedAgent().length;
+					}
 
-				@Override
-				public String getMimeType()
-				{
-					return HttpContentType.TEXT_CSV.getMimeType();
-				}
+					@Override
+					public String getMimeType()
+					{
+						return HttpContentType.TEXT_CSV.getMimeType();
+					}
 
-				@Override
-				public String getFilename()
-				{
-					return modelToServe.getFileName();
-				}
-			});
-			Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+					@Override
+					public String getFilename()
+					{
+						return modelToServe.getFileName();
+					}
+				});
+				Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+			}
+			catch (Exception e)
+			{
+				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+				PikaterLogger.logThrowable("Could not issue the download because:", e);
+				throw new RuntimeException(e);
+			}
 		}
 		else if(specificColumn == ExperimentTableDBView.Column.RESULTS)
 		{
@@ -122,7 +132,7 @@ public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends Abstr
 				private InterruptibleJobHelper underlyingTask;
 				
 				@Override
-				public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
 				{
 					// start the task and bind it with the progress dialog
 					underlyingTask = new InterruptibleJobHelper();
@@ -143,39 +153,48 @@ public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends Abstr
 				@Override
 				public void onTaskFinish(IProgressDialogTaskResult result)
 				{
-					UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+					try
 					{
-						@Override
-						public ResourceExpiration getLifeSpan()
+						UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 						{
-							return ResourceExpiration.ON_FIRST_PICKUP;
-						}
+							@Override
+							public ResourceExpiration getLifeSpan()
+							{
+								return ResourceExpiration.ON_FIRST_PICKUP;
+							}
 
-						@Override
-						public InputStream getStream() throws Throwable
-						{
-							return new FileInputStream(tmpFile);
-						}
+							@Override
+							public InputStream getStream() throws Exception
+							{
+								return new FileInputStream(tmpFile);
+							}
 
-						@Override
-						public long getSize()
-						{
-							return tmpFile.length();
-						}
+							@Override
+							public long getSize()
+							{
+								return tmpFile.length();
+							}
 
-						@Override
-						public String getMimeType()
-						{
-							return HttpContentType.TEXT_CSV.getMimeType();
-						}
+							@Override
+							public String getMimeType()
+							{
+								return HttpContentType.TEXT_CSV.getMimeType();
+							}
 
-						@Override
-						public String getFilename()
-						{
-							return tmpFile.getName();
-						}
-					});
-					Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+							@Override
+							public String getFilename()
+							{
+								return tmpFile.getName();
+							}
+						});
+						Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+					}
+					catch(Exception e)
+					{
+						// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+						PikaterLogger.logThrowable("Could not issue the download because:", e);
+						throw new RuntimeException(e);
+					}
 				}
 			});
 		}

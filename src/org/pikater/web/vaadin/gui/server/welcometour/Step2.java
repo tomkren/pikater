@@ -77,7 +77,7 @@ public class Step2 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 							getOutput().addParsedModel(topologyFile.getName(), model);
 						}
 					}
-					catch (Throwable t)
+					catch (Exception t)
 					{
 						PikaterLogger.logThrowable(String.format("A problem was encountered while parsing topology '%s': ", topologyFile.getName()) + t.getMessage(), t);
 						omittedModels.add(topologyFile.getName());

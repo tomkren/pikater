@@ -30,10 +30,4 @@ public class ParamResource extends Resource
 		
 		this.displayName = displayName;
 	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		return super.equals(obj);
-	}
 }

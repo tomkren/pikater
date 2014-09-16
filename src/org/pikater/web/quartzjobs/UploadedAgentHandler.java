@@ -82,9 +82,9 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			{
 				WebToCoreEntryPoint.notify_newAgent(agent.getId());
 			}
-			catch (Throwable t)
+			catch (Exception e)
 			{
-				PikaterLogger.logThrowable("Could not send notification about a new external agent to core.", t);
+				PikaterLogger.logThrowable("Could not send notification about a new external agent to core.", e);
 			}
 		}
 		finally

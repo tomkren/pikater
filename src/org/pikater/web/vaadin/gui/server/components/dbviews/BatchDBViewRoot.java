@@ -99,7 +99,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 						{
 							WebToCoreEntryPoint.notify_batchPriorityChanged(specificRow.getBatch().getId());
 						}
-						catch (Throwable e)
+						catch (Exception e)
 						{
 							PikaterLogger.logThrowable(String.format("Could not notify core about a priority change of batch '%d':", specificRow.getBatch().getId()), e);
 							MyNotifications.showApplicationError();
@@ -128,7 +128,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 				{
 					WebToCoreEntryPoint.notify_killBatch(specificRow.getBatch().getId());
 				}
-				catch (Throwable e)
+				catch (Exception e)
 				{
 					PikaterLogger.logThrowable(String.format("Could not kill batch '%d':", specificRow.getBatch().getId()), e);
 					MyNotifications.showApplicationError();
@@ -149,7 +149,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 				private InterruptibleJobHelper underlyingTask;
 				
 				@Override
-				public void startTask(IProgressDialogResultHandler contextForTask) throws Throwable
+				public void startTask(IProgressDialogResultHandler contextForTask) throws Exception
 				{
 					// start the task and bind it with the progress dialog
 					underlyingTask = new InterruptibleJobHelper();
@@ -170,39 +170,48 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 				@Override
 				public void onTaskFinish(IProgressDialogTaskResult result)
 				{
-					UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
+					try
 					{
-						@Override
-						public ResourceExpiration getLifeSpan()
+						UUID resultsDownloadResourceUI = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new IDownloadResource()
 						{
-							return ResourceExpiration.ON_FIRST_PICKUP;
-						}
+							@Override
+							public ResourceExpiration getLifeSpan()
+							{
+								return ResourceExpiration.ON_FIRST_PICKUP;
+							}
 
-						@Override
-						public InputStream getStream() throws Throwable
-						{
-							return new FileInputStream(tmpFile);
-						}
+							@Override
+							public InputStream getStream() throws Exception
+							{
+								return new FileInputStream(tmpFile);
+							}
 
-						@Override
-						public long getSize()
-						{
-							return tmpFile.length();
-						}
+							@Override
+							public long getSize()
+							{
+								return tmpFile.length();
+							}
 
-						@Override
-						public String getMimeType()
-						{
-							return HttpContentType.TEXT_CSV.getMimeType();
-						}
+							@Override
+							public String getMimeType()
+							{
+								return HttpContentType.TEXT_CSV.getMimeType();
+							}
 
-						@Override
-						public String getFilename()
-						{
-							return tmpFile.getName();
-						}
-					});
-					Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+							@Override
+							public String getFilename()
+							{
+								return tmpFile.getName();
+							}
+						});
+						Page.getCurrent().setLocation(ResourceRegistrar.getDownloadURL(resultsDownloadResourceUI));
+					}
+					catch (Exception e)
+					{
+						// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+						PikaterLogger.logThrowable("Could not issue the download because:", e);
+						throw new RuntimeException(e);
+					}
 				}
 			});
 		}

@@ -69,9 +69,9 @@ public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob
 			re.close();
 			resultHandler.finished(null);
 		}
-		catch (Throwable t)
+		catch (Exception e)
 		{
-			PikaterLogger.logThrowable("Job could not finish because of the following error:", t);
+			PikaterLogger.logThrowable("Job could not finish because of the following error:", e);
 			resultHandler.failed(); // don't forget to... important cleanup will take place
 		}
 		finally

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import org.pikater.shared.database.exceptions.AttributeException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.visualisation.implementation.charts.axis.Axis;
 import org.pikater.web.visualisation.implementation.charts.axis.CategoricalAxis;
 import org.pikater.web.visualisation.implementation.charts.axis.ValueAxis;
@@ -57,8 +58,7 @@ public abstract class ArffDataset {
 			this.arffStream = PGLargeObjectReader.getForLargeObject(dslo.getOID()).getInputStream();
 			init();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			PikaterLogger.logThrowable("Could not get a handle on the given large object:", e);
 		}
 	}
 	
@@ -143,8 +143,8 @@ public abstract class ArffDataset {
 							dslo.getAttributeMinValue(attribute.name()),
 							dslo.getAttributeMaxValue(attribute.name()));
 				} catch (AttributeException e) {
-					//however, this shouldn't happen, because stream contains 
-					e.printStackTrace();
+					//however, this shouldn't happen, because stream contains
+					PikaterLogger.logThrowable("Unexpected error encountered:", e);
 					res=new ValueAxis();
 				}
 			}else{
@@ -167,8 +167,8 @@ public abstract class ArffDataset {
 							dslo.getAttributeMaxValue(attribute.name())
 							);
 				} catch (AttributeException e) {
-					//this shouldn't happen, because stored dataset don't change
-					e.printStackTrace();
+					//this shouldn't happen, because stored datasets don't change
+					PikaterLogger.logThrowable("Unexpected error encountered:", e);
 					return new LinearColorer();
 				}
 			}else{

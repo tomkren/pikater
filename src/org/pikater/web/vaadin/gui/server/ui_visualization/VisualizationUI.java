@@ -5,7 +5,9 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.sharedresources.IRegistrarResource;
+import org.pikater.web.sharedresources.ResourceException;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.vaadin.CustomConfiguredUI;
@@ -46,9 +48,22 @@ public class VisualizationUI extends CustomConfiguredUI
 			arguments = (DSVisUIArgs<?>) ResourceRegistrar.getResource(resourceID);
 			arguments.getClass(); // spawn a null pointer exception if resource is not defined
 		}
-		catch(Throwable t)
+		catch(Exception e)
 		{
-			returnErrorCode(HttpServletResponse.SC_NOT_FOUND);
+			/*
+			 * ResourceException covers known cases that do not need to be logged. 
+			 */
+			if(!(e instanceof ResourceException))
+			{
+				PikaterLogger.logThrowable("An unexpected problem was found:", e);
+				returnErrorCode(HttpServletResponse.SC_NOT_FOUND);
+				throw new RuntimeException(e); // default UI error handler will catch this and display a visible notification
+			}
+			else
+			{
+				returnErrorCode(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
 		}
 		
 		/*
@@ -105,9 +120,18 @@ public class VisualizationUI extends CustomConfiguredUI
 		@Override
 		public String toRedirectURL()
 		{
-			UUID thisClassesResourceID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), this);
-			return CustomConfiguredUI.getRedirectURLToUI(PikaterUI.DATASET_VISUALIZATION) +
-					String.format("?%s=%s", VisualizationUI.PARAM_RESOURCE, ResourceRegistrar.fromResourceID(thisClassesResourceID));
+			try
+			{
+				UUID thisClassesResourceID = ResourceRegistrar.registerResource(VaadinSession.getCurrent(), this);
+				return CustomConfiguredUI.getRedirectURLToUI(PikaterUI.DATASET_VISUALIZATION) +
+						String.format("?%s=%s", VisualizationUI.PARAM_RESOURCE, ResourceRegistrar.fromResourceID(thisClassesResourceID));
+			}
+			catch(Exception e)
+			{
+				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+				PikaterLogger.logThrowable("Could not issue a redirect because:", e);
+				throw new RuntimeException(e);
+			}
 		}
 	}
 	

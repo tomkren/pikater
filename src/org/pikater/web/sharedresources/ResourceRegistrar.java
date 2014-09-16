@@ -1,9 +1,13 @@
 package org.pikater.web.sharedresources;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.quartzjobs.ResourceExpirationJob;
 import org.pikater.web.servlets.DynamicDownloadServlet;
@@ -28,11 +32,11 @@ public class ResourceRegistrar
 	 * @param lifeSpan
 	 * @return
 	 */
-	public static UUID registerResource(VaadinSession session, IRegistrarResource resource)
+	public static UUID registerResource(VaadinSession session, IRegistrarResource resource) throws ResourceException
 	{
 		if(resource == null)
 		{
-			throw new NullPointerException("Given resource can not be null.");
+			throw new ResourceException("Given resource can not be null.");
 		}
 		else
 		{
@@ -48,14 +52,14 @@ public class ResourceRegistrar
 							// resource will expire on its own if not picked up
 							PikaterJobScheduler.getJobScheduler().defineJob(ResourceExpirationJob.class, new Object[] { newUUID, resource });
 						}
-						catch (Throwable e)
+						catch (Exception e)
 						{
 							/*
-							 * Send a runtime error that will be caught by the default error handler on Vaadin UI,
+							 * Send a runtime exception that will be caught by the default error handler on Vaadin UI,
 							 * logged and client will see a notification of an error with 500 status code (internal
 							 * server error).
 							 */
-							throw new RuntimeException("Could not issue a resource expiration job.", e);
+							throw new ResourceException("Could not issue a resource expiration job.", e);
 						}
 						break;
 						
@@ -65,7 +69,7 @@ public class ResourceRegistrar
 						break;
 						
 					default:
-						throw new IllegalStateException("Unknown state: " + resource.getLifeSpan().name());
+						throw new ResourceException("Unknown state: " + resource.getLifeSpan().name());
 				}
 				return newUUID;
 			}
@@ -116,9 +120,69 @@ public class ResourceRegistrar
 	 * @param resourceToken
 	 * @return
 	 */
-	public static UUID toResourceID(String resourceToken)
+	public static UUID toResourceID(String resourceToken) throws ResourceException
 	{
-		return UUID.fromString(resourceToken);
+		if(resourceToken == null)
+		{
+			throw new ResourceException("Can not construct resource ID from a null string.");
+		}
+		else
+		{
+			try
+			{
+				return UUID.fromString(resourceToken);
+			}
+			catch (IllegalArgumentException e)
+			{
+				throw new ResourceException(e);
+			}
+		}
+	}
+	
+	/**
+	 * Handles exceptions thrown from methods of this class. If the exception is
+	 * an unknown error case, this method will throw a {@link RuntimeException}
+	 * and output {@link HttpServletResponse#SC_NOT_FOUND} error status.
+	 * 
+	 * {@link RuntimeException RuntimeExceptions} will be caught by the default
+	 * UI error handler and a visible notification will be displayed to user.
+	 * @param e
+	 * @param resp 
+	 */
+	public static void handleError(Exception e, HttpServletResponse resp)
+	{
+		if(e instanceof ResourceException)
+		{
+			/*
+			 * Covers known cases that do not need to be logged. 
+			 */
+			
+			try
+			{
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			}
+			catch (IOException e1)
+			{
+				throw new RuntimeException(e1);
+			}
+		}
+		else
+		{
+			/*
+			 * Covers unknown cases that need to be logged. 
+			 */
+			
+			PikaterLogger.logThrowable("An unexpected problem was found:", e);
+			try
+			{
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+				throw new RuntimeException(e);
+			}
+			catch (IOException e1)
+			{
+				throw new RuntimeException(e1);
+			}
+		}
 	}
 	
 	//-------------------------------------------------------------
@@ -131,18 +195,27 @@ public class ResourceRegistrar
 	 * @param uuid
 	 * @return
 	 */
-	public static String getDownloadURL(UUID resourceID) throws IllegalStateException
+	public static String getDownloadURL(UUID resourceID) throws ResourceException
 	{
 		synchronized(lock_object)
 		{
-			IRegistrarResource resource = getResource(resourceID, false);
+			IRegistrarResource resource = null;
+			try
+			{
+				resource = getResource(resourceID, false);
+			}
+			catch(IllegalStateException e)
+			{
+				throw new ResourceException("Resource not found.");
+			}
+			
 			if(resource instanceof IDownloadResource)
 			{
 				return String.format("./download?t=%s", fromResourceID(resourceID));
 			}
 			else
 			{
-				throw new IllegalStateException("Resource associated with the given ID is not downloadable.");
+				throw new ResourceException("Resource associated with the given ID is not downloadable.");
 			}
 		}
 	}

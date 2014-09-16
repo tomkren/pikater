@@ -71,7 +71,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 				agentInfoProvider = AgentInfoCollection.getFrom(WebToCoreEntryPoint.getAgentInfosVisibleForUser(
 						ManageAuth.getUserID(VaadinSession.getCurrent())));
 			}
-			catch (Throwable t)
+			catch (Exception t)
 			{
 				PikaterLogger.logThrowable("No information about agents received from core.", t);
 				GeneralDialogs.error("Not available at this moment", "Information about agents has not been received from core.");

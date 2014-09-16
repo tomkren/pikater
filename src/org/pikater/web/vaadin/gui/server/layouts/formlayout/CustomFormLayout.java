@@ -64,7 +64,7 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 							return;
 						}
 					}
-					catch (Throwable e)
+					catch (Exception e)
 					{
 						PikaterLogger.logThrowable("Could not submit form because of the error below.", e);
 						MyNotifications.showError("Internal error", "Form could not be submitted. Please contact the administrators.");

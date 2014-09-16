@@ -1,5 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_visualization.thumbnail;
 
+import org.pikater.shared.logging.web.PikaterLogger;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.ImageDownloadResource;
@@ -14,12 +15,13 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 
 public abstract class ChartThumbnail extends Thumbnail
 {
 	private static final long serialVersionUID = 8481225003085234704L;
 	
-	private final String downloadURL;
+	private String downloadURL;
 	private final int imageWidth;
 	private final int imageHeight; 
 	
@@ -28,13 +30,22 @@ public abstract class ChartThumbnail extends Thumbnail
 		super();
 		
 		// data source
-		this.downloadURL = ResourceRegistrar.getDownloadURL(ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new ImageDownloadResource(
-				imageResult.getFile(),
-				ResourceExpiration.ON_SESSION_END,
-				imageResult.getImageType().toMimeType(),
-				imageWidth,
-				imageHeight
-		)));
+		try
+		{
+			this.downloadURL = ResourceRegistrar.getDownloadURL(ResourceRegistrar.registerResource(VaadinSession.getCurrent(), new ImageDownloadResource(
+					imageResult.getFile(),
+					ResourceExpiration.ON_SESSION_END,
+					imageResult.getImageType().toMimeType(),
+					imageWidth,
+					imageHeight
+					)));
+		}
+		catch(Exception e)
+		{
+			// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
+			PikaterLogger.logThrowable("Could not create the resource thumbnail because:", e);
+			this.downloadURL = null;
+		}
 		this.imageWidth = imageWidth;
 		this.imageHeight = imageHeight;
 		
@@ -45,28 +56,35 @@ public abstract class ChartThumbnail extends Thumbnail
 	@Override
 	protected Component getContent()
 	{
-		Image result = new Image(null, new ExternalResource(downloadURL));
-		result.setDescription("Double click to enlarge.");
-		result.addClickListener(new MouseEvents.ClickListener()
+		if(downloadURL == null)
 		{
-			private static final long serialVersionUID = 5830107000487540250L;
-
-			@Override
-			public void click(ClickEvent event)
+			return new Label("Unavailable");
+		}
+		else
+		{
+			Image result = new Image(null, new ExternalResource(downloadURL));
+			result.setDescription("Double click to enlarge.");
+			result.addClickListener(new MouseEvents.ClickListener()
 			{
-				if(event.isDoubleClick())
-				{
-					ImageViewer viewer = new ImageViewer(downloadURL, imageWidth, imageHeight);
-					viewer.setSizeFull();
+				private static final long serialVersionUID = 5830107000487540250L;
 
-					MyPopup popup = new MyPopup(getContentCaption(), viewer);
-					popup.setCaptionCentered();
-					popup.setWidth("800px");
-					popup.setHeight("800px");
-					popup.show();
+				@Override
+				public void click(ClickEvent event)
+				{
+					if(event.isDoubleClick())
+					{
+						ImageViewer viewer = new ImageViewer(downloadURL, imageWidth, imageHeight);
+						viewer.setSizeFull();
+
+						MyPopup popup = new MyPopup(getContentCaption(), viewer);
+						popup.setCaptionCentered();
+						popup.setWidth("800px");
+						popup.setHeight("800px");
+						popup.show();
+					}
 				}
-			}
-		});
-		return result;
+			});
+			return result;
+		}
 	}
 }

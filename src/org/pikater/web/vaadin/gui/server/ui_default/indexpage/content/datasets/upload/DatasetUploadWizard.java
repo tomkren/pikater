@@ -234,7 +234,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 						{
 							PikaterJobScheduler.getJobScheduler().defineJob(UploadedDatasetHandler.class, jobParams);
 						}
-						catch (Throwable e)
+						catch (Exception e)
 						{
 							PikaterLogger.logThrowable("Could not issue an uploaded dataset handling job.", e);
 							MyNotifications.showError("Upload failed", event.getFileName());

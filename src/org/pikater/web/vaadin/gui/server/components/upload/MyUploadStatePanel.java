@@ -109,7 +109,7 @@ public class MyUploadStatePanel extends UploadStatePanel
 						+ "extensions defined.", originalType.getMimeType()));
 			}
 		}
-		catch (Throwable t)
+		catch (Exception t)
 		{
 			streamingFailed(new StreamingErrorEvent()
 			{

@@ -105,7 +105,7 @@ public class OptionValueForm extends CustomFormLayout
 				{
 					typeStr = type.getDefaultValue().toDisplayName();
 				}
-				catch (Throwable t)
+				catch (Exception t)
 				{
 					PikaterLogger.logThrowable(String.format("Could not transform the '%s' value type to display string.", 
 							type.getDefaultValue().getClass()), t);

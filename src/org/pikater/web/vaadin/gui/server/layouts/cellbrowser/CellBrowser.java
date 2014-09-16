@@ -173,6 +173,7 @@ public class CellBrowser extends HorizontalLayout
 				{
 					dragWrapper.disableDnD();
 				}
+				break;
 			default:
 				throw new IllegalArgumentException(String.format("Drag selection '%s' not implemented yet.", dragSelection.name()));
 		}

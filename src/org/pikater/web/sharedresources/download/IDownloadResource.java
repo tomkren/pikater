@@ -9,5 +9,5 @@ public interface IDownloadResource extends IRegistrarResource
 	String getFilename();
 	String getMimeType();
 	long getSize();
-	InputStream getStream() throws Throwable;
+	InputStream getStream() throws Exception;
 }

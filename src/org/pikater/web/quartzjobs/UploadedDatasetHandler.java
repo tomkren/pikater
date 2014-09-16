@@ -70,9 +70,9 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 			{
 				WebToCoreEntryPoint.notify_newDataset(newDatasetID);
 			}
-			catch (Throwable t)
+			catch (Exception e)
 			{
-				PikaterLogger.logThrowable("Could not send notification about a new dataset to core.", t);
+				PikaterLogger.logThrowable("Could not send notification about a new dataset to core.", e);
 			}
 			
 		} catch (IOException e) {
