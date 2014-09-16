@@ -14,7 +14,7 @@ public class InterruptibleJobHelper
 		this.jobKey = null;
 	}
 	
-	public void startJob(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Throwable
+	public void startJob(Class<? extends InterruptibleImmediateOneTimeJob> jobClass, Object[] jobArgs) throws Exception
 	{
 		jobKey = PikaterJobScheduler.getJobScheduler().defineJob(jobClass, jobArgs);
 	}
