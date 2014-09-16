@@ -75,7 +75,7 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 		DSVisTwoResult result = new DSVisTwoResult(context, ChartGenerator.SINGLE_CHART_SIZE, ChartGenerator.SINGLE_CHART_SIZE);
 		try
 		{
-			if(dataset1.getHash() == dataset2.getHash())
+			if(dataset1.getHash().equals(dataset2.getHash()))
 			{
 				throw new IllegalArgumentException("Identical datasets were received for comparison.");
 			}
