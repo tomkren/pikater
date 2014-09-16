@@ -10,7 +10,7 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.experiments.results.ResultTableDBView;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
@@ -134,7 +134,7 @@ public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBVie
 			catch(Exception e)
 			{
 				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
-				PikaterLogger.logThrowable("Could not issue the download because:", e);
+				PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 				throw new RuntimeException(e);
 			}
 		}

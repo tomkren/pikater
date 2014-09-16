@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.server.ui_visualization.thumbnail;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.ImageDownloadResource;
@@ -43,7 +43,7 @@ public abstract class ChartThumbnail extends Thumbnail
 		catch(Exception e)
 		{
 			// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
-			PikaterLogger.logThrowable("Could not create the resource thumbnail because:", e);
+			PikaterWebLogger.logThrowable("Could not create the resource thumbnail because:", e);
 			this.downloadURL = null;
 		}
 		this.imageWidth = imageWidth;

@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.server.components.forms;
 import java.io.File;
 import java.util.EnumSet;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.WebAppConfiguration;
@@ -109,7 +109,7 @@ public class AgentUploadForm extends CustomFormLayout
 					}
 					catch (Exception e)
 					{
-						PikaterLogger.logThrowable("Could not issue an uploaded agent handling job.", e);
+						PikaterWebLogger.logThrowable("Could not issue an uploaded agent handling job.", e);
 						MyNotifications.showError("Upload failed", event.getFileName());
 						return; // don't let the success notification be displayed
 					}

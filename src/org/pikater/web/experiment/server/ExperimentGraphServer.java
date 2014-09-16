@@ -13,7 +13,7 @@ import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.experiment.UniversalConnector;
 import org.pikater.shared.experiment.UniversalElement;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.experiment.IExperimentGraph;
@@ -441,7 +441,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 					}
 					catch (Exception e)
 					{
-						PikaterLogger.logThrowable(String.format("No agent info instance was found for ontology '%s' and agent '%s'.", 
+						PikaterWebLogger.logThrowable(String.format("No agent info instance was found for ontology '%s' and agent '%s'.", 
 								element.getOntologyInfo().getOntologyClass().getName(),
 								element.getOntologyInfo().getAgentClass()), e);
 						throw e;

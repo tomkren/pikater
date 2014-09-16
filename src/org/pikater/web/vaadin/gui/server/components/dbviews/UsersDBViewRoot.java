@@ -6,7 +6,7 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBRow;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.Mailing;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -85,7 +85,7 @@ public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 					catch (Exception e)
 					{
 						// SMTP server should take responsibility for delivering emails, no custom handling needed
-						PikaterLogger.logThrowable(String.format("Could not send a password reset notification to '%s':", specificRow.getUser().getEmail()), e);
+						PikaterWebLogger.logThrowable(String.format("Could not send a password reset notification to '%s':", specificRow.getUser().getEmail()), e);
 					}
 				}
 			});

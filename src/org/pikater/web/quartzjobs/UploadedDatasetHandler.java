@@ -11,7 +11,7 @@ import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPADatasetSource;
 import org.pikater.shared.database.util.DataSetConverter;
 import org.pikater.shared.database.util.DataSetConverter.InputType;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
@@ -72,7 +72,7 @@ public class UploadedDatasetHandler extends ImmediateOneTimeJob
 			}
 			catch (Exception e)
 			{
-				PikaterLogger.logThrowable("Could not send notification about a new dataset to core.", e);
+				PikaterWebLogger.logThrowable("Could not send notification about a new dataset to core.", e);
 			}
 			
 		} catch (IOException e) {

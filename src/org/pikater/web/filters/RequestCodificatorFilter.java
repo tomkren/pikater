@@ -10,7 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 
 @WebFilter(filterName="filter1", description = "Adds the default UI identifier to incoming default requests "
@@ -35,7 +35,7 @@ public class RequestCodificatorFilter extends AbstractFilter
 		{
 			if(isDebugMode())
 			{
-				PikaterLogger.log(Level.WARNING, "Request is about to be redirected...");
+				PikaterWebLogger.log(Level.WARNING, "Request is about to be redirected...");
 			}
 			clientRedirect(servletResponse, PikaterUI.INDEX_PAGE.getURLPattern());
 		}
@@ -43,7 +43,7 @@ public class RequestCodificatorFilter extends AbstractFilter
 		{
 			if(isDebugMode())
 			{
-				PikaterLogger.log(Level.WARNING, "Request is about to be further processed...");
+				PikaterWebLogger.log(Level.WARNING, "Request is about to be further processed...");
 			}
 			chain.doFilter(servletRequest, servletResponse); // pass the request along the filter chain
 		}

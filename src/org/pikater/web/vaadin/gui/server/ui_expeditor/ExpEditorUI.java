@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.config.AgentInfoCollection;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
@@ -73,7 +73,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 			}
 			catch (Exception t)
 			{
-				PikaterLogger.logThrowable("No information about agents received from core.", t);
+				PikaterWebLogger.logThrowable("No information about agents received from core.", t);
 				GeneralDialogs.error("Not available at this moment", "Information about agents has not been received from core.");
 			}
 		}

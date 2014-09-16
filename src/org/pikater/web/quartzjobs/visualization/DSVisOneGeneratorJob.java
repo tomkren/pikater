@@ -7,7 +7,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.postgre.largeobject.IPGLOActionContext;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.visualisation.definition.AttrMapping;
@@ -120,7 +120,7 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 		}
 		catch (Exception e)
 		{
-			PikaterLogger.logThrowable("Job could not finish because of the following error:", e);
+			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
 			result.failed(); // don't forget to... important cleanup will take place
 		}
 		finally

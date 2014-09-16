@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 import org.pikater.shared.TopologyModel;
 import org.pikater.shared.XStreamHelper;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.vaadin.gui.server.components.wizards.steps.RefreshableWizardStep;
 
@@ -27,7 +27,7 @@ public class Step2 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 		File webInfConfDirectory = new File(IOUtils.getAbsoluteWEBINFCONFPath());
 		if(!webInfConfDirectory.isDirectory())
 		{
-			PikaterLogger.log(Level.SEVERE, String.format("The following path leads to a resource that is not a directory even though it should be:\n '%s'", 
+			PikaterWebLogger.log(Level.SEVERE, String.format("The following path leads to a resource that is not a directory even though it should be:\n '%s'", 
 					IOUtils.getAbsoluteWEBINFCONFPath()));
 			
 			content = createErrorLabel("There was an internal error in the application and it can not proceed. Please, refer to the server logs or contact the administrator.");
@@ -79,7 +79,7 @@ public class Step2 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 					}
 					catch (Exception t)
 					{
-						PikaterLogger.logThrowable(String.format("A problem was encountered while parsing topology '%s': ", topologyFile.getName()) + t.getMessage(), t);
+						PikaterWebLogger.logThrowable(String.format("A problem was encountered while parsing topology '%s': ", topologyFile.getName()) + t.getMessage(), t);
 						omittedModels.add(topologyFile.getName());
 					}
 				}

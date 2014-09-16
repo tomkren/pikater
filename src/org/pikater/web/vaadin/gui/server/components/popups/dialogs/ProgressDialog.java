@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
 import com.vaadin.ui.Alignment;
@@ -74,7 +74,7 @@ public class ProgressDialog extends DialogCommons
 				}
 				catch (Exception t)
 				{
-					PikaterLogger.logThrowable("Could not abort underlying task.", t);
+					PikaterWebLogger.logThrowable("Could not abort underlying task.", t);
 				}
 				finally
 				{
@@ -258,9 +258,9 @@ public class ProgressDialog extends DialogCommons
 							{
 								taskHandler.onTaskFinish(result); // simply forward
 							}
-							catch (Throwable t)
+							catch (Exception t)
 							{
-								PikaterLogger.logThrowable("Something went wrong in progress dialog's onFinish event.", t);
+								PikaterWebLogger.logThrowable("Something went wrong in progress dialog's onFinish event.", t);
 								MyNotifications.showApplicationError();
 							}
 							finally
@@ -330,7 +330,7 @@ public class ProgressDialog extends DialogCommons
 				 * download the GUI changes made, but still the user may have to 
 				 * trigger such request manually and it might now be always possible.
 				 */
-				PikaterLogger.log(Level.WARNING, "UI polling will be disabled a bit earlier than expected - thread was interrupted.");
+				PikaterWebLogger.log(Level.WARNING, "UI polling will be disabled a bit earlier than expected - thread was interrupted.");
 			}
 			finally
 			{

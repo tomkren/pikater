@@ -12,7 +12,7 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBRow;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView.Column;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
@@ -199,7 +199,7 @@ public class DatasetDBViewRoot<V extends DataSetTableDBView> extends AbstractDBV
 			catch (Exception e)
 			{
 				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
-				PikaterLogger.logThrowable("Could not issue the download because:", e);
+				PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 				throw new RuntimeException(e);
 			}
 		}

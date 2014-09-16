@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.requests.HttpRequestUtils;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.vaadin.gui.server.ui_default.DefaultUI;
@@ -129,7 +129,7 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 					}
 					catch (IOException e)
 					{
-						PikaterLogger.logThrowable(String.format("An undefined resource with servlet path '%s' was requested "
+						PikaterWebLogger.logThrowable(String.format("An undefined resource with servlet path '%s' was requested "
 								+ "but writing an error code of 404 (NOT_FOUND) to the response failed because of the "
 								+ "following exception. Vaadin should have defaulted to error code 500 instead.", servletPath
 						), e);

@@ -11,7 +11,7 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBView;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.jobs.InterruptibleJobHelper;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.HttpContentType;
@@ -101,7 +101,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 						}
 						catch (Exception e)
 						{
-							PikaterLogger.logThrowable(String.format("Could not notify core about a priority change of batch '%d':", specificRow.getBatch().getId()), e);
+							PikaterWebLogger.logThrowable(String.format("Could not notify core about a priority change of batch '%d':", specificRow.getBatch().getId()), e);
 							MyNotifications.showApplicationError();
 						}
 					}
@@ -130,7 +130,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 				}
 				catch (Exception e)
 				{
-					PikaterLogger.logThrowable(String.format("Could not kill batch '%d':", specificRow.getBatch().getId()), e);
+					PikaterWebLogger.logThrowable(String.format("Could not kill batch '%d':", specificRow.getBatch().getId()), e);
 					MyNotifications.showApplicationError();
 				}
 			}
@@ -209,7 +209,7 @@ public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewR
 					catch (Exception e)
 					{
 						// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
-						PikaterLogger.logThrowable("Could not issue the download because:", e);
+						PikaterWebLogger.logThrowable("Could not issue the download because:", e);
 						throw new RuntimeException(e);
 					}
 				}

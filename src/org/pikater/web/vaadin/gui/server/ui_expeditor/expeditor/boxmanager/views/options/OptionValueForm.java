@@ -19,7 +19,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.collections.BidiMap;
 import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
@@ -107,7 +107,7 @@ public class OptionValueForm extends CustomFormLayout
 				}
 				catch (Exception t)
 				{
-					PikaterLogger.logThrowable(String.format("Could not transform the '%s' value type to display string.", 
+					PikaterWebLogger.logThrowable(String.format("Could not transform the '%s' value type to display string.", 
 							type.getDefaultValue().getClass()), t);
 					continue;
 				}
@@ -123,7 +123,7 @@ public class OptionValueForm extends CustomFormLayout
 				
 				if(typeToDisplayString.containsValue(typeStr))
 				{
-					PikaterLogger.logThrowable("Duplicate type detected.", new IllegalStateException());
+					PikaterWebLogger.logThrowable("Duplicate type detected.", new IllegalStateException());
 				}
 				else
 				{
@@ -266,7 +266,7 @@ public class OptionValueForm extends CustomFormLayout
 		{
 			if(! ((IValidatedValueData) value.getCurrentValue()).isValid())
 			{
-				PikaterLogger.logThrowable("", new IllegalStateException("Invalid value received."));
+				PikaterWebLogger.logThrowable("", new IllegalStateException("Invalid value received."));
 				MyNotifications.showWarning(null, "Invalid value received.");
 				return;
 			}
@@ -327,7 +327,7 @@ public class OptionValueForm extends CustomFormLayout
 		}
 		else
 		{
-			PikaterLogger.logThrowable("", new IllegalStateException(String.format("Unimplemented value type used: '%s'.", typeClass.getName())));
+			PikaterWebLogger.logThrowable("", new IllegalStateException(String.format("Unimplemented value type used: '%s'.", typeClass.getName())));
 			MyNotifications.showWarning("Unsupported option type", typeClass.getSimpleName());
 			return;
 		}

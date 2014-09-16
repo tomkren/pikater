@@ -5,7 +5,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.sharedresources.IRegistrarResource;
 import org.pikater.web.sharedresources.ResourceException;
 import org.pikater.web.sharedresources.ResourceExpiration;
@@ -55,7 +55,7 @@ public class VisualizationUI extends CustomConfiguredUI
 			 */
 			if(!(e instanceof ResourceException))
 			{
-				PikaterLogger.logThrowable("An unexpected problem was found:", e);
+				PikaterWebLogger.logThrowable("An unexpected problem was found:", e);
 				returnErrorCode(HttpServletResponse.SC_NOT_FOUND);
 				throw new RuntimeException(e); // default UI error handler will catch this and display a visible notification
 			}
@@ -129,7 +129,7 @@ public class VisualizationUI extends CustomConfiguredUI
 			catch(Exception e)
 			{
 				// ResourceRegistrar.handleError(e, resp); // whatever the case here, we want it logged
-				PikaterLogger.logThrowable("Could not issue a redirect because:", e);
+				PikaterWebLogger.logThrowable("Could not issue a redirect because:", e);
 				throw new RuntimeException(e);
 			}
 		}

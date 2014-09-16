@@ -9,7 +9,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataSaver;
 import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 
 public enum BoxType
 {
@@ -43,7 +43,7 @@ public enum BoxType
 		}
 		catch (ClassNotFoundException e)
 		{
-			PikaterLogger.logThrowable(String.format("No box type is mapped to '%s'.", info.getOntologyClassName()), e);
+			PikaterWebLogger.logThrowable(String.format("No box type is mapped to '%s'.", info.getOntologyClassName()), e);
 			return null;
 		}
 	}

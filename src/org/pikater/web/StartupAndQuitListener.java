@@ -1,15 +1,13 @@
 package org.pikater.web;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
-import org.pikater.shared.logging.web.GeneralPikaterLogger;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.WebAppConfiguration;
@@ -37,24 +35,6 @@ public class StartupAndQuitListener implements ServletContextListener
 	 		System.out.println("storage was already set");
 	 	}
 	 	*/
-		
-		// this must be first
-		PikaterLogger.setLogger(new GeneralPikaterLogger()
-		{
-			private final Logger innerLogger = Logger.getLogger("log4j");
-
-			@Override
-			public void logThrowable(String problemDescription, Throwable t)
-			{
-				innerLogger.log(Level.SEVERE, "exception occured: " + problemDescription + "\n" + throwableToStackTrace(t));
-			}
-
-			@Override
-			public void log(Level logLevel, String message)
-			{
-				innerLogger.log(logLevel, message);
-			}
-		});
 		
 		try
 		{
@@ -93,13 +73,13 @@ public class StartupAndQuitListener implements ServletContextListener
 			}
 			*/
 
-			PikaterLogger.log(Level.INFO, "\n**********************************************************\n"
+			PikaterWebLogger.log(Level.INFO, "\n**********************************************************\n"
 					+ "APPLICATION SETUP SUCCESSFULLY FINISHED\n"
 					+ "**********************************************************");
 		}
 		catch(Exception e)
 		{
-			PikaterLogger.log(Level.SEVERE, "APPLICATION LAUNCH REQUIREMENTS WERE NOT MET. ABORTED.");
+			PikaterWebLogger.log(Level.SEVERE, "APPLICATION LAUNCH REQUIREMENTS WERE NOT MET. ABORTED.");
 			throw new IllegalStateException(e); // will be printed just afterwards
 		}
 	}
@@ -118,7 +98,7 @@ public class StartupAndQuitListener implements ServletContextListener
 	
 	private void announceCheckOrAction(String message)
 	{
-		PikaterLogger.log(Level.INFO, "**********************************************************\n"
+		PikaterWebLogger.log(Level.INFO, "**********************************************************\n"
 				+ "CHECKING REQUIREMENT / DOING ACTION: " + message);
 	}
 }

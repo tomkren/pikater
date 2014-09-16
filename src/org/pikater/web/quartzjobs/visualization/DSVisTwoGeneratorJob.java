@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import org.pikater.shared.database.jpa.JPADataSetLO;
 import org.pikater.shared.database.postgre.largeobject.IPGLOActionContext;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.pikater.shared.util.Tuple;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
@@ -130,7 +130,7 @@ public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 		}
 		catch (Exception e)
 		{
-			PikaterLogger.logThrowable("Job could not finish because of the following error:", e);
+			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
 			result.failed(); // don't forget to... important cleanup will take place
 		}
 		finally

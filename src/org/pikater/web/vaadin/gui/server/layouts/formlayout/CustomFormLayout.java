@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultValidator;
 
@@ -66,7 +66,7 @@ public abstract class CustomFormLayout extends VerticalLayout implements IDialog
 					}
 					catch (Exception e)
 					{
-						PikaterLogger.logThrowable("Could not submit form because of the error below.", e);
+						PikaterWebLogger.logThrowable("Could not submit form because of the error below.", e);
 						MyNotifications.showError("Internal error", "Form could not be submitted. Please contact the administrators.");
 						return;
 					}

@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.status.JPAUserStatus;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.WebAppConfiguration;
@@ -106,7 +106,7 @@ public abstract class CustomConfiguredUI extends UI
 			@Override
 			public void error(com.vaadin.server.ErrorEvent event)
 			{
-				PikaterLogger.logThrowable("Default UI error handler caught the following error:", event.getThrowable());
+				PikaterWebLogger.logThrowable("Default UI error handler caught the following error:", event.getThrowable());
 				MyNotifications.showApplicationError();
 			}
 		});
@@ -345,7 +345,7 @@ public abstract class CustomConfiguredUI extends UI
 		}
 		catch (IOException e)
 		{
-			PikaterLogger.logThrowable(String.format("UI could not be created but writing an error code of '%d' "
+			PikaterWebLogger.logThrowable(String.format("UI could not be created but writing an error code of '%d' "
 					+ "to the response failed because of the following exception. Vaadin should have "
 					+ "defaulted to error code 500 instead.", errorCode), e);
 		}

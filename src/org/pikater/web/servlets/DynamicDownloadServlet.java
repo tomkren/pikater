@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
@@ -47,7 +47,7 @@ public class DynamicDownloadServlet extends HttpServlet
 		
 		if(downloadableResource.getSize() > Integer.MAX_VALUE) // "HttpServletResponse.setContentLength()" only accepts int type
 		{
-			PikaterLogger.log(Level.SEVERE, String.format("The file '%s' was not served because it is too large (larger than MAX_INT).", downloadableResource.getFilename()));
+			PikaterWebLogger.log(Level.SEVERE, String.format("The file '%s' was not served because it is too large (larger than MAX_INT).", downloadableResource.getFilename()));
 			resp.sendError(HttpStatus.SC_BAD_REQUEST, "The requested file is too large to serve.");
 		}
 		else
@@ -72,13 +72,13 @@ public class DynamicDownloadServlet extends HttpServlet
 	        }
 	        catch (IOException e)
 	        {
-	        	PikaterLogger.logThrowable(
+	        	PikaterWebLogger.logThrowable(
 	        			String.format("Client most likely disconnected or aborted transferring the file '%s' but this needs to be logged anyway.", downloadableResource.getFilename()), e);
 	        	MyNotifications.showError("Download ended with error", downloadableResource.getFilename());
 	        }
 	        catch (Exception e)
 	        {
-	        	PikaterLogger.logThrowable(String.format("Unknown error occured while uploading file '%s'.", downloadableResource.getFilename()), e);
+	        	PikaterWebLogger.logThrowable(String.format("Unknown error occured while uploading file '%s'.", downloadableResource.getFilename()), e);
 	        	MyNotifications.showError("Download ended with error", downloadableResource.getFilename());
 	        }
 	        finally

@@ -12,7 +12,7 @@ import org.pikater.shared.database.views.tableview.batches.BatchTableDBRow;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserSaved;
 import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserScheduled;
 import org.pikater.shared.experiment.UniversalComputationDescription;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.ManageAuth;
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
@@ -491,7 +491,7 @@ public class Toolbar extends VerticalLayout
 						}
 						catch (PikaterGatewayException e)
 						{
-							PikaterLogger.logThrowable("Could not send notification about a new batch to core.", e);
+							PikaterWebLogger.logThrowable("Could not send notification about a new batch to core.", e);
 							GeneralDialogs.warning("Failed to notify core", "Your experiment has been saved and designated "
 									+ "for execution but notification was not successfully passed to pikater core.");
 						}
@@ -518,7 +518,7 @@ public class Toolbar extends VerticalLayout
 		}
 		catch (Exception t)
 		{
-			PikaterLogger.logThrowable("Could not save experiment", t);
+			PikaterWebLogger.logThrowable("Could not save experiment", t);
 			MyNotifications.showApplicationError();
 		}
 	}

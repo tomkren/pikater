@@ -3,7 +3,7 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponen
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.experiment.UniversalComputationDescription;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.experiment.server.BoxInfoServer;
 import org.pikater.web.experiment.server.ExperimentGraphServer;
 import org.pikater.web.experiment.server.ExperimentGraphValidator;
@@ -348,7 +348,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		}
 		catch (ConversionException e)
 		{
-			PikaterLogger.logThrowable("", e);
+			PikaterWebLogger.logThrowable("", e);
 			MyNotifications.showError("Could not import experiment", "Please, contact the administrators.");
 		}
 	}
@@ -411,7 +411,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 		}
 		catch (ConversionException e)
 		{
-			PikaterLogger.logThrowable("", e);
+			PikaterWebLogger.logThrowable("", e);
 			MyNotifications.showError("Could not export experiment", "Please, contact the administrators.");
 		}
 	}

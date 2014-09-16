@@ -12,7 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.requests.HttpRequestUtils;
 
 public abstract class AbstractFilter implements Filter
@@ -92,7 +92,7 @@ public abstract class AbstractFilter implements Filter
 	
 	protected void printRequestComponents(String filterName, HttpServletRequest httpRequest)
 	{
-		PikaterLogger.log(Level.WARNING, String.format("Filter '%s' intercepted request:\n"
+		PikaterWebLogger.log(Level.WARNING, String.format("Filter '%s' intercepted request:\n"
 				+ "Full URL: %s\n"
 				+ "Derived servlet path: %s\n",
 				filterName,

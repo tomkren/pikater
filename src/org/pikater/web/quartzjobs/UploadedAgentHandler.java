@@ -10,7 +10,7 @@ import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.shared.database.jpa.JPAExternalAgent;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
@@ -84,7 +84,7 @@ public class UploadedAgentHandler extends ImmediateOneTimeJob
 			}
 			catch (Exception e)
 			{
-				PikaterLogger.logThrowable("Could not send notification about a new external agent to core.", e);
+				PikaterWebLogger.logThrowable("Could not send notification about a new external agent to core.", e);
 			}
 		}
 		finally

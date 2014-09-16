@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAExperiment;
 import org.pikater.shared.database.util.ResultExporter;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.quartz.JobBuilder;
@@ -71,7 +71,7 @@ public class ExportBatchResultsJob extends InterruptibleImmediateOneTimeJob
 		}
 		catch (Exception e)
 		{
-			PikaterLogger.logThrowable("Job could not finish because of the following error:", e);
+			PikaterWebLogger.logThrowable("Job could not finish because of the following error:", e);
 			resultHandler.failed(); // don't forget to... important cleanup will take place
 		}
 		finally

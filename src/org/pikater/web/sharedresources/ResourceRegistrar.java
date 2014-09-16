@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.quartzjobs.ResourceExpirationJob;
 import org.pikater.web.servlets.DynamicDownloadServlet;
@@ -172,7 +172,7 @@ public class ResourceRegistrar
 			 * Covers unknown cases that need to be logged. 
 			 */
 			
-			PikaterLogger.logThrowable("An unexpected problem was found:", e);
+			PikaterWebLogger.logThrowable("An unexpected problem was found:", e);
 			try
 			{
 				resp.sendError(HttpServletResponse.SC_NOT_FOUND);

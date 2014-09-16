@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.nio.channels.IllegalSelectorException;
 
 import org.fusesource.jansi.HtmlAnsiOutputStream;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.ssh.SSHRemoteExec;
 import org.pikater.web.ssh.SSHSession;
 import org.pikater.web.ssh.SSHBatchExecChannel.ISSHBatchChannelNotificationHandler;
@@ -157,7 +157,7 @@ public class SimpleConsoleComponent extends VerticalLayout
 		}
 		catch (IOException e)
 		{
-			PikaterLogger.logThrowable("Could not write command to the console input stream. Weird...", e);
+			PikaterWebLogger.logThrowable("Could not write command to the console input stream. Weird...", e);
 			remoteExec.getSession().getNotificationHandler().handleError("could not execute the last command", e); // forward to session handler
 			return false;
 		}
