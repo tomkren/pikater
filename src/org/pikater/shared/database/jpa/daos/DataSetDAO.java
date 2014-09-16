@@ -181,6 +181,12 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		return getByCriteriaQueryCount(createByOwnerUserUploadVisiblePredicate(owner));
 	}
 	
+	/**
+	 * Retrieves all DataSetLO entities from database, which have hash different from any entry
+	 *  in hashesToBeExcluded list and were uploaded by user.
+	 * @param hashesToBeExcluded list of dataset hashes, that have to be omitted
+	 * @return list of {@link JPADataSetLO} objects
+	 */
 	public List<JPADataSetLO> getAllExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb= em.getCriteriaBuilder();
@@ -192,6 +198,10 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
 		}
 		p=cb.and(p,cb.isNotNull(r.get("globalMetaData")));
+		
+		//we want user uploaded datasets
+		p=cb.and(p, cb.equal(r.get("source"), JPADatasetSource.USER_UPLOAD));
+		
 		cq=cq.where(p);
 		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
 		
@@ -222,6 +232,13 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		return getByTypedNamedQuery("DataSetLO.getAllWithResults");
 	}
 	
+	/**
+	 * Retrieves all DataSetLO entities from database, for which some results exist
+	 * in the database, have hash different from any entry in hashesToBeExcluded list 
+	 * and were uploaded by user.
+	 * @param hashesToBeExcluded list of dataset hashes, that have to be omitted
+	 * @return list of {@link JPADataSetLO} objects
+	 */
 	public List<JPADataSetLO> getAllWithResultsExcludingHashesWithMetadata(List<String> hashesToBeExcluded){
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		CriteriaBuilder cb= em.getCriteriaBuilder();
@@ -234,6 +251,9 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			p=cb.and(p,cb.equal(r.get("hash"),exHash).not());
 		}
 		p=cb.and(p,cb.isNotNull(r.get("globalMetaData")));
+		
+		//we want user uploaded datasets
+		p=cb.and(p,cb.equal(r.get("source"), JPADatasetSource.USER_UPLOAD));
 		
 		Subquery<JPAResult> subquery=cq.subquery(JPAResult.class);
 		Root<JPAResult> sqroot=subquery.from(JPAResult.class);
