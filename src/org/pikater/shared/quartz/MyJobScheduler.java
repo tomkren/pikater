@@ -91,7 +91,7 @@ public class MyJobScheduler extends PropertiesHandler
 	 * @param clazz
 	 * @throws Throwable
 	 */
-	public JobKey defineJob(Class<? extends ZeroArgJob> clazz) throws Throwable
+	public JobKey defineJob(Class<? extends ZeroArgJob> clazz) throws Exception
 	{
 		return defineJob(clazz, null);
 	}
@@ -100,7 +100,7 @@ public class MyJobScheduler extends PropertiesHandler
 	 * Define an arbitrary job - build it, create it and schedule it.
 	 * @param jobClass
 	 */
-	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Throwable
+	public JobKey defineJob(Class<? extends AbstractJobWithArgs> jobClass, Object[] args) throws Exception
 	{
 		if(scheduler == null)
 		{
@@ -148,7 +148,7 @@ public class MyJobScheduler extends PropertiesHandler
 	//--------------------------------------------------------
 	// OTHER INTERFACE
 	
-	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args)  
+	protected static void setArguments(JobDetail detail, AbstractJobWithArgs helperJobInstance, Object[] args) throws Exception
 	{
 		if(args.length != helperJobInstance.getNumberOfArguments())
 		{
