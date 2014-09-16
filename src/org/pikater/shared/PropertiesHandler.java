@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public abstract class PropertiesHandler
 {
@@ -28,7 +28,7 @@ public abstract class PropertiesHandler
 		}
 		catch (FileNotFoundException e)
 		{
-			PikaterLogger.logThrowable(String.format("The following properties file is missing:\n '%s'", sourceFile.getAbsolutePath()), e);
+			PikaterDBLogger.logThrowable(String.format("The following properties file is missing:\n '%s'", sourceFile.getAbsolutePath()), e);
 	    	return null;
 		}
 	    
@@ -41,12 +41,12 @@ public abstract class PropertiesHandler
 		}
 		catch (IOException e)
 		{
-			PikaterLogger.logThrowable(String.format("The following properties file could not be read (problems with reading rights?):\n '%s'", sourceFile.getAbsolutePath()), e);
+			PikaterDBLogger.logThrowable(String.format("The following properties file could not be read (problems with reading rights?):\n '%s'", sourceFile.getAbsolutePath()), e);
 			return null;
 		}
     	catch (IllegalArgumentException e)
 		{
-    		PikaterLogger.logThrowable(String.format("The following properties file contains a malformed unicode escape sequence:\n '%s'", sourceFile.getAbsolutePath()), e);
+    		PikaterDBLogger.logThrowable(String.format("The following properties file contains a malformed unicode escape sequence:\n '%s'", sourceFile.getAbsolutePath()), e);
     		return null;
 		}
     	finally
@@ -57,7 +57,7 @@ public abstract class PropertiesHandler
 			}
     		catch (IOException e)
     		{
-    			PikaterLogger.logThrowable(String.format("Weird... Could not close the input stream for the following properties file:\n '%s'", sourceFile.getAbsolutePath()), e);
+    			PikaterDBLogger.logThrowable(String.format("Weird... Could not close the input stream for the following properties file:\n '%s'", sourceFile.getAbsolutePath()), e);
 			}
     	}
 	}
@@ -73,7 +73,7 @@ public abstract class PropertiesHandler
 		String result = properties.getProperty(property);
 		if(result == null)
 		{
-			PikaterLogger.log(Level.SEVERE, String.format("The property '%s' has not been found.", property));
+			PikaterDBLogger.log(Level.SEVERE, String.format("The property '%s' has not been found.", property));
 		}
 		else
 		{

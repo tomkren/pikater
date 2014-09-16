@@ -9,7 +9,7 @@ import org.pikater.core.CoreConfiguration;
 import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.pikater.shared.database.jpa.EntityManagerInstancesCreator;
 import org.pikater.shared.database.jpa.daos.DAOs;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.postgresql.PGConnection;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -32,7 +32,7 @@ public class MyPGConnection
 		}
 		catch (ClassNotFoundException | SQLException e)
 		{
-			PikaterLogger.logThrowable("Can't establish connection to Database", e);
+			PikaterDBLogger.logThrowable("Can't establish connection to Database", e);
 		}
 	}
 	

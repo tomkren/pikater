@@ -29,6 +29,7 @@ import org.pikater.shared.database.util.Hash;
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 
@@ -332,10 +333,13 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			
 			if(changedEntity.getAttributeMetaData()!=null){
 				List<JPAAttributeMetaData> attrList=new ArrayList<JPAAttributeMetaData>();
-				/**System.err.println("No. of attr metadatas : "+changedEntity.getAttributeMetaData().size());
-				for(JPAAttributeMetaData amd : changedEntity.getAttributeMetaData()){
+				/*
+				 System.err.println("No. of attr metadatas : "+changedEntity.getAttributeMetaData().size());
+				 for(JPAAttributeMetaData amd : changedEntity.getAttributeMetaData())
+				 {
 					System.err.println(amd+"   ID: "+amd.getId());
-				}**/
+				 }
+				 */
 				for(JPAAttributeMetaData amd : changedEntity.getAttributeMetaData()){
 					if(amd instanceof JPAAttributeCategoricalMetaData){
 						//System.err.println("Categorical: "+amd.getId());
@@ -365,7 +369,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 			
 			em.getTransaction().commit();
 		}catch(Exception e){
-			logger.error("Can't update JPA DataSetLO object.", e);
+			PikaterDBLogger.logThrowable("Can't update JPA DataSetLO object.", e);
 			em.getTransaction().rollback();
 		}finally{
 			em.close();

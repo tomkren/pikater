@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.pikater.shared.database.postgre.MyPGConnection;
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.util.IOUtils;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
@@ -108,12 +108,12 @@ public class PGLargeObjectAction
         }
 		catch (FileNotFoundException e)
 		{
-			PikaterLogger.logThrowable("A file created just now can not be found? Weird...", e);
+			PikaterDBLogger.logThrowable("A file created just now can not be found? Weird...", e);
 			throw e;
 		}
 		catch (IOException e)
 		{
-			PikaterLogger.logThrowable(String.format("Problems encountered while reading large object with id '%d':", oid), e);
+			PikaterDBLogger.logThrowable(String.format("Problems encountered while reading large object with id '%d':", oid), e);
 			throw e;
 		}
         finally
@@ -131,7 +131,7 @@ public class PGLargeObjectAction
         	}
         	catch (IOException t)
         	{
-        		PikaterLogger.logThrowable("There is a problem closing output stream to the downloaded file. Weird...", t);
+        		PikaterDBLogger.logThrowable("There is a problem closing output stream to the downloaded file. Weird...", t);
         		// seems to me there is no reason to throw this
         	}
         	if(isActionInterrupted())

@@ -1,4 +1,4 @@
-package org.pikater.shared.logging.web;
+package org.pikater.shared.logging;
 
 import java.util.logging.Level;
 

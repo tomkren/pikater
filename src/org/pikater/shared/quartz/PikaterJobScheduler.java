@@ -1,6 +1,6 @@
 package org.pikater.shared.quartz;
 
-import org.pikater.shared.logging.web.PikaterLogger;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 import org.pikater.shared.quartz.jobs.base.ZeroArgJob;
 import org.pikater.shared.quartz.jobs.crons.RemoveExpiredTrainedModels;
 import org.pikater.shared.util.ReflectionUtils;
@@ -50,7 +50,7 @@ public class PikaterJobScheduler
 	        }
 			catch (SchedulerException se)
 			{
-				PikaterLogger.logThrowable("Could not shutdown the application's static quartz scheduler.", se);
+				PikaterDBLogger.logThrowable("Could not shutdown the application's static quartz scheduler.", se);
 				return false;
 	        }
 			finally
@@ -87,9 +87,9 @@ public class PikaterJobScheduler
 				{
 					staticScheduler.defineJob((Class<? extends ZeroArgJob>) clazz);
 				}
-				catch (Throwable t)
+				catch (Exception t)
 				{
-					PikaterLogger.logThrowable(String.format("Could not define the '%s' cron.", clazz.getName()), t);
+					PikaterDBLogger.logThrowable(String.format("Could not define the '%s' cron.", clazz.getName()), t);
 				}
 			}
 			else
