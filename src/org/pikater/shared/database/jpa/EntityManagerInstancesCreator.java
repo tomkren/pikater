@@ -15,8 +15,7 @@ public class EntityManagerInstancesCreator
 	 * produce EntityManager instances, unless we need several different configurations for various
 	 * purposes.
 	 */
-	public static EntityManagerFactory primaryFactory;
-	
+	private static EntityManagerFactory primaryFactory;
 	static
 	{
 		try

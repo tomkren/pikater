@@ -170,7 +170,7 @@ public class IOUtils
 	    	}
 	    	else
 	    	{
-	    		throw new RuntimeException("Temporary file could not be created.");
+	    		throw new IllegalStateException("Temporary file could not be created.");
 	    	}
 	    }
 	    catch (IOException e)
