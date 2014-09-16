@@ -17,7 +17,7 @@ public class PikaterJobScheduler
 	 * Initialize and start the cron job scheduler. Your application will not terminate until you call the
 	 * {@link #shutdown} method, because there will be active threads.
 	 */
-	public static void initStaticScheduler(String quartzConfAbsPath)
+	public static synchronized void initStaticScheduler(String quartzConfAbsPath)
 	{
 		if(staticScheduler != null)
 		{
@@ -40,7 +40,7 @@ public class PikaterJobScheduler
 	/**
 	 * Shutdown the scheduler. 
 	 */
-	public static boolean shutdownStaticScheduler()
+	public static synchronized boolean shutdownStaticScheduler()
 	{
 		if(staticScheduler != null)
 		{

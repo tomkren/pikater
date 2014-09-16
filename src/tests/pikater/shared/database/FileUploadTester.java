@@ -9,6 +9,7 @@ import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.subtrees.file.PrepareFileUpload;
+import org.pikater.shared.logging.database.PikaterDBLogger;
 
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -67,7 +68,7 @@ public class FileUploadTester extends PikaterAgent {
 			e.printStackTrace();
 		} catch (IOException e) {
 			logError("IO error occurred: " + e.getMessage(), e);
-			e.printStackTrace();
+			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 
 		log("FileUploadTester ending");

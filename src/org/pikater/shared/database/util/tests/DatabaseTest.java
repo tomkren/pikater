@@ -37,10 +37,11 @@ public class DatabaseTest {
 	
 	public void test(){
 		testDBConnection();
-		testDatasetRetrievalBasedOnResult();
+		testLastBatchWithExperiments();
+		//testDatasetRetrievalBasedOnResult();
 		//testExperimentsWithModels();
 		//testResultsWithModelsAndAgentNames();
-		testExternalAgentView();
+		//testExternalAgentView();
 		//testBatchResultRetrieval();
 		//testDatasetViewFunctions();
 		//listBestResult();
@@ -60,6 +61,15 @@ public class DatabaseTest {
 		//listExperiments();
 		//listFileMappings();
 		//listAgentInfos();
+	}
+	
+	private void testLastBatchWithExperiments() {
+		JPABatch batch=DAOs.batchDAO.getByID(134601);
+		p(batch.getName()+" : "+batch.getStatus());
+		for(JPAExperiment exp: batch.getExperiments()){
+			p(exp.getId()+" . "+exp.getStatus());
+		}
+		
 	}
 	
 	protected void testDatasetRetrievalBasedOnResult() {
@@ -192,7 +202,7 @@ public class DatabaseTest {
 	}
 	
 	protected void testModelRemoval() {
-		DAOs.modelDAO.removeOldModels(1);
+		DAOs.modelDAO.removeOldModels((short) 1);
 	}
 
 	protected void testDBConnection() {

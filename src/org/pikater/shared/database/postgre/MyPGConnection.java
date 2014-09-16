@@ -50,8 +50,7 @@ public class MyPGConnection
 		EntityManager em=EntityManagerInstancesCreator.getEntityManagerInstance();
 		Query q=em.createNativeQuery("select count(*) from "+DAOs.userDAO.getEntityName());
 		try{
-			@SuppressWarnings("unused")
-			Long bg = (Long) q.getSingleResult();
+			q.getSingleResult();
 		}catch(Exception e){
 			return false;
 		}
