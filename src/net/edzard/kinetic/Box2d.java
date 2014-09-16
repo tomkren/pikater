@@ -12,16 +12,16 @@ public class Box2d implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** The left side value */
-	public double left;
+	public Double left;
 	
 	/** The top side value */
-	public double top;
+	public Double top;
 	
 	/** The right side value */
-	public double right;
+	public Double right;
 	
 	/** The bottom side value */
-	public double bottom;
+	public Double bottom;
 	
 	/**
 	 * Standard Ctor.
@@ -80,10 +80,10 @@ public class Box2d implements Serializable {
 	 * @return True, if the given point is within or on the boundaries of the box. False, otherwise.
 	 */
 	public final boolean isInside(Vector2d point) {
-		if (((left != Double.NaN) && (left <= point.x)) &&
-			((top != Double.NaN) && (top <= point.y)) &&
-			((right != Double.NaN) && (right >= point.x)) &&
-			((bottom != Double.NaN) && (bottom >= point.y))) {
+		if (((left.equals(Double.NaN)) && (left <= point.x)) &&
+			((top.equals(Double.NaN)) && (top <= point.y)) &&
+			((right.equals(Double.NaN)) && (right >= point.x)) &&
+			((bottom.equals(Double.NaN)) && (bottom >= point.y))) {
 			return true;
 		} else {
 			return false;

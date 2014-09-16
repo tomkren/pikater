@@ -105,16 +105,9 @@ public class CellBrowser extends HorizontalLayout
 		 */
 		
 		// we do not know how many columns we will eventually create, so only define a column if necessary:
-		CellBrowserColumn column = null;
-		if(columnInfos.containsKey(level)) // column already defined
+		if(!columnInfos.containsKey(level)) // column not defined yet
 		{
-			column = columnInfos.get(level).column; // use it
-		}
-		else // column not yet defined
-		{
-			// define it
-			column = new CellBrowserColumn(level);
-			this.columnInfos.put(level, new CellBrowserColumnInfoWrapper(column));
+			this.columnInfos.put(level, new CellBrowserColumnInfoWrapper(new CellBrowserColumn(level)));
 		}
 		
 		// fetch and construct all information and cells for this level

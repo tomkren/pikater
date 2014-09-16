@@ -143,7 +143,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 					BoxInfoServer boxServer = experimentGraph.getBox(boxShared.getID());
 					boxServer.setRegistered(opKind == RegistrationOperation.REGISTER);
 					if(!getState().boxManagerBoundWithSelection && (opKind == RegistrationOperation.UNREGISTER)
-							&& (boxServer.getID() == boxManager.getCurrentBoxDataSource().getID()))  
+							&& (boxServer.getID().equals(boxManager.getCurrentBoxDataSource().getID())))  
 					{
 						boxManager.setContentFromSelectedBoxes(new BoxInfoServer[0]);
 					}
@@ -167,8 +167,8 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 					
 					if(boxManager.getCurrentBoxDataSource() != null)
 					{
-						if((edge.fromBoxID == boxManager.getCurrentBoxDataSource().getID()) ||
-							(edge.toBoxID == boxManager.getCurrentBoxDataSource().getID()))
+						if((edge.fromBoxID.equals(boxManager.getCurrentBoxDataSource().getID())) ||
+							(edge.toBoxID.equals(boxManager.getCurrentBoxDataSource().getID())))
 						{
 							boxManagerNeedsToUpdate = true;
 						}

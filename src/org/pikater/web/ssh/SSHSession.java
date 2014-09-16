@@ -106,7 +106,7 @@ public class SSHSession
 		session = null;
 	}
 	
-	public Channel openChannel(String channelType) throws JSchException
+	public synchronized Channel openChannel(String channelType) throws JSchException
 	{
 		if(!sessionInitializedProperly)
 		{

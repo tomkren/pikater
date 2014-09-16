@@ -186,8 +186,15 @@ public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> 
 				public void valueChange(ValueChangeEvent event)
 				{
 					AbstractTableRowDBView[] selectedRows = innerLayout.getTable().getViewsOfSelectedRows();
-					ResultTableDBRow selectedSingleRow = selectedRows.length == 1 ? (ResultTableDBRow) selectedRows[0] : null;
-					getOutput().setResult(selectedSingleRow.getResult());
+					if(selectedRows.length == 1)
+					{
+						ResultTableDBRow selectedSingleRow = (ResultTableDBRow) selectedRows[0];
+						getOutput().setResult(selectedSingleRow.getResult());
+					}
+					else
+					{
+						getOutput().setResult(null);
+					}
 				}
 			});
 		}
