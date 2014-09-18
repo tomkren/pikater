@@ -76,6 +76,7 @@ import org.pikater.core.ontology.subtrees.model.Models;
 import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
 import org.pikater.core.ontology.subtrees.result.SaveResults;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class DataManagerService extends FIPAService {
 
@@ -221,7 +222,9 @@ public class DataManagerService extends FIPAService {
 
 		try {
 			FIPAService.doFipaRequestClient(agent, request, 10000);
-		} catch (FIPAException e) {
+		} catch (FIPAException e)
+		{
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 
 	}
@@ -1178,8 +1181,7 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e.getMessage(), e);
 		}
 
-		return null;
-
+		return new jade.util.leap.ArrayList();
 	}
 
 	@Deprecated
@@ -1262,8 +1264,9 @@ public class DataManagerService extends FIPAService {
 
 			ACLMessage inform = FIPAService.doFipaRequestClient(agent, request);
 
-			if (inform == null) {
-				return null;
+			if (inform == null)
+			{
+				return new jade.util.leap.ArrayList();
 			}
 
 			Result r = (Result) agent.getContentManager()
@@ -1278,8 +1281,7 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e.getMessage(), e);
 		}
 
-		return null;
-
+		return new jade.util.leap.ArrayList();
 	}
 
 	@Deprecated

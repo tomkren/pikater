@@ -57,7 +57,7 @@ public class Agent_Initiator extends PikaterAgent {
 				}
 			}
 		} catch (Exception e) {
-			this.logException(e.getMessage(), e);
+			this.logException("Unexpected error occured:", e);
 		}
 
 		addBehaviour(new TickerBehaviour(this, 60000) {
@@ -80,20 +80,20 @@ public class Agent_Initiator extends PikaterAgent {
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 
-		if (nodeName != null && !nodeName.isEmpty()) {
-			name = name + "-" + nodeName;
-		}
-
 		try {
-			AgentController agent = container.createNewAgent(name, type, args);
+			AgentController agent = container.createNewAgent(
+					(nodeName != null) && !nodeName.isEmpty() ? name + "-" + nodeName : name,
+					type,
+					args
+			);
 			agent.start();
 			// provide agent time to register with DF etc.
 			doWait(300);
+			return true;
 		} catch (ControllerException e) {
 			logException("Exception while adding agent", e);
 			return false;
 		}
-		return true;
 	}
 
 	public Object[] processArgs(Object[] args) {

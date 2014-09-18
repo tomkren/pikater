@@ -27,15 +27,15 @@ public class BatchTableDBRow extends AbstractTableRowDBView
 		}
 	};
 	private static final Set<String> allowedUserPriorities = new LinkedHashSet<String>()
+	{
+		private static final long serialVersionUID = -7303124181497778648L;
+		{
+			for(int i = 0; i < 10; i++)
 			{
-				private static final long serialVersionUID = -7303124181497778648L;
-				{
-					for(int i = 0; i < 10; i++)
-					{
-						add(String.valueOf(i));
-					}
-				}
-			};
+				add(String.valueOf(i));
+			}
+		}
+	};
 	
 	private final JPABatch batch;
 	private final boolean adminMode;

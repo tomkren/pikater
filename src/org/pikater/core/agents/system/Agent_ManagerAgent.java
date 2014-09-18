@@ -118,7 +118,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				} catch (CodecException e) {
 					logException("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					logException(e.getMessage(), e);
+					logException("Unexpected error occured:", e);
 				}
 
 				ACLMessage failure = request.createReply();
@@ -145,11 +145,8 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				i++;
 			}
 		}
-		if (name == null){
-			name = type;
-		}
-		String generatedName = generateName(name);
-
+		
+		String generatedName = generateName(name == null ? type : name);
 		try {
 			try {
 				doCreateAgent(generatedName, type, container, args2);
@@ -176,15 +173,16 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	}
 
 	public String generateName(String name) {
+		String result = name;
 		if (nodeName != null && !nodeName.isEmpty()) {
-			name = name + "-" + nodeName;
+			result += "-" + nodeName;
 		}
 		PlatformController container = getContainerController();
 		try {
-			container.getAgent(name);
+			container.getAgent(result);
 		} catch (ControllerException exc) {
 			// agent with the same name does not exist, we are good
-			return name;
+			return result;
 		}
 
 		for (Integer i = 0; i < 10000; i++) {
@@ -194,10 +192,10 @@ public class Agent_ManagerAgent extends PikaterAgent {
 				container.getAgent(currentName);
 			} catch (ControllerException exc) {
 				// agent with the same name does not exist, we are good
-				name = currentName;
+				result = currentName;
 				break;
 			}
 		}
-		return name;
+		return result;
 	}
 }

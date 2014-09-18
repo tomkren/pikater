@@ -368,35 +368,6 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         return distance;
     }
 
-    private double d(double v1, double v2, double min, double max) {
-        // map the value to the 0,1 interval; 0 - the same, 1 - the most
-        // different
-
-        return Math.abs(v1 - v2) / (max - min);
-    }
-
-    private int dCategory(String v1, String v2) {
-        // null considered another value
-        if (v1 == null) {
-            v1 = "null";
-        }
-        if (v2 == null) {
-            v2 = "null";
-        }
-
-        if (v1.equals(v2)) {
-            return 0;
-        }
-        return 1;
-    }
-
-    private int dBoolean(Boolean v1, Boolean v2) {
-        if (v1 == v2) {
-            return 0;
-        }
-        return 1;
-    }
-
 	@Override
 	protected boolean finished() {		
 		return done;

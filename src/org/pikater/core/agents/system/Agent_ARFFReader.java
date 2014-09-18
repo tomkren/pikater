@@ -102,10 +102,10 @@ public class Agent_ARFFReader extends PikaterAgent {
 				Attribute a = data.attribute(i);
 				//AttributeStats as = data.attributeStats(i);
 
-				if (i != (data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1)) {
-					if (!types.contains(a.type())) {
-						types.add(a.type());
-					}
+				int index = data.classIndex() >= 0 ? data.classIndex() : data.numAttributes() - 1; 
+				if ((i != index) && !types.contains(a.type()))
+				{
+					types.add(a.type());
 				}
 			}
 
@@ -126,7 +126,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 				logException(oe.getMessage(), oe);
 			}
 		} catch (Exception e) {
-			logException(e.getMessage(), e);
+			logException("Unexpected error message:", e);
 		}
 		return msgOut;
 	} // end SendData

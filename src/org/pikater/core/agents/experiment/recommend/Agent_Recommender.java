@@ -317,4 +317,36 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 		return mergeOptions(myAgentOntology.getOptions(), optFileOptions);
 	}
 	
+	protected double d(double v1, double v2, double min, double max)
+	{
+        // map the value to the 0,1 interval; 0 - the same, 1 - the most
+        // different
+
+        return Math.abs(v1 - v2) / (max - min);
+    }
+	
+	protected int dCategory(String v1, String v2)
+	{
+		if((v1 == null) && (v2 == null))
+		{
+			return 0;
+		}
+		else if((v1 == null) || (v2 == null))
+		{
+			return 1;
+		}
+		else
+		{
+			return v1.equals(v2) ? 0 : 1;
+		}
+	}
+	
+	protected int dBoolean(Boolean v1, Boolean v2)
+	{
+		if (v1 == v2)
+		{
+			return 0;
+		}
+		return 1;
+	} 
 }

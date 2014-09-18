@@ -353,10 +353,10 @@ public class ComputingAction extends FSMBehaviour {
 					Date start = null;
 					if (agent.state != Agent_ComputingAgent.states.TRAINED) {
 						start = agent.train(eval);
-					} else if (!agent.resurrected) {
-						if (!mode.equals("test_only")) {
-							start = agent.train(eval);
-						}
+					}
+					else if (!agent.resurrected && !mode.equals("test_only"))
+					{
+						start = agent.train(eval);
 					}
 					eval.setStart(start);
 
@@ -408,10 +408,7 @@ public class ComputingAction extends FSMBehaviour {
 				} catch (Exception e) {
 					success = false;
 					agent.working = false;
-					failureMsg(e.getMessage());
-					agent.logInfo(agent.getLocalName() + ": Error: "
-							+ e.getMessage() + ".");
-					agent.logException(e.getMessage(), e);
+					agent.logException("Unexpected error occured:", e);
 				}
 			}
 

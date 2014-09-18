@@ -25,6 +25,7 @@ public class ErrorDescriptions {
 		this.errors.add(error);
 	}
 	
+	@Override
 	public ErrorDescriptions clone() {
 		
 		ErrorDescriptions errorsOnt = new ErrorDescriptions();

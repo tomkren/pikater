@@ -60,7 +60,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		NEW, TRAINED
 	}
 
-	private final String CLASS_NAME = "className";
+	private static final String CLASS_NAME = "className";
 
 	/* common properties for all computing agents */
 	public String trainFileName;

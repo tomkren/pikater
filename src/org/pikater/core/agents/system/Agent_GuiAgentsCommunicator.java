@@ -69,7 +69,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 				} catch (CodecException e) {
 					logException("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					logException(e.getMessage(), e);
+					logException("Unexpected error occured:", e);
 				}
 	
 				ACLMessage failure = request.createReply();

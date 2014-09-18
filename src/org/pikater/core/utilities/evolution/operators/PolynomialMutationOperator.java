@@ -9,7 +9,8 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 public class PolynomialMutationOperator implements Operator {
 
     private double mutRate;
-    private final double ETA_M = 100;
+    
+    private static final double ETA_M = 100;
 
     public PolynomialMutationOperator(double mutationRate) {
         mutRate = mutationRate;

@@ -9,8 +9,9 @@ import org.pikater.core.utilities.evolution.individuals.RealIndividual;
 public class SBXoverOperator implements Operator {
 
 	private double xover_rate;
-	private final double EPS = 0.00001;
-	private final double ETA_C = 20;
+	
+	private static final double EPS = 0.00001;
+	private static final double ETA_C = 20;
 
 
 	public SBXoverOperator(double cross_rate) {

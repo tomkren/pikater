@@ -37,10 +37,9 @@ public class ComputingCommunicator {
 			resultMsg.setPerformative(ACLMessage.AGREE);
 			agent.taskFIFO.addLast(req);
 
-			if (agent.taskFIFO.size() == 1) {
-				if (!agent.executionBehaviour.isRunnable()) {
-					agent.executionBehaviour.restart();
-				}
+			if ((agent.taskFIFO.size() == 1) && !agent.executionBehaviour.isRunnable())
+			{
+				agent.executionBehaviour.restart();
 			}
 
 		} else {
@@ -57,11 +56,10 @@ public class ComputingCommunicator {
 			resultMsg.setPerformative(ACLMessage.PROPOSE);
 			agent.taskFIFO.addFirst(req);
 
-			if (agent.taskFIFO.size() == 1) {
-				if (!agent.executionBehaviour.isRunnable()) {
-					agent.executionBehaviour.restart();
-				}
-			}	
+			if ((agent.taskFIFO.size() == 1) && !agent.executionBehaviour.isRunnable())
+			{
+				agent.executionBehaviour.restart();
+			}
 
 		} else {
 			resultMsg.setPerformative(ACLMessage.REFUSE);
@@ -155,7 +153,7 @@ public class ComputingCommunicator {
 			}
 
 		} catch (Exception e) {
-			agent.logException(e.getMessage(), e);
+			agent.logException("Unexpected error message:", e);
 		}
 
 		return msgOut;

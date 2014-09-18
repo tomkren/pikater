@@ -60,6 +60,7 @@ public class DataSourceDescription implements ISourceDescription {
 		return this.dataProvider;
 	}
 
+	@Override
 	public DataSourceDescription clone() {
 		
 		DataSourceDescription dataSource = new DataSourceDescription();

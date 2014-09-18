@@ -40,7 +40,7 @@ public class SearchOntology extends BeanOntology {
             add(Evaluation.class);
 
         } catch (Exception e) {
-            Log.error(e.getMessage(), e);
+            Log.error("Unexpected error occured:", e);
         }
     }
 

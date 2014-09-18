@@ -250,7 +250,7 @@ public class Agent_Manager extends PikaterAgent {
 			}
 		} catch (FIPAException fe) {
 			logException(fe.getMessage(), fe);
-			return null;
+			return new ArrayList<AID>();
 		}
 		
 		return Agents;

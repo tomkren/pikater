@@ -184,12 +184,9 @@ public class LoadResults implements AgentAction {
     }
 
 
-    private String appendAnd(String to, String what) {
-        if (to.isEmpty()) {
-            to = what;
-        }
-        else to += " AND " + what;
-        return to;
+    private String appendAnd(String to, String what)
+    {
+    	return to.isEmpty() ? what : to + " AND " + what;
     }
 
     public String asText() {
