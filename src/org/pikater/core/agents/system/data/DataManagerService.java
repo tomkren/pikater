@@ -264,7 +264,7 @@ public class DataManagerService extends FIPAService {
 	 */
 	public static void ensureCached(PikaterAgent agent, String filename) {
 		agent.logInfo("making sure file " + filename + " is present");
-		if (new File(CoreConfiguration.getPath_DataFiles() + filename).exists())
+		if (new File(CoreConfiguration.getDataFilesPath() + filename).exists())
 			return;
 		agent.logInfo("getting file " + filename + " from dataManager");
 		GetFile gf = new GetFile();

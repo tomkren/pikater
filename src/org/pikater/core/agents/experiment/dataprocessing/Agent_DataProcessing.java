@@ -55,7 +55,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 			saver.writeBatch();
 			byte[] bout = out.toByteArray();
 			String md5 = DigestUtils.md5Hex(bout);
-			Files.write(bout, new File(CoreConfiguration.getPath_DataFiles() + md5));
+			Files.write(bout, new File(CoreConfiguration.getDataFilesPath() + md5));
 			return md5;
 		} catch (IOException e) {
 			logException("Failed to write results", e);

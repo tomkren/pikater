@@ -23,7 +23,14 @@ import org.pikater.core.ontology.subtrees.systemLoad.GetSystemLoad;
 import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
 import org.pikater.core.ontology.subtrees.task.KillTasks;
 
-public class PlannerService {
+public class PlannerService
+{
+	/**
+	 * Private constructor the implicit public one. 
+	 */
+	private PlannerService()
+	{
+	}
 	
 	public static SystemLoad getSystemLoad(PikaterAgent agent) {
 		
@@ -74,10 +81,7 @@ public class PlannerService {
 
 		if (content instanceof Result) {
 			Result result = (Result) content;
-			
-			SystemLoad systemLoad = (SystemLoad) result.getValue();
-			
-			return systemLoad;
+			return (SystemLoad) result.getValue();
 		} else {
 			agent.logSevere("No Result ontology");
 		}

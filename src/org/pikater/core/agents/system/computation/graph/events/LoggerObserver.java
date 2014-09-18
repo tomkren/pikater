@@ -24,7 +24,7 @@ public class LoggerObserver implements Observer{
     	
         if (arg instanceof BatchFinished)
         {
-            BatchFinished finishedEvent= ((BatchFinished) arg);
+            BatchFinished finishedEvent= (BatchFinished) arg;
             int batchID = finishedEvent.getBatchID();
             
             DataManagerService.updateBatchStatus(

@@ -104,7 +104,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         while (it.hasNext()) {
             Map.Entry<String, ComputationOutputBuffer> pairs = (Map.Entry)it.next();
 
-            ComputationOutputBuffer cob = ((ComputationOutputBuffer)(pairs.getValue()));
+            ComputationOutputBuffer cob = (ComputationOutputBuffer) pairs.getValue();
             
             if (cob.isData() ){
             	// add to Datas

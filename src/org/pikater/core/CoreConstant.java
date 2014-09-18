@@ -1,7 +1,14 @@
 package org.pikater.core;
 
-public abstract class CoreConstant
+public class CoreConstant
 {
+	/**
+	 * Private constructors hide the public ones.
+	 */
+	private CoreConstant()
+	{
+	}
+	
 	public static enum Slot
 	{
 		SLOT_DATA("data"),

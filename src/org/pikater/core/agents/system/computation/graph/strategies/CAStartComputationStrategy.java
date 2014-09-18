@@ -85,22 +85,22 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 	
 	//Create new options from solution with filled ? values (convert solution->options) 
 	private NewOptions fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
-        NewOptions res_options = new NewOptions();
-		List<NewOption> options_list = new ArrayList<NewOption>();
+        NewOptions result = new NewOptions();
+		List<NewOption> resultList = new ArrayList<NewOption>();
 		if(options==null){
-			return res_options;
+			return result;
 		}
 		//if no solution values to fill - return the option
 		if(solution.getValues() == null){
-			res_options.setOptions(options);
-			return res_options;
+			result.setOptions(options);
+			return result;
 		}
         int currentSearchOptionNr=0;
         for (NewOption option:options)
         {
             if (option.isImmutable())
             {
-                options_list.add(option);
+                resultList.add(option);
             }
             else
             {
@@ -111,15 +111,15 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
                         IValueData currentValue= solution.getValues().get(currentSearchOptionNr);
                         NewOption clone=option.clone();
                         clone.setValuesWrapper(new ValuesForOption(new Value(currentValue)));
-                        options_list.add(clone);
+                        resultList.add(clone);
                         currentSearchOptionNr++;
                     }
                 }
             }
         }
 
-		res_options.setOptions(options_list);
-		return res_options;
+		result.setOptions(resultList);
+		return result;
 	}
 
 	

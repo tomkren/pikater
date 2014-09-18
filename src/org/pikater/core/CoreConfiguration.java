@@ -4,8 +4,15 @@ import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public abstract class CoreConfiguration
+public class CoreConfiguration
 {
+	/**
+	 * Private constructors hide the public ones.
+	 */
+	private CoreConfiguration()
+	{
+	}
+	
 	/*
 	 * Spring interface
 	 */
@@ -31,41 +38,38 @@ public abstract class CoreConfiguration
 	 * Other configuration interface
 	 */
 	
-	public static String getPath_CoreMasterConfigurationFile()
+	public static String getCoreMasterConfigurationFilepath()
 	{
-		// TODO: if not dynamic, put this into "Beans.xml"?
-		return "core" + System.getProperty("file.separator") + 	"configurationMaster.xml";
+		return "core" + System.getProperty("file.separator") + "configurationMaster.xml";
 	}
 	
-	public static String getPath_KlarasInputs()
+	public static String getKlarasInputsPath()
 	{
-		// TODO: if not dynamic, put this into "Beans.xml"?
-		return "core" + System.getProperty("file.separator") + "inputs" + System.getProperty("file.separator") + 
-				"inputsKlara" + System.getProperty("file.separator");
+		return getCorePath("inputs") + "inputsKlara" + System.getProperty("file.separator");
 	}
 	
-	public static String getPath_DataFiles()
+	public static String getDataFilesPath()
 	{
-		// TODO: if not dynamic, put this into "Beans.xml"?
-		return "core" + System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
-				"files" + System.getProperty("file.separator");
+		return getCorePath("data") + "files" + System.getProperty("file.separator");
 	}
 	
-	public static String getPath_ExtAgentsJARs()
+	public static String getExtAgentsPath()
 	{
-		// TODO: if not dynamic, put this into "Beans.xml"?
-		return "core" + System.getProperty("file.separator") + "ext_agents" + System.getProperty("file.separator");
+		return getCorePath("ext_agents");
 	}
 	
-	public static String getPath_Saved()
+	public static String getSavedResultsPath()
 	{
-		// TODO: if not dynamic, put this into "Beans.xml"?
-		return "core" + System.getProperty("file.separator") + "saved" + System.getProperty("file.separator");
+		return getCorePath("saved");
 	}
 	
-	public static String getPath_Metadata()
+	public static String getMetadataPath()
 	{
-		// TODO: if not dynamic, put this into "Beans.xml"?
-		return "core" + System.getProperty("file.separator") + "metadata" + System.getProperty("file.separator");
+		return getCorePath("metadata");
+	}
+	
+	private static String getCorePath(String nextFolder)
+	{
+		return "core" + System.getProperty("file.separator") + nextFolder + System.getProperty("file.separator");
 	}
 }

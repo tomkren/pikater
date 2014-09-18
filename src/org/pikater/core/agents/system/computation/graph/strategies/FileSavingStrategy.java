@@ -32,9 +32,6 @@ public class FileSavingStrategy implements StartComputationStrategy {
         myAgent.logInfo("This will be the place where the data will be saved.");
         Map<String,ComputationOutputBuffer> map = computationNode.getInputs();
         ComputationOutputBuffer buffer = map.get("file");
-        if (buffer != null) {
-        	DataSourceEdge dataToSave= (DataSourceEdge)buffer.getNext();
-        }
         computationNode.computationFinished();
     }
 }

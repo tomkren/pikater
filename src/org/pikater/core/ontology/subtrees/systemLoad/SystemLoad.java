@@ -41,9 +41,9 @@ public class SystemLoad implements Concept {
 	public void print()
 	{
 		StringBuilder sb = new StringBuilder("Planner:\n");
-		sb.append("\tNumberOfTasksInQueue: " + String.valueOf(numberOfTasksInQueue));
-		sb.append("\tNumberOfBussyCores: " + String.valueOf(numberOfBusyCores));
-		sb.append("\tNumberOfFreeCores: " + String.valueOf(numberOfFreeCores));
+		sb.append("\tNumberOfTasksInQueue: " + numberOfTasksInQueue);
+		sb.append("\tNumberOfBussyCores: " + numberOfBusyCores);
+		sb.append("\tNumberOfFreeCores: " + numberOfFreeCores);
 		ConsoleLogger.log(Level.INFO, sb.toString());
 	}
 }

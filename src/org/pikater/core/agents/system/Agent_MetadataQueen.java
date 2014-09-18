@@ -93,7 +93,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
     	NewDataset newDataset = (NewDataset)a.getAction();
 		
     	return respondToNewData(request,
-    			CoreConfiguration.getPath_Metadata(),
+    			CoreConfiguration.getMetadataPath(),
     			newDataset.getDataSetID());
     }
     private ACLMessage respondToNewComputedData(ACLMessage request, Action a) {
@@ -101,7 +101,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
     	NewComputedData newComputedData = (NewComputedData)a.getAction();
     	
     	return respondToNewData(request,
-    			CoreConfiguration.getPath_DataFiles(),
+    			CoreConfiguration.getDataFilesPath(),
     			newComputedData.getComputedDataID());	
     }
     

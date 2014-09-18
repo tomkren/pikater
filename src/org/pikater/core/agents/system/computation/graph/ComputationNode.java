@@ -37,7 +37,7 @@ public class ComputationNode {
         startBehavior=executeStrategy;
     }
 
-    public Boolean ContainsOutput(String outputName)
+    public Boolean containsOutput(String outputName)
     {
         return outputs.containsKey(outputName);
     }
@@ -54,7 +54,7 @@ public class ComputationNode {
             //another computation is running
             return false;
         }
-        for (ComputationOutputBuffer input:inputs.values())
+        for (ComputationOutputBuffer input : inputs.values())
         {
             if (input.size()==0 && !input.isBlocked())
             {
@@ -96,7 +96,7 @@ public class ComputationNode {
     	if (outputs.get(outputName)==null){
     		return;
     	}
-        ArrayList<ComputationOutputBuffer<EdgeValue>> outs=outputs.get(outputName);
+        List<ComputationOutputBuffer<EdgeValue>> outs = outputs.get(outputName);
         for (ComputationOutputBuffer<EdgeValue> out:outs)
         {
         	if (unblock)
@@ -107,13 +107,9 @@ public class ComputationNode {
         	out.setData(isData);
         	
         	out.insert(o);
-            if (out.size()==1)
+            if ((out.size() == 1) && out.getTarget().canComputationStart()) // was zero before - check for computation start
             {
-                //was zero before - check for computation start
-                if (out.getTarget().canComputationStart())
-                {
-                    out.getTarget().startComputation();
-                }
+            	out.getTarget().startComputation();
             }
         }
     }
@@ -187,9 +183,9 @@ public class ComputationNode {
         numberOfTasksChanged();
     }
 
-    public boolean AnyOutstandingTasks()
+    public boolean existsUnfinishedTasks()
     {
-        return numberOfTasksInProgress>0 || !idle;
+        return numberOfTasksInProgress > 0 || !idle;
     }
     
     public List<String> findOutput(String in){

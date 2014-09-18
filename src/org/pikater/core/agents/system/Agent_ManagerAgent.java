@@ -64,7 +64,7 @@ public class Agent_ManagerAgent extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		File data = new File(CoreConfiguration.getPath_Saved());
+		File data = new File(CoreConfiguration.getSavedResultsPath());
 		if (!data.exists()) {
 			logInfo("Creating directory saved");
 			if (data.mkdirs()) {
