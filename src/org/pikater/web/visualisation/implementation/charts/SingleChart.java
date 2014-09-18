@@ -46,11 +46,8 @@ public class SingleChart extends Chart{
 	}
 
 	private void renderHorizontalCaption(String caption){
-		if(isCapitalCaption()){
-			caption=caption.toUpperCase();
-		}
 		renderer.drawText(
-				caption,
+				isCapitalCaption() ? caption.toUpperCase() : caption,
 				offsetx+yLabelWidth+getAreaWidth()/2,
 				offsety+chartHeight-xLabelHeight/3,
 				TextAlignment.Center,
@@ -60,11 +57,8 @@ public class SingleChart extends Chart{
 	}
 	
 	private void renderVerticalCaption(String caption){
-		if(isCapitalCaption()){
-			caption=caption.toUpperCase();
-		}
 		renderer.drawText(
-				caption,
+				isCapitalCaption() ? caption.toUpperCase() : caption,
 				offsetx+yLabelWidth/2,
 				offsety+getAreaHeight()/2,
 				TextAlignment.Center,

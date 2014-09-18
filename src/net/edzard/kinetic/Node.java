@@ -520,7 +520,7 @@ public abstract class Node extends JavaScriptObject {
 	 */
 	private final static String eventListToString(NamedEventType... events)
 	{
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		for (NamedEventType event : events)
 		{
 			sb.append(event.toString()).append(" ");

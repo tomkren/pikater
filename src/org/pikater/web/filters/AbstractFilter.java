@@ -46,11 +46,7 @@ public abstract class AbstractFilter implements Filter
 	protected void clientRedirect(ServletResponse servletResponse, String redirectString) throws IOException, ServletException
 	{
 		HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-		if(redirectString.startsWith("/"))
-		{
-			redirectString = redirectString.substring(1);
-		}
-		httpResponse.sendRedirect(redirectString);
+		httpResponse.sendRedirect(redirectString.startsWith("/") ? redirectString.substring(1) : redirectString);
 	}
 	
 	/**

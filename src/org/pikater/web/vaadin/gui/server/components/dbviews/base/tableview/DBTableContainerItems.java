@@ -74,7 +74,7 @@ public class DBTableContainerItems implements ICommitable
 	
 	public Object getFirstItemID()
 	{
-		if(rows.size() > 0)
+		if(!rows.isEmpty())
 		{
 			return SimpleIDGenerator.getFirstID();
 		}
@@ -112,7 +112,7 @@ public class DBTableContainerItems implements ICommitable
 
 	public Object getLastItemID()
 	{
-		if(rows.size() > 0)
+		if(!rows.isEmpty())
 		{
 			return rows.size() - 1;
 		}

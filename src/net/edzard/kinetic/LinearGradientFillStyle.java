@@ -2,6 +2,7 @@ package net.edzard.kinetic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -22,7 +23,7 @@ public class LinearGradientFillStyle extends GradientFillStyle {
 	private Vector2d  end;
 	
 	/** Holds definitions of the colour stops */
-	private TreeMap<Double, Colour> colourStops;
+	private Map<Double, Colour> colourStops;
 
 	/**
 	 * Parametrized Ctor.

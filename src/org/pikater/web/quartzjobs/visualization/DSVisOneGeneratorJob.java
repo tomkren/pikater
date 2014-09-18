@@ -77,7 +77,7 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 		{
 			if(!dataset.hasComputedMetadata())
 			{
-				throw new MetadataNotPresentException();
+				throw new MetadataNotPresentException(dataset.getFileName());
 			}
 			
 			File datasetCachedFile = new PGLargeObjectAction(this).downloadLOFromDB(dataset.getOID());

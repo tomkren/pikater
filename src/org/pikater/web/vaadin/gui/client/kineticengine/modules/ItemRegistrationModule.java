@@ -70,7 +70,7 @@ public class ItemRegistrationModule implements IEngineModule
 	@Override
 	public String[] getGraphItemTypesToAttachHandlersTo()
 	{
-		return null;
+		return new String[0];
 	}
 
 	@Override

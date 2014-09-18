@@ -48,12 +48,9 @@ public class WizardWithOutput<T extends IWizardCommon> extends Wizard
 			@Override
 			public void activeStepChanged(WizardStepActivationEvent event)
 			{
-				if(refreshActivatedSteps)
+				if(refreshActivatedSteps && (event.getActivatedStep() instanceof RefreshableWizardStep<?, ?>))
 				{
-					if(event.getActivatedStep() instanceof RefreshableWizardStep<?, ?>)
-					{
-						((RefreshableWizardStep<?, ?>) event.getActivatedStep()).refresh();
-					}
+					((RefreshableWizardStep<?, ?>) event.getActivatedStep()).refresh();
 				}
 			}
 		});

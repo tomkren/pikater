@@ -73,8 +73,8 @@ public final class SSHBatchExecChannel implements ISSHChannel, ISSHAsyncCommandE
 	{
 		if(shellChannel != null)
 		{
-			command = command.trim() + "\n"; // command will not execute on the remote machine if it doesn't end with newline
-			commandStream.write(command.getBytes());
+			// command will not execute on the remote machine if it doesn't end with newline
+			commandStream.write((command.trim() + "\n").getBytes());
 		}
 		else
 		{

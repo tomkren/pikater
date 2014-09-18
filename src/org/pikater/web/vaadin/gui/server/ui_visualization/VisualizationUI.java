@@ -51,17 +51,16 @@ public class VisualizationUI extends CustomConfiguredUI
 		catch(Exception e)
 		{
 			/*
-			 * ResourceException covers known cases that do not need to be logged. 
+			 * ResourceException covers known cases that do not need to be logged.
 			 */
+			returnErrorCode(HttpServletResponse.SC_NOT_FOUND);
 			if(!(e instanceof ResourceException))
 			{
 				PikaterWebLogger.logThrowable("An unexpected problem was found:", e);
-				returnErrorCode(HttpServletResponse.SC_NOT_FOUND);
 				throw new RuntimeException(e); // default UI error handler will catch this and display a visible notification
 			}
 			else
 			{
-				returnErrorCode(HttpServletResponse.SC_NOT_FOUND);
 				return;
 			}
 		}

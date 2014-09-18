@@ -116,17 +116,10 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 		this.container.add(name);
 		
 	    // set event handlers
+		final Set<BoxGraphItemClient> thisBoxSet = new HashSet<BoxGraphItemClient>();
+		thisBoxSet.add(BoxGraphItemClient.this);
 		BoxDragListenerProvider listenerProvider = new BoxDragListenerProvider(new IBoxDragContext()
 		{
-			private final Set<BoxGraphItemClient> thisBoxSet = new HashSet<BoxGraphItemClient>()
-			{
-				private static final long serialVersionUID = -4038174041349265650L;
-
-				{
-					add(BoxGraphItemClient.this);
-				}
-			};
-			
 			@Override
 			public KineticEngine getEngine()
 			{

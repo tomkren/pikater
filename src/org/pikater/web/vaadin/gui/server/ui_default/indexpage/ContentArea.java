@@ -109,12 +109,9 @@ public class ContentArea extends Panel
 	{
 		for(IWebFeature feature : clazz.getEnumConstants())
 		{
-			if(feature.accessAllowed(VaadinSession.getCurrent()))
+			if(feature.accessAllowed(VaadinSession.getCurrent()) && (feature.toComponentClass() != null))
 			{
-				if(feature.toComponentClass() != null)
-				{
-					navigator.addView(feature.toNavigatorName(), feature.toComponentClass());
-				}
+				navigator.addView(feature.toNavigatorName(), feature.toComponentClass());
 			}
 		}
 	}

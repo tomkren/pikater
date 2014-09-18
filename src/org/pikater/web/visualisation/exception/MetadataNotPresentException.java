@@ -1,20 +1,19 @@
 package org.pikater.web.visualisation.exception;
 
-public class MetadataNotPresentException extends VisualisationException {
+public class MetadataNotPresentException extends Exception
+{
 	private static final long serialVersionUID = 2836255324545952145L;
-	private String datasetName=null;
 	
-	public MetadataNotPresentException(String datasetName){
+	private final String datasetName;
+	
+	public MetadataNotPresentException(String datasetName)
+	{
 		this.datasetName=datasetName;
 	}
 	
-	public MetadataNotPresentException(){}
-	
 	@Override
-	public String getMessage() {
-		return (datasetName==null)?
-				   super.getMessage() : 
-			       ("Dataset name : "+this.datasetName+"\n"+super.getMessage());
+	public String getMessage()
+	{
+		return "No metadata found for dataset: " + this.datasetName;
 	}
-	
 }

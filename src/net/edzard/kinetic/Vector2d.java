@@ -191,7 +191,7 @@ public class Vector2d implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("(");
+		StringBuilder sb = new StringBuilder("(");
 		sb.append(x).append(",").append(y).append(")");
 		return sb.toString();
 	}
