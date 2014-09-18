@@ -1,5 +1,7 @@
 package org.pikater.core.utilities.evolution.individuals;
 
+import org.pikater.shared.logging.core.ConsoleLogger;
+
 /** The abstract base of all individuals. Keeps track of fitness and objective values.
  *
  * @author Martin Pilat
@@ -64,7 +66,7 @@ public abstract class Individual implements Cloneable{
             return newInd;
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
         return null;
     }

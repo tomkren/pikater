@@ -1,6 +1,7 @@
 package org.pikater.core.ontology;
 
 import org.pikater.core.ontology.subtrees.model.Model;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.content.onto.BeanOntology;
 
@@ -15,7 +16,7 @@ public class ModelOntology extends BeanOntology {
         try {
             add(modelPackage);
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
 	}
 	

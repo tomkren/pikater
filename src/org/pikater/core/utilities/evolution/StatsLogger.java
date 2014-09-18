@@ -1,6 +1,8 @@
 package org.pikater.core.utilities.evolution;
 
 import org.pikater.core.utilities.evolution.individuals.Individual;
+import org.pikater.shared.logging.core.ConsoleLogger;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class StatsLogger {
 			out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 		
 	}
@@ -69,7 +71,7 @@ public class StatsLogger {
 			out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 		
 	}

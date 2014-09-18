@@ -12,6 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.recommend.GetMultipleBestAgents;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 
 
@@ -55,7 +56,7 @@ public class RecommendOntology extends BeanOntology {
             
             
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

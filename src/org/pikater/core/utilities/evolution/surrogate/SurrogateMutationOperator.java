@@ -9,6 +9,8 @@ import org.pikater.core.utilities.evolution.operators.OnePtXOver;
 import org.pikater.core.utilities.evolution.operators.Operator;
 import org.pikater.core.utilities.evolution.operators.SearchItemIndividualMutation;
 import org.pikater.core.utilities.evolution.selectors.TournamentSelector;
+import org.pikater.shared.logging.core.ConsoleLogger;
+
 import weka.classifiers.functions.GaussianProcesses;
 import weka.core.Instances;
 
@@ -84,8 +86,8 @@ public class SurrogateMutationOperator implements Operator {
             }
 
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
 
 

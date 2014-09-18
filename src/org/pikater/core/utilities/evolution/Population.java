@@ -1,6 +1,8 @@
 package org.pikater.core.utilities.evolution;
 
 import org.pikater.core.utilities.evolution.individuals.Individual;
+import org.pikater.shared.logging.core.ConsoleLogger;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,7 +42,7 @@ public class Population implements Cloneable{
             return newP;
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
 
 
