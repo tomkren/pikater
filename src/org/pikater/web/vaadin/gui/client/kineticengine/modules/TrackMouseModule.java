@@ -52,7 +52,7 @@ public final class TrackMouseModule implements IEngineModule
 			unsetCurrentlyHoveredBox();
 			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.AUTO);
 		}
-	};
+	}
 
 	/**
 	 * Constructor.

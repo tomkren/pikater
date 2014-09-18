@@ -105,7 +105,7 @@ public class SelectionModule implements IEngineModule
  			
  			kineticEngine.draw(EngineComponent.STAGE);
 		}
- 	};
+ 	}
 	
 	/**
 	 * Constructor.

@@ -6,7 +6,7 @@ public class JSNI_SharedConfig
 	{
 		DEBUG,
 		PRODUCTION
-	};
+	}
 	
 	/**
 	 * Call this from the main module's entry point to inject the desired JSNI functions into the window object.

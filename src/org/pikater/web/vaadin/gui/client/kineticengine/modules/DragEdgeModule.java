@@ -125,7 +125,7 @@ public final class DragEdgeModule implements IEngineModule
 			}
 			// event.stopPropagation(); // SERIOUSLY... don't set this up everytime. It can have devastating effects like preventing the Click event.
 		}
-	};
+	}
 	
 	/**
 	 * The special handlers that will temporarily replace the engine's when an edge drag is triggered.

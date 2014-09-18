@@ -53,7 +53,7 @@ public final class KineticEngine
 		LAYER_BOXES,
 		LAYER_EDGES,
 		LAYER_SELECTION
-	};
+	}
 	
 	/**
 	 * The kinetic stage to draw everything in.

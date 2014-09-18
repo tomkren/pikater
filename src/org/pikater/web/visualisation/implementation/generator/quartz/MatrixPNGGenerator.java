@@ -16,47 +16,48 @@ import org.pikater.web.visualisation.implementation.renderer.ImageRenderer;
  * Obsolete.
  */
 @Deprecated
-public class MatrixPNGGenerator extends Generator {
-	
-	private JPADataSetLO dslo;
-	private MultipleArffDataset dataset;
-	
-	public MatrixPNGGenerator(AbstractDSVisResult<?,?> progressListener, JPADataSetLO dslo, PrintStream output){
-		super(progressListener,output);
-		this.dslo=dslo;
-		init();
+public class MatrixPNGGenerator extends Generator
+{
+	private final MultipleArffDataset dataset;
+
+	public MatrixPNGGenerator(AbstractDSVisResult<?, ?> progressListener, JPADataSetLO dslo, PrintStream output)
+	{
+		super(progressListener, output);
+
+		this.dataset = new MultipleArffDataset(dslo);
+		this.instNum = dataset.getNumberOfInstances();
 	}
 
-	private void init(){
-		this.dataset=new MultipleArffDataset(dslo);
-		this.instNum=dataset.getNumberOfInstances();
-	}
-	
-	
 	@Override
-	public void create() throws IOException {
-		
-		ImageRenderer ir=new ImageRenderer(ChartGenerator.MATRIX_CHART_SIZE, ChartGenerator.MATRIX_CHART_SIZE);
+	public void create() throws IOException
+	{
+		ImageRenderer ir = new ImageRenderer(ChartGenerator.MATRIX_CHART_SIZE,
+				ChartGenerator.MATRIX_CHART_SIZE);
 		ir.begin();
 
-
-		MultipleArffDataset dataset=new MultipleArffDataset(dslo);
-
-		int attrNum=dataset.getNumberOfAttributes();
-
-		MatrixChart mchg=new MatrixChart(dataset, ChartGenerator.MATRIX_CHART_SIZE, ChartGenerator.MATRIX_CHART_SIZE, attrNum, ir, attrNum-1);
-
-		try{
-			while(dataset.next()){
-
-				for(int row=0;row<attrNum;row++){
-					for(int column=0;column<attrNum;column++){
-						mchg.renderPoint(row, column, dataset.getAttributeValue(column), dataset.getAttributeValue(row), dataset.getAttributeValue(attrNum-1), 7);
+		int attrNum = dataset.getNumberOfAttributes();
+		MatrixChart mchg = new MatrixChart(dataset,
+				ChartGenerator.MATRIX_CHART_SIZE,
+				ChartGenerator.MATRIX_CHART_SIZE, attrNum, ir, attrNum - 1);
+		try
+		{
+			while (dataset.next())
+			{
+				for (int row = 0; row < attrNum; row++)
+				{
+					for (int column = 0; column < attrNum; column++)
+					{
+						mchg.renderPoint(row, column,
+								dataset.getAttributeValue(column),
+								dataset.getAttributeValue(row),
+								dataset.getAttributeValue(attrNum - 1), 7);
 					}
 				}
 				signalOneProcessedRow();
 			}
-		}finally{
+		}
+		finally
+		{
 			dataset.close();
 		}
 
@@ -64,5 +65,4 @@ public class MatrixPNGGenerator extends Generator {
 		ImageIO.write(ir.getImage(), "PNG", output);
 		output.close();
 	}
-	
 }

@@ -286,9 +286,12 @@ public class ResourceRegistrar
 	
 	private static UUID getNextUIID()
 	{
-		UUID newUUID;
-		while(uuidToResource.containsKey(newUUID = UUID.randomUUID()))
+		UUID newUUID = null;
+		boolean continueGenerating = true;
+		while(continueGenerating)
 		{
+			newUUID = UUID.randomUUID();
+			continueGenerating = uuidToResource.containsKey(newUUID);
 		}
 		return newUUID;
 	}

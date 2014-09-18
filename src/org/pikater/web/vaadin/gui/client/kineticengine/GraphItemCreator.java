@@ -19,7 +19,7 @@ public class GraphItemCreator
 	{
 		AUTOMATIC,
 		MANUAL
-	};
+	}
 	
 	/**
 	 * The main structure of kinetic's own variables. 

@@ -56,7 +56,7 @@ public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSett
 	{
 		EDGE,
 		BASELINE
-	};
+	}
 	
 	public static enum EndPoint
 	{

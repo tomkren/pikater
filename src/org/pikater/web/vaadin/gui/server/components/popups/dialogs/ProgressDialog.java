@@ -34,7 +34,7 @@ public class ProgressDialog extends DialogCommons
 			public void setValue(String newStringValue)
 			{
 				super.setValue(newStringValue + " %");
-			};
+			}
 		};
 		lbl_percentage.setValue("0");
 		lbl_percentage.setSizeUndefined();

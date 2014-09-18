@@ -30,7 +30,7 @@ public class SimpleConsoleComponent extends VerticalLayout
 	{
 		CASUAL,
 		ERROR
-	};
+	}
 	
 	// GUI
 	private final Panel outputFieldScrollPanel;

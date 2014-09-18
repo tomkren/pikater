@@ -11,7 +11,7 @@ public abstract class AbstractSlot
 		DATA,
 		PARAMETER,
 		ERROR
-	};
+	}
 	
 	public final SlotContent content;
 	public final Resource resource;
