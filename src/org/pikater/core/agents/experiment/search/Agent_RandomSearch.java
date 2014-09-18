@@ -70,9 +70,9 @@ public class Agent_RandomSearch extends Agent_Search {
 		
 		// query_block_size = 1;
 		query_block_size = maximum_tries;
-		log(getLocalName()+" parameters are: ");
-		log("   final_error_rate: " + final_error_rate);
-		log("   maximum_tries: " + maximum_tries);		
+		logInfo(getLocalName()+" parameters are: ");
+		logInfo("   final_error_rate: " + final_error_rate);
+		logInfo("   maximum_tries: " + maximum_tries);		
 	}
 
 	@Override

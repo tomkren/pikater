@@ -66,16 +66,16 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 					}
 				
 				} catch (OntologyException e) {
-					logError("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					logError("Codec problem: " + e.getMessage(), e);
+					logException("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					logError(e.getMessage(), e);
+					logException(e.getMessage(), e);
 				}
 	
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: " + request.getContent());
+				logSevere("Failure responding to request: " + request.getContent());
 				return failure;
 			}
 	
@@ -103,13 +103,13 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 				batchPriority = 9;
 			} else {
 				
-				logError("Not permitted sender");
+				logSevere("Not permitted sender");
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
 				return failure;
 			}
 			           
-			log("Agent recieved ComputingDescription from " + request.getSender().getName() );
+			logInfo("Agent recieved ComputingDescription from " + request.getSender().getName() );
 			
 
             Batch batch = new Batch();
@@ -122,7 +122,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 
             // send received ComputationDescription as Batch to DataManger to save to DB
             int batchId =  DataManagerService.saveBatch(this, batch);
-            log("BatchId: " + batchId + " saved");
+            logInfo("BatchId: " + batchId + " saved");
 
             
             // send only NewBatch

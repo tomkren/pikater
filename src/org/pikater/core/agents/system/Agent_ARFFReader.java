@@ -55,11 +55,10 @@ public class Agent_ARFFReader extends PikaterAgent {
 			reader.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
-			logError("Reading of data from file " + path + " failed.");
+			logException("Reading of data from file " + path + " failed.", e);
 			return false;
 		}
-		log("Reading of data from file " + path + " succesful.");
+		logInfo("Reading of data from file " + path + " succesful.");
 		return true;
 	}
 
@@ -122,12 +121,12 @@ public class Agent_ARFFReader extends PikaterAgent {
 			try {
 				getContentManager().fillContent(msgOut, result);
 			} catch (CodecException ce) {
-				logError(ce.getMessage(), ce);
+				logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				logError(oe.getMessage(), oe);
+				logException(oe.getMessage(), oe);
 			}
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 		return msgOut;
 	} // end SendData
@@ -158,9 +157,9 @@ public class Agent_ARFFReader extends PikaterAgent {
 					return sendData(request);
 				}
 			} catch (CodecException ce) {
-				agent.logError(ce.getMessage(), ce);
+				agent.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError(oe.getMessage(), oe);
+				agent.logException(oe.getMessage(), oe);
 			}
 
 			ACLMessage notUnderstood = request.createReply();

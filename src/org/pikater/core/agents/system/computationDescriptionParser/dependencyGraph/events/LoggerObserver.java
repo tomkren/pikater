@@ -29,7 +29,7 @@ public class LoggerObserver implements Observer{
             
             DataManagerService.updateBatchStatus(
             		agent, batchID, JPABatchStatus.FINISHED.name());
-            agent.log("*****FINISHED BATCH ID: " + batchID + " *******");
+            agent.logInfo("*****FINISHED BATCH ID: " + batchID + " *******");
         }
     }
 }

@@ -45,8 +45,8 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		
 		this.logStartTask();
 		
-		log("Training...", 2);
-		log("Options: " + getOptions());
+		logInfo("Training...");
+		logInfo("Options: " + getOptions());
         classifier=getClassifierClass();
 		if(classifier == null)
 			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
@@ -76,7 +76,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 		this.lastStartDate=new Date(start);
 		this.lastDuration=duration;
-		log("start: " + new Date(start) + " : duration: " + duration, 2);
+		logInfo("start: " + new Date(start) + " : duration: " + duration);
 		
 		state = states.TRAINED; // change agent state
 		options = classifier.getOptions();
@@ -103,11 +103,11 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private Evaluation test(EvaluationMethod evaluation_method) throws Exception{
 		working = true;
-		log("Testing...", 2);
+		logInfo("Testing...");
 
 		// evaluate classifier and print some statistics
 		Evaluation eval = new Evaluation(train);
-        log("Evaluation method: \t", 2);
+        logInfo("Evaluation method: \t");
 		
 		if (evaluation_method.getAgentType().equals(CrossValidation.class.getName()) ){
 			
@@ -120,20 +120,20 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 				folds = valueF.getValue();
 			}
 			
-			log(folds + "-fold cross validation.", 2);
+			logInfo(folds + "-fold cross validation.");
 			eval.crossValidateModel(
 					classifier,
 					test,
 					folds, new Random(1));
 		}
 		else { // name = Standard
-			log("Standard weka evaluation.", 2);
+			logInfo("Standard weka evaluation.");
 			eval.evaluateModel(classifier, test);
 		}
 				
-		log("Error rate: " + eval.errorRate()+" ", 1);
-		log(eval.toSummaryString(getLocalName() + " agent: "
-				+ "\nResults\n=======\n", false), 2);
+		logInfo("Error rate: " + eval.errorRate()+" ");
+		logInfo(eval.toSummaryString(getLocalName() + " agent: "
+				+ "\nResults\n=======\n", false));
 
 		working = false;
 		return eval;

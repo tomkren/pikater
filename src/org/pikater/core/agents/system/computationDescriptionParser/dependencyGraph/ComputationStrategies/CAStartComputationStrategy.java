@@ -226,9 +226,9 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		try {
 			myAgent.getContentManager().fillContent(request, a);
 		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		}
 
         return request;

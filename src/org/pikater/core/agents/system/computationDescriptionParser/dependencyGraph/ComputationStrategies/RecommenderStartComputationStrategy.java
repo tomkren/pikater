@@ -79,13 +79,13 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			
 			recommendedAgent = (Agent) r.getItems().get(0);
 		} catch (FIPAException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (UngroundedException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		}
 		
 		// fill in the queues of CA
@@ -144,9 +144,9 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			myAgent.getContentManager().fillContent(req, a);
 			
 		} catch (CodecException ce) {
-			myAgent.logError(ce.getMessage(), ce);
+			myAgent.logException(ce.getMessage(), ce);
 		} catch (OntologyException ce) {
-			myAgent.logError(ce.getMessage(), ce);			
+			myAgent.logException(ce.getMessage(), ce);			
 		}
 
         return req;

@@ -6,7 +6,6 @@ import jade.util.leap.Serializable;
 import org.apache.commons.io.FileUtils;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.DataOntology;
-import org.pikater.shared.logging.core.Severity;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class AgentDataSource extends PikaterAgent {
             registerWithDF(SERVICE_TYPE);
             cleanup();
         } catch (Exception e) {
-                    logError("Failed to complete setup", Severity.Critical);
+                    logSevere("Failed to complete setup");
         }
     }
 
@@ -80,7 +79,7 @@ public class AgentDataSource extends PikaterAgent {
     }
 
     private void cleanup() throws IOException {
-        log("Cleaning local datasources directory from the datasources of the previous run");
+        logInfo("Cleaning local datasources directory from the datasources of the previous run");
         File localDataSourcesDirectory=new File(pathToLocalSources);
         FileUtils.cleanDirectory(localDataSourcesDirectory);
     }

@@ -8,42 +8,25 @@ import org.pikater.shared.logging.IPikaterLogger;
 
 public class PikaterDBLogger extends GeneralPikaterLogger
 {
-	private static final IPikaterLogger innerLogger = new IPikaterLogger()
-	{
-		private final Logger innerLogger = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
-
-		@Override
-		public void logThrowable(String problemDescription, Throwable t)
-		{
-			innerLogger.log(Level.SEVERE, "exception occured: " + problemDescription + "\n" + throwableToStackTrace(t));
-		}
-
-		@Override
-		public void log(Level logLevel, String message)
-		{
-			innerLogger.log(logLevel, message);
-		}
-	};
+	private static final IPikaterLogger innerLogger = createPikaterLogger(Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName()));
 	
 	public static IPikaterLogger getLogger()
 	{
-		if(innerLogger == null)
-		{
-			throw new NullPointerException("Logger has not been set. Call the 'setLogger' method prior to calling this one.");
-		}
-		else
-		{
-			return innerLogger;
-		}
+		return innerLogger;
 	}
 	
-	public static void logThrowable(String problemDescription, Throwable t)
+	public static void logThrowable(String message, Throwable t)
 	{
-		getLogger().logThrowable(problemDescription, t);
+		getLogger().logThrowable(message, t);
 	}
 
 	public static void log(Level logLevel, String message)
 	{
 		getLogger().log(logLevel, message);
 	}
+	
+	public static void log(Level logLevel, String source, String message)
+	{
+		getLogger().log(logLevel, source, message);
+    }
 }

@@ -275,9 +275,9 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 					resultMsg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 
 			} catch (CodecException ce) {
-				Agent_ComputingAgent.this.logError(ce.getMessage(), ce);
+				Agent_ComputingAgent.this.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				Agent_ComputingAgent.this.logError(oe.getMessage(), oe);
+				Agent_ComputingAgent.this.logException(oe.getMessage(), oe);
 			}
 			
 			return resultMsg;
@@ -336,11 +336,11 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	}
 	
 	public void logOptions() {
-		log(getOptions(), 1);
+		logInfo(getOptions());
 	}
 	
 	public void logFinishedTask() {
-		log("CA terminating");
+		logInfo("CA terminating");
 		terminate();
 	}
 	

@@ -59,14 +59,14 @@ public class PlannerCommunicator {
 
 		if (task.getAgent().getModel() != null) {
 			caAID = ManagerAgentService.loadAgent(agent, task.getAgent().getModel(), agentManagerAID);
-			agent.log("CA model " + task.getAgent().getModel() + " resurrected");
+			agent.logInfo("CA model " + task.getAgent().getModel() + " resurrected");
 		} else {
 			String CAtype = task.getAgent().getType();
-			agent.log("Sending request to create CA " + CAtype);
+			agent.logInfo("Sending request to create CA " + CAtype);
 			caAID = ManagerAgentService.createAgent(
 					agent, CAtype, CAtype, new Arguments(), agentManagerAID);
 			//agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
-			agent.log("CA " + CAtype + " created");
+			agent.logInfo("CA " + CAtype + " created");
 		}
 		return caAID;
 	}
@@ -88,9 +88,9 @@ public class PlannerCommunicator {
 		try {
 			agent.getContentManager().fillContent(msg, executeAction);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		agent.addBehaviour(new OneTaskComputingCABehaviour(agent, msg));
@@ -100,7 +100,7 @@ public class PlannerCommunicator {
 		
 		GetComputerInfo getComputerInfo = new GetComputerInfo();
 
-		agent.log("Sending request to getComputerInfo ");
+		agent.logInfo("Sending request to getComputerInfo ");
 
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(managerAgentAID);
@@ -112,9 +112,9 @@ public class PlannerCommunicator {
 		try {
 			agent.getContentManager().fillContent(msg, executeAction);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		ACLMessage reply = null;
@@ -122,7 +122,7 @@ public class PlannerCommunicator {
 			 reply = FIPAService.doFipaRequestClient(agent, msg);
 
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
+			agent.logSevere(e.getMessage());
 			return null;
 		}
 		
@@ -132,11 +132,11 @@ public class PlannerCommunicator {
 			return computerInfo;
 			
 		} catch (UngroundedException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 		
 		return null;

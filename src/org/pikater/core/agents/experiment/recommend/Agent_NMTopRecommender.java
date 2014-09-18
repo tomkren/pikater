@@ -86,6 +86,11 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             this.m = m;
             this.d = d;
         }
+        
+        private Agent_NMTopRecommender getOuterType()
+		{
+			return Agent_NMTopRecommender.this;
+		}
 
         @Override
         public int compareTo(MetadataDistancePair o) {
@@ -94,6 +99,32 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
             }
             return o.getDistance() < this.getDistance() ? 1 : -1;
         }
+
+		@Override
+		public int hashCode()
+		{
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			long temp;
+			temp = Double.doubleToLongBits(d);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			result = prime * result + ((m == null) ? 0 : m.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			MetadataDistancePair other = (MetadataDistancePair) obj;
+			return compareTo(other) == 0;
+		}
     }
 
     @Override
@@ -135,13 +166,13 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         	Agent agent=new Agent();
 			agent.setType(Agent_Recommender.DEFAULT_AGENT.getName());
 			agent.setName(Agent_Recommender.DEFAULT_AGENT.getName());
-			logError("Not having enough agents to choose from. Using default agent: "+agent.getType());
+			logSevere("Not having enough agents to choose from. Using default agent: "+agent.getType());
 			return agent;
         }
 
         List<Agent> agents = new LinkedList<Agent>();
         for (int i = 0; i < M; i++) {
-            log(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
+            logInfo(distances.get(i).m.getExternalName() + ": " + distances.get(i).d);
             Agents agentsOnt = DataManagerService.getNBestAgents(this, distances.get(i).m.getInternalName(), N);
             
             if((agents!=null)&&(agentsOnt!=null)) {
@@ -166,14 +197,14 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
         int maxCount = 0;
         String bestAgentType = null;
         for (String s : counts.keySet()) {
-            log(s + ": " + counts.get(s));
+            logInfo(s + ": " + counts.get(s));
             if (counts.get(s) > maxCount) {
                 maxCount = counts.get(s);
                 bestAgentType = s;
             }
         }
 
-        log("Best agent: " + bestAgentType);
+        logInfo("Best agent: " + bestAgentType);
 
         ArrayList<Agent> bestAgents = new ArrayList<Agent>();
 

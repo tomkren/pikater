@@ -52,14 +52,14 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					logError("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					logError("Codec problem: " + e.getMessage(), e);
+					logException("Codec problem: " + e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: "
+				logSevere("Failure responding to request: "
 						+ request.getContent());
 				return failure;
 			}
@@ -80,12 +80,12 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 					agentInfoMsg,
 					new Action(receiver, agentInfo));
 			
-			log("Reply: OK");
+			logInfo("Reply: OK");
 			
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
         
 		return agentInfoMsg;

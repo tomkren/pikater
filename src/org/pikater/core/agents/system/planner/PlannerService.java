@@ -49,27 +49,27 @@ public class PlannerService {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage());
+			agent.logSevere(ce.getMessage());
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage());
+			agent.logSevere(oe.getMessage());
 		}
 
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
+			agent.logSevere(e.getMessage());
 		}
 		
 		ContentElement content = null;
 		try {
 			content = agent.getContentManager().extractContent(reply);
 		} catch (UngroundedException e1) {
-			agent.logError(e1.getMessage(), e1);
+			agent.logException(e1.getMessage(), e1);
 		} catch (CodecException e1) {
-			agent.logError(e1.getMessage(), e1);
+			agent.logException(e1.getMessage(), e1);
 		} catch (OntologyException e1) {
-			agent.logError(e1.getMessage(), e1);
+			agent.logException(e1.getMessage(), e1);
 		}
 
 		if (content instanceof Result) {
@@ -79,7 +79,7 @@ public class PlannerService {
 			
 			return systemLoad;
 		} else {
-			agent.logError("No Result ontology");
+			agent.logSevere("No Result ontology");
 		}
 		
 		return null;
@@ -110,9 +110,9 @@ public class PlannerService {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage());
+			agent.logSevere(ce.getMessage());
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage());
+			agent.logSevere(oe.getMessage());
 		}
 
 		@SuppressWarnings("unused")
@@ -120,7 +120,7 @@ public class PlannerService {
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage());
+			agent.logSevere(e.getMessage());
 		}
 		
 	}

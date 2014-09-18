@@ -39,7 +39,7 @@ public class Agent_Initiator extends PikaterAgent {
 		initDefault();
         registerWithDF(AgentNames.INITIATOR);
 
-		log("Agent " + getName() + " configuration " + fileName);
+		logInfo("Agent " + getName() + " configuration " + fileName);
 
 		// read agents from configuration
 		try {
@@ -53,11 +53,11 @@ public class Agent_Initiator extends PikaterAgent {
 				Object[] arguments = processArgs(agentConfiguration.getArguments().toArray());
 				Boolean creationSuccessful = this.createAgent(agentConfiguration.getAgentType(), agentConfiguration.getAgentName(), arguments);
 				if (!creationSuccessful) {
-					logError("Creation of agent " + agentConfiguration.getAgentName() + " failed.");
+					logSevere("Creation of agent " + agentConfiguration.getAgentName() + " failed.");
 				}
 			}
 		} catch (Exception e) {
-			this.logError(e.getMessage(), e);
+			this.logException(e.getMessage(), e);
 		}
 
 		addBehaviour(new TickerBehaviour(this, 60000) {
@@ -90,7 +90,7 @@ public class Agent_Initiator extends PikaterAgent {
 			// provide agent time to register with DF etc.
 			doWait(300);
 		} catch (ControllerException e) {
-			logError("Exception while adding agent", e);
+			logException("Exception while adding agent", e);
 			return false;
 		}
 		return true;
