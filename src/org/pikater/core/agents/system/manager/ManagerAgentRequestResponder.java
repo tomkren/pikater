@@ -79,7 +79,7 @@ public class ManagerAgentRequestResponder {
         // save serialized object to file
         byte [] object = sa.getAgent().getObject();
         ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(CoreConfiguration.getPath_Saved() + filename + ".model"));
+                new FileOutputStream(CoreConfiguration.getSavedResultsPath() + filename + ".model"));
 
 
         oos.writeObject(toObject(object));
@@ -135,8 +135,9 @@ public class ManagerAgentRequestResponder {
 
 		ACLMessage replyFromAgent = FIPAService.doFipaRequestClient(managerAgent, msgToAgent, 10000);
 		if (replyFromAgent == null)
+		{
 			throw new FailureException("Agent didn't terminate in within 10 sec: "+agentName);
-
+		}
 		managerAgent.logInfo("Terminated " + agentName);
 
 		ACLMessage reply = request.createReply();
@@ -159,7 +160,7 @@ public class ManagerAgentRequestResponder {
         else {
 
             // read agent from file
-            String filename = CoreConfiguration.getPath_Saved() +
+            String filename = CoreConfiguration.getSavedResultsPath() +
             		la.getFilename() + ".model";
 
             //Construct the ObjectInputStream object
@@ -199,7 +200,7 @@ public class ManagerAgentRequestResponder {
 
             Ontology ontology = AgentManagementOntology.getInstance();
             
-            jade.lang.acl.ACLMessage first_message = new jade.lang.acl.ACLMessage(jade.lang.acl.ACLMessage.REQUEST);
+            ACLMessage first_message = new ACLMessage(ACLMessage.REQUEST);
             first_message.setLanguage(managerAgent.getCodec().getName());
             first_message.setOntology(ontology.getName());
             first_message.addReceiver(new AID(agentName, AID.ISLOCALNAME));
@@ -213,7 +214,7 @@ public class ManagerAgentRequestResponder {
         }
         reply = request.createReply();
         reply.setContent(newAgent.getLocalName());
-        reply.setPerformative(jade.lang.acl.ACLMessage.INFORM);
+        reply.setPerformative(ACLMessage.INFORM);
 
         return reply;
     }

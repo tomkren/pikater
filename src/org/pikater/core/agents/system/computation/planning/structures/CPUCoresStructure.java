@@ -113,7 +113,8 @@ public class CPUCoresStructure {
 			throw new IllegalArgumentException("Argument task can't be null");
 		}
 		
-		if (untappedCores.size() == 0) {
+		if (untappedCores.isEmpty())
+		{
 			return null;
 		}
 		

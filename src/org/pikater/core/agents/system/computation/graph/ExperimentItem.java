@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computation.graph;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 
@@ -10,8 +11,7 @@ public class ExperimentItem {
 	private ProblemStatus status = null;
 	private String outputFile = null;
 	
-	private ArrayList<ExperimentItem> dependentSons =
-			new ArrayList<ExperimentItem>();
+	private List<ExperimentItem> dependentSons = new ArrayList<ExperimentItem>();
 
 	public static enum ProblemStatus {
 		IS_WAITING,    // is waiting in queue to start computing
@@ -33,10 +33,10 @@ public class ExperimentItem {
 		this.outputFile = outputFile;
 	}
 
-	public ArrayList<ExperimentItem> getDependentSons() {
+	public List<ExperimentItem> getDependentSons() {
 		return dependentSons;
 	}
-	public void setDependentSons(ArrayList<ExperimentItem> dependentSons) {
+	public void setDependentSons(List<ExperimentItem> dependentSons) {
 		this.dependentSons = dependentSons;
 	}
 	public void getDependentSons(ExperimentItem problem) {
@@ -50,7 +50,7 @@ public class ExperimentItem {
 		this.status = status;
 	}
 
-	public ArrayList<ExperimentItem> getIndependentItems() {
+	public List<ExperimentItem> getIndependentItems() {
 
 		// If this Item is not waiting in queue, than his sons are not waiting to
 		if ( (this.getStatus() == ExperimentItem.ProblemStatus.IS_COMPUTING) ||
@@ -59,7 +59,7 @@ public class ExperimentItem {
 			return new ArrayList<ExperimentItem>();
 		}
 		
-		ArrayList<ExperimentItem> problems =
+		List<ExperimentItem> problems =
 				new ArrayList<ExperimentItem>();
 
 		
@@ -80,7 +80,7 @@ public class ExperimentItem {
 		// if this item is waiting and some his soon is waiting to - recursion
 		for (ExperimentItem problem : dependentSons) {
 			
-			ArrayList<ExperimentItem> problemsI =
+			List<ExperimentItem> problemsI =
 					problem.getDependentSons();
 			
 			problems.addAll(problemsI);

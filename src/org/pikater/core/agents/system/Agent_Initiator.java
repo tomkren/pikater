@@ -125,7 +125,7 @@ public class Agent_Initiator extends PikaterAgent {
 		}
 		if(fileName == null)
 		{
-			fileName = CoreConfiguration.getPath_CoreMasterConfigurationFile();
+			fileName = CoreConfiguration.getCoreMasterConfigurationFilepath();
 		}
 
 		initLogging();

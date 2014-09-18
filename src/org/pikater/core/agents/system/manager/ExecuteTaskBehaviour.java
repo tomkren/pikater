@@ -69,7 +69,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                 DataSourceEdge labeledData = new DataSourceEdge();
                 labeledData.setFile(false);
 
-                if (node.ContainsOutput("file"))
+                if (node.containsOutput("file"))
                 {
                     TaskOutput data= t.getOutputByType(Task.InOutType.DATA);
                     if (data==null)
@@ -79,7 +79,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                     labeledData.setDataSourceId(data.getName());
                     node.addToOutputAndProcess(labeledData,"file");
                 }
-                if (node.ContainsOutput(CoreConstant.Slot.SLOT_TESTING_DATA.get()))
+                if (node.containsOutput(CoreConstant.Slot.SLOT_TESTING_DATA.get()))
                 {
                     TaskOutput test= t.getOutputByType(Task.InOutType.TEST);
                     if (test==null)
@@ -89,7 +89,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                     labeledData.setDataSourceId(test.getName());
                     node.addToOutputAndProcess(labeledData, CoreConstant.Slot.SLOT_TESTING_DATA.get());
                 }
-                if (node.ContainsOutput(CoreConstant.Slot.SLOT_TRAINING_DATA.get()))
+                if (node.containsOutput(CoreConstant.Slot.SLOT_TRAINING_DATA.get()))
                 {
                     TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
 

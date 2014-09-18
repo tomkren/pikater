@@ -51,17 +51,13 @@ public class DataRegistry {
 		}
 	}
 	public void saveDataLocation(TaskToSolve taskToSolve, AID slaveServerAID) {
-		if (slaveServerAID == null) {
-			slaveServerAID = agent.getAID();
-		}
-		
 		for (TaskOutput outputTaskI : taskToSolve.getTask().getOutput()) {
 			String hash = outputTaskI.getName();
 			if (dataMap.get(hash) == null) {
 				DataFile file = new DataFile(DataFileType.COMPUTED_DATA);
 				file.setHash(hash);
 				file.setProducer(taskToSolve);
-				file.addLocation(slaveServerAID);
+				file.addLocation(slaveServerAID == null ? agent.getAID() : slaveServerAID);
 				dataMap.put(hash, file);
 			} else {
 				dataMap.get(hash).addLocation(slaveServerAID);

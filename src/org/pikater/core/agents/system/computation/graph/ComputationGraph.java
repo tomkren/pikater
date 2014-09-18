@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computation.graph;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 
 import org.pikater.core.CoreConfiguration;
@@ -14,8 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Time: 21:27
  */
 public class ComputationGraph extends Observable {
-    private HashMap<Integer,ComputationNode> nodes =
-    		new HashMap<Integer,ComputationNode>();
+    private Map<Integer,ComputationNode> nodes = new HashMap<Integer,ComputationNode>();
     private int id;
     private int batchID;
     
@@ -28,7 +28,7 @@ public class ComputationGraph extends Observable {
         id=generator.getAndAllocateGUID();
     }
     
-    public HashMap<Integer, ComputationNode> getNodes() {
+    public Map<Integer, ComputationNode> getNodes() {
         return nodes;
     }
 
@@ -62,7 +62,10 @@ public class ComputationGraph extends Observable {
     {
         for (ComputationNode node:nodes.values())
         {
-            if (node.AnyOutstandingTasks()) return;
+            if (node.existsUnfinishedTasks())
+            {
+            	return;
+            }
         }
         computationBatchFinished();
     }

@@ -20,7 +20,7 @@ public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
 
     @Override
     public boolean hasNext() {
-        return buffer.size()>0;
+        return !buffer.isEmpty();
     }
 
     @Override

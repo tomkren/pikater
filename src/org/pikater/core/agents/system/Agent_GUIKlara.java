@@ -77,7 +77,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			System.out.println("GUIKlara agent starts.");
 			
 			try {
-				runFile(CoreConfiguration.getPath_KlarasInputs() + "input.xml");
+				runFile(CoreConfiguration.getKlarasInputsPath() + "input.xml");
 				
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found.");
@@ -137,17 +137,17 @@ public class Agent_GUIKlara extends PikaterAgent {
 		System.out.println(" I welcome you Klara !!!");
 
 		String defaultFileName = "input.xml";
-		File testFile = new File(CoreConfiguration.getPath_KlarasInputs() + defaultFileName);
+		File testFile = new File(CoreConfiguration.getKlarasInputsPath() + defaultFileName);
 
 		if(testFile.exists() && !testFile.isDirectory()) {
 
 			System.out.println(" Do you wish to run experiment from file "
-					+ CoreConfiguration.getPath_KlarasInputs() + defaultFileName + " ? (y/n)");
+					+ CoreConfiguration.getKlarasInputsPath() + defaultFileName + " ? (y/n)");
 			System.out.print(">");
 
 			if (bufferedConsole.readLine().equals("y")) {
 				try {
-					runFile(CoreConfiguration.getPath_KlarasInputs() + defaultFileName);
+					runFile(CoreConfiguration.getKlarasInputsPath() + defaultFileName);
 					return;
 				} catch (FileNotFoundException e) {
 					System.out.println(" File not found.");

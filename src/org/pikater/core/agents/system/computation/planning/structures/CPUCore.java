@@ -30,17 +30,21 @@ public class CPUCore {
             toHashCode();
     }
     
-    public boolean equals(Object obj) {
-        if (!(obj instanceof CPUCore))
-             return false;
-         if (obj == this)
-             return true;
+    public boolean equals(Object obj)
+    {
+    	if (!(obj instanceof CPUCore))
+        {
+        	return false;
+        }
+        if (obj == this)
+        {
+        	return true;
+        }
 
-         CPUCore rhs = (CPUCore) obj;
-         return new EqualsBuilder().
+        CPUCore rhs = (CPUCore) obj;
+        return new EqualsBuilder().
              append(aID.getHap(), rhs.getAID().getName()).
              append(coreID, rhs.getCoreID()).
              isEquals();
-     }
-	
+    }
 }

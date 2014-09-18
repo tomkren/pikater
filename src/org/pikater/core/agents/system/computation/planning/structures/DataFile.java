@@ -7,7 +7,11 @@ import java.util.Set;
 
 public class DataFile {
 
-	public static enum DataFileType {DATA_SET, COMPUTED_DATA}
+	public static enum DataFileType
+	{
+		DATA_SET,
+		COMPUTED_DATA
+	}
 	
 	private String hash;
 	private DataFileType type;

@@ -31,6 +31,7 @@ import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -159,8 +160,8 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 	}
 
 
-	private void addOptionToSchema(NewOption opt, List schema){
-        ValuesForOption values = (opt.getValuesWrapper());
+	private void addOptionToSchema(NewOption opt, List<SearchItem> schema){
+        ValuesForOption values = opt.getValuesWrapper();
 		for (Value value:values.getValues()) {
             IValueData typedValue = value.getCurrentValue();
             if (typedValue instanceof QuestionMarkRange)
@@ -188,18 +189,21 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 	//Create schema of solutions from options (Convert options->schema)
 
-	private List convertOptionsToSchema(List<NewOption> options){
-		List<NewOption> new_schema = new ArrayList<NewOption>();
+	private List<SearchItem> convertOptionsToSchema(List<NewOption> options){
+		List<SearchItem> result = new ArrayList<SearchItem>();
 
 		if(options==null)
-			return new_schema;
-		java.util.Iterator<NewOption> itr = options.iterator();
-		while (itr.hasNext()) {
+			return result;
+		Iterator<NewOption> itr = options.iterator();
+		while (itr.hasNext())
+		{
 			NewOption opt = itr.next();
 			if(opt.isMutable())
-				addOptionToSchema(opt, new_schema);
+			{
+				addOptionToSchema(opt, result);
+			}
 		}
-		return new_schema;
+		return result;
 	}
 
     public SearchComputationNode getComputationNode() {

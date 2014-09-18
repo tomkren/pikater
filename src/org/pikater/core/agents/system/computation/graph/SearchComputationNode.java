@@ -24,11 +24,11 @@ public class SearchComputationNode extends ComputationNode {
         return modelClass;
     }
 
-    public void setModelClass(String modelClass) {
-        if (!modelClass.contains("."))
+    public void setModelClass(String newModelClass) {
+        if (!newModelClass.contains("."))
         {
-            modelClass=defaultPackagePrefix+modelClass;
+            newModelClass=defaultPackagePrefix+newModelClass;
         }
-        this.modelClass = modelClass;
+        this.modelClass = newModelClass;
     }
 }

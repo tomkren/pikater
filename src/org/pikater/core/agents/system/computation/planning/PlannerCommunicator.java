@@ -23,6 +23,7 @@ import org.pikater.core.ontology.subtrees.management.ComputerInfo;
 import org.pikater.core.ontology.subtrees.management.GetComputerInfo;
 import org.pikater.core.ontology.subtrees.task.ExecuteTask;
 import org.pikater.core.ontology.subtrees.task.Task;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class PlannerCommunicator {
 
@@ -46,8 +47,10 @@ public class PlannerCommunicator {
 			for (int i = 0; i < result.length; ++i) {
 				foundAgents[i] = result[i].getName();
 			}
-		} catch (FIPAException e) {
-			e.printStackTrace();
+		}
+		catch (FIPAException e)
+		{
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 
 		return foundAgents;
@@ -55,20 +58,20 @@ public class PlannerCommunicator {
 	
 	/** Request creation or loading of a CA */
 	public AID prepareCA(Task task, AID agentManagerAID) {
-		AID caAID;
+		AID result;
 
 		if (task.getAgent().getModel() != null) {
-			caAID = ManagerAgentService.loadAgent(agent, task.getAgent().getModel(), agentManagerAID);
+			result = ManagerAgentService.loadAgent(agent, task.getAgent().getModel(), agentManagerAID);
 			agent.logInfo("CA model " + task.getAgent().getModel() + " resurrected");
 		} else {
-			String CAtype = task.getAgent().getType();
-			agent.logInfo("Sending request to create CA " + CAtype);
-			caAID = ManagerAgentService.createAgent(
-					agent, CAtype, CAtype, new Arguments(), agentManagerAID);
+			String resultCAtype = task.getAgent().getType();
+			agent.logInfo("Sending request to create CA " + resultCAtype);
+			result = ManagerAgentService.createAgent(
+					agent, resultCAtype, resultCAtype, new Arguments(), agentManagerAID);
 			//agent.log("CA " + CAtype + " created by " + agentManagerAID.getName());
-			agent.logInfo("CA " + CAtype + " created");
+			agent.logInfo("CA " + resultCAtype + " created");
 		}
-		return caAID;
+		return result;
 	}
 
 	public void sendExecuteTask(Task task, AID agentManagerAID) {
@@ -128,8 +131,7 @@ public class PlannerCommunicator {
 		
 		try {
 			Result result = (Result) agent.getContentManager().extractContent(reply);
-			ComputerInfo computerInfo = (ComputerInfo) result.getValue();
-			return computerInfo;
+			return (ComputerInfo) result.getValue();
 			
 		} catch (UngroundedException e) {
 			agent.logException(e.getMessage(), e);

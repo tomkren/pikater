@@ -23,7 +23,9 @@ public abstract class AbstractComputationBuffer<E> implements ComputationOutputB
         setTarget(target);
     }
 
-    public AbstractComputationBuffer(){}
+    public AbstractComputationBuffer()
+    {
+    }
 
     @Override
     public ComputationNode getSource() {

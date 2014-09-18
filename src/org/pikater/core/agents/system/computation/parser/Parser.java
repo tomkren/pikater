@@ -13,11 +13,12 @@ import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Parser {
     private ComputationGraph computationGraph =
     		new ComputationGraph();
-    private HashMap<Integer,ComputationNode> alreadyProcessed =
+    private Map<Integer,ComputationNode> alreadyProcessed =
     		new HashMap<Integer,ComputationNode>();
     private Agent_Manager agent = null;
     private int priority;
@@ -108,7 +109,10 @@ public class Parser {
 
     
     public void parseErrors(ErrorSourceDescription errorDescription, ComputationNode child) {
-        if (errorDescription==null) return;
+        if (errorDescription==null)
+        {
+        	return;
+        }
         agent.logInfo("Ontology Parser - IErrorProvider");
         ComputingAgent errorProvider=(ComputingAgent)errorDescription.getProvider();
 

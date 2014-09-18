@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computation.graph;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExperimentGraph {
 	protected Integer id;
@@ -8,11 +9,9 @@ public class ExperimentGraph {
 	/*
 	 * Top layer of problem tree
 	 */
-	private ArrayList<ExperimentItem> problems =
-			new ArrayList<ExperimentItem>();
+	private List<ExperimentItem> problems = new ArrayList<ExperimentItem>();
 
-
-	public ArrayList<ExperimentItem> getProblems() {
+	public List<ExperimentItem> getProblems() {
 		return problems;
 	}
 	public void setProblems(ArrayList<ExperimentItem> problems) {
@@ -39,14 +38,14 @@ public class ExperimentGraph {
 		return true;
 	}
 
-	public ArrayList<ExperimentItem> getAllIndependentWaitingProblems() {
+	public List<ExperimentItem> getAllIndependentWaitingProblems() {
 		
-		ArrayList<ExperimentItem> result =
+		List<ExperimentItem> result =
 				new ArrayList<ExperimentItem>();
 		
 		for (ExperimentItem problemI : result) {
 			
-			ArrayList<ExperimentItem> problemsI =
+			List<ExperimentItem> problemsI =
 					problemI.getIndependentItems();
 			
 			result.addAll(problemsI);

@@ -81,10 +81,12 @@ public class WaitingTasksQueues {
 	
 	public TaskToSolve removeTaskWithHighestPriority() {
 		
-		if (this.shortTimeDurationQueue.size() != 0) {
+		if (!this.shortTimeDurationQueue.isEmpty())
+		{
 			return this.shortTimeDurationQueue.remove();
-			
-		} else if (this.longTermDurationQueue.size() != 0) {
+		}
+		else if (this.longTermDurationQueue.size() != 0)
+		{
 			return this.longTermDurationQueue.remove();
 		}
 		

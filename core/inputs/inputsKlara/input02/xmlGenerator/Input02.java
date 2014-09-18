@@ -91,7 +91,7 @@ public final class Input02 {
 
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = CoreConfiguration.getPath_KlarasInputs() + "input02"
+		String fileName = CoreConfiguration.getKlarasInputsPath() + "input02"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 

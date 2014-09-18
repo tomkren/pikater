@@ -162,13 +162,13 @@ public class Agent_DataManager extends PikaterAgent {
 		initDefault();
 		registerWithDF();
 
-		File data = new File(CoreConfiguration.getPath_DataFiles() + "temp");
+		File data = new File(CoreConfiguration.getDataFilesPath() + "temp");
 		if (!data.exists()) {
-			logInfo("Creating directory: " + CoreConfiguration.getPath_DataFiles());
+			logInfo("Creating directory: " + CoreConfiguration.getDataFilesPath());
 			if (data.mkdirs()) {
-				logInfo("Succesfully created directory: " + CoreConfiguration.getPath_DataFiles());
+				logInfo("Succesfully created directory: " + CoreConfiguration.getDataFilesPath());
 			} else {
-				logSevere("Error creating directory: " + CoreConfiguration.getPath_DataFiles());
+				logSevere("Error creating directory: " + CoreConfiguration.getDataFilesPath());
 			}
 		}
 
@@ -431,7 +431,7 @@ public class Agent_DataManager extends PikaterAgent {
 			if (files.size() > 0) {
 				translatedName = files.get(0).getInternalfilename();
 			} else {
-				String pathPrefix = CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
 
 				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
@@ -446,7 +446,7 @@ public class Agent_DataManager extends PikaterAgent {
 			if (files.size() > 0) {
 				translatedName = files.get(0).getExternalfilename();
 			} else {
-				String pathPrefix = CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
 
 				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
@@ -1351,7 +1351,7 @@ public class Agent_DataManager extends PikaterAgent {
 			throw new FailureException("Agent jar for type " + type + " not found in DB");
 		} else {
 			String jarname = type.replace(".", "_") + ".jar";
-			String jarpath = CoreConfiguration.getPath_ExtAgentsJARs() + jarname;
+			String jarpath = CoreConfiguration.getExtAgentsPath() + jarname;
 
 			File dest = new File(jarpath);
 			File tmp = new File(jarpath + ".tmp");
@@ -1411,8 +1411,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 				PGLargeObjectReader reader = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 				logInfo(reader.toString());
-				File temp = new File(CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator") + hash);
-				File target = new File(CoreConfiguration.getPath_DataFiles() + hash);
+				File temp = new File(CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator") + hash);
+				File target = new File(CoreConfiguration.getDataFilesPath() + hash);
 
 				FileOutputStream out = new FileOutputStream(temp);
 				try {
