@@ -90,7 +90,9 @@ public class Agent_ChooseXValues extends Agent_Search {
 	protected List<SearchSolution> generateNewSolutions(List<SearchSolution> solutions, float[][] evaluations) {
 		
 		if (n == 0)
-			return null;
+		{
+			return new ArrayList<SearchSolution>();
+		}
 		/*SearchSolution new_solution = (SearchSolution)solutions_list.get(ni++);
 		new ArrayList();
 		res_solutions.add(new_solution);*/

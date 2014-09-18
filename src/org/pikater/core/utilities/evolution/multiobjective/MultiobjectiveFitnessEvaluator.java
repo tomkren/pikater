@@ -47,7 +47,8 @@ public abstract class MultiobjectiveFitnessEvaluator implements FitnessEvaluator
         List<List<Individual>> fronts = new ArrayList<List<Individual>>();
         List<Individual> population = new ArrayList<Individual>();
         population.addAll(pop);
-        while (population.size() > 0) {
+        while (!population.isEmpty())
+        {
             List<Individual> front = getNonDominatedFront(population);
             fronts.add(front);
             population.removeAll(front);

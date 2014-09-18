@@ -177,7 +177,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 				break;
 			} else if(input.startsWith("--dura")){
 				printDurationAgentResponse();
-			} else if (input.startsWith("--run")) {
+			} else if (input.startsWith("--run"))
+			{
+				// TODO: what about this?
 			} else if (input.startsWith("--add-dataset")) {
 				addDataset(input);
 			} else if (input.startsWith("--kill")) {
@@ -310,7 +312,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				System.out.println("Do you want to convert the document? (y/n)\nDOCUMENT WIHT FOLLOWING PATH WILL BE OVERWRITTEN: "+newPath);
 			}
 			String answer=bufferedConsole.readLine();
-			if(answer.toLowerCase().equals("y")){
+			if(answer.equalsIgnoreCase("y")){
 				System.out.println("Do you want to define any header file? (path / -)");
 				answer=bufferedConsole.readLine();
 				if(!answer.equals("-")){

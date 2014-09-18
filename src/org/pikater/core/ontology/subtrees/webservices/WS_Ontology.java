@@ -1,5 +1,7 @@
 package org.pikater.core.ontology.subtrees.webservices;
 
+import org.pikater.shared.logging.core.ConsoleLogger;
+
 import jade.content.onto.BasicOntology;
 import jade.content.onto.Ontology;
 import jade.content.schema.AgentActionSchema;
@@ -90,7 +92,9 @@ public class WS_Ontology extends Ontology {
 			as.setResult((ConceptSchema) getSchema(OPTION), 0,
 					ObjectSchema.UNLIMITED);
 
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 	}
 

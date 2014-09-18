@@ -48,6 +48,7 @@ public class ErrorSourceDescription implements ISourceDescription {
 		return this.provider;
 	}
 	
+	@Override
 	public ErrorSourceDescription clone() {
     	
     	ErrorSourceDescription description = new ErrorSourceDescription();

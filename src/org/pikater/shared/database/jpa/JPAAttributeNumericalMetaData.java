@@ -62,7 +62,7 @@ public class JPAAttributeNumericalMetaData extends JPAAttributeMetaData{
 		this.avarage = avarage;
 	}
 	@Transient
-	public final String EntityName = "AttributeNumericalMetaData";
+	public static final String EntityName = "AttributeNumericalMetaData";
 	
 	
 }

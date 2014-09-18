@@ -51,7 +51,7 @@ public class Agent_Duration extends PikaterAgent {
 
 	private static final long serialVersionUID = -5555820420884978956L;
     
-    private final String LOG_LR_DURATIONS_NAME="log_LR_durations";
+    private static final String LOG_LR_DURATIONS_NAME="log_LR_durations";
 	
     List<Duration> durations = new ArrayList<Duration>();
     
@@ -89,11 +89,10 @@ public class Agent_Duration extends PikaterAgent {
 		
 		registerWithDF(CoreAgents.DURATION.getName());
     	
-		if (containsArgument(LOG_LR_DURATIONS_NAME)) {
-			if (isArgumentValueTrue(LOG_LR_DURATIONS_NAME)){
-				log_LR_durations = true;
-			}
-		}		    	
+		if (containsArgument(LOG_LR_DURATIONS_NAME) && isArgumentValueTrue(LOG_LR_DURATIONS_NAME))
+		{
+			log_LR_durations = true;
+		}
 		
         // create linear regression agent
         // send message to AgentManager to create an agent
@@ -229,7 +228,7 @@ public class Agent_Duration extends PikaterAgent {
     		
 	    	}
 	    	catch (Exception e){
-	    		logException(e.getMessage(), e);
+	    		logException("Unexpected error occured:", e);
 	    	}
 
     	}

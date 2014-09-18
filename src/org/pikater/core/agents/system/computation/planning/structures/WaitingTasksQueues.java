@@ -85,7 +85,7 @@ public class WaitingTasksQueues {
 		{
 			return this.shortTimeDurationQueue.remove();
 		}
-		else if (this.longTermDurationQueue.size() != 0)
+		else if (!this.longTermDurationQueue.isEmpty())
 		{
 			return this.longTermDurationQueue.remove();
 		}

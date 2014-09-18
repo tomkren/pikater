@@ -153,7 +153,7 @@ public class DataSetConverter {
 		BufferedReader br=null;
 		try{
 			br=new BufferedReader(new InputStreamReader(new FileInputStream(textFile)));
-			StringBuffer sb=new StringBuffer();
+			StringBuilder sb=new StringBuilder();
 			String line=null;
 			while((line=br.readLine())!=null){
 				sb.append(line);

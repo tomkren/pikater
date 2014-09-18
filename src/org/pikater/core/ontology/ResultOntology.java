@@ -55,7 +55,7 @@ public class ResultOntology extends BeanOntology {
             add(valuePackage);
 
         } catch (Exception e) {
-            Log.error(e.getMessage(), e);
+            Log.error("Unexpected error occured:", e);
         }
     }
 

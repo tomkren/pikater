@@ -179,13 +179,13 @@ public class Agent_SimulatedAnnealing extends Agent_Search {
 	  -the worse with probability exp((e-e_new)/temperature)
 	*/
 	private double acceptanceProb(double delta, double temperature){
-		if(!minimization){/*for max problems*/
-			delta = -delta;
+		if(!minimization) // for max problems
+		{
+			return -delta < 0 ? 1.0 : Math.exp(-delta/temperature);
 		}
-		if(delta<0){//it is better
-			return 1.0;
-		}else{
-			return Math.exp(-delta/temperature);
+		else
+		{
+			return delta < 0 ? 1.0 : Math.exp(-delta/temperature);
 		}
 	}
 	

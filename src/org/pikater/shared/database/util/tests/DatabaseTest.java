@@ -333,7 +333,8 @@ public class DatabaseTest {
 		
 		
 		List<JPADataSetLO> iDslos=DAOs.dataSetDAO.getByDescription("iris.arff");
-		if(iDslos.size()>0){
+		if(!iDslos.isEmpty())
+		{
 			JPADataSetLO idslo=iDslos.get(0);
 			exList.add(idslo.getHash());
 		}

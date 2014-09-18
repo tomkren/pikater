@@ -12,6 +12,7 @@ public interface ComputationOutputBuffer<E> {
     public void insert(E element);
     public E getNext();
     public int size();
+    public boolean isEmpty();
     public ComputationNode getSource();
     public void setSource(ComputationNode source);
     public ComputationNode getTarget();

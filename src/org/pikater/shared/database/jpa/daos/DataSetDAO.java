@@ -295,7 +295,8 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		long oid = -1;
 		String hash = Hash.getMD5Hash(sourceFile);
 		List<JPADataSetLO> sameHashDS = DAOs.dataSetDAO.getByHash(hash);
-		if (sameHashDS.size() > 0) {
+		if (!sameHashDS.isEmpty())
+		{
 			oid = sameHashDS.get(0).getOID();
 		} else {
 			try {

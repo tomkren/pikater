@@ -56,7 +56,7 @@ public class ComputationNode {
         }
         for (ComputationOutputBuffer input : inputs.values())
         {
-            if (input.size()==0 && !input.isBlocked())
+            if (input.isEmpty() && !input.isBlocked())
             {
                 return false;
             }

@@ -52,7 +52,7 @@ public class Instance implements Concept {
 		if (values == null) {
 			return "\n";
 		}
-		StringBuffer text = new StringBuffer();
+		StringBuilder text = new StringBuilder();
 
 		int i = 0;
 

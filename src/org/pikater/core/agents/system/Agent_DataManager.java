@@ -428,7 +428,8 @@ public class Agent_DataManager extends PikaterAgent {
 			logInfo("respondToTranslateFilename External File Name " + transtateFile.getExternalFilename());
 
 			java.util.List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getExternalFilename());
-			if (files.size() > 0) {
+			if (!files.isEmpty())
+			{
 				translatedName = files.get(0).getInternalfilename();
 			} else {
 				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
@@ -442,8 +443,9 @@ public class Agent_DataManager extends PikaterAgent {
 
 			logInfo("respondToTranslateFilename Internal File Name " + transtateFile.getInternalFilename());
 
-			java.util.List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getInternalFilename());
-			if (files.size() > 0) {
+			List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getInternalFilename());
+			if (!files.isEmpty())
+			{
 				translatedName = files.get(0).getExternalfilename();
 			} else {
 				String pathPrefix = CoreConfiguration.getDataFilesPath() + "temp" + System.getProperty("file.separator");
@@ -695,7 +697,8 @@ public class Agent_DataManager extends PikaterAgent {
 				action.setBatch_id(batchJPA.getId());
 				List<JPAExperiment> exps = batchJPA.getExperiments();
 				// when there was more than 1 sub-experiment, don't send the best result 
-				if (exps.size() == 1 && exps.get(0).getResults().size() > 0) {
+				if (exps.size() == 1 && !exps.get(0).getResults().isEmpty())
+				{
 					double bestErrorRate = 200;
 					for (JPAResult r : exps.get(0).getResults()) {
 						if (r.getErrorRate() < bestErrorRate) {
@@ -1241,8 +1244,8 @@ public class Agent_DataManager extends PikaterAgent {
 		ACLMessage reply = request.createReply();
 
 		Agents foundAgents = new Agents();
-		if (results.size() > 0) {
-
+		if (!results.isEmpty())
+		{
 			for (JPAResult result : results) {
 				NewOptions options = new NewOptions();
 				try{
@@ -1403,8 +1406,8 @@ public class Agent_DataManager extends PikaterAgent {
 		logInfo(new Date().toString() + " DataManager.GetFile");
 
 		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getByHash(hash);
-		if (dslos.size() > 0) {
-
+		if (!dslos.isEmpty())
+		{
 			try {
 				JPADataSetLO dslo = dslos.get(0);
 				logInfo(new Date().toString() + " Found DSLO: " + dslo.getDescription() + " - " + dslo.getOID() + " - " + dslo.getHash());

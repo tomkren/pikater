@@ -27,7 +27,8 @@ public class TaskTypeDAO extends AbstractDAO<JPATaskType> {
 					createNamedQuery("TaskType.getByName", JPATaskType.class)
 					.setParameter("name", name)
 					.getResultList();
-			if(tasks.size()>0){
+			if(!tasks.isEmpty())
+			{
 				em.getTransaction().commit();
 				return tasks.get(0);
 			}else{

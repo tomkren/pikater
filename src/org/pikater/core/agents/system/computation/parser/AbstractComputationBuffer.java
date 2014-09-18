@@ -61,5 +61,10 @@ public abstract class AbstractComputationBuffer<E> implements ComputationOutputB
     public void unblock(){
         isBlocked=false;
     }
-
+    
+    @Override
+    public boolean isEmpty()
+    {
+    	return size() == 0;
+    }
 }

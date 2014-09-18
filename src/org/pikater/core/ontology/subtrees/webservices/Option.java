@@ -25,11 +25,9 @@ public class Option implements Concept {
 		return value;
 	}
 
-	public void setValue(String value) {
-		if (value == null) {
-			value = "";
-		}
-		this.value = value;
+	public void setValue(String value)
+	{
+		this.value = value == null ? "" : value;
 	}
 
 	public String getDescription() {

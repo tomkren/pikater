@@ -104,12 +104,13 @@ public class DataProcessing implements IDataProvider {
 		this.errors = errors;
 	}
 	
-	public int generateIDs(int lastUsedId) {
-		
-		if (this.getId() == -1) {
-			this.setId(++lastUsedId);
+	public int generateIDs(int lastUsedId)
+	{
+		if (getId() == -1)
+		{
+			setId(lastUsedId + 1);
 		}
-		return lastUsedId;
+		return getId();
 	}
 
 	public UniversalOntology exportUniversalOntology() {

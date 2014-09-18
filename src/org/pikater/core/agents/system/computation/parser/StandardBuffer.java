@@ -37,7 +37,7 @@ public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
     public int size() {
         return buffer.size();
     }
-
+    
 	@Override
 	public boolean isData() {
 		return data;
