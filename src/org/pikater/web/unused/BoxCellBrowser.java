@@ -124,7 +124,7 @@ public class BoxCellBrowser extends CustomComponent
 				}
 				else
 				{
-					return (value instanceof BoxInfoClient);
+					return value instanceof BoxInfoClient;
 				}
 			}
 		};

@@ -178,7 +178,7 @@ public class MathTooling {
 	}
 
 	public static boolean isPointInCircle(Vector2d point, Vector2d circleCenter, double circleRadius) {
-		return (point.distanceTo(circleCenter) < circleRadius);
+		return point.distanceTo(circleCenter) < circleRadius;
 	}
 	
 

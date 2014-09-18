@@ -119,12 +119,11 @@ public class SingleArffDataset extends ArffDataset{
 	 */
 	public ArffXYZPoint getNext() throws IOException {
 		if(this.next()){
-			ArffXYZPoint nextPoint=new ArffXYZPoint(
+			return new ArffXYZPoint(
 					currentInstance.value(this.attrXIndex),
 					currentInstance.value(this.attrYIndex),
 					currentInstance.value(this.attrColorIndex)
-					);
-			return nextPoint;
+			);
 		}else{
 			return null;
 		}

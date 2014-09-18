@@ -51,7 +51,7 @@ public class MyUploadReceiver implements UploadReceiver
     		file = IOUtils.createTemporaryFile("upload");
             return new FileOutputStream(file);
         }
-    	catch (final IOException e)
+    	catch (IOException e)
     	{
     		throw new RuntimeException(e);
     	}

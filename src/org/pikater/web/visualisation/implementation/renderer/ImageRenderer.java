@@ -119,14 +119,18 @@ public class ImageRenderer implements RendererInterface {
 		
 		affineTransform.rotate(Math.toRadians(rotationDegree), rotationX, rotationY);
 		
-		switch(textAlignment){
-		case Left: break;
-		case Center:
-			affineTransform.translate(-fm.stringWidth(text)/2,0);
-			break;
-		case Right:
-			affineTransform.translate(-fm.stringWidth(text),0);
-			break;
+		switch(textAlignment)
+		{
+			case Left:
+				break;
+			case Center:
+				affineTransform.translate(-fm.stringWidth(text)/2,0);
+				break;
+			case Right:
+				affineTransform.translate(-fm.stringWidth(text),0);
+				break;
+			default:
+				throw new IllegalStateException();
 		}
 		
 		g2.setTransform(affineTransform);

@@ -5,5 +5,5 @@ import org.pikater.shared.database.jpa.JPADataSetLO;
 
 public interface IDSVisOne
 {
-	void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Throwable;
+	void visualizeDataset(JPADataSetLO dataset, JPAAttributeMetaData[] attrs, JPAAttributeMetaData attrTarget) throws Exception;
 }

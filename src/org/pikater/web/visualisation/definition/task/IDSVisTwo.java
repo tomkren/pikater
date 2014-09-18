@@ -5,5 +5,5 @@ import org.pikater.web.visualisation.definition.AttrComparisons;
 
 public interface IDSVisTwo
 {
-	void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList) throws Throwable;
+	void visualizeDatasetComparison(JPADataSetLO dataset1, JPADataSetLO dataset2, AttrComparisons comparisonList) throws Exception;
 }

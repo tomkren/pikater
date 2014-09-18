@@ -33,8 +33,12 @@ public class Line extends Shape {
 		 * Parametrized Ctor.
 		 * @param dashes Initialize with a certain setting of dashes 
 		 */
-		LineStyle(int... dashes) {
-			for (int i: dashes) this.dashes.add(i);
+		LineStyle(int... dashes)
+		{
+			for (int i: dashes)
+			{
+				this.dashes.add(i);
+			}
 		}
 	}
 

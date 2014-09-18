@@ -180,8 +180,20 @@ public class Colour implements FillStyle, Serializable {
 	 * Set the red component.
 	 * @param red The new value
 	 */
-	public void setRed(int red) {
-		if (red > 255) this.redComponent = 255; else if (red < 0) this.redComponent = 0; else this.redComponent =red;
+	public void setRed(int red)
+	{
+		if (red > 255)
+		{
+			this.redComponent = 255;
+		}
+		else if (red < 0)
+		{
+			this.redComponent = 0;
+		}
+		else
+		{
+			this.redComponent =red;
+		}
 	}
 
 	/**
@@ -196,8 +208,20 @@ public class Colour implements FillStyle, Serializable {
 	 * Set the green component.
 	 * @param green The new value
 	 */
-	public void setGreen(int green) {
-		if (green > 255) this.greenComponent = 255; else if (green < 0) this.greenComponent = 0; else this.greenComponent = green;
+	public void setGreen(int green)
+	{
+		if (green > 255)
+		{
+			this.greenComponent = 255;
+		}
+		else if (green < 0)
+		{
+			this.greenComponent = 0;
+		}
+		else
+		{
+			this.greenComponent = green;
+		}
 	}
 
 	/**
@@ -212,8 +236,20 @@ public class Colour implements FillStyle, Serializable {
 	 * Set the blue component.
 	 * @param blue The new value
 	 */
-	public void setBlue(int blue) {
-		if (blue > 255) this.blueComponent = 255; else if (blue < 0) this.blueComponent = 0; else this.blueComponent = blue;	
+	public void setBlue(int blue)
+	{
+		if (blue > 255)
+		{
+			this.blueComponent = 255;
+		}
+		else if (blue < 0)
+		{
+			this.blueComponent = 0;
+		}
+		else
+		{
+			this.blueComponent = blue;
+		}
 	}
 
 	/**

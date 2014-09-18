@@ -525,8 +525,7 @@ public abstract class Node extends JavaScriptObject {
 		{
 			sb.append(event.toString()).append(" ");
 		}
-		String result = sb.toString().trim();
-		return result;
+		return sb.toString().trim();
 	}
 	
 	/**
