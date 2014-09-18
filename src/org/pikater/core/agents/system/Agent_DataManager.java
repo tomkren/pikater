@@ -1024,7 +1024,7 @@ public class Agent_DataManager extends PikaterAgent {
 			File f = new File(sd.getSourceFile());
 			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(f, f.getName(), sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
 
-			reply.setContentObject((new Integer(jpadsloID)));
+			reply.setContentObject(new Integer(jpadsloID));
 			logInfo("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());
 		} catch (NoResultException e) {
 			logException("No user found with login: " + sd.getUserID(), e);

@@ -3,6 +3,7 @@ package org.pikater.core.utilities.evolution;
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.core.utilities.evolution.operators.Operator;
 import org.pikater.core.utilities.evolution.selectors.Selector;
+
 import java.util.ArrayList;
 
 /** The main class which is responsible for the run of a single generation of
@@ -128,7 +129,7 @@ public class EvolutionaryAlgorithm {
     public void evolve(Population pop) {
 
         if (fitness == null)
-            throw new RuntimeException("No fitness function defined");
+            throw new IllegalStateException("No fitness function defined");
 
         fitness.evaluate(pop);
 

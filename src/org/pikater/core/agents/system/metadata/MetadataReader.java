@@ -46,10 +46,10 @@ public class MetadataReader {
 			if (type.isEmpty()){
 				type = a.getType();
 			}
-			if (! a.getType().equals((type))){
+			if (!a.getType().equals(type))
+			{
 				type = "Multivariate";
 			}
-					
 		}		
 		metadata.setAttributeType(type);
 		
@@ -67,7 +67,9 @@ public class MetadataReader {
     
     private void setTaskType(DataInstances data, Metadata metadata)
     {
-        if ( ((Attribute) data.getAttributes().get((data.getClass_index() >= 0 ? data.getClass_index() : data.getAttributes().size() - 1))).getType().equals("Numeric") ){
+    	int index = data.getClass_index() >= 0 ? data.getClass_index() : data.getAttributes().size() - 1;
+        if (data.getAttributes().get(index).getType().equals("Numeric"))
+        {
             metadata.setDefaultTask("Regression");
         }
         else {

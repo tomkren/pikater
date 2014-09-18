@@ -204,9 +204,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		p=cb.and(p, cb.equal(r.get("source"), JPADatasetSource.USER_UPLOAD));
 		
 		cq=cq.where(p);
-		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
-		
-		return res;
+		return em.createQuery(cq).getResultList();
 	}
 
 	public List<JPADataSetLO> getByOwner(JPAUser user) {
@@ -266,9 +264,7 @@ public class DataSetDAO extends AbstractDAO<JPADataSetLO>{
 		
 		cq=cq.where(p);
 		
-		List<JPADataSetLO> res=em.createQuery(cq).getResultList();
-		
-		return res;
+		return em.createQuery(cq).getResultList();
 	}
 	
 	/**

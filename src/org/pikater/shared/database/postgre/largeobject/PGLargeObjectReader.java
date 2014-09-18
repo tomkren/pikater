@@ -62,7 +62,7 @@ public class PGLargeObjectReader extends Reader {
 	 * rely on inheritance from java.io.Reader
 	 */
 	public int read(char[] arg0, int arg1, int arg2) throws IOException {
-		byte buf[] = new byte[arg2];
+		byte[] buf = new byte[arg2];
 		int res=-1;
 		try {
 			res=obj.read(buf, arg1, arg2);

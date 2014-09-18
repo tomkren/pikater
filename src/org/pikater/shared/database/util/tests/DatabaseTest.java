@@ -434,7 +434,7 @@ public class DatabaseTest {
 		System.out.println(s);
 	}
 	
-	public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException, UserNotFoundException{
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException, UserNotFoundException{
 		DatabaseTest dt=new DatabaseTest();
 		dt.test();
 		System.out.println("End of Database Testing");

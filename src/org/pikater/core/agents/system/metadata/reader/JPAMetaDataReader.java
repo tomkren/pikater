@@ -73,7 +73,7 @@ public class JPAMetaDataReader {
 	            	((JPAAttributeCategoricalMetaData)jpaam).setNumberOfCategories(numberOfCategories);
 	            	
 	            }else if(att instanceof RealAttributeMetadata){
-	            	RealAttributeMetadata ram= ((RealAttributeMetadata)att);
+	            	RealAttributeMetadata ram = (RealAttributeMetadata) att;
 	            	
 	            	jpaam=new JPAAttributeNumericalMetaData();
 	            	((JPAAttributeNumericalMetaData)jpaam).setAvarage(ram.getAvg());
@@ -86,7 +86,7 @@ public class JPAMetaDataReader {
 	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getStandardDeviation());
 	            	
 	            }else if(att instanceof IntegerAttributeMetadata){
-	            	IntegerAttributeMetadata ram= ((IntegerAttributeMetadata)att);
+	            	IntegerAttributeMetadata ram = (IntegerAttributeMetadata) att;
 	            	
 	            	jpaam=new JPAAttributeNumericalMetaData();
 	            	((JPAAttributeNumericalMetaData)jpaam).setAvarage(ram.getAvg());

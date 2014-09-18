@@ -425,8 +425,7 @@ public class DataManagerService extends FIPAService {
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
-			Metadatas allMetadata = (Metadatas) r.getValue();
-			return allMetadata;
+			return (Metadatas) r.getValue(); // all metadata
 
 		} catch (CodecException e) {
 			agent.logException(e.getMessage(), e);
@@ -456,8 +455,7 @@ public class DataManagerService extends FIPAService {
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
-			Metadata metadata = (Metadata) r.getValue();
-			return metadata;
+			return (Metadata) r.getValue();
 
 		} catch (CodecException e) {
 			agent.logException(e.getMessage(), e);
@@ -496,8 +494,7 @@ public class DataManagerService extends FIPAService {
 
 			Result r = (Result) agent.getContentManager()
 					.extractContent(inform);
-			Agents bestAgentCandidates = (Agents) r.getValue();
-			return bestAgentCandidates;
+			return (Agents) r.getValue();
 
 		} catch (CodecException e) {
 			agent.logException(e.getMessage(), e);
@@ -511,7 +508,8 @@ public class DataManagerService extends FIPAService {
 
 	public static Agent getTheBestAgent(PikaterAgent agent, String fileName) {
 		Agents agents = DataManagerService.getNBestAgents(agent, fileName, 1);
-		if ((agents != null) && (agents.getAgents().size() > 0)) {
+		if ((agents != null) && !agents.getAgents().isEmpty())
+		{
 			return agents.getAgents().get(0);
 		} else {
 			return null;
@@ -568,9 +566,7 @@ public class DataManagerService extends FIPAService {
 			Result replyResult = (Result) agent.getContentManager()
 					.extractContent(datasetInfoMsg);
 
-			DatasetsInfo datasetsInfo = (DatasetsInfo) replyResult.getValue();
-
-			return datasetsInfo;
+			return (DatasetsInfo) replyResult.getValue();
 
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
@@ -612,9 +608,7 @@ public class DataManagerService extends FIPAService {
 			Result replyResult = (Result) agent.getContentManager()
 					.extractContent(agentInfoMsg);
 
-			AgentInfo agentInfo = (AgentInfo) replyResult.getValue();
-
-			return agentInfo;
+			return (AgentInfo) replyResult.getValue();
 
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
@@ -655,9 +649,7 @@ public class DataManagerService extends FIPAService {
 			Result replyResult = (Result) agent.getContentManager()
 					.extractContent(agentInfoMsg);
 
-			AgentInfos agentInfos = (AgentInfos) replyResult.getValue();
-
-			return agentInfos;
+			return (AgentInfos) replyResult.getValue();
 
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
@@ -697,9 +689,7 @@ public class DataManagerService extends FIPAService {
 			Result replyResult = (Result) agent.getContentManager()
 					.extractContent(agentInfoMsg);
 
-			AgentInfos agentInfos = (AgentInfos) replyResult.getValue();
-
-			return agentInfos;
+			return (AgentInfos) replyResult.getValue();
 
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
@@ -735,10 +725,7 @@ public class DataManagerService extends FIPAService {
 			Result replyResult = (Result) agent.getContentManager()
 					.extractContent(agentInfoMsg);
 
-			ExternalAgentNames externalAgentNames = (ExternalAgentNames) replyResult
-					.getValue();
-
-			return externalAgentNames;
+			return (ExternalAgentNames) replyResult.getValue();
 
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
@@ -864,15 +851,15 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e1.getMessage(), e1);
 		}
 
-		if (content instanceof Result) {
-			Result result = (Result) content;
-
-			Batch savedBatch = (Batch) result.getValue();
-			return savedBatch;
-		} else {
-			agent.logSevere("No Result ontology");
+		if (content instanceof Result)
+		{
+			return (Batch) ((Result) content).getValue();
 		}
-		return null;
+		else
+		{
+			agent.logSevere("No Result ontology");
+			return null;
+		}
 	}
 
 	public static void updateBatchStatus(PikaterAgent agent, int batchID,
@@ -965,17 +952,15 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e1.getMessage(), e1);
 		}
 
-		if (content instanceof Result) {
-			Result result = (Result) content;
-
-			long totalPriorityLong = (long) result.getValue();
-			int totalPriority = (int) totalPriorityLong;
-			return totalPriority;
-		} else {
-			agent.logSevere("No Result ontology");
+		if (content instanceof Result)
+		{
+			return (int) ((Result) content).getValue();
 		}
-
-		return -1;
+		else
+		{
+			agent.logSevere("No Result ontology");
+			return -1;
+		}
 	}
 	
 	/*
@@ -1135,15 +1120,15 @@ public class DataManagerService extends FIPAService {
 			agent.logException(e1.getMessage(), e1);
 		}
 
-		if (content instanceof Result) {
-			Result result = (Result) content;
-
-			User user = (User) result.getValue();
-			return user;
-		} else {
-			agent.logSevere("No Result ontology");
+		if (content instanceof Result)
+		{
+			return (User) ((Result) content).getValue();
 		}
-		return null;
+		else
+		{
+			agent.logSevere("No Result ontology");
+			return null;
+		}
 	}
 
 	@Deprecated

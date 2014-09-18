@@ -47,9 +47,11 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		logInfo("Options: " + getOptions());
         classifier=createClassifier();
 		if(classifier == null)
-			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
-		
-		if (options.length > 0) {
+		{
+			throw new IllegalStateException(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
+		}
+		if (options.length > 0)
+		{
             //this is destructive, the options array will be emptied
 			classifier.setOptions(options);
 		}
@@ -204,7 +206,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 			DataInstances onto_test) {
 
 		//Evaluation eval = test();
-		double pre[] = new double[test.numInstances()];
+		double[] pre = new double[test.numInstances()];
 		for (int i = 0; i < test.numInstances(); i++) {
 			try {
 				pre[i] = classifier.classifyInstance(test.instance(i));
