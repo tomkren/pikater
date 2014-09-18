@@ -115,7 +115,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                 if (a.getAction() instanceof Recommend) {
  
 					if (finished()){
-						log("Recommendation finished.");
+						logInfo("Recommendation finished.");
 						reply.setPerformative(ACLMessage.INFORM);					
 						reply.setContent("finished");
 						return reply;
@@ -127,7 +127,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                     // merge options with .opt file options
                     myAgentOntology.setOptions(getParameters());
 
-                    log("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()), 2);
+                    logSevere("options: " + NewOptions.exportToWeka(myAgentOntology.getOptions()));
 
                     Datas datas = rec.getDatas();
                     
@@ -174,15 +174,15 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     				try {
     					getContentManager().fillContent(reply, result);
     				} catch (CodecException ce) {
-    					logError(ce.getMessage(), ce);
+    					logException(ce.getMessage(), ce);
     				} catch (OntologyException oe) {
-    					logError(oe.getMessage(), oe);
+    					logException(oe.getMessage(), oe);
     				}    				
         		}
             } catch (OntologyException e) {
-            	logError(e.getMessage(), e);
+            	logException(e.getMessage(), e);
             } catch (CodecException e) {
-            	logError(e.getMessage(), e);
+            	logException(e.getMessage(), e);
 			}
 
             return reply;

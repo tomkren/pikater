@@ -90,7 +90,7 @@ public class ComputingCommunicator {
 		try {
 			agent.getContentManager().fillContent(durationMessage, a);
 		} catch (CodecException | OntologyException e) {
-			agent.logError("Codec/Ontology exception in Computing Communicator", e);
+			agent.logException("Codec/Ontology exception in Computing Communicator", e);
 		}
 		agent.send(durationMessage);
 	}
@@ -113,7 +113,7 @@ public class ComputingCommunicator {
 				msgOut.addReceiver(gui_agents[i].getName());
 			}
 		} catch (FIPAException fe) {
-			agent.logError(fe.getMessage(), fe);
+			agent.logException(fe.getMessage(), fe);
 		}
 
 		msgOut.setConversationId("partial-results");
@@ -127,9 +127,9 @@ public class ComputingCommunicator {
 		try {
 			agent.getContentManager().fillContent(msgOut, content);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		agent.send(msgOut);
@@ -149,13 +149,13 @@ public class ComputingCommunicator {
 				agent.getContentManager().fillContent(msgOut, result);
 
 			} catch (CodecException ce) {
-				agent.logError(ce.getMessage(), ce);
+				agent.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError(oe.getMessage(), oe);
+				agent.logException(oe.getMessage(), oe);
 			}
 
 		} catch (Exception e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		return msgOut;

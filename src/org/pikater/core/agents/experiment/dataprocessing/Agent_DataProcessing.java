@@ -58,7 +58,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 			Files.write(bout, new File(CoreConfiguration.DATA_FILES_PATH + md5));
 			return md5;
 		} catch (IOException e) {
-			logError("Failed to write results", e);
+			logException("Failed to write results", e);
 			return null;
 		}
 	}
@@ -87,11 +87,11 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 				}
 			}
 		} catch (UngroundedException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -115,7 +115,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 				if (isSameNode(result[i].getName())) {
 					// prefer local reader for O2A transfer
 					reader = result[i].getName();
-					log("preferring reader " + reader.getName());
+					logInfo("preferring reader " + reader.getName());
 					getData.setO2aAgent(getLocalName());
 					break;
 				}
@@ -129,7 +129,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 				reader = ARFFReaders[randomInt];
 			}
 
-			log("using reader " + reader + ", filename: " + fileName);
+			logInfo("using reader " + reader + ", filename: " + fileName);
 
 			Ontology ontology = DataOntology.getInstance();
 
@@ -147,13 +147,13 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 			getContentManager().fillContent(msgOut, a);
 
 		} catch (FIPAException fe) {
-			logError(fe.getMessage(), fe);
+			logException(fe.getMessage(), fe);
 			return null;
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 			return null;
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 			return null;
 		}
 		return msgOut;

@@ -43,11 +43,11 @@ public class ParserBehaviour extends AchieveREResponder {
     	try {
             concept = ((Action)(agent.getContentManager().extractContent(request))).getAction();
         } catch (UngroundedException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
            
     	
@@ -85,7 +85,7 @@ public class ParserBehaviour extends AchieveREResponder {
    
 		ACLMessage failure = request.createReply();
 		failure.setPerformative(ACLMessage.FAILURE);
-		agent.logError("Failure responding to request: " + request.getContent());
+		agent.logSevere("Failure responding to request: " + request.getContent());
 		
 		return failure;
     }

@@ -210,9 +210,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									getContentManager().fillContent(reply, result);
 									
 								} catch (CodecException e) {
-									logError(e.getMessage(), e);
+									logException(e.getMessage(), e);
 								} catch (OntologyException e) {
-									logError(e.getMessage(), e);
+									logException(e.getMessage(), e);
 								}
 																								
 								getDataStore().put(RESULT_NOTIFICATION_KEY, reply);
@@ -247,9 +247,9 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									try {
 										getContentManager().fillContent(query, action);
 									} catch (CodecException e) {
-										logError(e.getMessage(), e);
+										logException(e.getMessage(), e);
 									} catch (OntologyException e) {
-										logError(e.getMessage(), e);
+										logException(e.getMessage(), e);
 									}
 									myAgent.send(query);
 
@@ -278,11 +278,11 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 									List<Eval> named_evals = eval.getEvaluations();
 									evaluations[id]=namedEvalsToFitness(named_evals);
 								} catch (UngroundedException e) {
-									logError(e.getMessage(), e);
+									logException(e.getMessage(), e);
 								} catch (CodecException e) {
-									logError(e.getMessage(), e);
+									logException(e.getMessage(), e);
 								} catch (OntologyException e) {
-									logError(e.getMessage(), e);
+									logException(e.getMessage(), e);
 								}
 									queriesToProcess--;
 							}
@@ -329,11 +329,11 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 					//return null;
 				}				
 			} catch (UngroundedException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			} catch (CodecException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			} catch (OntologyException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			}
 			throw new NotUnderstoodException("Not understood");
 		}
@@ -362,15 +362,15 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 			getContentManager().fillContent(reply, result);
 			
 		} catch (ArrayIndexOutOfBoundsException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 			reply.setContent(e.getMessage());
 		}

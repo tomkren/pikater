@@ -66,11 +66,11 @@ public class Agent_ManagerAgent extends PikaterAgent {
 
 		File data = new File(CoreConfiguration.SAVED_PATH);
 		if (!data.exists()) {
-			log("Creating directory saved");
+			logInfo("Creating directory saved");
 			if (data.mkdirs()) {
-				log("Succesfully created directory saved");
+				logInfo("Succesfully created directory saved");
 			} else {
-				logError("Error creating directory saved");
+				logSevere("Error creating directory saved");
 			}
 		}
 
@@ -114,16 +114,16 @@ public class Agent_ManagerAgent extends PikaterAgent {
 					}
 
 				} catch (OntologyException e) {
-					logError("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					logError("Codec problem: " + e.getMessage(), e);
+					logException("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					logError(e.getMessage(), e);
+					logException(e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: "
+				logSevere("Failure responding to request: "
 						+ request.getContent().substring(0, 2048));
 				return failure;
 			}
@@ -154,13 +154,13 @@ public class Agent_ManagerAgent extends PikaterAgent {
 			try {
 				doCreateAgent(generatedName, type, container, args2);
 			} catch (StaleProxyException e) { // we may have the class in DB
-				log("agent creation failed, trying to get JAR for type " + type + " from DB");
+				logInfo("agent creation failed, trying to get JAR for type " + type + " from DB");
 				DataManagerService.getExternalAgent(this, type);
 				// DataManager will save the JAR to FS if it finds it so we can retry
 				doCreateAgent(generatedName, type, container, args2);
 			}
 		} catch (ControllerException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 			return null;
 		}
 

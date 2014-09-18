@@ -39,7 +39,7 @@ public class DurationService extends FIPAService {
 		try {
 			agent.getContentManager().fillContent(request, a);
 		} catch (CodecException | OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		Duration duration=new Duration();
@@ -53,13 +53,13 @@ public class DurationService extends FIPAService {
 			duration = (Duration) (((Result) content).getValue());
 
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (UngroundedException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 
 		return duration;

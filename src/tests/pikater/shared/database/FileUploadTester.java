@@ -49,29 +49,29 @@ public class FileUploadTester extends PikaterAgent {
 			request.setLanguage(getCodec().getName());
 			request.setOntology(DataOntology.getInstance().getName());
 			getContentManager().fillContent(request, new Action(receiver, action));
-			log("Sending test request to dataManager");
+			logInfo("Sending test request to dataManager");
 
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
 			if (reply == null)
-				logError("Reply not received.");
+				logSevere("Reply not received.");
 			else
-				log("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+				logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
 
 			int port = Integer.parseInt(reply.getContent());
 			// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
 			DataTransferService.doClientFileTransfer("772c551b8486b932aed784a582b9c1b1_", "localhost", port);
 		} catch (CodecException | OntologyException e) {
-			logError("Ontology/codec error occurred: " + e.getMessage(), e);
+			logException("Ontology/codec error occurred: " + e.getMessage(), e);
 			e.printStackTrace();
 		} catch (FIPAException e) {
-			logError("FIPA error occurred: " + e.getMessage(), e);
+			logException("FIPA error occurred: " + e.getMessage(), e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logError("IO error occurred: " + e.getMessage(), e);
+			logException("IO error occurred: " + e.getMessage(), e);
 			PikaterDBLogger.logThrowable("Unexpected error occured:", e);
 		}
 
-		log("FileUploadTester ending");
+		logInfo("FileUploadTester ending");
 		doDelete();
 	}
 

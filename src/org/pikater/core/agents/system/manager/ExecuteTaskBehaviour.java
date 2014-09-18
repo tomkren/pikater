@@ -43,20 +43,20 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
     }
 
 	protected void handleRefuse(ACLMessage refuse) {
-		myAgent.log("Agent "+refuse.getSender().getName()+" refused.", 1);
+		myAgent.logSevere("Agent "+refuse.getSender().getName()+" refused.");
 	}
 	
 	protected void handleFailure(ACLMessage failure) {
 		if (failure.getSender().equals(myAgent.getAMS())) {
-			myAgent. log("Responder does not exist", 1);
+			myAgent.logSevere("Responder does not exist");
 		}
 		else {
-			myAgent.log("Agent "+failure.getSender().getName()+" failed.", 1);	            
+			myAgent.logSevere("Agent "+failure.getSender().getName()+" failed.");	            
 		}
 	}
 	
 	protected void handleInform(ACLMessage inform) {
-		myAgent.log("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
+		myAgent.logInfo("Agent "+inform.getSender().getName()+" successfully performed the requested action.");
 		
 		ContentElement content;
 		try {
@@ -65,8 +65,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 				// get the original task from msg
 				Result result = (Result) content;					
 				Task t = (Task)result.getValue();
-                ComputationCollectionItem computation =
-                		myAgent.getComputation(t.getBatchID());
+                // ComputationCollectionItem computation = myAgent.getComputation(t.getBatchID()); // unused
                 DataSourceEdge labeledData = new DataSourceEdge();
                 labeledData.setFile(false);
 
@@ -108,11 +107,11 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                 node.decreaseNumberOfOutstandingTask();
 			}
 		} catch (UngroundedException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 		}
 		
 		// send subscription to the original agent after each received task

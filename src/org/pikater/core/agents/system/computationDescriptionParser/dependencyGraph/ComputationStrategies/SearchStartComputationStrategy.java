@@ -88,10 +88,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 				myAgent.getContentManager().fillContent(inform, result);
 			} catch (CodecException e) {
-				myAgent.logError(e.getMessage(), e);
+				myAgent.logException(e.getMessage(), e);
 				e.printStackTrace();
 			} catch (OntologyException e) {
-				myAgent.logError(e.getMessage(), e);
+				myAgent.logException(e.getMessage(), e);
 				e.printStackTrace();
 			}
 			
@@ -130,10 +130,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 		try {
 			myAgent.getContentManager().fillContent(msg, a);
 		} catch (CodecException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
 		} catch (OntologyException e) {
-			myAgent.logError(e.getMessage(), e);
+			myAgent.logException(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

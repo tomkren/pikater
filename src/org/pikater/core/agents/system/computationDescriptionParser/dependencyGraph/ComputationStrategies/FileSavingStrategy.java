@@ -29,7 +29,7 @@ public class FileSavingStrategy implements StartComputationStrategy {
 
     @Override
     public void execute(ComputationNode computation) {
-        myAgent.log("This will be the place where the data will be saved.");
+        myAgent.logInfo("This will be the place where the data will be saved.");
         Map<String,ComputationOutputBuffer> map = computationNode.getInputs();
         ComputationOutputBuffer buffer = map.get("file");
         if (buffer != null) {

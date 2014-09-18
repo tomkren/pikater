@@ -85,7 +85,7 @@ public class ManagerAgentRequestResponder {
         oos.writeObject(toObject(object));
         oos.flush();
         oos.close();
-        managerAgent.log("Agent " + name + " saved to file" + filename + ".model");
+        managerAgent.logInfo("Agent " + name + " saved to file" + filename + ".model");
 
         ACLMessage reply = request.createReply();
         reply.setContent(filename);
@@ -109,7 +109,7 @@ public class ManagerAgentRequestResponder {
         ACLMessage reply = request.createReply();
         reply.setPerformative(ACLMessage.INFORM);
         reply.setContent(agentNameCreated);
-        managerAgent.log("Agent " + agentNameCreated + " created.");
+        managerAgent.logInfo("Agent " + agentNameCreated + " created.");
 
         return reply;
     }
@@ -121,7 +121,7 @@ public class ManagerAgentRequestResponder {
 		String agentName = killAgent.getName();
 		AID agentAID = new AID(agentName, false);
 
-		managerAgent.log("Request to kill " + agentName + " agent");
+		managerAgent.logInfo("Request to kill " + agentName + " agent");
 		Ontology ontology = TerminationOntology.getInstance();
 		Codec codec = managerAgent.getCodec();
 
@@ -137,7 +137,7 @@ public class ManagerAgentRequestResponder {
 		if (replyFromAgent == null)
 			throw new FailureException("Agent didn't terminate in within 10 sec: "+agentName);
 
-		managerAgent.log("Terminated " + agentName);
+		managerAgent.logInfo("Terminated " + agentName);
 
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
@@ -170,7 +170,7 @@ public class ManagerAgentRequestResponder {
             inputStream.close();
         }
 
-        managerAgent.log("Resurrected agent : " + newAgent);
+        managerAgent.logInfo("Resurrected agent : " + newAgent);
         // TODO kdyz se ozivuje 2x ten samej -> chyba
 
         String agentName = managerAgent.generateName(la.getFilename());
@@ -187,7 +187,7 @@ public class ManagerAgentRequestResponder {
             throw new ControllerException("Agent not created.");
         }
 
-        managerAgent.log("Loaded agent:   " + agentName);
+        managerAgent.logInfo("Loaded agent:   " + agentName);
 
         jade.lang.acl.ACLMessage reply;
 
@@ -225,7 +225,7 @@ public class ManagerAgentRequestResponder {
         @SuppressWarnings("unused")
 		GetComputerInfo getComputerInfo = (GetComputerInfo) a.getAction();
 
-        managerAgent.log("Request to get ComputerInfo");
+        managerAgent.logInfo("Request to get ComputerInfo");
         Ontology ontology = AgentManagementOntology.getInstance();
         Codec codec = managerAgent.getCodec();
         
@@ -246,9 +246,9 @@ public class ManagerAgentRequestResponder {
         try {
         	managerAgent.getContentManager().fillContent(reply, result);	
 		} catch (CodecException e) {
-			managerAgent.logError(e.getMessage(), e);
+			managerAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			managerAgent.logError(e.getMessage(), e);
+			managerAgent.logException(e.getMessage(), e);
 		}
         
         return reply;
@@ -261,7 +261,7 @@ public class ManagerAgentRequestResponder {
         @SuppressWarnings("unused")
         Ping getPing = (Ping) a.getAction();
 
-        managerAgent.log("Request to get Ping");
+        managerAgent.logInfo("Request to get Ping");
         Ontology ontology = AgentManagementOntology.getInstance();
         Codec codec = managerAgent.getCodec();
 
@@ -275,9 +275,9 @@ public class ManagerAgentRequestResponder {
         try {
         	managerAgent.getContentManager().fillContent(reply, result);	
 		} catch (CodecException e) {
-			managerAgent.logError(e.getMessage(), e);
+			managerAgent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			managerAgent.logError(e.getMessage(), e);
+			managerAgent.logException(e.getMessage(), e);
 		}
         
         return reply;

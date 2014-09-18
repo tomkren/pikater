@@ -71,16 +71,16 @@ public class Agent_MetadataQueen extends PikaterAgent {
 						return respondToNewComputedData(request, a);
 					}
 				} catch (OntologyException e) {
-					logError("Problem extracting content",e);
+					logException("Problem extracting content",e);
 				} catch (CodecException e) {
-					logError("Codec problem",e);
+					logException("Codec problem",e);
 				} catch (Exception e) {
-					logError("General Exception", e);
+					logException("General Exception", e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: " + request.getContent());
+				logSevere("Failure responding to request: " + request.getContent());
 				return failure;
 			}
 
@@ -132,9 +132,9 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		
 			return reply;	
 		} catch (NoResultException e) {
-			logError("DataSet with ID "+dataID+" not found  in the database",e);
+			logException("DataSet with ID "+dataID+" not found  in the database",e);
 		} catch (IOException e) {
-			logError("IOError while accessing dataset", e);
+			logException("IOError while accessing dataset", e);
 		}
         
 		return null;
@@ -150,18 +150,18 @@ public class Agent_MetadataQueen extends PikaterAgent {
         
         try {
             ACLMessage request = makeActionRequest(receiver, saveMetaDataAction);
-            log("Sending SaveMetaDataAction to DataManager");
+            logInfo("Sending SaveMetaDataAction to DataManager");
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
             if (reply == null)
-                logError("Reply not received");
+                logSevere("Reply not received");
             else
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+                logInfo("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
         } catch (OntologyException e) {
-            logError("Ontology error occurred: ",e);
+            logException("Ontology error occurred: ",e);
         } catch (CodecException e) {
-            logError("Codec error occurred: ",e);
+            logException("Codec error occurred: ",e);
         } catch (FIPAException e) {
-            logError("FIPA error occurred",e);
+            logException("FIPA error occurred",e);
         }
     }
   

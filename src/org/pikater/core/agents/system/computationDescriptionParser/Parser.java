@@ -27,14 +27,14 @@ public class Parser {
     }
 
     public void parseRoot(IDataSaver dataSaver, int batchID, int userID) {
-        agent.log("Ontology Parser - IDataSaver");
+        agent.logInfo("Ontology Parser - IDataSaver");
         //Ontology root is Leaf in Computation
         parseSaver(dataSaver, batchID, userID);
     }
 
     private void parseSaver(IDataSaver dataSaver, int batchID, int userID) {
         if (dataSaver instanceof FileDataSaver) {
-            agent.log("Ontology Matched - FileDataSaver");
+            agent.logInfo("Ontology Matched - FileDataSaver");
 
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
@@ -44,14 +44,14 @@ public class Parser {
             //alreadyProcessed.put(dataSaver.getId(),saverNode);
             parseDataSourceDescription(dataSource, batchID, userID, saverNode, "file");
         } else {
-            agent.logError("Ontology Parser - Error unknown IDataSaver");
+            agent.logSevere("Ontology Parser - Error unknown IDataSaver");
         }
     }
 
     private void parseDataSourceDescription(DataSourceDescription dataSource,
     		int batchID, int userID, ComputationNode child, String connectionName, 
     		String connectionOutName) {
-        agent.log("Ontology Parser - DataSourceDescription");
+        agent.logInfo("Ontology Parser - DataSourceDescription");
 
         IDataProvider dataProvider = dataSource.getDataProvider();
         this.parseDataProvider(dataProvider, batchID, userID, child, 
@@ -67,36 +67,36 @@ public class Parser {
     public void parseDataProvider(IDataProvider dataProvider, int batchID,
     		int userID, ComputationNode child, String connectionName,
     		String connectionOutName) {
-        agent.log("Ontology Parser - IDataProvider");
+        agent.logInfo("Ontology Parser - IDataProvider");
         ComputationNode parent;
         if (dataProvider instanceof FileDataProvider) {
-            agent.log("Ontology Matched - FileDataProvider");
+            agent.logInfo("Ontology Matched - FileDataProvider");
 
             FileDataProvider fileData = (FileDataProvider) dataProvider;
             this.parseFileDataProvider(fileData, child, connectionName);
             return;
         }  else if (dataProvider instanceof ComputingAgent) {
-            agent.log("Ontology Matched - ComputingAgent");
+            agent.logInfo("Ontology Matched - ComputingAgent");
 
             ComputingAgent computingAgent = (ComputingAgent) dataProvider;
             parent=parseComputing(computingAgent, batchID, userID, true);
         }
         else if (dataProvider instanceof CARecSearchComplex)
         {
-            agent.log("Ontology Matched - CARecSearchComplex");
+            agent.logInfo("Ontology Matched - CARecSearchComplex");
 
             CARecSearchComplex complex = (CARecSearchComplex) dataProvider;
             parent=parseComplex(complex, batchID, userID);
         }
         else if (dataProvider instanceof DataProcessing) {
-            agent.log("Ontology Matched - DataProcessing");
+            agent.logInfo("Ontology Matched - DataProcessing");
             
             DataProcessing dataProcessing = (DataProcessing) dataProvider;
             parent = parseDataProcessing(dataProcessing, child, batchID, userID, 
             			connectionName, connectionOutName);
             return;
         } else {
-            agent.log("Ontology Matched - Error unknown IDataProvider");
+            agent.logInfo("Ontology Matched - Error unknown IDataProvider");
             return;
         }
         //handle parent - set him as file receiver
@@ -109,11 +109,11 @@ public class Parser {
     
     public void parseErrors(ErrorSourceDescription errorDescription, ComputationNode child) {
         if (errorDescription==null) return;
-        agent.log("Ontology Parser - IErrorProvider");
+        agent.logInfo("Ontology Parser - IErrorProvider");
         ComputingAgent errorProvider=(ComputingAgent)errorDescription.getProvider();
 
         if (!alreadyProcessed.containsKey(errorProvider.getId()))
-        {    agent.log("Error provider was not parsed at the moment parseErrors was called");
+        {    agent.logInfo("Error provider was not parsed at the moment parseErrors was called");
             return;
         }
         ComputationNode errorNode=alreadyProcessed.get(errorProvider.getId());
@@ -125,7 +125,7 @@ public class Parser {
 
     //This is the root of all parsing
     public void parseRoots(ComputationDescription comDescription, int batchID, int userID) {
-        agent.log("Ontology Parser - ComputationDescription");
+        agent.logInfo("Ontology Parser - ComputationDescription");
 
         List<FileDataSaver> elements = comDescription.getRootElements();
         for (FileDataSaver fileSaverI : elements) {
@@ -135,7 +135,7 @@ public class Parser {
 
     //Processes a node that is in the beginning of computation - reads file
     public void parseFileDataProvider(FileDataProvider file, ComputationNode child, String connectionName) {
-        agent.log("Ontology Parser - FileDataProvider");
+        agent.logInfo("Ontology Parser - FileDataProvider");
         if (!alreadyProcessed.containsKey(file.getId()))
         {
             alreadyProcessed.put(file.getId(), null);
@@ -154,7 +154,7 @@ public class Parser {
     public ModelComputationNode parseComputing(IComputingAgent computingAgent,
     		int batchID, int userID, Boolean addOptions)
     {
-        agent.log("Ontology Parser - Computing Agent Simple");
+        agent.logInfo("Ontology Parser - Computing Agent Simple");
 
         if (!alreadyProcessed.containsKey(computingAgent.getId()))
         {
@@ -180,7 +180,7 @@ public class Parser {
 
         if (agentType!=null)
         {
-            NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType, model));
+            NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer<AgentTypeEdge>(new AgentTypeEdge(agentType, model));
             typeBuffer.setTarget(computingNode);
             computingNode.addInput("agenttype",typeBuffer);
 
@@ -198,7 +198,7 @@ public class Parser {
     }
 
     public ComputationNode parseComplex(CARecSearchComplex complex, int batchID, int userID) {
-        agent.log("Ontology Parser - CARecSearchComplex");
+        agent.logInfo("Ontology Parser - CARecSearchComplex");
 
         ComputationNode computingNode;
         List<NewOption> childOptions;
@@ -240,7 +240,7 @@ public class Parser {
     public SearchComputationNode parseSearch(Search search, ComputationNode child,
     		List<ErrorSourceDescription> errors, List<NewOption> childOptions,
     		int batchID) {
-        agent.log("Ontology Parser - Search");
+        agent.logInfo("Ontology Parser - Search");
 
         if (!alreadyProcessed.containsKey(search.getId()))
         {
@@ -277,7 +277,7 @@ public class Parser {
 
     public void parseRecommender(Recommend recommender, ComputationNode child,
     		int batchID, int userID) {
-        agent.log("Ontology Parser - Recommender");
+        agent.logInfo("Ontology Parser - Recommender");
 
         RecommenderComputationNode recNode = new RecommenderComputationNode(computationGraph);
         RecommenderStartComputationStrategy recStrategy =
@@ -335,7 +335,7 @@ public class Parser {
             String agentType = dataProcessing.getAgentType();
             if (agentType!=null)
             {
-                NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer(new AgentTypeEdge(agentType, 0));
+                NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer<AgentTypeEdge>(new AgentTypeEdge(agentType, 0));
                 typeBuffer.setTarget(parent);
                 parent.addInput("agenttype",typeBuffer);
             }

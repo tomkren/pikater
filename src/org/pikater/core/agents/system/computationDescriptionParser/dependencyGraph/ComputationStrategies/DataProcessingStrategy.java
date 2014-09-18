@@ -156,9 +156,9 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         try {
             myAgent.getContentManager().fillContent(request, a);
         } catch (Codec.CodecException e) {
-            myAgent.logError(e.getMessage(), e);
+            myAgent.logException(e.getMessage(), e);
         } catch (OntologyException e) {
-            myAgent.logError(e.getMessage(), e);
+            myAgent.logException(e.getMessage(), e);
         }
         return request;
 

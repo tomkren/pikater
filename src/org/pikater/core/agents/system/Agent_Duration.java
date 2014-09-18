@@ -168,9 +168,9 @@ public class Agent_Duration extends PikaterAgent {
                         return reply;
                     }
                 } catch (OntologyException e) {
-                	Agent_Duration.this.logError(e.getMessage(), e);
+                	Agent_Duration.this.logException(e.getMessage(), e);
                 } catch (CodecException e) {
-                	Agent_Duration.this.logError(e.getMessage(), e);
+                	Agent_Duration.this.logException(e.getMessage(), e);
                 }
 
                 ACLMessage failure = request.createReply();
@@ -229,7 +229,7 @@ public class Agent_Duration extends PikaterAgent {
     		
 	    	}
 	    	catch (Exception e){
-	    		logError(e.getMessage(), e);
+	    		logException(e.getMessage(), e);
 	    	}
 
     	}
@@ -270,22 +270,22 @@ public class Agent_Duration extends PikaterAgent {
 		}
 		
 		protected void handleRefuse(ACLMessage refuse) {
-			log("Agent "+refuse.getSender().getName()+" refused.", 1);
+			logSevere("Agent "+refuse.getSender().getName()+" refused.");
 		}
 		
 		protected void handleFailure(ACLMessage failure) {
 			if (failure.getSender().equals(myAgent.getAMS())) {
 				// FAILURE notification from the JADE runtime: the receiver
 				// does not exist
-                log("Responder " + failure.getSender().getName() + " does not exist", 1);
+                logSevere("Responder " + failure.getSender().getName() + " does not exist");
 			}
 			else {
-                log("Agent "+failure.getSender().getName()+" failed", 1);
+                logSevere("Agent "+failure.getSender().getName()+" failed");
 			}
 		}
 				
 		protected void handleInform(ACLMessage inform) {
-            log("Agent "+inform.getSender().getName() + " successfully performed the requested action", 2);
+            logSevere("Agent "+inform.getSender().getName() + " successfully performed the requested action");
 																			
 			ContentElement content;
 			try {
@@ -311,19 +311,19 @@ public class Agent_Duration extends PikaterAgent {
 					}
 					d.setStart(evaluation.getStart());
 					durations.add(d);
-					logError(d.getStart() + " - " + d.getDurationMiliseconds());
+					logSevere(d.getStart() + " - " + d.getDurationMiliseconds());
 					if (log_LR_durations){
 						// write duration into a file:
-						log(d.getStart() + " - " + d.getDurationMiliseconds());
+						logInfo(d.getStart() + " - " + d.getDurationMiliseconds());
 					}											
 					
 				}				
 			} catch (UngroundedException e) {
-				agent.logError(e.getMessage(), e);
+				agent.logException(e.getMessage(), e);
 			} catch (CodecException e) {
-				agent.logError(e.getMessage(), e);
+				agent.logException(e.getMessage(), e);
 			} catch (OntologyException e) {
-				agent.logError(e.getMessage(), e);
+				agent.logException(e.getMessage(), e);
 			}			
 		}			
 	} // end of call for proposal bahavior
@@ -383,9 +383,9 @@ public class Agent_Duration extends PikaterAgent {
 			getContentManager().fillContent(cfp, a);
 
 		} catch (CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 				
 		return cfp;

@@ -164,11 +164,11 @@ public class Agent_DataManager extends PikaterAgent {
 
 		File data = new File(CoreConfiguration.DATA_FILES_PATH + "temp");
 		if (!data.exists()) {
-			log("Creating directory: " + CoreConfiguration.DATA_FILES_PATH);
+			logInfo("Creating directory: " + CoreConfiguration.DATA_FILES_PATH);
 			if (data.mkdirs()) {
-				log("Succesfully created directory: " + CoreConfiguration.DATA_FILES_PATH);
+				logInfo("Succesfully created directory: " + CoreConfiguration.DATA_FILES_PATH);
 			} else {
-				logError("Error creating directory: " + CoreConfiguration.DATA_FILES_PATH);
+				logSevere("Error creating directory: " + CoreConfiguration.DATA_FILES_PATH);
 			}
 		}
 
@@ -252,7 +252,7 @@ public class Agent_DataManager extends PikaterAgent {
 						return respondToSaveResults(request, a);
 					}
 					if (a.getAction() instanceof LoadResults) {
-						logError("Not Implemented");
+						logSevere("Not Implemented");
 					}
 
 					/**
@@ -312,29 +312,29 @@ public class Agent_DataManager extends PikaterAgent {
 					 * Deprecated Files actions
 					 */
 					if (a.getAction() instanceof GetFileInfo) {
-						logError("Not Implemented - Deprecated");
+						logSevere("Not Implemented - Deprecated");
 					}
 					if (a.getAction() instanceof ImportFile) {
-						logError("Not Implemented - Deprecated");
+						logSevere("Not Implemented - Deprecated");
 					}
 					if (a.getAction() instanceof GetFiles) {
-						logError("Not Implemented - Deprecated");
+						logSevere("Not Implemented - Deprecated");
 					}
 					if (a.getAction() instanceof DeleteTempFiles) {
-						logError("Not Implemented - Deprecated");
+						logSevere("Not Implemented - Deprecated");
 					}
 
 				} catch (OntologyException e) {
-					logError("Problem extracting content: " + e.getMessage(), e);
+					logException("Problem extracting content: " + e.getMessage(), e);
 				} catch (CodecException e) {
-					logError("Codec problem: " + e.getMessage(), e);
+					logException("Codec problem: " + e.getMessage(), e);
 				} catch (Exception e) {
-					logError(e.getMessage(), e);
+					logException(e.getMessage(), e);
 				}
 
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
-				logError("Failure responding to request: " + request.getConversationId());
+				logSevere("Failure responding to request: " + request.getConversationId());
 				return failure;
 			}
 
@@ -350,7 +350,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToGetUserID(ACLMessage request, Action a) {
 
-		log("respondToGetUserID");
+		logInfo("respondToGetUserID");
 
 		GetUserID getUserID = (GetUserID) a.getAction();
 
@@ -359,7 +359,7 @@ public class Agent_DataManager extends PikaterAgent {
 		if (userJPA == null) {
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
-			logError("UserLogin " + getUserID.getLogin() + " doesn't exist");
+			logSevere("UserLogin " + getUserID.getLogin() + " doesn't exist");
 			return failure;
 		}
 
@@ -371,9 +371,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -381,7 +381,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToGetUser(ACLMessage request, Action a) {
 
-		log("respondToGetUser");
+		logInfo("respondToGetUser");
 
 		GetUser getUser = (GetUser) a.getAction();
 
@@ -390,7 +390,7 @@ public class Agent_DataManager extends PikaterAgent {
 		if (userJPA == null) {
 			ACLMessage failure = request.createReply();
 			failure.setPerformative(ACLMessage.FAILURE);
-			logError("UserID " + getUser.getUserID() + " doesn't exist");
+			logSevere("UserID " + getUser.getUserID() + " doesn't exist");
 			return failure;
 		}
 
@@ -409,9 +409,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage());
+			logSevere(e.getMessage());
 		} catch (OntologyException e) {
-			logError(e.getMessage());
+			logSevere(e.getMessage());
 		}
 
 		return reply;
@@ -425,7 +425,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		if (transtateFile.getExternalFilename() != null && transtateFile.getInternalFilename() == null) {
 
-			log("respondToTranslateFilename External File Name " + transtateFile.getExternalFilename());
+			logInfo("respondToTranslateFilename External File Name " + transtateFile.getExternalFilename());
 
 			java.util.List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getExternalFilename());
 			if (files.size() > 0) {
@@ -440,7 +440,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		} else if (transtateFile.getInternalFilename() != null && transtateFile.getExternalFilename() == null) {
 
-			log("respondToTranslateFilename Internal File Name " + transtateFile.getInternalFilename());
+			logInfo("respondToTranslateFilename Internal File Name " + transtateFile.getInternalFilename());
 
 			java.util.List<JPAFilemapping> files = DAOs.filemappingDAO.getByExternalFilename(transtateFile.getInternalFilename());
 			if (files.size() > 0) {
@@ -480,9 +480,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -516,9 +516,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -543,9 +543,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -553,7 +553,7 @@ public class Agent_DataManager extends PikaterAgent {
 	
 	protected ACLMessage respondToGetExternalAgentNames(ACLMessage request, Action a) throws CodecException, OntologyException {
 
-		log("getting external agent names");
+		logInfo("getting external agent names");
 
 		List<JPAExternalAgent> externalAgents = DAOs.externalAgentDAO.getAll();
 
@@ -576,7 +576,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	protected ACLMessage respondToSaveAgentInfo(ACLMessage request, Action a) {
 
-		log("RespondToSaveAgentInfo");
+		logInfo("RespondToSaveAgentInfo");
 
 		SaveAgentInfo saveAgentInfo = (SaveAgentInfo) a.getAction();
 		AgentInfo newAgentInfo = saveAgentInfo.getAgentInfo();
@@ -607,7 +607,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToSaveBatch(ACLMessage request, Action a) {
 
-		log("RespondToSaveBatch");
+		logInfo("RespondToSaveBatch");
 
 		SaveBatch saveBatch = (SaveBatch) a.getAction();
 		Batch batch = saveBatch.getBatch();
@@ -641,9 +641,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -651,7 +651,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToLoadBatch(ACLMessage request, Action a) {
 
-		log("respondToLoadBatch");
+		logInfo("respondToLoadBatch");
 
 		LoadBatch loadBatch = (LoadBatch) a.getAction();
 
@@ -676,9 +676,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -713,12 +713,12 @@ public class Agent_DataManager extends PikaterAgent {
 				request.setOntology(ontology.getName());
 				try {
 					getContentManager().fillContent(request, new Action(receiver, action));
-					log("Sending notification request to mailAgent");
+					logInfo("Sending notification request to mailAgent");
 					ACLMessage reply = FIPAService.doFipaRequestClient(this.myAgent, request, 10000);
 					if (reply == null)
-						logError("Reply not received.");
+						logSevere("Reply not received.");
 				} catch (CodecException | OntologyException | FIPAException e) {
-					logError("Failed to request e-mail", e);
+					logException("Failed to request e-mail", e);
 				}
 			}
 		});
@@ -726,11 +726,11 @@ public class Agent_DataManager extends PikaterAgent {
 
 	protected ACLMessage respondToUpdateBatchStatus(ACLMessage request, Action a) {
 
-		log("respondToUpdateBatchStatus");
+		logInfo("respondToUpdateBatchStatus");
 
 		UpdateBatchStatus updateBatchStatus = (UpdateBatchStatus) a.getAction();
 		
-		log("****** " + updateBatchStatus.getBatchID());
+		logInfo("****** " + updateBatchStatus.getBatchID());
 
 
 		JPABatch batchJPA = DAOs.batchDAO.getByID(updateBatchStatus.getBatchID());
@@ -752,7 +752,7 @@ public class Agent_DataManager extends PikaterAgent {
 		if (batchStatus == JPABatchStatus.FINISHED && batchJPA.isSendEmailAfterFinish()) {
 			requestMailNotification(batchJPA);
 		} else {
-			log("not sending mail notification - option not set");
+			logInfo("not sending mail notification - option not set");
 		}
 
 		ACLMessage reply = request.createReply();
@@ -763,7 +763,7 @@ public class Agent_DataManager extends PikaterAgent {
 	}
 
 	private ACLMessage respondToGetBatchPriority(ACLMessage request, Action a) {
-		log("respondToGetBatchPriority");
+		logInfo("respondToGetBatchPriority");
 
 		GetBatchPriority getBatchPriority = (GetBatchPriority) a.getAction();
 		int batchID = getBatchPriority.getBatchID();
@@ -781,9 +781,9 @@ public class Agent_DataManager extends PikaterAgent {
 			try {
 				getContentManager().fillContent(reply, result);
 			} catch (CodecException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			} catch (OntologyException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			}
 		}
 
@@ -793,7 +793,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToSaveExperiment(ACLMessage request, Action a) {
 
-		log("respondToSaveExperiment");
+		logInfo("respondToSaveExperiment");
 
 		SaveExperiment saveExperiment = (SaveExperiment) a.getAction();
 		Experiment experiment = saveExperiment.getExperiment();
@@ -819,9 +819,9 @@ public class Agent_DataManager extends PikaterAgent {
 			try {
 				getContentManager().fillContent(reply, result);
 			} catch (CodecException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			} catch (OntologyException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			}
 		}
 
@@ -830,7 +830,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	protected ACLMessage respondToUpdateExperimentStatus(ACLMessage request, Action a) {
 
-		log("respondToUpdateExperimentStatus");
+		logInfo("respondToUpdateExperimentStatus");
 
 		UpdateExperimentStatus updateExperimentStatus = (UpdateExperimentStatus) a.getAction();
 
@@ -880,9 +880,9 @@ public class Agent_DataManager extends PikaterAgent {
 
 		JPAResult jparesult = new JPAResult();
 		jparesult.setAgentName(task.getAgent().getType());
-		log("Adding result for Agent Type: " + task.getAgent().getType());
+		logInfo("Adding result for Agent Type: " + task.getAgent().getType());
 		jparesult.setOptions(options.exportXML());
-		log("Saving result for hash: " + task.getDatas().exportInternalTrainFileName());
+		logInfo("Saving result for hash: " + task.getDatas().exportInternalTrainFileName());
 		jparesult.setSerializedFileName(task.getDatas().exportInternalTrainFileName());
 
 		for(Data data : safe(task.getDatas().getDatas())){
@@ -893,12 +893,12 @@ public class Agent_DataManager extends PikaterAgent {
 			if(dslo!=null){
 				if(!this.containsID(jparesult.getInputs(), dslo)){
 					jparesult.getInputs().add(dslo);
-					log("Adding input " + data.getInternalFileName() + " to result." );
+					logInfo("Adding input " + data.getInternalFileName() + " to result." );
 				}else{
-					log("Adding input " + data.getInternalFileName() + " skipped. Duplicate value.");
+					logInfo("Adding input " + data.getInternalFileName() + " skipped. Duplicate value.");
 				}
 			}else{
-				logError("Failed to add output " + data.getInternalFileName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+				logSevere("Failed to add output " + data.getInternalFileName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
 			}
 		}
 		
@@ -907,12 +907,12 @@ public class Agent_DataManager extends PikaterAgent {
 			if(dslo!=null){
 				if(!this.containsID(jparesult.getOutputs(), dslo)){
 					jparesult.getOutputs().add(dslo);
-					log("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+					logInfo("Adding output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
 				}else{
-					log("Adding output " + output.getName() + " skipped. Duplicate value.");
+					logInfo("Adding output " + output.getName() + " skipped. Duplicate value.");
 				}
 			}else{
-				logError("Failed to add output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
+				logSevere("Failed to add output " + output.getName() + " to result for train dataset " + task.getDatas().exportInternalTrainFileName());
 			}
 		}
 
@@ -980,30 +980,30 @@ public class Agent_DataManager extends PikaterAgent {
 		if (task.getStart() != null) {
 			start = Agent_DataManager.getDateFromPikaterDateString(task.getStart());
 		} else {
-			logError("Result start date isn't set. Using current DateTime");
+			logSevere("Result start date isn't set. Using current DateTime");
 		}
 		jparesult.setStart(start);
-		log("Start Date set: " + start.toString());
+		logInfo("Start Date set: " + start.toString());
 
 		Date finish = new Date();
 		if (task.getFinish() != null) {
 			finish = Agent_DataManager.getDateFromPikaterDateString(task.getFinish());
 		} else {
-			logError("Result finish date isn't set. Using current DateTime");
+			logSevere("Result finish date isn't set. Using current DateTime");
 		}
 		jparesult.setFinish(finish);
-		log("Finish Date set: " + finish.toString());
+		logInfo("Finish Date set: " + finish.toString());
 
 		jparesult.setNote(task.getNote());
-		log("JPA Result    " + jparesult.getErrorRate());
+		logInfo("JPA Result    " + jparesult.getErrorRate());
 		int resultID = DAOs.experimentDAO.addResultToExperiment(experimentID, jparesult);
 		if (resultID != -1) {
-			log("Persisted JPAResult for experiment ID " + experimentID + " with ID: " + resultID);
+			logInfo("Persisted JPAResult for experiment ID " + experimentID + " with ID: " + resultID);
 			if (task.getResult().getObject() != null) {
 				saveResultModel(task, resultID);
 			}
 		} else {
-			logError("Couldn't persist JPAResult for experiment ID \n" + experimentID);
+			logSevere("Couldn't persist JPAResult for experiment ID \n" + experimentID);
 		}
 
 		ACLMessage reply = request.createReply();
@@ -1022,12 +1022,12 @@ public class Agent_DataManager extends PikaterAgent {
 			int jpadsloID = DAOs.dataSetDAO.storeNewDataSet(f, f.getName(), sd.getDescription(), sd.getUserID(),JPADatasetSource.EXPERIMENT);
 
 			reply.setContentObject((new Integer(jpadsloID)));
-			log("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());
+			logInfo("Saved Dataset with ID: " + jpadsloID + " for sourcefile "+sd.getSourceFile());
 		} catch (NoResultException e) {
-			logError("No user found with login: " + sd.getUserID(), e);
+			logException("No user found with login: " + sd.getUserID(), e);
 			reply.setPerformative(ACLMessage.FAILURE);
 		} catch (IOException e) {
-			logError("File can't be read.", e);
+			logException("File can't be read.", e);
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 
@@ -1041,9 +1041,9 @@ public class Agent_DataManager extends PikaterAgent {
 		m.setSerializedAgent(task.getResult().getObject());
 		int savedModelID = DAOs.resultDAO.setModelForResult(m);
 		if (savedModelID == -1) {
-			logError("Failed to persist model for result with ID " + resultId);
+			logSevere("Failed to persist model for result with ID " + resultId);
 		} else {
-			log("Persisted JPAModel " + savedModelID);
+			logInfo("Persisted JPAModel " + savedModelID);
 		}
 	}
 
@@ -1059,7 +1059,7 @@ public class Agent_DataManager extends PikaterAgent {
 			String currentHash = dslo.getHash();
 
 			List<JPADataSetLO> equalDataSets = DAOs.dataSetDAO.getByHash(currentHash);
-			log("Hash of new dataset: " + currentHash);
+			logInfo("Hash of new dataset: " + currentHash);
 			//we search for a dataset entry with the same hash and with already generated metadata
 			JPADataSetLO dsloWithMetaData = null;
 			for (JPADataSetLO candidate : equalDataSets) {
@@ -1080,7 +1080,7 @@ public class Agent_DataManager extends PikaterAgent {
 			DAOs.dataSetDAO.updateEntity(dslo);
 
 		} catch (NoResultException e1) {
-			logError("Dataset for ID " + dataSetID + " doesn't exist.", e1);
+			logException("Dataset for ID " + dataSetID + " doesn't exist.", e1);
 		}
 
 		ACLMessage reply = request.createReply();
@@ -1094,7 +1094,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 		Metadata m = new Metadata();
 		ACLMessage reply = request.createReply();
-		log("Retrieving metadata for hash " + gm.getInternal_filename());
+		logInfo("Retrieving metadata for hash " + gm.getInternal_filename());
 		JPADataSetLO dslo = new ResultFormatter<JPADataSetLO>(DAOs.dataSetDAO.getByHash(gm.getInternal_filename())).getSingleResultWithNull();
 
 		if ((dslo != null)
@@ -1192,7 +1192,7 @@ public class Agent_DataManager extends PikaterAgent {
 	private ACLMessage respondToGetAllMetadata(ACLMessage request, Action a) throws CodecException, OntologyException {
 		GetAllMetadata gm = (GetAllMetadata) a.getAction();
 
-		log("Agent_DataManager.respondToGetAllMetadata");
+		logInfo("Agent_DataManager.respondToGetAllMetadata");
 
 		List<String> exHash = new java.util.LinkedList<String>();
 		for (Metadata metadataI : gm.getExceptions()) {
@@ -1202,10 +1202,10 @@ public class Agent_DataManager extends PikaterAgent {
 		List<JPADataSetLO> datasets = null;
 		
 		if (gm.getResultsRequired()) {
-			log("DataManager.Results Required");
+			logInfo("DataManager.Results Required");
 			datasets = DAOs.dataSetDAO.getAllWithResultsExcludingHashesWithMetadata(exHash);
 		} else {
-			log("DataManager.Results NOT Required");
+			logInfo("DataManager.Results NOT Required");
 			datasets = DAOs.dataSetDAO.getAllExcludingHashesWithMetadata(exHash);
 		}
 
@@ -1234,7 +1234,7 @@ public class Agent_DataManager extends PikaterAgent {
 		String datasethash = g.getNearestInternalFileName();
 		int count = g.getNumberOfAgents();
 
-		log("DataManager.GetTheBestAgent for datafile " + datasethash);
+		logInfo("DataManager.GetTheBestAgent for datafile " + datasethash);
 
 		List<JPAResult> results = DAOs.resultDAO.getResultsByDataSetHashAscendingUponErrorRate(datasethash, count);
 
@@ -1248,7 +1248,7 @@ public class Agent_DataManager extends PikaterAgent {
 				try{
 					options = NewOptions.importXML(result.getOptions());
 				}catch(Exception e){
-					logError("Incompatible options in result, using default options");
+					logSevere("Incompatible options in result, using default options");
 				}
 				Agent agent = new Agent();
 				agent.setName(result.getAgentName());
@@ -1277,7 +1277,7 @@ public class Agent_DataManager extends PikaterAgent {
 			System.out.println("Saved Model ID: " + savedModelID);
 			reply.setPerformative(ACLMessage.INFORM);
 		} else {
-			logError("Couldn't be saved model for experiment ID " + sm.getModel().getResultID());
+			logSevere("Couldn't be saved model for experiment ID " + sm.getModel().getResultID());
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 
@@ -1302,9 +1302,9 @@ public class Agent_DataManager extends PikaterAgent {
 			try {
 				getContentManager().fillContent(reply, result);
 			} catch (CodecException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			} catch (OntologyException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			}
 		}
 		return reply;
@@ -1333,9 +1333,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -1343,7 +1343,7 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToGetExternalAgentJar(ACLMessage request, Action a) throws FailureException, CodecException, OntologyException {
 		String type = ((GetExternalAgentJar) a.getAction()).getType();
-		log("getting JAR for agent type " + type);
+		logInfo("getting JAR for agent type " + type);
 
 		JPAExternalAgent ea = DAOs.externalAgentDAO.getByAgentClass(type);
 
@@ -1374,12 +1374,12 @@ public class Agent_DataManager extends PikaterAgent {
 	@SuppressWarnings("serial")
 	private ACLMessage respondToPrepareFileUpload(ACLMessage request, Action a) throws CodecException, OntologyException, IOException {
 		final String hash = ((PrepareFileUpload) a.getAction()).getHash();
-		log("respondToPrepareFileUpload");
+		logInfo("respondToPrepareFileUpload");
 
 		final ServerSocket serverSocket = new ServerSocket();
 		serverSocket.setSoTimeout(15000);
 		serverSocket.bind(null);
-		log("Listening on port: " + serverSocket.getLocalPort());
+		logInfo("Listening on port: " + serverSocket.getLocalPort());
 
 		addBehaviour(new ThreadedBehaviourFactory().wrap(new OneShotBehaviour() {
 			@Override
@@ -1387,7 +1387,7 @@ public class Agent_DataManager extends PikaterAgent {
 				try {
 					DataTransferService.handleUploadConnection(serverSocket, hash);
 				} catch (IOException e) {
-					logError("Data upload failed", e);
+					logException("Data upload failed", e);
 				}
 			}
 		}));
@@ -1400,17 +1400,17 @@ public class Agent_DataManager extends PikaterAgent {
 
 	private ACLMessage respondToGetFile(ACLMessage request, Action a) throws CodecException, OntologyException, ClassNotFoundException {
 		String hash = ((GetFile) a.getAction()).getHash();
-		log(new Date().toString() + " DataManager.GetFile");
+		logInfo(new Date().toString() + " DataManager.GetFile");
 
 		List<JPADataSetLO> dslos = DAOs.dataSetDAO.getByHash(hash);
 		if (dslos.size() > 0) {
 
 			try {
 				JPADataSetLO dslo = dslos.get(0);
-				log(new Date().toString() + " Found DSLO: " + dslo.getDescription() + " - " + dslo.getOID() + " - " + dslo.getHash());
+				logInfo(new Date().toString() + " Found DSLO: " + dslo.getDescription() + " - " + dslo.getOID() + " - " + dslo.getHash());
 
 				PGLargeObjectReader reader = PGLargeObjectReader.getForLargeObject(dslo.getOID());
-				log(reader.toString());
+				logInfo(reader.toString());
 				File temp = new File(CoreConfiguration.DATA_FILES_PATH + "temp" + System.getProperty("file.separator") + hash);
 				File target = new File(CoreConfiguration.DATA_FILES_PATH + hash);
 
@@ -1422,25 +1422,25 @@ public class Agent_DataManager extends PikaterAgent {
 						out.write(buf, 0, read);
 					}
 
-					log(new Date() + " Moving file to: " + target.getAbsolutePath());
+					logInfo(new Date() + " Moving file to: " + target.getAbsolutePath());
 					try {
 						java.nio.file.Files.move(temp.toPath(), target.toPath(), (CopyOption) StandardCopyOption.REPLACE_EXISTING);
-						log(new Date() + "File was successfully moved");
+						logInfo(new Date() + "File was successfully moved");
 					} catch (IOException ioe) {
-						logError(new Date() + "Error while moving file with hash " + dslo.getHash() + " to new location " + target.getAbsolutePath());
+						logSevere(new Date() + "Error while moving file with hash " + dslo.getHash() + " to new location " + target.getAbsolutePath());
 					}
 				} catch (IOException ioe) {
-					logError("Error while downloading file with hash " + hash + " from database", ioe);
+					logException("Error while downloading file with hash " + hash + " from database", ioe);
 				} finally {
 					reader.close();
 					out.close();
 
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logException("Unexpected error occured:", e);
 			}
 		} else {
-			logError("DataSet file with hash " + hash + " not found.");
+			logSevere("DataSet file with hash " + hash + " not found.");
 		}
 
 		ACLMessage reply = request.createReply();
@@ -1473,9 +1473,9 @@ public class Agent_DataManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;

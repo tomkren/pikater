@@ -1,36 +1,32 @@
 package org.pikater.shared.logging.core;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- * User: Kuba
- * Date: 31.10.13
- * Time: 12:04
- */
-public class ConsoleLogger implements Logger {
-    public void log(String source,String text) {
-        System.out.println(source + ": " + text);
-    }
+import org.pikater.shared.logging.GeneralPikaterLogger;
+import org.pikater.shared.logging.IPikaterLogger;
 
-    @Override
-    public void logError(String source, String errorDescription) {
-        logError(source,errorDescription,Severity.Normal);
-    }
-    
-    @Override
-    public void logError(String source, Exception exception) {
-    	System.err.println(source);
-    	exception.printStackTrace();
-    }
-    
-    @Override
-    public void logError(String source, String errorDescription, Severity severity) {
-        if (severity==Severity.Critical)
-        {
-            System.err.println("Critical Error in "+source + ": " + errorDescription);
-        }
-        else
-        {
-            System.err.println("Error in "+source + ": " + errorDescription);
-        }
+public class ConsoleLogger extends GeneralPikaterLogger
+{
+	private static final IPikaterLogger innerLogger = createPikaterLogger(Logger.getAnonymousLogger());
+
+	public static IPikaterLogger getLogger()
+	{
+		return innerLogger;
+	}
+	
+	public static void logThrowable(String message, Throwable t)
+	{
+		getLogger().logThrowable(message, t);
+	}
+
+	public static void log(Level logLevel, String message)
+	{
+		getLogger().log(logLevel, message);
+	}
+	
+	public static void log(Level logLevel, String source, String message)
+	{
+		getLogger().log(logLevel, source, message);
     }
 }

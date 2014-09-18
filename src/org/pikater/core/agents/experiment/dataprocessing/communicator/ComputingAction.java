@@ -101,9 +101,9 @@ public class ComputingAction extends FSMBehaviour {
 						.getAction();
 				return true;
 			} catch (CodecException ce) {
-				agent.logError(ce.getMessage(), ce);
+				agent.logException(ce.getMessage(), ce);
 			} catch (OntologyException oe) {
-				agent.logError(oe.getMessage(), oe);
+				agent.logException(oe.getMessage(), oe);
 			}
 		} else {
 			block();
@@ -410,9 +410,9 @@ public class ComputingAction extends FSMBehaviour {
 					success = false;
 					agent.working = false;
 					failureMsg(e.getMessage());
-					agent.log(agent.getLocalName() + ": Error: "
+					agent.logInfo(agent.getLocalName() + ": Error: "
 							+ e.getMessage() + ".");
-					agent.logError(e.getMessage(), e);
+					agent.logException(e.getMessage(), e);
 				}
 			}
 
@@ -445,13 +445,13 @@ public class ComputingAction extends FSMBehaviour {
 							eval.setObjectFilename(objectFilename);
 
 						} catch (CodecException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						} catch (OntologyException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						} catch (IOException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						} catch (FIPAException e) {
-							agent.logError(e.getMessage(), e);
+							agent.logException(e.getMessage(), e);
 						}
 					}
 
@@ -461,7 +461,7 @@ public class ComputingAction extends FSMBehaviour {
 						try {
 							eval.setObject(agent.getAgentObject());
 						} catch (IOException e1) {
-							agent.logError(e1.getMessage(), e1);
+							agent.logException(e1.getMessage(), e1);
 						}
 					}
 				}
@@ -490,11 +490,11 @@ public class ComputingAction extends FSMBehaviour {
 					agent.getContentManager().fillContent(resultMsg, result);
 
 				} catch (UngroundedException e) {
-					agent.logError(e.getMessage(), e);
+					agent.logException(e.getMessage(), e);
 				} catch (CodecException e) {
-					agent.logError(e.getMessage(), e);
+					agent.logException(e.getMessage(), e);
 				} catch (OntologyException e) {
-					agent.logError(e.getMessage(), e);
+					agent.logException(e.getMessage(), e);
 				}
 
 				agent.currentTask.setFinish(agent.getDateTime());
@@ -538,7 +538,7 @@ public class ComputingAction extends FSMBehaviour {
 	private String addTaskOutput(InOutType type, String dataType, Instances inst) {
 		if (inst != null) {
 			String md5 = agent.saveArff(inst);
-			agent.log("Saved "+type+" to " + md5);
+			agent.logInfo("Saved "+type+" to " + md5);
 			TaskOutput to = new TaskOutput();
 			to.setType(type);
 			to.setName(md5);

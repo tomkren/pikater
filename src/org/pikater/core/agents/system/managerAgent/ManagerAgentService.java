@@ -63,13 +63,13 @@ public class ManagerAgentService {
 
 			aid = new AID(msgRetursName.getContent(), AID.ISLOCALNAME);
 		} catch (FIPAException e) {
-			agent.logError(agent.getLocalName()
+			agent.logException(agent.getLocalName()
 					+ ": Exception while adding agent " + type + ": "
 					+ e.getMessage(), e);
 		} catch (Codec.CodecException e) {
-			agent.logError(agent.getLocalName() + ": " + e.getMessage(), e);
+			agent.logException(agent.getLocalName() + ": " + e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(agent.getLocalName() + ": " + e.getMessage(), e);
+			agent.logException(agent.getLocalName() + ": " + e.getMessage(), e);
 		}
 
 		return aid;
@@ -114,11 +114,11 @@ public class ManagerAgentService {
 			}
 			
 		} catch (FIPAException e) {
-			agentKiller.logError(agentKiller.getName(), e);
+			agentKiller.logException(agentKiller.getName(), e);
 		} catch (Codec.CodecException e) {
-			agentKiller.logError(agentKiller.getName(), e);
+			agentKiller.logException(agentKiller.getName(), e);
 		} catch (OntologyException e) {
-			agentKiller.logError(agentKiller.getName(), e);
+			agentKiller.logException(agentKiller.getName(), e);
 		}
 		
 		return false;
@@ -130,7 +130,7 @@ public class ManagerAgentService {
 	
 	public static AID loadAgent(PikaterAgent agent, int modelId, AID manager) {
 		Model m = DataManagerService.getModel(agent, modelId);
-		agent.log("got model, agent size "+m.getSerializedAgent().length+", result ID "+m.getResultID());
+		agent.logInfo("got model, agent size "+m.getSerializedAgent().length+", result ID "+m.getResultID());
 
 		LoadAgent act = new LoadAgent();
 		act.setObject(m.getSerializedAgent());
@@ -144,17 +144,17 @@ public class ManagerAgentService {
 			agent.getContentManager().fillContent(request, new Action(agent.getAID(), act));
 			ACLMessage response = FIPAService.doFipaRequestClient(agent, request, 10000);
 			if (response == null) {
-				agent.logError("did not receive LoadAgent response for model "+modelId+" in time");
+				agent.logSevere("did not receive LoadAgent response for model "+modelId+" in time");
 			} else {
-				agent.log("LoadAgent for model "+ modelId +" finished, AID="+response.getContent());
+				agent.logInfo("LoadAgent for model "+ modelId +" finished, AID="+response.getContent());
 				return new AID(response.getContent(), AID.ISLOCALNAME);
 			}
 		} catch (CodecException e) {
-			agent.logError("LoadAgent service failure", e);
+			agent.logException("LoadAgent service failure", e);
 		} catch (OntologyException e) {
-			agent.logError("LoadAgent service failure", e);
+			agent.logException("LoadAgent service failure", e);
 		} catch (FIPAException e) {
-			agent.logError("LoadAgent service failure", e);
+			agent.logException("LoadAgent service failure", e);
 		}
 		throw new IllegalStateException("LoadAgent for model "+modelId+" failed");
 	}
@@ -190,11 +190,11 @@ public class ManagerAgentService {
 			}
 			
 		} catch (FIPAException e) {
-			agent.logError(agent.getName(), e);
+			agent.logException(agent.getName(), e);
 		} catch (Codec.CodecException e) {
-			agent.logError(agent.getName(), e);
+			agent.logException(agent.getName(), e);
 		} catch (OntologyException e) {
-			agent.logError(agent.getName(), e);
+			agent.logException(agent.getName(), e);
 		}
 		
 		return true;

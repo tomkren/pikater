@@ -83,7 +83,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found.");
-				logError("File not found.", e);
+				logException("File not found.", e);
 			}
 			
 		} else {
@@ -91,9 +91,9 @@ public class Agent_GUIKlara extends PikaterAgent {
 			try {
 				runAutomat();
 			} catch (IOException e) {
-				logError("Error with console in KlaraGUI", e);
+				logException("Error with console in KlaraGUI", e);
 			} catch (Exception e) {
-				logError("General error...", e);
+				logException("General error...", e);
 			}
 			
 		}
@@ -122,7 +122,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 				doDelete();
 				
 			} catch (FIPAException e) {
-				logError(e.getMessage(), e);
+				logException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -234,7 +234,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 
 	private void printDurationAgentResponse() {
 		Duration dur = DurationService.getDuration(this, new GetDuration());
-		log("Last Duration info - Start "+(dur.getStart()!=null? dur.getStart().toString() : "no data  ")+":"+ dur.getDurationMiliseconds()+" ms , LR: "+dur.getLR_duration());
+		logInfo("Last Duration info - Start "+(dur.getStart()!=null? dur.getStart().toString() : "no data  ")+":"+ dur.getDurationMiliseconds()+" ms , LR: "+dur.getLR_duration());
 	}
 
 	private void runFile(String fileName) throws FileNotFoundException {
@@ -251,7 +251,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 		try {
 			Thread.sleep(9000);
 		} catch (InterruptedException e1) {
-			logError(e1.getMessage(), e1);
+			logException(e1.getMessage(), e1);
 		}
 
         AID receiver = new AID(AgentNames.GUI_AGENTS_COMMUNICATOR, false);
@@ -270,14 +270,14 @@ public class Agent_GUIKlara extends PikaterAgent {
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, msg, 10000);
 			String replyText = (reply!=null)?reply.getContent():"null";
 			
-			log("Reply: " + replyText);
+			logInfo("Reply: " + replyText);
 			
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (FIPAException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 	}
@@ -386,21 +386,21 @@ public class Agent_GUIKlara extends PikaterAgent {
            
             ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
             if (reply == null){
-                logError("Reply not received.");
+                logSevere("Reply not received.");
                 return -1;
             }
             else{
-                log("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
+                logInfo("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
             	return (Integer)reply.getContentObject();
             }
         } catch (CodecException e) {
-            logError("Codec error occurred: "+e.getMessage(), e);
+            logException("Codec error occurred: "+e.getMessage(), e);
         } catch (OntologyException e) {
-            logError("Ontology error occurred: "+e.getMessage(), e);
+            logException("Ontology error occurred: "+e.getMessage(), e);
         } catch (FIPAException e) {
-            logError("FIPA error occurred: "+e.getMessage(), e);
+            logException("FIPA error occurred: "+e.getMessage(), e);
         } catch (UnreadableException e) {
-        	logError(e.getMessage(), e);
+        	logException(e.getMessage(), e);
 		}
 		return -1;
 	}

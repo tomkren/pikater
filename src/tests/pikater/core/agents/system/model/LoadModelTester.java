@@ -27,11 +27,11 @@ public class LoadModelTester extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		log("doing request");
+		logInfo("doing request");
 		ManagerAgentService.loadAgent(this, 83554);
-		log("load returned");
+		logInfo("load returned");
 
-		log("LoadModelTester ending");
+		logInfo("LoadModelTester ending");
 		doDelete();
 	}
 }

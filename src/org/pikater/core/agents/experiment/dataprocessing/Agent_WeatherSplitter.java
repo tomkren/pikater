@@ -117,7 +117,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 				} catch (ContentException e) {
 					throw new FailureException("Content problem: " + e.getMessage());
 				} catch (FIPAException e) {
-					logError("FIPA exception when performing task", e);
+					logException("FIPA exception when performing task", e);
 					throw new FailureException("Failed because of another agent " + e.getMessage());
 				}
 			}
@@ -126,7 +126,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 	}
 
 	private ACLMessage respondToExecute(ACLMessage request) throws ContentException, FIPAException {
-		log("got execute");
+		logInfo("got execute");
 		final ACLMessage reply = request.createReply();
 		final ExecuteTask content;
 		Task performed;
@@ -134,10 +134,10 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 			content = (ExecuteTask) ((Action)getContentManager().extractContent(request)).getAction();
 			performed = performTask(content.getTask());
 		} catch (CodecException e) {
-			logError("Failed to extract task", e);
+			logException("Failed to extract task", e);
 			throw e;
 		} catch (OntologyException e) {
-			logError("Failed to extract task", e);
+			logException("Failed to extract task", e);
 			throw e;
 		}
 
@@ -145,7 +145,7 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		getContentManager().fillContent(reply, result);
 		reply.setPerformative(ACLMessage.INFORM);
 
-		log("responding with finished task");
+		logInfo("responding with finished task");
 		return reply;
 	}
 	
@@ -154,21 +154,21 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		for (Data dataI : t.getDatas().getDatas()) {
 			String fname = dataI.getInternalFileName();
 			ACLMessage request = makeGetDataRequest(fname);
-			log("sending getData for "+fname);
+			logInfo("sending getData for "+fname);
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
 			res.add(processGetDataResponse(reply));
-			log("got data for "+fname);
+			logInfo("got data for "+fname);
 		}
 		return res;
 	}
 
 	private Task performTask(Task t) throws FIPAException {
-		log("getting data");
+		logInfo("getting data");
 
 		List<DataInstances> weatherData = getDataForTask(t);
-		log("processing data");
+		logInfo("processing data");
 		ArrayList<TaskOutput> outputs = processData(weatherData);
-		log("returning outputs");
+		logInfo("returning outputs");
 		t.setOutput(outputs);
 		return t;
 	}

@@ -29,7 +29,7 @@ public class SlaveServersStructure {
 		 try {
 			result = DFService.search(agent, template);
 		} catch (FIPAException e1) {
-			agent.logError(e1.getMessage(), e1);
+			agent.logException(e1.getMessage(), e1);
 		}
 		List<DFAgentDescription> foundDFADescriptions =
 				new ArrayList<DFAgentDescription>(Arrays.asList(result));

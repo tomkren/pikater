@@ -50,7 +50,7 @@ public class AgentDataSourceCommunicator {
                 throw new Exception("No DataSourceAgent found");
             }
         } catch (FIPAException e) {
-        	initAgent.logError(e.getMessage(), e);
+        	initAgent.logException(e.getMessage(), e);
         }
     }
 
@@ -74,13 +74,13 @@ public class AgentDataSourceCommunicator {
             DataSourcePath result=(DataSourcePath)((Result)msg_reply.getContentObject()).getValue();
             return result.getPath();
         } catch (Codec.CodecException e) {
-        	initAgent.logError(e.getMessage(), e);
+        	initAgent.logException(e.getMessage(), e);
         } catch (UnreadableException e) {
-        	initAgent.logError(e.getMessage(), e);
+        	initAgent.logException(e.getMessage(), e);
         } catch (FIPAException e) {
-        	initAgent.logError(e.getMessage(), e);
+        	initAgent.logException(e.getMessage(), e);
         } catch (OntologyException e) {
-        	initAgent.logError(e.getMessage(), e);
+        	initAgent.logException(e.getMessage(), e);
         }
  
  
@@ -106,9 +106,9 @@ public class AgentDataSourceCommunicator {
             initAgent.getContentManager().fillContent(msg, a);
             initAgent.send(msg);
         } catch (Codec.CodecException e) {
-        	initAgent.logError(e.getMessage(), e);
+        	initAgent.logException(e.getMessage(), e);
         } catch (OntologyException e) {
-        	initAgent.logError(e.getMessage(), e);
+        	initAgent.logException(e.getMessage(), e);
         }
     }
 }

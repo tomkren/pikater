@@ -46,17 +46,17 @@ public class ManagerService {
 			agent.getContentManager().fillContent(msg, a);
 
 		} catch (CodecException ce) {
-			agent.logError(ce.getMessage(), ce);
+			agent.logException(ce.getMessage(), ce);
 		} catch (OntologyException oe) {
-			agent.logError(oe.getMessage(), oe);
+			agent.logException(oe.getMessage(), oe);
 		}
 
 		ACLMessage reply = null;
 		try {
 			reply = FIPAService.doFipaRequestClient(agent, msg);
-			agent.log("Reply to NewBatch: " + reply.getContent());
+			agent.logInfo("Reply to NewBatch: " + reply.getContent());
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 		
 	}

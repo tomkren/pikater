@@ -67,7 +67,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			getContentManager().registerOntology(ontologyI);
 		}
 
-		log("Agent " + getName() + " started");
+		logInfo("Agent " + getName() + " started");
 
 		//this.agentInfosPublic = 
 		
@@ -89,11 +89,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 					action = (Action) getContentManager().extractContent(
 							request);
 				} catch (UngroundedException e) {
-				    logError(e.getMessage(), e);
+				    logException(e.getMessage(), e);
 				} catch (CodecException e) {
-					logError(e.getMessage(), e);
+					logException(e.getMessage(), e);
 				} catch (OntologyException e) {
-					logError(e.getMessage(), e);
+					logException(e.getMessage(), e);
 				}
 
 				if (action.getAction() instanceof GetAgentInfo) {
@@ -115,7 +115,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 				ACLMessage failure = request.createReply();
 				failure.setPerformative(ACLMessage.FAILURE);
 
-				logError("Failure responding to request: " + request.getContent());
+				logSevere("Failure responding to request: " + request.getContent());
 				return failure;
 			}
 
@@ -267,9 +267,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, result);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;		
@@ -292,9 +292,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -324,9 +324,9 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		try {
 			getContentManager().fillContent(reply, r);
 		} catch (CodecException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			logError(e.getMessage(), e);
+			logException(e.getMessage(), e);
 		}
 
 		return reply;
@@ -387,11 +387,11 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			return agentInfo;
 			
 		} catch (FIPAException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (Codec.CodecException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		} catch (OntologyException e) {
-			agent.logError(e.getMessage(), e);
+			agent.logException(e.getMessage(), e);
 		}
 		
 		return null;
@@ -416,7 +416,7 @@ class ShutDownAgents extends Thread {
     public void run() {
 
 		for (AgentClass classI : agentClasses){
-			agent.log("Agent " + classI.getAgentClass() + " was killed");
+			agent.logInfo("Agent " + classI.getAgentClass() + " was killed");
 			agent.killAgent(classI.getAgentClass());
 			
 		}
