@@ -197,9 +197,9 @@ public class Agent_Duration extends PikaterAgent {
 		
     	long t1 = -1;
 		long t2 = -1;
-		long d = -1; 
+		long d = duration;
 		
-    	while (duration > 0){   		    	
+    	while (d > 0){   		    	
     		try {
 	    		t1 = ((Duration)durations.get(i_d + i)).getStart().getTime();	    		
 	    		if (i_d + i + 1 > durations.size()-1){ 
@@ -211,18 +211,11 @@ public class Agent_Duration extends PikaterAgent {
 	    		}
 	    		long time_between_LRs = t2 - t1;
 	    		
-	    		// if (duration < t){
-	    		if (duration < time_between_LRs){
-	    			d = duration;
-	    		}
-	    		else {
-	    		// 	d = t;
-	    			d = Math.min(t2 - start, time_between_LRs); // osetreni prvniho useku        		
-	    		}
+	    		final long duration1 = duration < time_between_LRs ? duration : Math.min(t2 - start, time_between_LRs); // osetreni prvniho useku
 	    		
 	    		// System.out.println("d: " + d + " LR dur: " + ((Duration)durations.get(i_d + i)).getDuration());
 	    		number_of_LRs += (float)d / (float)(durations.get(i_d + i)).getDurationMiliseconds();
-	    		duration = duration - (int)Math.ceil(d);
+	    		d -= duration1;
 	    		
 	    		i++;
     		

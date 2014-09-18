@@ -100,7 +100,7 @@ public class ResultTableDBRow extends AbstractTableRowDBView
 					if(result.hasAnOutput())
 					{
 						setValidOutput();
-						return (firstValidOutput != null);
+						return firstValidOutput != null;
 					}
 					else
 					{

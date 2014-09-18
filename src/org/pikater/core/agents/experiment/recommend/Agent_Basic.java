@@ -186,12 +186,11 @@ public class Agent_Basic extends Agent_Recommender {
 		double dNumber_of_instances = d(m1.getNumberOfInstances(), m2
 				.getNumberOfInstances(), minInstances, maxInstances);
 
-		double distance = wAttribute_type * dAttribute_type + wDefault_task
+		// return distance
+		return wAttribute_type * dAttribute_type + wDefault_task
 				* dDefault_task + wMissing_values * dMissing_values
 				+ wNumber_of_attributes * dNumber_of_attributes
 				+ wNumber_of_instances * dNumber_of_instances;
-
-		return distance;
 	}
 
 	@Override

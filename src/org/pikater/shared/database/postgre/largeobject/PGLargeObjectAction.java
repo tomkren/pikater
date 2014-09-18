@@ -53,7 +53,7 @@ public class PGLargeObjectAction
 
 		try
 		{
-			byte buf[] = new byte[2048];
+			byte[] buf = new byte[2048];
 			int s;
 			while ((s = fis.read(buf, 0, DEFAULT_BUFFER_SIZE)) > 0)
 			{

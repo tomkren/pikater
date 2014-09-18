@@ -34,8 +34,7 @@ public class MetadataReader {
 		// missing values
 		boolean missing = false; 
 		for (Instance i : data.getInstances()) {
-			if (!i.getMissing().isEmpty())
-			{
+			if (i.getMissing().size() != 0){
 				missing = true;
 			}			
 		}		
@@ -47,10 +46,10 @@ public class MetadataReader {
 			if (type.isEmpty()){
 				type = a.getType();
 			}
-			if (! a.getType().equals((type))){
+			if (!a.getType().equals(type))
+			{
 				type = "Multivariate";
 			}
-					
 		}		
 		metadata.setAttributeType(type);
 		
@@ -68,7 +67,9 @@ public class MetadataReader {
     
     private void setTaskType(DataInstances data, Metadata metadata)
     {
-        if ( ((Attribute) data.getAttributes().get((data.getClass_index() >= 0 ? data.getClass_index() : data.getAttributes().size() - 1))).getType().equals("Numeric") ){
+    	int index = data.getClass_index() >= 0 ? data.getClass_index() : data.getAttributes().size() - 1;
+        if (data.getAttributes().get(index).getType().equals("Numeric"))
+        {
             metadata.setDefaultTask("Regression");
         }
         else {
@@ -147,16 +148,14 @@ public class MetadataReader {
                 values.add((Double)instanceI.getValues().get(attributeNumber));
         }
         Collections.sort(values);
-        if (!values.isEmpty())
-        {
+        if (values.size() > 0){
         	met.setMin(values.get(0));
         }
         else {
         	met.setMin(defValue);
         }
         
-        if (!values.isEmpty())
-        {
+        if (values.size() > 0){
         	met.setMax(values.get(values.size()-1));
         }
         else {
@@ -175,8 +174,7 @@ public class MetadataReader {
         met.setAvg(average);
         met.setStandardDeviation(Math.sqrt(variation));
         int half=(int)Math.floor(values.size()/2);
-        if (!values.isEmpty())
-        {
+        if (values.size() > 0){
         	met.setMedian(values.get(half));
         }
         else {

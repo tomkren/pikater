@@ -246,10 +246,7 @@ public class AgentInfo implements Concept, ICloneable
 		String xml = scanner.useDelimiter("\\Z").next();
 		scanner.close();
 		
-		AgentInfo agentInfo =
-				(AgentInfo)xstream.fromXML(xml);
-		
-		return agentInfo;
+		return (AgentInfo)xstream.fromXML(xml);
 	}
 	
 }

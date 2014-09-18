@@ -213,10 +213,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		Set<Class<? extends Agent_AbstractExperiment>> allClassesSet = 
 		     reflections.getSubTypesOf(Agent_AbstractExperiment.class);
 		 
-		List<Class<? extends Agent_AbstractExperiment>> allClasses =
-				new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
-
-		return allClasses;
+		return new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
 	}
 	
 	private List<Class<? extends Agent_AbstractExperiment>> getComputingAgentClasses(
@@ -228,10 +225,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 		Set<Class<? extends Agent_ComputingAgent>> allClassesSet = 
 		     reflections.getSubTypesOf(Agent_ComputingAgent.class);
 		 
-		List<Class<? extends Agent_AbstractExperiment>> allClasses =
-				new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
-
-		return allClasses;
+		return new ArrayList<Class<? extends Agent_AbstractExperiment>>(allClassesSet);
 	}
 
 	private List<AgentClass> notSavedClasses(
@@ -382,9 +376,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 			Action replyAction = (Action) agent.getContentManager()
 					.extractContent(agentInfoMsg);
 			
-			AgentInfo agentInfo = (AgentInfo) replyAction.getAction();
-
-			return agentInfo;
+			return (AgentInfo) replyAction.getAction();
 			
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);

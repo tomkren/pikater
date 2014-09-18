@@ -342,9 +342,7 @@ public class ComputationDescription implements Concept {
 		// xstream.aliasPackage("", descriptionOntology.getPackage().getName());
 		xstream.aliasAttribute("type", "class");
 
-		String xml = xstream.toXML(this);
-
-		return xml;
+		return xstream.toXML(this);
 	}
 
 	public void exportXML(String fileName) throws FileNotFoundException {
@@ -378,10 +376,7 @@ public class ComputationDescription implements Concept {
 		xstream.aliasAttribute("type", "class");
 
 
-		ComputationDescription computDes = (ComputationDescription) xstream
-				.fromXML(xml);
-
-		return computDes;
+		return (ComputationDescription) xstream.fromXML(xml);
 	}
 
 }

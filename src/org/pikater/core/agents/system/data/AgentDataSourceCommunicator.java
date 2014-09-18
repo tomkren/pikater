@@ -47,7 +47,7 @@ public class AgentDataSourceCommunicator {
             }
             else
             {
-                throw new Exception("No DataSourceAgent found");
+                throw new IllegalStateException("No DataSourceAgent found");
             }
         } catch (FIPAException e) {
         	initAgent.logException(e.getMessage(), e);

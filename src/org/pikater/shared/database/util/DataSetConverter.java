@@ -145,7 +145,8 @@ public class DataSetConverter {
 			DataSetConverter.joinCSVFileWithHeader(input, header, output);
 			break;
 		case INVALID:
-			throw new DataSetConverterException("Unsupported document format : "+InputType.INVALID);
+		default:
+			throw new DataSetConverterException("Unsupported document format : " + input);
 		}
 	}
 	

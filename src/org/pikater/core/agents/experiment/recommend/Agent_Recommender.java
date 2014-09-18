@@ -307,8 +307,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 */
 	
 	public AID createAgent(String type, String name, Arguments arguments) {
-        AID aid=ManagerAgentService.createAgent(this,type,name,arguments);
-        return aid;
+        return ManagerAgentService.createAgent(this,type,name,arguments);
 	}
 	
 	protected List<NewOption> getParameters(){

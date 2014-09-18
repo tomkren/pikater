@@ -159,7 +159,7 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 
 				boolean cont;
 				List<SearchSolution> solutions_new = null;
-				float evaluations[][] = null;
+				float[][] evaluations = null;
 				int queriesToProcess = 0;
 				@Override
 				public void action() {

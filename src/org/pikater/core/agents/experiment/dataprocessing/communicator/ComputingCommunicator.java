@@ -184,8 +184,6 @@ public class ComputingCommunicator {
 		agent.getContentManager().fillContent(request, a);
 		ACLMessage reply = FIPAService.doFipaRequestClient(agent, request);
 
-		String objectFilename = reply.getContent();
-
-		return objectFilename;
+		return reply.getContent();
 	}
 }

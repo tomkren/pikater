@@ -46,7 +46,7 @@ public abstract class Individual implements Cloneable{
      */
     public double getFitnessValue() {
         if (fitnessValue == -Double.MAX_VALUE)
-            throw new RuntimeException("Fitness value not evaluated");
+            throw new IllegalStateException("Fitness value not evaluated");
         return fitnessValue;
     }
 

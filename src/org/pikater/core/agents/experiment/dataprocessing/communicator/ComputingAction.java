@@ -91,7 +91,8 @@ public class ComputingAction extends FSMBehaviour {
 
 	/* Get a message from the FIFO of tasks */
 	boolean getRequest() {
-		if (agent.taskFIFO.size() > 0) {
+		if (!agent.taskFIFO.isEmpty())
+		{
 			incomingRequest = agent.taskFIFO.removeFirst();
 			try {
 				ContentElement content = agent.getContentManager()
@@ -496,7 +497,8 @@ public class ComputingAction extends FSMBehaviour {
 
 				agent.send(resultMsg);
 				
-				if (agent.taskFIFO.size() > 0) {
+				if (!agent.taskFIFO.isEmpty())
+				{
 					agent.executionBehaviour.restart();
 				} else {
 					agent.logFinishedTask();

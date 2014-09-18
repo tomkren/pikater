@@ -277,19 +277,14 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 		
-		String xml = xstream.toXML(this);
-
-		return xml;
+		return xstream.toXML(this);
 	}
 	public static NewOption importXML(String xml) {
 
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 
-		NewOption optionNew = (NewOption) xstream
-				.fromXML(xml);
-
-		return optionNew;
+		return (NewOption) xstream.fromXML(xml);
 	}
 	
 	@Override

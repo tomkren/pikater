@@ -23,7 +23,7 @@ public class Hash {
 			try {
 				fis = new FileInputStream(file);
 				MessageDigest md = MessageDigest.getInstance("MD5");
-				byte buf[] = new byte[2048];
+				byte[] buf = new byte[2048];
 				int s;
 				while ((s = fis.read(buf, 0, 2048)) > 0) {
 					md.update(buf, 0, s);

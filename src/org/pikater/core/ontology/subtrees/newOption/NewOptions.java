@@ -73,19 +73,14 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 		
-		String xml = xstream.toXML(this);
-
-		return xml;
+		return xstream.toXML(this);
 	}
 	public static NewOptions importXML(String xml) {
 
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.ID_REFERENCES);
 
-		NewOptions optionsNew = (NewOptions) xstream
-				.fromXML(xml);
-
-		return optionsNew;
+		return (NewOptions) xstream.fromXML(xml);
 	}
     
     @Override
