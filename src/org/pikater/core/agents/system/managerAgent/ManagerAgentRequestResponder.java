@@ -79,7 +79,7 @@ public class ManagerAgentRequestResponder {
         // save serialized object to file
         byte [] object = sa.getAgent().getObject();
         ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(CoreConfiguration.SAVED_PATH + filename + ".model"));
+                new FileOutputStream(CoreConfiguration.getPath_Saved() + filename + ".model"));
 
 
         oos.writeObject(toObject(object));
@@ -159,7 +159,7 @@ public class ManagerAgentRequestResponder {
         else {
 
             // read agent from file
-            String filename = CoreConfiguration.SAVED_PATH +
+            String filename = CoreConfiguration.getPath_Saved() +
             		la.getFilename() + ".model";
 
             //Construct the ObjectInputStream object

@@ -7,7 +7,7 @@ import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -145,7 +145,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         request.setLanguage(myAgent.getCodec().getName());
         request.setOntology(TaskOntology.getInstance().getName());
 
-        request.addReceiver(new AID(AgentNames.PLANNER, false));
+        request.addReceiver(new AID(CoreAgents.PLANNER.getName(), false));
 
         request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 

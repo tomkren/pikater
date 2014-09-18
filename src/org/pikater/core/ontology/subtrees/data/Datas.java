@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 
@@ -19,8 +19,8 @@ public class Datas implements Concept {
 	private List<Data> datas;
 	private Metadata metadata;
 	
-	private String output = CoreConstants.OUTPUT_EVALUATION_ONLY; // "predictions"
-	private String mode = CoreConstants.MODE_TRAIN_TEST; // test_only, train_test, train_only
+	private String output = CoreConstant.Output.EVALUATION_ONLY.get(); // "predictions"
+	private String mode = CoreConstant.Mode.TRAIN_TEST.get(); // test_only, train_test, train_only
 	
 	public Datas() {
 		this.datas = new ArrayList<Data>();

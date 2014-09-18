@@ -6,8 +6,8 @@ import jade.content.onto.basic.Action;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreAgents;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.ComputationOutputBuffer;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
@@ -158,15 +158,15 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		{
 		    if (in.getValue().isData() ); 
 		}
-        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get(CoreConstants.SLOT_TRAINING_DATA).getNext();
+        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get(CoreConstant.Slot.SLOT_TRAINING_DATA.get()).getNext();
         DataSourceEdge testingEdge;
 		String training = trainingEdge.getDataSourceId();
-		if( inputs.get(CoreConstants.SLOT_TESTING_DATA) == null){
+		if( inputs.get(CoreConstant.Slot.SLOT_TESTING_DATA.get()) == null){
 			testingEdge=trainingEdge;
 		}
 		else{
 
-			testingEdge = ((DataSourceEdge) inputs.get(CoreConstants.SLOT_TESTING_DATA).getNext());
+			testingEdge = ((DataSourceEdge) inputs.get(CoreConstant.Slot.SLOT_TESTING_DATA.get()).getNext());
 		}
 
         if (trainingEdge.isFile()) {
@@ -215,7 +215,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setLanguage(myAgent.getCodec().getName());
 		request.setOntology(TaskOntology.getInstance().getName());
-		request.addReceiver(myAgent.getAgentByType(AgentNames.PLANNER));
+		request.addReceiver(myAgent.getAgentByType(CoreAgents.PLANNER.getName()));
 		
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 	

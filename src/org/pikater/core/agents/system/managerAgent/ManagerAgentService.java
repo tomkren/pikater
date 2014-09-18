@@ -11,7 +11,7 @@ import jade.domain.FIPAService;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.configuration.Arguments;
@@ -31,7 +31,7 @@ public class ManagerAgentService {
 	public static AID createAgent(PikaterAgent agent,
 			String type, String name, Arguments options) {
 		return ManagerAgentService.createAgent(
-				agent, type, name, options, new AID(AgentNames.MANAGER_AGENT, false));
+				agent, type, name, options, new AID(CoreAgents.MANAGER_AGENT.getName(), false));
 	}
 
 	public static AID createAgent(PikaterAgent agent,
@@ -87,7 +87,7 @@ public class ManagerAgentService {
 		}
 
 
-		AID agentManagerAID = new AID(AgentNames.MANAGER_AGENT, false);
+		AID agentManagerAID = new AID(CoreAgents.MANAGER_AGENT.getName(), false);
 		Ontology ontology = AgentManagementOntology.getInstance();
 
 		ACLMessage msgKillA = new ACLMessage(ACLMessage.REQUEST);
@@ -125,7 +125,7 @@ public class ManagerAgentService {
 	}
 	
 	public static AID loadAgent(PikaterAgent agent, int modelId) {
-		return loadAgent(agent, modelId, new AID(AgentNames.MANAGER_AGENT, false));
+		return loadAgent(agent, modelId, new AID(CoreAgents.MANAGER_AGENT.getName(), false));
 	}
 	
 	public static AID loadAgent(PikaterAgent agent, int modelId, AID manager) {

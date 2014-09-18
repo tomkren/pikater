@@ -11,22 +11,24 @@ public abstract class GeneralPikaterLogger
 	{
 		return new IPikaterLogger()
 		{
+			private final Logger LOGGER = logger; 
+			
 			@Override
 			public void logThrowable(String message, Throwable t)
 			{
-				logger.log(Level.SEVERE, "exception occured: " + message + "\n" + throwableToStackTrace(t));
+				LOGGER.log(Level.SEVERE, "exception occured: " + message + "\n" + throwableToStackTrace(t));
 			}
 
 			@Override
 			public void log(Level logLevel, String message)
 			{
-				logger.log(logLevel, message);
+				LOGGER.log(logLevel, message);
 			}
 
 			@Override
 			public void log(Level logLevel, String source, String message)
 			{
-				logger.logp(logLevel, source, null, message);
+				LOGGER.logp(logLevel, source, null, message);
 		    }
 		};
 	}

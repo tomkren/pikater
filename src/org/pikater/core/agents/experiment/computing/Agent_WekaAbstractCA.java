@@ -4,7 +4,7 @@ import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.attribute.Instance;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -149,12 +149,12 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		java.util.List<Eval> evaluations = evaluation.getEvaluations();
 		//List evaluations = new ArrayList();
 		Eval ev = new Eval();
-		ev.setName(CoreConstants.ERROR_RATE);
+		ev.setName(CoreConstant.Error.ERROR_RATE.get());
 		ev.setValue((float) eval.errorRate());
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName(CoreConstants.KAPPA_STATISTIC);
+		ev.setName(CoreConstant.Error.KAPPA_STATISTIC.get());
 		try {
 			ev.setValue((float) eval.kappa());
 		} catch (Exception e) {
@@ -163,7 +163,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstants.MEAN_ABSOLUTE_ERROR);
+		ev.setName(CoreConstant.Error.MEAN_ABSOLUTE.get());
 		try {
 			ev.setValue((float) eval.meanAbsoluteError());
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstants.RELATIVE_ABSOLUTE_ERROR);
+		ev.setName(CoreConstant.Error.RELATIVE_ABSOLUTE.get());
 		try {
 			ev.setValue((float) eval.relativeAbsoluteError());
 		} catch (Exception e) {
@@ -181,7 +181,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName(CoreConstants.ROOT_MEAN_SQUARED_ERROR);
+		ev.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.get());
 		try {
 			ev.setValue((float) eval.rootMeanSquaredError());
 		} catch (Exception e) {
@@ -190,7 +190,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstants.ROOT_RELATIVE_SQUARED_ERROR);
+		ev.setName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.get());
 		try {
 			ev.setValue((float) eval.rootRelativeSquaredError());
 		} catch (Exception e) {

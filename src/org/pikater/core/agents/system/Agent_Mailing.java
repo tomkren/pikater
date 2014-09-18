@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
@@ -43,7 +43,7 @@ public class Agent_Mailing extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-		registerWithDF(AgentNames.MAILING);
+		registerWithDF(CoreAgents.MAILING.getName());
 
 		addBehaviour(new AchieveREResponder(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)) {
 			private static final long serialVersionUID = 746138569142900592L;

@@ -21,7 +21,7 @@ public class ComputationGraph extends Observable {
     
     public ComputationGraph()
     {
-        String initBeansName = CoreConfiguration.BEANS_CONFIG_FILE;
+        String initBeansName = CoreConfiguration.getConfigurationFileName();
         @SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
         GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");

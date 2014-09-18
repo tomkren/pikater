@@ -21,9 +21,9 @@ public class DataTransferService extends FIPAService {
 		try (
 			Socket socket = new Socket(host, port);
 		) {
-			Path temp = Paths.get(CoreConfiguration.DATA_FILES_PATH + "temp" + System.getProperty("file.separator") + hash);
+			Path temp = Paths.get(CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator") + hash);
 			Files.copy(socket.getInputStream(), temp, StandardCopyOption.REPLACE_EXISTING);
-			Files.move(temp, Paths.get(CoreConfiguration.DATA_FILES_PATH + hash), StandardCopyOption.ATOMIC_MOVE);
+			Files.move(temp, Paths.get(CoreConfiguration.getPath_DataFiles() + hash), StandardCopyOption.ATOMIC_MOVE);
 
 			//System.out.println("Data loaded");
 		}
@@ -42,7 +42,7 @@ public class DataTransferService extends FIPAService {
 
 			//System.out.println("Sending data to "+socket.getRemoteSocketAddress());
 
-			Files.copy(Paths.get(CoreConfiguration.DATA_FILES_PATH + hash), socket.getOutputStream());
+			Files.copy(Paths.get(CoreConfiguration.getPath_DataFiles() + hash), socket.getOutputStream());
 
 			serverSocket.close();
 		} finally {

@@ -12,7 +12,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.manager.ManagerService;
@@ -42,10 +42,9 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
 	@Override
 	protected void setup() {
 
-	  	System.out.println("Agent: " +getLocalName() + " starts.");
-
 		initDefault();
-		registerWithDF(AgentNames.GUI_AGENTS_COMMUNICATOR);
+		logInfo("is starting up...");
+		registerWithDF(CoreAgents.GUI_AGENTS_COMMUNICATOR.getName());
 
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		
@@ -92,7 +91,7 @@ public class Agent_GuiAgentsCommunicator extends PikaterAgent {
         int batchOwnerID = -1;
         int batchPriority = -1;
 
-		AID klaraGUI = new AID(AgentNames.GUI_KLARA_AGENT, false);
+		AID klaraGUI = new AID(CoreAgents.GUI_KLARA_AGENT.getName(), false);
 		String senderName = request.getSender().getLocalName() + "Agent";
 		
 			if (senderName.equals(klaraGUI.getLocalName()) ) {

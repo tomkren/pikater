@@ -20,7 +20,7 @@ import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
 import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
@@ -74,7 +74,7 @@ public class Agent_Manager extends PikaterAgent {
 
     	initDefault();
 
-    	registerWithDF(AgentNames.MANAGER);
+    	registerWithDF(CoreAgents.MANAGER.getName());
 		doWait(30000);
 		
 		MessageTemplate subscriptionTemplate = 

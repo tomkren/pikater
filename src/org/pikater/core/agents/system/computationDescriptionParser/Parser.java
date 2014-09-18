@@ -1,6 +1,6 @@
 package org.pikater.core.agents.system.computationDescriptionParser;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.*;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.*;
@@ -293,13 +293,13 @@ public class Parser {
         computationGraph.addNode(recNode);
         alreadyProcessed.put(recommender.getId(),recNode);
 
-        DataSourceEdge ds=(DataSourceEdge) child.getInputs().get(CoreConstants.SLOT_TRAINING_DATA).getNext();
+        DataSourceEdge ds=(DataSourceEdge) child.getInputs().get(CoreConstant.Slot.SLOT_TRAINING_DATA.get()).getNext();
         DataSourceEdge copy=new DataSourceEdge();
         copy.setDataSourceId(ds.getDataSourceId());
         copy.setFile(ds.isFile());
         NeverEndingBuffer<DataSourceEdge> training=new NeverEndingBuffer<>(copy);
         training.setTarget(recNode);
-        recNode.addInput(CoreConstants.SLOT_TRAINING_DATA, training);
+        recNode.addInput(CoreConstant.Slot.SLOT_TRAINING_DATA.get(), training);
 
         for (ErrorSourceDescription error:recommender.getErrors()) {
             parseErrors(error, recNode);

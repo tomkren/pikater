@@ -1,7 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
@@ -60,12 +60,12 @@ public final class Input06 {
 		// Data processed by dp are the new datasource
 		DataSourceDescription dataSourceSunny = new DataSourceDescription();
 		dataSourceSunny.setOutputType("sunnyOutput");
-		dataSourceSunny.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+		dataSourceSunny.setInputType(CoreConstant.Slot.SLOT_TRAINING_DATA.get());
 		dataSourceSunny.setDataProvider(dp);
 
 		DataSourceDescription dataSourceRainy = new DataSourceDescription();
 		dataSourceRainy.setOutputType("sunnyOutput");
-		dataSourceRainy.setInputType(CoreConstants.SLOT_TESTING_DATA);
+		dataSourceRainy.setInputType(CoreConstant.Slot.SLOT_TESTING_DATA.get());
 		dataSourceRainy.setDataProvider(dp);
 		
 		// Create new computing agent, add options and datasource that we have
@@ -79,7 +79,7 @@ public final class Input06 {
 		comAgent.setEvaluationMethod(evaluationMethod);
 
 		DataSourceDescription computingAgentDataSource = new DataSourceDescription();
-		computingAgentDataSource.setOutputType(CoreConstants.SLOT_COMPUTED_DATA);
+		computingAgentDataSource.setOutputType(CoreConstant.Slot.SLOT_COMPUTED_DATA.get());
 		computingAgentDataSource.setDataProvider(comAgent);
 
 		// Save labeled data
@@ -103,7 +103,7 @@ public final class Input06 {
 
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input06"
+		String fileName = CoreConfiguration.getPath_KlarasInputs() + "input06"
 				+ System.getProperty("file.separator") + "input.xml";
 
 		comDescription.exportXML(fileName);

@@ -22,8 +22,8 @@ import jade.proto.ContractNetInitiator;
 
 import java.util.Date;
 
-import org.pikater.core.AgentNames;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreAgents;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaLinearRegression;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
@@ -68,7 +68,7 @@ public class Agent_Duration extends PikaterAgent {
     
     @Override
     protected String getAgentType(){
-    	return AgentNames.DURATION;
+    	return CoreAgents.DURATION.getName();
     }
     
 	public List<Ontology> getOntologies() {
@@ -87,7 +87,7 @@ public class Agent_Duration extends PikaterAgent {
 
 		initDefault();
 		
-		registerWithDF(AgentNames.DURATION);
+		registerWithDF(CoreAgents.DURATION.getName());
     	
 		if (containsArgument(LOG_LR_DURATIONS_NAME)) {
 			if (isArgumentValueTrue(LOG_LR_DURATIONS_NAME)){
@@ -100,10 +100,10 @@ public class Agent_Duration extends PikaterAgent {
         aid = ManagerAgentService.createAgent(
         		this,
         		Agent_WekaDurationLinearRegression.class.getName(),
-        		AgentNames.DURATION_SERVICE,
+        		CoreAgents.DURATION_SERVICE.getName(),
         		null);
         
-		this.durationDatasetName = CoreConstants.DURATION_DATASET_NAME;
+		this.durationDatasetName = CoreConstant.Misc.DURATION_DATASET_NAME.get();
 		this.durationDatasetHash = DataManagerService.
 				translateExternalFilename(this, -1, durationDatasetName);
 
@@ -305,7 +305,7 @@ public class Agent_Duration extends PikaterAgent {
 					
 					Duration d = new Duration();
 					for (Eval eval : ev) {
-						if(eval.getName().equals(CoreConstants.DURATION)){
+						if(eval.getName().equals(CoreConstant.Misc.DURATION.get())){
 							d.setDurationMiliseconds((int)eval.getValue());
 						}
 					}
@@ -355,7 +355,7 @@ public class Agent_Duration extends PikaterAgent {
 						durationDatasetHash,
 						DataTypes.TRAIN_DATA));
 		datas.addData(new Data("xxx", "xxx", DataTypes.TEST_DATA));
-		datas.setMode(CoreConstants.MODE_TRAIN_ONLY);
+		datas.setMode(CoreConstant.Mode.TRAIN_ONLY.get());
 		
 		Task task = new Task();
 		Id _id = new Id();

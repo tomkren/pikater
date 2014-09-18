@@ -8,7 +8,7 @@ import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
@@ -79,7 +79,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                     labeledData.setDataSourceId(data.getName());
                     node.addToOutputAndProcess(labeledData,"file");
                 }
-                if (node.ContainsOutput(CoreConstants.SLOT_TESTING_DATA))
+                if (node.ContainsOutput(CoreConstant.Slot.SLOT_TESTING_DATA.get()))
                 {
                     TaskOutput test= t.getOutputByType(Task.InOutType.TEST);
                     if (test==null)
@@ -87,14 +87,14 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                         test=t.getOutputByType(Task.InOutType.TRAIN);
                     }
                     labeledData.setDataSourceId(test.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstants.SLOT_TESTING_DATA);
+                    node.addToOutputAndProcess(labeledData, CoreConstant.Slot.SLOT_TESTING_DATA.get());
                 }
-                if (node.ContainsOutput(CoreConstants.SLOT_TRAINING_DATA))
+                if (node.ContainsOutput(CoreConstant.Slot.SLOT_TRAINING_DATA.get()))
                 {
                     TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
 
                     labeledData.setDataSourceId(train.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstants.SLOT_TRAINING_DATA);
+                    node.addToOutputAndProcess(labeledData, CoreConstant.Slot.SLOT_TRAINING_DATA.get());
                 }
 
 				// save results to the database										

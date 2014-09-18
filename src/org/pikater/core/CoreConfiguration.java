@@ -1,33 +1,71 @@
 package org.pikater.core;
 
+import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class CoreConfiguration {
-
-	public static final String BEANS_CONFIG_FILE = "Beans.xml";
-
-	public static final String CONFIGURATION_MASTER_FILE = "core" + 
-			System.getProperty("file.separator") + 
-			"configurationMaster.xml";
+public abstract class CoreConfiguration
+{
+	/*
+	 * Spring interface
+	 */
+	private static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext(getConfigurationFileName());
 	
-	public static final String INPUTS_KLARA_PATH = "core"
-			+ System.getProperty("file.separator") + "inputs"
-			+ System.getProperty("file.separator") + "inputsKlara"
-			+ System.getProperty("file.separator");
-	public static final String DATA_FILES_PATH =
-			"core" + System.getProperty("file.separator") +
-			"data" + System.getProperty("file.separator") +
-			"files" + System.getProperty("file.separator");
-	public static final String EXTERNAL_AGENT_JARS_PATH =
-			"core" + System.getProperty("file.separator") +
-			"ext_agents" + System.getProperty("file.separator");
-	public static final String SAVED_PATH = "core"
-			+ System.getProperty("file.separator") + "saved"
-			+ System.getProperty("file.separator");
-	public static final String METADATA_PATH = "core"
-			+ System.getProperty("file.separator") + "metadata"
-			+ System.getProperty("file.separator");
+	@SuppressWarnings("unchecked")
+	private static <T extends Object> T getBean(String id)
+	{
+		return (T) APPLICATION_CONTEXT.getBean(id);
+	}
 	
-	public static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext(BEANS_CONFIG_FILE);
+	public static String getConfigurationFileName()
+	{
+		return "Beans.xml";
+	}
+	
+	public static PostgreSQLConnectionProvider getPGSQLConnProvider()
+	{
+		return getBean("defaultConnection");
+	}
+	
+	/*
+	 * Other configuration interface
+	 */
+	
+	public static String getPath_CoreMasterConfigurationFile()
+	{
+		// TODO: if not dynamic, put this into "Beans.xml"?
+		return "core" + System.getProperty("file.separator") + 	"configurationMaster.xml";
+	}
+	
+	public static String getPath_KlarasInputs()
+	{
+		// TODO: if not dynamic, put this into "Beans.xml"?
+		return "core" + System.getProperty("file.separator") + "inputs" + System.getProperty("file.separator") + 
+				"inputsKlara" + System.getProperty("file.separator");
+	}
+	
+	public static String getPath_DataFiles()
+	{
+		// TODO: if not dynamic, put this into "Beans.xml"?
+		return "core" + System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
+				"files" + System.getProperty("file.separator");
+	}
+	
+	public static String getPath_ExtAgentsJARs()
+	{
+		// TODO: if not dynamic, put this into "Beans.xml"?
+		return "core" + System.getProperty("file.separator") + "ext_agents" + System.getProperty("file.separator");
+	}
+	
+	public static String getPath_Saved()
+	{
+		// TODO: if not dynamic, put this into "Beans.xml"?
+		return "core" + System.getProperty("file.separator") + "saved" + System.getProperty("file.separator");
+	}
+	
+	public static String getPath_Metadata()
+	{
+		// TODO: if not dynamic, put this into "Beans.xml"?
+		return "core" + System.getProperty("file.separator") + "metadata" + System.getProperty("file.separator");
+	}
 }

@@ -11,7 +11,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -47,7 +47,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 			return false;
 		}
 		
-		String path = CoreConfiguration.DATA_FILES_PATH + relativeFileName;
+		String path = CoreConfiguration.getPath_DataFiles() + relativeFileName;
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
@@ -64,7 +64,7 @@ public class Agent_ARFFReader extends PikaterAgent {
 
 	@Override
 	protected String getAgentType() {
-		return AgentNames.ARFF_READER;
+		return CoreAgents.ARFF_READER.getName();
 	}
 
 	@Override

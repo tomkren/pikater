@@ -1,7 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.recommend.Agent_Basic;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -48,7 +48,7 @@ public final class Input05 {
 
         //Set error provider
         ErrorSourceDescription errorDescription=new ErrorSourceDescription();
-        errorDescription.setOutputType(CoreConstants.SLOT_ERRORS);
+        errorDescription.setOutputType(CoreConstant.Slot.SLOT_ERRORS.get());
         errorDescription.setProvider(comAgent);
         recommender.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
         
@@ -77,7 +77,7 @@ public final class Input05 {
 
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input05"
+		String fileName = CoreConfiguration.getPath_KlarasInputs() + "input05"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 

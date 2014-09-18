@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.ontology.DataOntology;
@@ -55,7 +55,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 			saver.writeBatch();
 			byte[] bout = out.toByteArray();
 			String md5 = DigestUtils.md5Hex(bout);
-			Files.write(bout, new File(CoreConfiguration.DATA_FILES_PATH + md5));
+			Files.write(bout, new File(CoreConfiguration.getPath_DataFiles() + md5));
 			return md5;
 		} catch (IOException e) {
 			logException("Failed to write results", e);
@@ -103,7 +103,7 @@ abstract public class Agent_DataProcessing extends Agent_AbstractExperiment {
 		// Make the list of reader agents
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.ARFF_READER);
+		sd.setType(CoreAgents.ARFF_READER.getName());
 		template.addServices(sd);
 		try {
 			GetData getData = new GetData();

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.planner.dataStructures.DataFile.DataFileType;
@@ -33,7 +33,7 @@ public class DataRegistry {
 		DatasetsInfo datasetsInfo = DataManagerService.getAllDatasetInfo(agent);
 		for (DatasetInfo datasetInfo : datasetsInfo.getDatasets()) {
 			
-			AID managerAgentAID = new AID(AgentNames.MANAGER_AGENT, false);
+			AID managerAgentAID = new AID(CoreAgents.MANAGER_AGENT.getName(), false);
 			String hash = datasetInfo.getHash();
 
 			if (dataMap.get(hash) == null) {
