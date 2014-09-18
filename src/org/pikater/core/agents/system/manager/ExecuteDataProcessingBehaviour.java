@@ -11,9 +11,9 @@ import jade.proto.AchieveREInitiator;
 import java.util.ArrayList;
 
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.DataProcessingStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computation.graph.ComputationNode;
+import org.pikater.core.agents.system.computation.graph.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computation.graph.strategies.DataProcessingStrategy;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 

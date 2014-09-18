@@ -22,8 +22,8 @@ import jade.proto.SubscriptionResponder.SubscriptionManager;
 
 import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.SearchComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.SolutionEdge;
+import org.pikater.core.agents.system.computation.graph.SearchComputationNode;
+import org.pikater.core.agents.system.computation.graph.edges.SolutionEdge;
 import org.pikater.core.agents.system.manager.ComputationCollectionItem;
 import org.pikater.core.agents.system.manager.ParserBehaviour;
 import org.pikater.core.ontology.*;

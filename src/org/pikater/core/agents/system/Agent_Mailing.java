@@ -29,7 +29,7 @@ public class Agent_Mailing extends PikaterAgent {
 	/** Podporovane typy e-mailu */
 	public static enum EmailType {
 		TEST, RESULT
-	};
+	}
 
 	@Override
 	public List<Ontology> getOntologies() {

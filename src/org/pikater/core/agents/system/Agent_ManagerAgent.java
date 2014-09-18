@@ -16,7 +16,7 @@ import jade.wrapper.StaleProxyException;
 
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.data.DataManagerService;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentRequestResponder;
+import org.pikater.core.agents.system.manager.ManagerAgentRequestResponder;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;

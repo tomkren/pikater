@@ -10,10 +10,10 @@ import jade.proto.AchieveREInitiator;
 
 import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ComputationStrategies.CAStartComputationStrategy;
-import org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.ModelComputationNode;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.DataSourceEdge;
-import org.pikater.core.agents.system.computationDescriptionParser.edges.ErrorEdge;
+import org.pikater.core.agents.system.computation.graph.ModelComputationNode;
+import org.pikater.core.agents.system.computation.graph.edges.DataSourceEdge;
+import org.pikater.core.agents.system.computation.graph.edges.ErrorEdge;
+import org.pikater.core.agents.system.computation.graph.strategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;

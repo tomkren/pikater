@@ -86,7 +86,6 @@ public class ComputingAction extends FSMBehaviour {
 		evaluations.add(st);
 
 		eval.setEvaluations(evaluations);
-
 		eval.setStatus(desc);
 	}
 
@@ -483,7 +482,6 @@ public class ComputingAction extends FSMBehaviour {
 					if (agent.resurrected) {
 						eval.setObject(null);
 					}
-					;
 					agent.currentTask.setResult(eval);
 
 					Result result = new Result((Action) content, agent.currentTask);
