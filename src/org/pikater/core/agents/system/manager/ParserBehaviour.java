@@ -98,20 +98,27 @@ public class ParserBehaviour extends AchieveREResponder {
         reply.setContent("OK");
         this.agent.send(reply);
         
-        Parser parser = new Parser(agent);
-        parser.parseRoots(comDescription, batchID, userID);
-
-        ComputationGraph computationGraph = parser.getComputationGraph();
-        computationGraph.setBatchID(batchID);
-        computationGraph.addObserver(new LoggerObserver(agent));
-        ComputationCollectionItem item = new ComputationCollectionItem(
-        		computationGraph, request, batchID);
-        agent.addComputation(item);
-        
+        JPABatchStatus status;
+        try {
+	        Parser parser = new Parser(agent);
+	        parser.parseRoots(comDescription, batchID, userID);
+	
+	        ComputationGraph computationGraph = parser.getComputationGraph();
+	        computationGraph.setBatchID(batchID);
+	        computationGraph.addObserver(new LoggerObserver(agent));
+	        ComputationCollectionItem item = new ComputationCollectionItem(
+	        		computationGraph, request, batchID);
+	        agent.addComputation(item);
+			computationGraph.startBatchComputation();
+			status = JPABatchStatus.COMPUTING;
+        }
+        catch (Exception e){
+        	agent.logError(e.toString());
+        	status = JPABatchStatus.FAILED;
+        }
         // change status to computing and log to database
-        DataManagerService.updateBatchStatus(agent, batchID, JPABatchStatus.COMPUTING.name());
+        DataManagerService.updateBatchStatus(agent, batchID, status.name());
         
-		computationGraph.startBatchComputation();
 		
         return null;
     }

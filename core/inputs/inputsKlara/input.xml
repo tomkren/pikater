@@ -84,105 +84,28 @@
             <errors/>
             <dataSources/>
             <agentType>org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation</agentType>
-            <options>
-              <org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-                <name>F</name>
-                <valuesWrapper>
-                  <values>
-                    <org.pikater.core.ontology.subtrees.newOption.base.Value>
-                      <currentValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                        <value>8</value>
-                      </currentValue>
-                      <type>
-                        <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                          <value>8</value>
-                        </defaultValue>
-                      </type>
-                    </org.pikater.core.ontology.subtrees.newOption.base.Value>
-                  </values>
-                </valuesWrapper>
-                <valueRestrictions>
-                  <restrictions>
-                    <org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                      <types>
-                        <org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                          <defaultValue type="org.pikater.core.ontology.subtrees.newOption.values.IntegerValue">
-                            <value>8</value>
-                          </defaultValue>
-                        </org.pikater.core.ontology.subtrees.newOption.base.ValueType>
-                      </types>
-                    </org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction>
-                  </restrictions>
-                </valueRestrictions>
-              </org.pikater.core.ontology.subtrees.newOption.base.NewOption>
-            </options>
+            <options/>
           </evaluationMethod>
           <trainingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
               <id>2</id>
-              <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
               <options/>
               <errors/>
-              <dataSources>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                  <outputType>fileData</outputType>
-                  <inputType>firstInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>5</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                  <outputType>fileData</outputType>
-                  <inputType>secondInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              </dataSources>
+              <dataSources/>
+              <fileURI>weather.arff</fileURI>
             </dataProvider>
-            <outputType>sunnyOutput</outputType>
+            <outputType>fileData</outputType>
             <inputType>trainingData</inputType>
           </trainingData>
           <testingData>
-            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.DataProcessing">
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
               <id>2</id>
-              <agentType>org.pikater.core.agents.experiment.dataprocessing.Agent_WeatherSplitter</agentType>
               <options/>
               <errors/>
-              <dataSources>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>4</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                  <outputType>fileData</outputType>
-                  <inputType>firstInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                <org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-                  <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
-                    <id>5</id>
-                    <options/>
-                    <errors/>
-                    <dataSources/>
-                    <fileURI>weather.arff</fileURI>
-                  </dataProvider>
-                  <outputType>fileData</outputType>
-                  <inputType>secondInput</inputType>
-                </org.pikater.core.ontology.subtrees.batchDescription.DataSourceDescription>
-              </dataSources>
+              <dataSources/>
+              <fileURI>weather.arff</fileURI>
             </dataProvider>
-            <outputType>sunnyOutput</outputType>
+            <outputType>fileData</outputType>
             <inputType>testingData</inputType>
           </testingData>
         </dataProvider>

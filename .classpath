@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="core/inputs/inputsKlara/input01error"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input09"/>
-	<classpathentry excluding="inputs/inputsKlara/input08/|inputs/inputsKlara/input01/|inputs/inputsKlara/input02/|inputs/inputsKlara/input03/|inputs/inputsKlara/input04/|inputs/inputsKlara/input05/|inputs/inputsKlara/input06/|inputs/inputsKlara/input07/|inputs/inputsKlara/input10/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input09/|inputs/inputsKlara/input09/" kind="src" path="core"/>
+	<classpathentry excluding="inputs/inputsKlara/input08/|inputs/inputsKlara/input01/|inputs/inputsKlara/input02/|inputs/inputsKlara/input03/|inputs/inputsKlara/input04/|inputs/inputsKlara/input05/|inputs/inputsKlara/input06/|inputs/inputsKlara/input07/|inputs/inputsKlara/input10/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input01-model/|inputs/inputsKlara/input09/|inputs/inputsKlara/input09/|inputs/inputsKlara/input01error/" kind="src" path="core"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input08"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input01"/>
 	<classpathentry kind="src" path="core/inputs/inputsKlara/input02"/>

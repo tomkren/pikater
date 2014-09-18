@@ -116,8 +116,10 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 				
 				NewOptions options = new NewOptions(evaluation_method.getOptions());
 				NewOption optionF = options.fetchOptionByName("F");
-				IntegerValue valueF = (IntegerValue) optionF.toSingleValue().getCurrentValue();
-				folds = valueF.getValue();
+				if (optionF != null){
+					IntegerValue valueF = (IntegerValue) optionF.toSingleValue().getCurrentValue();
+					folds = valueF.getValue();
+				}				
 			}
 			
 			log(folds + "-fold cross validation.", 2);
