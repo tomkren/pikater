@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.ontology.DataOntology;
@@ -38,7 +38,7 @@ public class FileUploadTester extends PikaterAgent {
 		getContentManager().registerOntology(DataOntology.getInstance());
 
 		// dal by se taky najit v DF, kdybych nevedel, jak se jmenuje
-		AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+		AID receiver = new AID(CoreAgents.DATA_MANAGER.getName(), false);
 
 		PrepareFileUpload action = new PrepareFileUpload();
 		action.setHash("772c551b8486b932aed784a582b9c1b1");

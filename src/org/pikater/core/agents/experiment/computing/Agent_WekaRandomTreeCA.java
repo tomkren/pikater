@@ -14,7 +14,7 @@ public class Agent_WekaRandomTreeCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = -8782398475553889105L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 		
 		return new RandomTree();
 	}

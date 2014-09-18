@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataManagerService;
@@ -48,8 +48,6 @@ public class Agent_GUIKlara extends PikaterAgent {
 	private static final boolean DEBUG_MODE = true;
 	private BufferedReader bufferedConsole=null;
 
-	private String filePath = CoreConfiguration.INPUTS_KLARA_PATH;
-
 	@Override
 	public List<Ontology> getOntologies() {
 		
@@ -70,7 +68,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-		registerWithDF(AgentNames.GUI_KLARA_AGENT);
+		registerWithDF(CoreAgents.GUI_KLARA_AGENT.getName());
 		
 		bufferedConsole=new BufferedReader(new InputStreamReader(System.in));
 
@@ -79,7 +77,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			System.out.println("GUIKlara agent starts.");
 			
 			try {
-				runFile(filePath + "input.xml");
+				runFile(CoreConfiguration.getPath_KlarasInputs() + "input.xml");
 				
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found.");
@@ -139,17 +137,17 @@ public class Agent_GUIKlara extends PikaterAgent {
 		System.out.println(" I welcome you Klara !!!");
 
 		String defaultFileName = "input.xml";
-		File testFile = new File(filePath + defaultFileName);
+		File testFile = new File(CoreConfiguration.getPath_KlarasInputs() + defaultFileName);
 
 		if(testFile.exists() && !testFile.isDirectory()) {
 
 			System.out.println(" Do you wish to run experiment from file "
-					+ filePath + defaultFileName + " ? (y/n)");
+					+ CoreConfiguration.getPath_KlarasInputs() + defaultFileName + " ? (y/n)");
 			System.out.print(">");
 
 			if (bufferedConsole.readLine().equals("y")) {
 				try {
-					runFile(filePath + defaultFileName);
+					runFile(CoreConfiguration.getPath_KlarasInputs() + defaultFileName);
 					return;
 				} catch (FileNotFoundException e) {
 					System.out.println(" File not found.");
@@ -206,7 +204,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			Ontology taskOntology = TaskOntology.getInstance();
 
 			try {
-				AID planner = new AID(AgentNames.PLANNER, false);
+				AID planner = new AID(CoreAgents.PLANNER.getName(), false);
 
 				ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 				request.addReceiver(planner);
@@ -254,7 +252,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 			logException(e1.getMessage(), e1);
 		}
 
-        AID receiver = new AID(AgentNames.GUI_AGENTS_COMMUNICATOR, false);
+        AID receiver = new AID(CoreAgents.GUI_AGENTS_COMMUNICATOR.getName(), false);
         
         Ontology ontology = BatchOntology.getInstance();
 
@@ -372,7 +370,7 @@ public class Agent_GUIKlara extends PikaterAgent {
 	
 	private int sendRequestSaveDataSet(String filename, int userID, String description){
 		try {
-        	AID dataManager = new AID(AgentNames.DATA_MANAGER, false);
+        	AID dataManager = new AID(CoreAgents.DATA_MANAGER.getName(), false);
     		Ontology ontology = DataOntology.getInstance();
     		SaveDataset sd = new SaveDataset();
     		sd.setUserID(userID);

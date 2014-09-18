@@ -6,7 +6,7 @@ import jade.content.onto.OntologyException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.gateway.Initiator;
 import org.pikater.core.agents.gateway.PikaterGateway_General;
@@ -27,7 +27,7 @@ public class PikaterGateway_NewBatch {
 			Ontology batchOntology = BatchOntology.getInstance();
 
 			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.MANAGER, batchOntology,
+					CoreAgents.MANAGER.getName(), batchOntology,
 					newBatch);
 
 			Initiator initiator = new Initiator(msg);

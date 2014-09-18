@@ -11,7 +11,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
@@ -70,7 +70,7 @@ public abstract class Agent_AbstractExperiment extends PikaterAgent {
 	private ACLMessage respondToGetAgentInfo(ACLMessage request) {
 		
 		AgentInfo agentInfo = getAgentInfo();
-		AID receiver = new AID(AgentNames.AGENTINFO_MANAGER, false);
+		AID receiver = new AID(CoreAgents.AGENTINFO_MANAGER.getName(), false);
 		
 		ACLMessage agentInfoMsg = request.createReply();
 		agentInfoMsg.setPerformative(ACLMessage.INFORM);

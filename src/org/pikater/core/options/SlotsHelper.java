@@ -3,7 +3,7 @@ package org.pikater.core.options;
 import java.util.Arrays;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 
@@ -16,22 +16,22 @@ public abstract class SlotsHelper
 	{
 		Slot recomedSlot = new Slot();
 		recomedSlot.setSlotType(SlotTypes.DATA_RECOMMEND);
-		recomedSlot.setDataType(CoreConstants.SLOT_RECOMMEND);
+		recomedSlot.setDataType(CoreConstant.Slot.SLOT_RECOMMEND.get());
 		recomedSlot.setDescription("Recommends an agent to use (its name).");
 		
 		Slot comAgentSlot = new Slot();
 		comAgentSlot.setSlotType(SlotTypes.DATA_AGENT);
-		comAgentSlot.setDataType(CoreConstants.SLOT_COMPUTATION_AGENT);
+		comAgentSlot.setDataType(CoreConstant.Slot.SLOT_COMPUTATION_AGENT.get());
 		comAgentSlot.setDescription("Data computed by an agent.");
 		
 		Slot searchSlot = new Slot();
 		searchSlot.setSlotType(SlotTypes.DATA_SEARCH);
-		searchSlot.setDataType(CoreConstants.SLOT_SEARCH);
+		searchSlot.setDataType(CoreConstant.Slot.SLOT_SEARCH.get());
 		searchSlot.setDescription("Parameters produced by search.");
 		
 		Slot comAgentErrorSlot = new Slot();
 		comAgentErrorSlot.setSlotType(SlotTypes.ERROR);
-		comAgentErrorSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		comAgentErrorSlot.setDataType(CoreConstant.Slot.SLOT_ERRORS.get());
 		comAgentErrorSlot.setDescription("Errors from computing agent.");
 		
 		return Arrays.asList(
@@ -50,19 +50,19 @@ public abstract class SlotsHelper
 	{
 		Slot inputTrainingSlot = new Slot();
 		inputTrainingSlot.setSlotType(SlotTypes.DATA);
-		inputTrainingSlot.setDataType(CoreConstants.SLOT_TRAINING_DATA);
+		inputTrainingSlot.setDataType(CoreConstant.Slot.SLOT_TRAINING_DATA.get());
 
 		Slot inputTestingSlot = new Slot();
 		inputTestingSlot.setSlotType(SlotTypes.DATA);
-		inputTestingSlot.setDataType(CoreConstants.SLOT_TESTING_DATA);
+		inputTestingSlot.setDataType(CoreConstant.Slot.SLOT_TESTING_DATA.get());
 
 		Slot inputValidationSlot = new Slot();
 		inputValidationSlot.setSlotType(SlotTypes.DATA);
-		inputValidationSlot.setDataType(CoreConstants.SLOT_VALIDATION_DATA);
+		inputValidationSlot.setDataType(CoreConstant.Slot.SLOT_VALIDATION_DATA.get());
 
 		Slot evaluationMethodSlot = new Slot();
 		evaluationMethodSlot.setSlotType(SlotTypes.DATA_EVALUATIONMETHOD);
-		evaluationMethodSlot.setDataType(CoreConstants.SLOT_EVALUATION_METHOD);
+		evaluationMethodSlot.setDataType(CoreConstant.Slot.SLOT_EVALUATION_METHOD.get());
 		
 		return Arrays.asList(
 				inputTrainingSlot,
@@ -76,12 +76,12 @@ public abstract class SlotsHelper
 	{
 		Slot comAgentDataSlot = new Slot();
 		comAgentDataSlot.setSlotType(SlotTypes.DATA_AGENT);
-		comAgentDataSlot.setDataType(CoreConstants.SLOT_COMPUTED_DATA);
+		comAgentDataSlot.setDataType(CoreConstant.Slot.SLOT_COMPUTED_DATA.get());
 		comAgentDataSlot.setDescription("Data computed by an agent.");
 		
 		Slot comAgentErrorSlot = new Slot();
 		comAgentErrorSlot.setSlotType(SlotTypes.ERROR);
-		comAgentErrorSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		comAgentErrorSlot.setDataType(CoreConstant.Slot.SLOT_ERRORS.get());
 		comAgentErrorSlot.setDescription("Errors produced by computing agent.");
 		
 		return Arrays.asList(comAgentDataSlot, comAgentErrorSlot);
@@ -91,12 +91,12 @@ public abstract class SlotsHelper
 	{
 		Slot searchSlot = new Slot();
 		searchSlot.setSlotType(SlotTypes.DATA_SEARCH);
-		searchSlot.setDataType(CoreConstants.SLOT_SEARCH);
+		searchSlot.setDataType(CoreConstant.Slot.SLOT_SEARCH.get());
 		searchSlot.setDescription("Parameters produced by search.");
 		
 		Slot searchErrorSlot = new Slot();
 		searchErrorSlot.setSlotType(SlotTypes.ERROR);
-		searchErrorSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		searchErrorSlot.setDataType(CoreConstant.Slot.SLOT_ERRORS.get());
 		searchErrorSlot.setDescription("Errors produced by search.");
 		
 		return Arrays.asList(searchSlot, searchErrorSlot);
@@ -106,7 +106,7 @@ public abstract class SlotsHelper
 	{
 		Slot recomedSlot = new Slot();
 		recomedSlot.setSlotType(SlotTypes.ERROR);
-		recomedSlot.setDataType(CoreConstants.SLOT_ERRORS);
+		recomedSlot.setDataType(CoreConstant.Slot.SLOT_ERRORS.get());
 		recomedSlot.setDescription("Agent errors.");
 		
 		return Arrays.asList(recomedSlot);
@@ -116,7 +116,7 @@ public abstract class SlotsHelper
 	{
 		Slot recomedSlot = new Slot();
 		recomedSlot.setSlotType(SlotTypes.DATA_RECOMMEND);
-		recomedSlot.setDataType(CoreConstants.SLOT_RECOMMEND);
+		recomedSlot.setDataType(CoreConstant.Slot.SLOT_RECOMMEND.get());
 		recomedSlot.setDescription("Recommends an agent to use (its name).");
 		
 		return Arrays.asList(recomedSlot);
@@ -126,7 +126,7 @@ public abstract class SlotsHelper
 	{
 		Slot evaluationMethodSlot = new Slot();
 		evaluationMethodSlot.setSlotType(SlotTypes.DATA_EVALUATIONMETHOD);
-		evaluationMethodSlot.setDataType(CoreConstants.SLOT_EVALUATION_METHOD);
+		evaluationMethodSlot.setDataType(CoreConstant.Slot.SLOT_EVALUATION_METHOD.get());
 		return Arrays.asList(evaluationMethodSlot);
 	}
 	
@@ -134,7 +134,7 @@ public abstract class SlotsHelper
 	{
 		Slot fileInputSlot = new Slot();
 		fileInputSlot.setSlotType(SlotTypes.DATA);
-		fileInputSlot.setDataType(CoreConstants.SLOT_FILE_DATA);
+		fileInputSlot.setDataType(CoreConstant.Slot.SLOT_FILE_DATA.get());
 		return  Arrays.asList(fileInputSlot);
 	}	
 
@@ -142,7 +142,7 @@ public abstract class SlotsHelper
 	{
 		Slot fileSaverSlot = new Slot();
 		fileSaverSlot.setSlotType(SlotTypes.DATA);
-		fileSaverSlot.setDataType(CoreConstants.SLOT_FILE_DATA);
+		fileSaverSlot.setDataType(CoreConstant.Slot.SLOT_FILE_DATA.get());
 		return  Arrays.asList(fileSaverSlot);
 	}
 

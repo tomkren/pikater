@@ -29,9 +29,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.data.DataTransferService;
 import org.pikater.core.agents.system.metadata.reader.JPAMetaDataReader;
@@ -162,13 +162,13 @@ public class Agent_DataManager extends PikaterAgent {
 		initDefault();
 		registerWithDF();
 
-		File data = new File(CoreConfiguration.DATA_FILES_PATH + "temp");
+		File data = new File(CoreConfiguration.getPath_DataFiles() + "temp");
 		if (!data.exists()) {
-			logInfo("Creating directory: " + CoreConfiguration.DATA_FILES_PATH);
+			logInfo("Creating directory: " + CoreConfiguration.getPath_DataFiles());
 			if (data.mkdirs()) {
-				logInfo("Succesfully created directory: " + CoreConfiguration.DATA_FILES_PATH);
+				logInfo("Succesfully created directory: " + CoreConfiguration.getPath_DataFiles());
 			} else {
-				logSevere("Error creating directory: " + CoreConfiguration.DATA_FILES_PATH);
+				logSevere("Error creating directory: " + CoreConfiguration.getPath_DataFiles());
 			}
 		}
 
@@ -431,7 +431,7 @@ public class Agent_DataManager extends PikaterAgent {
 			if (files.size() > 0) {
 				translatedName = files.get(0).getInternalfilename();
 			} else {
-				String pathPrefix = CoreConfiguration.DATA_FILES_PATH + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator");
 
 				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
@@ -446,7 +446,7 @@ public class Agent_DataManager extends PikaterAgent {
 			if (files.size() > 0) {
 				translatedName = files.get(0).getExternalfilename();
 			} else {
-				String pathPrefix = CoreConfiguration.DATA_FILES_PATH + "temp" + System.getProperty("file.separator");
+				String pathPrefix = CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator");
 
 				String tempFileName = pathPrefix + transtateFile.getExternalFilename();
 				if (new File(tempFileName).exists())
@@ -704,7 +704,7 @@ public class Agent_DataManager extends PikaterAgent {
 					}
 					action.setResult(bestErrorRate);
 				}
-				AID receiver = new AID(AgentNames.MAILING, false);
+				AID receiver = new AID(CoreAgents.MAILING.getName(), false);
 				ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 				Ontology ontology = MailingOntology.getInstance();
 
@@ -927,42 +927,42 @@ public class Agent_DataManager extends PikaterAgent {
 
 		Evaluation evaluation = task.getResult();
 
-		Eval errorRateEval = evaluation.exportEvalByName(CoreConstants.ERROR_RATE);
+		Eval errorRateEval = evaluation.exportEvalByName(CoreConstant.Error.ERROR_RATE.get());
 		if (errorRateEval != null) {
 			errorRate = errorRateEval.getValue();
 		}
 
-		Eval kappaStatisticEval = evaluation.exportEvalByName(CoreConstants.KAPPA_STATISTIC);
+		Eval kappaStatisticEval = evaluation.exportEvalByName(CoreConstant.Error.KAPPA_STATISTIC.get());
 		if (kappaStatisticEval != null) {
 			kappa_statistic = kappaStatisticEval.getValue();
 		}
 
-		Eval meanAbsoluteEval = evaluation.exportEvalByName(CoreConstants.MEAN_ABSOLUTE_ERROR);
+		Eval meanAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.MEAN_ABSOLUTE.get());
 		if (meanAbsoluteEval != null) {
 			mean_absolute_error = meanAbsoluteEval.getValue();
 		}
 
-		Eval rootMeanSquaredEval = evaluation.exportEvalByName(CoreConstants.ROOT_MEAN_SQUARED_ERROR);
+		Eval rootMeanSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_MEAN_SQUARED.get());
 		if (rootMeanSquaredEval != null) {
 			root_mean_squared_error = rootMeanSquaredEval.getValue();
 		}
 
-		Eval relativeAbsoluteEval = evaluation.exportEvalByName(CoreConstants.RELATIVE_ABSOLUTE_ERROR);
+		Eval relativeAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.RELATIVE_ABSOLUTE.get());
 		if (relativeAbsoluteEval != null) {
 			relative_absolute_error = relativeAbsoluteEval.getValue();
 		}
 
-		Eval rootRelativeSquaredEval = evaluation.exportEvalByName(CoreConstants.ROOT_RELATIVE_SQUARED_ERROR);
+		Eval rootRelativeSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.get());
 		if (rootRelativeSquaredEval != null) {
 			root_relative_squared_error = rootRelativeSquaredEval.getValue();
 		}
 
-		Eval durationEval = evaluation.exportEvalByName(CoreConstants.DURATION);
+		Eval durationEval = evaluation.exportEvalByName(CoreConstant.Misc.DURATION.get());
 		if (durationEval != null) {
 			duration = (int) durationEval.getValue();
 		}
 
-		Eval durationLREval = evaluation.exportEvalByName(CoreConstants.DURATIONLR);
+		Eval durationLREval = evaluation.exportEvalByName(CoreConstant.Misc.DURATIONLR.get());
 		if (durationLREval != null) {
 			durationLR = (float) durationLREval.getValue();
 		}
@@ -1274,7 +1274,7 @@ public class Agent_DataManager extends PikaterAgent {
 		int savedModelID = DAOs.resultDAO.setModelForResult(sm.getModel());
 
 		if (savedModelID != -1) {
-			System.out.println("Saved Model ID: " + savedModelID);
+			logInfo("Saved Model ID: " + savedModelID);
 			reply.setPerformative(ACLMessage.INFORM);
 		} else {
 			logSevere("Couldn't be saved model for experiment ID " + sm.getModel().getResultID());
@@ -1351,7 +1351,7 @@ public class Agent_DataManager extends PikaterAgent {
 			throw new FailureException("Agent jar for type " + type + " not found in DB");
 		} else {
 			String jarname = type.replace(".", "_") + ".jar";
-			String jarpath = CoreConfiguration.EXTERNAL_AGENT_JARS_PATH + jarname;
+			String jarpath = CoreConfiguration.getPath_ExtAgentsJARs() + jarname;
 
 			File dest = new File(jarpath);
 			File tmp = new File(jarpath + ".tmp");
@@ -1411,8 +1411,8 @@ public class Agent_DataManager extends PikaterAgent {
 
 				PGLargeObjectReader reader = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 				logInfo(reader.toString());
-				File temp = new File(CoreConfiguration.DATA_FILES_PATH + "temp" + System.getProperty("file.separator") + hash);
-				File target = new File(CoreConfiguration.DATA_FILES_PATH + hash);
+				File temp = new File(CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator") + hash);
+				File target = new File(CoreConfiguration.getPath_DataFiles() + hash);
 
 				FileOutputStream out = new FileOutputStream(temp);
 				try {

@@ -45,7 +45,7 @@ public class Rectangle extends Shape {
 				return direction;
 			}
 		}
-	};
+	}
 
 	/** Protected default Ctor keeps GWT happy */ 
 	protected Rectangle() {}

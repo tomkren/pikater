@@ -22,20 +22,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
+import org.pikater.core.agents.system.computation.planning.PlannerCommunicator;
+import org.pikater.core.agents.system.computation.planning.structures.CPUCore;
+import org.pikater.core.agents.system.computation.planning.structures.CPUCoresStructure;
+import org.pikater.core.agents.system.computation.planning.structures.DataFiles;
+import org.pikater.core.agents.system.computation.planning.structures.DataRegistry;
+import org.pikater.core.agents.system.computation.planning.structures.Lock;
+import org.pikater.core.agents.system.computation.planning.structures.SlaveServersStructure;
+import org.pikater.core.agents.system.computation.planning.structures.TaskToSolve;
+import org.pikater.core.agents.system.computation.planning.structures.WaitingTasksQueues;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.agents.system.metadata.MetadataService;
-import org.pikater.core.agents.system.planner.PlannerCommunicator;
-import org.pikater.core.agents.system.planner.dataStructures.CPUCore;
-import org.pikater.core.agents.system.planner.dataStructures.CPUCoresStructure;
-import org.pikater.core.agents.system.planner.dataStructures.DataFiles;
-import org.pikater.core.agents.system.planner.dataStructures.DataRegistry;
-import org.pikater.core.agents.system.planner.dataStructures.Lock;
-import org.pikater.core.agents.system.planner.dataStructures.SlaveServersStructure;
-import org.pikater.core.agents.system.planner.dataStructures.TaskToSolve;
-import org.pikater.core.agents.system.planner.dataStructures.WaitingTasksQueues;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MetadataOntology;
@@ -80,7 +80,7 @@ public class Agent_Planner extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		registerWithDF(AgentNames.PLANNER);
+		registerWithDF(CoreAgents.PLANNER.getName());
 
 		// waiting to start ManagerAgent
 		doWait(10000);
@@ -295,7 +295,7 @@ public class Agent_Planner extends PikaterAgent {
 	}
 
 	private void saveDataToDB(Task task, String node) {
-		String dataManagerName = AgentNames.DATA_MANAGER;
+		String dataManagerName = CoreAgents.DATA_MANAGER.getName();
 		if (node != null) {
 			dataManagerName += "-";
 			dataManagerName += node;
@@ -309,7 +309,7 @@ public class Agent_Planner extends PikaterAgent {
 			logInfo("requesting save of data "+t.getName());
 			SaveDataset sd = new SaveDataset();
 			sd.setUserID(task.getUserID());
-			String savedFileName = CoreConfiguration.DATA_FILES_PATH+System.getProperty("file.separator")+t.getName();
+			String savedFileName = CoreConfiguration.getPath_DataFiles()+System.getProperty("file.separator")+t.getName();
 			sd.setSourceFile(savedFileName);			
 			sd.setDescription("Output from batch "+task.getBatchID()+ " ("+t.getType().toString()+")");
 			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);

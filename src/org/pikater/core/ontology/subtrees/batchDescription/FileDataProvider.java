@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 
@@ -27,7 +27,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption fileURIOption = new NewOption(CoreConstants.FILEURI, fileURI);
+		NewOption fileURIOption = new NewOption(CoreConstant.Misc.FILEURI.get(), fileURI);
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(fileURIOption);
@@ -38,7 +38,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	public void importAllOptions(List<NewOption> options) {
 		
 		for (NewOption optionI : options) {
-			if (optionI.getName().equals(CoreConstants.FILEURI)) {
+			if (optionI.getName().equals(CoreConstant.Misc.FILEURI.get())) {
 				StringValue value = (StringValue) optionI.toSingleValue().getCurrentValue();
 				this.fileURI = value.getValue();
 			}

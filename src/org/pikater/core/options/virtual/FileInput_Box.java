@@ -1,6 +1,6 @@
 package org.pikater.core.options.virtual;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.virtual.Agent_VirtualFileInputBoxProvider;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider;
@@ -19,7 +19,7 @@ public class FileInput_Box {
 		agentInfo.setName("FileInput");
 		agentInfo.setDescription("This box provides a data source to other boxes.");
 
-		NewOption optionIN = new NewOption(CoreConstants.FILEURI, new StringValue("inputFile.ARFF"));
+		NewOption optionIN = new NewOption(CoreConstant.Misc.FILEURI.get(), new StringValue("inputFile.ARFF"));
 		optionIN.setDescription("File name");
 		
 		agentInfo.addOption(optionIN);

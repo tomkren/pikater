@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
+import org.pikater.core.agents.system.manager.ManagerAgentService;
 import org.pikater.core.configuration.Argument;
 import org.pikater.core.configuration.Arguments;
 import org.pikater.core.ontology.TerminationOntology;

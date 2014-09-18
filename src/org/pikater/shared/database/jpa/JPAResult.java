@@ -259,6 +259,5 @@ public class JPAResult extends JPAAbstractEntity{
     	this.serializedFileName=updateValues.getSerializedFileName();
     	this.start=updateValues.getStart();
     	this.createdModel=updateValues.getCreatedModel();
-    	System.out.println("JPAResult to be updated: "+updateValues.getId());
 	}
 }

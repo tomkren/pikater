@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 
 
 /**
@@ -24,13 +24,13 @@ public class DataSourceDescription implements ISourceDescription {
     public void setDataProvider(IDataProvider dataProvider) {
     	
     	if (dataProvider instanceof FileDataProvider) {
-    		this.setOutputType(CoreConstants.SLOT_FILE_DATA);
+    		this.setOutputType(CoreConstant.Slot.SLOT_FILE_DATA.get());
     		
     	} else if (dataProvider instanceof ComputingAgent) {
-    		this.setOutputType(CoreConstants.SLOT_COMPUTED_DATA);
+    		this.setOutputType(CoreConstant.Slot.SLOT_COMPUTED_DATA.get());
     		
     	} else if (dataProvider instanceof CARecSearchComplex) {
-    		this.setOutputType(CoreConstants.SLOT_COMPUTED_DATA);
+    		this.setOutputType(CoreConstant.Slot.SLOT_COMPUTED_DATA.get());
     	}
     	
         this.dataProvider = dataProvider;

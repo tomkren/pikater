@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.agents.system.data.AgentDataSource;
@@ -86,7 +86,6 @@ public class ComputingAction extends FSMBehaviour {
 		evaluations.add(st);
 
 		eval.setEvaluations(evaluations);
-
 		eval.setStatus(desc);
 	}
 
@@ -175,7 +174,7 @@ public class ComputingAction extends FSMBehaviour {
 					getTrainBehaviour.reset(null);
 				}
 
-				if (!mode.equals(CoreConstants.MODE_TRAIN_ONLY)) {
+				if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.get())) {
 					testFn = data.exportInternalTestFileName();
 					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETTESTDATA_STATE);
@@ -365,10 +364,10 @@ public class ComputingAction extends FSMBehaviour {
 						EvaluationMethod evaluation_method = executeAction
 								.getTask().getEvaluationMethod();
 
-						if (!mode.equals(CoreConstants.MODE_TRAIN_ONLY)) {
+						if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.get())) {
 							agent.evaluateCA(evaluation_method, eval);
 
-							if (output.equals(CoreConstants.OUTPUT_PREDICTION)) {
+							if (output.equals(CoreConstant.Output.PREDICTION.get())) {
 								DataInstances di = new DataInstances();
 								di.fillWekaInstances(agent.test);
 								DataInstances labeledTest = agent
@@ -466,9 +465,9 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 				
-				addTaskOutput(InOutType.TEST, CoreConstants.SLOT_TESTING_DATA, agent.test);
-				addTaskOutput(InOutType.TRAIN, CoreConstants.SLOT_TRAINING_DATA, agent.train);
-				addTaskOutput(InOutType.VALIDATION, CoreConstants.SLOT_VALIDATION_DATA, agent.label);
+				addTaskOutput(InOutType.TEST, CoreConstant.Slot.SLOT_TESTING_DATA.get(), agent.test);
+				addTaskOutput(InOutType.TRAIN, CoreConstant.Slot.SLOT_TRAINING_DATA.get(), agent.train);
+				addTaskOutput(InOutType.VALIDATION, CoreConstant.Slot.SLOT_VALIDATION_DATA.get(), agent.label);
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);
@@ -483,7 +482,6 @@ public class ComputingAction extends FSMBehaviour {
 					if (agent.resurrected) {
 						eval.setObject(null);
 					}
-					;
 					agent.currentTask.setResult(eval);
 
 					Result result = new Result((Action) content, agent.currentTask);

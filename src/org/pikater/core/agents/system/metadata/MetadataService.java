@@ -9,7 +9,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.MetadataOntology;
 import org.pikater.core.ontology.subtrees.metadata.NewComputedData;
@@ -20,7 +20,7 @@ public class MetadataService {
 	public static void requestMetadataForDataset(PikaterAgent agent,
 			int dataSetID, int userID) {
 		
-		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
+		AID receiver = new AID(CoreAgents.METADATA_QUEEN.getName(), false);
 
 		NewDataset nds = new NewDataset();
 		nds.setUserID(userID);
@@ -54,7 +54,7 @@ public class MetadataService {
 	public static void requestMetadataForComputedData(PikaterAgent agent,
 			int computedDataID, int userID) {
 
-		AID receiver = new AID(AgentNames.METADATA_QUEEN, false);
+		AID receiver = new AID(CoreAgents.METADATA_QUEEN.getName(), false);
 
 		NewComputedData ncd = new NewComputedData();
 		ncd.setUserID(userID);

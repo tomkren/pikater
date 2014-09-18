@@ -8,22 +8,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.domain.FIPAService;
 
 public class DataTransferService extends FIPAService {
 	/** Connects to a DataManager listening on given host+port and loads the data into the file with the given hash */
 	public static void doClientFileTransfer(String hash, String host, int port) throws IOException {
-		System.out.println("Loading "+hash+" from "+host+":"+port);
+		ConsoleLogger.log(Level.INFO, "Loading "+hash+" from "+host+":"+port);
 
 		try (
 			Socket socket = new Socket(host, port);
 		) {
-			Path temp = Paths.get(CoreConfiguration.DATA_FILES_PATH + "temp" + System.getProperty("file.separator") + hash);
+			Path temp = Paths.get(CoreConfiguration.getPath_DataFiles() + "temp" + System.getProperty("file.separator") + hash);
 			Files.copy(socket.getInputStream(), temp, StandardCopyOption.REPLACE_EXISTING);
-			Files.move(temp, Paths.get(CoreConfiguration.DATA_FILES_PATH + hash), StandardCopyOption.ATOMIC_MOVE);
+			Files.move(temp, Paths.get(CoreConfiguration.getPath_DataFiles() + hash), StandardCopyOption.ATOMIC_MOVE);
 
 			//System.out.println("Data loaded");
 		}
@@ -36,13 +38,13 @@ public class DataTransferService extends FIPAService {
 			try {
 				socket = serverSocket.accept();
 			} catch (SocketTimeoutException e) {
-				System.out.println("No request arrived");
+				ConsoleLogger.log(Level.INFO, "No request arrived");
 				return;
 			}
 
 			//System.out.println("Sending data to "+socket.getRemoteSocketAddress());
 
-			Files.copy(Paths.get(CoreConfiguration.DATA_FILES_PATH + hash), socket.getOutputStream());
+			Files.copy(Paths.get(CoreConfiguration.getPath_DataFiles() + hash), socket.getOutputStream());
 
 			serverSocket.close();
 		} finally {

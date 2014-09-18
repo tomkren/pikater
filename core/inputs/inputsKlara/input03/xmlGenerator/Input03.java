@@ -1,7 +1,7 @@
 package xmlGenerator;
 
 import org.pikater.core.CoreConfiguration;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.computing.Agent_WekaRBFNetworkCA;
 import org.pikater.core.ontology.subtrees.batchDescription.*;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -37,7 +37,7 @@ public final class Input03 {
 		comAgent1.setEvaluationMethod(evaluationMethod1);
 		
 		NewOption optionOutput1 = new NewOption(
-				CoreConstants.OUTPUT, CoreConstants.OUTPUT_EVALUATION_ONLY); 
+				CoreConstant.Output.DEFAULT.get(), CoreConstant.Output.EVALUATION_ONLY.get()); 
 
 		CARecSearchComplex complex1 = new CARecSearchComplex();
 		complex1.setComputingAgent(comAgent1);
@@ -66,7 +66,7 @@ public final class Input03 {
 		comAgent2.setEvaluationMethod(evaluationMethod2);
 
 		NewOption optionOutput2 = new NewOption(
-				CoreConstants.OUTPUT, CoreConstants.OUTPUT_EVALUATION_ONLY);
+				CoreConstant.Output.DEFAULT.get(), CoreConstant.Output.EVALUATION_ONLY.get());
 
 		CARecSearchComplex complex2 = new CARecSearchComplex();
 		complex2.setComputingAgent(comAgent2);
@@ -93,7 +93,7 @@ public final class Input03 {
 		
 		ComputationDescription comDescription = createDescription();
 
-		String fileName = CoreConfiguration.INPUTS_KLARA_PATH + "input03"
+		String fileName = CoreConfiguration.getPath_KlarasInputs() + "input03"
 				+ System.getProperty("file.separator")
 				+ "input.xml";
 

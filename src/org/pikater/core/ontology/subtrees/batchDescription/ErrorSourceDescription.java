@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 
 
 /**
@@ -19,7 +19,7 @@ public class ErrorSourceDescription implements ISourceDescription {
     }
     public void setProvider(IErrorProvider errorProvider) {
     	if (errorProvider instanceof FileDataProvider) {
-    		this.setOutputType(CoreConstants.SLOT_ERRORS);
+    		this.setOutputType(CoreConstant.Slot.SLOT_ERRORS.get());
     	}
         this.provider = errorProvider;
     }

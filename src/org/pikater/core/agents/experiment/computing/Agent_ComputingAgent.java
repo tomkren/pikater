@@ -27,8 +27,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.pikater.core.AgentNames;
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreAgents;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.experiment.dataprocessing.Agent_DataProcessing;
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingAction;
 import org.pikater.core.agents.experiment.dataprocessing.communicator.ComputingCommunicator;
@@ -147,7 +147,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		// register with the DF
 		if (! this.getAID().getLocalName().contains("Service")){	
 			List<String> descr = new ArrayList<String>();
-			descr.add(AgentNames.COMPUTING_AGENT);
+			descr.add(CoreAgents.COMPUTING_AGENT.getName());
 			descr.add(getLocalName());
 	
 			String typeDesc;
@@ -163,7 +163,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 		if (!newAgent) {
 			resurrected = true;
-			System.out.println(getLocalName() + " resurrected.");
+			logInfo("was resurrected");
 			taskFIFO = new LinkedList<ACLMessage>();
 			executionBehaviour.reset();
 			state = states.TRAINED;
@@ -191,10 +191,11 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 						)
 				);
 	
+		executionBehaviour = new ComputingAction(this);
 
 		addBehaviour(new RequestServer(this, reqMsgTemplate));
 		addBehaviour(new CFPResponder(this, cfpMsgTemplate));
-		addBehaviour(executionBehaviour = new ComputingAction(this));
+		addBehaviour(executionBehaviour);
 		
 	} // end setup
 
@@ -212,8 +213,8 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		 */
 		
 		NewOptions taskOptions = new NewOptions(task.getAgent().getOptions());
-		taskOptions.removeOptionByName(CoreConstants.MODE);
-		taskOptions.removeOptionByName(CoreConstants.OUTPUT);
+		taskOptions.removeOptionByName(CoreConstant.Mode.DEFAULT.get());
+		taskOptions.removeOptionByName(CoreConstant.Output.DEFAULT.get());
 		
 		String wekaOptionsString = 
 				taskOptions.exportToWeka();

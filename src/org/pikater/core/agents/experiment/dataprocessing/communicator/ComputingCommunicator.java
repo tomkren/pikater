@@ -17,7 +17,7 @@ import jade.util.leap.List;
 
 import java.io.IOException;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
 import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.TaskOntology;
@@ -80,7 +80,7 @@ public class ComputingCommunicator {
 		
 		ACLMessage durationMessage=new ACLMessage(ACLMessage.REQUEST);
 		durationMessage.setOntology(DurationOntology.getInstance().getName());
-		durationMessage.addReceiver(new AID(AgentNames.DURATION,false));
+		durationMessage.addReceiver(new AID(CoreAgents.DURATION.getName(), false));
 		durationMessage.setLanguage(agent.getCodec().getName());
 		
 		Action a =new Action();
@@ -105,7 +105,7 @@ public class ComputingCommunicator {
 		ACLMessage msgOut = new ACLMessage(ACLMessage.INFORM);
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentNames.GUI_AGENT);
+		sd.setType(CoreAgents.GUI_AGENT.getName());
 		template.addServices(sd);
 		try {
 			DFAgentDescription[] gui_agents = DFService.search(agent, template);
@@ -174,7 +174,7 @@ public class ComputingCommunicator {
 		saveAgent.setAgent(agentOnt);
 
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.addReceiver(new AID(AgentNames.MANAGER_AGENT, false));
+		request.addReceiver(new AID(CoreAgents.MANAGER_AGENT.getName(), false));
 		request.setOntology(TaskOntology.getInstance().getName());
 		request.setLanguage(agent.getCodec().getName());
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);

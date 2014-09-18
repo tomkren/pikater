@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.core.agents.PikaterAgent;
-import org.pikater.core.agents.system.managerAgent.ManagerAgentService;
+import org.pikater.core.agents.system.manager.ManagerAgentService;
 import org.pikater.core.ontology.AgentManagementOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ModelOntology;

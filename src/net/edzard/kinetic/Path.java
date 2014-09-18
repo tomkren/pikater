@@ -18,7 +18,7 @@ public class Path {
 	 */
 	public enum CommandType {
 		UNKNOWN, BEGIN, MOVE, CLOSE, LINE, QUADRATIC, BEZIER, ARCTO, ARC, RECT
-	};
+	}
 	
 	/**
 	 * Base class for all path commands

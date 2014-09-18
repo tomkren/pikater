@@ -14,7 +14,7 @@ public class Agent_WekaJ48 extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = 3338557556876835327L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 
 		return new J48();
 	}

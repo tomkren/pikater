@@ -16,7 +16,7 @@ public class Task implements Concept {
 
 	public enum InOutType {
 		TRAIN, TEST, ERRORS, VALIDATION, AGENT, DATA
-	};
+	}
 
 	// administrative:
 	private int nodeID;

@@ -21,7 +21,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.metadata.MetadataReader;
@@ -93,7 +93,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
     	NewDataset newDataset = (NewDataset)a.getAction();
 		
     	return respondToNewData(request,
-    			CoreConfiguration.METADATA_PATH,
+    			CoreConfiguration.getPath_Metadata(),
     			newDataset.getDataSetID());
     }
     private ACLMessage respondToNewComputedData(ACLMessage request, Action a) {
@@ -101,7 +101,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
     	NewComputedData newComputedData = (NewComputedData)a.getAction();
     	
     	return respondToNewData(request,
-    			CoreConfiguration.DATA_FILES_PATH,
+    			CoreConfiguration.getPath_DataFiles(),
     			newComputedData.getComputedDataID());	
     }
     
@@ -142,7 +142,7 @@ public class Agent_MetadataQueen extends PikaterAgent {
     
     
     private void sendSaveMetaDataRequest(Metadata metadata,int dataSetID){
-        AID receiver = new AID(AgentNames.DATA_MANAGER, false);
+        AID receiver = new AID(CoreAgents.DATA_MANAGER.getName(), false);
 
         SaveMetadata saveMetaDataAction = new SaveMetadata();
         saveMetaDataAction.setMetadata(metadata);

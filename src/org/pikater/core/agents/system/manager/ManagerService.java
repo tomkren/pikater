@@ -11,7 +11,7 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.subtrees.batch.NewBatch;
@@ -31,7 +31,7 @@ public class ManagerService {
 
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setSender(agent.getAID());
-		msg.addReceiver(new AID(AgentNames.MANAGER, false));
+		msg.addReceiver(new AID(CoreAgents.MANAGER.getName(), false));
 		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
         msg.setLanguage(new SLCodec().getName());

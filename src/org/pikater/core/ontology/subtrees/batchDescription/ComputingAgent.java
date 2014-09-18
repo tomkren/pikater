@@ -4,7 +4,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration;
 import org.pikater.core.ontology.subtrees.batchDescription.durarion.ExpectedDuration.DurationType;
 import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.CrossValidation;
@@ -72,7 +72,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument trainingData can't be null");
     	}
     	DataSourceDescription trainingDataC = new DataSourceDescription(); 
-    	trainingDataC.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+    	trainingDataC.setInputType(CoreConstant.Slot.SLOT_TRAINING_DATA.get());
     	trainingDataC.setOutputType(trainingData.getOutputType());
     	trainingDataC.setDataProvider(trainingData.getDataProvider());
     	
@@ -87,7 +87,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument testingData can't be null");
     	}
     	DataSourceDescription testingDataC = new DataSourceDescription(); 
-    	testingDataC.setInputType(CoreConstants.SLOT_TESTING_DATA);
+    	testingDataC.setInputType(CoreConstant.Slot.SLOT_TESTING_DATA.get());
     	testingDataC.setOutputType(testingData.getOutputType());
     	testingDataC.setDataProvider(testingData.getDataProvider());
 
@@ -102,7 +102,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
     		throw new IllegalArgumentException("Argument validationData can't be null");
     	}
     	DataSourceDescription validationDataC = new DataSourceDescription(); 
-    	validationDataC.setInputType(CoreConstants.SLOT_VALIDATION_DATA);
+    	validationDataC.setInputType(CoreConstant.Slot.SLOT_VALIDATION_DATA.get());
     	validationDataC.setOutputType(validationData.getOutputType());
     	validationDataC.setDataProvider(validationData.getDataProvider());
 
@@ -143,22 +143,22 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 	@Override
 	public List<NewOption> exportAllOptions() {
-		List<NewOption> options = new ArrayList<NewOption>();
+		List<NewOption> result = new ArrayList<NewOption>();
 
 		NewOption modelOption = null;
 		if (model == null) {
-			modelOption = new NewOption(CoreConstants.MODEL, new NullValue());
+			modelOption = new NewOption(CoreConstant.Misc.MODEL.get(), new NullValue());
 		} else {
-			modelOption = new NewOption(CoreConstants.MODEL, model);
+			modelOption = new NewOption(CoreConstant.Misc.MODEL.get(), model);
 		}
-		options.add(modelOption);
+		result.add(modelOption);
 		
 		NewOption expectedDurationOption = new NewOption(
-				CoreConstants.DURATION, duration.getDurationType());
+				CoreConstant.Misc.DURATION.get(), duration.getDurationType());
 		
-		options.add(expectedDurationOption);
-		options.addAll(this.options);
-		return options;
+		result.add(expectedDurationOption);
+		result.addAll(this.options);
+		return result;
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		NewOptions optionsOntol = new NewOptions(options);
 
 		//import model
-		NewOption optModel = optionsOntol.fetchOptionByName(CoreConstants.MODEL);
+		NewOption optModel = optionsOntol.fetchOptionByName(CoreConstant.Misc.MODEL.get());
 
 		if (optModel != null) {
 			Value value = optModel.toSingleValue();
@@ -183,7 +183,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 
 		//import duration
-		NewOption optDuration = optionsOntol.fetchOptionByName(CoreConstants.DURATION);
+		NewOption optDuration = optionsOntol.fetchOptionByName(CoreConstant.Misc.DURATION.get());
 		StringValue valueMethod = (StringValue)
 				optDuration.toSingleValue().getCurrentValue();
 		
@@ -216,7 +216,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (trainingData != null) {
 			DataSourceDescription trainingDataC = new DataSourceDescription();
-			trainingDataC.setInputType(CoreConstants.SLOT_TRAINING_DATA);
+			trainingDataC.setInputType(CoreConstant.Slot.SLOT_TRAINING_DATA.get());
 			trainingDataC.setOutputType(trainingData.getOutputType());
 			trainingDataC.setDataProvider(trainingData.getDataProvider());
 			slots.add(trainingDataC);
@@ -224,7 +224,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (testingData != null) {
 			DataSourceDescription testingDataC = new DataSourceDescription();
-			testingDataC.setInputType(CoreConstants.SLOT_TESTING_DATA);
+			testingDataC.setInputType(CoreConstant.Slot.SLOT_TESTING_DATA.get());
 			testingDataC.setOutputType(testingData.getOutputType());
 			testingDataC.setDataProvider(testingData.getDataProvider());
 			slots.add(testingDataC);
@@ -232,7 +232,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (validationData != null) {
 			DataSourceDescription validationDataC = new DataSourceDescription();
-			validationDataC.setInputType(CoreConstants.SLOT_VALIDATION_DATA);
+			validationDataC.setInputType(CoreConstant.Slot.SLOT_VALIDATION_DATA.get());
 			validationDataC.setOutputType(validationData.getOutputType());
 			validationDataC.setDataProvider(validationData.getDataProvider());
 			slots.add(validationDataC);
@@ -240,7 +240,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		if (evaluationMethod != null) {
 			DataSourceDescription evaluationMethodDataC = new DataSourceDescription();
-			evaluationMethodDataC.setInputType(CoreConstants.SLOT_EVALUATION_METHOD);
+			evaluationMethodDataC.setInputType(CoreConstant.Slot.SLOT_EVALUATION_METHOD.get());
 			evaluationMethodDataC.setOutputType("evaluationMethod");
 			evaluationMethodDataC.setDataProvider(evaluationMethod);
 			slots.add(evaluationMethodDataC);
@@ -258,22 +258,22 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		
 		DataSourceDescription descriptinTrainingData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_TRAINING_DATA);
+						CoreConstant.Slot.SLOT_TRAINING_DATA.get());
 		trainingData = descriptinTrainingData;
 
 		DataSourceDescription descriptinTestingData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_TESTING_DATA);
+						CoreConstant.Slot.SLOT_TESTING_DATA.get());
 		testingData = descriptinTestingData;
 		
 		DataSourceDescription descriptinValidationData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_VALIDATION_DATA);
+						CoreConstant.Slot.SLOT_VALIDATION_DATA.get());
 		validationData = descriptinValidationData;
 		
 		DataSourceDescription descriptinevaluationMethodData = 
 				descriptions.getDataSourceDescriptionIBynputType(
-						CoreConstants.SLOT_EVALUATION_METHOD);
+						CoreConstant.Slot.SLOT_EVALUATION_METHOD.get());
 		evaluationMethod = (EvaluationMethod) descriptinevaluationMethodData.getDataProvider();
 	}
 

@@ -149,10 +149,10 @@ public class DatabaseInitialisation {
 		}
 				
 		p("Beans.xml current target (type new or leave blank) ");
-		p("src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE);
+		p("src"+File.separator+CoreConfiguration.getConfigurationFileName());
 		String beansTarget=br.readLine();
 		if((beansTarget==null)||(beansTarget.equals(""))){
-			beansTarget="src"+File.separator+CoreConfiguration.BEANS_CONFIG_FILE;
+			beansTarget="src"+File.separator+CoreConfiguration.getConfigurationFileName();
 		}
 		
 		p("Generating "+persistenceTarget+" ...");

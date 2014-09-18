@@ -3,7 +3,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.pikater.core.CoreConstants;
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
@@ -104,25 +104,25 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		DataSourceDescription searchSlot =
 				new DataSourceDescription();
 		searchSlot.setInputType(
-				CoreConstants.SLOT_SEARCH);
+				CoreConstant.Slot.SLOT_SEARCH.get());
 		searchSlot.setOutputType(
-				CoreConstants.SLOT_SEARCH);
+				CoreConstant.Slot.SLOT_SEARCH.get());
 		searchSlot.setDataProvider(search);
 		
 		DataSourceDescription recommenderSlot =
 				new DataSourceDescription();
 		recommenderSlot.setInputType(
-				CoreConstants.SLOT_RECOMMEND);
+				CoreConstant.Slot.SLOT_RECOMMEND.get());
 		recommenderSlot.setOutputType(
-				CoreConstants.SLOT_RECOMMEND);
+				CoreConstant.Slot.SLOT_RECOMMEND.get());
 		recommenderSlot.setDataProvider(recommender);
 		
 		DataSourceDescription computingAgentSlot =
 				new DataSourceDescription();
 		computingAgentSlot.setInputType(
-				CoreConstants.SLOT_COMPUTATION_AGENT);
+				CoreConstant.Slot.SLOT_COMPUTATION_AGENT.get());
 		computingAgentSlot.setOutputType(
-				CoreConstants.SLOT_COMPUTATION_AGENT);
+				CoreConstant.Slot.SLOT_COMPUTATION_AGENT.get());
 		computingAgentSlot.setDataProvider((IDataProvider) computingAgent);
 
 		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
@@ -143,13 +143,13 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		
 		for (DataSourceDescription slotI : dataSourceDescriptions) {
 			
-			if (slotI.getInputType().equals(CoreConstants.SLOT_SEARCH)) {
+			if (slotI.getInputType().equals(CoreConstant.Slot.SLOT_SEARCH.get())) {
 				search = (Search) slotI.getDataProvider();
 			}
-			if (slotI.getInputType().equals(CoreConstants.SLOT_RECOMMEND)) {
+			if (slotI.getInputType().equals(CoreConstant.Slot.SLOT_RECOMMEND.get())) {
 				recommender = (Recommend) slotI.getDataProvider();
 			}
-			if (slotI.getInputType().equals(CoreConstants.SLOT_COMPUTATION_AGENT)) {
+			if (slotI.getInputType().equals(CoreConstant.Slot.SLOT_COMPUTATION_AGENT.get())) {
 				computingAgent = (IComputingAgent) slotI.getDataProvider();
 			}
 		}

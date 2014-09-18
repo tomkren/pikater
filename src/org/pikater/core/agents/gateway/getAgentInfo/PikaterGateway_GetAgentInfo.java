@@ -8,7 +8,7 @@ import jade.content.onto.OntologyException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.gateway.Agent_PikaterGateway;
 import org.pikater.core.agents.gateway.PikaterGateway_General;
 import org.pikater.core.agents.gateway.exception.PikaterGatewayException;
@@ -30,7 +30,7 @@ public class PikaterGateway_GetAgentInfo {
 			Ontology agentInfoOntology = AgentInfoOntology.getInstance();
 
 			ACLMessage msg = Agent_PikaterGateway.makeActionRequest(
-					AgentNames.AGENTINFO_MANAGER, agentInfoOntology,
+					CoreAgents.AGENTINFO_MANAGER.getName(), agentInfoOntology,
 					getAgentInfos);
 
 			GetAgentInfoInitiator initiator = new GetAgentInfoInitiator(msg);

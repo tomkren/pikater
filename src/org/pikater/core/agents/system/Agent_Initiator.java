@@ -6,7 +6,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.configuration.AgentConfiguration;
@@ -24,7 +24,7 @@ public class Agent_Initiator extends PikaterAgent {
 
 	private static final long serialVersionUID = -3908734088006529947L;
 
-    String fileName = CoreConfiguration.CONFIGURATION_MASTER_FILE;
+    private String fileName = null;
 
 	@Override
 	public List<Ontology> getOntologies() {
@@ -37,7 +37,7 @@ public class Agent_Initiator extends PikaterAgent {
 	@Override
 	protected void setup() {
 		initDefault();
-        registerWithDF(AgentNames.INITIATOR);
+        registerWithDF(CoreAgents.INITIATOR.getName());
 
 		logInfo("Agent " + getName() + " configuration " + fileName);
 
@@ -71,7 +71,7 @@ public class Agent_Initiator extends PikaterAgent {
 
 			protected void onTick() {
 				cal = Calendar.getInstance();
-				System.out.println(myAgent.getLocalName() + ": tick=" + getTickCount() + " time=" + sdf.format(cal.getTime()));
+				logInfo("tick=" + getTickCount() + " time=" + sdf.format(cal.getTime()));
 			}
 		});
 	}
@@ -112,14 +112,20 @@ public class Agent_Initiator extends PikaterAgent {
 	@Override
 	public void initDefault() {
 		Object[] args = getArguments();
-
-		if (args != null) {
-			if (args.length > 0) {
+		if (args != null)
+		{
+			if (args.length > 0)
+			{
 				fileName = (String) args[0];
 			} 
-			if (args.length > 1) {
+			if (args.length > 1)
+			{
 				nodeName = (String) args[1];
 			}
+		}
+		if(fileName == null)
+		{
+			fileName = CoreConfiguration.getPath_CoreMasterConfigurationFile();
 		}
 
 		initLogging();

@@ -3,7 +3,7 @@ package tests.pikater.core.agents.system.mailing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Mailing;
 import org.pikater.core.ontology.MailingOntology;
@@ -37,7 +37,7 @@ public class MailAgentTester extends PikaterAgent {
         initDefault();
 
         // dal by se taky najit v DF, kdybych nevedel, jak se jmenuje
-        AID receiver = new AID(AgentNames.MAILING, false);
+        AID receiver = new AID(CoreAgents.MAILING.getName(), false);
 
         // pozadavek, ktery primeje MailAgenta poslat testovaci e-mail
         SendEmail action = new SendEmail(Agent_Mailing.EmailType.TEST, DESTINATION_ADDRESS);

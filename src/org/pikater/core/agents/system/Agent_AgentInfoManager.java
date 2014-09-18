@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.pikater.core.AgentNames;
+import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.experiment.Agent_AbstractExperiment;
 import org.pikater.core.agents.experiment.computing.Agent_ComputingAgent;
@@ -61,7 +61,7 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 	protected void setup() {
 		initDefault();
 
-		registerWithDF(AgentNames.AGENTINFO_MANAGER);
+		registerWithDF(CoreAgents.AGENTINFO_MANAGER.getName());
 
 		for (Ontology ontologyI : getOntologies()) {
 			getContentManager().registerOntology(ontologyI);
