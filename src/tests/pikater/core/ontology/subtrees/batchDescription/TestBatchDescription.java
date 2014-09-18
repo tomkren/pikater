@@ -6,6 +6,7 @@ import org.pikater.core.ontology.subtrees.batchDescription.ComputationDescriptio
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SearchOnly;
 import org.pikater.core.ontology.subtrees.batchDescription.examples.SimpleTraining;
 import org.pikater.shared.experiment.UniversalComputationDescription;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import xmlGenerator.Input01;
 import xmlGenerator.Input01_model;
@@ -84,7 +85,7 @@ public class TestBatchDescription {
 			comDescription.exportXML("comDescription.xml");
 			comDescription2.exportXML("comDescription2.xml");
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
 		}
 
 	

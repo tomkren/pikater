@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.core.ontology.subtrees.ping.Ping;
 import org.pikater.core.ontology.subtrees.systemLoad.SystemLoad;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 
 public class AgentManagementOntology extends BeanOntology {
@@ -45,7 +46,7 @@ public class AgentManagementOntology extends BeanOntology {
             add(systemLoadPackage);
             add(pingPackage);
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

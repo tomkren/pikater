@@ -12,6 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.base.ValueType;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.IRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.BooleanValue;
 import org.pikater.core.ontology.subtrees.option.GetOptions;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 
 public class AgentInfoOntology extends BeanOntology {
@@ -49,7 +50,7 @@ public class AgentInfoOntology extends BeanOntology {
             add(AgentClass.class);
             
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

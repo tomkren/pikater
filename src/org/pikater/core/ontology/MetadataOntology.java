@@ -3,6 +3,7 @@ package org.pikater.core.ontology;
 
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -30,7 +31,7 @@ public class MetadataOntology extends BeanOntology {
             add(attributeMetadataPackage);
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

@@ -4,6 +4,7 @@ import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 
 import org.pikater.core.ontology.subtrees.agent.TerminateSelf;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 
 public class TerminationOntology extends BeanOntology {
@@ -15,7 +16,7 @@ public class TerminationOntology extends BeanOntology {
         try {
             add(TerminateSelf.class);
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

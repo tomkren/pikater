@@ -1,6 +1,7 @@
 package org.pikater.core.ontology;
 
 import org.pikater.core.ontology.subtrees.mailing.SendEmail;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -23,7 +24,7 @@ public class MailingOntology extends BeanOntology {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
     }
 

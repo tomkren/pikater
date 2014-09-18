@@ -1,6 +1,7 @@
 package org.pikater.core.utilities.evolution.individuals;
 
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 /**
  * Represents all individual which acts as arrays of values. 
@@ -34,7 +35,7 @@ public abstract class ArrayIndividual extends Individual {
             return super.clone();
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
         }
         return null;
     }
