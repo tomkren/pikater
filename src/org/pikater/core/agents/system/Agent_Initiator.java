@@ -71,7 +71,7 @@ public class Agent_Initiator extends PikaterAgent {
 
 			protected void onTick() {
 				cal = Calendar.getInstance();
-				System.out.println(myAgent.getLocalName() + ": tick=" + getTickCount() + " time=" + sdf.format(cal.getTime()));
+				logInfo("tick=" + getTickCount() + " time=" + sdf.format(cal.getTime()));
 			}
 		});
 	}

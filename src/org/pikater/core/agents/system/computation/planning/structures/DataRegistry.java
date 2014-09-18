@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.pikater.core.CoreAgents;
 import org.pikater.core.agents.PikaterAgent;
@@ -17,6 +18,7 @@ import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.dataset.DatasetInfo;
 import org.pikater.core.ontology.subtrees.dataset.DatasetsInfo;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class DataRegistry {
 	/** data hash => Set(node AID) */
@@ -105,10 +107,17 @@ public class DataRegistry {
 		}
 	}
 	
-	private void printMap() {
-		System.out.println("Data map:");
-		for (String hash : dataMap.keySet()) {
-			System.out.println("  "+hash+" ==> "+dataMap.get(hash).toString());
+	private void printMap()
+	{
+		StringBuilder sb = new StringBuilder("Data map:\n");
+		for (String hash : dataMap.keySet())
+		{
+			sb.append("\t");
+			sb.append(hash);
+			sb.append(" ==> ");
+			sb.append(dataMap.get(hash).toString());
+			sb.append("\n");
 		}
+		ConsoleLogger.log(Level.INFO, sb.toString()); 
 	}
 }

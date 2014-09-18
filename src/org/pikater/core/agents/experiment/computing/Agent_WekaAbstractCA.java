@@ -25,19 +25,17 @@ import java.util.Random;
 public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 
 	private static final long serialVersionUID = -3594051562022044000L;
-	
-	
-	protected abstract Classifier getClassifierClass();
-    protected Classifier classifier;
 
+	protected Classifier classifier;
 
 	@Override
-	public String getAgentType() {
-		
-		Classifier classifier = new RBFNetwork();//TODO: get method and sets the classifier???
-
-		return classifier.getClass().getName();
+	public String getAgentType()
+	{
+		//TODO: get method and sets the classifier???
+		return RBFNetwork.class.getName();
 	}
+	
+	protected abstract Classifier createClassifier();
 
 	@Override
 	public Date train(org.pikater.core.ontology.subtrees.task.Evaluation evaluation) throws Exception {
@@ -47,7 +45,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		
 		logInfo("Training...");
 		logInfo("Options: " + getOptions());
-        classifier=getClassifierClass();
+        classifier=createClassifier();
 		if(classifier == null)
 			throw new Exception(getLocalName() + ": Weka classifier class hasn't been created (Wrong type?).");
 		

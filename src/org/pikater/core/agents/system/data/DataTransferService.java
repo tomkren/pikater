@@ -8,15 +8,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 
 import org.pikater.core.CoreConfiguration;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.domain.FIPAService;
 
 public class DataTransferService extends FIPAService {
 	/** Connects to a DataManager listening on given host+port and loads the data into the file with the given hash */
 	public static void doClientFileTransfer(String hash, String host, int port) throws IOException {
-		System.out.println("Loading "+hash+" from "+host+":"+port);
+		ConsoleLogger.log(Level.INFO, "Loading "+hash+" from "+host+":"+port);
 
 		try (
 			Socket socket = new Socket(host, port);
@@ -36,7 +38,7 @@ public class DataTransferService extends FIPAService {
 			try {
 				socket = serverSocket.accept();
 			} catch (SocketTimeoutException e) {
-				System.out.println("No request arrived");
+				ConsoleLogger.log(Level.INFO, "No request arrived");
 				return;
 			}
 

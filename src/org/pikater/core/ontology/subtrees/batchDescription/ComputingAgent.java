@@ -143,7 +143,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 
 	@Override
 	public List<NewOption> exportAllOptions() {
-		List<NewOption> options = new ArrayList<NewOption>();
+		List<NewOption> result = new ArrayList<NewOption>();
 
 		NewOption modelOption = null;
 		if (model == null) {
@@ -151,14 +151,14 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		} else {
 			modelOption = new NewOption(CoreConstant.Misc.MODEL.get(), model);
 		}
-		options.add(modelOption);
+		result.add(modelOption);
 		
 		NewOption expectedDurationOption = new NewOption(
 				CoreConstant.Misc.DURATION.get(), duration.getDurationType());
 		
-		options.add(expectedDurationOption);
-		options.addAll(this.options);
-		return options;
+		result.add(expectedDurationOption);
+		result.addAll(this.options);
+		return result;
 	}
 
 	@Override

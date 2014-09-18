@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import org.pikater.core.ontology.subtrees.experiment.Experiment;
 
-public class Experimenttem {
+public class ExperimentItem {
 
 	private Experiment problem = null;
 	private ProblemStatus status = null;
 	private String outputFile = null;
 	
-	private ArrayList<Experimenttem> dependentSons =
-			new ArrayList<Experimenttem>();
+	private ArrayList<ExperimentItem> dependentSons =
+			new ArrayList<ExperimentItem>();
 
 	public static enum ProblemStatus {
 		IS_WAITING,    // is waiting in queue to start computing
@@ -33,13 +33,13 @@ public class Experimenttem {
 		this.outputFile = outputFile;
 	}
 
-	public ArrayList<Experimenttem> getDependentSons() {
+	public ArrayList<ExperimentItem> getDependentSons() {
 		return dependentSons;
 	}
-	public void setDependentSons(ArrayList<Experimenttem> dependentSons) {
+	public void setDependentSons(ArrayList<ExperimentItem> dependentSons) {
 		this.dependentSons = dependentSons;
 	}
-	public void getDependentSons(Experimenttem problem) {
+	public void getDependentSons(ExperimentItem problem) {
 		this.dependentSons.add(problem);
 	}
 
@@ -50,23 +50,23 @@ public class Experimenttem {
 		this.status = status;
 	}
 
-	public ArrayList<Experimenttem> getIndependentItems() {
+	public ArrayList<ExperimentItem> getIndependentItems() {
 
 		// If this Item is not waiting in queue, than his sons are not waiting to
-		if ( (this.getStatus() == Experimenttem.ProblemStatus.IS_COMPUTING) ||
-			 (this.getStatus() == Experimenttem.ProblemStatus.IS_FINISHED) ) {
+		if ( (this.getStatus() == ExperimentItem.ProblemStatus.IS_COMPUTING) ||
+			 (this.getStatus() == ExperimentItem.ProblemStatus.IS_FINISHED) ) {
 
-			return new ArrayList<Experimenttem>();
+			return new ArrayList<ExperimentItem>();
 		}
 		
-		ArrayList<Experimenttem> problems =
-				new ArrayList<Experimenttem>();
+		ArrayList<ExperimentItem> problems =
+				new ArrayList<ExperimentItem>();
 
 		
 		int numOfIndependentSons = 0;
 
-		for (Experimenttem problem : dependentSons) {
-			if (problem.getStatus() == Experimenttem.ProblemStatus.IS_FINISHED) {
+		for (ExperimentItem problem : dependentSons) {
+			if (problem.getStatus() == ExperimentItem.ProblemStatus.IS_FINISHED) {
 				numOfIndependentSons++;
 			}
 		}
@@ -78,9 +78,9 @@ public class Experimenttem {
 		
 
 		// if this item is waiting and some his soon is waiting to - recursion
-		for (Experimenttem problem : dependentSons) {
+		for (ExperimentItem problem : dependentSons) {
 			
-			ArrayList<Experimenttem> problemsI =
+			ArrayList<ExperimentItem> problemsI =
 					problem.getDependentSons();
 			
 			problems.addAll(problemsI);

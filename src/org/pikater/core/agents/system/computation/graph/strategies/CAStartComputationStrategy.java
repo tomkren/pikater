@@ -153,11 +153,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		}
 		agent.setOptions(usedoptions.getOptions());
 		
-		Datas datas = new Datas();	
-		for (Map.Entry<String, ComputationOutputBuffer> in : inputs.entrySet())
-		{
-		    if (in.getValue().isData() ); 
-		}
+		Datas datas = new Datas();
         DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get(CoreConstant.Slot.SLOT_TRAINING_DATA.get()).getNext();
         DataSourceEdge testingEdge;
 		String training = trainingEdge.getDataSourceId();

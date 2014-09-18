@@ -143,14 +143,14 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 	private Agent getSearchFromNode(){
 
-		Map<String,ComputationOutputBuffer> inputs = computationNode.getInputs();
+		Map<String,ComputationOutputBuffer> nodeInputs = computationNode.getInputs();
 
 		Agent agent = new Agent();
 //		agent.setName(computationNode.);
 		agent.setType(computationNode.getModelClass());
        if (options==null) {
-           OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
-           inputs.get("options").block();
+           OptionEdge optionEdge = (OptionEdge) nodeInputs.get("options").getNext();
+           nodeInputs.get("options").block();
            options = new NewOptions(optionEdge.getOptions());
        }
 		agent.setOptions(options.getOptions());

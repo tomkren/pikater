@@ -14,7 +14,7 @@ public class Agent_WekaPerceptronCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = -9097793752774638033L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 
 		return new MultilayerPerceptron();
 	}

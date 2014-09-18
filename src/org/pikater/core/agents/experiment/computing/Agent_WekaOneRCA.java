@@ -14,7 +14,7 @@ public class Agent_WekaOneRCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = 8673671279677606903L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 
 		return new OneR();
 	}

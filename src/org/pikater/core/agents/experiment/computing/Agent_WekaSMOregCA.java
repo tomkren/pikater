@@ -14,7 +14,7 @@ public class Agent_WekaSMOregCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = -2239067912711714537L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 		
 		return new SMOreg();
 	}

@@ -8,21 +8,21 @@ public class ExperimentGraph {
 	/*
 	 * Top layer of problem tree
 	 */
-	private ArrayList<Experimenttem> problems =
-			new ArrayList<Experimenttem>();
+	private ArrayList<ExperimentItem> problems =
+			new ArrayList<ExperimentItem>();
 
 
-	public ArrayList<Experimenttem> getProblems() {
+	public ArrayList<ExperimentItem> getProblems() {
 		return problems;
 	}
-	public void setProblems(ArrayList<Experimenttem> problems) {
+	public void setProblems(ArrayList<ExperimentItem> problems) {
 		this.problems = problems;
 	}
-	public void addRootProblem(Experimenttem problem) {
+	public void addRootProblem(ExperimentItem problem) {
 		this.problems.add(problem);
 	}
 	
-	public int getNumOfProblems() {
+	public int getProblemsCount() {
 		return this.problems.size();
 	}
 	
@@ -30,29 +30,29 @@ public class ExperimentGraph {
 	public boolean areAllProblemsFinished() {
 		
 		// if exists some rootItem which is not finished
-		for (Experimenttem problemI : problems) {
+		for (ExperimentItem problemI : problems) {
 			
-			if (problemI.getStatus() != Experimenttem.ProblemStatus.IS_FINISHED) {
+			if (problemI.getStatus() != ExperimentItem.ProblemStatus.IS_FINISHED) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public ArrayList<Experimenttem> getAllIndependetWaitingProblems() {
+	public ArrayList<ExperimentItem> getAllIndependentWaitingProblems() {
 		
-		ArrayList<Experimenttem> problems =
-				new ArrayList<Experimenttem>();
+		ArrayList<ExperimentItem> result =
+				new ArrayList<ExperimentItem>();
 		
-		for (Experimenttem problemI : problems) {
+		for (ExperimentItem problemI : result) {
 			
-			ArrayList<Experimenttem> problemsI =
+			ArrayList<ExperimentItem> problemsI =
 					problemI.getIndependentItems();
 			
-			problems.addAll(problemsI);
+			result.addAll(problemsI);
 		}
 		
-		return problems;
+		return result;
 	}
 
 }

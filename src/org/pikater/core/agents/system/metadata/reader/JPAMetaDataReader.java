@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.pikater.core.agents.system.metadata.MetadataReader;
 import org.pikater.shared.database.jpa.JPAAttributeCategoricalMetaData;
@@ -14,6 +15,7 @@ import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 import org.pikater.shared.database.jpa.JPAAttributeNumericalMetaData;
 import org.pikater.shared.database.jpa.JPAGlobalMetaData;
 import org.pikater.shared.database.jpa.daos.DAOs;
+import org.pikater.shared.logging.core.ConsoleLogger;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
 import org.pikater.core.ontology.subtrees.metadata.Metadata;
 import org.pikater.core.ontology.subtrees.metadata.attributes.AttributeMetadata;
@@ -59,7 +61,7 @@ public class JPAMetaDataReader {
 	        {
 	            AttributeMetadata att= (AttributeMetadata)md.getAttributeMetadataList().get(i);
 	            String attName=att.getName();
-	            System.out.println("MetadataQueen sent attribute with name: "+attName);
+	            ConsoleLogger.log(Level.INFO, "MetadataQueen sent attribute with name: "+attName);
 	            if(attName==null){
 	            	attName="attr_"+i;
 	            }
@@ -96,7 +98,7 @@ public class JPAMetaDataReader {
 	            	((JPAAttributeNumericalMetaData)jpaam).setReal(false);
 	            	((JPAAttributeNumericalMetaData)jpaam).setVariance(ram.getStandardDeviation());
 	            }else{
-	            	System.out.println(att.toString());
+	            	ConsoleLogger.log(Level.INFO, att.toString());
 	            }
 	            
 	            jpaam.setRatioOfMissingValues(att.getRatioOfMissingValues());

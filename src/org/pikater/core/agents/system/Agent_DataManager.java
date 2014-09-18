@@ -1274,7 +1274,7 @@ public class Agent_DataManager extends PikaterAgent {
 		int savedModelID = DAOs.resultDAO.setModelForResult(sm.getModel());
 
 		if (savedModelID != -1) {
-			System.out.println("Saved Model ID: " + savedModelID);
+			logInfo("Saved Model ID: " + savedModelID);
 			reply.setPerformative(ACLMessage.INFORM);
 		} else {
 			logSevere("Couldn't be saved model for experiment ID " + sm.getModel().getResultID());

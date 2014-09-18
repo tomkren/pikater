@@ -14,7 +14,7 @@ public class Agent_WekaLinearRegression extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = 3947508050679743L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 		
 		return new LinearRegression();
 	}

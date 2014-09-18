@@ -14,7 +14,7 @@ public class Agent_WekaNBTreeCA extends Agent_WekaAbstractCA {
 	private static final long serialVersionUID = 2430007385203181066L;
 
 	@Override
-	protected Classifier getClassifierClass() {
+	protected Classifier createClassifier() {
 		
 		return new NBTree();
 	}

@@ -2,12 +2,14 @@ package org.pikater.core.agents.gateway;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.BatchOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.MailingOntology;
 import org.pikater.core.ontology.MetadataOntology;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.content.AgentAction;
 import jade.content.ContentManager;
@@ -50,7 +52,7 @@ public class Agent_PikaterGateway extends GatewayAgent {
         	getContentManager().registerOntology(ontologyI);
         }
 
-        System.out.println("PikaterGateway started");
+        ConsoleLogger.log(Level.INFO, "PikaterGateway started");
     }
 
     /** receiver je jmeno agenta (prijemce), action je nejaka AgentAction z Pikateri ontologie */

@@ -152,19 +152,19 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
         return req;
 	}
 
-	private Agent getRecommenderFromNode(){
-
-		Map<String,ComputationOutputBuffer> inputs = computationNode.getInputs();
+	private Agent getRecommenderFromNode()
+	{
+		Map<String,ComputationOutputBuffer> nodeInputs = computationNode.getInputs();
 
 		Agent agent = new Agent();
 		agent.setType(computationNode.getRecommenderClass());
-       if (options==null) {
-           OptionEdge optionEdge = (OptionEdge) inputs.get("options").getNext();
-           inputs.get("options").block();
-           options = new NewOptions(optionEdge.getOptions());
-       }
+        if (options==null)
+        {
+        	OptionEdge optionEdge = (OptionEdge) nodeInputs.get("options").getNext();
+            nodeInputs.get("options").block();
+            options = new NewOptions(optionEdge.getOptions());
+        }
 		agent.setOptions(options.getOptions());
-
 		return agent;
 	}
 

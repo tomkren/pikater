@@ -163,7 +163,7 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 
 		if (!newAgent) {
 			resurrected = true;
-			System.out.println(getLocalName() + " resurrected.");
+			logInfo("was resurrected");
 			taskFIFO = new LinkedList<ACLMessage>();
 			executionBehaviour.reset();
 			state = states.TRAINED;
