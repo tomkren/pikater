@@ -12,7 +12,7 @@
 
     <bean id="logger" class="org.pikater.shared.logging.core.ConsoleLogger" scope="singleton"/>
 
-    <bean id="guidGenerator" class="org.pikater.core.agents.system.computationDescriptionParser.dependencyGraph.IncrementalGUIDGenerator" lazy-init="false"/>
+    <bean id="guidGenerator" class="org.pikater.core.agents.system.computation.graph.IncrementalGUIDGenerator" lazy-init="false"/>
 
     <bean id="defaultConnection" class="org.pikater.shared.database.connection.PostgreSQLConnectionProvider" scope="singleton">
         <constructor-arg index="0">  <!-- url -->
