@@ -23,9 +23,10 @@ public class StartGettingParametersFromSearch extends AchieveREInitiator {
 	public StartGettingParametersFromSearch(Agent_Manager a, ACLMessage req, ACLMessage msg,
 			SearchStartComputationStrategy cs) {
 		super(a, msg);
+		
 		this.myAgent = a;
-		this.strategy = cs;
 		this.msg = msg;
+		this.strategy = cs;
 		
         myAgent.logSevere("StartGettingParametersFromSearch behavior created.");
 	}
