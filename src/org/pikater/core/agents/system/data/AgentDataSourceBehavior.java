@@ -6,13 +6,10 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
-import jade.content.onto.basic.Result;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import org.pikater.core.ontology.subtrees.dataSource.DataSourcePath;
-import org.pikater.core.ontology.subtrees.dataSource.GetDataSourcePath;
 import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
 
 /**
@@ -21,41 +18,42 @@ import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
  * Time: 12:40
  * Behaviors for AgentDataSource - registering datasources and obtaining path to Local DataSources
  */
-   public class AgentDataSourceBehavior extends CyclicBehaviour {
-    /**
-	 * 
-	 */
+public class AgentDataSourceBehavior extends CyclicBehaviour
+{
 	private static final long serialVersionUID = 1953739710427491422L;
 
 	protected Codec codec;
     protected Ontology ontology;
     protected AgentDataSource dsAgent;
+    
+    private MessageTemplate registerDSTemplate; // one template for registering files
+            
+    /*
+     * One template for obtaining path on local server.
+     * TODO: If not on local server, DataSourceAgent must copy the file to local server.
+     */
+    private MessageTemplate getDSPathTemplate;
+    
     public AgentDataSourceBehavior(Codec codec,Ontology ontology,AgentDataSource agent)
     {
         super(agent);
         dsAgent=agent;
         this.codec=codec;
         this.ontology=ontology;
+        this.registerDSTemplate = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+                        MessageTemplate.MatchOntology(ontology.getName())));
+        this.getDSPathTemplate = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                        MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+                                MessageTemplate.MatchOntology(ontology.getName())));
     }
-
-    //one template for registering files
-    private MessageTemplate RegisterDSTemplate =
-            MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                    MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-                            MessageTemplate.MatchOntology(ontology.getName())));
-    //one template for obtaining path on local server. If not on local server, DataSourceAgent must copy
-    // the file to local server. TODO
-    private MessageTemplate GetDSPathTemplate =
-            MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                    MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-                            MessageTemplate.MatchOntology(ontology.getName())));
 
     @Override
     public void action() {
 
         ContentElement content;
         try {
-            ACLMessage inf = myAgent.receive(RegisterDSTemplate);
+            ACLMessage inf = myAgent.receive(registerDSTemplate);
             if (inf != null) {
                 content = myAgent.getContentManager().extractContent(inf);
                 if (((Action) content).getAction() instanceof RegisterDataSourceConcept) {
@@ -75,6 +73,8 @@ import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
                 return;
             }
 
+            /*
+             * TODO: inevitable null pointer references - "inf" is null (check the previous "if" statement and the "return" statement) 
             ACLMessage req = myAgent.receive(GetDSPathTemplate);
             if (req != null) {
                 content = myAgent.getContentManager().extractContent(req);
@@ -100,6 +100,7 @@ import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
                 myAgent.send(result_msg);
                 return;
             }
+            */
 
         } catch (UngroundedException e) {
         	dsAgent.logException(e.getMessage(), e);

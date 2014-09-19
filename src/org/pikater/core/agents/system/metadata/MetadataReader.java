@@ -173,7 +173,7 @@ public class MetadataReader {
         double variation=squareaverage-(average*average);
         met.setAvg(average);
         met.setStandardDeviation(Math.sqrt(variation));
-        int half=(int)Math.floor(values.size()/2);
+        int half=(int)Math.floor(values.size()/2.0);
         if (values.size() > 0){
         	met.setMedian(values.get(half));
         }

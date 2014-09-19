@@ -897,7 +897,7 @@ public class DataManagerService extends FIPAService {
 		@SuppressWarnings("unused")
 		ACLMessage reply = null;
 		try {
-			reply = FIPAService.doFipaRequestClient(agent, msg);
+			FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
 		}
@@ -1065,7 +1065,7 @@ public class DataManagerService extends FIPAService {
 		@SuppressWarnings("unused")
 		ACLMessage reply = null;
 		try {
-			reply = FIPAService.doFipaRequestClient(agent, msg);
+			FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
 		}

@@ -92,9 +92,7 @@ public class Parser {
         else if (dataProvider instanceof DataProcessing) {
             agent.logInfo("Ontology Matched - DataProcessing");
             
-            DataProcessing dataProcessing = (DataProcessing) dataProvider;
-            parent = parseDataProcessing(dataProcessing, child, batchID, userID, 
-            			connectionName, connectionOutName);
+            parseDataProcessing((DataProcessing) dataProvider, child, batchID, userID, connectionName, connectionOutName);
             return;
         } else {
             agent.logInfo("Ontology Matched - Error unknown IDataProvider");

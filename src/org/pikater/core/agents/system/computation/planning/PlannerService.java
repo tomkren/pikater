@@ -122,7 +122,7 @@ public class PlannerService
 		@SuppressWarnings("unused")
 		ACLMessage reply = null;
 		try {
-			reply = FIPAService.doFipaRequestClient(agent, msg);
+			FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
 			agent.logSevere(e.getMessage());
 		}

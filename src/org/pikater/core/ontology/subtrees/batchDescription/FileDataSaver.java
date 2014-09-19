@@ -46,7 +46,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
 		if (dataSourceDescriptions.size() != 1) {
-			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
+			throw new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		} else {
 			this.dataSource = dataSourceDescriptions.get(0);
 		}
@@ -60,7 +60,7 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 	public void importAllErrors(List<ErrorSourceDescription> errors) {
 
 		if (errors != null && !errors.isEmpty()) {
-			new IllegalArgumentException("Argument errors can be only null");
+			throw new IllegalArgumentException("Argument errors can be only null");
 		}
 	}
 	

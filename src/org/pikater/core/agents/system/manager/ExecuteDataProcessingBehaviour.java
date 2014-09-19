@@ -64,7 +64,7 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 			if (content instanceof Result) {
 				// get the original task from msg
 				Result result = (Result) content;					
-				Task t = (Task)result.getValue();
+				Task t = (Task) result.getValue();
                 // ComputationCollectionItem computation = myAgent.getComputation(t.getBatchID()); // unused
                 ArrayList<TaskOutput> outputs = t.getOutput();
                 for (int i=0;i<outputs.size();i++)
