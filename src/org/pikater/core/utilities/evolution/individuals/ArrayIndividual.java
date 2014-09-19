@@ -1,7 +1,6 @@
 package org.pikater.core.utilities.evolution.individuals;
 
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.shared.logging.core.ConsoleLogger;
 
 /**
  * Represents all individual which acts as arrays of values. 
@@ -28,16 +27,12 @@ public abstract class ArrayIndividual extends Individual {
     /**
      * Makes a deep copy of the individual.
      * @return Deep copy of the individual.
+     * @throws CloneNotSupportedException 
      */
     @Override
-    public Object clone() {
-        try {
-            return super.clone();
-        }
-        catch (Exception e) {
-        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
-        }
-        return null;
+    public ArrayIndividual clone()
+    {
+    	return (ArrayIndividual) super.clone();
     }
 
     /**

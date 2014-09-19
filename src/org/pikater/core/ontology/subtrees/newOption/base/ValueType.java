@@ -74,10 +74,9 @@ public class ValueType implements Concept, IValidated
 		return defaultValue;
 	}
 	/**
-	 * Set default value via a constructor - this method should only be used by JADE.
+	 * Use only if you really know what you're doing.
 	 * @param defaultValue
 	 */
-	@Deprecated
 	public void setDefaultValue(IValueData defaultValue)
 	{
 		this.defaultValue = defaultValue;
@@ -241,12 +240,12 @@ public class ValueType implements Concept, IValidated
 		}
 	}
 	@Override
-	public ValueType clone()
+	public ValueType clone() throws CloneNotSupportedException
 	{
-		return new ValueType(
-				defaultValue.clone(),
-				rangeRestriction != null ? rangeRestriction.clone() : null,
-				setRestriction != null ? setRestriction.clone() : null
-		);
+		ValueType result = (ValueType) super.clone();
+		result.setDefaultValue(defaultValue.clone());
+		result.setRangeRestriction(rangeRestriction != null ? rangeRestriction.clone() : null);
+		result.setSetRestriction(setRestriction != null ? setRestriction.clone() : null);
+		return result;
 	}
 }

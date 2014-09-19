@@ -87,9 +87,10 @@ public class Recommend extends DataProcessing {
 		}
 	}
 
-	public Recommend clone() {
-		
-		Recommend recommend = new Recommend();
+	@Override
+	public Recommend clone() throws CloneNotSupportedException
+	{
+		Recommend recommend = (Recommend) super.clone();
 		recommend.setId(this.getId());
 		recommend.setAgentType(this.recommenderClass);
 		NewOptions optionsOnt = new NewOptions(this.options);

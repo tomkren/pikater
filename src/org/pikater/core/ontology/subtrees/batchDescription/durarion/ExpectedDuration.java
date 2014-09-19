@@ -57,9 +57,9 @@ public class ExpectedDuration implements Concept {
 	public void importDurationType(DurationType durationType) {
 		this.durationType = durationType.name();
 	}	
-	public ExpectedDuration clone() {
-		
-		ExpectedDuration expectedDuration = new ExpectedDuration();
+	public ExpectedDuration clone() throws CloneNotSupportedException
+	{
+		ExpectedDuration expectedDuration = (ExpectedDuration) super.clone();
 		expectedDuration.setDurationType(durationType);
 		return expectedDuration;
 	}

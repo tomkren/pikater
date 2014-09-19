@@ -11,5 +11,5 @@ public interface IValueData extends Concept, ICloneable, IWekaItem
 	public boolean equals(Object obj);
 	public Object hackValue();
 	public String toDisplayName();
-	public IValueData clone();
+	public IValueData clone() throws CloneNotSupportedException;
 }

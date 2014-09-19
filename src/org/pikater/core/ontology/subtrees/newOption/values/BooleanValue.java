@@ -61,9 +61,11 @@ public class BooleanValue implements IValueData
 		return value;
 	}
 	@Override
-	public IValueData clone()
+	public BooleanValue clone() throws CloneNotSupportedException
 	{
-		return new BooleanValue(value);
+		BooleanValue result = (BooleanValue) super.clone();
+		result.setValue(value);
+		return result;
 	}
 	@Override
 	public String exportToWeka()

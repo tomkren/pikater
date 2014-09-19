@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import jade.content.Concept;
 
@@ -80,12 +81,20 @@ public class ValuesForOption implements Concept, IValidated, IWekaItem, Iterable
 	@Override
 	public ValuesForOption clone()
 	{
-		List<Value> valuesCopied = new ArrayList<Value>();
-		for(Value value : values)
+		try
 		{
-			valuesCopied.add(value.clone());
+			ValuesForOption result = (ValuesForOption) super.clone();
+			for(Value value : values)
+			{
+				result.addValue(value.clone());
+			}
+			return result;
 		}
-		return new ValuesForOption(valuesCopied);
+		catch (CloneNotSupportedException e)
+		{
+			ConsoleLogger.logThrowable("Could not clone values. Returning null...", e);
+			return null;
+		}
 	}
 	@Override
 	public boolean isValid()

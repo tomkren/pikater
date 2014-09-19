@@ -84,9 +84,9 @@ public class NewOptions implements Concept, ICloneable, IMergeable, IWekaItem, I
 	}
     
     @Override
-    public NewOptions clone()
+    public NewOptions clone() throws CloneNotSupportedException
     {
-    	NewOptions result = new NewOptions();
+    	NewOptions result = (NewOptions) super.clone();
     	for (NewOption optionI : options)
     	{
     		result.addOption(optionI.clone());

@@ -18,6 +18,7 @@ import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.experiment.UniversalConnector;
 import org.pikater.shared.experiment.UniversalElement;
 import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -138,14 +139,22 @@ public class ComputationDescription implements Concept {
 
 	}
 	
-	public UniversalComputationDescription exportUniversalComputationDescription() {
-
+	public UniversalComputationDescription exportUniversalComputationDescription()
+	{
 		generateIDs();
 		gene();
 		
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
 		NewOptions optionsOnt = new NewOptions(this.getGlobalOptions());
-		uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
+		try
+		{
+			uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
+		}
+		catch (CloneNotSupportedException e)
+		{
+			ConsoleLogger.logThrowable("Could not clone options. Returning null...", e);
+			return null;
+		}
 		
 		// map - id x ontology
 		Map<Integer, UniversalOntology> finishedtUniOntologys =

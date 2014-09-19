@@ -1,13 +1,14 @@
 package org.pikater.core.utilities.evolution.individuals;
 
+import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.shared.logging.core.ConsoleLogger;
 
 /** The abstract base of all individuals. Keeps track of fitness and objective values.
  *
  * @author Martin Pilat
  */
-public abstract class Individual implements Cloneable{
-
+public abstract class Individual implements ICloneable
+{
     double fitnessValue;
     double objectiveValue;
 
@@ -55,20 +56,22 @@ public abstract class Individual implements Cloneable{
      * non-evaluated.
      * 
      * @return The deep copy of the individual.
+     * @throws CloneNotSupportedException 
      */
 
     @Override
-    public Object clone() {
-
-        try {
-            Individual newInd =  (Individual) super.clone();
-            newInd.fitnessValue = -Double.MAX_VALUE;
-            return newInd;
-        }
-        catch (Exception e) {
-        	ConsoleLogger.logThrowable("Unexpected error occured:", e);
-        }
-        return null;
+    public Individual clone()
+    {
+		try
+		{
+			Individual newInd = (Individual) super.clone();
+			newInd.fitnessValue = -Double.MAX_VALUE;
+	        return newInd;
+		}
+		catch (CloneNotSupportedException e)
+		{
+			ConsoleLogger.logThrowable("Unexpected error occured:", e);
+			return null;
+		}
     }
-
 }

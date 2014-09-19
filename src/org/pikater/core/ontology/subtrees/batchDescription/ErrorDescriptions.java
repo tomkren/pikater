@@ -26,14 +26,13 @@ public class ErrorDescriptions {
 	}
 	
 	@Override
-	public ErrorDescriptions clone() {
-		
-		ErrorDescriptions errorsOnt = new ErrorDescriptions();
-		for (ErrorSourceDescription errorI : errors) {
-			errorsOnt.addErrors(errorI.clone());
+	public ErrorDescriptions clone() throws CloneNotSupportedException
+	{
+		ErrorDescriptions result = (ErrorDescriptions) super.clone();
+		for (ErrorSourceDescription errorI : errors)
+		{
+			result.addErrors(errorI.clone());
 		}
-		
-		return errorsOnt;
+		return result;
 	}
-	
 }

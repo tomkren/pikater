@@ -71,13 +71,11 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 		
 	}
 
-	public FileDataProvider clone() {
-		
-		FileDataProvider fileData = new FileDataProvider();
+	public FileDataProvider clone() throws CloneNotSupportedException
+	{
+		FileDataProvider fileData = (FileDataProvider) super.clone();
 		fileData.setId(this.getId());
 		fileData.setFileURI(fileURI);
-		
 		return fileData;
 	}
-
 }

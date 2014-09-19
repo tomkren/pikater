@@ -68,11 +68,11 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 			List<DataSourceDescription> dataSourceDescriptions) {
 	}
 
-	public EvaluationMethod clone() {
-		
+	public EvaluationMethod clone() throws CloneNotSupportedException
+	{
 		NewOptions optionsOnt = new NewOptions(this.options);
 		
-		EvaluationMethod evaluation = new EvaluationMethod();
+		EvaluationMethod evaluation = (EvaluationMethod) super.clone();
 		evaluation.setId(this.getId());
 		evaluation.setAgentType(this.getAgentType());
 		evaluation.setOptions(optionsOnt.clone().getOptions());

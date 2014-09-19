@@ -162,7 +162,7 @@ public class UniversalComputationDescription
         		XStreamHelper.getSerializerWithProcessedAnnotations(UniversalComputationDescription.class));
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws CloneNotSupportedException
 	{
 		UniversalComputationDescription uDescription = SearchOnly.createDescription().exportUniversalComputationDescription();
 		System.out.println(XStreamHelper.serializeToXML(uDescription, 

@@ -77,7 +77,7 @@ public class IntegerIndividual extends ArrayIndividual{
     }
 
     @Override
-    public Object clone() {
+    public IntegerIndividual clone() {
 
         IntegerIndividual newBI = (IntegerIndividual) super.clone();
         newBI.genes = new int[genes.length];
