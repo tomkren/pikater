@@ -443,15 +443,26 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 	
 	public BoxInfoServer createBox(AgentInfo info, int absX, int absY, boolean sendToClient)
 	{
-		BoxInfoServer result = experimentGraph.addBox(new BoxInfoServer(
-				info,
-				absX - absoluteLeft,
-				absY - absoluteTop
-		));
+		BoxInfoServer result = null;
+		try
+		{
+			result = experimentGraph.addBox(new BoxInfoServer(
+					info,
+					absX - absoluteLeft,
+					absY - absoluteTop
+			));
+		}
+		catch (CloneNotSupportedException e)
+		{
+			PikaterWebLogger.logThrowable("Could not create a new server box because:", e);
+			return null;
+		}
+		
 		if(sendToClient)
 		{
 			getClientRPC().createBox(result.toClientFormat());
 		}
+		
 		return result;
 	}
 	

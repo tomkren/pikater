@@ -172,14 +172,14 @@ public class OptionValueForm extends CustomFormLayout
 				selectedType = typeToDisplayString.getValue(dataSource.getValue().getType());
 				if(dataSource.getValue().getCurrentValue() == null)
 				{
-					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().getDefaultValue().clone());
+					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().cloneDefaultValue());
 				}
 			}
 			else // auto-correct accidental invalid type binding
 			{
 				selectedType = typeOptions.get(0);
 				dataSource.getValue().setType(typeToDisplayString.getKey(selectedType));
-				dataSource.getValue().setCurrentValue(typeToDisplayString.getKey(selectedType).getDefaultValue().clone());
+				dataSource.getValue().setCurrentValue(typeToDisplayString.getKey(selectedType).cloneDefaultValue());
 			}
 			// at this point, current value needs to be set (non-null) for the 'value' argument
 			
@@ -205,7 +205,7 @@ public class OptionValueForm extends CustomFormLayout
 					// first change type and reset value to default
 					ValueType newlySelectedType = typeToDisplayString.getKey((String) event.getProperty().getValue());
 					dataSource.getValue().setType(newlySelectedType);
-					dataSource.getValue().setCurrentValue(newlySelectedType.getDefaultValue().clone());
+					dataSource.getValue().setCurrentValue(newlySelectedType.cloneDefaultValue());
 					
 					// and then recreate type specific fields
 					recreateTypeSpecificFields(dataSource.getValue());
@@ -225,7 +225,7 @@ public class OptionValueForm extends CustomFormLayout
 				public void buttonClick(ClickEvent event)
 				{
 					// first reset the value
-					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().getDefaultValue().clone());
+					dataSource.getValue().setCurrentValue(dataSource.getValue().getType().cloneDefaultValue());
 					
 					// and then recreate type specific fields
 					recreateTypeSpecificFields(dataSource.getValue());

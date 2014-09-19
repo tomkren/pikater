@@ -22,7 +22,7 @@ public class BoxInfoServer implements IBoxInfoCommon<Integer>
 	private int posY;
 	private boolean registered;
 	
-	public BoxInfoServer(AgentInfo associatedAgent, int posX, int posY)
+	public BoxInfoServer(AgentInfo associatedAgent, int posX, int posY) throws CloneNotSupportedException
 	{
 		this.generatedUniqueID = null;
 		this.boxType = BoxType.fromAgentInfo(associatedAgent);
