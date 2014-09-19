@@ -34,8 +34,7 @@ public class AgentDataSourceBehavior extends CyclicBehaviour
      */
     private MessageTemplate getDSPathTemplate;
     
-    public AgentDataSourceBehavior(Codec codec,Ontology ontology,AgentDataSource agent)
-    {
+    public AgentDataSourceBehavior(Codec codec,Ontology ontology,AgentDataSource agent) {
         super(agent);
         dsAgent=agent;
         this.codec=codec;
@@ -73,8 +72,7 @@ public class AgentDataSourceBehavior extends CyclicBehaviour
                 return;
             }
 
-            /*
-             * TODO: inevitable null pointer references - "inf" is null (check the previous "if" statement and the "return" statement) 
+            /* Inevitable null-pointer dereference
             ACLMessage req = myAgent.receive(GetDSPathTemplate);
             if (req != null) {
                 content = myAgent.getContentManager().extractContent(req);

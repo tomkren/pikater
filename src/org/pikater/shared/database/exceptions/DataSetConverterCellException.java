@@ -17,8 +17,7 @@ public class DataSetConverterCellException extends DataSetConverterException {
 	}
 	
 	@Override
-	public String getMessage()
-	{
+	public String getMessage() {
 		return MessageFormat.format("{0} Position [row= {1},column= {2}]: {3}", this.getClass().getName(),this.row,this.column, super.getMessage());
 	}
 }

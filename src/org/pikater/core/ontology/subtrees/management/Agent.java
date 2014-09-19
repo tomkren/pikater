@@ -63,8 +63,7 @@ public class Agent implements Concept, Cloneable {
 		return option.fetchOptionByName(name);
 	}
 
-	public Object clone() throws CloneNotSupportedException
-	{
+	public Object clone() throws CloneNotSupportedException {
 		Agent agent = (Agent) super.clone();
 		agent.setName(name);
 		agent.setObject(object);

@@ -37,7 +37,6 @@ import java.util.Map;
  */
 public class RecommenderStartComputationStrategy implements StartComputationStrategy{
 	Agent_Manager myAgent;
-	int batchID;
 	int userID;
 	RecommenderComputationNode computationNode;
 	Map<String,ComputationOutputBuffer> inputs;
@@ -47,7 +46,6 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
     public RecommenderStartComputationStrategy (Agent_Manager manager,
 			int batchID, int userID, RecommenderComputationNode computationNode){
 		this.myAgent = manager;
-        this.batchID = batchID;
         this.userID = userID;
         this.computationNode = computationNode;
 	}
