@@ -277,28 +277,29 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 		evaluationMethod = (EvaluationMethod) descriptinevaluationMethodData.getDataProvider();
 	}
 
-	public ComputingAgent clone() {
-		
-		ComputingAgent comAgentColone = new ComputingAgent();
-		comAgentColone.setId(this.getId());
-		comAgentColone.setAgentType(this.getAgentType());
+	@Override
+	public ComputingAgent clone() throws CloneNotSupportedException
+	{
+		ComputingAgent result = (ComputingAgent) super.clone();
+		result.setId(this.getId());
+		result.setAgentType(this.getAgentType());
 		NewOptions optionsOnt = new NewOptions(this.options);
-		comAgentColone.setOptions(optionsOnt.clone().getOptions());
-		comAgentColone.setModel(this.model);
+		result.setOptions(optionsOnt.clone().getOptions());
+		result.setModel(this.model);
 		
-		comAgentColone.setDuration(this.duration.clone());
-		comAgentColone.setEvaluationMethod(this.evaluationMethod.clone());
+		result.setDuration(this.duration.clone());
+		result.setEvaluationMethod(this.evaluationMethod.clone());
 
 		if (this.trainingData != null) {
-			comAgentColone.setTrainingData(this.trainingData.clone());
+			result.setTrainingData(this.trainingData.clone());
 		}
 		if (this.testingData != null) {
-			comAgentColone.setTestingData(this.testingData.clone());
+			result.setTestingData(this.testingData.clone());
 		}
 		if (this.validationData != null) {
-			comAgentColone.setValidationData(this.validationData.clone());
+			result.setValidationData(this.validationData.clone());
 		}
-		return comAgentColone;
+		return result;
 	}
 	
 }

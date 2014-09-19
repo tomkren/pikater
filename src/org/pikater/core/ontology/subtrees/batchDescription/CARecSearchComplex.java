@@ -156,25 +156,26 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		
 	}
 
-	public CARecSearchComplex clone() {
-		
-		CARecSearchComplex complex = new CARecSearchComplex();
-		complex.setId(this.getId());
+	@Override
+	public CARecSearchComplex clone() throws CloneNotSupportedException
+	{
+		CARecSearchComplex result = (CARecSearchComplex) super.clone();
+		result.setId(this.getId());
 		NewOptions optionsOnt = new NewOptions(this.options);
-		complex.setOptions(optionsOnt.clone().getOptions());
+		result.setOptions(optionsOnt.clone().getOptions());
 		ErrorDescriptions errorsOnt = new ErrorDescriptions(this.errors);
-		complex.setErrors(errorsOnt.clone().getErrors());
+		result.setErrors(errorsOnt.clone().getErrors());
 		
 		if (this.search != null) {
-			complex.setSearch(this.search.clone());
+			result.setSearch(this.search.clone());
 		}
 		if (this.recommender != null) {
-			complex.setRecommender(this.recommender.clone());
+			result.setRecommender(this.recommender.clone());
 		}
 		if (this.computingAgent != null) {
-			complex.setComputingAgent(this.computingAgent.clone());
+			result.setComputingAgent(this.computingAgent.clone());
 		}
-		return complex;
+		return result;
 	}
 	
 }

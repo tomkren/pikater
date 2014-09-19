@@ -144,14 +144,16 @@ public class DatabaseInitialisation {
 		p("persistence.xml current target (type new or leave blank) ");
 		p("src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET);
 		String persistenceTarget=br.readLine();
-		if((persistenceTarget==null)||(persistenceTarget.equals(""))){
+		if((persistenceTarget==null) || persistenceTarget.isEmpty())
+		{
 			persistenceTarget="src"+File.separator+DatabaseInitialisation.PERSISTENT_TARGET;
 		}
 				
 		p("Beans.xml current target (type new or leave blank) ");
 		p("src"+File.separator+CoreConfiguration.getConfigurationFileName());
 		String beansTarget=br.readLine();
-		if((beansTarget==null)||(beansTarget.equals(""))){
+		if((beansTarget==null) || beansTarget.isEmpty())
+		{
 			beansTarget="src"+File.separator+CoreConfiguration.getConfigurationFileName();
 		}
 		

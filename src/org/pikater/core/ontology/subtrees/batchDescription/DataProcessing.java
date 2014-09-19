@@ -9,6 +9,7 @@ import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 /**
  * Created by Stepan on 20.4.14.
@@ -170,8 +171,8 @@ public class DataProcessing implements IDataProvider {
 	}
 	
 	@Override
-	public DataProcessing clone() {
-		
+	public DataProcessing clone() throws CloneNotSupportedException
+	{
 		List<NewOption> allOptionsCloned = new ArrayList<NewOption>();
 		for (NewOption optionI : exportAllOptions()) {
 			allOptionsCloned.add(optionI.clone());
@@ -187,7 +188,7 @@ public class DataProcessing implements IDataProvider {
 			dataSourceCloned.add(dataSourceI.clone());
 		}
 		
-		DataProcessing dataProcessing = new DataProcessing();
+		DataProcessing dataProcessing = (DataProcessing) super.clone();
 		dataProcessing.setId(this.id);
 		dataProcessing.setAgentType(this.getAgentType());
 		dataProcessing.importAllOptions(allOptionsCloned);
@@ -201,8 +202,17 @@ public class DataProcessing implements IDataProvider {
 	public void cloneSources() {
 		
 		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
-		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions()) {
-			dataSourceCloned.add(dataSourceI.clone());
+		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions())
+		{
+			try
+			{
+				dataSourceCloned.add(dataSourceI.clone());
+			}
+			catch(CloneNotSupportedException e)
+			{
+				ConsoleLogger.logThrowable("Can not clone sources. Returning...", e);
+				return;
+			}
 		}
 		
 		importAllDataSourceDescriptions(dataSourceCloned);

@@ -33,8 +33,10 @@ public class MetadataReader {
 
 		// missing values
 		boolean missing = false; 
-		for (Instance i : data.getInstances()) {
-			if (i.getMissing().size() != 0){
+		for (Instance i : data.getInstances())
+		{
+			if (!i.getMissing().isEmpty())
+			{
 				missing = true;
 			}			
 		}		
@@ -148,17 +150,21 @@ public class MetadataReader {
                 values.add((Double)instanceI.getValues().get(attributeNumber));
         }
         Collections.sort(values);
-        if (values.size() > 0){
+        if (!values.isEmpty())
+        {
         	met.setMin(values.get(0));
         }
-        else {
+        else
+        {
         	met.setMin(defValue);
         }
         
-        if (values.size() > 0){
+        if (!values.isEmpty())
+        {
         	met.setMax(values.get(values.size()-1));
         }
-        else {
+        else
+        {
         	met.setMax(defValue);
         }
         double average=0;
@@ -173,8 +179,9 @@ public class MetadataReader {
         double variation=squareaverage-(average*average);
         met.setAvg(average);
         met.setStandardDeviation(Math.sqrt(variation));
-        int half=(int)Math.floor(values.size()/2);
-        if (values.size() > 0){
+        int half=(int)Math.floor(values.size()/2.0);
+        if (!values.isEmpty())
+        {
         	met.setMedian(values.get(half));
         }
         else {

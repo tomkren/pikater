@@ -1,9 +1,7 @@
 package org.pikater.core.agents.experiment.computing;
 
 import jade.content.Concept;
-import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
-import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
@@ -53,8 +51,6 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	 * 
 	 */
 	private static final long serialVersionUID = -7927583436579620995L;
-
-	protected Codec codec = new SLCodec();
 
 	public enum states {
 		NEW, TRAINED

@@ -6,5 +6,5 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 public interface IDataProvider extends IComputationElement
 {
 	@Override
-	public IDataProvider clone();
+	public IDataProvider clone() throws CloneNotSupportedException;
 }

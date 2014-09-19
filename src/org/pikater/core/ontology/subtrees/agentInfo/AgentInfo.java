@@ -133,9 +133,9 @@ public class AgentInfo implements Concept, ICloneable
 	// OTHER INTERFACE
 	
 	@Override
-	public AgentInfo clone()
+	public AgentInfo clone() throws CloneNotSupportedException
 	{
-		AgentInfo result = new AgentInfo();
+		AgentInfo result = (AgentInfo) super.clone();
 		result.setOntologyClassName(ontologyClassName);
 		result.setAgentClassName(agentClassName);
 		result.setName(name);

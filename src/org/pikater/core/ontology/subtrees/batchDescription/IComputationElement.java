@@ -2,6 +2,7 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 import java.util.List;
 
+import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.UniversalOntology;
 
@@ -10,8 +11,8 @@ import jade.content.Concept;
 /**
  * Created by Martin Pilat on 28.12.13.
  */
-public interface IComputationElement extends Concept {
-	
+public interface IComputationElement extends Concept, ICloneable
+{
 	public int getId();
 	public void setId(int id);
 	
@@ -29,6 +30,7 @@ public interface IComputationElement extends Concept {
 	
 	public boolean equalsElement(IComputationElement element);
 	
-	public IComputationElement clone();
+	@Override
+	public IComputationElement clone() throws CloneNotSupportedException;
 	public void cloneSources();
 }

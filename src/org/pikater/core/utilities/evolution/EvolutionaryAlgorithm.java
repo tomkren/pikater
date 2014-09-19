@@ -137,7 +137,8 @@ public class EvolutionaryAlgorithm {
         
         Population matingPool = new Population();
 
-        if (matingSelectors.size() > 0) {
+        if (!matingSelectors.isEmpty())
+        {
             int mateSel = matingSelectors.size();
             int toSelect = parents.getPopulationSize()/mateSel;
             for (int i = 0; i < matingSelectors.size(); i++) {
