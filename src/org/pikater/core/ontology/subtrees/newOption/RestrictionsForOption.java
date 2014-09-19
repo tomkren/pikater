@@ -58,14 +58,14 @@ public class RestrictionsForOption implements Concept, ICloneable, IValidated
 	 * Inherited interface.
 	 */
 	@Override
-	public RestrictionsForOption clone()
+	public RestrictionsForOption clone() throws CloneNotSupportedException
 	{
-		List<TypeRestriction> restrictionsCopied = new ArrayList<TypeRestriction>();
+		RestrictionsForOption result = (RestrictionsForOption) super.clone();
 		for(TypeRestriction restriction : restrictions)
 		{
-			restrictionsCopied.add(restriction.clone());
+			result.add(restriction.clone());
 		}
-		return new RestrictionsForOption(restrictionsCopied);
+		return result;
 	}
 	@Override
 	public boolean isValid()

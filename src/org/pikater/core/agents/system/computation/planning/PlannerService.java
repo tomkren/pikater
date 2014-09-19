@@ -119,14 +119,10 @@ public class PlannerService
 			agent.logSevere(oe.getMessage());
 		}
 
-		@SuppressWarnings("unused")
-		ACLMessage reply = null;
 		try {
 			FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
 			agent.logSevere(e.getMessage());
 		}
-		
 	}
-	
 }

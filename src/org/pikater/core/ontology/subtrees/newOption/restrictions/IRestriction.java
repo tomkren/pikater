@@ -8,5 +8,5 @@ import jade.content.Concept;
 public interface IRestriction extends Concept, ICloneable, IValidated
 {
 	@Override
-	public IRestriction clone();
+	public IRestriction clone() throws CloneNotSupportedException;
 }

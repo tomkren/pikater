@@ -49,9 +49,9 @@ public class ErrorSourceDescription implements ISourceDescription {
 	}
 	
 	@Override
-	public ErrorSourceDescription clone() {
+	public ErrorSourceDescription clone() throws CloneNotSupportedException {
     	
-    	ErrorSourceDescription description = new ErrorSourceDescription();
+    	ErrorSourceDescription description = (ErrorSourceDescription) super.clone();
     	description.setProvider(provider);
     	description.setInputType(getInputType());
     	description.setOutputType(getOutputType());

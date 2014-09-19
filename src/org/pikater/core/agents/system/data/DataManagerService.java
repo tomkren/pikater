@@ -894,8 +894,6 @@ public class DataManagerService extends FIPAService {
 			agent.logException(oe.getMessage(), oe);
 		}
 
-		@SuppressWarnings("unused")
-		ACLMessage reply = null;
 		try {
 			FIPAService.doFipaRequestClient(agent, msg);
 		} catch (FIPAException e) {
@@ -1062,14 +1060,14 @@ public class DataManagerService extends FIPAService {
 			agent.logException(oe.getMessage(), oe);
 		}
 
-		@SuppressWarnings("unused")
-		ACLMessage reply = null;
-		try {
+		try
+		{
 			FIPAService.doFipaRequestClient(agent, msg);
-		} catch (FIPAException e) {
+		}
+		catch (FIPAException e)
+		{
 			agent.logException(e.getMessage(), e);
 		}
-		
 	}
 
 	public static User loadUser(PikaterAgent agent, int userID) {

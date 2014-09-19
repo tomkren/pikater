@@ -1,7 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class DoubleValue implements IComparableValueData
 {
@@ -63,9 +62,11 @@ public class DoubleValue implements IComparableValueData
 		return value;
 	}
 	@Override
-	public IValueData clone()
+	public DoubleValue clone() throws CloneNotSupportedException
 	{
-		return new DoubleValue(value);
+		DoubleValue result = (DoubleValue) super.clone();
+		result.setValue(value);
+		return result;
 	}
 	@Override
 	public String exportToWeka()

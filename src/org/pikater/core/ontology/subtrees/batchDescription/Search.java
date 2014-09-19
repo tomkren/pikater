@@ -82,11 +82,11 @@ public class Search extends DataProcessing implements IErrorProvider {
 		}
 	}
 	
-	public Search clone() {
-		
+	public Search clone() throws CloneNotSupportedException
+	{
 		NewOptions optionsOnt = new NewOptions(this.options);
 		
-		Search search = new Search();
+		Search search = (Search) super.clone();
 		search.setId(this.getId());
 		search.setAgentType(searchClass);
 		search.setOptions(optionsOnt.clone().getOptions());

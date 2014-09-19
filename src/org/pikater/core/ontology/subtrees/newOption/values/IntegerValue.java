@@ -1,7 +1,6 @@
 package org.pikater.core.ontology.subtrees.newOption.values;
 
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
 public class IntegerValue implements IComparableValueData
 {
@@ -60,9 +59,11 @@ public class IntegerValue implements IComparableValueData
 		return value;
 	}
 	@Override
-	public IValueData clone()
+	public IntegerValue clone() throws CloneNotSupportedException
 	{
-		return new IntegerValue(value);
+		IntegerValue result = (IntegerValue) super.clone();
+		result.setValue(value);
+		return result;
 	}
 	@Override
 	public String exportToWeka() {

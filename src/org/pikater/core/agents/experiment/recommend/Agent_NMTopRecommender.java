@@ -326,7 +326,7 @@ public class Agent_NMTopRecommender extends Agent_Recommender {
                 	continue;
                 }
                 NewOption option0 = bestAgent.getOptionByName(optionI.getName());
-                newOpt.setValuesWrapper(option0.getValuesWrapper().clone());   
+                newOpt.setValuesWrapper(option0.getValuesWrapper().clone());
         	}
 
             options.add(newOpt);

@@ -8,6 +8,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class Value implements Concept, IValidated
 {
@@ -36,7 +37,7 @@ public class Value implements Concept, IValidated
 	 */
 	public Value(IValueData defaultValue)
 	{
-		this.currentValue = defaultValue.clone();
+		this.currentValue = cloneDefaultValue(defaultValue);
 		this.type = new ValueType(defaultValue);
 	}
 	/**
@@ -46,7 +47,7 @@ public class Value implements Concept, IValidated
 	 */
 	public Value(IValueData defaultValue, RangeRestriction rangeRestriction)
 	{
-		this.currentValue = defaultValue.clone();
+		this(defaultValue);
 		this.type = new ValueType(defaultValue, rangeRestriction);
 	}
 	/**
@@ -56,16 +57,8 @@ public class Value implements Concept, IValidated
 	 */
 	public Value(IValueData defaultValue, SetRestriction setRestriction)
 	{
-		this.currentValue = defaultValue.clone();
+		this(defaultValue);
 		this.type = new ValueType(defaultValue, setRestriction);
-	}
-	/**
-	 * Copy-constructor for internal use. 
-	 */
-	private Value(ValueType type, IValueData currentValue)
-	{
-		this.currentValue = currentValue;
-		this.type = type;
 	}
 
 	public IValueData getCurrentValue()
@@ -80,7 +73,7 @@ public class Value implements Concept, IValidated
 	{
 		if(currentValue == null)
 		{
-			this.currentValue = getType().getDefaultValue().clone();
+			this.currentValue = cloneDefaultValue(getType().getDefaultValue());
 		}
 		else
 		{
@@ -104,6 +97,19 @@ public class Value implements Concept, IValidated
 		else
 		{
 			this.type = type;
+		}
+	}
+	
+	private IValueData cloneDefaultValue(IValueData defaultValue)
+	{
+		try
+		{
+			return defaultValue.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			ConsoleLogger.logThrowable("Could not clone value. Returning null.", e);
+			return null;
 		}
 	}
 	
@@ -141,8 +147,11 @@ public class Value implements Concept, IValidated
 		return true;
 	}
 	@Override
-	public Value clone()
+	public Value clone() throws CloneNotSupportedException
 	{
-		return new Value(type.clone(), currentValue.clone());
+		Value result = (Value) super.clone();
+		result.setType(type.clone());
+		result.setCurrentValue(currentValue.clone());
+		return result;
 	}
 }

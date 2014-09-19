@@ -41,8 +41,8 @@ public class NullValue implements IValueData
 		return "NONE";
 	}
 	@Override
-	public IValueData clone()
+	public NullValue clone() throws CloneNotSupportedException
 	{
-		return new NullValue();
+		return (NullValue) super.clone();
 	}
 }

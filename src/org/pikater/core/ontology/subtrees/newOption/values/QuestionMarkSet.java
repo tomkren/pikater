@@ -97,9 +97,12 @@ public class QuestionMarkSet implements IValidatedValueData
 		return null;
 	}
 	@Override
-	public IValueData clone()
+	public QuestionMarkSet clone() throws CloneNotSupportedException
 	{
-		return new QuestionMarkSet(countOfValuesToTry, userDefinedRestriction.clone());
+		QuestionMarkSet result = (QuestionMarkSet) super.clone();
+		result.setCountOfValuesToTry(countOfValuesToTry);
+		result.setUserDefinedRestriction(getUserDefinedRestriction().clone());
+		return result;
 	}
 	@Override
 	public String exportToWeka()

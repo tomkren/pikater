@@ -78,7 +78,7 @@ public class RealIndividual extends ArrayIndividual {
     }
 
     @Override
-    public Object clone() {
+    public RealIndividual clone() {
 
         RealIndividual newBI = (RealIndividual) super.clone();
         newBI.genes = new double[genes.length];

@@ -11,6 +11,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.*;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 import java.util.Arrays;
 import java.util.List;
@@ -290,9 +291,20 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	@Override
 	public NewOption clone()
 	{
-		NewOption result = new NewOption(name, valuesWrapper.clone(), valueRestrictions.clone());
-		result.setDescription(getDescription());
-		return result;
+		try
+		{
+			NewOption result = (NewOption) super.clone();
+			result.setName(name);
+			result.setDescription(getDescription());
+			result.setValueRestrictions(valueRestrictions.clone());
+			result.setValuesWrapper(valuesWrapper.clone()); 
+			return result;
+		}
+		catch (CloneNotSupportedException e)
+		{
+			ConsoleLogger.logThrowable("Could not clone option. Returning null...", e);
+			return null;
+		}
 	}
 	@Override
 	public void mergeWith(IMergeable other)

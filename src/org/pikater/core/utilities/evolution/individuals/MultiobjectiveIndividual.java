@@ -21,7 +21,7 @@ public abstract class MultiobjectiveIndividual extends ArrayIndividual {
     }
     
     @Override
-    public Object clone() {
+    public MultiobjectiveIndividual clone() {
         MultiobjectiveIndividual mi = (MultiobjectiveIndividual)super.clone();
         
         if (this.objectives != null) {

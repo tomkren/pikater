@@ -218,8 +218,17 @@ public class DataProcessing implements IDataProvider {
 		importAllDataSourceDescriptions(dataSourceCloned);
 		
 		List<ErrorSourceDescription> errorSourceCloned = new ArrayList<ErrorSourceDescription>();
-		for (ErrorSourceDescription errorSourceI : exportAllErrors()) {
-			errorSourceCloned.add(errorSourceI.clone());
+		for (ErrorSourceDescription errorSourceI : exportAllErrors())
+		{
+			try
+			{
+				errorSourceCloned.add(errorSourceI.clone());
+			}
+			catch(CloneNotSupportedException e)
+			{
+				ConsoleLogger.logThrowable("Could not close sources. Returning...", e);
+				return;
+			}
 		}
 		
 		importAllErrors(errorSourceCloned);

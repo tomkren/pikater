@@ -71,9 +71,7 @@ public class TestBatchDescription {
 	private static void testComputatingDescription(
 			ComputationDescription comDescription, String note) {
 
-		UniversalComputationDescription udescriptinSimpleTraining =
-				comDescription.exportUniversalComputationDescription();
-
+		UniversalComputationDescription udescriptinSimpleTraining = comDescription.exportUniversalComputationDescription();
 		ComputationDescription comDescription2 =
 				ComputationDescription.importUniversalComputationDescription(
 						udescriptinSimpleTraining);
