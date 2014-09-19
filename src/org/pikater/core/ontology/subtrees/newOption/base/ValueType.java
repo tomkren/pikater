@@ -10,6 +10,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData; 
+import org.pikater.shared.logging.core.ConsoleLogger;
 
 public class ValueType implements Concept, IValidated
 {
@@ -108,6 +109,18 @@ public class ValueType implements Concept, IValidated
 	public boolean isSetRestrictionDefined()
 	{
 		return getSetRestriction() != null;
+	}
+	public IValueData cloneDefaultValue()
+	{
+		try
+		{
+			return defaultValue.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			ConsoleLogger.logThrowable(String.format("Could not clone '%s'.", defaultValue.getClass().getName()), e);
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/* -------------------------------------------------------------
