@@ -16,12 +16,6 @@ public class Slot implements Concept, ICloneable
 	public Slot()
 	{
 	}
-	private Slot(String dataType, String slotType, String description)
-	{
-		this.dataType = dataType;
-		this.slotType = slotType;
-		this.description = description;
-	}
 
 	public String getDataType() 
 	{
@@ -49,9 +43,13 @@ public class Slot implements Concept, ICloneable
 	}
 	
 	@Override
-	public Slot clone()
+	public Slot clone() throws CloneNotSupportedException
 	{
-		return new Slot(dataType, slotType, description);
+		Slot result = (Slot) super.clone();
+		result.setDataType(dataType);
+		result.setSlotType(slotType);
+		result.setDescription(description);
+		return result;
 	}
 	
 	/*

@@ -64,9 +64,10 @@ public class FileDataSaver extends DataProcessing implements IDataSaver {
 		}
 	}
 	
-	public FileDataSaver clone() {
+	@Override
+	public FileDataSaver clone() throws CloneNotSupportedException {
 		
-		FileDataSaver fileSaver = new FileDataSaver();
+		FileDataSaver fileSaver = (FileDataSaver) super.clone();
 		fileSaver.setId(this.getId());
 		fileSaver.setNameOfFile(nameOfFile);
 		fileSaver.setDataSource(dataSource.clone());

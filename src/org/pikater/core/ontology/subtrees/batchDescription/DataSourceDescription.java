@@ -61,9 +61,9 @@ public class DataSourceDescription implements ISourceDescription {
 	}
 
 	@Override
-	public DataSourceDescription clone() {
+	public DataSourceDescription clone() throws CloneNotSupportedException {
 		
-		DataSourceDescription dataSource = new DataSourceDescription();
+		DataSourceDescription dataSource = (DataSourceDescription) super.clone();
 		dataSource.setInputType(this.getInputType());
 		dataSource.setOutputType(this.getOutputType());
 		dataSource.setDataProvider(getDataProvider().clone());
