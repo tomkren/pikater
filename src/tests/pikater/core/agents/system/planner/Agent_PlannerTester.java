@@ -89,8 +89,8 @@ public class Agent_PlannerTester extends PikaterAgent {
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.get());
-    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.get());
+    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
+    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
         NewOption optionF = new NewOption("F", 8);
     	
@@ -152,8 +152,8 @@ public class Agent_PlannerTester extends PikaterAgent {
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.get());
-    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.get());
+    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
+    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
         NewOption optionF = new NewOption("F", 8);
         
@@ -215,8 +215,8 @@ public class Agent_PlannerTester extends PikaterAgent {
     			new Data("weather.arff",
     					"28c7b9febbecff6ce207bcde29fc0eb8",
     					DataTypes.TRAIN_DATA) );
-    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.get());
-    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.get());
+    	datas.setMode(CoreConstant.Mode.TRAIN_TEST.name());
+    	datas.setOutput(CoreConstant.Output.EVALUATION_ONLY.name());
     	
         NewOption optionF = new NewOption("F", 8);
         

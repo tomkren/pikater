@@ -23,13 +23,13 @@ public class DataSourceDescription implements ISourceDescription {
     public void setDataProvider(IDataProvider dataProvider) {
     	
     	if (dataProvider instanceof FileDataProvider) {
-    		this.setOutputType(CoreConstant.Slot.SLOT_FILE_DATA.get());
+    		this.setOutputType(CoreConstant.SlotContent.FILE_DATA.getSlotName());
     		
     	} else if (dataProvider instanceof ComputingAgent) {
-    		this.setOutputType(CoreConstant.Slot.SLOT_COMPUTED_DATA.get());
+    		this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
     		
     	} else if (dataProvider instanceof CARecSearchComplex) {
-    		this.setOutputType(CoreConstant.Slot.SLOT_COMPUTED_DATA.get());
+    		this.setOutputType(CoreConstant.SlotContent.COMPUTED_DATA.getSlotName());
     	}
     	
         this.dataProvider = dataProvider;

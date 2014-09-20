@@ -9,113 +9,106 @@ public class CoreConstant
 	{
 	}
 	
-	public static enum Slot
+	public static enum SlotDirection
 	{
-		SLOT_DATA("data"),
-		SLOT_FILE_DATA("fileData"),
-		SLOT_TRAINING_DATA("trainingData"),
-		SLOT_TESTING_DATA("testingData"),
-		SLOT_VALIDATION_DATA("validationData"),
-		SLOT_COMPUTED_DATA("computedData"),
+		INPUT,
+		OUTPUT
+	}
+	
+	public static enum SlotCategory
+	{
+		DATA_GENERAL,
+		DATA_AGENT,
+		DATA_SEARCH,
+		DATA_RECOMMEND,
+		DATA_EVALUATIONMETHOD,
+		ERROR
+	}
+	
+	public static enum SlotContent
+	{
+		DATA("data"),
+		FILE_DATA("fileData"),
+		TRAINING_DATA("trainingData"),
+		TESTING_DATA("testingData"),
+		VALIDATION_DATA("validationData"),
+		COMPUTED_DATA("computedData"),
 		
-		SLOT_COMPUTATION_AGENT("computingAgent"),
-		SLOT_ERRORS("error"),
-		SLOT_EVALUATION_METHOD("evaluationMethod"),
-		SLOT_RECOMMEND("recommender"),
-		SLOT_SEARCH("search");
+		COMPUTATION_AGENT("computingAgent"),
+		ERRORS("error"),
+		EVALUATION_METHOD("evaluationMethod"),
+		RECOMMEND("recommender"),
+		SEARCH("search");
 		
-		private final String constant;
+		private final String slotName;
 		
-		private Slot(String constant)
+		private SlotContent(String slotName)
 		{
-			this.constant = constant;
+			this.slotName = slotName;
 		}
 		
-		public String get()
+		public String getSlotName()
 		{
-			return constant;
+			return slotName;
+		}
+		
+		public SlotCategory getCategory()
+		{
+			switch(this)
+			{
+				case DATA:
+				case COMPUTED_DATA:
+				case FILE_DATA:
+				case TESTING_DATA:
+				case TRAINING_DATA:
+				case VALIDATION_DATA:
+					return SlotCategory.DATA_GENERAL;
+					
+				case COMPUTATION_AGENT:
+					return SlotCategory.DATA_AGENT;
+				case ERRORS:
+					return SlotCategory.ERROR;
+				case EVALUATION_METHOD:
+					return SlotCategory.DATA_EVALUATIONMETHOD;
+				case RECOMMEND:
+					return SlotCategory.DATA_RECOMMEND;
+				case SEARCH:
+					return SlotCategory.DATA_SEARCH;
+				
+				default:
+					throw new IllegalStateException();
+			}
 		}
 	}
 	
 	public static enum Mode
 	{
-		DEFAULT("mode"),
-		TRAIN_ONLY("train_only"),
-		TEST_ONLY("test_only"),
-		TRAIN_TEST("train_test");
-		
-		private final String constant;
-		
-		private Mode(String constant)
-		{
-			this.constant = constant;
-		}
-		
-		public String get()
-		{
-			return constant;
-		}
+		DEFAULT,
+		TRAIN_ONLY,
+		TEST_ONLY,
+		TRAIN_TEST,
 	}
 	
 	public static enum Output
 	{
-		DEFAULT("output"),
-		EVALUATION_ONLY("evaluation_only"),
-		PREDICTION("predictions");
-		
-		private final String constant;
-		
-		private Output(String constant)
-		{
-			this.constant = constant;
-		}
-		
-		public String get()
-		{
-			return constant;
-		}
+		DEFAULT,
+		EVALUATION_ONLY,
+		PREDICTION;
 	}
 	
 	public static enum Error
 	{
-		ERROR_RATE("error_rate"),
-		KAPPA_STATISTIC("kappa_statistic"),
-		MEAN_ABSOLUTE("mean_absolute_error"),
-		RELATIVE_ABSOLUTE("relative_absolute_error"),
-		ROOT_MEAN_SQUARED("root_mean_squared_error"),
-		ROOT_RELATIVE_SQUARED("root_relative_squared_error");
-		
-		private final String constant;
-		
-		private Error(String constant)
-		{
-			this.constant = constant;
-		}
-		
-		public String get()
-		{
-			return constant;
-		}
+		ERROR_RATE,
+		KAPPA_STATISTIC,
+		MEAN_ABSOLUTE,
+		RELATIVE_ABSOLUTE,
+		ROOT_MEAN_SQUARED,
+		ROOT_RELATIVE_SQUARED;
 	}
 	
-	public static enum Misc
-	{
-		DURATION_DATASET_NAME("lineardata.arff"),
-		MODEL("model"),
-		DURATION("duration"),
-		DURATIONLR("durationLR"),
-		FILEURI("fileURI");
-		
-		private final String constant;
-		
-		private Misc(String constant)
-		{
-			this.constant = constant;
-		}
-		
-		public String get()
-		{
-			return constant;
-		}
-	}
+	public static final String DURATION_DATASET_NAME = "lineardata.arff";
+	public static final String MODEL = "model";
+	public static final String DURATION = "duration";
+	public static final String DURATIONLR = "durationLR";
+	public static final String FILEURI = "fileURI";
 }

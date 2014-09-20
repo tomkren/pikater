@@ -76,7 +76,7 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                     labeledData.setDataSourceId(data.getName());
                     node.addToOutputAndProcess(labeledData,"file");
                 }
-                if (node.containsOutput(CoreConstant.Slot.SLOT_TESTING_DATA.get()))
+                if (node.containsOutput(CoreConstant.SlotContent.TESTING_DATA.getSlotName()))
                 {
                     TaskOutput test= t.getOutputByType(Task.InOutType.TEST);
                     if (test==null)
@@ -84,14 +84,14 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                         test=t.getOutputByType(Task.InOutType.TRAIN);
                     }
                     labeledData.setDataSourceId(test.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstant.Slot.SLOT_TESTING_DATA.get());
+                    node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TESTING_DATA.getSlotName());
                 }
-                if (node.containsOutput(CoreConstant.Slot.SLOT_TRAINING_DATA.get()))
+                if (node.containsOutput(CoreConstant.SlotContent.TRAINING_DATA.getSlotName()))
                 {
                     TaskOutput train= t.getOutputByType(Task.InOutType.TRAIN);
 
                     labeledData.setDataSourceId(train.getName());
-                    node.addToOutputAndProcess(labeledData, CoreConstant.Slot.SLOT_TRAINING_DATA.get());
+                    node.addToOutputAndProcess(labeledData, CoreConstant.SlotContent.TRAINING_DATA.getSlotName());
                 }
 
 				// save results to the database										

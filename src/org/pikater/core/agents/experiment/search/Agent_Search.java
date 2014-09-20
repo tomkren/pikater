@@ -100,13 +100,13 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		
 		for (Eval e : named_evals) {
 
-			if(e.getName().equals(CoreConstant.Error.ERROR_RATE.get())) {
+			if(e.getName().equals(CoreConstant.Error.ERROR_RATE.name())) {
 				res[0]=e.getValue();
             }
-            if(e.getName().equals(CoreConstant.Error.ROOT_MEAN_SQUARED.get())) {
+            if(e.getName().equals(CoreConstant.Error.ROOT_MEAN_SQUARED.name())) {
                 res[1] = e.getValue();
             }
-            if(e.getName().equals(CoreConstant.Error.KAPPA_STATISTIC.get())) {
+            if(e.getName().equals(CoreConstant.Error.KAPPA_STATISTIC.name())) {
                 res[2] = -e.getValue();
             }
 		}
@@ -118,17 +118,17 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 		List<Eval> evals = new ArrayList<Eval>();
 		
 		Eval ev = new Eval();
-		ev.setName(CoreConstant.Error.ERROR_RATE.get());
+		ev.setName(CoreConstant.Error.ERROR_RATE.name());
 		ev.setValue(fitness[0]);
 		evals.add(ev);
 		
 		Eval ev1 = new Eval();
-		ev1.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.get());			
+		ev1.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());			
 		ev1.setValue(fitness[1]);				
 		evals.add(ev1);
 		
 		Eval ev2 = new Eval();
-		ev2.setName(CoreConstant.Error.KAPPA_STATISTIC.get());
+		ev2.setName(CoreConstant.Error.KAPPA_STATISTIC.name());
 		ev2.setValue(fitness[2]);
 		evals.add(ev2);
 		

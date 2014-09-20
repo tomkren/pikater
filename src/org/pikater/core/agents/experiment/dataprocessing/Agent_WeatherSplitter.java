@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.AgentInfoOntology;
 import org.pikater.core.ontology.DataOntology;
 import org.pikater.core.ontology.ExperimentOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.batchDescription.DataProcessing;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.dataInstance.DataInstances;
@@ -61,29 +61,14 @@ public class Agent_WeatherSplitter extends Agent_DataProcessing {
 		agentInfo.setName("WeatherSplitter");
 		agentInfo.setDescription("Splits weather data by prediction.");
 
-		Slot i1 = new Slot();
-		i1.setSlotType(SlotTypes.DATA);
-		i1.setDataType("firstInput");
-		i1.setDescription("First weather input.");
-		Slot i2 = new Slot();
-		i2.setSlotType(SlotTypes.DATA);
-		i2.setDataType("secondInput");
-		i2.setDescription("Second weather input.");
+		Slot i1 = new Slot("firstInput", CoreConstant.SlotCategory.DATA_GENERAL, "First weather input.");
+		Slot i2 = new Slot("secondInput", CoreConstant.SlotCategory.DATA_GENERAL, "Second weather input.");
 		
 		agentInfo.setInputSlots(Arrays.asList(i1, i2));
 
-		Slot o_sunny = new Slot();
-		o_sunny.setSlotType(SlotTypes.DATA);
-		o_sunny.setDataType("sunnyOutput");
-		o_sunny.setDescription("Sunny output.");
-		Slot o_overcast = new Slot();
-		o_overcast.setSlotType(SlotTypes.DATA);
-		o_overcast.setDataType("overcastOutput");
-		o_overcast.setDescription("Overcast output.");
-		Slot o_rainy = new Slot();
-		o_rainy.setSlotType(SlotTypes.DATA);
-		o_rainy.setDataType("rainyOutput");
-		o_rainy.setDescription("Rainy output.");
+		Slot o_sunny = new Slot("sunnyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Sunny output.");
+		Slot o_overcast = new Slot("overcastOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Overcast output.");
+		Slot o_rainy = new Slot("rainyOutput", CoreConstant.SlotCategory.DATA_GENERAL, "Rainy output.");
 
 		agentInfo.setOutputSlots(Arrays.asList(o_sunny, o_overcast, o_rainy));
 

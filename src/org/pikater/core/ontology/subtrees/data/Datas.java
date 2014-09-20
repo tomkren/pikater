@@ -19,8 +19,8 @@ public class Datas implements Concept {
 	private List<Data> datas;
 	private Metadata metadata;
 	
-	private String output = CoreConstant.Output.EVALUATION_ONLY.get(); // "predictions"
-	private String mode = CoreConstant.Mode.TRAIN_TEST.get(); // test_only, train_test, train_only
+	private String output = CoreConstant.Output.EVALUATION_ONLY.name();
+	private String mode = CoreConstant.Mode.TRAIN_TEST.name();
 	
 	public Datas() {
 		this.datas = new ArrayList<Data>();

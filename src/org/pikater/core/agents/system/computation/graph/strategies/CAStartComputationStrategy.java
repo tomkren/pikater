@@ -86,40 +86,49 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 	//Create new options from solution with filled ? values (convert solution->options) 
 	private NewOptions fillOptionsWithSolution(List<NewOption> options, SearchSolution solution){
         NewOptions result = new NewOptions();
-		List<NewOption> resultList = new ArrayList<NewOption>();
-		if(options==null){
+		if(options==null)
+		{
 			return result;
 		}
-		//if no solution values to fill - return the option
-		if(solution.getValues() == null){
+		else if(solution.getValues() == null) // if no solution values to fill - return the option
+		{
 			result.setOptions(options);
 			return result;
 		}
-        int currentSearchOptionNr=0;
-        for (NewOption option:options)
-        {
-            if (option.isImmutable())
-            {
-                resultList.add(option);
-            }
-            else
-            {
-                for (Value value:option.getValuesWrapper().getValues()) {
-                    IValueData typedValue = value.getCurrentValue();
-                    if (typedValue instanceof QuestionMarkRange || typedValue instanceof QuestionMarkSet)
-                    {
-                        IValueData currentValue= solution.getValues().get(currentSearchOptionNr);
-                        NewOption clone=option.clone();
-                        clone.setValuesWrapper(new ValuesForOption(new Value(currentValue)));
-                        resultList.add(clone);
-                        currentSearchOptionNr++;
-                    }
-                }
-            }
-        }
-
-		result.setOptions(resultList);
-		return result;
+		else
+		{
+			List<NewOption> resultList = new ArrayList<NewOption>();
+			int currentSearchOptionNr=0;
+	        for (NewOption option:options)
+	        {
+	            if (option.isImmutable())
+	            {
+	                resultList.add(option);
+	            }
+	            else
+	            {
+	                for (Value value:option.getValuesWrapper().getValues()) {
+	                    IValueData typedValue = value.getCurrentValue();
+	                    if (typedValue instanceof QuestionMarkRange || typedValue instanceof QuestionMarkSet)
+	                    {
+	                    	/*
+	                    	 * TODO: this is very much prone to errors because it makes the inner
+	                    	 * state of NewOption inconsistent. You should use constructors (e.g.
+	                    	 * "NewOption(String, Value)") because the option must have the type
+	                    	 * defined for each value. Type is inferred in the example constructor.  
+	                    	 */
+	                        IValueData currentValue= solution.getValues().get(currentSearchOptionNr);
+	                        NewOption clone=option.clone();
+	                        clone.setValuesWrapper(new ValuesForOption(new Value(currentValue)));
+	                        resultList.add(clone);
+	                        currentSearchOptionNr++;
+	                    }
+	                }
+	            }
+	        }
+	        result.setOptions(resultList);
+			return result;
+		}
 	}
 
 	
@@ -154,15 +163,15 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 		agent.setOptions(usedoptions.getOptions());
 		
 		Datas datas = new Datas();
-        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get(CoreConstant.Slot.SLOT_TRAINING_DATA.get()).getNext();
+        DataSourceEdge trainingEdge=(DataSourceEdge)inputs.get(CoreConstant.SlotContent.TRAINING_DATA.getSlotName()).getNext();
         DataSourceEdge testingEdge;
 		String training = trainingEdge.getDataSourceId();
-		if( inputs.get(CoreConstant.Slot.SLOT_TESTING_DATA.get()) == null){
+		if( inputs.get(CoreConstant.SlotContent.TESTING_DATA.getSlotName()) == null){
 			testingEdge=trainingEdge;
 		}
 		else{
 
-			testingEdge = ((DataSourceEdge) inputs.get(CoreConstant.Slot.SLOT_TESTING_DATA.get()).getNext());
+			testingEdge = ((DataSourceEdge) inputs.get(CoreConstant.SlotContent.TESTING_DATA.getSlotName()).getNext());
 		}
 
         if (trainingEdge.isFile()) {

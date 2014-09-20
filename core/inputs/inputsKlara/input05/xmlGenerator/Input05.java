@@ -48,7 +48,7 @@ public final class Input05 {
 
         //Set error provider
         ErrorSourceDescription errorDescription=new ErrorSourceDescription();
-        errorDescription.setOutputType(CoreConstant.Slot.SLOT_ERRORS.get());
+        errorDescription.setOutputType(CoreConstant.SlotContent.ERRORS.getSlotName());
         errorDescription.setProvider(comAgent);
         recommender.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
         

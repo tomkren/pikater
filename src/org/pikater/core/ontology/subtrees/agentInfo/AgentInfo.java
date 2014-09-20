@@ -189,11 +189,11 @@ public class AgentInfo implements Concept, ICloneable
 		this.outputSlots.add(outputSlot);
 	}
 	
-	public Slot fetchInputSlotByDataType(String dataType)
+	public Slot fetchInputSlotByName(String slotName)
 	{
 		for(Slot slot : inputSlots)
 		{
-			if(slot.getDataType().equals(dataType))
+			if(slot.getName().equals(slotName))
 			{
 				return slot;
 			}
@@ -201,11 +201,11 @@ public class AgentInfo implements Concept, ICloneable
 		return null;
 	}
 	
-	public Slot fetchOutputSlotByDataType(String dataType)
+	public Slot fetchOutputSlotByName(String slotName)
 	{
 		for(Slot slot : outputSlots)
 		{
-			if(slot.getDataType().equals(dataType))
+			if(slot.getName().equals(slotName))
 			{
 				return slot;
 			}

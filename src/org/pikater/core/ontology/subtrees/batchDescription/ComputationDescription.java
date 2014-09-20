@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.experiment.UniversalConnector;
 import org.pikater.shared.experiment.UniversalElement;
 import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -144,8 +144,7 @@ public class ComputationDescription implements Concept {
 		gene();
 		
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
-		NewOptions optionsOnt = new NewOptions(this.getGlobalOptions());
-		uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
+		uModel.addGlobalOptions(new HashSet<NewOption>(CollectionUtils.deepCopy(getGlobalOptions())));
 		
 		// map - id x ontology
 		Map<Integer, UniversalOntology> finishedtUniOntologys =

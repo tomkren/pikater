@@ -116,9 +116,9 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 	public abstract String getAgentType();
 
 	@Override
-	public java.util.List<Ontology> getOntologies() {
+	public List<Ontology> getOntologies() {
 
-		java.util.List<Ontology> ontologies = new java.util.ArrayList<Ontology>();
+		List<Ontology> ontologies = new ArrayList<Ontology>();
 		ontologies.add(TaskOntology.getInstance());
 		ontologies.add(AgentInfoOntology.getInstance());
 		ontologies.add(ExperimentOntology.getInstance());
@@ -209,8 +209,8 @@ public abstract class Agent_ComputingAgent extends Agent_DataProcessing {
 		 */
 		
 		NewOptions taskOptions = new NewOptions(task.getAgent().getOptions());
-		taskOptions.removeOptionByName(CoreConstant.Mode.DEFAULT.get());
-		taskOptions.removeOptionByName(CoreConstant.Output.DEFAULT.get());
+		taskOptions.removeOptionByName(CoreConstant.Mode.DEFAULT.name());
+		taskOptions.removeOptionByName(CoreConstant.Output.DEFAULT.name());
 		
 		String wekaOptionsString = 
 				taskOptions.exportToWeka();

@@ -56,7 +56,7 @@ public final class Input04 {
 
         //Set error provider
         ErrorSourceDescription errorDescription=new ErrorSourceDescription();
-        errorDescription.setOutputType(CoreConstant.Slot.SLOT_ERRORS.get());
+        errorDescription.setOutputType(CoreConstant.SlotContent.ERRORS.getSlotName());
         errorDescription.setProvider(comAgent);
         complex.setErrors(new ArrayList<>(Arrays.asList( errorDescription)) );
 
@@ -68,7 +68,7 @@ public final class Input04 {
         // Note that the data provider is complex.
         // To save each iteration the data source would have to be comAgent
 		DataSourceDescription computingDataSource = new DataSourceDescription();
-		computingDataSource.setOutputType(CoreConstant.Slot.SLOT_DATA.get());
+		computingDataSource.setOutputType(CoreConstant.SlotContent.DATA.getSlotName());
 		computingDataSource.setDataProvider(complex);
 
         FileDataSaver saver = new FileDataSaver();

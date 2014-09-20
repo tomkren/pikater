@@ -27,7 +27,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	@Override
 	public List<NewOption> exportAllOptions() {
 		
-		NewOption fileURIOption = new NewOption(CoreConstant.Misc.FILEURI.get(), fileURI);
+		NewOption fileURIOption = new NewOption(CoreConstant.FILEURI, fileURI);
 		
 		List<NewOption> options = new ArrayList<NewOption>();
 		options.add(fileURIOption);
@@ -38,7 +38,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	public void importAllOptions(List<NewOption> options) {
 		
 		for (NewOption optionI : options) {
-			if (optionI.getName().equals(CoreConstant.Misc.FILEURI.get())) {
+			if (optionI.getName().equals(CoreConstant.FILEURI)) {
 				StringValue value = (StringValue) optionI.toSingleValue().getCurrentValue();
 				this.fileURI = value.getValue();
 			}

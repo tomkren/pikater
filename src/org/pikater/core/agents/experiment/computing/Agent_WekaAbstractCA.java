@@ -149,12 +149,12 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		java.util.List<Eval> evaluations = evaluation.getEvaluations();
 		//List evaluations = new ArrayList();
 		Eval ev = new Eval();
-		ev.setName(CoreConstant.Error.ERROR_RATE.get());
+		ev.setName(CoreConstant.Error.ERROR_RATE.name());
 		ev.setValue((float) eval.errorRate());
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName(CoreConstant.Error.KAPPA_STATISTIC.get());
+		ev.setName(CoreConstant.Error.KAPPA_STATISTIC.name());
 		try {
 			ev.setValue((float) eval.kappa());
 		} catch (Exception e) {
@@ -163,7 +163,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstant.Error.MEAN_ABSOLUTE.get());
+		ev.setName(CoreConstant.Error.MEAN_ABSOLUTE.name());
 		try {
 			ev.setValue((float) eval.meanAbsoluteError());
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstant.Error.RELATIVE_ABSOLUTE.get());
+		ev.setName(CoreConstant.Error.RELATIVE_ABSOLUTE.name());
 		try {
 			ev.setValue((float) eval.relativeAbsoluteError());
 		} catch (Exception e) {
@@ -181,7 +181,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 		
 		ev = new Eval();
-		ev.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.get());
+		ev.setName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());
 		try {
 			ev.setValue((float) eval.rootMeanSquaredError());
 		} catch (Exception e) {
@@ -190,7 +190,7 @@ public abstract class Agent_WekaAbstractCA extends Agent_ComputingAgent {
 		evaluations.add(ev);
 
 		ev = new Eval();
-		ev.setName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.get());
+		ev.setName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
 		try {
 			ev.setValue((float) eval.rootRelativeSquaredError());
 		} catch (Exception e) {
