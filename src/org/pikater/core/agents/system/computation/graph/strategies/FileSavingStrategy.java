@@ -15,15 +15,11 @@ import org.pikater.core.agents.system.computation.parser.ComputationOutputBuffer
  */
 public class FileSavingStrategy implements StartComputationStrategy {
     Agent_Manager myAgent;
-    int computationId;
-    int graphId;
     ComputationNode computationNode;
 
     public FileSavingStrategy (Agent_Manager manager, int computationId,
                                        int graphId, ComputationNode computationNode){
         myAgent = manager;
-        this.computationId = computationId;
-        this.graphId = graphId;
         this.computationNode = computationNode;
     }
 

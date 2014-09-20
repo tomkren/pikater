@@ -9,10 +9,9 @@ import org.pikater.core.ontology.subtrees.newOption.values.NullValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData; 
-import org.pikater.shared.logging.core.ConsoleLogger;
+import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 
-public class ValueType implements Concept, IValidated
+public class ValueType implements Concept, IValidated, ICloneable
 {
 	private static final long serialVersionUID = -4658896847448815807L;
 
@@ -109,18 +108,6 @@ public class ValueType implements Concept, IValidated
 	public boolean isSetRestrictionDefined()
 	{
 		return getSetRestriction() != null;
-	}
-	public IValueData cloneDefaultValue()
-	{
-		try
-		{
-			return defaultValue.clone();
-		}
-		catch (CloneNotSupportedException e)
-		{
-			ConsoleLogger.logThrowable(String.format("Could not clone '%s'.", defaultValue.getClass().getName()), e);
-			throw new RuntimeException(e);
-		}
 	}
 	
 	/* -------------------------------------------------------------
@@ -253,9 +240,17 @@ public class ValueType implements Concept, IValidated
 		}
 	}
 	@Override
-	public ValueType clone() throws CloneNotSupportedException
+	public ValueType clone()
 	{
-		ValueType result = (ValueType) super.clone();
+		ValueType result;
+		try
+		{
+			result = (ValueType) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setDefaultValue(defaultValue.clone());
 		result.setRangeRestriction(rangeRestriction != null ? rangeRestriction.clone() : null);
 		result.setSetRestriction(setRestriction != null ? setRestriction.clone() : null);

@@ -220,14 +220,10 @@ public abstract class Agent_Search extends Agent_AbstractExperiment {
 								//nova vlna evaluaci - generovani query
 								// System.out.println("OK: Pars - nove solutiony poslat");
 								solutions_new = generateNewSolutions(solutions_new, evaluations);
-								if(solutions_new != null)
-								{
+								if(solutions_new != null) {
 									evaluations = new float[solutions_new.size()][];
-								}
-								else
-								{
-									solutions_new = new ArrayList<SearchSolution>();
-								}
+								} else
+									solutions_new = new ArrayList<>();
 								queriesToProcess = solutions_new.size();
 								for(int i = 0; i < solutions_new.size(); i++){
 									//posli queries

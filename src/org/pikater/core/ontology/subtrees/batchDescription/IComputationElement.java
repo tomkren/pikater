@@ -2,9 +2,9 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;
 
@@ -31,6 +31,6 @@ public interface IComputationElement extends Concept, ICloneable
 	public boolean equalsElement(IComputationElement element);
 	
 	@Override
-	public IComputationElement clone() throws CloneNotSupportedException;
+	public IComputationElement clone();
 	public void cloneSources();
 }

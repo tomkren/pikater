@@ -59,9 +59,17 @@ public class FloatValue implements IComparableValueData
 		return value;
 	}
 	@Override
-	public FloatValue clone() throws CloneNotSupportedException
+	public FloatValue clone()
 	{
-		FloatValue result = (FloatValue) super.clone();
+		FloatValue result;
+		try
+		{
+			result = (FloatValue) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setValue(value);
 		return result;
 	}

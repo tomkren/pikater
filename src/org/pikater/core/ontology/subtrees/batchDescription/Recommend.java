@@ -1,11 +1,10 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -88,16 +87,13 @@ public class Recommend extends DataProcessing {
 	}
 
 	@Override
-	public Recommend clone() throws CloneNotSupportedException
+	public Recommend clone()
 	{
 		Recommend recommend = (Recommend) super.clone();
 		recommend.setId(this.getId());
 		recommend.setAgentType(this.recommenderClass);
-		NewOptions optionsOnt = new NewOptions(this.options);
-		recommend.setOptions(optionsOnt.clone().getOptions());
-		ErrorDescriptions errorOnt = new ErrorDescriptions(this.errors);
-		recommend.setErrors(errorOnt.clone().getErrors());
-		
+		recommend.setOptions(CollectionUtils.deepCopy(options));
+		recommend.setErrors(CollectionUtils.deepCopy(errors));
 		return recommend;
 	}
 

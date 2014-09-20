@@ -1060,12 +1060,9 @@ public class DataManagerService extends FIPAService {
 			agent.logException(oe.getMessage(), oe);
 		}
 
-		try
-		{
+		try {
 			FIPAService.doFipaRequestClient(agent, msg);
-		}
-		catch (FIPAException e)
-		{
+		} catch (FIPAException e) {
 			agent.logException(e.getMessage(), e);
 		}
 	}

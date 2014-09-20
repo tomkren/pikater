@@ -5,9 +5,10 @@ import jade.content.Concept;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.core.ontology.subtrees.newOption.base.IValidated;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
+import org.pikater.shared.util.ICloneable;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 public class RestrictionsForOption implements Concept, ICloneable, IValidated 
 {
@@ -58,13 +59,18 @@ public class RestrictionsForOption implements Concept, ICloneable, IValidated
 	 * Inherited interface.
 	 */
 	@Override
-	public RestrictionsForOption clone() throws CloneNotSupportedException
+	public RestrictionsForOption clone()
 	{
-		RestrictionsForOption result = (RestrictionsForOption) super.clone();
-		for(TypeRestriction restriction : restrictions)
+		RestrictionsForOption result;
+		try
 		{
-			result.add(restriction.clone());
+			result = (RestrictionsForOption) super.clone();
 		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setRestrictions(CollectionUtils.deepCopy(restrictions));
 		return result;
 	}
 	@Override

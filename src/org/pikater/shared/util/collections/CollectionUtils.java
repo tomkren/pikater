@@ -1,11 +1,15 @@
 package org.pikater.shared.util.collections;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+
+import org.pikater.shared.util.ICloneable;
 
 public class CollectionUtils
 {
@@ -43,5 +47,24 @@ public class CollectionUtils
 			result.append(it.next());
 		}
 		return result.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <O extends ICloneable> List<O> deepCopy(List<O> source)
+	{
+		if(source == null)
+		{
+			return null;
+		}
+		else
+		{
+			List<O> copy = new ArrayList<O>(source.size());
+			for(O item : source)
+			{
+				ICloneable itemCopy = ((ICloneable) item).clone();
+				copy.add((O) itemCopy);
+			}
+			return copy;
+		}
 	}
 }

@@ -67,9 +67,17 @@ public class StringValue implements IComparableValueData
 		return value;
 	}
 	@Override
-	public StringValue clone() throws CloneNotSupportedException
+	public StringValue clone()
 	{
-		StringValue result = (StringValue) super.clone();
+		StringValue result;
+		try
+		{
+			result = (StringValue) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setValue(value);
 		return result;
 	}

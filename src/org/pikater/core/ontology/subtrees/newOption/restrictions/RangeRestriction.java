@@ -182,11 +182,19 @@ public class RangeRestriction implements IRestriction
 		}
 	}
 	@Override
-	public RangeRestriction clone() throws CloneNotSupportedException
+	public RangeRestriction clone()
 	{
-		RangeRestriction result = (RangeRestriction) super.clone();
-		result.setMinValue(minValue == null ? null : (IComparableValueData) minValue.clone());
-		result.setMaxValue(maxValue == null ? null : (IComparableValueData) maxValue.clone());
+		RangeRestriction result;
+		try
+		{
+			result = (RangeRestriction) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setMinValue(minValue == null ? null : minValue.clone());
+		result.setMaxValue(maxValue == null ? null : maxValue.clone());
 		return result;
 	}
 }

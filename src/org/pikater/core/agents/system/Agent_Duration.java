@@ -33,7 +33,7 @@ import org.pikater.core.ontology.DurationOntology;
 import org.pikater.core.ontology.FilenameTranslationOntology;
 import org.pikater.core.ontology.TaskOntology;
 import org.pikater.core.ontology.subtrees.batchDescription.EvaluationMethod;
-import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standart;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standard;
 import org.pikater.core.ontology.subtrees.data.Data;
 import org.pikater.core.ontology.subtrees.data.Datas;
 import org.pikater.core.ontology.subtrees.data.types.DataTypes;
@@ -358,7 +358,7 @@ public class Agent_Duration extends PikaterAgent {
 		task.setDatas(datas);
 		
 		EvaluationMethod evaluationMethod = new EvaluationMethod();
-		evaluationMethod.setAgentType(Standart.class.getName());
+		evaluationMethod.setAgentType(Standard.class.getName());
 		
 		task.setEvaluationMethod(evaluationMethod);
 		

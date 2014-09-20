@@ -1,15 +1,20 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
+import org.pikater.shared.util.ICloneable;
+
 import jade.content.Concept;
 
-public interface ISourceDescription extends Concept {
-
-    public String getOutputType();
-    public void setOutputType(String dataType);
+public interface ISourceDescription extends Concept, ICloneable
+{
+    String getOutputType();
+    void setOutputType(String dataType);
     
-    public String getInputType();
-	public void setInputType(String dataInputType);
+    String getInputType();
+	void setInputType(String dataInputType);
     
-	public void importSource(IComputationElement element); 
-	public IComputationElement exportSource(); 
+	void importSource(IComputationElement element); 
+	IComputationElement exportSource();
+	
+	@Override
+	ISourceDescription clone();
 }

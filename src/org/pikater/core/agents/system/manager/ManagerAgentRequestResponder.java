@@ -223,9 +223,6 @@ public class ManagerAgentRequestResponder {
     	
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
         
-        @SuppressWarnings("unused")
-		GetComputerInfo getComputerInfo = (GetComputerInfo) a.getAction();
-
         managerAgent.logInfo("Request to get ComputerInfo");
         Ontology ontology = AgentManagementOntology.getInstance();
         Codec codec = managerAgent.getCodec();
@@ -258,9 +255,6 @@ public class ManagerAgentRequestResponder {
     public ACLMessage respondToPing(ACLMessage request) throws OntologyException, CodecException {
     	
         Action a = (Action) managerAgent.getContentManager().extractContent(request);
-
-        @SuppressWarnings("unused")
-        Ping getPing = (Ping) a.getAction();
 
         managerAgent.logInfo("Request to get Ping");
         Ontology ontology = AgentManagementOntology.getInstance();

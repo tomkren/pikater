@@ -19,9 +19,8 @@ public class PropertiesConfigurationProvider implements ConfigurationProvider {
     public PropertiesConfigurationProvider(String propertiesPath)
     {
         configuration = new Properties();
-        try(FileInputStream fis = new FileInputStream(propertiesPath))
-        {
-            configuration.load(fis);
+        try (FileInputStream stream = new FileInputStream(propertiesPath)) {
+            configuration.load(stream);
         }
         catch (IOException e) {
             Log.error(e.getMessage(), e);

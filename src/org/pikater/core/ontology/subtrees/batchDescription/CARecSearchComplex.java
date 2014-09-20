@@ -157,7 +157,7 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 	}
 
 	@Override
-	public CARecSearchComplex clone() throws CloneNotSupportedException
+	public CARecSearchComplex clone()
 	{
 		CARecSearchComplex result = (CARecSearchComplex) super.clone();
 		result.setId(this.getId());

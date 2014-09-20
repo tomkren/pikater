@@ -23,8 +23,6 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 	private static final long serialVersionUID = -2044738642107219180L;
 
 	private Agent_Manager myAgent;
-	@SuppressWarnings("unused")
-	private CAStartComputationStrategy strategy;
     private final ModelComputationNode node;
     // original message sent by whoever wants to
     // compute the task (either search agent or
@@ -37,7 +35,6 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
 		super(a, req);
 		myAgent = a;
         this.msg = msg;
-		strategy = cs;
         this.node = node;
         node.increaseNumberOfOutstandingTask();
     }

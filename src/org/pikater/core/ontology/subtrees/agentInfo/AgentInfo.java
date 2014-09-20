@@ -1,8 +1,9 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
-import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.util.ICloneable;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -133,21 +134,23 @@ public class AgentInfo implements Concept, ICloneable
 	// OTHER INTERFACE
 	
 	@Override
-	public AgentInfo clone() throws CloneNotSupportedException
+	public AgentInfo clone()
 	{
-		AgentInfo result = (AgentInfo) super.clone();
+		AgentInfo result;
+		try
+		{
+			result = (AgentInfo) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setOntologyClassName(ontologyClassName);
 		result.setAgentClassName(agentClassName);
 		result.setName(name);
 		result.setDescription(description);
-		for(Slot slot : inputSlots)
-		{
-			result.addInputSlot(slot.clone());
-		}
-		for(Slot slot : outputSlots)
-		{
-			result.addOutputSlot(slot.clone());
-		}
+		result.setInputSlots(CollectionUtils.deepCopy(inputSlots));
+		result.setInputSlots(CollectionUtils.deepCopy(outputSlots));
 		result.setOptions(options.clone());
 		return result;
 	}

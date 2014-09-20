@@ -71,7 +71,8 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 		
 	}
 
-	public FileDataProvider clone() throws CloneNotSupportedException
+	@Override
+	public FileDataProvider clone()
 	{
 		FileDataProvider fileData = (FileDataProvider) super.clone();
 		fileData.setId(this.getId());

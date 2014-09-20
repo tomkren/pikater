@@ -1,4 +1,4 @@
-package org.pikater.core.ontology.subtrees.newOption.base;
+package org.pikater.shared.util;
 
 public interface ICloneable extends Cloneable
 {

@@ -6,5 +6,5 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 public interface IComputingAgent extends IComputationElement
 {
 	@Override
-	public IComputingAgent clone() throws CloneNotSupportedException;
+	public IComputingAgent clone();
 }

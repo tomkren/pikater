@@ -8,8 +8,9 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValidatedValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.util.ICloneable;
 
-public class Value implements Concept, IValidated
+public class Value implements Concept, IValidated, ICloneable
 {
 	private static final long serialVersionUID = 4778874898115080831L;
 
@@ -63,7 +64,7 @@ public class Value implements Concept, IValidated
 	private Value(ValueType type)
 	{
 		this.type = type;
-		this.currentValue = this.type.cloneDefaultValue();
+		this.currentValue = this.type.getDefaultValue().clone();
 	}
 	
 	public IValueData getCurrentValue()
@@ -76,7 +77,7 @@ public class Value implements Concept, IValidated
 	 */
 	public void setCurrentValue(IValueData currentValue)
 	{
-		this.currentValue = currentValue == null ? type.cloneDefaultValue() : currentValue;
+		this.currentValue = currentValue == null ? type.getDefaultValue().clone() : currentValue;
 	}
 	public ValueType getType()
 	{
@@ -132,11 +133,18 @@ public class Value implements Concept, IValidated
 		return true;
 	}
 	@Override
-	public Value clone() throws CloneNotSupportedException
+	public Value clone()
 	{
-		Value result = (Value) super.clone();
+		Value result;
+		try
+		{
+			result = (Value) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setType(type.clone());
-		result.setCurrentValue(currentValue.clone());
 		return result;
 	}
 }
