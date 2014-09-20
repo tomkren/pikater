@@ -199,8 +199,8 @@ public class ComputationDescription implements Concept {
 				uniElement.setOntologyInfo(uniOntology);
 				
 				UniversalConnector connector = new UniversalConnector();
-				connector.setInputDataType(slotIJ.getInputType());
-				connector.setOutputDataType(slotIJ.getOutputType());
+				connector.setInputDataIdentifier(slotIJ.getInputType());
+				connector.setOutputDataIdentifier(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
 				
 				ontoI.addInputDataSlot(connector);
@@ -214,8 +214,8 @@ public class ComputationDescription implements Concept {
 				uniElement.setOntologyInfo(uniOntology);
 				
 				UniversalConnector connector = new UniversalConnector();
-				connector.setInputDataType(slotIJ.getInputType());
-				connector.setOutputDataType(slotIJ.getOutputType());
+				connector.setInputDataIdentifier(slotIJ.getInputType());
+				connector.setOutputDataIdentifier(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
 				
 				ontoI.addInputErrorSlot(connector);
@@ -287,8 +287,8 @@ public class ComputationDescription implements Concept {
 						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
 				
 				DataSourceDescription dataSourceDesc = new DataSourceDescription();
-				dataSourceDesc.setInputType(slotIJ.getInputDataType());
-				dataSourceDesc.setOutputType(slotIJ.getOutputDataType());
+				dataSourceDesc.setInputType(slotIJ.getInputDataIdentifier());
+				dataSourceDesc.setOutputType(slotIJ.getOutputDataIdentifier());
 				dataSourceDesc.importSource(dataProvider);
 				
 				inputDataSources.add(dataSourceDesc);
@@ -309,8 +309,8 @@ public class ComputationDescription implements Concept {
 						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
 				
 				ErrorSourceDescription errorSourceDesc = new ErrorSourceDescription();
-				errorSourceDesc.setInputType(slotIJ.getInputDataType());
-				errorSourceDesc.setOutputType(slotIJ.getOutputDataType());
+				errorSourceDesc.setInputType(slotIJ.getInputDataIdentifier());
+				errorSourceDesc.setOutputType(slotIJ.getOutputDataIdentifier());
 				errorSourceDesc.importSource(dataProvider);
 					
 				inputErrorSources.add(errorSourceDesc);
