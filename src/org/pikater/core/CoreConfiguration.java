@@ -1,5 +1,6 @@
 package org.pikater.core;
 
+import org.pikater.core.agents.system.computation.graph.GUIDGenerator;
 import org.pikater.shared.database.connection.PostgreSQLConnectionProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -14,7 +15,7 @@ public class CoreConfiguration
 	}
 	
 	/*
-	 * Spring interface
+	 * Spring configuration convenience interface
 	 */
 	private static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext(getConfigurationFileName());
 	
@@ -32,6 +33,11 @@ public class CoreConfiguration
 	public static PostgreSQLConnectionProvider getPGSQLConnProvider()
 	{
 		return getBean("defaultConnection");
+	}
+	
+	public static GUIDGenerator getGUIDGenerator()
+	{
+		return getBean("guidGenerator");
 	}
 	
 	/*

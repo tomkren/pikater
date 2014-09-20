@@ -6,8 +6,6 @@ import java.util.Observable;
 
 import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.computation.graph.events.BatchFinished;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * User: Kuba
@@ -21,11 +19,7 @@ public class ComputationGraph extends Observable {
     
     public ComputationGraph()
     {
-        String initBeansName = CoreConfiguration.getConfigurationFileName();
-        @SuppressWarnings("resource")
-		ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
-        GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
-        id=generator.getAndAllocateGUID();
+        id = CoreConfiguration.getGUIDGenerator().getAndAllocateGUID();
     }
     
     public Map<Integer, ComputationNode> getNodes() {

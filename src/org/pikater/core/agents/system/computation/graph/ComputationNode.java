@@ -1,9 +1,8 @@
 package org.pikater.core.agents.system.computation.graph;
 
+import org.pikater.core.CoreConfiguration;
 import org.pikater.core.agents.system.computation.graph.edges.EdgeValue;
 import org.pikater.core.agents.system.computation.parser.ComputationOutputBuffer;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,10 +147,7 @@ public class ComputationNode {
 
     private void initDefault()
     {
-        String initBeansName = "Beans.xml";
-        ApplicationContext context = new ClassPathXmlApplicationContext(initBeansName);
-        GUIDGenerator generator= (GUIDGenerator) context.getBean("guidGenerator");
-        id=generator.getAndAllocateGUID();
+        id = CoreConfiguration.getGUIDGenerator().getAndAllocateGUID();
     }
 
     public int getNumberOfTasksInProgress() {
