@@ -54,7 +54,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	public void importAllErrors(List<ErrorSourceDescription> errors) {
 		
 		if (errors != null && !errors.isEmpty()) {
-			new IllegalArgumentException("Argument errors can be only null");
+			throw new IllegalArgumentException("Argument errors can be only null");
 		}
 	}
 
@@ -66,7 +66,7 @@ public class FileDataProvider extends DataProcessing implements IDataProvider {
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
 		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
-			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
+			throw new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		}
 		
 	}

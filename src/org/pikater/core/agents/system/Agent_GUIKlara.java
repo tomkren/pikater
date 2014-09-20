@@ -312,10 +312,10 @@ public class Agent_GUIKlara extends PikaterAgent {
 				System.out.println("Do you want to convert the document? (y/n)\nDOCUMENT WIHT FOLLOWING PATH WILL BE OVERWRITTEN: "+newPath);
 			}
 			String answer=bufferedConsole.readLine();
-			if(answer.equalsIgnoreCase("y")){
+			if(answer != null && answer.equalsIgnoreCase("y")){
 				System.out.println("Do you want to define any header file? (path / -)");
 				answer=bufferedConsole.readLine();
-				if(!answer.equals("-")){
+				if(answer != null && !answer.equals("-")){
 					String headerPath=answer;
 					if(inputType==0){
 						DataSetConverter.xlsToArff(new File(headerPath),new File(path), new File(newPath));

@@ -78,12 +78,16 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			recommendedAgent = (Agent) r.getItems().get(0);
 		} catch (FIPAException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		} catch (UngroundedException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		} catch (CodecException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		} catch (OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		}
 		
 		// fill in the queues of CA

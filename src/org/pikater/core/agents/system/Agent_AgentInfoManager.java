@@ -90,10 +90,13 @@ public class Agent_AgentInfoManager extends PikaterAgent {
 							request);
 				} catch (UngroundedException e) {
 				    logException(e.getMessage(), e);
+				    return null;
 				} catch (CodecException e) {
 					logException(e.getMessage(), e);
+					return null;
 				} catch (OntologyException e) {
 					logException(e.getMessage(), e);
+					return null;
 				}
 
 				if (action.getAction() instanceof GetAgentInfo) {

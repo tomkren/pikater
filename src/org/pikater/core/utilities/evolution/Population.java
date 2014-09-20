@@ -46,7 +46,7 @@ public class Population implements ICloneable
         catch (Exception e)
         {
         	ConsoleLogger.logThrowable("Unexpected error occured:", e);
-        	return null;
+        	throw new RuntimeException("failed to clone");
         }
     }
 

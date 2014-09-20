@@ -10,8 +10,9 @@ import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkSet;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.util.ICloneable;
 
-public class ValueType implements Concept, IValidated
+public class ValueType implements Concept, IValidated, ICloneable
 {
 	private static final long serialVersionUID = -4658896847448815807L;
 

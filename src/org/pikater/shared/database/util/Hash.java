@@ -18,10 +18,8 @@ public class Hash {
 		}
 		else
 		{
-			FileInputStream fis = null;
 			String res = null;
-			try {
-				fis = new FileInputStream(file);
+			try (FileInputStream fis = new FileInputStream(file)){
 				MessageDigest md = MessageDigest.getInstance("MD5");
 				byte[] buf = new byte[2048];
 				int s;
@@ -32,8 +30,6 @@ public class Hash {
 				res = DatatypeConverter.printHexBinary(dig).toLowerCase();
 			} catch (NoSuchAlgorithmException nsae) {
 				PikaterDBLogger.logThrowable("Unexpected error occured:", nsae);
-			} finally {
-				fis.close();
 			}
 			return res;
 		}

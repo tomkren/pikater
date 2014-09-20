@@ -82,7 +82,7 @@ public class Recommend extends DataProcessing {
 	public void importAllDataSourceDescriptions(List<DataSourceDescription> dataSourceDescriptions) {
 		
 		if (dataSourceDescriptions != null && !dataSourceDescriptions.isEmpty()) {
-			new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
+			throw new IllegalArgumentException("Argument dataSourceDescriptions can be only null");
 		}
 	}
 

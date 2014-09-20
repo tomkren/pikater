@@ -217,7 +217,7 @@ public class AgentInfo implements Concept, ICloneable
 	{
 		if(this.agentClassName == null) // some kind of a weird agent (should be exactly one)
 		{
-			if(this.ontologyClassName.equals(ontologyClassName) && this.agentClassName == agentClassName)
+			if(this.ontologyClassName.equals(ontologyClassName) && agentClassName == null)
 			{
 				return true;
 			}
