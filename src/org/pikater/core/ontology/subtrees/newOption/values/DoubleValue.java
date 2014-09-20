@@ -62,16 +62,23 @@ public class DoubleValue implements IComparableValueData
 		return value;
 	}
 	@Override
-	public DoubleValue clone() throws CloneNotSupportedException
+	public DoubleValue clone()
 	{
-		DoubleValue result = (DoubleValue) super.clone();
+		DoubleValue result;
+		try
+		{
+			result = (DoubleValue) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setValue(value);
 		return result;
 	}
 	@Override
 	public String exportToWeka()
 	{
-		
 		return String.valueOf(value);
 	}
 	@Override

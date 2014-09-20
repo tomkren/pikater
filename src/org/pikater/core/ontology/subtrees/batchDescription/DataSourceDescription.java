@@ -2,7 +2,6 @@ package org.pikater.core.ontology.subtrees.batchDescription;
 
 import org.pikater.core.CoreConstant;
 
-
 /**
  * Created by Martin Pilat on 28.12.13.
  */
@@ -61,9 +60,17 @@ public class DataSourceDescription implements ISourceDescription {
 	}
 
 	@Override
-	public DataSourceDescription clone() throws CloneNotSupportedException {
-		
-		DataSourceDescription dataSource = (DataSourceDescription) super.clone();
+	public DataSourceDescription clone()
+	{
+		DataSourceDescription dataSource;
+		try
+		{
+			dataSource = (DataSourceDescription) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		dataSource.setInputType(this.getInputType());
 		dataSource.setOutputType(this.getOutputType());
 		dataSource.setDataProvider(getDataProvider().clone());

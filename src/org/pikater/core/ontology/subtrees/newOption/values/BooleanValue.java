@@ -61,9 +61,17 @@ public class BooleanValue implements IValueData
 		return value;
 	}
 	@Override
-	public BooleanValue clone() throws CloneNotSupportedException
+	public BooleanValue clone()
 	{
-		BooleanValue result = (BooleanValue) super.clone();
+		BooleanValue result;
+		try
+		{
+			result = (BooleanValue) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setValue(value);
 		return result;
 	}

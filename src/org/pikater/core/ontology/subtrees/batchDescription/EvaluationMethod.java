@@ -1,12 +1,11 @@
 package org.pikater.core.ontology.subtrees.batchDescription;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standart;
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
+import org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod.Standard;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 
@@ -16,7 +15,7 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 	private List<NewOption> options;
 
 	public EvaluationMethod() {
-		this.agentType = Standart.class.getName();
+		this.agentType = Standard.class.getName();
 		this.options = new ArrayList<NewOption>();
 	}
 	public EvaluationMethod(String type) {
@@ -68,15 +67,13 @@ public class EvaluationMethod  extends DataProcessing implements IDataProvider {
 			List<DataSourceDescription> dataSourceDescriptions) {
 	}
 
-	public EvaluationMethod clone() throws CloneNotSupportedException
+	@Override
+	public EvaluationMethod clone()
 	{
-		NewOptions optionsOnt = new NewOptions(this.options);
-		
 		EvaluationMethod evaluation = (EvaluationMethod) super.clone();
 		evaluation.setId(this.getId());
 		evaluation.setAgentType(this.getAgentType());
-		evaluation.setOptions(optionsOnt.clone().getOptions());
-		
+		evaluation.setOptions(CollectionUtils.deepCopy(options));
 		return evaluation;
 	}
 }

@@ -9,7 +9,7 @@ import org.jfree.util.Log;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.UniversalOntology;
-import org.pikater.shared.logging.core.ConsoleLogger;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 /**
  * Created by Stepan on 20.4.14.
@@ -171,68 +171,30 @@ public class DataProcessing implements IDataProvider {
 	}
 	
 	@Override
-	public DataProcessing clone() throws CloneNotSupportedException
+	public DataProcessing clone()
 	{
-		List<NewOption> allOptionsCloned = new ArrayList<NewOption>();
-		for (NewOption optionI : exportAllOptions()) {
-			allOptionsCloned.add(optionI.clone());
+		DataProcessing dataProcessing = null;
+		try
+		{
+			dataProcessing = (DataProcessing) super.clone();
 		}
-
-		List<ErrorSourceDescription> errorsCloned = new ArrayList<ErrorSourceDescription>();
-		for (ErrorSourceDescription errorI : exportAllErrors()) {
-			errorsCloned.add(errorI.clone());
-		}
-
-		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
-		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions()) {
-			dataSourceCloned.add(dataSourceI.clone());
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
 		}
 		
-		DataProcessing dataProcessing = (DataProcessing) super.clone();
 		dataProcessing.setId(this.id);
 		dataProcessing.setAgentType(this.getAgentType());
-		dataProcessing.importAllOptions(allOptionsCloned);
-		dataProcessing.importAllErrors(errorsCloned);
-		dataProcessing.importAllDataSourceDescriptions(dataSourceCloned);
-		
+		dataProcessing.importAllErrors(CollectionUtils.deepCopy(exportAllErrors()));
+		dataProcessing.importAllOptions(CollectionUtils.deepCopy(exportAllOptions()));
+		dataProcessing.importAllDataSourceDescriptions(CollectionUtils.deepCopy(exportAllDataSourceDescriptions()));
 		return dataProcessing;
 	}
 
 
-	public void cloneSources() {
-		
-		List<DataSourceDescription> dataSourceCloned = new ArrayList<DataSourceDescription>();
-		for (DataSourceDescription dataSourceI : exportAllDataSourceDescriptions())
-		{
-			try
-			{
-				dataSourceCloned.add(dataSourceI.clone());
-			}
-			catch(CloneNotSupportedException e)
-			{
-				ConsoleLogger.logThrowable("Can not clone sources. Returning...", e);
-				return;
-			}
-		}
-		
-		importAllDataSourceDescriptions(dataSourceCloned);
-		
-		List<ErrorSourceDescription> errorSourceCloned = new ArrayList<ErrorSourceDescription>();
-		for (ErrorSourceDescription errorSourceI : exportAllErrors())
-		{
-			try
-			{
-				errorSourceCloned.add(errorSourceI.clone());
-			}
-			catch(CloneNotSupportedException e)
-			{
-				ConsoleLogger.logThrowable("Could not close sources. Returning...", e);
-				return;
-			}
-		}
-		
-		importAllErrors(errorSourceCloned);
+	public void cloneSources()
+	{
+		importAllDataSourceDescriptions(CollectionUtils.deepCopy(exportAllDataSourceDescriptions()));
+		importAllErrors(CollectionUtils.deepCopy(exportAllErrors()));
 	}
-	
-	
 }

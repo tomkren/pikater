@@ -11,12 +11,12 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.TypeRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.*;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
-import org.pikater.shared.logging.core.ConsoleLogger;
+import org.pikater.shared.util.ICloneable;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class NewOption implements Concept, IMergeable, IWekaItem
+public class NewOption implements Concept, IMergeable, IWekaItem, ICloneable
 {
 	private static final long serialVersionUID = 972224767505690979L;
 	
@@ -291,20 +291,20 @@ public class NewOption implements Concept, IMergeable, IWekaItem
 	@Override
 	public NewOption clone()
 	{
+		NewOption result;
 		try
 		{
-			NewOption result = (NewOption) super.clone();
-			result.setName(name);
-			result.setDescription(getDescription());
-			result.setValueRestrictions(valueRestrictions.clone());
-			result.setValuesWrapper(valuesWrapper.clone()); 
-			return result;
+			result = (NewOption) super.clone();
 		}
 		catch (CloneNotSupportedException e)
 		{
-			ConsoleLogger.logThrowable("Could not clone option. Returning null...", e);
-			return null;
+			throw new RuntimeException(e);
 		}
+		result.setName(name);
+		result.setDescription(description);
+		result.setValueRestrictions(valueRestrictions.clone());
+		result.setValuesWrapper(valuesWrapper.clone());
+		return result;
 	}
 	@Override
 	public void mergeWith(IMergeable other)

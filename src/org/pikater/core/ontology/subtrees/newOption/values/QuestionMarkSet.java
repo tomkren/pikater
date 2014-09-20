@@ -97,11 +97,19 @@ public class QuestionMarkSet implements IValidatedValueData
 		return null;
 	}
 	@Override
-	public QuestionMarkSet clone() throws CloneNotSupportedException
+	public QuestionMarkSet clone()
 	{
-		QuestionMarkSet result = (QuestionMarkSet) super.clone();
+		QuestionMarkSet result;
+		try
+		{
+			result = (QuestionMarkSet) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setCountOfValuesToTry(countOfValuesToTry);
-		result.setUserDefinedRestriction(getUserDefinedRestriction().clone());
+		result.setUserDefinedRestriction(userDefinedRestriction.clone());
 		return result;
 	}
 	@Override

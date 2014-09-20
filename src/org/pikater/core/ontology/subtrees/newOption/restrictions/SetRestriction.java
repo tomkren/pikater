@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 public class SetRestriction implements IRestriction, Iterable<IValueData>
 {
@@ -128,13 +129,19 @@ public class SetRestriction implements IRestriction, Iterable<IValueData>
 		return values.iterator();
 	}
 	@Override
-	public SetRestriction clone() throws CloneNotSupportedException
+	public SetRestriction clone()
 	{
-		SetRestriction result = (SetRestriction) super.clone();
-		for(IValueData value : values)
+		SetRestriction result;
+		try
 		{
-			result.addValue(value.clone());
+			result = (SetRestriction) super.clone();
 		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		result.setNullable(nullable);
+		result.setValues(CollectionUtils.deepCopy(values));
 		return result;
 	}
 	@SuppressWarnings("unchecked")

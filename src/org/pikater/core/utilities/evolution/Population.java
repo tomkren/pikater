@@ -2,20 +2,23 @@ package org.pikater.core.utilities.evolution;
 
 import org.pikater.core.utilities.evolution.individuals.Individual;
 import org.pikater.shared.logging.core.ConsoleLogger;
+import org.pikater.shared.util.ICloneable;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /** A container which contains the individuals of a population.
  *
  * @author Martin Pilat
  */
-public class Population implements Cloneable{
-
+public class Population implements ICloneable
+{
     int size = 0;
     Individual sampleIndividual;
-    ArrayList<Individual> individuals;
+    List<Individual> individuals;
     
     /**
      * Creates a new empty population.
@@ -32,21 +35,19 @@ public class Population implements Cloneable{
      * their clone methods.
      */
     @Override
-    public Object clone() {
-        try {
-            Population newP = (Population)super.clone();
-            newP.individuals = new ArrayList<Individual>(individuals.size());
-            for (Individual i: individuals) {
-                newP.individuals.add((Individual)i.clone());
-            }
-            return newP;
+    public Population clone()
+    {
+        try
+        {
+            Population result = (Population) super.clone();
+            result.individuals = CollectionUtils.deepCopy(individuals);
+            return result;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
         	ConsoleLogger.logThrowable("Unexpected error occured:", e);
+        	return null;
         }
-
-
-        return null;
     }
 
     /**

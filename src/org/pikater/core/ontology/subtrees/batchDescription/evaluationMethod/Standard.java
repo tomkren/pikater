@@ -1,6 +1,6 @@
 package org.pikater.core.ontology.subtrees.batchDescription.evaluationMethod;
 
-public class Standart implements IEvaluationMethod {
+public class Standard implements IEvaluationMethod {
 
 	/**
 	 * 

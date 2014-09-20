@@ -9,7 +9,6 @@ import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 import org.pikater.core.utilities.evolution.RandomNumberGenerator;
 import org.pikater.core.utilities.evolution.surrogate.ModelInputNormalizer;
-import org.pikater.shared.logging.core.ConsoleLogger;
 
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -77,14 +76,7 @@ public class SearchItemIndividual extends MultiobjectiveIndividual {
         
         for (int i = 0; i < items.length; i++)
         {
-            try
-			{
-				newSI.items[i] = items[i].clone();
-			}
-			catch (CloneNotSupportedException e)
-			{
-				ConsoleLogger.logThrowable("Could not clone value. Continuing execution...", e);
-			}
+            newSI.items[i] = items[i].clone();
         }
         
         newSI.fitnessValue = fitnessValue;

@@ -59,9 +59,17 @@ public class IntegerValue implements IComparableValueData
 		return value;
 	}
 	@Override
-	public IntegerValue clone() throws CloneNotSupportedException
+	public IntegerValue clone()
 	{
-		IntegerValue result = (IntegerValue) super.clone();
+		IntegerValue result;
+		try
+		{
+			result = (IntegerValue) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setValue(value);
 		return result;
 	}

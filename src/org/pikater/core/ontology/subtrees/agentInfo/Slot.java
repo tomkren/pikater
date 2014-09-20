@@ -1,7 +1,7 @@
 package org.pikater.core.ontology.subtrees.agentInfo;
 
 import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
-import org.pikater.core.ontology.subtrees.newOption.base.ICloneable;
+import org.pikater.shared.util.ICloneable;
 
 import jade.content.Concept;
 
@@ -43,9 +43,17 @@ public class Slot implements Concept, ICloneable
 	}
 	
 	@Override
-	public Slot clone() throws CloneNotSupportedException
+	public Slot clone()
 	{
-		Slot result = (Slot) super.clone();
+		Slot result;
+		try
+		{
+			result = (Slot) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		result.setDataType(dataType);
 		result.setSlotType(slotType);
 		result.setDescription(description);
@@ -58,7 +66,7 @@ public class Slot implements Concept, ICloneable
 	public boolean isCompatibleWith(Slot otherSlot)
 	{
 		return true; // TODO: a hack around...
-		// return slotType.equals(otherSlot.slotType);
+		// return slotType.equals(otherSlot.slotType) when the experiment data streams are a bit more "standardized"
 	}
 	public boolean isErrorSlot()
 	{

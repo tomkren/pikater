@@ -278,7 +278,7 @@ public class ComputingAgent extends DataProcessing implements IDataProvider, ICo
 	}
 
 	@Override
-	public ComputingAgent clone() throws CloneNotSupportedException
+	public ComputingAgent clone()
 	{
 		ComputingAgent result = (ComputingAgent) super.clone();
 		result.setId(this.getId());

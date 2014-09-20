@@ -51,14 +51,14 @@ public class TypeRestriction implements IRestriction
 	 * Inherited interface.
 	 */
 	@Override
-	public TypeRestriction clone() throws CloneNotSupportedException
+	public TypeRestriction clone()
 	{
-		TypeRestriction result = (TypeRestriction) super.clone();
+		List<ValueType> clonedTypes = new ArrayList<ValueType>();
 		for(ValueType type : types)
 		{
-			result.addType(type.clone());
+			clonedTypes.add(type.clone());
 		}
-		return result;
+		return new TypeRestriction(clonedTypes);
 	}
 	@Override
 	public boolean isValid()
