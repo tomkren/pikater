@@ -3,10 +3,10 @@ package org.pikater.web.experiment.server;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.pikater.core.CoreConstant.SlotDirection;
 import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-import org.pikater.web.experiment.server.BoxSlot.SlotType;
 
 public class ExperimentGraphValidator
 {
@@ -96,22 +96,22 @@ public class ExperimentGraphValidator
 									registerValidationProblem("At least one of 'FileInput' boxes has the invalid default value set in the 'fileURI' option.");
 								}
 							}
-							validateBoxSlot(box, SlotType.OUTPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
+							validateBoxSlot(box, SlotDirection.OUTPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
 							break;
 						case CHOOSE:
 							break;
 						case COMPOSITE:
 							break;
 						case COMPUTE:
-							validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_TRAINING_DATA); // potentially duplicate check but it is needed
-							validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_TESTING_DATA); // potentially duplicate check but it is needed
+							validateBoxSlot(box, SlotDirection.INPUT, CoreConstants.SLOT_TRAINING_DATA); // potentially duplicate check but it is needed
+							validateBoxSlot(box, SlotDirection.INPUT, CoreConstants.SLOT_TESTING_DATA); // potentially duplicate check but it is needed
 							break;
 						case MISC:
 							break;
 						case OPTION:
 							break;
 						case OUTPUT:
-							validateBoxSlot(box, SlotType.INPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
+							validateBoxSlot(box, SlotDirection.INPUT, CoreConstants.SLOT_FILE_DATA); // potentially duplicate check but it is needed
 							break;
 						case PROCESS_DATA:
 							break;
@@ -144,21 +144,21 @@ public class ExperimentGraphValidator
 		*/
 	}
 	
-	private void validateBoxSlot(BoxInfoServer box, SlotType type, String slotDataType)
+	private void validateBoxSlot(BoxInfoServer box, SlotDirection direction, String slotName)
 	{
 		Slot slotToCheck;
-		if(type == SlotType.INPUT)
+		if(direction == SlotDirection.INPUT)
 		{
-			slotToCheck = box.getAssociatedAgent().fetchInputSlotByDataType(slotDataType);
+			slotToCheck = box.getAssociatedAgent().fetchInputSlotByName(slotName);
 		}
 		else
 		{
-			slotToCheck = box.getAssociatedAgent().fetchOutputSlotByDataType(slotDataType);	
+			slotToCheck = box.getAssociatedAgent().fetchOutputSlotByName(slotName);	
 		}
 		if(!experimentGraph.getSlotConnections().isSlotConnectedToAValidEndpoint(slotToCheck))
 		{
 			registerValidationProblem(String.format("At least one of '%s' boxes doesn't have the '%s' slot connected.", 
-					box.getAssociatedAgent().getName(), slotDataType));
+					box.getAssociatedAgent().getName(), slotName));
 		}
 	}
 }

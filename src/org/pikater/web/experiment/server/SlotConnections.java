@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.pikater.core.CoreConstant.SlotDirection;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.web.experiment.server.BoxSlot.SlotType;
 
 /**
  * Maps all slots (input/output; all boxes) to connected slots, wrapped in a special
@@ -128,11 +128,11 @@ public class SlotConnections
 	public Set<BoxSlot> getCandidateEndpointsForEndpoint(BoxSlot endpoint)
 	{
 		Set<BoxSlot> result = new HashSet<BoxSlot>();
-		Set<BoxInfoServer> otherBoxes = endpoint.getChildSlotsType() == SlotType.INPUT ?
+		Set<BoxInfoServer> otherBoxes = endpoint.getChildSlotsType() == SlotDirection.INPUT ?
 				context.getToNeighbours(endpoint.getParentBox().getID()) : context.getFromNeighbours(endpoint.getParentBox().getID());
 		for(BoxInfoServer otherBox : otherBoxes)
 		{
-			List<Slot> slotCollection = endpoint.getChildSlotsType() == SlotType.INPUT ? 
+			List<Slot> slotCollection = endpoint.getChildSlotsType() == SlotDirection.INPUT ? 
 					otherBox.getAssociatedAgent().getOutputSlots() : otherBox.getAssociatedAgent().getInputSlots();
 			for(Slot otherSlot : slotCollection)
 			{

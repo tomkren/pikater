@@ -84,7 +84,7 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 	{
 		BoxSlot currentEndpoint = new BoxSlot(getContext().getCurrentBoxDataSource(), getCurrentSource());
 		
-		this.link_slotName.setValue(currentEndpoint.getChildSlot().getDataType());
+		this.link_slotName.setValue(currentEndpoint.getChildSlot().getName());
 		this.link_slotName.setDescription(currentEndpoint.getChildSlot().getDescription());
 		this.lbl_slotType.setValue(String.format("(%s)", currentEndpoint.getChildSlotsType().name()));
 		
@@ -146,7 +146,7 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 			});
 			Label lbl_caption = new Label(String.format("%s@%s", 
 					endpoint.getParentBox().getAssociatedAgent().getName(),
-					endpoint.getChildSlot().getDataType()
+					endpoint.getChildSlot().getName()
 			));
 			lbl_caption.setSizeUndefined();
 			

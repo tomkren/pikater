@@ -334,8 +334,8 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 										// construct the edge, with exact slot connection
 										UniversalConnector connector = new UniversalConnector();
 										connector.setFromElement(uniBox);
-										connector.setOutputDataType(outputSlot.getDataType());
-										connector.setInputDataType(inputSlot.getDataType());
+										connector.setOutputDataIdentifier(outputSlot.getName());
+										connector.setInputDataIdentifier(inputSlot.getName());
 										
 										// distinguish between error and data slots
 										if(inputSlot.isErrorSlot() && outputSlot.isErrorSlot())
@@ -475,10 +475,10 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 						}
 						
 						// also connect slots if needed
-						if((slotConnection.getInputDataType() != null) && (slotConnection.getOutputDataType() != null))
+						if((slotConnection.getInputDataIdentifier() != null) && (slotConnection.getOutputDataIdentifier() != null))
 						{
-							Slot fromBoxSlot = fromBox.getAssociatedAgent().fetchOutputSlotByDataType(slotConnection.getOutputDataType());
-							Slot toBoxSlot = toBox.getAssociatedAgent().fetchInputSlotByDataType(slotConnection.getInputDataType());
+							Slot fromBoxSlot = fromBox.getAssociatedAgent().fetchOutputSlotByName(slotConnection.getOutputDataIdentifier());
+							Slot toBoxSlot = toBox.getAssociatedAgent().fetchInputSlotByName(slotConnection.getInputDataIdentifier());
 							if((fromBoxSlot == null) || (toBoxSlot == null))
 							{
 								throw new IllegalStateException("Could not find a slot by name in resolved agent info. Invalid binding.");

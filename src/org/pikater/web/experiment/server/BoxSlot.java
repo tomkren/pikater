@@ -1,41 +1,24 @@
 package org.pikater.web.experiment.server;
 
+import org.pikater.core.CoreConstant.SlotDirection;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 
 public class BoxSlot
 {
-	public static enum SlotType
-	{
-		INPUT,
-		OUTPUT;
-		
-		public SlotType getOther()
-		{
-			if(this == INPUT)
-			{
-				return OUTPUT;
-			}
-			else
-			{
-				return INPUT;
-			}
-		}
-	}
-	
 	private final BoxInfoServer parentBox;
 	private final Slot childSlot;
-	private final SlotType childSlotsType;
+	private final SlotDirection childSlotsType;
 	
 	public BoxSlot(BoxInfoServer parentBox, Slot childSlot)
 	{
 		this.parentBox = parentBox;
 		if(parentBox.getAssociatedAgent().getInputSlots().contains(childSlot))
 		{
-			this.childSlotsType = SlotType.INPUT;
+			this.childSlotsType = SlotDirection.INPUT;
 		}
 		else if(parentBox.getAssociatedAgent().getOutputSlots().contains(childSlot))
 		{
-			this.childSlotsType = SlotType.OUTPUT;
+			this.childSlotsType = SlotDirection.OUTPUT;
 		}
 		else
 		{
@@ -54,14 +37,14 @@ public class BoxSlot
 		return childSlot;
 	}
 
-	public SlotType getChildSlotsType()
+	public SlotDirection getChildSlotsType()
 	{
 		return childSlotsType;
 	}
 	
 	public boolean isFromEndpoint()
 	{
-		return childSlotsType == SlotType.OUTPUT;
+		return childSlotsType == SlotDirection.OUTPUT;
 	}
 	
 	public boolean isValid()

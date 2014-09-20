@@ -7,10 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.pikater.core.CoreConstant.SlotCategory;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfos;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
-import org.pikater.core.ontology.subtrees.agentInfo.slotTypes.SlotTypes;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.newOption.restrictions.RangeRestriction;
@@ -176,15 +176,8 @@ public class AgentInfoCollection implements Iterable<AgentInfo>
 						))))); */
 					));
 
-			Slot slotInput_test = new Slot();
-			slotInput_test.setDataType("testSlot");
-			slotInput_test.setSlotType(SlotTypes.DATA);
-			slotInput_test.setDescription("Test input slot.");
-
-			Slot slotOutput_test = new Slot();
-			slotOutput_test.setDataType("testSlot");
-			slotOutput_test.setSlotType(SlotTypes.DATA);
-			slotOutput_test.setDescription("Test output slot.");
+			Slot slotInput_test = new Slot("testSlot", SlotCategory.DATA_GENERAL, "Test input slot.");
+			Slot slotOutput_test = new Slot("testSlot", SlotCategory.DATA_GENERAL, "Test output slot.");
 
 			agentInfo.setOptions(options);
 			agentInfo.setInputSlots(Arrays.asList(slotInput_test));

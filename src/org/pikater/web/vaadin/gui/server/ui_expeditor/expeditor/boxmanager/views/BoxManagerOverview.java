@@ -134,7 +134,7 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 		LedIndicator ledComponent = new LedIndicator(getIndicatorTheme(isSlotConnected));
 		ledComponent.setDescription(isSlotConnected ? "Slot IS connected." : "Slot is NOT connected.");
 		
-		HorizontalFlowLayout fLayout = (HorizontalFlowLayout) createLabeledRow(slot.getDataType(), slot.getDescription(), actionButton);
+		HorizontalFlowLayout fLayout = (HorizontalFlowLayout) createLabeledRow(slot.getName(), slot.getDescription(), actionButton);
 		fLayout.addComponentAsFirst(ledComponent);
 		if(isSlotConnected)
 		{
