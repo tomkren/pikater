@@ -12,7 +12,19 @@ public class CoreConstant
 	public static enum SlotDirection
 	{
 		INPUT,
-		OUTPUT
+		OUTPUT;
+		
+		public SlotDirection getOther()
+		{
+			if(this == INPUT)
+			{
+				return OUTPUT;
+			}
+			else
+			{
+				return INPUT;
+			}
+		}
 	}
 	
 	public static enum SlotCategory
