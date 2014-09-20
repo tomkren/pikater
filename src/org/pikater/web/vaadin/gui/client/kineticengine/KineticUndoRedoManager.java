@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.kineticengine;
 
-import java.util.LinkedList;
+import java.util.Stack;
 
 import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
@@ -8,14 +8,14 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOpera
 public class KineticUndoRedoManager
 {
 	private final KineticComponentWidget widget;
-	private final LinkedList<BiDiOperation> undoStack; 
-	private final LinkedList<BiDiOperation> redoStack;
+	private final Stack<BiDiOperation> undoStack; 
+	private final Stack<BiDiOperation> redoStack;
 	
 	public KineticUndoRedoManager(KineticComponentWidget widget)
 	{
 		this.widget = widget;
-		this.undoStack = new LinkedList<BiDiOperation>();
-		this.redoStack = new LinkedList<BiDiOperation>();
+		this.undoStack = new Stack<BiDiOperation>();
+		this.redoStack = new Stack<BiDiOperation>();
 	}
 	
 	public void loadHistory(KineticUndoRedoManager history)
