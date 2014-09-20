@@ -19,7 +19,7 @@ public class ErrorSourceDescription implements ISourceDescription, ICloneable {
     }
     public void setProvider(IErrorProvider errorProvider) {
     	if (errorProvider instanceof FileDataProvider) {
-    		this.setOutputType(CoreConstant.Slot.SLOT_ERRORS.get());
+    		this.setOutputType(CoreConstant.SlotContent.ERRORS.getSlotName());
     	}
         this.provider = errorProvider;
     }

@@ -241,10 +241,13 @@ public class Agent_Planner extends PikaterAgent {
 					finishedTaskMsg);
 		} catch (UngroundedException e1) {
 			logException(e1.getMessage(), e1);
+			return;
 		} catch (CodecException e1) {
 			logException(e1.getMessage(), e1);
+			return;
 		} catch (OntologyException e1) {
 			logException(e1.getMessage(), e1);
+			return;
 		}
 		
 		Task finishedTask = (Task) result.getValue();

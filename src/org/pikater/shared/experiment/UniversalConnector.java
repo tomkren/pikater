@@ -2,28 +2,26 @@ package org.pikater.shared.experiment;
 
 public class UniversalConnector
 {
-    private String inputDataType;
-	private String outputDataType;
+    private String inputDataIdentifier;
+	private String outputDataIdentifier;
 	private UniversalElement fromElement;
 	
-	public String getInputDataType()
+	public String getInputDataIdentifier()
 	{
-		return inputDataType;
+		return inputDataIdentifier;
 	}
-	public void setInputDataType(String inputDataType)
+	public void setInputDataIdentifier(String inputDataIdentifier)
 	{
-		this.inputDataType = inputDataType;
+		this.inputDataIdentifier = inputDataIdentifier;
 	}
-	
-	public String getOutputDataType()
+	public String getOutputDataIdentifier()
 	{
-		return outputDataType;
+		return outputDataIdentifier;
 	}
-	public void setOutputDataType(String outputDataType)
+	public void setOutputDataIdentifier(String outputDataIdentifier)
 	{
-		this.outputDataType = outputDataType;
+		this.outputDataIdentifier = outputDataIdentifier;
 	}
-	
 	public UniversalElement getFromElement()
 	{
 		return fromElement;
@@ -35,7 +33,7 @@ public class UniversalConnector
 	
 	public boolean isFullySpecified()
 	{
-		return (inputDataType != null) && (outputDataType != null); 
+		return (inputDataIdentifier != null) && (outputDataIdentifier != null); 
 	}
 	
 	public void validate()
@@ -44,8 +42,8 @@ public class UniversalConnector
 		{
 			throw new IllegalStateException("From element is not defined.");
 		}
-		else if(((inputDataType != null) && (outputDataType == null)) ||
-				((inputDataType == null) && (outputDataType != null)))
+		else if(((inputDataIdentifier != null) && (outputDataIdentifier == null)) ||
+				((inputDataIdentifier == null) && (outputDataIdentifier != null)))
 		{
 			throw new IllegalStateException("One of the data types is not defined.");
 		}

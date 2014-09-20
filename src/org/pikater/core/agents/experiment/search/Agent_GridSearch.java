@@ -157,12 +157,6 @@ public class Agent_GridSearch extends Agent_Search {
 	                }
             	}
             }
-            if (si instanceof SetSItem) {
-                SetSItem ssi = (SetSItem) si;
-                for (int i = 0; i < tries && i < ssi.getSet().size(); i++) {
-                    valsForItem.add(ssi.getSet().get(i));
-                }
-            }
             valsForOpts.add(valsForItem);
         }
         

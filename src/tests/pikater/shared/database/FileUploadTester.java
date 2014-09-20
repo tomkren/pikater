@@ -54,12 +54,12 @@ public class FileUploadTester extends PikaterAgent {
 			ACLMessage reply = FIPAService.doFipaRequestClient(this, request, 10000);
 			if (reply == null)
 				logSevere("Reply not received.");
-			else
+			else {
 				logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
-
-			int port = Integer.parseInt(reply.getContent());
-			// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
-			DataTransferService.doClientFileTransfer("772c551b8486b932aed784a582b9c1b1_", "localhost", port);
+				int port = Integer.parseInt(reply.getContent());
+				// tuhle cast uz muze delat jiny agent nez poslal PrepareFileUpload (ten by mel posilat master DataManager)
+				DataTransferService.doClientFileTransfer("772c551b8486b932aed784a582b9c1b1_", "localhost", port);
+			}
 		} catch (CodecException | OntologyException e) {
 			logException("Ontology/codec error occurred: " + e.getMessage(), e);
 			e.printStackTrace();

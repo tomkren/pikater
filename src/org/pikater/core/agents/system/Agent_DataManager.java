@@ -930,42 +930,42 @@ public class Agent_DataManager extends PikaterAgent {
 
 		Evaluation evaluation = task.getResult();
 
-		Eval errorRateEval = evaluation.exportEvalByName(CoreConstant.Error.ERROR_RATE.get());
+		Eval errorRateEval = evaluation.exportEvalByName(CoreConstant.Error.ERROR_RATE.name());
 		if (errorRateEval != null) {
 			errorRate = errorRateEval.getValue();
 		}
 
-		Eval kappaStatisticEval = evaluation.exportEvalByName(CoreConstant.Error.KAPPA_STATISTIC.get());
+		Eval kappaStatisticEval = evaluation.exportEvalByName(CoreConstant.Error.KAPPA_STATISTIC.name());
 		if (kappaStatisticEval != null) {
 			kappa_statistic = kappaStatisticEval.getValue();
 		}
 
-		Eval meanAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.MEAN_ABSOLUTE.get());
+		Eval meanAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.MEAN_ABSOLUTE.name());
 		if (meanAbsoluteEval != null) {
 			mean_absolute_error = meanAbsoluteEval.getValue();
 		}
 
-		Eval rootMeanSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_MEAN_SQUARED.get());
+		Eval rootMeanSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_MEAN_SQUARED.name());
 		if (rootMeanSquaredEval != null) {
 			root_mean_squared_error = rootMeanSquaredEval.getValue();
 		}
 
-		Eval relativeAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.RELATIVE_ABSOLUTE.get());
+		Eval relativeAbsoluteEval = evaluation.exportEvalByName(CoreConstant.Error.RELATIVE_ABSOLUTE.name());
 		if (relativeAbsoluteEval != null) {
 			relative_absolute_error = relativeAbsoluteEval.getValue();
 		}
 
-		Eval rootRelativeSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.get());
+		Eval rootRelativeSquaredEval = evaluation.exportEvalByName(CoreConstant.Error.ROOT_RELATIVE_SQUARED.name());
 		if (rootRelativeSquaredEval != null) {
 			root_relative_squared_error = rootRelativeSquaredEval.getValue();
 		}
 
-		Eval durationEval = evaluation.exportEvalByName(CoreConstant.Misc.DURATION.get());
+		Eval durationEval = evaluation.exportEvalByName(CoreConstant.DURATION);
 		if (durationEval != null) {
 			duration = (int) durationEval.getValue();
 		}
 
-		Eval durationLREval = evaluation.exportEvalByName(CoreConstant.Misc.DURATIONLR.get());
+		Eval durationLREval = evaluation.exportEvalByName(CoreConstant.DURATIONLR);
 		if (durationLREval != null) {
 			durationLR = (float) durationLREval.getValue();
 		}

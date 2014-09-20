@@ -60,8 +60,8 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
             recommender = myAgent.createAgent(computationNode.getRecommenderClass());
         }
 
-        if (inputs.get(CoreConstant.Slot.SLOT_ERRORS.get()).isBlocked()){
-			inputs.get(CoreConstant.Slot.SLOT_ERRORS.get()).unblock();
+        if (inputs.get(CoreConstant.SlotContent.ERRORS.name()).isBlocked()){
+			inputs.get(CoreConstant.SlotContent.ERRORS.name()).unblock();
 		}
 		
 		// send message to recommender
@@ -78,12 +78,16 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 			recommendedAgent = (Agent) r.getItems().get(0);
 		} catch (FIPAException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		} catch (UngroundedException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		} catch (CodecException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		} catch (OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
+			return;
 		}
 		
 		// fill in the queues of CA
@@ -108,13 +112,13 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		// request.setReplyByDate(new Date(System.currentTimeMillis() + 200));
 		
 		Datas datas = new Datas();
-		String training = ((DataSourceEdge)inputs.get(CoreConstant.Slot.SLOT_TRAINING_DATA.get()).getNext()).getDataSourceId();
+		String training = ((DataSourceEdge)inputs.get(CoreConstant.SlotContent.TRAINING_DATA.name()).getNext()).getDataSourceId();
 		String testing;
-		if( inputs.get(CoreConstant.Slot.SLOT_TESTING_DATA.get()) == null){
+		if( inputs.get(CoreConstant.SlotContent.TESTING_DATA.name()) == null){
 			testing = training;							
 		}
 		else{
-			testing = ((DataSourceEdge) inputs.get(CoreConstant.Slot.SLOT_TESTING_DATA.get()).getNext()).getDataSourceId();
+			testing = ((DataSourceEdge) inputs.get(CoreConstant.SlotContent.TESTING_DATA.name()).getNext()).getDataSourceId();
 		}
 		
         String internalTrainFileName = DataManagerService
@@ -130,8 +134,8 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		Recommend recommend = new Recommend();
 		recommend.setDatas(datas);
 		recommend.setRecommender(getRecommenderFromNode());
-        if (inputs.get(CoreConstant.Slot.SLOT_ERRORS.get()).hasNext()) {
-            recommend.setPreviousError(((ErrorEdge) inputs.get(CoreConstant.Slot.SLOT_ERRORS.get()).getNext()).getEvaluation());
+        if (inputs.get(CoreConstant.SlotContent.ERRORS.name()).hasNext()) {
+            recommend.setPreviousError(((ErrorEdge) inputs.get(CoreConstant.SlotContent.ERRORS.name()).getNext()).getEvaluation());
         }
 
 		Action a = new Action();

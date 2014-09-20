@@ -23,7 +23,7 @@ public class OptionsHelper
 		
 		Value defaultValue = new Value(new NullValue());
 		
-		NewOption optModel = new NewOption(CoreConstant.Misc.MODEL.get(), defaultValue, 
+		NewOption optModel = new NewOption(CoreConstant.MODEL, defaultValue, 
 				defaultValue.getType(),
 				new ValueType(new IntegerValue(-1), // WEB requires -1
 						new RangeRestriction(new IntegerValue(-1), null)) // WEB requires -1
@@ -45,28 +45,28 @@ public class OptionsHelper
 		}
 
 		NewOption optDuration = new NewOption(
-				CoreConstant.Misc.DURATION.get(),
+				CoreConstant.DURATION,
 				new StringValue(DurationType.MINUTES.getGuiValue()),
 				new SetRestriction(false, durationValues));
 		
 		List<IValueData> modeValues = new ArrayList<IValueData>();
-		modeValues.add(new StringValue(CoreConstant.Mode.TRAIN_ONLY.get()));
-		modeValues.add(new StringValue(CoreConstant.Mode.TEST_ONLY.get()));
-		modeValues.add(new StringValue(CoreConstant.Mode.TRAIN_TEST.get()));
+		modeValues.add(new StringValue(CoreConstant.Mode.TRAIN_ONLY.name()));
+		modeValues.add(new StringValue(CoreConstant.Mode.TEST_ONLY.name()));
+		modeValues.add(new StringValue(CoreConstant.Mode.TRAIN_TEST.name()));
 
 		NewOption optMode = new NewOption(
-				CoreConstant.Mode.DEFAULT.get(),
-				new StringValue(CoreConstant.Mode.TRAIN_ONLY.get()),
+				CoreConstant.Mode.DEFAULT.name(),
+				new StringValue(CoreConstant.Mode.TRAIN_ONLY.name()),
 				new SetRestriction(false, modeValues));
 		
 		
 		List<IValueData> outputValues = new ArrayList<IValueData>();
-		outputValues.add(new StringValue(CoreConstant.Output.EVALUATION_ONLY.get()));
-		outputValues.add(new StringValue(CoreConstant.Output.PREDICTION.get()));
+		outputValues.add(new StringValue(CoreConstant.Output.EVALUATION_ONLY.name()));
+		outputValues.add(new StringValue(CoreConstant.Output.PREDICTION.name()));
 
 		NewOption optOutput = new NewOption(
-				CoreConstant.Output.DEFAULT.get(),
-				new StringValue(CoreConstant.Output.PREDICTION.get()),
+				CoreConstant.Output.DEFAULT.name(),
+				new StringValue(CoreConstant.Output.PREDICTION.name()),
 				new SetRestriction(false, outputValues));
 
 		List<NewOption> options = new ArrayList<NewOption>();

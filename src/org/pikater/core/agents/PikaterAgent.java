@@ -21,6 +21,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +58,9 @@ public abstract class PikaterAgent extends Agent
 		return registerWithDF(new ArrayList<String>());
 	}
 
-	protected boolean registerWithDF(String service) {
-		List<String> st = new ArrayList<String>();
-		st.add(service);
-		return registerWithDF(st);
+	protected boolean registerWithDF(String service)
+	{
+		return registerWithDF(Collections.singletonList(service));
 	}
 
 	protected boolean registerWithDF(List<String> ServiceTypes) {

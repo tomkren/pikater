@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import org.pikater.core.CoreConstant;
 import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
-
-
-
+import org.pikater.shared.util.collections.CollectionUtils;
 
 /**
  * Created by Martin Pilat on 28.12.13.
@@ -104,25 +102,25 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		DataSourceDescription searchSlot =
 				new DataSourceDescription();
 		searchSlot.setInputType(
-				CoreConstant.Slot.SLOT_SEARCH.get());
+				CoreConstant.SlotContent.SEARCH.getSlotName());
 		searchSlot.setOutputType(
-				CoreConstant.Slot.SLOT_SEARCH.get());
+				CoreConstant.SlotContent.SEARCH.getSlotName());
 		searchSlot.setDataProvider(search);
 		
 		DataSourceDescription recommenderSlot =
 				new DataSourceDescription();
 		recommenderSlot.setInputType(
-				CoreConstant.Slot.SLOT_RECOMMEND.get());
+				CoreConstant.SlotContent.RECOMMEND.getSlotName());
 		recommenderSlot.setOutputType(
-				CoreConstant.Slot.SLOT_RECOMMEND.get());
+				CoreConstant.SlotContent.RECOMMEND.getSlotName());
 		recommenderSlot.setDataProvider(recommender);
 		
 		DataSourceDescription computingAgentSlot =
 				new DataSourceDescription();
 		computingAgentSlot.setInputType(
-				CoreConstant.Slot.SLOT_COMPUTATION_AGENT.get());
+				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName());
 		computingAgentSlot.setOutputType(
-				CoreConstant.Slot.SLOT_COMPUTATION_AGENT.get());
+				CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName());
 		computingAgentSlot.setDataProvider((IDataProvider) computingAgent);
 
 		List<DataSourceDescription> slots = new ArrayList<DataSourceDescription>();
@@ -143,13 +141,13 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 		
 		for (DataSourceDescription slotI : dataSourceDescriptions) {
 			
-			if (slotI.getInputType().equals(CoreConstant.Slot.SLOT_SEARCH.get())) {
+			if (slotI.getInputType().equals(CoreConstant.SlotContent.SEARCH.getSlotName())) {
 				search = (Search) slotI.getDataProvider();
 			}
-			if (slotI.getInputType().equals(CoreConstant.Slot.SLOT_RECOMMEND.get())) {
+			if (slotI.getInputType().equals(CoreConstant.SlotContent.RECOMMEND.getSlotName())) {
 				recommender = (Recommend) slotI.getDataProvider();
 			}
-			if (slotI.getInputType().equals(CoreConstant.Slot.SLOT_COMPUTATION_AGENT.get())) {
+			if (slotI.getInputType().equals(CoreConstant.SlotContent.COMPUTATION_AGENT.getSlotName())) {
 				computingAgent = (IComputingAgent) slotI.getDataProvider();
 			}
 		}
@@ -161,20 +159,11 @@ public class CARecSearchComplex extends DataProcessing implements IComputingAgen
 	{
 		CARecSearchComplex result = (CARecSearchComplex) super.clone();
 		result.setId(this.getId());
-		NewOptions optionsOnt = new NewOptions(this.options);
-		result.setOptions(optionsOnt.clone().getOptions());
-		ErrorDescriptions errorsOnt = new ErrorDescriptions(this.errors);
-		result.setErrors(errorsOnt.clone().getErrors());
-		
-		if (this.search != null) {
-			result.setSearch(this.search.clone());
-		}
-		if (this.recommender != null) {
-			result.setRecommender(this.recommender.clone());
-		}
-		if (this.computingAgent != null) {
-			result.setComputingAgent(this.computingAgent.clone());
-		}
+		result.setOptions(CollectionUtils.deepCopy(options));
+		result.setErrors(CollectionUtils.deepCopy(errors));
+		result.setSearch(search != null ? search.clone() : null);
+		result.setRecommender(recommender != null ? recommender.clone() : null);
+		result.setComputingAgent(computingAgent != null ? computingAgent.clone() : null);
 		return result;
 	}
 	

@@ -175,7 +175,7 @@ public class ComputingAction extends FSMBehaviour {
 					getTrainBehaviour.reset(null);
 				}
 
-				if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.get())) {
+				if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.name())) {
 					testFn = data.exportInternalTestFileName();
 					AchieveREInitiator getTestBehaviour = (AchieveREInitiator)
 							((ComputingAction) parent).getState(GETTESTDATA_STATE);
@@ -365,10 +365,10 @@ public class ComputingAction extends FSMBehaviour {
 						EvaluationMethod evaluation_method = executeAction
 								.getTask().getEvaluationMethod();
 
-						if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.get())) {
+						if (!mode.equals(CoreConstant.Mode.TRAIN_ONLY.name())) {
 							agent.evaluateCA(evaluation_method, eval);
 
-							if (output.equals(CoreConstant.Output.PREDICTION.get())) {
+							if (output.equals(CoreConstant.Output.PREDICTION.name())) {
 								DataInstances di = new DataInstances();
 								di.fillWekaInstances(agent.test);
 								DataInstances labeledTest = agent
@@ -463,9 +463,9 @@ public class ComputingAction extends FSMBehaviour {
 					}
 				}
 				
-				addTaskOutput(InOutType.TEST, CoreConstant.Slot.SLOT_TESTING_DATA.get(), agent.test);
-				addTaskOutput(InOutType.TRAIN, CoreConstant.Slot.SLOT_TRAINING_DATA.get(), agent.train);
-				addTaskOutput(InOutType.VALIDATION, CoreConstant.Slot.SLOT_VALIDATION_DATA.get(), agent.label);
+				addTaskOutput(InOutType.TEST, CoreConstant.SlotContent.TESTING_DATA.getSlotName(), agent.test);
+				addTaskOutput(InOutType.TRAIN, CoreConstant.SlotContent.TRAINING_DATA.getSlotName(), agent.train);
+				addTaskOutput(InOutType.VALIDATION, CoreConstant.SlotContent.VALIDATION_DATA.getSlotName(), agent.label);
 
 				resultMsg = incomingRequest.createReply();
 				resultMsg.setPerformative(ACLMessage.INFORM);

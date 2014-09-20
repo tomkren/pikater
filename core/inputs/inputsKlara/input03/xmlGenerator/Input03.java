@@ -37,7 +37,7 @@ public final class Input03 {
 		comAgent1.setEvaluationMethod(evaluationMethod1);
 		
 		NewOption optionOutput1 = new NewOption(
-				CoreConstant.Output.DEFAULT.get(), CoreConstant.Output.EVALUATION_ONLY.get()); 
+				CoreConstant.Output.DEFAULT.name(), CoreConstant.Output.EVALUATION_ONLY.name()); 
 
 		CARecSearchComplex complex1 = new CARecSearchComplex();
 		complex1.setComputingAgent(comAgent1);
@@ -66,7 +66,7 @@ public final class Input03 {
 		comAgent2.setEvaluationMethod(evaluationMethod2);
 
 		NewOption optionOutput2 = new NewOption(
-				CoreConstant.Output.DEFAULT.get(), CoreConstant.Output.EVALUATION_ONLY.get());
+				CoreConstant.Output.DEFAULT.name(), CoreConstant.Output.EVALUATION_ONLY.name());
 
 		CARecSearchComplex complex2 = new CARecSearchComplex();
 		complex2.setComputingAgent(comAgent2);

@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.pikater.core.ontology.subtrees.newOption.NewOptions;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.experiment.UniversalConnector;
 import org.pikater.shared.experiment.UniversalElement;
 import org.pikater.shared.experiment.UniversalOntology;
+import org.pikater.shared.util.collections.CollectionUtils;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -144,8 +144,7 @@ public class ComputationDescription implements Concept {
 		gene();
 		
 		UniversalComputationDescription uModel = new UniversalComputationDescription();
-		NewOptions optionsOnt = new NewOptions(this.getGlobalOptions());
-		uModel.addGlobalOptions(new HashSet<NewOption>(optionsOnt.clone().getOptions()));
+		uModel.addGlobalOptions(new HashSet<NewOption>(CollectionUtils.deepCopy(getGlobalOptions())));
 		
 		// map - id x ontology
 		Map<Integer, UniversalOntology> finishedtUniOntologys =
@@ -200,8 +199,8 @@ public class ComputationDescription implements Concept {
 				uniElement.setOntologyInfo(uniOntology);
 				
 				UniversalConnector connector = new UniversalConnector();
-				connector.setInputDataType(slotIJ.getInputType());
-				connector.setOutputDataType(slotIJ.getOutputType());
+				connector.setInputDataIdentifier(slotIJ.getInputType());
+				connector.setOutputDataIdentifier(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
 				
 				ontoI.addInputDataSlot(connector);
@@ -215,8 +214,8 @@ public class ComputationDescription implements Concept {
 				uniElement.setOntologyInfo(uniOntology);
 				
 				UniversalConnector connector = new UniversalConnector();
-				connector.setInputDataType(slotIJ.getInputType());
-				connector.setOutputDataType(slotIJ.getOutputType());
+				connector.setInputDataIdentifier(slotIJ.getInputType());
+				connector.setOutputDataIdentifier(slotIJ.getOutputType());
 				connector.setFromElement(uniElement);
 				
 				ontoI.addInputErrorSlot(connector);
@@ -288,8 +287,8 @@ public class ComputationDescription implements Concept {
 						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
 				
 				DataSourceDescription dataSourceDesc = new DataSourceDescription();
-				dataSourceDesc.setInputType(slotIJ.getInputDataType());
-				dataSourceDesc.setOutputType(slotIJ.getOutputDataType());
+				dataSourceDesc.setInputType(slotIJ.getInputDataIdentifier());
+				dataSourceDesc.setOutputType(slotIJ.getOutputDataIdentifier());
 				dataSourceDesc.importSource(dataProvider);
 				
 				inputDataSources.add(dataSourceDesc);
@@ -310,8 +309,8 @@ public class ComputationDescription implements Concept {
 						finishedDataProcessings.get(uElement.getOntologyInfo().getId());
 				
 				ErrorSourceDescription errorSourceDesc = new ErrorSourceDescription();
-				errorSourceDesc.setInputType(slotIJ.getInputDataType());
-				errorSourceDesc.setOutputType(slotIJ.getOutputDataType());
+				errorSourceDesc.setInputType(slotIJ.getInputDataIdentifier());
+				errorSourceDesc.setOutputType(slotIJ.getOutputDataIdentifier());
 				errorSourceDesc.importSource(dataProvider);
 					
 				inputErrorSources.add(errorSourceDesc);
