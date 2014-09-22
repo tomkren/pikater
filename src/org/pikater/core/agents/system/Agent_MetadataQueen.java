@@ -1,14 +1,5 @@
 package org.pikater.core.agents.system;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import jade.content.AgentAction;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.Ontology;
@@ -20,6 +11,15 @@ import jade.domain.FIPAService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.pikater.core.CoreAgents;
 import org.pikater.core.CoreConfiguration;
@@ -33,11 +33,13 @@ import org.pikater.core.ontology.subtrees.metadata.NewDataset;
 import org.pikater.core.ontology.subtrees.metadata.SaveMetadata;
 import org.pikater.shared.database.exceptions.NoResultException;
 import org.pikater.shared.database.jpa.JPADataSetLO;
-import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
+import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 
 import weka.core.Instances;
+
+import com.google.common.io.Files;
 
 public class Agent_MetadataQueen extends PikaterAgent {
 	private static final long serialVersionUID = -1886699589066832983L;
@@ -99,14 +101,17 @@ public class Agent_MetadataQueen extends PikaterAgent {
 		return respondToNewData(request, CoreConfiguration.getDataFilesPath(), newComputedData.getComputedDataID());
 	}
 
+	/** reads a new dataset from the DB, generates metadata for it and sends the data to DataManager to store */
 	private ACLMessage respondToNewData(ACLMessage request, String path, int dataID) {
 		try {
 			JPADataSetLO dslo = DAOs.dataSetDAO.getByID(dataID, EmptyResultAction.THROW);
 			PGLargeObjectReader plor = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 
-			File file = new File(path + dslo.getHash());
+			final String baseFilename = path + dslo.getHash();
+			File tmp = new File(baseFilename + ".tmp");
+			File file = new File(baseFilename);
 			if (!file.exists()) {
-				FileWriter fw = new FileWriter(file);
+				FileWriter fw = new FileWriter(tmp);
 
 				char[] buf = new char[100];
 				int s = -1;
@@ -116,9 +121,11 @@ public class Agent_MetadataQueen extends PikaterAgent {
 				fw.close();
 			}
 
-			Metadata resultMetaData = this.readFile(file);
+			Files.move(tmp, file);
 
-			this.sendSaveMetaDataRequest(resultMetaData, dataID);
+			Metadata resultMetaData = readFile(file);
+
+			sendSaveMetaDataRequest(resultMetaData, dataID);
 
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
