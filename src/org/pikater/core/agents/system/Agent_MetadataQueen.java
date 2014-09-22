@@ -108,9 +108,9 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			PGLargeObjectReader plor = PGLargeObjectReader.getForLargeObject(dslo.getOID());
 
 			final String baseFilename = path + dslo.getHash();
-			File tmp = new File(baseFilename + ".tmp");
 			File file = new File(baseFilename);
 			if (!file.exists()) {
+				File tmp = new File(baseFilename + ".tmp");
 				FileWriter fw = new FileWriter(tmp);
 
 				char[] buf = new char[100];
@@ -119,9 +119,8 @@ public class Agent_MetadataQueen extends PikaterAgent {
 					fw.write(buf, 0, s);
 				}
 				fw.close();
+				Files.move(tmp, file);
 			}
-
-			Files.move(tmp, file);
 
 			Metadata resultMetaData = readFile(file);
 
