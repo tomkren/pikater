@@ -40,19 +40,18 @@ import org.pikater.shared.database.postgre.largeobject.PGLargeObjectReader;
 import weka.core.Instances;
 
 public class Agent_MetadataQueen extends PikaterAgent {
-
 	private static final long serialVersionUID = -1886699589066832983L;
-	
+
 	@Override
 	public List<Ontology> getOntologies() {
 		List<Ontology> ontologies = new ArrayList<Ontology>();
-		ontologies.add(MetadataOntology.getInstance());		
+		ontologies.add(MetadataOntology.getInstance());
 		return ontologies;
 	}
-	
-    @Override
-    protected void setup() {
-        initDefault();
+
+	@Override
+	protected void setup() {
+		initDefault();
 
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 
@@ -71,9 +70,9 @@ public class Agent_MetadataQueen extends PikaterAgent {
 						return respondToNewComputedData(request, a);
 					}
 				} catch (OntologyException e) {
-					logException("Problem extracting content",e);
+					logException("Problem extracting content", e);
 				} catch (CodecException e) {
-					logException("Codec problem",e);
+					logException("Codec problem", e);
 				} catch (Exception e) {
 					logException("General Exception", e);
 				}
@@ -85,104 +84,96 @@ public class Agent_MetadataQueen extends PikaterAgent {
 			}
 
 		});
-        
-    }
 
-    private ACLMessage respondToNewDataset(ACLMessage request, Action a) {
-    	
-    	NewDataset newDataset = (NewDataset)a.getAction();
-		
-    	return respondToNewData(request,
-    			CoreConfiguration.getMetadataPath(),
-    			newDataset.getDataSetID());
-    }
-    private ACLMessage respondToNewComputedData(ACLMessage request, Action a) {
-    	
-    	NewComputedData newComputedData = (NewComputedData)a.getAction();
-    	
-    	return respondToNewData(request,
-    			CoreConfiguration.getDataFilesPath(),
-    			newComputedData.getComputedDataID());	
-    }
-    
-    private ACLMessage respondToNewData(ACLMessage request, String path, int dataID) {
-        
-        try {
+	}
+
+	private ACLMessage respondToNewDataset(ACLMessage request, Action a) {
+		NewDataset newDataset = (NewDataset) a.getAction();
+
+		return respondToNewData(request, CoreConfiguration.getMetadataPath(), newDataset.getDataSetID());
+	}
+
+	private ACLMessage respondToNewComputedData(ACLMessage request, Action a) {
+		NewComputedData newComputedData = (NewComputedData) a.getAction();
+
+		return respondToNewData(request, CoreConfiguration.getDataFilesPath(), newComputedData.getComputedDataID());
+	}
+
+	private ACLMessage respondToNewData(ACLMessage request, String path, int dataID) {
+		try {
 			JPADataSetLO dslo = DAOs.dataSetDAO.getByID(dataID, EmptyResultAction.THROW);
 			PGLargeObjectReader plor = PGLargeObjectReader.getForLargeObject(dslo.getOID());
-			
-			File file=new File(path + dslo.getHash());
-			if(!file.exists()){
-			FileWriter fw=new FileWriter(file);
-			
-			char[] buf=new char[100];
-			int s=-1;
-			while((s=plor.read(buf))!=-1){
-				fw.write(buf,0,s);
+
+			File file = new File(path + dslo.getHash());
+			if (!file.exists()) {
+				FileWriter fw = new FileWriter(file);
+
+				char[] buf = new char[100];
+				int s = -1;
+				while ((s = plor.read(buf)) != -1) {
+					fw.write(buf, 0, s);
+				}
+				fw.close();
 			}
-			fw.close();
-			}
-			
+
 			Metadata resultMetaData = this.readFile(file);
-		
+
 			this.sendSaveMetaDataRequest(resultMetaData, dataID);
-				
+
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
-		
-			return reply;	
+
+			return reply;
 		} catch (NoResultException e) {
-			logException("DataSet with ID "+dataID+" not found  in the database",e);
+			logException("DataSet with ID " + dataID + " not found  in the database", e);
 		} catch (IOException e) {
 			logException("IOError while accessing dataset", e);
 		}
-        
+
 		return null;
 	}
-    
-    
-    private void sendSaveMetaDataRequest(Metadata metadata,int dataSetID){
-        AID receiver = new AID(CoreAgents.DATA_MANAGER.getName(), false);
 
-        SaveMetadata saveMetaDataAction = new SaveMetadata();
-        saveMetaDataAction.setMetadata(metadata);
-        saveMetaDataAction.setDataSetID(dataSetID);
-        
-        try {
-            ACLMessage request = makeActionRequest(receiver, saveMetaDataAction);
-            logInfo("Sending SaveMetaDataAction to DataManager");
-            ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
-            if (reply == null)
-                logSevere("Reply not received");
-            else
-                logInfo("Reply received: "+ACLMessage.getPerformative(reply.getPerformative())+" "+reply.getContent());
-        } catch (OntologyException e) {
-            logException("Ontology error occurred: ",e);
-        } catch (CodecException e) {
-            logException("Codec error occurred: ",e);
-        } catch (FIPAException e) {
-            logException("FIPA error occurred",e);
-        }
-    }
-  
-  
-   /** Naplni pozadavek na konkretni akci pro jednoho ciloveho agenta */
-    private ACLMessage makeActionRequest(AID target, AgentAction action) throws CodecException, OntologyException {
-    	Ontology ontology = MetadataOntology.getInstance();
-    	
-        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-        msg.addReceiver(target);
-        msg.setLanguage(getCodec().getName());
-        msg.setOntology(ontology.getName());
-        getContentManager().fillContent(msg, new Action(target, action));
-        return msg;
-    }
-  
-    private Metadata readFile(File file) throws FileNotFoundException, IOException{	
-			DataInstances data=new DataInstances();
-			data.fillWekaInstances(new Instances(new BufferedReader(new FileReader(file))));
-			MetadataReader reader=new MetadataReader();
-			return reader.computeMetadata(data);
+	private void sendSaveMetaDataRequest(Metadata metadata, int dataSetID) {
+		AID receiver = new AID(CoreAgents.DATA_MANAGER.getName(), false);
+
+		SaveMetadata saveMetaDataAction = new SaveMetadata();
+		saveMetaDataAction.setMetadata(metadata);
+		saveMetaDataAction.setDataSetID(dataSetID);
+
+		try {
+			ACLMessage request = makeActionRequest(receiver, saveMetaDataAction);
+			logInfo("Sending SaveMetaDataAction to DataManager");
+			ACLMessage reply = FIPAService.doFipaRequestClient(this, request);
+			if (reply == null)
+				logSevere("Reply not received");
+			else
+				logInfo("Reply received: " + ACLMessage.getPerformative(reply.getPerformative()) + " " + reply.getContent());
+		} catch (OntologyException e) {
+			logException("Ontology error occurred: ", e);
+		} catch (CodecException e) {
+			logException("Codec error occurred: ", e);
+		} catch (FIPAException e) {
+			logException("FIPA error occurred", e);
+		}
+	}
+
+	/** Naplni pozadavek na konkretni akci pro jednoho ciloveho agenta */
+	private ACLMessage makeActionRequest(AID target, AgentAction action) throws CodecException, OntologyException {
+		Ontology ontology = MetadataOntology.getInstance();
+
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.addReceiver(target);
+		msg.setLanguage(getCodec().getName());
+		msg.setOntology(ontology.getName());
+		getContentManager().fillContent(msg, new Action(target, action));
+		return msg;
+	}
+
+	private Metadata readFile(File file) throws FileNotFoundException, IOException {
+		DataInstances data = new DataInstances();
+		data.fillWekaInstances(new Instances(new BufferedReader(new FileReader(file))));
+		MetadataReader reader = new MetadataReader();
+		return reader.computeMetadata(data);
 	}
 
 }
