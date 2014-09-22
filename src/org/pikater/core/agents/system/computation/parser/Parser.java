@@ -391,7 +391,7 @@ public class Parser {
             parseDataSourceDescription(testingData, batchID, userID, node, testingData.getInputType(), testingData.getOutputType());
         }
         if (validationData!=null) {
-            parseDataSourceDescription(validationData, batchID, userID, node, testingData.getInputType(), testingData.getOutputType());
+            parseDataSourceDescription(validationData, batchID, userID, node, validationData.getInputType(), validationData.getOutputType());
         }
     }
     
