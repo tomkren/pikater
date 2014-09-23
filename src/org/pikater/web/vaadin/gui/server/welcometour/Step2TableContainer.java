@@ -98,7 +98,7 @@ public class Step2TableContainer implements Container
 		{
 			for(Entry<Integer, RemoteServerInfoItemInner> entry : data.entrySet())
 			{
-				if(entry.getValue().serverInfoProperties.getProperty(Header.TOPOLOGYNAME).getValue() == filterOnlyMachinesFromThisTopology)
+				if(entry.getValue().serverInfoProperties.getProperty(Header.TOPOLOGYNAME).getValue().equals(filterOnlyMachinesFromThisTopology))
 				{
 					result.add(entry.getKey());
 				}

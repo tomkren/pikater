@@ -26,7 +26,7 @@ public enum RepetitionType {
 		case REPEAT: return "repeat";
 		case REPEAT_X: return "repeat-x";
 		case REPEAT_Y: return "repeat-y";
-		default: return null;
+		default: return "";
 		}
 	}
 	

@@ -66,11 +66,11 @@ public class Step2 extends RefreshableWizardStep<WelcomeTourCommons, WelcomeTour
 						);
 						if(model == null)
 						{
-							throw new NullPointerException(String.format("parsed into a null object", topologyFile.getName()));
+							throw new NullPointerException(String.format("parsed into a null object: %s", topologyFile.getName()));
 						}
 						else if (!model.isWellFormed())
 						{
-							throw new IllegalStateException(String.format("not well formed", topologyFile.getName()));
+							throw new IllegalStateException(String.format("not well formed: %s", topologyFile.getName()));
 						}
 						else
 						{
