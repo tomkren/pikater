@@ -12,6 +12,12 @@ import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.WebAppConfiguration;
 
+/**
+ * Application life cycle event listener. Provides routines for startup/shutdown
+ * of the web application.
+ * 
+ * @author SkyCrawl
+ */
 @WebListener
 public class StartupAndQuitListener implements ServletContextListener
 {
@@ -22,7 +28,12 @@ public class StartupAndQuitListener implements ServletContextListener
 	public void contextInitialized(ServletContextEvent event)
 	{
 		/*
-	    // first let's see whether our app is clustered and replicates the servlet context
+		 * Should the application ever support clustering, context replication
+		 * could be a good way to start. The following is a mere "hint"... on
+		 * no account it is a full implementation.
+		 */
+		
+		/*
 	    // event.getServletContext().setAttribute("config", this);
 	 	ServletContext ctx = event.getServletContext();
 	 	if(ctx.getAttribute("storage") == null) // servlet context is replicated and was successfully loaded
@@ -36,12 +47,13 @@ public class StartupAndQuitListener implements ServletContextListener
 	 	}
 	 	*/
 		
+		/*
+		 * This is where the actual initialization begins.
+		 * GENERAL NOTE: don't alter the code order. There may be some dependencies. 
+		 */
+		
 		try
 		{
-			/*
-			 * GENERAL NOTE: don't alter the code order. There may be some dependencies.
-			 */
-			
 			announceCheckOrAction("setting initial application state & essential variables");
 			WebAppConfiguration.setContext(event.getServletContext());
 			IOUtils.setAbsoluteBaseAppPath(event.getServletContext().getRealPath("/"));
@@ -64,7 +76,7 @@ public class StartupAndQuitListener implements ServletContextListener
 			
 			announceCheckOrAction("database connection");
 			/*
-			 * // TODO: doesn't work in context listeners for some reason
+			 * TODO: doesn't work in context listeners for some reason because of driver loading issues:
 			if(!ServerConfigurationInterface.avoidUsingDBForNow() && !MyPGConnection.isConnectionToCurrentPGDBEstablished())
 			{
 				Class.forName("org.postgresql.Driver");

@@ -4,6 +4,12 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Utility class for all servlets of this application. Provides some general
+ * interface.
+ * 
+ * @author SkyCrawl
+ */
 public class GeneralServletInterface
 {
 	// ***************************************************************************************************

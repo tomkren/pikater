@@ -1,6 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets.upload;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.pikater.shared.logging.web.PikaterWebLogger;
@@ -191,10 +192,16 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 			label.setSizeUndefined();
 			label.setStyleName("v-label-undefWidth-wordWrap");
 			
+			EnumSet<HttpContentType> allowedDatasetMimeTypes = EnumSet.of(
+						HttpContentType.APPLICATION_MS_EXCEL,
+						HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
+						HttpContentType.TEXT_CSV,
+						HttpContentType.TEXT_PLAIN
+			);
 			MyMultiUpload mmu = uploadManager.createUploadButton(
 					"Choose file to upload",
 					uploadInfoProvider,
-					HttpContentType.getDatasetUploadTypes()
+					allowedDatasetMimeTypes
 			);
 			mmu.addFileUploadEventsCallback(new IFileUploadEvents()
 			{

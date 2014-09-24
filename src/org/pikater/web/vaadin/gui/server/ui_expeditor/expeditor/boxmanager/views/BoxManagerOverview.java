@@ -129,7 +129,7 @@ public class BoxManagerOverview extends AbstractBoxManagerView<BoxInfoServer>
 	
 	private Component createSlotRow(final Slot slot, Button actionButton)
 	{
-		Set<BoxSlot> connectedEndpoints = getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().getConnectedAndValidEndpointsForSlot(slot);
+		Set<BoxSlot> connectedEndpoints = getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().getConnectedValidEndpoints(slot);
 		boolean isSlotConnected = !connectedEndpoints.isEmpty();
 		LedIndicator ledComponent = new LedIndicator(getIndicatorTheme(isSlotConnected));
 		ledComponent.setDescription(isSlotConnected ? "Slot IS connected." : "Slot is NOT connected.");

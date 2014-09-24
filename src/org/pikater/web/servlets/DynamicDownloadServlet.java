@@ -18,6 +18,12 @@ import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 
+/**
+ * A download servlet returning streams of shared resources registered with
+ * {@link ResourceRegistrar}.
+ * 
+ * @author SkyCrawl
+ */
 @WebServlet(value = "/download", asyncSupported = true, loadOnStartup = 1)
 public class DynamicDownloadServlet extends HttpServlet
 {

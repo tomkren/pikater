@@ -8,11 +8,11 @@ import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
 import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.experiment.client.BoxInfoClient;
 import org.pikater.web.experiment.server.BoxType;
-import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.CellBrowser;
-import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.ICellBrowserCellProvider;
-import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.ICellBrowserTreeViewModel;
-import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.CellBrowser.CellBrowserDragSelection;
-import org.pikater.web.vaadin.gui.server.layouts.cellbrowser.cell.CellBrowserCellSource;
+import org.pikater.web.unused.cellbrowser.CellBrowser;
+import org.pikater.web.unused.cellbrowser.ICellBrowserCellProvider;
+import org.pikater.web.unused.cellbrowser.ICellBrowserTreeViewModel;
+import org.pikater.web.unused.cellbrowser.CellBrowser.CellBrowserDragSelection;
+import org.pikater.web.unused.cellbrowser.cell.CellBrowserCellSource;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.CustomComponent;

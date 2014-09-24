@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,19 +12,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.pikater.shared.logging.web.PikaterWebLogger;
+import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.requests.HttpRequestUtils;
 
+/**
+ * Base class for all {@link Filter filters} of this application. Provides
+ * special filter-related optional interface.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class AbstractFilter implements Filter
 {
 	//----------------------------------------------------------
 	// SINGLE (AND SIMPLE) IMPLEMENTATION OF SOME INHERITED ROUTINES
 	
-	private ServletContext context = null;
-	
 	@Override
 	public void init(FilterConfig arg0) throws ServletException
 	{
-		context = arg0.getServletContext();
 	}
 	
 	@Override
@@ -50,7 +53,7 @@ public abstract class AbstractFilter implements Filter
 	}
 	
 	/**
-	 * Deprecated: debug first - see client reditect above
+	 * @Deprecated: debug first - see {@link #clientRedirect(ServletResponse, String)}
 	 * 
 	 * Server-side forward. Doesn't affect the client browser's address bar.
 	 * @param servletRequest
@@ -74,16 +77,16 @@ public abstract class AbstractFilter implements Filter
 	}
 	
 	//----------------------------------------------------------
-	// DEBUG ROUTINES
+	// DEBUG ROUTINES, ALTER TO FIT YOUR NEEDS
 	
 	protected boolean isApplicationInProductionMode()
 	{
-		return Boolean.parseBoolean(context.getInitParameter("productionMode"));
+		return Boolean.parseBoolean(WebAppConfiguration.getContext().getInitParameter("productionMode"));
 	}
 	
-	protected boolean isDebugMode()
+	protected boolean shouldPrintDebugInfo()
 	{
-		return Boolean.parseBoolean(context.getInitParameter("printDebugInfoInFilters")); // TODO: rewrite to use ServerConfiguration
+		return Boolean.parseBoolean(WebAppConfiguration.getContext().getInitParameter("printDebugInfoInFilters"));
 	}
 	
 	protected void printRequestComponents(String filterName, HttpServletRequest httpRequest)

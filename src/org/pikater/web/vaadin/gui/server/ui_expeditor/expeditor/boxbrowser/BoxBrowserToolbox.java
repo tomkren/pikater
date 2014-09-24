@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.pikater.core.ontology.subtrees.agentInfo.AgentInfo;
-import org.pikater.web.config.AgentInfoCollection;
+import org.pikater.web.config.KnownCoreAgents;
 import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.vaadin.gui.server.components.toolbox.Toolbox;
 
@@ -24,7 +24,7 @@ public class BoxBrowserToolbox extends Toolbox
 {
 	private static final long serialVersionUID = -1349487568799323284L;
 
-	public BoxBrowserToolbox(String caption, AgentInfoCollection agentInfoProvider, ClickListener minimizeAction)
+	public BoxBrowserToolbox(String caption, KnownCoreAgents agentInfoProvider, ClickListener minimizeAction)
 	{
 		super(caption, minimizeAction);
 		setSizeFull();
@@ -38,7 +38,7 @@ public class BoxBrowserToolbox extends Toolbox
 			vLayout.setStyleName("boxBrowserToolbox-accordion-content");
 			
 			Map<String, DragAndDropWrapper> boxNameToComponentMapping = new HashMap<String, DragAndDropWrapper>();
-			for(AgentInfo agentInfo : agentInfoProvider.getListByType(type))
+			for(AgentInfo agentInfo : agentInfoProvider.getAllByType(type))
 			{
 				Label lbl = new Label(agentInfo.getName());
 				lbl.setSizeUndefined();

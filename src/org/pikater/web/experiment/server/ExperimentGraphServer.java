@@ -15,11 +15,18 @@ import org.pikater.shared.experiment.UniversalConnector;
 import org.pikater.shared.experiment.UniversalElement;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.SimpleIDGenerator;
-import org.pikater.web.config.AgentInfoCollection;
+import org.pikater.web.config.KnownCoreAgents;
 import org.pikater.web.experiment.IExperimentGraph;
 import org.pikater.web.experiment.client.ExperimentGraphClient;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.ConversionException;
+import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent.KineticComponent;
 
+/**
+ * Web application's notion of experiment graph.
+ * 
+ * @author SkyCrawl
+ * @see {@link KineticComponent}
+ */
 public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoServer>, ISlotConnectionsContext<Integer, BoxInfoServer>
 {
 	/**
@@ -48,7 +55,9 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	// ------------------------------------------------------------------
 	// CONSTRUCTOR
 
-	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
+	/**
+	 * Default public constructor keeps Vaadin happy.
+	 */
 	public ExperimentGraphServer()
 	{
 		this.boxIDGenerator = new SimpleIDGenerator();
@@ -165,6 +174,10 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	// ------------------------------------------------------------------
 	// OTHER PUBLIC INTERFACE
 	
+	/**
+	 * See {@link SlotConnections}.
+	 * @return
+	 */
 	public SlotConnections getSlotConnections()
 	{
 		return slotConnections;
@@ -173,6 +186,12 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	// ------------------------------------------------------------------
 	// PRIVATE INTERFACE
 
+	/**
+	 * Either connects or disconnects two given boxes, depending on the the last argument.
+	 * @param fromBoxKey
+	 * @param toBoxKey
+	 * @param connect
+	 */
 	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey, boolean connect)
 	{
 		/*
@@ -239,13 +258,13 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	}
 
 	/**
-	 * Converts web experiment format into universal experiment format.
+	 * Converts web experiment format into universal experiment format.</br>
 	 * This conversion is substantially simpler than its counterpart. It should always work.
 	 * @param webFormat
 	 * @return
 	 * @throws ConversionException
 	 */
-	public UniversalComputationDescription toUniversalFormat(AgentInfoCollection agentInfoProvider) throws ConversionException
+	public UniversalComputationDescription toUniversalFormat(KnownCoreAgents agentInfoProvider) throws ConversionException
 	{
 		try
 		{
@@ -350,13 +369,13 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 									}
 								}
 							}
+							/*
+							 * It is necessary to check like below.
+							 * <pre>neighbourUniBox.getOntologyInfo().getInputDataSlots().isEmpty()</pre>
+							 * is not safe because connectors may have been added previously (for another pair of boxes).
+							 */
 							if(!aConnectedWasAdded) // no slot connections are defined
 							{
-								/*
-								 * It is necessary to check like this... (neighbourUniBox.getOntologyInfo().getInputDataSlots().isEmpty())
-								 * is not safe because connectors may have been added previously (for another pair of boxes).
-								 */
-								
 								// at least remember the edge, with no slot connections whatsoever
 								UniversalConnector connector = new UniversalConnector();
 								connector.setFromElement(uniBox);
@@ -381,7 +400,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 
 	/**
 	 * Converts universal format experiments into web format experiments that are used
-	 * to do the actual loading in the client's kinetic environment.</br> 
+	 * to do the actual loading in kinetic environment within the user's browser.</br> 
 	 * This method is very sensitive to changes (because of serialization to XML
 	 * and back) to:
 	 * <ul>
@@ -394,7 +413,7 @@ public class ExperimentGraphServer implements IExperimentGraph<Integer, BoxInfoS
 	 * @return
 	 * @throws ConversionException
 	 */
-	public static ExperimentGraphServer fromUniversalFormat(AgentInfoCollection agentInfoProvider, UniversalComputationDescription uniFormat) throws ConversionException
+	public static ExperimentGraphServer fromUniversalFormat(KnownCoreAgents agentInfoProvider, UniversalComputationDescription uniFormat) throws ConversionException
 	{
 		try
 		{

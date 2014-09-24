@@ -11,6 +11,12 @@ import org.pikater.core.ontology.subtrees.batchDescription.Recommend;
 import org.pikater.core.ontology.subtrees.batchDescription.Search;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 
+/**
+ * Categories for experiment graph boxes. Also provides
+ * some useful mapping to core system data structures.
+ * 
+ * @author SkyCrawl
+ */
 public enum BoxType
 {
 	INPUT(FileDataProvider.class),

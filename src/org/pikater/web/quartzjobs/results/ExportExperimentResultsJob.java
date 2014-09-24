@@ -12,6 +12,12 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
+/**
+ * Background task that exports batch results into a human-readable
+ * format.
+ * 
+ * @author SkyCrawl
+ */
 public class ExportExperimentResultsJob extends InterruptibleImmediateOneTimeJob
 {
 	public ExportExperimentResultsJob()

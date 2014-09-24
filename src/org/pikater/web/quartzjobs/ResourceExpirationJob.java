@@ -13,6 +13,11 @@ import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 
+/**
+ * Background task that triggers expiration of a shared resource.
+ * 
+ * @author SkyCrawl
+ */
 public class ResourceExpirationJob extends AbstractJobWithArgs
 {
 	public ResourceExpirationJob()

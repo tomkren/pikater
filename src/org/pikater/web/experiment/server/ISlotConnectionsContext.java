@@ -4,6 +4,16 @@ import java.util.Set;
 
 import org.pikater.web.experiment.IBoxInfoCommon;
 
+/**  
+ * Context for {@link SlotConnections}.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <I> The type for IDs. Typically Integers or Strings.
+ * @param <B> The supported box type. Currently, experiments 
+ * are stored on the server and hence, only {@link BoxInfoServer}
+ * should be used.
+ */
 public interface ISlotConnectionsContext<I extends Object, B extends IBoxInfoCommon<I>>
 {
 	/**

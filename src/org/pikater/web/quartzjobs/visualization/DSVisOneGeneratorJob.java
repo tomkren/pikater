@@ -21,6 +21,11 @@ import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGe
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
+/**
+ * Background task that generates visualization images for a single dataset.
+ * 
+ * @author SkyCrawl
+ */
 public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisOne, IPGLOActionContext
 {
 	private IProgressDialogResultHandler context;

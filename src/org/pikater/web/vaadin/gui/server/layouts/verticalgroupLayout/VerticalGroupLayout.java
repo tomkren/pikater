@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.server.layouts.verticalgroupLayout;
+package org.pikater.web.vaadin.gui.server.layouts.verticalgrouplayout;
 
 import org.pikater.web.vaadin.gui.server.layouts.SimplePanel;
 

@@ -92,7 +92,7 @@ public class BoxManagerSlotView extends AbstractBoxManagerView<Slot>
 		vLayout_slots_new.setStyleName("viewItem");
 		vLayout_slots_new.setCaption(String.format("Connected %s slots:", currentEndpoint.getChildSlotsType().getOther().name()));
 		vLayout_slots_new.setSpacing(true);
-		for(final BoxSlot endpoint : getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().getCandidateEndpointsForEndpoint(currentEndpoint))
+		for(final BoxSlot endpoint : getContext().getCurrentComponent().getExperimentGraph().getSlotConnections().getCandidateEndpoints(currentEndpoint))
 		{
 			HorizontalFlowLayout connectionRow = new HorizontalFlowLayout(new IFlowLayoutStyleProvider()
 			{

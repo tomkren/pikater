@@ -4,6 +4,11 @@ import java.io.File;
 
 import org.pikater.web.sharedresources.ResourceExpiration;
 
+/**
+ * A file-backed downloadable image resource with some extra information.
+ * 
+ * @author SkyCrawl
+ */
 public class ImageDownloadResource extends FileDownloadResource
 {
 	private final int imageWidth;

@@ -1,5 +1,8 @@
 package org.pikater.web.requests;
 
+/**
+ * @author SkyCrawl
+ */
 public enum HttpRequestComponent
 {
 	/**

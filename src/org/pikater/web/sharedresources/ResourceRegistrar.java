@@ -16,9 +16,22 @@ import org.pikater.web.vaadin.ManageSession;
 
 import com.vaadin.server.VaadinSession;
 
+/**
+ * Low-level implementation of sharing "resources" (technically anything, even class instances)
+ * between various entities, be it threads or server and client.
+ * 
+ * @author SkyCrawl
+ */
 public class ResourceRegistrar
 {
+	/**
+	 * Dedicated synchronization object.
+	 */
 	private static final Object lock_object = new Object();
+	
+	/**
+	 * Collection of registered resources mapped by an ID.
+	 */
 	private static final Map<UUID, IRegistrarResource> uuidToResource = new HashMap<UUID, IRegistrarResource>();
 	
 	//-------------------------------------------------------------
@@ -169,7 +182,7 @@ public class ResourceRegistrar
 		else
 		{
 			/*
-			 * Covers unknown cases that need to be logged. 
+			 * Covers unknown cases that need to be logged.
 			 */
 			
 			PikaterWebLogger.logThrowable("An unexpected problem was found:", e);

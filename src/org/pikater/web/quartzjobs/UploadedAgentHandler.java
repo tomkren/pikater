@@ -15,6 +15,13 @@ import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
+/**
+ * Background task that handles newly uploaded agents, stores them to database
+ * and notifies the core system that a new agent has been registered with the
+ * system.
+ * 
+ * @author SkyCrawl
+ */
 public class UploadedAgentHandler extends ImmediateOneTimeJob
 {
 	public UploadedAgentHandler()

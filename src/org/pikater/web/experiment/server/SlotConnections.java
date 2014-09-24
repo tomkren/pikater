@@ -10,9 +10,15 @@ import org.pikater.core.CoreConstant.SlotDirection;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 
 /**
- * Maps all slots (input/output; all boxes) to connected slots, wrapped in a special
- * class. It is required that all mentioned slots are represented by exactly one
- * {@link Slot} instance in the whole web application. 
+ * <p>Maps connected slots of a given {@link ExperimentGraphServer}.</br>
+ * In each pair of connected slots, one has to be an input slot and 
+ * the other an output slot. Each slot belongs to exactly one box. A
+ * box may have multiple slots defined (either input or output).</p>
+ * 
+ * <p>All slots ARE REQUIRED to be represented by exactly one
+ * {@link Slot} instance in the whole web application.</p>
+ * 
+ * @author SkyCrawl
  */
 public class SlotConnections
 {
@@ -45,7 +51,8 @@ public class SlotConnections
 
 	/**
 	 * Ctor.
-	 * @param context
+	 * @param context Context for the slot mapper. See {@link ISlotConnectionsContext}
+	 * for more information.
 	 */
 	public SlotConnections(ISlotConnectionsContext<Integer, BoxInfoServer> context)
 	{
@@ -55,8 +62,9 @@ public class SlotConnections
 	}
 	
 	/**
-	 * Connects the given 2 slots, if possible. Throws exceptions otherwise.</br>
-	 * No need to distinguish between input/output endpoints.</br> 
+	 * Connects the given 2 {@link BoxSlot endpoints}/slots, if possible, and throws exceptions
+	 * otherwise.</br>
+	 * No need to distinguish between input/output {@link BoxSlot endpoints}.
 	 * @param endPoint1
 	 * @param endPoint2
 	 */
@@ -111,6 +119,13 @@ public class SlotConnections
 		}
 	}
 	
+	/**
+	 * A self explanatory method.</br>
+	 * No need to distinguish between input/output slots.
+	 * @param slot1
+	 * @param slot2
+	 * @return
+	 */
 	public boolean areSlotsConnected(Slot slot1, Slot slot2)
 	{
 		if(connectionExistsFor(slot1) && connectionExistsFor(slot2))
@@ -121,11 +136,12 @@ public class SlotConnections
 	}
 	
 	/**
-	 * Gets the list of endpoints that can be connected to the given endpoint. 
+	 * Gets the list of {@link BoxSlot endpoints} that can be connected to the given
+	 * {@link BoxSlot endpoint}. 
 	 * @param endpoint
 	 * @return
 	 */
-	public Set<BoxSlot> getCandidateEndpointsForEndpoint(BoxSlot endpoint)
+	public Set<BoxSlot> getCandidateEndpoints(BoxSlot endpoint)
 	{
 		Set<BoxSlot> result = new HashSet<BoxSlot>();
 		Set<BoxInfoServer> otherBoxes = endpoint.getChildSlotsType() == SlotDirection.INPUT ?
@@ -146,7 +162,13 @@ public class SlotConnections
 		return result;
 	}
 	
-	public Set<BoxSlot> getConnectedAndValidEndpointsForSlot(Slot slot)
+	/**
+	 * Get all {@link BoxSlot endpoints} backed by an edge between the owner boxes
+	 * and whose slots are connected to the given slot 
+	 * @param slot
+	 * @return
+	 */
+	public Set<BoxSlot> getConnectedValidEndpoints(Slot slot)
 	{
 		Set<BoxSlot> result = new HashSet<BoxSlot>();
 		if(connectionExistsFor(slot))
@@ -174,12 +196,22 @@ public class SlotConnections
 		return result;
 	}
 	
+	/** 
+	 * Whether {@link #getConnectedValidEndpoints(Slot)} returns a non-empty result.
+	 * @param slot
+	 * @return
+	 */
 	public boolean isSlotConnectedToAValidEndpoint(Slot slot)
 	{
-		return !getConnectedAndValidEndpointsForSlot(slot).isEmpty();
+		return !getConnectedValidEndpoints(slot).isEmpty();
 	}
 	
-	public boolean hasBoxSlotConnections(BoxInfoServer box)
+	/**
+	 * A self explanatory convenience method.
+	 * @param box
+	 * @return
+	 */
+	public boolean hasASlotConnected(BoxInfoServer box)
 	{
 		for(Slot inputSlot : box.getAssociatedAgent().getInputSlots())
 		{
@@ -202,7 +234,8 @@ public class SlotConnections
 	// PRIVATE INTERFACE
 	
 	/**
-	 * IMPORTANT: doesn't distinguish between valid and invalid connections. 
+	 * IMPORTANT: doesn't distinguish between valid and invalid connections
+	 * (whether an edge exists between the affected boxes or not). 
 	 * @param slot
 	 * @return
 	 */
@@ -220,7 +253,7 @@ public class SlotConnections
 	}
 	
 	/**
-	 * Connects the given endpoints in the defined direction.
+	 * Connects the given {@link BoxSlot endpoints} in the defined direction.
 	 * @param from can be arbitrary {@link BoxSlot} instance
 	 * @param to can be arbitrary {@link BoxSlot} instance
 	 */

@@ -13,16 +13,17 @@ public class ThemeResources
 	 * GENERAL NOTES:
 	 * - Resources can be both static (a downloadable WEB-INF file for instance) and dynamic (URL link needs to be constructed).
 	 * - Stream resources allow creating dynamic resource content. Charts are typical examples of dynamic images.
-	 * - ThemeResource will look for the file in "VAADIN/themes/pikater/" (see example below).
+	 * 
+	 * NOTABLE SERVER-RELATED TYPES:
+	 * - com.vaadin.server.FileDownloader
+	 * - com.vaadin.server.ExternalResource
+	 * - com.vaadin.server.StreamResource
+	 * - Link - a link to internal or external resource - can open a new window
+	 * 
+	 *  THEMERESOURCE NOTE:
+	 * - {@link ThemeResource} (see below) looks for files in vaadin's static resource folder, see 
+	 * {@link #getVaadinRelativePathForResource(String)}
 	 */
-	
-	// ----------------------------------------------------------------
-	// NOTABLE SERVER-RELATED TYPES:
-		
-	// com.vaadin.server.FileDownloader
-	// com.vaadin.server.ExternalResource
-	// com.vaadin.server.StreamResource
-	// Link - a link to internal or external resource - can open a new window
 	
 	// ----------------------------------------------------------------
 	// THEME RESOURCE DEFINITIONS:
@@ -95,9 +96,11 @@ public class ThemeResources
 	// PUBLIC METHODS:
 	
 	/**
-	 * Returns a relative path of the desired resource, which is required to
-	 * be in the vaadin's static resource folder.
-	 * @param relativeResourcePath
+	 * <p>Returns a real-time relative path of the desired resource that can be included
+	 * statically in HTML. The resource is required to be in vaadin's static resource folder,
+	 * e.g. "WebContent/VAADIN/themes/{theme-name}/".</p>
+	 * 
+	 * @param relativeResourcePath theme-relative path to a file
 	 * @return
 	 */
 	public static String getVaadinRelativePathForResource(String relativeResourcePath)

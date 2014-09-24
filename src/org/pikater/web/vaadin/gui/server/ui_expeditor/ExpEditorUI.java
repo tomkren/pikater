@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_expeditor;
 
 import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
 import org.pikater.shared.logging.web.PikaterWebLogger;
-import org.pikater.web.config.AgentInfoCollection;
+import org.pikater.web.config.KnownCoreAgents;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
 import org.pikater.web.vaadin.ManageAuth;
@@ -60,15 +60,15 @@ public class ExpEditorUI extends CustomConfiguredUI
 		}
 	}
 	
-	private AgentInfoCollection createAgentInfoProvider()
+	private KnownCoreAgents createAgentInfoProvider()
 	{
 		// fetch information about available agents from core or create dummy
-		AgentInfoCollection agentInfoProvider = null;
+		KnownCoreAgents agentInfoProvider = null;
 		if(WebAppConfiguration.isCoreEnabled())
 		{
 			try
 			{
-				agentInfoProvider = AgentInfoCollection.getFrom(WebToCoreEntryPoint.getAgentInfosVisibleForUser(
+				agentInfoProvider = KnownCoreAgents.getFrom(WebToCoreEntryPoint.getAgentInfosVisibleForUser(
 						ManageAuth.getUserID(VaadinSession.getCurrent())));
 			}
 			catch (Exception t)
@@ -79,14 +79,14 @@ public class ExpEditorUI extends CustomConfiguredUI
 		}
 		else
 		{
-			agentInfoProvider = AgentInfoCollection.getDummyBoxes();
+			agentInfoProvider = KnownCoreAgents.getDummy();
 		}
 		return agentInfoProvider;
 	}
 	
 	private void displayExperimentEditor()
 	{
-		final AgentInfoCollection agentInfoProvider = createAgentInfoProvider();
+		final KnownCoreAgents agentInfoProvider = createAgentInfoProvider();
 		if(agentInfoProvider != null)
 		{
 			// disable regular page layout

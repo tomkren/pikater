@@ -9,7 +9,18 @@ import java.util.Set;
 
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.experiment.IExperimentGraph;
+import org.pikater.web.experiment.server.ExperimentGraphServer;
 
+/**
+ * A special (GWT&Vaadin)-compliant experiment graph implementation. As such, fields are
+ * required to be public and a public default constructor is needed.
+ * 
+ * This class is only used to efficiently transport already defined experiments
+ * to the client. All experiments in experiment editor are actually stored on the server. 
+ * 
+ * @author SkyCrawl
+ * @see {@link ExperimentGraphServer}
+ */
 public class ExperimentGraphClient implements Serializable, IExperimentGraph<Integer, BoxInfoClient>
 {
 	private static final long serialVersionUID = 5653859184631065811L;
@@ -25,14 +36,16 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	public Map<Integer, BoxInfoClient> leafBoxes;
 	
 	/**
-	 * Collection of oriented edges between boxes, sorted by the "from end point".
+	 * Collection of oriented edges (between boxes), sorted by the "from end point".
 	 */
 	public Map<Integer, Set<Integer>> edges;
 	
 	// ------------------------------------------------------------------
 	// CONSTRUCTOR
 
-	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
+	/**
+	 * Default public constructor keeps Vaadin happy.
+	 */
 	public ExperimentGraphClient()
 	{
 		this.boxIDGenerator = new SimpleIDGenerator();
@@ -92,19 +105,25 @@ public class ExperimentGraphClient implements Serializable, IExperimentGraph<Int
 	@Override
 	public void connect(Integer fromBoxKey, Integer toBoxKey)
 	{
-		interboxConnectionAction(fromBoxKey, toBoxKey, true);
+		doEdgeAction(fromBoxKey, toBoxKey, true);
 	}
 	
 	@Override
 	public void disconnect(Integer fromBoxKey, Integer toBoxKey)
 	{
-		interboxConnectionAction(fromBoxKey, toBoxKey, false);
+		doEdgeAction(fromBoxKey, toBoxKey, false);
 	}
 	
 	// ------------------------------------------------------------------
 	// PRIVATE INTERFACE
 	
-	private void interboxConnectionAction(Integer fromBoxKey, Integer toBoxKey, boolean connect)
+	/**
+	 * Either connects or disconnects two given boxes, depending on the the last argument.
+	 * @param fromBoxKey
+	 * @param toBoxKey
+	 * @param connect
+	 */
+	private void doEdgeAction(Integer fromBoxKey, Integer toBoxKey, boolean connect)
 	{
 		/*
 		 * Let this method have a transaction-like manner and only alter the data when

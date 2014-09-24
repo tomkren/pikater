@@ -25,7 +25,7 @@ public class RequestCodificatorFilter extends AbstractFilter
 		HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 		
 		// print debug info if needed
-		if(isDebugMode())
+		if(shouldPrintDebugInfo())
 		{
 			printRequestComponents(RequestCodificatorFilter.class.getSimpleName(), httpRequest);
 		}
@@ -33,7 +33,7 @@ public class RequestCodificatorFilter extends AbstractFilter
 		// actually do stuff
 		if(!isServletPathDefined(httpRequest))
 		{
-			if(isDebugMode())
+			if(shouldPrintDebugInfo())
 			{
 				PikaterWebLogger.log(Level.WARNING, "Request is about to be redirected...");
 			}
@@ -41,7 +41,7 @@ public class RequestCodificatorFilter extends AbstractFilter
 		}
 		else
 		{
-			if(isDebugMode())
+			if(shouldPrintDebugInfo())
 			{
 				PikaterWebLogger.log(Level.WARNING, "Request is about to be further processed...");
 			}

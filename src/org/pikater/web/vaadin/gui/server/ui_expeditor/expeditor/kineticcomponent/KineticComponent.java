@@ -364,7 +364,7 @@ public class KineticComponent extends AbstractComponent implements IKineticCompo
 			{
 				ExperimentGraphValidator validator = new ExperimentGraphValidator(experimentGraph);
 				validator.validate();
-				if(validator.problemsFound())
+				if(validator.aProblemWasFound())
 				{
 					StringBuilder sb = new StringBuilder();
 					for(String problem : validator.getProblems())

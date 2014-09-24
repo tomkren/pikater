@@ -71,7 +71,7 @@ public class MyUploadStatePanel extends UploadStatePanel
 	{
 		super.streamingFinished(event); // always call this first, otherwise unexpected problems may occur
 		
-		final HttpContentType originalType = HttpContentType.fromString(event.getMimeType());
+		final HttpContentType originalType = HttpContentType.fromMimeType(event.getMimeType());
 		try
 		{
 			if(originalType.hasExtensionsDefined())

@@ -22,6 +22,11 @@ import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonP
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
+/**
+ * Background task that generates visualization images comparing two datasets.
+ * 
+ * @author SkyCrawl
+ */
 public class DSVisTwoGeneratorJob extends InterruptibleImmediateOneTimeJob implements IDSVisTwo, IPGLOActionContext
 {
 	private IProgressDialogResultHandler context;

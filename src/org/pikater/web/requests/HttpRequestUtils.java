@@ -2,6 +2,14 @@ package org.pikater.web.requests;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.HttpRequest;
+
+/**
+ * A special utility class to fiddle with {@link HttpRequest} and provide
+ * some additional interface.
+ * 
+ * @author SkyCrawl
+ */
 public class HttpRequestUtils
 {
 	/**
@@ -59,10 +67,15 @@ public class HttpRequestUtils
 	
 	public static String getFullURL(HttpServletRequest request)
 	{
-		return getPrefix(request, HttpRequestComponent.P7_QUERYSTRING);
+		return getURLPrefix(request, HttpRequestComponent.P7_QUERYSTRING);
 	}
 	
-	public static String getPrefix(HttpServletRequest request, HttpRequestComponent stopAtIncl)
+	/**
+	 * @param request
+	 * @param stopAtIncl the component to stop the URL at - inclusive
+	 * @return
+	 */
+	public static String getURLPrefix(HttpServletRequest request, HttpRequestComponent stopAtIncl)
 	{
 		StringBuilder result = new StringBuilder();
 		for(HttpRequestComponent currentComponent : HttpRequestComponent.values()) // returns the constants in the order they're declared!

@@ -3,6 +3,12 @@ package org.pikater.web.experiment.server;
 import org.pikater.core.CoreConstant.SlotDirection;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 
+/**
+ * A wrapper class for (oriented) experiment graph endpoint - a box, a slot and
+ * a direction (INPUT/OUTPUT).
+ * 
+ * @author SkyCrawl
+ */
 public class BoxSlot
 {
 	private final BoxInfoServer parentBox;

@@ -3,7 +3,14 @@ package org.pikater.web.experiment.client;
 import java.io.Serializable;
 
 import org.pikater.web.experiment.IBoxInfoCommon;
+import org.pikater.web.experiment.server.BoxInfoServer;
 
+/**
+ * A special (GWT&Vaadin)-compliant box implementation. As such, fields are required to be public
+ * and a public default constructor is needed. 
+ * 
+ * @author SkyCrawl
+ */
 public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer>
 {
 	private static final long serialVersionUID = 3875674558654733345L;
@@ -26,20 +33,23 @@ public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer>
 	 */
 	public String pictureURL;
 
-	/** PUBLIC DEFAULT CONSTRUCTOR keeps Vaadin happy. */
+	/**
+	 * Default public constructor keeps Vaadin happy. Use the other constructor instead.
+	 */
 	@Deprecated
 	public BoxInfoClient()
 	{
 	}
 
-	/** 
+	/**
+	 * See {@link BoxInfoServer} for an example of what values need to be passed here.
 	 * @param boxID
 	 * @param boxTypeName
 	 * @param displayName
 	 * @param posX
 	 * @param posY
 	 * @param pictureURL
-     */
+	 */
 	public BoxInfoClient(Integer boxID, String boxTypeName, String displayName, int posX, int posY, String pictureURL)
 	{
 		this.boxID = boxID;

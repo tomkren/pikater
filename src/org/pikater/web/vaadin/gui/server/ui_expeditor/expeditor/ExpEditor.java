@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
-import org.pikater.web.config.AgentInfoCollection;
+import org.pikater.web.config.KnownCoreAgents;
 import org.pikater.web.experiment.server.BoxInfoServer;
 import org.pikater.web.experiment.server.BoxType;
 import org.pikater.web.sharedresources.ThemeResources;
@@ -108,10 +108,10 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	// -------------------------------------------------------------
 	// PROGRAMMATIC VARIABLES
 	
-	private final AgentInfoCollection agentInfoProvider;
+	private final KnownCoreAgents agentInfoProvider;
 	private final ExpEditorExtension extension;
 	
-	public ExpEditor(AgentInfoCollection agentInfoProvider)
+	public ExpEditor(KnownCoreAgents agentInfoProvider)
 	{
 		super();
 		setSizeFull();
@@ -244,7 +244,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 	// -------------------------------------------------------------
 	// PUBLIC INTERFACE
 	
-	public AgentInfoCollection getAgentInfoProvider()
+	public KnownCoreAgents getAgentInfoProvider()
 	{
 		return agentInfoProvider;
 	}

@@ -2,7 +2,6 @@ package org.pikater.web.unused;
 
 import javax.servlet.ServletContext;
 
-import org.pikater.web.config.JadeTopologies;
 import org.pikater.web.config.WebAppConfiguration;
 
 /**

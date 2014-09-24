@@ -13,12 +13,12 @@ import org.pikater.shared.util.IOUtils;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.requests.HttpRequestComponent;
 import org.pikater.web.requests.HttpRequestUtils;
+import org.pikater.web.unused.welcometour.WelcomeTourWizard;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.SpecialDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.MyFancyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
-import org.pikater.web.vaadin.gui.server.welcometour.WelcomeTourWizard;
 
 import com.porotype.iconfont.FontAwesome;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -389,7 +389,7 @@ public abstract class CustomConfiguredUI extends UI
 	
 	public static String getBaseAppURLFromLastRequest()
 	{
-		return HttpRequestUtils.getPrefix(VaadinServletService.getCurrentServletRequest(), HttpRequestComponent.P4_APPCONTEXT);
+		return HttpRequestUtils.getURLPrefix(VaadinServletService.getCurrentServletRequest(), HttpRequestComponent.P4_APPCONTEXT);
 	}
 	
 	public static String getRedirectURLToUI(PikaterUI ui)

@@ -8,9 +8,22 @@ import org.pikater.core.CoreConstants;
 import org.pikater.core.ontology.subtrees.agentInfo.Slot;
 import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 
+/**
+ * As implied by the name, a class created for the sole purpose of validating experiments
+ * before being queued for execution.
+ * 
+ * @author SkyCrawl
+ */
 public class ExperimentGraphValidator
 {
+	/**
+	 * The experiment to validate.
+	 */
 	private final ExperimentGraphServer experimentGraph;
+	
+	/**
+	 * Collection storing all found problems as strings.
+	 */
 	private final Set<String> problems;
 	
 	public ExperimentGraphValidator(ExperimentGraphServer experimentGraph)
@@ -22,7 +35,7 @@ public class ExperimentGraphValidator
 	//-----------------------------------------------------------
 	// BASIC PUBLIC INTERFACE
 	
-	public boolean problemsFound()
+	public boolean aProblemWasFound()
 	{
 		return !this.problems.isEmpty();
 	}
@@ -32,6 +45,9 @@ public class ExperimentGraphValidator
 		return problems;
 	}
 	
+	/**
+	 * Clears all previously found problems to (potentially) trigger validation again.
+	 */
 	public void clear()
 	{
 		this.problems.clear();
@@ -48,6 +64,9 @@ public class ExperimentGraphValidator
 	// ------------------------------------------------------------------
 	// VALIDATION INTERFACE
 	
+	/**
+	 * Triggers the validation. Results can be inspected with the {@link #getProblems()} method.
+	 */
 	public void validate()
 	{
 		// clean the instance just in case so that old problems are not effective anymore
@@ -63,7 +82,7 @@ public class ExperimentGraphValidator
 				 * A check whether the box is approved is needed. Currently, this is done
 				 * in core system and only approved agents are sent to web.
 				 */
-				if(!experimentGraph.getSlotConnections().hasBoxSlotConnections(box))
+				if(!experimentGraph.getSlotConnections().hasASlotConnected(box))
 				{
 					// the box is not isolated but has no valid slot connections defined
 					registerValidationProblem(String.format("At least one of '%s' boxes has no slot connections defined. Isolated boxes are not allowed.", 

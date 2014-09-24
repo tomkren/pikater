@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import org.pikater.web.servlets.DynamicDownloadServlet;
 import org.pikater.web.sharedresources.ResourceExpiration;
 
 /**
  * A generic class wrapping files in downloadable resources.
+ * 
+ * @see {@link DynamicDownloadServlet}
  */
 public class FileDownloadResource implements IDownloadResource
 {

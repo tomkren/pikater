@@ -1,12 +1,17 @@
 package org.pikater.web;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
+/**
+ * There are various enumerations like this in various libraries but none of them
+ * seems to be complete or provide interface we require so we made our own implementation,
+ * sufficient to cover the needs of our application.
+ * 
+ * @author SkyCrawl
+ */  
 public enum HttpContentType
 {
 	APPLICATION_JAR("application/java-archive", ".jar"),
@@ -44,9 +49,9 @@ public enum HttpContentType
 		return (extensionList != null) && extensionList.length > 0; 
 	}
 	
-	public static List<String> getMimeTypeList(EnumSet<HttpContentType> contentTypes)
+	public static Set<String> getMimeTypes(EnumSet<HttpContentType> contentTypes)
 	{
-		List<String> result = new ArrayList<String>();
+		Set<String> result = new LinkedHashSet<String>();
 		Iterator<HttpContentType> iter = contentTypes.iterator();
 		while (iter.hasNext())
 		{
@@ -55,7 +60,7 @@ public enum HttpContentType
 		return result;
 	}
 	
-	public static Set<String> getExtensionList(EnumSet<HttpContentType> contentTypes)
+	public static Set<String> getExtensions(EnumSet<HttpContentType> contentTypes)
 	{
 		Set<String> result = new LinkedHashSet<String>();
 		Iterator<HttpContentType> iter = contentTypes.iterator();
@@ -69,28 +74,15 @@ public enum HttpContentType
 		return result;
 	}
 	
-	public static HttpContentType fromString(String contentType)
+	public static HttpContentType fromMimeType(String mimeType)
 	{
 		for(HttpContentType type : HttpContentType.values())
 		{
-			if(type.getMimeType().equalsIgnoreCase(contentType))
+			if(type.getMimeType().equalsIgnoreCase(mimeType))
 			{
 				return type;
 			}
 		}
 		return null;
-	}
-	
-	//---------------------------------------------------------
-	// SOME APPLICATION SPECIFIC INTERFACE
-	
-	public static EnumSet<HttpContentType> getDatasetUploadTypes()
-	{
-		return EnumSet.of(
-				HttpContentType.APPLICATION_MS_EXCEL,
-				HttpContentType.APPLICATION_MS_OFFICE_OPEN_SPREADSHEET, 
-				HttpContentType.TEXT_CSV,
-				HttpContentType.TEXT_PLAIN
-		);
 	}
 }

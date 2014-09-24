@@ -5,6 +5,14 @@ import org.pikater.web.experiment.IBoxInfoCommon;
 import org.pikater.web.experiment.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
+/**
+ * <p>The server's notion of "boxes". This format is intermediate. The following
+ * chain explains the conversion cycle:</p>
+ * ({@link BoxInfoClient} - user's browser) <-> ({@link BoxInfoServer} -
+ * web application server) <- ({@link AgentInfo} - core system)
+ * 
+ * @author SkyCrawl
+ */
 public class BoxInfoServer implements IBoxInfoCommon<Integer>
 {
 	/*
@@ -12,14 +20,39 @@ public class BoxInfoServer implements IBoxInfoCommon<Integer>
 	 */
 	
 	private Integer generatedUniqueID;
+	
+	/**
+	 * Box category.
+	 */
 	private final BoxType boxType;
+	
+	/**
+	 * Low-level box information provider, fetched from core system.
+	 */
 	private final AgentInfo associatedAgent;
 	
 	/*
 	 * Mutable fields.
 	 */
+	
+	/**
+	 * X position of the box in the experiment canvas. 
+	 */
 	private int posX;
+	
+	/**
+	 * Y position of the box in the experiment canvas.
+	 */
 	private int posY;
+	
+	/**
+	 * Whether this box is currently registered and visible in the experiment
+	 * canvas.
+	 * 
+	 * If the box is deleted, this field is set to "false". Then, it may be
+	 * restored using the "CTRL+Z" shortcut and this field is again
+	 * set to "true".
+	 */
 	private boolean registered;
 	
 	public BoxInfoServer(AgentInfo associatedAgent, int posX, int posY) throws CloneNotSupportedException
@@ -31,9 +64,6 @@ public class BoxInfoServer implements IBoxInfoCommon<Integer>
 		this.posY = posY;
 		this.registered = true;
 	}
-	
-	//--------------------------------------------------
-	// SOME BASIC GETTERS/SETTERS
 	
 	@Override
 	public Integer getID()
@@ -93,9 +123,6 @@ public class BoxInfoServer implements IBoxInfoCommon<Integer>
 	{
 		return boxType;
 	}
-	
-	//--------------------------------------------------
-	// SLOT-RELATED ROUTINES
 	
 	public BoxInfoClient toClientFormat()
 	{

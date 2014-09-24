@@ -11,8 +11,8 @@ import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.base.values.StringDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
+import org.pikater.web.unused.welcometour.RemoteServerInfoItem.Header;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
-import org.pikater.web.vaadin.gui.server.welcometour.RemoteServerInfoItem.Header;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;

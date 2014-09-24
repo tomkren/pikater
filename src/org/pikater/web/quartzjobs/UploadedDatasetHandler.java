@@ -16,6 +16,13 @@ import org.pikater.shared.quartz.jobs.base.ImmediateOneTimeJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
+/**
+ * Background task that handles newly uploaded datasets, stores them to database
+ * and notifies the core system that a new dataset has been registered with the
+ * system.
+ * 
+ * @author SkyCrawl
+ */
 public class UploadedDatasetHandler extends ImmediateOneTimeJob
 {
 	public UploadedDatasetHandler()
