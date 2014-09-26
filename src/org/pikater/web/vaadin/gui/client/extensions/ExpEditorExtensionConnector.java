@@ -1,10 +1,8 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
-import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentConnector;
+import org.pikater.web.vaadin.gui.client.components.kineticcomponent.KineticComponentConnector;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditorExtension;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Timer;
@@ -14,29 +12,24 @@ import com.vaadin.client.ServerConnector;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.shared.ui.Connect;
 
+/** 
+ * @author SkyCrawl 
+ */
 @Connect(ExpEditorExtension.class)
 public class ExpEditorExtensionConnector extends AbstractExtensionConnector
 {
 	private static final long serialVersionUID = 6766120104518020715L;
 	
 	// private final ExpEditorExtensionServerRpc serverRPC = RpcProxy.create(ExpEditorExtensionServerRpc.class, this);
-	/*
-	private int offsetWidth;
-	private int offsetHeight;
-	*/
 	
 	public ExpEditorExtensionConnector()
 	{
-		/*
-		this.offsetWidth = 0;
-		this.offsetHeight = 0;
-		*/
 		registerRpc(ExpEditorExtensionClientRpc.class, new ExpEditorExtensionClientRpc()
 		{
 			private static final long serialVersionUID = 560120982576334694L;
 			
 			@Override
-			public void command_loadBoxPictures(final String[] pictureURLs)
+			public void command_cacheBoxPictures(final String[] pictureURLs)
 			{
 				// built-in image widget does exactly what we want, we only need to create an instance
 				final Image[] imageWidgets = new Image[pictureURLs.length];
@@ -60,36 +53,13 @@ public class ExpEditorExtensionConnector extends AbstractExtensionConnector
 	@Override
 	protected void extend(ServerConnector target)
 	{
-		// first "extend" the client side widget
-		// final Widget extendedWidget = ((ComponentConnector) target).getWidget(); // remember the extended client side widget
-		Scheduler.get().scheduleDeferred(new ScheduledCommand()
-		{
-			@Override
-			public void execute()
-			{
-				/*
-				 * When the GWT event loop finishes and the widget is fully setup,
-				 * remember spaces between the client window and experiment editor's
-				 * master element.
-				int windowWidth = Window.getClientWidth();
-				int windowHeight = Window.getClientHeight();
-				int expEditorWidth = extendedWidget.getOffsetWidth();
-				int expEditorHeight = extendedWidget.getOffsetHeight();
-				
-				offsetWidth = windowWidth - expEditorWidth; 
-				offsetHeight = windowHeight - expEditorHeight;
-				
-				GWTLogger.logWarning("Exp editor offset: " + String.valueOf(offsetWidth) + ";" + String.valueOf(offsetHeight));
-				*/
-			}
-		});
-		
 		// then prevent accidental loss of work
 		Window.addWindowClosingHandler(new Window.ClosingHandler()
 		{
 			public void onWindowClosing(Window.ClosingEvent closingEvent)
 			{
 				/*
+				 * TODO: currently unsupported feature
 				if(getState().modifiedTabsCount > 0)
 				{
 					closingEvent.setMessage("There's unsaved content in the editor. Really leave?");
@@ -108,8 +78,6 @@ public class ExpEditorExtensionConnector extends AbstractExtensionConnector
 				@Override
 				public void run()
 				{
-					// extendedWidget.setWidth(String.valueOf(Window.getClientWidth() - offsetWidth) + "px");
-					// extendedWidget.setHeight(String.valueOf(Window.getClientHeight() - offsetHeight) + "px");
 					resizeSelectedKineticComponent();
 				}
 			};

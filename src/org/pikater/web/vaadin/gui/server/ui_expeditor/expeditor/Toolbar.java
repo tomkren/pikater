@@ -14,8 +14,8 @@ import org.pikater.shared.database.views.tableview.batches.BatchTableDBViewUserS
 import org.pikater.shared.experiment.UniversalComputationDescription;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.config.WebAppConfiguration;
-import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentState;
+import org.pikater.web.vaadin.UserAuth;
+import org.pikater.web.vaadin.gui.client.components.kineticcomponent.KineticComponentState;
 import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTableLayout;
 import org.pikater.web.vaadin.gui.server.components.forms.SaveExperimentForm;
@@ -434,7 +434,7 @@ public class Toolbar extends VerticalLayout
 						@Override
 						public boolean handleResult(Object[] args)
 						{
-							experimentOwner = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+							experimentOwner = UserAuth.getUserEntity(VaadinSession.getCurrent());
 							experimentXML = exportedExperiment.toXML();
 							switch(saveMode)
 							{
@@ -574,7 +574,7 @@ public class Toolbar extends VerticalLayout
 			super();
 			setStyleName("loadExperimentDialogContent");
 			
-			JPAUser currentUser = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+			JPAUser currentUser = UserAuth.getUserEntity(VaadinSession.getCurrent());
 			
 			final DBTableLayout savedExperimentsLayout = new DBTableLayout();
 			savedExperimentsLayout.setSizeFull();

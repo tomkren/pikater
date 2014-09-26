@@ -1,14 +1,32 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
+import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
 import org.pikater.web.vaadin.gui.shared.borderlayout.Dimension;
 
 import com.vaadin.shared.communication.ClientRpc;
 
+/** 
+ * @author SkyCrawl
+ * @see {@link AutoVerticalBorderLayout}
+ */
 public interface AutoVerticalBorderLayoutExtensionClientRpc extends ClientRpc
 {
+	/**
+	 * Note that for optimal results only 1 row should have its height
+	 * set to maximum.
+	 * @param row
+	 * @param dimension
+	 */
 	void setRowHeight(Row row, Dimension dimension);
+	
+	/**
+	 * Note that for optimal results only 1 column should have its width
+	 * set to maximum.
+	 * @param designatedColumn
+	 * @param dimension
+	 */
 	void setColumnWidth(Column designatedColumn, Dimension dimension);
 	
 	void addRowStyleName(Row row, String styleName);
@@ -24,5 +42,12 @@ public interface AutoVerticalBorderLayoutExtensionClientRpc extends ClientRpc
 	void setBorderSpacing(int pixels);
 	void setCellSpacing(int pixels);
 	void setCellPadding(int pixels);
+	
+	/**
+	 * @param westDimension
+	 * @param centerDimension
+	 * @param eastDimension
+	 * @see http://www.w3.org/TR/CSS21/tables.html#fixed-table-layout
+	 */
 	void setFixedLayout(Dimension westDimension, Dimension centerDimension, Dimension eastDimension);
 }

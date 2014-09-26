@@ -11,14 +11,12 @@ import org.pikater.shared.database.util.ResultFormatter;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
-import org.pikater.web.visualisation.implementation.charts.axis.exception.AxisNotJoinableException;
-import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
-import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.ComparisonPNGGenerator;
+import org.pikater.web.visualisation.implementation.generator.ComparisonPNGGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
 
 public class TestVisual {
 
-	public static void main(String[] args) throws IOException, AxisNotJoinableException, ColorerNotMergeableException {
+	public static void main(String[] args) throws IOException {
 		
 		DSVisOneResult dummyResult = new DSVisOneResult(new IProgressDialogResultHandler()
 		{
@@ -61,7 +59,7 @@ public class TestVisual {
 		}
 		System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
 	
-		/**
+		/*
 		List<JPADataSetLO> datasets = DAOs.dataSetDAO.getAll();
 		
 		for(JPADataSetLO dataset : datasets){
@@ -81,6 +79,6 @@ public class TestVisual {
 			System.out.println("Finished in: "+(System.currentTimeMillis()-time)+" ms");
 			break;
 		}
-		**/
+		*/
 	}
 }

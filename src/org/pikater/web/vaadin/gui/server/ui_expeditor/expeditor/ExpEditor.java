@@ -215,7 +215,7 @@ public class ExpEditor extends AutoVerticalBorderLayout implements ITabSheetOwne
 		// extend this component and load all images in GWT (cache in browser)
 		this.extension = new ExpEditorExtension();
 		this.extension.extend(this);
-		this.extension.getClientRPC().command_loadBoxPictures(allPictureURLs.toArray(new String[0]));
+		this.extension.getClientRPC().command_cacheBoxPictures(allPictureURLs.toArray(new String[0]));
 	}
 	
 	@Override

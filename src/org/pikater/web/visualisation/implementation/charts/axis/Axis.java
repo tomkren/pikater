@@ -2,9 +2,7 @@ package org.pikater.web.visualisation.implementation.charts.axis;
 
 import java.awt.Color;
 
-import org.pikater.web.visualisation.implementation.charts.axis.exception.AxisNotJoinableException;
-
-
+import org.pikater.web.visualisation.implementation.exceptions.AxisNotJoinableException;
 
 public abstract class Axis {
 	/**
@@ -61,7 +59,8 @@ public abstract class Axis {
 	 * @return
 	 * @throws AxisNotJoinableException
 	 */
-	public static Axis join(Axis axis1,Axis axis2) throws AxisNotJoinableException{
+	public static Axis join(Axis axis1,Axis axis2) throws AxisNotJoinableException
+	{
 		if((axis1 instanceof ValueAxis)&&(axis2 instanceof ValueAxis)){
 			ValueAxis res = (ValueAxis)axis1;
 			double min1=((ValueAxis)axis1).getMin();

@@ -19,7 +19,6 @@ import org.pikater.web.visualisation.implementation.charts.axis.ValueAxis;
 import org.pikater.web.visualisation.implementation.charts.coloring.CategoricalColorer;
 import org.pikater.web.visualisation.implementation.charts.coloring.Colorer;
 import org.pikater.web.visualisation.implementation.charts.coloring.LinearColorer;
-import org.pikater.web.visualisation.implementation.datasource.exception.DatasetNotInitializedException;
 
 import weka.core.Attribute;
 import weka.core.Instance;
@@ -110,7 +109,7 @@ public abstract class ArffDataset {
 		if(data!=null){
 			return data.numAttributes();
 		}else{
-			throw new DatasetNotInitializedException();
+			throw new IllegalStateException("Dataset not initialized.");
 		}
 	}
 	
@@ -122,7 +121,7 @@ public abstract class ArffDataset {
 				return true;
 			}
 		}else{
-			throw new DatasetNotInitializedException();
+			throw new IllegalStateException("Dataset not initialized.");
 		}
 		return false;
 	}

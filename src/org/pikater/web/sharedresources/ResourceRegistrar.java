@@ -12,13 +12,17 @@ import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.quartzjobs.ResourceExpirationJob;
 import org.pikater.web.servlets.DynamicDownloadServlet;
 import org.pikater.web.sharedresources.download.IDownloadResource;
-import org.pikater.web.vaadin.ManageSession;
+import org.pikater.web.vaadin.UserSession;
 
 import com.vaadin.server.VaadinSession;
 
 /**
- * Low-level implementation of sharing "resources" (technically anything, even class instances)
- * between various entities, be it threads or server and client.
+ * An implementation of sharing "resources" (technically anything, even class instances)
+ * between threads or server-client pairs. Resources used are required to be "accessible"
+ * from {@link UserSession user session} (and thus tied to it), unless they have an explicit
+ * expiration time set.</br>
+ * This restriction refers to the {@link #registerResource(VaadinSession, IRegistrarResource)}
+ * method.
  * 
  * @author SkyCrawl
  */
@@ -47,6 +51,10 @@ public class ResourceRegistrar
 	 */
 	public static UUID registerResource(VaadinSession session, IRegistrarResource resource) throws ResourceException
 	{
+		/*
+		 * Don't forget to keep the invariant mentioned in the class's Javadoc.
+		 */
+		
 		if(resource == null)
 		{
 			throw new ResourceException("Given resource can not be null.");
@@ -78,7 +86,7 @@ public class ResourceRegistrar
 						
 					case ON_SESSION_END: 
 						// resource will be expired manually, when session ends - only remember it for now
-						ManageSession.rememberSharedResource(VaadinSession.getCurrent(), newUUID);
+						UserSession.rememberSharedResource(VaadinSession.getCurrent(), newUUID);
 						break;
 						
 					default:
@@ -262,7 +270,7 @@ public class ResourceRegistrar
 	{
 		synchronized(lock_object)
 		{
-			for(UUID resourceID : ManageSession.getSharedResources(session))
+			for(UUID resourceID : UserSession.getSharedResources(session))
 			{
 				if(uuidToResource.containsKey(resourceID) && uuidToResource.get(resourceID).getLifeSpan() == ResourceExpiration.ON_SESSION_END)
 				{

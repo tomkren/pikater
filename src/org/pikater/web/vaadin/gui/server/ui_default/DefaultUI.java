@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_default;
 
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.IndexPage;
 
 import com.vaadin.annotations.Push;
@@ -38,7 +38,7 @@ public class DefaultUI extends CustomConfiguredUI
 		/*
 		 * Display index page if authenticated or make the user authenticate first and then display it.
 		 */
-		if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
+		if(UserAuth.isUserAuthenticated(VaadinSession.getCurrent()))
 		{
 			displayIndexPage();
 		}

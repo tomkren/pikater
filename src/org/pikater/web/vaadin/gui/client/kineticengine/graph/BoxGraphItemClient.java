@@ -176,7 +176,7 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 		final double textOffset_left = settings.getTextOffsetLeft();
 		final Vector2d textSize = new Vector2d(settings.getTextWidth(textOffset_left), settings.getTextHeight());
 		
-		if(settings.isIconsVisible())
+		if(settings.areIconsVisible())
 		{
 			this.icon.show();
 		}

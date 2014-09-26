@@ -5,7 +5,7 @@ import java.util.Date;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.web.config.WebAppConfiguration;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
@@ -31,7 +31,7 @@ public class WelcomeView extends Label implements IContentComponent
 		}
 		else
 		{
-			JPAUser user = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+			JPAUser user = UserAuth.getUserEntity(VaadinSession.getCurrent());
 			setValue(String.format("Welcome to Pikatorium.</br>Your last visit was: %s", user.getLastLogin()));
 			user.setLastLogin(new Date());
 			DAOs.userDAO.updateEntity(user);

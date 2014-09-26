@@ -9,15 +9,15 @@ import org.pikater.shared.database.postgre.largeobject.IPGLOActionContext;
 import org.pikater.shared.database.postgre.largeobject.PGLargeObjectAction;
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.quartz.jobs.base.InterruptibleImmediateOneTimeJob;
+import org.pikater.web.ImageType;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.visualisation.definition.AttrMapping;
-import org.pikater.web.visualisation.definition.ImageType;
 import org.pikater.web.visualisation.definition.result.DSVisOneResult;
 import org.pikater.web.visualisation.definition.result.DSVisOneSubresult;
 import org.pikater.web.visualisation.definition.task.IDSVisOne;
-import org.pikater.web.visualisation.exception.MetadataNotPresentException;
-import org.pikater.web.visualisation.implementation.generator.ChartGenerator;
-import org.pikater.web.visualisation.implementation.generator.quartz.SinglePNGGenerator;
+import org.pikater.web.visualisation.implementation.exceptions.MetadataNotPresentException;
+import org.pikater.web.visualisation.implementation.generator.SinglePNGGenerator;
+import org.pikater.web.visualisation.implementation.generator.base.ChartGenerator;
 import org.quartz.JobBuilder;
 import org.quartz.JobExecutionException;
 
@@ -100,7 +100,7 @@ public class DSVisOneGeneratorJob extends InterruptibleImmediateOneTimeJob imple
 					}
 					
 					// otherwise continue generating
-					DSVisOneSubresult imageResult = result.createSingleImageResult(
+					DSVisOneSubresult imageResult = result.createAndRegisterSubresult(
 							new AttrMapping(attrX, attrY, attrTarget),
 							ImageType.PNG
 					);

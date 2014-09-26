@@ -6,7 +6,7 @@ import java.util.Map;
 import org.pikater.shared.util.SimpleIDGenerator;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.CustomConfiguredUIServlet.PikaterUI;
 import org.pikater.web.vaadin.gui.server.components.anchor.Anchor;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.ContentProvider.AdminFeature;
@@ -92,7 +92,7 @@ public class LeftMenu extends Panel
 		}
 		else
 		{
-			buildMenu(ManageAuth.getUserEntity(getSession()).isAdmin());
+			buildMenu(UserAuth.getUserEntity(getSession()).isAdmin());
 		}
 	}
 	

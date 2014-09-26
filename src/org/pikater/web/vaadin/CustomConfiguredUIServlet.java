@@ -142,7 +142,6 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
 				}
 			}
 		});
-    	ManageSession.initSessionStore(event.getSession());
     }
     
     @Override
@@ -157,9 +156,9 @@ public class CustomConfiguredUIServlet extends VaadinServlet implements SessionI
     	 */
     	
     	ResourceRegistrar.expireSessionResources(event.getSession());
-    	if(ManageAuth.isUserAuthenticated(event.getSession()))
+    	if(UserAuth.isUserAuthenticated(event.getSession()))
     	{
-    		ManageAuth.logout(event.getSession());
+    		UserAuth.logout(event.getSession());
     	}
     	
     	/*

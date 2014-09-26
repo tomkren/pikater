@@ -2,9 +2,7 @@ package org.pikater.web.visualisation.implementation.charts.coloring;
 
 import java.awt.Color;
 
-import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
-
-
+import org.pikater.web.visualisation.implementation.exceptions.ColorerNotMergeableException;
 
 public class CategoricalColorer implements Colorer {
 
@@ -32,16 +30,22 @@ public class CategoricalColorer implements Colorer {
 	}
 
 	@Override
-	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException {
-		if(colorer instanceof CategoricalColorer){
-			if(this.numberOfCategories==((CategoricalColorer)colorer).getNumberOfCategories()){
+	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException
+	{
+		if(colorer instanceof CategoricalColorer)
+		{
+			if(this.numberOfCategories==((CategoricalColorer)colorer).getNumberOfCategories())
+			{
 				return this;
-			}else{
+			}
+			else
+			{
 				throw new ColorerNotMergeableException();
 			}
-		}else{
+		}
+		else
+		{
 			throw new ColorerNotMergeableException();
 		}
 	}
-
 }

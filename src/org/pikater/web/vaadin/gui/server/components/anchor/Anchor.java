@@ -1,8 +1,8 @@
 package org.pikater.web.vaadin.gui.server.components.anchor;
 
-import org.pikater.web.vaadin.gui.client.anchor.AnchorClientRpc;
-import org.pikater.web.vaadin.gui.client.anchor.AnchorServerRpc;
-import org.pikater.web.vaadin.gui.client.anchor.AnchorState;
+import org.pikater.web.vaadin.gui.client.components.anchor.AnchorClientRpc;
+import org.pikater.web.vaadin.gui.client.components.anchor.AnchorServerRpc;
+import org.pikater.web.vaadin.gui.client.components.anchor.AnchorState;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.event.MouseEvents.ClickEvent;

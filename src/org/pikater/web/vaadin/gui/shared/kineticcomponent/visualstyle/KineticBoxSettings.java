@@ -5,18 +5,31 @@ import net.edzard.kinetic.Colour;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.IGraphItemSettings;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
 
+/**
+ * <p>Visual style settings of boxes in the client kinetic canvas.</p>
+ * 
+ * <p>All functionality used by the "server" package should be static and
+ * not involve constructors.</p>
+ * 
+ * @author SkyCrawl
+ */
 public class KineticBoxSettings implements IGraphItemSettings
 {
 	private final boolean iconsVisible;
 	private final double scale;
 	
+	/**
+	 * Constructor to use from "client" or "shared" packages.
+	 * @param iconsVisible
+	 * @param scale
+	 */
 	public KineticBoxSettings(boolean iconsVisible, double scale)
 	{
 		this.iconsVisible = iconsVisible;
 		this.scale = scale;
 	}
 	
-	public boolean isIconsVisible()
+	public boolean areIconsVisible()
 	{
 		return iconsVisible;
 	}
@@ -26,7 +39,7 @@ public class KineticBoxSettings implements IGraphItemSettings
 	
 	public double getTextOffsetLeft()
 	{
-		if(isIconsVisible())
+		if(areIconsVisible())
 		{
 			return getInnerComponentSpace() + getIconWidth() + (getInnerComponentSpace() >> 1);
 		}

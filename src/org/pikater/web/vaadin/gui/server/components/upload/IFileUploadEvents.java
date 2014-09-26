@@ -15,7 +15,7 @@ import com.vaadin.server.StreamVariable.StreamingStartEvent;
  * </ul>
  * 
  * <font color="red">THE PROBLEM: </font> All parent components or UIs of upload buttons created with the
- * {@link org.pikater.web.vaadin.ManageUserUploads#createUploadButton createUploadButton}
+ * {@link org.pikater.web.vaadin.UserUploads#createUploadButton createUploadButton}
  * method has to be attached for as long as an upload is in progress, otherwise the upload is interrupted
  * and fails.</br></br>
  * 

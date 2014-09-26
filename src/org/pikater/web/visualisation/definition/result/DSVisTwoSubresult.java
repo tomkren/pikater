@@ -1,9 +1,15 @@
 package org.pikater.web.visualisation.definition.result;
 
 import org.pikater.shared.util.Tuple;
+import org.pikater.web.ImageType;
 import org.pikater.web.visualisation.definition.AttrMapping;
-import org.pikater.web.visualisation.definition.ImageType;
 
+/**
+ * A single subresult (image) of {@link DSVisTwoResult}, implementing
+ * its own indexing.
+ * 
+ * @author SkyCrawl
+ */
 public class DSVisTwoSubresult extends AbstractDSVisSubresult<AttrMapping>
 {
 	private final Tuple<AttrMapping, AttrMapping> attrInfo;

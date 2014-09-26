@@ -18,7 +18,7 @@ public class BoxHighlightExtension extends AbstractExtension
 		*/
 		
 		getState().kineticConnectorID = kineticConnectorID;
-		getState().boxesToBeHighlighted = boxesToBeHighlighted;
+		getState().boxIDs = boxesToBeHighlighted;
 	}
 	
 	@Override

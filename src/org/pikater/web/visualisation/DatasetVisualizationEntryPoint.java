@@ -10,6 +10,13 @@ import org.pikater.web.visualisation.definition.AttrComparisons;
 import org.pikater.web.visualisation.definition.task.IDSVisOne;
 import org.pikater.web.visualisation.definition.task.IDSVisTwo;
 
+/**
+ * <p>Base class for any interaction with the visualization package from outside.</p>
+ * 
+ * <p>At present time, this class only triggers visualization background tasks.</p>
+ * 
+ * @author SkyCrawl
+ */
 public class DatasetVisualizationEntryPoint extends InterruptibleJobHelper implements IDSVisOne, IDSVisTwo
 {
 	private final IProgressDialogResultHandler context;

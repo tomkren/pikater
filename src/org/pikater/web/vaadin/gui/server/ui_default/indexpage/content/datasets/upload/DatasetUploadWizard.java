@@ -9,8 +9,8 @@ import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.quartzjobs.UploadedDatasetHandler;
-import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.ManageUserUploads;
+import org.pikater.web.vaadin.UserAuth;
+import org.pikater.web.vaadin.UserUploads;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
@@ -36,7 +36,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 {
 	private static final long serialVersionUID = -2782484084003504941L;
 	
-	public DatasetUploadWizard(ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
+	public DatasetUploadWizard(UserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
 	{
 		super(new DatasetUploadCommons());
 		
@@ -180,7 +180,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 	{
 		private final VerticalLayout vLayout;
 		
-		public Step3(DatasetUploadWizard parentWizard, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
+		public Step3(DatasetUploadWizard parentWizard, UserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
 		{
 			super(parentWizard);
 			this.vLayout = new VerticalLayout();
@@ -231,7 +231,7 @@ public class DatasetUploadWizard extends WizardForDialog<DatasetUploadCommons> i
 					{
 						Object[] jobParams = new Object[]
 						{
-								ManageAuth.getUserEntity(VaadinSession.getCurrent()),
+								UserAuth.getUserEntity(VaadinSession.getCurrent()),
 								getOutput().optionalARFFHeaders,
 								getOutput().optionalDatasetDescription,
 								uploadedTemporaryFile,

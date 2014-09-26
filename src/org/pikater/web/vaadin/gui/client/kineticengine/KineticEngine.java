@@ -22,8 +22,8 @@ import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
 import org.pikater.web.experiment.client.ExperimentGraphClient;
+import org.pikater.web.vaadin.gui.client.components.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.gwtmanagers.GWTMisc;
-import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.GraphItemCreator.GraphItemRegistration;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;

@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.client.kineticengine;
 
 import java.util.Stack;
 
-import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentWidget;
+import org.pikater.web.vaadin.gui.client.components.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
 public class KineticUndoRedoManager

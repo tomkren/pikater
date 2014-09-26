@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.pikater.shared.database.jpa.JPABatch;
 import org.pikater.shared.database.jpa.JPAUser;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.CustomFormCheckBox;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
@@ -161,7 +161,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 					userPriorityOptions.add(i);
 				}
 				this.field_saveForLaterMode = null;
-				JPAUser user = ManageAuth.getUserEntity(VaadinSession.getCurrent());
+				JPAUser user = UserAuth.getUserEntity(VaadinSession.getCurrent());
 				this.field_priorityAssignedByUser = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
 				this.field_priorityAssignedByUser.setDescription("The more, the higher priority.");
 				this.field_priorityAssignedByUser.setWidth("100%");

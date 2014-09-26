@@ -2,6 +2,9 @@ package org.pikater.web.vaadin.gui.client.extensions;
 
 import com.vaadin.shared.communication.ClientRpc;
 
+/** 
+ * @author SkyCrawl 
+ */
 public interface ExpEditorExtensionClientRpc extends ClientRpc
 {
 	/**
@@ -11,7 +14,7 @@ public interface ExpEditorExtensionClientRpc extends ClientRpc
 	 * That is what this method aims to do.
 	 * @param pictureURLs
 	 */
-	void command_loadBoxPictures(String[] pictureURLs);
+	void command_cacheBoxPictures(String[] pictureURLs);
 	
 	/**
 	 * Called on events that might change the kinetic component's parent's size.

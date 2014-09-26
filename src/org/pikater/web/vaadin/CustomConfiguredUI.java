@@ -314,7 +314,7 @@ public abstract class CustomConfiguredUI extends UI
 				}
 				else
 				{
-					ManageAuth.login(VaadinSession.getCurrent(), user.getId()); // actually authenticate in this UI
+					UserAuth.login(VaadinSession.getCurrent(), user.getId()); // actually authenticate in this UI
 				}
 			}
 			else
@@ -337,6 +337,12 @@ public abstract class CustomConfiguredUI extends UI
 		returnErrorCode(errorCode, "");
 	}
 	
+	/**
+	 * Only to be used from the {@link #init(VaadinRequest)} method when an
+	 * unrecoverable error occurs.
+	 * @param errorCode
+	 * @param message
+	 */
 	protected void returnErrorCode(int errorCode, String message)
 	{
 		try
@@ -361,7 +367,7 @@ public abstract class CustomConfiguredUI extends UI
 	protected abstract void displayChildContent();
 	
 	//-----------------------------------------------------------
-	// PUBLIC INTERFACE - miscellaneous methods
+	// PUBLIC INSTANCE INTERFACE
 	
 	public void setPageCroppedAndHorizontallyCentered(boolean centered)
 	{
@@ -377,6 +383,9 @@ public abstract class CustomConfiguredUI extends UI
 		}
 	}
 	
+	/**
+	 * Access to special client features.
+	 */
 	public UniversalUIExtension getUniversalUIExtension()
 	{
 		return universalUIExt;
@@ -387,11 +396,26 @@ public abstract class CustomConfiguredUI extends UI
 		return notifications;
 	}
 	
+	//-----------------------------------------------------------
+	// STATIC INTERFACE
+	
+	/**
+	 * Returns something like "http://my.domain/Pikater". A URL that can be used
+	 * to access various application artifacts or servlets. 
+	 * @param ui
+	 * @return
+	 */
 	public static String getBaseAppURLFromLastRequest()
 	{
 		return HttpRequestUtils.getURLPrefix(VaadinServletService.getCurrentServletRequest(), HttpRequestComponent.P4_APPCONTEXT);
 	}
 	
+	/**
+	 * Returns something like "http://my.domain/Pikater/index". A URL that, if used in the
+	 * browser's address bar, redirects the user to the given UI.
+	 * @param ui
+	 * @return
+	 */
 	public static String getRedirectURLToUI(PikaterUI ui)
 	{
 		return CustomConfiguredUI.getBaseAppURLFromLastRequest() + "/" + ui.getURLPattern();

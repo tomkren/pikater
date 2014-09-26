@@ -2,6 +2,7 @@ package org.pikater.web.visualisation.definition;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +11,18 @@ import org.pikater.shared.util.Tuple;
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.visualisation.definition.result.AbstractDSVisSubresult;
 
-public class SubresultIndexer<I, R extends AbstractDSVisSubresult<I>> implements IMatrixDataSource<I, R>
+/**
+ * Holds all generated subresults/images and provides some basic (matrix-like)
+ * interface for them. The matrix may not be complete (some positions may be
+ * blank).
+ * 
+ * @author SkyCrawl
+ *
+ * @param <I> The type to index subresults with.
+ * @param <R> The subresult type.
+ */
+public class SubresultIndexer<I, R extends AbstractDSVisSubresult<I>> implements 
+	IMatrixDataSource<I, R>, Iterable<R>
 {
 	private final Set<I> leftIndexSet;
 	private final Set<I> topIndexSet;
@@ -18,9 +30,15 @@ public class SubresultIndexer<I, R extends AbstractDSVisSubresult<I>> implements
 	
 	public SubresultIndexer()
 	{
-		this.leftIndexSet = new LinkedHashSet<I>(); // hash, don't use comparing and keep the insertion order
-		this.topIndexSet = new LinkedHashSet<I>(); // hash, don't use comparing and keep the insertion order
+		this.leftIndexSet = new LinkedHashSet<I>(); // LinkedHashSet - hash, don't use comparing and keep the insertion order
+		this.topIndexSet = new LinkedHashSet<I>(); // LinkedHashSet - hash, don't use comparing and keep the insertion order
 		this.indexesToSubresult = new HashMap<Tuple<I, I>, R>();
+	}
+	
+	@Override
+	public Iterator<R> iterator()
+	{
+		return indexesToSubresult.values().iterator();
 	}
 	
 	public boolean isSubresultRegistered(I leftIndex, I topIndex)

@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content;
 
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents.AgentsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents.UserAgentsView;
 import org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.batches.BatchesView;
@@ -111,7 +111,7 @@ public class ContentProvider
 		@Override
 		public boolean accessAllowed(VaadinSession session)
 		{
-			return WebAppConfiguration.avoidUsingDBForNow() ? true : ManageAuth.getUserEntity(session).isAdmin(); // only allowed for admins
+			return WebAppConfiguration.avoidUsingDBForNow() ? true : UserAuth.getUserEntity(session).isAdmin(); // only allowed for admins
 		}
 		
 		@Override
@@ -153,7 +153,7 @@ public class ContentProvider
 			}
 			else
 			{
-				return ManageAuth.isUserAuthenticated(session); // only allowed for authenticated users
+				return UserAuth.isUserAuthenticated(session); // only allowed for authenticated users
 			}
 		}
 		

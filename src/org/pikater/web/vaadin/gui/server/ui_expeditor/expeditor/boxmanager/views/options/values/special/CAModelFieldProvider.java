@@ -1,7 +1,7 @@
 package org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.special;
 
 import org.pikater.core.ontology.subtrees.newOption.base.Value;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.gui.server.components.dbviews.pickers.ModelWizardPicker;
 import org.pikater.web.vaadin.gui.server.components.dbviews.pickers.ModelWizardPickerOutput;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -46,7 +46,7 @@ public class CAModelFieldProvider extends IntegerValueProvider
 		    @Override
 		    public void buttonClick(ActionButtonTextField.ClickEvent clickEvent)
 		    {
-		    	MessageBox mb = GeneralDialogs.wizardDialog("Search for model", new ModelWizardPicker(ManageAuth.getUserEntity(VaadinSession.getCurrent()), agentClassSimpleName), 
+		    	MessageBox mb = GeneralDialogs.wizardDialog("Search for model", new ModelWizardPicker(UserAuth.getUserEntity(VaadinSession.getCurrent()), agentClassSimpleName), 
 		    			new GeneralDialogs.IDialogResultHandler()
 				{
 					@Override

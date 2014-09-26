@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.datasets;
 
 import org.pikater.shared.database.views.tableview.datasets.DataSetTableDBView;
-import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.ManageSession;
-import org.pikater.web.vaadin.ManageUserUploads;
+import org.pikater.web.vaadin.UserAuth;
+import org.pikater.web.vaadin.UserSession;
+import org.pikater.web.vaadin.UserUploads;
 import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -25,7 +25,7 @@ public class UserDatasetsView extends DatasetsView
 	/**
 	 * This should be a constant reference across all UI instances.
 	 */
-	private ManageUserUploads uploadManager;
+	private UserUploads uploadManager;
 	
 	/**
 	 * One upload manager per UI instance.
@@ -61,12 +61,12 @@ public class UserDatasetsView extends DatasetsView
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		this.uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads);
+		this.uploadManager = UserSession.getUserUploadManager(VaadinSession.getCurrent());
 		this.uploadInfoProvider = uploadManager.createUploadInfoProvider();
 			
 		// always call these last, when you're absolutely ready to display the content
 		getMainLayout().setView(new DatasetDBViewRoot<DataSetTableDBView>(new DataSetTableDBView(
-				ManageAuth.getUserEntity(VaadinSession.getCurrent()
+				UserAuth.getUserEntity(VaadinSession.getCurrent()
 		))));
 		super.finishInit(); // don't forget to!
 	}

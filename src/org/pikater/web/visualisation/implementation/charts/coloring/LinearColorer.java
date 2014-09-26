@@ -2,7 +2,7 @@ package org.pikater.web.visualisation.implementation.charts.coloring;
 
 import java.awt.Color;
 
-import org.pikater.web.visualisation.implementation.charts.coloring.exception.ColorerNotMergeableException;
+import org.pikater.web.visualisation.implementation.exceptions.ColorerNotMergeableException;
 
 public class LinearColorer implements Colorer {
 
@@ -35,7 +35,8 @@ public class LinearColorer implements Colorer {
 	}
 
 	@Override
-	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException {
+	public Colorer merge(Colorer colorer) throws ColorerNotMergeableException
+	{
 		if(colorer instanceof LinearColorer){
 			LinearColorer linCol=(LinearColorer)colorer;
 			if(linCol.min<this.min){

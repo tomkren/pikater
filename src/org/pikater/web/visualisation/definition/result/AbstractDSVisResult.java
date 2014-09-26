@@ -1,7 +1,5 @@
 package org.pikater.web.visualisation.definition.result;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
@@ -9,6 +7,16 @@ import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialo
 import org.pikater.web.vaadin.gui.server.layouts.matrixlayout.IMatrixDataSource;
 import org.pikater.web.visualisation.definition.SubresultIndexer;
 
+/**
+ * Base class to wrap the generated visualization images and provide the most
+ * essential interface. Generated images (subresults) are held within the
+ * {@link SubresultIndexer indexer} which provides some (homogenous) matrix indexing.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <I> The type to index subresults with.
+ * @param <R> The subresult type.
+ */
 public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>> implements 
 	IProgressDialogTaskResult, Iterable<R>
 {
@@ -21,11 +29,6 @@ public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>
 	 * Indexer for the generated images.
 	 */
 	private final SubresultIndexer<I, R> indexer;
-	
-	/**
-	 * Collection of generated images, with some additional attached data.
-	 */
-	private final Collection<R> resultImageCollection;
 	
 	/**
 	 * The width of all images in the above collection.
@@ -41,7 +44,6 @@ public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>
 	{
 		this.taskResult = taskResult;
 		this.indexer = new SubresultIndexer<I, R>();
-		this.resultImageCollection = new ArrayList<R>();
 		this.imageWidth = imageWidth;
 		this.imageHeight = imageHeight;
 	}
@@ -50,13 +52,13 @@ public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>
 	// PUBLIC INTERFACE
 	
 	/*
-	 * Main.
+	 * MAIN
 	 */
 	
 	@Override
 	public Iterator<R> iterator()
 	{
-		return resultImageCollection.iterator();
+		return indexer.iterator();
 	}
 	
 	public int getImageWidth()
@@ -69,18 +71,24 @@ public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>
 		return imageHeight;
 	}
 	
-	public IMatrixDataSource<I, R> toMatrixView()
-	{
-		return indexer;
-	}
-	
 	public boolean isSubresultRegistered(I leftIndex, I topIndex)
 	{
 		return indexer.isSubresultRegistered(leftIndex, topIndex);
 	}
 	
+	/**
+	 * Transforms the registered images (subresults) into a matrix view
+	 * for further processing.
+	 *  
+	 * @return
+	 */
+	public IMatrixDataSource<I, R> toMatrixView()
+	{
+		return indexer;
+	}
+	
 	/*
-	 * OPAQUE PROGRESS ROUTINES FORWARDED TO THE PASSED TASK RESULT OBJECT
+	 * OPAQUE PROGRESS ROUTINES FORWARDING TO THE PASSED TASK RESULT OBJECT
 	 */
 	
 	public void updateProgress(float percentage)
@@ -88,9 +96,12 @@ public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>
 		taskResult.updateProgress(percentage);
 	}
 	
+	/**
+	 * As a side effect, destroys all registered subresults.
+	 */
 	public void failed()
 	{
-		for(R subresult : resultImageCollection)
+		for(R subresult : indexer)
 		{
 			subresult.destroy();
 		}
@@ -105,9 +116,16 @@ public abstract class AbstractDSVisResult<I, R extends AbstractDSVisSubresult<I>
 	//------------------------------------------------------------------------------
 	// PROTECTED INTERFACE
 	
+	/**
+	 * Use this method to include a generated subresult into the main result
+	 * collection.
+	 * 
+	 * @param leftIndex the Y matrix index associated to the new subresult
+	 * @param topIndex the X matrix index associated to the new subresult
+	 * @param subresult the new subresult
+	 */
 	protected void registerSubresult(I leftIndex, I topIndex, R subresult)
 	{
 		indexer.registerSubresult(leftIndex, topIndex, subresult); // might throw an exception - let it be first
-		resultImageCollection.add(subresult);
 	}
 }

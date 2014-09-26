@@ -12,6 +12,9 @@ import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.client.ui.customlayout.CustomLayoutConnector;
 import com.vaadin.shared.ui.Connect;
 
+/** 
+ * @author SkyCrawl 
+ */
 @Connect(ScalableImageExtension.class)
 public class ScalableImageExtensionConnector extends AbstractExtensionConnector
 {
@@ -32,16 +35,6 @@ public class ScalableImageExtensionConnector extends AbstractExtensionConnector
 			@Override
 			public void setScaleRatio(final double scaleRatio)
 			{
-				/*
-				String scalePropertyValue = "scale(" + String.valueOf(scaleRatio) + ")";
-				
-				imgTag.getStyle().setProperty("WebkitTransform", scalePropertyValue); // Saf3.1+, Chrome
-				imgTag.getStyle().setProperty("MozTransform", scalePropertyValue); // FF3.5+
-				imgTag.getStyle().setProperty("MsTransform", scalePropertyValue); // IE9
-				imgTag.getStyle().setProperty("OTransform", scalePropertyValue); // Opera 10.5+
-				imgTag.getStyle().setProperty("transform", scalePropertyValue);
-				*/
-				
 				Scheduler.get().scheduleDeferred(new ScheduledCommand()
 				{
 					@Override

@@ -8,8 +8,8 @@ import org.pikater.shared.quartz.PikaterJobScheduler;
 import org.pikater.web.HttpContentType;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.quartzjobs.UploadedAgentHandler;
-import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.ManageUserUploads;
+import org.pikater.web.vaadin.UserAuth;
+import org.pikater.web.vaadin.UserUploads;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -40,7 +40,7 @@ public class AgentUploadForm extends CustomFormLayout
 	private final TextArea tf_agentDescription;
 	private final MyMultiUpload upload;
 	
-	public AgentUploadForm(final Window parentPopup, ManageUserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
+	public AgentUploadForm(final Window parentPopup, UserUploads uploadManager, MyUploadStateWindow uploadInfoProvider) throws UploadLimitReachedException
 	{
 		super(null);
 		
@@ -97,7 +97,7 @@ public class AgentUploadForm extends CustomFormLayout
 				{
 					Object[] jobParams = new Object[]
 					{
-							ManageAuth.getUserEntity(VaadinSession.getCurrent()),
+							UserAuth.getUserEntity(VaadinSession.getCurrent()),
 							event.getFileName(),
 							tf_agentClass.getValue(),
 							tf_agentDescription.getValue(),

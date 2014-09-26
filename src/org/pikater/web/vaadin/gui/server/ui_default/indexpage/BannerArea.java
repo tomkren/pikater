@@ -2,7 +2,7 @@ package org.pikater.web.vaadin.gui.server.ui_default.indexpage;
 
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.sharedresources.ThemeResources;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
@@ -46,7 +46,7 @@ public class BannerArea extends HorizontalLayout
 			@Override
 			public void buttonClick(com.vaadin.ui.Button.ClickEvent event)
 			{
-				ManageAuth.logout(VaadinSession.getCurrent());
+				UserAuth.logout(VaadinSession.getCurrent());
 				getUI().getPage().reload();
 			}
 		}); 
@@ -81,7 +81,7 @@ public class BannerArea extends HorizontalLayout
 		}
 		else
 		{
-			lbl_accountName.setValue(ManageAuth.getUserEntity(getSession()).getLogin());
+			lbl_accountName.setValue(UserAuth.getUserEntity(getSession()).getLogin());
 		}
 	}
 }

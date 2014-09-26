@@ -1,7 +1,7 @@
 package org.pikater.web.unused.cellbrowser.cell;
 
-import org.pikater.web.vaadin.gui.client.extensions.CellBrowserCellExtensionClientRpc;
-import org.pikater.web.vaadin.gui.client.extensions.CellBrowserCellExtensionSharedState;
+import org.pikater.web.unused.cellbrowser.CellBrowserCellExtensionClientRpc;
+import org.pikater.web.unused.cellbrowser.CellBrowserCellExtensionSharedState;
 
 import com.vaadin.server.AbstractExtension;
 import com.vaadin.ui.CustomLayout;

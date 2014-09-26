@@ -3,6 +3,7 @@ package org.pikater.web.vaadin.gui.client.extensions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
 import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayoutExtension;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Column;
 import org.pikater.web.vaadin.gui.shared.borderlayout.BorderLayoutUtil.Row;
@@ -20,13 +21,18 @@ import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.client.ui.customlayout.CustomLayoutConnector;
 import com.vaadin.shared.ui.Connect;
 
+/** 
+ * @author SkyCrawl
+ * @see {@link AutoVerticalBorderLayout}
+ */
 @Connect(AutoVerticalBorderLayoutExtension.class)
 public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensionConnector
 {
 	private static final long serialVersionUID = 6766120104518020715L;
 	
-	// private final MainUIExtensionServerRpc serverRPC = RpcProxy.create(MainUIExtensionServerRpc.class, this);
-	
+	/*
+	 * Keep these static definitions in sync with "WebContent/VAADIN/themes/pikater/layouts/autoVerticalBorderLayout.html". 
+	 */
 	private static final String firstRowStyleName = "avbl-firstRow";
 	private static final String secondRowStyleName = "avbl-secondRow";
 	private static final String thirdRowStyleName = "avbl-thirdRow";
@@ -34,6 +40,9 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 	private static final String secondColumnStyleName = "avbl-secondColumn";
 	private static final String thirdColumnStyleName = "avbl-thirdColumn";
 	
+	/*
+	 * Reference holders for important inner layout elements. 
+	 */
 	private Element encapsulatingTable = null;
 	
 	private Element coll1 = null;
@@ -48,16 +57,15 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 	private Element cell2 = null;
 	private Element cell3 = null;
 	
+	/*
+	 * Some helping variables.
+	 */
 	private final Map<Row, ItemInfo<Row>> rowInfo;
 	private final Map<Column, ItemInfo<Column>> columnInfo;
-	
-	/*
-	 * GENERAL IMPORTANT NOTE:
-	 * The in-built style builder uses the "camelCase" format (no hyphens, underscores, spaces etc) so
-	 * when using the "style.setProperty()" methods, make sure the property names are in that format.
-	 * For example: "borderSpacing" builds into "border-spacing".
-	 */
 
+	/**
+	 * Constructor.
+	 */
 	public AutoVerticalBorderLayoutExtensionConnector()
 	{
 		this.rowInfo = new HashMap<Row, ItemInfo<Row>>();
@@ -75,6 +83,13 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 		{
 			private static final long serialVersionUID = 8760526187099873218L;
 			
+			/*
+			 * GENERAL IMPORTANT NOTE:
+			 * The in-built GWT style builder uses the "camelCase" format (no hyphens, underscores, spaces etc) so
+			 * when using the "style.setProperty()" methods, make sure the property names are in that format.
+			 * For example: CSS property "border-spacing" builds into "borderSpacing" in "camelCase".
+			 */
+			
 			@Override
 			public void setRowHeight(final Row designatedRow, final Dimension dimension)
 			{
@@ -90,11 +105,11 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 							{
 								if(row != designatedRow)
 								{
-									getElementByRow(row).getStyle().setProperty("height", new Dimension(DimensionMode.AUTO).dimension);
+									getElementByRow(row).getStyle().setProperty("height", new Dimension(DimensionMode.AUTO).cssDimensionString);
 								}
 							}
 						}
-						getElementByRow(designatedRow).getStyle().setProperty("height", dimension.dimension);
+						getElementByRow(designatedRow).getStyle().setProperty("height", dimension.cssDimensionString);
 					}
 				});
 			}
@@ -107,7 +122,7 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 					@Override
 				    public void execute()
 					{
-						getElementByColumn(designatedColumn).getStyle().setProperty("width", dimension.dimension);
+						getElementByColumn(designatedColumn).getStyle().setProperty("width", dimension.cssDimensionString);
 					}
 				});
 			}
@@ -328,9 +343,9 @@ public class AutoVerticalBorderLayoutExtensionConnector extends AbstractExtensio
 				    public void execute()
 					{
 						encapsulatingTable.getStyle().setTableLayout(TableLayout.FIXED);
-						coll1.getStyle().setProperty("width", westDimension.dimension);
-						coll2.getStyle().setProperty("width", centerDimension.dimension);
-						coll3.getStyle().setProperty("width", eastDimension.dimension);
+						coll1.getStyle().setProperty("width", westDimension.cssDimensionString);
+						coll2.getStyle().setProperty("width", centerDimension.cssDimensionString);
+						coll3.getStyle().setProperty("width", eastDimension.cssDimensionString);
 					}
 				});
 			}

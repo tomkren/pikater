@@ -1,9 +1,9 @@
 package org.pikater.web.vaadin.gui.server.ui_default.indexpage.content.agents;
 
 import org.pikater.shared.database.views.tableview.externalagents.ExternalAgentTableDBView;
-import org.pikater.web.vaadin.ManageAuth;
-import org.pikater.web.vaadin.ManageSession;
-import org.pikater.web.vaadin.ManageUserUploads;
+import org.pikater.web.vaadin.UserAuth;
+import org.pikater.web.vaadin.UserSession;
+import org.pikater.web.vaadin.UserUploads;
 import org.pikater.web.vaadin.gui.server.components.dbviews.AgentsDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.forms.AgentUploadForm;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
@@ -25,7 +25,7 @@ public class UserAgentsView extends AgentsView
 	/**
 	 * This should be a constant reference across all UI instances.
 	 */
-	private ManageUserUploads uploadManager;
+	private UserUploads uploadManager;
 	
 	/**
 	 * One upload manager per UI instance.
@@ -65,11 +65,11 @@ public class UserAgentsView extends AgentsView
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		this.uploadManager = (ManageUserUploads) ManageSession.getAttribute(VaadinSession.getCurrent(), ManageSession.key_userUploads);
+		this.uploadManager = UserSession.getUserUploadManager(VaadinSession.getCurrent());
 		this.uploadInfoProvider = uploadManager.createUploadInfoProvider();
 		
 		// required to be executed after initializing DB view
-		setView(new AgentsDBViewRoot(new ExternalAgentTableDBView(ManageAuth.getUserEntity(VaadinSession.getCurrent()))));
+		setView(new AgentsDBViewRoot(new ExternalAgentTableDBView(UserAuth.getUserEntity(VaadinSession.getCurrent()))));
 	}
 	
 	@Override

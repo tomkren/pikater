@@ -5,6 +5,11 @@ import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.IGraphItemSettings;
 
+/**
+ * Visual settings of edges in the client kinetic canvas.
+ * 
+ * @author SkyCrawl
+ */
 public class KineticEdgeSettings implements IGraphItemSettings
 {
 	/*
@@ -26,14 +31,9 @@ public class KineticEdgeSettings implements IGraphItemSettings
 	 * Parameter defining the looks of drag marks.
 	 */
 	
-	public int getDragMarkDimension()
-	{
-		return 12;
-	}
-	
 	public Vector2d getDragMarkSize()
 	{
-		return new Vector2d(getDragMarkDimension(), getDragMarkDimension());
+		return new Vector2d(12, 12);
 	}
 	
 	public Colour getDragMarkFill()

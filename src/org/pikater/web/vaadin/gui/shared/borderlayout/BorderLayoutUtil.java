@@ -1,5 +1,12 @@
 package org.pikater.web.vaadin.gui.shared.borderlayout;
 
+import org.pikater.web.vaadin.gui.server.layouts.borderlayout.AutoVerticalBorderLayout;
+
+/**
+ * Shared utilities (for both server and client) related to {@link AutoVerticalBorderLayout}.
+ * 
+ * @author SkyCrawl
+ */
 public class BorderLayoutUtil
 {
 	public enum Border

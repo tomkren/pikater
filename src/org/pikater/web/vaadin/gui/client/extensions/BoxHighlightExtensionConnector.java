@@ -1,6 +1,6 @@
 package org.pikater.web.vaadin.gui.client.extensions;
 
-import org.pikater.web.vaadin.gui.client.kineticcomponent.KineticComponentConnector;
+import org.pikater.web.vaadin.gui.client.components.kineticcomponent.KineticComponentConnector;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.AbstractGraphItemClient.VisualStyle;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.BoxHighlightExtension;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
@@ -15,6 +15,10 @@ import com.vaadin.client.ServerConnector;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.shared.ui.Connect;
 
+/**  
+ * @author SkyCrawl
+ * @see {@link BoxHighlightExtension}
+ */
 @Connect(BoxHighlightExtension.class)
 public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 {
@@ -23,7 +27,17 @@ public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 	@Override
 	protected void extend(ServerConnector target)
 	{
-		final Widget extendedWidget = ((ComponentConnector) target).getWidget();
+		/*
+		 * Extends the given component/connector with a mouseover/mouseout
+		 * handler that turns on/off highlighting of the given boxes of
+		 * the given instance of client kinetic canvas.
+		 * 
+		 * This is all required not to be implemented on the server because
+		 * of performance penalties and impacts. As such, this extension
+		 * makes a VERY nice workaround.
+		 */
+		
+		final Widget extendedWidget = ((ComponentConnector) target).getWidget(); 
 		extendedWidget.addDomHandler(new MouseOverHandler()
 		{
 			@Override
@@ -32,7 +46,7 @@ public class BoxHighlightExtensionConnector extends AbstractExtensionConnector
 				extendedWidget.getElement().getStyle().setBackgroundColor(
 						KineticBoxSettings.getColor(VisualStyle.HIGHLIGHTED_SLOT).toString()
 				);
-				getKineticConnectorByID(getState().kineticConnectorID).getWidget().highlightBoxes(getState().boxesToBeHighlighted);
+				getKineticConnectorByID(getState().kineticConnectorID).getWidget().highlightBoxes(getState().boxIDs);
 			}
 		}, MouseOverEvent.getType());
 		extendedWidget.addDomHandler(new MouseOutHandler()

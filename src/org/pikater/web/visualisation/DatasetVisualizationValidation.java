@@ -2,11 +2,14 @@ package org.pikater.web.visualisation;
 
 import org.pikater.web.visualisation.definition.AttrMapping;
 
+/** 
+ * @author SkyCrawl
+ */
 public class DatasetVisualizationValidation
 {
 	/**
-	 * Checks whether the given attributes can be used as input for visualization.</br>
-	 * The visualization output is supposed to be a single image.
+	 * Checks whether the given attribute mapping is valid for image
+	 * generation. Relates to single dataset visualization.
 	 * @param attributes
 	 * @return
 	 */
@@ -16,8 +19,8 @@ public class DatasetVisualizationValidation
 	}
 	
 	/**
-	 * Checks whether the given attributes can be used as input for comparison.</br>
-	 * The visualization output is supposed to be a single image. 
+	 * Checks whether the given attribute mappings are valid for image
+	 * generation. Relates to dataset comparison. 
 	 * @param attributes1
 	 * @param attributes2
 	 * @return

@@ -2,6 +2,12 @@ package org.pikater.web.visualisation.definition;
 
 import org.pikater.shared.database.jpa.JPAAttributeMetaData;
 
+/**
+ * Utility class dedicated to visualization. Specifies what columns (attributes)
+ * of datasets should be compared and how. It is also used to index generated images. 
+ * 
+ * @author SkyCrawl
+ */
 public class AttrMapping
 {
 	private final JPAAttributeMetaData attrX;

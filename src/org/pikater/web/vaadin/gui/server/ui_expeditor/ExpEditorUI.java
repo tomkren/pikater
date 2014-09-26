@@ -5,7 +5,7 @@ import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.web.config.KnownCoreAgents;
 import org.pikater.web.config.WebAppConfiguration;
 import org.pikater.web.vaadin.CustomConfiguredUI;
-import org.pikater.web.vaadin.ManageAuth;
+import org.pikater.web.vaadin.UserAuth;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.ExpEditor;
 
@@ -43,7 +43,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 		/*
 		 * Display editor if authenticated or make the user authenticate first and then display it.
 		 */
-		if(ManageAuth.isUserAuthenticated(VaadinSession.getCurrent()))
+		if(UserAuth.isUserAuthenticated(VaadinSession.getCurrent()))
 		{
 			displayExperimentEditor();
 		}
@@ -69,7 +69,7 @@ public class ExpEditorUI extends CustomConfiguredUI
 			try
 			{
 				agentInfoProvider = KnownCoreAgents.getFrom(WebToCoreEntryPoint.getAgentInfosVisibleForUser(
-						ManageAuth.getUserID(VaadinSession.getCurrent())));
+						UserAuth.getUserID(VaadinSession.getCurrent())));
 			}
 			catch (Exception t)
 			{

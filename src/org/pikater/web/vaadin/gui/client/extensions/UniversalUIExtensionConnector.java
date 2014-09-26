@@ -8,6 +8,9 @@ import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.shared.ui.Connect;
 
+/** 
+ * @author SkyCrawl 
+ */
 @Connect(UniversalUIExtension.class)
 public class UniversalUIExtensionConnector extends AbstractExtensionConnector
 {
