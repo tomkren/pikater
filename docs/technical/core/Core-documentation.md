@@ -137,8 +137,6 @@ V paměti (a systému) jsou datasety reprezentovány ontologií `DataInstances` 
 
 **Řešení přenosu**  
 
-<font color="red">TADY SPECIÁLNÍ POZOR. Hodně jsem to přefrázoval a snažil se uhádnout, jak to asi funguje, protože z původní dokumentace jsem to pochopit a úplně vyčíst nedokázal...</font>
-
 V původním Pikateru se načtená data předávala výpočetním agentům přímo ACL zprávami, což se ukázalo jako nanejvýš neefektivní – potenciálně velká data musela projít drahou serializací a deserializací, dokonce i v rámci jednoho JADE kontejneru.
 
 Nyní jsou data přenášena z databáze přímo do agenta dedikovaného pro přístup k databázi, který se vyskytuje v každém kontejneru. Aktuální systém přepokládá výskyt právě jednoho slave kontejneru na jednom fyzickém stroji.
@@ -147,7 +145,7 @@ V rámci daného kontejneru (stroje) jsou pak data přenášena tzv. "object to 
 
 Pro zefektivnění přenosů mezi různými stroji pak bylo zavedeno cacheování dat. Data se na každém stroji zachovávají (nemažou) a pokud již jsou na daném stroji k dispozici, nepřenášejí se systémem znovu.
 
-Všimněte si ovšem, že některá data se stále přenášejí ACL zprávami, protože jde typicky o malé soubory (do 5 MB) a jejich přenos nepředstavuje riziko velkého vytížení infrastruktury. Přenos probíhá přímým načtením ze vzdálené databáze do souboru. Konkrétně jsou to:
+Všimněte si ovšem, že některá data se stále přenášejí ACL zprávami, protože jde typicky o malé soubory (do 5 MB) a jejich přenos nepředstavuje riziko velkého vytížení infrastruktury. Konkrétně jsou to:
 * __Serializované modely__  
 Typicky mívají do 100 kB, jsou doručovány binárně (bytová pole) v podobě serializované JAVA třídy (agenta). Serializaci/deserializaci zajišťuje WEKA.
 * __JAR soubory__  
