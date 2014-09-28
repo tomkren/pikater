@@ -3,6 +3,14 @@ package org.pikater.web.vaadin.gui.server.components.wizards.steps;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardWithDynamicSteps;
 
+/**
+ * Wizard step to be exclusively used by {@link WizardWithDynamicSteps}.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <OUTPUT>
+ * @param <WIZARD>
+ */
 public abstract class DynamicNeighbourWizardStep<OUTPUT extends IWizardCommon, WIZARD extends WizardWithDynamicSteps<OUTPUT>> extends ParentAwareWizardStep<OUTPUT, WIZARD>
 {
 	private final boolean isLeaf;

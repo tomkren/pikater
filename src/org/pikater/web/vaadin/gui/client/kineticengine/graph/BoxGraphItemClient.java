@@ -21,11 +21,16 @@ import org.pikater.web.experiment.client.BoxInfoClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.BoxDragListenerProvider;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.DragParameters;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragContext;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragEndContext;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.BoxGraphItemShared;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 
+/**
+ * The class representing a box in our {@link KineticEngine}.
+ * 
+ * @author SkyCrawl
+ */
 public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettings>
 {
 	// **********************************************************************************************
@@ -121,13 +126,13 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 		BoxDragListenerProvider listenerProvider = new BoxDragListenerProvider(new IBoxDragContext()
 		{
 			@Override
-			public KineticEngine getEngine()
+			public KineticEngine getParentEngine()
 			{
 				return getKineticEngine();
 			}
 			
 			@Override
-			public Vector2d getCurrentPosition()
+			public Vector2d getCurrentBasePosition()
 			{
 				return container.getPosition();
 			}
@@ -145,21 +150,21 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 			}
 			
 			@Override
-			public Node[] getAllNodesBeingMoved()
+			public Node[] getNodesBeingMoved()
 			{
 				return new Node[]{ container };
 			}
 			
 			@Override
-			public void setOriginalPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			public void setOriginalPositions(Node[] allMovedNodes, DragParameters params)
 			{
-				container.setPosition(context.getOriginalPosition());
+				container.setPosition(params.getOriginalPosition());
 			}
 			
 			@Override
-			public void setNewPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			public void setNewPositions(Node[] allMovedNodes, DragParameters params)
 			{
-				container.setPosition(context.getNewPosition());
+				container.setPosition(params.getNewPosition());
 			}
 		});
 	    this.container.addEventListener(listenerProvider.getDragStartListener(), EventType.Basic.DRAGSTART);
@@ -326,9 +331,9 @@ public class BoxGraphItemClient extends AbstractGraphItemClient<KineticBoxSettin
 		return Collections.disjoint(connectedEdges, otherBox.connectedEdges);
 	}
 	
-	public boolean intersects(Vector2d selectionAbsPos, Vector2d selectionSize)
+	public boolean intersects(Box2d box)
 	{
-		return rectangle.intersects(selectionAbsPos, selectionSize);
+		return rectangle.intersects(box);
 	}
 	
 	public void setEdgeRegistered(EdgeGraphItemClient edge, boolean registered)

@@ -1,11 +1,17 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.ComboBox;
 
+/** 
+ * @author SkyCrawl
+ * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, 
+ * org.pikater.shared.database.views.base.values.AbstractDBViewValue) DBTableContainer#getProperty()}
+ */
 public class DBTableItemPropertyCombo implements Property<ComboBox>
 {
 	private static final long serialVersionUID = -5919644785774086999L;

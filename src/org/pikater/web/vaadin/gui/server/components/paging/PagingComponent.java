@@ -14,12 +14,24 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
+/**
+ * Component providing paging navigation and setting page sizes. 
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("pagingComponent.css")
 public class PagingComponent extends HorizontalLayout
 {
 	private static final long serialVersionUID = 5946124883390545518L;
 	
+	/*
+	 * Programmatic variables.
+	 */
 	private final IPagedComponent context;
+	
+	/*
+	 * Inner components.
+	 */
 	private final ComboBox cb_pageLength;
 	private final PagePicker pagePicker;
 
@@ -76,6 +88,12 @@ public class PagingComponent extends HorizontalLayout
 		return pagePicker.getCurrentlySelectedPage();
 	}
 	
+	/**
+	 * Look at the currently selected page and page size and
+	 * determine the current overall offset of this first visible
+	 * item.
+	 * @return
+	 */
 	public int getOverallOffset()
 	{
 		return (getCurrentlySelectedPage() - 1) * getPageSize();
@@ -121,6 +139,13 @@ public class PagingComponent extends HorizontalLayout
 		void onPageSizeChanged(int itemsPerPage);
 	}
 	
+	/**
+	 * Inner component providing page navigation - direct links for
+	 * first, last, next and previous pages + direct page selection
+	 * combo box.  
+	 * 
+	 * @author SkyCrawl
+	 */
 	private class PagePicker extends HorizontalLayout
 	{
 		private static final long serialVersionUID = -595408596224035721L;
@@ -275,6 +300,12 @@ public class PagingComponent extends HorizontalLayout
 			}
 		}
 		
+		/**
+		 * Updates inner components with a new page count, without
+		 * spawning any events. Also updates the selected page if
+		 * necessary but does NOT reset it to the first page.
+		 * @param pageCount
+		 */
 		public void setPageCount(final int pageCount)
 		{
 			if(pageCount < 1)
@@ -307,6 +338,11 @@ public class PagingComponent extends HorizontalLayout
 		// ---------------------------------------------------
 		// PRIVATE INTERFACE
 		
+		/**
+		 * Provides a way to make changes to the inner navigation
+		 * components without triggering any attached event handlers.
+		 * @param updateAction
+		 */
 		private void updateWithoutSpawningEvents(Runnable updateAction)
 		{
 			/*
@@ -319,6 +355,9 @@ public class PagingComponent extends HorizontalLayout
 			cb_selectedPage.setData(true);
 		}
 		
+		/**
+		 * Some post-processing of inner components when changes occur.
+		 */
 		private void afterChecks()
 		{
 			page_previous.setEnabled(!isFirstPageSelected());

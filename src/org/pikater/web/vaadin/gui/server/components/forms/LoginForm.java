@@ -6,9 +6,15 @@ import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactor
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
+/**
+ * A form for users to authenticate with.
+ * 
+ * @author SkyCrawl
+ */
 public class LoginForm extends CustomFormLayout implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = -2356468027629344476L;
@@ -26,10 +32,15 @@ public class LoginForm extends CustomFormLayout implements IDialogResultPreparer
 		*/
 		
 		this.loginField = FormFieldFactory.getLoginField("", true, false);
-		this.passwordField = FormFieldFactory.getGeneralPasswordField("Password:", "", true, false);
+		this.passwordField = FormFieldFactory.createPasswordField("Password:", "", true, false);
 		
 		addField("login", loginField);
 		addField("password", passwordField);
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event)
+	{
 	}
 	
 	@Override

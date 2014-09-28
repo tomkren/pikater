@@ -13,6 +13,11 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventListener;
 
+/**
+ * Module tracking which box the user's mouse currently hovers over.
+ * 
+ * @author SkyCrawl
+ */
 public final class TrackMouseModule implements IEngineModule
 {
 	public static String moduleID;
@@ -40,7 +45,7 @@ public final class TrackMouseModule implements IEngineModule
 		@Override
 		protected void handleInner(KineticEvent event)
 		{
-			setCurrentlyHoveredBox(parentBox);
+			setCurrentlyHoveredBox(getEventSourceBox());
 			GWTCursorManager.setCursorType(kineticEngine.getContext().getStageDOMElement(), MyCursor.POINTER);
 		}
 	}
@@ -102,7 +107,7 @@ public final class TrackMouseModule implements IEngineModule
 	// **********************************************************************************************
 	// PUBLIC INTERFACE
 	
-	public boolean isBoxHovered()
+	public boolean isABoxHovered()
 	{
 		return currentlyHoveredBox != null;
 	}

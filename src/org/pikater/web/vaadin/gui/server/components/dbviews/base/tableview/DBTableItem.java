@@ -10,6 +10,12 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 
+/**
+ * An item for our {@link DBTable database tables} representing
+ * and encapsulating a single row. The row is defined by {@link #rowView}.
+ * 
+ * @author SkyCrawl
+ */
 public class DBTableItem implements Item, ICommitable
 {
 	private static final long serialVersionUID = -8884535836440270245L;
@@ -18,7 +24,7 @@ public class DBTableItem implements Item, ICommitable
 	private final AbstractTableRowDBView rowView;
 	private final Map<ITableColumn, Property<? extends Object>> columnToValue;
 	
-	public DBTableItem(DBTableContainer container, AbstractTableRowDBView rowView, DBTable parentTable)
+	public DBTableItem(DBTableContainer container, AbstractTableRowDBView rowView)
 	{
 		this.container = container;
 		this.rowView = rowView;
@@ -40,8 +46,8 @@ public class DBTableItem implements Item, ICommitable
 	public Collection<ITableColumn> getItemPropertyIds()
 	{
 		/*
-		 * By default, all rows have a value for every table column. If no such value can
-		 * be provided, let
+		 * By default, all rows have a value for every table column since
+		 * our tables are homogenous.
 		 */
 		return container.getContainerPropertyIds();
 	}

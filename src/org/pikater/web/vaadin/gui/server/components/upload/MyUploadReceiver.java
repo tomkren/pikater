@@ -27,6 +27,8 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.receiver.UploadReceiver;
  * 
  * When (re-)implementing this class, it is advised to consult the 
  * <a href="http://goo.gl/piWOPJ">original UploadStatePanel implementation</a>.
+ * 
+ * @author SkyCrawl
  */
 public class MyUploadReceiver implements UploadReceiver
 {

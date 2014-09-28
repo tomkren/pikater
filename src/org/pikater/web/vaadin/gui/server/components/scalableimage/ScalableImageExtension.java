@@ -5,6 +5,11 @@ import org.pikater.web.vaadin.gui.client.extensions.ScalableImageExtensionServer
 
 import com.vaadin.server.AbstractExtension;
 
+/**
+ * Vaadin extension implementing the conduct of {@link ScalableImage}.
+ * 
+ * @author SkyCrawl
+ */
 public class ScalableImageExtension extends AbstractExtension
 {
 	private static final long serialVersionUID = 8278201529558658998L;

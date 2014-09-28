@@ -21,6 +21,8 @@ import com.vaadin.server.StreamVariable.StreamingStartEvent;
  * 
  * <font color="red">THE SOLUTION: </font> don't detach the parent components, only hide them
  * in the {@link #uploadStarted} method, e.g. {@link com.vaadin.ui.AbstractComponent#setVisible setVisible(false)}.
+ * 
+ * @author SkyCrawl
  */
 public interface IFileUploadEvents
 {

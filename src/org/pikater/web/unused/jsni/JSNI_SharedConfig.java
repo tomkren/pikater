@@ -1,4 +1,4 @@
-package org.pikater.web.vaadin.gui.client.jsni;
+package org.pikater.web.unused.jsni;
 
 public class JSNI_SharedConfig
 {

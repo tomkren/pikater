@@ -6,10 +6,26 @@ import java.util.Stack;
 
 import com.google.gwt.user.client.Element;
 
+/**
+ * A utility class to provide easy stack-like cursor
+ * style management.
+ *  
+ * @author SkyCrawl
+ *
+ */
 public class GWTCursorManager
 {
+	/**
+	 * Currently supported cursor styles.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static enum MyCursor
 	{
+		/*
+		 * All of these are standard CSS cursor styles.
+		 */
+		
 		AUTO,
 		CROSSHAIR,
 		DEFAULT,
@@ -29,6 +45,12 @@ public class GWTCursorManager
 	// *************************************************************************************
 	// PUBLIC METHODS
 	
+	/**
+	 * Set special cursor style to display when hovering over the specified element.
+	 * 
+	 * @param element
+	 * @param cursorType
+	 */
 	public static void setCursorType(Element element, MyCursor cursorType)
 	{
 		// backup the current cursor style
@@ -43,6 +65,11 @@ public class GWTCursorManager
 		element.getStyle().setProperty("cursor", cursorType.toString());
 	}
 	
+	/**
+	 * Set cursor style for this element that was previous to the current one.
+	 * 
+	 * @param element
+	 */
 	public static void rollBackCursor(Element element)
 	{
 		element.getStyle().setProperty("cursor", previousCursors.get(element.hashCode()).pop());

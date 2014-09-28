@@ -16,6 +16,7 @@ import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.forms.DatasetVisualizationForm;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
@@ -34,6 +35,11 @@ import com.vaadin.ui.TextField;
 
 import de.steinwedel.messagebox.MessageBox;
 
+/**
+ * Configuration for {@link DBTable DB tables} working with experiment results.
+ * 
+ * @author SkyCrawl
+ */
 public class ResultDBViewRoot<V extends ResultTableDBView> extends AbstractDBViewRoot<V>
 {
 	public ResultDBViewRoot(V view)

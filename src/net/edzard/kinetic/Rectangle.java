@@ -68,19 +68,12 @@ public class Rectangle extends Shape {
 	}-*/;
 	
 	/**
-	 * Does this rectangle intersect with another?
-	 * Copied and assimilated from StackOverflow answer #2: http://stackoverflow.com/questions/2752349/fast-rectangle-to-rectangle-intersection
+	 * Does this rectangle intersect with another? 
 	 * @param other The other rectangle
 	 */
-	public final boolean intersects(Vector2d otherRectAbsPos, Vector2d otherRectSize)
+	public final boolean intersects(Box2d otherBox)
 	{
-		Vector2d absPosA = getAbsolutePosition();
-		Vector2d sizeA = getSize();
-		return (absPosA.x <= (otherRectAbsPos.x + otherRectSize.x) && // a.left <= b.right
-				otherRectAbsPos.x <= (absPosA.x + sizeA.x) && // b.left <= a.right
-				absPosA.y <= (otherRectAbsPos.y + otherRectSize.y) && // a.top <= b.bottom
-				otherRectAbsPos.y <= (absPosA.y + sizeA.y) // b.top <= a.bottom
-		);
+		return getBox().intersects(otherBox);
 	}
 	
 	/**
@@ -121,12 +114,17 @@ public class Rectangle extends Shape {
 		}
 	}
 	
-	private double getScaledWidth(double scale)
+	public final Box2d getBox()
+	{
+		return new Box2d(getAbsolutePosition(), getSize());
+	}
+	
+	private final double getScaledWidth(double scale)
 	{
 		return getWidth() * scale;
 	}
 	
-	private double getScaledHeight(double scale)
+	private final double getScaledHeight(double scale)
 	{
 		return getHeight() * scale;
 	}

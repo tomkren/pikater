@@ -1,17 +1,34 @@
 package org.pikater.shared.util;
 
-public class Interval<T extends Comparable<T>>
+/**
+ * Immutable number range implementation. Values are nullable.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <N> Integer, Float or Double.
+ */
+public class Interval<N extends Number>
 {
-	public final T min;
-	public final T max;
+	private final N min;
+	private final N max;
 	
-	public Interval(T min, T max)
+	public Interval(N min, N max)
 	{
 		this.min = min;
 		this.max = max;
-		if(min.compareTo(max) > 0) // min > max
+		if((min != null) && (max != null))
 		{
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Minimum exceeds maximum");
 		}
+	}
+
+	public N getMin()
+	{
+		return min;
+	}
+
+	public N getMax()
+	{
+		return max;
 	}
 }

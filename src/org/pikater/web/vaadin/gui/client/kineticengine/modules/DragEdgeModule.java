@@ -20,6 +20,11 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.ModuleEventL
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.DeleteEdgeOperation;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.SwapEdgeEndPointOperation;
 
+/**
+ * Module implementing dragging edges (one of the endpoint boxes is changed).
+ * 
+ * @author SkyCrawl
+ */
 @SuppressWarnings("deprecation")
 public final class DragEdgeModule implements IEngineModule
 {
@@ -82,10 +87,10 @@ public final class DragEdgeModule implements IEngineModule
 		@Override
 		protected void handleInner(KineticEvent event)
 		{
-			if(isAnEdgeBeingDragged() && !isStaticEndpointForThisDrag(parentBox))
+			if(isAnEdgeBeingDragged() && !isStaticEndpointForThisDrag(getEventSourceBox()))
 			{
-				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
-				kineticEngine.draw(parentBox.getComponentToDraw());
+				getEventSourceBox().setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
+				kineticEngine.draw(getEventSourceBox().getComponentToDraw());
 				
 				event.setProcessed();
 				event.stopVerticalPropagation();
@@ -104,8 +109,8 @@ public final class DragEdgeModule implements IEngineModule
 		{
 			if(isAnEdgeBeingDragged())
 			{
-				parentBox.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
-				kineticEngine.draw(parentBox.getComponentToDraw());
+				getEventSourceBox().setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
+				kineticEngine.draw(getEventSourceBox().getComponentToDraw());
 				
 				event.setProcessed();
 				event.stopVerticalPropagation();
@@ -154,8 +159,8 @@ public final class DragEdgeModule implements IEngineModule
 				if(newEndpoint != originalEndpoint) // now we know for sure we are going to change the endpoint
 				{
 					// IMPORTANT: don't violate the call order
-					selectionModule.onEdgeDragOperationFinished(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
-					kineticEngine.pushNewOperation(new SwapEdgeEndPointOperation(
+					selectionModule.onEdgeDragFinish(draggedEdge, originalEndpoint, newEndpoint, draggedEdge.getEndPoint(draggedEdgeEndpoint.getInverted()));
+					kineticEngine.pushToHistory(new SwapEdgeEndPointOperation(
 							kineticEngine,
 							getDraggedEdge(),
 							getEndPointBeingChanged()
@@ -169,7 +174,7 @@ public final class DragEdgeModule implements IEngineModule
 			else // edge was dragged off the previous box onto blank space
 			{
 				// delete it and also draw changes
-				kineticEngine.pushNewOperation(new DeleteEdgeOperation(kineticEngine, draggedEdge));
+				kineticEngine.pushToHistory(new DeleteEdgeOperation(kineticEngine, draggedEdge));
 			}
 			resetEdgeDraggingVars();
 		}

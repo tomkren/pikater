@@ -3,45 +3,53 @@ package org.pikater.web.vaadin.gui.server.components.forms.validators;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.pikater.shared.util.Interval;
+
 import com.vaadin.data.Validator;
 
+/**
+ * Common range validator for numbers. Any number of ranges can
+ * be added and validation will validate against the highest
+ * minimum and lowest maximum found.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <N> The number type. Integer, Float or Double.
+ */
 public class NumberRangeValidator<N extends Number> implements Validator
 {
 	private static final long serialVersionUID = 3351367465515564187L;
 	
 	private final NumberConstant thisNumber;
-	private final Collection<IBoundsProvider> boundsProviders;
-	
-	public NumberRangeValidator(Class<? extends Number> numberClass, IBoundsProvider boundsProvider)
-	{
-		this.thisNumber = NumberConstant.fromNumberClass(numberClass);
-		this.boundsProviders = new HashSet<IBoundsProvider>();
-		addBoundsProvider(boundsProvider);
-	}
+	private final Collection<Interval<N>> boundsProviders;
 	
 	public NumberRangeValidator(Class<? extends Number> numberClass, final N min, final N max)
 	{
-		this(numberClass, new IBoundsProvider()
-		{
-			@Override
-			public Number getMin()
-			{
-				return min;
-			}
-
-			@Override
-			public Number getMax()
-			{
-				return max;
-			}
-		});
+		this(numberClass, new Interval<N>(min, max));
+	}
+	public NumberRangeValidator(Class<? extends Number> numberClass, Interval<N> boundsProvider)
+	{
+		this.thisNumber = NumberConstant.fromNumberClass(numberClass);
+		this.boundsProviders = new HashSet<Interval<N>>();
+		addBoundsProvider(boundsProvider);
 	}
 	
-	public void addBoundsProvider(IBoundsProvider boundsProvider)
+	/**
+	 * Add a range to validate against.
+	 * @param boundsProvider
+	 */
+	public void addBoundsProvider(Interval<N> boundsProvider)
 	{
 		this.boundsProviders.add(boundsProvider);
 	}
 	
+	/**
+	 * Parse the given value into the validator's associated number
+	 * type.
+	 * @param value
+	 * @return
+	 * @throws InvalidValueException
+	 */
 	@SuppressWarnings("unchecked")
 	public N parse(String value) throws InvalidValueException
 	{
@@ -61,15 +69,15 @@ public class NumberRangeValidator<N extends Number> implements Validator
 	{
 		N min = (N) this.thisNumber.absoluteMin;
 		N max = (N) this.thisNumber.absoluteMax;
-		for(IBoundsProvider boundsProvider : boundsProviders)
+		for(Interval<N> interval : boundsProviders)
 		{
-			if((boundsProvider.getMin() != null) && (boundsProvider.getMin().doubleValue() > min.doubleValue()))
+			if((interval.getMin() != null) && (interval.getMin().doubleValue() > min.doubleValue()))
 			{
-				min = (N) boundsProvider.getMin();
+				min = (N) interval.getMin();
 			}
-			if((boundsProvider.getMax() != null) && (boundsProvider.getMax().doubleValue() < max.doubleValue()))
+			if((interval.getMax() != null) && (interval.getMax().doubleValue() < max.doubleValue()))
 			{
-				max = (N) boundsProvider.getMax();
+				max = (N) interval.getMax();
 			}
 		}
 		
@@ -78,62 +86,6 @@ public class NumberRangeValidator<N extends Number> implements Validator
 		{
 			throw new InvalidValueException("Not " + thisNumber.errorDisplayString + " between " +
 					min.toString() + " and " + max.toString());
-		}
-	}
-	
-	//--------------------------------------------------
-	// SPECIAL TYPES
-	
-	public enum NumberConstant
-	{
-		INTEGER("an integer", Integer.MIN_VALUE, Integer.MAX_VALUE),
-		FLOAT("a float", Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY),
-		DOUBLE("a double", Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-		
-		public final String errorDisplayString;
-		public final Number absoluteMin;
-		public final Number absoluteMax;
-		
-		private NumberConstant(String errorDisplayString, Number min, Number max)
-		{
-			this.errorDisplayString = errorDisplayString;
-			this.absoluteMin = min;
-			this.absoluteMax = max;
-		}
-		
-		public Number parse(String value) throws NumberFormatException
-		{
-			switch(this)
-			{
-				case DOUBLE:
-					return Double.parseDouble(value);
-				case FLOAT:
-					return Float.parseFloat(value);
-				case INTEGER:
-					return Integer.parseInt(value);
-				default:
-					throw new IllegalStateException("Unknown state: " + name());
-			}
-		}
-		
-		public static NumberConstant fromNumberClass(Class<? extends Number> clazz)
-		{
-			if(clazz.equals(Integer.class))
-			{
-				return INTEGER;
-			}
-			else if(clazz.equals(Float.class))
-			{
-				return FLOAT;
-			}
-			else if(clazz.equals(Double.class))
-			{
-				return DOUBLE;
-			}
-			else
-			{
-				throw new IllegalArgumentException("Unknown number type: " + clazz.getName());
-			}
 		}
 	}
 }

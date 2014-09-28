@@ -7,6 +7,12 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient.EndPoint;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemRegistrationOperation;
 
+/**
+ * A helper class to create (and register, should you wish it)
+ * graph items.
+ * 
+ * @author SkyCrawl
+ */
 public class GraphItemCreator
 {
 	/**
@@ -40,7 +46,7 @@ public class GraphItemCreator
 		result.reloadVisualStyles(false);
 		if(nrt == GraphItemRegistration.AUTOMATIC)
 		{
-			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, new BoxGraphItemClient[] { result }, null, true));
+			kineticEngine.pushToHistory(new ItemRegistrationOperation(kineticEngine, new BoxGraphItemClient[] { result }, null, true));
 		}
 	    return result;
 	}
@@ -65,7 +71,7 @@ public class GraphItemCreator
 		}
 		if(nrt == GraphItemRegistration.AUTOMATIC)
 		{
-			kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, null, new EdgeGraphItemClient[] { result }, true));
+			kineticEngine.pushToHistory(new ItemRegistrationOperation(kineticEngine, null, new EdgeGraphItemClient[] { result }, true));
 		}
 		return result;
 	}

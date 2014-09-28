@@ -7,6 +7,14 @@ import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 
+/**
+ * Abstract class for all graph items used in experiment editor. Currently, that
+ * means boxes and edges.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <S> The class representing visual settings to this graph item.
+ */
 public abstract class AbstractGraphItemClient<S extends IGraphItemSettings> implements IKineticShapeWrapper
 {
 	/**

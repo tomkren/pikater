@@ -16,6 +16,12 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModul
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
 
+/**
+ * Module implementing item registering/unregistering in the
+ * kinetic canvas (environment).
+ * 
+ * @author SkyCrawl
+ */
 public class ItemRegistrationModule implements IEngineModule
 {
 	public static String moduleID;
@@ -83,12 +89,13 @@ public class ItemRegistrationModule implements IEngineModule
 	
 	/**
 	 * Does the operation corresponding to the arguments, doesn't handle edges in any way.
-	 * The following things are required to be done in the calling code:</br>
+	 * The following things are required to be done in the calling code:
 	 * <ul>
 	 * <li> Proper initialization of the given items.
-	 * </ul> 
+	 * </ul>
 	 * @param opKind
 	 * @param drawOnFinish
+	 * @param notifyServer
 	 * @param boxes
 	 */
 	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, BoxGraphItemClient... boxes)
@@ -133,12 +140,13 @@ public class ItemRegistrationModule implements IEngineModule
 	
 	/**
 	 * Does the operation corresponding to the arguments, doesn't handle boxes in any way.
-	 * The following things are required to be done in the calling code:</br>
+	 * The following things are required to be done in the calling code:
 	 * <ul>
 	 * <li> Proper initialization of the given items.
 	 * </ul>
 	 * @param opKind
 	 * @param drawOnFinish
+	 * @param notifyServer
 	 * @param edges
 	 */
 	public void doOperation(RegistrationOperation opKind, boolean drawOnFinish, boolean notifyServer, EdgeGraphItemClient... edges)
@@ -191,10 +199,10 @@ public class ItemRegistrationModule implements IEngineModule
 	}
 	
 	/**
-	 * Does what the method's name suggests.</br>
+	 * Does exactly what the method's name suggests.</br>
 	 * This method is supposed to be called from the server and only resets the
-	 * engine (boxes, edges and selection). Further cleanup is expected to be done
-	 * in the calling code.
+	 * engine (boxes, edges and selection). Further cleanup (e.g. history) is expected
+	 * to be done in the calling code.
 	 */
 	public void destroyGraphAndClearStage()
 	{

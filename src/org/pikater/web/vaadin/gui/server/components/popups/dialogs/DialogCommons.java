@@ -15,14 +15,19 @@ import de.steinwedel.messagebox.ButtonId;
 import de.steinwedel.messagebox.MessageBox;
 import de.steinwedel.messagebox.MessageBoxListener;
 
+/**
+ * Common utilities and methods for all of Pikater's dialogs. All
+ * further classes implementing dialogs should extend this class. 
+ * 
+ * @author SkyCrawl
+ */
 public class DialogCommons
 {
 	/**
-	 * Applies general message box settings.
+	 * Applies general messagebox settings.
 	 * @param box
 	 * @param enterButton which button to bind with the ENTER key
 	 * @param closeWithAnyButton whether the dialog should close after clicking ANY of its buttons
-	 * @param escapeToClose
 	 */
 	protected static void setupGeneralDialog(MessageBox box, boolean closeWithAnyButton)
 	{
@@ -35,13 +40,6 @@ public class DialogCommons
 		UI.getCurrent().setFocusedComponent(box.getWindow());
 	}
 	
-	/**
-	 * Applies general message box settings.
-	 * @param box
-	 * @param enterButton which button to bind with the ENTER key
-	 * @param closeWithAnyButton whether the dialog should close after clicking ANY of its buttons
-	 * @param escapeToClose
-	 */
 	protected static void setupWizardDialog(MessageBox box, WizardForDialog<?> wizard)
 	{
 		box.getWindow().setClosable(true);
@@ -185,6 +183,15 @@ public class DialogCommons
 		}
 	}
 	
+	/**
+	 * Provides a way for dialogs to pass button click event handling
+	 * to external code.
+	 * 
+	 * @author SkyCrawl
+	 *
+	 * @param <T> The dialog content type that prepares conditions
+	 * for a button click of the dialog.
+	 */
 	protected static class MyComponentMessageBoxListenerWithExternalResultHandler<T extends Component & IDialogResultPreparer> extends MyMessageBoxListener
 	{
 		private final T component; 
@@ -209,6 +216,14 @@ public class DialogCommons
 		}
 	}
 	
+	/**
+	 * Provides a way for dialogs to handle button clicks through the content component.
+	 * 
+	 * @author SkyCrawl
+	 *
+	 * @param <T> The dialog content type that prepares conditions
+	 * for a button click of the dialog and also handles the click event.
+	 */
 	protected static class MyComponentMessageBoxListener<T extends Component & IDialogComponent> extends MyMessageBoxListener
 	{
 		private final T component; 
@@ -236,6 +251,11 @@ public class DialogCommons
 	// -------------------------------------------------------------------------
 	// PUBLIC TYPES - GENERAL DIALOG RESULT HANDLING AND PREPARATION TO IT
 
+	/**
+	 * Interface providing validation methods to dialog buttons.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static interface IDialogResultValidator extends Component
 	{
 		/**
@@ -246,6 +266,12 @@ public class DialogCommons
 		boolean isResultReadyToBeHandled();
 	}
 
+	/**
+	 * Interface providing validation and pre-processing methods to
+	 * dialog buttons.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static interface IDialogResultPreparer extends IDialogResultValidator
 	{
 		/**
@@ -257,6 +283,13 @@ public class DialogCommons
 		void addArgs(List<Object> arguments);
 	}
 
+	/**
+	 * Interface providing methods for handling dialog button clicks.
+	 * Although it doesn't extend the other interfaces declared in this class,
+	 * it is supposed to work together with at least {@link IDialogResultPreparer}.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static interface IDialogResultHandler
 	{
 		/**
@@ -267,6 +300,11 @@ public class DialogCommons
 		boolean handleResult(Object[] args);
 	}
 
+	/**
+	 * @author SkyCrawl
+	 * @see {@link IDialogResultPreparer}
+	 * @see {@link IDialogResultHandler}
+	 */
 	public static interface IDialogComponent extends IDialogResultPreparer, IDialogResultHandler
 	{
 	}

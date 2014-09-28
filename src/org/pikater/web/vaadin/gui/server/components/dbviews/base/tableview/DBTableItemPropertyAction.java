@@ -8,6 +8,11 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 
+/** 
+ * @author SkyCrawl
+ * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, 
+ * org.pikater.shared.database.views.base.values.AbstractDBViewValue) DBTableContainer#getProperty()}
+ */
 public class DBTableItemPropertyAction implements Property<Button>
 {
 	private static final long serialVersionUID = -4326743856484935440L;

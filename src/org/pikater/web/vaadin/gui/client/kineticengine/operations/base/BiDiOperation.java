@@ -2,6 +2,12 @@ package org.pikater.web.vaadin.gui.client.kineticengine.operations.base;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 
+/**
+ * Base class for "back&forth" operations suitable to be used
+ * in history managers.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class BiDiOperation
 {
 	protected final KineticEngine kineticEngine;
@@ -11,10 +17,13 @@ public abstract class BiDiOperation
 		this.kineticEngine = kineticEngine;
 	}
 	
-	public abstract void firstExecution();
+	/**
+	 * Undo this operation.
+	 */
 	public abstract void undo();
-	public abstract void redo();
 	
-	@Override
-	public abstract String toString();
+	/**
+	 * Redo this operation.
+	 */
+	public abstract void redo();
 }

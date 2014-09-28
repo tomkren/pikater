@@ -4,6 +4,12 @@ import org.pikater.web.vaadin.gui.client.extensions.ScalableImageExtensionClient
 
 import com.vaadin.ui.CustomLayout;
 
+/**
+ * A CSS implementation of a scaled image component. Use
+ * {@link #setScaleRatio(double)}.
+ * 
+ * @author SkyCrawl
+ */
 public class ScalableImage extends CustomLayout implements ScalableImageExtensionClientRpc
 {
 	private static final long serialVersionUID = -5047809273477362373L;

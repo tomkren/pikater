@@ -19,6 +19,11 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Master component viewing the results of dataset comparison.
+ * 
+ * @author SkyCrawl
+ */
 public class CompareDatasetsVisualizer extends VerticalLayout
 {
 	private static final long serialVersionUID = 3682122092659178186L;

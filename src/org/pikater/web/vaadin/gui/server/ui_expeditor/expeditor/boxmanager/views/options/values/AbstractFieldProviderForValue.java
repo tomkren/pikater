@@ -12,7 +12,7 @@ import org.pikater.core.ontology.subtrees.newOption.restrictions.SetRestriction;
 import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IValueData;
 import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactory;
-import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator.NumberConstant;
+import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberConstant;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -107,7 +107,7 @@ public abstract class AbstractFieldProviderForValue
 	protected <O extends Object> AbstractField<? extends Object> createEnumeratedField(O currentValue, List<O> options, String caption,
 			final IOnValueChange<O> valueChangeHandler)
 	{
-		final ComboBox cb_value = FormFieldFactory.getGeneralComboBox(caption, options, currentValue, true, false);
+		final ComboBox cb_value = FormFieldFactory.createComboBox(caption, options, currentValue, true, false);
 		cb_value.setWidth("100%");
 		cb_value.addValueChangeListener(new Property.ValueChangeListener()
 		{
@@ -138,7 +138,7 @@ public abstract class AbstractFieldProviderForValue
 			}
 			else
 			{
-				TextField tf_value = FormFieldFactory.getGeneralTextField(caption, null, context.getCurrentValue(), true, false);
+				TextField tf_value = FormFieldFactory.createTextField(caption, null, context.getCurrentValue(), true, false);
 				tf_value.setWidth("100%");
 				tf_value.addValueChangeListener(new Property.ValueChangeListener()
 				{

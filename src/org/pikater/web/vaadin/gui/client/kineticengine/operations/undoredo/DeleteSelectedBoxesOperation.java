@@ -9,6 +9,12 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.S
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 
+/**
+ * Undoable operation that deletes all selected boxes and related
+ * edges.
+ * 
+ * @author SkyCrawl
+ */
 public class DeleteSelectedBoxesOperation extends BiDiOperation
 {
 	private final SelectionModule selectionModule;
@@ -27,12 +33,6 @@ public class DeleteSelectedBoxesOperation extends BiDiOperation
 	}
 	
 	@Override
-	public void firstExecution()
-	{
-		redo();
-	}
-
-	@Override
 	public void undo()
 	{
 		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, true, originalSelectedBoxes); // first add boxes
@@ -46,11 +46,5 @@ public class DeleteSelectedBoxesOperation extends BiDiOperation
 		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, originalSelectedBoxes); // first deselect everything
 		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, false, true, allRelatedEdges); // then remove edges
 		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, true, originalSelectedBoxes); // and finally, remove boxes
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "DeleteSelectionOperation";
 	}
 }

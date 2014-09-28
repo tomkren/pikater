@@ -8,6 +8,8 @@ import org.pikater.shared.database.views.base.query.QueryConstraints;
 import org.pikater.shared.database.views.base.query.SortOrder;
 import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBRow;
+import org.pikater.shared.database.views.tableview.users.UsersTableDBView;
 import org.pikater.shared.util.collections.CustomOrderSet;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent;
@@ -16,12 +18,31 @@ import org.pikater.web.vaadin.gui.server.components.paging.PagingComponent.IPage
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Table;
 
+/**
+ * <p>A custom Vaadin table made to display a portion of data
+ * from database. Supports various page sizes and paging
+ * controls to allow navigation.</p>
+ * 
+ * <p>Should only be used from {@link DBTableLayout} - it
+ * knows best how to use this class.</p>
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("dbTable.css")
-public class DBTable extends Table implements IDBTableContainerContext, IPagedComponent, ICommitable
+public class DBTable extends Table implements IPagedComponent, ICommitable
 {
 	private static final long serialVersionUID = 6518669246548765191L;
 	
+	/**
+	 * Data holder for the table's current view.
+	 */
 	private final DBTableContainer tableContainer;
+	
+	/**
+	 * Defines a portion of the current database table
+	 * to be viewed.
+	 * @see {@link #setView(AbstractDBViewRoot)}  
+	 */
 	private final PagingComponent pagingControls;
 	private ITableColumn currentSortColumn;
 	private SortOrder currentSortOrder;
@@ -86,20 +107,6 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		 * doesn't do it, buggy little mischief...
 		 */
 		resetPaging(); // requires the above call (so that the subsequent database query is correct)
-	}
-	
-	//-------------------------------------------------------------------
-	// INHERITED CONTAINER RELATED INTERFACE
-	
-	@Override
-	public QueryConstraints getQuery()
-	{
-		return new QueryConstraints(
-				currentSortColumn,
-				currentSortOrder,
-				pagingControls.getOverallOffset(),
-				pagingControls.getPageSize()
-		);
 	}
 	
 	//-------------------------------------------------------------------
@@ -174,6 +181,13 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		return !getSelectedRowIDs().isEmpty();
 	}
 	
+	/**
+	 * The returned type is compatible with the type
+	 * used in {@link #setView(AbstractDBViewRoot)}.
+	 * For example, if {@link UsersTableDBView} was
+	 * used, then this method returns {@link UsersTableDBRow}.
+	 * @return
+	 */
 	public AbstractTableRowDBView[] getViewsOfSelectedRows()
 	{
 		CustomOrderSet<Object> sortedSelectedItemSet = new CustomOrderSet<Object>(getSelectedRowIDs());
@@ -190,9 +204,29 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 	
 	//-------------------------------------------------------------------
 	// OTHER PUBLIC INTERFACE
+	
+	/**
+	 * {@link DBTableContainer} uses this to fetch the currently
+	 * viewed data. 
+	 * @return
+	 */
+	public QueryConstraints getQuery()
+	{
+		return new QueryConstraints(
+				currentSortColumn,
+				currentSortOrder,
+				pagingControls.getOverallOffset(),
+				pagingControls.getPageSize()
+		);
+	}
 
 	/**
-	 * The most important method. Without this, the table is but an empty shell.
+	 * <p>Maps a certain "database table" to this Vaadin table. Paging then
+	 * determines the actual rows viewed.</p>
+	 * 
+	 * <p>This is the most important method. Without it, the table is but an
+	 * empty shell.</p>
+	 * 
 	 * @param viewRoot
 	 */
 	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot)
@@ -278,6 +312,10 @@ public class DBTable extends Table implements IDBTableContainerContext, IPagedCo
 		super.refreshRowCache();
 	}
 	
+	/**
+	 * Query database for the currently defined view and view
+	 * the result rows.
+	 */
 	public void rebuildRowCache()
 	{
 		setPageLength(tableContainer.getItemIds().size());

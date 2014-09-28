@@ -4,6 +4,12 @@ import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
+/**
+ * A utility class to hold various global data structures and provide
+ * some global methods.
+ * 
+ * @author SkyCrawl
+ */
 public class GWTMisc
 {
 	// *************************************************************************************
@@ -38,6 +44,11 @@ public class GWTMisc
 	// *************************************************************************************
 	// PUBLIC METHODS
 	
+	/**
+	 * GWT compatible version of getting simple class names.
+	 * @param cls
+	 * @return
+	 */
 	public static String getSimpleName(Class<? extends Object> cls)
 	{
 		String name = cls.getName(); 

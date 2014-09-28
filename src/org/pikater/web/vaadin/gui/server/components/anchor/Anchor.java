@@ -16,6 +16,8 @@ import com.vaadin.ui.AbstractComponent;
  * <li> Display an anchor that handles click events on the server.
  * <li> Display an anchor that executes custom javascript code when clicked (and thus acts as a bookmarklet).
  * </ol>
+ * 
+ * @author SkyCrawl
  */
 @StyleSheet("anchor.css")
 public class Anchor extends AbstractComponent implements AnchorClientRpc

@@ -4,6 +4,12 @@ import org.pikater.shared.database.views.tableview.datasets.DatasetTableDBViewMi
 import org.pikater.web.vaadin.gui.server.components.dbviews.DatasetDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.TableRowPicker;
 
+/**
+ * See {@link TableRowPicker}. Datasets are intended to be picked
+ * with this descendant.
+ * 
+ * @author SkyCrawl
+ */
 public class DatasetTablePicker extends TableRowPicker
 {
 	private static final long serialVersionUID = -417558814086758389L;

@@ -21,6 +21,11 @@ import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
 
+/**
+ * Module implementing creating edges, from start to end. 
+ * 
+ * @author SkyCrawl
+ */
 @SuppressWarnings("deprecation")
 public final class CreateEdgeModule implements IEngineModule
 {
@@ -74,13 +79,20 @@ public final class CreateEdgeModule implements IEngineModule
 		}
 		
 		/**
-		 * This method has to call {@link finishOperation(BoxPrototype toEndPoint)} for consistency.
+		 * <p>Start creation of a new edge.</p>
+		 * 
+		 * <p>This method has to call {@link finishOperation(BoxPrototype toEndPoint)}
+		 * for consistency.</p>
 		 */
 		public void stopOperation()
 		{
 			finishOperation(null);
 		}
 		
+		/**
+		 * Finish creation of a new edge.
+		 * @param toEndPoint
+		 */
 		public void finishOperation(BoxGraphItemClient toEndPoint)
 		{
 			// IMPORTANT: don't violate the call order
@@ -92,7 +104,7 @@ public final class CreateEdgeModule implements IEngineModule
 				{
 					newEdge.setEndpoint(EndPoint.TO, toEndPoint);
 					newEdge.edgeDrag_toEdge(true); // switches the edge's internal state and updates it, doesn't draw anything
-					selectionModule.onEdgeCreateOperation(newEdge);
+					selectionModule.onNewEdgeCreated(newEdge);
 					
 					/*
 					 * Duplicate code from {@link ItemRegistrationModule}. Not so easy to do it 
@@ -170,9 +182,9 @@ public final class CreateEdgeModule implements IEngineModule
 				/*
 				 * Finish this create edge operation.
 				 */
-				if(parentBox != edgeCreationContext.getFromEndPoint())
+				if(getEventSourceBox() != edgeCreationContext.getFromEndPoint())
 				{
-					edgeCreationContext.finishOperation(parentBox);
+					edgeCreationContext.finishOperation(getEventSourceBox());
 				}
 				
 				event.stopVerticalPropagation();
@@ -185,8 +197,8 @@ public final class CreateEdgeModule implements IEngineModule
 				 * Start this create edge operation.
 				 */
 				
-				edgeCreationContext.startOperation(parentBox);
-				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
+				edgeCreationContext.startOperation(getEventSourceBox());
+				getEventSourceBox().setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
 				
 				// register the required handlers
 				kineticEngine.removeFillRectangleHandlers();
@@ -194,7 +206,7 @@ public final class CreateEdgeModule implements IEngineModule
 				kineticEngine.getFillRectangle().addEventListener(fillRectangleEdgeDragMouseDownHandler, EventType.Basic.MOUSEDOWN);
 				
 				// register the new edge and also draw the stage
-				kineticEngine.pushNewOperation(new ItemRegistrationOperation(kineticEngine, null, 
+				kineticEngine.pushToHistory(new ItemRegistrationOperation(kineticEngine, null, 
 						new EdgeGraphItemClient[] { edgeCreationContext.getNewEdge() }, true));
 				
 				// and display changes - not needed at this point (done in the previous command)
@@ -215,10 +227,10 @@ public final class CreateEdgeModule implements IEngineModule
 		@Override
 		protected void handleInner(KineticEvent event)
 		{
-			if(edgeCreationContext.isAnEdgeBeingCreated() && (parentBox != edgeCreationContext.getFromEndPoint()))
+			if(edgeCreationContext.isAnEdgeBeingCreated() && (getEventSourceBox() != edgeCreationContext.getFromEndPoint()))
 			{
-				parentBox.setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
-				kineticEngine.draw(parentBox.getComponentToDraw());
+				getEventSourceBox().setVisualStyle(VisualStyle.HIGHLIGHTED_EDGE);
+				kineticEngine.draw(getEventSourceBox().getComponentToDraw());
 				
 				event.stopVerticalPropagation();
 				event.setProcessed();
@@ -235,10 +247,10 @@ public final class CreateEdgeModule implements IEngineModule
 		@Override
 		protected void handleInner(KineticEvent event)
 		{
-			if(edgeCreationContext.isAnEdgeBeingCreated() && (parentBox != edgeCreationContext.getFromEndPoint()))
+			if(edgeCreationContext.isAnEdgeBeingCreated() && (getEventSourceBox() != edgeCreationContext.getFromEndPoint()))
 			{
-				parentBox.setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
-				kineticEngine.draw(parentBox.getComponentToDraw());
+				getEventSourceBox().setVisualStyle(VisualStyle.NOT_HIGHLIGHTED_EDGE);
+				kineticEngine.draw(getEventSourceBox().getComponentToDraw());
 				
 				event.stopVerticalPropagation();
 				event.setProcessed();

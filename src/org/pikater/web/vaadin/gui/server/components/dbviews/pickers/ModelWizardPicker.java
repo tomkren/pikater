@@ -14,6 +14,7 @@ import org.pikater.web.vaadin.gui.server.components.dbviews.BatchDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.ExperimentDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.ResultDBViewRoot;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.TableRowPicker;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 import org.pikater.web.vaadin.gui.server.components.wizards.WizardForDialog;
@@ -24,6 +25,14 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.Component;
 
+/**
+ * Expands on the idea of {@link TableRowPicker} by incorporating
+ * wizards (a series of {@link DBTable DB tables}. User navigates
+ * through individual steps/tables by selecting a row, just like
+ * before and the selected row of the final step is our result.
+ * 
+ * @author SkyCrawl
+ */
 public class ModelWizardPicker extends WizardForDialog<ModelWizardPickerOutput> implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = -2782484084003504941L;

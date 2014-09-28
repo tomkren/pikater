@@ -1,6 +1,5 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag;
 
-import net.edzard.kinetic.Vector2d;
 import net.edzard.kinetic.event.IEventListener;
 import net.edzard.kinetic.event.KineticEvent;
 
@@ -10,15 +9,25 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 
+/**
+ * Wrapper class providing movement functionality (also in groups) to
+ * boxes. While this MAY be a part of {@link BoxGraphItemClient}, as
+ * a result it also clutters the code a little and that's why it
+ * was separated into this class. As a side effect, all box movement
+ * code is focused into a single exclusive package.
+ * 
+ * @author SkyCrawl
+ */
 @SuppressWarnings("deprecation")
 public class BoxDragListenerProvider
 {
 	private final IBoxDragContext context;
-	private Vector2d originalPosition;
+	private final DragParameters positionParams;
 
 	public BoxDragListenerProvider(IBoxDragContext context)
 	{
 		this.context = context;
+		this.positionParams = new DragParameters();
 	}
 	
 	//-----------------------------------------------------------
@@ -33,10 +42,10 @@ public class BoxDragListenerProvider
 			@Override
 			public void handle(KineticEvent event)
 			{
-				GWTCursorManager.setCursorType(context.getEngine().getContext().getStageDOMElement(), MyCursor.MOVE);
+				GWTCursorManager.setCursorType(context.getParentEngine().getContext().getStageDOMElement(), MyCursor.MOVE);
 				
 				// first and foremost, remember & compute some basic information
-				originalPosition = context.getCurrentPosition();
+				positionParams.setOriginalPosition(context.getCurrentBasePosition());
 				boxBeingMoved = (context.getBoxesBeingMoved() != null) || (context.getBoxesBeingMoved().size() == 1) ?
 						context.getBoxesBeingMoved().iterator().next() : null;
 				
@@ -51,7 +60,7 @@ public class BoxDragListenerProvider
 				}
 				
 				// draw and finish
-				context.getEngine().draw(EngineComponent.LAYER_EDGES);
+				context.getParentEngine().draw(EngineComponent.LAYER_EDGES);
 				event.stopVerticalPropagation();
 			}
 		};
@@ -71,7 +80,7 @@ public class BoxDragListenerProvider
 				}
 				
 				// draw and finish
-				context.getEngine().draw(EngineComponent.LAYER_EDGES);
+				context.getParentEngine().draw(EngineComponent.LAYER_EDGES);
 				event.stopVerticalPropagation();
 			}
 		};
@@ -88,14 +97,12 @@ public class BoxDragListenerProvider
 			@Override
 			public void handle(KineticEvent event)
 			{
-				GWTCursorManager.rollBackCursor(context.getEngine().getContext().getStageDOMElement());
+				GWTCursorManager.rollBackCursor(context.getParentEngine().getContext().getStageDOMElement());
 				
 				// propagate the new position to selected items and switch edges in between back to normal mode
-				context.getEngine().pushNewOperation(new MoveBoxesOperation(
-						context,
-						originalPosition,
-						context.getCurrentPosition()
-				));
+				MoveBoxesOperation operation = new MoveBoxesOperation(context, positionParams);
+				context.getParentEngine().pushToHistory(operation);
+				operation.redo();
 				
 				// finish
 				event.stopVerticalPropagation();

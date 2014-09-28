@@ -3,8 +3,9 @@ package org.pikater.web.vaadin.gui.server.components.forms.fields;
 import java.util.Collection;
 
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
-import org.pikater.web.vaadin.gui.server.components.forms.validators.RequiredValidator;
+import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 
+import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -15,37 +16,44 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 
+/**
+ * A center for the whole application to create fields
+ * that are inteded to be used in forms, especially
+ * {@link CustomFormLayout}.
+ * 
+ * @author SkyCrawl
+ */
 public class FormFieldFactory
 {
 	//-------------------------------------------------------------------
 	// GENERAL FIELD GENERATION
 	
-	public static TextField getGeneralTextField(String caption, String inputPrompt, String value, boolean required, boolean readOnly)
+	public static TextField createTextField(String caption, String inputPrompt, String value, boolean required, boolean readOnly)
 	{
 		final TextField result = new TextField(caption);
-		setupTextFieldToWorkWithCustomForms(result, value, inputPrompt, required, readOnly);
+		prepareForACustomForm(result, value, inputPrompt, required, readOnly);
 		return result;
 	}
 	
-	public static PasswordField getGeneralPasswordField(String caption, String value, boolean required, boolean readOnly)
+	public static PasswordField createPasswordField(String caption, String value, boolean required, boolean readOnly)
 	{
 		// TODO: implement proper constraint eventually
 		// addValidator(new StringLengthValidator("Five to twenty characters are required.", 5, 20, false));
 		
 		PasswordField result = new PasswordField(caption);
-		setupTextFieldToWorkWithCustomForms(result, value, "Enter password", required, readOnly);
+		prepareForACustomForm(result, value, "Enter password", required, readOnly);
 		return result;
 	}
 	
-	public static TextArea getGeneralTextArea(String caption, String inputPrompt, String value, boolean required, boolean readOnly)
+	public static TextArea createTextArea(String caption, String inputPrompt, String value, boolean required, boolean readOnly)
 	{
 		final TextArea result = new TextArea(caption);
 		result.setWordwrap(true);
-		setupTextFieldToWorkWithCustomForms(result, value, inputPrompt, required, readOnly);
+		prepareForACustomForm(result, value, inputPrompt, required, readOnly);
 		return result;
 	}
 	
-	public static ComboBox getGeneralComboBox(String caption, Collection<?> options, Object defaultOption, boolean required, boolean readonly)
+	public static ComboBox createComboBox(String caption, Collection<?> options, Object defaultOption, boolean required, boolean readonly)
 	{
 		ComboBox result = new ComboBox(caption, options);
 		result.setNewItemsAllowed(false);
@@ -61,12 +69,12 @@ public class FormFieldFactory
 		return result;
 	}
 	
-	public static CustomFormCheckBox getGeneralCheckField(String componentCaption, String checkBoxCaption, boolean initialState, boolean readOnly)
+	public static CustomFormCheckBox createCheckBox(String componentCaption, String checkBoxCaption, boolean initialState, boolean readOnly)
 	{
 		return new CustomFormCheckBox(componentCaption, checkBoxCaption, initialState, readOnly);
 	}
 	
-	public static OptionGroup getGeneralOptionGroup(String caption, boolean required, boolean readOnly)
+	public static OptionGroup createOptionGroup(String caption, boolean required, boolean readOnly)
 	{
 		OptionGroup result = new OptionGroup(caption);
 		result.setImmediate(true);
@@ -81,18 +89,18 @@ public class FormFieldFactory
 	public static TextField getLoginField(String loginValue, boolean required, boolean readOnly)
 	{
 		// TODO: eventually add a special validator too
-		return getGeneralTextField("Login:", "Enter a login", loginValue, required, readOnly);
+		return createTextField("Login:", "Enter a login", loginValue, required, readOnly);
 	}
 	
 	public static TextField getEmailField(String emailValue, boolean required, boolean readOnly)
 	{
-		final TextField result = getGeneralTextField("Email:", "Enter an email", emailValue, required, readOnly);
+		final TextField result = createTextField("Email:", "Enter an email", emailValue, required, readOnly);
 		result.addValidator(new EmailValidator("Invalid email address."));
 		return result;
 	}
 	
 	/**
-	 * A generic method to create a range-validated number field: integer float or double by default.
+	 * A generic method to create a range-validated number (Integer, Float or Double) field.
 	 * @param caption
 	 * @param value
 	 * @param min
@@ -109,8 +117,21 @@ public class FormFieldFactory
 		}
 		else
 		{
-			final TextField result = getGeneralTextField(caption, "Enter a number", String.valueOf(value), required, readOnly);
-			result.addValidator(new RequiredValidator(result));
+			final TextField result = createTextField(caption, "Enter a number", String.valueOf(value), required, readOnly);
+			result.addValidator(new Validator()
+			{
+				private static final long serialVersionUID = 8536719332070293601L;
+
+				@Override
+				public void validate(Object value) throws InvalidValueException
+				{
+					// validate required field - it has to non-empty
+					if(result.isRequired() && ((value == null) || ((String) value).isEmpty()))
+					{
+						throw new InvalidValueException(result.getRequiredError());
+					}
+				}
+			});
 			result.addValidator(new NumberRangeValidator<N>(value.getClass(), min, max));
 			return result;
 		}
@@ -119,7 +140,7 @@ public class FormFieldFactory
 	//-------------------------------------------------------------------
 	// PRIVATE INTERFACE - SPECIAL FIELD BEHAVIOUR
 	
-	private static void setupTextFieldToWorkWithCustomForms(final AbstractTextField field, String value, String inputPrompt, boolean required, boolean readOnly)
+	private static void prepareForACustomForm(final AbstractTextField field, String value, String inputPrompt, boolean required, boolean readOnly)
 	{
 		field.setValue(value == null ? "" : value);
 		field.setInputPrompt(inputPrompt);

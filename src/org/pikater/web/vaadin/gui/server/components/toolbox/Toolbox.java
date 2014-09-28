@@ -10,6 +10,16 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * A Vaadin component looking like a small window, with
+ * a minimize button, allowing arbitrary components as
+ * its content.</br>
+ * It looks like a window but it is
+ * not. It belongs to the document flow just like any
+ * other Vaadin component (without special modifications).
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("toolbox.css")
 public class Toolbox extends VerticalLayout
 {
@@ -21,7 +31,6 @@ public class Toolbox extends VerticalLayout
 	{
 		this(caption, new Label(), minimizeAction);
 	}
-	
 	public Toolbox(String caption, Component content, MouseEvents.ClickListener minimizeAction)
 	{
 		super();

@@ -14,7 +14,9 @@ import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * A image viewer for large images capable of zooming in and out. 
+ * An image viewer for large images capable of zooming in and out.
+ * 
+ * @author SkyCrawl
  */
 @StyleSheet("imageViewer.css")
 public class ImageViewer extends VerticalLayout

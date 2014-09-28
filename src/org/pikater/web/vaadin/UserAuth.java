@@ -3,6 +3,7 @@ package org.pikater.web.vaadin;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.shared.database.jpa.daos.DAOs;
 import org.pikater.shared.database.jpa.daos.AbstractDAO.EmptyResultAction;
+import org.pikater.web.config.WebAppConfiguration;
 
 import com.vaadin.server.VaadinSession;
 
@@ -32,7 +33,14 @@ public class UserAuth
 	
 	public static JPAUser getUserEntity(VaadinSession session)
 	{
-		return DAOs.userDAO.getByID(getUserID(session), EmptyResultAction.LOG_NULL);
+		if(WebAppConfiguration.avoidUsingDBForNow())
+		{
+			return JPAUser.getDummy();
+		}
+		else
+		{
+			return DAOs.userDAO.getByID(getUserID(session), EmptyResultAction.LOG_NULL);
+		}
 	}
 	
 	public static boolean isUserAuthenticated(VaadinSession session)

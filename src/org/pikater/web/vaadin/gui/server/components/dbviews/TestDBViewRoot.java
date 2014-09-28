@@ -5,9 +5,16 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.test.TestTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 
 import com.vaadin.ui.AbstractComponent;
 
+/**
+ * Configuration for {@link DBTable DB tables} made for development
+ * tests.
+ * 
+ * @author SkyCrawl
+ */
 public class TestDBViewRoot extends AbstractDBViewRoot<TestTableDBView>
 {
 	public TestDBViewRoot(TestTableDBView underlyingDBView)

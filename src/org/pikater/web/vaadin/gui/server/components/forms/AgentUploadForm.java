@@ -23,6 +23,7 @@ import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.StreamVariable.StreamingEndEvent;
@@ -32,6 +33,11 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 
+/**
+ * A form to save/queue experiments.
+ * 
+ * @author SkyCrawl
+ */
 public class AgentUploadForm extends CustomFormLayout
 {
 	private static final long serialVersionUID = -7727756941636752874L;
@@ -44,7 +50,7 @@ public class AgentUploadForm extends CustomFormLayout
 	{
 		super(null);
 		
-		this.tf_agentClass = FormFieldFactory.getGeneralTextField("Agent class (incl. package):", "Class of the agent?", null, false, false);
+		this.tf_agentClass = FormFieldFactory.createTextField("Agent class (incl. package):", "Class of the agent?", null, false, false);
 		this.tf_agentClass.setSizeFull();
 		this.tf_agentClass.addValidator(new RegexpValidator("^[a-zA-Z_\\$][\\w\\$]*(?:\\.[a-zA-Z_\\$][\\w\\$]*)*$", 
 				"Not a valid package name. Press ALT+H to display online help."));
@@ -59,7 +65,7 @@ public class AgentUploadForm extends CustomFormLayout
 			}
 		});
 		addField("class name", tf_agentClass);
-		this.tf_agentDescription = FormFieldFactory.getGeneralTextArea("Optional description:", "Any description of the agent for future reference?", null, false, false);
+		this.tf_agentDescription = FormFieldFactory.createTextArea("Optional description:", "Any description of the agent for future reference?", null, false, false);
 		this.tf_agentDescription.setSizeFull();
 		addField("description", tf_agentDescription);
 		
@@ -134,6 +140,11 @@ public class AgentUploadForm extends CustomFormLayout
 		this.upload.setEnabled(false);
 		
 		addCustomButtonInterface(this.upload);
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event)
+	{
 	}
 	
 	@Override

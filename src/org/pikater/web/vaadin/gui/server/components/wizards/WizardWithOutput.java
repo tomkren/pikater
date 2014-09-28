@@ -11,6 +11,17 @@ import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.Button;
 
+/**
+ * Our own version of a wizard taken from the Wizards Vaadin add-on,
+ * that uses a global "state" object (and is thus capable of producing
+ * an "output") and is capable of refreshing the newly activated steps,
+ * if set to do so (steps may then be a result of previous steps, for
+ * example).
+ * 
+ * @author SkyCrawl
+ *
+ * @param <T> The wizard's "state" class.
+ */
 @StyleSheet("wizards.css")
 public class WizardWithOutput<T extends IWizardCommon> extends Wizard
 {

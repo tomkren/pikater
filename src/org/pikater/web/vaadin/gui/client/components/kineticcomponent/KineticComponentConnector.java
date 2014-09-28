@@ -141,6 +141,6 @@ public class KineticComponentConnector extends AbstractComponentConnector
 	{
 		super.onStateChanged(stateChangeEvent);
 		
-		getWidget().getEngine().reloadBoxVisualStyle(getState().toBoxVisualSettings(), new KineticEdgeSettings());
+		getWidget().getEngine().applyVisualStyle(getState().toBoxVisualSettings(), new KineticEdgeSettings());
 	}
 }

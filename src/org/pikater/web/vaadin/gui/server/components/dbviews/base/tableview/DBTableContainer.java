@@ -1,7 +1,6 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
 import java.util.Collection;
-import java.util.Set;
 
 import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
@@ -11,7 +10,6 @@ import org.pikater.shared.database.views.base.values.RepresentativeDBViewValue;
 import org.pikater.shared.database.views.base.values.StringDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableDBView;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
-import org.pikater.web.unused.welcometour.RemoteServerInfoItem.Header;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
 
 import com.vaadin.data.Container;
@@ -22,21 +20,28 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 
+/**
+ * Low-level {@link DBTable} view provider. Asks database
+ * for the currently viewed data and then passes them to
+ * the table.
+ * 
+ * @author SkyCrawl
+ */
 public class DBTableContainer implements Container.Sortable, ICommitable
 {
 	private static final long serialVersionUID = 9197656251784900256L;
 
 	private final DBTable parentTable;
-	private final DBTableContainerItems rows;
+	private final DBTableContainerItems currentlyViewedRows;
 	
 	public DBTableContainer(DBTable parentTable)
 	{
 		this.parentTable = parentTable;
-		this.rows = new DBTableContainerItems(parentTable);
+		this.currentlyViewedRows = new DBTableContainerItems();
 	}
 	
 	//-----------------------------------------------------------
-	// FIRST CONTAINER-SPECIFIC INHERITED REQUIRED INTERFACE
+	// FIRST INHERITED CONTAINER-SPECIFIC REQUIRED INTERFACE
 	
 	@Override
 	public Collection<ITableColumn> getContainerPropertyIds()
@@ -57,26 +62,26 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public Collection<?> getItemIds()
 	{
-		rows.loadRows(this, viewRoot.getUnderlyingDBView().queryRows(parentTable.getQuery()));
-		return rows.getRowIDs();
+		currentlyViewedRows.loadRows(this, viewRoot.getUnderlyingDBView().queryRows(parentTable.getQuery()));
+		return currentlyViewedRows.getRowIDs();
 	}
 	
 	@Override
 	public int size()
 	{
-		return rows.getTableItemCount();
+		return currentlyViewedRows.getRowIDs().size();
 	}
 	
 	@Override
 	public boolean containsId(Object itemId)
 	{
-		return rows.getRowIDs().contains(itemId);
+		return currentlyViewedRows.getRowIDs().contains(itemId);
 	}
 	
 	@Override
 	public DBTableItem getItem(Object itemId)
 	{
-		return rows.getRow(itemId);
+		return currentlyViewedRows.getRow(itemId);
 	}
 
 	@Override
@@ -138,6 +143,13 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	//-----------------------------------------------------------
 	// CONTAINER-SPECIFIC SORTABLE REQUIRED INTERFACE
 	
+	/*
+	 * Although these methods are not really used by our tables (we
+	 * have support for native sorting by queries), they are set
+	 * to be "sortable" and thus require having a sortable container
+	 * at their disposal.
+	 */
+	
 	public Collection<?> getSortableContainerPropertyIds()
 	{
 		return viewRoot.getUnderlyingDBView().getSortableColumns();
@@ -145,39 +157,40 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	
 	public Object firstItemId()
 	{
-		return rows.getFirstItemID();
+		return currentlyViewedRows.getFirstItemID();
 	}
 
 	public Object nextItemId(Object itemId)
 	{
-		return rows.getNextItemID(itemId);
+		return currentlyViewedRows.getNextItemID(itemId);
 	}
 
 	public Object prevItemId(Object itemId)
 	{
-		return rows.getPrevItemID(itemId);
+		return currentlyViewedRows.getPrevItemID(itemId);
 	}
 
 	public Object lastItemId()
 	{
-		return rows.getLastItemID();
+		return currentlyViewedRows.getLastItemID();
 	}
 
 	public boolean isFirstId(Object itemId)
 	{
-		return rows.isFirstID(itemId);
+		return currentlyViewedRows.isFirstID(itemId);
 	}
 
 	public boolean isLastId(Object itemId)
 	{
-		return rows.isLastID(itemId);
+		return currentlyViewedRows.isLastID(itemId);
 	}
 
 	public void sort(Object[] propertyId, boolean[] ascending)
 	{
 		/*
-		 * This is executed AFTER rebuilding the row cache by which time we
-		 * already need the new sort order => do nothing in here.
+		 * This is executed AFTER rebuilding the row cache and we
+		 * need the sorting to be native (database query) => do
+		 * nothing in here.
 		 */
 	}
 
@@ -197,6 +210,13 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	//-----------------------------------------------------------
 	// VIEW TYPE TO PRESENTATION TYPE BINDING METHODS
 	
+	/**
+	 * Return content class for the given column/cell. The table is homogenous
+	 * and descendants of {@link AbstractTableDBView} directly require/imply it.
+	 * @param container
+	 * @param column
+	 * @return
+	 */
 	public static Class<? extends Object> getPresentationType(DBTableContainer container, ITableColumn column)
 	{
 		switch(column.getColumnType())
@@ -218,6 +238,15 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		}
 	}
 	
+	/**
+	 * Vaadin tables work with "properties", instead of working directly with values. 
+	 * We have created our own, with a little extra nice features.
+	 * @param container
+	 * @param column
+	 * @param row
+	 * @param value
+	 * @return
+	 */
 	public static Property<? extends Object> getProperty(DBTableContainer container, ITableColumn column, AbstractTableRowDBView row, 
 			AbstractDBViewValue<? extends Object> value)
 	{
@@ -254,12 +283,16 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 	@Override
 	public void commitToDB()
 	{
-		rows.commitToDB();
+		currentlyViewedRows.commitToDB();
 	}
 	
 	//-----------------------------------------------------------
 	// AND FINALLY, SOME ADDED VALUE
 	
+	/**
+	 * A special wrapper class bound to a certain view type providing
+	 * display configuration for the table - column widths etc.
+	 */
 	private AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot;
 	
 	public AbstractDBViewRoot<? extends AbstractTableDBView> getViewRoot()
@@ -277,26 +310,32 @@ public class DBTableContainer implements Container.Sortable, ICommitable
 		return parentTable;
 	}
 	
+	/**
+	 * Return the total number of rows for the currently viewed
+	 * database table. This is needed for table paging to work.
+	 * @return
+	 */
 	public int getUnconstrainedQueryResultsCount()
 	{
-		return rows.getAllItemsCount();
+		return currentlyViewedRows.getAllItemsCount();
 	}
 	
+	/*
+	 * NOT NEEDED OR USED AT THE MOMENT
 	protected void batchSetValues(Set<Integer> ids, Header header, String newValue)
 	{
 		// TODO: finish
 		if(header.supportsBatchSet())
 		{
-			/*
 			for(Integer itemID : ids)
 			{
 				//getItem(itemID).serverInfoProperties.setValueForProperty(header, newValue);
 			}
-			*/
 		}
 		else
 		{
 			throw new UnsupportedOperationException();
 		}
 	}
+	*/
 }

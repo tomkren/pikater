@@ -6,9 +6,15 @@ import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactor
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogComponent;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
+/**
+ * A form to create accounts with.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class CreateAccountForm extends CustomFormLayout implements IDialogComponent
 {
 	private static final long serialVersionUID = 1751781460173551178L;
@@ -22,12 +28,17 @@ public abstract class CreateAccountForm extends CustomFormLayout implements IDia
 		super(null);
 		
 		this.loginField = FormFieldFactory.getLoginField(null, true, false);
-		this.passwordField = FormFieldFactory.getGeneralPasswordField("Password:", null, true, false);
+		this.passwordField = FormFieldFactory.createPasswordField("Password:", null, true, false);
 		this.emailField = FormFieldFactory.getEmailField(null, true, false);
 		
 		addField("login", this.loginField);
 		addField("password", this.passwordField);
 		addField("email", this.emailField);
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event)
+	{
 	}
 	
 	@Override

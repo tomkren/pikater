@@ -6,6 +6,12 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.ui.MultiFileUpload;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 
+/**
+ * Our own version of multi-file upload, extending the Vaadin
+ * multi-file upload Vaadin add-on.
+ * 
+ * @author SkyCrawl
+ */
 public class MyMultiUpload extends MultiFileUpload
 {
 	private static final long serialVersionUID = 1274280572318620L;
@@ -40,6 +46,10 @@ public class MyMultiUpload extends MultiFileUpload
     // ----------------------------------------------------------------------
     // OTHER PUBLIC INTERFACE
     
+    /**
+     * Add a custom upload event handlers, like when a new one starts.
+     * @param callbacks
+     */
     public void addFileUploadEventsCallback(IFileUploadEvents callbacks)
     {
     	getUploadStatePanel().addUploadStartListener(callbacks);

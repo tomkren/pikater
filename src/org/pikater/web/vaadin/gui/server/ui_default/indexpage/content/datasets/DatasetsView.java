@@ -71,7 +71,7 @@ public class DatasetsView extends ExpandableView
 	// OTHER INTERFACE
 	
 	@Override
-	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()
+	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep()
 	{
 		// this is called in the constructor via super
 		return new DatasetOverviewStep(this);

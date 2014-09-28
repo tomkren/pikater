@@ -56,7 +56,7 @@ public class KineticState implements IKineticEngineContext
 	public void setParentWidget(KineticComponentWidget parentWidget)
 	{
 		this.parentWidget = parentWidget;
-		this.engine.setContext(parentWidget);
+		this.engine.setWidgetContext(parentWidget);
 	}
 
 	@Override

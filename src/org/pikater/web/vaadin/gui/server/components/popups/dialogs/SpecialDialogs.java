@@ -9,6 +9,12 @@ import de.steinwedel.messagebox.ButtonId;
 import de.steinwedel.messagebox.Icon;
 import de.steinwedel.messagebox.MessageBox;
 
+/**
+ * A utility class to implement specialized dialogs for
+ * a particular use.
+ * 
+ * @author SkyCrawl
+ */
 public class SpecialDialogs extends DialogCommons
 {
 	public static MessageBox loginDialog(final IDialogResultHandler resultHandler)

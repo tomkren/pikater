@@ -21,10 +21,18 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.BoxListener;
 import org.pikater.web.vaadin.gui.client.kineticengine.modules.base.IEngineModule;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.BoxDragListenerProvider;
+import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.DragParameters;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragContext;
-import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag.IBoxDragEndContext;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.ClickMode;
 
+/**
+ * Module managing all selection-related code. Boxes may
+ * be directly selected with the left mouse button and 
+ * edges are selected automatically if both their endpoint
+ * boxes are selected.  
+ * 
+ * @author SkyCrawl
+ */
 @SuppressWarnings("deprecation")
 public class SelectionModule implements IEngineModule
 {
@@ -71,27 +79,27 @@ public class SelectionModule implements IEngineModule
 		{
 			if(GWTKeyboardManager.isShiftKeyDown()) // whichever click mode is currently set, don't hesitate when the right modifier key is down
  			{
-				doSelectionRelatedOperation(SelectionOperation.getInvertSelectionOperation(parentBox), false, true, parentBox); // select or deselect this box only
+				doSelectionRelatedOperation(SelectionOperation.getInvertSelectionOperation(getEventSourceBox()), false, true, getEventSourceBox()); // select or deselect this box only
 	 			onFinish(event);
  			}
  			else if(kineticEngine.getContext().getClickMode() == ClickMode.SELECTION) // it's clear we want to select
  			{
  				if(selectedBoxes.size() == 1)
  				{
- 					if(parentBox.isSelected()) // just this one box is selected
+ 					if(getEventSourceBox().isSelected()) // just this one box is selected
  					{
- 						doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, parentBox); // deselect it
+ 						doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, true, getEventSourceBox()); // deselect it
  					}
  					else // some other box is selected
  					{
  						doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, false, getSelectedBoxes()); // deselect it first
- 						doSelectionRelatedOperation(SelectionOperation.SELECTION, false, true, parentBox); // and then select this box
+ 						doSelectionRelatedOperation(SelectionOperation.SELECTION, false, true, getEventSourceBox()); // and then select this box
  					}
  				}
  				else
  				{
  					doSelectionRelatedOperation(SelectionOperation.DESELECTION, false, false, getSelectedBoxes()); // first deselect everything
- 					doSelectionRelatedOperation(SelectionOperation.SELECTION, false, true, parentBox); // and then select this box
+ 					doSelectionRelatedOperation(SelectionOperation.SELECTION, false, true, getEventSourceBox()); // and then select this box
  				}
  				onFinish(event);
  			}
@@ -126,13 +134,13 @@ public class SelectionModule implements IEngineModule
 		BoxDragListenerProvider listenerProvider = new BoxDragListenerProvider(new IBoxDragContext()
 		{
 			@Override
-			public KineticEngine getEngine()
+			public KineticEngine getParentEngine()
 			{
 				return SelectionModule.this.kineticEngine;
 			}
 			
 			@Override
-			public Vector2d getCurrentPosition()
+			public Vector2d getCurrentBasePosition()
 			{
 				return selectionGroup.getPosition();
 			}
@@ -150,17 +158,17 @@ public class SelectionModule implements IEngineModule
 			}
 
 			@Override
-			public Node[] getAllNodesBeingMoved()
+			public Node[] getNodesBeingMoved()
 			{
 				return selectionGroup.getChildren().toArray(new Node[0]); 
 			}
 
 			@Override
-			public void setNewPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			public void setNewPositions(Node[] allMovedNodes, DragParameters params)
 			{
 				for(Node node : allMovedNodes)
 				{
-					node.setPosition(node.getX() + context.getDelta().x, node.getY() + context.getDelta().y);
+					node.setPosition(node.getX() + params.getDelta().x, node.getY() + params.getDelta().y);
 				}
 				
 				// this will always affect the current selection group but it doesn't matter since this is an invariant:
@@ -168,11 +176,11 @@ public class SelectionModule implements IEngineModule
 			}
 
 			@Override
-			public void setOriginalPositions(Node[] allMovedNodes, IBoxDragEndContext context)
+			public void setOriginalPositions(Node[] allMovedNodes, DragParameters params)
 			{
 				for(Node node : allMovedNodes)
 				{
-					node.setPosition(node.getX() - context.getDelta().x, node.getY() - context.getDelta().y);
+					node.setPosition(node.getX() - params.getDelta().x, node.getY() - params.getDelta().y);
 				}
 			}
 		});
@@ -236,10 +244,9 @@ public class SelectionModule implements IEngineModule
 	 * selected/deselected with this method as it internally selects/deselects the appropriate
 	 * edges too.</br>
 	 * As huge as this method aims to be, it concentrates heavy logic into this class while offering
-	 * a simple declarative interface to the calling code. It also simplifies code needed to launch
-	 * additional operations when this one finishes. See the arguments.
+	 * a simple declarative interface to the calling code.
 	 * @param opKind
-	 * @param drawOnFinish
+	 * @param drawOnFinish 
 	 * @param notifyServer
 	 * @param boxes
 	 */
@@ -309,7 +316,7 @@ public class SelectionModule implements IEngineModule
 	 * @param newEndPoint the new endpoint of the edge
 	 * @param staticEndPoint the other endpoint of the edge that is unaffected by the drag operation 
 	 */
-	public void onEdgeDragOperationFinished(EdgeGraphItemClient edge, BoxGraphItemClient originalEndPoint, BoxGraphItemClient newEndPoint, BoxGraphItemClient staticEndPoint)
+	public void onEdgeDragFinish(EdgeGraphItemClient edge, BoxGraphItemClient originalEndPoint, BoxGraphItemClient newEndPoint, BoxGraphItemClient staticEndPoint)
 	{
 		// IMPORTANT: this code assumes that the endpoint swap has not been done yet
 		if(originalEndPoint.isSelected() != newEndPoint.isSelected())
@@ -343,7 +350,7 @@ public class SelectionModule implements IEngineModule
 		}
 	}
 	
-	public void onEdgeCreateOperation(EdgeGraphItemClient edge)
+	public void onNewEdgeCreated(EdgeGraphItemClient edge)
 	{
 		if(edge.isSelected())
 		{
@@ -374,21 +381,37 @@ public class SelectionModule implements IEngineModule
 		return selectionGroup;
 	}
 	
+	/**
+	 * Get boxes that are currently selected.
+	 * @return
+	 */
 	public BoxGraphItemClient[] getSelectedBoxes()
 	{
 		return selectedBoxes.toArray(new BoxGraphItemClient[0]);
 	}
 	
+	/**
+	 * Get edges that have both endpoints selected.
+	 * @return
+	 */
 	public EdgeGraphItemClient[] getSelectedEdges()
 	{
 		return selectedEdges.toArray(new EdgeGraphItemClient[0]);
 	}
 	
+	/**
+	 * Get edges that have exactly 1 endpoint selected.
+	 * @return
+	 */
 	public EdgeGraphItemClient[] getEdgesInBetween()
 	{
 		return edgesInBetween.toArray(new EdgeGraphItemClient[0]);
 	}
 	
+	/**
+	 * Get edges that have at least 1 endpoint selected.
+	 * @return
+	 */
 	public EdgeGraphItemClient[] getAllRelatedEdges()
 	{
 		Set<EdgeGraphItemClient> result = new HashSet<EdgeGraphItemClient>(selectedEdges);

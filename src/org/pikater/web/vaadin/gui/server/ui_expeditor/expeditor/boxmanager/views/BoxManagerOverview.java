@@ -10,7 +10,7 @@ import org.pikater.web.experiment.server.BoxInfoServer;
 import org.pikater.web.experiment.server.BoxSlot;
 import org.pikater.web.vaadin.gui.server.StyleBuilder;
 import org.pikater.web.vaadin.gui.server.components.led.LedIndicator;
-import org.pikater.web.vaadin.gui.server.components.led.LedIndicatorTheme;
+import org.pikater.web.vaadin.gui.server.components.led.LedIndicator.LedIndicatorTheme;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.HorizontalFlowLayout;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.IFlowLayoutStyleProvider;
 import org.pikater.web.vaadin.gui.server.layouts.flowlayout.VerticalFlowLayout;

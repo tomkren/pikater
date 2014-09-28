@@ -8,8 +8,10 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOpera
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 
 /**
- * Operation handling only the first item registration / deregistration. Item
- * removing/adding again is done in {@link DeleteSelectedBoxesOperation} which extends this class.
+ * Undoable operation that registers/unregisters some graph items 
+ * from the environment/canvas.
+ * 
+ * @author SkyCrawl
  */
 public final class ItemRegistrationOperation extends BiDiOperation
 {
@@ -26,11 +28,7 @@ public final class ItemRegistrationOperation extends BiDiOperation
 		this.edges = edges == null ? new EdgeGraphItemClient[0] : edges;
 		this.itemRegistrationModule = (ItemRegistrationModule) kineticEngine.getModule(ItemRegistrationModule.moduleID);
 		this.notifyServer = notifyServer;
-	}
-	
-	@Override
-	public void firstExecution()
-	{
+		
 		for(BoxGraphItemClient box : boxes)
 		{
 			kineticEngine.attachModuleHandlersTo(box);
@@ -39,7 +37,6 @@ public final class ItemRegistrationOperation extends BiDiOperation
 		{
 			kineticEngine.attachModuleHandlersTo(edge);
 		}
-		redo();
 	}
 	
 	@Override
@@ -55,10 +52,4 @@ public final class ItemRegistrationOperation extends BiDiOperation
 		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, false, notifyServer, boxes);
 		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, notifyServer, edges);
 	}
-
-	@Override
-	public String toString()
-	{
-		return "ItemRegistrationOperation";
-	}	
 }

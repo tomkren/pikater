@@ -9,6 +9,12 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.SelectionModule.S
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 
+/**
+ * Undoable operation that deletes edges from the graph
+ * AND from the environment/canvas.
+ * 
+ * @author SkyCrawl
+ */
 public class DeleteEdgeOperation extends BiDiOperation
 {
 	private final ItemRegistrationModule itemRegistrationModule;
@@ -24,12 +30,6 @@ public class DeleteEdgeOperation extends BiDiOperation
 		this.selectionModule = (SelectionModule) kineticEngine.getModule(SelectionModule.moduleID);
 		this.edgeToRemove = edgeToRemove;
 		this.edgeSelectedOriginally = edgeToRemove.isSelected();
-	}
-
-	@Override
-	public void firstExecution()
-	{
-		redo();
 	}
 
 	@Override
@@ -54,11 +54,5 @@ public class DeleteEdgeOperation extends BiDiOperation
 					edgeToRemove.getEndPoint(EndPoint.FROM), edgeToRemove.getEndPoint(EndPoint.TO)); 
 		}
 		itemRegistrationModule.doOperation(RegistrationOperation.UNREGISTER, true, true, edgeToRemove);
-	}
-
-	@Override
-	public String toString()
-	{
-		return "DeleteEdgeOperation";
 	}
 }

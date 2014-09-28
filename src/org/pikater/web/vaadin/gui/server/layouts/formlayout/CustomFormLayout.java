@@ -12,6 +12,7 @@ import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.navigator.View;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
@@ -22,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
 @StyleSheet("customFormLayout.css")
-public abstract class CustomFormLayout extends VerticalLayout implements IDialogResultValidator
+public abstract class CustomFormLayout extends VerticalLayout implements IDialogResultValidator, View
 {
 	private static final long serialVersionUID = 4919466788832055328L;
 	

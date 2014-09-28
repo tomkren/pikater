@@ -11,6 +11,15 @@ import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 
+/**
+ * Unlike {@link WizardWithOutput} which requires statically defined
+ * steps, this one allows for each step to construct the next step
+ * dynamically.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <T> The wizard's "state" class.
+ */
 public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends WizardWithOutput<T>
 {
 	private static final long serialVersionUID = 6111242222755309996L;
@@ -104,7 +113,7 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 	 */
 	protected void finishInit()
 	{
-		addStep(getFirstStep());
+		addStep(createFirstStep());
 	}
 	
 	@Override
@@ -145,5 +154,9 @@ public abstract class WizardWithDynamicSteps<T extends IWizardCommon> extends Wi
 	}
 	*/
 	
-	protected abstract DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> getFirstStep();
+	/**
+	 * Return the first dynamically constructed step.
+	 * @return
+	 */
+	protected abstract DynamicNeighbourWizardStep<T, WizardWithDynamicSteps<T>> createFirstStep();
 }

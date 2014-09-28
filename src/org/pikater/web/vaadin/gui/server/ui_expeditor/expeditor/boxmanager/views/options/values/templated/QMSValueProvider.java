@@ -33,7 +33,7 @@ public class QMSValueProvider extends AbstractFieldProviderForValue
 		
 		// and finally, create list select for the set
 		final BidiMap<Object, IValueData> itemIDToValue = new BidiMap<Object, IValueData>();
-		OptionGroup setFilter = FormFieldFactory.getGeneralOptionGroup("Values:", false, false);
+		OptionGroup setFilter = FormFieldFactory.createOptionGroup("Values:", false, false);
 		setFilter.setMultiSelect(true);
 		for(IValueData setValue : value.getType().getSetRestriction().getValues())
 		{

@@ -20,8 +20,20 @@ import de.steinwedel.messagebox.Icon;
 import de.steinwedel.messagebox.MessageBox;
 import de.steinwedel.messagebox.ResourceFactory;
 
+/**
+ * Defines specific dialogs used to track progress of
+ * something.
+ * 
+ * @author SkyCrawl
+ */
 public class ProgressDialog extends DialogCommons
 {
+	/**
+	 * The main method of this class, showing the given progress dialog.
+	 * @param title
+	 * @param progressDialogEvents
+	 * @return
+	 */
 	public static ProgressDialogContext show(String title, final IProgressDialogTaskHandler progressDialogEvents)
 	{
 		ProgressBar progress = new ProgressBar(0);
@@ -99,6 +111,12 @@ public class ProgressDialog extends DialogCommons
 	// -------------------------------------------------------------------------
 	// PUBLIC TYPES - PROGRESS BAR DIALOG
 
+	/**
+	 * Classes implementing this object are supposed to
+	 * manage the underlying tracked task.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static interface IProgressDialogTaskHandler
 	{
 		/**
@@ -122,7 +140,7 @@ public class ProgressDialog extends DialogCommons
 		void abortTask();
 
 		/**
-		 * Called when the underlying task is finished.</br>
+		 * Called when the underlying task is finished.
 		 * <ul>
 		 * <li> You only need to use the task's result to generate new GUI - everything else
 		 * is taken care of for you.
@@ -136,20 +154,48 @@ public class ProgressDialog extends DialogCommons
 		void onTaskFinish(IProgressDialogTaskResult result);
 	}
 	
+	/**
+	 * Classes implementing this object are supposed to handle 
+	 * the underlying tracked task's progress, whether successful
+	 * or not.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static interface IProgressDialogResultHandler
 	{
 		/**
 		 * @param percentage value must be between 0.0 and 1.0
 		 */
 		void updateProgress(float percentage);
+		
+		/**
+		 * Call this method when the underlying task fails to
+		 * notify the dialog.
+		 */
 		void failed();
+		
+		/**
+		 * Call this method when the underlying task finishes to
+		 * notify the dialog.
+		 */
 		void finished(IProgressDialogTaskResult result);
 	}
 	
+	/**
+	 * A base interface for objects that hold the underlying task's results.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static interface IProgressDialogTaskResult
 	{
 	}
 
+	/**
+	 * The object connecting specific dialog handlers with the GUI and
+	 * making all of this to run.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static class ProgressDialogContext implements IProgressDialogResultHandler
 	{
 		private static final int POLL_INTERVAL = 500;
@@ -300,6 +346,7 @@ public class ProgressDialog extends DialogCommons
 		 * Vaadin doesn't like when components are updated while response with
 		 * previous updates is being written. Use this method to update components
 		 * from background threads to avoid accidental concurrent access issues.
+		 * @param command
 		 */
 		private void executeInLock(Runnable command)
 		{

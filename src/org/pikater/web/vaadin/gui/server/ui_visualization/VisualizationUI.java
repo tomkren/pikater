@@ -25,6 +25,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 
+/**
+ * Entry point into the visualization functionality.
+ * 
+ * @author SkyCrawl
+ */
 @Title("Visualization")
 @Theme("pikater")
 @Push(value = PushMode.AUTOMATIC)
@@ -96,6 +101,13 @@ public class VisualizationUI extends CustomConfiguredUI
 	//-------------------------------------------------------------------------------
 	// SPECIAL TYPES
 	
+	/**
+	 * Abstract {@link IUIArguments arguments} class for {@link VisualizationUI}.
+	 * 
+	 * @author SkyCrawl
+	 *
+	 * @param <T> Generated subresult type.
+	 */
 	public abstract static class DSVisUIArgs<T extends AbstractDSVisResult<?, ?>> implements IUIArguments, IRegistrarResource
 	{
 		private final T generatedResult;
@@ -134,6 +146,11 @@ public class VisualizationUI extends CustomConfiguredUI
 		}
 	}
 	
+	/**
+	 * Arguments for single dataset visualization.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static class DSVisOneUIArgs extends DSVisUIArgs<DSVisOneResult> 
 	{
 		private final JPADataSetLO dataset;
@@ -150,6 +167,11 @@ public class VisualizationUI extends CustomConfiguredUI
 		}
 	}
 	
+	/**
+	 * Arguments for dataset comparison.
+	 * 
+	 * @author SkyCrawl
+	 */
 	public static class DSVisTwoUIArgs extends DSVisUIArgs<DSVisTwoResult> 
 	{
 		private final JPADataSetLO dataset1;

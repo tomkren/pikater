@@ -70,7 +70,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 				switch (event.getNativeKeyCode())
 				{
 					case KeyCodes.KEY_BACKSPACE:
-						getEngine().pushNewOperation(new DeleteSelectedBoxesOperation(getEngine()));
+						getEngine().pushToHistory(new DeleteSelectedBoxesOperation(getEngine()));
 						event.preventDefault();
 						event.stopPropagation();
 						break;
@@ -259,7 +259,7 @@ public class KineticComponentWidget extends FocusPanel implements KineticCompone
 			{
 				if(experiment != null)
 				{
-					getEngine().fromIntermediateFormat(experiment);
+					getEngine().setExperiment(experiment);
 				}
 				else
 				{

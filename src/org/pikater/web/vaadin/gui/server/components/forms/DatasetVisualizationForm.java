@@ -11,9 +11,15 @@ import org.pikater.web.vaadin.gui.server.components.forms.fields.FormFieldFactor
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.DialogCommons.IDialogResultPreparer;
 import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.OptionGroup;
 
+/**
+ * A form to set dataset visualization parameters with.
+ * 
+ * @author SkyCrawl
+ */
 public class DatasetVisualizationForm extends CustomFormLayout implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = -223143365023322543L;
@@ -26,13 +32,13 @@ public class DatasetVisualizationForm extends CustomFormLayout implements IDialo
 		super(null);
 		
 		List<JPAAttributeMetaData> targetAttrs = dataset.getTargetAttributes();
-		this.field_attrTarget = FormFieldFactory.getGeneralComboBox("Target attribute:", targetAttrs, targetAttrs.get(targetAttrs.size() - 1), true, false);
+		this.field_attrTarget = FormFieldFactory.createComboBox("Target attribute:", targetAttrs, targetAttrs.get(targetAttrs.size() - 1), true, false);
 		for(JPAAttributeMetaData attr : targetAttrs)
 		{
 			this.field_attrTarget.setItemCaption(attr, attr.getName());
 		}
 		
-		this.field_attrsToCompare = FormFieldFactory.getGeneralOptionGroup("Attributes:", true, false);
+		this.field_attrsToCompare = FormFieldFactory.createOptionGroup("Attributes:", true, false);
 		this.field_attrsToCompare.setMultiSelect(true);
 		Set<JPAAttributeMetaData> customOrderAttributes = new CustomOrderSet<JPAAttributeMetaData>(dataset.getAttributeMetaData(), new Comparator<JPAAttributeMetaData>()
 		{
@@ -51,6 +57,11 @@ public class DatasetVisualizationForm extends CustomFormLayout implements IDialo
 		
 		addField("target", this.field_attrTarget);
 		addField("attributes", this.field_attrsToCompare);
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event)
+	{
 	}
 
 	@Override

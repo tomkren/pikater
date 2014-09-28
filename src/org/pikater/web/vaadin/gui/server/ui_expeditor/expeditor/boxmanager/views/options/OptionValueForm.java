@@ -38,6 +38,7 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -77,6 +78,11 @@ public class OptionValueForm extends CustomFormLayout
 		this.typeToDisplayString = new BidiMap<ValueType, String>();
 		
 		setupFields();
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event)
+	{
 	}
 	
 	@Override
@@ -184,7 +190,7 @@ public class OptionValueForm extends CustomFormLayout
 			// at this point, current value needs to be set (non-null) for the 'value' argument
 			
 			// create type combobox and set it up
-			ComboBox cb_type = FormFieldFactory.getGeneralComboBox(
+			ComboBox cb_type = FormFieldFactory.createComboBox(
 					"Type:",
 					typeOptions,
 					selectedType,

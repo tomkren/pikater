@@ -21,6 +21,7 @@ import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogResultHandler;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog.IProgressDialogTaskResult;
@@ -29,6 +30,11 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 
+/**
+ * Configuration for {@link DBTable DB tables} working with experiments.
+ * 
+ * @author SkyCrawl
+ */
 public class ExperimentDBViewRoot<V extends ExperimentTableDBView> extends AbstractDBViewRoot<V>
 {
 	public ExperimentDBViewRoot(V view)

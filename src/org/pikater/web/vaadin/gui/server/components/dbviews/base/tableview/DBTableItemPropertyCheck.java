@@ -1,11 +1,17 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.BooleanDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.CheckBox;
 
+/** 
+ * @author SkyCrawl
+ * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, 
+ * org.pikater.shared.database.views.base.values.AbstractDBViewValue) DBTableContainer#getProperty()}
+ */
 public class DBTableItemPropertyCheck implements Property<CheckBox>
 {
 	private static final long serialVersionUID = 8460699686386766346L;

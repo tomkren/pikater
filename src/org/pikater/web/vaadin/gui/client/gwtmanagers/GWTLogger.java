@@ -2,10 +2,19 @@ package org.pikater.web.vaadin.gui.client.gwtmanagers;
 
 import org.pikater.web.vaadin.gui.client.extensions.UniversalUIExtensionServerRpc;
 
+/** 
+ * A utility class that forwards received logging messages
+ * to the server.
+ * 
+ * @author SkyCrawl
+ */
 public class GWTLogger
 {
 	private static UniversalUIExtensionServerRpc serverRPC = null;
 	
+	/** 
+	 * @param serverRPC the server UI to send logging messages to
+	 */
 	public static void setRemoteLogger(UniversalUIExtensionServerRpc serverRPC)
 	{
 		GWTLogger.serverRPC = serverRPC;

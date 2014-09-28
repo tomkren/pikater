@@ -13,8 +13,19 @@ import de.steinwedel.messagebox.ButtonId;
 import de.steinwedel.messagebox.Icon;
 import de.steinwedel.messagebox.MessageBox;
 
+/**
+ * Defines many non-specific dialogs for general use.
+ * 
+ * @author SkyCrawl
+ */
 public class GeneralDialogs extends DialogCommons
 {
+	/**
+	 * A simple notification message box that can closed right away.
+	 * @param title
+	 * @param message
+	 * @return
+	 */
 	public static MessageBox info(String title, String message)
 	{
 		MessageBox mb = MessageBox.showPlain(
@@ -28,6 +39,12 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A simple warning message box that can closed right away.
+	 * @param title
+	 * @param message
+	 * @return
+	 */
 	public static MessageBox warning(String title, String message)
 	{
 		MessageBox mb = MessageBox.showPlain(
@@ -41,6 +58,12 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A simple error message box that can closed right away.
+	 * @param title
+	 * @param message
+	 * @return
+	 */
 	public static MessageBox error(String title, String message)
 	{
 		MessageBox mb = MessageBox.showPlain(Icon.ERROR, title == null ? "Error" : title, message, ButtonId.OK);
@@ -49,6 +72,13 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A simple confirmation message box that can closed right away.
+	 * @param title
+	 * @param message
+	 * @param resultHandler
+	 * @return
+	 */
 	public static MessageBox confirm(String title, String message, IDialogResultHandler resultHandler)
 	{
 		MyMessageBoxListener listener = MyMessageBoxListener.getDefault(resultHandler);
@@ -65,6 +95,13 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A text-prompt in the form of a dialog.
+	 * @param title
+	 * @param inputLabel what do we want the user to enter
+	 * @param resultHandler
+	 * @return
+	 */
 	public static MessageBox textPrompt(String title, String inputLabel, final IDialogResultHandler resultHandler)
 	{
 		final TextField tf = new TextField();
@@ -96,6 +133,12 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A custom component, wrapped in a dialog.
+	 * @param title
+	 * @param content
+	 * @return
+	 */
 	public static MessageBox componentDialog(String title, IDialogComponent content)
 	{
 		MyComponentMessageBoxListener<IDialogComponent> listener = new MyComponentMessageBoxListener<IDialogComponent>(content);
@@ -112,6 +155,13 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A custom component, wrapped in a dialog.
+	 * @param title
+	 * @param content
+	 * @param resultHandler
+	 * @return
+	 */
 	public static MessageBox componentDialog(String title, IDialogResultPreparer content, IDialogResultHandler resultHandler)
 	{
 		MyComponentMessageBoxListenerWithExternalResultHandler<IDialogResultPreparer> listener = 
@@ -129,6 +179,12 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A custom wizard component, wrapped in a dialog.
+	 * @param title
+	 * @param content
+	 * @return
+	 */
 	public static <C extends WizardForDialog<?> & IDialogComponent> MessageBox wizardDialog(String title, final C content)
 	{
 		final MessageBox mb = MessageBox.showCustomized(
@@ -170,6 +226,13 @@ public class GeneralDialogs extends DialogCommons
 		return mb;
 	}
 	
+	/**
+	 * A custom wizard component, wrapped in a dialog.
+	 * @param title
+	 * @param content
+	 * @param resultHandler
+	 * @return
+	 */
 	public static <C extends WizardForDialog<?> & IDialogResultPreparer> MessageBox wizardDialog(String title, final C content, final IDialogResultHandler resultHandler)
 	{
 		final MessageBox mb = MessageBox.showCustomized(

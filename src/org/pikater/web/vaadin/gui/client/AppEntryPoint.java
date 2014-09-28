@@ -8,17 +8,17 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.user.client.Event;
 
+/**
+ * Basic client setup, called once when the client engine
+ * initialized the client application in browser.
+ * 
+ * @author SkyCrawl
+ */
 public class AppEntryPoint implements EntryPoint
 {
 	@Override
 	public void onModuleLoad()
 	{
-		/*
-		 * Creates a special JS namespace, injects it into the window object and
-		 * exports some JSNI functions that can be called from the server.
-		 */
-		// JSNI_SharedConfig.exportStaticMethods();
-
 		/*
 		 * Adds a keyboard listener that keeps track of what keys are currently ressed.
 		 */

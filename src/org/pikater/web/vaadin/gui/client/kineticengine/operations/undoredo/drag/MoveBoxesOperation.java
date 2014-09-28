@@ -1,67 +1,65 @@
 package org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.drag;
 
 import net.edzard.kinetic.Node;
-import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineComponent;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.EdgeGraphItemClient;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
-/** 
- * Operation to move some graph items as a group and update related edges. This operation
- * is selection independent, it doesn't deselect or select anything.
+/**
+ * <p>Undoable operation to move some graph items as a group and update related
+ * edges in the environment/canvas.</p>
+ * 
+ * <p>This operation is selection independent - it doesn't select/deselect anything.</p>
+ * 
+ * @author SkyCrawl
  */
-public class MoveBoxesOperation extends BiDiOperation implements IBoxDragEndContext
+public class MoveBoxesOperation extends BiDiOperation
 {
-	// main operation related variables 
+	/*
+	 * Required operation related variables and contexts.
+	 */
 	private final IBoxDragContext context;
+	private final DragParameters params;
+	
+	/*
+	 * Local immutable copy of all nodes/items being involved.
+	 */
 	private final BoxGraphItemClient[] boxesBeingMoved;
 	private final Node[] allMovedNodes; // boxes and edges
 	private final EdgeGraphItemClient[] edgesInBetween;
 	
-	// positions to keep track of
-	private final Vector2d originalPosition;
-	private final Vector2d newPosition;
-	private final Vector2d delta;
-	
-	public MoveBoxesOperation(IBoxDragContext context, Vector2d originalPosition, Vector2d newPosition)
+	/**
+	 * Constructor. Use AFTER the drag itself.
+	 * @param context
+	 */
+	public MoveBoxesOperation(IBoxDragContext context, DragParameters params)
 	{
-		super(context.getEngine());
+		super(context.getParentEngine());
 		
 		this.context = context;
+		this.params = params.copy(); // this is important...local copy
+		
 		this.boxesBeingMoved = context.getBoxesBeingMoved().toArray(new BoxGraphItemClient[0]);
-		this.allMovedNodes = context.getAllNodesBeingMoved();
+		this.allMovedNodes = context.getNodesBeingMoved();
 		this.edgesInBetween = context.getEdgesInBetween().toArray(new EdgeGraphItemClient[0]);
 		
-		this.originalPosition = originalPosition;
-		this.newPosition = newPosition;
-		this.delta = new Vector2d(newPosition).sub(originalPosition);
-	}
-	
-	// **********************************************************************************
-	// INHERITED OPERATION INTERFACE
-
-	/**
-	 * NOTE: this method is executed AFTER the drag itself.
-	 */
-	@Override
-	public void firstExecution()
-	{
 		// switch from drag mode back to normal mode (but don't recompute the edges yet)
 		for(EdgeGraphItemClient edge : edgesInBetween)
 		{
 			edge.endPointDrag_toEdge();
 		}
-				
-		redo();
 	}
 	
+	// **********************************************************************************
+	// INHERITED OPERATION INTERFACE
+
 	@Override
 	public void undo()
 	{
 		// first restore original positions
-		context.setOriginalPositions(allMovedNodes, this);
+		context.setOriginalPositions(allMovedNodes, params);
 		
 		// and finally, update the edges caught between selection and dynamic layer and draw changes
 		recomputeEdgesInBetweenAndDraw();
@@ -74,40 +72,13 @@ public class MoveBoxesOperation extends BiDiOperation implements IBoxDragEndCont
 	public void redo()
 	{
 		// first move the nodes
-		context.setNewPositions(allMovedNodes, this);
+		context.setNewPositions(allMovedNodes, params);
 		
 		// and then update the edges caught between selection and dynamic layer and draw changes
 		recomputeEdgesInBetweenAndDraw();
 		
 		// notify server about the changes - compute new serialized objects with current positions
 		kineticEngine.getContext().command_boxPositionsChanged(BoxGraphItemClient.toShared(boxesBeingMoved));
-	}
-	
-	// **********************************************************************************
-	// INHERITED BOX DRAG CONTEXT INTERFACE
-	
-	@Override
-	public Vector2d getOriginalPosition()
-	{
-		return originalPosition;
-	}
-
-	@Override
-	public Vector2d getNewPosition()
-	{
-		return newPosition;
-	}
-
-	@Override
-	public Vector2d getDelta()
-	{
-		return delta;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "MoveBoxesOperation";
 	}
 	
 	// **********************************************************************************

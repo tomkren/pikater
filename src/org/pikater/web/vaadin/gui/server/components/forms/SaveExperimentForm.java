@@ -13,12 +13,18 @@ import org.pikater.web.vaadin.gui.server.layouts.formlayout.CustomFormLayout;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 
+/**
+ * A form to save/queue experiments.
+ * 
+ * @author SkyCrawl
+ */
 public class SaveExperimentForm extends CustomFormLayout implements IDialogResultPreparer
 {
 	private static final long serialVersionUID = -692840139111911571L;
@@ -99,14 +105,14 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 		this.saveMode = saveMode;
 		
 		// first create the fields
-		this.field_experimentName = FormFieldFactory.getGeneralTextField("Experiment name:", "Enter the name", null, false, false);
+		this.field_experimentName = FormFieldFactory.createTextField("Experiment name:", "Enter the name", null, false, false);
 		this.field_experimentName.setWidth("100%");
-		this.field_experimentNote = FormFieldFactory.getGeneralTextArea("Note:", "A short description for this experiment?", null, false, false);
+		this.field_experimentNote = FormFieldFactory.createTextArea("Note:", "A short description for this experiment?", null, false, false);
 		this.field_experimentNote.setWidth("100%");
 		switch(saveMode)
 		{
 			case SAVE_FOR_LATER:
-				this.field_saveForLaterMode = FormFieldFactory.getGeneralOptionGroup("How to save:", true, false);
+				this.field_saveForLaterMode = FormFieldFactory.createOptionGroup("How to save:", true, false);
 				SaveForLaterMode[] availableSaveForLaterModes = SaveForLaterMode.getAvailableByContext(sourceExperiment);
 				for(SaveForLaterMode mode : availableSaveForLaterModes)
 				{
@@ -151,7 +157,7 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 				break;
 				
 			case SAVE_FOR_EXECUTION:
-				/**
+				/*
 				 * This is dependent on {@link JPAUser#setPriorityMax()} and
 				 * {@link UniversalComputationDescription#setPriority()}.
 				 */
@@ -162,10 +168,10 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 				}
 				this.field_saveForLaterMode = null;
 				JPAUser user = UserAuth.getUserEntity(VaadinSession.getCurrent());
-				this.field_priorityAssignedByUser = FormFieldFactory.getGeneralComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
+				this.field_priorityAssignedByUser = FormFieldFactory.createComboBox("Priority:", userPriorityOptions, user.getPriorityMax(), true, false);
 				this.field_priorityAssignedByUser.setDescription("The more, the higher priority.");
 				this.field_priorityAssignedByUser.setWidth("100%");
-				this.field_sendEmailWhenFinished = FormFieldFactory.getGeneralCheckField("Email when finished:", "", true, false);
+				this.field_sendEmailWhenFinished = FormFieldFactory.createCheckBox("Email when finished:", "", true, false);
 				break;
 				
 			default:
@@ -191,6 +197,11 @@ public class SaveExperimentForm extends CustomFormLayout implements IDialogResul
 			default:
 				throw new IllegalStateException("Unknown state: " + saveMode.name());
 		}
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event)
+	{
 	}
 
 	@Override

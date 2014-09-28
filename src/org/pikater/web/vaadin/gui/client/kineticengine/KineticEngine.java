@@ -41,6 +41,12 @@ import org.pikater.web.vaadin.gui.client.kineticengine.operations.undoredo.ItemR
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticBoxSettings;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticEdgeSettings;
 
+/**
+ * The center of the whole kinetic environment implementation. Defines
+ * the essential infrastructure for all the rest of the code.
+ * 
+ * @author SkyCrawl
+ */
 @SuppressWarnings("deprecation")
 public final class KineticEngine
 {
@@ -162,11 +168,10 @@ public final class KineticEngine
 			// TODO: make this faster with smarter collision detection!
 			
 			// handle the event
-			Box2d msrBox = multiSelectionRectangle.getPosAndSize();
 			Set<BoxGraphItemClient> boxesToSelect = new HashSet<BoxGraphItemClient>();
 			for(BoxGraphItemClient box : itemRegistrationModule.getRegisteredBoxes())
 			{
-				if(!box.isSelected() && box.intersects(msrBox.getPosition(), msrBox.getSize()))
+				if(!box.isSelected() && box.intersects(multiSelectionRectangle.getSelection()))
 				{
 					boxesToSelect.add(box);
 				}
@@ -327,7 +332,7 @@ public final class KineticEngine
 	}
 	*/
 	
-	public void fromIntermediateFormat(ExperimentGraphClient experiment)
+	public void setExperiment(ExperimentGraphClient experiment)
 	{
 		// first convert all boxes
 		Map<Integer, BoxGraphItemClient> guiBoxes = new HashMap<Integer, BoxGraphItemClient>();
@@ -354,7 +359,7 @@ public final class KineticEngine
 				guiBoxes.values().toArray(new BoxGraphItemClient[0]),
 				edges.toArray(new EdgeGraphItemClient[0]),
 				false
-		).firstExecution();
+		).redo();
 	}
 	
 	// *****************************************************************************************************
@@ -377,10 +382,10 @@ public final class KineticEngine
 		stage.draw();
 	}
 	
-	public void setContext(KineticComponentWidget context)
+	public void setWidgetContext(KineticComponentWidget context)
 	{
 		/*
-		 * First set up the stage.
+		 * First setup the stage.
 		 */
 		if(this.stage != null)
 		{
@@ -395,7 +400,7 @@ public final class KineticEngine
 		this.stage.add(layer3_edges);
 		
 		/*
-		 * The set up z-indexes for layers.
+		 * Then setup layer z-indexes.
 		 * NOTE: ZIndex = value that determines priority for event handlers when 2 objects collide. The higher ZIndex, the closer to the user. 
 		 */
 		
@@ -431,7 +436,7 @@ public final class KineticEngine
 		selectionModule.doSelectionRelatedOperation(SelectionOperation.DESELECTION, true, false, selectionModule.getSelectedBoxes());
 	}
 	
-	public void reloadBoxVisualStyle(KineticBoxSettings boxSettings, KineticEdgeSettings edgeSettings)
+	public void applyVisualStyle(KineticBoxSettings boxSettings, KineticEdgeSettings edgeSettings)
 	{
 		if((this.settings_box == null) || (this.settings_edge == null) ||
 				!this.settings_box.equals(boxSettings) || !this.settings_edge.equals(edgeSettings)) 
@@ -545,10 +550,10 @@ public final class KineticEngine
 		return stage.getPointerPosition();
 	}
 	
-	public void pushNewOperation(BiDiOperation operation)
+	public void pushToHistory(BiDiOperation operation)
 	{
 		getContext().getHistoryManager().push(operation);
-		operation.firstExecution();
+		operation.redo();
 	}
 	
 	public void draw(EngineComponent component)

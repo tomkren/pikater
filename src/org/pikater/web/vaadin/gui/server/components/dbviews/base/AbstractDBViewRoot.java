@@ -8,6 +8,15 @@ import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTab
 
 import com.vaadin.ui.AbstractComponent;
 
+/**
+ * A wrapper for {@link AbstractTableDBView DB views} used in 
+ * {@link DBTable DB tables}. Provides GUI configuration for
+ * the view like column sizes etc.
+ * 
+ * @author SkyCrawl
+ *
+ * @param <T> The view type.
+ */
 public abstract class AbstractDBViewRoot<T extends AbstractTableDBView>
 {
 	private final T underlyingDBView;
@@ -41,7 +50,30 @@ public abstract class AbstractDBViewRoot<T extends AbstractTableDBView>
 	}
 	
 	public abstract int getColumnSize(ITableColumn column);
+	
+	/**
+	 * Gets the column to take up any remaining width of the table,
+	 * after it has been distributed to columns as specified by
+	 * {@link #getColumnSize(ITableColumn)}.
+	 * @return
+	 */
 	public abstract ITableColumn getExpandColumn();
+	
+	/**
+	 * Post-processing for table cells, after they have been initialized.
+	 * @param column
+	 * @param value
+	 * @param component
+	 */
 	public abstract void onCellCreate(ITableColumn column, AbstractDBViewValue<?> value, AbstractComponent component);
+	
+	/**
+	 * This method is called after the user clicks a button within a cell 
+	 * in {@link DBTable}. It is a top-level check whether the button's
+	 * action handler may be executed for the given row. 
+	 * @param column
+	 * @param row
+	 * @param action
+	 */
 	public abstract void approveAction(ITableColumn column, AbstractTableRowDBView row, Runnable action);
 }

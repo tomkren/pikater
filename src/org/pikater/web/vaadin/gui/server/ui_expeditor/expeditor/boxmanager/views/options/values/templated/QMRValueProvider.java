@@ -7,7 +7,7 @@ import org.pikater.core.ontology.subtrees.newOption.values.IntegerValue;
 import org.pikater.core.ontology.subtrees.newOption.values.QuestionMarkRange;
 import org.pikater.core.ontology.subtrees.newOption.values.StringValue;
 import org.pikater.core.ontology.subtrees.newOption.values.interfaces.IComparableValueData;
-import org.pikater.web.vaadin.gui.server.components.forms.validators.IBoundsProvider;
+import org.pikater.shared.util.Interval;
 import org.pikater.web.vaadin.gui.server.components.forms.validators.NumberRangeValidator;
 import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.boxmanager.views.options.values.AbstractFieldProviderForValue;
 
@@ -163,34 +163,8 @@ public class QMRValueProvider extends AbstractFieldProviderForValue
 		final NumberRangeValidator<Number> minFieldValidator = getNumberRangeValidator(minField);
 		final NumberRangeValidator<Number> maxFieldValidator = getNumberRangeValidator(maxField);
 		
-		minFieldValidator.addBoundsProvider(new IBoundsProvider()
-		{
-			@Override
-			public Number getMin()
-			{
-				return null;
-			}
-
-			@Override
-			public Number getMax()
-			{
-				return maxFieldValidator.parse((String) maxField.getValue());
-			}
-		});
-		maxFieldValidator.addBoundsProvider(new IBoundsProvider()
-		{
-			@Override
-			public Number getMin()
-			{
-				return minFieldValidator.parse((String) minField.getValue());
-			}
-
-			@Override
-			public Number getMax()
-			{
-				return null;
-			}
-		});
+		minFieldValidator.addBoundsProvider(new Interval<Number>(null, maxFieldValidator.parse((String) maxField.getValue())));
+		maxFieldValidator.addBoundsProvider(new Interval<Number>(minFieldValidator.parse((String) minField.getValue()), null));
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -6,6 +6,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 
+/**
+ * Our own modified window for a few special use cases.
+ * See references.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("myPopup.css")
 public class MyPopup extends Window
 {

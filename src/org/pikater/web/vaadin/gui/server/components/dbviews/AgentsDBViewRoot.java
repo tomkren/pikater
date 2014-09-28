@@ -15,6 +15,7 @@ import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 
 import com.vaadin.server.Page;
@@ -22,6 +23,11 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
 
+/**
+ * Configuration for {@link DBTable DB tables} working with agents.
+ * 
+ * @author SkyCrawl
+ */
 public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBView>
 {
 	public AgentsDBViewRoot(ExternalAgentTableDBView view)
@@ -142,7 +148,6 @@ public class AgentsDBViewRoot extends AbstractDBViewRoot<ExternalAgentTableDBVie
 					return true; // close the dialog
 				}
 			});
-			
 		}
 		else
 		{

@@ -6,10 +6,13 @@ import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
-/**
- * Vaadin doesn't support a password field that reveals the password temporarily, so we're going to use both
- * components to simulate such behaviour. The goal here is to dynamically embed the right component and switch
- * between them.
+/** 
+ * Vaadin doesn't support a password field that reveals the password temporarily,
+ * so we're going to use both {@link PasswordField} and {@link TextField} to
+ * simulate such behaviour. The goal here is to dynamically embed the right
+ * component and switch between them.
+ * 
+ * @author SkyCrawl
  */
 public class RevealablePasswordField
 {

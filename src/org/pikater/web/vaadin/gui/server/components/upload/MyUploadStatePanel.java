@@ -15,6 +15,12 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.component.SmartMultiUpload;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStatePanel;
 
+/**
+ * Our own version of multi-file upload, extending the Vaadin
+ * multi-file upload Vaadin add-on.
+ * 
+ * @author SkyCrawl
+ */
 public class MyUploadStatePanel extends UploadStatePanel
 {
 	private static final long serialVersionUID = 2373915541113299145L;
@@ -33,12 +39,18 @@ public class MyUploadStatePanel extends UploadStatePanel
 	// ------------------------------------------------------------
 	// INHERITED INTERFACE
 	
+	/*
+	 * Just so we know there is something else we can customize.
+	 */
 	@Override
 	public void setFinishedHandler(UploadFinishedHandler finishedHandler)
 	{
 		super.setFinishedHandler(finishedHandler);
 	}
 	
+	/*
+	 * Just so we know there is something else we can customize.
+	 */
 	@Override
 	public void setMultiUpload(SmartMultiUpload multiUpload)
 	{

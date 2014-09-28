@@ -2,6 +2,12 @@ package org.pikater.web.vaadin.gui.client.kineticengine.graph;
 
 import net.edzard.kinetic.Node;
 
+/**
+ * Common interface for all classes representing a kinetic node
+ * but not extending it.
+ * 
+ * @author SkyCrawl
+ */
 public interface IKineticShapeWrapper
 {
 	/**

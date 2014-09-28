@@ -19,6 +19,11 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Master component viewing the results of single dataset visualization.
+ * 
+ * @author SkyCrawl
+ */
 public class SingleDatasetVisualizer extends VerticalLayout
 {
 	private static final long serialVersionUID = 8665905099485047156L;

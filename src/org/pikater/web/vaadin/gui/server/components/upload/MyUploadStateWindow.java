@@ -6,6 +6,12 @@ import java.util.List;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStatePanel;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 
+/**
+ * Our own, a more centralized, expansion of the original multi-file
+ * upload Vaadin add-on.
+ * 
+ * @author SkyCrawl
+ */
 public class MyUploadStateWindow extends UploadStateWindow
 {
 	private static final long serialVersionUID = -1630660423984992697L;
@@ -42,8 +48,16 @@ public class MyUploadStateWindow extends UploadStateWindow
 		}
 	}
 	
+	/**
+	 * Note: on any UI. 
+	 * @return
+	 */
 	public boolean isAFileBeingUploaded()
 	{
+		/*
+		 * Works across all instances in all UIs, if panels are always
+		 * added.
+		 */
 		synchronized(lock_object)
 		{
 			for(UploadStatePanel panel : panels)

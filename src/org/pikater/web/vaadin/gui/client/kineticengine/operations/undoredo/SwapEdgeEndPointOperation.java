@@ -8,6 +8,11 @@ import org.pikater.web.vaadin.gui.client.kineticengine.modules.ItemRegistrationM
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.AbstractGraphItemShared.RegistrationOperation;
 
+/**
+ * Undoable operation that swaps edge endpoints.
+ * 
+ * @author SkyCrawl
+ */
 public class SwapEdgeEndPointOperation extends BiDiOperation
 {
 	private final ItemRegistrationModule itemRegistrationModule;
@@ -25,19 +30,16 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 		this.edge = edge;
 		this.affectedEndpoint = affectedEndpoint;
 		this.boxEndpoint_original = this.edge.getEndPoint(this.affectedEndpoint);
-		this.boxEndpoint_new = kineticEngine.getHoveredBox();
 		
-		if(this.boxEndpoint_new == null)
+		if(kineticEngine.getHoveredBox() == null)
 		{
 			throw new NullPointerException("Can not perform this operation because no hovered box was found. Did you"
 					+ "somehow break the track mouse plugin's functions?");
 		}
-	}
-
-	@Override
-	public void firstExecution()
-	{
-		redo();
+		else
+		{
+			this.boxEndpoint_new = kineticEngine.getHoveredBox();
+		}
 	}
 
 	@Override
@@ -56,11 +58,5 @@ public class SwapEdgeEndPointOperation extends BiDiOperation
 		edge.setEndpoint(affectedEndpoint, boxEndpoint_new);
 		edge.updateEdge();
 		itemRegistrationModule.doOperation(RegistrationOperation.REGISTER, true, true, edge);
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "SwapEdgeEndPointOperation";
 	}
 }

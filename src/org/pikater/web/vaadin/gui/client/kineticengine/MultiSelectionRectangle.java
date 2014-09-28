@@ -10,10 +10,17 @@ import net.edzard.kinetic.Vector2d;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.graph.IKineticShapeWrapper;
 
+/**
+ * A shape always present in {@link KineticEngine} which is used
+ * to capture movement of the user's mouse. The movement selects
+ * a boundary within which we will later be looking for boxes.
+ * 
+ * @author SkyCrawl
+ */
 public class MultiSelectionRectangle implements IKineticShapeWrapper
 {
 	/**
-	 * The kinetic shape to draw the rectangle.
+	 * The kinetic shape representing the rectangle.
 	 */
 	private final PathSVG path;
 	
@@ -55,19 +62,40 @@ public class MultiSelectionRectangle implements IKineticShapeWrapper
 		return this.originalMousePosition;
 	}
 	
+	/**
+	 * Sets the starting point of a selection. Use this method when user clicks
+	 * the left mouse button and holds it.
+	 * @param position
+	 */
 	public void setOriginalMousePosition(Vector2d position)
 	{
 		this.originalMousePosition = position;
 		this.currentMousePosition = position;
 	}
 	
+	/**
+	 * <p>Updates the rectangle with a new mouse position somehow. Use this
+	 * method when user moves their mouse while still holding the left
+	 * mouse button.</p>
+	 * 
+	 * <p>A little bit of "magic" is used here that even us don't understand anymore...
+	 * This should probably be made more clear (and complex)</p>
+	 * 
+	 * @param left
+	 * @param up
+	 * @param right
+	 */
 	public void updatePath(Vector2d left, Vector2d up, Vector2d right)
 	{
 		this.currentMousePosition = up;
 		this.path.setData(new Path().moveTo(originalMousePosition).lineTo(left).lineTo(up).lineTo(right).lineTo(originalMousePosition).toSVGPath());
 	}
 	
-	public Box2d getPosAndSize()
+	/**
+	 * Returns the box (position and size) of the current selection.
+	 * @return
+	 */
+	public Box2d getSelection()
 	{
 		Vector2d pos, size;
 		if(originalMousePosition.x < currentMousePosition.x)

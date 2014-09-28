@@ -1,9 +1,14 @@
-package org.pikater.web.vaadin.gui.client.kineticengine.operations.base;
+package org.pikater.web.unused;
 
 import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine;
 
 import com.google.gwt.user.client.Command;
 
+/**
+ * Temporary 
+ * 
+ * @author SkyCrawl
+ */
 public abstract class TempConditionOperation
 {
 	protected final KineticEngine engine;

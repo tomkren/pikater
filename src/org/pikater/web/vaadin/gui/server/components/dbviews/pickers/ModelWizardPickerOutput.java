@@ -6,6 +6,11 @@ import org.pikater.shared.database.jpa.JPAResult;
 import org.pikater.shared.database.jpa.JPAUser;
 import org.pikater.web.vaadin.gui.server.components.wizards.IWizardCommon;
 
+/** 
+ * A class holding progress and result of {@link ModelWizardPicker}.
+ * 
+ * @author SkyCrawl
+ */
 public class ModelWizardPickerOutput implements IWizardCommon
 {
 	private final JPAUser owner;

@@ -5,6 +5,12 @@ import java.util.Stack;
 import org.pikater.web.vaadin.gui.client.components.kineticcomponent.KineticComponentWidget;
 import org.pikater.web.vaadin.gui.client.kineticengine.operations.base.BiDiOperation;
 
+/**
+ * History manager for our kinetic canvas and experiment editor. Allows
+ * undoing and redoing individual changes at will.
+ * 
+ * @author SkyCrawl
+ */
 public class KineticUndoRedoManager
 {
 	private final KineticComponentWidget widget;
@@ -18,6 +24,10 @@ public class KineticUndoRedoManager
 		this.redoStack = new Stack<BiDiOperation>();
 	}
 	
+	/**
+	 * Load history from a backup.
+	 * @param history
+	 */
 	public void loadHistory(KineticUndoRedoManager history)
 	{
 		if(history != null)
@@ -36,6 +46,9 @@ public class KineticUndoRedoManager
 		}
 	}
 	
+	/**
+	 * Delete history up until this moment.
+	 */
 	public void clear()
 	{
 		undoStack.clear();
@@ -44,6 +57,10 @@ public class KineticUndoRedoManager
 		// alterStateIf(undoStack.isEmpty());
 	}
 	
+	/**
+	 * Register a new change and put it on top of the change history.
+	 * @param operation
+	 */
 	public void push(BiDiOperation operation)
 	{
 		// alterStateIf(undoStack.isEmpty());
@@ -52,6 +69,9 @@ public class KineticUndoRedoManager
 		redoStack.clear();
 	}
 	
+	/**
+	 * Undo the latest change.
+	 */
 	public void undo()
 	{
 		if(!undoStack.isEmpty())
@@ -64,6 +84,10 @@ public class KineticUndoRedoManager
 		}
 	}
 	
+	/**
+	 * Comes in handy for incomplete operation that were cancelled 
+	 * in the process.
+	 */
 	public void undoAndDiscard()
 	{
 		if(!undoStack.isEmpty())
@@ -74,6 +98,9 @@ public class KineticUndoRedoManager
 		}
 	}
 	
+	/**
+	 * Redo the latest change undid with {@link #undo()}.
+	 */
 	public void redo()
 	{
 		// alterStateIf(undoStack.isEmpty());
@@ -90,7 +117,7 @@ public class KineticUndoRedoManager
 	// INTERFACE FOR SHARING THE "MODIFIED" STATUS WITH THE SERVER
 	
 	/*
-	 * TODO: options editing makes this incomplete... we have to merge all changes
+	 * TODO: editing options makes this incomplete... we have to merge all changes
 	 * to be registered either on the server or the client.
 	 */
 	

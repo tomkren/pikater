@@ -64,7 +64,7 @@ public class BatchesView extends ExpandableView
 	// OTHER INTERFACE
 
 	@Override
-	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()
+	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep()
 	{
 		return new BatchStep(this, new BatchTableDBViewAll()); 
 	}

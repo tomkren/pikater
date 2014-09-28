@@ -5,9 +5,15 @@ import org.pikater.shared.database.views.base.values.AbstractDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.database.views.tableview.datasets.metadata.NumericalMetaDataTableDBView;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 
 import com.vaadin.ui.AbstractComponent;
 
+/**
+ * Configuration for {@link DBTable DB tables} working with numerical metadata.
+ * 
+ * @author SkyCrawl
+ */
 public class NumericalMetadataDBViewRoot extends AbstractDBViewRoot<NumericalMetaDataTableDBView>
 {
 	public NumericalMetadataDBViewRoot(NumericalMetaDataTableDBView view)

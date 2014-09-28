@@ -5,8 +5,10 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 
 /**
- * This class acts as a keyboard listener. Listens to keyboards events and logs which
+ * This class acts as a keyboard listener. Listens to keyboard events and logs which
  * keys are currently pressed.
+ * 
+ * @author SkyCrawl
  */
 public class GWTKeyboardManager
 {
@@ -14,13 +16,14 @@ public class GWTKeyboardManager
 	{
 		return new NativePreviewHandler()
 		{
-			/**
-			 * The underlying code is called after an event is triggered and even before
-			 * the browser processes it which allows for event cancelling. 
-			 */
 			@Override
 			public void onPreviewNativeEvent(NativePreviewEvent event)
 			{
+				/*
+				 * This is called after an event is triggered and even before
+				 * the browser processes it, which allows for event cancelling. 
+				 */
+				
 				switch (event.getTypeInt())
 				{
 					case 128: // keydown
@@ -56,11 +59,6 @@ public class GWTKeyboardManager
 	// *************************************************************************************
 	// PRIVATE FIELDS & METHODS
 	
-	/**
-	 * Code to handle keyboard input and some routines around it. It is marked static to avoid distributing
-	 * an instance of this class to other kinetic components. If more editors are used in the same browser tab,
-	 * the static modifier needs to be removed.
-	 */
 	private static final boolean[] keyDown = new boolean[256]; // defaults to false
 	
 	private static boolean isKeyDown(int keyCode)

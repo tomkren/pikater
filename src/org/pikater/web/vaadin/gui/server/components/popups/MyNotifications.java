@@ -9,14 +9,17 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.UI;
 
 /**
- * This class define routines for displaying various kinds of notifications
+ * <p>This class define routines for displaying various kinds of notifications
  * in OS X style.</br>
  * Note that this class can not be used outside of Vaadin requests (threads
  * processing them). The methods defined here work on a so called thread-local
- * pattern.
- * </br></br>
- * TODO: is there a decent way to improve this? To get an instance of underlying
- * UI based on something other than currently running thread? Maybe {@link ResourceRegistrar}?
+ * pattern.</p>
+ * 
+ * <p>TODO: is there a decent way to improve this? To get an instance of underlying
+ * UI based on something other than currently running thread? Maybe
+ * {@link ResourceRegistrar}?</p>
+ * 
+ * @author SkyCrawl
  */
 public class MyNotifications
 {
@@ -61,6 +64,11 @@ public class MyNotifications
 	
 	private static MyFancyNotifications getCurrentNotificationsManager()
 	{
+		/*
+		 * This is one of the reasons why notifications need to operate
+		 * on a thread-local pattern - they require to have a special
+		 * component attached to a UI. 
+		 */
 		return ((CustomConfiguredUI) UI.getCurrent()).getNotificationsComponent();
 	}
     

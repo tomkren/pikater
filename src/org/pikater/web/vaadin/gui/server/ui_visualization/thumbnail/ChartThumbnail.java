@@ -17,6 +17,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 
+/**
+ * A thumbnail of the given generated subresult (image). Double click
+ * enlarges it in a separate overlay, with a zoom functionality.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class ChartThumbnail extends Thumbnail
 {
 	private static final long serialVersionUID = 8481225003085234704L;

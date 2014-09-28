@@ -14,7 +14,7 @@ public class BooleanValueProvider extends AbstractFieldProviderForValue
 	@Override
 	protected void doGenerateFields(final Value value)
 	{
-		CustomFormCheckBox chb_value = FormFieldFactory.getGeneralCheckField(
+		CustomFormCheckBox chb_value = FormFieldFactory.createCheckBox(
 				"Value:",
 				"",
 				(Boolean) value.getCurrentValue().hackValue(),

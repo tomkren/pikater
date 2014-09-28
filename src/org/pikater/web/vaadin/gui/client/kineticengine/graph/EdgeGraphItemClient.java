@@ -23,6 +23,11 @@ import org.pikater.web.vaadin.gui.client.kineticengine.KineticEngine.EngineCompo
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.graphitems.EdgeGraphItemShared;
 import org.pikater.web.vaadin.gui.shared.kineticcomponent.visualstyle.KineticEdgeSettings;
 
+/**
+ * The class representing an edge in our {@link KineticEngine}.
+ * 
+ * @author SkyCrawl
+ */
 public class EdgeGraphItemClient extends AbstractGraphItemClient<KineticEdgeSettings>
 {
 	// **********************************************************************************************

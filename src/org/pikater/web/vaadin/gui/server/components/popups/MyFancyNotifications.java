@@ -5,6 +5,12 @@ import org.vaadin.alump.fancylayouts.gwt.client.shared.FancyNotificationsState.P
 
 import com.vaadin.annotations.StyleSheet;
 
+/**
+ * Our own configured version of notifications
+ * take from the FancyNotifications Vaadin add-on.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("myFancyNotifications.css")
 public class MyFancyNotifications extends FancyNotifications
 {

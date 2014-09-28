@@ -88,6 +88,20 @@ public class Box2d implements Serializable {
 	}
 	
 	/**
+	 * Whether this box shares at least a small area with the given box.
+	 * @param otherBox
+	 * @return
+	 * @see answer #2: http://stackoverflow.com/questions/2752349/fast-rectangle-to-rectangle-intersection
+	 */
+	public final boolean intersects(Box2d otherBox)
+	{
+		return (this.left <= otherBox.right) && // this.left <= other.right
+				(otherBox.left <= this.right) && // other.left <= this.right
+				(this.top <= otherBox.bottom) && // this.top <= other.bottom
+				(otherBox.top <= this.bottom); // other.top <= this.bottom
+	}
+	
+	/**
 	 * Corrects the box by some offset value.
 	 * @param offset The offset value to use for correction
 	 */

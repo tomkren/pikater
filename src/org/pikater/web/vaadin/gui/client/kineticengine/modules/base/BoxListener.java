@@ -4,13 +4,20 @@ import org.pikater.web.vaadin.gui.client.kineticengine.graph.BoxGraphItemClient;
 
 /**
  * General template for listeners attached to a box.
+ * 
+ * @author SkyCrawl
  */
 public abstract class BoxListener extends ModuleEventListener
 {
-	protected final BoxGraphItemClient parentBox;
+	private final BoxGraphItemClient parentBox;
 	
 	public BoxListener(BoxGraphItemClient parentBox)
 	{
 		this.parentBox = parentBox;
+	}
+	
+	protected BoxGraphItemClient getEventSourceBox()
+	{
+		return parentBox;
 	}
 }

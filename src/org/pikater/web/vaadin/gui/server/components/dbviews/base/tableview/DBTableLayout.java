@@ -13,6 +13,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * A class wrapping our {@link DBTable database tables} and related
+ * features like paging into a Vaadin component.
+ * 
+ * @author SkyCrawl 
+ */
 @StyleSheet("dbTableLayout.css")
 public class DBTableLayout extends VerticalLayout
 {
@@ -78,6 +84,10 @@ public class DBTableLayout extends VerticalLayout
 		setExpandRatio(hl_btnInterface, 1);
 	}
 	
+	/**
+	 * Sets this component to be read-only by disabling
+	 * both automatic and manual database update features.
+	 */
 	@Override
 	public void setReadOnly(boolean readOnly)
 	{
@@ -87,21 +97,39 @@ public class DBTableLayout extends VerticalLayout
 		chb_commit.setVisible(!readOnly);
 	}
 	
+	/**
+	 * Gets the underlying table component.
+	 * @return
+	 */
 	public DBTable getTable()
 	{
 		return table;
 	}
 	
+	/**
+	 * 
+	 * @param viewRoot
+	 */
 	public void setView(AbstractDBViewRoot<? extends AbstractTableDBView> viewRoot)
 	{
 		table.setView(viewRoot);
 	}
 	
+	/**
+	 * If set to true, change made to a cell will automatically
+	 * be published to database IMMEDIATELY. Otherwise, changes
+	 * will only apply when the "save changes" button is clicked.
+	 * @param immediate
+	 */
 	public void setCommitImmediately(boolean immediate)
 	{
 		chb_commit.setValue(immediate);
 	}
 	
+	/**
+	 * Add/remove visual padding to the paging component.
+	 * @param enabled
+	 */
 	public void setPagingPadding(boolean enabled)
 	{
 		if(enabled)
@@ -114,6 +142,11 @@ public class DBTableLayout extends VerticalLayout
 		}
 	}
 	
+	/**
+	 * Adds a custom component (most likely a button) to the button
+	 * interface.
+	 * @param component
+	 */
 	public void addCustomActionComponent(Component component)
 	{
 		hl_btnInterface.addComponent(component);

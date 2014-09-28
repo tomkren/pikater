@@ -10,6 +10,13 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ItemClickEvent;
 
+/**
+ * A step for {@link ExpandableView}, defines a single table. Use
+ * {@link #registerDBViewLayout(DBTableLayout)} to include the
+ * table in the step.
+ * 
+ * @author SkyCrawl
+ */
 public abstract class ExpandableViewStep extends DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>>
 {
 	public ExpandableViewStep(WizardWithDynamicSteps<IWizardCommon> parentWizard, boolean isLeaf)
@@ -17,6 +24,11 @@ public abstract class ExpandableViewStep extends DynamicNeighbourWizardStep<IWiz
 		super(parentWizard, isLeaf);
 	}
 	
+	/**
+	 * Adds the given {@link DBTableLayout table} in this step.
+	 * 
+	 * @param layout
+	 */
 	protected void registerDBViewLayout(final DBTableLayout layout)
 	{
 		if(!isLeaf())

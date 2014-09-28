@@ -6,6 +6,11 @@ import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 
+/** 
+ * @author SkyCrawl
+ * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, 
+ * org.pikater.shared.database.views.base.values.AbstractDBViewValue) DBTableContainer#getProperty()}
+ */
 public class DBTableItemPropertyGeneric<T extends Object> implements Property<T>
 {
 	private static final long serialVersionUID = -2142093421893500620L;

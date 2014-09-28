@@ -8,41 +8,63 @@ import org.pikater.shared.database.views.base.query.QueryResult;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 import org.pikater.shared.util.SimpleIDGenerator;
 
+/**
+ * The lowest-level implementation of a view provider for
+ * {@link DBTable}. Works directly with the database.
+ * 
+ * @author SkyCrawl
+ */
 public class DBTableContainerItems implements ICommitable
 {
-	private final DBTable parentTable;
-	private final Map<Integer, DBTableItem> rows;
+	/**
+	 * Vaadin tables work with IDs, so we have to have all
+	 * rows mapped.
+	 * @return
+	 * @see {@link #getRowIDs()}
+	 * @see {@link #getRow(Object)}
+	 */
+	private final Map<Integer, DBTableItem> currentlyViewedRows;
 	
+	/**
+	 * You never know when it might come in handy.
+	 * @see {@link #getAllItemsCount()}
+	 */
 	private QueryResult lastQueryResult;
 	
-	public DBTableContainerItems(DBTable parentTable)
+	public DBTableContainerItems()
 	{
-		this.parentTable = parentTable;
-		this.rows = new HashMap<Integer, DBTableItem>();
+		this.currentlyViewedRows = new HashMap<Integer, DBTableItem>();
 	}
 	
 	@Override
 	public void commitToDB()
 	{
-		for(DBTableItem row : rows.values())
+		for(DBTableItem row : currentlyViewedRows.values())
 		{
 			row.commitToDB();
 		}
 	}
 	
 	//-----------------------------------------------
-	// MAIN CONTAINER INTERFACE
+	// MAIN CONTAINER INTERFACE - SHOULD BE SELF EXPLANATORY
 	
+	/**
+	 * Look at the table, define a query with its help, ask 
+	 * database for the new rows, store them and wait until
+	 * the table picks them up. 
+	 * @param container
+	 * @param queryResult
+	 */
 	public void loadRows(DBTableContainer container, QueryResult queryResult)
 	{
 		// first, clear the previous rows
-		this.rows.clear();
+		this.currentlyViewedRows.clear();
 		
 		// then generate the new ones
 		SimpleIDGenerator ids = new SimpleIDGenerator();
 		for(AbstractTableRowDBView row : queryResult.getConstrainedResults())
 		{
-			this.rows.put(ids.getAndIncrement(), new DBTableItem(container, row, parentTable));
+			this.currentlyViewedRows.put(ids.getAndIncrement(), new DBTableItem(container, row));
 		}
 		
 		// and finally:
@@ -51,17 +73,12 @@ public class DBTableContainerItems implements ICommitable
 	
 	public Set<Integer> getRowIDs()
 	{
-		return this.rows.keySet();
+		return this.currentlyViewedRows.keySet();
 	}
 	
 	public DBTableItem getRow(Object rowID)
 	{
-		return this.rows.get(rowID);
-	}
-	
-	public int getTableItemCount()
-	{
-		return this.rows.size();
+		return this.currentlyViewedRows.get(rowID);
 	}
 	
 	public int getAllItemsCount()
@@ -72,9 +89,16 @@ public class DBTableContainerItems implements ICommitable
 	//-----------------------------------------------
 	// SORT INTERFACE - REFER TO THE CONTAINER.SORTABLE INTERFACE JAVADOC WHEN IMPLEMENTING
 	
+	/*
+	 * Although these methods are not really used by our tables (we
+	 * have support for native sorting by queries), they are set
+	 * to be "sortable" and thus require having a sortable container
+	 * at their disposal.
+	 */
+	
 	public Object getFirstItemID()
 	{
-		if(!rows.isEmpty())
+		if(!currentlyViewedRows.isEmpty())
 		{
 			return SimpleIDGenerator.getFirstID();
 		}
@@ -112,9 +136,9 @@ public class DBTableContainerItems implements ICommitable
 
 	public Object getLastItemID()
 	{
-		if(!rows.isEmpty())
+		if(!currentlyViewedRows.isEmpty())
 		{
-			return rows.size() - 1;
+			return currentlyViewedRows.size() - 1;
 		}
 		else
 		{

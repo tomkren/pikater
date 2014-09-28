@@ -9,10 +9,16 @@ import org.pikater.shared.database.views.tableview.users.UsersTableDBView.Column
 import org.pikater.shared.logging.web.PikaterWebLogger;
 import org.pikater.shared.util.Mailing;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 
 import com.vaadin.ui.AbstractComponent;
 
+/**
+ * Configuration for {@link DBTable DB tables} working with users.
+ * 
+ * @author SkyCrawl
+ */
 public class UsersDBViewRoot extends AbstractDBViewRoot<UsersTableDBView>
 {
 	public UsersDBViewRoot(UsersTableDBView view)

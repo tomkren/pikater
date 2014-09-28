@@ -1,11 +1,17 @@
 package org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview;
 
+import org.pikater.shared.database.views.base.ITableColumn;
 import org.pikater.shared.database.views.base.values.StringDBViewValue;
 import org.pikater.shared.database.views.tableview.AbstractTableRowDBView;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.TextField;
 
+/** 
+ * @author SkyCrawl
+ * @see {@link DBTableContainer#getProperty(DBTableContainer, ITableColumn, AbstractTableRowDBView, 
+ * org.pikater.shared.database.views.base.values.AbstractDBViewValue) DBTableContainer#getProperty()}
+ */
 public class DBTableItemPropertyText implements Property<TextField>
 {
 	private static final long serialVersionUID = -1889090215704801361L;

@@ -6,6 +6,11 @@ import com.vaadin.server.Resource;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Image;
 
+/** 
+ * An image-button.
+ * 
+ * @author SkyCrawl
+ */
 @StyleSheet("iconButton.css")
 public class IconButton extends CustomComponent
 {

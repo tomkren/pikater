@@ -70,7 +70,7 @@ public class TestExpandableView extends ExpandableView
 	}
 
 	@Override
-	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> getFirstStep()
+	protected DynamicNeighbourWizardStep<IWizardCommon, WizardWithDynamicSteps<IWizardCommon>> createFirstStep()
 	{
 		return new Step1(this);
 	}

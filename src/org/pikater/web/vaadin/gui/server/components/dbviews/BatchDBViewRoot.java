@@ -21,6 +21,7 @@ import org.pikater.web.sharedresources.ResourceExpiration;
 import org.pikater.web.sharedresources.ResourceRegistrar;
 import org.pikater.web.sharedresources.download.IDownloadResource;
 import org.pikater.web.vaadin.gui.server.components.dbviews.base.AbstractDBViewRoot;
+import org.pikater.web.vaadin.gui.server.components.dbviews.base.tableview.DBTable;
 import org.pikater.web.vaadin.gui.server.components.popups.MyNotifications;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.GeneralDialogs;
 import org.pikater.web.vaadin.gui.server.components.popups.dialogs.ProgressDialog;
@@ -32,6 +33,11 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TextField;
 
+/**
+ * Configuration for {@link DBTable DB tables} working with batches.
+ * 
+ * @author SkyCrawl
+ */
 public class BatchDBViewRoot<V extends BatchTableDBView> extends AbstractDBViewRoot<V>
 {
 	public BatchDBViewRoot(V view)
