@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computation.graph.edges;
 
 /**
+ * Edge with agent type
  * User: Kuba
  * Date: 10.5.2014
  * Time: 13:36
@@ -11,6 +12,10 @@ public class AgentTypeEdge extends EdgeValue {
     //TODO: looks obsolete
 	private Integer model;
 
+    /**
+     *
+     * @param agentType Agent type
+     */
 	public AgentTypeEdge(String agentType) {
 		this.agentType = agentType;
 	}
