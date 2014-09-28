@@ -5,6 +5,7 @@ import org.pikater.core.agents.system.computation.graph.ComputationNode;
 import java.util.LinkedList;
 
 /**
+ * Standard queue
  * User: Kuba
  * Date: 10.5.2014
  * Time: 12:07
@@ -14,6 +15,11 @@ public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
     private boolean data; 
     private String targetInput;
 
+    /**
+     *
+     * @param source Source node
+     * @param target Target node
+     */
     public StandardBuffer(ComputationNode source, ComputationNode target) {
            super(source,target);
     }
@@ -47,11 +53,8 @@ public class StandardBuffer<E> extends AbstractComputationBuffer<E> {
 	public void setData(boolean data) {
 		this.data = data;
 	}
-	@Override
-	public void setTargetInput(String targetInput) {
-		this.targetInput = targetInput;		
-	}	
-	@Override
+
+    @Override
 	public String getTargetInput() {
 		return targetInput;
 	}

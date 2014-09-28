@@ -3,6 +3,7 @@ package org.pikater.core.agents.system.computation.parser;
 import org.pikater.core.agents.system.computation.graph.ComputationNode;
 
 /**
+ * Abstract class implementing common methods of buffer interface
  * User: Kuba
  * Date: 10.5.2014
  * Time: 12:46
@@ -12,12 +13,21 @@ public abstract class AbstractComputationBuffer<E> implements ComputationOutputB
     private ComputationNode target;
     private boolean isBlocked=false;
 
+    /**
+     *
+     * @param source Source node
+     * @param target Target node
+     */
     public AbstractComputationBuffer(ComputationNode source, ComputationNode target)
     {
         setSource(source);
         setTarget(target);
     }
 
+    /**
+     *
+     * @param target Target node
+     */
     public AbstractComputationBuffer(ComputationNode target)
     {
         setTarget(target);
