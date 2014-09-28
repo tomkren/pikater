@@ -31,6 +31,7 @@ import org.pikater.core.ontology.subtrees.recommend.Recommend;
 import java.util.Map;
 
 /**
+ * Strategy for recommendation
  * User: Klara
  * Date: 18.5.2014
  * Time: 11:13
@@ -43,13 +44,22 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
     NewOptions options;
     AID recommender;
 
-    public RecommenderStartComputationStrategy (Agent_Manager manager,
-			int batchID, int userID, RecommenderComputationNode computationNode){
+    /**
+     *  @param manager Manager agent that will receive ExecuteTaskBehaviour behavior
+     * @param userID User id of the owner of this experiemtn
+     * @param computationNode Parent computation node
+     */
+    public RecommenderStartComputationStrategy(Agent_Manager manager,
+                                               int userID, RecommenderComputationNode computationNode){
 		this.myAgent = manager;
         this.userID = userID;
         this.computationNode = computationNode;
 	}
 
+    /**
+     *
+     * @param computation Computation node with this strategy
+     */
 	public void execute(ComputationNode computation){
 		Agent recommendedAgent = null;
 		
@@ -169,8 +179,4 @@ public class RecommenderStartComputationStrategy implements StartComputationStra
 		agent.setOptions(options.getOptions());
 		return agent;
 	}
-
-    public RecommenderComputationNode getComputationNode() {
-        return computationNode;
-    }
 }

@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * Strategy for data pre and post processing
  * User: Kuba
  * Date: 10.8.2014
  * Time: 16:00
@@ -44,6 +45,14 @@ public class DataProcessingStrategy implements StartComputationStrategy {
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
 
+    /**
+     *
+     * @param manager Manager agent
+     * @param batchID  Id of the batch that this computation belongs to
+     * @param experimentID Id of the experiment that this computation belongs to
+     * @param userID User id of the owner of this experiemtn
+     * @param computationNode Parent computation node
+     */
     public DataProcessingStrategy(Agent_Manager manager, int batchID,
     		int experimentID, int userID, DataProcessingComputationNode computationNode) {
         myAgent = manager;
@@ -53,6 +62,10 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         this.computationNode = computationNode;
     }
 
+    /**
+     *
+     * @param computation Computation node with this strategy
+     */
     @Override
     public void execute(ComputationNode computation) {
         ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
@@ -138,7 +151,7 @@ public class DataProcessingStrategy implements StartComputationStrategy {
         return task;
     }
 
-    public ACLMessage execute2Message(ExecuteTask ex) {
+    private ACLMessage execute2Message(ExecuteTask ex) {
         // create ACLMessage from Execute ontology action
 
         ACLMessage request = new ACLMessage(ACLMessage.REQUEST);

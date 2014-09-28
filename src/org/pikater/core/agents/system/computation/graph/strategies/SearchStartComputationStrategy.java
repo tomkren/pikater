@@ -7,7 +7,6 @@ import jade.content.onto.basic.Result;
 import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
-
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationNode;
 import org.pikater.core.agents.system.computation.graph.SearchComputationNode;
@@ -31,11 +30,11 @@ import org.pikater.core.ontology.subtrees.search.searchItems.SearchItem;
 import org.pikater.core.ontology.subtrees.search.searchItems.SetSItem;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * Startegy for searching - adds to manager StartGettingParametersFromSearch
  * User: Klara
  * Date: 18.5.2014
  * Time: 11:13
@@ -49,6 +48,12 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
     OptionEdge childOptions;
     AID searchAID;
 
+    /**
+     *
+     * @param manager Manager agent that will receive StartGettingParametersFromSearch behavior
+     * @param batchID  Id of the batch that this computation belongs to
+     * @param computationNode Parent computation node
+     */
 	public SearchStartComputationStrategy (Agent_Manager manager,
 			int batchID, SearchComputationNode computationNode){
 		myAgent = manager;
@@ -56,6 +61,10 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
         this.computationNode = computationNode;
 	}
 
+    /**
+     *
+     * @param computation Computation node with this strategy
+     */
 	public void execute(ComputationNode computation){
 		ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
         if (searchAID==null) {
@@ -194,18 +203,18 @@ public class SearchStartComputationStrategy implements StartComputationStrategy{
 
 		if(options==null)
 			return result;
-		Iterator<NewOption> itr = options.iterator();
-		while (itr.hasNext())
-		{
-			NewOption opt = itr.next();
-			if(opt.isMutable())
-			{
-				addOptionToSchema(opt, result);
-			}
-		}
+        for (NewOption opt : options) {
+            if (opt.isMutable()) {
+                addOptionToSchema(opt, result);
+            }
+        }
 		return result;
 	}
 
+    /**
+     * Get computation node of this strategy
+     * @return COmputationNode containing this strategy instance
+     */
     public SearchComputationNode getComputationNode() {
         return computationNode;
     }

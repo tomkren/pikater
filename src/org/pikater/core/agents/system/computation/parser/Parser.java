@@ -40,7 +40,7 @@ public class Parser {
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
             FileSaverNode saverNode=new FileSaverNode(computationGraph);
-            saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),batchID,saverNode));
+            saverNode.setStartBehavior(new FileSavingStrategy(agent, saverNode));
             //computationGraph.addNode(saverNode);
             //alreadyProcessed.put(dataSaver.getId(),saverNode);
             parseDataSourceDescription(dataSource, batchID, userID, saverNode, "file");
@@ -283,7 +283,7 @@ public class Parser {
 
         RecommenderComputationNode recNode = new RecommenderComputationNode(computationGraph);
         RecommenderStartComputationStrategy recStrategy =
-        		new RecommenderStartComputationStrategy(agent, batchID, userID, recNode);
+        		new RecommenderStartComputationStrategy(agent, userID, recNode);
         recNode.setStartBehavior(recStrategy);
         StandardBuffer recBuffer=new StandardBuffer(recNode,child);
         recNode.addBufferToOutput("agenttype",recBuffer);
