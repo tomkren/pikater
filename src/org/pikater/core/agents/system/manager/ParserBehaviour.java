@@ -11,6 +11,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;
 
+import org.pikater.core.agents.PikaterAgent;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationGraph;
 import org.pikater.core.agents.system.computation.graph.events.LoggerObserver;
@@ -113,7 +114,7 @@ public class ParserBehaviour extends AchieveREResponder {
 			status = JPABatchStatus.COMPUTING;
         }
         catch (Exception e){
-        	agent.logError(e.toString());
+        	agent.logException("Error in processing the batch", e);
         	status = JPABatchStatus.FAILED;
         }
         // change status to computing and log to database
