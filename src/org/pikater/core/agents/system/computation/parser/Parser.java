@@ -15,18 +15,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class for parsing COmputation Graph from ontology
+ */
 public class Parser {
     private ComputationGraph computationGraph =
     		new ComputationGraph();
     private Map<Integer,ComputationNode> alreadyProcessed =
-    		new HashMap<Integer,ComputationNode>();
+    		new HashMap<>();
     private Agent_Manager agent = null;
-    private int priority;
 
+    /**
+     *
+     * @param agent Owner manager
+     */
     public Parser(Agent_Manager agent) {
         this.agent = agent;
     }
 
+    /**
+     * Parse roots of ontology
+     * @param dataSaver Root dataSaver
+     * @param batchID If of the batch
+     * @param userID If of the user
+     */
     public void parseRoot(IDataSaver dataSaver, int batchID, int userID) {
         agent.logInfo("Ontology Parser - IDataSaver");
         //Ontology root is Leaf in Computation
@@ -65,7 +77,7 @@ public class Parser {
     			connectionName, null);
     }
     
-    public void parseDataProvider(IDataProvider dataProvider, int batchID,
+    private void parseDataProvider(IDataProvider dataProvider, int batchID,
     		int userID, ComputationNode child, String connectionName,
     		String connectionOutName) {
         agent.logInfo("Ontology Parser - IDataProvider");
@@ -105,8 +117,8 @@ public class Parser {
         child.addInput(connectionName,fileBuffer);
     }
 
-    
-    public void parseErrors(ErrorSourceDescription errorDescription, ComputationNode child) {
+
+    private void parseErrors(ErrorSourceDescription errorDescription, ComputationNode child) {
         if (errorDescription==null)
         {
         	return;
@@ -125,7 +137,12 @@ public class Parser {
         buffer.block();
     }
 
-    //This is the root of all parsing
+    /**
+     * This is the root of all parsing
+     * @param comDescription computation Description ontology
+     * @param batchID Id of the batch
+     * @param userID Id of the user
+     */
     public void parseRoots(ComputationDescription comDescription, int batchID, int userID) {
         agent.logInfo("Ontology Parser - ComputationDescription");
 
@@ -136,7 +153,7 @@ public class Parser {
     }
 
     //Processes a node that is in the beginning of computation - reads file
-    public void parseFileDataProvider(FileDataProvider file, ComputationNode child, String connectionName) {
+    private void parseFileDataProvider(FileDataProvider file, ComputationNode child, String connectionName) {
         agent.logInfo("Ontology Parser - FileDataProvider");
         if (!alreadyProcessed.containsKey(file.getId()))
         {
@@ -153,7 +170,7 @@ public class Parser {
         child.addInput(connectionName,buffer);
     }
 
-    public ModelComputationNode parseComputing(IComputingAgent computingAgent,
+    private ModelComputationNode parseComputing(IComputingAgent computingAgent,
     		int batchID, int userID, Boolean addOptions)
     {
         agent.logInfo("Ontology Parser - Computing Agent Simple");
@@ -182,14 +199,14 @@ public class Parser {
 
         if (agentType!=null)
         {
-            NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer<AgentTypeEdge>(new AgentTypeEdge(agentType, model));
+            NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer<>(new AgentTypeEdge(agentType, model));
             typeBuffer.setTarget(computingNode);
             computingNode.addInput("agenttype",typeBuffer);
 
         }
         computingNode.setEvaluationMethod(computingAgentO.getEvaluationMethod());
         computingNode.setExpectedDuration(computingAgentO.getDuration());
-        computingNode.setPriority(priority);
+        computingNode.setPriority(0);
 
         if (addOptions) {
             addOptionsToInputs(computingNode, computingAgentO.getOptions());
@@ -199,7 +216,7 @@ public class Parser {
         return computingNode;
     }
 
-    public ComputationNode parseComplex(CARecSearchComplex complex, int batchID, int userID) {
+    private ComputationNode parseComplex(CARecSearchComplex complex, int batchID, int userID) {
         agent.logInfo("Ontology Parser - CARecSearchComplex");
 
         ComputationNode computingNode;
@@ -220,7 +237,7 @@ public class Parser {
         }
         if (recommenderO!=null)
         {
-            parseRecommender(recommenderO, computingNode, batchID, userID);
+            parseRecommender(recommenderO, computingNode, userID);
         }
         else
         {
@@ -239,7 +256,7 @@ public class Parser {
         return computingNode;
     }
 
-    public SearchComputationNode parseSearch(Search search, ComputationNode child,
+    private SearchComputationNode parseSearch(Search search, ComputationNode child,
     		List<ErrorSourceDescription> errors, List<NewOption> childOptions,
     		int batchID) {
         agent.logInfo("Ontology Parser - Search");
@@ -277,8 +294,8 @@ public class Parser {
         return searchNode;
     }
 
-    public void parseRecommender(Recommend recommender, ComputationNode child,
-    		int batchID, int userID) {
+    private void parseRecommender(Recommend recommender, ComputationNode child,
+                                 int userID) {
         agent.logInfo("Ontology Parser - Recommender");
 
         RecommenderComputationNode recNode = new RecommenderComputationNode(computationGraph);
@@ -336,7 +353,7 @@ public class Parser {
             String agentType = dataProcessing.getAgentType();
             if (agentType!=null)
             {
-                NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer<AgentTypeEdge>(new AgentTypeEdge(agentType, 0));
+                NeverEndingBuffer<AgentTypeEdge> typeBuffer=new NeverEndingBuffer<>(new AgentTypeEdge(agentType, 0));
                 typeBuffer.setTarget(parent);
                 parent.addInput("agenttype",typeBuffer);
             }
@@ -393,7 +410,11 @@ public class Parser {
             parseDataSourceDescription(validationData, batchID, userID, node, validationData.getInputType(), validationData.getOutputType());
         }
     }
-    
+
+    /**
+     * Gets parsed graph
+     * @return Parsed computation graph
+     */
     public ComputationGraph getComputationGraph() {
         return computationGraph;
     }
