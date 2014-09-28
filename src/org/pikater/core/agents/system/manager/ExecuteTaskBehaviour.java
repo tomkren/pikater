@@ -3,21 +3,21 @@ package org.pikater.core.agents.system.manager;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
-
 import org.pikater.core.CoreConstant;
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ModelComputationNode;
 import org.pikater.core.agents.system.computation.graph.edges.DataSourceEdge;
 import org.pikater.core.agents.system.computation.graph.edges.ErrorEdge;
-import org.pikater.core.agents.system.computation.graph.strategies.CAStartComputationStrategy;
 import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
+/**
+ * Behavior executing DM tasks - send them to planner and wait for results
+ */
 public class ExecuteTaskBehaviour extends AchieveREInitiator{
 
 	private static final long serialVersionUID = -2044738642107219180L;
@@ -29,9 +29,16 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
     // gui agent);
     // to be able to send a reply
     private ACLMessage msg;
-	
+
+    /**
+     *
+     * @param a Owning manager
+     * @param req Request to send
+     * @param msg Original request message
+     * @param node Computation node with the behavior
+     */
 	public ExecuteTaskBehaviour(Agent_Manager a, ACLMessage req,
-                                ACLMessage msg, CAStartComputationStrategy cs, ModelComputationNode node) {
+                                ACLMessage msg, ModelComputationNode node) {
 		super(a, req);
 		myAgent = a;
         this.msg = msg;
@@ -103,15 +110,11 @@ public class ExecuteTaskBehaviour extends AchieveREInitiator{
                 node.addToOutputAndProcess(errorEdge,"error");
                 node.decreaseNumberOfOutstandingTask();
 			}
-		} catch (UngroundedException e) {
-			myAgent.logException(e.getMessage(), e);
-		} catch (CodecException e) {
-			myAgent.logException(e.getMessage(), e);
-		} catch (OntologyException e) {
+		} catch (CodecException | OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
 		}
-		
-		// send subscription to the original agent after each received task
+
+        // send subscription to the original agent after each received task
 		myAgent.sendSubscription(inform, msg);
 	}
 }

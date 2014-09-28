@@ -3,20 +3,20 @@ package org.pikater.core.agents.system.manager;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Result;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
-
-import java.util.ArrayList;
-
 import org.pikater.core.agents.system.Agent_Manager;
 import org.pikater.core.agents.system.computation.graph.ComputationNode;
 import org.pikater.core.agents.system.computation.graph.edges.DataSourceEdge;
-import org.pikater.core.agents.system.computation.graph.strategies.DataProcessingStrategy;
 import org.pikater.core.ontology.subtrees.task.Task;
 import org.pikater.core.ontology.subtrees.task.TaskOutput;
 
+import java.util.ArrayList;
+
+/**
+ * Behavior for data processing - pre and postprocessing
+ */
 public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 
 	private static final long serialVersionUID = -2044738642107219180L;
@@ -29,13 +29,18 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 							// gui agent);
 							// to be able to send a reply
 
+    /**
+     *  @param a Agent manager that will receive this behavior
+     * @param req Request to send
+     * @param msg Original request
+     * @param node Node that created the behavior
+     */
 	public ExecuteDataProcessingBehaviour(Agent_Manager a, ACLMessage req,
-                                          ACLMessage msg, DataProcessingStrategy cs, ComputationNode node) {
+                                          ACLMessage msg, ComputationNode node) {
 		super(a, req);
 		
 		this.myAgent = a;
         this.msg = msg;
-		// this.strategy = cs;
         this.node = node;
         
         node.increaseNumberOfOutstandingTask();
@@ -66,29 +71,23 @@ public class ExecuteDataProcessingBehaviour extends AchieveREInitiator{
 				Result result = (Result) content;					
 				Task t = (Task) result.getValue();
                 ArrayList<TaskOutput> outputs = t.getOutput();
-                for (int i=0;i<outputs.size();i++)
-                {
-                    TaskOutput output=outputs.get(i);
-                    DataSourceEdge edge=new DataSourceEdge();
+                for (TaskOutput output : outputs) {
+                    DataSourceEdge edge = new DataSourceEdge();
                     edge.setDataSourceId(output.getName());
                     edge.setFile(false);
-                    
-                    for (String in : node.findOutput(output.getDataType())){                    	
-                    	node.addToOutputAndProcess(edge, in, false, true);
-                    } 
+
+                    for (String in : node.findOutput(output.getDataType())) {
+                        node.addToOutputAndProcess(edge, in, false, true);
+                    }
                 }
                 node.decreaseNumberOfOutstandingTask();
             }
 
-		} catch (UngroundedException e) {
-			myAgent.logException(e.getMessage(), e);
-		} catch (CodecException e) {
-			myAgent.logException(e.getMessage(), e);
-		} catch (OntologyException e) {
+		} catch (CodecException | OntologyException e) {
 			myAgent.logException(e.getMessage(), e);
 		}
-		
-		// send subscription to the original agent after each received task
+
+        // send subscription to the original agent after each received task
 		myAgent.sendSubscription(inform, msg);
 	}
 } // end of ExecuteTask ("send request to planner agent") bahavior

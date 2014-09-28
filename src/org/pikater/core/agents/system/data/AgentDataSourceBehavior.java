@@ -4,12 +4,10 @@ import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-
 import org.pikater.core.ontology.subtrees.dataSource.RegisterDataSourceConcept;
 
 /**
@@ -27,13 +25,13 @@ public class AgentDataSourceBehavior extends CyclicBehaviour
     protected AgentDataSource dsAgent;
     
     private MessageTemplate registerDSTemplate; // one template for registering files
-            
-    /*
-     * One template for obtaining path on local server.
-     * TODO: If not on local server, DataSourceAgent must copy the file to local server.
+
+    /**
+     *
+     * @param codec  Codec to be used
+     * @param ontology Ontology to be used
+     * @param agent Owber agent
      */
-    private MessageTemplate getDSPathTemplate;
-    
     public AgentDataSourceBehavior(Codec codec,Ontology ontology,AgentDataSource agent) {
         super(agent);
         dsAgent=agent;
@@ -42,9 +40,9 @@ public class AgentDataSourceBehavior extends CyclicBehaviour
         this.registerDSTemplate = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.INFORM),
                 MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
                         MessageTemplate.MatchOntology(ontology.getName())));
-        this.getDSPathTemplate = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                        MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
-                                MessageTemplate.MatchOntology(ontology.getName())));
+        MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+                        MessageTemplate.MatchOntology(ontology.getName())));
     }
 
     @Override
@@ -69,7 +67,6 @@ public class AgentDataSourceBehavior extends CyclicBehaviour
                 ACLMessage result_msg = inf.createReply();
                 result_msg.setPerformative(ACLMessage.NOT_UNDERSTOOD);
                 myAgent.send(result_msg);
-                return;
             }
 
             /* Inevitable null-pointer dereference
@@ -100,11 +97,7 @@ public class AgentDataSourceBehavior extends CyclicBehaviour
             }
             */
 
-        } catch (UngroundedException e) {
-        	dsAgent.logException(e.getMessage(), e);
-        } catch (OntologyException e) {
-        	dsAgent.logException(e.getMessage(), e);
-        } catch (Codec.CodecException e) {
+        } catch (OntologyException | Codec.CodecException e) {
         	dsAgent.logException(e.getMessage(), e);
         }
     }
