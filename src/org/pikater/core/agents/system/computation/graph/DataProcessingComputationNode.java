@@ -5,28 +5,26 @@ import org.pikater.core.agents.system.data.DataManagerService;
 import org.pikater.shared.database.jpa.status.JPAExperimentStatus;
 
 /**
+ * Computation node for data pro and pre processing
  * User: Kuba
  * Date: 16.8.2014
  * Time: 14:00
  */
 public class DataProcessingComputationNode extends ComputationNode {
-    private int numberOfInputs;
     private PikaterAgent agent;
     private int experimentID;
 
+    /**
+     *
+     * @param computationGraph Parent computation graph
+     * @param agent Owning agent
+     * @param experimentID Id of the experiment
+     */
     public DataProcessingComputationNode(ComputationGraph computationGraph,
     		PikaterAgent agent, int experimentID) {
         super(computationGraph);
         this.agent = agent;
         this.experimentID = experimentID;
-    }
-
-    public int getNumberOfInputs() {
-        return numberOfInputs;
-    }
-
-    public void setNumberOfInputs(int numberOfInputs) {
-        this.numberOfInputs = numberOfInputs;
     }
     
 	@Override

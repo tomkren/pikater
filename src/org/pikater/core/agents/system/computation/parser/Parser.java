@@ -332,7 +332,6 @@ public class Parser {
             
             DataProcessingComputationNode dpNode = new DataProcessingComputationNode(
             		computationGraph, agent, experimentID);
-            dpNode.setNumberOfInputs(dataSources.size());
             parent=dpNode;
             String agentType = dataProcessing.getAgentType();
             if (agentType!=null)
