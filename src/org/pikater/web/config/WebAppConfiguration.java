@@ -16,51 +16,45 @@ import org.pikater.core.agents.gateway.WebToCoreEntryPoint;
  * 
  * @author SkyCrawl
  */
-public class WebAppConfiguration
-{
+public class WebAppConfiguration {
 	/*
 	 * Unique keys parameters stored in "web.xml".
 	 */
 	private static final String PARAMKEY_CORE_ENABLED = "coreEnabled";
-	
+
 	/*
 	 * Inner variables.
 	 */
 	private static ServletContext WEBAPPCONTEXT = null;
-	
+
 	// **************************************************************************************************
 	// PUBLIC SETTERS
-	
+
 	/**
 	 * Set the web application's context. All relevant settings found in the deployment
 	 * descriptor will be derived from it.
 	 * @param context
 	 * @see {@link #getContextParam(String)}
 	 */
-	public static void setContext(ServletContext context)
-	{
-		if(WebAppConfiguration.WEBAPPCONTEXT != null)
-		{
+	public static void setContext(ServletContext context) {
+		if (WebAppConfiguration.WEBAPPCONTEXT != null) {
 			throw new IllegalStateException("Application context is already defined.");
-		}
-		else
-		{
+		} else {
 			WebAppConfiguration.WEBAPPCONTEXT = context;
 		}
 	}
-	
+
 	/**
 	 * Get the web application's context.
 	 * @param context
 	 */
-	public static ServletContext getContext()
-	{
+	public static ServletContext getContext() {
 		return WEBAPPCONTEXT;
 	}
-	
+
 	// **************************************************************************************************
 	// OTHER PUBLIC INTERFACE
-	
+
 	/**
 	 * Determines whether the web application is set to communicate with an instance
 	 * of core system.
@@ -74,11 +68,10 @@ public class WebAppConfiguration
 	 * 
 	 * @return
 	 */
-	public static boolean isCoreEnabled()
-	{
+	public static boolean isCoreEnabled() {
 		return Boolean.parseBoolean((String) getContextParam(PARAMKEY_CORE_ENABLED));
 	}
-	
+
 	/**
 	 * Convenience method for development purposes.</br>
 	 * Signals what kind of data should be used throughout the application.
@@ -92,36 +85,32 @@ public class WebAppConfiguration
 	 * 
 	 * @return
 	 */
-	public static boolean avoidUsingDBForNow()
-	{
+	public static boolean avoidUsingDBForNow() {
 		return false;
 	}
-	
+
 	/**
 	 * Whether the application has been launched successfully and a valid
 	 * configuration has been parsed.
 	 * @return
 	 */
-	public static boolean isApplicationReadyToServe()
-	{
+	public static boolean isApplicationReadyToServe() {
 		return isValid(); // when remote Jade launching is implemented, edit accordingly
 	}
-	
+
 	/**
 	 * Whether settings derived from the web deployment descriptor are all valid.
 	 * @return
 	 */
-	public static boolean isValid()
-	{
+	public static boolean isValid() {
 		return WEBAPPCONTEXT != null;
 	}
-	
+
 	// **************************************************************************************************
 	// PRIVATE INTERFACE
-	
+
 	@SuppressWarnings("unchecked")
-	private static <PT extends Object> PT getContextParam(String key)
-	{
+	private static <PT extends Object> PT getContextParam(String key) {
 		return (PT) WEBAPPCONTEXT.getInitParameter(key);
 	}
 }

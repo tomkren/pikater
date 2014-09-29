@@ -11,23 +11,22 @@ import org.pikater.web.experiment.server.BoxInfoServer;
  * 
  * @author SkyCrawl
  */
-public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer>
-{
+public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer> {
 	private static final long serialVersionUID = 3875674558654733345L;
-	
+
 	/*
 	 * General info.
 	 */
 	public Integer boxID;
 	public String boxTypeName;
 	public String displayName;
-	
+
 	/*
 	 * Position.
 	 */
 	public int positionX;
 	public int positionY;
-	
+
 	/*
 	 * Picture info. 
 	 */
@@ -37,8 +36,7 @@ public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer>
 	 * Default public constructor keeps Vaadin happy. Use the other constructor instead.
 	 */
 	@Deprecated
-	public BoxInfoClient()
-	{
+	public BoxInfoClient() {
 	}
 
 	/**
@@ -50,8 +48,7 @@ public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer>
 	 * @param posY
 	 * @param pictureURL
 	 */
-	public BoxInfoClient(Integer boxID, String boxTypeName, String displayName, int posX, int posY, String pictureURL)
-	{
+	public BoxInfoClient(Integer boxID, String boxTypeName, String displayName, int posX, int posY, String pictureURL) {
 		this.boxID = boxID;
 		this.boxTypeName = boxTypeName;
 		this.displayName = displayName;
@@ -61,38 +58,32 @@ public class BoxInfoClient implements Serializable, IBoxInfoCommon<Integer>
 	}
 
 	@Override
-	public Integer getID()
-	{
+	public Integer getID() {
 		return boxID;
 	}
 
 	@Override
-	public void setID(Integer id)
-	{
+	public void setID(Integer id) {
 		this.boxID = id;
 	}
 
 	@Override
-	public int getPosX()
-	{
+	public int getPosX() {
 		return positionX;
 	}
 
 	@Override
-	public void setPosX(int posX)
-	{
+	public void setPosX(int posX) {
 		this.positionX = posX;
 	}
 
 	@Override
-	public int getPosY()
-	{
+	public int getPosY() {
 		return positionY;
 	}
 
 	@Override
-	public void setPosY(int posY)
-	{
+	public void setPosY(int posY) {
 		this.positionY = posY;
 	}
 }

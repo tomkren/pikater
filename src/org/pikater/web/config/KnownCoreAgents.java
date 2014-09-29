@@ -36,81 +36,69 @@ import org.pikater.web.vaadin.gui.server.ui_expeditor.expeditor.kineticcomponent
  * 
  * @author SkyCrawl
  */
-public class KnownCoreAgents implements Iterable<AgentInfo>
-{
+public class KnownCoreAgents implements Iterable<AgentInfo> {
 	/**
 	 * Inner collection holding all currently known agent definitions.
 	 */
 	private final Set<AgentInfo> knownAgents;
-	
-	private KnownCoreAgents()
-	{
-		this.knownAgents = new HashSet<AgentInfo>(); 
+
+	private KnownCoreAgents() {
+		this.knownAgents = new HashSet<AgentInfo>();
 	}
-	
+
 	@Override
-	public Iterator<AgentInfo> iterator()
-	{
+	public Iterator<AgentInfo> iterator() {
 		return knownAgents.iterator();
 	}
-	
+
 	/**
 	 * This method is required to either return the requested object or throw an exception. 
 	 * @param ontologyClassName
 	 * @param agentClassName
 	 * @return
 	 */
-	public AgentInfo getUnique(String ontologyClassName, String agentClassName)
-	{
+	public AgentInfo getUnique(String ontologyClassName, String agentClassName) {
 		List<AgentInfo> result = new ArrayList<AgentInfo>();
-		for(AgentInfo info : knownAgents)
-		{
-			if(info.isIdentifiedBy(ontologyClassName, agentClassName))
-			{
+		for (AgentInfo info : knownAgents) {
+			if (info.isIdentifiedBy(ontologyClassName, agentClassName)) {
 				result.add(info);
 			}
 		}
-		switch(result.size())
-		{
-			case 0:
-				throw new IllegalStateException(String.format("No agent info was found for ontology class "
-						+ "name '%s' and agent class name '%s'.", ontologyClassName, agentClassName));
-			case 1:
-				return result.get(0);
-			default:
-				throw new IllegalStateException("Duplicate AgentInfo found by ontology and agent class names.");
+		switch (result.size()) {
+		case 0:
+			throw new IllegalStateException(String.format("No agent info was found for ontology class " + "name '%s' and agent class name '%s'.", ontologyClassName, agentClassName));
+		case 1:
+			return result.get(0);
+		default:
+			throw new IllegalStateException("Duplicate AgentInfo found by ontology and agent class names.");
 		}
 	}
-	
+
 	/**
 	 * Queries for all agents with the given type, returned as a {@link List}.
 	 * @param type
 	 * @return
 	 */
-	public List<AgentInfo> getAllByType(BoxType type)
-	{
-		List<AgentInfo> result = new ArrayList<AgentInfo>(); 
-		for(AgentInfo info : knownAgents)
-		{
-			if(type.toOntologyClass().getName().equals(info.getOntologyClassName()))
-			{
+	public List<AgentInfo> getAllByType(BoxType type) {
+		List<AgentInfo> result = new ArrayList<AgentInfo>();
+		for (AgentInfo info : knownAgents) {
+			if (type.toOntologyClass().getName().equals(info.getOntologyClassName())) {
 				result.add(info);
 			}
 		}
 		return result;
 	}
-	
+
 	//---------------------------------------------------------
 	// PRIVATE INTERFACE
-	
-	private boolean addAgent(AgentInfo info)
-	{
+
+	private boolean addAgent(AgentInfo info) {
 		return knownAgents.add(info);
 	}
 
 	//---------------------------------------------------------
 	// SOME "FACTORY" METHODS
-	
+
 	/**
 	 * This method should be used when communication with core system is enabled
 	 * (see {@link WebAppConfiguration}).
@@ -118,16 +106,14 @@ public class KnownCoreAgents implements Iterable<AgentInfo>
 	 * {@link WebToCoreEntryPoint}.
 	 * @return
 	 */
-	public static KnownCoreAgents getFrom(AgentInfos agentsFromCore)
-	{
+	public static KnownCoreAgents getFrom(AgentInfos agentsFromCore) {
 		KnownCoreAgents agentInfoCollection = new KnownCoreAgents();
-		for(AgentInfo info : agentsFromCore.getAgentInfos())
-		{
+		for (AgentInfo info : agentsFromCore.getAgentInfos()) {
 			agentInfoCollection.addAgent(info);
 		}
 		return agentInfoCollection;
 	}
-	
+
 	/**
 	 * <p>An alternative for whenever using {@link #getFrom(AgentInfos)} is not desirable.</p>
 	 * 
@@ -140,73 +126,59 @@ public class KnownCoreAgents implements Iterable<AgentInfo>
 	 * </ul> 
 	 * @return
 	 */
-	public static KnownCoreAgents getDummy()
-	{
+	public static KnownCoreAgents getDummy() {
 		KnownCoreAgents knownAgents = new KnownCoreAgents();
-		for(BoxType type : BoxType.values())
-		{
+		for (BoxType type : BoxType.values()) {
 			AgentInfo agentInfo = new AgentInfo();
 			agentInfo.setOntologyClassName(type.toOntologyClass().getName());
 			agentInfo.setAgentClassName(KnownCoreAgents.class.getName());
 			agentInfo.setDescription(String.format("Some kind of a '%s' box.", type.name()));
 
 			String name = null;
-			switch(type)
-			{
-				case CHOOSE:
-					name = "DummyChooser";
-					break;
-				case COMPUTE:
-					name = "DummyComputeAgent";
-					break;
-				case PROCESS_DATA:
-					name = "DummyDataProcessor";
-					break;
-				case OPTION:
-					name = "DummyOptionModifier";
-					break;
-				case INPUT:
-					name = "DumyInputBox";
-					break;
-				case MISC:
-					name = "DummyBox";
-					break;
-				case OUTPUT:
-					name = "DummyOutputBox";
-					break;
-				case SEARCH:
-					name = "DummySearchAgent";
-					break;
-				case COMPOSITE:
-					name = "DummyComposite";
-					break;
-				default:
-					throw new IllegalStateException("Unknown box type: " + type.name());
+			switch (type) {
+			case CHOOSE:
+				name = "DummyChooser";
+				break;
+			case COMPUTE:
+				name = "DummyComputeAgent";
+				break;
+			case PROCESS_DATA:
+				name = "DummyDataProcessor";
+				break;
+			case OPTION:
+				name = "DummyOptionModifier";
+				break;
+			case INPUT:
+				name = "DumyInputBox";
+				break;
+			case MISC:
+				name = "DummyBox";
+				break;
+			case OUTPUT:
+				name = "DummyOutputBox";
+				break;
+			case SEARCH:
+				name = "DummySearchAgent";
+				break;
+			case COMPOSITE:
+				name = "DummyComposite";
+				break;
+			default:
+				throw new IllegalStateException("Unknown box type: " + type.name());
 			}
 			agentInfo.setName(name);
 
 			NewOptions options = new NewOptions();
 			options.addOption(new NewOption("IntRange", new IntegerValue(5), new RangeRestriction(new IntegerValue(2), new IntegerValue(10))));
-			options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(
-					new IntegerValue(2),
-					new IntegerValue(3),
-					new IntegerValue(5),
-					new IntegerValue(10))))
-					));
+			options.addOption(new NewOption("IntSet", new IntegerValue(5), new SetRestriction(false, new ArrayList<IValueData>(Arrays.asList(new IntegerValue(2), new IntegerValue(3),
+					new IntegerValue(5), new IntegerValue(10))))));
 			options.addOption(new NewOption("Double", new DoubleValue(1)));
 			options.addOption(new NewOption("Boolean", new BooleanValue(true)));
 			options.addOption(new NewOption("Float", new FloatValue(1)));
 
 			options.addOption(new NewOption("QuestionMarkRange", new QuestionMarkRange(new IntegerValue(5), new IntegerValue(10), 3)));
-			options.addOption(new NewOption(
-					"QuestionMarkSet",
-					new QuestionMarkSet(3, new ArrayList<IValueData>(Arrays.asList(
-							new IntegerValue(5),
-							new IntegerValue(6),
-							new IntegerValue(9),
-							new IntegerValue(10),
-							new IntegerValue(11))))
-			));
+			options.addOption(new NewOption("QuestionMarkSet", new QuestionMarkSet(3, new ArrayList<IValueData>(Arrays.asList(new IntegerValue(5), new IntegerValue(6), new IntegerValue(9),
+					new IntegerValue(10), new IntegerValue(11))))));
 
 			Slot slotInput_test = new Slot("testSlot", SlotCategory.DATA_GENERAL, "Test input slot.");
 			Slot slotOutput_test = new Slot("testSlot", SlotCategory.DATA_GENERAL, "Test output slot.");
