@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.util.Log;
+import org.pikater.core.agents.experiment.virtual.Agent_VirtualNotSpecifiedComputingAgent;
 import org.pikater.core.ontology.subtrees.agent.AgentClass;
 import org.pikater.core.ontology.subtrees.batchDescription.ComputingAgent;
 import org.pikater.core.ontology.subtrees.model.Models;
@@ -61,7 +62,8 @@ public class AgentInfos implements Concept {
 			
 			String agentClassNameI = agentInfoI.getAgentClassName();
 			if (agentClassNameI == null) {
-				if (agentClass.getAgentClass() == null) {
+				if (agentClass.getAgentClass().equals(
+						Agent_VirtualNotSpecifiedComputingAgent.class.getName())) {
 					return true;
 				}
 			} else if ( agentClassNameI.equals(agentClass.getAgentClass()) ) {

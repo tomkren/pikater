@@ -30,6 +30,7 @@ public final class Input05 {
 		comAgent.setAgentType(null);
 		comAgent.setTrainingData(fileDataSource);
 		comAgent.setTestingData(fileDataSource);
+		comAgent.setValidationData(fileDataSource);
 		
 		EvaluationMethod em =
 				new EvaluationMethod(CrossValidation.class.getName());

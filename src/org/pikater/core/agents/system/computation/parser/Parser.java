@@ -40,7 +40,7 @@ public class Parser {
             FileDataSaver fileDataSaver = (FileDataSaver) dataSaver;
             DataSourceDescription dataSource = fileDataSaver.getDataSource();
             FileSaverNode saverNode=new FileSaverNode(computationGraph);
-            saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),batchID,saverNode));
+            //saverNode.setStartBehavior(new FileSavingStrategy(agent,saverNode.getId(),batchID,saverNode));
             //computationGraph.addNode(saverNode);
             //alreadyProcessed.put(dataSaver.getId(),saverNode);
             parseDataSourceDescription(dataSource, batchID, userID, saverNode, "file");

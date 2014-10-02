@@ -16,6 +16,8 @@ import xmlGenerator.Input03;
 import xmlGenerator.Input05;
 import xmlGenerator.Input06;
 import xmlGenerator.Input07;
+import xmlGenerator.Input08;
+import xmlGenerator.Input09;
 import xmlGenerator.Input10;
 
 public class TestBatchDescription {
@@ -61,6 +63,14 @@ public class TestBatchDescription {
 		testComputatingDescription(
 				Input07.createDescription(),
 				"Input07");
+
+		testComputatingDescription(
+				Input08.createDescription(),
+				"Input08");
+
+		testComputatingDescription(
+				Input09.createDescription(),
+				"Input09");
 		
 		testComputatingDescription(
 				Input10.createDescription(),

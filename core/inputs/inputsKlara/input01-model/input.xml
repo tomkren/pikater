@@ -140,6 +140,17 @@
             <outputType>fileData</outputType>
             <inputType>testingData</inputType>
           </testingData>
+          <validationData>
+            <dataProvider type="org.pikater.core.ontology.subtrees.batchDescription.FileDataProvider">
+              <id>2</id>
+              <options/>
+              <errors/>
+              <dataSources/>
+              <fileURI>weather.arff</fileURI>
+            </dataProvider>
+            <outputType>fileData</outputType>
+            <inputType>validationData</inputType>
+          </validationData>
         </dataProvider>
         <outputType>computedData</outputType>
       </dataSource>
