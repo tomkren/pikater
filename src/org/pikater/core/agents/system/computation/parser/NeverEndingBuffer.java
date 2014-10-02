@@ -1,6 +1,7 @@
 package org.pikater.core.agents.system.computation.parser;
 
 /**
+ * Type of buffer with one element that always replenish itself
  * User: Kuba
  * Date: 10.5.2014
  * Time: 12:05
@@ -15,6 +16,11 @@ public class NeverEndingBuffer<E> extends AbstractComputationBuffer<E>
     public NeverEndingBuffer()
     {
     }
+
+    /**
+     *
+     * @param singleElement Replenishing element
+     */
 	public NeverEndingBuffer(E singleElement)
     {
         this.singleElement=singleElement;
@@ -26,6 +32,10 @@ public class NeverEndingBuffer<E> extends AbstractComputationBuffer<E>
         return singleElement!=null;
     }
 
+    /**
+     * Sets new replenishing element
+     * @param element Element to insert
+     */
     public void insert(E element) {
            singleElement=element;
     }
@@ -49,7 +59,6 @@ public class NeverEndingBuffer<E> extends AbstractComputationBuffer<E>
 	public void setData(boolean data) {
 		this.data = data;
 	}
-	@Override
 	public void setTargetInput(String targetInput) {
 		this.targetInput = targetInput;		
 	}	

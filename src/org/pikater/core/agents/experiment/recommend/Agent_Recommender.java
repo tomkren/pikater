@@ -35,7 +35,9 @@ import org.pikater.core.ontology.subtrees.newOption.base.NewOption;
 import org.pikater.core.ontology.subtrees.recommend.Recommend;
 
 
-
+/**
+ * Base recommender class for metalaerning recommendation
+ */
 public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	
 	/**
@@ -59,7 +61,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
 	public List<Ontology> getOntologies() {
 		
 		List<Ontology> ontologies =
-				new ArrayList<Ontology>();
+				new ArrayList<>();
 
 		ontologies.add(RecommendOntology.getInstance());
 		ontologies.add(MetadataOntology.getInstance());
@@ -132,7 +134,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
                     Datas datas = rec.getDatas();
                     
                     // Get metadata:
-					Metadata metadata = null;    
+					Metadata metadata;
 					
 					// if metatada are not yet in ontology		
 					if (rec.getDatas().getMetadata() == null) {
@@ -173,17 +175,13 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     				
     				try {
     					getContentManager().fillContent(reply, result);
-    				} catch (CodecException ce) {
+    				} catch (CodecException | OntologyException ce) {
     					logException(ce.getMessage(), ce);
-    				} catch (OntologyException oe) {
-    					logException(oe.getMessage(), oe);
-    				}    				
-        		}
-            } catch (OntologyException e) {
+    				}
+                }
+            } catch (OntologyException | CodecException e) {
             	logException(e.getMessage(), e);
-            } catch (CodecException e) {
-            	logException(e.getMessage(), e);
-			}
+            }
 
             return reply;
         }
@@ -191,7 +189,7 @@ public abstract class Agent_Recommender extends Agent_AbstractExperiment {
     
 	private List<NewOption> mergeOptions(List<NewOption> o1_CA, List<NewOption> o2) {
 		
-		List<NewOption> new_options = new ArrayList<NewOption>();
+		List<NewOption> new_options = new ArrayList<>();
 		if (o1_CA != null) {
 
 			// if this type of agent has got some options

@@ -9,7 +9,7 @@ public class RecommenderComputationNode extends ComputationNode {
     private String recommenderClass;
 
     public RecommenderComputationNode(StartComputationStrategy executeStrategy,ComputationGraph computationGraph) {
-        super(executeStrategy,computationGraph);
+        super(executeStrategy);
     }
 
     public RecommenderComputationNode(ComputationGraph computationGraph) {

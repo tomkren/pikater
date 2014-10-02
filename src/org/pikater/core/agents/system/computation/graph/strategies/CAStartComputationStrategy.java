@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This strategy triggers the computation - send to planner and waits for results by adding ExecuteTaskBehaviour
  * User: Klara
  * Date: 18.5.2014
  * Time: 11:13
@@ -52,7 +53,15 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 	ModelComputationNode computationNode;
     NewOptions options;
     AgentTypeEdge agentTypeEdge;
-	
+
+    /**
+     *
+     * @param manager Manager agent that will receive ExecuteTaskBehaviour behavior
+     * @param batchID  Id of the batch that this computation belongs to
+     * @param experimentID Id of the experiment that this computation belongs to
+     * @param userID User id of the owner of this experiemtn
+     * @param computationNode Parent computation node
+     */
 	public CAStartComputationStrategy (Agent_Manager manager, int batchID,
 			int experimentID, int userID, ModelComputationNode computationNode){
 		this.myAgent = manager;
@@ -61,19 +70,31 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
         this.userID = userID;
         this.computationNode = computationNode;
 	}
-	
+
+    /**
+     *
+     * @param computation Computation node with this strategy
+     */
 	public void execute(ComputationNode computation) {    	
 		ACLMessage originalRequest = myAgent.getComputation(batchID).getMessage();
-		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, this,computationNode));
+		myAgent.addBehaviour(new ExecuteTaskBehaviour(myAgent, prepareRequest(), originalRequest, computationNode));
         computationNode.computationFinished();
     }
-		
+
+    /**
+     * Add validation to outputs
+     * @param dataSourceName Generated id of the datasource with validation data
+     */
 	public void processValidation(String dataSourceName){
     	DataSourceEdge dse = new DataSourceEdge();
     	dse.setDataSourceId(dataSourceName);
     	computationNode.addToOutputAndProcess(dse, "validation");
     }
-		
+
+    /**
+     * Prepare request for the manager
+     * @return Message for manager
+     */
 	private ACLMessage prepareRequest(){
 		ExecuteTask ex = new ExecuteTask();
 		Task task = getTaskFromNode();
@@ -214,7 +235,7 @@ public class CAStartComputationStrategy implements StartComputationStrategy {
 	}
 	
 	
-	public ACLMessage execute2Message(ExecuteTask ex) {
+	private ACLMessage execute2Message(ExecuteTask ex) {
 		// create ACLMessage from Execute ontology action
 		
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
